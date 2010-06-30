@@ -125,7 +125,7 @@ CoordBox Relation::boundingBox() const
             CoordBox Clip;
             bool haveFirst = false;
             for (int i=0; i<p->Members.size(); ++i)
-                if (p->Members[i].second && !p->Members[i].second->notEverythingDownloaded() && !CAST_RELATION(p->Members[i].second)) {
+                if (p->Members[i].second && !p->Members[i].second->notEverythingDownloaded()/* && !CAST_RELATION(p->Members[i].second)*/) {
                     if (!haveFirst) {
                         Clip = p->Members[i].second->boundingBox();
                         haveFirst = true;
@@ -151,79 +151,41 @@ void Relation::draw(QPainter& P, MapView* theView)
     P.drawPath(theView->transform().map(p->theBoundingPath));
 }
 
-void Relation::drawFocus(QPainter& P, MapView* theView, bool solid)
+void Relation::drawSpecial(QPainter& thePainter, QPen& Pen, MapView* theView)
 {
-    if (!solid) {
-        QPen thePen(M_PREFS->getFocusColor(),M_PREFS->getFocusWidth());
-        thePen.setDashPattern(M_PREFS->getParentDashes());
-        P.setPen(thePen);
-        P.drawPath(theView->transform().map(p->theBoundingPath));
-    } else {
-        P.setPen(QPen(M_PREFS->getFocusColor(),M_PREFS->getFocusWidth(),Qt::DashLine));
-        P.drawPath(theView->transform().map(p->theBoundingPath));
+    QPen TP(Pen);
 
-        for (int i=0; i<p->Members.size(); ++i)
-            if (p->Members[i].second && !p->Members[i].second->isDeleted())
-                if (p->Members[i].second->boundingBox().intersects(theView->viewport()))
-                    p->Members[i].second->drawFocus(P,theView, solid);
+    /* draw relation itself now solid
+    if (Pen.style() == Qt::SolidLine)
+    {
+        TP.setStyle(Qt::DashLine);
+    } */
 
-        if (M_PREFS->getShowParents()) {
-            for (int i=0; i<sizeParents(); ++i)
-                if (!getParent(i)->isDeleted())
-                    if (getParent(i)->boundingBox().intersects(theView->viewport()))
-                        getParent(i)->drawFocus(P, theView, false);
-        }
-    }
+    thePainter.setPen(TP);
+    thePainter.drawPath(theView->transform().map(p->theBoundingPath));
 }
 
-void Relation::drawHover(QPainter& P, MapView* theView, bool solid)
+void Relation::drawParentsSpecial(QPainter& thePainter, QPen& Pen, MapView* theView)
 {
-    if (!solid) {
-        QPen thePen(M_PREFS->getHoverColor(),M_PREFS->getHoverWidth());
-        thePen.setDashPattern(M_PREFS->getParentDashes());
-        P.setPen(thePen);
-        P.drawPath(theView->transform().map(p->theBoundingPath));
-    } else {
-        P.setPen(QPen(M_PREFS->getHoverColor(),M_PREFS->getHoverWidth(),Qt::DashLine));
-        P.drawPath(theView->transform().map(p->theBoundingPath));
-
-        for (int i=0; i<p->Members.size(); ++i)
-            if (p->Members[i].second && !p->Members[i].second->isDeleted())
-                if (p->Members[i].second->boundingBox().intersects(theView->viewport()))
-                    p->Members[i].second->drawHover(P,theView, false);
-
-        if (M_PREFS->getShowParents()) {
-            for (int i=0; i<sizeParents(); ++i)
-                if (!getParent(i)->isDeleted())
-                    if (getParent(i)->boundingBox().intersects(theView->viewport()))
-                        getParent(i)->drawHover(P, theView, false);
-        }
-    }
+    for (int i=0; i<sizeParents(); ++i)
+        if (!getParent(i)->isDeleted())
+            getParent(i)->drawSpecial(thePainter, Pen, theView);
 }
 
-void Relation::drawHighlight(QPainter& P, MapView* theView, bool solid)
+void Relation::drawChildrenSpecial(QPainter& thePainter, QPen& Pen, MapView *theView, int depth)
 {
-    if (!solid) {
-        QPen thePen(M_PREFS->getHoverColor(),M_PREFS->getHighlightWidth());
-        thePen.setDashPattern(M_PREFS->getParentDashes());
-        P.setPen(thePen);
-        P.drawPath(theView->transform().map(p->theBoundingPath));
-    } else {
-        P.setPen(QPen(M_PREFS->getHighlightColor(),M_PREFS->getHighlightWidth(),Qt::DashLine));
-        P.drawPath(theView->transform().map(p->theBoundingPath));
-
-        for (int i=0; i<p->Members.size(); ++i)
-            if (p->Members[i].second && !p->Members[i].second->isDeleted())
-                if (p->Members[i].second->boundingBox().intersects(theView->viewport()))
-                    p->Members[i].second->drawHighlight(P,theView, solid);
-
-//		if (M_PREFS->getShowParents()) {
-//			for (int i=0; i<sizeParents(); ++i)
-//				if (!getParent(i)->isDeleted())
-//					getParent(i)->drawHover(P, theView, false);
-//		}
-    }
+    QPen TP(Pen);
+    TP.setStyle(Qt::DashLine);
+    for (int i=0; i<p->Members.size(); ++i)
+        if (p->Members[i].second && !p->Members[i].second->isDeleted())
+            if (p->Members[i].second->boundingBox().intersects(theView->viewport()))    
+            {
+                p->Members[i].second->drawSpecial(thePainter, TP, theView);
+                if (--depth > 0)
+                    p->Members[i].second->drawChildrenSpecial(thePainter, TP, theView, depth);
+            }
 }
+
 
 double Relation::pixelDistance(const QPointF& Target, double ClearEndDistance, bool, MapView* theView) const
 {

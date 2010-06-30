@@ -34,6 +34,7 @@
         <file>actions/edit_rotate.png</file>
         <file>actions/edit_paste.png</file>
         <file>actions/edit_paste_tags.png</file>
+        <file>actions/join_areas.png</file>
         <file>actions/join_roads.png</file>
         <file>actions/redo.png</file>
         <file>actions/reverse_road.png</file>

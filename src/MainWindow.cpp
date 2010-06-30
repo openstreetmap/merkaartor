@@ -2001,6 +2001,18 @@ void MainWindow::on_relationRemoveMemberAction_triggered()
     }
 }
 
+void MainWindow::on_areaJoinAction_triggered()
+{
+    CommandList* theList = new CommandList(MainWindow::tr("Join areas"), NULL);
+    joinAreas(theDocument, theList, p->theProperties);
+    if (theList->empty())
+        delete theList;
+    else {
+        theDocument->addHistory(theList);
+        invalidateView();
+    }
+}
+
 void MainWindow::on_areaSplitAction_triggered()
 {
     CommandList* theList = new CommandList(MainWindow::tr("Split area"), NULL);

@@ -21,6 +21,7 @@ class Projection;
 
 class QPointF;
 class QPainter;
+class QPen;
 class QProgressDialog;
 
 class MapFeaturePrivate;
@@ -105,19 +106,13 @@ class Feature : public QObject
          */
         virtual void draw(QPainter& P, MapView* theView) = 0;
 
-        /** Draw the feature using the given QPainter an Projection and with the focused draw
-         * @param P The QPainter used to draw
-         * @param theProjection the Projection used to convert real coordinates to screen coordinates
-         */
-        virtual void drawFocus(QPainter& P, MapView* theView, bool solid=true) = 0;
+        virtual void drawSpecial(QPainter& P, QPen& Pen, MapView* theView) = 0;
+        virtual void drawParentsSpecial(QPainter& P, QPen& Pen, MapView* theView) = 0;
+        virtual void drawChildrenSpecial(QPainter & P, QPen& Pen, MapView *theView, int depth) = 0;
 
-        /** Draw the feature using the given QPainter an Projection and with the hover draw
-         * @param P The QPainter used to draw
-         * @param theProjection the Projection used to convert real coordinates to screen coordinates
-         */
-        virtual void drawHover(QPainter& P, MapView* theView, bool solid=true) = 0;
-        virtual void drawHighlight(QPainter& P, MapView* theView, bool solid=true) = 0;
-
+        virtual void drawHover(QPainter& P, MapView* theView);
+        virtual void drawHighlight(QPainter& P, MapView* theView);
+        virtual void drawFocus(QPainter& P, MapView* theView);
 
         virtual double pixelDistance(const QPointF& Target, double ClearEndDistance, bool selectNodes, MapView* theView) const = 0;
         virtual void cascadedRemoveIfUsing(Document* theDocument, Feature* aFeature, CommandList* theList, const QList<Feature*>& Alternatives) = 0;
@@ -321,7 +316,7 @@ class Feature : public QObject
         virtual void invalidateMeta();
         double widthOf();
 
-        virtual bool deleteChildren(Document* , CommandList* ) { return true; }
+        virtual bool deleteChildren(Document* , CommandList*, bool = false ) { return true; }
 
         static Relation * GetSingleParentRelation(Feature * mapFeature);
         static Node* getTrackPointOrCreatePlaceHolder(Document *theDocument, Layer *theLayer, const QString& Id);

@@ -125,6 +125,7 @@ public slots:
     virtual void on_nodeDetachAction_triggered();
     virtual void on_relationAddMemberAction_triggered();
     virtual void on_relationRemoveMemberAction_triggered();
+    virtual void on_areaJoinAction_triggered();
     virtual void on_areaSplitAction_triggered();
     virtual void on_areaTerraceAction_triggered();
 

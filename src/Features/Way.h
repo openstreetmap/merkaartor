@@ -31,9 +31,10 @@ class Way : public Feature
 
         virtual CoordBox boundingBox() const;
         virtual void draw(QPainter& P, MapView* theView);
-        virtual void drawFocus(QPainter& P, MapView* theView, bool solid=true);
-        virtual void drawHover(QPainter& P, MapView* theView, bool solid=true);
-        virtual void drawHighlight(QPainter& P, MapView* theView, bool solid=true);
+        virtual void drawSpecial(QPainter& P, QPen& Pen, MapView* theView);
+        virtual void drawParentsSpecial(QPainter& P, QPen& Pen, MapView* theView);
+        virtual void drawChildrenSpecial(QPainter& P, QPen& Pen, MapView* theView, int depth);
+
         virtual double pixelDistance(const QPointF& Target, double ClearEndDistance, bool selectNodes, MapView* theView) const;
         Node* pixelDistanceVirtual(const QPointF& Target, double ClearEndDistance, MapView* theView) const;
         virtual void cascadedRemoveIfUsing(Document* theDocument, Feature* aFeature, CommandList* theList, const QList<Feature*>& Alternatives);
@@ -95,7 +96,7 @@ class Way : public Feature
         bool isClosed() const;
         double distance();
 
-        virtual bool deleteChildren(Document* theDocument, CommandList* theList);
+        virtual bool deleteChildren(Document* theDocument, CommandList* theList, bool force = false);
 
         QPainterPath getPath();
         void buildPath(Projection const &theProjection, const QTransform& thensform, const QRectF& clipRect);

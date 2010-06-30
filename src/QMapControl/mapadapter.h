@@ -120,25 +120,6 @@ protected:
     int max_zoom;
     int current_zoom;
 
-    int param1;
-    int param2;
-    int param3;
-    int param4;
-    int param5;
-    int param6;
-
-    QString sub1;
-    QString sub2;
-    QString sub3;
-    QString sub4;
-    QString sub5;
-    QString sub6;
-
-    int order[3][2];
-
-    int middle_x;
-    int middle_y;
-
     QLocale loc;
 
     IImageManager* theImageManager;
