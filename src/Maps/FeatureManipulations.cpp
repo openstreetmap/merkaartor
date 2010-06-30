@@ -1596,8 +1596,10 @@ bool axisAlignRoads(Document* theDocument, CommandList* theList, PropertiesDock*
     QVector<QPointF> midpoints;
     double total_weight;
     if (!axisAlignPreprocess(theDock, proj, axes,
-                             theWays, edge_angles, edge_axis, edge_weight, total_weight, midpoints))
+                             theWays, edge_angles, edge_axis, edge_weight, total_weight, midpoints)) {
+        theList->undo();
         return false;
+    }
 
     int theta;
     axisAlignCluster(edge_angles, edge_weight, total_weight, axes, theta, edge_axis);
@@ -1690,6 +1692,7 @@ bool axisAlignRoads(Document* theDocument, CommandList* theList, PropertiesDock*
                     QLineF l1(midpoints[index1], midpoints[index1] + axis_vectors[edge_axis[index1]]);
                     if (l0.intersect(l1, &new_pos) == QLineF::NoIntersection) {
                         qWarning() << "WARNING: adjacent edges assigned opposite axes, not able to resolve";
+                        theList->undo();
                         return false;
                     }
 
