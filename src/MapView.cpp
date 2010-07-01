@@ -264,15 +264,16 @@ void MapView::drawScale(QPainter & P)
         Log = floor(Log)+log10(5.);
 
     double Length = pow(10.,Log);
-    P.setPen(QPen(QColor(0,0,0),2));
     QPointF P1(20,height()-20);
     QPointF P2(20+Length*p->PixelPerM,height()-20);
+    P.fillRect(P1.x()-4, P1.y()-20-4, P2.x() - P1.x() + 4, 33, QColor(255, 255, 255, 128));
+    P.setPen(QPen(QColor(0,0,0),2));
     P.drawLine(P1-QPointF(0,5),P1+QPointF(0,5));
     P.drawLine(P1,P2);
     if (Length < 1000)
-        P.drawText(QRectF(P2-QPoint(100,40),QSize(200,30)),Qt::AlignHCenter | Qt::AlignBottom, QString(tr("%1 m")).arg(Length, 0, 'f', 0));
+        P.drawText(QRectF(P2-QPoint(200,40),QSize(200,30)),Qt::AlignRight | Qt::AlignBottom, QString(tr("%1 m")).arg(Length, 0, 'f', 0));
     else
-        P.drawText(QRectF(P2-QPoint(100,40),QSize(200,30)),Qt::AlignHCenter | Qt::AlignBottom, QString(tr("%1 km")).arg(Length/1000, 0, 'f', 0));
+        P.drawText(QRectF(P2-QPoint(200,40),QSize(200,30)),Qt::AlignRight | Qt::AlignBottom, QString(tr("%1 km")).arg(Length/1000, 0, 'f', 0));
 
     P.drawLine(P2-QPointF(0,5),P2+QPointF(0,5));
 }
