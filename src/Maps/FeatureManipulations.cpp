@@ -1430,14 +1430,36 @@ static void axisAlignAlignMidpoints(QVector<QPointF> &midpoints, const QVector<d
 static const int angle_shift = 20;
 
 // returns true on success
+static bool axisAlignGetWays(/* in */ PropertiesDock *theDock,
+                             /* out */ QList<Way *> &theWays)
+{
+    QList<Feature *> selection = theDock->selection();
+    // we can't use foreach since we append to selection inside the loop
+    for (; !selection.empty(); selection.pop_front()) {
+        Feature *F = selection.first();
+        if (F->getClass() == "Way")
+            theWays << CAST_WAY(F);
+        else if (F->getClass() == "Relation")
+            // expand relation members onto the end of the selection list
+            for (int i = 0; i < F->size(); ++i)
+                selection << F->get(i);
+    }
+    return !theWays.empty();
+}
+
+// base the decision purely on what types of features are selected
+bool canAxisAlignRoads(PropertiesDock* theDock)
+{
+    QList<Way *> theWays;
+    return axisAlignGetWays(theDock, theWays);
+}
+
+// returns true on success
 static bool axisAlignPreprocess(/* in */ PropertiesDock *theDock, const Projection &proj, int axes,
                                 /* out */ QList<Way *> &theWays, QVector<int> &edge_angles, QVector<int> &edge_axis,
                                           QVector<double> &edge_weight, double &total_weight, QVector<QPointF> &midpoints)
 {
-    for (int i = 0; i < theDock->size(); ++i)
-        if (theDock->selection(i)->getClass() == "Way")
-            theWays << CAST_WAY(theDock->selection(i));
-    if (theWays.empty())
+    if (!axisAlignGetWays(theDock, theWays))
         return false;
 
     // manipulate angles as fixed point values with a unit of the angle between axes

@@ -35,6 +35,7 @@ bool canSplitArea(PropertiesDock* theDock, Way** outTheArea = 0, unsigned int ou
 void splitArea(Document* theDocument, CommandList* theList, PropertiesDock* theDock);
 bool canTerraceArea(PropertiesDock* theDock, Way** outTheArea = 0, int* startNode = 0);
 void terraceArea(Document* theDocument, CommandList* theList, PropertiesDock* theDock, unsigned int divisions);
+bool canAxisAlignRoads(PropertiesDock* theDock);
 unsigned int axisAlignGuessAxes(PropertiesDock* theDock, const Projection &proj, unsigned int max_axes);
 bool axisAlignRoads(Document* theDocument, CommandList* theList, PropertiesDock* theDock, const Projection &proj, unsigned int axes, bool *accurate = 0);
 
