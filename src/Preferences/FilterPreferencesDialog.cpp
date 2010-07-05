@@ -69,17 +69,26 @@ void FilterPreferencesDialog::on_btDel_clicked(void)
         return;
 
     theItems[idx].deleted = true;
-    delete lvFilters->takeItem(idx);
+
+    delete lvFilters->takeItem(lvFilters->currentRow());
     on_lvFilters_itemSelectionChanged();
 }
 
 void FilterPreferencesDialog::on_lvFilters_itemSelectionChanged()
 {
+    if (lvFilters->currentRow() < 0)
+    {
+        selectedItem.clear();
+        edFilterName->setText(selectedItem);
+        edFilterString->setText(selectedItem);
+        return;
+    }
+
     QListWidgetItem* it = lvFilters->item(lvFilters->currentRow());
 
     int idx = it->data(Qt::UserRole).toInt();
     if (idx >= theItems.size())
-        return;
+         return;
 
     FilterItem& item(theItems[idx]);
     edFilterName->setText(item.name);
