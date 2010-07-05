@@ -467,8 +467,10 @@ void Way::drawParentsSpecial(QPainter& thePainter, QPen& Pen, MapView* theView)
             getParent(i)->drawSpecial(thePainter, Pen, theView);
 }
 
-void Way::drawChildrenSpecial(QPainter& thePainter, QPen& Pen, MapView *theView, int)
+void Way::drawChildrenSpecial(QPainter& thePainter, QPen& Pen, MapView *theView, int depth)
 {               
+    Q_UNUSED(depth);
+
     QPen TP(Pen);
     TP.setWidth(TP.width()*3);
     TP.setCapStyle(Qt::RoundCap);
