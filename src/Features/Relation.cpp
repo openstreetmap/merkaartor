@@ -239,7 +239,7 @@ double Relation::pixelDistance(const QPointF& Target, double ClearEndDistance, b
     //}
 
     double D;
-    QRectF bb = QRectF(theView->toView(boundingBox().topLeft()),theView->toView(boundingBox().bottomRight()));
+    QRectF bb = QRectF(theView->toView(boundingBox().bottomLeft()),theView->toView(boundingBox().topRight()));
     //bb.adjust(-10, -10, 10, 10);
 
     LineF F(bb.topLeft(), bb.topRight());
@@ -410,6 +410,7 @@ void Relation::buildPath(Projection const &theProjection, const QTransform& /*th
         return;
 
     QRectF bb = QRectF(theProjection.project(boundingBox().bottomLeft()),theProjection.project(boundingBox().topRight()));
+
     p->theBoundingPath.addRect(bb);
 
     p->theBoundingPath = p->theBoundingPath.intersected(clipPath);
