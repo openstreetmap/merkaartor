@@ -1430,14 +1430,36 @@ static void axisAlignAlignMidpoints(QVector<QPointF> &midpoints, const QVector<d
 static const int angle_shift = 20;
 
 // returns true on success
+static bool axisAlignGetWays(/* in */ PropertiesDock *theDock,
+                             /* out */ QList<Way *> &theWays)
+{
+    QList<Feature *> selection = theDock->selection();
+    // we can't use foreach since we append to selection inside the loop
+    for (; !selection.empty(); selection.pop_front()) {
+        Feature *F = selection.first();
+        if (F->getClass() == "Way")
+            theWays << CAST_WAY(F);
+        else if (F->getClass() == "Relation")
+            // expand relation members onto the end of the selection list
+            for (int i = 0; i < F->size(); ++i)
+                selection << F->get(i);
+    }
+    return !theWays.empty();
+}
+
+// base the decision purely on what types of features are selected
+bool canAxisAlignRoads(PropertiesDock* theDock)
+{
+    QList<Way *> theWays;
+    return axisAlignGetWays(theDock, theWays);
+}
+
+// returns true on success
 static bool axisAlignPreprocess(/* in */ PropertiesDock *theDock, const Projection &proj, int axes,
                                 /* out */ QList<Way *> &theWays, QVector<int> &edge_angles, QVector<int> &edge_axis,
                                           QVector<double> &edge_weight, double &total_weight, QVector<QPointF> &midpoints)
 {
-    for (int i = 0; i < theDock->size(); ++i)
-        if (theDock->selection(i)->getClass() == "Way")
-            theWays << CAST_WAY(theDock->selection(i));
-    if (theWays.empty())
+    if (!axisAlignGetWays(theDock, theWays))
         return false;
 
     // manipulate angles as fixed point values with a unit of the angle between axes
@@ -1582,8 +1604,13 @@ unsigned int axisAlignGuessAxes(PropertiesDock* theDock, const Projection &proj,
     return min_var_axes;
 }
 
-// returns whether successful (if not don't add theList to history)
-bool axisAlignRoads(Document* theDocument, CommandList* theList, PropertiesDock* theDock, const Projection &proj, unsigned int axes, bool *accurate)
+// maximum number of iterations
+#define AXIS_ALIGN_MAX_ITS          10000
+// threshold of (node movement/distance from midpoint)^2
+#define AXIS_ALIGN_FAR_THRESHOLD    (1e-6)  // 1/1000th ^2
+
+// don't add theList to history if result isn't success
+AxisAlignResult axisAlignRoads(Document* theDocument, CommandList* theList, PropertiesDock* theDock, const Projection &proj, unsigned int axes)
 {
     // Make sure nodes aren't pointlessly repeated or angles would be undefined
     removeRepeatsInRoads(theDocument, theList, theDock);
@@ -1597,8 +1624,10 @@ bool axisAlignRoads(Document* theDocument, CommandList* theList, PropertiesDock*
     double total_weight;
     if (!axisAlignPreprocess(theDock, proj, axes,
                              theWays, edge_angles, edge_axis, edge_weight, total_weight, midpoints)) {
+        // should never happen, repeated nodes already removed
+        Q_ASSERT(0);
         theList->undo();
-        return false;
+        return AxisAlignFail;
     }
 
     int theta;
@@ -1658,16 +1687,17 @@ bool axisAlignRoads(Document* theDocument, CommandList* theList, PropertiesDock*
         }
     }
 
-    // Iteratively adjust the nodes. The process is repeated to lessen the fact
-    // that the algorithm doesn't handle nodes which are part of multiple ways
-    // or more than 2 segments. It does not guarantee alignment when dups==true
+    // If nodes are repeated then they will be moved more than once, so we
+    // iterate and allow the nodes to converge to a point.
+    double last_movement = -1.0;
+    double movement = 0.0;
     for (int it = 0; ; ++it) {
         i = 0;
         bool moved_far = false;
         // Move nodes (only in node_pos) onto the intersection of the neighbouring
         // edge's axes through their midpoints. Where neighbouring edges are on the
         // same axis (and so there is no intersection), project directly onto the
-        // axis through one of the midpoints.
+        // axis through the mean midpoint.
         foreach (Way *theWay, theWays) {
             int index0, index1, max;
             int start = i;
@@ -1691,39 +1721,64 @@ bool axisAlignRoads(Document* theDocument, CommandList* theList, PropertiesDock*
                     QLineF l0(midpoints[index0], midpoints[index0] + axis_vectors[edge_axis[index0]]);
                     QLineF l1(midpoints[index1], midpoints[index1] + axis_vectors[edge_axis[index1]]);
                     if (l0.intersect(l1, &new_pos) == QLineF::NoIntersection) {
-                        qWarning() << "WARNING: adjacent edges assigned opposite axes, not able to resolve";
                         theList->undo();
-                        return false;
+                        return AxisAlignSharpAngles;
                     }
 
-                    if (!moved_far)
+                    if (dups && !moved_far)
                         mid = midpoints[index0];
                 } else {
-                    // axes the same, midpoints are aligned so just project onto axis through midpoint
+                    // Axes are the same so there's no intersection point. Just
+                    // project onto axis through average midpoint.
                     int index = ((index0 >= 0) ? index0 : index1);
-                    QPointF rel_pos = old_pos - midpoints[index];
+                    QPointF midpoint = midpoints[index];
+                    if (index != index1 && index1 >= 0)
+                        midpoint = (midpoint + midpoints[index1]) / 2;
+                    QPointF rel_pos = old_pos - midpoint;
                     QPointF dir = axis_vectors[edge_axis[index]];
                     double dot = dir.x()*rel_pos.x() + dir.y()*rel_pos.y();
-                    new_pos = midpoints[index] + dir*dot;
+                    new_pos = midpoint + dir*dot;
 
-                    if (!moved_far)
+                    if (dups && !moved_far)
                         mid = midpoints[index];
                 }
-                node_pos[N] = new_pos;
+                if (dups) {
+                    // If we're iterating, only move the node half the distance
+                    // towards the new position, so that different edges can
+                    // compete with one another to move the node.
+                    new_pos = (new_pos + old_pos) / 2;
 
-                if (!moved_far) {
-                    old_pos -= new_pos;
-                    new_pos -= mid;
-                    if ((old_pos.x()*old_pos.x() + old_pos.y()*old_pos.y())*1000*1000 > (new_pos.x()*new_pos.x() + new_pos.y()*new_pos.y()))
-                        moved_far = true;
+                    // find how far the node has moved (squared to avoid a sqrt)
+                    QPointF delta = new_pos - old_pos;
+                    double moved_sq = delta.x()*delta.x() + delta.y()*delta.y();
+                    movement += moved_sq;
+
+                    // has the node moved "far"?
+                    if (!moved_far) {
+                        delta = new_pos - mid;
+                        double size_sq = delta.x()*delta.x() + delta.y()*delta.y();
+                        if (moved_sq > size_sq * AXIS_ALIGN_FAR_THRESHOLD)
+                            moved_far = true;
+                    }
                 }
+                node_pos[N] = new_pos;
             }
         }
-        // safe to finish yet?
+
+        // We're done when no nodes have moved very far.
         if (!moved_far)
             dups = false;
-        if (!dups || it >= 20)
+        if (!dups || it >= AXIS_ALIGN_MAX_ITS)
             break;
+        // Every so often check that the movement has decreased since last
+        // time. If it hasn't then it's likely that the ways are impossible to
+        // align.
+        if ((it & 0xf) == 0xf) {
+            if (last_movement >= 0.0 && movement >= last_movement)
+                break;
+            last_movement = movement;
+            movement = 0.0;
+        }
 
         // tweak midpoints
         i = 0;
@@ -1741,10 +1796,11 @@ bool axisAlignRoads(Document* theDocument, CommandList* theList, PropertiesDock*
             }
         }
     }
-    if (accurate)
-        *accurate = !dups;
-    if (dups)
-        qWarning() << "WARNING: ways are self intersecting or share nodes, so the alignment may not be accurate";
+    // dups is set to false when converged
+    if (dups) {
+        theList->undo();
+        return AxisAlignFail;
+    }
     // Commit the changes
     foreach (Way *theWay, theWays) {
         for (int i = 0; i < theWay->size(); ++i) {
@@ -1752,5 +1808,5 @@ bool axisAlignRoads(Document* theDocument, CommandList* theList, PropertiesDock*
             theList->add(new MoveNodeCommand(N, proj.inverse(node_pos[N]), theDocument->getDirtyOrOriginLayer(N->layer())));
         }
     }
-    return true;
+    return AxisAlignSuccess;
 }

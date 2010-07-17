@@ -1916,25 +1916,16 @@ void MainWindow::on_roadAxisAlignAction_triggered()
 
     // Do the manipulation
     CommandList* theList = new CommandList(command_name, NULL);
-    bool accurate = true;
-    ok = axisAlignRoads(theDocument, theList, p->theProperties, view()->projection(), axes, &accurate);
-    if (!ok)
-        QMessageBox::critical(this, tr("Unable to align to axes"), tr("Align to axes operation failed. Please adjust any sharp corners and try again."));
-    else if (!accurate) {
-        // allow the user to see the changes before they decide
-        invalidateView();
-        MDiscardableMessage dlg(NULL,
-            MainWindow::tr("Inaccurate align to axes."),
-            MainWindow::tr("Ways are self intersecting or share nodes, so the alignment may not be accurate. Do you want to continue?"));
-        if (dlg.check() != QDialog::Accepted) {
-            theList->undo();
-            invalidateView();
-            ok = false;
-        }
-    }
-    if (!ok || theList->empty())
+    AxisAlignResult result = axisAlignRoads(theDocument, theList, p->theProperties, view()->projection(), axes);
+    if (result != AxisAlignSuccess || theList->empty()) {
+        if (result == AxisAlignSharpAngles)
+            QMessageBox::critical(this, tr("Unable to align to axes"),
+                                  tr("Align to axes operation failed. Please adjust any sharp corners and try again."));
+        else if (result == AxisAlignFail)
+            QMessageBox::critical(this, tr("Unable to align to axes"),
+                                  tr("Align to axes operation failed and did not converge on a solution."));
         delete theList;
-    else {
+    } else {
         theDocument->addHistory(theList);
         invalidateView();
     }
