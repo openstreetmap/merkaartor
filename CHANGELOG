@@ -1,4 +1,5 @@
 v0.17
+    * FIX : Fix scale bar to take latitude into account.
     * ADD : Tool to align edges to regularly spaced angles (can orthogonalise buildings)
     * FIX : Do not tag-match relation's children unless the type is "multippolygon" (fixes #2916)
     * ADD : support for potlach-style TMS url (with "!") and "%x", "%y", "%z" in addition to "%1", "%2", "%3"
