@@ -3326,9 +3326,9 @@ void MainWindow::updateLanguage()
                 retQt = qtTranslator->load("qt_" + DefaultLanguage.left(2), STRINGIFY(TRANSDIR_SYSTEM));
 #else
 #if defined(Q_OS_MAC)
-            bool retQt = qtTranslator->load("qt_" + DefaultLanguage.left(2), resources.absolutePath());
+            retQt = qtTranslator->load("qt_" + DefaultLanguage.left(2), resources.absolutePath());
 #else
-            bool retQt = qtTranslator->load("qt_" + DefaultLanguage.left(2), QLibraryInfo::location(QLibraryInfo::TranslationsPath));
+            retQt = qtTranslator->load("qt_" + DefaultLanguage.left(2), QLibraryInfo::location(QLibraryInfo::TranslationsPath));
 #endif // Q_OS_MAC
 #endif // TRANSDIR_SYSTEM
         }

@@ -307,8 +307,12 @@ void Node::drawParentsSpecial(QPainter& thePainter, QPen& Pen, MapView* theView)
             getParent(i)->drawSpecial(thePainter, Pen, theView);
 }
 
-void Node::drawChildrenSpecial(QPainter&, QPen&, MapView*, int)
+void Node::drawChildrenSpecial(QPainter& thePainter, QPen& Pen, MapView* theView, int depth)
 {
+    Q_UNUSED(thePainter);
+    Q_UNUSED(Pen);
+    Q_UNUSED(theView);
+    Q_UNUSED(depth);
     // Node has no children
 }
 
