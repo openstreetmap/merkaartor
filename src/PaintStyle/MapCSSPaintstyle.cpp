@@ -53,8 +53,11 @@ QString parseSelector(QString in)
     QString out;
 
     QList<TagSelector*> terms;
-    while (idx < in.length())
-        terms.append(TagSelector::parse(in, idx));
+    while (idx < in.length()) {
+        TagSelector* t = TagSelector::parse(in, idx);
+        if (!t) break;
+        terms.append(t);
+    }
 
     if (terms.length()) {
         out += terms[terms.length()-1]->asExpression(true);

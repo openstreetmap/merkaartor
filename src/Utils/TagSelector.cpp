@@ -164,13 +164,6 @@ TagSelector* parseFactor(const QString& Expression, int& idx)
             canParseSymbol(Expression, idx, ')');
         }
     }
-    if (!Current) {
-        if (canParseSymbol(Expression, idx, '['))
-        {
-            Current = parseFactor(Expression, idx);
-            canParseSymbol(Expression, idx, ']');
-        }
-    }
 
     if (!Current)
     {
@@ -199,21 +192,39 @@ TagSelector* parseFactor(const QString& Expression, int& idx)
     }
     if (!Current)
     {
-        idx = Saved;
         Current = parseTagSelectorHasTags(Expression, idx);
     }
     if (!Current)
     {
-        if (canParseLiteral(Expression,idx,"not")) {
+        idx = Saved;
+        if ((canParseLiteral(Expression,idx,"not")) || canParseSymbol(Expression,idx,'!')) {
             TagSelector* notFactor = parseFactor(Expression, idx);
             Current = new TagSelectorNot(notFactor);
         }
     }
     if (!Current)
     {
+        idx = Saved;
         if (canParseLiteral(Expression,idx,"parent")) {
             TagSelector* parentFactor = parseFactor(Expression, idx);
             Current = new TagSelectorParent(parentFactor);
+        }
+    }
+    if (!Current) {
+        idx = Saved;
+        if (canParseSymbol(Expression, idx, '['))
+        {
+            Current = parseFactor(Expression, idx);
+            canParseSymbol(Expression, idx, ']');
+        }
+    }
+    if (!Current)
+    {
+        idx = Saved;
+        QString Key;
+        if (canParseValue(Expression,idx,Key)) {
+            int TmpIdx = 0;
+            Current = parseFactor("not(" + Key + " is _NULL_)", TmpIdx);
         }
     }
     return Current;
