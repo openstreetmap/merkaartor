@@ -177,6 +177,11 @@ TagSelector* parseFactor(const QString& Expression, int& idx)
         idx = Saved;
         Current = parseTagSelectorTypeIs(Expression, idx);
     }
+    if (!Current)
+    {
+        idx = Saved;
+        Current = parseTagSelectorIsOneOf(Expression, idx);
+    }
     if (!Current) {
         idx = Saved;
         Current = parseTagSelectorIs(Expression, idx);
@@ -196,11 +201,6 @@ TagSelector* parseFactor(const QString& Expression, int& idx)
     {
         idx = Saved;
         Current = parseTagSelectorHasTags(Expression, idx);
-    }
-    if (!Current)
-    {
-        idx = Saved;
-        Current = parseTagSelectorIsOneOf(Expression, idx);
     }
     if (!Current)
     {
