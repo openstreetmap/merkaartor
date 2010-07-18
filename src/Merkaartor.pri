@@ -8,9 +8,6 @@ HEADERS += ./IProgressWindow.h \
     ./Maps/Projection.h \
     ./Maps/FeatureManipulations.h \
     ./MapView.h \
-    ./PaintStyle/MasPaintStyle.h \
-    ./PaintStyle/PaintStyle.h \
-    ./PaintStyle/PaintStyleEditor.h \
     ./TagModel.h \
     ./Utils/LineF.h \
     ./Utils/ShortcutOverrideFilter.h \
@@ -37,9 +34,6 @@ SOURCES += ./Maps/Coord.cpp \
     ./Maps/Projection.cpp \
     ./Maps/FeatureManipulations.cpp \
     ./MapView.cpp \
-    ./PaintStyle/MasPaintStyle.cpp \
-    ./PaintStyle/PaintStyle.cpp \
-    ./PaintStyle/PaintStyleEditor.cpp \
     ./Main.cpp \
     ./MainWindow.cpp \
     ./TagModel.cpp \
@@ -67,7 +61,6 @@ FORMS += ./AboutDialog.ui \
     ./GotoDialog.ui \
     ./TerraceDialog.ui \
     ./MultiProperties.ui \
-    ./PaintStyle/PaintStyleEditor.ui \
     ./Utils/PictureViewerDialog.ui \
     ./Utils/SelectionDialog.ui \
     Utils/TagSelectorWidget.ui

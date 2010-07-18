@@ -63,15 +63,9 @@ bool canParseKey(const QString& Expression, int& idx, QString& Key)
 bool canParseLiteral(const QString& Expression, int& idx, const QString& Literal)
 {
     skipWhite(Expression,idx);
-    QString Result;
-    int TempIdx = idx;
-    if (canParseValue(Expression,TempIdx,Result))
-    {
-        if (Result == Literal)
-        {
-            idx = TempIdx;
-            return true;
-        }
+    if (Expression.indexOf(Literal, idx, Qt::CaseInsensitive) == idx) {
+        idx += Literal.length();
+        return true;
     }
     return false;
 }
@@ -79,9 +73,9 @@ bool canParseLiteral(const QString& Expression, int& idx, const QString& Literal
 TagSelectorIs* parseTagSelectorIs(const QString& Expression, int& idx)
 {
     QString Key, Value;
-    if (!canParseKey(Expression, idx, Key))
+    if ((!canParseKey(Expression, idx, Key)) && (!canParseValue(Expression, idx, Key)))
         return 0;
-    if (!canParseLiteral(Expression, idx, "is"))
+    if ((!canParseLiteral(Expression, idx, "is")) && (!canParseSymbol(Expression, idx, '=')))
         return 0;
     if (!canParseValue(Expression, idx, Value))
         return 0;
@@ -90,6 +84,13 @@ TagSelectorIs* parseTagSelectorIs(const QString& Expression, int& idx)
 
 TagSelectorTypeIs* parseTagSelectorTypeIs(const QString& Expression, int& idx)
 {
+    if (canParseLiteral(Expression, idx, "node"))
+        return new TagSelectorTypeIs("node");
+    if (canParseLiteral(Expression, idx, "way"))
+        return new TagSelectorTypeIs("way");
+    if (canParseLiteral(Expression, idx, "relation"))
+        return new TagSelectorTypeIs("relation");
+
     QString Type;
     if (!canParseLiteral(Expression, idx, "Type"))
         return 0;
@@ -163,7 +164,19 @@ TagSelector* parseFactor(const QString& Expression, int& idx)
             canParseSymbol(Expression, idx, ')');
         }
     }
+    if (!Current) {
+        if (canParseSymbol(Expression, idx, '['))
+        {
+            Current = parseFactor(Expression, idx);
+            canParseSymbol(Expression, idx, ']');
+        }
+    }
 
+    if (!Current)
+    {
+        idx = Saved;
+        Current = parseTagSelectorTypeIs(Expression, idx);
+    }
     if (!Current) {
         idx = Saved;
         Current = parseTagSelectorIs(Expression, idx);
@@ -182,11 +195,6 @@ TagSelector* parseFactor(const QString& Expression, int& idx)
     if (!Current)
     {
         idx = Saved;
-        Current = parseTagSelectorTypeIs(Expression, idx);
-    }
-    if (!Current)
-    {
-        idx = Saved;
         Current = parseTagSelectorHasTags(Expression, idx);
     }
     if (!Current)
@@ -201,6 +209,13 @@ TagSelector* parseFactor(const QString& Expression, int& idx)
             Current = new TagSelectorNot(notFactor);
         }
     }
+    if (!Current)
+    {
+        if (canParseLiteral(Expression,idx,"parent")) {
+            TagSelector* parentFactor = parseFactor(Expression, idx);
+            Current = new TagSelectorParent(parentFactor);
+        }
+    }
     return Current;
 }
 
@@ -213,8 +228,12 @@ TagSelector* parseTerm(const QString& Expression, int& idx)
         if (!Current)
             break;
         Factors.push_back(Current);
-        if (!canParseLiteral(Expression,idx,"and"))
-            break;
+        if (canParseLiteral(Expression,idx,"and"))
+            continue;
+        int TempIdx = idx;
+        if (canParseSymbol(Expression, TempIdx, '['))
+            continue;
+        break;
     }
     if (Factors.size() == 1)
         return Factors[0];
@@ -232,7 +251,7 @@ TagSelector* parseTagSelector(const QString& Expression, int& idx)
         if (!Current)
             break;
         Terms.push_back(Current);
-        if (!canParseLiteral(Expression,idx,"or"))
+        if ((!canParseLiteral(Expression,idx,"or")) && (!canParseLiteral(Expression,idx,",")))
             break;
     }
     if (Terms.size() == 1)
@@ -245,6 +264,11 @@ TagSelector* parseTagSelector(const QString& Expression, int& idx)
 TagSelector* TagSelector::parse(const QString& Expression)
 {
     int idx = 0;
+    return parseTagSelector(Expression,idx);
+}
+
+TagSelector* TagSelector::parse(const QString& Expression, int& idx)
+{
     return parseTagSelector(Expression,idx);
 }
 
@@ -465,7 +489,7 @@ TagSelector* TagSelectorTypeIs::copy() const
 
 TagSelectorMatchResult TagSelectorTypeIs::matches(const Feature* F) const
 {
-    if (F->getClass() == Type)
+    if (Type.compare(F->getClass(), Qt::CaseInsensitive) == 0)
         return TagSelect_Match;
     else
         if (Type.toLower() == "area")
@@ -625,8 +649,54 @@ QString TagSelectorNot::asExpression(bool /* Precedence */) const
     if (!Term)
         return "";
     QString R;
-    R += " not ";
+    R += " not(";
     R += Term->asExpression(true);
+    R += ")";
+    return R;
+}
+
+/* TAGSELECTORPARENT */
+
+TagSelectorParent::TagSelectorParent(TagSelector* term)
+: Term(term)
+{
+}
+
+TagSelectorParent::~TagSelectorParent()
+{
+    delete Term;
+}
+
+TagSelector* TagSelectorParent::copy() const
+{
+    if (!Term)
+        return NULL;
+    return new TagSelectorParent(Term->copy());
+}
+
+TagSelectorMatchResult TagSelectorParent::matches(const Feature* F) const
+{
+    if (!Term)
+        return TagSelect_NoMatch;
+
+    TagSelectorMatchResult ret = TagSelect_NoMatch;
+    for (int i=0; i<F->sizeParents(); ++i) {
+        if (Term->matches(F->getParent(i)) == TagSelect_Match) {
+            ret = TagSelect_Match;
+            break;
+        }
+    }
+    return ret;
+}
+
+QString TagSelectorParent::asExpression(bool /* Precedence */) const
+{
+    if (!Term)
+        return "";
+    QString R;
+    R += " parent(";
+    R += Term->asExpression(true);
+    R += ")";
     return R;
 }
 

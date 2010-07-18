@@ -38,6 +38,7 @@ class TagSelector
         virtual QString asExpression(bool Precedence) const = 0;
 
         static TagSelector* parse(const QString& Expression);
+        static TagSelector* parse(const QString& Expression, int& idx);
 };
 
 class TagSelectorIs : public TagSelector
@@ -133,6 +134,20 @@ class TagSelectorNot : public TagSelector
     public:
         TagSelectorNot(TagSelector* Term);
         virtual ~TagSelectorNot();
+
+        virtual TagSelector* copy() const;
+        virtual TagSelectorMatchResult matches(const Feature* F) const;
+        virtual QString asExpression(bool Precedence) const;
+
+    private:
+        TagSelector* Term;
+};
+
+class TagSelectorParent : public TagSelector
+{
+    public:
+        TagSelectorParent(TagSelector* Term);
+        virtual ~TagSelectorParent();
 
         virtual TagSelector* copy() const;
         virtual TagSelectorMatchResult matches(const Feature* F) const;

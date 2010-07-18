@@ -35,8 +35,9 @@
 #include "Features.h"
 #include "Maps/FeatureManipulations.h"
 #include "LayerIterator.h"
-#include "PaintStyle/MasPaintStyle.h"
-#include "PaintStyle/PaintStyleEditor.h"
+#include "MasPaintStyle.h"
+#include "MapCSSPaintstyle.h"
+#include "PaintStyleEditor.h"
 #include "Sync/SyncOSM.h"
 #include "Utils/Utils.h"
 
@@ -2133,12 +2134,19 @@ void MainWindow::on_mapStyleSaveAction_triggered()
 
 void MainWindow::on_mapStyleLoadAction_triggered()
 {
-    QString f = QFileDialog::getOpenFileName(this, tr("Load map style"), QString(), tr("Merkaartor map style (*.mas)"));
+    QString f = QFileDialog::getOpenFileName(this, tr("Load map style"), QString(),
+                                             tr("Supported formats")+" (*.mas *.css)\n" \
+                                             + tr("Merkaartor map style (*.mas)\n")
+                                             + tr("MapCSS stylesheet (*.css)"));
     if (!f.isNull()) {
-        M_STYLE->loadPainters(f);
-        for (VisibleFeatureIterator i(theDocument); !i.isEnd(); ++i)
-            i.get()->invalidatePainter();
-        invalidateView();
+        if (f.endsWith("css"))
+            MapCSSPaintstyle::instance()->loadPainters(f);
+        else {
+            M_STYLE->loadPainters(f);
+            for (VisibleFeatureIterator i(theDocument); !i.isEnd(); ++i)
+                i.get()->invalidatePainter();
+            invalidateView();
+        }
     }
 }
 
@@ -2674,9 +2682,28 @@ void MainWindow::on_editSelectAction_triggered()
     SelectionDialog* Sel = new SelectionDialog(this);
 
     if (Sel->exec() == QDialog::Accepted) {
-        TagSelector* tsel = TagSelector::parse(Sel->edTagQuery->text());
+        QString out;
+        int idx = 0;
+        QString in = Sel->edTagQuery->text();
+        QList<TagSelector*> terms;
+        while (idx < in.length())
+            terms.append(TagSelector::parse(in, idx));
+
+        if (terms.length()) {
+            out += terms[terms.length()-1]->asExpression(true);
+            for (int i=terms.length()-2; i>=0; --i) {
+                out += " and parent(";
+                out += terms[i]->asExpression(true);
+                out += ") ";
+            }
+        } else
+            return;
+
+        qDebug() << out;
+        TagSelector* tsel = TagSelector::parse(out);
         if (!tsel)
             return;
+        qDebug() << tsel->asExpression(false);
 
         int selMaxResult = Sel->sbMaxResult->value();
 
