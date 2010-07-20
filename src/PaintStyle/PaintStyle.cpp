@@ -277,7 +277,7 @@ FeaturePainter FeaturePainter::fromXML(const QDomElement& e, QString filename)
         n = n.nextSibling();
     }
     if (Pairs.size() == 1)
-        FP.setSelector(new TagSelectorIs(Pairs[0].first,Pairs[0].second));
+        FP.setSelector(new TagSelectorOperator(Pairs[0].first,"=",Pairs[0].second));
     else if (Pairs.size())
     {
         bool Same = true;
@@ -295,7 +295,7 @@ FeaturePainter FeaturePainter::fromXML(const QDomElement& e, QString filename)
         {
             QList<TagSelector*> Options;
             for (int i=0; i<Pairs.size(); ++i)
-                Options.push_back(new TagSelectorIs(Pairs[i].first,Pairs[i].second));
+                Options.push_back(new TagSelectorOperator(Pairs[i].first,"=",Pairs[i].second));
             FP.setSelector(new TagSelectorOr(Options));
         }
     }

@@ -41,10 +41,17 @@ class TagSelector
         static TagSelector* parse(const QString& Expression, int& idx);
 };
 
-class TagSelectorIs : public TagSelector
+class TagSelectorOperator : public TagSelector
 {
+    enum Ops {
+        EQ,
+        GT,
+        LT,
+        LE,
+        GE
+    };
     public:
-        TagSelectorIs(const QString& key, const QString& value);
+        TagSelectorOperator(const QString& key, const QString& oper, const QString& value);
 
         virtual TagSelector* copy() const;
         virtual TagSelectorMatchResult matches(const Feature* F) const;
@@ -52,7 +59,8 @@ class TagSelectorIs : public TagSelector
 
     private:
         QRegExp rx;
-        QString Key, Value;
+        QString Key, Oper, Value;
+        Ops theOp;
         double numValue;
         QDateTime dtValue;
         bool UseRegExp;
