@@ -528,7 +528,7 @@ void PropertiesDock::resetValues()
                 }
             }
             if (theTemplates) {
-                w = theTemplates->getWidget(Pt);
+                w = theTemplates->getWidget(Pt, Main->view());
                 w->installEventFilter(shortcutFilter);
                 TrackPointUi.variableLayout->addWidget(w);
             }
@@ -555,7 +555,7 @@ void PropertiesDock::resetValues()
                 }
             }
             if (theTemplates) {
-                w = theTemplates->getWidget(R);
+                w = theTemplates->getWidget(R, Main->view());
                 w->installEventFilter(shortcutFilter);
                 RoadUi.variableLayout->addWidget(w);
             }
@@ -577,7 +577,7 @@ void PropertiesDock::resetValues()
                 }
             }
             if (theTemplates) {
-                w = theTemplates->getWidget(L);
+                w = theTemplates->getWidget(L, Main->view());
                 w->installEventFilter(shortcutFilter);
                 RelationUi.variableLayout->addWidget(w);
             }

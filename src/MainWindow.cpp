@@ -2714,7 +2714,7 @@ void MainWindow::on_editSelectAction_triggered()
         int added = 0;
         for (VisibleFeatureIterator i(theDocument); !i.isEnd() && added < selMaxResult; ++i) {
             Feature* F = i.get();
-            if (tsel->matches(F)) {
+            if (tsel->matches(F, theView)) {
                 selection.push_back(F);
                 ++added;
             }

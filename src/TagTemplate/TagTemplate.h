@@ -39,14 +39,14 @@ class TagTemplateWidget: public QObject
         virtual ~TagTemplateWidget();
 
     public:
-        QString id() {return (!theId.isEmpty() ? theId : theTag);};
-        QString tag() {return theTag;};
-        virtual QWidget*	getWidget(const Feature* /* F */) {return NULL;};
-        virtual TagTemplateWidgetValue* getCurrentValue() {return NULL;};
+        QString id() {return (!theId.isEmpty() ? theId : theTag);}
+        QString tag() {return theTag;}
+        virtual QWidget*	getWidget(const Feature* /* F */, const MapView* /*V*/) {return NULL;}
+        virtual TagTemplateWidgetValue* getCurrentValue() {return NULL;}
 
-        virtual void apply(const Feature*) {};
+        virtual void apply(const Feature*) {}
 
-        virtual bool toXML(QDomElement& /* xParent */, bool /* header */) {return false;};
+        virtual bool toXML(QDomElement& /* xParent */, bool /* header */) {return false;}
         static TagTemplateWidget*		fromXml(const QDomElement& e);
 
         void parseCommonElements(const QDomElement& e);
@@ -77,7 +77,7 @@ class TagTemplateWidgetValue: public TagTemplateWidget
     Q_OBJECT
 
     public:
-        TagTemplateWidgetValue(const QString& aTagValue) : theTagValue(aTagValue) {};
+        TagTemplateWidgetValue(const QString& aTagValue) : theTagValue(aTagValue) {}
 
     public:
         QString		theTagValue;
@@ -98,7 +98,7 @@ class TagTemplateWidgetCombo: public TagTemplateWidget
         virtual ~TagTemplateWidgetCombo();
 
     public:
-        QWidget*	getWidget(const Feature* F);
+        QWidget*	getWidget(const Feature* F, const MapView* V);
 
         virtual void apply(const Feature* F);
 
@@ -114,7 +114,7 @@ class TagTemplateWidgetYesno: public TagTemplateWidget
     Q_OBJECT
 
     public:
-        QWidget*	getWidget(const Feature* F);
+        QWidget*	getWidget(const Feature* F, const MapView* V);
 
         virtual void apply(const Feature* F);
 
@@ -133,7 +133,7 @@ class TagTemplateWidgetConstant: public TagTemplateWidget
         ~TagTemplateWidgetConstant();
 
     public:
-        QWidget*	getWidget(const Feature* F);
+        QWidget*	getWidget(const Feature* F, const MapView* V);
 
         virtual void apply(const Feature* F);
 
@@ -146,7 +146,7 @@ class TagTemplateWidgetEdit: public TagTemplateWidget
     Q_OBJECT
 
     public:
-        QWidget*	getWidget(const Feature* F);
+        QWidget*	getWidget(const Feature* F, const MapView* V);
 
         virtual void apply(const Feature* F);
 
@@ -172,8 +172,8 @@ class TagTemplate: public QObject
         ~TagTemplate();
 
     public:
-        TagSelectorMatchResult		matchesTag(const Feature* F);
-        QWidget*	getWidget(const Feature* F);
+        TagSelectorMatchResult		matchesTag(const Feature* F, const MapView* V);
+        QWidget*	getWidget(const Feature* F, const MapView* V);
 
         void setSelector(const QString& aName);
         void setSelector(TagSelector* aSelector);
@@ -209,9 +209,9 @@ class TagTemplates : public QObject
         ~TagTemplates();
 
     public:
-        QWidget*	getWidget(const Feature* F);
+        QWidget*	getWidget(const Feature* F, const MapView* V);
         QList<TagTemplate*> items;
-        TagTemplate* match(Feature* F);
+        TagTemplate* match(const Feature* F, const MapView* V);
 
         void addWidget(TagTemplateWidget* aWidget);
         TagTemplateWidget* findWidget(const QString& tag);

@@ -57,7 +57,7 @@ public:
     void setSelector(const QString& aName);
     void setSelector(TagSelector* aSelector);
     bool isFilled() const;
-    TagSelectorMatchResult matchesTag(const Feature* F) const;
+    TagSelectorMatchResult matchesTag(const Feature* F, const MapView* V) const;
     bool matchesZoom(double PixelPerM) const;
     FeaturePainter& backgroundActive(bool b);
     FeaturePainter& background(QColor Color, double Scale, double Offset);

@@ -616,7 +616,7 @@ void FeaturePainter::setSelector(TagSelector* aSel)
     theSelector = aSel;
 }
 
-TagSelectorMatchResult FeaturePainter::matchesTag(const Feature* F) const
+TagSelectorMatchResult FeaturePainter::matchesTag(const Feature* F, const MapView* V) const
 {
     TagSelectorMatchResult res;
 
@@ -632,7 +632,7 @@ TagSelectorMatchResult FeaturePainter::matchesTag(const Feature* F) const
     //				return TagSelect_NoMatch;
     //	}
     //}
-    if ((res = theSelector->matches(F)))
+    if ((res = theSelector->matches(F,V)))
         return res;
     // Special casing for multipolygon relations
     //if (const Relation* R = dynamic_cast<const Relation*>(F))

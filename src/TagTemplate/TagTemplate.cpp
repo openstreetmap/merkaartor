@@ -153,9 +153,9 @@ TagTemplateWidgetCombo::~TagTemplateWidgetCombo()
 {
 }
 
-QWidget* TagTemplateWidgetCombo::getWidget(const Feature* F)
+QWidget* TagTemplateWidgetCombo::getWidget(const Feature* F, const MapView* V)
 {
-    if (theSelector && (theSelector->matches(F) != TagSelect_Match && theSelector->matches(F) != TagSelect_DefaultMatch))
+    if (theSelector && (theSelector->matches(F,V) != TagSelect_Match && theSelector->matches(F,V) != TagSelect_DefaultMatch))
         return NULL;
 
     QString lang = getDefaultLanguage();
@@ -303,9 +303,9 @@ void TagTemplateWidgetCombo::apply(const Feature*)
 
 /** TagTemplateWidgetYesno **/
 
-QWidget* TagTemplateWidgetYesno::getWidget(const Feature* F)
+QWidget* TagTemplateWidgetYesno::getWidget(const Feature* F, const MapView* V)
 {
-    if (theSelector && (theSelector->matches(F) != TagSelect_Match && theSelector->matches(F) != TagSelect_DefaultMatch))
+    if (theSelector && (theSelector->matches(F,V) != TagSelect_Match && theSelector->matches(F,V) != TagSelect_DefaultMatch))
         return NULL;
 
     QString lang = getDefaultLanguage();
@@ -415,9 +415,9 @@ TagTemplateWidgetConstant::~TagTemplateWidgetConstant()
 {
 }
 
-QWidget* TagTemplateWidgetConstant::getWidget(const Feature* F)
+QWidget* TagTemplateWidgetConstant::getWidget(const Feature* F, const MapView* V)
 {
-    if (theSelector && (theSelector->matches(F) != TagSelect_Match && theSelector->matches(F) != TagSelect_DefaultMatch))
+    if (theSelector && (theSelector->matches(F,V) != TagSelect_Match && theSelector->matches(F,V) != TagSelect_DefaultMatch))
         return NULL;
 
     QString lang = getDefaultLanguage();
@@ -547,9 +547,9 @@ bool TagTemplateWidgetConstant::toXML(QDomElement& xParent, bool header)
 
 /** TagTemplateWidgetEdit **/
 
-QWidget* TagTemplateWidgetEdit::getWidget(const Feature* F)
+QWidget* TagTemplateWidgetEdit::getWidget(const Feature* F, const MapView* V)
 {
-    if (theSelector && (theSelector->matches(F) != TagSelect_Match && theSelector->matches(F) != TagSelect_DefaultMatch))
+    if (theSelector && (theSelector->matches(F,V) != TagSelect_Match && theSelector->matches(F,V) != TagSelect_DefaultMatch))
         return NULL;
 
     QString lang = getDefaultLanguage();
@@ -684,7 +684,7 @@ TagTemplate::~TagTemplate()
     delete theSelector;
 }
 
-TagSelectorMatchResult TagTemplate::matchesTag(const Feature* F)
+TagSelectorMatchResult TagTemplate::matchesTag(const Feature* F, const MapView* V)
 {
     TagSelectorMatchResult res;
 
@@ -701,7 +701,7 @@ TagSelectorMatchResult TagTemplate::matchesTag(const Feature* F)
                         return TagSelect_NoMatch;
         }
     }
-    if ((res = theSelector->matches(F)))
+    if ((res = theSelector->matches(F,V)))
         return res;
     // Special casing for multipolygon relations
     if (const Relation* R = qobject_cast<const Relation*>(F))
@@ -709,14 +709,14 @@ TagSelectorMatchResult TagTemplate::matchesTag(const Feature* F)
         if (R->tagValue("type","") == "multipolygon") {
             for (int i=0; i<R->size(); ++i)
                 if (!R->get(i)->isDeleted())
-                    if ((res = theSelector->matches(R->get(i))))
+                    if ((res = theSelector->matches(R->get(i),V)))
                         return res;
         }
     }
     return TagSelect_NoMatch;
 }
 
-QWidget* TagTemplate::getWidget(const Feature* F)
+QWidget* TagTemplate::getWidget(const Feature* F, const MapView* V)
 {
     QString lang = getDefaultLanguage();
     QString defLang = "en";
@@ -732,7 +732,7 @@ QWidget* TagTemplate::getWidget(const Feature* F)
     aLayout->setContentsMargins(2, 2, 2, 2);
 
     for (int i=0; i<theFields.size(); ++i) {
-        QWidget* W = theFields[i]->getWidget(F);
+        QWidget* W = theFields[i]->getWidget(F,V);
         if (W)
             aLayout->addWidget(W);
     }
@@ -860,7 +860,7 @@ TagTemplates::~TagTemplates()
         delete items[i];
 }
 
-QWidget* TagTemplates::getWidget(const Feature* F)
+QWidget* TagTemplates::getWidget(const Feature* F, const MapView* V)
 {
     QString lang = getDefaultLanguage();
     QString defLang = "en";
@@ -919,7 +919,7 @@ QWidget* TagTemplates::getWidget(const Feature* F)
     }
     if (!forcedTemplate) {
         for (int i=0; i<items.size(); ++i) {
-            if (idx == -1 && items[i]->matchesTag(F) == TagSelect_Match) {
+            if (idx == -1 && items[i]->matchesTag(F,V) == TagSelect_Match) {
                 curTemplate = items[i];
                 idx = i+1;
             }
@@ -927,7 +927,7 @@ QWidget* TagTemplates::getWidget(const Feature* F)
     }
     if (!forcedTemplate && idx == -1) {
         for (int i=0; i<items.size(); ++i) {
-            if (idx == -1 && items[i]->matchesTag(F) == TagSelect_DefaultMatch) {
+            if (idx == -1 && items[i]->matchesTag(F,V) == TagSelect_DefaultMatch) {
                 curTemplate = items[i];
                 idx = i+1;
             }
@@ -940,7 +940,7 @@ QWidget* TagTemplates::getWidget(const Feature* F)
         theCombo->setCurrentIndex(idx);
 
     if (curTemplate) {
-        aLayout->addWidget(curTemplate->getWidget(F));
+        aLayout->addWidget(curTemplate->getWidget(F,V));
         connect(curTemplate, SIGNAL(tagChanged(QString, QString)), this, SLOT(on_tag_changed(QString, QString)));
         connect(curTemplate, SIGNAL(tagCleared(QString)), this, SLOT(on_tag_cleared(QString)));
     }
@@ -1044,14 +1044,14 @@ bool TagTemplates::mergeXml(const QDomElement& e)
     return true;
 }
 
-TagTemplate* TagTemplates::match(Feature* F)
+TagTemplate* TagTemplates::match(const Feature* F, const MapView* V)
 {
     for (int i=0; i<items.size(); ++i) {
-        if (items[i]->matchesTag(F) == TagSelect_Match)
+        if (items[i]->matchesTag(F,V) == TagSelect_Match)
             return items[i];
     }
     for (int i=0; i<items.size(); ++i) {
-        if (items[i]->matchesTag(F) == TagSelect_DefaultMatch)
+        if (items[i]->matchesTag(F,V) == TagSelect_DefaultMatch)
             return items[i];
     }
     return NULL;

@@ -387,7 +387,7 @@ bool Feature::isReadonly() const
                     if (D->filterRevision() != p->FilterRevision) {
                         p->FilterRevision = D->filterRevision();
                         if (D->getTagFilter()) {
-                            if (D->getTagFilter()->matches(this) != TagSelect_NoMatch)
+                            if (D->getTagFilter()->matches(this,NULL) != TagSelect_NoMatch)
                                 p->ReadOnly = false;
                             else
                                 p->ReadOnly = true;
@@ -615,7 +615,7 @@ void MapFeaturePrivate::updatePossiblePainters()
     for (int i=0; i<M_STYLE->painterSize(); ++i)
     {
         const FeaturePainter* Current = M_STYLE->getPainter(i);
-        switch (Current->matchesTag(theFeature)) {
+        switch (Current->matchesTag(theFeature,NULL)) {
             case TagSelect_Match:
                 PossiblePainters.push_back(Current);
                 break;

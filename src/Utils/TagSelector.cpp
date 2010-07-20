@@ -2,6 +2,7 @@
 
 #include "Feature.h"
 #include "Way.h"
+#include "MapView.h"
 
 void skipWhite(const QString& Expression, int& idx)
 {
@@ -322,7 +323,10 @@ TagSelectorOperator::TagSelectorOperator(const QString& key, const QString& oper
         numValue = value.toDouble(&ok);
         if (!ok)
             numValue = Q_QNAN;
-    }
+    } else if (key.toUpper() == ":ZOOMLEVEL")
+        specialKey = TagSelectKey_ZoomLevel;
+    else if (key.toUpper() == ":PIXELPERM")
+        specialKey = TagSelectKey_PixelPerM;
 
     if (value.toUpper() == "_NULL_") {
         specialValue = TagSelectValue_Empty;
@@ -352,7 +356,7 @@ TagSelector* TagSelectorOperator::copy() const
 
 static const QString emptyString("__EMPTY__");
 
-TagSelectorMatchResult TagSelectorOperator::matches(const Feature* F) const
+TagSelectorMatchResult TagSelectorOperator::matches(const Feature* F, const MapView* V) const
 {
     if (specialKey != TagSelectKey_None) {
         switch (specialKey) {
@@ -460,6 +464,33 @@ TagSelectorMatchResult TagSelectorOperator::matches(const Feature* F) const
 
             break;
 
+        case TagSelectKey_PixelPerM: {
+            if (!V)
+                return TagSelect_Match;
+            bool okval;
+            double valN = Value.toDouble(&okval);
+            if (!okval)
+                return TagSelect_NoMatch;
+            switch (theOp) {
+            case EQ:
+                return (V->pixelPerM() == valN ? TagSelect_Match : TagSelect_NoMatch);
+                break;
+            case GT:
+                return (V->pixelPerM() > valN ? TagSelect_Match : TagSelect_NoMatch);
+                break;
+            case LT:
+                return (V->pixelPerM() < valN ? TagSelect_Match : TagSelect_NoMatch);
+                break;
+            case GE:
+                return (V->pixelPerM() >= valN ? TagSelect_Match : TagSelect_NoMatch);
+                break;
+            case LE:
+                return (V->pixelPerM() <= valN ? TagSelect_Match : TagSelect_NoMatch);
+                break;
+            }
+            break;
+        }
+
         default:
             return TagSelect_NoMatch;
             break;
@@ -563,7 +594,7 @@ TagSelector* TagSelectorIsOneOf::copy() const
     return new TagSelectorIsOneOf(Key,Values);
 }
 
-TagSelectorMatchResult TagSelectorIsOneOf::matches(const Feature* F) const
+TagSelectorMatchResult TagSelectorIsOneOf::matches(const Feature* F, const MapView* V) const
 {
     if (specialKey != TagSelectKey_None) {
         foreach (QString Value, exactMatchv) {
@@ -645,7 +676,7 @@ TagSelector* TagSelectorTypeIs::copy() const
     return new TagSelectorTypeIs(Type);
 }
 
-TagSelectorMatchResult TagSelectorTypeIs::matches(const Feature* F) const
+TagSelectorMatchResult TagSelectorTypeIs::matches(const Feature* F, const MapView* V) const
 {
     if (Type.compare(F->getClass(), Qt::CaseInsensitive) == 0)
         return TagSelect_Match;
@@ -677,7 +708,7 @@ TagSelector* TagSelectorHasTags::copy() const
     return new TagSelectorHasTags();
 }
 
-TagSelectorMatchResult TagSelectorHasTags::matches(const Feature* F) const
+TagSelectorMatchResult TagSelectorHasTags::matches(const Feature* F, const MapView* V) const
 {
     return (F->tagSize()==0 || (F->tagSize()==1 && F->tagKey(0)=="created_by" )) ? TagSelect_NoMatch : TagSelect_Match;
 }
@@ -710,10 +741,10 @@ TagSelector* TagSelectorOr::copy() const
     return new TagSelectorOr(Copied);
 }
 
-TagSelectorMatchResult TagSelectorOr::matches(const Feature* F) const
+TagSelectorMatchResult TagSelectorOr::matches(const Feature* F, const MapView* V) const
 {
     for (int i=0; i<Terms.size(); ++i)
-        if (Terms[i]->matches(F) == TagSelect_Match)
+        if (Terms[i]->matches(F,V) == TagSelect_Match)
             return TagSelect_Match;
     return TagSelect_NoMatch;
 }
@@ -756,10 +787,10 @@ TagSelector* TagSelectorAnd::copy() const
     return new TagSelectorAnd(Copied);
 }
 
-TagSelectorMatchResult TagSelectorAnd::matches(const Feature* F) const
+TagSelectorMatchResult TagSelectorAnd::matches(const Feature* F, const MapView* V) const
 {
     for (int i=0; i<Terms.size(); ++i)
-        if (Terms[i]->matches(F) == TagSelect_NoMatch)
+        if (Terms[i]->matches(F,V) == TagSelect_NoMatch)
             return TagSelect_NoMatch;
     return TagSelect_Match;
 }
@@ -795,11 +826,11 @@ TagSelector* TagSelectorNot::copy() const
     return new TagSelectorNot(Term->copy());
 }
 
-TagSelectorMatchResult TagSelectorNot::matches(const Feature* F) const
+TagSelectorMatchResult TagSelectorNot::matches(const Feature* F, const MapView* V) const
 {
     if (!Term)
         return TagSelect_NoMatch;
-    return (Term->matches(F) == TagSelect_Match) ? TagSelect_NoMatch : TagSelect_Match;
+    return (Term->matches(F,V) == TagSelect_Match) ? TagSelect_NoMatch : TagSelect_Match;
 }
 
 QString TagSelectorNot::asExpression(bool /* Precedence */) const
@@ -832,14 +863,14 @@ TagSelector* TagSelectorParent::copy() const
     return new TagSelectorParent(Term->copy());
 }
 
-TagSelectorMatchResult TagSelectorParent::matches(const Feature* F) const
+TagSelectorMatchResult TagSelectorParent::matches(const Feature* F, const MapView* V) const
 {
     if (!Term)
         return TagSelect_NoMatch;
 
     TagSelectorMatchResult ret = TagSelect_NoMatch;
     for (int i=0; i<F->sizeParents(); ++i) {
-        if (Term->matches(F->getParent(i)) == TagSelect_Match) {
+        if (Term->matches(F->getParent(i),V) == TagSelect_Match) {
             ret = TagSelect_Match;
             break;
         }
@@ -869,7 +900,7 @@ TagSelector* TagSelectorFalse::copy() const
     return new TagSelectorFalse();
 }
 
-TagSelectorMatchResult TagSelectorFalse::matches(const Feature* /* F */) const
+TagSelectorMatchResult TagSelectorFalse::matches(const Feature* /* F */, const MapView* V) const
 {
     return TagSelect_NoMatch;
 }
@@ -892,7 +923,7 @@ TagSelector* TagSelectorTrue::copy() const
     return new TagSelectorFalse();
 }
 
-TagSelectorMatchResult TagSelectorTrue::matches(const Feature* /* F */) const
+TagSelectorMatchResult TagSelectorTrue::matches(const Feature* /* F */, const MapView* V) const
 {
     return TagSelect_Match;
 }
@@ -921,10 +952,10 @@ TagSelector* TagSelectorDefault::copy() const
     return new TagSelectorDefault(Term->copy());
 }
 
-TagSelectorMatchResult TagSelectorDefault::matches(const Feature* F) const
+TagSelectorMatchResult TagSelectorDefault::matches(const Feature* F, const MapView* V) const
 {
     //return (Term->matches(F) == TagSelect_Match) ? TagSelect_DefaultMatch : TagSelect_NoMatch;
-    if (Term->matches(F) == TagSelect_Match)
+    if (Term->matches(F,V) == TagSelect_Match)
         return TagSelect_DefaultMatch;
     else
         return TagSelect_NoMatch;
