@@ -238,20 +238,21 @@ double Relation::pixelDistance(const QPointF& Target, double ClearEndDistance, b
     //	}
     //}
 
+
     double D;
-    QRectF bb = QRectF(theView->toView(boundingBox().bottomLeft()),theView->toView(boundingBox().topRight()));
+    //QRectF bb = QRectF(theView->toView(boundingBox().bottomLeft()),theView->toView(boundingBox().topRight()));
     //bb.adjust(-10, -10, 10, 10);
 
-    LineF F(bb.topLeft(), bb.topRight());
+    LineF F(theView->toView(boundingBox().topLeft()), theView->toView(boundingBox().topRight()));
     D = F.capDistance(Target);
     if ((D < ClearEndDistance) && (D<Best)) Best = D;
-    F = LineF(bb.topLeft(), bb.bottomLeft());
+    F = LineF(theView->toView(boundingBox().topLeft()), theView->toView(boundingBox().bottomLeft()));
     D = F.capDistance(Target);
     if ((D < ClearEndDistance) && (D<Best)) Best = D;
-    F = LineF(bb.bottomRight(), bb.bottomLeft());
+    F = LineF(theView->toView(boundingBox().bottomRight()), theView->toView(boundingBox().bottomLeft()));
     D = F.capDistance(Target);
     if ((D < ClearEndDistance) && (D<Best)) Best = D;
-    F = LineF(bb.bottomRight(), bb.topRight());
+    F = LineF(theView->toView(boundingBox().bottomRight()), theView->toView(boundingBox().topRight()));
     D = F.capDistance(Target);
     if ((D < ClearEndDistance) && (D<Best)) Best = D;
 
@@ -409,9 +410,17 @@ void Relation::buildPath(Projection const &theProjection, const QTransform& /*th
     if (!p->Members.size())
         return;
 
-    QRectF bb = QRectF(theProjection.project(boundingBox().bottomLeft()),theProjection.project(boundingBox().topRight()));
+    QVector<QPointF>theVector;
+    theVector.append(theProjection.project(boundingBox().bottomLeft()));
+    theVector.append(theProjection.project(boundingBox().topLeft()));
+    theVector.append(theProjection.project(boundingBox().topRight()));
+    theVector.append(theProjection.project(boundingBox().bottomRight()));
+    theVector.append(theProjection.project(boundingBox().bottomLeft()));
 
-    p->theBoundingPath.addRect(bb);
+    //QRectF bb = QPolygonF(theVector).boundingRect();
+    //p->theBoundingPath.addRect(bb);
+
+    p->theBoundingPath.addPolygon(QPolygonF(theVector));
 
     p->theBoundingPath = p->theBoundingPath.intersected(clipPath);
 }
