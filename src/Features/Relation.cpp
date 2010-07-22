@@ -178,7 +178,7 @@ void Relation::drawChildrenSpecial(QPainter& thePainter, QPen& Pen, MapView *the
     TP.setStyle(Qt::DashLine);
     for (int i=0; i<p->Members.size(); ++i)
         if (p->Members[i].second && !p->Members[i].second->isDeleted())
-            if (p->Members[i].second->boundingBox().intersects(theView->viewport()))    
+            if (p->Members[i].second->boundingBox().intersects(theView->viewport()))
             {
                 p->Members[i].second->drawSpecial(thePainter, TP, theView);
                 if (--depth > 0)
@@ -374,7 +374,7 @@ void Relation::buildPath(Projection const &theProjection, const QTransform& /*th
     if (!p->Members.size())
         return;
 
-    QVector<QPointF>theVector;
+    QPolygonF theVector;
     theVector.append(theProjection.project(boundingBox().bottomLeft()));
     theVector.append(theProjection.project(boundingBox().topLeft()));
     theVector.append(theProjection.project(boundingBox().topRight()));
@@ -384,7 +384,7 @@ void Relation::buildPath(Projection const &theProjection, const QTransform& /*th
     //QRectF bb = QPolygonF(theVector).boundingRect();
     //p->theBoundingPath.addRect(bb);
 
-    p->theBoundingPath.addPolygon(QPolygonF(theVector));
+    p->theBoundingPath.addPolygon(theVector);
 
     p->theBoundingPath = p->theBoundingPath.intersected(clipPath);
 }
