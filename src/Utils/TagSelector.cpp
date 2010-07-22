@@ -838,7 +838,7 @@ QString TagSelectorNot::asExpression(bool /* Precedence */) const
     if (!Term)
         return "";
     QString R;
-    R += " not(";
+    R += "not(";
     R += Term->asExpression(true);
     R += ")";
     return R;
