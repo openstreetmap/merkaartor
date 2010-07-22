@@ -1,4 +1,6 @@
 v0.17
+    * FIX : lat/lon grid fixes for non-othogonal projections
+    * FIX : for non-rthogonal projections, maximize the viewport in lat/lon
     * FIX : Handle empty style list in editor (fixes #3079)
     * FIX : Fix scale bar to take latitude into account.
     * ADD : Tool to align edges to regularly spaced angles (can orthogonalise buildings)

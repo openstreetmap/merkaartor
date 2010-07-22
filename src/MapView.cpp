@@ -428,15 +428,30 @@ void MapView::drawLatLonGrid(QPainter & P)
         medianLines << l;
     }
 
+    P.save();
+    P.setRenderHint(QPainter::Antialiasing);
     P.setPen(QColor(180, 217, 255));
+    QLineF lb = QLineF(rect().topLeft(), rect().bottomLeft());
+    QLineF lt = QLineF(rect().topLeft(), rect().topRight());
+    QLineF l;
     for (int i=0; i<parallelLines.size(); ++i) {
 
         if (parallelLines[i].size() == 0)
           continue;
 
         P.drawPolyline(p->theTransform.map(parallelLines[i]));
-        QPoint pt = QPoint(0, p->theTransform.map(parallelLines.at(i).at(0)).y());
-        QPoint ptt = pt + QPoint(5, -5);
+        int k=0;
+        QPointF pt;
+        while (k < parallelLines.at(i).size()-2) {
+            l = QLineF(p->theTransform.map(parallelLines.at(i).at(k)), p->theTransform.map(parallelLines.at(i).at(k+1)));
+            if (l.intersect(lb, &pt) == QLineF::BoundedIntersection)
+                break;
+            ++k;
+        }
+        if (pt.isNull())
+            continue;
+//        QPoint pt = QPoint(0, p->theTransform.map(parallelLines.at(i).at(0)).y());
+        QPoint ptt = pt.toPoint() + QPoint(5, -5);
         P.drawText(ptt, QString("%1").arg(coordToAng(theProjection.inverse(parallelLines.at(i).at(0)).lat()), 0, 'f', 2-prec));
     }
     for (int i=0; i<medianLines.size(); ++i) {
@@ -445,10 +460,22 @@ void MapView::drawLatLonGrid(QPainter & P)
           continue;
 
         P.drawPolyline(p->theTransform.map(medianLines[i]));
-        QPoint pt = QPoint(p->theTransform.map(medianLines.at(i).at(0)).x(), 0);
-        QPoint ptt = pt + QPoint(5, 10);
+        int k=0;
+        QPointF pt;
+        while (k < medianLines.at(i).size()-2) {
+            l = QLineF(p->theTransform.map(medianLines.at(i).at(k)), p->theTransform.map(medianLines.at(i).at(k+1)));
+            if (l.intersect(lt, &pt) == QLineF::BoundedIntersection)
+                break;
+            ++k;
+        }
+        if (pt.isNull())
+            continue;
+//        QPoint pt = QPoint(p->theTransform.map(medianLines.at(i).at(0)).x(), 0);
+        QPoint ptt = pt.toPoint() + QPoint(5, 10);
         P.drawText(ptt, QString("%1").arg(coordToAng(theProjection.inverse(medianLines.at(i).at(0)).lon()), 0, 'f', 2-prec));
     }
+
+    P.restore();
 }
 
 void MapView::drawFeatures(QPainter & P)
@@ -1000,9 +1027,15 @@ CoordBox MapView::viewport() const
 void MapView::viewportRecalc(const QRect & Screen)
 {
     QRectF fScreen(Screen);
-    p->Viewport =
-        CoordBox(theProjection.inverse(p->theTransform.inverted().map(fScreen.bottomLeft())),
-             theProjection.inverse(p->theTransform.inverted().map(fScreen.topRight())));
+    Coord bl = theProjection.inverse(p->theTransform.inverted().map(fScreen.bottomLeft()));
+    Coord br = theProjection.inverse(p->theTransform.inverted().map(fScreen.bottomRight()));
+    Coord tr = theProjection.inverse(p->theTransform.inverted().map(fScreen.topRight()));
+    Coord tl = theProjection.inverse(p->theTransform.inverted().map(fScreen.topLeft()));
+    double t = qMax(tr.lat(), tl.lat());
+    double b = qMin(br.lat(), bl.lat());
+    double l = qMin(tl.lon(), bl.lon());
+    double r = qMax(tr.lon(), br.lon());
+    p->Viewport = CoordBox(Coord(b, l), Coord(t, r));
 
     if (theProjection.projIsLatLong()) {
         p->PixelPerM = Screen.width() / (double)p->Viewport.lonDiff() * theProjection.lonAnglePerM(coordToRad(p->Viewport.center().lat()));
