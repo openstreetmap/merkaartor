@@ -3,6 +3,7 @@ TEMPLATE = subdirs
 !symbian {
     SUBDIRS += \
         # MArbitraryRasterMapBackground \
+        MNavitBackground \
         MYahooTiledBackground \
         MYahooBackground \
         MWalkingPapersBackground
