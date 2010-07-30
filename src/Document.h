@@ -5,7 +5,6 @@
 
 #include "Layer.h"
 #include "Maps/Coord.h"
-#include "PaintStyle/PaintStyle.h"
 #include "MainWindow.h"
 #include "Preferences/MerkaartorPreferences.h"
 #include "LayerDock.h"
@@ -25,6 +24,7 @@ class DrawingLayer;
 class DirtyLayer;
 class UploadedLayer;
 class DeletedLayer;
+class FeaturePainter;
 
 class Document : public QObject
 {
@@ -111,6 +111,8 @@ public:
     void setTitle(const QString aTitle);
 
     QString toPropertiesHtml();
+    int getFeaturePaintersSize();
+    const FeaturePainter* getFeaturePainter(int i);
 
 private:
     MapDocumentPrivate* p;

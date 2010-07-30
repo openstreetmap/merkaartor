@@ -1150,7 +1150,7 @@ public:
                 }
             }
 
-            if ((*itF)->isDeleted() || (*itF)->isHidden() || !(*itF)->hasEditPainter())
+            if ((*itF)->isDeleted() || (*itF)->isHidden() || !(*itF)->hasPainter())
                 continue;
 
             break;

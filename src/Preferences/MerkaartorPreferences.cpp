@@ -22,6 +22,8 @@
 #include "MapView.h"
 
 #include "IMapAdapter.h"
+#include "PaintStyle/IPaintStyle.h"
+#include "PaintStyle/MasPaintStyle.h"
 
 #define M_PARAM_IMPLEMENT_BOOL(Param, Category, Default) \
     bool mb_##Param = false; \
@@ -96,6 +98,23 @@
 #endif
 
 MerkaartorPreferences* MerkaartorPreferences::m_prefInstance = 0;
+MerkaartorPreferences* MerkaartorPreferences::instance() {
+    if (!m_prefInstance) {
+        m_prefInstance = new MerkaartorPreferences;
+    }
+
+    return m_prefInstance;
+}
+
+
+IPaintStyle* MerkaartorPreferences::m_EPSInstance = 0;
+IPaintStyle* MerkaartorPreferences::styleinstance() {
+    if (!m_EPSInstance) {
+        m_EPSInstance = new MasPaintStyle;
+    }
+
+    return m_EPSInstance;
+}
 
 Tool::Tool(QString Name, QString Path)
     : ToolName(Name), ToolPath(Path)

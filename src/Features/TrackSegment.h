@@ -22,7 +22,7 @@ class TrackSegment : public Feature
 
     public:
         virtual QString getClass() const {return "TrackSegment";}
-        virtual Feature::FeatureType getType() const {return Feature::Segments;}
+        virtual IFeature::FeatureType getType() const {return IFeature::OsmSegment;}
         virtual void updateMeta();
 
         virtual CoordBox boundingBox() const;

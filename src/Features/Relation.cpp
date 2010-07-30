@@ -167,9 +167,13 @@ void Relation::drawSpecial(QPainter& thePainter, QPen& Pen, MapView* theView)
 
 void Relation::drawParentsSpecial(QPainter& thePainter, QPen& Pen, MapView* theView)
 {
-    for (int i=0; i<sizeParents(); ++i)
-        if (!getParent(i)->isDeleted())
-            getParent(i)->drawSpecial(thePainter, Pen, theView);
+    for (int i=0; i<sizeParents(); ++i) {
+        if (!getParent(i)->isDeleted()) {
+            Feature* f = CAST_FEATURE(getParent(i));
+            if (f)
+                f->drawSpecial(thePainter, Pen, theView);
+        }
+    }
 }
 
 void Relation::drawChildrenSpecial(QPainter& thePainter, QPen& Pen, MapView *theView, int depth)

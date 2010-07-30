@@ -1,7 +1,7 @@
 #ifndef MERKAARTOR_STYLE_TAGSELECTOR_H_
 #define MERKAARTOR_STYLE_TAGSELECTOR_H_
 
-class Feature;
+class IFeature;
 
 #include <QtCore/QString>
 #include <QRegExp>
@@ -30,14 +30,13 @@ enum TagSelectorSpecialValue {
     TagSelectValue_Empty
 };
 
-class MapView;
 class TagSelector
 {
     public:
         virtual ~TagSelector() = 0;
 
         virtual TagSelector* copy() const = 0;
-        virtual TagSelectorMatchResult matches(const Feature* F, const MapView* V) const = 0;
+        virtual TagSelectorMatchResult matches(const IFeature* F, double PixelPerM) const = 0;
         virtual QString asExpression(bool Precedence) const = 0;
 
         static TagSelector* parse(const QString& Expression);
@@ -57,7 +56,7 @@ class TagSelectorOperator : public TagSelector
         TagSelectorOperator(const QString& key, const QString& oper, const QString& value);
 
         virtual TagSelector* copy() const;
-        virtual TagSelectorMatchResult matches(const Feature* F, const MapView* V) const;
+        virtual TagSelectorMatchResult matches(const IFeature* F, double PixelPerM) const;
         virtual QString asExpression(bool Precedence) const;
 
     private:
@@ -77,7 +76,7 @@ class TagSelectorIsOneOf : public TagSelector
         TagSelectorIsOneOf(const QString& key, const QList<QString>& values);
 
         virtual TagSelector* copy() const;
-        virtual TagSelectorMatchResult matches(const Feature* F, const MapView* V) const;
+        virtual TagSelectorMatchResult matches(const IFeature* F, double PixelPerM) const;
         virtual QString asExpression(bool Precedence) const;
 
     private:
@@ -95,7 +94,7 @@ class TagSelectorTypeIs : public TagSelector
         TagSelectorTypeIs(const QString& type);
 
         virtual TagSelector* copy() const;
-        virtual TagSelectorMatchResult matches(const Feature* F, const MapView* V) const;
+        virtual TagSelectorMatchResult matches(const IFeature* F, double PixelPerM) const;
         virtual QString asExpression(bool Precedence) const;
 
     private:
@@ -108,7 +107,7 @@ class TagSelectorHasTags : public TagSelector
         TagSelectorHasTags();
 
         virtual TagSelector* copy() const;
-        virtual TagSelectorMatchResult matches(const Feature* F, const MapView* V) const;
+        virtual TagSelectorMatchResult matches(const IFeature* F, double PixelPerM) const;
         virtual QString asExpression(bool Precedence) const;
 };
 
@@ -119,7 +118,7 @@ class TagSelectorOr : public TagSelector
         virtual ~TagSelectorOr();
 
         virtual TagSelector* copy() const;
-        virtual TagSelectorMatchResult matches(const Feature* F, const MapView* V) const;
+        virtual TagSelectorMatchResult matches(const IFeature* F, double PixelPerM) const;
         virtual QString asExpression(bool Precedence) const;
 
     private:
@@ -133,7 +132,7 @@ class TagSelectorAnd : public TagSelector
         virtual ~TagSelectorAnd();
 
         virtual TagSelector* copy() const;
-        virtual TagSelectorMatchResult matches(const Feature* F, const MapView* V) const;
+        virtual TagSelectorMatchResult matches(const IFeature* F, double PixelPerM) const;
         virtual QString asExpression(bool Precedence) const;
 
     private:
@@ -147,7 +146,7 @@ class TagSelectorNot : public TagSelector
         virtual ~TagSelectorNot();
 
         virtual TagSelector* copy() const;
-        virtual TagSelectorMatchResult matches(const Feature* F, const MapView* V) const;
+        virtual TagSelectorMatchResult matches(const IFeature* F, double PixelPerM) const;
         virtual QString asExpression(bool Precedence) const;
 
     private:
@@ -161,7 +160,7 @@ class TagSelectorParent : public TagSelector
         virtual ~TagSelectorParent();
 
         virtual TagSelector* copy() const;
-        virtual TagSelectorMatchResult matches(const Feature* F, const MapView* V) const;
+        virtual TagSelectorMatchResult matches(const IFeature* F, double PixelPerM) const;
         virtual QString asExpression(bool Precedence) const;
 
     private:
@@ -174,7 +173,7 @@ class TagSelectorFalse : public TagSelector
         TagSelectorFalse();
 
         virtual TagSelector* copy() const;
-        virtual TagSelectorMatchResult matches(const Feature* F, const MapView* V) const;
+        virtual TagSelectorMatchResult matches(const IFeature* F, double PixelPerM) const;
         virtual QString asExpression(bool Precedence) const;
 };
 
@@ -184,7 +183,7 @@ class TagSelectorTrue : public TagSelector
         TagSelectorTrue();
 
         virtual TagSelector* copy() const;
-        virtual TagSelectorMatchResult matches(const Feature* F, const MapView* V) const;
+        virtual TagSelectorMatchResult matches(const IFeature* F, double PixelPerM) const;
         virtual QString asExpression(bool Precedence) const;
 };
 
@@ -195,7 +194,7 @@ class TagSelectorDefault : public TagSelector
         virtual ~TagSelectorDefault();
 
         virtual TagSelector* copy() const;
-        virtual TagSelectorMatchResult matches(const Feature* F, const MapView* V) const;
+        virtual TagSelectorMatchResult matches(const IFeature* F, double PixelPerM) const;
         virtual QString asExpression(bool Precedence) const;
 
     private:

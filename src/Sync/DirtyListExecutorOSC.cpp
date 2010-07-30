@@ -208,13 +208,14 @@ bool DirtyListExecutorOSC::stop()
                     if (F) {
                         QString idPrefix;
                         switch (F->getType()) {
-                        case Feature::Nodes:
+                        case IFeature::Point:
                             idPrefix = "node_";
                             break;
-                        case Feature::Ways:
+                        case IFeature::LineString:
+                        case IFeature::Polygon:
                             idPrefix = "way_";
                             break;
-                        case Feature::Relations:
+                        case IFeature::OsmRelation:
                             idPrefix = "rel_";
                             break;
                         default:

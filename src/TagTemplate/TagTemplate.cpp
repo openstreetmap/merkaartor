@@ -14,6 +14,7 @@
 
 #include "Features.h"
 #include "FeatureCommands.h"
+#include "MapView.h"
 
 #include <QComboBox>
 #include <QLabel>
@@ -155,7 +156,7 @@ TagTemplateWidgetCombo::~TagTemplateWidgetCombo()
 
 QWidget* TagTemplateWidgetCombo::getWidget(const Feature* F, const MapView* V)
 {
-    if (theSelector && (theSelector->matches(F,V) != TagSelect_Match && theSelector->matches(F,V) != TagSelect_DefaultMatch))
+    if (theSelector && (theSelector->matches(F,V->pixelPerM()) != TagSelect_Match && theSelector->matches(F,V->pixelPerM()) != TagSelect_DefaultMatch))
         return NULL;
 
     QString lang = getDefaultLanguage();
@@ -305,7 +306,7 @@ void TagTemplateWidgetCombo::apply(const Feature*)
 
 QWidget* TagTemplateWidgetYesno::getWidget(const Feature* F, const MapView* V)
 {
-    if (theSelector && (theSelector->matches(F,V) != TagSelect_Match && theSelector->matches(F,V) != TagSelect_DefaultMatch))
+    if (theSelector && (theSelector->matches(F,V->pixelPerM()) != TagSelect_Match && theSelector->matches(F,V->pixelPerM()) != TagSelect_DefaultMatch))
         return NULL;
 
     QString lang = getDefaultLanguage();
@@ -417,7 +418,7 @@ TagTemplateWidgetConstant::~TagTemplateWidgetConstant()
 
 QWidget* TagTemplateWidgetConstant::getWidget(const Feature* F, const MapView* V)
 {
-    if (theSelector && (theSelector->matches(F,V) != TagSelect_Match && theSelector->matches(F,V) != TagSelect_DefaultMatch))
+    if (theSelector && (theSelector->matches(F,V->pixelPerM()) != TagSelect_Match && theSelector->matches(F,V->pixelPerM()) != TagSelect_DefaultMatch))
         return NULL;
 
     QString lang = getDefaultLanguage();
@@ -549,7 +550,7 @@ bool TagTemplateWidgetConstant::toXML(QDomElement& xParent, bool header)
 
 QWidget* TagTemplateWidgetEdit::getWidget(const Feature* F, const MapView* V)
 {
-    if (theSelector && (theSelector->matches(F,V) != TagSelect_Match && theSelector->matches(F,V) != TagSelect_DefaultMatch))
+    if (theSelector && (theSelector->matches(F,V->pixelPerM()) != TagSelect_Match && theSelector->matches(F,V->pixelPerM()) != TagSelect_DefaultMatch))
         return NULL;
 
     QString lang = getDefaultLanguage();
@@ -695,13 +696,13 @@ TagSelectorMatchResult TagTemplate::matchesTag(const Feature* F, const MapView* 
         // TODO create a isPartOfMultiPolygon(R) function for this
         for (int i=0; i<R->sizeParents(); ++i)
         {
-            if (const Relation* Parent = qobject_cast<const Relation*>(R->getParent(i)))
+            if (const Relation* Parent = dynamic_cast<const Relation*>(R->getParent(i)))
                 if (!Parent->isDeleted())
                     if (Parent->tagValue("type","") == "multipolygon")
                         return TagSelect_NoMatch;
         }
     }
-    if ((res = theSelector->matches(F,V)))
+    if ((res = theSelector->matches(F,V->pixelPerM())))
         return res;
     // Special casing for multipolygon relations
     if (const Relation* R = qobject_cast<const Relation*>(F))
@@ -709,7 +710,7 @@ TagSelectorMatchResult TagTemplate::matchesTag(const Feature* F, const MapView* 
         if (R->tagValue("type","") == "multipolygon") {
             for (int i=0; i<R->size(); ++i)
                 if (!R->get(i)->isDeleted())
-                    if ((res = theSelector->matches(R->get(i),V)))
+                    if ((res = theSelector->matches(R->get(i),V->pixelPerM())))
                         return res;
         }
     }

@@ -155,8 +155,11 @@ void MoveNodeInteraction::snapMouseReleaseEvent(QMouseEvent * event, Feature* Cl
             for (int j=0; j<Moving[i]->sizeParents(); ++j) {
                 if (Way* aRoad = CAST_WAY(Moving[i]->getParent(j)))
                     WaysToUpdate << aRoad;
-                else
-                    Moving[i]->getParent(j)->updateIndex();
+                else {
+                    Feature* f = CAST_FEATURE(Moving[i]->getParent(j));
+                    if (f)
+                        f->updateIndex();
+                }
             }
         }
         foreach (Way* w, WaysToUpdate) {

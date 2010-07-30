@@ -1,5 +1,5 @@
 #include "PaintStyle/PaintStyleEditor.h"
-#include "PaintStyle/PaintStyle.h"
+#include "PaintStyle/Painter.h"
 #include "MainWindow.h"
 #include "Document.h"
 
@@ -23,7 +23,7 @@ static void makeBoundaryIcon(QToolButton* bt, QColor C)
     bt->setIcon(pm);
 }
 
-PaintStyleEditor::PaintStyleEditor(QWidget *aParent, const GlobalPainter& aGlobalPainter, const QList<FeaturePainter>& aPainters)
+PaintStyleEditor::PaintStyleEditor(QWidget *aParent, const GlobalPainter& aGlobalPainter, const QList<Painter>& aPainters)
         : QDialog(aParent), theGlobalPainter(aGlobalPainter), thePainters(aPainters), FreezeUpdate(true)
 {
     setupUi(this);
@@ -68,7 +68,7 @@ void PaintStyleEditor::on_DuplicateButton_clicked()
     if (idx < 0 || idx >= thePainters.size())
         return;
     //QList<FeaturePainter>::iterator theIterator = thePainters.begin();
-    thePainters.insert(thePainters.begin() + idx, FeaturePainter(thePainters[idx]));
+    thePainters.insert(thePainters.begin() + idx, Painter(thePainters[idx]));
     idx++;
     PaintList->insertItem(idx, thePainters[idx].userName());
     PaintList->setCurrentRow(idx);
@@ -94,7 +94,7 @@ void PaintStyleEditor::on_btUp_clicked()
     int idx = static_cast<int>(PaintList->currentRow());
     if (idx <= 0)
         return;
-    FeaturePainter fp = thePainters[idx-1];
+    Painter fp = thePainters[idx-1];
     thePainters[idx-1] = thePainters[idx];
     thePainters[idx] = fp;
     PaintList->item(idx-1)->setText(thePainters[idx-1].userName());
@@ -107,7 +107,7 @@ void PaintStyleEditor::on_btDown_clicked()
     int idx = PaintList->currentRow();
     if (idx >= thePainters.size()-1)
         return;
-    FeaturePainter fp = thePainters[idx+1];
+    Painter fp = thePainters[idx+1];
     thePainters[idx+1] = thePainters[idx];
     thePainters[idx] = fp;
     PaintList->item(idx+1)->setText(thePainters[idx+1].userName());
@@ -131,7 +131,7 @@ void PaintStyleEditor::on_PaintList_itemSelectionChanged()
     }
     if (idx >= thePainters.size())
         return;
-    FeaturePainter& FP(thePainters[idx]);
+    Painter& FP(thePainters[idx]);
     TagSelection->setText(FP.userName());
     if (FP.zoomBoundaries().first == 0)
         LowerZoomBoundary->setValue(0);
@@ -217,7 +217,7 @@ void PaintStyleEditor::on_LowerZoomBoundary_valueChanged()
     int idx = PaintList->currentRow();
     if (idx >= thePainters.size())
         return;
-    FeaturePainter& FP(thePainters[idx]);
+    Painter& FP(thePainters[idx]);
     QPair<double, double> Result(0, 0);
     if (LowerZoomBoundary->value() > 10e-6)
         Result.first = 1 / LowerZoomBoundary->value();
@@ -266,7 +266,7 @@ void PaintStyleEditor::on_BackgroundColor_clicked()
     int idx = PaintList->currentRow();
     if (idx >= thePainters.size())
         return;
-    FeaturePainter& FP(thePainters[idx]);
+    Painter& FP(thePainters[idx]);
     QColor rgb = QColorDialog::getColor(FP.backgroundBoundary().Color, this
 #if (QT_VERSION >= QT_VERSION_CHECK(4, 5, 0))
                                             , tr("Select Color"), QColorDialog::ShowAlphaChannel
@@ -285,7 +285,7 @@ void PaintStyleEditor::on_ProportionalBackground_valueChanged()
     int idx = PaintList->currentRow();
     if (idx >= thePainters.size())
         return;
-    FeaturePainter& FP(thePainters[idx]);
+    Painter& FP(thePainters[idx]);
     FP.background(FP.backgroundBoundary().Color, ProportionalBackground->value(), FixedBackground->value());
 }
 
@@ -310,7 +310,7 @@ void PaintStyleEditor::on_ForegroundColor_clicked()
     int idx = PaintList->currentRow();
     if (idx >= thePainters.size())
         return;
-    FeaturePainter& FP(thePainters[idx]);
+    Painter& FP(thePainters[idx]);
     QColor rgb = QColorDialog::getColor(FP.foregroundBoundary().Color, this
 #if (QT_VERSION >= QT_VERSION_CHECK(4, 5, 0))
                                             , tr("Select Color"), QColorDialog::ShowAlphaChannel
@@ -329,7 +329,7 @@ void PaintStyleEditor::on_ProportionalForeground_valueChanged()
     int idx = PaintList->currentRow();
     if (idx >= thePainters.size())
         return;
-    FeaturePainter& FP(thePainters[idx]);
+    Painter& FP(thePainters[idx]);
     FP.foreground(FP.foregroundBoundary().Color, ProportionalForeground->value(), FixedForeground->value());
 }
 
@@ -346,7 +346,7 @@ void PaintStyleEditor::on_ForegroundDashed_clicked()
     int idx = PaintList->currentRow();
     if (idx >= thePainters.size())
         return;
-    FeaturePainter& FP(thePainters[idx]);
+    Painter& FP(thePainters[idx]);
     if (ForegroundDashed->isChecked())
         FP.foregroundDash(ForegroundDashOn->value(), ForegroundDashOff->value());
     else
@@ -378,7 +378,7 @@ void PaintStyleEditor::on_TouchupColor_clicked()
     int idx = PaintList->currentRow();
     if (idx >= thePainters.size())
         return;
-    FeaturePainter& FP(thePainters[idx]);
+    Painter& FP(thePainters[idx]);
     QColor rgb = QColorDialog::getColor(FP.touchupBoundary().Color, this
 #if (QT_VERSION >= QT_VERSION_CHECK(4, 5, 0))
                                             , tr("Select Color"), QColorDialog::ShowAlphaChannel
@@ -397,7 +397,7 @@ void PaintStyleEditor::on_ProportionalTouchup_valueChanged()
     int idx = PaintList->currentRow();
     if (idx >= thePainters.size())
         return;
-    FeaturePainter& FP(thePainters[idx]);
+    Painter& FP(thePainters[idx]);
     FP.touchup(FP.touchupBoundary().Color, ProportionalTouchup->value(), FixedTouchup->value());
 }
 
@@ -414,7 +414,7 @@ void PaintStyleEditor::on_TouchupDashed_clicked()
     int idx = PaintList->currentRow();
     if (idx >= thePainters.size())
         return;
-    FeaturePainter& FP(thePainters[idx]);
+    Painter& FP(thePainters[idx]);
     if (TouchupDashed->isChecked())
         FP.touchupDash(TouchupDashOn->value(), TouchupDashOff->value());
     else
@@ -446,7 +446,7 @@ void PaintStyleEditor::on_FillColor_clicked()
     int idx = PaintList->currentRow();
     if (idx >= thePainters.size())
         return;
-    FeaturePainter& FP(thePainters[idx]);
+    Painter& FP(thePainters[idx]);
     QColor rgb = QColorDialog::getColor(FP.fillColor(), this
 #if (QT_VERSION >= QT_VERSION_CHECK(4, 5, 0))
                                             , tr("Select Color"), QColorDialog::ShowAlphaChannel
@@ -475,7 +475,7 @@ void PaintStyleEditor::on_IconName_textEdited()
     int idx = PaintList->currentRow();
     if (idx >= thePainters.size())
         return;
-    FeaturePainter& FP(thePainters[idx]);
+    Painter& FP(thePainters[idx]);
     FP.setIcon(IconName->text(), ProportionalIcon->value(), FixedIcon->value());
 }
 
@@ -536,7 +536,7 @@ void PaintStyleEditor::on_LabelColor_clicked()
     int idx = PaintList->currentRow();
     if (idx >= thePainters.size())
         return;
-    FeaturePainter& FP(thePainters[idx]);
+    Painter& FP(thePainters[idx]);
     QColor rgb = QColorDialog::getColor(FP.labelBoundary().Color, this
 #if (QT_VERSION >= QT_VERSION_CHECK(4, 5, 0))
                                             , tr("Select Color"), QColorDialog::ShowAlphaChannel
@@ -555,7 +555,7 @@ void PaintStyleEditor::on_ProportionalLabel_valueChanged()
     int idx = PaintList->currentRow();
     if (idx >= thePainters.size())
         return;
-    FeaturePainter& FP(thePainters[idx]);
+    Painter& FP(thePainters[idx]);
     FP.label(FP.labelBoundary().Color, ProportionalLabel->value(), FixedLabel->value());
 }
 
@@ -577,7 +577,7 @@ void PaintStyleEditor::on_LabelBackgroundlColor_clicked()
     int idx = PaintList->currentRow();
     if (idx >= thePainters.size())
         return;
-    FeaturePainter& FP(thePainters[idx]);
+    Painter& FP(thePainters[idx]);
     QColor rgb = QColorDialog::getColor(FP.labelBackgroundColor(), this
 #if (QT_VERSION >= QT_VERSION_CHECK(4, 5, 0))
                                             , tr("Select Color"), QColorDialog::ShowAlphaChannel
@@ -602,7 +602,7 @@ void PaintStyleEditor::updatePaintList()
     int idx = PaintList->currentRow();
     if (idx >= thePainters.size())
         return;
-    FeaturePainter& FP(thePainters[idx]);
+    Painter& FP(thePainters[idx]);
     FP.setSelector(TagSelection->text());
     PaintList->currentItem()->setText(FP.userName());
 }

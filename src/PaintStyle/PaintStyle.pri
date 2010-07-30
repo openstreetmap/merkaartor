@@ -5,16 +5,13 @@ DEPENDPATH += PaintStyle
 HEADERS +=  \
     MasPaintStyle.h \
     MapCSSPaintstyle.h \
-    PaintStyle.h \
-    PaintStyleEditor.h
+    PrimitivePainter.h \
+    Painter.h \
+    PaintStyle/IPaintStyle.h
 
 # Source files
 SOURCES +=  \
     MasPaintStyle.cpp \
     MapCSSPaintstyle.cpp \
-    PaintStyle.cpp \
-    PaintStyleEditor.cpp
-
-# Forms
-FORMS +=  \
-    PaintStyleEditor.ui
+    PrimitivePainter.cpp \
+    Painter.cpp

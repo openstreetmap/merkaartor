@@ -1,9 +1,13 @@
 # Header files
-HEADERS += NativeRenderDialog.h \
+HEADERS += \
+    FeaturePainter.h \
+    NativeRenderDialog.h \
     MapRenderer.h
 
 # Source files
-SOURCES += NativeRenderDialog.cpp \
+SOURCES += \
+    FeaturePainter.cpp \
+    NativeRenderDialog.cpp \
     MapRenderer.cpp
 
 # Forms

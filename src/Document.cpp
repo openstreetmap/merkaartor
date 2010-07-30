@@ -14,6 +14,8 @@
 #include "LayerWidget.h"
 
 #include "Utils/TagSelector.h"
+#include "PaintStyle/IPaintStyle.h"
+#include "PaintStyle/FeaturePainter.h"
 
 #include <QtCore/QString>
 #include <QMultiMap>
@@ -57,14 +59,14 @@ public:
     UploadedLayer*			uploadedLayer;
     LayerDock*					theDock;
     Layer*					lastDownloadLayer;
-
     QHash<Layer*, CoordBox>		downloadBoxes;
 
     QHash< QString, QSet<QString> * >		tagList;
-
     TagSelector* tagFilter;
     int FilterRevision;
     QString title;
+
+    QList<FeaturePainter> theFeaturePainters;
 
 };
 
@@ -76,6 +78,10 @@ Document::Document()
 
     setFilterType(M_PREFS->getCurrentFilter());
     p->title = tr("untitled");
+
+    for (int i=0; i<M_STYLE->painterSize(); ++i) {
+        p->theFeaturePainters.append(FeaturePainter(*M_STYLE->getPainter(i)));
+    }
 }
 
 Document::Document(LayerDock* aDock)
@@ -84,6 +90,10 @@ Document::Document(LayerDock* aDock)
     p->theDock = aDock;
     setFilterType(M_PREFS->getCurrentFilter());
     p->title = tr("untitled");
+
+    for (int i=0; i<M_STYLE->painterSize(); ++i) {
+        p->theFeaturePainters.append(FeaturePainter(*M_STYLE->getPainter(i)));
+    }
 }
 
 Document::Document(const Document&, LayerDock*)
@@ -95,6 +105,16 @@ Document::Document(const Document&, LayerDock*)
 Document::~Document()
 {
     delete p;
+}
+
+int Document::getFeaturePaintersSize()
+{
+    return p->theFeaturePainters.size();
+}
+
+const FeaturePainter* Document::getFeaturePainter(int i)
+{
+    return &p->theFeaturePainters[i];
 }
 
 void Document::addDefaultLayers()

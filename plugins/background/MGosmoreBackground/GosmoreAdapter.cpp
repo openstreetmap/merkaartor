@@ -22,11 +22,15 @@
 #include <QTimer>
 #include <QBuffer>
 #include <QPair>
+#include <QSettings>
 
 #include <math.h>
 #include <vector>
 #include <stack>
 #include <queue>
+
+#include "MasPaintStyle.h"
+#include "GosmoreFeature.h"
 
 static const QUuid theUid ("{7b7185c5-46cc-4b67-85b7-7aeb7fb49f31}");
 
@@ -82,8 +86,247 @@ GosmoreAdapter::GosmoreAdapter()
 
     loaded = false;
 //    setPak("d:/gosmore?.pak");
+
+    MasPaintStyle theStyle;
+    theStyle.loadPainters(":/Styles/Mapnik.mas");
+    for (int i=0; i<theStyle.painterSize(); ++i) {
+        thePrimitivePainters.append(PrimitivePainter(*theStyle.getPainter(i)));
+    }
+
+    loadStyle(gosmore_note_yes);
+    loadStyle(highway_residential);
+    loadStyle(highway_unclassified);
+    loadStyle(highway_tertiary);
+    loadStyle(highway_secondary);
+    loadStyle(highway_primary);
+    loadStyle(highway_trunk);
+    loadStyle(highway_footway);
+    loadStyle(highway_service);
+    loadStyle(highway_track);
+    loadStyle(highway_cycleway);
+    loadStyle(highway_pedestrian);
+    loadStyle(highway_steps);
+    loadStyle(highway_bridleway);
+    loadStyle(railway_rail);
+    loadStyle(railway_station);
+    loadStyle(highway_mini_roundabout);
+    loadStyle(highway_traffic_signals);
+    loadStyle(highway_bus_stop);
+    loadStyle(amenity_parking);
+    loadStyle(amenity_fuel);
+    loadStyle(amenity_school);
+    loadStyle(place_village);
+    loadStyle(place_suburb);
+    loadStyle(shop_supermarket);
+    loadStyle(religion_christian);
+    loadStyle(religion_jewish);
+    loadStyle(religion_muslim);
+    loadStyle(amenity_pub);
+    loadStyle(amenity_restaurant);
+    loadStyle(power_tower);
+    loadStyle(waterway_stream);
+    loadStyle(amenity_grave_yard);
+    loadStyle(amenity_crematorium);
+    loadStyle(amenity_shelter);
+    loadStyle(tourism_picnic_site);
+    loadStyle(leisure_common);
+    loadStyle(amenity_park_bench);
+    loadStyle(tourism_viewpoint);
+    loadStyle(tourism_artwork);
+    loadStyle(tourism_museum);
+    loadStyle(tourism_theme_park);
+    loadStyle(tourism_zoo);
+    loadStyle(leisure_playground);
+    loadStyle(leisure_park);
+    loadStyle(leisure_nature_reserve);
+    loadStyle(leisure_miniature_golf);
+    loadStyle(leisure_golf_course);
+    loadStyle(leisure_sports_centre);
+    loadStyle(leisure_stadium);
+    loadStyle(leisure_pitch);
+    loadStyle(leisure_track);
+    loadStyle(sport_athletics);
+    loadStyle(sport_10pin);
+    loadStyle(sport_boules);
+    loadStyle(sport_bowls);
+    loadStyle(sport_baseball);
+    loadStyle(sport_basketball);
+    loadStyle(sport_cricket);
+    loadStyle(sport_cricket_nets);
+    loadStyle(sport_croquet);
+    loadStyle(sport_dog_racing);
+    loadStyle(sport_equestrian);
+    loadStyle(sport_football);
+    loadStyle(sport_soccer);
+    loadStyle(sport_climbing);
+    loadStyle(sport_gymnastics);
+    loadStyle(sport_hockey);
+    loadStyle(sport_horse_racing);
+    loadStyle(sport_motor);
+    loadStyle(sport_pelota);
+    loadStyle(sport_rugby);
+    loadStyle(sport_australian_football);
+    loadStyle(sport_skating);
+    loadStyle(sport_skateboard);
+    loadStyle(sport_handball);
+    loadStyle(sport_table_tennis);
+    loadStyle(sport_tennis);
+    loadStyle(sport_racquet);
+    loadStyle(sport_badminton);
+    loadStyle(sport_paintball);
+    loadStyle(sport_shooting);
+    loadStyle(sport_volleyball);
+    loadStyle(sport_beachvolleyball);
+    loadStyle(sport_archery);
+    loadStyle(sport_skiing);
+    loadStyle(sport_rowing);
+    loadStyle(sport_sailing);
+    loadStyle(sport_diving);
+    loadStyle(sport_swimming);
+    loadStyle(leisure_swimming_pool);
+    loadStyle(leisure_water_park);
+    loadStyle(leisure_marina);
+    loadStyle(leisure_slipway);
+    loadStyle(leisure_fishing);
+    loadStyle(shop_bakery);
+    loadStyle(shop_butcher);
+    loadStyle(shop_florist);
+    loadStyle(shop_groceries);
+    loadStyle(shop_beverages);
+    loadStyle(shop_clothes);
+    loadStyle(shop_shoes);
+    loadStyle(shop_jewelry);
+    loadStyle(shop_books);
+    loadStyle(shop_newsagent);
+    loadStyle(shop_furniture);
+    loadStyle(shop_hifi);
+    loadStyle(shop_electronics);
+    loadStyle(shop_computer);
+    loadStyle(shop_video);
+    loadStyle(shop_toys);
+    loadStyle(shop_motorcycle);
+    loadStyle(shop_car_repair);
+    loadStyle(shop_doityourself);
+    loadStyle(shop_garden_centre);
+    loadStyle(shop_outdoor);
+    loadStyle(shop_bicycle);
+    loadStyle(shop_dry_cleaning);
+    loadStyle(shop_laundry);
+    loadStyle(shop_hairdresser);
+    loadStyle(shop_travel_agency);
+    loadStyle(shop_convenience);
+    loadStyle(shop_mall);
+    loadStyle(shop_department_store);
+    loadStyle(amenity_biergarten);
+    loadStyle(amenity_nightclub);
+    loadStyle(amenity_bar);
+    loadStyle(amenity_cafe);
+    loadStyle(amenity_fast_food);
+    loadStyle(amenity_ice_cream);
+    loadStyle(amenity_bicycle_rental);
+    loadStyle(amenity_car_rental);
+    loadStyle(amenity_car_sharing);
+    loadStyle(amenity_car_wash);
+    loadStyle(amenity_taxi);
+    loadStyle(amenity_telephone);
+    loadStyle(amenity_post_office);
+    loadStyle(amenity_post_box);
+    loadStyle(tourism_information);
+    loadStyle(amenity_toilets);
+    loadStyle(amenity_recycling);
+    loadStyle(amenity_fire_station);
+    loadStyle(amenity_police);
+    loadStyle(amenity_courthouse);
+    loadStyle(amenity_prison);
+    loadStyle(amenity_public_building);
+    loadStyle(amenity_townhall);
+    loadStyle(amenity_cinema);
+    loadStyle(amenity_arts_centre);
+    loadStyle(amenity_theatre);
+    loadStyle(tourism_hotel);
+    loadStyle(tourism_motel);
+    loadStyle(tourism_guest_house);
+    loadStyle(tourism_hostel);
+    loadStyle(tourism_chalet);
+    loadStyle(tourism_camp_site);
+    loadStyle(tourism_caravan_site);
+    loadStyle(amenity_pharmacy);
+    loadStyle(amenity_dentist);
+    loadStyle(amenity_doctor);
+    loadStyle(amenity_hospital);
+    loadStyle(amenity_bank);
+    loadStyle(amenity_bureau_de_change);
+    loadStyle(amenity_atm);
+    loadStyle(amenity_drinking_water);
+    loadStyle(amenity_fountain);
+    loadStyle(natural_spring);
+    loadStyle(amenity_university);
+    loadStyle(amenity_college);
+    loadStyle(amenity_kindergarten);
+    loadStyle(highway_living_street);
+    loadStyle(highway_motorway);
+    loadStyle(highway_motorway_link);
+    loadStyle(highway_trunk_link);
+    loadStyle(highway_primary_link);
+    loadStyle(barrier_bollard);
+    loadStyle(barrier_gate);
+    loadStyle(barrier_stile);
+    loadStyle(barrier_cattle_grid);
+    loadStyle(barrier_toll_booth);
+    loadStyle(man_made_beacon);
+    loadStyle(man_made_survey_point);
+    loadStyle(man_made_tower);
+    loadStyle(man_made_water_tower);
+    loadStyle(man_made_gasometer);
+    loadStyle(man_made_reservoir_covered);
+    loadStyle(man_made_lighthouse);
+    loadStyle(man_made_windmill);
+    loadStyle(man_made_pier);
+    loadStyle(man_made_pipeline);
+    loadStyle(man_made_wastewater_plant);
+    loadStyle(man_made_crane);
+    loadStyle(building_yes);
+    loadStyle(landuse_forest);
+    loadStyle(landuse_residential);
+    loadStyle(landuse_industrial);
+    loadStyle(landuse_retail);
+    loadStyle(landuse_commercial);
+    loadStyle(landuse_construction);
+    loadStyle(landuse_reservoir);
+    loadStyle(natural_water);
+    loadStyle(landuse_basin);
+    loadStyle(landuse_landfill);
+    loadStyle(landuse_quarry);
+    loadStyle(landuse_cemetery);
+    loadStyle(landuse_allotments);
+    loadStyle(landuse_farm);
+    loadStyle(landuse_farmyard);
+    loadStyle(landuse_military);
+    loadStyle(religion_bahai);
+    loadStyle(religion_buddhist);
+    loadStyle(religion_hindu);
+    loadStyle(religion_jain);
+    loadStyle(religion_sikh);
+    loadStyle(religion_shinto);
+    loadStyle(religion_taoist);
+    loadStyle(highway_road);
+    loadStyle(restriction_no_right_turn);
+    loadStyle(restriction_no_left_turn);
+    loadStyle(restriction_no_u_turn);
+    loadStyle(restriction_no_straight_on);
+    loadStyle(restriction_only_right_turn);
+    loadStyle(restriction_only_left_turn);
+    loadStyle(restriction_only_straight_on);
 }
 
+void GosmoreAdapter::loadStyle(int stylenr)
+{
+    GosmoreFeature f(stylenr);
+    for (int i=0; i<thePrimitivePainters.size(); ++i) {
+        if (thePrimitivePainters[i].matchesTag(&f, 0))
+            myStyles[stylenr] = &thePrimitivePainters[i];
+    }
+}
 
 GosmoreAdapter::~GosmoreAdapter()
 {
@@ -153,13 +396,13 @@ QMenu* GosmoreAdapter::getMenu() const
 
 QRectF GosmoreAdapter::getBoundingbox() const
 {
-//    return QRectF(QPointF(-20037508.34, -20037508.34), QPointF(20037508.34, 20037508.34));
-    return QRectF(QPointF(-180., -85.), QPointF(180., 85.));
+    return QRectF(QPointF(-6378137.0/2, -6378137.0/2), QPointF(6378137.0/2, 6378137.0/2));
+//    return QRectF(QPointF(-180., -85.), QPointF(180., 85.));
 }
 
 QString GosmoreAdapter::projection() const
 {
-    return "EPSG:4326";
+    return "EPSG:3857";
 }
 
 int WaySizeCmp (ndType **a, ndType **b)
@@ -200,6 +443,12 @@ QPixmap GosmoreAdapter::getPixmap(const QRectF& wgs84Bbox, const QRectF& /*projB
     double PLat = pBox.center().y() * ScaleLat;
     double DeltaLon = src.width() / 2 - PLon;
     double DeltaLat = src.height() - (src.height() / 2 - PLat);
+
+    double LengthOfOneDegreeLat = 6378137.0 * M_PI / 180;
+    double LengthOfOneDegreeLon = LengthOfOneDegreeLat * fabs(cos(angToRad(wgs84Bbox.center().y())));
+    double lonAnglePerM =  1 / LengthOfOneDegreeLon;
+    double PixelPerM = src.width() / (double)wgs84Bbox.width() * lonAnglePerM;
+    qDebug() << PixelPerM;
 
     tfm.setMatrix(ScaleLon, 0, 0, 0, -ScaleLat, 0, DeltaLon, DeltaLat, 1);
 
@@ -266,11 +515,23 @@ QPixmap GosmoreAdapter::getPixmap(const QRectF& wgs84Bbox, const QRectF& /*projB
         pth.closeSubpath();
 
         if (!pth.isEmpty()) {
-            P.setBrush(styleColour[Style (w) - style][0]);
-            P.setPen(Qt::NoPen);
-            P.drawPath(tfm.map(pth));
-            P.setBrush(styleColour[Style (w) - style][1]);
-            P.strokePath(tfm.map(pth), QPen(Style (w)->lineWidth));
+            QPainterPath pp = tfm.map(pth);
+            if (myStyles[StyleNr(w)]) {
+                if (myStyles[StyleNr(w)]->matchesZoom(PixelPerM)) {
+                    myStyles[StyleNr(w)]->drawBackground(&pp, &P, PixelPerM);
+                    myStyles[StyleNr(w)]->drawForeground(&pp, &P, PixelPerM);
+                    myStyles[StyleNr(w)]->drawTouchup(&pp, &P, PixelPerM);
+                    //          myStyles[StyleNr(w)]->drawLabel(&pp, &P, PixelPerM);
+                }
+            } else {
+                P.setPen(QPen(Qt::black, 2));
+                P.drawPath(pp);
+            }
+//            P.setBrush(styleColour[Style (w) - style][0]);
+//            P.setPen(Qt::NoPen);
+//            P.drawPath(tfm.map(pth));
+//            P.setBrush(styleColour[Style (w) - style][1]);
+//            P.strokePath(tfm.map(pth), QPen(Style (w)->lineWidth));
 
             // Text placement: The basic idea is here : http://alienryderflex.com/polygon_fill/
         } // Polygon not empty
@@ -280,42 +541,62 @@ QPixmap GosmoreAdapter::getPixmap(const QRectF& wgs84Bbox, const QRectF& /*projB
       for (; !dlist[l].empty (); dlist[l].pop ()) {
         ndType *nd = dlist[l].top ();
         wayType *w = Way (nd);
+        QStringList strL(QString(QByteArray((char*)(w + 1) + 1)).split("\n"));
 
     // single-point node
         if (nd->other[0] == 0 && nd->other[1] == 0) {
-            P.setPen(QPen(Qt::red, 3));
-            QPoint pt(nd->lon, nd->lat);
-            P.drawPoint(tfm.map(pt));
+            QPointF pt(nd->lon, nd->lat);
+            //            P.setPen(QPen(Qt::red, 3));
+            //            P.drawPoint(tfm.map(pt));
 
+            if (myStyles[StyleNr(w)] && myStyles[StyleNr(w)]->matchesZoom(PixelPerM)) {
+                QPointF pp = tfm.map(pt);
+                myStyles[StyleNr(w)]->drawTouchup(&pp, &P, PixelPerM);
+                myStyles[StyleNr(w)]->drawLabel(&pp, &P, PixelPerM, strL[0]);
+            }
         }
-    // ways (including areas on WinMob : FIXME)
+        // ways (including areas on WinMob : FIXME)
         else if (nd->other[1] != 0) {
-      // perform validation (on non-areas)
-      ndType *orig = nd;
-      nd = orig;
+            // perform validation (on non-areas)
+            ndType *orig = nd;
+            nd = orig;
 
-      QPainterPath pth;
-      pth.moveTo(nd->lon, nd->lat);
-      do {
-          ndType *next = nd + nd->other[1];
-          if (next->lat == INT_MIN) break; // Node excluded from build
-          pth.lineTo(next->lon, next->lat);
-          nd = next;
-      } while (itr.left <= nd->lon && nd->lon < itr.right &&
-               itr.top  <= nd->lat && nd->lat < itr.bottom &&
-               nd->other[1] != 0);
+            QPainterPath pth;
+            pth.moveTo(nd->lon, nd->lat);
+            do {
+                ndType *next = nd + nd->other[1];
+                if (next->lat == INT_MIN) break; // Node excluded from build
+                pth.lineTo(next->lon, next->lat);
+                nd = next;
+            } while (itr.left <= nd->lon && nd->lon < itr.right &&
+                     itr.top  <= nd->lat && nd->lat < itr.bottom &&
+                     nd->other[1] != 0);
 
-//      P.setBrush(styleColour[firstElemStyle][1]);
-//      P.setPen(10);
-//      P.drawPath(tfm.map(pth));
-      P.setBrush(Qt::NoBrush);
-      P.setPen(QPen(styleColour[Style (w) - style][1], Style (w)->lineWidth));
-      P.drawPath(tfm.map(pth));
+        //      P.setBrush(Qt::NoBrush);
+        //      P.setPen(QPen(styleColour[Style (w) - style][1], Style (w)->lineWidth));
+        //      P.drawPath(tfm.map(pth));
 
-  } /* If it has one or more segments */
+            QPainterPath pp = tfm.map(pth);
+            if (myStyles[StyleNr(w)]) {
+                if (myStyles[StyleNr(w)]->matchesZoom(PixelPerM)) {
+                    P.save();
+                    P.setCompositionMode(QPainter::CompositionMode_DestinationOver);
+                    myStyles[StyleNr(w)]->drawBackground(&pp, &P, PixelPerM);
+                    P.restore();
+                    myStyles[StyleNr(w)]->drawForeground(&pp, &P, PixelPerM);
+                    myStyles[StyleNr(w)]->drawTouchup(&pp, &P, PixelPerM);
+                    //                myStyles[StyleNr(w)]->drawLabel(&pp, &P, PixelPerM, strL[0]);
+                }
+            } else {
+                qDebug() << StyleNr(w);
+                P.setPen(QPen(Qt::black, 2));
+                P.drawPath(pp);
+            }
 
-      } /* for each way / icon */
-    } // For each layer
+        } /* If it has one or more segments */
+
+    } /* for each way / icon */
+  } // For each layer
 
 
 

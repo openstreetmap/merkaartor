@@ -20,6 +20,9 @@
 
 #include "libgosm.h"
 
+#include "PaintStyle/PrimitivePainter.h"
+class MasPaintStyle;
+
 class GosmoreAdapter : public QObject, public IMapAdapter
 {
     Q_OBJECT
@@ -111,6 +114,7 @@ public slots:
     void onLoadFile();
 
 protected:
+    void loadStyle(int stylenr);
     bool alreadyLoaded(QString fn) const;
 
 private:
@@ -121,6 +125,9 @@ private:
     uchar* gosmap;
 
     void setPak(QString fileName);
+
+    QList<PrimitivePainter> thePrimitivePainters;
+    QHash< int, PrimitivePainter* > myStyles;
 };
 
 #endif // GOSMOREADAPTER_H

@@ -431,8 +431,7 @@ MainWindow::~MainWindow(void)
 {
     p->theProperties->setSelection(NULL);
 
-    if (MasPaintStyle::instance())
-        delete MasPaintStyle::instance();
+    delete M_STYLE;
     M_PREFS->setWorkingDir(QDir::currentPath());
     delete theDocument;
     delete theView;
@@ -1798,7 +1797,9 @@ void MainWindow::on_featureDeleteAction_triggered()
         return;
 
     while (F->sizeParents()) {
-        F->getParent(0)->remove(F);
+        Feature* p = (Feature*)(F->getParent(0));
+        if (p)
+            p->remove(F);
     }
     F->layer()->deleteFeature(F);
     p->theProperties->setSelection(0);
@@ -2107,7 +2108,7 @@ void MainWindow::on_editMapStyleAction_triggered()
     PaintStyleEditor* dlg = new PaintStyleEditor(this, M_STYLE->getGlobalPainter(), M_STYLE->getPainters());
     connect(dlg, SIGNAL(stylesApplied(QList<FeaturePainter>* )), this, SLOT(applyStyles(QList<FeaturePainter>* )));
     GlobalPainter saveGlobalPainter = M_STYLE->getGlobalPainter();
-    QList<FeaturePainter> savePainters = M_STYLE->getPainters();
+    QList<Painter> savePainters = M_STYLE->getPainters();
     if (dlg->exec() == QDialog::Accepted) {
         M_STYLE->setGlobalPainter(dlg->theGlobalPainter);
         M_STYLE->setPainters(dlg->thePainters);
@@ -2122,7 +2123,7 @@ void MainWindow::on_editMapStyleAction_triggered()
     delete dlg;
 }
 
-void MainWindow::applyStyles(QList<FeaturePainter>* thePainters)
+void MainWindow::applyStyles(QList<Painter>* thePainters)
 {
     M_STYLE->setPainters(*thePainters);
     for (VisibleFeatureIterator i(theDocument); !i.isEnd(); ++i)
@@ -2744,7 +2745,7 @@ void MainWindow::on_editSelectAction_triggered()
         int added = 0;
         for (VisibleFeatureIterator i(theDocument); !i.isEnd() && (!selMaxResult || added < selMaxResult); ++i) {
             Feature* F = i.get();
-            if (tsel->matches(F, theView)) {
+            if (tsel->matches(F, theView->pixelPerM())) {
                 selection.push_back(F);
                 ++added;
             }

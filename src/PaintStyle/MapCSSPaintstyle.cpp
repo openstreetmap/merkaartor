@@ -1,11 +1,5 @@
-#include "MapView.h"
 #include "PaintStyle/MapCSSPaintstyle.h"
-#include "Maps/Painting.h"
-#include "Maps/Projection.h"
-#include "Features.h"
-#include "Layer.h"
 #include "Utils/TagSelector.h"
-#include "Utils/LineF.h"
 
 #include <QtCore/QFile>
 #include <QtCore/QTextStream>
@@ -14,6 +8,8 @@
 #include <QtXml/QDomDocument>
 #include <QtXml/QDomNode>
 
+#include <QHash>
+#include <QDebug>
 
 #include <math.h>
 #include <utility>
@@ -49,24 +45,24 @@ void MapCSSPaintstyle::savePainters(const QString& /*filename*/)
 
 QString parseSelector(QString in)
 {
-    int idx = 0;
-    QString out;
+    QString out = in;
+//    int idx = 0;
 
-    QList<TagSelector*> terms;
-    while (idx < in.length()) {
-        TagSelector* t = TagSelector::parse(in, idx);
-        if (!t) break;
-        terms.append(t);
-    }
+//    QList<TagSelector*> terms;
+//    while (idx < in.length()) {
+//        TagSelector* t = TagSelector::parse(in, idx);
+//        if (!t) break;
+//        terms.append(t);
+//    }
 
-    if (terms.length()) {
-        out += terms[terms.length()-1]->asExpression(true);
-        for (int i=terms.length()-2; i>=0; --i) {
-            out += " and parent(";
-            out += terms[i]->asExpression(true);
-            out += ") ";
-        }
-    }
+//    if (terms.length()) {
+//        out += terms[terms.length()-1]->asExpression(true);
+//        for (int i=terms.length()-2; i>=0; --i) {
+//            out += " and parent(";
+//            out += terms[i]->asExpression(true);
+//            out += ") ";
+//        }
+//    }
 
     return out;
 }
@@ -120,17 +116,17 @@ void MapCSSPaintstyle::setGlobalPainter(GlobalPainter aGlobalPainter)
     globalPainter = aGlobalPainter;
 }
 
-const FeaturePainter* MapCSSPaintstyle::getPainter(int i) const
+const Painter* MapCSSPaintstyle::getPainter(int i) const
 {
     return &(Painters[i]);
 }
 
-QList<FeaturePainter> MapCSSPaintstyle::getPainters() const
+QList<Painter> MapCSSPaintstyle::getPainters() const
 {
     return Painters;
 }
 
-void MapCSSPaintstyle::setPainters(QList<FeaturePainter> aPainters)
+void MapCSSPaintstyle::setPainters(QList<Painter> aPainters)
 {
     Painters = aPainters;
 }

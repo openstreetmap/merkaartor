@@ -91,18 +91,11 @@ static bool isChildOfSingleRoad(Feature *mapFeature)
 
 static bool isChildOfSingleRelation(Feature *mapFeature)
 {
-    int parents = mapFeature->sizeParents();
-
-    if (parents == 0)
-        return false;
-
     int parentRelations = 0;
-
-    int i;
-    for (i=0; i<parents; i++)
+    for (int i=0; i<mapFeature->sizeParents(); i++)
     {
-        Feature * parent = mapFeature->getParent(i);
-        if (parent->isDeleted()) continue;
+        Feature * parent = CAST_FEATURE(mapFeature->getParent(i));
+        if (!parent || parent->isDeleted()) continue;
 
         bool isParentRelation = dynamic_cast<Relation*>(parent) != 0;
         if (isParentRelation)
@@ -116,18 +109,10 @@ static bool isChildOfSingleRelation(Feature *mapFeature)
 
 static bool isChildOfRelation(Feature *mapFeature)
 {
-    int parents = mapFeature->sizeParents();
-
-    if (parents == 0)
-        return false;
-
-    int i;
-    for (i=0; i<parents; i++)
+    for (int i=0; i<mapFeature->sizeParents(); i++)
     {
-        Feature * parent = mapFeature->getParent(i);
-        if (parent->isDeleted()) continue;
-
-        if (dynamic_cast<Relation*>(parent))
+        Relation * rel = CAST_RELATION(mapFeature->getParent(i));
+        if (rel && !rel->isDeleted())
             return true;
     }
 

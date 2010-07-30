@@ -302,9 +302,13 @@ void Node::drawSpecial(QPainter& thePainter, QPen& Pen, MapView* theView)
 
 void Node::drawParentsSpecial(QPainter& thePainter, QPen& Pen, MapView* theView)
 {
-    for (int i=0; i<sizeParents(); ++i)
-        if (!getParent(i)->isDeleted())
-            getParent(i)->drawSpecial(thePainter, Pen, theView);
+    for (int i=0; i<sizeParents(); ++i) {
+        if (!getParent(i)->isDeleted()) {
+            Feature* f = CAST_FEATURE(getParent(i));
+            if (f)
+                f->drawSpecial(thePainter, Pen, theView);
+        }
+    }
 }
 
 void Node::drawChildrenSpecial(QPainter& thePainter, QPen& Pen, MapView* theView, int depth)

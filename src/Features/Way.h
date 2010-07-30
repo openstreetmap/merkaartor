@@ -26,7 +26,7 @@ class Way : public Feature
 
     public:
         virtual QString getClass() const {return "Way";}
-        virtual Feature::FeatureType getType() const {return Feature::Ways;}
+        virtual IFeature::FeatureType getType() const;
         virtual void updateMeta();
 
         virtual CoordBox boundingBox() const;

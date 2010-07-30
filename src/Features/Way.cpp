@@ -164,6 +164,15 @@ Way::~Way(void)
     delete p;
 }
 
+IFeature::FeatureType Way::getType() const
+{
+    if (isClosed())
+        return IFeature::Polygon;
+    else
+        return IFeature::LineString;
+}
+
+
 void Way::setDeleted(bool delState)
 {
     Feature::setDeleted(delState);
@@ -467,9 +476,13 @@ void Way::drawSpecial(QPainter& thePainter, QPen& Pen, MapView* theView)
 
 void Way::drawParentsSpecial(QPainter& thePainter, QPen& Pen, MapView* theView)
 {
-    for (int i=0; i<sizeParents(); ++i)
-        if (!getParent(i)->isDeleted())
-            getParent(i)->drawSpecial(thePainter, Pen, theView);
+    for (int i=0; i<sizeParents(); ++i) {
+        if (!getParent(i)->isDeleted()) {
+            Feature* f = CAST_FEATURE(getParent(i));
+            if (f)
+                f->drawSpecial(thePainter, Pen, theView);
+        }
+    }
 }
 
 void Way::drawChildrenSpecial(QPainter& thePainter, QPen& Pen, MapView *theView, int depth)
@@ -1103,22 +1116,13 @@ bool Way::isExtrimity(Node* node)
 
 Way * Way::GetSingleParentRoad(Feature * mapFeature)
 {
-    int parents = mapFeature->sizeParents();
-
-    if (parents == 0)
-        return NULL;
-
     Way * parentRoad = NULL;
 
-    int i;
-    for (i=0; i<parents; i++)
+    for (int i=0; i<mapFeature->sizeParents(); i++)
     {
-        Feature * parent = mapFeature->getParent(i);
-        if (parent->isDeleted()) continue;
+        Way * road = CAST_WAY(mapFeature->getParent(i));
 
-        Way * road = CAST_WAY(parent);
-
-        if (road == NULL)
+        if (!road || road->isDeleted())
             continue;
 
         if (parentRoad && road != parentRoad)
@@ -1134,23 +1138,14 @@ Way * Way::GetSingleParentRoad(Feature * mapFeature)
 
 Way * Way::GetSingleParentRoadInner(Feature * mapFeature)
 {
-    int parents = mapFeature->sizeParents();
-
-    if (parents == 0)
-        return NULL;
-
     Way * parentRoad = NULL;
     Node* trackPoint = CAST_NODE(mapFeature);
 
-    int i;
-    for (i=0; i<parents; i++)
+    for (int i=0; i<mapFeature->sizeParents(); i++)
     {
-        Feature * parent = mapFeature->getParent(i);
-        if (parent->isDeleted()) continue;
+        Way * road = CAST_WAY(mapFeature->getParent(i));
 
-        Way * road = CAST_WAY(parent);
-
-        if (road == NULL)
+        if (!road || road->isDeleted())
             continue;
 
         if (road->isExtrimity(trackPoint) && !road->isClosed())

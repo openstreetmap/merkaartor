@@ -29,7 +29,7 @@ class Node : public Feature
         virtual ~Node();
 
         virtual QString getClass() const {return "Node";}
-        virtual Feature::FeatureType getType() const {return Feature::Nodes;}
+        virtual IFeature::FeatureType getType() const {return IFeature::Point;}
         virtual void updateMeta();
 
         virtual CoordBox boundingBox() const;
@@ -94,7 +94,7 @@ class Node : public Feature
         virtual void toBinary(QDataStream& ds, QHash <QString, quint64>& theIndex);
         static Node* fromBinary(Document* d, OsbLayer* L, QDataStream& ds, qint8 c, qint64 id);
 
-    private:        
+    private:
         Coord Position;
 
         double Elevation;

@@ -318,11 +318,7 @@ QString Feature::xmlId() const
 
 bool Feature::hasOSMId() const
 {
-    if (p->Id.left(5) == "node_")
-        return true;
-    if (p->Id.left(4) == "way_")
-        return true;
-    if (p->Id.left(4) == "rel_")
+    if (p->Id[0] == 'n' || p->Id[0] == 'w' || p->Id[0] == 'r')
         return true;
     return false;
 }
@@ -381,11 +377,10 @@ bool Feature::isReadonly() const
             return true;
         else {
             int i=0;
-            for (; i<sizeParents(); ++i) {
-                if (!getParent(i)->isReadonly()) {
-                    break;
-                }
-             }
+            for (; i<p->Parents.size(); ++i)
+                if (!p->Parents[i]->isReadonly()) {
+                break;
+            }
             if (i != sizeParents())
                 p->ReadOnly = false;
             else {
@@ -624,18 +619,18 @@ void MapFeaturePrivate::updatePossiblePainters()
 
     PossiblePainters.clear();
     QList<const FeaturePainter*> DefaultPainters;
-    for (int i=0; i<M_STYLE->painterSize(); ++i)
+    for (int i=0; i<theFeature->layer()->getDocument()->getFeaturePaintersSize(); ++i)
     {
-        const FeaturePainter* Current = M_STYLE->getPainter(i);
+        const FeaturePainter* Current = theFeature->layer()->getDocument()->getFeaturePainter(i);
         switch (Current->matchesTag(theFeature,NULL)) {
-            case TagSelect_Match:
-                PossiblePainters.push_back(Current);
-                break;
-            case TagSelect_DefaultMatch:
-                DefaultPainters.push_back(Current);
-                break;
-            default:
-                break;
+        case TagSelect_Match:
+            PossiblePainters.push_back(Current);
+            break;
+        case TagSelect_DefaultMatch:
+            DefaultPainters.push_back(Current);
+            break;
+        default:
+            break;
         }
     }
     if (!PossiblePainters.size())
@@ -667,24 +662,31 @@ void MapFeaturePrivate::blankPainters()
     HasPainter = false;
 }
 
-const FeaturePainter* Feature::getEditPainter(double PixelPerM) const
+const FeaturePainter* Feature::getPainter(double PixelPerM) const
 {
     if (p->PixelPerMForPainter != PixelPerM)
         p->updatePainters(PixelPerM);
     return p->CurrentPainter;
 }
 
-const FeaturePainter* Feature::getCurrentEditPainter() const
+const FeaturePainter* Feature::getCurrentPainter() const
 {
     return p->CurrentPainter;
 }
 
-bool Feature::hasEditPainter() const
+bool Feature::hasPainter() const
 {
     if (!p->PossiblePaintersUpToDate)
         p->updatePossiblePainters();
 
     return p->HasPainter;
+}
+
+bool Feature::hasPainter(double PixelPerM) const
+{
+    if (p->PixelPerMForPainter != PixelPerM)
+        p->updatePainters(PixelPerM);
+    return (p->CurrentPainter != NULL);
 }
 
 void Feature::setParentFeature(Feature* F)
@@ -724,12 +726,12 @@ int Feature::sizeParents() const
     return p->Parents.size();
 }
 
-Feature* Feature::getParent(int i)
+IFeature* Feature::getParent(int i)
 {
     return p->Parents[i];
 }
 
-const Feature* Feature::getParent(int i) const
+const IFeature* Feature::getParent(int i) const
 {
     return p->Parents[i];
 }
@@ -867,13 +869,8 @@ Relation * Feature::GetSingleParentRelation(Feature * mapFeature)
     int i;
     for (i=0; i<parents; i++)
     {
-        Feature * parent = mapFeature->getParent(i);
-        if (parent->isDeleted()) continue;
-
-        Relation * rel = dynamic_cast<Relation*>(parent);
-
-        if (rel == NULL)
-            continue;
+        Relation * rel = dynamic_cast<Relation*>(mapFeature->getParent(i));
+        if (!rel || rel->isDeleted()) continue;
 
         if (parentRelation)
             return NULL;

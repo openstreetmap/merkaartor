@@ -36,12 +36,15 @@
 class MainWindow;
 class MapView;
 class IMapAdapter;
+class IPaintStyle;
 
 //#define WORLD_COORDBOX CoordBox(Coord(1.3, -1.3), Coord(-1.3, 1.3))
 #define WORLD_COORDBOX CoordBox(Coord(COORD_MAX/4, -COORD_MAX/4), Coord(-COORD_MAX/4, COORD_MAX/4))
 #define BUILTIN_STYLES_DIR ":/Styles"
 #define BUILTIN_TEMPLATES_DIR ":/Templates"
+
 #define M_PREFS MerkaartorPreferences::instance()
+#define M_STYLE MerkaartorPreferences::styleinstance()
 
 #define NONE_ADAPTER_UUID QUuid("{8F5D3625-F987-45c5-A50B-17D88384F97D}")
 #define SHAPE_ADAPTER_UUID QUuid("{AFB0324E-34D0-4267-BB8A-CF56CD2D7012}")
@@ -118,16 +121,11 @@ class MerkaartorPreferences : public QObject
 {
 Q_OBJECT
 public:
+    static MerkaartorPreferences* instance();
+    static IPaintStyle* styleinstance();
+
     MerkaartorPreferences();
     ~MerkaartorPreferences();
-
-    static MerkaartorPreferences* instance() {
-        if (!m_prefInstance) {
-            m_prefInstance = new MerkaartorPreferences;
-        }
-
-        return m_prefInstance;
-    }
 
     QSettings* getQSettings() const { return Sets; }
     void save(bool UserPwdChanged = false);
@@ -441,6 +439,7 @@ private:
 #endif
 
     static MerkaartorPreferences* m_prefInstance;
+    static IPaintStyle* m_EPSInstance;
 
 private slots:
     void on_responseHeaderReceived(const QHttpResponseHeader & hdr);

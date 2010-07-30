@@ -1,18 +1,21 @@
 #ifndef MERKATOR_MAPFEATURE_H_
 #define MERKATOR_MAPFEATURE_H_
 
+#include "IFeature.h"
 #include "Maps/Coord.h"
-#include "PaintStyle/PaintStyle.h"
+#include "MapView.h"
+#include "PaintStyle/FeaturePainter.h"
 
 #include <QtCore/QString>
 #include <QList>
 
 #include <boost/intrusive_ptr.hpp>
 
-#define CAST_NODE(x) (qobject_cast<Node*>(x))
-#define CAST_WAY(x) (qobject_cast<Way*>(x))
-#define CAST_RELATION(x) (qobject_cast<Relation*>(x))
-#define CAST_SEGMENT(x) (qobject_cast<TrackSegment*>(x))
+#define CAST_FEATURE(x) (dynamic_cast<Feature*>(x))
+#define CAST_NODE(x) (dynamic_cast<Node*>(x))
+#define CAST_WAY(x) (dynamic_cast<Way*>(x))
+#define CAST_RELATION(x) (dynamic_cast<Relation*>(x))
+#define CAST_SEGMENT(x) (dynamic_cast<TrackSegment*>(x))
 
 class CommandList;
 class Document;
@@ -72,20 +75,13 @@ namespace boost
 }
 
 /// Used to store objects of the map
-class Feature : public QObject
+class Feature : public QObject, public IFeature
 {
     Q_OBJECT
 
     public:
         typedef enum { User, UserResolved, OSMServer, OSMServerConflict, NotYetDownloaded, Log } ActorType;
         typedef enum { UnknownDirection, BothWays, OneWay, OtherWay } TrafficDirectionType;
-        typedef enum {
-            Relations			= 0x00000000,
-            Ways				= 0x00000001,
-            Nodes				= 0x00000002,
-            Segments			= 0x00000004,
-            All					= 0xffffffff
-        } FeatureType;
     public:
         /// Constructor for an empty map feature
         Feature();
@@ -278,9 +274,10 @@ class Feature : public QObject
 
         virtual bool isInteresting() const {return true;}
 
-        const FeaturePainter* getEditPainter(double PixelPerM) const;
-        const FeaturePainter* getCurrentEditPainter() const;
-        bool hasEditPainter() const;
+        const FeaturePainter* getPainter(double PixelPerM) const;
+        const FeaturePainter* getCurrentPainter() const;
+        bool hasPainter() const;
+        bool hasPainter(double PixelPerM) const;
         void invalidatePainter();
         QVector<qreal> getParentDashes() const;
 
@@ -292,11 +289,12 @@ class Feature : public QObject
         virtual const Feature* get(int Idx) const = 0;
         virtual bool isNull() const = 0;
 
+        int sizeParents() const;
+        IFeature* getParent(int i);
+        const IFeature* getParent(int i) const;
+
         void setParentFeature(Feature* F);
         void unsetParentFeature(Feature* F);
-        int sizeParents() const;
-        Feature* getParent(int i);
-        const Feature* getParent(int i) const;
         virtual void partChanged(Feature* F, int ChangeId) = 0;
         void notifyChanges();
         void notifyParents(int Id);
@@ -310,7 +308,7 @@ class Feature : public QObject
         virtual void toBinary(QDataStream& ds, QHash <QString, quint64>& theIndex) = 0;
 
         virtual QString getClass() const = 0;
-        virtual Feature::FeatureType getType() const = 0;
+        virtual IFeature::FeatureType getType() const = 0;
         virtual void updateMeta();
         virtual void updateIndex();
         virtual void invalidateMeta();

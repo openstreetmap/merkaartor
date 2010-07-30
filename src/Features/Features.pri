@@ -7,6 +7,7 @@ HEADERS += \
 	Way.h \
 	Node.h \
 	TrackSegment.h \
+    Features/IFeature.h
 
 SOURCES += \ 
 	Feature.cpp \

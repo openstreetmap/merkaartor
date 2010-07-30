@@ -1,45 +1,32 @@
 #ifndef MERKAARTOR_EDITPAINTSTYLE_H_
 #define MERKAARTOR_EDITPAINTSTYLE_H_
 
-#include "PaintStyle.h"
+#include "IPaintStyle.h"
+#include "Painter.h"
 
 class MapView;
-class PaintStylePrivate;
 
 #include <QList>
 
-#define M_STYLE MasPaintStyle::instance()
-
-class MasPaintStyle
+class MasPaintStyle : public IPaintStyle
 {
-	public:
-		static MasPaintStyle* instance() {
-			if (!m_EPSInstance) {
-				m_EPSInstance = new MasPaintStyle;
-			}
+    public:
+        MasPaintStyle();
+        virtual ~MasPaintStyle();
 
-			return m_EPSInstance;
-		}
+        int painterSize();
+        const GlobalPainter& getGlobalPainter() const;
+        void setGlobalPainter(GlobalPainter aGlobalPainter);
+        const Painter* getPainter(int i) const;
+        QList<Painter> getPainters() const;
+        void setPainters(QList<Painter> aPainters);
 
-		MasPaintStyle();
-		virtual ~MasPaintStyle();
-		void initialize(QPainter& P, MapView& theView);
+        void savePainters(const QString& filename);
+        void loadPainters(const QString& filename);
 
-		int painterSize();
-		const GlobalPainter& getGlobalPainter() const;
-		void setGlobalPainter(GlobalPainter aGlobalPainter);
-		const FeaturePainter* getPainter(int i) const;
-		QList<FeaturePainter> getPainters() const;
-		void setPainters(QList<FeaturePainter> aPainters);
-
-		void savePainters(const QString& filename);
-		void loadPainters(const QString& filename);
-
-	private:
-		QList<FeaturePainter> Painters;
-		GlobalPainter globalPainter;
-
-		static MasPaintStyle* m_EPSInstance;
+    private:
+        QList<Painter> Painters;
+        GlobalPainter globalPainter;
 };
 
 #endif

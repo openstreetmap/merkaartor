@@ -21,6 +21,7 @@
 
 #include "Utils/TagSelector.h"
 
+class MapView;
 class Feature;
 class QGroupBox;
 class QDomElement;

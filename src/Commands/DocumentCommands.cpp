@@ -123,7 +123,9 @@ RemoveFeatureCommand::RemoveFeatureCommand(Document *theDocument, Feature *aFeat
 {
     CascadedCleanUp  = new CommandList(MainWindow::tr("Cascaded cleanup"), NULL);
     for (int i=0; i<aFeature->sizeParents(); ++i) {
-        aFeature->getParent(i)->cascadedRemoveIfUsing(theDocument, aFeature, CascadedCleanUp, Alternatives);
+        Feature* f = CAST_FEATURE(aFeature->getParent(i));
+        if (f)
+            f->cascadedRemoveIfUsing(theDocument, aFeature, CascadedCleanUp, Alternatives);
     }
     for (FeatureIterator it(theDocument); !it.isEnd(); ++it)
         it.get()->cascadedRemoveIfUsing(theDocument, aFeature, CascadedCleanUp, Alternatives);

@@ -1,11 +1,4 @@
-#include "MapView.h"
-#include "PaintStyle/MasPaintStyle.h"
-#include "Maps/Painting.h"
-#include "Maps/Projection.h"
-#include "Features.h"
-#include "Layer.h"
-#include "Utils/TagSelector.h"
-#include "Utils/LineF.h"
+#include "MasPaintStyle.h"
 
 #include <QtCore/QFile>
 #include <QtCore/QTextStream>
@@ -19,8 +12,6 @@
 #include <utility>
 
 //#define GLOBALZOOM		0.002
-
-MasPaintStyle* MasPaintStyle::m_EPSInstance = 0;
 
 #define ALWAYS 10e6
 
@@ -86,7 +77,7 @@ void MasPaintStyle::loadPainters(const QString& filename)
         } else
         if(!e.isNull() && e.tagName() == "painter")
         {
-            FeaturePainter FP = FeaturePainter::fromXML(e, filename);
+            Painter FP = Painter::fromXML(e, filename);
             Painters.push_back(FP);
         }
         n = n.nextSibling();
@@ -108,17 +99,17 @@ void MasPaintStyle::setGlobalPainter(GlobalPainter aGlobalPainter)
     globalPainter = aGlobalPainter;
 }
 
-const FeaturePainter* MasPaintStyle::getPainter(int i) const
+const Painter* MasPaintStyle::getPainter(int i) const
 {
     return &(Painters[i]);
 }
 
-QList<FeaturePainter> MasPaintStyle::getPainters() const
+QList<Painter> MasPaintStyle::getPainters() const
 {
     return Painters;
 }
 
-void MasPaintStyle::setPainters(QList<FeaturePainter> aPainters)
+void MasPaintStyle::setPainters(QList<Painter> aPainters)
 {
     Painters = aPainters;
 }

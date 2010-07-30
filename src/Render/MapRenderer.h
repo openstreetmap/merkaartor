@@ -12,7 +12,7 @@
 #ifndef MAPRENDERER_H
 #define MAPRENDERER_H
 
-#include "PaintStyle/PaintStyle.h"
+#include "PaintStyle/FeaturePainter.h"
 
 #include <QPainter>
 #include <QTransform>

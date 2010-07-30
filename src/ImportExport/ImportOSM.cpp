@@ -362,7 +362,7 @@ static bool downloadToResolve(const QList<Feature*>& Resolution, QWidget* aParen
 static void recurseDelete (Feature* F, QList<Feature*>& MustDelete)
 {
     for (int i=0; i<F->sizeParents(); i++) {
-        recurseDelete(F->getParent(i), MustDelete);
+        recurseDelete(CAST_FEATURE(F->getParent(i)), MustDelete);
     }
     if (!MustDelete.contains(F))
         MustDelete.push_back(F);

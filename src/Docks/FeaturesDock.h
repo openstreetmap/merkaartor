@@ -71,7 +71,7 @@ private:
     QAction* deleteAction;
 
     CoordBox theViewport;
-    Feature::FeatureType curFeatType;
+    IFeature::FeatureType curFeatType;
 
     void clearItems();
     void addItem(MapFeaturePtr F);

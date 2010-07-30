@@ -1,8 +1,6 @@
 #include "TagSelector.h"
 
-#include "Feature.h"
-#include "Way.h"
-#include "MapView.h"
+#include "Features/IFeature.h"
 
 void skipWhite(const QString& Expression, int& idx)
 {
@@ -322,7 +320,7 @@ TagSelectorOperator::TagSelectorOperator(const QString& key, const QString& oper
         bool ok;
         numValue = value.toDouble(&ok);
         if (!ok)
-            numValue = Q_QNAN;
+            numValue = -1;
     } else if (key.toUpper() == ":ZOOMLEVEL")
         specialKey = TagSelectKey_ZoomLevel;
     else if (key.toUpper() == ":PIXELPERM")
@@ -356,7 +354,7 @@ TagSelector* TagSelectorOperator::copy() const
 
 static const QString emptyString("__EMPTY__");
 
-TagSelectorMatchResult TagSelectorOperator::matches(const Feature* F, const MapView* V) const
+TagSelectorMatchResult TagSelectorOperator::matches(const IFeature* F, double PixelPerM) const
 {
     if (specialKey != TagSelectKey_None) {
         switch (specialKey) {
@@ -465,7 +463,7 @@ TagSelectorMatchResult TagSelectorOperator::matches(const Feature* F, const MapV
             break;
 
         case TagSelectKey_PixelPerM: {
-            if (!V)
+            if (!PixelPerM)
                 return TagSelect_Match;
             bool okval;
             double valN = Value.toDouble(&okval);
@@ -473,19 +471,19 @@ TagSelectorMatchResult TagSelectorOperator::matches(const Feature* F, const MapV
                 return TagSelect_NoMatch;
             switch (theOp) {
             case EQ:
-                return (V->pixelPerM() == valN ? TagSelect_Match : TagSelect_NoMatch);
+                return (PixelPerM == valN ? TagSelect_Match : TagSelect_NoMatch);
                 break;
             case GT:
-                return (V->pixelPerM() > valN ? TagSelect_Match : TagSelect_NoMatch);
+                return (PixelPerM > valN ? TagSelect_Match : TagSelect_NoMatch);
                 break;
             case LT:
-                return (V->pixelPerM() < valN ? TagSelect_Match : TagSelect_NoMatch);
+                return (PixelPerM < valN ? TagSelect_Match : TagSelect_NoMatch);
                 break;
             case GE:
-                return (V->pixelPerM() >= valN ? TagSelect_Match : TagSelect_NoMatch);
+                return (PixelPerM >= valN ? TagSelect_Match : TagSelect_NoMatch);
                 break;
             case LE:
-                return (V->pixelPerM() <= valN ? TagSelect_Match : TagSelect_NoMatch);
+                return (PixelPerM <= valN ? TagSelect_Match : TagSelect_NoMatch);
                 break;
             }
             break;
@@ -594,7 +592,7 @@ TagSelector* TagSelectorIsOneOf::copy() const
     return new TagSelectorIsOneOf(Key,Values);
 }
 
-TagSelectorMatchResult TagSelectorIsOneOf::matches(const Feature* F, const MapView* /*V*/) const
+TagSelectorMatchResult TagSelectorIsOneOf::matches(const IFeature* F, double PixelPerM) const
 {
     if (specialKey != TagSelectKey_None) {
         foreach (QString Value, exactMatchv) {
@@ -676,15 +674,19 @@ TagSelector* TagSelectorTypeIs::copy() const
     return new TagSelectorTypeIs(Type);
 }
 
-TagSelectorMatchResult TagSelectorTypeIs::matches(const Feature* F, const MapView* /*V*/) const
+TagSelectorMatchResult TagSelectorTypeIs::matches(const IFeature* F, double PixelPerM) const
 {
-    if (Type.compare(F->getClass(), Qt::CaseInsensitive) == 0)
-        return TagSelect_Match;
-    else
-        if (Type.toLower() == "area")
-            if (Way* R = dynamic_cast<Way*>((Feature*)F))
-                if (R->area() > 0.0)
-                    return TagSelect_Match;
+    QString t = Type.toLower();
+    if (t == "node")
+        return (F->getType() == IFeature::Point) ? TagSelect_Match : TagSelect_NoMatch;
+    else if (t == "way")
+        return (F->getType() == IFeature::LineString || F->getType() == IFeature::Polygon) ? TagSelect_Match : TagSelect_NoMatch;
+    else if (t == "area")
+        return (F->getType() == IFeature::Polygon) ? TagSelect_Match : TagSelect_NoMatch;
+    else if (t == "relation")
+        return (F->getType() == IFeature::OsmRelation) ? TagSelect_Match : TagSelect_NoMatch;
+    else if (t == "tracksegment")
+        return (F->getType() == IFeature::OsmSegment) ? TagSelect_Match : TagSelect_NoMatch;
 
     return TagSelect_NoMatch;
 }
@@ -708,7 +710,7 @@ TagSelector* TagSelectorHasTags::copy() const
     return new TagSelectorHasTags();
 }
 
-TagSelectorMatchResult TagSelectorHasTags::matches(const Feature* F, const MapView* /*V*/) const
+TagSelectorMatchResult TagSelectorHasTags::matches(const IFeature* F, double PixelPerM) const
 {
     return (F->tagSize()==0 || (F->tagSize()==1 && F->tagKey(0)=="created_by" )) ? TagSelect_NoMatch : TagSelect_Match;
 }
@@ -741,10 +743,10 @@ TagSelector* TagSelectorOr::copy() const
     return new TagSelectorOr(Copied);
 }
 
-TagSelectorMatchResult TagSelectorOr::matches(const Feature* F, const MapView* V) const
+TagSelectorMatchResult TagSelectorOr::matches(const IFeature* F, double PixelPerM) const
 {
     for (int i=0; i<Terms.size(); ++i)
-        if (Terms[i]->matches(F,V) == TagSelect_Match)
+        if (Terms[i]->matches(F,PixelPerM) == TagSelect_Match)
             return TagSelect_Match;
     return TagSelect_NoMatch;
 }
@@ -787,10 +789,10 @@ TagSelector* TagSelectorAnd::copy() const
     return new TagSelectorAnd(Copied);
 }
 
-TagSelectorMatchResult TagSelectorAnd::matches(const Feature* F, const MapView* V) const
+TagSelectorMatchResult TagSelectorAnd::matches(const IFeature* F, double PixelPerM) const
 {
     for (int i=0; i<Terms.size(); ++i)
-        if (Terms[i]->matches(F,V) == TagSelect_NoMatch)
+        if (Terms[i]->matches(F,PixelPerM) == TagSelect_NoMatch)
             return TagSelect_NoMatch;
     return TagSelect_Match;
 }
@@ -826,11 +828,11 @@ TagSelector* TagSelectorNot::copy() const
     return new TagSelectorNot(Term->copy());
 }
 
-TagSelectorMatchResult TagSelectorNot::matches(const Feature* F, const MapView* V) const
+TagSelectorMatchResult TagSelectorNot::matches(const IFeature* F, double PixelPerM) const
 {
     if (!Term)
         return TagSelect_NoMatch;
-    return (Term->matches(F,V) == TagSelect_Match) ? TagSelect_NoMatch : TagSelect_Match;
+    return (Term->matches(F,PixelPerM) == TagSelect_Match) ? TagSelect_NoMatch : TagSelect_Match;
 }
 
 QString TagSelectorNot::asExpression(bool /* Precedence */) const
@@ -863,14 +865,14 @@ TagSelector* TagSelectorParent::copy() const
     return new TagSelectorParent(Term->copy());
 }
 
-TagSelectorMatchResult TagSelectorParent::matches(const Feature* F, const MapView* V) const
+TagSelectorMatchResult TagSelectorParent::matches(const IFeature* F, double PixelPerM) const
 {
     if (!Term)
         return TagSelect_NoMatch;
 
     TagSelectorMatchResult ret = TagSelect_NoMatch;
     for (int i=0; i<F->sizeParents(); ++i) {
-        if (Term->matches(F->getParent(i),V) == TagSelect_Match) {
+        if (Term->matches(F->getParent(i),PixelPerM) == TagSelect_Match) {
             ret = TagSelect_Match;
             break;
         }
@@ -900,7 +902,7 @@ TagSelector* TagSelectorFalse::copy() const
     return new TagSelectorFalse();
 }
 
-TagSelectorMatchResult TagSelectorFalse::matches(const Feature* /* F */, const MapView* /*V*/) const
+TagSelectorMatchResult TagSelectorFalse::matches(const IFeature* /* F */, double PixelPerM) const
 {
     return TagSelect_NoMatch;
 }
@@ -923,7 +925,7 @@ TagSelector* TagSelectorTrue::copy() const
     return new TagSelectorFalse();
 }
 
-TagSelectorMatchResult TagSelectorTrue::matches(const Feature* /* F */, const MapView* /*V*/) const
+TagSelectorMatchResult TagSelectorTrue::matches(const IFeature* /* F */, double PixelPerM) const
 {
     return TagSelect_Match;
 }
@@ -952,10 +954,10 @@ TagSelector* TagSelectorDefault::copy() const
     return new TagSelectorDefault(Term->copy());
 }
 
-TagSelectorMatchResult TagSelectorDefault::matches(const Feature* F, const MapView* V) const
+TagSelectorMatchResult TagSelectorDefault::matches(const IFeature* F, double PixelPerM) const
 {
     //return (Term->matches(F) == TagSelect_Match) ? TagSelect_DefaultMatch : TagSelect_NoMatch;
-    if (Term->matches(F,V) == TagSelect_Match)
+    if (Term->matches(F,PixelPerM) == TagSelect_Match)
         return TagSelect_DefaultMatch;
     else
         return TagSelect_NoMatch;

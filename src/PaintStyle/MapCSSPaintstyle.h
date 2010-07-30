@@ -1,7 +1,7 @@
 #ifndef MERKAARTOR_MAPCSSPAINTSTYLE_H_
 #define MERKAARTOR_MAPCSSPAINTSTYLE_H_
 
-#include "PaintStyle.h"
+#include "Painter.h"
 
 class MapView;
 class PaintStylePrivate;
@@ -26,15 +26,15 @@ class MapCSSPaintstyle
         int painterSize();
         const GlobalPainter& getGlobalPainter() const;
         void setGlobalPainter(GlobalPainter aGlobalPainter);
-        const FeaturePainter* getPainter(int i) const;
-        QList<FeaturePainter> getPainters() const;
-        void setPainters(QList<FeaturePainter> aPainters);
+        const Painter* getPainter(int i) const;
+        QList<Painter> getPainters() const;
+        void setPainters(QList<Painter> aPainters);
 
         void savePainters(const QString& filename);
         void loadPainters(const QString& filename);
 
     private:
-        QList<FeaturePainter> Painters;
+        QList<Painter> Painters;
         GlobalPainter globalPainter;
 
         static MapCSSPaintstyle* m_MapCSSInstance;

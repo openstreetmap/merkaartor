@@ -320,7 +320,7 @@ static bool handleWaysplitSpecialRestriction(Document* theDocument, CommandList*
                 // we just added a member, so get over it
                 k++;
             }
-            else if ((theRel->get(k))->getType() == Feature::Nodes)
+            else if ((theRel->get(k))->getType() == IFeature::Point)
             {
                 // this seems to be a via node, check if it is member the nextPart
                 if (NextPart->find(theRel->get(k)) < NextPart->size())
@@ -331,7 +331,7 @@ static bool handleWaysplitSpecialRestriction(Document* theDocument, CommandList*
                     theList->add(new RelationRemoveFeatureCommand(theRel, idx, theDocument->getDirtyOrOriginLayer(FirstPart->layer())));
                 }
             }
-            else if ((theRel->get(k))->getType() == Feature::Ways)
+            else if ((theRel->get(k))->getType() == IFeature::LineString || (theRel->get(k))->getType() == IFeature::Polygon)
             {
                 // this is a way, check the nodes
                 Way* W = CAST_WAY(theRel->get(k));
@@ -1127,7 +1127,7 @@ findNextJoin:
                 continue;
             // Go through parents of the node that are areas in our set
             for (int p1 = 0; p1 < node->sizeParents(); ++p1) {
-                if (node->getParent(p1)->getClass() != "Way")
+                if (node->getParent(p1)->getType() != IFeature::Polygon)
                     continue;
                 Way* otherArea = CAST_WAY(node->getParent(p1));
                 if (otherArea == area || !areas.contains(otherArea))

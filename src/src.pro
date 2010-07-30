@@ -135,6 +135,7 @@ BINTRANSLATIONS += \
 #Include file(s)
 include(Merkaartor.pri)
 include(PaintStyle/PaintStyle.pri)
+include(PaintStyle/PaintStyleEditor.pri)
 include(Features/Features.pri)
 include(Layers/Layers.pri)
 include(Preferences/Preferences.pri)

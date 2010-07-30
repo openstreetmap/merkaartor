@@ -23,7 +23,7 @@ class InfoDock;
 class DirtyDock;
 class FeaturesDock;
 class QGPS;
-class FeaturePainter;
+class Painter;
 class TrackLayer;
 class TrackSegment;
 class Interaction;
@@ -223,7 +223,7 @@ public slots:
     void filterTriggered(QAction* anAction);
     void styleTriggered(QAction* anAction);
     void updateGpsPosition(float latitude, float longitude, QDateTime time, float altitude, float speed, float heading);
-    void applyStyles(QList<FeaturePainter>* thePainters);
+    void applyStyles(QList<Painter>* thePainters);
 
 public:
     void invalidateView(bool UpdateDock = true);

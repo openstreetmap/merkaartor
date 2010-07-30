@@ -31,7 +31,7 @@
 FeaturesDock::FeaturesDock(MainWindow* aParent)
     : MDockAncestor(aParent),
     Main(aParent),
-    curFeatType(Feature::Relations),
+    curFeatType(IFeature::OsmRelation),
     findMode(false)
 {
 //    setMinimumSize(220,100);
@@ -68,13 +68,13 @@ FeaturesDock::FeaturesDock(MainWindow* aParent)
 
     int t;
     t = ui.tabBar->addTab(NULL);
-    ui.tabBar->setTabData(t, Feature::Relations);
+    ui.tabBar->setTabData(t, IFeature::OsmRelation);
     t = ui.tabBar->addTab(NULL);
-    ui.tabBar->setTabData(t, Feature::Ways);
+    ui.tabBar->setTabData(t, IFeature::LineString);
     t = ui.tabBar->addTab(NULL);
-    ui.tabBar->setTabData(t, Feature::Nodes);
+    ui.tabBar->setTabData(t, IFeature::Point);
     t = ui.tabBar->addTab(NULL);
-    ui.tabBar->setTabData(t, Feature::All);
+    ui.tabBar->setTabData(t, IFeature::All);
     ui.tabBar->setElideMode(Qt::ElideRight);
     ui.tabBar->setUsesScrollButtons(true);
     retranslateTabBar();
@@ -259,7 +259,7 @@ void FeaturesDock::on_btFind_clicked(bool)
     Found.clear();
     int added = 0;
     for (VisibleFeatureIterator i(Main->document()); !i.isEnd() && (!dlg->sbMaxResult->value() || added < dlg->sbMaxResult->value()); ++i) {
-        if (tsel->matches(i.get(), Main->view())) {
+        if (tsel->matches(i.get(), Main->view()->pixelPerM())) {
             Found << i.get();
         }
     }
@@ -286,7 +286,7 @@ void FeaturesDock::changeEvent(QEvent * event)
 
 void FeaturesDock::tabChanged(int idx)
 {
-    curFeatType = (Feature::FeatureType)ui.tabBar->tabData(idx).toInt();
+    curFeatType = (IFeature::FeatureType)ui.tabBar->tabData(idx).toInt();
     ui.FeaturesList->clear();
     Highlighted.clear();
 
@@ -308,21 +308,21 @@ void FeaturesDock::addItem(MapFeaturePtr F)
     if (Highlighted.contains(F))
         return;
 
-    if (curFeatType == Feature::Relations || curFeatType == Feature::All)
+    if (curFeatType == IFeature::OsmRelation || curFeatType == IFeature::All)
     {
         if (Relation* L = CAST_RELATION(F)) {
             QListWidgetItem* anItem = new QListWidgetItem(L->description(), ui.FeaturesList);
             anItem->setData(Qt::UserRole, QVariant::fromValue(F));
         }
     }
-    if (curFeatType == Feature::Ways || curFeatType == Feature::All)
+    if (curFeatType == IFeature::LineString || curFeatType == IFeature::Polygon || curFeatType == Feature::All)
     {
         if (Way* R = CAST_WAY(F)) {
             QListWidgetItem* anItem = new QListWidgetItem(R->description(), ui.FeaturesList);
             anItem->setData(Qt::UserRole, QVariant::fromValue(F));
         }
     }
-    if (curFeatType == Feature::Nodes || curFeatType == Feature::All)
+    if (curFeatType == IFeature::Point || curFeatType == Feature::All)
     {
         if (Node* N = CAST_NODE(F)) {
         for (int i=0; i<N->tagSize(); ++i)

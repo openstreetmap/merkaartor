@@ -81,7 +81,7 @@ bool ImportExportKML::export_(const QList<Feature *>& featList)
             QDomElement ls = theXmlDoc.createElement("LineStyle");
             k.appendChild(ls);
 
-            const FeaturePainter* fp = R->getCurrentEditPainter();
+            const FeaturePainter* fp = R->getCurrentPainter();
             if (fp) {
                 QDomElement color = theXmlDoc.createElement("color");
                 ls.appendChild(color);

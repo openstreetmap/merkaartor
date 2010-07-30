@@ -22,12 +22,12 @@
 
 void BackgroundStyleLayer::draw(Way* R)
 {
-    const FeaturePainter* paintsel = R->getEditPainter(r->theView->pixelPerM());
+    const FeaturePainter* paintsel = R->getPainter(r->theView->pixelPerM());
     if (paintsel) {
         paintsel->drawBackground(R,r->thePainter,r->theView);
         return;
     }
-    if (/*!globalZoom(r->theProjection) && */!R->hasEditPainter()) //FIXME Untagged roads level of zoom?
+    if (/*!globalZoom(r->theProjection) && */!R->hasPainter()) //FIXME Untagged roads level of zoom?
     {
         QPen thePen(QColor(0,0,0),1);
 
@@ -52,7 +52,7 @@ void BackgroundStyleLayer::draw(Way* R)
 
 void BackgroundStyleLayer::draw(Relation* R)
 {
-    const FeaturePainter* paintsel = R->getEditPainter(r->theView->pixelPerM());
+    const FeaturePainter* paintsel = R->getPainter(r->theView->pixelPerM());
     if (paintsel)
         paintsel->drawBackground(R,r->thePainter,r->theView);
 }
@@ -64,14 +64,14 @@ void BackgroundStyleLayer::draw(Node*)
 
 void ForegroundStyleLayer::draw(Way* R)
 {
-    const FeaturePainter* paintsel = R->getEditPainter(r->theView->pixelPerM());
+    const FeaturePainter* paintsel = R->getPainter(r->theView->pixelPerM());
     if (paintsel)
         paintsel->drawForeground(R,r->thePainter,r->theView);
 }
 
 void ForegroundStyleLayer::draw(Relation* R)
 {
-    const FeaturePainter* paintsel = R->getEditPainter(r->theView->pixelPerM());
+    const FeaturePainter* paintsel = R->getPainter(r->theView->pixelPerM());
     if (paintsel)
         paintsel->drawForeground(R,r->thePainter,r->theView);
 }
@@ -82,7 +82,7 @@ void ForegroundStyleLayer::draw(Node*)
 
 void TouchupStyleLayer::draw(Way* R)
 {
-    const FeaturePainter* paintsel = R->getEditPainter(r->theView->pixelPerM());
+    const FeaturePainter* paintsel = R->getPainter(r->theView->pixelPerM());
     if (paintsel)
         paintsel->drawTouchup(R,r->thePainter,r->theView);
     else {
@@ -144,10 +144,10 @@ void TouchupStyleLayer::draw(Relation* /* R */)
 
 void TouchupStyleLayer::draw(Node* Pt)
 {
-    const FeaturePainter* paintsel = Pt->getEditPainter(r->theView->pixelPerM());
+    const FeaturePainter* paintsel = Pt->getPainter(r->theView->pixelPerM());
     if (paintsel)
         paintsel->drawTouchup(Pt,r->thePainter,r->theView);
-    else if (!Pt->hasEditPainter()) {
+    else if (!Pt->hasPainter()) {
         if (! ((Pt->isReadonly() || !Pt->isSelectable(r->theView)) && (!Pt->isPOI() && !Pt->isWaypoint())))
 //        if (!Pt->isReadonly() && Pt->isSelectable(r->theView))
         {
@@ -168,7 +168,7 @@ void TouchupStyleLayer::draw(Node* Pt)
 
 void LabelStyleLayer::draw(Way* R)
 {
-    const FeaturePainter* paintsel = R->getEditPainter(r->theView->pixelPerM());
+    const FeaturePainter* paintsel = R->getPainter(r->theView->pixelPerM());
     if (paintsel)
         paintsel->drawLabel(R,r->thePainter,r->theView);
 }
@@ -179,7 +179,7 @@ void LabelStyleLayer::draw(Relation* /* R */)
 
 void LabelStyleLayer::draw(Node* Pt)
 {
-    const FeaturePainter* paintsel = Pt->getEditPainter(r->theView->pixelPerM());
+    const FeaturePainter* paintsel = Pt->getPainter(r->theView->pixelPerM());
     if (paintsel)
         paintsel->drawLabel(Pt,r->thePainter,r->theView);
 }
@@ -252,7 +252,7 @@ void MapRenderer::render(
                     // If there is painter at the relation level, don't paint at the way level
                     bool draw = true;
                     for (int i=0; i<R->sizeParents(); ++i) {
-                        if (!R->getParent(i)->isDeleted() && R->getParent(i)->getEditPainter(theView->pixelPerM()))
+                        if (!R->getParent(i)->isDeleted() && R->getParent(i)->hasPainter(theView->pixelPerM()))
                             draw = false;
                     }
                     if (!draw)
@@ -368,7 +368,7 @@ void MapRenderer::render(
                     P->setOpacity((*it)->layer()->getAlpha());
                     if (Way * R = CAST_WAY(*it)) {
                         for (int i=0; i<R->sizeParents(); ++i)
-                            if (!R->getParent(i)->isDeleted() && R->getParent(i)->getEditPainter(theView->pixelPerM()))
+                            if (!R->getParent(i)->isDeleted() && R->getParent(i)->hasPainter(theView->pixelPerM()))
                                 continue;
                         bglayer.draw(R);
                     } else if (Node * Pt = CAST_NODE(*it))
@@ -390,7 +390,7 @@ void MapRenderer::render(
                     P->setOpacity((*it)->layer()->getAlpha());
                     if (Way * R = CAST_WAY(*it)) {
                         for (int i=0; i<R->sizeParents(); ++i)
-                            if (!R->getParent(i)->isDeleted() && R->getParent(i)->getEditPainter(theView->pixelPerM()))
+                            if (!R->getParent(i)->isDeleted() && R->getParent(i)->hasPainter(theView->pixelPerM()))
                                 continue;
                         fglayer.draw(R);
                     } else if (Node * Pt = CAST_NODE(*it))
@@ -411,7 +411,7 @@ void MapRenderer::render(
                 P->setOpacity((*it)->layer()->getAlpha());
                 if (Way * R = CAST_WAY(*it)) {
                     for (int i=0; i<R->sizeParents(); ++i)
-                        if (!R->getParent(i)->isDeleted() && R->getParent(i)->getEditPainter(theView->pixelPerM()))
+                        if (!R->getParent(i)->isDeleted() && R->getParent(i)->hasPainter(theView->pixelPerM()))
                             continue;
                     tchuplayer.draw(R);
                 } else if (Node * Pt = CAST_NODE(*it))
@@ -430,7 +430,7 @@ void MapRenderer::render(
                 P->setOpacity((*it)->layer()->getAlpha());
                 if (Way * R = CAST_WAY(*it)) {
                     for (int i=0; i<R->sizeParents(); ++i)
-                        if (!R->getParent(i)->isDeleted() && R->getParent(i)->getEditPainter(theView->pixelPerM()))
+                        if (!R->getParent(i)->isDeleted() && R->getParent(i)->hasPainter(theView->pixelPerM()))
                             continue;
                     lbllayer.draw(R);
                 } else if (Node * Pt = CAST_NODE(*it))
