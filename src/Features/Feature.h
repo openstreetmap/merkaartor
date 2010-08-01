@@ -332,6 +332,7 @@ class Feature : public QObject
     protected:
         mutable CoordBox BBox;
         bool MetaUpToDate;
+        qint64 randomId() const;
 
         bool tagsToXML(QDomElement xParent);
         static void tagsFromXML(Document* d, Feature* f, QDomElement e);
