@@ -76,6 +76,14 @@ public:
 Projection::Projection(void)
 : theProj(0), p(new ProjectionPrivate)
 {
+#ifdef USE_PROJ
+#ifdef Q_OS_WIN
+    QString pdir(qApp->applicationDirPath() + "/" STRINGIFY(SHARE_DIR) "/proj");
+    const char* proj_dir = QDir::toNativeSeparators(pdir).toUtf8().constData();
+//    const char* proj_dir = "E:\\cbro\\src\\merkaartor-devel\\binaries\\bin\\share\\proj";
+    pj_set_searchpath(1, &proj_dir);
+#endif
+#endif
 #ifndef _MOBILE
     p->theWGS84Proj = Projection::getProjection("+proj=longlat +ellps=WGS84 +datum=WGS84");
     p->projType = "";
@@ -85,6 +93,11 @@ Projection::Projection(void)
 
 Projection::~Projection(void)
 {
+#ifdef USE_PROJ
+    pj_free(theProj);
+#else
+    SAFE_DELETE(theProj)
+#endif
     delete p;
 }
 
@@ -329,7 +342,11 @@ bool Projection::setProjectionType(ProjectionType aProjectionType)
     if (aProjectionType == p->projType)
         return true;
 
+#ifdef USE_PROJ
+    pj_free(theProj);
+#else
     SAFE_DELETE(theProj)
+#endif
     p->ProjectionRevision++;
     p->projType = aProjectionType;
     p->IsLatLong = false;
