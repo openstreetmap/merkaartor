@@ -6,7 +6,8 @@
 # PREFIX              - base prefix for installation (default: /usr/local)
 # LIBDIR              - base directory for plugins (default: $$PREFIX/lib)
 # NODEBUG             - no debug target
-# GDAL    	      - enable GDAL
+# PROJ=1              - use PROJ4 library for projections (requires proj4)
+# GDAL    	          - enable GDAL
 # MOBILE    	      - enable MOBILE
 # GEOIMAGE            - enable geotagged images (needs exiv2)
 # NVIDIA_HACK         - used to solve nvidia specific slowdown
@@ -229,6 +230,10 @@ contains (GDAL, 1) {
 world_shp.path = $${SHARE_DIR}
 world_shp.files = $$PWD/../share/world_background.osb
 
+contains (PROJ, 1) {
+    DEFINES += USE_PROJ
+    LIBS += -lproj
+}
 
 macx {
     DEFINES += WORLD_SHP=world_background.osb

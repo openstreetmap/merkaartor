@@ -6,9 +6,6 @@
 
 #include <math.h>
 
-#include <ggl/extensions/gis/projections/parameters.hpp>
-#include <ggl/extensions/gis/projections/factory.hpp>
-
 // from wikipedia
 #define EQUATORIALRADIUS 6378137.0
 #define POLARRADIUS      6356752.0
@@ -16,14 +13,23 @@
 #define EQUATORIALMETERHALFCIRCUMFERENCE  20037508.34
 #define EQUATORIALMETERPERDEGREE    222638.981555556
 
+#ifndef _MOBILE
+#ifndef USE_PROJ
+#include <ggl/extensions/gis/projections/parameters.hpp>
+#include <ggl/extensions/gis/projections/factory.hpp>
+#include "ggl/extensions/gis/projections/impl/pj_transform.hpp"
+
 using namespace ggl;
+#endif
+#endif
+
 
 // ProjectionPrivate
 
 class ProjectionPrivate
 {
 public:
-    ProjProjection *theWGS84Proj;
+    ProjProjection theWGS84Proj;
     ProjectionType projType;
     QRectF ProjectedViewport;
     int ProjectionRevision;
@@ -156,27 +162,47 @@ Coord Projection::inverse(const QPointF & Screen) const
 
 #ifndef _MOBILE
 
-#include "ggl/extensions/gis/projections/impl/pj_transform.hpp"
-void Projection::projTransform(ProjProjection *srcdefn,
-                           ProjProjection *dstdefn,
+void Projection::projTransform(ProjProjection srcdefn,
+                           ProjProjection dstdefn,
                            long point_count, int point_offset, double *x, double *y, double *z )
 {
+#ifdef USE_PROJ
+    pj_transform(srcdefn, dstdefn, point_count, point_offset, x, y, z);
+#else
     ggl::projection::detail::pj_transform(srcdefn, dstdefn, point_count, point_offset, x, y, z);
+#endif
 }
 
 void Projection::projTransformFromWGS84(long point_count, int point_offset, double *x, double *y, double *z ) const
 {
+#ifdef USE_PROJ
+    pj_transform(p->theWGS84Proj, theProj, point_count, point_offset, x, y, z);
+#else
     ggl::projection::detail::pj_transform(p->theWGS84Proj, theProj, point_count, point_offset, x, y, z);
+#endif
 }
 
 void Projection::projTransformToWGS84(long point_count, int point_offset, double *x, double *y, double *z ) const
 {
+#ifdef USE_PROJ
+    pj_transform(theProj, p->theWGS84Proj, point_count, point_offset, x, y, z);
+#else
     ggl::projection::detail::pj_transform(theProj, p->theWGS84Proj, point_count, point_offset, x, y, z);
-
+#endif
 }
 
 QPointF Projection::projProject(const Coord & Map) const
 {
+#ifdef USE_PROJ
+    projUV in;
+
+    in.u = angToRad(Map.lon());
+    in.v = angToRad(Map.lat());
+
+    projUV out = pj_fwd(in, theProj);
+
+    return QPoint((int)out.u, int(out.v));
+#else
     try {
         point_ll_deg in(longitude<>(coordToAng(Map.lon())), latitude<>(coordToAng(Map.lat())));
         point_2d out;
@@ -187,10 +213,20 @@ QPointF Projection::projProject(const Coord & Map) const
     } catch (...) {
         return QPointF(0., 0.);
     }
+#endif
 }
 
 Coord Projection::projInverse(const QPointF & pProj) const
 {
+#ifdef USE_PROJ
+    projUV in;
+    in.u = pProj.x();
+    in.v = pProj.y();
+
+    projUV out = pj_inv(in, theProj);
+
+    return Coord(radToCoord(out.v), radToCoord(out.u));
+#else
     try {
         point_2d in(pProj.x(), pProj.y());
         point_ll_deg out;
@@ -201,6 +237,7 @@ Coord Projection::projInverse(const QPointF & pProj) const
     } catch (...) {
         return Coord(0, 0);
     }
+#endif
 }
 
 bool Projection::projIsLatLong() const
@@ -269,21 +306,21 @@ QRectF Projection::getProjectedViewport(const CoordBox& Viewport, const QRect& s
 
 #ifndef _MOBILE
 
-ProjProjection * Projection::getProjection(QString projString)
+ProjProjection Projection::getProjection(QString projString)
 {
-//    qDebug() << "setProjection: " << projString;
-
+#ifdef USE_PROJ
+    ProjProjection theProj = pj_init_plus(QString("%1 +over").arg(projString).toLatin1());
+#else
     ggl::projection::factory<ggl::point_ll_deg, ggl::point_2d> fac;
     ggl::projection::parameters par;
-    ggl::projection::projection<ggl::point_ll_deg, ggl::point_2d> *theProj;
+    ProjProjection theProj;
 
     try {
         par = ggl::projection::init(std::string(QString("%1 +over").arg(projString).toLatin1().data()));
         theProj = fac.create_new(par);
     } catch (...) {
-        par = ggl::projection::init(std::string(QString("%1 +over").arg(M_PREFS->getProjection("mercator").projection).toLatin1().data()));
-        theProj = fac.create_new(par);
     }
+#endif
     return theProj;
 }
 
@@ -323,7 +360,11 @@ bool Projection::setProjectionType(ProjectionType aProjectionType)
         if (!theProj)
             p->IsMercator = true;
         else
+#ifdef USE_PROJ
+            if (pj_is_latlong(theProj))
+#else
             if (theProj->params().is_latlong)
+#endif
                 p->IsLatLong = true;
     } catch (...) {
         return false;

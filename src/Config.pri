@@ -11,6 +11,7 @@ symbian:MOBILE=1
 # MOBILE=1    	      - enable MOBILE
 # GEOIMAGE=1          - enable geotagged images (requires exiv2)
 # NVIDIA_HACK=1       - used to solve nvidia specific slowdown
+# PROJ=1              - use PROJ4 library for projections (requires proj4)
 # GDAL=1    	      - enable GDAL (for, e.g., shapefile import; requires libgdal)
 # USE_BUILTIN_BOOST=1 - use the Boost version (1.38) from Merkaartor rather than the system one (ony on Linux)
 # GPSDLIB=1           - use gpsd libgps or libQgpsmm for access to a gpsd server

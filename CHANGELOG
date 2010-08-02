@@ -1,4 +1,5 @@
 v0.17
+    * ADD : Re-introduce PROJ4 as a build-time optional dependency for projections. It is probably neede for exotic projections...
     * FIX : implement new Id's as global incremented 64-bits integer (fixes #3082)
     * FIX : lat/lon grid fixes for non-othogonal projections
     * FIX : for non-rthogonal projections, maximize the viewport in lat/lon
