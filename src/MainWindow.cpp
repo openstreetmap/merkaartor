@@ -1645,10 +1645,14 @@ void MainWindow::on_fileNewAction_triggered()
         fileName = "";
         setWindowTitle(QString("%1 - %2").arg(theDocument->title()).arg(p->title));
 
+        theView->projection().setProjectionType(M_PREFS->getProjectionType());
+        updateProjectionMenu();
+
         emit content_changed();
         on_editPropertiesAction_triggered();
         adjustLayers(true);
     }
+
 #ifdef GEOIMAGE
     if (theGeoImage)
         theGeoImage->clear();
@@ -2468,6 +2472,8 @@ void MainWindow::loadDocument(QString fn)
     progress.reset();
     delete theXmlDoc;
 
+    updateProjectionMenu();
+
 #ifdef GEOIMAGE
     if (theGeoImage)
         theGeoImage->clear();
@@ -2794,14 +2800,24 @@ void MainWindow::updateProjectionMenu()
 #ifndef _MOBILE
     SAFE_DELETE(p->projActgrp)
     p->projActgrp = new QActionGroup(this);
+    bool projFound = false;
     foreach (ProjectionItem it, *M_PREFS->getProjectionsList()->getProjections()) {
         if (it.deleted)
             continue;
         QAction* a = new QAction(it.name, p->projActgrp);
         a->setCheckable (true);
-        if (it.name.contains(theView->projection().getProjectionType(), Qt::CaseInsensitive))
+        if (it.name.contains(theView->projection().getProjectionType(), Qt::CaseInsensitive)) {
             a->setChecked(true);
+            projFound = true;
+        }
         ui->mnuProjections->addAction(a);
+    }
+    if (!projFound) {
+        QAction* a = new QAction(theView->projection().getProjectionType(), p->projActgrp);
+        a->setCheckable (true);
+        a->setChecked(true);
+        ui->mnuProjections->addAction(a);
+        M_PREFS->getProjectionsList()->addProjection(ProjectionItem(theView->projection().getProjectionType(), theView->projection().getProjectionProj4()));
     }
     connect (ui->mnuProjections, SIGNAL(triggered(QAction *)), this, SLOT(projectionTriggered(QAction *)));
 #endif
@@ -3006,8 +3022,10 @@ void MainWindow::recentImportTriggered(QAction* anAction)
 #ifndef _MOBILE
 void MainWindow::projectionTriggered(QAction* anAction)
 {
-    if(theView->projection().setProjectionType((ProjectionType)anAction->text()) == FALSE)
+    if(theView->projection().setProjectionType(anAction->text()) == FALSE)
         QMessageBox::critical(this, tr("Invalid projection"), tr("Unable to set projection \"%1\".").arg(anAction->text()));
+    else
+        M_PREFS->setProjectionType(anAction->text());
     theView->setViewport(theView->viewport(), theView->rect());
     invalidateView();
 }

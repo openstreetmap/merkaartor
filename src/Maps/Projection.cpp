@@ -30,7 +30,8 @@ class ProjectionPrivate
 {
 public:
     ProjProjection theWGS84Proj;
-    ProjectionType projType;
+    QString projType;
+    QString projProj4;
     QRectF ProjectedViewport;
     int ProjectionRevision;
     bool IsMercator;
@@ -86,8 +87,7 @@ Projection::Projection(void)
 #endif
 #ifndef _MOBILE
     p->theWGS84Proj = Projection::getProjection("+proj=longlat +ellps=WGS84 +datum=WGS84");
-    p->projType = "";
-    setProjectionType("EPSG:3785+");
+    setProjectionType(M_PREFS->getProjectionType());
 #endif
 }
 
@@ -337,18 +337,22 @@ ProjProjection Projection::getProjection(QString projString)
     return theProj;
 }
 
-bool Projection::setProjectionType(ProjectionType aProjectionType)
+bool Projection::setProjectionType(QString aProjectionType)
 {
     if (aProjectionType == p->projType)
         return true;
 
 #ifdef USE_PROJ
-    pj_free(theProj);
+    if (theProj) {
+        pj_free(theProj);
+        theProj = NULL;
+    }
 #else
     SAFE_DELETE(theProj)
 #endif
     p->ProjectionRevision++;
     p->projType = aProjectionType;
+    p->projProj4 = QString();
     p->IsLatLong = false;
     p->IsMercator = false;
 
@@ -361,6 +365,7 @@ bool Projection::setProjectionType(ProjectionType aProjectionType)
             )
     {
         p->IsMercator = true;
+        p->projType = "EPSG:3785";
         return true;
     }
     // Hardcode "lat/long " projection
@@ -369,11 +374,13 @@ bool Projection::setProjectionType(ProjectionType aProjectionType)
             )
     {
         p->IsLatLong = true;
+        p->projType = "EPSG:4326";
         return true;
     }
 
     try {
-        theProj = getProjection(M_PREFS->getProjection(aProjectionType).projection);
+        p->projProj4 = M_PREFS->getProjection(aProjectionType).projection;
+        theProj = getProjection(p->projProj4);
         if (!theProj)
             p->IsMercator = true;
         else
@@ -390,9 +397,14 @@ bool Projection::setProjectionType(ProjectionType aProjectionType)
 }
 #endif
 
-ProjectionType Projection::getProjectionType() const
+QString Projection::getProjectionType() const
 {
     return p->projType;
+}
+
+QString Projection::getProjectionProj4() const
+{
+    return p->projProj4;
 }
 
 // Common routines
@@ -415,3 +427,36 @@ int Projection::projectionRevision() const
     return p->ProjectionRevision;
 }
 
+bool Projection::toXML(QDomElement xParent)
+{
+    bool OK = true;
+
+    QDomElement e = xParent.namedItem("Projection").toElement();
+    if (!e.isNull()) {
+        xParent.removeChild(e);
+    }
+    e = xParent.ownerDocument().createElement("Projection");
+    xParent.appendChild(e);
+
+    e.setAttribute("type", p->projType);
+    if (!p->IsLatLong && !p->IsMercator && !p->projProj4.isEmpty()) {
+        e.appendChild(xParent.ownerDocument().createTextNode(p->projProj4));
+    }
+
+
+    return OK;
+}
+
+void Projection::fromXML(const QDomElement e)
+{
+    if (e.tagName() == "Projection") {
+        if (e.hasChildNodes()) {
+            setProjectionType(e.firstChild().toText().nodeValue());
+            if (e.hasAttribute("type"))
+                p->projType = e.attribute("type");
+            else
+                p->projType = QCoreApplication::translate("Projection", "Document");
+        } else
+            setProjectionType(e.attribute("type"));
+    }
+}

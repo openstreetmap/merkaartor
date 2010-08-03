@@ -1,4 +1,6 @@
 v0.17
+    * ADD : Save projection in .MDC files
+    * CHG : Do not save the projection in preferences unless the projection is specified thru the menu
     * ADD : Re-introduce PROJ4 as a build-time optional dependency for projections. It is probably neede for exotic projections...
     * FIX : implement new Id's as global incremented 64-bits integer (fixes #3082)
     * FIX : lat/lon grid fixes for non-othogonal projections

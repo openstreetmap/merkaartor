@@ -37,8 +37,9 @@ class Projection
 
 #ifndef _MOBILE
         static ProjProjection getProjection(QString projString);
-        bool setProjectionType(ProjectionType aProjectionType);
-        ProjectionType getProjectionType() const;
+        bool setProjectionType(QString aProjectionType);
+        QString getProjectionType() const;
+        QString getProjectionProj4() const;
 
         static void projTransform(ProjProjection srcdefn,
                            ProjProjection dstdefn,
@@ -49,6 +50,9 @@ class Projection
         QRectF getProjectedViewport(const CoordBox& Viewport, const QRect& screen) const;
 
         int projectionRevision() const;
+
+        bool toXML(QDomElement xParent);
+        void fromXML(const QDomElement e);
 #endif
 
     protected:

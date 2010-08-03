@@ -889,15 +889,28 @@ bool MapView::toXML(QDomElement xParent)
     xParent.appendChild(e);
 
     viewport().toXML("Viewport", e);
+    theProjection.toXML(e);
 
     return OK;
 }
 
-void MapView::fromXML(const QDomElement e)
+void MapView::fromXML(const QDomElement p)
 {
-    CoordBox cb = CoordBox::fromXML(e.firstChildElement("Viewport"));
-    setViewport(cb, rect());
+    CoordBox cb;
+    QDomElement e = p.firstChildElement();
+    while(!e.isNull()) {
+        if (e.tagName() == "Viewport") {
+            cb = CoordBox::fromXML(e);
+        }
+        else if (e.tagName() == "Projection") {
+            theProjection.fromXML(e);
+        }
 
+        e = e.nextSiblingElement();
+    }
+
+    if (!cb.isNull())
+        setViewport(cb, rect());
     invalidate(true, true);
 }
 

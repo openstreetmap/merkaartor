@@ -86,9 +86,6 @@ class IMapAdapter;
 
 extern bool g_Merk_Portable;
 
-#ifndef _MOBILE
-typedef QString ProjectionType;
-#endif
 typedef QString FilterType;
 
 enum ExportType {
@@ -364,6 +361,8 @@ public:
     void loadProjections();
     void saveProjections();
 #ifndef _MOBILE
+    void setProjectionType(QString theValue);
+    QString getProjectionType();
     ProjectionsList* getProjectionsList();
     ProjectionItem getProjection(QString aProj);
 #endif

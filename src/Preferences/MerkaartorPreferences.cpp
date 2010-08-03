@@ -785,6 +785,16 @@ void MerkaartorPreferences::initialPosition(MapView* vw)
 }
 
 #ifndef _MOBILE
+void MerkaartorPreferences::setProjectionType(QString theValue)
+{
+    Sets->setValue("projection/Type", theValue);
+}
+
+QString MerkaartorPreferences::getProjectionType()
+{
+    return Sets->value("projection/Type", "EPSG:3785").toString();
+}
+
 ProjectionsList* MerkaartorPreferences::getProjectionsList()
 {
     return &theProjectionsList;
@@ -801,9 +811,9 @@ void MerkaartorPreferences::setCurrentFilter(FilterType theValue)
     Sets->setValue("filter/Type", theValue);
 }
 
-ProjectionType MerkaartorPreferences::getCurrentFilter()
+QString MerkaartorPreferences::getCurrentFilter()
 {
-    return (ProjectionType)Sets->value("filter/Type", "").toString();
+    return Sets->value("filter/Type", "").toString();
 }
 
 FiltersList* MerkaartorPreferences::getFiltersList()
