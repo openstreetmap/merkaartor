@@ -364,8 +364,6 @@ public:
     void loadProjections();
     void saveProjections();
 #ifndef _MOBILE
-    void setProjectionType(ProjectionType theValue);
-    ProjectionType getProjectionType();
     ProjectionsList* getProjectionsList();
     ProjectionItem getProjection(QString aProj);
 #endif

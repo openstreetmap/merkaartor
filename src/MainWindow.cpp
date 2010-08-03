@@ -1474,7 +1474,6 @@ void MainWindow::on_viewLockZoomAction_triggered()
     }
     if (l && l->isTiled()) {
         theView->projection().setProjectionType(l->projection());
-        M_PREFS->setProjectionType(l->projection());
         theView->setViewport(theView->viewport(), theView->rect());
     }
     theView->adjustZoomToBoris();
@@ -2305,7 +2304,6 @@ void MainWindow::preferencesChanged(void)
         }
     }
     ui->mnuProjections->menuAction()->setEnabled(true);
-    view()->projection().setProjectionType(M_PREFS->getProjectionType());
     if (M_PREFS->getZoomBoris()) {
         ImageMapLayer* l = NULL;
         for (LayerIterator<ImageMapLayer*> ImgIt(theDocument); !ImgIt.isEnd(); ++ImgIt) {
@@ -2801,7 +2799,7 @@ void MainWindow::updateProjectionMenu()
             continue;
         QAction* a = new QAction(it.name, p->projActgrp);
         a->setCheckable (true);
-        if (it.name.contains(M_PREFS->getProjectionType(), Qt::CaseInsensitive))
+        if (it.name.contains(theView->projection().getProjectionType(), Qt::CaseInsensitive))
             a->setChecked(true);
         ui->mnuProjections->addAction(a);
     }
@@ -3008,9 +3006,7 @@ void MainWindow::recentImportTriggered(QAction* anAction)
 #ifndef _MOBILE
 void MainWindow::projectionTriggered(QAction* anAction)
 {
-    if(theView->projection().setProjectionType((ProjectionType)anAction->text()))
-        M_PREFS->setProjectionType(anAction->text());
-    else
+    if(theView->projection().setProjectionType((ProjectionType)anAction->text()) == FALSE)
         QMessageBox::critical(this, tr("Invalid projection"), tr("Unable to set projection \"%1\".").arg(anAction->text()));
     theView->setViewport(theView->viewport(), theView->rect());
     invalidateView();

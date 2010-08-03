@@ -785,16 +785,6 @@ void MerkaartorPreferences::initialPosition(MapView* vw)
 }
 
 #ifndef _MOBILE
-void MerkaartorPreferences::setProjectionType(ProjectionType theValue)
-{
-    Sets->setValue("projection/Type", theValue);
-}
-
-ProjectionType MerkaartorPreferences::getProjectionType()
-{
-    return (ProjectionType)Sets->value("projection/Type", "EPSG:3785").toString();
-}
-
 ProjectionsList* MerkaartorPreferences::getProjectionsList()
 {
     return &theProjectionsList;

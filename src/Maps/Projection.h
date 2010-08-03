@@ -38,6 +38,7 @@ class Projection
 #ifndef _MOBILE
         static ProjProjection getProjection(QString projString);
         bool setProjectionType(ProjectionType aProjectionType);
+        ProjectionType getProjectionType() const;
 
         static void projTransform(ProjProjection srcdefn,
                            ProjProjection dstdefn,

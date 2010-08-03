@@ -87,7 +87,7 @@ Projection::Projection(void)
 #ifndef _MOBILE
     p->theWGS84Proj = Projection::getProjection("+proj=longlat +ellps=WGS84 +datum=WGS84");
     p->projType = "";
-    setProjectionType(M_PREFS->getProjectionType());
+    setProjectionType("EPSG:3785+");
 #endif
 }
 
@@ -389,6 +389,11 @@ bool Projection::setProjectionType(ProjectionType aProjectionType)
     return (theProj != NULL || p->IsLatLong || p->IsMercator);
 }
 #endif
+
+ProjectionType Projection::getProjectionType() const
+{
+    return p->projType;
+}
 
 // Common routines
 
