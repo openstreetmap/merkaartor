@@ -63,7 +63,8 @@ FORMS += ./AboutDialog.ui \
     ./MultiProperties.ui \
     ./Utils/PictureViewerDialog.ui \
     ./Utils/SelectionDialog.ui \
-    Utils/TagSelectorWidget.ui
+    Utils/TagSelectorWidget.ui \
+    PropertiesDialog.ui
 
 # Resource file(s)
 RESOURCES += ../Icons/AllIcons.qrc \

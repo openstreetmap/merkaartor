@@ -39,6 +39,7 @@ public:
     virtual int size() const;
 
     virtual bool toXML(QDomElement& xParent, QProgressDialog * progress);
+    virtual QString toPropertiesHtml();
     static ImageMapLayer* fromXML(Document* d, const QDomElement& e, QProgressDialog * progress);
 
     virtual /* const */ LayerType classType() {return Layer::ImageLayerType;}

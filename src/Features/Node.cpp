@@ -591,15 +591,6 @@ Node * Node::fromGPX(Document* d, Layer* L, const QDomElement e)
     return Pt;
 }
 
-QString Coord2Sexa(double c)
-{
-    int deg = int(c);
-    double min = fabs((c - deg)*60);
-    double sec = (min - int(min)) *60;
-
-    return QString("%1° %2' %3\"").arg(deg).arg(int(min)).arg(sec, 0, 'f', 2);
-}
-
 QString Node::toHtml()
 {
     QString D;

@@ -122,11 +122,16 @@ public:
 
     virtual void cleanup();
 
+    virtual bool toXML(QDomElement xParent);
+    virtual void fromXML(const QDomElement xParent);
+    virtual QString toPropertiesHtml();
+
 public slots:
     void onLoadImage();
 
 protected:
     bool alreadyLoaded(QString fn) const;
+    bool loadImage(const QString& fn);
 
 private:
     QMenu* theMenu;

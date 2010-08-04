@@ -416,4 +416,39 @@ void GosmoreAdapter::cleanup()
 {
 }
 
+bool GosmoreAdapter::toXML(QDomElement xParent)
+{
+    bool OK = true;
+
+    QDomElement fs = xParent.ownerDocument().createElement("Images");
+    xParent.appendChild(fs);
+    if (pak)
+        fs.setAttribute("filename", pak->fileName());
+
+    return OK;
+}
+
+void GosmoreAdapter::fromXML(const QDomElement xParent)
+{
+    QDomElement fs = xParent.firstChildElement();
+    while(!fs.isNull()) {
+        if (fs.tagName() == "Images") {
+            QString fn = fs.attribute("filename");
+            setPak(fn);
+        }
+
+        fs = fs.nextSiblingElement();
+    }
+}
+
+QString GosmoreAdapter::toPropertiesHtml()
+{
+    QString h;
+
+    if (pak)
+        h += "<i>" + tr("Filename") + ": </i>" + pak->fileName();
+
+    return h;
+}
+
 Q_EXPORT_PLUGIN2(MGosmoreBackgroundPlugin, GosmoreAdapter)

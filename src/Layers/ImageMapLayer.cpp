@@ -299,7 +299,11 @@ bool ImageMapLayer::toXML(QDomElement& xParent, QProgressDialog * /* progress */
         e.appendChild(c);
 
         c.setAttribute("name", p->selServer);
-    }
+    } else
+        c = e.ownerDocument().createElement(p->theMapAdapter->getName().remove(' '));
+        e.appendChild(c);
+
+        p->theMapAdapter->toXML(c);
 
     return OK;
 }
@@ -314,13 +318,18 @@ ImageMapLayer * ImageMapLayer::fromXML(Document* d, const QDomElement& e, QProgr
     QDomElement c = e.firstChildElement();
 
     QString server;
+    QUuid bgtype = QUuid(e.attribute("bgtype"));
     if (c.tagName() == "WmsServer") {
         server = c.attribute("name");
     } else
     if (c.tagName() == "TmsServer") {
         server = c.attribute("name");
+    } else {
+        IMapAdapter* theMapAdapter = M_PREFS->getBackgroundPlugin(bgtype);
+        if (theMapAdapter)
+            theMapAdapter->fromXML(c);
     }
-    l->setMapAdapter(QUuid(e.attribute("bgtype")), server);
+    l->setMapAdapter(bgtype, server);
 
     l->setAlpha(e.attribute("alpha").toDouble());
     l->setVisible((e.attribute("visible") == "true" ? true : false));
@@ -826,5 +835,30 @@ void ImageMapLayer::on_imageReceived()
 void ImageMapLayer::on_loadingFinished()
 {
     emit loadingFinished(this);
+}
+
+QString ImageMapLayer::toPropertiesHtml()
+{
+    QString h;
+
+    h += "<u>" + name() + "</u><br/>";
+    if (p->theMapAdapter) {
+        if (p->theMapAdapter->getType() != IMapAdapter::DirectBackground) {
+            h += "<i>" + tr("Server") + ": </i>" + p->theMapAdapter->getHost();
+            h += "<br/>";
+            if (p->theMapAdapter->isTiled()) {
+                h += "<i>" + tr("Tile size") + ": </i>" + QString("%1").arg(p->theMapAdapter->getTileSize());
+                h += "<br/>";
+                h += "<i>" + tr("Min/Max zoom") + ": </i>" + QString("%1/%2").arg(p->theMapAdapter->getMinZoom()).arg(p->theMapAdapter->getMaxZoom());
+                h += "<br/>";
+            }
+        }
+        h += "<i>" + tr("Projection") + ": </i>" + p->theMapAdapter->projection();
+        h += "<br/>";
+        h += p->theMapAdapter->toPropertiesHtml();
+    }
+    h += "";
+
+    return h;
 }
 

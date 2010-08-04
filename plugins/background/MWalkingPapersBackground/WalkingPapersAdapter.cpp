@@ -152,24 +152,14 @@ bool WalkingPapersAdapter::askAndgetWalkingPapersDetails(QRectF& bbox) const
         return false;
 }
 
-void WalkingPapersAdapter::onLoadImage()
+bool WalkingPapersAdapter::loadImage(const QString& fn, QRectF theBbox, int theRotation)
 {
-    int fileOk = 0;
-    QRectF theBbox = QRectF();
+    if (alreadyLoaded(fn))
+        return true;
 
-    QStringList fileNames = QFileDialog::getOpenFileNames(
-                    NULL,
-                    tr("Open Walking Papers scan"),
-                    "", FILTER_OPEN_SUPPORTED);
-    if (fileNames.isEmpty())
-        return;
-
-    for (int i=0; i<fileNames.size(); i++) {
-        if (alreadyLoaded(fileNames[i]))
-            continue;
-
-        QImage img(fileNames[i]);
-        WalkingPapersImage wimg;
+    QImage img(fn);
+    WalkingPapersImage wimg;
+    if (theBbox.isNull()) {
 #ifdef USE_ZBAR
         zbar::QZBarImage image(img);
 
@@ -188,7 +178,7 @@ void WalkingPapersAdapter::onLoadImage()
         if (n <= 0) {
             qDebug() << "WP scan error: " << n;
             if (!askAndgetWalkingPapersDetails(theBbox))
-                continue;
+                return false;
         } else {
             QUrl url;
             // extract results
@@ -205,14 +195,12 @@ void WalkingPapersAdapter::onLoadImage()
                 int y = symbol->get_location_y(0);
                 QPoint mid = QPoint(img.width()/2, img.height()/2);
                 if (x < mid.x() || y < mid.y()) {
-                    QMatrix mat;
                     if (x < mid.x() && y < mid.y())
-                        mat.rotate(180);
+                        theRotation = 180;
                     else if (x > mid.x() && y < mid.y())
-                        mat.rotate(90);
+                        theRotation = 90;
                     else if (x < mid.x() && y > mid.y())
-                        mat.rotate(-90);
-                    img = img.transformed(mat);
+                        theRotation = -90;
                 }
             }
         }
@@ -223,13 +211,38 @@ void WalkingPapersAdapter::onLoadImage()
         if (!askAndgetWalkingPapersDetails(theBbox))
             continue;
 #endif
-        wimg.theFilename = fileNames[i];
-        wimg.theImg = QPixmap::fromImage(img);
-        wimg.theBBox = theBbox;
-        theImages.push_back(wimg);
-        ++fileOk;
+    }
+    if (theRotation) {
+        QMatrix mat;
+        mat.rotate(theRotation);
+        img = img.transformed(mat);
+    }
+    wimg.theFilename = fn;
+    wimg.theImg = QPixmap::fromImage(img);
+    wimg.theBBox = theBbox;
+    wimg.rotation = theRotation;
+    theImages.push_back(wimg);
 
-        theCoordBbox |= theBbox;
+    theCoordBbox |= theBbox;
+
+    return true;
+}
+
+void WalkingPapersAdapter::onLoadImage()
+{
+    int fileOk = 0;
+
+    QStringList fileNames = QFileDialog::getOpenFileNames(
+                    NULL,
+                    tr("Open Walking Papers scan"),
+                    "", FILTER_OPEN_SUPPORTED);
+    if (fileNames.isEmpty())
+        return;
+
+    QRectF theBbox = QRectF();
+    for (int i=0; i<fileNames.size(); i++) {
+        if (loadImage(fileNames[i], theBbox))
+            ++fileOk;
     }
 
     if (!fileOk) {
@@ -334,5 +347,68 @@ void WalkingPapersAdapter::cleanup()
     theImages.clear();
     theCoordBbox = QRectF();
 }
+
+bool WalkingPapersAdapter::toXML(QDomElement xParent)
+{
+    bool OK = true;
+
+    QDomElement fs = xParent.ownerDocument().createElement("Images");
+    xParent.appendChild(fs);
+
+    for (int i=0; i<theImages.size(); ++i) {
+        QDomElement f = xParent.ownerDocument().createElement("Image");
+        fs.appendChild(f);
+        f.setAttribute("filename", theImages[i].theFilename);
+        f.setAttribute("top", theImages[i].theBBox.top());
+        f.setAttribute("left", theImages[i].theBBox.left());
+        f.setAttribute("width", theImages[i].theBBox.width());
+        f.setAttribute("height", theImages[i].theBBox.height());
+        f.setAttribute("rotation", theImages[i].rotation);
+    }
+
+    return OK;
+}
+
+void WalkingPapersAdapter::fromXML(const QDomElement xParent)
+{
+    theCoordBbox = QRectF();
+    theImages.clear();
+
+    QDomElement fs = xParent.firstChildElement();
+    while(!fs.isNull()) {
+        if (fs.tagName() == "Images") {
+            QDomElement f = fs.firstChildElement();
+            while(!f.isNull()) {
+                if (f.tagName() == "Image") {
+                    QString fn = f.attribute("filename");
+                    double x = f.attribute("left").toDouble();
+                    double y = f.attribute("top").toDouble();
+                    double w = f.attribute("width").toDouble();
+                    double h = f.attribute("height").toDouble();
+                    int r = f.attribute("rotation").toInt();
+                    QRectF bbox(x, y, w, h);
+                    loadImage(fn, bbox, r);
+                }
+                f = f.nextSiblingElement();
+            }
+        }
+
+        fs = fs.nextSiblingElement();
+    }
+}
+
+QString WalkingPapersAdapter::toPropertiesHtml()
+{
+    QString h;
+
+    QStringList fn;
+    for (int i=0; i<theImages.size(); ++i) {
+        fn << QDir::toNativeSeparators(theImages[i].theFilename);
+    }
+    h += "<i>" + tr("Filename(s)") + ": </i>" + fn.join("; ");
+
+    return h;
+}
+
 
 Q_EXPORT_PLUGIN2(MWalkingPapersBackgroundPlugin, WalkingPapersAdapter)

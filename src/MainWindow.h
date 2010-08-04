@@ -78,6 +78,7 @@ public slots:
     virtual void on_fileSaveAction_triggered();
     virtual void on_fileWorkOfflineAction_triggered();
     virtual void on_filePrintAction_triggered();
+    virtual void on_filePropertiesAction_triggered();
 
     virtual void on_helpAboutAction_triggered();
     virtual void on_viewZoomAllAction_triggered();

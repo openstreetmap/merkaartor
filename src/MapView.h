@@ -90,6 +90,8 @@ class MapView :	public QWidget
         RendererOptions renderOptions();
         void setRenderOptions(const RendererOptions& opt);
 
+        QString toPropertiesHtml();
+
     private:
         void drawGPS(QPainter & painter);
         void updateStaticBackground();

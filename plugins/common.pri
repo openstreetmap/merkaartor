@@ -28,7 +28,7 @@ win32-msvc* {
 TEMPLATE = lib
 CONFIG += plugin
 
-QT += core
+QT += core xml
 
 #DEFINES += QT_NO_DEBUG_OUTPUT
 

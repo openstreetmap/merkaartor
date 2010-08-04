@@ -839,6 +839,18 @@ void Document::setTitle(const QString aTitle)
     p->title = aTitle;
 }
 
+QString Document::toPropertiesHtml()
+{
+    QString h;
+
+    h += "<big><strong>" + tr("Document") + "</strong></big><hr/>";
+    for (int i=0; i<p->Layers.size(); ++i) {
+        h += p->Layers[i]->toPropertiesHtml() + "<br/>";
+    }
+    h += "";
+
+    return h;
+}
 /* FEATUREITERATOR */
 
 FeatureIterator::FeatureIterator(Document *aDoc)

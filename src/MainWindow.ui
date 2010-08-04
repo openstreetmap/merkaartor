@@ -166,6 +166,8 @@
     <addaction name="separator"/>
     <addaction name="filePrintAction"/>
     <addaction name="separator"/>
+    <addaction name="filePropertiesAction"/>
+    <addaction name="separator"/>
     <addaction name="fileWorkOfflineAction"/>
     <addaction name="fileQuitAction"/>
    </widget>
@@ -1727,6 +1729,11 @@
   <action name="filePrintPreviewAction">
    <property name="text">
     <string>Print preview...</string>
+   </property>
+  </action>
+  <action name="filePropertiesAction">
+   <property name="text">
+    <string>Properties...</string>
    </property>
   </action>
  </widget>

@@ -559,11 +559,7 @@ QString Layer::toMainHtml()
     "<small><i>" + QString(metaObject()->className()) + "</i></small><br/>"
     + desc;
     S += "<hr/>";
-    int sz = 0;
-    foreach (Feature* f, p->Features)
-        if (!(f->isVirtual()))
-            ++sz;
-    S += "<i>"+QApplication::translate("Layer", "Size")+": </i>" + QApplication::translate("Layer", "%n features", "", QCoreApplication::CodecForTr, sz)+"<br/>";
+    S += "<i>"+QApplication::translate("Layer", "Size")+": </i>" + QApplication::translate("Layer", "%n features", "", QCoreApplication::CodecForTr, getDirtySize())+"<br/>";
     S += "%1";
     S += "</body></html>";
 
@@ -573,6 +569,16 @@ QString Layer::toMainHtml()
 QString Layer::toHtml()
 {
     return toMainHtml().arg("");
+}
+
+QString Layer::toPropertiesHtml()
+{
+    QString h;
+
+    h += "<u>" + p->Name + "</u><br/>";
+    h += "<i>" + tr("Features") + ": </i>" + QString::number(getDirtySize());
+
+    return h;
 }
 
 bool Layer::toXML(QDomElement& e, QProgressDialog * /*progress*/)

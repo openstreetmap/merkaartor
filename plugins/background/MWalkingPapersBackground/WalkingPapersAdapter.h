@@ -23,6 +23,7 @@ public:
     QString theFilename;
     QPixmap theImg;
     QRectF theBBox;
+    int rotation;
 };
 
 
@@ -109,8 +110,13 @@ public:
 
     virtual void cleanup();
 
+    virtual bool toXML(QDomElement xParent);
+    virtual void fromXML(const QDomElement xParent);
+    virtual QString toPropertiesHtml();
+
 public slots:
     void onLoadImage();
+    bool loadImage(const QString& fn, QRectF theBbox, int theRotation=0);
 
 protected:
     bool alreadyLoaded(QString fn) const;

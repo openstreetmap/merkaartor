@@ -46,6 +46,7 @@
 #include <ui_UploadMapDialog.h>
 #include <ui_SelectionDialog.h>
 #include <ui_ExportDialog.h>
+#include <ui_PropertiesDialog.h>
 
 #include "Preferences/PreferencesDialog.h"
 #include "Preferences/MerkaartorPreferences.h"
@@ -1410,6 +1411,21 @@ void MainWindow::on_filePrintAction_triggered()
 {
     NativeRenderDialog osmR(theDocument, theView->viewport(), this);
     osmR.exec();
+}
+
+void MainWindow::on_filePropertiesAction_triggered()
+{
+    QDialog dlg(this);
+    Ui::PropertiesDialog Prop;
+    Prop.setupUi(&dlg);
+
+    QString h;
+    h += theView->toPropertiesHtml();
+    h += "<br/>";
+    h += theDocument->toPropertiesHtml();
+    Prop.textBrowser->setHtml(h);
+
+    dlg.exec();
 }
 
 void MainWindow::on_helpAboutAction_triggered()

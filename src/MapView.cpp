@@ -1257,3 +1257,27 @@ void MapView::setRenderOptions(const RendererOptions &opt)
 {
     p->ROptions = opt;
 }
+
+QString MapView::toPropertiesHtml()
+{
+    QString h;
+
+    h += "<big><strong>" + tr("View") + "</strong></big><hr/>";
+    h += "<u>" + tr("Bounding Box") + "</u><br/>";
+    h += QString("%1, %2, %3, %4 (%5, %6, %7, %8)")
+         .arg(QString::number(coordToAng(viewport().bottomLeft().lon()),'f',4))
+         .arg(QString::number(coordToAng(viewport().bottomLeft().lat()),'f',4))
+         .arg(QString::number(coordToAng(viewport().topRight().lon()),'f',4))
+         .arg(QString::number(coordToAng(viewport().topRight().lat()),'f',4))
+         .arg(Coord2Sexa(viewport().bottomLeft().lon()))
+         .arg(Coord2Sexa(viewport().bottomLeft().lat()))
+         .arg(Coord2Sexa(viewport().topRight().lon()))
+         .arg(Coord2Sexa(viewport().topRight().lat()))
+         ;
+    h += "<br/>";
+    h += "<u>" + tr("Projection") + "</u><br/>";
+    h += theProjection.getProjectionType();
+    h += "";
+
+    return h;
+}

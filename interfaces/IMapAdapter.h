@@ -7,6 +7,7 @@
 #include <QPointF>
 #include <QUuid>
 #include <QMenu>
+#include <QDomElement>
 
 #include "IImageManager.h"
 
@@ -110,9 +111,14 @@ public:
     virtual void setImageManager(IImageManager* anImageManager) = 0;
 
     virtual void cleanup() = 0;
+
+    virtual bool toXML(QDomElement xParent) = 0;
+    virtual void fromXML(const QDomElement xParent) = 0;
+    virtual QString toPropertiesHtml() = 0;
+
 };
 
 Q_DECLARE_INTERFACE ( IMapAdapter,
-                      "com.cbsoft.Merkaartor.IMapAdapter/1.6" )
+                      "com.cbsoft.Merkaartor.IMapAdapter/1.7" )
 
 #endif

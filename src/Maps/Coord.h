@@ -13,6 +13,15 @@
 #define COORD_ENLARGE 0.00015
 
 #define COORD2STRING(c) QString::number(c, 'f', 7)
+inline QString Coord2Sexa(double c)
+{
+    int deg = int(c);
+    double min = fabs((c - deg)*60);
+    double sec = (min - int(min)) *60;
+
+    return QString("%1° %2' %3\"").arg(deg).arg(int(min)).arg(sec, 0, 'f', 2);
+}
+
 
 inline double angToRad(double a)
 {

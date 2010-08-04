@@ -84,6 +84,10 @@ public:
 
     virtual void cleanup() {}
 
+    virtual bool toXML(QDomElement xParent) { return true; }
+    virtual void fromXML(const QDomElement xParent) {}
+    virtual QString toPropertiesHtml() {return "";}
+
 protected:
     WmsServer theServer;
 

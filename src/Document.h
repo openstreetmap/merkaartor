@@ -110,6 +110,8 @@ public:
     QString title() const;
     void setTitle(const QString aTitle);
 
+    QString toPropertiesHtml();
+
 private:
     MapDocumentPrivate* p;
 

@@ -108,6 +108,8 @@ public:
 
     virtual QString toMainHtml();
     virtual QString toHtml();
+    virtual QString toPropertiesHtml();
+
     virtual bool toXML(QDomElement& e, QProgressDialog * progress);
     static Layer* fromXML(Layer* l, Document* d, const QDomElement e, QProgressDialog * progress);
 

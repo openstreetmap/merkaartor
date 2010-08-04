@@ -56,6 +56,67 @@ bool GdalAdapter::alreadyLoaded(QString fn) const
     return false;
 }
 
+bool GdalAdapter::loadImage(const QString& fn)
+{
+    if (alreadyLoaded(fn))
+        return true;
+
+    QFileInfo fi(fn);
+    GdalImage img;
+
+    poDataset = (GDALDataset *) GDALOpen( QDir::toNativeSeparators(fi.absoluteFilePath()).toUtf8().constData(), GA_ReadOnly );
+    if( poDataset == NULL )
+    {
+        qDebug() <<  "GDAL Open failed: " << fn;
+        return false;
+    }
+
+    if( strlen(poDataset->GetProjectionRef()) != 0 ) {
+        qDebug( "Projection is `%s'\n", poDataset->GetProjectionRef() );
+        OGRSpatialReference* theSrs = new OGRSpatialReference(poDataset->GetProjectionRef());
+        if (theSrs) {
+            theSrs->morphFromESRI();
+            char* theProj4;
+            if (theSrs->exportToProj4(&theProj4) == OGRERR_NONE) {
+                qDebug() << "SHP: to proj4 : " << theProj4;
+            } else {
+                qDebug() << "SHP: to proj4 error: " << CPLGetLastErrorMsg();
+                return false;
+            }
+            theProjection = QString(theProj4);
+        }
+    } else
+        return false;
+
+    if( poDataset->GetGeoTransform( img.adfGeoTransform ) == CE_None )
+    {
+        qDebug( "Origin = (%.6f,%.6f)\n",
+                img.adfGeoTransform[0], img.adfGeoTransform[3] );
+
+        qDebug( "Pixel Size = (%.6f,%.6f)\n",
+                img.adfGeoTransform[1], img.adfGeoTransform[5] );
+
+        theBbox.setTopLeft(QPointF(img.adfGeoTransform[0], img.adfGeoTransform[3]));
+        theBbox.setWidth(img.adfGeoTransform[1]*poDataset->GetRasterXSize());
+        theBbox.setHeight(img.adfGeoTransform[5]*poDataset->GetRasterYSize());
+    } else
+        return false;
+
+    qDebug( "Driver: %s/%s\n",
+            poDataset->GetDriver()->GetDescription(),
+            poDataset->GetDriver()->GetMetadataItem( GDAL_DMD_LONGNAME ) );
+
+    qDebug( "Size is %dx%dx%d\n",
+            poDataset->GetRasterXSize(), poDataset->GetRasterYSize(),
+            poDataset->GetRasterCount() );
+
+    img.theFilename = fn;
+    img.theImg.load(fn);
+    theImages.push_back(img);
+
+    return true;
+}
+
 void GdalAdapter::onLoadImage()
 {
     int fileOk = 0;
@@ -71,62 +132,8 @@ void GdalAdapter::onLoadImage()
 //    theImages.clear();
 
     for (int i=0; i<fileNames.size(); i++) {
-        if (alreadyLoaded(fileNames[i]))
-            continue;
-
-        QFileInfo fi(fileNames[i]);
-        GdalImage img;
-
-        poDataset = (GDALDataset *) GDALOpen( QDir::toNativeSeparators(fi.absoluteFilePath()).toUtf8().constData(), GA_ReadOnly );
-        if( poDataset == NULL )
-        {
-            qDebug() <<  "GDAL Open failed: " << fileNames[i];
-            continue;
-        }
-
-        if( strlen(poDataset->GetProjectionRef()) != 0 ) {
-            qDebug( "Projection is `%s'\n", poDataset->GetProjectionRef() );
-            OGRSpatialReference* theSrs = new OGRSpatialReference(poDataset->GetProjectionRef());
-            if (theSrs) {
-                theSrs->morphFromESRI();
-                char* theProj4;
-                if (theSrs->exportToProj4(&theProj4) == OGRERR_NONE) {
-                    qDebug() << "SHP: to proj4 : " << theProj4;
-                } else {
-                    qDebug() << "SHP: to proj4 error: " << CPLGetLastErrorMsg();
-                    return;
-                }
-                theProjection = QString(theProj4);
-            }
-        } else
-            continue;
-
-        if( poDataset->GetGeoTransform( img.adfGeoTransform ) == CE_None )
-        {
-            qDebug( "Origin = (%.6f,%.6f)\n",
-                    img.adfGeoTransform[0], img.adfGeoTransform[3] );
-
-            qDebug( "Pixel Size = (%.6f,%.6f)\n",
-                    img.adfGeoTransform[1], img.adfGeoTransform[5] );
-
-            theBbox.setTopLeft(QPointF(img.adfGeoTransform[0], img.adfGeoTransform[3]));
-            theBbox.setWidth(img.adfGeoTransform[1]*poDataset->GetRasterXSize());
-            theBbox.setHeight(img.adfGeoTransform[5]*poDataset->GetRasterYSize());
-        } else
-            continue;
-
-        qDebug( "Driver: %s/%s\n",
-                poDataset->GetDriver()->GetDescription(),
-                poDataset->GetDriver()->GetMetadataItem( GDAL_DMD_LONGNAME ) );
-
-        qDebug( "Size is %dx%dx%d\n",
-                poDataset->GetRasterXSize(), poDataset->GetRasterYSize(),
-                poDataset->GetRasterCount() );
-
-        img.theFilename = fileNames[i];
-        img.theImg.load(fileNames[i]);
-        theImages.push_back(img);
-        ++fileOk;
+        if (loadImage(fileNames[i]))
+            ++fileOk;
     }
 
     if (!fileOk) {
@@ -317,6 +324,57 @@ void GdalAdapter::cleanup()
     theImages.clear();
     theBbox = QRectF();
     theProjection = QString();
+}
+
+bool GdalAdapter::toXML(QDomElement xParent)
+{
+    bool OK = true;
+
+    QDomElement fs = xParent.ownerDocument().createElement("Images");
+    xParent.appendChild(fs);
+
+    for (int i=0; i<theImages.size(); ++i) {
+        QDomElement f = xParent.ownerDocument().createElement("Image");
+        fs.appendChild(f);
+        f.setAttribute("filename", theImages[i].theFilename);
+    }
+
+    return OK;
+}
+
+void GdalAdapter::fromXML(const QDomElement xParent)
+{
+    theBbox = QRectF();
+    theImages.clear();
+
+    QDomElement fs = xParent.firstChildElement();
+    while(!fs.isNull()) {
+        if (fs.tagName() == "Images") {
+            QDomElement f = fs.firstChildElement();
+            while(!f.isNull()) {
+                if (f.tagName() == "Image") {
+                    QString fn = f.attribute("filename");
+                    loadImage(fn);
+                }
+                f = f.nextSiblingElement();
+            }
+        }
+
+        fs = fs.nextSiblingElement();
+    }
+}
+
+QString GdalAdapter::toPropertiesHtml()
+{
+    QString h;
+
+    QStringList fn;
+    for (int i=0; i<theImages.size(); ++i) {
+        fn << QDir::toNativeSeparators(theImages[i].theFilename);
+    }
+    h += "<i>" + tr("Filename(s)") + ": </i>" + fn.join("; ");
+
+    return h;
 }
 
 Q_EXPORT_PLUGIN2(MGdalBackgroundPlugin, GdalAdapter)
