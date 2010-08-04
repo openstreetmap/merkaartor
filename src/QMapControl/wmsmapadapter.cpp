@@ -49,7 +49,7 @@ void WMSMapAdapter::setImageManager(IImageManager* anImageManager)
 QString WMSMapAdapter::projection() const
 {
     if (theServer.WmsProjections == "OSGEO:41001")
-        return "EPSG:3785";
+        return "EPSG:3857";
     return theServer.WmsProjections;
 }
 

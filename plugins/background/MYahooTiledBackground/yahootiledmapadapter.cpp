@@ -81,7 +81,7 @@ QRectF	YahooTiledMapAdapter::getBoundingbox() const
 
 QString YahooTiledMapAdapter::projection() const
 {
-    return ("EPSG:3785");
+    return ("EPSG:3857");
 }
 
 int YahooTiledMapAdapter::getTilesWE(int zoomlevel) const

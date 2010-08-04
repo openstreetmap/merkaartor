@@ -58,7 +58,7 @@ QString	YahooLegalMapAdapter::getName() const
 
 QString YahooLegalMapAdapter::projection() const
 {
-    return ("EPSG:3785");
+    return ("EPSG:3857");
 }
 
 QString YahooLegalMapAdapter::getQuery(const QRectF& wgs84Bbox, const QRectF& /*projBbox*/, const QRect& size) const

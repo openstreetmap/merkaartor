@@ -365,7 +365,7 @@ bool Projection::setProjectionType(QString aProjectionType)
             )
     {
         p->IsMercator = true;
-        p->projType = "EPSG:3785";
+        p->projType = "EPSG:3857";
         return true;
     }
     // Hardcode "lat/long " projection
