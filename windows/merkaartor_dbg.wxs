@@ -104,6 +104,8 @@
          <ComponentRef Id="Merkaartor" />
          <ComponentRef Id="background_plug" />
          <ComponentRef Id="skulpture" />
+         <ComponentRef Id="proj4_bin" />
+         <ComponentRef Id="proj4_shr" />
       </Feature>
       <Feature Id="ftWorld_Shp" Title="World Shape file" Level="1"
          Display="expand" ConfigurableDirectory="MERKAARTORSHARE">
@@ -135,6 +137,7 @@
    <?include qttrans.wxi?>
 -->
    <?include external.wxi?>
+   <?include proj4.wxi?>
    <?include merkaartor_trans.wxi?>
 
 </Wix>

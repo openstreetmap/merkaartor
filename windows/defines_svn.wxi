@@ -11,6 +11,7 @@
   <?define TranslationsPath = "$(var.SourcePath)" ?>
   <?define BinPath = "$(var.SourcePath)\binaries\bin" ?>
   <?define DllPath = "$(var.SourcePath)\binaries\bin" ?>
+  <?define ShareBinPath = "$(var.SourcePath)\binaries\share" ?>
   <?define SharePath = "$(var.SourcePath)\share" ?>
 
 </Include>
