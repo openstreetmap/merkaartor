@@ -217,6 +217,7 @@ public slots:
     void recentOpenTriggered(QAction* anAction);
     void recentImportTriggered(QAction* anAction);
 #ifndef _MOBILE
+    void projectionSet(const QString& prj);
     void projectionTriggered(QAction* anAction);
 #endif
     void filterTriggered(QAction* anAction);

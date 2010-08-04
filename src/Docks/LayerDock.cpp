@@ -129,6 +129,7 @@ void LayerDock::addLayer(Layer* aLayer)
         connect(w, SIGNAL(layerClosed(Layer*)), this, SLOT(layerClosed(Layer*)));
         connect(w, SIGNAL(layerCleared(Layer*)), this, SLOT(layerCleared(Layer*)));
         connect(w, SIGNAL(layerZoom(Layer*)), this, SLOT(layerZoom(Layer*)));
+        connect(w, SIGNAL(layerProjection(const QString&)), this, SLOT(layerProjection(const QString&)));
 
         p->Main->ui->menuLayers->addMenu(w->getAssociatedMenu());
 
@@ -298,6 +299,11 @@ void LayerDock::layerZoom(Layer * l)
 //    bb = bb.zoomed(1.1);
     p->Main->view()->setViewport(bb, p->Main->view()->rect());
     emit(layersChanged(false));
+}
+
+void LayerDock::layerProjection(const QString &prj)
+{
+    emit layersProjection(prj);
 }
 
 void LayerDock::tabChanged(int idx)

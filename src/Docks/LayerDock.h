@@ -35,6 +35,8 @@ class LayerDock : public MDockAncestor
         void layerClosed(Layer*);
         void layerCleared(Layer*);
         void layerZoom(Layer*);
+        void layerProjection(const QString&);
+
         void tabChanged(int idx);
         void tabContextMenuRequested(const QPoint& pos);
         void TabShowAll(bool);
@@ -50,6 +52,7 @@ class LayerDock : public MDockAncestor
         void layersChanged(bool adjustViewport);
         void layersClosed();
         void layersCleared();
+        void layersProjection(const QString&);
 
     protected:
         LayerDockPrivate* p;

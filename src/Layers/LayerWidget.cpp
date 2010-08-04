@@ -352,6 +352,14 @@ void ImageLayerWidget::setBackground(QAction* act)
     emit (layerChanged(this, true));
 }
 
+void ImageLayerWidget::setProjection()
+{
+    IMapAdapter* ma = ((ImageMapLayer*)theLayer.data())->getMapAdapter();
+    if (ma) {
+        emit (layerProjection(ma->projection()));
+    }
+}
+
 void ImageLayerWidget::initActions()
 {
     //if (actgrWms)
@@ -364,6 +372,11 @@ void ImageLayerWidget::initActions()
         actZoom->setVisible(false);
 
     actReadonly->setVisible(false);
+
+    actProjection = new QAction(tr("Set view projection to layer's"), this);
+    connect(actProjection, SIGNAL(triggered()), this, SLOT(setProjection()));
+    ctxMenu->addAction(actProjection);
+    associatedMenu->addAction(actProjection);
 
     closeAction = new QAction(tr("Close"), this);
     connect(closeAction, SIGNAL(triggered()), this, SLOT(close()));

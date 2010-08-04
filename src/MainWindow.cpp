@@ -226,6 +226,7 @@ MainWindow::MainWindow(QWidget *parent)
     connect(theLayers, SIGNAL(layersChanged(bool)), this, SLOT(adjustLayers(bool)));
     connect(theLayers, SIGNAL(layersCleared()), this, SIGNAL(content_changed()));
     connect(theLayers, SIGNAL(layersClosed()), this, SIGNAL(content_changed()));
+    connect(theLayers, SIGNAL(layersProjection(const QString&)), this, SLOT(projectionSet(const QString&)));
 
     connect (M_PREFS, SIGNAL(bookmarkChanged()), this, SLOT(updateBookmarksMenu()));
     updateBookmarksMenu();
@@ -3036,9 +3037,17 @@ void MainWindow::recentImportTriggered(QAction* anAction)
 }
 
 #ifndef _MOBILE
+void MainWindow::projectionSet(const QString& prj)
+{
+    if(false == theView->projection().setProjectionType(prj))
+        QMessageBox::critical(this, tr("Invalid projection"), tr("Unable to set projection \"%1\".").arg(prj));
+    theView->setViewport(theView->viewport(), theView->rect());
+    invalidateView();
+}
+
 void MainWindow::projectionTriggered(QAction* anAction)
 {
-    if(theView->projection().setProjectionType(anAction->text()) == FALSE)
+    if(false == theView->projection().setProjectionType(anAction->text()))
         QMessageBox::critical(this, tr("Invalid projection"), tr("Unable to set projection \"%1\".").arg(anAction->text()));
     else
         M_PREFS->setProjectionType(anAction->text());
