@@ -381,13 +381,15 @@ void WalkingPapersAdapter::fromXML(const QDomElement xParent)
             while(!f.isNull()) {
                 if (f.tagName() == "Image") {
                     QString fn = f.attribute("filename");
-                    double x = f.attribute("left").toDouble();
-                    double y = f.attribute("top").toDouble();
-                    double w = f.attribute("width").toDouble();
-                    double h = f.attribute("height").toDouble();
-                    int r = f.attribute("rotation").toInt();
-                    QRectF bbox(x, y, w, h);
-                    loadImage(fn, bbox, r);
+                    if (!fn.isEmpty()) {
+                        double x = f.attribute("left").toDouble();
+                        double y = f.attribute("top").toDouble();
+                        double w = f.attribute("width").toDouble();
+                        double h = f.attribute("height").toDouble();
+                        int r = f.attribute("rotation").toInt();
+                        QRectF bbox(x, y, w, h);
+                        loadImage(fn, bbox, r);
+                    }
                 }
                 f = f.nextSiblingElement();
             }

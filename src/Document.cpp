@@ -135,7 +135,8 @@ bool Document::toXML(QDomElement xParent, QProgressDialog * progress)
     }
 
     for (int i=0; i<p->Layers.size(); ++i) {
-        p->Layers[i]->toXML(mapDoc, progress);
+        if (p->Layers[i]->isEnabled())
+            p->Layers[i]->toXML(mapDoc, progress);
     }
 
     OK = history().toXML(mapDoc, progress);

@@ -434,7 +434,8 @@ void GosmoreAdapter::fromXML(const QDomElement xParent)
     while(!fs.isNull()) {
         if (fs.tagName() == "Images") {
             QString fn = fs.attribute("filename");
-            setPak(fn);
+            if (!fn.isEmpty())
+                setPak(fn);
         }
 
         fs = fs.nextSiblingElement();

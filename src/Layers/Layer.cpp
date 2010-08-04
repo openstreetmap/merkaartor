@@ -130,7 +130,7 @@ bool getFeatureSetCallback(MapFeaturePtr /*data*/, void* /*ctxt*/)
 void Layer::getFeatureSet(QMap<RenderPriority, QSet <Feature*> >& theFeatures, QSet<Way*>& theCoastlines, Document* /* theDocument */,
                    QList<CoordBox>& invalidRects, QRectF& clipRect, Projection& theProjection, QTransform& theTransform)
 {
-    if (!isVisible() || !size())
+    if (!size())
         return;
 
     QList < MapFeaturePtr > ret;

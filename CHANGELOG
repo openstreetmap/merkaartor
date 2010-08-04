@@ -1,4 +1,5 @@
 v0.17
+    * ADD : "Close" action to Image layers
     * ADD : Allow plugins to save parameters in a .mdc document; allows, e.g.; to save the filename of a GeoTIFF
     * ADD : Add a "Properties" dialog to display various info about the current document
     * ADD : Save projection in .MDC files

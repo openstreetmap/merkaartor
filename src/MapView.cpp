@@ -296,7 +296,8 @@ void MapView::buildFeatureSet()
 
     p->theCoastlines.clear();
     for (int i=0; i<theDocument->layerSize(); ++i) {
-        theDocument->getLayer(i)->getFeatureSet(p->theFeatures, p->theCoastlines, theDocument, p->invalidRects, clipRect, theProjection, p->theTransform);
+        if (theDocument->getLayer(i)->isVisible())
+            theDocument->getLayer(i)->getFeatureSet(p->theFeatures, p->theCoastlines, theDocument, p->invalidRects, clipRect, theProjection, p->theTransform);
     }
 }
 

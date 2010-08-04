@@ -266,6 +266,7 @@ void LayerDock::layerClosed(Layer* l)
     //delete l;
     l->clear();
     l->setEnabled(false);
+    l->setVisible(false);
     l->getWidget()->setVisible(false);
     l->getWidget()->getAssociatedMenu()->setVisible(false);
     p->Main->on_editPropertiesAction_triggered();

@@ -365,6 +365,11 @@ void ImageLayerWidget::initActions()
 
     actReadonly->setVisible(false);
 
+    closeAction = new QAction(tr("Close"), this);
+    connect(closeAction, SIGNAL(triggered()), this, SLOT(close()));
+    ctxMenu->addAction(closeAction);
+    associatedMenu->addAction(closeAction);
+
     ctxMenu->addSeparator();
     associatedMenu->addSeparator();
 

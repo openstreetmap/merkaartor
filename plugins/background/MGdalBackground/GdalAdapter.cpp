@@ -354,7 +354,8 @@ void GdalAdapter::fromXML(const QDomElement xParent)
             while(!f.isNull()) {
                 if (f.tagName() == "Image") {
                     QString fn = f.attribute("filename");
-                    loadImage(fn);
+                    if (!fn.isEmpty())
+                        loadImage(fn);
                 }
                 f = f.nextSiblingElement();
             }
