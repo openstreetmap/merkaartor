@@ -193,6 +193,7 @@ MapRenderer::MapRenderer()
     lbllayer = LabelStyleLayer(this);
 }
 
+#if 0
 void MapRenderer::render(
         QPainter* P,
         QMap<RenderPriority, QSet <Feature*> > theFeatures,
@@ -200,6 +201,10 @@ void MapRenderer::render(
         MapView* aView
 )
 {
+    #ifndef NDEBUG
+        QTime Start(QTime::currentTime());
+    #endif
+
     theView = aView;
     theOptions = options;
 
@@ -221,9 +226,6 @@ void MapRenderer::render(
     itm = theFeatures.constBegin();
     while (itm != theFeatures.constEnd())
     {
-//#ifndef NDEBUG
-//    QTime Start(QTime::currentTime());
-//#endif
         pix.fill(Qt::transparent);
         thePainter->begin(&pix);
         thePainter->setRenderHint(QPainter::Antialiasing);
@@ -318,33 +320,92 @@ void MapRenderer::render(
         }
         thePainter->end();
         P->drawPixmap(0, 0, pix);
-//#ifndef NDEBUG
-//    QTime Stop(QTime::currentTime());
-//    qDebug() << "curLayer: " << curLayer << " " << Start.msecsTo(Stop) << "ms";
-//#endif
+#ifndef NDEBUG
+    QTime Stop(QTime::currentTime());
+    qDebug() << Start.msecsTo(Stop) << "ms";
+#endif
     }
 }
-
-void MapRenderer::print(
+#else
+void MapRenderer::render(
         QPainter* P,
         QMap<RenderPriority, QSet <Feature*> > theFeatures,
         const RendererOptions& options,
         MapView* aView
 )
 {
+//    #ifndef NDEBUG
+//        QTime Start(QTime::currentTime());
+//    #endif
+
     theView = aView;
     theOptions = options;
 
+    bool bgLayerVisible = TEST_RFLAGS(RendererOptions::BackgroundVisible);
+    bool fgLayerVisible = TEST_RFLAGS(RendererOptions::ForegroundVisible);
+    bool tchpLayerVisible = TEST_RFLAGS(RendererOptions::TouchupVisible);
+    bool lblLayerVisible = TEST_RFLAGS(RendererOptions::NamesVisible);
+
     QMap<RenderPriority, QSet<Feature*> >::const_iterator itm;
+    QMap<RenderPriority, QSet<Feature*> >::const_iterator itmCur;
     QSet<Feature*>::const_iterator it;
 
     P->setRenderHint(QPainter::Antialiasing);
     thePainter = P;
 
-    if (TEST_RFLAGS(RendererOptions::BackgroundVisible))
+    itm = theFeatures.constBegin();
+    while (itm != theFeatures.constEnd())
     {
-        BackgroundStyleLayer layer(this);
+        int curLayer = (itm.key()).layer();
+        itmCur = itm;
+        while (itm != theFeatures.constEnd() && (itm.key()).layer() == curLayer)
+        {
+            if (bgLayerVisible)
+            {
+                for (it = itm.value().constBegin(); it != itm.value().constEnd(); ++it) {
+                    P->save();
+                    P->setOpacity((*it)->layer()->getAlpha());
+                    if (Way * R = CAST_WAY(*it)) {
+                        for (int i=0; i<R->sizeParents(); ++i)
+                            if (!R->getParent(i)->isDeleted() && R->getParent(i)->getEditPainter(theView->pixelPerM()))
+                                continue;
+                        bglayer.draw(R);
+                    } else if (Node * Pt = CAST_NODE(*it))
+                        bglayer.draw(Pt);
+                    else if (Relation * RR = CAST_RELATION(*it))
+                        bglayer.draw(RR);
+                    P->restore();
+                }
+            }
+            ++itm;
+        }
+        itm = itmCur;
+        while (itm != theFeatures.constEnd() && (itm.key()).layer() == curLayer)
+        {
+            if (fgLayerVisible)
+            {
+                ForegroundStyleLayer layer(this);
 
+                for (it = itm.value().constBegin(); it != itm.value().constEnd(); ++it) {
+                    P->save();
+                    P->setOpacity((*it)->layer()->getAlpha());
+                    if (Way * R = CAST_WAY(*it)) {
+                        for (int i=0; i<R->sizeParents(); ++i)
+                            if (!R->getParent(i)->isDeleted() && R->getParent(i)->getEditPainter(theView->pixelPerM()))
+                                continue;
+                        fglayer.draw(R);
+                    } else if (Node * Pt = CAST_NODE(*it))
+                        fglayer.draw(Pt);
+                    else if (Relation * RR = CAST_RELATION(*it))
+                        fglayer.draw(RR);
+                    P->restore();
+                }
+            }
+            ++itm;
+        }
+    }
+    if (tchpLayerVisible)
+    {
         for (itm = theFeatures.constBegin() ;itm != theFeatures.constEnd(); ++itm) {
             for (it = itm.value().constBegin(); it != itm.value().constEnd(); ++it) {
                 P->save();
@@ -353,19 +414,17 @@ void MapRenderer::print(
                     for (int i=0; i<R->sizeParents(); ++i)
                         if (!R->getParent(i)->isDeleted() && R->getParent(i)->getEditPainter(theView->pixelPerM()))
                             continue;
-                    layer.draw(R);
+                    tchuplayer.draw(R);
                 } else if (Node * Pt = CAST_NODE(*it))
-                    layer.draw(Pt);
+                    tchuplayer.draw(Pt);
                 else if (Relation * RR = CAST_RELATION(*it))
-                    layer.draw(RR);
+                    tchuplayer.draw(RR);
                 P->restore();
             }
         }
     }
-    if (TEST_RFLAGS(RendererOptions::ForegroundVisible))
+    if (lblLayerVisible)
     {
-        ForegroundStyleLayer layer(this);
-
         for (itm = theFeatures.constBegin() ;itm != theFeatures.constEnd(); ++itm) {
             for (it = itm.value().constBegin(); it != itm.value().constEnd(); ++it) {
                 P->save();
@@ -374,52 +433,11 @@ void MapRenderer::print(
                     for (int i=0; i<R->sizeParents(); ++i)
                         if (!R->getParent(i)->isDeleted() && R->getParent(i)->getEditPainter(theView->pixelPerM()))
                             continue;
-                    layer.draw(R);
+                    lbllayer.draw(R);
                 } else if (Node * Pt = CAST_NODE(*it))
-                    layer.draw(Pt);
+                    lbllayer.draw(Pt);
                 else if (Relation * RR = CAST_RELATION(*it))
-                    layer.draw(RR);
-                P->restore();
-            }
-        }
-    }
-    if (TEST_RFLAGS(RendererOptions::TouchupVisible))
-    {
-        TouchupStyleLayer layer(this);
-
-        for (itm = theFeatures.constBegin() ;itm != theFeatures.constEnd(); ++itm) {
-            for (it = itm.value().constBegin(); it != itm.value().constEnd(); ++it) {
-                P->save();
-                P->setOpacity((*it)->layer()->getAlpha());
-                if (Way * R = CAST_WAY(*it)) {
-                    for (int i=0; i<R->sizeParents(); ++i)
-                        if (!R->getParent(i)->isDeleted() && R->getParent(i)->getEditPainter(theView->pixelPerM()))
-                            continue;
-                    layer.draw(R);
-                } else if (Node * Pt = CAST_NODE(*it))
-                    layer.draw(Pt);
-                else if (Relation * RR = CAST_RELATION(*it))
-                    layer.draw(RR);
-                P->restore();
-            }
-        }
-    }
-    if (TEST_RFLAGS(RendererOptions::NamesVisible)) {
-        LabelStyleLayer layer(this);
-
-        for (itm = theFeatures.constBegin() ;itm != theFeatures.constEnd(); ++itm) {
-            for (it = itm.value().constBegin(); it != itm.value().constEnd(); ++it) {
-                P->save();
-                P->setOpacity((*it)->layer()->getAlpha());
-                if (Way * R = CAST_WAY(*it)) {
-                    for (int i=0; i<R->sizeParents(); ++i)
-                        if (!R->getParent(i)->isDeleted() && R->getParent(i)->getEditPainter(theView->pixelPerM()))
-                            continue;
-                    layer.draw(R);
-                } else if (Node * Pt = CAST_NODE(*it))
-                    layer.draw(Pt);
-                else if (Relation * RR = CAST_RELATION(*it))
-                    layer.draw(RR);
+                    lbllayer.draw(RR);
                 P->restore();
             }
         }
@@ -433,5 +451,10 @@ void MapRenderer::print(
             (*it)->draw(*P, aView);
         }
     }
+//    #ifndef NDEBUG
+//        QTime Stop(QTime::currentTime());
+//        qDebug() << Start.msecsTo(Stop) << "ms";
+//    #endif
 }
+#endif
 

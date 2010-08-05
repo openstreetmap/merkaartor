@@ -93,12 +93,12 @@ public:
             const RendererOptions& options,
             MapView* aView
     );
-    void print(
-            QPainter* P,
-            QMap<RenderPriority, QSet <Feature*> > theFeatures,
-            const RendererOptions& options,
-            MapView* aView
-    );
+//    void print(
+//            QPainter* P,
+//            QMap<RenderPriority, QSet <Feature*> > theFeatures,
+//            const RendererOptions& options,
+//            MapView* aView
+//    );
 
     MapView* theView;
     QPainter* thePainter;

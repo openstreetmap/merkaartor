@@ -486,7 +486,7 @@ void MapView::drawFeatures(QPainter & P)
 
 void MapView::printFeatures(QPainter & P)
 {
-    p->renderer.print(&P, p->theFeatures, p->ROptions, this);
+    p->renderer.render(&P, p->theFeatures, p->ROptions, this);
 }
 
 void MapView::drawDownloadAreas(QPainter & P)
