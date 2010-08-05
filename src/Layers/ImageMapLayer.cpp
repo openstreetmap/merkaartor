@@ -293,17 +293,17 @@ bool ImageMapLayer::toXML(QDomElement& xParent, QProgressDialog * /* progress */
         e.appendChild(c);
 
         c.setAttribute("name", p->selServer);
-    } else
-    if (p->bgType == TMS_ADAPTER_UUID) {
+    } else if (p->bgType == TMS_ADAPTER_UUID) {
         c = e.ownerDocument().createElement("TmsServer");
         e.appendChild(c);
 
         c.setAttribute("name", p->selServer);
-    } else
+    } else if (p->bgType != NONE_ADAPTER_UUID) {
         c = e.ownerDocument().createElement(p->theMapAdapter->getName().remove(' '));
         e.appendChild(c);
 
         p->theMapAdapter->toXML(c);
+    }
 
     return OK;
 }
