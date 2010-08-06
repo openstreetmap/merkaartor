@@ -792,7 +792,7 @@ void MerkaartorPreferences::setProjectionType(QString theValue)
 
 QString MerkaartorPreferences::getProjectionType()
 {
-    return Sets->value("projection/Type", "EPSG:3857").toString();
+    return Sets->value("projection/Type", "Mercator").toString();
 }
 
 ProjectionsList* MerkaartorPreferences::getProjectionsList()
