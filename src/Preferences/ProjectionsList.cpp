@@ -110,6 +110,7 @@ ProjectionItem ProjectionsList::getProjection(QString name) const
                 return it.value();
         }
     }
+#ifndef USE_PROJ
     QString theProj;
     if (name.startsWith("epsg:", Qt::CaseInsensitive)) {
         theProj = searchEPSG(name, ":/proj/epsg");
@@ -119,6 +120,7 @@ ProjectionItem ProjectionsList::getProjection(QString name) const
         if (!theProj.isEmpty())
             return ProjectionItem(name, theProj);
     }
+#endif
     return ProjectionItem(name, QString("+init=%1").arg(name));
 }
 

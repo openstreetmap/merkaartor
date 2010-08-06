@@ -33,7 +33,7 @@ QString ProjectionChooser::getProjection(QString title, QWidget* parent)
         if (dlg->ui->chkPredefined->isChecked())
             sPrj = dlg->ui->cbPredefined->itemText(dlg->ui->cbPredefined->currentIndex());
         else if (dlg->ui->chkStandard->isChecked())
-            sPrj = "+init=" +dlg-> ui->txtStandard->text();
+            sPrj = dlg-> ui->txtStandard->text();
         else
             sPrj = dlg->ui->txtCustom->text();
     }
