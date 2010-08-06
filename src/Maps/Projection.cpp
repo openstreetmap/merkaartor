@@ -381,9 +381,10 @@ bool Projection::setProjectionType(QString aProjectionType)
     try {
         p->projProj4 = M_PREFS->getProjection(aProjectionType).projection;
         theProj = getProjection(p->projProj4);
-        if (!theProj)
+        if (!theProj) {
             p->IsMercator = true;
-        else
+            return false;
+        } else
 #ifdef USE_PROJ
             if (pj_is_latlong(theProj))
 #else

@@ -8,6 +8,9 @@
 #include "MainWindow.h"
 #include "Preferences/MerkaartorPreferences.h"
 #include "revision.h"
+#ifdef USE_PROJ
+#include "proj_api.h"
+#endif
 
 #include "IMapAdapter.h"
 
@@ -149,6 +152,9 @@ int main(int argc, char** argv)
 
     qDebug() << "**** " << QDateTime::currentDateTime().toString(Qt::ISODate) << " -- Starting " << QString("Merkaartor %1%2(%3)").arg(STRINGIFY(VERSION)).arg(STRINGIFY(REVISION)).arg(STRINGIFY(SVNREV));
     qDebug() <<	"-------" << QString("using QT version %1 (built with %2)").arg(qVersion()).arg(QT_VERSION_STR);
+#ifdef USE_PROJ
+    qDebug() <<	"-------" << QString("using PROJ4 version %1").arg(STRINGIFY(PJ_VERSION));
+#endif
 #ifdef Q_WS_X11
     qDebug() << "-------" << "on X11";
 #endif

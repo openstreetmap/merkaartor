@@ -15,6 +15,8 @@
 #include "../ImportExport/ImportExportSHP.h"
 #include "Maps/Projection.h"
 #include "Features.h"
+#include "Utils/ProjectionChooser.h"
+
 
 #include "ogrsf_frmts.h"
 
@@ -204,23 +206,24 @@ bool ImportExportSHP::import(Layer* aLayer)
     toWGS84 = NULL;
     theProjection = NULL;
 
-    // { char *wkt; theSrs->exportToPrettyWkt(&wkt); qDebug() << "SHP: input SRS:" << endl << wkt; }
+    if (theSrs) {
+        toWGS84 = OGRCreateCoordinateTransformation(theSrs, &wgs84srs);
 
-    // Workaround for OSGB - otherwise its datum is ignored (TODO: why?)
-    QString gcs = theSrs->GetAttrValue("GEOGCS");
-    if (gcs == "GCS_OSGB_1936" || gcs == "OSGB 1936") {
-        qDebug() << "SHP: substituting GCS_OSGB_1936 with EPSG:27700";
-        if ((ogrError = theSrs->importFromEPSG(27700)) != OGRERR_NONE) {
-            qDebug("SHP: couldn't initialise EPSG:27700: %d: %s", ogrError, CPLGetLastErrorMsg());
-            return false;
+        // { char *wkt; theSrs->exportToPrettyWkt(&wkt); qDebug() << "SHP: input SRS:" << endl << wkt; }
+
+        // Workaround for OSGB - otherwise its datum is ignored (TODO: why?)
+        QString gcs = theSrs->GetAttrValue("GEOGCS");
+        if (gcs == "GCS_OSGB_1936" || gcs == "OSGB 1936") {
+            qDebug() << "SHP: substituting GCS_OSGB_1936 with EPSG:27700";
+            if ((ogrError = theSrs->importFromEPSG(27700)) != OGRERR_NONE) {
+                qDebug("SHP: couldn't initialise EPSG:27700: %d: %s", ogrError, CPLGetLastErrorMsg());
+                return false;
+            }
         }
     }
 
-    if (theSrs)
-        toWGS84 = OGRCreateCoordinateTransformation(theSrs, &wgs84srs);
-
+    theProjection = new Projection();
     if (theSrs && !toWGS84) {
-        theProjection = new Projection();
         theSrs->morphFromESRI();
         {
             char* cTheProj4;
@@ -236,6 +239,19 @@ bool ImportExportSHP::import(Layer* aLayer)
             if (datum == "OSGB_1936" && !theProj4.contains("+datum"))
                 theProj4 += " +datum=OSGB36";
             theProjection->setProjectionType(QString(theProj4));
+        }
+    } else {
+        QString sPrj;
+        sPrj = ProjectionChooser::getProjection(QCoreApplication::translate("ImportExportSHP", "Unable to set projection; please specify one"));
+        if (sPrj.isEmpty()) {
+            delete theProjection;
+            return false;
+        }
+
+        if (!theProjection->setProjectionType(sPrj)) {
+//            QMessageBox::critical(0,QCoreApplication::translate("ImportExportSHP","Cannot load file"),QCoreApplication::translate("ImportExportSHP","Unable to set projection."));
+            delete theProjection;
+            return false;
         }
     }
 

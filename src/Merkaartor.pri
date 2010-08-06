@@ -25,7 +25,8 @@ HEADERS += ./IProgressWindow.h \
     Utils/OsmLink.h \
     Utils/Utils.h \
     Utils/TagSelector.h \
-    Utils/TagSelectorWidget.h
+    Utils/TagSelectorWidget.h \
+    Utils/ProjectionChooser.h
 
 # Source files
 SOURCES += ./Maps/Coord.cpp \
@@ -51,7 +52,8 @@ SOURCES += ./Maps/Coord.cpp \
     Utils/OsmLink.cpp \
     Utils/Utils.cpp \
     Utils/TagSelector.cpp \
-    Utils/TagSelectorWidget.cpp
+    Utils/TagSelectorWidget.cpp \
+    Utils/ProjectionChooser.cpp
 
 # Forms
 FORMS += ./AboutDialog.ui \
@@ -64,7 +66,8 @@ FORMS += ./AboutDialog.ui \
     ./Utils/PictureViewerDialog.ui \
     ./Utils/SelectionDialog.ui \
     Utils/TagSelectorWidget.ui \
-    PropertiesDialog.ui
+    PropertiesDialog.ui \
+    Utils/ProjectionChooser.ui
 
 # Resource file(s)
 RESOURCES += ../Icons/AllIcons.qrc \
