@@ -1501,6 +1501,7 @@ void MainWindow::on_viewLockZoomAction_triggered()
 void MainWindow::on_viewDownloadedAction_triggered()
 {
     M_PREFS->setDownloadedVisible(!M_PREFS->getDownloadedVisible());
+    if (M_PREFS->getDownloadedVisible()) p->renderOptions.options |= RendererOptions::DownloadedVisible; else p->renderOptions.options &= ~RendererOptions::DownloadedVisible;
     ui->viewDownloadedAction->setChecked(M_PREFS->getDownloadedVisible());
     invalidateView();
 }
