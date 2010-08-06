@@ -209,7 +209,7 @@ bool WalkingPapersAdapter::loadImage(const QString& fn, QRectF theBbox, int theR
         image.set_data(NULL, 0);
 #else
         if (!askAndgetWalkingPapersDetails(theBbox))
-            continue;
+            return false;
 #endif
     }
     if (theRotation) {

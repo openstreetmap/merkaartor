@@ -236,6 +236,8 @@ CoordBox Node::boundingBox() const
 
 void Node::draw(QPainter& thePainter , MapView* theView)
 {
+    Q_UNUSED(thePainter)
+    Q_UNUSED(theView)
 #ifdef GEOIMAGE
     if (p->HasPhoto) {
          QPoint me = theView->toView(this);

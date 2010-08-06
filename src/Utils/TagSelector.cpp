@@ -544,8 +544,8 @@ TagSelectorMatchResult TagSelectorOperator::matches(const Feature* F, const MapV
                     break;
                 }
         }
-//        return rx.exactMatch(F->tagValue(Key, "")) ? TagSelect_Match : TagSelect_NoMatch;
     }
+    return TagSelect_NoMatch;
 }
 
 QString TagSelectorOperator::asExpression(bool) const
@@ -594,7 +594,7 @@ TagSelector* TagSelectorIsOneOf::copy() const
     return new TagSelectorIsOneOf(Key,Values);
 }
 
-TagSelectorMatchResult TagSelectorIsOneOf::matches(const Feature* F, const MapView* V) const
+TagSelectorMatchResult TagSelectorIsOneOf::matches(const Feature* F, const MapView* /*V*/) const
 {
     if (specialKey != TagSelectKey_None) {
         foreach (QString Value, exactMatchv) {
@@ -676,7 +676,7 @@ TagSelector* TagSelectorTypeIs::copy() const
     return new TagSelectorTypeIs(Type);
 }
 
-TagSelectorMatchResult TagSelectorTypeIs::matches(const Feature* F, const MapView* V) const
+TagSelectorMatchResult TagSelectorTypeIs::matches(const Feature* F, const MapView* /*V*/) const
 {
     if (Type.compare(F->getClass(), Qt::CaseInsensitive) == 0)
         return TagSelect_Match;
@@ -708,7 +708,7 @@ TagSelector* TagSelectorHasTags::copy() const
     return new TagSelectorHasTags();
 }
 
-TagSelectorMatchResult TagSelectorHasTags::matches(const Feature* F, const MapView* V) const
+TagSelectorMatchResult TagSelectorHasTags::matches(const Feature* F, const MapView* /*V*/) const
 {
     return (F->tagSize()==0 || (F->tagSize()==1 && F->tagKey(0)=="created_by" )) ? TagSelect_NoMatch : TagSelect_Match;
 }
@@ -900,7 +900,7 @@ TagSelector* TagSelectorFalse::copy() const
     return new TagSelectorFalse();
 }
 
-TagSelectorMatchResult TagSelectorFalse::matches(const Feature* /* F */, const MapView* V) const
+TagSelectorMatchResult TagSelectorFalse::matches(const Feature* /* F */, const MapView* /*V*/) const
 {
     return TagSelect_NoMatch;
 }
@@ -923,7 +923,7 @@ TagSelector* TagSelectorTrue::copy() const
     return new TagSelectorFalse();
 }
 
-TagSelectorMatchResult TagSelectorTrue::matches(const Feature* /* F */, const MapView* V) const
+TagSelectorMatchResult TagSelectorTrue::matches(const Feature* /* F */, const MapView* /*V*/) const
 {
     return TagSelect_Match;
 }

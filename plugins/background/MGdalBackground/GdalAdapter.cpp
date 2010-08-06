@@ -269,7 +269,7 @@ QString GdalAdapter::projection() const
     return theProjection;
 }
 
-QPixmap GdalAdapter::getPixmap(const QRectF& wgs84Bbox, const QRectF& projBbox, const QRect& src) const
+QPixmap GdalAdapter::getPixmap(const QRectF& /*wgs84Bbox*/, const QRectF& projBbox, const QRect& src) const
 {
     QPixmap pix(src.size());
     pix.fill(Qt::transparent);
