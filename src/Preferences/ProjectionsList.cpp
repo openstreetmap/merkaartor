@@ -106,6 +106,9 @@ ProjectionItem ProjectionsList::getProjection(QString name) const
         while (it.hasNext()) {
             it.next();
 
+            if (it.value().deleted)
+                continue;
+
             if (it.key().contains(name, Qt::CaseInsensitive))
                 return it.value();
         }

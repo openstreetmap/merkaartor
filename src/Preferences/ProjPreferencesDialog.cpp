@@ -64,12 +64,14 @@ void ProjPreferencesDialog::on_btAdd_clicked(void)
 
 void ProjPreferencesDialog::on_btDel_clicked(void)
 {
-    int idx = static_cast<int>(lvProjections->currentItem()->data(Qt::UserRole).toInt());
+    QListWidgetItem* it = lvProjections->item(lvProjections->currentRow());
+
+    int idx = it->data(Qt::UserRole).toInt();
     if (idx >= theItems.size())
         return;
 
     theItems[idx].deleted = true;
-    delete lvProjections->takeItem(idx);
+    delete lvProjections->takeItem(lvProjections->currentRow());
     on_lvProjections_itemSelectionChanged();
 }
 
