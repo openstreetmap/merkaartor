@@ -264,7 +264,7 @@ void Feature::setId(const QString& id)
 
 const QString& Feature::resetId()
 {
-    p->Id = QString::number((((qint64)this) * -1));
+    p->Id = QString::number((llabs((qint64)this) * -1));
     if (parent())
         dynamic_cast<Layer*>(parent())->notifyIdUpdate(p->Id,const_cast<Feature*>(this));
     return p->Id;
@@ -274,7 +274,7 @@ const QString& Feature::id() const
 {
     if (p->Id.isEmpty())
     {
-        p->Id = QString::number((((qint64)this) * -1));
+        p->Id = QString::number((llabs((qint64)this) * -1));
         Layer* L = dynamic_cast<Layer*>(parent());
         if (L)
             L->notifyIdUpdate(p->Id,const_cast<Feature*>(this));
@@ -293,7 +293,7 @@ qint64 Feature::idToLong() const
         p->LongId = s.toLongLong(&ok);
         Q_ASSERT(ok);
     } else {
-        p->LongId = (((qint64)this) * -1);
+        p->LongId = (llabs((qint64)this) * -1);
     }
 
     return p->LongId;

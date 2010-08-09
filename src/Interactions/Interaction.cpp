@@ -53,6 +53,10 @@ const QTransform& Interaction::transform() const
 
 void Interaction::mousePressEvent(QMouseEvent * anEvent)
 {
+    if (anEvent->buttons() & Qt::MidButton) {
+        Panning = true;
+        FirstPan = LastPan = anEvent->pos();
+    } else
 #if defined(Q_OS_MAC)
     // In the name of beautifull code, Steve, add a right mouse button
     if (	(anEvent->modifiers() & Qt::MetaModifier) ||
@@ -104,6 +108,19 @@ void Interaction::mouseReleaseEvent(QMouseEvent * anEvent)
 
 void Interaction::mouseMoveEvent(QMouseEvent* anEvent)
 {
+    if (anEvent->buttons() & Qt::MidButton) {
+        if (Panning)
+        {
+            QPoint Delta = LastPan;
+            Delta -= anEvent->pos();
+            view()->panScreen(-Delta);
+            LastPan = anEvent->pos();
+#if defined(ENABLE_NVIDIA_HACK)
+            view()->invalidate(true, false);
+#endif // ENABLE_NVIDIA_HACK
+        }
+    } else
+
 #if defined(Q_OS_MAC)
     // In the name of beautifull code, Steve, add a right mouse button
     if (	(anEvent->modifiers() & Qt::MetaModifier) ||

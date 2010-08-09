@@ -1,4 +1,6 @@
 v0.16.2
+    * FIX : temporary solution for #3082
+    * CHG : Allow to pan with middle mouse button
     * FIX : lat/lon grid fixes for non-othogonal projections
     * FIX : for non-rthogonal projections, maximize the viewport in lat/lon
     * FIX : Handle empty style list in editor (fixes #3079)
