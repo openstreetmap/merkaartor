@@ -454,7 +454,12 @@ bool Feature::isHidden() const
 
 void Feature::setVirtual(bool val)
 {
+    if (val == p->Virtual)
+        return;
+
     p->Virtual = val;
+    if (!p->Virtual)
+        resetId();
 }
 
 bool Feature::isVirtual() const

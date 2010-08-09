@@ -250,7 +250,12 @@ void Layer::add(Feature* aFeature, int Idx)
 
 void Layer::notifyIdUpdate(const QString& id, Feature* aFeature)
 {
-    p->IdMap[id] = aFeature;
+    if (!aFeature)
+        p->IdMap.remove(id);
+    else {
+        if (!aFeature->isVirtual())
+            p->IdMap[id] = aFeature;
+    }
 }
 
 void Layer::remove(Feature* aFeature)
