@@ -381,10 +381,11 @@ bool Feature::isReadonly() const
             return true;
         else {
             int i=0;
-            for (; i<sizeParents(); ++i)
+            for (; i<sizeParents(); ++i) {
                 if (!getParent(i)->isReadonly()) {
-                break;
-            }
+                    break;
+                }
+             }
             if (i != sizeParents())
                 p->ReadOnly = false;
             else {

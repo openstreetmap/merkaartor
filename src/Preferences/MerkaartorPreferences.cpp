@@ -823,6 +823,8 @@ FiltersList* MerkaartorPreferences::getFiltersList()
 
 FilterItem MerkaartorPreferences::getFilter(QString aFilter)
 {
+    if (aFilter.isEmpty())
+        return FilterItem();
     return theFiltersList.getFilter(aFilter);
 }
 
