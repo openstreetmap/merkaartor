@@ -5,247 +5,246 @@
 
 void skipWhite(const QString& Expression, int& idx)
 {
-	while (idx < Expression.length())
-		if (Expression[idx] == ' ')
-			++idx;
-		else
-			return;
+    while (idx < Expression.length())
+        if (Expression[idx] == ' ')
+            ++idx;
+        else
+            return;
 }
 
 bool canParseSymbol(const QString& Expression, int& idx, char Symbol)
 {
-	skipWhite(Expression, idx);
-	if ((idx < Expression.length()) && (Expression[idx] == Symbol))
-	{
-		++idx;
-		return true;
-	}
-	return false;
+    skipWhite(Expression, idx);
+    if ((idx < Expression.length()) && (Expression[idx] == Symbol))
+    {
+        ++idx;
+        return true;
+    }
+    return false;
 }
 
 bool canParseValue(const QString& Expression, int& idx, QString& Key)
 {
-	Key = "";
-	skipWhite(Expression,idx);
-	unsigned short opened =0;
-	while (idx < Expression.length())
-	{
-		if ( ((Expression[idx] == '_') || (Expression[idx].isLetterOrNumber()) || (Expression[idx].isPunct()) || (Expression[idx] == '*') || (Expression[idx] == '?'))
-				&&  ( (Expression[idx] != '[') && (Expression[idx] != ']') && (Expression[idx] != ',') && (Expression[idx] != '(')&& (Expression[idx] != ')')) )
-			Key += Expression[idx++];
-		else if ( Expression[idx] == '[' )
-		{
-			opened++;
-			Key += Expression[idx++];
-		}
-		else if ( Expression[idx] == ']' )
-		{
-			if( opened == 0) break;
-			opened--;
-			Key += Expression[idx++];
-		}
-		else
-			break;
-	}
-	return Key.length() > 0;
+    Key = "";
+    skipWhite(Expression,idx);
+    unsigned short opened =0;
+    while (idx < Expression.length())
+    {
+        if ( ((Expression[idx] == '_') || (Expression[idx].isLetterOrNumber()) || (Expression[idx].isPunct()) || (Expression[idx] == '*') || (Expression[idx] == '?'))
+                &&  ( (Expression[idx] != '[') && (Expression[idx] != ']') && (Expression[idx] != ',') && (Expression[idx] != '(')&& (Expression[idx] != ')')) )
+            Key += Expression[idx++];
+        else if ( Expression[idx] == '[' )
+        {
+            opened++;
+            Key += Expression[idx++];
+        }
+        else if ( Expression[idx] == ']' )
+        {
+            if( opened == 0) break;
+            opened--;
+            Key += Expression[idx++];
+        }
+        else
+            break;
+    }
+    return Key.length() > 0;
 }
 
 bool canParseKey(const QString& Expression, int& idx, QString& Key)
 {
-	if (!canParseSymbol(Expression,idx,'['))
-		return false;
-	if (!canParseValue(Expression,idx,Key))
-		return false;
-	canParseSymbol(Expression,idx,']');
-	return true;
+    if (!canParseSymbol(Expression,idx,'['))
+        return false;
+    if (!canParseValue(Expression,idx,Key))
+        return false;
+    canParseSymbol(Expression,idx,']');
+    return true;
 }
 
 bool canParseLiteral(const QString& Expression, int& idx, const QString& Literal)
 {
-	skipWhite(Expression,idx);
-	QString Result;
-	int TempIdx = idx;
-	if (canParseValue(Expression,TempIdx,Result))
-	{
-		if (Result == Literal)
-		{
-			idx = TempIdx;
-			return true;
-		}
-	}
-	return false;
+    skipWhite(Expression,idx);
+    QString Result;
+    int TempIdx = idx;
+    if (canParseValue(Expression,TempIdx,Result))
+    {
+        if (Result == Literal)
+        {
+            idx = TempIdx;
+            return true;
+        }
+    }
+    return false;
 }
 
 TagSelectorIs* parseTagSelectorIs(const QString& Expression, int& idx)
 {
-	QString Key, Value;
-	if (!canParseKey(Expression, idx, Key))
-		return 0;
-	if (!canParseLiteral(Expression, idx, "is"))
-		return 0;
-	if (!canParseValue(Expression, idx, Value))
-		return 0;
-	return new TagSelectorIs(Key, Value);
+    QString Key, Value;
+    if (!canParseKey(Expression, idx, Key))
+        return 0;
+    if (!canParseLiteral(Expression, idx, "is"))
+        return 0;
+    if (!canParseValue(Expression, idx, Value))
+        return 0;
+    return new TagSelectorIs(Key, Value);
 }
 
 TagSelectorTypeIs* parseTagSelectorTypeIs(const QString& Expression, int& idx)
 {
-	QString Type;
-	if (!canParseLiteral(Expression, idx, "Type"))
-		return 0;
-	if (!canParseLiteral(Expression, idx, "is"))
-		return 0;
-	if (!canParseValue(Expression, idx, Type))
-		return 0;
-	return new TagSelectorTypeIs(Type);
+    QString Type;
+    if (!canParseLiteral(Expression, idx, "Type"))
+        return 0;
+    if (!canParseLiteral(Expression, idx, "is"))
+        return 0;
+    if (!canParseValue(Expression, idx, Type))
+        return 0;
+    return new TagSelectorTypeIs(Type);
 }
 
 TagSelectorHasTags* parseTagSelectorHasTags(const QString& Expression, int& idx)
 {
-	if (!canParseLiteral(Expression, idx, "HasTags"))
-		return 0;
-	return new TagSelectorHasTags();
+    if (!canParseLiteral(Expression, idx, "HasTags"))
+        return 0;
+    return new TagSelectorHasTags();
 }
 
 TagSelectorIsOneOf* parseTagSelectorIsOneOf(const QString& Expression, int& idx)
 {
-	QString Key;
-	if (!canParseKey(Expression, idx, Key))
-		return 0;
-	if (!canParseLiteral(Expression, idx, "isoneof"))
-		return 0;
-	if (!canParseSymbol(Expression, idx, '('))
-		return 0;
-	QList<QString> Values;
-	while (true)
-	{
-		QString Value;
-		if (!canParseValue(Expression, idx, Value))
-			break;
-		Values.push_back(Value);
-		if (!canParseSymbol(Expression, idx, ','))
-			break;
-	}
-	canParseSymbol(Expression, idx, ')');
-	if (Values.size())
-		return new TagSelectorIsOneOf(Key,Values);
-	return 0;
+    QString Key;
+    if (!canParseKey(Expression, idx, Key))
+        return 0;
+    if (!canParseLiteral(Expression, idx, "isoneof"))
+        return 0;
+    if (!canParseSymbol(Expression, idx, '('))
+        return 0;
+    QList<QString> Values;
+    while (true)
+    {
+        QString Value;
+        if (!canParseValue(Expression, idx, Value))
+            break;
+        Values.push_back(Value);
+        if (!canParseSymbol(Expression, idx, ','))
+            break;
+    }
+    canParseSymbol(Expression, idx, ')');
+    if (Values.size())
+        return new TagSelectorIsOneOf(Key,Values);
+    return 0;
 }
 
 TagSelectorFalse* parseTagSelectorFalse(const QString& Expression, int& idx)
 {
-	if (!canParseLiteral(Expression, idx, "false"))
-		return 0;
-	return new TagSelectorFalse();
+    if (!canParseLiteral(Expression, idx, "false"))
+        return 0;
+    return new TagSelectorFalse();
 }
 
 TagSelectorTrue* parseTagSelectorTrue(const QString& Expression, int& idx)
 {
-	if (!canParseLiteral(Expression, idx, "true"))
-		return 0;
-	return new TagSelectorTrue();
+    if (!canParseLiteral(Expression, idx, "true"))
+        return 0;
+    return new TagSelectorTrue();
 }
 
 TagSelector* parseTagSelector(const QString& Expression, int& idx);
 
 TagSelector* parseFactor(const QString& Expression, int& idx)
 {
-	TagSelector* Current = 0;
-	if (canParseLiteral(Expression,idx,"[Default]")) {
-		TagSelector* defFactor = parseTagSelector(Expression, idx);
-		Current = new TagSelectorDefault(defFactor);
-	}
-	int Saved = idx;
-	if (!Current) {
-		if (canParseSymbol(Expression, idx, '('))
-		{
-			Current = parseTagSelector(Expression, idx);
-			canParseSymbol(Expression, idx, ')');
-		}
-	}
+    TagSelector* Current = 0;
+    if (canParseLiteral(Expression,idx,"[Default]")) {
+        TagSelector* defFactor = parseTagSelector(Expression, idx);
+        Current = new TagSelectorDefault(defFactor);
+    }
+    int Saved = idx;
+    if (!Current) {
+        if (canParseSymbol(Expression, idx, '('))
+        {
+            Current = parseTagSelector(Expression, idx);
+            canParseSymbol(Expression, idx, ')');
+        }
+    }
 
-	if (!Current) {
-		idx = Saved;
-		Current = parseTagSelectorIs(Expression, idx);
-	}
-
-	if (!Current)
-	{
-		idx = Saved;
-		Current = parseTagSelectorFalse(Expression, idx);
-	}
-	if (!Current)
-	{
-		idx = Saved;
-		Current = parseTagSelectorTrue(Expression, idx);
-	}
-	if (!Current)
-	{
-		idx = Saved;
-		Current = parseTagSelectorTypeIs(Expression, idx);
-	}
-	if (!Current)
-	{
-		idx = Saved;
-		Current = parseTagSelectorHasTags(Expression, idx);
-	}
-	if (!Current)
-	{
-		idx = Saved;
-		Current = parseTagSelectorIsOneOf(Expression, idx);
-	}
-	if (!Current)
-	{
-		if (canParseLiteral(Expression,idx,"not")) {
-			TagSelector* notFactor = parseFactor(Expression, idx);
-			Current = new TagSelectorNot(notFactor);
-		}
-	}
-	return Current;
+    if (!Current)
+    {
+        idx = Saved;
+        Current = parseTagSelectorTypeIs(Expression, idx);
+    }
+    if (!Current)
+    {
+        idx = Saved;
+        Current = parseTagSelectorIsOneOf(Expression, idx);
+    }
+    if (!Current) {
+        idx = Saved;
+        Current = parseTagSelectorIs(Expression, idx);
+    }
+    if (!Current)
+    {
+        idx = Saved;
+        Current = parseTagSelectorFalse(Expression, idx);
+    }
+    if (!Current)
+    {
+        idx = Saved;
+        Current = parseTagSelectorTrue(Expression, idx);
+    }
+    if (!Current)
+    {
+        idx = Saved;
+        Current = parseTagSelectorHasTags(Expression, idx);
+    }
+    if (!Current)
+    {
+        if (canParseLiteral(Expression,idx,"not")) {
+            TagSelector* notFactor = parseFactor(Expression, idx);
+            Current = new TagSelectorNot(notFactor);
+        }
+    }
+    return Current;
 }
 
 TagSelector* parseTerm(const QString& Expression, int& idx)
 {
-	QList<TagSelector*> Factors;
-	while (idx < Expression.length())
-	{
-		TagSelector* Current = parseFactor(Expression, idx);
-		if (!Current)
-			break;
-		Factors.push_back(Current);
-		if (!canParseLiteral(Expression,idx,"and"))
-			break;
-	}
-	if (Factors.size() == 1)
-		return Factors[0];
-	else if (Factors.size() > 1)
-		return new TagSelectorAnd(Factors);
-	return 0;
+    QList<TagSelector*> Factors;
+    while (idx < Expression.length())
+    {
+        TagSelector* Current = parseFactor(Expression, idx);
+        if (!Current)
+            break;
+        Factors.push_back(Current);
+        if (!canParseLiteral(Expression,idx,"and"))
+            break;
+    }
+    if (Factors.size() == 1)
+        return Factors[0];
+    else if (Factors.size() > 1)
+        return new TagSelectorAnd(Factors);
+    return 0;
 }
 
 TagSelector* parseTagSelector(const QString& Expression, int& idx)
 {
-	QList<TagSelector*> Terms;
-	while (idx < Expression.length())
-	{
-		TagSelector* Current = parseTerm(Expression, idx);
-		if (!Current)
-			break;
-		Terms.push_back(Current);
-		if (!canParseLiteral(Expression,idx,"or"))
-			break;
-	}
-	if (Terms.size() == 1)
-		return Terms[0];
-	else if (Terms.size() > 1)
-		return new TagSelectorOr(Terms);
-	return 0;
+    QList<TagSelector*> Terms;
+    while (idx < Expression.length())
+    {
+        TagSelector* Current = parseTerm(Expression, idx);
+        if (!Current)
+            break;
+        Terms.push_back(Current);
+        if (!canParseLiteral(Expression,idx,"or"))
+            break;
+    }
+    if (Terms.size() == 1)
+        return Terms[0];
+    else if (Terms.size() > 1)
+        return new TagSelectorOr(Terms);
+    return 0;
 }
 
 TagSelector* TagSelector::parse(const QString& Expression)
 {
-	int idx = 0;
-	return parseTagSelector(Expression,idx);
+    int idx = 0;
+    return parseTagSelector(Expression,idx);
 }
 
 TagSelector::~TagSelector()
@@ -258,44 +257,44 @@ TagSelector::~TagSelector()
 TagSelectorIs::TagSelectorIs(const QString& key, const QString& value)
 : Key(key), Value(value), MatchEmpty(false), UseRegExp(false)
 {
-	if (value == "_NULL_") {
-		MatchEmpty = true;
-	} else if (value.contains(QRegExp("[][*?]"))) {
-		UseRegExp = true;
-		rx = QRegExp(value);
-		rx.setPatternSyntax(QRegExp::Wildcard);
-	}
-	// Else exact match against ->Value only
+    if (value == "_NULL_") {
+        MatchEmpty = true;
+    } else if (value.contains(QRegExp("[][*?]"))) {
+        UseRegExp = true;
+        rx = QRegExp(value);
+        rx.setPatternSyntax(QRegExp::Wildcard);
+    }
+    // Else exact match against ->Value only
 }
 
 TagSelector* TagSelectorIs::copy() const
 {
-	return new TagSelectorIs(Key,Value);
+    return new TagSelectorIs(Key,Value);
 }
 
 static const QString emptyString("__EMPTY__");
 
 TagSelectorMatchResult TagSelectorIs::matches(const Feature* F) const
 {
-	QString val = F->tagValue(Key, emptyString);
-	if (MatchEmpty) {
-		return val == emptyString ? TagSelect_Match : TagSelect_NoMatch;
-	} else if (UseRegExp) {
-		return rx.exactMatch(val) ? TagSelect_Match : TagSelect_NoMatch;
-	} else {
-		return (val == Value) ? TagSelect_Match : TagSelect_NoMatch;
-	}
-	return rx.exactMatch(F->tagValue(Key, "")) ? TagSelect_Match : TagSelect_NoMatch;
+    QString val = F->tagValue(Key, emptyString);
+    if (MatchEmpty) {
+        return val == emptyString ? TagSelect_Match : TagSelect_NoMatch;
+    } else if (UseRegExp) {
+        return rx.exactMatch(val) ? TagSelect_Match : TagSelect_NoMatch;
+    } else {
+        return (val == Value) ? TagSelect_Match : TagSelect_NoMatch;
+    }
+    return rx.exactMatch(F->tagValue(Key, "")) ? TagSelect_Match : TagSelect_NoMatch;
 }
 
 QString TagSelectorIs::asExpression(bool) const
 {
-	QString R;
-	R += "[";
-	R += Key;
-	R += "] is ";
-	R += Value;
-	return R;
+    QString R;
+    R += "[";
+    R += Key;
+    R += "] is ";
+    R += Value;
+    return R;
 }
 
 /* TAGSELECTORISONEOF */
@@ -303,54 +302,54 @@ QString TagSelectorIs::asExpression(bool) const
 TagSelectorIsOneOf::TagSelectorIsOneOf(const QString& key, const QList<QString>& values)
 : Key(key), Values(values), MatchEmpty(false)
 {
-	for (int i=0; i<values.size(); ++i)
-	{
-		if (values[i] == "_NULL_") {
-			MatchEmpty = true;
-		} else if (values[i].contains(QRegExp("[][*?]"))) {
-			QRegExp rx(values[i]);
-			rx.setPatternSyntax(QRegExp::Wildcard);
-			rxv.append(rx);
-		} else {
-			exactMatchv.append(values[i]);
-		}
-	}
+    for (int i=0; i<values.size(); ++i)
+    {
+        if (values[i] == "_NULL_") {
+            MatchEmpty = true;
+        } else if (values[i].contains(QRegExp("[][*?]"))) {
+            QRegExp rx(values[i]);
+            rx.setPatternSyntax(QRegExp::Wildcard);
+            rxv.append(rx);
+        } else {
+            exactMatchv.append(values[i]);
+        }
+    }
 }
 
 TagSelector* TagSelectorIsOneOf::copy() const
 {
-	return new TagSelectorIsOneOf(Key,Values);
+    return new TagSelectorIsOneOf(Key,Values);
 }
 
 TagSelectorMatchResult TagSelectorIsOneOf::matches(const Feature* F) const
 {
-	QString V = F->tagValue(Key, emptyString);
-	if (MatchEmpty && V.isEmpty()) {
-		return TagSelect_Match;
-	}
-	foreach (QString pattern, exactMatchv) {
-		if (V == pattern) return TagSelect_Match;
-	}
-	foreach (QRegExp pattern, rxv) {
-		if (pattern.exactMatch(V)) return TagSelect_Match;
-	}
-	return TagSelect_NoMatch;
+    QString V = F->tagValue(Key, emptyString);
+    if (MatchEmpty && V.isEmpty()) {
+        return TagSelect_Match;
+    }
+    foreach (QString pattern, exactMatchv) {
+        if (V == pattern) return TagSelect_Match;
+    }
+    foreach (QRegExp pattern, rxv) {
+        if (pattern.exactMatch(V)) return TagSelect_Match;
+    }
+    return TagSelect_NoMatch;
 }
 
 QString TagSelectorIsOneOf::asExpression(bool) const
 {
-	QString R;
-	R += "[";
-	R += Key;
-	R += "] isoneof (";
-	for (int i=0; i<Values.size(); ++i)
-	{
-		if (i)
-			R += " , ";
-		R += Values[i];
-	}
-	R += ")";
-	return R;
+    QString R;
+    R += "[";
+    R += Key;
+    R += "] isoneof (";
+    for (int i=0; i<Values.size(); ++i)
+    {
+        if (i)
+            R += " , ";
+        R += Values[i];
+    }
+    R += ")";
+    return R;
 }
 
 /* TAGSELECTORTYPEIS */
@@ -362,28 +361,28 @@ TagSelectorTypeIs::TagSelectorTypeIs(const QString& type)
 
 TagSelector* TagSelectorTypeIs::copy() const
 {
-	return new TagSelectorTypeIs(Type);
+    return new TagSelectorTypeIs(Type);
 }
 
 TagSelectorMatchResult TagSelectorTypeIs::matches(const Feature* F) const
 {
-	if (F->getClass() == Type)
-		return TagSelect_Match;
-	else
-		if (Type.toLower() == "area")
-			if (Way* R = dynamic_cast<Way*>((Feature*)F))
-				if (R->area() > 0.0)
-					return TagSelect_Match;
+    if (F->getClass() == Type)
+        return TagSelect_Match;
+    else
+        if (Type.toLower() == "area")
+            if (Way* R = dynamic_cast<Way*>((Feature*)F))
+                if (R->area() > 0.0)
+                    return TagSelect_Match;
 
-	return TagSelect_NoMatch;
+    return TagSelect_NoMatch;
 }
 
 QString TagSelectorTypeIs::asExpression(bool) const
 {
-	QString R;
-	R += "Type is ";
-	R += Type;
-	return R;
+    QString R;
+    R += "Type is ";
+    R += Type;
+    return R;
 }
 
 /* TAGSELECTORHASTAGS */
@@ -394,19 +393,19 @@ TagSelectorHasTags::TagSelectorHasTags()
 
 TagSelector* TagSelectorHasTags::copy() const
 {
-	return new TagSelectorHasTags();
+    return new TagSelectorHasTags();
 }
 
 TagSelectorMatchResult TagSelectorHasTags::matches(const Feature* F) const
 {
-	return (F->tagSize()==0 || (F->tagSize()==1 && F->tagKey(0)=="created_by" )) ? TagSelect_NoMatch : TagSelect_Match;
+    return (F->tagSize()==0 || (F->tagSize()==1 && F->tagKey(0)=="created_by" )) ? TagSelect_NoMatch : TagSelect_Match;
 }
 
 QString TagSelectorHasTags::asExpression(bool) const
 {
-	QString R;
-	R += "HasTags";
-	return R;
+    QString R;
+    R += "HasTags";
+    return R;
 }
 
 /* TAGSELECTOROR */
@@ -418,40 +417,40 @@ TagSelectorOr::TagSelectorOr(const QList<TagSelector*> terms)
 
 TagSelectorOr::~TagSelectorOr()
 {
-	for (int i=0; i<Terms.size(); ++i)
-		delete Terms[i];
+    for (int i=0; i<Terms.size(); ++i)
+        delete Terms[i];
 }
 
 TagSelector* TagSelectorOr::copy() const
 {
-	QList<TagSelector*> Copied;
-	for (int i=0; i<Terms.size(); ++i)
-		Copied.push_back(Terms[i]->copy());
-	return new TagSelectorOr(Copied);
+    QList<TagSelector*> Copied;
+    for (int i=0; i<Terms.size(); ++i)
+        Copied.push_back(Terms[i]->copy());
+    return new TagSelectorOr(Copied);
 }
 
 TagSelectorMatchResult TagSelectorOr::matches(const Feature* F) const
 {
-	for (int i=0; i<Terms.size(); ++i)
-		if (Terms[i]->matches(F) == TagSelect_Match)
-			return TagSelect_Match;
-	return TagSelect_NoMatch;
+    for (int i=0; i<Terms.size(); ++i)
+        if (Terms[i]->matches(F) == TagSelect_Match)
+            return TagSelect_Match;
+    return TagSelect_NoMatch;
 }
 
 QString TagSelectorOr::asExpression(bool Precedence) const
 {
-	QString R;
-	if (Precedence)
-		R += "(";
-	for (int i=0; i<Terms.size(); ++i)
-	{
-		if (i)
-			R += " or ";
-		R += Terms[i]->asExpression(false);
-	}
-	if (Precedence)
-		R += ")";
-	return R;
+    QString R;
+    if (Precedence)
+        R += "(";
+    for (int i=0; i<Terms.size(); ++i)
+    {
+        if (i)
+            R += " or ";
+        R += Terms[i]->asExpression(false);
+    }
+    if (Precedence)
+        R += ")";
+    return R;
 }
 
 
@@ -464,36 +463,36 @@ TagSelectorAnd::TagSelectorAnd(const QList<TagSelector*> terms)
 
 TagSelectorAnd::~TagSelectorAnd()
 {
-	for (int i=0; i<Terms.size(); ++i)
-		delete Terms[i];
+    for (int i=0; i<Terms.size(); ++i)
+        delete Terms[i];
 }
 
 TagSelector* TagSelectorAnd::copy() const
 {
-	QList<TagSelector*> Copied;
-	for (int i=0; i<Terms.size(); ++i)
-		Copied.push_back(Terms[i]->copy());
-	return new TagSelectorAnd(Copied);
+    QList<TagSelector*> Copied;
+    for (int i=0; i<Terms.size(); ++i)
+        Copied.push_back(Terms[i]->copy());
+    return new TagSelectorAnd(Copied);
 }
 
 TagSelectorMatchResult TagSelectorAnd::matches(const Feature* F) const
 {
-	for (int i=0; i<Terms.size(); ++i)
-		if (Terms[i]->matches(F) == TagSelect_NoMatch)
-			return TagSelect_NoMatch;
-	return TagSelect_Match;
+    for (int i=0; i<Terms.size(); ++i)
+        if (Terms[i]->matches(F) == TagSelect_NoMatch)
+            return TagSelect_NoMatch;
+    return TagSelect_Match;
 }
 
 QString TagSelectorAnd::asExpression(bool /* Precedence */) const
 {
-	QString R;
-	for (int i=0; i<Terms.size(); ++i)
-	{
-		if (i)
-			R += " and ";
-		R += Terms[i]->asExpression(true);
-	}
-	return R;
+    QString R;
+    for (int i=0; i<Terms.size(); ++i)
+    {
+        if (i)
+            R += " and ";
+        R += Terms[i]->asExpression(true);
+    }
+    return R;
 }
 
 /* TAGSELECTORNOT */
@@ -505,31 +504,31 @@ TagSelectorNot::TagSelectorNot(TagSelector* term)
 
 TagSelectorNot::~TagSelectorNot()
 {
-	delete Term;
+    delete Term;
 }
 
 TagSelector* TagSelectorNot::copy() const
 {
-	if (!Term)
-		return NULL;
-	return new TagSelectorNot(Term->copy());
+    if (!Term)
+        return NULL;
+    return new TagSelectorNot(Term->copy());
 }
 
 TagSelectorMatchResult TagSelectorNot::matches(const Feature* F) const
 {
-	if (!Term)
-		return TagSelect_NoMatch;
-	return (Term->matches(F) == TagSelect_Match) ? TagSelect_NoMatch : TagSelect_Match;
+    if (!Term)
+        return TagSelect_NoMatch;
+    return (Term->matches(F) == TagSelect_Match) ? TagSelect_NoMatch : TagSelect_Match;
 }
 
 QString TagSelectorNot::asExpression(bool /* Precedence */) const
 {
-	if (!Term)
-		return "";
-	QString R;
-	R += " not ";
-	R += Term->asExpression(true);
-	return R;
+    if (!Term)
+        return "";
+    QString R;
+    R += " not ";
+    R += Term->asExpression(true);
+    return R;
 }
 
 /* TAGSELECTORFALSE */
@@ -540,19 +539,19 @@ TagSelectorFalse::TagSelectorFalse()
 
 TagSelector* TagSelectorFalse::copy() const
 {
-	return new TagSelectorFalse();
+    return new TagSelectorFalse();
 }
 
 TagSelectorMatchResult TagSelectorFalse::matches(const Feature* /* F */) const
 {
-	return TagSelect_NoMatch;
+    return TagSelect_NoMatch;
 }
 
 QString TagSelectorFalse::asExpression(bool /* Precedence */) const
 {
-	QString R;
-	R += " false ";
-	return R;
+    QString R;
+    R += " false ";
+    return R;
 }
 
 /* TAGSELECTORTRUE */
@@ -563,19 +562,19 @@ TagSelectorTrue::TagSelectorTrue()
 
 TagSelector* TagSelectorTrue::copy() const
 {
-	return new TagSelectorFalse();
+    return new TagSelectorFalse();
 }
 
 TagSelectorMatchResult TagSelectorTrue::matches(const Feature* /* F */) const
 {
-	return TagSelect_Match;
+    return TagSelect_Match;
 }
 
 QString TagSelectorTrue::asExpression(bool /* Precedence */) const
 {
-	QString R;
-	R += " true ";
-	return R;
+    QString R;
+    R += " true ";
+    return R;
 }
 
 /* TAGSELECTORDEFAULT */
@@ -587,28 +586,28 @@ TagSelectorDefault::TagSelectorDefault(TagSelector* term)
 
 TagSelectorDefault::~TagSelectorDefault()
 {
-	delete Term;
+    delete Term;
 }
 
 TagSelector* TagSelectorDefault::copy() const
 {
-	return new TagSelectorDefault(Term->copy());
+    return new TagSelectorDefault(Term->copy());
 }
 
 TagSelectorMatchResult TagSelectorDefault::matches(const Feature* F) const
 {
-	//return (Term->matches(F) == TagSelect_Match) ? TagSelect_DefaultMatch : TagSelect_NoMatch;
-	if (Term->matches(F) == TagSelect_Match)
-		return TagSelect_DefaultMatch;
-	else
-		return TagSelect_NoMatch;
+    //return (Term->matches(F) == TagSelect_Match) ? TagSelect_DefaultMatch : TagSelect_NoMatch;
+    if (Term->matches(F) == TagSelect_Match)
+        return TagSelect_DefaultMatch;
+    else
+        return TagSelect_NoMatch;
 }
 
 QString TagSelectorDefault::asExpression(bool /* Precedence */) const
 {
-	QString R;
-	R += " [Default] ";
-	R += Term->asExpression(true);
-	return R;
+    QString R;
+    R += " [Default] ";
+    R += Term->asExpression(true);
+    return R;
 }
 
