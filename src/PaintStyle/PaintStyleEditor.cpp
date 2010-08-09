@@ -14,593 +14,603 @@
 
 static void makeBoundaryIcon(QToolButton* bt, QColor C)
 {
-	QPixmap pm(36, 18);
-	pm.fill(QColor(255, 255, 255));
-	QPainter p(&pm);
-	p.setPen(C);
-	p.setBrush(C);
-	p.drawRect(0, 6, 36, 6);
-	bt->setIcon(pm);
+    QPixmap pm(36, 18);
+    pm.fill(QColor(255, 255, 255));
+    QPainter p(&pm);
+    p.setPen(C);
+    p.setBrush(C);
+    p.drawRect(0, 6, 36, 6);
+    bt->setIcon(pm);
 }
 
 PaintStyleEditor::PaintStyleEditor(QWidget *aParent, const GlobalPainter& aGlobalPainter, const QList<FeaturePainter>& aPainters)
-		: QDialog(aParent), theGlobalPainter(aGlobalPainter), thePainters(aPainters), FreezeUpdate(true)
+        : QDialog(aParent), theGlobalPainter(aGlobalPainter), thePainters(aPainters), FreezeUpdate(true)
 {
-	setupUi(this);
+    setupUi(this);
 
-	setWindowFlags(windowFlags() & ~Qt::WindowContextHelpButtonHint);
-	setWindowFlags(windowFlags() | Qt::MSWindowsFixedSizeDialogHint);
+    setWindowFlags(windowFlags() & ~Qt::WindowContextHelpButtonHint);
+    setWindowFlags(windowFlags() | Qt::MSWindowsFixedSizeDialogHint);
 
-	BackgroundColor->setIconSize(QSize(36, 18));
-	ForegroundColor->setIconSize(QSize(36, 18));
-	TouchupColor->setIconSize(QSize(36, 18));
-	FillColor->setIconSize(QSize(36, 18));
-	LabelColor->setIconSize(QSize(36, 18));
-	LabelBackgroundlColor->setIconSize(QSize(36, 18));
-	GlobalBackgroundColor->setIconSize(QSize(36, 18));
+    BackgroundColor->setIconSize(QSize(36, 18));
+    ForegroundColor->setIconSize(QSize(36, 18));
+    TouchupColor->setIconSize(QSize(36, 18));
+    FillColor->setIconSize(QSize(36, 18));
+    LabelColor->setIconSize(QSize(36, 18));
+    LabelBackgroundlColor->setIconSize(QSize(36, 18));
+    GlobalBackgroundColor->setIconSize(QSize(36, 18));
 
-	for (int i = 0; i < thePainters.size(); ++i)
-		PaintList->addItem(thePainters[i].userName());
-	PaintList->setCurrentRow(0);
-	LowerZoomBoundary->setSpecialValueText(tr("Always"));
-	UpperZoomBoundary->setSpecialValueText(tr("Always"));
+    for (int i = 0; i < thePainters.size(); ++i)
+        PaintList->addItem(thePainters[i].userName());
+    PaintList->setCurrentRow(0);
+    LowerZoomBoundary->setSpecialValueText(tr("Always"));
+    UpperZoomBoundary->setSpecialValueText(tr("Always"));
 
-	DrawGlobalBackground->setChecked(theGlobalPainter.getDrawBackground());
-	makeBoundaryIcon(GlobalBackgroundColor, theGlobalPainter.getBackgroundColor());
-	on_PaintList_itemSelectionChanged();
+    DrawGlobalBackground->setChecked(theGlobalPainter.getDrawBackground());
+    makeBoundaryIcon(GlobalBackgroundColor, theGlobalPainter.getBackgroundColor());
+    on_PaintList_itemSelectionChanged();
 
-	FreezeUpdate = false;
+    FreezeUpdate = false;
 
-	resize(1, 1);
+    resize(1, 1);
 }
 
 void PaintStyleEditor::on_AddButton_clicked()
 {
-	thePainters.push_back(FeaturePainter());
-	PaintList->addItem(thePainters[thePainters.size()-1].userName());
-	PaintList->setCurrentRow(thePainters.size() - 1);
-	on_PaintList_itemSelectionChanged();
+    thePainters.push_back(FeaturePainter());
+    PaintList->addItem(thePainters[thePainters.size()-1].userName());
+    PaintList->setCurrentRow(thePainters.size() - 1);
+    on_PaintList_itemSelectionChanged();
 }
 
 void PaintStyleEditor::on_DuplicateButton_clicked()
 {
-	int idx = PaintList->currentRow();
-	if (idx >= thePainters.size())
-		return;
-	//QList<FeaturePainter>::iterator theIterator = thePainters.begin();
-	thePainters.insert(thePainters.begin() + idx, FeaturePainter(thePainters[idx]));
-	idx++;
-	PaintList->insertItem(idx, thePainters[idx].userName());
-	PaintList->setCurrentRow(idx);
-	on_PaintList_itemSelectionChanged();
+    int idx = PaintList->currentRow();
+    if (idx < 0 || idx >= thePainters.size())
+        return;
+    //QList<FeaturePainter>::iterator theIterator = thePainters.begin();
+    thePainters.insert(thePainters.begin() + idx, FeaturePainter(thePainters[idx]));
+    idx++;
+    PaintList->insertItem(idx, thePainters[idx].userName());
+    PaintList->setCurrentRow(idx);
+    on_PaintList_itemSelectionChanged();
 }
 
 void PaintStyleEditor::on_RemoveButton_clicked()
 {
-	FreezeUpdate = true;
-	int idx = PaintList->currentRow();
-	if (idx >= thePainters.size())
-		return;
-	thePainters.erase(thePainters.begin() + idx);
-	delete PaintList->takeItem(idx);
-	if (idx && (idx >= thePainters.size()))
-		--idx;
-	PaintList->setCurrentRow(idx);
-	on_PaintList_itemSelectionChanged();
+    FreezeUpdate = true;
+    int idx = PaintList->currentRow();
+    if (idx < 0 || idx >= thePainters.size())
+        return;
+    thePainters.erase(thePainters.begin() + idx);
+    delete PaintList->takeItem(idx);
+    if (idx && (idx >= thePainters.size()))
+        --idx;
+    PaintList->setCurrentRow(idx);
+    on_PaintList_itemSelectionChanged();
 }
 
 void PaintStyleEditor::on_btUp_clicked()
 {
-	int idx = static_cast<int>(PaintList->currentRow());
-	if (idx <= 0)
-		return;
-	FeaturePainter fp = thePainters[idx-1];
-	thePainters[idx-1] = thePainters[idx];
-	thePainters[idx] = fp;
-	PaintList->item(idx-1)->setText(thePainters[idx-1].userName());
-	PaintList->item(idx)->setText(thePainters[idx].userName());
-	PaintList->setCurrentRow(idx-1);
+    int idx = static_cast<int>(PaintList->currentRow());
+    if (idx <= 0)
+        return;
+    FeaturePainter fp = thePainters[idx-1];
+    thePainters[idx-1] = thePainters[idx];
+    thePainters[idx] = fp;
+    PaintList->item(idx-1)->setText(thePainters[idx-1].userName());
+    PaintList->item(idx)->setText(thePainters[idx].userName());
+    PaintList->setCurrentRow(idx-1);
 }
 
 void PaintStyleEditor::on_btDown_clicked()
 {
-	int idx = PaintList->currentRow();
-	if (idx >= thePainters.size()-1)
-		return;
-	FeaturePainter fp = thePainters[idx+1];
-	thePainters[idx+1] = thePainters[idx];
-	thePainters[idx] = fp;
-	PaintList->item(idx+1)->setText(thePainters[idx+1].userName());
-	PaintList->item(idx)->setText(thePainters[idx].userName());
-	PaintList->setCurrentRow(idx+1);
+    int idx = PaintList->currentRow();
+    if (idx >= thePainters.size()-1)
+        return;
+    FeaturePainter fp = thePainters[idx+1];
+    thePainters[idx+1] = thePainters[idx];
+    thePainters[idx] = fp;
+    PaintList->item(idx+1)->setText(thePainters[idx+1].userName());
+    PaintList->item(idx)->setText(thePainters[idx].userName());
+    PaintList->setCurrentRow(idx+1);
 }
 
 void PaintStyleEditor::on_PaintList_itemSelectionChanged()
 {
-	FreezeUpdate = true;
-	int idx = PaintList->currentRow();
-	if (idx < 0 || idx >= thePainters.size())
-		return;
-	FeaturePainter& FP(thePainters[idx]);
-	TagSelection->setText(FP.userName());
-	if (FP.zoomBoundaries().first == 0)
-		LowerZoomBoundary->setValue(0);
-	else
-		LowerZoomBoundary->setValue(1 / FP.zoomBoundaries().first);
-	if ((FP.zoomBoundaries().second == 0) || (FP.zoomBoundaries().second > 10e5))
-		UpperZoomBoundary->setValue(0);
-	else
-		UpperZoomBoundary->setValue(1 / FP.zoomBoundaries().second);
-	DrawBackground->setChecked(FP.backgroundBoundary().Draw);
-	ProportionalBackground->setValue(FP.backgroundBoundary().Proportional);
-	FixedBackground->setValue(FP.backgroundBoundary().Fixed);
-	makeBoundaryIcon(BackgroundColor, FP.backgroundBoundary().Color);
-	DrawForeground->setChecked(FP.foregroundBoundary().Draw);
-	ProportionalForeground->setValue(FP.foregroundBoundary().Proportional);
-	FixedForeground->setValue(FP.foregroundBoundary().Fixed);
-	makeBoundaryIcon(ForegroundColor, FP.foregroundBoundary().Color);
-	ForegroundDashed->setChecked(FP.foregroundBoundary().Dashed);
-	ForegroundDashOn->setValue(FP.foregroundBoundary().DashOn);
-	ForegroundDashOff->setValue(FP.foregroundBoundary().DashOff);
-	DrawTouchup->setChecked(FP.touchupBoundary().Draw);
-	ProportionalTouchup->setValue(FP.touchupBoundary().Proportional);
-	FixedTouchup->setValue(FP.touchupBoundary().Fixed);
-	makeBoundaryIcon(TouchupColor, FP.touchupBoundary().Color);
-	TouchupDashed->setChecked(FP.touchupBoundary().Dashed);
-	TouchupDashOn->setValue(FP.touchupBoundary().DashOn);
-	TouchupDashOff->setValue(FP.touchupBoundary().DashOff);
-	DrawFill->setChecked(FP.fillColor().isValid());
-	makeBoundaryIcon(FillColor, FP.fillColor());
-	DrawIcon->setChecked(FP.icon().Draw);
-	IconName->setText(FP.icon().Name);
-	ProportionalIcon->setValue(FP.icon().Proportional);
-	FixedIcon->setValue(FP.icon().Fixed);
-	DrawLabel->setChecked(FP.labelBoundary().Draw);
-	makeBoundaryIcon(LabelColor, FP.labelBoundary().Color);
-	ProportionalLabel->setValue(FP.labelBoundary().Proportional);
-	FixedLabel->setValue(FP.labelBoundary().Fixed);
-	DrawLabelBackground->setChecked(FP.labelBackgroundColor().isValid());
-	makeBoundaryIcon(LabelBackgroundlColor, FP.labelBackgroundColor());
-	LabelFont->setCurrentFont(FP.getLabelFont());
-	LabelTag->setText(FP.getLabelTag());
-	LabelBackgroundTag->setText(FP.getLabelBackgroundTag());
-	LabelHalo->setChecked(FP.getLabelHalo());
-	LabelArea->setChecked(FP.getLabelArea());
+    FreezeUpdate = true;
+    int idx = PaintList->currentRow();
+    if (idx < 0) {
+        editArea->setEnabled(false);
+        DuplicateButton->setEnabled(false);
+        RemoveButton->setEnabled(false);
+        return;
+    } else {
+        editArea->setEnabled(true);
+        DuplicateButton->setEnabled(true);
+        RemoveButton->setEnabled(true);
+    }
+    if (idx >= thePainters.size())
+        return;
+    FeaturePainter& FP(thePainters[idx]);
+    TagSelection->setText(FP.userName());
+    if (FP.zoomBoundaries().first == 0)
+        LowerZoomBoundary->setValue(0);
+    else
+        LowerZoomBoundary->setValue(1 / FP.zoomBoundaries().first);
+    if ((FP.zoomBoundaries().second == 0) || (FP.zoomBoundaries().second > 10e5))
+        UpperZoomBoundary->setValue(0);
+    else
+        UpperZoomBoundary->setValue(1 / FP.zoomBoundaries().second);
+    DrawBackground->setChecked(FP.backgroundBoundary().Draw);
+    ProportionalBackground->setValue(FP.backgroundBoundary().Proportional);
+    FixedBackground->setValue(FP.backgroundBoundary().Fixed);
+    makeBoundaryIcon(BackgroundColor, FP.backgroundBoundary().Color);
+    DrawForeground->setChecked(FP.foregroundBoundary().Draw);
+    ProportionalForeground->setValue(FP.foregroundBoundary().Proportional);
+    FixedForeground->setValue(FP.foregroundBoundary().Fixed);
+    makeBoundaryIcon(ForegroundColor, FP.foregroundBoundary().Color);
+    ForegroundDashed->setChecked(FP.foregroundBoundary().Dashed);
+    ForegroundDashOn->setValue(FP.foregroundBoundary().DashOn);
+    ForegroundDashOff->setValue(FP.foregroundBoundary().DashOff);
+    DrawTouchup->setChecked(FP.touchupBoundary().Draw);
+    ProportionalTouchup->setValue(FP.touchupBoundary().Proportional);
+    FixedTouchup->setValue(FP.touchupBoundary().Fixed);
+    makeBoundaryIcon(TouchupColor, FP.touchupBoundary().Color);
+    TouchupDashed->setChecked(FP.touchupBoundary().Dashed);
+    TouchupDashOn->setValue(FP.touchupBoundary().DashOn);
+    TouchupDashOff->setValue(FP.touchupBoundary().DashOff);
+    DrawFill->setChecked(FP.fillColor().isValid());
+    makeBoundaryIcon(FillColor, FP.fillColor());
+    DrawIcon->setChecked(FP.icon().Draw);
+    IconName->setText(FP.icon().Name);
+    ProportionalIcon->setValue(FP.icon().Proportional);
+    FixedIcon->setValue(FP.icon().Fixed);
+    DrawLabel->setChecked(FP.labelBoundary().Draw);
+    makeBoundaryIcon(LabelColor, FP.labelBoundary().Color);
+    ProportionalLabel->setValue(FP.labelBoundary().Proportional);
+    FixedLabel->setValue(FP.labelBoundary().Fixed);
+    DrawLabelBackground->setChecked(FP.labelBackgroundColor().isValid());
+    makeBoundaryIcon(LabelBackgroundlColor, FP.labelBackgroundColor());
+    LabelFont->setCurrentFont(FP.getLabelFont());
+    LabelTag->setText(FP.getLabelTag());
+    LabelBackgroundTag->setText(FP.getLabelBackgroundTag());
+    LabelHalo->setChecked(FP.getLabelHalo());
+    LabelArea->setChecked(FP.getLabelArea());
 
-	updatePagesIcons();
+    updatePagesIcons();
 
-	FreezeUpdate = false;
+    FreezeUpdate = false;
 }
 
 void PaintStyleEditor::updatePagesIcons()
 {
-	if (DrawForeground->isChecked() || DrawFill->isChecked())
-		tbStyle->setItemIcon(0, QIcon(":/Icons/actions/software-update-available.png"));
-	else
-		tbStyle->setItemIcon(0, QIcon());
+    if (DrawForeground->isChecked() || DrawFill->isChecked())
+        tbStyle->setItemIcon(0, QIcon(":/Icons/actions/software-update-available.png"));
+    else
+        tbStyle->setItemIcon(0, QIcon());
 
-	if (DrawBackground->isChecked())
-		tbStyle->setItemIcon(1, QIcon(":/Icons/actions/software-update-available.png"));
-	else
-		tbStyle->setItemIcon(1, QIcon());
+    if (DrawBackground->isChecked())
+        tbStyle->setItemIcon(1, QIcon(":/Icons/actions/software-update-available.png"));
+    else
+        tbStyle->setItemIcon(1, QIcon());
 
-	if (DrawTouchup->isChecked() || DrawIcon->isChecked())
-		tbStyle->setItemIcon(2, QIcon(":/Icons/actions/software-update-available.png"));
-	else
-		tbStyle->setItemIcon(2, QIcon());
+    if (DrawTouchup->isChecked() || DrawIcon->isChecked())
+        tbStyle->setItemIcon(2, QIcon(":/Icons/actions/software-update-available.png"));
+    else
+        tbStyle->setItemIcon(2, QIcon());
 
-	if (DrawLabel->isChecked())
-		tbStyle->setItemIcon(3, QIcon(":/Icons/actions/software-update-available.png"));
-	else
-		tbStyle->setItemIcon(3, QIcon());
+    if (DrawLabel->isChecked())
+        tbStyle->setItemIcon(3, QIcon(":/Icons/actions/software-update-available.png"));
+    else
+        tbStyle->setItemIcon(3, QIcon());
 }
 
 void PaintStyleEditor::on_TagSelection_editingFinished()
 {
-	updatePaintList();
+    updatePaintList();
 }
 
 void PaintStyleEditor::on_LowerZoomBoundary_valueChanged()
 {
-	if (FreezeUpdate)
-		return;
-	int idx = PaintList->currentRow();
-	if (idx >= thePainters.size())
-		return;
-	FeaturePainter& FP(thePainters[idx]);
-	QPair<double, double> Result(0, 0);
-	if (LowerZoomBoundary->value() > 10e-6)
-		Result.first = 1 / LowerZoomBoundary->value();
-	if (UpperZoomBoundary->value() > 10e-6)
-		Result.second = 1 / UpperZoomBoundary->value();
-	else
-		Result.second = 10e6;
-	FP.zoomBoundary(Result.first, Result.second);
+    if (FreezeUpdate)
+        return;
+    int idx = PaintList->currentRow();
+    if (idx >= thePainters.size())
+        return;
+    FeaturePainter& FP(thePainters[idx]);
+    QPair<double, double> Result(0, 0);
+    if (LowerZoomBoundary->value() > 10e-6)
+        Result.first = 1 / LowerZoomBoundary->value();
+    if (UpperZoomBoundary->value() > 10e-6)
+        Result.second = 1 / UpperZoomBoundary->value();
+    else
+        Result.second = 10e6;
+    FP.zoomBoundary(Result.first, Result.second);
 }
 
 void PaintStyleEditor::on_UpperZoomBoundary_valueChanged()
 {
-	on_LowerZoomBoundary_valueChanged();
+    on_LowerZoomBoundary_valueChanged();
 }
 
 void PaintStyleEditor::on_DrawGlobalBackground_clicked(bool b)
 {
-	theGlobalPainter.backgroundActive(b);
+    theGlobalPainter.backgroundActive(b);
 }
 
 void PaintStyleEditor::on_GlobalBackgroundColor_clicked()
 {
-	QColor rgb = QColorDialog::getColor(theGlobalPainter.getBackgroundColor(), this
+    QColor rgb = QColorDialog::getColor(theGlobalPainter.getBackgroundColor(), this
 #if (QT_VERSION >= QT_VERSION_CHECK(4, 5, 0))
                                             , tr("Select Color"), QColorDialog::ShowAlphaChannel
 #endif
                                            );
-	if (rgb.isValid()) {
-		makeBoundaryIcon(GlobalBackgroundColor, rgb);
-		theGlobalPainter.background(rgb);
-	}
+    if (rgb.isValid()) {
+        makeBoundaryIcon(GlobalBackgroundColor, rgb);
+        theGlobalPainter.background(rgb);
+    }
 }
 
 void PaintStyleEditor::on_DrawBackground_clicked(bool b)
 {
-	int idx = PaintList->currentRow();
-	if (idx >= thePainters.size())
-		return;
-	thePainters[idx].backgroundActive(b);
+    int idx = PaintList->currentRow();
+    if (idx >= thePainters.size())
+        return;
+    thePainters[idx].backgroundActive(b);
 
-	updatePagesIcons();
+    updatePagesIcons();
 }
 
 void PaintStyleEditor::on_BackgroundColor_clicked()
 {
-	int idx = PaintList->currentRow();
-	if (idx >= thePainters.size())
-		return;
-	FeaturePainter& FP(thePainters[idx]);
-	QColor rgb = QColorDialog::getColor(FP.backgroundBoundary().Color, this
+    int idx = PaintList->currentRow();
+    if (idx >= thePainters.size())
+        return;
+    FeaturePainter& FP(thePainters[idx]);
+    QColor rgb = QColorDialog::getColor(FP.backgroundBoundary().Color, this
 #if (QT_VERSION >= QT_VERSION_CHECK(4, 5, 0))
                                             , tr("Select Color"), QColorDialog::ShowAlphaChannel
 #endif
                                            );
-	if (rgb.isValid()) {
-		makeBoundaryIcon(BackgroundColor, rgb);
-		FP.background(rgb, ProportionalBackground->value(), FixedBackground->value());
-	}
+    if (rgb.isValid()) {
+        makeBoundaryIcon(BackgroundColor, rgb);
+        FP.background(rgb, ProportionalBackground->value(), FixedBackground->value());
+    }
 }
 
 void PaintStyleEditor::on_ProportionalBackground_valueChanged()
 {
-	if (FreezeUpdate)
-		return;
-	int idx = PaintList->currentRow();
-	if (idx >= thePainters.size())
-		return;
-	FeaturePainter& FP(thePainters[idx]);
-	FP.background(FP.backgroundBoundary().Color, ProportionalBackground->value(), FixedBackground->value());
+    if (FreezeUpdate)
+        return;
+    int idx = PaintList->currentRow();
+    if (idx >= thePainters.size())
+        return;
+    FeaturePainter& FP(thePainters[idx]);
+    FP.background(FP.backgroundBoundary().Color, ProportionalBackground->value(), FixedBackground->value());
 }
 
 void PaintStyleEditor::on_FixedBackground_valueChanged()
 {
-	on_ProportionalBackground_valueChanged();
+    on_ProportionalBackground_valueChanged();
 }
 
 void PaintStyleEditor::on_DrawForeground_clicked(bool b)
 {
-	int idx = PaintList->currentRow();
-	if (idx >= thePainters.size())
-		return;
-	thePainters[idx].foregroundActive(b);
+    int idx = PaintList->currentRow();
+    if (idx >= thePainters.size())
+        return;
+    thePainters[idx].foregroundActive(b);
 
-	updatePagesIcons();
+    updatePagesIcons();
 }
 
 
 void PaintStyleEditor::on_ForegroundColor_clicked()
 {
-	int idx = PaintList->currentRow();
-	if (idx >= thePainters.size())
-		return;
-	FeaturePainter& FP(thePainters[idx]);
-	QColor rgb = QColorDialog::getColor(FP.foregroundBoundary().Color, this
+    int idx = PaintList->currentRow();
+    if (idx >= thePainters.size())
+        return;
+    FeaturePainter& FP(thePainters[idx]);
+    QColor rgb = QColorDialog::getColor(FP.foregroundBoundary().Color, this
 #if (QT_VERSION >= QT_VERSION_CHECK(4, 5, 0))
                                             , tr("Select Color"), QColorDialog::ShowAlphaChannel
 #endif
                                            );
-	if (rgb.isValid()) {
-		makeBoundaryIcon(ForegroundColor, rgb);
-		FP.foreground(rgb, ProportionalForeground->value(), FixedForeground->value());
-	}
+    if (rgb.isValid()) {
+        makeBoundaryIcon(ForegroundColor, rgb);
+        FP.foreground(rgb, ProportionalForeground->value(), FixedForeground->value());
+    }
 }
 
 void PaintStyleEditor::on_ProportionalForeground_valueChanged()
 {
-	if (FreezeUpdate)
-		return;
-	int idx = PaintList->currentRow();
-	if (idx >= thePainters.size())
-		return;
-	FeaturePainter& FP(thePainters[idx]);
-	FP.foreground(FP.foregroundBoundary().Color, ProportionalForeground->value(), FixedForeground->value());
+    if (FreezeUpdate)
+        return;
+    int idx = PaintList->currentRow();
+    if (idx >= thePainters.size())
+        return;
+    FeaturePainter& FP(thePainters[idx]);
+    FP.foreground(FP.foregroundBoundary().Color, ProportionalForeground->value(), FixedForeground->value());
 }
 
 void PaintStyleEditor::on_FixedForeground_valueChanged()
 {
-	on_ProportionalForeground_valueChanged();
+    on_ProportionalForeground_valueChanged();
 }
 
 
 void PaintStyleEditor::on_ForegroundDashed_clicked()
 {
-	if (FreezeUpdate)
-		return;
-	int idx = PaintList->currentRow();
-	if (idx >= thePainters.size())
-		return;
-	FeaturePainter& FP(thePainters[idx]);
-	if (ForegroundDashed->isChecked())
-		FP.foregroundDash(ForegroundDashOn->value(), ForegroundDashOff->value());
-	else
-		FP.clearForegroundDash();
+    if (FreezeUpdate)
+        return;
+    int idx = PaintList->currentRow();
+    if (idx >= thePainters.size())
+        return;
+    FeaturePainter& FP(thePainters[idx]);
+    if (ForegroundDashed->isChecked())
+        FP.foregroundDash(ForegroundDashOn->value(), ForegroundDashOff->value());
+    else
+        FP.clearForegroundDash();
 }
 
 void PaintStyleEditor::on_ForegroundDashOff_valueChanged()
 {
-	on_ForegroundDashed_clicked();
+    on_ForegroundDashed_clicked();
 }
 
 void PaintStyleEditor::on_ForegroundDashOn_valueChanged()
 {
-	on_ForegroundDashed_clicked();
+    on_ForegroundDashed_clicked();
 }
 
 void PaintStyleEditor::on_DrawTouchup_clicked(bool b)
 {
-	int idx = PaintList->currentRow();
-	if (idx >= thePainters.size())
-		return;
-	thePainters[idx].touchupActive(b);
+    int idx = PaintList->currentRow();
+    if (idx >= thePainters.size())
+        return;
+    thePainters[idx].touchupActive(b);
 
-	updatePagesIcons();
+    updatePagesIcons();
 }
 
 void PaintStyleEditor::on_TouchupColor_clicked()
 {
-	int idx = PaintList->currentRow();
-	if (idx >= thePainters.size())
-		return;
-	FeaturePainter& FP(thePainters[idx]);
-	QColor rgb = QColorDialog::getColor(FP.touchupBoundary().Color, this
+    int idx = PaintList->currentRow();
+    if (idx >= thePainters.size())
+        return;
+    FeaturePainter& FP(thePainters[idx]);
+    QColor rgb = QColorDialog::getColor(FP.touchupBoundary().Color, this
 #if (QT_VERSION >= QT_VERSION_CHECK(4, 5, 0))
                                             , tr("Select Color"), QColorDialog::ShowAlphaChannel
 #endif
                                            );
-	if (rgb.isValid()) {
-		makeBoundaryIcon(TouchupColor, rgb);
-		FP.touchup(rgb, ProportionalTouchup->value(), FixedTouchup->value());
-	}
+    if (rgb.isValid()) {
+        makeBoundaryIcon(TouchupColor, rgb);
+        FP.touchup(rgb, ProportionalTouchup->value(), FixedTouchup->value());
+    }
 }
 
 void PaintStyleEditor::on_ProportionalTouchup_valueChanged()
 {
-	if (FreezeUpdate)
-		return;
-	int idx = PaintList->currentRow();
-	if (idx >= thePainters.size())
-		return;
-	FeaturePainter& FP(thePainters[idx]);
-	FP.touchup(FP.touchupBoundary().Color, ProportionalTouchup->value(), FixedTouchup->value());
+    if (FreezeUpdate)
+        return;
+    int idx = PaintList->currentRow();
+    if (idx >= thePainters.size())
+        return;
+    FeaturePainter& FP(thePainters[idx]);
+    FP.touchup(FP.touchupBoundary().Color, ProportionalTouchup->value(), FixedTouchup->value());
 }
 
 void PaintStyleEditor::on_FixedTouchup_valueChanged()
 {
-	on_ProportionalTouchup_valueChanged();
+    on_ProportionalTouchup_valueChanged();
 }
 
 
 void PaintStyleEditor::on_TouchupDashed_clicked()
 {
-	if (FreezeUpdate)
-		return;
-	int idx = PaintList->currentRow();
-	if (idx >= thePainters.size())
-		return;
-	FeaturePainter& FP(thePainters[idx]);
-	if (TouchupDashed->isChecked())
-		FP.touchupDash(TouchupDashOn->value(), TouchupDashOff->value());
-	else
-		FP.clearTouchupDash();
+    if (FreezeUpdate)
+        return;
+    int idx = PaintList->currentRow();
+    if (idx >= thePainters.size())
+        return;
+    FeaturePainter& FP(thePainters[idx]);
+    if (TouchupDashed->isChecked())
+        FP.touchupDash(TouchupDashOn->value(), TouchupDashOff->value());
+    else
+        FP.clearTouchupDash();
 }
 
 void PaintStyleEditor::on_TouchupDashOff_valueChanged()
 {
-	on_TouchupDashed_clicked();
+    on_TouchupDashed_clicked();
 }
 
 void PaintStyleEditor::on_TouchupDashOn_valueChanged()
 {
-	on_TouchupDashed_clicked();
+    on_TouchupDashed_clicked();
 }
 
 void PaintStyleEditor::on_DrawFill_clicked(bool b)
 {
-	int idx = PaintList->currentRow();
-	if (idx >= thePainters.size())
-		return;
-	thePainters[idx].fillActive(b);
+    int idx = PaintList->currentRow();
+    if (idx >= thePainters.size())
+        return;
+    thePainters[idx].fillActive(b);
 
-	updatePagesIcons();
+    updatePagesIcons();
 }
 
 void PaintStyleEditor::on_FillColor_clicked()
 {
-	int idx = PaintList->currentRow();
-	if (idx >= thePainters.size())
-		return;
-	FeaturePainter& FP(thePainters[idx]);
-	QColor rgb = QColorDialog::getColor(FP.fillColor(), this
+    int idx = PaintList->currentRow();
+    if (idx >= thePainters.size())
+        return;
+    FeaturePainter& FP(thePainters[idx]);
+    QColor rgb = QColorDialog::getColor(FP.fillColor(), this
 #if (QT_VERSION >= QT_VERSION_CHECK(4, 5, 0))
                                             , tr("Select Color"), QColorDialog::ShowAlphaChannel
 #endif
                                            );
-	if (rgb.isValid()) {
-		makeBoundaryIcon(FillColor, rgb);
-		FP.foregroundFill(rgb);
-	}
+    if (rgb.isValid()) {
+        makeBoundaryIcon(FillColor, rgb);
+        FP.foregroundFill(rgb);
+    }
 }
 
 void PaintStyleEditor::on_DrawIcon_clicked(bool b)
 {
-	int idx = PaintList->currentRow();
-	if (idx >= thePainters.size())
-		return;
-	thePainters[idx].iconActive(b);
+    int idx = PaintList->currentRow();
+    if (idx >= thePainters.size())
+        return;
+    thePainters[idx].iconActive(b);
 
-	updatePagesIcons();
+    updatePagesIcons();
 }
 
 void PaintStyleEditor::on_IconName_textEdited()
 {
-	if (FreezeUpdate)
-		return;
-	int idx = PaintList->currentRow();
-	if (idx >= thePainters.size())
-		return;
-	FeaturePainter& FP(thePainters[idx]);
-	FP.setIcon(IconName->text(), ProportionalIcon->value(), FixedIcon->value());
+    if (FreezeUpdate)
+        return;
+    int idx = PaintList->currentRow();
+    if (idx >= thePainters.size())
+        return;
+    FeaturePainter& FP(thePainters[idx]);
+    FP.setIcon(IconName->text(), ProportionalIcon->value(), FixedIcon->value());
 }
 
 void PaintStyleEditor::on_ProportionalIcon_valueChanged()
 {
-	on_IconName_textEdited();
+    on_IconName_textEdited();
 }
 
 void PaintStyleEditor::on_FixedIcon_valueChanged()
 {
-	on_IconName_textEdited();
+    on_IconName_textEdited();
 }
 
 void PaintStyleEditor::on_DrawLabel_clicked(bool b)
 {
-	int idx = PaintList->currentRow();
-	if (idx >= thePainters.size())
-		return;
-	thePainters[idx].labelActive(b);
+    int idx = PaintList->currentRow();
+    if (idx >= thePainters.size())
+        return;
+    thePainters[idx].labelActive(b);
 
-	updatePagesIcons();
+    updatePagesIcons();
 }
 
 void PaintStyleEditor::on_LabelHalo_clicked(bool b)
 {
-	int idx = PaintList->currentRow();
-	if (idx >= thePainters.size())
-		return;
-	thePainters[idx].labelHalo(b);
+    int idx = PaintList->currentRow();
+    if (idx >= thePainters.size())
+        return;
+    thePainters[idx].labelHalo(b);
 }
 
 void PaintStyleEditor::on_LabelArea_clicked(bool b)
 {
-	int idx = PaintList->currentRow();
-	if (idx >= thePainters.size())
-		return;
-	thePainters[idx].labelArea(b);
+    int idx = PaintList->currentRow();
+    if (idx >= thePainters.size())
+        return;
+    thePainters[idx].labelArea(b);
 }
 
 void PaintStyleEditor::on_LabelTag_textEdited()
 {
-	int idx = PaintList->currentRow();
-	if (idx >= thePainters.size())
-		return;
-	thePainters[idx].labelTag(LabelTag->text());
+    int idx = PaintList->currentRow();
+    if (idx >= thePainters.size())
+        return;
+    thePainters[idx].labelTag(LabelTag->text());
 }
 
 void PaintStyleEditor::on_LabelBackgroundTag_textEdited()
 {
-	int idx = PaintList->currentRow();
-	if (idx >= thePainters.size())
-		return;
-	thePainters[idx].labelBackgroundTag(LabelBackgroundTag->text());
+    int idx = PaintList->currentRow();
+    if (idx >= thePainters.size())
+        return;
+    thePainters[idx].labelBackgroundTag(LabelBackgroundTag->text());
 }
 
 void PaintStyleEditor::on_LabelColor_clicked()
 {
-	int idx = PaintList->currentRow();
-	if (idx >= thePainters.size())
-		return;
-	FeaturePainter& FP(thePainters[idx]);
-	QColor rgb = QColorDialog::getColor(FP.labelBoundary().Color, this
+    int idx = PaintList->currentRow();
+    if (idx >= thePainters.size())
+        return;
+    FeaturePainter& FP(thePainters[idx]);
+    QColor rgb = QColorDialog::getColor(FP.labelBoundary().Color, this
 #if (QT_VERSION >= QT_VERSION_CHECK(4, 5, 0))
                                             , tr("Select Color"), QColorDialog::ShowAlphaChannel
 #endif
                                            );
-	if (rgb.isValid()) {
-		makeBoundaryIcon(LabelColor, rgb);
-		FP.label(rgb, ProportionalLabel->value(), FixedLabel->value());
-	}
+    if (rgb.isValid()) {
+        makeBoundaryIcon(LabelColor, rgb);
+        FP.label(rgb, ProportionalLabel->value(), FixedLabel->value());
+    }
 }
 
 void PaintStyleEditor::on_ProportionalLabel_valueChanged()
 {
-	if (FreezeUpdate)
-		return;
-	int idx = PaintList->currentRow();
-	if (idx >= thePainters.size())
-		return;
-	FeaturePainter& FP(thePainters[idx]);
-	FP.label(FP.labelBoundary().Color, ProportionalLabel->value(), FixedLabel->value());
+    if (FreezeUpdate)
+        return;
+    int idx = PaintList->currentRow();
+    if (idx >= thePainters.size())
+        return;
+    FeaturePainter& FP(thePainters[idx]);
+    FP.label(FP.labelBoundary().Color, ProportionalLabel->value(), FixedLabel->value());
 }
 
 void PaintStyleEditor::on_FixedLabel_valueChanged()
 {
-	on_ProportionalLabel_valueChanged();
+    on_ProportionalLabel_valueChanged();
 }
 
 void PaintStyleEditor::on_DrawLabelBackground_clicked(bool b)
 {
-	int idx = PaintList->currentRow();
-	if (idx >= thePainters.size())
-		return;
-	thePainters[idx].labelBackgroundActive(b);
+    int idx = PaintList->currentRow();
+    if (idx >= thePainters.size())
+        return;
+    thePainters[idx].labelBackgroundActive(b);
 }
 
 void PaintStyleEditor::on_LabelBackgroundlColor_clicked()
 {
-	int idx = PaintList->currentRow();
-	if (idx >= thePainters.size())
-		return;
-	FeaturePainter& FP(thePainters[idx]);
-	QColor rgb = QColorDialog::getColor(FP.labelBackgroundColor(), this
+    int idx = PaintList->currentRow();
+    if (idx >= thePainters.size())
+        return;
+    FeaturePainter& FP(thePainters[idx]);
+    QColor rgb = QColorDialog::getColor(FP.labelBackgroundColor(), this
 #if (QT_VERSION >= QT_VERSION_CHECK(4, 5, 0))
                                             , tr("Select Color"), QColorDialog::ShowAlphaChannel
 #endif
                                            );
-	if (rgb.isValid()) {
-		makeBoundaryIcon(LabelBackgroundlColor, rgb);
-		FP.labelBackground(rgb);
-	}
+    if (rgb.isValid()) {
+        makeBoundaryIcon(LabelBackgroundlColor, rgb);
+        FP.labelBackground(rgb);
+    }
 }
 
 void PaintStyleEditor::on_LabelFont_currentFontChanged(const QFont & font)
 {
-	int idx = PaintList->currentRow();
-	if (idx >= thePainters.size())
-		return;
-	thePainters[idx].setLabelFont(font.toString());
+    int idx = PaintList->currentRow();
+    if (idx >= thePainters.size())
+        return;
+    thePainters[idx].setLabelFont(font.toString());
 }
 
 void PaintStyleEditor::updatePaintList()
 {
-	int idx = PaintList->currentRow();
-	if (idx >= thePainters.size())
-		return;
-	FeaturePainter& FP(thePainters[idx]);
-	FP.setSelector(TagSelection->text());
-	PaintList->currentItem()->setText(FP.userName());
+    int idx = PaintList->currentRow();
+    if (idx >= thePainters.size())
+        return;
+    FeaturePainter& FP(thePainters[idx]);
+    FP.setSelector(TagSelection->text());
+    PaintList->currentItem()->setText(FP.userName());
 }
 
 void PaintStyleEditor::on_buttonBox_clicked(QAbstractButton * button)
 {
-	if (buttonBox->buttonRole(button) == QDialogButtonBox::ApplyRole) {
-		emit(stylesApplied(&thePainters));
-	}
+    if (buttonBox->buttonRole(button) == QDialogButtonBox::ApplyRole) {
+        emit(stylesApplied(&thePainters));
+    }
 }
 
