@@ -384,8 +384,6 @@ void MapRenderer::render(
         {
             if (fgLayerVisible)
             {
-                ForegroundStyleLayer layer(this);
-
                 for (it = itm.value().constBegin(); it != itm.value().constEnd(); ++it) {
                     P->save();
                     P->setOpacity((*it)->layer()->getAlpha());
