@@ -1,4 +1,5 @@
 v0.16.2
+    * FIX : Do not tag-match relation's children unless the type is "multippolygon" (fixes #2916)
     * FIX : problem with "Bottom-left standard" TMS
     * FIX : OSX fix
     * FIX : Draw relations children dashed to avoid multiple parent drawing
