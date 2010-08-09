@@ -124,34 +124,6 @@ bool TrackSegment::isNull() const
     return (p->Nodes.size() == 0);
 }
 
-static void configurePen(QPen & pen, double slope, double speed)
-{
-    // Encode speed in width of path ...
-    double penWidth = 1.0;
-    if (speed > 10.0)
-        penWidth = qMin(1.0+speed*0.02, 5.0);
-
-    // ... and slope in the color
-    int green = 0;
-    int red = 0;
-
-    if (slope > 2.0)
-    {
-        slope = qMin(slope, 20.0);
-        green = 48 + int(slope*79.0 / 20.0);
-    }
-    else if (slope < -2.0)
-    {
-        slope = qMax(slope, - 20.0);
-        red = 48 + int(-slope*79.0 / 20.0);
-    }
-
-    pen.setColor(QColor(128 + red, 128 + green, 128));
-
-    pen.setStyle(Qt::DotLine);
-    pen.setWidthF(penWidth);
-}
-
 void TrackSegment::drawDirectionMarkers(QPainter &P, QPen &pen, const QPointF & FromF, const QPointF & ToF)
 {
     if (::distance(FromF,ToF) <= 30.0)
@@ -193,11 +165,43 @@ void TrackSegment::draw(QPainter &P, MapView* theView)
 
         if (!M_PREFS->getSimpleGpxTrack())
         {
-            const double distance = here.distanceFrom(last);
-            const double slope = (p->Nodes[i]->elevation() - p->Nodes[i-1]->elevation()) / (distance * 10.0);
-            const double speed = p->Nodes[i]->speed();
+            double distance = here.distanceFrom(last);
+            double slope = (p->Nodes[i]->elevation() - p->Nodes[i-1]->elevation()) / (distance * 10.0);
+            double speed = p->Nodes[i]->speed();
 
-            configurePen(pen, slope, speed);
+            int width = M_PREFS->getGpxTrackWidth();
+            // Dynamic track line width adaption to zoom level
+            if (theView->pixelPerM() > 2)
+                width++;
+            else if (theView->pixelPerM() < 1)
+                width--;
+
+            // Encode speed in width of path ...
+            double penWidth = 1.0;
+            if (speed > 10.0)
+                penWidth = qMin(1.0+speed*0.02, 5.0);
+
+            penWidth *= width;
+
+            // ... and slope in the color
+            int green = 0;
+            int red = 0;
+
+            if (slope > 2.0)
+            {
+                slope = qMin(slope, 20.0);
+                green = 48 + int(slope*79.0 / 20.0);
+            }
+            else if (slope < -2.0)
+            {
+                slope = qMax(slope, - 20.0);
+                red = 48 + int(-slope*79.0 / 20.0);
+            }
+
+            pen.setColor(QColor(128 + red, 128 + green, 128));
+
+            pen.setStyle(Qt::DotLine);
+            pen.setWidthF(penWidth);
         }
         else
         {

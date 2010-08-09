@@ -300,7 +300,6 @@ void FeaturesDock::invalidate()
 {
     ui.FeaturesList->clear();
     Highlighted.clear();
-    Found.clear();
 }
 
 void FeaturesDock::clearItems()
