@@ -978,6 +978,16 @@ void MapView::viewportRecalc(const QRect & Screen)
         CoordBox(theProjection.inverse(p->theTransform.inverted().map(fScreen.bottomLeft())),
              theProjection.inverse(p->theTransform.inverted().map(fScreen.topRight())));
 
+    if (theProjection.projIsLatLong()) {
+        p->PixelPerM = Screen.width() / (double)p->Viewport.lonDiff() * theProjection.lonAnglePerM(coordToRad(p->Viewport.center().lat()));
+    } else {
+        // measure geographical distance between mid left and mid right of the screen
+        int mid = (fScreen.topLeft().y() + fScreen.bottomLeft().y()) / 2;
+        Coord left = theProjection.inverse(p->theTransform.inverted().map(QPointF(fScreen.left(), mid)));
+        Coord right = theProjection.inverse(p->theTransform.inverted().map(QPointF(fScreen.right(), mid)));
+        p->PixelPerM = Screen.width() / (left.distanceFrom(right)*1000);
+    }
+
     emit viewportChanged();
 }
 
@@ -1042,13 +1052,6 @@ void MapView::setViewport(const CoordBox & TargetMap,
         targetVp = TargetMap;
     transformCalc(p->theTransform, theProjection, targetVp, Screen);
     viewportRecalc(Screen);
-
-    if (theProjection.projIsLatLong()) {
-        p->PixelPerM = Screen.width() / (double)p->Viewport.lonDiff() * LAT_ANG_PER_M / M_PI * COORD_MAX;
-    } else {
-        QRectF vp = theProjection.getProjectedViewport(p->Viewport, Screen);
-        p->PixelPerM = Screen.width() / vp.width();
-    }
 
     p->NodeWidth = p->PixelPerM * M_PREFS->getNodeSize();
     if (p->NodeWidth > M_PREFS->getNodeSize())
@@ -1127,12 +1130,6 @@ void MapView::zoom(double d, const QPoint & Around,
     p->theTransform.setMatrix(ScaleLon, 0, 0, 0, ScaleLat, 0, DeltaLon, DeltaLat, 1);
     viewportRecalc(Screen);
 
-    if (theProjection.projIsLatLong()) {
-        p->PixelPerM = Screen.width() / (double)p->Viewport.lonDiff() * LAT_ANG_PER_M / M_PI * COORD_MAX;
-    } else {
-        QRectF vp = theProjection.getProjectedViewport(p->Viewport, Screen);
-        p->PixelPerM = Screen.width() / vp.width();
-    }
     p->NodeWidth = p->PixelPerM * M_PREFS->getNodeSize();
     if (p->NodeWidth > M_PREFS->getNodeSize())
         p->NodeWidth = M_PREFS->getNodeSize();
