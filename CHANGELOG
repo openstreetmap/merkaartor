@@ -1,4 +1,6 @@
 v0.16.2
+    * FIX : lat/lon grid fixes for non-othogonal projections
+    * FIX : for non-rthogonal projections, maximize the viewport in lat/lon
     * FIX : Handle empty style list in editor (fixes #3079)
     * FIX : Fix scale bar to take latitude into account.
     * FIX : Do not tag-match relation's children unless the type is "multippolygon" (fixes #2916)
