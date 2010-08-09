@@ -200,76 +200,96 @@ void MapRenderer::render(
     theView = aView;
 
     QMap<RenderPriority, QSet<Feature*> >::const_iterator itm;
+    QMap<RenderPriority, QSet<Feature*> >::const_iterator itmCur;
     QSet<Feature*>::const_iterator it;
 
-#if 0
+    bool bgLayerVisible = M_PREFS->getBackgroundVisible();
+    bool fgLayerVisible = M_PREFS->getForegroundVisible();
+    bool tchpLayerVisible = M_PREFS->getTouchupVisible();
+    bool lblLayerVisible = M_PREFS->getNamesVisible();
+
+#if 1
     P->setRenderHint(QPainter::Antialiasing);
     thePainter = P;
 
-    if (M_PREFS->getBackgroundVisible())
+    itm = theFeatures.constBegin();
+    while (itm != theFeatures.constEnd())
     {
-        BackgroundStyleLayer layer(this);
+        int curLayer = (itm.key()).layer();
+        itmCur = itm;
+        while (itm != theFeatures.constEnd() && (itm.key()).layer() == curLayer)
+        {
+            if (bgLayerVisible)
+            {
+                for (it = itm.value().constBegin(); it != itm.value().constEnd(); ++it) {
+                    P->save();
+                    P->setOpacity((*it)->layer()->getAlpha());
+                    if (Way * R = CAST_WAY(*it)) {
+                        for (int i=0; i<R->sizeParents(); ++i)
+                            if (!R->getParent(i)->isDeleted() && R->getParent(i)->getEditPainter(theView->pixelPerM()))
+                                continue;
+                        bglayer.draw(R);
+                    } else if (Node * Pt = CAST_NODE(*it))
+                        bglayer.draw(Pt);
+                    else if (Relation * RR = CAST_RELATION(*it))
+                        bglayer.draw(RR);
+                    P->restore();
+                }
+            }
+            ++itm;
+        }
+        itm = itmCur;
+        while (itm != theFeatures.constEnd() && (itm.key()).layer() == curLayer)
+        {
+            if (fgLayerVisible)
+            {
+                for (it = itm.value().constBegin(); it != itm.value().constEnd(); ++it) {
+                    P->save();
+                    P->setOpacity((*it)->layer()->getAlpha());
+                    if (Way * R = CAST_WAY(*it)) {
+                        for (int i=0; i<R->sizeParents(); ++i)
+                            if (!R->getParent(i)->isDeleted() && R->getParent(i)->getEditPainter(theView->pixelPerM()))
+                                continue;
+                        fglayer.draw(R);
+                    } else if (Node * Pt = CAST_NODE(*it))
+                        fglayer.draw(Pt);
+                    else if (Relation * RR = CAST_RELATION(*it))
+                        fglayer.draw(RR);
+                    P->restore();
+                }
+            }
+            ++itm;
+        }
+    }
+
+    if (tchpLayerVisible)
+    {
         P->save();
 
         for (itm = theFeatures.constBegin() ;itm != theFeatures.constEnd(); ++itm)
             for (it = itm.value().constBegin(); it != itm.value().constEnd(); ++it) {
                 P->setOpacity((*it)->layer()->getAlpha());
                 if (Way * R = dynamic_cast < Way * >(*it))
-                    layer.draw(R);
+                    tchuplayer.draw(R);
                 else if (Node * Pt = dynamic_cast < Node * >(*it))
-                    layer.draw(Pt);
+                    tchuplayer.draw(Pt);
                 else if (Relation * RR = dynamic_cast < Relation * >(*it))
-                    layer.draw(RR);
+                    tchuplayer.draw(RR);
             }
         P->restore();
     }
-    if (M_PREFS->getForegroundVisible())
-    {
-        ForegroundStyleLayer layer(this);
+    if (lblLayerVisible) {
         P->save();
 
         for (itm = theFeatures.constBegin() ;itm != theFeatures.constEnd(); ++itm)
             for (it = itm.value().constBegin(); it != itm.value().constEnd(); ++it) {
                 P->setOpacity((*it)->layer()->getAlpha());
                 if (Way * R = dynamic_cast < Way * >(*it))
-                    layer.draw(R);
+                    lbllayer.draw(R);
                 else if (Node * Pt = dynamic_cast < Node * >(*it))
-                    layer.draw(Pt);
+                    lbllayer.draw(Pt);
                 else if (Relation * RR = dynamic_cast < Relation * >(*it))
-                    layer.draw(RR);
-            }
-        P->restore();
-    }
-    if (M_PREFS->getTouchupVisible())
-    {
-        TouchupStyleLayer layer(this);
-        P->save();
-
-        for (itm = theFeatures.constBegin() ;itm != theFeatures.constEnd(); ++itm)
-            for (it = itm.value().constBegin(); it != itm.value().constEnd(); ++it) {
-                P->setOpacity((*it)->layer()->getAlpha());
-                if (Way * R = dynamic_cast < Way * >(*it))
-                    layer.draw(R);
-                else if (Node * Pt = dynamic_cast < Node * >(*it))
-                    layer.draw(Pt);
-                else if (Relation * RR = dynamic_cast < Relation * >(*it))
-                    layer.draw(RR);
-            }
-        P->restore();
-    }
-    if (M_PREFS->getNamesVisible()) {
-        LabelStyleLayer layer(this);
-        P->save();
-
-        for (itm = theFeatures.constBegin() ;itm != theFeatures.constEnd(); ++itm)
-            for (it = itm.value().constBegin(); it != itm.value().constEnd(); ++it) {
-                P->setOpacity((*it)->layer()->getAlpha());
-                if (Way * R = dynamic_cast < Way * >(*it))
-                    layer.draw(R);
-                else if (Node * Pt = dynamic_cast < Node * >(*it))
-                    layer.draw(Pt);
-                else if (Relation * RR = dynamic_cast < Relation * >(*it))
-                    layer.draw(RR);
+                    lbllayer.draw(RR);
             }
         P->restore();
     }
@@ -284,11 +304,6 @@ void MapRenderer::render(
     }
 
 #else
-
-    bool bgLayerVisible = M_PREFS->getBackgroundVisible();
-    bool fgLayerVisible = M_PREFS->getForegroundVisible();
-    bool tchpLayerVisible = M_PREFS->getTouchupVisible();
-    bool lblLayerVisible = M_PREFS->getNamesVisible();
 
     Way * R = NULL;
     Node * Pt = NULL;
