@@ -15,7 +15,6 @@ class NodePrivate
         NodePrivate()
         : IsWaypoint(false), ProjectionRevision(0)
         , HasPhoto(false)
-        , HasTags(false)
         , photoLocationBR(true)
         {
         }
@@ -25,7 +24,6 @@ class NodePrivate
         int ProjectionRevision;
 #endif
         bool HasPhoto;
-        bool HasTags;
         QPixmap Photo;
         bool photoLocationBR;
 };
@@ -129,7 +127,7 @@ bool Node::isWaypoint()
 bool Node::isSelectable(MapView* theView) const
 {
     // If Node has non-default tags -> POI -> always selectable
-    if (p->HasTags)
+    if (isPOI())
         return true;
 
     bool Draw = false;
@@ -373,12 +371,6 @@ void Node::updateMeta()
 
     p->IsWaypoint = (findKey("_waypoint_") != tagSize());
 
-    for (int i=0; i<tagSize(); ++i)
-        if ((tagKey(i) != "created_by") && (tagKey(i) != "ele")) {
-            p->HasTags = true;
-            break;
-        }
-
     MetaUpToDate = true;
 }
 
@@ -599,6 +591,8 @@ QString Node::toHtml()
     int i;
 
 
+    if ((i = findKey("_waypoint_")) < tagSize())
+        D += "<p><b>"+QApplication::translate("MapFeature", "Waypoint")+"</b><br/>";
     D += "<i>"+QApplication::translate("MapFeature", "coord")+": </i>" + COORD2STRING(coordToAng(position().lat())) + " (" + Coord2Sexa(position().lat()) + ") / " + COORD2STRING(coordToAng(position().lon())) + " (" + Coord2Sexa(position().lon()) + ")";
 
     if (elevation())
@@ -609,16 +603,6 @@ QString Node::toHtml()
         D += "<br/><i>"+QApplication::translate("MapFeature", "description")+": </i>" + tagValue(i);
     if ((i = findKey("_comment_")) < tagSize())
         D += "<br/><i>"+QApplication::translate("MapFeature", "comment")+": </i>" + tagValue(i);
-
-    if ((i = findKey("_waypoint_")) < tagSize()) {
-        D += "<p><b>"+QApplication::translate("MapFeature", "Waypoint")+"</b>";
-
-        if ((i = findKey("_description_")) < tagSize())
-            D += "<br/><i>"+QApplication::translate("MapFeature", "description")+": </i>" + tagValue(i);
-
-        if ((i = findKey("_comment_")) < tagSize())
-            D += "<br/><i>"+QApplication::translate("MapFeature", "comment")+": </i>" + tagValue(i);
-    }
 
     return Feature::toMainHtml(QApplication::translate("MapFeature", "Node"), "node").arg(D);
 }

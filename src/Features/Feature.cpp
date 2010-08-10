@@ -984,6 +984,24 @@ QString Feature::toMainHtml(QString type, QString systemtype)
     S += "</small>"
     "<hr/>"
     "%1";
+
+    if (tagSize()) {
+        QStringList sTags;
+        int t=0;
+        for (int i=0; i<tagSize(); ++i) {
+            if (tagKey(i) != "created_by" && tagKey(i) != "ele" && tagKey(i) != "_description_" && tagKey(i) != "_comment_") {
+                ++t;
+                sTags << tagKey(i) + "&nbsp;=&nbsp;" + "<b>" + tagValue(i) + "</b>";
+            }
+        }
+
+        if (t) {
+            S += "<hr/><small>";
+            S += sTags.join("<br/>");
+            S += "</small>";
+        }
+    }
+
     int f = id().lastIndexOf("_");
     if (f>0) {
         S += "<hr/>"

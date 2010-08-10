@@ -148,7 +148,8 @@ void TouchupStyleLayer::draw(Node* Pt)
     if (paintsel)
         paintsel->drawTouchup(Pt,r->thePainter,r->theView);
     else if (!Pt->hasEditPainter()) {
-        if (!Pt->isReadonly() && Pt->isSelectable(r->theView))
+        if (! ((Pt->isReadonly() || !Pt->isSelectable(r->theView)) && (!Pt->isPOI() && !Pt->isWaypoint())))
+//        if (!Pt->isReadonly() && Pt->isSelectable(r->theView))
         {
             QPoint P = r->theView->transform().map(r->theView->projection().project(Pt)).toPoint();
             double theWidth = r->theView->nodeWidth();
