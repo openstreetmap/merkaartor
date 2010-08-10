@@ -114,6 +114,7 @@ void WayPrivate::addVirtuals()
         l.setLength(l.length()/2);
         Node* v = new Node(toCoord(l.p2()));
         v->setVirtual(true);
+        v->setId("v" + v->id());
         v->setParentFeature(theWay);
         theWay->layer()->add(v);
         virtualNodes.push_back(v);
@@ -468,7 +469,7 @@ void Way::drawParentsSpecial(QPainter& thePainter, QPen& Pen, MapView* theView)
 }
 
 void Way::drawChildrenSpecial(QPainter& thePainter, QPen& Pen, MapView *theView, int depth)
-{               
+{
     Q_UNUSED(depth);
 
     QPen TP(Pen);
