@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>511</width>
-    <height>198</height>
+    <height>246</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -99,17 +99,17 @@
      <item row="0" column="0">
       <widget class="QLabel" name="label_5">
        <property name="text">
-        <string>Maximum returned results</string>
+        <string>Maximum returned results (0 for all)</string>
        </property>
       </widget>
      </item>
      <item row="1" column="0">
       <widget class="QSpinBox" name="sbMaxResult">
        <property name="minimum">
-        <number>1</number>
+        <number>0</number>
        </property>
        <property name="maximum">
-        <number>999</number>
+        <number>99999</number>
        </property>
        <property name="value">
         <number>100</number>

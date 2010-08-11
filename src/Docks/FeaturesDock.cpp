@@ -258,7 +258,7 @@ void FeaturesDock::on_btFind_clicked(bool)
 
     Found.clear();
     int added = 0;
-    for (VisibleFeatureIterator i(Main->document()); !i.isEnd() && added < dlg->sbMaxResult->value(); ++i) {
+    for (VisibleFeatureIterator i(Main->document()); !i.isEnd() && (!dlg->sbMaxResult->value() || added < dlg->sbMaxResult->value()); ++i) {
         if (tsel->matches(i.get(), Main->view())) {
             Found << i.get();
         }
