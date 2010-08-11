@@ -986,6 +986,7 @@ QString Way::toHtml()
     D += "<i>"+QApplication::translate("MapFeature", "Botright")+": </i>" + COORD2STRING(coordToAng(bb.bottomRight().lat())) + " / " + COORD2STRING(coordToAng(bb.bottomRight().lon()));
 
     QString type = isClosed() ? QApplication::translate("MapFeature", "Area") : QApplication::translate("MapFeature", "Way");
+
     return Feature::toMainHtml(type, "way").arg(D);
 }
 

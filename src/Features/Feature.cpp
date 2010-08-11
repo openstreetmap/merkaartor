@@ -801,11 +801,16 @@ void Feature::drawHighlight(QPainter& thePainter, MapView* theView)
 
 QString Feature::toXML(int lvl, QProgressDialog * progress)
 {
-    QDomDocument theXmlDoc;
-    QDomElement root = theXmlDoc.documentElement();
-    if (toXML(root, progress))
-        return theXmlDoc.toString(lvl);
-    else
+    QDomDocument doc;
+    QDomElement root = doc.createElement("root");
+    doc.appendChild(root);
+    if (toXML(root, progress)) {
+        QString ret;
+        QTextStream ts(&ret);
+        root.firstChild().save(ts, lvl);
+        return ret;
+//        return theXmlDoc.toString(lvl);
+    } else
         return "";
 }
 

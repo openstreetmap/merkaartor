@@ -42,6 +42,9 @@ bool ImportExportCSV::import(Layer* aLayer)
     ImportCSVDialog* dlg = new ImportCSVDialog(Device);
     if (dlg->exec() == QDialog::Rejected)
         return false;
-    return dlg->import(aLayer);
+    bool ret = dlg->import(aLayer);
+    delete dlg;
+
+    return ret;
 }
 
