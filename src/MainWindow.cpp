@@ -2347,15 +2347,28 @@ bool MainWindow::selectExportedFeatures(QList<Feature*>& theFeatures)
     }
     if (dlg.exec()) {
         if (dlgExport.rbAll->isChecked()) {
+<<<<<<< HEAD
             theFeatures = document()->getFeatures();
             MerkaartorPreferences::instance()->setExportType(Export_All);
+=======
+            for (VisibleFeatureIterator i(document()); !i.isEnd(); ++i) {
+                if (i.get()->notEverythingDownloaded())
+                    continue;
+
+                theFeatures.append(i.get());
+            }
+            M_PREFS->setExportType(Export_All);
+>>>>>>> 9a27d93... FIX : Do not export incomplete features
             return true;
         }
-        if (dlgExport.rbViewport->isChecked()) {
+        else if (dlgExport.rbViewport->isChecked()) {
             CoordBox aCoordBox = view()->viewport();
 
             theFeatures.clear();
             for (VisibleFeatureIterator i(document()); !i.isEnd(); ++i) {
+                if (i.get()->notEverythingDownloaded())
+                    continue;
+
                 if (Node* P = dynamic_cast<Node*>(i.get())) {
                     if (aCoordBox.contains(P->position())) {
                         theFeatures.append(P);
@@ -2393,7 +2406,7 @@ bool MainWindow::selectExportedFeatures(QList<Feature*>& theFeatures)
             MerkaartorPreferences::instance()->setExportType(Export_Viewport);
             return true;
         }
-        if (dlgExport.rbSelected->isChecked()) {
+        else if (dlgExport.rbSelected->isChecked()) {
             theFeatures = p->theProperties->selection();
             MerkaartorPreferences::instance()->setExportType(Export_Selected);
             return true;
