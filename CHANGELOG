@@ -1,4 +1,5 @@
 v0.17
+    * FIX : Do not export incomplete features
     * FIX : CSV import bugs
     * ADD : Display tags in info dock
     * FIX : Use "GPX track width" setting even when not in "Simple track appearance" (fixes #3095)

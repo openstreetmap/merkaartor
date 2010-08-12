@@ -2644,15 +2644,23 @@ bool MainWindow::selectExportedFeatures(QList<Feature*>& theFeatures)
     }
     if (dlg.exec()) {
         if (dlgExport.rbAll->isChecked()) {
-            theFeatures = document()->getFeatures();
+            for (VisibleFeatureIterator i(document()); !i.isEnd(); ++i) {
+                if (i.get()->notEverythingDownloaded())
+                    continue;
+
+                theFeatures.append(i.get());
+            }
             M_PREFS->setExportType(Export_All);
             return true;
         }
-        if (dlgExport.rbViewport->isChecked()) {
+        else if (dlgExport.rbViewport->isChecked()) {
             CoordBox aCoordBox = view()->viewport();
 
             theFeatures.clear();
             for (VisibleFeatureIterator i(document()); !i.isEnd(); ++i) {
+                if (i.get()->notEverythingDownloaded())
+                    continue;
+
                 if (Node* P = dynamic_cast<Node*>(i.get())) {
                     if (aCoordBox.contains(P->position())) {
                         theFeatures.append(P);
@@ -2690,7 +2698,7 @@ bool MainWindow::selectExportedFeatures(QList<Feature*>& theFeatures)
             M_PREFS->setExportType(Export_Viewport);
             return true;
         }
-        if (dlgExport.rbSelected->isChecked()) {
+        else if (dlgExport.rbSelected->isChecked()) {
             theFeatures = p->theProperties->selection();
             M_PREFS->setExportType(Export_Selected);
             return true;
