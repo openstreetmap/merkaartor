@@ -177,7 +177,10 @@ Feature* ImportCSVDialog::generateOSM(QString line)
         delete N;
         return NULL;
     }
-    N->setPosition(CSVProjection.inverse(p));
+    if (CSVProjection.projIsLatLong())
+        N->setPosition(Coord(p.y(), p.x()));
+    else
+        N->setPosition(CSVProjection.inverse(p));
     return N;
 }
 
@@ -334,7 +337,7 @@ bool ImportCSVDialog::import(Layer *aLayer)
     QString line;
 
     m_dev->seek(0);
-    if (ui->cbHasHeader)
+    if (ui->cbHasHeader->isChecked())
         m_dev->readLine();
 
     int l = 0;
@@ -343,7 +346,7 @@ bool ImportCSVDialog::import(Layer *aLayer)
         ++l;
     }
 
-    while ((l < ui->sbTo->value() || ui->sbTo == 0) && !m_dev->atEnd()) {
+    while ((l < ui->sbTo->value() || ui->sbTo->value() == 0) && !m_dev->atEnd()) {
         line = m_dev->readLine();
         Feature* F = generateOSM(line);
         if (F)

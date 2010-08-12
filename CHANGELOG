@@ -1,4 +1,5 @@
 v0.16.2
+    * FIX : CSV import bugs
     * FIX : Use "GPX track width" setting even when not in "Simple track appearance" (fixes #3095)
     * FIX : temporary solution for #3082
     * CHG : Allow to pan with middle mouse button
