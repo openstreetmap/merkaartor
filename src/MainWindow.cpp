@@ -2347,10 +2347,6 @@ bool MainWindow::selectExportedFeatures(QList<Feature*>& theFeatures)
     }
     if (dlg.exec()) {
         if (dlgExport.rbAll->isChecked()) {
-<<<<<<< HEAD
-            theFeatures = document()->getFeatures();
-            MerkaartorPreferences::instance()->setExportType(Export_All);
-=======
             for (VisibleFeatureIterator i(document()); !i.isEnd(); ++i) {
                 if (i.get()->notEverythingDownloaded())
                     continue;
@@ -2358,7 +2354,6 @@ bool MainWindow::selectExportedFeatures(QList<Feature*>& theFeatures)
                 theFeatures.append(i.get());
             }
             M_PREFS->setExportType(Export_All);
->>>>>>> 9a27d93... FIX : Do not export incomplete features
             return true;
         }
         else if (dlgExport.rbViewport->isChecked()) {
