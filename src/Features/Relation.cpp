@@ -306,6 +306,8 @@ void Relation::add(const QString& Role, Feature* F)
         CoordBox bb = boundingBox();
         layer()->indexAdd(bb, this);
     }
+
+    notifyChanges();
 }
 
 void Relation::add(const QString& Role, Feature* F, int Idx)
@@ -321,6 +323,8 @@ void Relation::add(const QString& Role, Feature* F, int Idx)
         CoordBox bb = boundingBox();
         layer()->indexAdd(bb, this);
     }
+
+    notifyChanges();
 }
 
 void Relation::remove(int Idx)
@@ -338,6 +342,8 @@ void Relation::remove(int Idx)
         CoordBox bb = boundingBox();
         layer()->indexAdd(bb, this);
     }
+
+    notifyChanges();
 }
 
 void Relation::remove(Feature* F)
