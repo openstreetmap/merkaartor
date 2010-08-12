@@ -235,6 +235,8 @@ void Way::add(Node* Pt, int Idx)
         CoordBox bb = boundingBox();
         layer()->indexAdd(bb, this);
     }
+
+    notifyChanges();
 }
 
 int Way::find(Feature* Pt) const
@@ -273,6 +275,8 @@ void Way::remove(int idx)
         CoordBox bb = boundingBox();
         layer()->indexAdd(bb, this);
     }
+
+    notifyChanges();
 }
 
 void Way::remove(Feature* F)
