@@ -396,7 +396,7 @@ bool Node::toXML(QDomElement xParent, QProgressDialog * progress, bool strict)
             e.setAttribute("deleted","true");
     }
 
-    tagsToXML(e);
+    tagsToXML(e, strict);
 
     if (progress)
         progress->setValue(progress->value()+1);

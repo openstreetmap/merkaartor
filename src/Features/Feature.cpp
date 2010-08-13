@@ -814,12 +814,17 @@ QString Feature::toXML(int lvl, QProgressDialog * progress)
         return "";
 }
 
-bool Feature::tagsToXML(QDomElement xParent)
+bool Feature::tagsToXML(QDomElement xParent, bool strict)
 {
     bool OK = true;
 
     for (int i=0; i<tagSize(); ++i)
     {
+        if (strict) {
+            if (tagKey(i).startsWith('_') && (tagKey(i).endsWith('_')))
+                continue;
+        }
+
         QDomElement e = xParent.ownerDocument().createElement("tag");
         xParent.appendChild(e);
 

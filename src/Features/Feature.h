@@ -334,7 +334,7 @@ class Feature : public QObject
         bool MetaUpToDate;
         qint64 randomId() const;
 
-        bool tagsToXML(QDomElement xParent);
+        bool tagsToXML(QDomElement xParent, bool strict);
         static void tagsFromXML(Document* d, Feature* f, QDomElement e);
 
         long    m_references;

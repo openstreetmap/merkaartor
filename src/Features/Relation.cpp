@@ -450,7 +450,7 @@ bool Relation::toXML(QDomElement xParent, QProgressDialog * progress, bool stric
         n.setAttribute("role", getRole(i));
     }
 
-    tagsToXML(e);
+    tagsToXML(e, strict);
 
     if (progress)
         progress->setValue(progress->value()+1);
