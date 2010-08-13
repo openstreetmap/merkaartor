@@ -8,7 +8,7 @@
     <x>0</x>
     <y>0</y>
     <width>689</width>
-    <height>347</height>
+    <height>405</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -16,12 +16,28 @@
   </property>
   <layout class="QVBoxLayout" name="verticalLayout_6">
    <item>
+    <widget class="QDialogButtonBox" name="buttonBox">
+     <property name="maximumSize">
+      <size>
+       <width>900</width>
+       <height>700</height>
+      </size>
+     </property>
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
+     </property>
+     <property name="standardButtons">
+      <set>QDialogButtonBox::Apply|QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
+     </property>
+    </widget>
+   </item>
+   <item>
     <widget class="QTabWidget" name="tabPref">
      <property name="tabPosition">
       <enum>QTabWidget::North</enum>
      </property>
      <property name="currentIndex">
-      <number>0</number>
+      <number>1</number>
      </property>
      <widget class="QWidget" name="tab_4">
       <attribute name="title">
@@ -157,11 +173,8 @@
       <attribute name="title">
        <string>Colors</string>
       </attribute>
-      <layout class="QFormLayout" name="formLayout_2">
-       <property name="fieldGrowthPolicy">
-        <enum>QFormLayout::AllNonFixedFieldsGrow</enum>
-       </property>
-       <item row="1" column="1">
+      <layout class="QVBoxLayout" name="verticalLayout_9">
+       <item>
         <layout class="QHBoxLayout" name="horizontalLayout_3">
          <item>
           <widget class="QToolButton" name="btBgColor">
@@ -204,7 +217,74 @@
          </item>
         </layout>
        </item>
-       <item row="3" column="0" colspan="2">
+       <item>
+        <widget class="QLabel" name="label_8">
+         <property name="text">
+          <string>Background</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <layout class="QHBoxLayout" name="horizontalLayout_11">
+         <item>
+          <widget class="QToolButton" name="btGpxTrackColor">
+           <property name="minimumSize">
+            <size>
+             <width>45</width>
+             <height>25</height>
+            </size>
+           </property>
+           <property name="text">
+            <string>...</string>
+           </property>
+           <property name="iconSize">
+            <size>
+             <width>40</width>
+             <height>20</height>
+            </size>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QSpinBox" name="GpxTrackWidth"/>
+         </item>
+         <item>
+          <widget class="QLabel" name="label_27">
+           <property name="text">
+            <string>Pixels</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QCheckBox" name="cbSimpleGpxTrack">
+           <property name="text">
+            <string>Use simple GPX track appearance</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <spacer name="horizontalSpacer_6">
+           <property name="orientation">
+            <enum>Qt::Horizontal</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>40</width>
+             <height>20</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+        </layout>
+       </item>
+       <item>
+        <widget class="QLabel" name="label_26">
+         <property name="text">
+          <string>GPX track</string>
+         </property>
+        </widget>
+       </item>
+       <item>
         <widget class="QGroupBox" name="groupBox_2">
          <property name="minimumSize">
           <size>
@@ -216,7 +296,7 @@
           <string>Interface</string>
          </property>
          <layout class="QGridLayout" name="formLayout">
-          <item row="2" column="1">
+          <item row="3" column="1">
            <layout class="QHBoxLayout" name="horizontalLayout_5">
             <item>
              <widget class="QToolButton" name="btFocusColor">
@@ -262,7 +342,7 @@
             </item>
            </layout>
           </item>
-          <item row="3" column="1">
+          <item row="4" column="1">
            <layout class="QHBoxLayout" name="horizontalLayout_6">
             <item>
              <widget class="QToolButton" name="btRelationsColor">
@@ -407,14 +487,14 @@
             </item>
            </layout>
           </item>
-          <item row="3" column="0">
+          <item row="4" column="0">
            <widget class="QLabel" name="label_21">
             <property name="text">
              <string>Relations</string>
             </property>
            </widget>
           </item>
-          <item row="2" column="0">
+          <item row="3" column="0">
            <widget class="QLabel" name="label_20">
             <property name="text">
              <string>Focus</string>
@@ -428,75 +508,61 @@
             </property>
            </widget>
           </item>
+          <item row="2" column="1">
+           <layout class="QHBoxLayout" name="horizontalLayout_13">
+            <item>
+             <widget class="QToolButton" name="btDirtyColor">
+              <property name="minimumSize">
+               <size>
+                <width>45</width>
+                <height>25</height>
+               </size>
+              </property>
+              <property name="text">
+               <string>...</string>
+              </property>
+              <property name="iconSize">
+               <size>
+                <width>40</width>
+                <height>20</height>
+               </size>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QSpinBox" name="DirtyWidth"/>
+            </item>
+            <item>
+             <widget class="QLabel" name="label_28">
+              <property name="text">
+               <string>Pixels</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <spacer name="horizontalSpacer_8">
+              <property name="orientation">
+               <enum>Qt::Horizontal</enum>
+              </property>
+              <property name="sizeHint" stdset="0">
+               <size>
+                <width>40</width>
+                <height>20</height>
+               </size>
+              </property>
+             </spacer>
+            </item>
+           </layout>
+          </item>
+          <item row="2" column="0">
+           <widget class="QLabel" name="label_11">
+            <property name="text">
+             <string>Dirty</string>
+            </property>
+           </widget>
+          </item>
          </layout>
         </widget>
-       </item>
-       <item row="1" column="0">
-        <widget class="QLabel" name="label_8">
-         <property name="text">
-          <string>Background</string>
-         </property>
-        </widget>
-       </item>
-       <item row="2" column="0">
-        <widget class="QLabel" name="label_26">
-         <property name="text">
-          <string>GPX track</string>
-         </property>
-        </widget>
-       </item>
-       <item row="2" column="1">
-        <layout class="QHBoxLayout" name="horizontalLayout_11">
-         <item>
-          <widget class="QToolButton" name="btGpxTrackColor">
-           <property name="minimumSize">
-            <size>
-             <width>45</width>
-             <height>25</height>
-            </size>
-           </property>
-           <property name="text">
-            <string>...</string>
-           </property>
-           <property name="iconSize">
-            <size>
-             <width>40</width>
-             <height>20</height>
-            </size>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QSpinBox" name="GpxTrackWidth"/>
-         </item>
-         <item>
-          <widget class="QLabel" name="label_27">
-           <property name="text">
-            <string>Pixels</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QCheckBox" name="cbSimpleGpxTrack">
-           <property name="text">
-            <string>Use simple GPX track appearance</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <spacer name="horizontalSpacer_6">
-           <property name="orientation">
-            <enum>Qt::Horizontal</enum>
-           </property>
-           <property name="sizeHint" stdset="0">
-            <size>
-             <width>40</width>
-             <height>20</height>
-            </size>
-           </property>
-          </spacer>
-         </item>
-        </layout>
        </item>
       </layout>
      </widget>
@@ -1358,22 +1424,6 @@
        </item>
       </layout>
      </widget>
-    </widget>
-   </item>
-   <item>
-    <widget class="QDialogButtonBox" name="buttonBox">
-     <property name="maximumSize">
-      <size>
-       <width>900</width>
-       <height>700</height>
-      </size>
-     </property>
-     <property name="orientation">
-      <enum>Qt::Horizontal</enum>
-     </property>
-     <property name="standardButtons">
-      <set>QDialogButtonBox::Apply|QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
-     </property>
     </widget>
    </item>
   </layout>

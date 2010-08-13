@@ -205,16 +205,19 @@ void PreferencesDialog::loadPrefs()
     FocusColor = M_PREFS->getFocusColor();
     HoverColor = M_PREFS->getHoverColor();
     HighlightColor = M_PREFS->getHighlightColor();
+    DirtyColor = M_PREFS->getDirtyColor();
     RelationsColor = M_PREFS->getRelationsColor();
     GpxTrackColor = M_PREFS->getGpxTrackColor();
     makeBoundaryIcon(btBgColor, BgColor);
     makeBoundaryIcon(btHoverColor, HoverColor);
     makeBoundaryIcon(btHighlightColor, HighlightColor);
+    makeBoundaryIcon(btDirtyColor, DirtyColor);
     makeBoundaryIcon(btFocusColor, FocusColor);
     makeBoundaryIcon(btRelationsColor, RelationsColor);
     makeBoundaryIcon(btGpxTrackColor, GpxTrackColor);
     HoverWidth->setValue(M_PREFS->getHoverWidth());
     HighlightWidth->setValue(M_PREFS->getHighlightWidth());
+    DirtyWidth->setValue(M_PREFS->getDirtyWidth());
     FocusWidth->setValue(M_PREFS->getFocusWidth());
     RelationsWidth->setValue(M_PREFS->getRelationsWidth());
     GpxTrackWidth->setValue(M_PREFS->getGpxTrackWidth());
@@ -347,6 +350,7 @@ void PreferencesDialog::savePrefs()
     M_PREFS->setFocusColor(FocusColor,FocusWidth->value());
     M_PREFS->setHoverColor(HoverColor,HoverWidth->value());
     M_PREFS->setHighlightColor(HighlightColor,HighlightWidth->value());
+    M_PREFS->setDirtyColor(DirtyColor,DirtyWidth->value());
     M_PREFS->setRelationsColor(RelationsColor,RelationsWidth->value());
     M_PREFS->setGpxTrackColor(GpxTrackColor,GpxTrackWidth->value());
 
@@ -439,6 +443,19 @@ void PreferencesDialog::on_btHighlightColor_clicked()
     if (rgb.isValid()) {
         HighlightColor = rgb;
         makeBoundaryIcon(btHighlightColor, HighlightColor);
+    }
+}
+
+void PreferencesDialog::on_btDirtyColor_clicked()
+{
+    QColor rgb = QColorDialog::getColor(DirtyColor, this
+#if (QT_VERSION >= QT_VERSION_CHECK(4, 5, 0))
+                                        , tr("Select Color"), QColorDialog::ShowAlphaChannel
+#endif
+                                       );
+    if (rgb.isValid()) {
+        DirtyColor = rgb;
+        makeBoundaryIcon(btDirtyColor, DirtyColor);
     }
 }
 

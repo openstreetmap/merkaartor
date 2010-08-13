@@ -37,6 +37,7 @@ NavitBin::~NavitBin()
 
 bool NavitBin::setFilename(const QString& filename)
 {
+    m_filename = QString();
     zip = new NavitZip();
     if (!zip->setZip(filename)) {
         QMessageBox::critical(0,QCoreApplication::translate("NavitBackground","Not a valid file"),QCoreApplication::translate("NavitBackground","Cannot open file."));
@@ -53,6 +54,7 @@ bool NavitBin::setFilename(const QString& filename)
     }
     indexTile = theTiles[idx];
 
+    m_filename = filename;
     return true;
 }
 

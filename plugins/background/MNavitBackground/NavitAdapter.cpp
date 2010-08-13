@@ -219,4 +219,40 @@ void NavitAdapter::cleanup()
 {
 }
 
+bool NavitAdapter::toXML(QDomElement xParent)
+{
+    bool OK = true;
+
+    QDomElement fs = xParent.ownerDocument().createElement("Images");
+    xParent.appendChild(fs);
+    if (loaded)
+        fs.setAttribute("filename", navit.filename());
+
+    return OK;
+}
+
+void NavitAdapter::fromXML(const QDomElement xParent)
+{
+    QDomElement fs = xParent.firstChildElement();
+    while(!fs.isNull()) {
+        if (fs.tagName() == "Images") {
+            QString fn = fs.attribute("filename");
+            if (!fn.isEmpty())
+                loaded = navit.setFilename(fn);
+        }
+
+        fs = fs.nextSiblingElement();
+    }
+}
+
+QString NavitAdapter::toPropertiesHtml()
+{
+    QString h;
+
+    if (loaded)
+        h += "<i>" + tr("Filename") + ": </i>" + navit.filename();
+
+    return h;
+}
+
 Q_EXPORT_PLUGIN2(MWalkingPapersBackgroundPlugin, NavitAdapter)

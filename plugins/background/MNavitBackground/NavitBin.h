@@ -85,6 +85,7 @@ public:
     ~NavitBin();
 
     bool setFilename(const QString& filename);
+    QString filename();
     bool readTile(int index) const;
 
 //    bool getFeatures(const QString& tileRef, QList <NavitFeature>& theFeats) const;
@@ -96,6 +97,8 @@ private:
 
     mutable QHash<int, NavitTile> theTiles;
     NavitTile indexTile;
+
+    QString m_filename;
 };
 
 #endif // NAVITBIN_H

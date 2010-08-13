@@ -22,57 +22,59 @@
 #include "Preferences/MerkaartorPreferences.h"
 
 /**
-	@author cbro <cbro@semperpax.com>
+    @author cbro <cbro@semperpax.com>
 */
 
 class PreferencesDialog : public QDialog, public Ui::PreferencesDialog
 {
-	Q_OBJECT
+    Q_OBJECT
 
 public:
-	PreferencesDialog(QWidget* parent = 0);
-	~PreferencesDialog();
+    PreferencesDialog(QWidget* parent = 0);
+    ~PreferencesDialog();
 
 public slots:
-	void on_buttonBox_clicked(QAbstractButton * button);
-	void on_BrowseStyle_clicked();
-	void on_BrowseTemplate_clicked();
-	void on_btBgColor_clicked();
-	void on_btFocusColor_clicked();
-	void on_btHoverColor_clicked();
-	void on_btHighlightColor_clicked();
-	void on_btRelationsColor_clicked();
-	void on_btGpxTrackColor_clicked();
+    void on_buttonBox_clicked(QAbstractButton * button);
+    void on_BrowseStyle_clicked();
+    void on_BrowseTemplate_clicked();
+    void on_btBgColor_clicked();
+    void on_btFocusColor_clicked();
+    void on_btHoverColor_clicked();
+    void on_btHighlightColor_clicked();
+    void on_btDirtyColor_clicked();
+    void on_btRelationsColor_clicked();
+    void on_btGpxTrackColor_clicked();
 
-	/* GPS */
-	void on_btGpsLogDirBrowse_clicked();
+    /* GPS */
+    void on_btGpsLogDirBrowse_clicked();
 
-	/* Tools */
-	void on_btAddTool_clicked(void);
-	void on_btDelTool_clicked(void);
-	void on_btApplyTool_clicked(void);
-	void on_lvTools_itemSelectionChanged();
-	void on_btBrowse_clicked();
-
-private:
-	void updateStyles();
-	void loadPrefs();
-	void initLanguages(QComboBox*);
-	void savePrefs();
-
-	void changeEvent(QEvent *);
+    /* Tools */
+    void on_btAddTool_clicked(void);
+    void on_btDelTool_clicked(void);
+    void on_btApplyTool_clicked(void);
+    void on_lvTools_itemSelectionChanged();
+    void on_btBrowse_clicked();
 
 private:
-	QList<Tool> theTools;
-	QColor BgColor;
-	QColor FocusColor;
-	QColor HoverColor;
-	QColor HighlightColor;
-	QColor RelationsColor;
-	QColor GpxTrackColor;
+    void updateStyles();
+    void loadPrefs();
+    void initLanguages(QComboBox*);
+    void savePrefs();
+
+    void changeEvent(QEvent *);
+
+private:
+    QList<Tool> theTools;
+    QColor BgColor;
+    QColor FocusColor;
+    QColor HoverColor;
+    QColor HighlightColor;
+    QColor DirtyColor;
+    QColor RelationsColor;
+    QColor GpxTrackColor;
 
 signals:
-	void preferencesChanged();
+    void preferencesChanged();
 };
 
 #endif

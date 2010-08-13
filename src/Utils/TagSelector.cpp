@@ -592,7 +592,7 @@ TagSelector* TagSelectorIsOneOf::copy() const
     return new TagSelectorIsOneOf(Key,Values);
 }
 
-TagSelectorMatchResult TagSelectorIsOneOf::matches(const IFeature* F, double PixelPerM) const
+TagSelectorMatchResult TagSelectorIsOneOf::matches(const IFeature* F, double /*PixelPerM*/) const
 {
     if (specialKey != TagSelectKey_None) {
         foreach (QString Value, exactMatchv) {
@@ -674,7 +674,7 @@ TagSelector* TagSelectorTypeIs::copy() const
     return new TagSelectorTypeIs(Type);
 }
 
-TagSelectorMatchResult TagSelectorTypeIs::matches(const IFeature* F, double PixelPerM) const
+TagSelectorMatchResult TagSelectorTypeIs::matches(const IFeature* F, double /*PixelPerM*/) const
 {
     QString t = Type.toLower();
     if (t == "node")
@@ -710,7 +710,7 @@ TagSelector* TagSelectorHasTags::copy() const
     return new TagSelectorHasTags();
 }
 
-TagSelectorMatchResult TagSelectorHasTags::matches(const IFeature* F, double PixelPerM) const
+TagSelectorMatchResult TagSelectorHasTags::matches(const IFeature* F, double /*PixelPerM*/) const
 {
     return (F->tagSize()==0 || (F->tagSize()==1 && F->tagKey(0)=="created_by" )) ? TagSelect_NoMatch : TagSelect_Match;
 }
@@ -902,7 +902,7 @@ TagSelector* TagSelectorFalse::copy() const
     return new TagSelectorFalse();
 }
 
-TagSelectorMatchResult TagSelectorFalse::matches(const IFeature* /* F */, double PixelPerM) const
+TagSelectorMatchResult TagSelectorFalse::matches(const IFeature* /* F */, double /*PixelPerM*/) const
 {
     return TagSelect_NoMatch;
 }
@@ -925,7 +925,7 @@ TagSelector* TagSelectorTrue::copy() const
     return new TagSelectorFalse();
 }
 
-TagSelectorMatchResult TagSelectorTrue::matches(const IFeature* /* F */, double PixelPerM) const
+TagSelectorMatchResult TagSelectorTrue::matches(const IFeature* /* F */, double /*PixelPerM*/) const
 {
     return TagSelect_Match;
 }

@@ -878,6 +878,11 @@ int MerkaartorPreferences::getHighlightWidth() const
     return Sets->value("visual/HighlightWidth",1).toInt();
 }
 
+int MerkaartorPreferences::getDirtyWidth() const
+{
+    return Sets->value("visual/DirtyWidth",1).toInt();
+}
+
 int MerkaartorPreferences::getFocusWidth() const
 {
     return Sets->value("visual/FocusWidth",3).toInt();
@@ -957,6 +962,14 @@ QColor MerkaartorPreferences::getHighlightColor() const
     return Sets->value("visual/HighlightColor").value<QColor>();
 }
 
+QColor MerkaartorPreferences::getDirtyColor() const
+{
+    QString sColor = Sets->value("visual/DirtyColor").toString();
+    if (sColor.isEmpty())
+        return Qt::darkYellow;
+    return Sets->value("visual/DirtyColor").value<QColor>();
+}
+
 QColor MerkaartorPreferences::getRelationsColor() const
 {
     QString sColor = Sets->value("visual/RelationsColor").toString();
@@ -983,6 +996,12 @@ void MerkaartorPreferences::setHighlightColor(const QColor theValue, int Width)
 {
     Sets->setValue("visual/HighlightColor", QVariant(theValue));
     Sets->setValue("visual/HighlightWidth", Width);
+}
+
+void MerkaartorPreferences::setDirtyColor(const QColor theValue, int Width)
+{
+    Sets->setValue("visual/DirtyColor", QVariant(theValue));
+    Sets->setValue("visual/DirtyWidth", Width);
 }
 
 void MerkaartorPreferences::setFocusColor(const QColor theValue, int Width)
@@ -1263,6 +1282,7 @@ M_PARAM_IMPLEMENT_BOOL(TrackSegmentsVisible, visual, true)
 M_PARAM_IMPLEMENT_BOOL(RelationsVisible, visual, false)
 M_PARAM_IMPLEMENT_BOOL(PhotosVisible, visual, true)
 M_PARAM_IMPLEMENT_BOOL(VirtualNodesVisible, visual, true)
+M_PARAM_IMPLEMENT_BOOL(DirtyVisible, visual, true)
 
 /* Templates */
 M_PARAM_IMPLEMENT_STRING(DefaultTemplate, templates, ":/Templates/default.mat")

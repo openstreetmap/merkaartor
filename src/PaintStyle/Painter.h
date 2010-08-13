@@ -93,7 +93,6 @@ public:
     static Painter fromXML(const QDomElement& e, QString filename);
 
 public:
-    QString theSelector;
     bool ZoomLimitSet;
     double ZoomUnder, ZoomUpper;
     bool DrawBackground;
@@ -130,6 +129,8 @@ public:
     QFont LabelFont;
     bool LabelHalo;
     bool LabelArea;
+
+    QString theSelector;
 };
 
 class GlobalPainter

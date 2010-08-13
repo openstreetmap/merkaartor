@@ -87,6 +87,7 @@ public slots:
     virtual void on_viewZoomWindowAction_triggered();
     virtual void on_viewLockZoomAction_triggered();
     virtual void on_viewDownloadedAction_triggered();
+    virtual void on_viewDirtyAction_triggered();
     virtual void on_viewScaleAction_triggered();
     virtual void on_viewPhotosAction_triggered();
     virtual void on_viewShowLatLonGridAction_triggered();

@@ -103,6 +103,10 @@ public:
 
     virtual void cleanup();
 
+    virtual bool toXML(QDomElement xParent);
+    virtual void fromXML(const QDomElement xParent);
+    virtual QString toPropertiesHtml();
+
 public slots:
     void onLoadFile();
 

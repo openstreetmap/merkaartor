@@ -1505,6 +1505,14 @@ void MainWindow::on_viewDownloadedAction_triggered()
     invalidateView();
 }
 
+void MainWindow::on_viewDirtyAction_triggered()
+{
+    M_PREFS->setDirtyVisible(!M_PREFS->getDirtyVisible());
+    if (M_PREFS->getDirtyVisible()) p->renderOptions.options |= RendererOptions::DirtyVisible; else p->renderOptions.options &= ~RendererOptions::DirtyVisible;
+    ui->viewDirtyAction->setChecked(M_PREFS->getDirtyVisible());
+    invalidateView();
+}
+
 void MainWindow::on_viewScaleAction_triggered()
 {
     M_PREFS->setScaleVisible(!M_PREFS->getScaleVisible());

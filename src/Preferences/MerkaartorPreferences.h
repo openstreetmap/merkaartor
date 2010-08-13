@@ -186,6 +186,9 @@ public:
     QColor getHighlightColor() const;
     int getHighlightWidth() const;
     void setHighlightColor(const QColor theValue, int width);
+    QColor getDirtyColor() const;
+    int getDirtyWidth() const;
+    void setDirtyColor(const QColor theValue, int width);
     QColor getRelationsColor() const;
     int getRelationsWidth() const;
     void setRelationsColor(const QColor theValue, int width);
@@ -281,6 +284,7 @@ public:
     M_PARAM_DECLARE_BOOL(TrackSegmentsVisible)
     M_PARAM_DECLARE_BOOL(RelationsVisible)
     M_PARAM_DECLARE_BOOL(PhotosVisible)
+    M_PARAM_DECLARE_BOOL(DirtyVisible)
 
     /* Templates */
     M_PARAM_DECLARE_STRING(DefaultTemplate)

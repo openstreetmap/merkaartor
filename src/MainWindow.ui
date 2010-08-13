@@ -24,7 +24,7 @@
      <x>0</x>
      <y>0</y>
      <width>1100</width>
-     <height>21</height>
+     <height>25</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuHelp">
@@ -296,6 +296,7 @@
      <addaction name="viewArrowsAlwaysAction"/>
     </widget>
     <addaction name="viewDownloadedAction"/>
+    <addaction name="viewDirtyAction"/>
     <addaction name="menuShow_directional_Arrows"/>
     <addaction name="separator"/>
     <addaction name="viewStyleForegroundAction"/>
@@ -1734,6 +1735,14 @@
   <action name="filePropertiesAction">
    <property name="text">
     <string>Properties...</string>
+   </property>
+  </action>
+  <action name="viewDirtyAction">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Highlight dirt&amp;y features</string>
    </property>
   </action>
  </widget>

@@ -20,10 +20,11 @@ public:
         RelationsVisible = 0x100,
         MapBackgroundVisible = 0x200,
         DownloadedVisible = 0x400,
-        ScaleVisible = 0x800,
-        LatLonGridVisible = 0x1000,
-        LockZoom = 0x2000,
-        ForPrinting = 0x4000
+        DirtyVisible = 0x800,
+        ScaleVisible = 0x1000,
+        LatLonGridVisible = 0x2000,
+        LockZoom = 0x4000,
+        ForPrinting = 0x10000
     };
     Q_DECLARE_FLAGS(RenderOptions, RenderOption)
 
