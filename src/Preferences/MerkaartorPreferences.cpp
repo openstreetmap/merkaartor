@@ -880,7 +880,7 @@ int MerkaartorPreferences::getHighlightWidth() const
 
 int MerkaartorPreferences::getDirtyWidth() const
 {
-    return Sets->value("visual/DirtyWidth",1).toInt();
+    return Sets->value("visual/DirtyWidth",2).toInt();
 }
 
 int MerkaartorPreferences::getFocusWidth() const
@@ -966,7 +966,7 @@ QColor MerkaartorPreferences::getDirtyColor() const
 {
     QString sColor = Sets->value("visual/DirtyColor").toString();
     if (sColor.isEmpty())
-        return Qt::darkYellow;
+        return QColor(255, 85, 0);
     return Sets->value("visual/DirtyColor").value<QColor>();
 }
 

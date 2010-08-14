@@ -242,6 +242,7 @@ MainWindow::MainWindow(QWidget *parent)
     connect (ui->menuStyles, SIGNAL(triggered(QAction *)), this, SLOT(styleTriggered(QAction *)));
 
     ui->viewDownloadedAction->setChecked(M_PREFS->getDownloadedVisible());
+    ui->viewDirtyAction->setChecked(M_PREFS->getDirtyVisible());
     ui->viewScaleAction->setChecked(M_PREFS->getScaleVisible());
     ui->viewPhotosAction->setChecked(M_PREFS->getPhotosVisible());
     ui->viewShowLatLonGridAction->setChecked(M_PREFS->getLatLonGridVisible());

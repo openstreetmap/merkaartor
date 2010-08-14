@@ -448,6 +448,12 @@ double Way::area()
 
 void Way::draw(QPainter& P, MapView* theView)
 {
+    if (isDirty() && M_PREFS->getDirtyVisible()) {
+        QPen thePen(M_PREFS->getDirtyColor(),M_PREFS->getDirtyWidth());
+        P.setPen(thePen);
+        P.drawPath(theView->transform().map(getPath()));
+    }
+
     double theWidth = theView->nodeWidth();
     bool Draw = (theWidth >= 1);
     if (!Draw || !TEST_RFLAGS(RendererOptions::VirtualNodesVisible) || !TEST_RFLAGS(RendererOptions::NodesVisible) || isReadonly())

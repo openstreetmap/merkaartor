@@ -1,4 +1,5 @@
 v0.17
+    * ADD : View menu item allowing to highlight "dirty" features, i.e., features ready for upload
     * FIX : Do not export incomplete features
     * FIX : CSV import bugs
     * ADD : Display tags in info dock

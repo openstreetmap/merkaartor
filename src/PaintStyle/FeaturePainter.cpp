@@ -361,7 +361,7 @@ void FeaturePainter::drawTouchup(Node* Pt, QPainter* thePainter, MapView* theVie
         }
 
         QRectF R(P-QPointF(2,2),QSize(4,4));
-            thePainter->fillRect(R,theColor);
+        thePainter->fillRect(R,theColor);
     }
 }
 

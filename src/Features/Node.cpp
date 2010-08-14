@@ -257,6 +257,12 @@ void Node::draw(QPainter& thePainter , MapView* theView)
          }
      }
 #endif
+    if (isDirty() && M_PREFS->getDirtyVisible()) {
+        QPointF P(theView->toView(this));
+        QRectF R(P-QPointF(2,2),QSize(4,4));
+        thePainter.fillRect(R,M_PREFS->getDirtyColor());
+    }
+
 }
 
 #ifdef GEOIMAGE
