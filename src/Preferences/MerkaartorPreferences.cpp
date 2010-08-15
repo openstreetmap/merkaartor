@@ -795,12 +795,13 @@ void MerkaartorPreferences::initialPosition(MapView* vw)
     const Coord bottomLeft(ip[0].toDouble(), ip[1].toDouble());
     const Coord topRight(ip[2].toDouble(),ip[3].toDouble());
 
-    if (!Sets->contains("MainWindow/ViewRect"))
-        vw->setViewport(CoordBox(bottomLeft, topRight), vw->rect());
-    else {
-        QRect rt = Sets->value("MainWindow/ViewRect").toRect();
-        vw->setViewport(CoordBox(bottomLeft, topRight), rt);
-    }
+    vw->setViewport(CoordBox(bottomLeft, topRight), vw->rect());
+//    if (!Sets->contains("MainWindow/ViewRect"))
+//        vw->setViewport(CoordBox(bottomLeft, topRight), vw->rect());
+//    else {
+//        QRect rt = Sets->value("MainWindow/ViewRect").toRect();
+//        vw->setViewport(CoordBox(bottomLeft, topRight), rt);
+//    }
 }
 
 #ifndef _MOBILE
