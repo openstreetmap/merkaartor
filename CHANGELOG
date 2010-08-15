@@ -1,4 +1,6 @@
+<<<<<<< HEAD
 v0.16.2
+    * FIX : Initial viewport issue
     * FIX : Do not export incomplete features
     * FIX : CSV import bugs
     * FIX : Use "GPX track width" setting even when not in "Simple track appearance" (fixes #3095)
