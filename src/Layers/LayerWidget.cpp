@@ -19,14 +19,21 @@ LayerWidget::LayerWidget(Layer* aLayer, QWidget* aParent)
 {
     setCheckable(true);
     //setAutoExclusive(true) ;
-    setFocusPolicy(Qt::NoFocus);
+    setFocusPolicy(Qt::ClickFocus);
     setContextMenuPolicy(Qt::NoContextMenu);
     visibleIcon = QPixmap(":Icons/eye.xpm");
     hiddenIcon = QPixmap(":Icons/empty.xpm");
+
+    edit = new QLineEdit(this);
+    edit->setStyleSheet("background: transparent;");
+    edit->move(21, 0);
+    edit->setAttribute(Qt::WA_TransparentForMouseEvents);
+    edit->setReadOnly(true);
 }
 
 LayerWidget::~LayerWidget()
 {
+    delete edit;
     delete associatedMenu;
 }
 
@@ -71,6 +78,13 @@ void LayerWidget::mouseReleaseEvent(QMouseEvent* anEvent)
     }
 }
 
+void LayerWidget::mouseDoubleClickEvent(QMouseEvent *event)
+{
+    edit->setStyleSheet("");
+    edit->setAttribute(Qt::WA_TransparentForMouseEvents, false);
+    edit->setReadOnly(false);
+}
+
 QSize LayerWidget::minimumSizeHint () const
 {
     return QSize(100, LINEHEIGHT);
@@ -93,11 +107,11 @@ void LayerWidget::paintEvent(QPaintEvent*)
         P.fillRect(rect().adjusted(20,0,0,-1),QBrush(palette().highlight()));
 //		P.fillRect(20, 1, width()-19, rect().height()-1, QBrush(palette().highlight()));
         P.setPen(palette().highlightedText().color());
-        P.drawText(rect().adjusted(23,0,0,-1), Qt::AlignLeft | Qt::AlignVCenter , theLayer->name());
+//        P.drawText(rect().adjusted(23,0,0,-1), Qt::AlignLeft | Qt::AlignVCenter , theLayer->name());
     } else {
         P.fillRect(rect().adjusted(0,0,0,-1),backColor);
         P.setPen(QColor(0,0,0));
-        P.drawText(rect().adjusted(23,0,0,-1), Qt::AlignLeft | Qt::AlignVCenter , theLayer->name());
+//        P.drawText(rect().adjusted(23,0,0,-1), Qt::AlignLeft | Qt::AlignVCenter , theLayer->name());
     }
     if (!getMapLayer()->isUploadable()) {
         P.fillRect(rect().adjusted(20,0,0,-1),QBrush(Qt::red, Qt::BDiagPattern));
@@ -107,6 +121,8 @@ void LayerWidget::paintEvent(QPaintEvent*)
         P.drawPixmap(QPoint(2, rect().center().y()-visibleIcon.height()/2), visibleIcon);
     else
         P.drawPixmap(QPoint(2, rect().center().y()-hiddenIcon.height()/2), hiddenIcon);
+
+    edit->setText(theLayer->name());
 }
 
 void LayerWidget::checkStateSet()

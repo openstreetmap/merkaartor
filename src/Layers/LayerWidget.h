@@ -6,6 +6,7 @@
 
 #include <QActionGroup>
 #include <QAbstractButton>
+#include <QLineEdit>
 
 class MainWindow;
 class Layer;
@@ -36,6 +37,7 @@ class LayerWidget : public QAbstractButton
         virtual void mousePressEvent(QMouseEvent *event);
         virtual void mouseMoveEvent(QMouseEvent *event);
         virtual void mouseReleaseEvent(QMouseEvent* anEvent);
+        virtual void mouseDoubleClickEvent(QMouseEvent *event);
 
         virtual void paintEvent(QPaintEvent* anEvent);
         virtual void checkStateSet();
@@ -52,6 +54,8 @@ class LayerWidget : public QAbstractButton
         QAction* actReadonly;
         QMenu* associatedMenu;
         QPoint dragStartPosition;
+
+        QLineEdit* edit;
 
     signals:
         void layerSelected(LayerWidget *);
