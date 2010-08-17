@@ -32,7 +32,7 @@ class LayerDockPrivate
         QScrollArea* Scroller;
         QWidget* Content;
         QVBoxLayout* Layout;
-        QHBoxLayout* frameLayout;
+        QVBoxLayout* frameLayout;
         QTabBar* tab;
         LayerWidget* theDropWidget;
         LayerWidget* lastSelWidget;
@@ -163,12 +163,12 @@ void LayerDock::createContent()
     delete p->Scroller;
 
     QWidget* frame = new QWidget();
-    p->frameLayout = new QHBoxLayout(frame);
+    p->frameLayout = new QVBoxLayout(frame);
     p->frameLayout->setMargin(0);
     p->frameLayout->setSpacing(0);
 
     p->tab = new QTabBar(frame);
-    p->tab->setShape(QTabBar::RoundedWest);
+    p->tab->setShape(QTabBar::RoundedNorth);
     p->tab->setContextMenuPolicy(Qt::CustomContextMenu);
     p->tab->setUsesScrollButtons(true);
     p->tab->setElideMode(Qt::ElideRight);
@@ -187,8 +187,8 @@ void LayerDock::createContent()
 
     QVBoxLayout* tabLayout = new QVBoxLayout();
     tabLayout->addWidget(p->tab);
-    QSpacerItem* tabSpacer = new QSpacerItem(20, 40, QSizePolicy::Minimum, QSizePolicy::Expanding);
-    tabLayout->addItem(tabSpacer);
+//    QSpacerItem* tabSpacer = new QSpacerItem(20, 40, QSizePolicy::Minimum, QSizePolicy::Expanding);
+//    tabLayout->addItem(tabSpacer);
 
     p->frameLayout->addLayout(tabLayout);
 
