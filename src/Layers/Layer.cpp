@@ -165,6 +165,7 @@ void Layer::setName(const QString& s)
 {
     p->Name = s;
     if (theWidget) {
+        theWidget->setName(s);
         theWidget->getAssociatedMenu()->setTitle(s);
     }
 }
@@ -186,6 +187,9 @@ const QString& Layer::description() const
 
 void Layer::setVisible(bool b) {
     p->Visible = b;
+    if (theWidget) {
+        theWidget->setLayerVisible(p->Visible, false);
+    }
 }
 
 bool Layer::isVisible() const

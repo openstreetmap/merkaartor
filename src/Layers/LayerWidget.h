@@ -5,74 +5,75 @@
 #include "ImageMapLayer.h"
 
 #include <QActionGroup>
-#include <QAbstractButton>
-#include <QLineEdit>
+#include <QPushButton>
+
+#include "ui_LayerWidget.h"
 
 class MainWindow;
 class Layer;
 
-class LayerWidget : public QAbstractButton
+class LayerWidget : public QPushButton
 {
     Q_OBJECT
 
-        friend class LayerDock;
+    friend class LayerDock;
 
-    public:
-        LayerWidget(Layer* aLayer, QWidget* aParent = 0);
-        virtual ~LayerWidget();
+public:
+    LayerWidget(Layer* aLayer, QWidget* aParent = 0);
+    virtual ~LayerWidget();
+    void paintEvent(QPaintEvent *);
 
-        virtual QSize sizeHint () const;
-        virtual QSize minimumSizeHint () const;
+    virtual void setName(const QString& s);
 
-        virtual Layer* getMapLayer();
-        virtual void setLayerVisible(bool b);
-        virtual void setLayerReadonly(bool b);
-        virtual	void initActions();
+    virtual Layer* getMapLayer();
+    virtual void setLayerVisible(bool b, bool updateLayer=true);
+    virtual void setLayerReadonly(bool b);
+    virtual	void initActions();
 
-        QMenu* getAssociatedMenu();
+    QMenu* getAssociatedMenu();
 
-    protected:
-        virtual void showContextMenu(QContextMenuEvent* anEvent);
+protected:
+    virtual void showContextMenu(QContextMenuEvent* anEvent);
 
-        virtual void mousePressEvent(QMouseEvent *event);
-        virtual void mouseMoveEvent(QMouseEvent *event);
-        virtual void mouseReleaseEvent(QMouseEvent* anEvent);
-        virtual void mouseDoubleClickEvent(QMouseEvent *event);
+    virtual void mousePressEvent(QMouseEvent *event);
+    virtual void mouseMoveEvent(QMouseEvent *event);
+    virtual void mouseReleaseEvent(QMouseEvent* anEvent);
+    virtual void mouseDoubleClickEvent(QMouseEvent *event);
 
-        virtual void paintEvent(QPaintEvent* anEvent);
-        virtual void checkStateSet();
-        virtual void nextCheckState();
+    virtual void checkStateSet();
+    virtual void nextCheckState();
 
-        QPointer<Layer> theLayer;
-        QPixmap visibleIcon;
-        QPixmap hiddenIcon;
-        QBrush backColor;
-        QMenu* ctxMenu;
-        QAction* closeAction;
-        QAction* actZoom;
-        QAction* actVisible;
-        QAction* actReadonly;
-        QMenu* associatedMenu;
-        QPoint dragStartPosition;
+    QPointer<Layer> theLayer;
+    QMenu* ctxMenu;
+    QAction* closeAction;
+    QAction* actZoom;
+    QAction* actVisible;
+    QAction* actReadonly;
+    QMenu* associatedMenu;
+    QPoint dragStartPosition;
 
-        QLineEdit* edit;
+signals:
+    void layerSelected(LayerWidget *);
+    void layerChanged(LayerWidget *, bool adjustViewport);
+    void layerClosed(Layer *);
+    void layerCleared(Layer *);
+    void layerZoom(Layer *);
+    void layerProjection(const QString&);
 
-    signals:
-        void layerSelected(LayerWidget *);
-        void layerChanged(LayerWidget *, bool adjustViewport);
-        void layerClosed(Layer *);
-        void layerCleared(Layer *);
-        void layerZoom(Layer *);
-        void layerProjection(const QString&);
+protected slots:
+    void setOpacity(QAction*);
+    void zoomLayer(bool);
+    void visibleLayer(bool);
+    void readonlyLayer(bool);
+    void close();
+    void clear();
+    void associatedAboutToShow();
 
-    protected slots:
-        void setOpacity(QAction*);
-        void zoomLayer(bool);
-        void visibleLayer(bool);
-        void readonlyLayer(bool);
-        void close();
-        void clear();
-        void associatedAboutToShow();
+    void on_cbVisible_stateChanged ( int state );
+    void on_edName_editingFinished();
+
+private:
+    Ui::LayerWidget ui;
 };
 
 class DrawingLayerWidget : public LayerWidget

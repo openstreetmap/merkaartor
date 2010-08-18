@@ -10,31 +10,48 @@
 
 #include <QApplication>
 #include <QMouseEvent>
-#include <QPainter>
+#include <QStylePainter>
 
 #define LINEHEIGHT 25
 
 LayerWidget::LayerWidget(Layer* aLayer, QWidget* aParent)
-: QAbstractButton(aParent), theLayer(aLayer), ctxMenu(0), closeAction(0), actZoom(0), associatedMenu(0)
+: QPushButton(aParent), theLayer(aLayer), ctxMenu(0), closeAction(0), actZoom(0), associatedMenu(0)
 {
-    setCheckable(true);
-    //setAutoExclusive(true) ;
-    setFocusPolicy(Qt::ClickFocus);
-    setContextMenuPolicy(Qt::NoContextMenu);
-    visibleIcon = QPixmap(":Icons/eye.xpm");
-    hiddenIcon = QPixmap(":Icons/empty.xpm");
+    ui.setupUi(this);
 
-    edit = new QLineEdit(this);
-    edit->setStyleSheet("background: transparent;");
-    edit->move(21, 0);
-    edit->setAttribute(Qt::WA_TransparentForMouseEvents);
-    edit->setReadOnly(true);
+    setCheckable(true);
+//    setFlat(true);
+    setFocusPolicy(Qt::NoFocus);
+    setContextMenuPolicy(Qt::NoContextMenu);
+
+    ui.cbVisible->blockSignals(true);
+    ui.cbVisible->setChecked(theLayer->isVisible());
+    ui.cbVisible->blockSignals(false);
+
+    ui.edName->setText(theLayer->name());
+    ui.edName->setReadOnly(true);
+    ui.edName->setAttribute(Qt::WA_TransparentForMouseEvents);
+    ui.edName->setFrame(false);
+    ui.edName->setCursorPosition(0);
+    ui.edName->setStyleSheet(" LayerWidget QLineEdit { background: transparent; }");
 }
 
 LayerWidget::~LayerWidget()
 {
-    delete edit;
     delete associatedMenu;
+}
+
+void LayerWidget::paintEvent(QPaintEvent *)
+{
+    QStylePainter p(this);
+    QStyleOptionButton option;
+    initStyleOption(&option);
+    p.drawControl(QStyle::CE_PushButton, option);
+
+    if (!theLayer->isUploadable()) {
+        p.fillRect(rect().adjusted(20,0,0,-1),QBrush(Qt::red, Qt::BDiagPattern));
+    }
+
 }
 
 void LayerWidget::mousePressEvent(QMouseEvent *event)
@@ -67,64 +84,35 @@ void LayerWidget::mouseMoveEvent(QMouseEvent *event)
 
 void LayerWidget::mouseReleaseEvent(QMouseEvent* anEvent)
 {
-    if (anEvent->pos().x()<20)
-    {
-        setLayerVisible(!theLayer->isVisible());
-        anEvent->accept();
-    }
-    else
-    {
-        anEvent->ignore();
-    }
+    anEvent->ignore();
+}
+
+void LayerWidget::on_cbVisible_stateChanged ( int state )
+{
+    setLayerVisible((state > Qt::Unchecked));
 }
 
 void LayerWidget::mouseDoubleClickEvent(QMouseEvent *event)
 {
-    edit->setStyleSheet("");
-    edit->setAttribute(Qt::WA_TransparentForMouseEvents, false);
-    edit->setReadOnly(false);
+    ui.edName->setReadOnly(false);
+    ui.edName->setAttribute(Qt::WA_TransparentForMouseEvents, false);
+    ui.edName->setFrame(true);
+    ui.edName->setStyleSheet("");
+    ui.edName->setFocus();
 }
 
-QSize LayerWidget::minimumSizeHint () const
+void LayerWidget::on_edName_editingFinished()
 {
-    return QSize(100, LINEHEIGHT);
-}
+    ui.edName->setReadOnly(true);
+    ui.edName->setAttribute(Qt::WA_TransparentForMouseEvents, true);
+    ui.edName->setFrame(false);
+    ui.edName->setStyleSheet("QLineEdit { background: transparent; } ");
 
-QSize LayerWidget::sizeHint () const
-{
-    return QSize(100, LINEHEIGHT);
-}
-
-void LayerWidget::paintEvent(QPaintEvent*)
-{
-    if (!theLayer || !theLayer->isEnabled())
-        return;
-
-    QPainter P(this);
-
-    P.drawLine(rect().bottomLeft(), rect().bottomRight());
-    if (isChecked()) {
-        P.fillRect(rect().adjusted(20,0,0,-1),QBrush(palette().highlight()));
-//		P.fillRect(20, 1, width()-19, rect().height()-1, QBrush(palette().highlight()));
-        P.setPen(palette().highlightedText().color());
-//        P.drawText(rect().adjusted(23,0,0,-1), Qt::AlignLeft | Qt::AlignVCenter , theLayer->name());
-    } else {
-        P.fillRect(rect().adjusted(0,0,0,-1),backColor);
-        P.setPen(QColor(0,0,0));
-//        P.drawText(rect().adjusted(23,0,0,-1), Qt::AlignLeft | Qt::AlignVCenter , theLayer->name());
-    }
-    if (!getMapLayer()->isUploadable()) {
-        P.fillRect(rect().adjusted(20,0,0,-1),QBrush(Qt::red, Qt::BDiagPattern));
-    }
-
-    if (theLayer->isVisible())
-        P.drawPixmap(QPoint(2, rect().center().y()-visibleIcon.height()/2), visibleIcon);
+    if (!ui.edName->text().isEmpty())
+        theLayer->setName(ui.edName->text());
     else
-        P.drawPixmap(QPoint(2, rect().center().y()-hiddenIcon.height()/2), hiddenIcon);
-
-    edit->setText(theLayer->name());
+        ui.edName->setText(theLayer->name());
 }
-
 void LayerWidget::checkStateSet()
 {
     QAbstractButton::checkStateSet();
@@ -136,6 +124,11 @@ void LayerWidget::nextCheckState()
     QAbstractButton::nextCheckState();
     theLayer->setSelected(isChecked());
     //emit (layerSelected(this));
+}
+
+void LayerWidget::setName(const QString& s)
+{
+    ui.edName->setText(s);
 }
 
 Layer* LayerWidget::getMapLayer()
@@ -247,10 +240,12 @@ QMenu* LayerWidget::getAssociatedMenu()
     return associatedMenu;
 }
 
-void LayerWidget::setLayerVisible(bool b)
+void LayerWidget::setLayerVisible(bool b, bool updateLayer)
 {
-    theLayer->setVisible(b);
+    if (updateLayer)
+        theLayer->setVisible(b);
     actVisible->setChecked(b);
+    ui.cbVisible->setChecked(b);
     update();
     emit(layerChanged(this, false));
 }
@@ -274,7 +269,6 @@ void LayerWidget::associatedAboutToShow()
 DrawingLayerWidget::DrawingLayerWidget(DrawingLayer* aLayer, QWidget* aParent)
     : LayerWidget(aLayer, aParent)
 {
-    backColor = QColor(165,209,255);
     initActions();
 }
 
@@ -297,9 +291,6 @@ void DrawingLayerWidget::initActions()
 ImageLayerWidget::ImageLayerWidget(ImageMapLayer* aLayer, QWidget* aParent)
 : LayerWidget(aLayer, aParent), wmsMenu(0) //, actgrWms(0)
 {
-    backColor = QColor(255,255,204);
-    //actgrAdapter = new QActionGroup(this);
-
     actNone = new QAction(tr("None"), this);
     //actNone->setCheckable(true);
     actNone->setChecked((MerkaartorPreferences::instance()->getBackgroundPlugin() == NONE_ADAPTER_UUID));
@@ -479,7 +470,6 @@ void ImageLayerWidget::initActions()
 TrackLayerWidget::TrackLayerWidget(TrackLayer* aLayer, QWidget* aParent)
     : LayerWidget(aLayer, aParent)
 {
-    backColor = QColor(122,204,166);
     initActions();
 }
 
@@ -524,7 +514,6 @@ void TrackLayerWidget::extractLayer(bool)
 DirtyLayerWidget::DirtyLayerWidget(DirtyLayer* aLayer, QWidget* aParent)
     : LayerWidget(aLayer, aParent)
 {
-    backColor = QColor(200,200,200);
     initActions();
 }
 
@@ -545,7 +534,6 @@ void DirtyLayerWidget::initActions()
 UploadedLayerWidget::UploadedLayerWidget(UploadedLayer* aLayer, QWidget* aParent)
     : LayerWidget(aLayer, aParent)
 {
-    backColor = QColor(200,200,200);
     initActions();
 }
 
@@ -572,7 +560,6 @@ void UploadedLayerWidget::initActions()
 OsbLayerWidget::OsbLayerWidget(OsbLayer* aLayer, QWidget* aParent)
     : LayerWidget(aLayer, aParent)
 {
-    backColor = QColor(165,209,192);
     initActions();
 }
 

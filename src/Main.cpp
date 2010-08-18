@@ -176,6 +176,22 @@ int main(int argc, char** argv)
     QApplication::setFont(appFont);
 #endif
 
+    qApp->setStyleSheet(
+            " LayerWidget { color: black; /*border: none;*/ }"
+//            " LayerWidget[Uploadable=\"false\"] { color: black; /*border: none;*/ }"
+            " LayerWidget:checked { background-color: blue; }"
+
+            " LayerWidget QCheckBox::indicator:checked { image: url(:Icons/eye.xpm); }"
+            " LayerWidget QCheckBox::indicator:unchecked { image: url(:Icons/empty.xpm); }"
+
+            " DrawingLayerWidget { background-color: #a5d1ff; }"
+            " ImageLayerWidget { background-color: #ffffcc; }"
+            " TrackLayerWidget { background-color: #7acca6; }"
+            " DirtyLayerWidget { background-color: #c8c8c8; }"
+            " UploadedLayerWidget { background-color: #c8c8c8; }"
+            " OsbLayerWidget { background-color: #a2d1c0; }"
+            );
+
     QPixmap pixmap(":/Splash/Mercator_splash.png");
     QSplashScreen splash(pixmap);
     splash.show();
