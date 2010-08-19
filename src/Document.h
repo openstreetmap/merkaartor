@@ -78,6 +78,8 @@ public:
     //DirtyMapLayer* getDirtyLayer() const;
     Layer* getDirtyOrOriginLayer(Layer* aLayer = NULL) const;
     Layer* getDirtyOrOriginLayer(Feature* F) const;
+    int getDirtySize() const;
+
     void setUploadedLayer(UploadedLayer* aLayer);
     UploadedLayer* getUploadedLayer() const;
     //DeletedMapLayer* getTrashLayer() const;
@@ -93,9 +95,9 @@ public:
     bool importKML(const QString& filename, TrackLayer* NewLayer);
     bool importSHP(const QString& filename, DrawingLayer* NewLayer);
     bool importCSV(const QString& filename, DrawingLayer* NewLayer);
-    bool importOSC(const QString& filename, DirtyLayer* NewLayer);
+    bool importOSC(const QString& filename, DrawingLayer* NewLayer);
 
-    Layer* getLastDownloadLayer();
+    Layer* getLastDownloadLayer() const;
     void setLastDownloadLayer(Layer * aLayer);
     void addDownloadBox(Layer*l, CoordBox aBox);
     void removeDownloadBox(Layer*l);

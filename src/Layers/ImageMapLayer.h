@@ -42,7 +42,7 @@ public:
     virtual QString toPropertiesHtml();
     static ImageMapLayer* fromXML(Document* d, const QDomElement& e, QProgressDialog * progress);
 
-    virtual /* const */ LayerType classType() {return Layer::ImageLayerType;}
+    virtual /* const */ LayerType classType() const {return Layer::ImageLayerType;}
     virtual const LayerGroups classGroups() {return(Layer::Default);}
 
     virtual bool arePointsDrawable() {return false;}

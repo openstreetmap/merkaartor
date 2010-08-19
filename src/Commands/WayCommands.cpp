@@ -39,8 +39,8 @@ void WayAddNodeCommand::undo()
     if (theLayer && oldLayer && (theLayer != oldLayer)) {
         theLayer->remove(theRoad);
         oldLayer->add(theRoad);
-        decDirtyLevel(oldLayer);
     }
+    decDirtyLevel(oldLayer, theRoad);
 }
 
 void WayAddNodeCommand::redo()
@@ -49,9 +49,9 @@ void WayAddNodeCommand::redo()
     theRoad->add(theTrackPoint, Position);
     if (theLayer && oldLayer && (theLayer != oldLayer)) {
         oldLayer->remove(theRoad);
-        incDirtyLevel(oldLayer);
         theLayer->add(theRoad);
     }
+    incDirtyLevel(oldLayer, theRoad);
     Command::redo();
 }
 
@@ -152,7 +152,7 @@ void WayRemoveNodeCommand::undo()
     if (theLayer && oldLayer && (theLayer != oldLayer)) {
         theLayer->remove(theRoad);
         oldLayer->add(theRoad);
-        decDirtyLevel(oldLayer);
+        decDirtyLevel(oldLayer, theRoad);
     }
 }
 
@@ -167,7 +167,7 @@ void WayRemoveNodeCommand::redo()
 
     if (theLayer && oldLayer && (theLayer != oldLayer)) {
         oldLayer->remove(theRoad);
-        incDirtyLevel(oldLayer);
+        incDirtyLevel(oldLayer, theRoad);
         theLayer->add(theRoad);
     }
     Command::redo();

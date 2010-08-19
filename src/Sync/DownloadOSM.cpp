@@ -628,15 +628,15 @@ bool downloadFeatures(MainWindow* Main, const QList<QString>& idList , Document*
             theLayer = new DrawingLayer(QApplication::translate("Downloader","%1 download").arg(QDateTime::currentDateTime().toString(Qt::ISODate)));
             theDocument->add(theLayer);
         } else
-            theLayer = theDocument->getLastDownloadLayer();
+            theLayer = (Layer*)theDocument->getLastDownloadLayer();
     }
     theLayer->blockIndexing(true);
 
     QString osmWebsite, osmUser, osmPwd;
 
-    osmWebsite = MerkaartorPreferences::instance()->getOsmWebsite();
-    osmUser = MerkaartorPreferences::instance()->getOsmUser();
-    osmPwd = MerkaartorPreferences::instance()->getOsmPassword();
+    osmWebsite = M_PREFS->getOsmWebsite();
+    osmUser = M_PREFS->getOsmUser();
+    osmPwd = M_PREFS->getOsmPassword();
 
     if (Main)
         Main->view()->setUpdatesEnabled(false);
@@ -742,14 +742,14 @@ bool downloadMoreOSM(MainWindow* Main, const CoordBox& aBox , Document* theDocum
         theLayer = new DrawingLayer(QApplication::translate("Downloader","%1 download").arg(QDateTime::currentDateTime().toString(Qt::ISODate)));
         theDocument->add(theLayer);
     } else
-        theLayer = theDocument->getLastDownloadLayer();
+        theLayer = (Layer*)theDocument->getLastDownloadLayer();
     theLayer->blockIndexing(true);
 
     QString osmWebsite, osmUser, osmPwd;
 
-    osmWebsite = MerkaartorPreferences::instance()->getOsmWebsite();
-    osmUser = MerkaartorPreferences::instance()->getOsmUser();
-    osmPwd = MerkaartorPreferences::instance()->getOsmPassword();
+    osmWebsite = M_PREFS->getOsmWebsite();
+    osmUser = M_PREFS->getOsmUser();
+    osmPwd = M_PREFS->getOsmPassword();
 
     Main->view()->setUpdatesEnabled(false);
 
@@ -782,9 +782,9 @@ bool downloadOSM(MainWindow* Main, const CoordBox& aBox , Document* theDocument)
 
     QDialog * dlg = new QDialog(Main);
 
-    osmWebsite = MerkaartorPreferences::instance()->getOsmWebsite();
-    osmUser = MerkaartorPreferences::instance()->getOsmUser();
-    osmPwd = MerkaartorPreferences::instance()->getOsmPassword();
+    osmWebsite = M_PREFS->getOsmWebsite();
+    osmUser = M_PREFS->getOsmUser();
+    osmPwd = M_PREFS->getOsmPassword();
 
     Ui::DownloadMapDialog ui;
     ui.setupUi(dlg);

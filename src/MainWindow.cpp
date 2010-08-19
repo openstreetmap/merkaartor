@@ -382,6 +382,10 @@ MainWindow::MainWindow(QWidget *parent)
     }
     connect(ui->mnuAreaOpacity, SIGNAL(triggered(QAction*)), this, SLOT(setAreaOpacity(QAction*)));
 
+    if (g_Merk_Frisius) {
+        ui->layersNewDrawingAction->setVisible(false);
+    }
+
     blockSignals(false);
 
     QTimer::singleShot( 0, this, SLOT(delayedInit()) );
@@ -1076,9 +1080,15 @@ bool MainWindow::importFiles(Document * mapDocument, const QStringList & fileNam
             importOK = importOSM(this, baseFileName, mapDocument, newLayer);
         }
         else if (fn.toLower().endsWith(".osc")) {
-            newLayer = mapDocument->getDirtyOrOriginLayer();
-            newLayer->blockIndexing(true);
-            importOK = mapDocument->importOSC(fn, (DirtyLayer *)newLayer);
+            if (g_Merk_Frisius) {
+                newLayer = new DrawingLayer( baseFileName );
+                newLayer->blockIndexing(true);
+                mapDocument->add(newLayer);
+            } else {
+                newLayer = mapDocument->getDirtyOrOriginLayer();
+                newLayer->blockIndexing(true);
+            }
+            importOK = mapDocument->importOSC(fn, (DrawingLayer*)newLayer);
         }
         else if (fn.toLower().endsWith(".osb")) {
             newLayer = new OsbLayer( baseFileName, fn );

@@ -211,10 +211,14 @@ class Feature : public QObject, public IFeature
          */
         virtual void removeTag(int i);
 
-        /** check if the feature is on the dirty layer
-         * @return true if on the dirty layer
+        /** check if the dirty status of the feature
          */
         virtual bool isDirty() const;
+
+        virtual int incDirtyLevel(int inc=1);
+        virtual int decDirtyLevel(int inc=1);
+        virtual int getDirtyLevel() const;
+        virtual int setDirtyLevel(int newLevel);
 
         /** check if the feature is on an uploadable layer
          * @return true if on an uploadable layer

@@ -230,7 +230,7 @@ void WMSPreferencesDialog::on_buttonBox_clicked(QAbstractButton * button)
 
 void WMSPreferencesDialog::loadPrefs()
 {
-    WmsServerList* L = MerkaartorPreferences::instance()->getWmsServers();
+    WmsServerList* L = M_PREFS->getWmsServers();
     WmsServerListIterator i(*L);
     while (i.hasNext()) {
         i.next();
@@ -240,13 +240,13 @@ void WMSPreferencesDialog::loadPrefs()
 
 void WMSPreferencesDialog::savePrefs()
 {
-    WmsServerList* L = MerkaartorPreferences::instance()->getWmsServers();
+    WmsServerList* L = M_PREFS->getWmsServers();
     L->clear();
     for (int i = 0; i < theWmsServers.size(); ++i) {
         WmsServer S(theWmsServers[i]);
         L->insert(theWmsServers[i].WmsName, S);
     }
-    //MerkaartorPreferences::instance()->setSelectedWmsServer(getSelectedServer());
+    //M_PREFS->setSelectedWmsServer(getSelectedServer());
     M_PREFS->save();
 }
 

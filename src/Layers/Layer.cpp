@@ -531,21 +531,23 @@ int Layer::setDirtyLevel(int newLevel)
     return (p->dirtyLevel = newLevel);
 }
 
-int Layer::getDirtyLevel()
+int Layer::getDirtyLevel() const
 {
     return p->dirtyLevel;
 }
 
-int Layer::getDirtySize()
+int Layer::getDirtySize() const
 {
     int dirtyObjects = 0;
 
     QList<MapFeaturePtr>::const_iterator i;
-    for (i = p->Features.constBegin(); i != p->Features.constEnd(); i++)
-        if ((*i)->isVirtual())
+    for (i = p->Features.constBegin(); i != p->Features.constEnd(); i++) {
+        Feature* F = (*i);
+        if (F->isVirtual())
             continue;
-        else if (!((*i)->isDeleted()) || ((*i)->isDeleted() && (*i)->hasOSMId()))
+        else if (F->isDirty() && (!(F->isDeleted()) || (F->isDeleted() && F->hasOSMId())))
             ++dirtyObjects;
+    }
 
     return dirtyObjects;
 }

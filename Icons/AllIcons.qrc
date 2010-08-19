@@ -3,6 +3,7 @@
         <file>actions/GPS.png</file>
         <file>actions/camera.png</file>
         <file>Merkaartor.xpm</file>
+        <file>Frisius.xpm</file>
         <file>add.xpm</file>
         <file>empty.xpm</file>
         <file>eye.xpm</file>
@@ -386,9 +387,11 @@
         <file alias="Gps_Marker.svg">Gps_Marker.svg</file>
     </qresource>
     <qresource prefix="/Utils">
-        <file alias="Merkaartor_About.png">Mercator_100x100.png</file>
+        <file alias="Merkaartor_About.png">Merkaartor_100x100.png</file>
+        <file alias="Frisius_About.png">Frisius_100x100.png</file>
     </qresource>
     <qresource prefix="/Splash">
-        <file alias="Mercator_splash.png">Mercator_splash.png</file>
+        <file alias="Merkaartor_splash.png">Merkaartor_splash.png</file>
+        <file alias="Frisius_splash.png">Frisius_splash.png</file>
     </qresource>
 </RCC>

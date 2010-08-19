@@ -103,7 +103,7 @@ class MapFeaturePrivate
                 theFeature(0), LastPartNotification(0),
                 Time(QDateTime::currentDateTime()), Deleted(false), Visible(true), Uploaded(false), ReadOnly(false), FilterRevision(-1)
                 , LongId(0)
-                , Virtual(false), Special(false)
+                , Virtual(false), Special(false), DirtyLevel(0)
                 , VirtualsUpdatesBlocked(false)
                 , Width(0)
         {
@@ -116,7 +116,7 @@ class MapFeaturePrivate
                 theFeature(0), LastPartNotification(0),
                 Time(other.Time), Deleted(false), Visible(true), Uploaded(false), ReadOnly(false), FilterRevision(-1)
                 , LongId(0)
-                , Virtual(other.Virtual), Special(other.Special)
+                , Virtual(other.Virtual), Special(other.Special), DirtyLevel(0)
                 , VirtualsUpdatesBlocked(other.VirtualsUpdatesBlocked)
                 , Width(other.Width)
         {
@@ -152,6 +152,7 @@ class MapFeaturePrivate
         RenderPriority theRenderPriority;
         bool Virtual;
         bool Special;
+        int DirtyLevel;
         bool VirtualsUpdatesBlocked;
         double Width;
 };
@@ -343,8 +344,31 @@ void Feature::setUser(const QString& user)
     p->User = user;
 }
 
+int Feature::incDirtyLevel(int inc)
+{
+    return p->DirtyLevel += inc;
+}
+
+int Feature::decDirtyLevel(int inc)
+{
+    return p->DirtyLevel -= inc;
+}
+
+int Feature::setDirtyLevel(int newLevel)
+{
+    return (p->DirtyLevel = newLevel);
+}
+
+int Feature::getDirtyLevel() const
+{
+    return p->DirtyLevel;
+}
+
 bool Feature::isDirty() const
 {
+    if (g_Merk_Frisius)
+        return (p->DirtyLevel > 0);
+
     if (parent())
         return (dynamic_cast<Layer*>(parent())->classType() == Layer::DirtyLayerType);
     else
@@ -606,7 +630,7 @@ void MapFeaturePrivate::updatePossiblePainters()
     //if the object has no tags or only the created_by tag, we don't check for style
     //search is about 15 times faster like that !!!
     //However, still match features with no tags and no parent, i.e. "lost" trackpoints
-    if ( (theFeature->layer()->isTrack()) && MerkaartorPreferences::instance()->getDisableStyleForTracks() ) return blankPainters();
+    if ( (theFeature->layer()->isTrack()) && M_PREFS->getDisableStyleForTracks() ) return blankPainters();
 
     if ( (theFeature->layer()->isTrack()) || theFeature->sizeParents() ) {
         int i;

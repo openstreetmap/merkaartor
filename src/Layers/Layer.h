@@ -115,14 +115,14 @@ public:
 
     virtual CoordBox boundingBox();
 
-    virtual /* const */ LayerType classType() = 0;
-    virtual const LayerGroups classGroups() = 0;
+    virtual /* const */ LayerType classType() const = 0;
+    virtual const LayerGroups classGroups() const = 0;
 
     int incDirtyLevel(int inc=1);
     int decDirtyLevel(int inc=1);
-    int getDirtyLevel();
+    int getDirtyLevel() const;
     int setDirtyLevel(int newLevel);
-    int getDirtySize();
+    int getDirtySize() const;
 
     virtual bool canDelete() const;
     virtual bool isUploadable() const;
@@ -164,8 +164,8 @@ public:
     static DrawingLayer* fromXML(Document* d, const QDomElement& e, QProgressDialog * progress);
     static DrawingLayer* doFromXML(DrawingLayer* l, Document* d, const QDomElement e, QProgressDialog * progress);
 
-    virtual /* const */ LayerType classType() {return Layer::DrawingLayerType;}
-    virtual const LayerGroups classGroups() {return (Layer::OSM);}
+    virtual /* const */ LayerType classType() const {return Layer::DrawingLayerType;}
+    virtual const LayerGroups classGroups() const {return (Layer::OSM);}
 };
 
 class TrackLayer : public Layer
@@ -184,8 +184,8 @@ public:
     virtual bool toXML(QDomElement& xParent, QProgressDialog * progress);
     static TrackLayer* fromXML(Document* d, const QDomElement& e, QProgressDialog * progress);
 
-    virtual /* const */ LayerType classType() {return Layer::TrackLayerType;}
-    virtual const LayerGroups classGroups() {return(Layer::Tracks);}
+    virtual /* const */ LayerType classType() const {return Layer::TrackLayerType;}
+    virtual const LayerGroups classGroups() const {return(Layer::Tracks);}
 
     virtual bool isUploadable() {return true;}
     virtual bool isTrack() const {return true;}
@@ -203,8 +203,8 @@ public:
 
     static DirtyLayer* fromXML(Document* d, const QDomElement e, QProgressDialog * progress);
 
-    virtual /* const */ LayerType classType() {return Layer::DirtyLayerType;}
-    virtual const LayerGroups classGroups() {return(Layer::Default|Layer::OSM);}
+    virtual /* const */ LayerType classType() const {return Layer::DirtyLayerType;}
+    virtual const LayerGroups classGroups() const {return(Layer::Default|Layer::OSM);}
 
     virtual LayerWidget* newWidget(void);
 
@@ -221,8 +221,8 @@ public:
 
     static UploadedLayer* fromXML(Document* d, const QDomElement e, QProgressDialog * progress);
 
-    virtual /* const */ LayerType classType() {return Layer::UploadedLayerType;}
-    virtual const LayerGroups classGroups() {return(Layer::Default|Layer::OSM);}
+    virtual /* const */ LayerType classType() const {return Layer::UploadedLayerType;}
+    virtual const LayerGroups classGroups() const {return(Layer::Default|Layer::OSM);}
 
     virtual LayerWidget* newWidget(void);
 
@@ -239,8 +239,8 @@ public:
     virtual bool toXML(QDomElement& xParent, QProgressDialog * progress);
     static DeletedLayer* fromXML(Document* d, const QDomElement& e, QProgressDialog * progress);
 
-    virtual /* const */ LayerType classType() {return Layer::DeletedLayerType;}
-    virtual const LayerGroups classGroups() {return(Layer::None);}
+    virtual /* const */ LayerType classType() const {return Layer::DeletedLayerType;}
+    virtual const LayerGroups classGroups() const {return(Layer::None);}
     virtual LayerWidget* newWidget(void);
 
     virtual bool isUploadable() {return false;}
@@ -258,8 +258,8 @@ public:
     OsbLayer(const QString& aName, const QString& filename, bool isWorld = false);
     virtual ~OsbLayer();
 
-    virtual /* const */ LayerType classType() {return Layer::OsbLayerType;}
-    virtual const LayerGroups classGroups() {return(Layer::OSM);}
+    virtual /* const */ LayerType classType() const {return Layer::OsbLayerType;}
+    virtual const LayerGroups classGroups() const {return(Layer::OSM);}
     virtual LayerWidget* newWidget(void);
 
     void setFilename(const QString& filename);

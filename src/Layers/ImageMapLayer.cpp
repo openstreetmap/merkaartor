@@ -114,7 +114,7 @@ void ImageMapLayer::setVisible(bool b)
     Layer::setVisible(b);
     if (p->bgType == NONE_ADAPTER_UUID)
         Layer::setVisible(false);
-    MerkaartorPreferences::instance()->setBgVisible(isVisible());
+    M_PREFS->setBgVisible(isVisible());
 }
 
 QString ImageMapLayer::projection() const
@@ -151,7 +151,7 @@ void ImageMapLayer::setMapAdapter(const QUuid& theAdapterUid, const QString& ser
     p->pm = QPixmap();
 
     p->bgType = theAdapterUid;
-    MerkaartorPreferences::instance()->setBackgroundPlugin(theAdapterUid);
+    M_PREFS->setBackgroundPlugin(theAdapterUid);
     if (p->bgType == NONE_ADAPTER_UUID) {
         setName(tr("Map - None"));
         setVisible(false);
@@ -681,7 +681,7 @@ QRect ImageMapLayer::drawTiled(MapView& theView, QRect& rect) const
                             ((tile->j-mapmiddle_tile_y)*tilesize)+rect.height()/2-cross_scr_y,
                                                     pm);
 
-            if (MerkaartorPreferences::instance()->getDrawTileBoundary()) {
+            if (M_PREFS->getDrawTileBoundary()) {
                 painter.drawRect(((tile->i-mapmiddle_tile_x)*tilesize)-cross_scr_x+rect.width()/2,
                           ((tile->j-mapmiddle_tile_y)*tilesize)-cross_scr_y-rect.height()/2,
                                             tilesize, tilesize);
@@ -804,7 +804,7 @@ QRect ImageMapLayer::drawTiled(MapView& theView, QRect& rect) const
 //                            ((tile->j-mapmiddle_tile_y)*tilesize)-cross_y+rect.height()/2,
 //                                                    pm);
 //
-//            if (MerkaartorPreferences::instance()->getDrawTileBoundary()) {
+//            if (M_PREFS->getDrawTileBoundary()) {
 //                painter.drawRect(((tile->i-mapmiddle_tile_x)*tilesize)-cross_x+rect.width()/2,
 //                          ((tile->j-mapmiddle_tile_y)*tilesize)-cross_y+rect.height()/2,
 //                                            tilesize, tilesize);

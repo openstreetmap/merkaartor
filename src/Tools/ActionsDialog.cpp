@@ -13,24 +13,24 @@
 ActionsDialog::ActionsDialog(QList<QAction *>& actions, MainWindow *parent)
     : QDialog(parent), Main(parent)
 {
-	setWindowFlags(windowFlags() & ~Qt::WindowContextHelpButtonHint);
+    setWindowFlags(windowFlags() & ~Qt::WindowContextHelpButtonHint);
 
     actionsTable = new QTableWidget(actions.count(), 2, this);
-	QStringList hdr;
-	hdr << tr("Description") << tr("Shortcut");
-	actionsTable->setHorizontalHeaderLabels(hdr);
+    QStringList hdr;
+    hdr << tr("Description") << tr("Shortcut");
+    actionsTable->setHorizontalHeaderLabels(hdr);
     actionsTable->verticalHeader()->hide();
-	actionsTable->horizontalHeader()->setMinimumSectionSize(100);
-	actionsTable->horizontalHeader()->setResizeMode(0, QHeaderView::Stretch);
-	actionsTable->horizontalHeader()->setResizeMode(1, QHeaderView::ResizeToContents);
+    actionsTable->horizontalHeader()->setMinimumSectionSize(100);
+    actionsTable->horizontalHeader()->setResizeMode(0, QHeaderView::Stretch);
+    actionsTable->horizontalHeader()->setResizeMode(1, QHeaderView::ResizeToContents);
     //actionsTable->setColumnReadOnly(0, true);
 
     int row = 0;
-    
-	for (int i=0; i<actions.size(); ++i) {
-	    QAction *action = static_cast<QAction*>(actions.at(i));
-		QTableWidgetItem* it = new QTableWidgetItem(action->toolTip());
-		it->setFlags(0);
+
+    for (int i=0; i<actions.size(); ++i) {
+        QAction *action = static_cast<QAction*>(actions.at(i));
+        QTableWidgetItem* it = new QTableWidgetItem(action->toolTip());
+        it->setFlags(0);
         actionsTable->setItem(row, 0, it);
         actionsTable->setItem(row, 1, new QTableWidgetItem(action->shortcut().toString()));
 
@@ -70,27 +70,27 @@ ActionsDialog::ActionsDialog(QList<QAction *>& actions, MainWindow *parent)
     mainLayout->addLayout(buttonLayout);
 
     setWindowTitle(tr("Shortcut Editor"));
-	cancelButton->setFocus();
+    cancelButton->setFocus();
 }
 
 void ActionsDialog::resetToDefault()
 {
     for (int row = 0; row < (int)actionsList.size(); ++row) {
-		QAction *action = actionsList[row];
-		actionsTable->item(row, 1)->setText(Main->shortcutsDefault[action->objectName()]);
-	}
+        QAction *action = actionsList[row];
+        actionsTable->item(row, 1)->setText(Main->shortcutsDefault[action->objectName()]);
+    }
 }
 
 void ActionsDialog::accept()
 {
-	QStringList shortcuts;
+    QStringList shortcuts;
     for (int row = 0; row < (int)actionsList.size(); ++row) {
         QAction *action = actionsList[row];
-		action->setShortcut(QKeySequence(actionsTable->item(row, 1)->text()));
-		shortcuts.append(action->objectName());
-		shortcuts.append(action->shortcut().toString());
+        action->setShortcut(QKeySequence(actionsTable->item(row, 1)->text()));
+        shortcuts.append(action->objectName());
+        shortcuts.append(action->shortcut().toString());
     }
-	M_PREFS->setShortcuts(shortcuts);
+    M_PREFS->setShortcuts(shortcuts);
 
     QDialog::accept();
 }
@@ -113,49 +113,49 @@ void ActionsDialog::validateAction(int row, int column)
 
 void ActionsDialog::importShortcuts()
 {
-	QString fileName = QFileDialog::getOpenFileName(this, tr("Load Shortcut scheme"), QString(), tr("Merkaartor shortcut scheme (*.mss)"));
-	if (!fileName.isNull()) {
-		QFile file(fileName);
-		if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
-			QMessageBox::critical(this, tr("Unable to open file"), tr("%1 could not be opened.").arg(fileName));
-			return;
-		}
+    QString fileName = QFileDialog::getOpenFileName(this, tr("Load Shortcut scheme"), QString(), tr("Merkaartor shortcut scheme (*.mss)"));
+    if (!fileName.isNull()) {
+        QFile file(fileName);
+        if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
+            QMessageBox::critical(this, tr("Unable to open file"), tr("%1 could not be opened.").arg(fileName));
+            return;
+        }
 
-		QTextStream ts(&file);
-		while (!ts.atEnd()) {
-			QString s = ts.readLine();
-			if (!s.isNull()) {
-				QStringList t = s.split(":");
-				for (int row = 0; row < (int)actionsList.size(); ++row) {
-					if (actionsTable->item(row, 0)->text() == t[0]) {
-						actionsTable->item(row, 1)->setText(t[1]);
-						break;
-					}
-				}
-			}
-		}
-	}
+        QTextStream ts(&file);
+        while (!ts.atEnd()) {
+            QString s = ts.readLine();
+            if (!s.isNull()) {
+                QStringList t = s.split(":");
+                for (int row = 0; row < (int)actionsList.size(); ++row) {
+                    if (actionsTable->item(row, 0)->text() == t[0]) {
+                        actionsTable->item(row, 1)->setText(t[1]);
+                        break;
+                    }
+                }
+            }
+        }
+    }
 }
 
 void ActionsDialog::exportShortcuts()
 {
-	QString fileName = QFileDialog::getSaveFileName(this,
-		tr("Save Shortcut scheme"), QString("%1/%2.mss").arg(MerkaartorPreferences::instance()->getWorkingDir()).arg(tr("untitled")), tr("Merkaartor shortcut scheme (*.mss)"));
+    QString fileName = QFileDialog::getSaveFileName(this,
+        tr("Save Shortcut scheme"), QString("%1/%2.mss").arg(M_PREFS->getWorkingDir()).arg(tr("untitled")), tr("Merkaartor shortcut scheme (*.mss)"));
 
-	if (!fileName.isNull()) {
-		QFile file(fileName);
-		if (!file.open(QIODevice::WriteOnly | QIODevice::Text)) {
-			QMessageBox::critical(this, tr("Unable to open save file"), tr("%1 could not be opened for writing.").arg(fileName));
-			return;
-		}
+    if (!fileName.isNull()) {
+        QFile file(fileName);
+        if (!file.open(QIODevice::WriteOnly | QIODevice::Text)) {
+            QMessageBox::critical(this, tr("Unable to open save file"), tr("%1 could not be opened for writing.").arg(fileName));
+            return;
+        }
 
-		QTextStream ts(&file);
-		QStringList shortcuts;
-		for (int row = 0; row < (int)actionsList.size(); ++row) {
-			ts << actionsTable->item(row, 0)->text() << ":" << actionsTable->item(row, 1)->text() << endl;
-		}
+        QTextStream ts(&file);
+        QStringList shortcuts;
+        for (int row = 0; row < (int)actionsList.size(); ++row) {
+            ts << actionsTable->item(row, 0)->text() << ":" << actionsTable->item(row, 1)->text() << endl;
+        }
 
-		file.close();
-	}
+        file.close();
+    }
 }
 

@@ -61,19 +61,18 @@ void DirtyDock::updateList()
     if (!Main->document())
         return;
 
-    int dirtyObjects = Main->document()->getDirtyOrOriginLayer()->getDirtySize();
-
+    int dirtyObjects = Main->document()->getDirtySize();
     switch (dirtyObjects)
     {
         case 0:
-            ui.label->setText(tr("There is <b>no</b> object in the dirty layer"));
+            ui.label->setText(tr("There is <b>no</b> dirty object"));
             break;
         case 1:
-            ui.label->setText(tr("There is <b>one</b> object in the dirty layer"));
+            ui.label->setText(tr("There is <b>one</b> dirty object"));
             break;
 
         default:
-            ui.label->setText(tr("There are <b>%n</b> objects in the dirty layer", "", dirtyObjects));
+            ui.label->setText(tr("There are <b>%n</b> dirty objects", "", dirtyObjects));
             break;
     }
 

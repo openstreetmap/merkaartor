@@ -293,13 +293,13 @@ ImageLayerWidget::ImageLayerWidget(ImageMapLayer* aLayer, QWidget* aParent)
 {
     actNone = new QAction(tr("None"), this);
     //actNone->setCheckable(true);
-    actNone->setChecked((MerkaartorPreferences::instance()->getBackgroundPlugin() == NONE_ADAPTER_UUID));
+    actNone->setChecked((M_PREFS->getBackgroundPlugin() == NONE_ADAPTER_UUID));
     actNone->setData(QVariant::fromValue(NONE_ADAPTER_UUID));
 
     if (M_PREFS->getUseShapefileForBackground()) {
         actShape = new QAction(tr("Shape adapter"), this);
         //actShape->setCheckable(true);
-        actShape->setChecked((MerkaartorPreferences::instance()->getBackgroundPlugin() == SHAPE_ADAPTER_UUID));
+        actShape->setChecked((M_PREFS->getBackgroundPlugin() == SHAPE_ADAPTER_UUID));
         actShape->setData(QVariant::fromValue(SHAPE_ADAPTER_UUID));
     }
 
@@ -410,7 +410,7 @@ void ImageLayerWidget::initActions()
     }
 
     tmsMenu = new QMenu(tr("TMS adapter"), this);
-    TmsServerList* TmsServers = MerkaartorPreferences::instance()->getTmsServers();
+    TmsServerList* TmsServers = M_PREFS->getTmsServers();
     TmsServerListIterator ti(*TmsServers);
     while (ti.hasNext()) {
         ti.next();
@@ -425,9 +425,9 @@ void ImageLayerWidget::initActions()
         }
     }
 
-    actNone->setChecked((MerkaartorPreferences::instance()->getBackgroundPlugin() == NONE_ADAPTER_UUID));
+    actNone->setChecked((M_PREFS->getBackgroundPlugin() == NONE_ADAPTER_UUID));
     if (M_PREFS->getUseShapefileForBackground())
-        actShape->setChecked((MerkaartorPreferences::instance()->getBackgroundPlugin() == SHAPE_ADAPTER_UUID));
+        actShape->setChecked((M_PREFS->getBackgroundPlugin() == SHAPE_ADAPTER_UUID));
 
     ctxMenu->addAction(actNone);
     associatedMenu->addAction(actNone);
