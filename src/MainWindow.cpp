@@ -3388,7 +3388,6 @@ void MainWindow::updateLanguage()
     QString DefaultLanguage = getDefaultLanguage();
     if (DefaultLanguage != "-" && DefaultLanguage != "en")
     {
-    } else {
 #if defined(Q_OS_MAC)
         QDir resources = QDir(QCoreApplication::applicationDirPath());
         resources.cdUp();
@@ -3398,6 +3397,7 @@ void MainWindow::updateLanguage()
         bool retQt;
         if (g_Merk_Portable) {
             retQt = qtTranslator->load("qt_" + DefaultLanguage.left(2), QCoreApplication::applicationDirPath() + "/translations");
+        } else {
 #ifdef TRANSDIR_SYSTEM
             if (!QDir::isAbsolutePath(STRINGIFY(TRANSDIR_SYSTEM)))
                 retQt = qtTranslator->load("qt_" + DefaultLanguage.left(2), QCoreApplication::applicationDirPath() + "/" + STRINGIFY(TRANSDIR_SYSTEM));
