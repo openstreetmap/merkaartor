@@ -3487,3 +3487,9 @@ void MainWindow::on_layersNewImageAction_triggered()
     if (theDocument)
         theDocument->addImageLayer();
 }
+
+void MainWindow::on_layersNewDrawingAction_triggered()
+{
+    if (theDocument)
+        theDocument->addDrawingLayer();
+}

@@ -33,7 +33,7 @@ LayerWidget::LayerWidget(Layer* aLayer, QWidget* aParent)
     ui.edName->setAttribute(Qt::WA_TransparentForMouseEvents);
     ui.edName->setFrame(false);
     ui.edName->setCursorPosition(0);
-    ui.edName->setStyleSheet(" LayerWidget QLineEdit { background: transparent; }");
+    ui.edName->setStyleSheet(" background: transparent; ");
 }
 
 LayerWidget::~LayerWidget()
@@ -106,7 +106,7 @@ void LayerWidget::on_edName_editingFinished()
     ui.edName->setReadOnly(true);
     ui.edName->setAttribute(Qt::WA_TransparentForMouseEvents, true);
     ui.edName->setFrame(false);
-    ui.edName->setStyleSheet("QLineEdit { background: transparent; } ");
+    ui.edName->setStyleSheet(" background: transparent; ");
 
     if (!ui.edName->text().isEmpty())
         theLayer->setName(ui.edName->text());

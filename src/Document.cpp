@@ -27,6 +27,8 @@
 
 #include <QSet>
 
+int g_LayerNum = 0;
+
 /* MAPDOCUMENT */
 
 class MapDocumentPrivate
@@ -307,6 +309,15 @@ ImageMapLayer* Document::addImageLayer(ImageMapLayer* aLayer)
     connect(theLayer, SIGNAL(loadingFinished(ImageMapLayer*)),
         this, SLOT(on_loadingFinished(ImageMapLayer*)), Qt::QueuedConnection);
 
+    return theLayer;
+}
+
+DrawingLayer* Document::addDrawingLayer(DrawingLayer *aLayer)
+{
+    DrawingLayer* theLayer = aLayer;
+    if (!theLayer)
+        theLayer = new DrawingLayer(tr("Drawing layer #%1").arg(++g_LayerNum));
+    add(theLayer);
     return theLayer;
 }
 

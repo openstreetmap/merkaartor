@@ -66,6 +66,7 @@ public slots:
     virtual void on_editPasteFeaturesAction_triggered();
 
     virtual void on_layersNewImageAction_triggered();
+    virtual void on_layersNewDrawingAction_triggered();
 
     virtual void on_fileNewAction_triggered();
     virtual void on_fileDownloadAction_triggered();

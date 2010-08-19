@@ -177,9 +177,7 @@ int main(int argc, char** argv)
 #endif
 
     qApp->setStyleSheet(
-            " LayerWidget { color: black; /*border: none;*/ }"
-//            " LayerWidget[Uploadable=\"false\"] { color: black; /*border: none;*/ }"
-            " LayerWidget:checked { background-color: blue; }"
+            " LayerWidget { color: black; border: 1px solid black; min-height: 20px}"
 
             " LayerWidget QCheckBox::indicator:checked { image: url(:Icons/eye.xpm); }"
             " LayerWidget QCheckBox::indicator:unchecked { image: url(:Icons/empty.xpm); }"
@@ -190,6 +188,8 @@ int main(int argc, char** argv)
             " DirtyLayerWidget { background-color: #c8c8c8; }"
             " UploadedLayerWidget { background-color: #c8c8c8; }"
             " OsbLayerWidget { background-color: #a2d1c0; }"
+
+            " LayerWidget:checked { background-color: lightsteelblue; }"
             );
 
     QPixmap pixmap(":/Splash/Mercator_splash.png");
