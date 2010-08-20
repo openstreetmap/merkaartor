@@ -228,9 +228,12 @@ bool DirtyListExecutorOSC::stop()
                         F->setUser("me");
                         F->setTime(QDateTime::currentDateTime());
 
-                        F->layer()->remove(F);
-                        document()->getUploadedLayer()->add(F);
+                        if (!g_Merk_Frisius) {
+                            F->layer()->remove(F);
+                            document()->getUploadedLayer()->add(F);
+                        }
                         F->setUploaded(true);
+                        F->setDirtyLevel(0);
 
                     } else
                         qDebug() << "Feature not found in diff upload result: " << c.attribute("old_id");

@@ -212,6 +212,7 @@ class Feature : public QObject, public IFeature
         virtual void removeTag(int i);
 
         /** check if the dirty status of the feature
+         * @return true if the feature is dirty
          */
         virtual bool isDirty() const;
 

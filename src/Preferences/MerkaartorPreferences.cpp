@@ -30,7 +30,7 @@
 #else
     bool g_Merk_Portable = false;
 #endif
-    bool g_Merk_Frisius = false;
+    bool g_Merk_Frisius = true;
 
 #define M_PARAM_IMPLEMENT_BOOL(Param, Category, Default) \
     bool mb_##Param = false; \

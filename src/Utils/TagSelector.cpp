@@ -325,6 +325,10 @@ TagSelectorOperator::TagSelectorOperator(const QString& key, const QString& oper
         specialKey = TagSelectKey_ZoomLevel;
     else if (key.toUpper() == ":PIXELPERM")
         specialKey = TagSelectKey_PixelPerM;
+    else if (key.toUpper() == ":DIRTY")
+        specialKey = TagSelectKey_Dirty;
+    else if (key.toUpper() == ":UPLOADED")
+        specialKey = TagSelectKey_Uploaded;
 
     if (value.toUpper() == "_NULL_") {
         specialValue = TagSelectValue_Empty;
@@ -356,6 +360,15 @@ static const QString emptyString("__EMPTY__");
 
 TagSelectorMatchResult TagSelectorOperator::matches(const IFeature* F, double PixelPerM) const
 {
+    bool boolVal = false, valB;
+    if (Value.toLower() == "true") {
+        boolVal = true;
+        valB = true;
+    } else if (Value.toLower() == "false") {
+        boolVal = true;
+        valB = false;
+    }
+
     if (specialKey != TagSelectKey_None) {
         switch (specialKey) {
         case TagSelectKey_Id:
@@ -489,6 +502,56 @@ TagSelectorMatchResult TagSelectorOperator::matches(const IFeature* F, double Pi
             break;
         }
 
+        case TagSelectKey_Dirty: {
+            if (!boolVal)
+                return TagSelect_NoMatch;
+
+            switch (theOp) {
+            case EQ:
+                if (valB) {
+                    if (F->isDirty())
+                        return TagSelect_Match;
+                    else
+                        return TagSelect_NoMatch;
+                } else {
+                    if (!F->isDirty())
+                        return TagSelect_Match;
+                    else
+                        return TagSelect_NoMatch;
+                }
+                break;
+
+            default:
+                return TagSelect_NoMatch;
+            }
+            break;
+        }
+
+        case TagSelectKey_Uploaded: {
+            if (!boolVal)
+                return TagSelect_NoMatch;
+
+            switch (theOp) {
+            case EQ:
+                if (valB) {
+                    if (F->isUploaded())
+                        return TagSelect_Match;
+                    else
+                        return TagSelect_NoMatch;
+                } else {
+                    if (!F->isUploaded())
+                        return TagSelect_Match;
+                    else
+                        return TagSelect_NoMatch;
+                }
+                break;
+
+            default:
+                return TagSelect_NoMatch;
+            }
+            break;
+        }
+
         default:
             return TagSelect_NoMatch;
             break;
@@ -505,7 +568,26 @@ TagSelectorMatchResult TagSelectorOperator::matches(const IFeature* F, double Pi
             bool okkey, okval;
             double keyN = val.toDouble(&okkey);
             double valN = Value.toDouble(&okval);
-            if (okkey && okval)
+            if (boolVal)
+                switch (theOp) {
+                case EQ:
+                    if (valB) {
+                        if (val.toLower() == "true" || val.toLower() == "yes" || val == "1")
+                            return TagSelect_Match;
+                        else
+                            return TagSelect_NoMatch;
+                    } else {
+                        if (val.toLower() == "false" || val.toLower() == "no" || val == "0")
+                            return TagSelect_Match;
+                        else
+                            return TagSelect_NoMatch;
+                    }
+                    break;
+
+                default:
+                    return TagSelect_NoMatch;
+                }
+            else if (okkey && okval)
                 switch (theOp) {
                 case EQ:
                     return (keyN == valN) ? TagSelect_Match : TagSelect_NoMatch;

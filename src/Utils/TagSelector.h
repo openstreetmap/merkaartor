@@ -22,7 +22,9 @@ enum TagSelectorSpecialKey {
     TagSelectKey_Time,
     TagSelectKey_Version,
     TagSelectKey_ZoomLevel,
-    TagSelectKey_PixelPerM
+    TagSelectKey_PixelPerM,
+    TagSelectKey_Dirty,
+    TagSelectKey_Uploaded
 };
 
 enum TagSelectorSpecialValue {

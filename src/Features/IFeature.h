@@ -65,6 +65,17 @@ public:
         */
     virtual QString tagKey(int i) const = 0;
 
+
+    /** check if the feature has been uploaded
+     * @return true if uploaded
+     */
+    virtual bool isUploaded() const = 0;
+
+    /** check if the dirty status of the feature
+     * @return true if the feature is dirty
+     */
+    virtual bool isDirty() const = 0;
+
 };
 
 #endif // IFEATURE_H

@@ -2125,7 +2125,7 @@ void MainWindow::on_createRelationAction_triggered()
 void MainWindow::on_editMapStyleAction_triggered()
 {
     PaintStyleEditor* dlg = new PaintStyleEditor(this, M_STYLE->getGlobalPainter(), M_STYLE->getPainters());
-    connect(dlg, SIGNAL(stylesApplied(QList<FeaturePainter>* )), this, SLOT(applyStyles(QList<FeaturePainter>* )));
+    connect(dlg, SIGNAL(stylesApplied(QList<Painter>* )), this, SLOT(applyStyles(QList<Painter>* )));
     GlobalPainter saveGlobalPainter = M_STYLE->getGlobalPainter();
     QList<Painter> savePainters = M_STYLE->getPainters();
     if (dlg->exec() == QDialog::Accepted) {

@@ -48,7 +48,7 @@ void LayerWidget::paintEvent(QPaintEvent *)
     initStyleOption(&option);
     p.drawControl(QStyle::CE_PushButton, option);
 
-    if (!theLayer->isUploadable()) {
+    if (theLayer && !theLayer->isUploadable()) {
         p.fillRect(rect().adjusted(20,0,0,-1),QBrush(Qt::red, Qt::BDiagPattern));
     }
 

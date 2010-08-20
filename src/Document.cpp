@@ -27,8 +27,6 @@
 
 #include <QSet>
 
-int g_LayerNum = 0;
-
 /* MAPDOCUMENT */
 
 class MapDocumentPrivate
@@ -42,6 +40,7 @@ public:
         , theDock(0)
         , lastDownloadLayer(0)
         , tagFilter(0), FilterRevision(0)
+        , layerNum(0)
     {
     };
     ~MapDocumentPrivate()
@@ -67,6 +66,8 @@ public:
     TagSelector* tagFilter;
     int FilterRevision;
     QString title;
+    int layerNum;
+
 
     QList<FeaturePainter> theFeaturePainters;
 
@@ -321,7 +322,7 @@ DrawingLayer* Document::addDrawingLayer(DrawingLayer *aLayer)
 {
     DrawingLayer* theLayer = aLayer;
     if (!theLayer)
-        theLayer = new DrawingLayer(tr("Drawing layer #%1").arg(++g_LayerNum));
+        theLayer = new DrawingLayer(tr("Drawing layer #%1").arg(++p->layerNum));
     add(theLayer);
     return theLayer;
 }

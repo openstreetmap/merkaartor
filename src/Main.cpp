@@ -94,6 +94,7 @@ void showHelp()
     fprintf(stdout, "  -v, --version\t\tShow version information\n");
     fprintf(stdout, "  -n, --noreuse\t\tDo not reuse an existing Merkaartor instance\n");
     fprintf(stdout, "  -p, --portable\t\tExecute Merkaartor as a portable application (all files saved in the application directory)\n");
+    fprintf(stdout, "  enable_special_layers\t\tEnable old style \"Dirty\" and \"Uploaded\" layers\n");
     fprintf(stdout, "  [filenames]\t\tOpen designated files \n");
 }
 
@@ -116,19 +117,19 @@ int main(int argc, char** argv)
             reuse = false;
         } else if (argsIn[i] == "-p" || argsIn[i] == "--portable") {
             g_Merk_Portable = true;
-        } else if (argsIn[i] == "-f" || argsIn[i] == "--frisius") {
-            g_Merk_Frisius = true;
+        } else if (argsIn[i] == "--enable_special_layers") {
+            g_Merk_Frisius = false;
         } else
             argsOut << argsIn[i];
     }
 
     QCoreApplication::setOrganizationName("Merkaartor");
     QCoreApplication::setOrganizationDomain("merkaartor.org");
-    if (g_Merk_Frisius)
-        QCoreApplication::setApplicationName("Frisius");
-    else
+#ifdef FRISIUS_BUILD
+    QCoreApplication::setApplicationName("Frisius");
+#else
         QCoreApplication::setApplicationName("Merkaartor");
-
+#endif
     QString message = argsOut.join("$");
     if (reuse)
         if (instance.sendMessage(message))

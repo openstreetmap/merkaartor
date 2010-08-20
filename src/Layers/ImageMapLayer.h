@@ -43,7 +43,7 @@ public:
     static ImageMapLayer* fromXML(Document* d, const QDomElement& e, QProgressDialog * progress);
 
     virtual /* const */ LayerType classType() const {return Layer::ImageLayerType;}
-    virtual const LayerGroups classGroups() {return(Layer::Default);}
+    virtual const LayerGroups classGroups() {return(Layer::Map);}
 
     virtual bool arePointsDrawable() {return false;}
 

@@ -176,9 +176,9 @@ void LayerDock::createContent()
     t = p->tab->addTab(NULL);
     p->tab->setTabData(t, Layer::All);
     t = p->tab->addTab(NULL);
-    p->tab->setTabData(t, Layer::Default);
+    p->tab->setTabData(t, Layer::Map);
     t = p->tab->addTab(NULL);
-    p->tab->setTabData(t, Layer::OSM);
+    p->tab->setTabData(t, Layer::Draw);
     t = p->tab->addTab(NULL);
     p->tab->setTabData(t, Layer::Tracks);
     retranslateTabBar();
@@ -375,8 +375,8 @@ void LayerDock::retranslateUi()
 void LayerDock::retranslateTabBar()
 {
     p->tab->setTabText(0, tr("All"));
-    p->tab->setTabText(1, tr("Default"));
-    p->tab->setTabText(2, tr("OSM"));
+    p->tab->setTabText(1, tr("Map"));
+    p->tab->setTabText(2, tr("Draw"));
     p->tab->setTabText(3, tr("Tracks"));
 }
 

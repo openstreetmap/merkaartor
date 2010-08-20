@@ -49,8 +49,8 @@ public:
 
     enum LayerGroup {
         None				= 0x00000000,
-        Default				= 0x00000001,
-        OSM					= 0x00000002,
+        Map				    = 0x00000001,
+        Draw				= 0x00000002,
         Tracks				= 0x00000004,
         All					= 0xffffffff
     };
@@ -165,7 +165,7 @@ public:
     static DrawingLayer* doFromXML(DrawingLayer* l, Document* d, const QDomElement e, QProgressDialog * progress);
 
     virtual /* const */ LayerType classType() const {return Layer::DrawingLayerType;}
-    virtual const LayerGroups classGroups() const {return (Layer::OSM);}
+    virtual const LayerGroups classGroups() const {return (Layer::Draw);}
 };
 
 class TrackLayer : public Layer
@@ -204,7 +204,7 @@ public:
     static DirtyLayer* fromXML(Document* d, const QDomElement e, QProgressDialog * progress);
 
     virtual /* const */ LayerType classType() const {return Layer::DirtyLayerType;}
-    virtual const LayerGroups classGroups() const {return(Layer::Default|Layer::OSM);}
+    virtual const LayerGroups classGroups() const {return(Layer::Map|Layer::Draw);}
 
     virtual LayerWidget* newWidget(void);
 
@@ -222,7 +222,7 @@ public:
     static UploadedLayer* fromXML(Document* d, const QDomElement e, QProgressDialog * progress);
 
     virtual /* const */ LayerType classType() const {return Layer::UploadedLayerType;}
-    virtual const LayerGroups classGroups() const {return(Layer::Default|Layer::OSM);}
+    virtual const LayerGroups classGroups() const {return(Layer::Map|Layer::Draw);}
 
     virtual LayerWidget* newWidget(void);
 
@@ -259,7 +259,7 @@ public:
     virtual ~OsbLayer();
 
     virtual /* const */ LayerType classType() const {return Layer::OsbLayerType;}
-    virtual const LayerGroups classGroups() const {return(Layer::OSM);}
+    virtual const LayerGroups classGroups() const {return(Layer::Draw);}
     virtual LayerWidget* newWidget(void);
 
     void setFilename(const QString& filename);

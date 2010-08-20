@@ -59,6 +59,16 @@ public:
         */
     virtual QString tagKey(int i) const;
 
+    /** check if the feature has been uploaded
+     * @return true if uploaded
+     */
+    virtual bool isUploaded() const { return false; }
+
+    /** check if the dirty status of the feature
+     * @return true if the feature is dirty
+     */
+    virtual bool isDirty() const { return false; }
+
 protected:
     QList<QPair<QString, QString> > Tags;
 };
