@@ -141,6 +141,8 @@ void PreferencesDialog::loadPrefs()
     edOsmUser->setText(M_PREFS->getOsmUser());
     edOsmPwd->setText(M_PREFS->getOsmPassword());
 
+    edXapiUrl->setText(M_PREFS->getXapiUrl());
+
     edGpsPort->setText(M_PREFS->getGpsPort());
     edGpsdHost->setText(M_PREFS->getGpsdHost());
     sbGpsdPort->setValue(M_PREFS->getGpsdPort());
@@ -271,7 +273,7 @@ void PreferencesDialog::savePrefs()
     M_PREFS->setOsmUser(edOsmUser->text());
     M_PREFS->setOsmPassword(edOsmPwd->text());
 
-    M_PREFS->setXapiWebSite(M_PREFS->getXapiWebSite());
+    M_PREFS->setXapiUrl(edXapiUrl->text());
 
     M_PREFS->setGpsPort(edGpsPort->text());
     M_PREFS->setGpsdHost(edGpsdHost->text());

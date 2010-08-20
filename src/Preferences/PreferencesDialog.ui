@@ -8,7 +8,7 @@
     <x>0</x>
     <y>0</y>
     <width>689</width>
-    <height>405</height>
+    <height>476</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -21,7 +21,7 @@
       <enum>QTabWidget::North</enum>
      </property>
      <property name="currentIndex">
-      <number>1</number>
+      <number>5</number>
      </property>
      <widget class="QWidget" name="tab_4">
       <attribute name="title">
@@ -816,7 +816,7 @@
           </size>
          </property>
          <property name="title">
-          <string>OSM</string>
+          <string>OSM API</string>
          </property>
          <layout class="QVBoxLayout">
           <item>
@@ -824,12 +824,9 @@
             <item row="0" column="0">
              <widget class="QLabel" name="label_12">
               <property name="text">
-               <string>Website:</string>
+               <string>Host:</string>
               </property>
              </widget>
-            </item>
-            <item row="0" column="1">
-             <widget class="QLineEdit" name="edOsmUrl"/>
             </item>
             <item row="1" column="0">
              <widget class="QLabel" name="label_14">
@@ -852,6 +849,38 @@
              <widget class="QLineEdit" name="edOsmPwd">
               <property name="echoMode">
                <enum>QLineEdit::Password</enum>
+              </property>
+             </widget>
+            </item>
+            <item row="0" column="1">
+             <widget class="QLineEdit" name="edOsmUrl"/>
+            </item>
+           </layout>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item>
+        <widget class="QGroupBox" name="grpOSM_2">
+         <property name="minimumSize">
+          <size>
+           <width>0</width>
+           <height>0</height>
+          </size>
+         </property>
+         <property name="title">
+          <string>XAPI</string>
+         </property>
+         <layout class="QVBoxLayout" name="_6">
+          <item>
+           <layout class="QGridLayout" name="_7">
+            <item row="0" column="2">
+             <widget class="QLineEdit" name="edXapiUrl"/>
+            </item>
+            <item row="0" column="1">
+             <widget class="QLabel" name="label_29">
+              <property name="text">
+               <string>URL:</string>
               </property>
              </widget>
             </item>
@@ -918,21 +947,21 @@
             </item>
            </layout>
           </item>
+          <item>
+           <spacer>
+            <property name="orientation">
+             <enum>Qt::Vertical</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>20</width>
+              <height>0</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
          </layout>
         </widget>
-       </item>
-       <item>
-        <spacer>
-         <property name="orientation">
-          <enum>Qt::Vertical</enum>
-         </property>
-         <property name="sizeHint" stdset="0">
-          <size>
-           <width>20</width>
-           <height>0</height>
-          </size>
-         </property>
-        </spacer>
        </item>
       </layout>
      </widget>

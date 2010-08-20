@@ -840,6 +840,51 @@ QString Feature::toXML(int lvl, QProgressDialog * progress)
         return "";
 }
 
+bool Feature::fromXML(const QDomElement& e, Feature* F)
+{
+    bool Deleted = (e.attribute("deleted") == "true");
+    int Dirty = (e.hasAttribute("dirtylevel") ? e.attribute("dirtylevel").toInt() : 0);
+    bool Uploaded = (e.attribute("uploaded") == "true");
+
+    QDateTime time;
+    time = QDateTime::fromString(e.attribute("timestamp").left(19), Qt::ISODate);
+    QString user = e.attribute("user");
+    int Version = e.attribute("version").toInt();
+    if (Version < 1)
+        Version = 0;
+    Feature::ActorType A = (Feature::ActorType)(e.attribute("actor", "2").toInt());
+
+    QString id = (e.hasAttribute("id") ? e.attribute("id") : e.attribute("xml:id"));
+    if (!id.startsWith('{') && !id.startsWith('-'))
+        id = F->getClass().toLower() + "_" + id;
+
+    F->setId(id);
+    F->setLastUpdated(A);
+    F->setDeleted(Deleted);
+    F->setDirtyLevel(Dirty);
+    F->setUploaded(Uploaded);
+    F->setTime(time);
+    F->setUser(user);
+    F->setVersionNumber(Version);
+}
+
+bool Feature::toXML(QDomElement& e, bool strict)
+{
+    e.setAttribute("id", xmlId());
+    e.setAttribute("timestamp", time().toString(Qt::ISODate)+"Z");
+    e.setAttribute("version", versionNumber());
+    e.setAttribute("user", user());
+    if (!strict) {
+        e.setAttribute("actor", (int)lastUpdated());
+        if (isDeleted())
+            e.setAttribute("deleted","true");
+        if (getDirtyLevel() > 0)
+            e.setAttribute("dirtylevel", getDirtyLevel());
+        if (isUploaded())
+            e.setAttribute("uploaded","true");
+    }
+}
+
 bool Feature::tagsToXML(QDomElement xParent, bool strict)
 {
     bool OK = true;

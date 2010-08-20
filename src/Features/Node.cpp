@@ -394,17 +394,9 @@ bool Node::toXML(QDomElement xParent, QProgressDialog * progress, bool strict)
     QDomElement e = xParent.ownerDocument().createElement("node");
     xParent.appendChild(e);
 
-    e.setAttribute("id", xmlId());
+    Feature::toXML(e, strict);
     e.setAttribute("lon",COORD2STRING(coordToAng(Position.lon())));
     e.setAttribute("lat", COORD2STRING(coordToAng(Position.lat())));
-    e.setAttribute("timestamp", time().toString(Qt::ISODate)+"Z");
-    e.setAttribute("version", versionNumber());
-    e.setAttribute("user", user());
-    if (!strict) {
-        e.setAttribute("actor", (int)lastUpdated());
-        if (isDeleted())
-            e.setAttribute("deleted","true");
-    }
 
     tagsToXML(e, strict);
 
@@ -492,26 +484,18 @@ Node * Node::fromXML(Document* d, Layer* L, const QDomElement e)
 {
     double Lat = e.attribute("lat").toDouble();
     double Lon = e.attribute("lon").toDouble();
-    bool Deleted = (e.attribute("deleted") == "true");
-
-    QDateTime time;
-    time = QDateTime::fromString(e.attribute("timestamp").left(19), Qt::ISODate);
-    QString user = e.attribute("user");
-    int Version = e.attribute("version").toInt();
-    if (Version < 1)
-        Version = 0;
-    Feature::ActorType A = (Feature::ActorType)(e.attribute("actor", "2").toInt());
 
     QString id = (e.hasAttribute("id") ? e.attribute("id") : e.attribute("xml:id"));
     if (!id.startsWith('{') && !id.startsWith('-'))
         id = "node_" + id;
+
     Node* Pt = dynamic_cast<Node*>(d->getFeature(id));
     if (!Pt) {
         Pt = new Node(Coord(angToCoord(Lat),angToCoord(Lon)));
-        Pt->setId(id);
-        Pt->setLastUpdated(A);
+        Feature::fromXML(e, Pt);
         L->add(Pt);
     } else {
+        Feature::fromXML(e, Pt);
         if (Pt->layer() != L) {
             Pt->layer()->remove(Pt);
             L->add(Pt);
@@ -520,10 +504,6 @@ Node * Node::fromXML(Document* d, Layer* L, const QDomElement e)
         if (Pt->lastUpdated() == Feature::NotYetDownloaded)
             Pt->setLastUpdated(A);
     }
-    Pt->setDeleted(Deleted);
-    Pt->setTime(time);
-    Pt->setUser(user);
-    Pt->setVersionNumber(Version);
 
     Feature::tagsFromXML(d, Pt, e);
 

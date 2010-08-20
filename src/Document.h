@@ -75,14 +75,13 @@ public:
     QString getTagValue(int idx);
 
     void setDirtyLayer(DirtyLayer* aLayer);
-    //DirtyMapLayer* getDirtyLayer() const;
+    Layer* getDirtyLayer();
     Layer* getDirtyOrOriginLayer(Layer* aLayer = NULL) const;
     Layer* getDirtyOrOriginLayer(Feature* F) const;
     int getDirtySize() const;
 
     void setUploadedLayer(UploadedLayer* aLayer);
     UploadedLayer* getUploadedLayer() const;
-    //DeletedMapLayer* getTrashLayer() const;
 
     QString exportOSM(QMainWindow* main, const CoordBox& aCoordBox = WORLD_COORDBOX, bool renderBounds=false);
     QString exportOSM(QMainWindow* main, QList<Feature*> aFeatures);

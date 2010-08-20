@@ -474,6 +474,15 @@ void Document::setDirtyLayer(DirtyLayer* aLayer)
     p->dirtyLayer = aLayer;
 }
 
+Layer* Document::getDirtyLayer()
+{
+    if (!p->dirtyLayer) {
+        p->dirtyLayer = new DirtyLayer(tr("Dirty layer"));
+        add(p->dirtyLayer);
+    }
+    return p->dirtyLayer;
+}
+
 Layer* Document::getDirtyOrOriginLayer(Layer* aLayer) const
 {
     if (g_Merk_Frisius) {

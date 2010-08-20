@@ -304,6 +304,9 @@ class Feature : public QObject, public IFeature
         void notifyChanges();
         void notifyParents(int Id);
 
+        virtual bool fromXML(const QDomElement& e, Feature* F);
+        virtual bool toXML(QDomElement& e, bool strict);
+
         virtual QString toXML(int lvl=0, QProgressDialog * progress=NULL);
         virtual bool toXML(QDomElement xParent, QProgressDialog * progress=NULL, bool strict=false) = 0;
 
