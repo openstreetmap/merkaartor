@@ -63,7 +63,7 @@ bool RelationAddFeatureCommand::buildDirtyList(DirtyList& theList)
         return theList.noop(theRelation);
     if (!theRelation->layer())
         return theList.update(theRelation);
-    if (theRelation->layer()->isUploadable())
+    if (theRelation->isUploadable())
         return theList.update(theRelation);
 
     return theList.noop(theRelation);
@@ -187,7 +187,7 @@ bool RelationRemoveFeatureCommand::buildDirtyList(DirtyList& theList)
         return theList.noop(theRelation);
     if (!theRelation->layer())
         return theList.update(theRelation);
-    if (theRelation->layer()->isUploadable())
+    if (theRelation->isUploadable())
         return theList.update(theRelation);
 
     return theList.noop(theRelation);

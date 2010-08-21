@@ -159,7 +159,7 @@ bool Document::toXML(QDomElement xParent, QProgressDialog * progress)
         mapDoc.setAttribute("lastdownloadlayer", p->lastDownloadLayer->id());
 
     for (int i=0; i<p->Layers.size(); ++i) {
-        progress->setMaximum(progress->maximum() + p->Layers[i]->size());
+        progress->setMaximum(progress->maximum() + p->Layers[i]->getDisplaySize());
     }
 
     for (int i=0; i<p->Layers.size(); ++i) {

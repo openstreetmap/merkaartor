@@ -466,6 +466,7 @@ Relation * Relation::fromXML(Document * d, Layer * L, const QDomElement e)
     Relation* R = dynamic_cast<Relation*>(d->getFeature(id));
     if (!R) {
         R = new Relation;
+        R->setId(id);
         Feature::fromXML(e, R);
     } else {
         Feature::fromXML(e, R);

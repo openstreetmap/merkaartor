@@ -855,6 +855,7 @@ Way * Way::fromXML(Document* d, Layer * L, const QDomElement e)
 
     if (!R) {
         R = new Way();
+        R->setId(id);
         Feature::fromXML(e, R);
         L->add(R);
     } else {
@@ -863,8 +864,6 @@ Way * Way::fromXML(Document* d, Layer * L, const QDomElement e)
             R->layer()->remove(R);
             L->add(R);
         }
-        if (R->lastUpdated() == Feature::NotYetDownloaded)
-            R->setLastUpdated(A);
         while (R->p->Nodes.size())
             R->remove(0);
     }

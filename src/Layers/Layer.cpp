@@ -536,6 +536,20 @@ int Layer::getDirtyLevel() const
     return p->dirtyLevel;
 }
 
+int Layer::getDisplaySize() const
+{
+    int objects = 0;
+
+    QList<MapFeaturePtr>::const_iterator i;
+    for (i = p->Features.constBegin(); i != p->Features.constEnd(); i++) {
+        if ((*i)->isVirtual())
+            continue;
+        ++objects;
+    }
+
+    return objects;
+}
+
 int Layer::getDirtySize() const
 {
     int dirtyObjects = 0;
@@ -570,7 +584,7 @@ QString Layer::toMainHtml()
     "<small><i>" + QString(metaObject()->className()) + "</i></small><br/>"
     + desc;
     S += "<hr/>";
-    S += "<i>"+QApplication::translate("Layer", "Size")+": </i>" + QApplication::translate("Layer", "%n features", "", QCoreApplication::CodecForTr, getDirtySize())+"<br/>";
+    S += "<i>"+QApplication::translate("Layer", "Size")+": </i>" + QApplication::translate("Layer", "%n features", "", QCoreApplication::CodecForTr, getDisplaySize())+"<br/>";
     S += "%1";
     S += "</body></html>";
 

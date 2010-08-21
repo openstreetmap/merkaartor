@@ -382,7 +382,7 @@ MainWindow::MainWindow(QWidget *parent)
     }
     connect(ui->mnuAreaOpacity, SIGNAL(triggered(QAction*)), this, SLOT(setAreaOpacity(QAction*)));
 
-    if (g_Merk_Frisius) {
+    if (!g_Merk_Frisius) {
         ui->layersNewDrawingAction->setVisible(false);
     }
 

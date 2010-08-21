@@ -63,7 +63,7 @@ bool WayAddNodeCommand::buildDirtyList(DirtyList& theList)
         return theList.noop(theRoad);
     if (!theRoad->layer())
         return theList.update(theRoad);
-    if (theRoad->layer()->isUploadable() && theTrackPoint->layer()->isUploadable())
+    if (theRoad->isUploadable() && theTrackPoint->isUploadable())
         return theList.update(theRoad);
 
     return theList.noop(theRoad);
@@ -181,7 +181,7 @@ bool WayRemoveNodeCommand::buildDirtyList(DirtyList& theList)
         return theList.noop(theRoad);
     if (!theRoad->layer())
         return theList.update(theRoad);
-    if (theRoad->layer()->isUploadable() && (theNode->layer()->isUploadable() || theNode->hasOSMId()))
+    if (theRoad->isUploadable() && (theNode->isUploadable() || theNode->hasOSMId()))
         return theList.update(theRoad);
 
     return theList.noop(theRoad);

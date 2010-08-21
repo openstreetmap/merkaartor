@@ -492,6 +492,7 @@ Node * Node::fromXML(Document* d, Layer* L, const QDomElement e)
     Node* Pt = dynamic_cast<Node*>(d->getFeature(id));
     if (!Pt) {
         Pt = new Node(Coord(angToCoord(Lat),angToCoord(Lon)));
+        Pt->setId(id);
         Feature::fromXML(e, Pt);
         L->add(Pt);
     } else {
@@ -501,8 +502,6 @@ Node * Node::fromXML(Document* d, Layer* L, const QDomElement e)
             L->add(Pt);
         }
         Pt->setPosition(Coord(angToCoord(Lat), angToCoord(Lon)));
-        if (Pt->lastUpdated() == Feature::NotYetDownloaded)
-            Pt->setLastUpdated(A);
     }
 
     Feature::tagsFromXML(d, Pt, e);

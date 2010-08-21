@@ -129,8 +129,10 @@ bool SetTagCommand::buildDirtyList(DirtyList& theList)
         return theList.noop(theFeature);
     if (theK.startsWith('_') && (theK.endsWith('_')))
         return theList.noop(theFeature);
-    else
-        return theList.update(theFeature);
+    if (!theFeature->isUploadable())
+        return theList.noop(theFeature);
+
+    return theList.update(theFeature);
 }
 
 bool SetTagCommand::toXML(QDomElement& xParent) const
@@ -340,13 +342,12 @@ bool ClearTagCommand::buildDirtyList(DirtyList& theList)
         return false;
     if (theFeature->lastUpdated() == Feature::NotYetDownloaded)
         return theList.noop(theFeature);
-    if (theLayer->isUploadable())
-        if (theK.startsWith('_') && (theK.endsWith('_')))
-            return theList.noop(theFeature);
-        else
-            return theList.update(theFeature);
-    else
+    if (theK.startsWith('_') && (theK.endsWith('_')))
         return theList.noop(theFeature);
+    if (!theFeature->isUploadable())
+        return theList.noop(theFeature);
+
+    return theList.update(theFeature);
 }
 
 bool ClearTagCommand::toXML(QDomElement& xParent) const

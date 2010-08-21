@@ -840,7 +840,7 @@ QString Feature::toXML(int lvl, QProgressDialog * progress)
         return "";
 }
 
-bool Feature::fromXML(const QDomElement& e, Feature* F)
+void Feature::fromXML(const QDomElement& e, Feature* F)
 {
     bool Deleted = (e.attribute("deleted") == "true");
     int Dirty = (e.hasAttribute("dirtylevel") ? e.attribute("dirtylevel").toInt() : 0);
@@ -854,11 +854,6 @@ bool Feature::fromXML(const QDomElement& e, Feature* F)
         Version = 0;
     Feature::ActorType A = (Feature::ActorType)(e.attribute("actor", "2").toInt());
 
-    QString id = (e.hasAttribute("id") ? e.attribute("id") : e.attribute("xml:id"));
-    if (!id.startsWith('{') && !id.startsWith('-'))
-        id = F->getClass().toLower() + "_" + id;
-
-    F->setId(id);
     F->setLastUpdated(A);
     F->setDeleted(Deleted);
     F->setDirtyLevel(Dirty);
@@ -868,7 +863,7 @@ bool Feature::fromXML(const QDomElement& e, Feature* F)
     F->setVersionNumber(Version);
 }
 
-bool Feature::toXML(QDomElement& e, bool strict)
+void Feature::toXML(QDomElement& e, bool strict)
 {
     e.setAttribute("id", xmlId());
     e.setAttribute("timestamp", time().toString(Qt::ISODate)+"Z");

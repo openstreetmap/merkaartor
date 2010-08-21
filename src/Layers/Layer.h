@@ -74,6 +74,7 @@ public:
     virtual void deleteFeature(Feature* aFeature);
     virtual void clear();
     bool exists(Feature* aFeature) const;
+    int getDisplaySize() const;
     virtual int size() const;
     int get(Feature* aFeature);
     QList<Feature *> get();

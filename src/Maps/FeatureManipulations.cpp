@@ -847,7 +847,7 @@ void commitFeatures(Document* theDocument, CommandList* theList, PropertiesDock*
     QQueue<Feature*> ToAdd;
 
     for (int i=0; i<theDock->size(); ++i)
-        if (!theDock->selection(i)->isDirty() && !theDock->selection(i)->isSpecial())
+        if (!theDock->selection(i)->isUploadable() && !theDock->selection(i)->isSpecial())
             ToAdd.enqueue(theDock->selection(i));
 
     while (!ToAdd.isEmpty()) {
