@@ -211,10 +211,15 @@ class Feature : public QObject, public IFeature
          */
         virtual void removeTag(int i);
 
-        /** check if the feature is on the dirty layer
-         * @return true if on the dirty layer
+        /** check if the dirty status of the feature
+         * @return true if the feature is dirty
          */
         virtual bool isDirty() const;
+
+        virtual int incDirtyLevel(int inc=1);
+        virtual int decDirtyLevel(int inc=1);
+        virtual int getDirtyLevel() const;
+        virtual int setDirtyLevel(int newLevel);
 
         /** check if the feature is on an uploadable layer
          * @return true if on an uploadable layer
@@ -298,6 +303,9 @@ class Feature : public QObject, public IFeature
         virtual void partChanged(Feature* F, int ChangeId) = 0;
         void notifyChanges();
         void notifyParents(int Id);
+
+        static void fromXML(const QDomElement& e, Feature* F);
+        virtual void toXML(QDomElement& e, bool strict);
 
         virtual QString toXML(int lvl=0, QProgressDialog * progress=NULL);
         virtual bool toXML(QDomElement xParent, QProgressDialog * progress=NULL, bool strict=false) = 0;

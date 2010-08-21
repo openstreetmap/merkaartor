@@ -433,15 +433,7 @@ bool Relation::toXML(QDomElement xParent, QProgressDialog * progress, bool stric
     QDomElement e = xParent.ownerDocument().createElement("relation");
     xParent.appendChild(e);
 
-    e.setAttribute("id", xmlId());
-    e.setAttribute("timestamp", time().toString(Qt::ISODate)+"Z");
-    e.setAttribute("user", user());
-    e.setAttribute("version", versionNumber());
-    if (!strict) {
-        e.setAttribute("actor", (int)lastUpdated());
-        if (isDeleted())
-            e.setAttribute("deleted","true");
-    }
+    Feature::toXML(e, strict);
 
     for (int i=0; i<size(); ++i) {
         QString Type("node");
@@ -467,30 +459,21 @@ bool Relation::toXML(QDomElement xParent, QProgressDialog * progress, bool stric
 
 Relation * Relation::fromXML(Document * d, Layer * L, const QDomElement e)
 {
-    QString id = e.attribute("id");
+    QString id = (e.hasAttribute("id") ? e.attribute("id") : e.attribute("xml:id"));
     if (!id.startsWith('{') && !id.startsWith('-'))
-        id = "rel_" + id;
-    QDateTime time = QDateTime::fromString(e.attribute("timestamp").left(19), Qt::ISODate);
-    QString user = e.attribute("user");
-    bool Deleted = (e.attribute("deleted") == "true");
-    int Version = e.attribute("version").toInt();
-    if (Version < 1)
-        Version = 0;
+        id = "relation_" + id;
 
     Relation* R = dynamic_cast<Relation*>(d->getFeature(id));
     if (!R) {
         R = new Relation;
         R->setId(id);
-        R->setLastUpdated(Feature::OSMServer);
+        Feature::fromXML(e, R);
     } else {
+        Feature::fromXML(e, R);
         R->layer()->remove(R);
         while (R->p->Members.size())
             R->remove(0);
     }
-    R->setTime(time);
-    R->setUser(user);
-    R->setDeleted(Deleted);
-    R->setVersionNumber(Version);
 
     QDomElement c = e.firstChildElement();
     while(!c.isNull()) {

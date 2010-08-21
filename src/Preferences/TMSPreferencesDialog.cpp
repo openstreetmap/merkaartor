@@ -185,7 +185,7 @@ void TMSPreferencesDialog::on_buttonBox_clicked(QAbstractButton * button)
 
 void TMSPreferencesDialog::loadPrefs()
 {
-    TmsServerList* L = MerkaartorPreferences::instance()->getTmsServers();
+    TmsServerList* L = M_PREFS->getTmsServers();
     TmsServerListIterator i(*L);
     while (i.hasNext()) {
         i.next();
@@ -195,13 +195,13 @@ void TMSPreferencesDialog::loadPrefs()
 
 void TMSPreferencesDialog::savePrefs()
 {
-    TmsServerList* L = MerkaartorPreferences::instance()->getTmsServers();
+    TmsServerList* L = M_PREFS->getTmsServers();
     L->clear();
     for (int i = 0; i < theTmsServers.size(); ++i) {
         TmsServer S(theTmsServers[i]);
         L->insert(theTmsServers[i].TmsName, S);
     }
-    //MerkaartorPreferences::instance()->setSelectedTmsServer(getSelectedServer());
+    //M_PREFS->setSelectedTmsServer(getSelectedServer());
     M_PREFS->save();
 }
 

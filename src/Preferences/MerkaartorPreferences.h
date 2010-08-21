@@ -88,6 +88,7 @@ class IPaintStyle;
 */
 
 extern bool g_Merk_Portable;
+extern bool g_Merk_Frisius;
 
 typedef QString FilterType;
 
@@ -215,7 +216,7 @@ public:
     void setOsmWebsite(const QString & theValue);
     QString getOsmWebsite() const;
 
-    M_PARAM_DECLARE_STRING(XapiWebSite)
+    M_PARAM_DECLARE_STRING(XapiUrl)
     M_PARAM_DECLARE_BOOL(AutoHistoryCleanup)
 
     void setOsmUser(const QString & theValue);

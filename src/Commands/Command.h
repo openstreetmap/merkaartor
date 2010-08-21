@@ -38,8 +38,8 @@ class Command
         virtual Feature* getFeature();
         virtual void setFeature(Feature* feat);
 
-        int incDirtyLevel(Layer* aLayer);
-        int decDirtyLevel(Layer* aLayer);
+        int incDirtyLevel(Layer* aLayer, Feature* F);
+        int decDirtyLevel(Layer* aLayer, Feature* F);
         int getDirtyLevel();
 
     protected:

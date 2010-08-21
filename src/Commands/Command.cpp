@@ -70,14 +70,16 @@ bool Command::buildUndoList(QListWidget* theListWidget)
     return true;
 }
 
-int Command::incDirtyLevel(Layer* aLayer)
+int Command::incDirtyLevel(Layer* aLayer, Feature* F)
 {
+    F->incDirtyLevel();
     aLayer->incDirtyLevel();
     return ++commandDirtyLevel;
 }
 
-int Command::decDirtyLevel(Layer* aLayer)
+int Command::decDirtyLevel(Layer* aLayer, Feature* F)
 {
+    F->decDirtyLevel();
     aLayer->decDirtyLevel();
     return commandDirtyLevel;
 }

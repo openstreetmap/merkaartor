@@ -24,7 +24,7 @@
      <x>0</x>
      <y>0</y>
      <width>1100</width>
-     <height>25</height>
+     <height>21</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuHelp">
@@ -261,6 +261,7 @@
      <string>&amp;Layers</string>
     </property>
     <addaction name="layersNewImageAction"/>
+    <addaction name="layersNewDrawingAction"/>
     <addaction name="separator"/>
    </widget>
    <widget class="QMenu" name="menuGps">
@@ -1743,6 +1744,11 @@
    </property>
    <property name="text">
     <string>Highlight dirt&amp;y features</string>
+   </property>
+  </action>
+  <action name="layersNewDrawingAction">
+   <property name="text">
+    <string>Add new Drawing layer</string>
    </property>
   </action>
  </widget>

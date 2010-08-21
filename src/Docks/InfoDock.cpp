@@ -63,9 +63,9 @@ void InfoDock::on_anchorClicked(const QUrl & link)
     QHttp http;
     QString data;
 
-    QString osmWebsite = MerkaartorPreferences::instance()->getOsmWebsite();
-    QString osmUser = MerkaartorPreferences::instance()->getOsmUser();
-    QString osmPwd = MerkaartorPreferences::instance()->getOsmPassword();
+    QString osmWebsite = M_PREFS->getOsmWebsite();
+    QString osmUser = M_PREFS->getOsmUser();
+    QString osmPwd = M_PREFS->getOsmPassword();
 
     Downloader theDownloader(osmWebsite, osmUser, osmPwd);
 

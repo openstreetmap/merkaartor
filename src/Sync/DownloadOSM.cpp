@@ -476,8 +476,7 @@ bool downloadOSM(QWidget* aParent, const QUrl& theUrl, const QString& aUser, con
     case 307:
         aWeb = Rcv.locationText();
         if (!aWeb.isEmpty()) {
-            QUrl aURL = theUrl;
-            aURL.setHost(aWeb);
+            QUrl aURL(aWeb);
             return downloadOSM(aParent, aURL, aUser, aPassword, theDocument, theLayer);
         } else {
             QString msg = QApplication::translate("Downloader","Unexpected http status code (%1)\nServer message is '%2'").arg(x).arg(Rcv.resultText());
@@ -628,15 +627,15 @@ bool downloadFeatures(MainWindow* Main, const QList<QString>& idList , Document*
             theLayer = new DrawingLayer(QApplication::translate("Downloader","%1 download").arg(QDateTime::currentDateTime().toString(Qt::ISODate)));
             theDocument->add(theLayer);
         } else
-            theLayer = theDocument->getLastDownloadLayer();
+            theLayer = (Layer*)theDocument->getLastDownloadLayer();
     }
     theLayer->blockIndexing(true);
 
     QString osmWebsite, osmUser, osmPwd;
 
-    osmWebsite = MerkaartorPreferences::instance()->getOsmWebsite();
-    osmUser = MerkaartorPreferences::instance()->getOsmUser();
-    osmPwd = MerkaartorPreferences::instance()->getOsmPassword();
+    osmWebsite = M_PREFS->getOsmWebsite();
+    osmUser = M_PREFS->getOsmUser();
+    osmPwd = M_PREFS->getOsmPassword();
 
     if (Main)
         Main->view()->setUpdatesEnabled(false);
@@ -742,14 +741,14 @@ bool downloadMoreOSM(MainWindow* Main, const CoordBox& aBox , Document* theDocum
         theLayer = new DrawingLayer(QApplication::translate("Downloader","%1 download").arg(QDateTime::currentDateTime().toString(Qt::ISODate)));
         theDocument->add(theLayer);
     } else
-        theLayer = theDocument->getLastDownloadLayer();
+        theLayer = (Layer*)theDocument->getLastDownloadLayer();
     theLayer->blockIndexing(true);
 
     QString osmWebsite, osmUser, osmPwd;
 
-    osmWebsite = MerkaartorPreferences::instance()->getOsmWebsite();
-    osmUser = MerkaartorPreferences::instance()->getOsmUser();
-    osmPwd = MerkaartorPreferences::instance()->getOsmPassword();
+    osmWebsite = M_PREFS->getOsmWebsite();
+    osmUser = M_PREFS->getOsmUser();
+    osmPwd = M_PREFS->getOsmPassword();
 
     Main->view()->setUpdatesEnabled(false);
 
@@ -782,9 +781,9 @@ bool downloadOSM(MainWindow* Main, const CoordBox& aBox , Document* theDocument)
 
     QDialog * dlg = new QDialog(Main);
 
-    osmWebsite = MerkaartorPreferences::instance()->getOsmWebsite();
-    osmUser = MerkaartorPreferences::instance()->getOsmUser();
-    osmPwd = MerkaartorPreferences::instance()->getOsmPassword();
+    osmWebsite = M_PREFS->getOsmWebsite();
+    osmUser = M_PREFS->getOsmUser();
+    osmPwd = M_PREFS->getOsmPassword();
 
     Ui::DownloadMapDialog ui;
     ui.setupUi(dlg);
@@ -794,7 +793,7 @@ bool downloadOSM(MainWindow* Main, const CoordBox& aBox , Document* theDocument)
 #endif
     CoordBox Clip(aBox);
     SlippyMap->setViewportArea(Clip.toRectF());
-    ui.vboxLayout1->addWidget(SlippyMap);
+    ui.verticalLayout->addWidget(SlippyMap);
     QObject::connect(SlippyMap, SIGNAL(redraw()), ui.FromMap, SLOT(toggle()));
     BookmarkListIterator i(*(M_PREFS->getBookmarks()));
     while (i.hasNext()) {
@@ -802,9 +801,11 @@ bool downloadOSM(MainWindow* Main, const CoordBox& aBox , Document* theDocument)
         if (i.value().deleted == false)
             ui.Bookmarks->addItem(i.key());
     }
+    ui.edXapiUrl->setText(QString("*[bbox=%1,%2,%3,%4]").arg(coordToAng(aBox.bottomLeft().lon()), 0, 'f').arg(coordToAng(aBox.bottomLeft().lat()), 0, 'f').arg(coordToAng(aBox.topRight().lon()), 0, 'f').arg(coordToAng(aBox.topRight().lat()), 0, 'f'));
     ui.IncludeTracks->setChecked(DownloadRaw);
     ui.ResolveRelations->setChecked(M_PREFS->getResolveRelations());
     bool OK = true, retry = true, directAPI = false, Regional=false;
+    QString directUrl;
     while (retry) {
         retry = false;
 #ifdef _MOBILE
@@ -826,6 +827,7 @@ bool downloadOSM(MainWindow* Main, const CoordBox& aBox , Document* theDocument)
 
                 if (link.contains("/api/")) {
                     directAPI=true;
+                    directUrl = link;
                 } else {
                     link.toUInt(&Regional);
                     if (!Regional) {
@@ -835,6 +837,11 @@ bool downloadOSM(MainWindow* Main, const CoordBox& aBox , Document* theDocument)
                             retry = true;
                     }
                 }
+            }
+            else if (ui.FromXapi->isChecked())
+            {
+                directAPI = true;
+                directUrl = M_PREFS->getXapiUrl() + ui.edXapiUrl->text();
             }
             else if (ui.FromMap->isChecked())
             {
@@ -847,8 +854,11 @@ bool downloadOSM(MainWindow* Main, const CoordBox& aBox , Document* theDocument)
             theDocument->add(theLayer);
             theLayer->blockIndexing(true);
             M_PREFS->setResolveRelations(ui.ResolveRelations->isChecked());
-            if (directAPI)
-                OK = downloadOSM(Main,QUrl(QUrl::fromEncoded(ui.Link->text().toAscii())),osmUser,osmPwd,theDocument,theLayer);
+            if (directAPI) {
+                if (ui.FromXapi->isChecked())
+                    theLayer->setUploadable(false);
+                OK = downloadOSM(Main,QUrl(QUrl::fromEncoded(directUrl.toAscii())),osmUser,osmPwd,theDocument,theLayer);
+            }
             else
             if (Regional)
                 OK = downloadOSM(Main,osmUser,osmPwd,ui.Link->text().toUInt(),theDocument,theLayer);

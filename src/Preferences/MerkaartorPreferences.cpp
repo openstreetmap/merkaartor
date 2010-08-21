@@ -25,6 +25,13 @@
 #include "PaintStyle/IPaintStyle.h"
 #include "PaintStyle/MasPaintStyle.h"
 
+#ifdef PORTABLE_BUILD
+    bool g_Merk_Portable = true;
+#else
+    bool g_Merk_Portable = false;
+#endif
+    bool g_Merk_Frisius = true;
+
 #define M_PARAM_IMPLEMENT_BOOL(Param, Category, Default) \
     bool mb_##Param = false; \
     void MerkaartorPreferences::set##Param(bool theValue) \
@@ -90,12 +97,6 @@
     }
 
 /***************************/
-
-#ifdef PORTABLE_BUILD
-    bool g_Merk_Portable = true;
-#else
-    bool g_Merk_Portable = false;
-#endif
 
 MerkaartorPreferences* MerkaartorPreferences::m_prefInstance = 0;
 MerkaartorPreferences* MerkaartorPreferences::instance() {
@@ -795,12 +796,13 @@ void MerkaartorPreferences::initialPosition(MapView* vw)
     const Coord bottomLeft(ip[0].toDouble(), ip[1].toDouble());
     const Coord topRight(ip[2].toDouble(),ip[3].toDouble());
 
-    if (!Sets->contains("MainWindow/ViewRect"))
-        vw->setViewport(CoordBox(bottomLeft, topRight), vw->rect());
-    else {
-        QRect rt = Sets->value("MainWindow/ViewRect").toRect();
-        vw->setViewport(CoordBox(bottomLeft, topRight), rt);
-    }
+    vw->setViewport(CoordBox(bottomLeft, topRight), vw->rect());
+//    if (!Sets->contains("MainWindow/ViewRect"))
+//        vw->setViewport(CoordBox(bottomLeft, topRight), vw->rect());
+//    else {
+//        QRect rt = Sets->value("MainWindow/ViewRect").toRect();
+//        vw->setViewport(CoordBox(bottomLeft, topRight), rt);
+//    }
 }
 
 #ifndef _MOBILE
@@ -1045,7 +1047,7 @@ void MerkaartorPreferences::setOsmWebsite(const QString & theValue)
     Sets->setValue("osm/Website", theValue);
 }
 
-M_PARAM_IMPLEMENT_STRING(XapiWebSite, osm, "www.informationfreeway.org")
+M_PARAM_IMPLEMENT_STRING(XapiUrl, osm, "http://www.informationfreeway.org/api/0.6/")
 M_PARAM_IMPLEMENT_BOOL(AutoHistoryCleanup, data, true);
 
 QString MerkaartorPreferences::getOsmUser() const

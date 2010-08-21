@@ -1,4 +1,9 @@
 v0.17
+    * ADD : Support for XAPI
+    * ADD : ":dirty" and ":uploaded" pseudo tags for finding/filtering
+    * CHG : Remove builtin "Dirty" and "Uploaded" layers. Those are now managed at feature level.
+    * ADD : Allow to rename a layer by double-clicking on its name
+    * FIX : Initial viewport issue
     * ADD : View menu item allowing to highlight "dirty" features, i.e., features ready for upload
     * FIX : Do not export incomplete features
     * FIX : CSV import bugs

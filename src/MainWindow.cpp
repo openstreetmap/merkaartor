@@ -382,6 +382,10 @@ MainWindow::MainWindow(QWidget *parent)
     }
     connect(ui->mnuAreaOpacity, SIGNAL(triggered(QAction*)), this, SLOT(setAreaOpacity(QAction*)));
 
+    if (!g_Merk_Frisius) {
+        ui->layersNewDrawingAction->setVisible(false);
+    }
+
     blockSignals(false);
 
     QTimer::singleShot( 0, this, SLOT(delayedInit()) );
@@ -1076,9 +1080,15 @@ bool MainWindow::importFiles(Document * mapDocument, const QStringList & fileNam
             importOK = importOSM(this, baseFileName, mapDocument, newLayer);
         }
         else if (fn.toLower().endsWith(".osc")) {
-            newLayer = mapDocument->getDirtyOrOriginLayer();
-            newLayer->blockIndexing(true);
-            importOK = mapDocument->importOSC(fn, (DirtyLayer *)newLayer);
+            if (g_Merk_Frisius) {
+                newLayer = new DrawingLayer( baseFileName );
+                newLayer->blockIndexing(true);
+                mapDocument->add(newLayer);
+            } else {
+                newLayer = mapDocument->getDirtyOrOriginLayer();
+                newLayer->blockIndexing(true);
+            }
+            importOK = mapDocument->importOSC(fn, (DrawingLayer*)newLayer);
         }
         else if (fn.toLower().endsWith(".osb")) {
             newLayer = new OsbLayer( baseFileName, fn );
@@ -2115,7 +2125,7 @@ void MainWindow::on_createRelationAction_triggered()
 void MainWindow::on_editMapStyleAction_triggered()
 {
     PaintStyleEditor* dlg = new PaintStyleEditor(this, M_STYLE->getGlobalPainter(), M_STYLE->getPainters());
-    connect(dlg, SIGNAL(stylesApplied(QList<FeaturePainter>* )), this, SLOT(applyStyles(QList<FeaturePainter>* )));
+    connect(dlg, SIGNAL(stylesApplied(QList<Painter>* )), this, SLOT(applyStyles(QList<Painter>* )));
     GlobalPainter saveGlobalPainter = M_STYLE->getGlobalPainter();
     QList<Painter> savePainters = M_STYLE->getPainters();
     if (dlg->exec() == QDialog::Accepted) {
@@ -3486,4 +3496,10 @@ void MainWindow::on_layersNewImageAction_triggered()
 {
     if (theDocument)
         theDocument->addImageLayer();
+}
+
+void MainWindow::on_layersNewDrawingAction_triggered()
+{
+    if (theDocument)
+        theDocument->addDrawingLayer();
 }

@@ -37,7 +37,7 @@ void syncOSM(MainWindow* theMain, const QString& aWeb, const QString& aUser, con
                 theMain->document()->history().cleanup();
 
             if (theMain->fileName != "") {
-                if (MerkaartorPreferences::instance()->getAutoSaveDoc()) {
+                if (M_PREFS->getAutoSaveDoc()) {
                     theMain->saveDocument();
                 } else {
                     if (QMessageBox::warning(theMain,MainWindow::tr("Unsaved changes"),

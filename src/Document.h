@@ -47,6 +47,7 @@ public:
     void add(Layer* aLayer);
     void moveLayer(Layer* aLayer, int pos);
     ImageMapLayer* addImageLayer(ImageMapLayer* aLayer = NULL);
+    DrawingLayer* addDrawingLayer(DrawingLayer* aLayer = NULL);
     void remove(Layer* aLayer);
     bool exists(Layer* aLayer) const;
     bool exists(Feature* aFeature) const;
@@ -74,12 +75,13 @@ public:
     QString getTagValue(int idx);
 
     void setDirtyLayer(DirtyLayer* aLayer);
-    //DirtyMapLayer* getDirtyLayer() const;
+    Layer* getDirtyLayer();
     Layer* getDirtyOrOriginLayer(Layer* aLayer = NULL) const;
     Layer* getDirtyOrOriginLayer(Feature* F) const;
+    int getDirtySize() const;
+
     void setUploadedLayer(UploadedLayer* aLayer);
     UploadedLayer* getUploadedLayer() const;
-    //DeletedMapLayer* getTrashLayer() const;
 
     QString exportOSM(QMainWindow* main, const CoordBox& aCoordBox = WORLD_COORDBOX, bool renderBounds=false);
     QString exportOSM(QMainWindow* main, QList<Feature*> aFeatures);
@@ -92,9 +94,9 @@ public:
     bool importKML(const QString& filename, TrackLayer* NewLayer);
     bool importSHP(const QString& filename, DrawingLayer* NewLayer);
     bool importCSV(const QString& filename, DrawingLayer* NewLayer);
-    bool importOSC(const QString& filename, DirtyLayer* NewLayer);
+    bool importOSC(const QString& filename, DrawingLayer* NewLayer);
 
-    Layer* getLastDownloadLayer();
+    Layer* getLastDownloadLayer() const;
     void setLastDownloadLayer(Layer * aLayer);
     void addDownloadBox(Layer*l, CoordBox aBox);
     void removeDownloadBox(Layer*l);

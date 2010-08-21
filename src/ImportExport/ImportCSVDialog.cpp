@@ -442,7 +442,7 @@ void ImportCSVDialog::on_btSave_clicked()
 
     QDomElement root = theXmlDoc.createElement("CSVImportSettings");
     theXmlDoc.appendChild(root);
-    root.setAttribute("creator", QString("Merkaartor v%1%2").arg(STRINGIFY(VERSION)).arg(STRINGIFY(REVISION)));
+    root.setAttribute("creator", QString("%1 v%2%3").arg(qApp->applicationName()).arg(STRINGIFY(VERSION)).arg(STRINGIFY(REVISION)));
 
     QString tDelim = delim;
     if (tDelim == "\t")

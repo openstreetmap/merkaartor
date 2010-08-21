@@ -165,6 +165,7 @@ void Layer::setName(const QString& s)
 {
     p->Name = s;
     if (theWidget) {
+        theWidget->setName(s);
         theWidget->getAssociatedMenu()->setTitle(s);
     }
 }
@@ -186,6 +187,9 @@ const QString& Layer::description() const
 
 void Layer::setVisible(bool b) {
     p->Visible = b;
+    if (theWidget) {
+        theWidget->setLayerVisible(p->Visible, false);
+    }
 }
 
 bool Layer::isVisible() const
@@ -527,21 +531,37 @@ int Layer::setDirtyLevel(int newLevel)
     return (p->dirtyLevel = newLevel);
 }
 
-int Layer::getDirtyLevel()
+int Layer::getDirtyLevel() const
 {
     return p->dirtyLevel;
 }
 
-int Layer::getDirtySize()
+int Layer::getDisplaySize() const
+{
+    int objects = 0;
+
+    QList<MapFeaturePtr>::const_iterator i;
+    for (i = p->Features.constBegin(); i != p->Features.constEnd(); i++) {
+        if ((*i)->isVirtual())
+            continue;
+        ++objects;
+    }
+
+    return objects;
+}
+
+int Layer::getDirtySize() const
 {
     int dirtyObjects = 0;
 
     QList<MapFeaturePtr>::const_iterator i;
-    for (i = p->Features.constBegin(); i != p->Features.constEnd(); i++)
-        if ((*i)->isVirtual())
+    for (i = p->Features.constBegin(); i != p->Features.constEnd(); i++) {
+        Feature* F = (*i);
+        if (F->isVirtual())
             continue;
-        else if (!((*i)->isDeleted()) || ((*i)->isDeleted() && (*i)->hasOSMId()))
+        else if (F->isDirty() && (!(F->isDeleted()) || (F->isDeleted() && F->hasOSMId())))
             ++dirtyObjects;
+    }
 
     return dirtyObjects;
 }
@@ -564,7 +584,7 @@ QString Layer::toMainHtml()
     "<small><i>" + QString(metaObject()->className()) + "</i></small><br/>"
     + desc;
     S += "<hr/>";
-    S += "<i>"+QApplication::translate("Layer", "Size")+": </i>" + QApplication::translate("Layer", "%n features", "", QCoreApplication::CodecForTr, getDirtySize())+"<br/>";
+    S += "<i>"+QApplication::translate("Layer", "Size")+": </i>" + QApplication::translate("Layer", "%n features", "", QCoreApplication::CodecForTr, getDisplaySize())+"<br/>";
     S += "%1";
     S += "</body></html>";
 

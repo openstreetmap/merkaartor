@@ -819,15 +819,7 @@ bool Way::toXML(QDomElement xParent, QProgressDialog * progress, bool strict)
     QDomElement e = xParent.ownerDocument().createElement("way");
     xParent.appendChild(e);
 
-    e.setAttribute("id", xmlId());
-    e.setAttribute("timestamp", time().toString(Qt::ISODate)+"Z");
-    e.setAttribute("user", user());
-    e.setAttribute("version", versionNumber());
-    if (!strict) {
-        e.setAttribute("actor", (int)lastUpdated());
-        if (isDeleted())
-            e.setAttribute("deleted","true");
-    }
+    Feature::toXML(e, strict);
 
     if (size()) {
         QDomElement n = xParent.ownerDocument().createElement("nd");
@@ -855,45 +847,26 @@ bool Way::toXML(QDomElement xParent, QProgressDialog * progress, bool strict)
 
 Way * Way::fromXML(Document* d, Layer * L, const QDomElement e)
 {
-    QString id = e.attribute("id");
+    QString id = (e.hasAttribute("id") ? e.attribute("id") : e.attribute("xml:id"));
     if (!id.startsWith('{') && !id.startsWith('-'))
         id = "way_" + id;
-    QDateTime time = QDateTime::fromString(e.attribute("timestamp").left(19), Qt::ISODate);
-    QString user = e.attribute("user");
-    bool Deleted = (e.attribute("deleted") == "true");
-    int Version = e.attribute("version").toInt();
-    if (Version < 1)
-        Version = 0;
-    Feature::ActorType A;
-    if (e.hasAttribute("actor"))
-        A = (Feature::ActorType)(e.attribute("actor", "2").toInt());
-    else
-        if ((L == d->getDirtyOrOriginLayer()))
-            A = Feature::User;
-        else
-            A = Feature::OSMServer;
 
     Way* R = dynamic_cast<Way*>(d->getFeature(id));
 
     if (!R) {
         R = new Way();
         R->setId(id);
-        R->setLastUpdated(A);
+        Feature::fromXML(e, R);
         L->add(R);
     } else {
+        Feature::fromXML(e, R);
         if (R->layer() != L) {
             R->layer()->remove(R);
             L->add(R);
         }
-        if (R->lastUpdated() == Feature::NotYetDownloaded)
-            R->setLastUpdated(A);
         while (R->p->Nodes.size())
             R->remove(0);
     }
-    R->setTime(time);
-    R->setUser(user);
-    R->setDeleted(Deleted);
-    R->setVersionNumber(Version);
 
     QDomElement c = e.firstChildElement();
     while(!c.isNull()) {

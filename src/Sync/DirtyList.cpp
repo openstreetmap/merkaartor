@@ -558,9 +558,12 @@ bool DirtyListExecutor::addRelation(Relation *R)
         R->setId("rel_"+QString::number(DataOut.toInt()));
         R->setLastUpdated(Feature::OSMServer);
         R->setVersionNumber(1);
-        R->layer()->remove(R);
-        document()->getUploadedLayer()->add(R);
+        if (!g_Merk_Frisius) {
+            R->layer()->remove(R);
+            document()->getUploadedLayer()->add(R);
+        }
         R->setUploaded(true);
+        R->setDirtyLevel(0);
         return EraseFromHistory;
     }
     return false;
@@ -587,9 +590,12 @@ bool DirtyListExecutor::addRoad(Way *R)
         R->setId("way_"+QString::number(DataOut.toInt()));
         R->setLastUpdated(Feature::OSMServer);
         R->setVersionNumber(1);
-        R->layer()->remove(R);
-        document()->getUploadedLayer()->add(R);
+        if (!g_Merk_Frisius) {
+            R->layer()->remove(R);
+            document()->getUploadedLayer()->add(R);
+        }
         R->setUploaded(true);
+        R->setDirtyLevel(0);
         return EraseFromHistory;
     }
     return false;
@@ -617,9 +623,12 @@ bool DirtyListExecutor::addPoint(Node* Pt)
         Pt->setId("node_"+QString::number(DataOut.toInt()));
         Pt->setLastUpdated(Feature::OSMServer);
         Pt->setVersionNumber(1);
-        Pt->layer()->remove(Pt);
-        document()->getUploadedLayer()->add(Pt);
+        if (!g_Merk_Frisius) {
+            Pt->layer()->remove(Pt);
+            document()->getUploadedLayer()->add(Pt);
+        }
         Pt->setUploaded(true);
+        Pt->setDirtyLevel(0);
         return EraseFromHistory;
     }
     return false;
@@ -648,9 +657,12 @@ bool DirtyListExecutor::updateRelation(Relation* R)
                 NewVersion = R->versionNumber()+1;
             R->setVersionNumber(NewVersion);
         }
-        R->layer()->remove(R);
-        document()->getUploadedLayer()->add(R);
+        if (!g_Merk_Frisius) {
+            R->layer()->remove(R);
+            document()->getUploadedLayer()->add(R);
+        }
         R->setUploaded(true);
+        R->setDirtyLevel(0);
         return EraseFromHistory;
     }
     return true;
@@ -678,9 +690,12 @@ bool DirtyListExecutor::updateRoad(Way* R)
                 NewVersion = R->versionNumber()+1;
             R->setVersionNumber(NewVersion);
         }
-        R->layer()->remove(R);
-        document()->getUploadedLayer()->add(R);
+        if (!g_Merk_Frisius) {
+            R->layer()->remove(R);
+            document()->getUploadedLayer()->add(R);
+        }
         R->setUploaded(true);
+        R->setDirtyLevel(0);
         return EraseFromHistory;
     }
     return true;
@@ -709,9 +724,12 @@ bool DirtyListExecutor::updatePoint(Node* Pt)
                 NewVersion = Pt->versionNumber()+1;
             Pt->setVersionNumber(NewVersion);
         }
-        Pt->layer()->remove(Pt);
-        document()->getUploadedLayer()->add(Pt);
+        if (!g_Merk_Frisius) {
+            Pt->layer()->remove(Pt);
+            document()->getUploadedLayer()->add(Pt);
+        }
         Pt->setUploaded(true);
+        Pt->setDirtyLevel(0);
         return EraseFromHistory;
     }
     return false;
@@ -734,9 +752,12 @@ bool DirtyListExecutor::erasePoint(Node *Pt)
     if (sendRequest("DELETE",URL,DataIn,DataOut))
     {
         Pt->setLastUpdated(Feature::OSMServer);
-        Pt->layer()->remove(Pt);
-        document()->getUploadedLayer()->add(Pt);
+        if (!g_Merk_Frisius) {
+            Pt->layer()->remove(Pt);
+            document()->getUploadedLayer()->add(Pt);
+        }
         Pt->setUploaded(true);
+        Pt->setDirtyLevel(0);
         return EraseFromHistory;
     }
     return false;
@@ -759,9 +780,12 @@ bool DirtyListExecutor::eraseRoad(Way *R)
     if (sendRequest("DELETE",URL,DataIn,DataOut))
     {
         R->setLastUpdated(Feature::OSMServer);
-        R->layer()->remove(R);
-        document()->getUploadedLayer()->add(R);
+        if (!g_Merk_Frisius) {
+            R->layer()->remove(R);
+            document()->getUploadedLayer()->add(R);
+        }
         R->setUploaded(true);
+        R->setDirtyLevel(0);
         return EraseFromHistory;
     }
     return false;
@@ -782,9 +806,12 @@ bool DirtyListExecutor::eraseRelation(Relation *R)
     if (sendRequest("DELETE",URL,DataIn,DataOut))
     {
         R->setLastUpdated(Feature::OSMServer);
-        R->layer()->remove(R);
-        document()->getUploadedLayer()->add(R);
+        if (!g_Merk_Frisius) {
+            R->layer()->remove(R);
+            document()->getUploadedLayer()->add(R);
+        }
         R->setUploaded(true);
+        R->setDirtyLevel(0);
         return EraseFromHistory;
     }
     return false;

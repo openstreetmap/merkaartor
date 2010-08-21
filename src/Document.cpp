@@ -40,6 +40,7 @@ public:
         , theDock(0)
         , lastDownloadLayer(0)
         , tagFilter(0), FilterRevision(0)
+        , layerNum(0)
     {
     };
     ~MapDocumentPrivate()
@@ -65,6 +66,8 @@ public:
     TagSelector* tagFilter;
     int FilterRevision;
     QString title;
+    int layerNum;
+
 
     QList<FeaturePainter> theFeaturePainters;
 
@@ -129,11 +132,16 @@ void Document::addDefaultLayers()
         lMenu->setTitle(l->name());
     }
 
-    p->dirtyLayer = new DirtyLayer(tr("Dirty layer"));
-    add(p->dirtyLayer);
+    if (g_Merk_Frisius) {
+        DrawingLayer* aLayer = addDrawingLayer();
+        setLastDownloadLayer(aLayer);
+    } else {
+        p->dirtyLayer = new DirtyLayer(tr("Dirty layer"));
+        add(p->dirtyLayer);
 
-    p->uploadedLayer = new UploadedLayer(tr("Uploaded layer"));
-    add(p->uploadedLayer);
+        p->uploadedLayer = new UploadedLayer(tr("Uploaded layer"));
+        add(p->uploadedLayer);
+    }
 }
 
 bool Document::toXML(QDomElement xParent, QProgressDialog * progress)
@@ -151,7 +159,7 @@ bool Document::toXML(QDomElement xParent, QProgressDialog * progress)
         mapDoc.setAttribute("lastdownloadlayer", p->lastDownloadLayer->id());
 
     for (int i=0; i<p->Layers.size(); ++i) {
-        progress->setMaximum(progress->maximum() + p->Layers[i]->size());
+        progress->setMaximum(progress->maximum() + p->Layers[i]->getDisplaySize());
     }
 
     for (int i=0; i<p->Layers.size(); ++i) {
@@ -310,6 +318,15 @@ ImageMapLayer* Document::addImageLayer(ImageMapLayer* aLayer)
     return theLayer;
 }
 
+DrawingLayer* Document::addDrawingLayer(DrawingLayer *aLayer)
+{
+    DrawingLayer* theLayer = aLayer;
+    if (!theLayer)
+        theLayer = new DrawingLayer(tr("Drawing layer #%1").arg(++p->layerNum));
+    add(theLayer);
+    return theLayer;
+}
+
 void Document::addToTagList(QString k, QString v)
 {
 #ifndef _MOBILE
@@ -457,8 +474,29 @@ void Document::setDirtyLayer(DirtyLayer* aLayer)
     p->dirtyLayer = aLayer;
 }
 
+Layer* Document::getDirtyLayer()
+{
+    if (!p->dirtyLayer) {
+        p->dirtyLayer = new DirtyLayer(tr("Dirty layer"));
+        add(p->dirtyLayer);
+    }
+    return p->dirtyLayer;
+}
+
 Layer* Document::getDirtyOrOriginLayer(Layer* aLayer) const
 {
+    if (g_Merk_Frisius) {
+        if (aLayer)
+            return aLayer;
+        else {
+            for (int i=0; i<layerSize(); ++i) {
+                if (getLayer(i)->isSelected() && getLayer(i)->classType() == Layer::DrawingLayerType)
+                    return (Layer*)getLayer(i);
+            }
+            return (Layer*)getLastDownloadLayer();
+        }
+    }
+
     if (!aLayer || aLayer->isUploadable())
         return p->dirtyLayer;
     else
@@ -467,10 +505,22 @@ Layer* Document::getDirtyOrOriginLayer(Layer* aLayer) const
 
 Layer* Document::getDirtyOrOriginLayer(Feature* F) const
 {
+    if (g_Merk_Frisius)
+        return F->layer();
+
     if (!F || !F->layer() || F->layer()->isUploadable())
         return p->dirtyLayer;
     else
         return F->layer();
+}
+
+int Document::getDirtySize() const
+{
+    int dirtyObjects = 0;
+    for (int i=0; i<layerSize(); ++i) {
+        dirtyObjects += getLayer(i)->getDirtySize();
+    }
+    return dirtyObjects;
 }
 
 void Document::setUploadedLayer(UploadedLayer* aLayer)
@@ -549,7 +599,7 @@ QString Document::exportOSM(QMainWindow* main, const CoordBox& aCoordBox, bool r
     QDomElement o = theXmlDoc.createElement("osm");
     theXmlDoc.appendChild(o);
     o.setAttribute("version", "0.6");
-    o.setAttribute("generator", QString("Merkaartor %1").arg(STRINGIFY(VERSION)));
+    o.setAttribute("generator", QString("%1 %2").arg(qApp->applicationName()).arg(STRINGIFY(VERSION)));
 
     QDomElement bb = theXmlDoc.createElement("bound");
     o.appendChild(bb);
@@ -609,7 +659,7 @@ QString Document::exportOSM(QMainWindow* main, QList<Feature*> aFeatures)
     QDomElement o = theXmlDoc.createElement("osm");
     theXmlDoc.appendChild(o);
     o.setAttribute("version", "0.6");
-    o.setAttribute("generator", QString("Merkaartor %1").arg(STRINGIFY(VERSION)));
+    o.setAttribute("generator", QString("%1 %2").arg(qApp->applicationName()).arg(STRINGIFY(VERSION)));
 
     if (exportedFeatures.size()) {
         aCoordBox = exportedFeatures[0]->boundingBox();
@@ -689,7 +739,7 @@ bool Document::importNMEA(const QString& filename, TrackLayer* NewLayer)
         return false;
 }
 
-bool Document::importOSC(const QString& filename, DirtyLayer* NewLayer)
+bool Document::importOSC(const QString& filename, DrawingLayer* NewLayer)
 {
     ImportExportOSC imp(this);
     if (!imp.loadFile(filename))
@@ -779,7 +829,7 @@ const QList<CoordBox> Document::getDownloadBoxes() const
     return p->downloadBoxes.values();
 }
 
-Layer * Document::getLastDownloadLayer()
+Layer * Document::getLastDownloadLayer() const
 {
     return p->lastDownloadLayer;
 }
@@ -824,7 +874,7 @@ QPair<bool,CoordBox> Document::boundingBox()
 bool Document::hasUnsavedChanges()
 {
 //	return aDoc.history().index();
-    return (getDirtyOrOriginLayer()->getDirtySize() > 0);
+    return (getDirtySize() > 0);
 }
 
 bool Document::setFilterType(FilterType aFilter)

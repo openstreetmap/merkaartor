@@ -30,7 +30,7 @@ void AddFeatureCommand::undo()
     } else
         theFeature->setDeleted(true);
 
-    decDirtyLevel(theLayer);
+    decDirtyLevel(theLayer, theFeature);
 }
 
 void AddFeatureCommand::redo()
@@ -46,7 +46,7 @@ void AddFeatureCommand::redo()
             theFeature->setDeleted(false);
             oldLayer = NULL;
         }
-        incDirtyLevel(theLayer);
+        incDirtyLevel(theLayer, theFeature);
     }
     Command::redo();
 }
@@ -158,7 +158,7 @@ void RemoveFeatureCommand::redo()
     oldLayer->remove(theFeature);
     theFeature->setDeleted(true);
     theLayer->add(theFeature);
-    incDirtyLevel(oldLayer);
+    incDirtyLevel(oldLayer, theFeature);
     Command::redo();
 }
 
@@ -170,7 +170,7 @@ void RemoveFeatureCommand::undo()
         Idx = oldLayer->size();
     theFeature->setDeleted(false);
     oldLayer->add(theFeature,Idx);
-    decDirtyLevel(oldLayer);
+    decDirtyLevel(oldLayer, theFeature);
     if (CascadedCleanUp)
         CascadedCleanUp->undo();
 }

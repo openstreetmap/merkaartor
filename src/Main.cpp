@@ -79,7 +79,7 @@ void showVersion()
     fprintf(stdout, "%s", o.toLatin1().data());
     o = QString("using QT version %1 (built with %2)\n").arg(qVersion()).arg(QT_VERSION_STR);
     fprintf(stdout, "%s", o.toLatin1().data());
-    fprintf(stdout, "Copyright Bart Vanhauwaert, Chris Browet and others, 2006-2009\n");
+    fprintf(stdout, "Copyright Bart Vanhauwaert, Chris Browet and others, 2006-2010\n");
     fprintf(stdout, "This program is licensed under the GNU Public License v2\n");
 }
 
@@ -94,6 +94,7 @@ void showHelp()
     fprintf(stdout, "  -v, --version\t\tShow version information\n");
     fprintf(stdout, "  -n, --noreuse\t\tDo not reuse an existing Merkaartor instance\n");
     fprintf(stdout, "  -p, --portable\t\tExecute Merkaartor as a portable application (all files saved in the application directory)\n");
+    fprintf(stdout, "  enable_special_layers\t\tEnable old style \"Dirty\" and \"Uploaded\" layers\n");
     fprintf(stdout, "  [filenames]\t\tOpen designated files \n");
 }
 
@@ -109,21 +110,26 @@ int main(int argc, char** argv)
         if (argsIn[i] == "-v" || argsIn[i] == "--version") {
             showVersion();
             exit(0);
-        } else
-        if (argsIn[i] == "-h" || argsIn[i] == "--help") {
+        } else if (argsIn[i] == "-h" || argsIn[i] == "--help") {
             showHelp();
             exit(0);
-        } else
-        if (argsIn[i] == "-n" || argsIn[i] == "--noreuse") {
+        } else if (argsIn[i] == "-n" || argsIn[i] == "--noreuse") {
             reuse = false;
-        } else
-        if (argsIn[i] == "-p" || argsIn[i] == "--portable") {
+        } else if (argsIn[i] == "-p" || argsIn[i] == "--portable") {
             g_Merk_Portable = true;
+        } else if (argsIn[i] == "--enable_special_layers") {
+            g_Merk_Frisius = false;
         } else
             argsOut << argsIn[i];
-
     }
 
+    QCoreApplication::setOrganizationName("Merkaartor");
+    QCoreApplication::setOrganizationDomain("merkaartor.org");
+#ifdef FRISIUS_BUILD
+    QCoreApplication::setApplicationName("Frisius");
+#else
+        QCoreApplication::setApplicationName("Merkaartor");
+#endif
     QString message = argsOut.join("$");
     if (reuse)
         if (instance.sendMessage(message))
@@ -132,9 +138,9 @@ int main(int argc, char** argv)
     QString logFilename;
 #ifndef NDEBUG
 #if defined(Q_OS_UNIX)
-    logFilename = QString(QDir::homePath() + "/merkaartor.log");
+    logFilename = QString(QDir::homePath() + "/" + qApp->applicationName().toLower() + ".log");
 #else
-    logFilename = QString(qApp->applicationDirPath() + "/merkaartor.log");
+    logFilename = QString(qApp->applicationDirPath() + "/" + qApp->applicationName().toLower() + ".log");
 #endif
 #endif
     QStringList fileNames;
@@ -150,7 +156,7 @@ int main(int argc, char** argv)
         pLogFile = fopen(logFilename.toLatin1(), "a");
     qInstallMsgHandler(myMessageOutput);
 
-    qDebug() << "**** " << QDateTime::currentDateTime().toString(Qt::ISODate) << " -- Starting " << QString("Merkaartor %1%2(%3)").arg(STRINGIFY(VERSION)).arg(STRINGIFY(REVISION)).arg(STRINGIFY(SVNREV));
+    qDebug() << "**** " << QDateTime::currentDateTime().toString(Qt::ISODate) << " -- Starting " << QString("%1 %2%3(%4)").arg(qApp->applicationName()).arg(STRINGIFY(VERSION)).arg(STRINGIFY(REVISION)).arg(STRINGIFY(SVNREV));
     qDebug() <<	"-------" << QString("using QT version %1 (built with %2)").arg(qVersion()).arg(QT_VERSION_STR);
 #ifdef USE_PROJ
     qDebug() <<	"-------" << QString("using PROJ4 version %1").arg(STRINGIFY(PJ_VERSION));
@@ -166,26 +172,38 @@ int main(int argc, char** argv)
 #endif
     qDebug() << "-------" << "with arguments: " << QCoreApplication::arguments();
 
-    QCoreApplication::setOrganizationName("Merkaartor");
-    QCoreApplication::setOrganizationDomain("merkaartor.org");
-    QCoreApplication::setApplicationName("Merkaartor");
-
 #ifdef _MOBILE
     QFont appFont = QApplication::font();
     appFont.setPointSize(6);
     QApplication::setFont(appFont);
 #endif
 
-    QPixmap pixmap(":/Splash/Mercator_splash.png");
+    qApp->setStyleSheet(
+            " LayerWidget { color: black; border: 1px solid black; min-height: 20px}"
+
+            " LayerWidget QCheckBox::indicator:checked { image: url(:Icons/eye.xpm); }"
+            " LayerWidget QCheckBox::indicator:unchecked { image: url(:Icons/empty.xpm); }"
+
+            " DrawingLayerWidget { background-color: #a5d1ff; }"
+            " ImageLayerWidget { background-color: #ffffcc; }"
+            " TrackLayerWidget { background-color: #7acca6; }"
+            " DirtyLayerWidget { background-color: #c8c8c8; }"
+            " UploadedLayerWidget { background-color: #c8c8c8; }"
+            " OsbLayerWidget { background-color: #a2d1c0; }"
+
+            " LayerWidget:checked { background-color: lightsteelblue; }"
+            );
+
+    QPixmap pixmap(QString(":/Splash/%1_splash.png").arg(qApp->applicationName()));
     QSplashScreen splash(pixmap);
     splash.show();
     instance.processEvents();
 
-    splash.showMessage(QString(instance.translate("Main", "Merkaartor v%1%2(%3)\nLoading plugins...")).arg(STRINGIFY(VERSION)).arg(STRINGIFY(REVISION)).arg(STRINGIFY(SVNREV)), Qt::AlignBottom | Qt::AlignHCenter, Qt::black);
+    splash.showMessage(QString(instance.translate("Main", "%1 v%2%3(%4)\nLoading plugins...")).arg(qApp->applicationName()).arg(STRINGIFY(VERSION)).arg(STRINGIFY(REVISION)).arg(STRINGIFY(SVNREV)), Qt::AlignBottom | Qt::AlignHCenter, Qt::black);
     instance.processEvents();
 
-    if (!QDir::home().exists(".merkaartor"))
-        QDir::home().mkdir(".merkaartor");
+    if (!QDir::home().exists("." + qApp->applicationName().toLower()))
+        QDir::home().mkdir("." + qApp->applicationName().toLower());
 #if defined(Q_OS_WIN32)
     QDir pluginsDir = QDir(qApp->applicationDirPath() + "/" + STRINGIFY(PLUGINS_DIR));
 
@@ -213,7 +231,7 @@ int main(int argc, char** argv)
         }
     }
 
-    splash.showMessage(QString(instance.translate("Main", "Merkaartor v%1%2(%3)\nInitializing...")).arg(STRINGIFY(VERSION)).arg(STRINGIFY(REVISION)).arg(STRINGIFY(SVNREV)), Qt::AlignBottom | Qt::AlignHCenter, Qt::black);
+    splash.showMessage(QString(instance.translate("Main", "%1 v%2%3(%4)\nInitializing...")).arg(qApp->applicationName()).arg(STRINGIFY(VERSION)).arg(STRINGIFY(REVISION)).arg(STRINGIFY(SVNREV)), Qt::AlignBottom | Qt::AlignHCenter, Qt::black);
     instance.processEvents();
 
     MainWindow Main;
@@ -237,7 +255,7 @@ int main(int argc, char** argv)
 
     int x = instance.exec();
 
-    qDebug() << "**** " << QDateTime::currentDateTime().toString(Qt::ISODate) << " -- Ending " << QString("Merkaartor %1%2(%3)").arg(STRINGIFY(VERSION)).arg(STRINGIFY(REVISION)).arg(STRINGIFY(SVNREV));
+    qDebug() << "**** " << QDateTime::currentDateTime().toString(Qt::ISODate) << " -- Ending " << QString("%1 %2%3(%4)").arg(qApp->applicationName()).arg(STRINGIFY(VERSION)).arg(STRINGIFY(REVISION)).arg(STRINGIFY(SVNREV));
     if(pLogFile) {
         fclose(pLogFile);
         pLogFile = NULL;

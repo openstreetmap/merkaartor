@@ -103,7 +103,7 @@ class MapFeaturePrivate
                 theFeature(0), LastPartNotification(0),
                 Time(QDateTime::currentDateTime()), Deleted(false), Visible(true), Uploaded(false), ReadOnly(false), FilterRevision(-1)
                 , LongId(0)
-                , Virtual(false), Special(false)
+                , Virtual(false), Special(false), DirtyLevel(0)
                 , VirtualsUpdatesBlocked(false)
                 , Width(0)
         {
@@ -116,7 +116,7 @@ class MapFeaturePrivate
                 theFeature(0), LastPartNotification(0),
                 Time(other.Time), Deleted(false), Visible(true), Uploaded(false), ReadOnly(false), FilterRevision(-1)
                 , LongId(0)
-                , Virtual(other.Virtual), Special(other.Special)
+                , Virtual(other.Virtual), Special(other.Special), DirtyLevel(0)
                 , VirtualsUpdatesBlocked(other.VirtualsUpdatesBlocked)
                 , Width(other.Width)
         {
@@ -152,6 +152,7 @@ class MapFeaturePrivate
         RenderPriority theRenderPriority;
         bool Virtual;
         bool Special;
+        int DirtyLevel;
         bool VirtualsUpdatesBlocked;
         double Width;
 };
@@ -343,8 +344,31 @@ void Feature::setUser(const QString& user)
     p->User = user;
 }
 
+int Feature::incDirtyLevel(int inc)
+{
+    return p->DirtyLevel += inc;
+}
+
+int Feature::decDirtyLevel(int inc)
+{
+    return p->DirtyLevel -= inc;
+}
+
+int Feature::setDirtyLevel(int newLevel)
+{
+    return (p->DirtyLevel = newLevel);
+}
+
+int Feature::getDirtyLevel() const
+{
+    return p->DirtyLevel;
+}
+
 bool Feature::isDirty() const
 {
+    if (g_Merk_Frisius)
+        return (p->DirtyLevel > 0);
+
     if (parent())
         return (dynamic_cast<Layer*>(parent())->classType() == Layer::DirtyLayerType);
     else
@@ -606,7 +630,7 @@ void MapFeaturePrivate::updatePossiblePainters()
     //if the object has no tags or only the created_by tag, we don't check for style
     //search is about 15 times faster like that !!!
     //However, still match features with no tags and no parent, i.e. "lost" trackpoints
-    if ( (theFeature->layer()->isTrack()) && MerkaartorPreferences::instance()->getDisableStyleForTracks() ) return blankPainters();
+    if ( (theFeature->layer()->isTrack()) && M_PREFS->getDisableStyleForTracks() ) return blankPainters();
 
     if ( (theFeature->layer()->isTrack()) || theFeature->sizeParents() ) {
         int i;
@@ -814,6 +838,46 @@ QString Feature::toXML(int lvl, QProgressDialog * progress)
 //        return theXmlDoc.toString(lvl);
     } else
         return "";
+}
+
+void Feature::fromXML(const QDomElement& e, Feature* F)
+{
+    bool Deleted = (e.attribute("deleted") == "true");
+    int Dirty = (e.hasAttribute("dirtylevel") ? e.attribute("dirtylevel").toInt() : 0);
+    bool Uploaded = (e.attribute("uploaded") == "true");
+
+    QDateTime time;
+    time = QDateTime::fromString(e.attribute("timestamp").left(19), Qt::ISODate);
+    QString user = e.attribute("user");
+    int Version = e.attribute("version").toInt();
+    if (Version < 1)
+        Version = 0;
+    Feature::ActorType A = (Feature::ActorType)(e.attribute("actor", "2").toInt());
+
+    F->setLastUpdated(A);
+    F->setDeleted(Deleted);
+    F->setDirtyLevel(Dirty);
+    F->setUploaded(Uploaded);
+    F->setTime(time);
+    F->setUser(user);
+    F->setVersionNumber(Version);
+}
+
+void Feature::toXML(QDomElement& e, bool strict)
+{
+    e.setAttribute("id", xmlId());
+    e.setAttribute("timestamp", time().toString(Qt::ISODate)+"Z");
+    e.setAttribute("version", versionNumber());
+    e.setAttribute("user", user());
+    if (!strict) {
+        e.setAttribute("actor", (int)lastUpdated());
+        if (isDeleted())
+            e.setAttribute("deleted","true");
+        if (getDirtyLevel() > 0)
+            e.setAttribute("dirtylevel", getDirtyLevel());
+        if (isUploaded())
+            e.setAttribute("uploaded","true");
+    }
 }
 
 bool Feature::tagsToXML(QDomElement xParent, bool strict)

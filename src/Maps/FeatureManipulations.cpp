@@ -846,10 +846,8 @@ void commitFeatures(Document* theDocument, CommandList* theList, PropertiesDock*
     QSet<Feature*> Features;
     QQueue<Feature*> ToAdd;
 
-    Layer *layer = theDocument->getDirtyOrOriginLayer();
-
     for (int i=0; i<theDock->size(); ++i)
-        if (!theDock->selection(i)->isDirty() && !theDock->selection(i)->isSpecial())
+        if (!theDock->selection(i)->isUploadable() && !theDock->selection(i)->isSpecial())
             ToAdd.enqueue(theDock->selection(i));
 
     while (!ToAdd.isEmpty()) {
@@ -863,8 +861,11 @@ void commitFeatures(Document* theDocument, CommandList* theList, PropertiesDock*
         }
     }
 
-    foreach (Feature *feature, Features)
-        theList->add(new AddFeatureCommand(layer,feature,true));
+    if (Features.size()) {
+        Layer *layer = theDocument->getDirtyLayer();
+        foreach (Feature *feature, Features)
+            theList->add(new AddFeatureCommand(layer,feature,true));
+    }
 }
 
 void addRelationMember(Document* theDocument, CommandList* theList, PropertiesDock* theDock)
