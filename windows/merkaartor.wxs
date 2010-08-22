@@ -20,8 +20,8 @@
      </InstallExecuteSequence>
 
       <!--Set the icon for the msi and Add/Remove programs-->
-      <Icon Id='Merkaartor.exe' SourceFile='..\Icons\Mercator_16x16.ico'/>
-      <Icon Id='MainIcon.exe' SourceFile='..\Icons\Mercator_48x48.ico'/>
+      <Icon Id='Merkaartor.exe' SourceFile='..\Icons\Merkaartor_16x16.ico'/>
+      <Icon Id='MainIcon.exe' SourceFile='..\Icons\Merkaartor_48x48.ico'/>
       <Property Id="ARPPRODUCTICON" Value="Merkaartor.exe" />
       <Property Id="ALLUSERS" Value="1"/>
 
