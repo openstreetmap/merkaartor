@@ -2144,7 +2144,7 @@ void MainWindow::on_editMapStyleAction_triggered()
 
 void MainWindow::applyStyles(QList<Painter>* thePainters)
 {
-    M_STYLE->setPainters(*thePainters);
+    theDocument->setPainters(*thePainters);
     for (VisibleFeatureIterator i(theDocument); !i.isEnd(); ++i)
         i.get()->invalidatePainter();
     invalidateView();
@@ -2184,6 +2184,7 @@ void MainWindow::on_mapStyleLoadAction_triggered()
             MapCSSPaintstyle::instance()->loadPainters(f);
         else {
             M_STYLE->loadPainters(f);
+            document()->setPainters(M_STYLE->getPainters());
             for (VisibleFeatureIterator i(theDocument); !i.isEnd(); ++i)
                 i.get()->invalidatePainter();
             invalidateView();
@@ -3104,6 +3105,7 @@ void MainWindow::styleTriggered(QAction* anAction)
     {
         M_PREFS->setDefaultStyle(NewStyle);
         M_STYLE->loadPainters(M_PREFS->getDefaultStyle());
+        document()->setPainters(M_STYLE->getPainters());
         for (FeatureIterator it(document()); !it.isEnd(); ++it)
         {
             it.get()->invalidatePainter();

@@ -643,9 +643,9 @@ void MapFeaturePrivate::updatePossiblePainters()
 
     PossiblePainters.clear();
     QList<const FeaturePainter*> DefaultPainters;
-    for (int i=0; i<theFeature->layer()->getDocument()->getFeaturePaintersSize(); ++i)
+    for (int i=0; i<theFeature->layer()->getDocument()->getPaintersSize(); ++i)
     {
-        const FeaturePainter* Current = theFeature->layer()->getDocument()->getFeaturePainter(i);
+        const FeaturePainter* Current = dynamic_cast<const FeaturePainter*>(theFeature->layer()->getDocument()->getPainter(i));
         switch (Current->matchesTag(theFeature,NULL)) {
         case TagSelect_Match:
             PossiblePainters.push_back(Current);
