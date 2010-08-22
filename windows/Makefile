@@ -71,7 +71,7 @@ merkaartor_dbg.wixobj: merkaartor_dbg.wxs defines_dbg.wxi qt_dbg.wxi qttrans.wxi
 		-dREVISION=$(REVISION) \
 		-out $(call ToWin,$@)
 
-qt_dbg.wixobj: qt_dbg.wxs defines_qt_dbg.wxi qt_dbg.wxi qttrans.wxi Makefile
+qt_dbg.wixobj: qt_dbg.wxs defines-qt_dbg.wxi qt_dbg.wxi qttrans.wxi Makefile
 	$(CANDLE) $(call ToWin,$<) \
 		-dVERSION=$(VERSION) \
 		-dREVISION=$(REVISION) \
