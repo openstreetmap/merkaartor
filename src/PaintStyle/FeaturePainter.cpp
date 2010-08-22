@@ -385,6 +385,19 @@ void FeaturePainter::drawTouchup(Way* R, QPainter* thePainter, MapView* theView)
             thePainter->strokePath(theView->transform().map(R->getPath()),thePen);
         }
     }
+    if (DrawIcon)
+    {
+        if (!IconName.isEmpty()) {
+            double PixelPerM = theView->pixelPerM();
+            double WW = PixelPerM*IconScale+IconOffset;
+
+            QPixmap pm = getPixmapFromFile(IconName,int(WW));
+            if (!pm.isNull()) {
+                QPointF C(theView->transform().map(theView->projection().project(R->boundingBox().center())));
+                thePainter->drawPixmap( int(C.x()-pm.width()/2), int(C.y()-pm.height()/2) , pm);
+            }
+        }
+    }
     if ( ((DrawTrafficDirectionMarks) && (theView->renderOptions().arrowOptions == RendererOptions::ArrowsOneway)) ||  theView->renderOptions().arrowOptions == RendererOptions::ArrowsAlways)
     {
         Feature::TrafficDirectionType TT = trafficDirection(R);

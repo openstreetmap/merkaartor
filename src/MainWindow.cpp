@@ -1356,6 +1356,7 @@ void MainWindow::on_fileUploadAction_triggered()
 
     theDocument->history().updateActions();
     theDirty->updateList();
+    invalidateView();
 }
 
 void MainWindow::on_fileDownloadAction_triggered()
