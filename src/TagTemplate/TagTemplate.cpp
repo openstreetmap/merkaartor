@@ -189,6 +189,8 @@ QWidget* TagTemplateWidgetCombo::getWidget(const Feature* F, const MapView* V)
     QComboBox* aCombo = new QComboBox();
     aCombo->setEditable(true);
 //	aCombo->setSizeAdjustPolicy(QComboBox::AdjustToMinimumContentsLengthWithIcon);
+    aCombo->setSizePolicy(QSizePolicy::Maximum, QSizePolicy::Fixed);
+    aCombo->setMinimumWidth(100);
     aLayout->addWidget(aCombo);
 
     aCombo->addItem(tr("Undefined"), qVariantFromValue(new TagTemplateWidgetValue("__NULL__")));
@@ -897,6 +899,9 @@ QWidget* TagTemplates::getWidget(const Feature* F, const MapView* V)
 //	f.setPointSize(6);
 //	theCombo->setFont(f);
 //	theCombo->setMaximumHeight(16);
+    theCombo->setMinimumWidth(100);
+    theCombo->setSizePolicy(QSizePolicy::Maximum, QSizePolicy::Preferred);
+
     headLayout->addWidget(theCombo);
 
     QFrame* line = new QFrame();
