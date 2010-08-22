@@ -3,7 +3,7 @@ ToWin = $1
 DOSWIXDIR := c:\\Program Files\\Windows Installer XML v3\\
 LIGHT := "c:/Program Files/Windows Installer XML v3/bin/light.exe"
 CANDLE := "c:/Program Files/Windows Installer XML v3/bin/candle.exe"
-LRELEASE := "C:/Qt/4.6.2-win/bin/lrelease.exe"
+LRELEASE := "d:/Qt/4.6.3/bin/lrelease.exe"
 #VERSION=0.16
 #REVISION=-svn
 
