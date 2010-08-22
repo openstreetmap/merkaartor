@@ -64,6 +64,7 @@
         <file>geotagged.png</file>
         <file alias="grab.png">Grab.png</file>
         <file>grabbing.png</file>
+        <file>actions/edit-cut.png</file>
     </qresource>
     <qresource prefix="/Art">
         <file>Mapnik/airport.png</file>

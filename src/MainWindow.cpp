@@ -723,6 +723,63 @@ Document* MainWindow::getDocumentFromClipboard()
     return NULL;
 }
 
+void MainWindow::on_editCutAction_triggered()
+{
+    QClipboard *clipboard = QApplication::clipboard();
+    QMimeData* md = new QMimeData();
+
+    QString osm = theDocument->exportOSM(this, p->theProperties->selection());
+    md->setText(osm);
+    md->setData("application/x-openstreetmap+xml", osm.toUtf8());
+
+    ImportExportKML kmlexp(theDocument);
+    QBuffer kmlBuf;
+    kmlBuf.open(QIODevice::WriteOnly | QIODevice::Truncate);
+    if (kmlexp.setDevice(&kmlBuf)) {
+        kmlexp.export_(p->theProperties->selection());
+        md->setData("application/vnd.google-earth.kml+xml", kmlBuf.data());
+    }
+
+    ExportGPX gpxexp(theDocument);
+    QBuffer gpxBuf;
+    gpxBuf.open(QIODevice::WriteOnly | QIODevice::Truncate);
+    if (gpxexp.setDevice(&gpxBuf)) {
+        gpxexp.export_(p->theProperties->selection());
+        md->setData("application/gpx+xml", gpxBuf.data());
+    }
+
+    clipboard->setMimeData(md);
+    invalidateView();
+
+    //Deletion
+    QList<Feature*> Sel;
+    for (int i=0; i<p->theProperties->size(); ++i)
+        Sel.push_back(p->theProperties->selection(i));
+    if (Sel.size() == 0) return;
+
+    CommandList* theList  = new CommandList(MainWindow::tr("Cut feature %1").arg(Sel[0]->id()), Sel[0]);
+    for (int i=0; i<Sel.size(); ++i) {
+        QList<Feature*> Alternatives;
+
+        int parents=0;
+        for(int j=0; j<Sel[i]->sizeParents();++j) {
+            if (!Sel.contains(CAST_FEATURE(Sel[i]->getParent(j))))
+                ++parents;
+        }
+        if (!parents)
+            theList->add(new RemoveFeatureCommand(document(), Sel[i], Alternatives));
+    }
+
+    if (theList->size()) {
+        document()->addHistory(theList);
+        view()->properties()->setSelection(0);
+        view()->properties()->checkMenuStatus();
+    }
+    else
+        delete theList;
+    view()->invalidate(true, false);
+}
+
 void MainWindow::on_editCopyAction_triggered()
 {
     QClipboard *clipboard = QApplication::clipboard();
