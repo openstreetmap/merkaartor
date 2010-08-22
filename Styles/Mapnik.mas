@@ -606,8 +606,9 @@
 </painter>
 <painter
  zoomUnder="0.03" zoomUpper="1e+07"
- icon=":/Art/Mapnik/station.png" iconScale="0" iconOffset="0"
- drawTrafficDirectionMarks="no">
+ icon=":/Art/Mapnik/station.png" iconScale="6" iconOffset="4"
+ drawTrafficDirectionMarks="no" labelColor="#5555ffff" labelScale="12" labelOffset="6"
+ labelFont="MS Shell Dlg 2,8.25,-1,5,50,0,0,0,0,0" labelTag="name" labelHalo="yes">
   <selector expr="[railway] is station"/>
 </painter>
 <painter

@@ -97,6 +97,7 @@
         <file>Places/place_hamlet.png</file>
         <file>Places/place_village.png</file>
         <file>Places/place_town.png</file>
+        <file>Mapnik/bus_stop.p.12.png</file>
     </qresource>
     <qresource prefix="/MapIcons">
         <file>map-icons/square.small/accommodation.png</file>
