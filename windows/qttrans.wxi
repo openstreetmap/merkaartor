@@ -10,6 +10,12 @@
         <File Id="qt_ar.qm" Name="qt_ar.qm"
            Source="$(var.QtPath)\translations\qt_ar.qm" DiskId="1">
         </File>
+        <File Id="qt_cs.qm" Name="qt_cs.qm"
+           Source="$(var.QtPath)\translations\qt_cs.qm" DiskId="1">
+        </File>
+        <File Id="qt_da.qm" Name="qt_da.qm"
+           Source="$(var.QtPath)\translations\qt_da.qm" DiskId="1">
+        </File>
         <File Id="qt_de.qm" Name="qt_de.qm"
            Source="$(var.QtPath)\translations\qt_de.qm" DiskId="1">
         </File>
@@ -19,11 +25,11 @@
         <File Id="qt_fr.qm" Name="qt_fr.qm"
            Source="$(var.QtPath)\translations\qt_fr.qm" DiskId="1">
         </File>
-        <File Id="qt_iw.qm" Name="qt_iw.qm"
-           Source="$(var.QtPath)\translations\qt_iw.qm" DiskId="1">
+        <File Id="qt_he.qm" Name="qt_he.qm"
+           Source="$(var.QtPath)\translations\qt_he.qm" DiskId="1">
         </File>
-        <File Id="qt_ja_jp.qm" Name="qt_ja_jp.qm"
-           Source="$(var.QtPath)\translations\qt_ja_jp.qm" DiskId="1">
+        <File Id="qt_ja_JP.qm" Name="qt_ja_JP.qm"
+           Source="$(var.QtPath)\translations\qt_ja_JP.qm" DiskId="1">
         </File>
         <File Id="qt_pl.qm" Name="qt_pl.qm"
            Source="$(var.QtPath)\translations\qt_pl.qm" DiskId="1">
@@ -36,6 +42,9 @@
         </File>
         <File Id="qt_sk.qm" Name="qt_sk.qm"
            Source="$(var.QtPath)\translations\qt_sk.qm" DiskId="1">
+        </File>
+        <File Id="qt_sl.qm" Name="qt_sl.qm"
+           Source="$(var.QtPath)\translations\qt_sl.qm" DiskId="1">
         </File>
         <File Id="qt_sv.qm" Name="qt_sv.qm"
            Source="$(var.QtPath)\translations\qt_sv.qm" DiskId="1">
