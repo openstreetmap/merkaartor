@@ -239,6 +239,20 @@ void EditInteraction::snapMouseMoveEvent(QMouseEvent* anEvent, Feature* aLast)
     }
 }
 
+void EditInteraction::snapMouseDoubleClickEvent(QMouseEvent* anEvent, Feature* aLast)
+{
+    Qt::KeyboardModifiers modifiers = anEvent->modifiers();
+    if (!panning() && !modifiers) {
+        QList<Feature*> theFeatures;
+        theFeatures << aLast;
+        for (int i=0; i<aLast->size(); ++i)
+            theFeatures << aLast->get(i);
+        view()->properties()->setSelection(theFeatures);
+        view()->properties()->checkMenuStatus();
+        view()->update();
+    }
+}
+
 void EditInteraction::on_remove_triggered()
 {
     QList<Feature*> Sel;

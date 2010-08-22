@@ -40,6 +40,7 @@ class Interaction : public QObject
         virtual void mousePressEvent(QMouseEvent * event);
         virtual void mouseReleaseEvent(QMouseEvent * event);
         virtual void mouseMoveEvent(QMouseEvent* event);
+        virtual void mouseDoubleClickEvent(QMouseEvent* event);
         virtual void wheelEvent(QWheelEvent* ev);
 
         virtual void paintEvent(QPaintEvent* anEvent, QPainter& thePainter);
@@ -75,10 +76,12 @@ public:
     virtual void mousePressEvent(QMouseEvent * event);
     virtual void mouseReleaseEvent(QMouseEvent * event);
     virtual void mouseMoveEvent(QMouseEvent* event);
+    virtual void mouseDoubleClickEvent(QMouseEvent* event);
 
     virtual void snapMousePressEvent(QMouseEvent * , Feature*);
     virtual void snapMouseReleaseEvent(QMouseEvent * , Feature*);
     virtual void snapMouseMoveEvent(QMouseEvent* , Feature*);
+    virtual void snapMouseDoubleClickEvent(QMouseEvent* , Feature*);
 
     void activateSnap(bool b);
     void addToNoSnap(Feature* F);

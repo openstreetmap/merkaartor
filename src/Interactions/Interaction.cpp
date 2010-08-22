@@ -152,6 +152,10 @@ void Interaction::mouseMoveEvent(QMouseEvent* anEvent)
     }
 }
 
+void Interaction::mouseDoubleClickEvent(QMouseEvent* /*anEvent*/)
+{
+}
+
 void Interaction::wheelEvent(QWheelEvent* ev)
 {
     double finalZoom = 1.;
@@ -254,6 +258,15 @@ void FeatureSnapInteraction::mouseMoveEvent(QMouseEvent* event)
         Interaction::mouseMoveEvent(event);
 }
 
+void FeatureSnapInteraction::mouseDoubleClickEvent(QMouseEvent* event)
+{
+    updateSnap(event);
+    view()->setCursor(cursor());
+    snapMouseDoubleClickEvent(event, LastSnap);
+    if (!(M_PREFS->getMouseSingleButton() && LastSnap))
+        Interaction::mouseDoubleClickEvent(event);
+}
+
 void FeatureSnapInteraction::snapMousePressEvent(QMouseEvent * , Feature*)
 {
 }
@@ -263,6 +276,10 @@ void FeatureSnapInteraction::snapMouseReleaseEvent(QMouseEvent * , Feature*)
 }
 
 void FeatureSnapInteraction::snapMouseMoveEvent(QMouseEvent* , Feature*)
+{
+}
+
+void FeatureSnapInteraction::snapMouseDoubleClickEvent(QMouseEvent* , Feature*)
 {
 }
 

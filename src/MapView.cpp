@@ -616,6 +616,17 @@ void MapView::mouseMoveEvent(QMouseEvent* anEvent)
         theInteraction->mouseMoveEvent(anEvent);
 }
 
+void MapView::mouseDoubleClickEvent(QMouseEvent* anEvent)
+{
+    if (!document())
+        return;
+
+    if (!updatesEnabled())
+        return;
+    if (theInteraction)
+        theInteraction->mouseDoubleClickEvent(anEvent);
+}
+
 void MapView::wheelEvent(QWheelEvent* ev)
 {
     if (!document())
