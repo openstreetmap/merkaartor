@@ -74,6 +74,24 @@
      <item>
       <layout class="QVBoxLayout" name="verticalLayout_8">
        <item>
+        <layout class="QHBoxLayout" name="horizontalLayout_7">
+         <item>
+          <widget class="QLabel" name="label_21">
+           <property name="text">
+            <string>Filter</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QLineEdit" name="edFilter">
+           <property name="text">
+            <string/>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </item>
+       <item>
         <layout class="QHBoxLayout">
          <property name="spacing">
           <number>6</number>

@@ -113,8 +113,10 @@ public:
     void setTitle(const QString aTitle);
 
     QString toPropertiesHtml();
-    int getFeaturePaintersSize();
-    const FeaturePainter* getFeaturePainter(int i);
+
+    void setPainters(QList<Painter> aPainters);
+    int getPaintersSize();
+    const Painter* getPainter(int i);
 
 private:
     MapDocumentPrivate* p;

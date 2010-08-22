@@ -110,12 +110,21 @@ Document::~Document()
     delete p;
 }
 
-int Document::getFeaturePaintersSize()
+void Document::setPainters(QList<Painter> aPainters)
+{
+    p->theFeaturePainters.clear();
+    for (int i=0; i<aPainters.size(); ++i) {
+        FeaturePainter fp(aPainters[i]);
+        p->theFeaturePainters.append(fp);
+    }
+}
+
+int Document::getPaintersSize()
 {
     return p->theFeaturePainters.size();
 }
 
-const FeaturePainter* Document::getFeaturePainter(int i)
+const Painter* Document::getPainter(int i)
 {
     return &p->theFeaturePainters[i];
 }

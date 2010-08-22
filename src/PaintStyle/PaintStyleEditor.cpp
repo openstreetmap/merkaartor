@@ -24,7 +24,7 @@ static void makeBoundaryIcon(QToolButton* bt, QColor C)
 }
 
 PaintStyleEditor::PaintStyleEditor(QWidget *aParent, const GlobalPainter& aGlobalPainter, const QList<Painter>& aPainters)
-        : QDialog(aParent), theGlobalPainter(aGlobalPainter), thePainters(aPainters), FreezeUpdate(true)
+    : QDialog(aParent), theGlobalPainter(aGlobalPainter), thePainters(aPainters), FreezeUpdate(true)
 {
     setupUi(this);
 
@@ -39,9 +39,8 @@ PaintStyleEditor::PaintStyleEditor(QWidget *aParent, const GlobalPainter& aGloba
     LabelBackgroundlColor->setIconSize(QSize(36, 18));
     GlobalBackgroundColor->setIconSize(QSize(36, 18));
 
-    for (int i = 0; i < thePainters.size(); ++i)
-        PaintList->addItem(thePainters[i].userName());
-    PaintList->setCurrentRow(0);
+    updatePaintList();
+
     LowerZoomBoundary->setSpecialValueText(tr("Always"));
     UpperZoomBoundary->setSpecialValueText(tr("Always"));
 
@@ -54,6 +53,25 @@ PaintStyleEditor::PaintStyleEditor(QWidget *aParent, const GlobalPainter& aGloba
     resize(1, 1);
 }
 
+void PaintStyleEditor::updatePaintList()
+{
+    QListWidgetItem* it;
+    PaintList->clear();
+    for (int i = 0; i < thePainters.size(); ++i) {
+        it = new QListWidgetItem(thePainters[i].userName());
+        it->setData(Qt::UserRole, i);
+        if (edFilter->text().isEmpty()) {
+            PaintList->addItem(it);
+        } else
+            if (thePainters[i].userName().contains(edFilter->text(), Qt::CaseInsensitive)) {
+            it = new QListWidgetItem(thePainters[i].userName());
+            it->setData(Qt::UserRole, i);
+            PaintList->addItem(it);
+        }
+    }
+    PaintList->setCurrentRow(0);
+}
+
 void PaintStyleEditor::on_AddButton_clicked()
 {
     thePainters.push_back(FeaturePainter());
@@ -64,7 +82,9 @@ void PaintStyleEditor::on_AddButton_clicked()
 
 void PaintStyleEditor::on_DuplicateButton_clicked()
 {
-    int idx = PaintList->currentRow();
+    QListWidgetItem* it = PaintList->currentItem();
+    int idx = it->data(Qt::UserRole).toInt();
+
     if (idx < 0 || idx >= thePainters.size())
         return;
     //QList<FeaturePainter>::iterator theIterator = thePainters.begin();
@@ -78,7 +98,9 @@ void PaintStyleEditor::on_DuplicateButton_clicked()
 void PaintStyleEditor::on_RemoveButton_clicked()
 {
     FreezeUpdate = true;
-    int idx = PaintList->currentRow();
+    QListWidgetItem* it = PaintList->currentItem();
+    int idx = it->data(Qt::UserRole).toInt();
+
     if (idx < 0 || idx >= thePainters.size())
         return;
     thePainters.erase(thePainters.begin() + idx);
@@ -104,7 +126,9 @@ void PaintStyleEditor::on_btUp_clicked()
 
 void PaintStyleEditor::on_btDown_clicked()
 {
-    int idx = PaintList->currentRow();
+    QListWidgetItem* it = PaintList->currentItem();
+    int idx = it->data(Qt::UserRole).toInt();
+
     if (idx >= thePainters.size()-1)
         return;
     Painter fp = thePainters[idx+1];
@@ -118,7 +142,9 @@ void PaintStyleEditor::on_btDown_clicked()
 void PaintStyleEditor::on_PaintList_itemSelectionChanged()
 {
     FreezeUpdate = true;
-    int idx = PaintList->currentRow();
+    QListWidgetItem* it = PaintList->currentItem();
+    int idx = it->data(Qt::UserRole).toInt();
+
     if (idx < 0) {
         editArea->setEnabled(false);
         DuplicateButton->setEnabled(false);
@@ -207,14 +233,16 @@ void PaintStyleEditor::updatePagesIcons()
 
 void PaintStyleEditor::on_TagSelection_editingFinished()
 {
-    updatePaintList();
+    refreshPainter();
 }
 
 void PaintStyleEditor::on_LowerZoomBoundary_valueChanged()
 {
     if (FreezeUpdate)
         return;
-    int idx = PaintList->currentRow();
+    QListWidgetItem* it = PaintList->currentItem();
+    int idx = it->data(Qt::UserRole).toInt();
+
     if (idx >= thePainters.size())
         return;
     Painter& FP(thePainters[idx]);
@@ -242,9 +270,9 @@ void PaintStyleEditor::on_GlobalBackgroundColor_clicked()
 {
     QColor rgb = QColorDialog::getColor(theGlobalPainter.getBackgroundColor(), this
 #if (QT_VERSION >= QT_VERSION_CHECK(4, 5, 0))
-                                            , tr("Select Color"), QColorDialog::ShowAlphaChannel
+                                        , tr("Select Color"), QColorDialog::ShowAlphaChannel
 #endif
-                                           );
+                                        );
     if (rgb.isValid()) {
         makeBoundaryIcon(GlobalBackgroundColor, rgb);
         theGlobalPainter.background(rgb);
@@ -253,7 +281,9 @@ void PaintStyleEditor::on_GlobalBackgroundColor_clicked()
 
 void PaintStyleEditor::on_DrawBackground_clicked(bool b)
 {
-    int idx = PaintList->currentRow();
+    QListWidgetItem* it = PaintList->currentItem();
+    int idx = it->data(Qt::UserRole).toInt();
+
     if (idx >= thePainters.size())
         return;
     thePainters[idx].backgroundActive(b);
@@ -263,15 +293,17 @@ void PaintStyleEditor::on_DrawBackground_clicked(bool b)
 
 void PaintStyleEditor::on_BackgroundColor_clicked()
 {
-    int idx = PaintList->currentRow();
+    QListWidgetItem* it = PaintList->currentItem();
+    int idx = it->data(Qt::UserRole).toInt();
+
     if (idx >= thePainters.size())
         return;
     Painter& FP(thePainters[idx]);
     QColor rgb = QColorDialog::getColor(FP.backgroundBoundary().Color, this
 #if (QT_VERSION >= QT_VERSION_CHECK(4, 5, 0))
-                                            , tr("Select Color"), QColorDialog::ShowAlphaChannel
+                                        , tr("Select Color"), QColorDialog::ShowAlphaChannel
 #endif
-                                           );
+                                        );
     if (rgb.isValid()) {
         makeBoundaryIcon(BackgroundColor, rgb);
         FP.background(rgb, ProportionalBackground->value(), FixedBackground->value());
@@ -282,7 +314,9 @@ void PaintStyleEditor::on_ProportionalBackground_valueChanged()
 {
     if (FreezeUpdate)
         return;
-    int idx = PaintList->currentRow();
+    QListWidgetItem* it = PaintList->currentItem();
+    int idx = it->data(Qt::UserRole).toInt();
+
     if (idx >= thePainters.size())
         return;
     Painter& FP(thePainters[idx]);
@@ -296,7 +330,9 @@ void PaintStyleEditor::on_FixedBackground_valueChanged()
 
 void PaintStyleEditor::on_DrawForeground_clicked(bool b)
 {
-    int idx = PaintList->currentRow();
+    QListWidgetItem* it = PaintList->currentItem();
+    int idx = it->data(Qt::UserRole).toInt();
+
     if (idx >= thePainters.size())
         return;
     thePainters[idx].foregroundActive(b);
@@ -307,15 +343,17 @@ void PaintStyleEditor::on_DrawForeground_clicked(bool b)
 
 void PaintStyleEditor::on_ForegroundColor_clicked()
 {
-    int idx = PaintList->currentRow();
+    QListWidgetItem* it = PaintList->currentItem();
+    int idx = it->data(Qt::UserRole).toInt();
+
     if (idx >= thePainters.size())
         return;
     Painter& FP(thePainters[idx]);
     QColor rgb = QColorDialog::getColor(FP.foregroundBoundary().Color, this
 #if (QT_VERSION >= QT_VERSION_CHECK(4, 5, 0))
-                                            , tr("Select Color"), QColorDialog::ShowAlphaChannel
+                                        , tr("Select Color"), QColorDialog::ShowAlphaChannel
 #endif
-                                           );
+                                        );
     if (rgb.isValid()) {
         makeBoundaryIcon(ForegroundColor, rgb);
         FP.foreground(rgb, ProportionalForeground->value(), FixedForeground->value());
@@ -326,7 +364,9 @@ void PaintStyleEditor::on_ProportionalForeground_valueChanged()
 {
     if (FreezeUpdate)
         return;
-    int idx = PaintList->currentRow();
+    QListWidgetItem* it = PaintList->currentItem();
+    int idx = it->data(Qt::UserRole).toInt();
+
     if (idx >= thePainters.size())
         return;
     Painter& FP(thePainters[idx]);
@@ -343,7 +383,9 @@ void PaintStyleEditor::on_ForegroundDashed_clicked()
 {
     if (FreezeUpdate)
         return;
-    int idx = PaintList->currentRow();
+    QListWidgetItem* it = PaintList->currentItem();
+    int idx = it->data(Qt::UserRole).toInt();
+
     if (idx >= thePainters.size())
         return;
     Painter& FP(thePainters[idx]);
@@ -365,7 +407,9 @@ void PaintStyleEditor::on_ForegroundDashOn_valueChanged()
 
 void PaintStyleEditor::on_DrawTouchup_clicked(bool b)
 {
-    int idx = PaintList->currentRow();
+    QListWidgetItem* it = PaintList->currentItem();
+    int idx = it->data(Qt::UserRole).toInt();
+
     if (idx >= thePainters.size())
         return;
     thePainters[idx].touchupActive(b);
@@ -375,15 +419,17 @@ void PaintStyleEditor::on_DrawTouchup_clicked(bool b)
 
 void PaintStyleEditor::on_TouchupColor_clicked()
 {
-    int idx = PaintList->currentRow();
+    QListWidgetItem* it = PaintList->currentItem();
+    int idx = it->data(Qt::UserRole).toInt();
+
     if (idx >= thePainters.size())
         return;
     Painter& FP(thePainters[idx]);
     QColor rgb = QColorDialog::getColor(FP.touchupBoundary().Color, this
 #if (QT_VERSION >= QT_VERSION_CHECK(4, 5, 0))
-                                            , tr("Select Color"), QColorDialog::ShowAlphaChannel
+                                        , tr("Select Color"), QColorDialog::ShowAlphaChannel
 #endif
-                                           );
+                                        );
     if (rgb.isValid()) {
         makeBoundaryIcon(TouchupColor, rgb);
         FP.touchup(rgb, ProportionalTouchup->value(), FixedTouchup->value());
@@ -394,7 +440,9 @@ void PaintStyleEditor::on_ProportionalTouchup_valueChanged()
 {
     if (FreezeUpdate)
         return;
-    int idx = PaintList->currentRow();
+    QListWidgetItem* it = PaintList->currentItem();
+    int idx = it->data(Qt::UserRole).toInt();
+
     if (idx >= thePainters.size())
         return;
     Painter& FP(thePainters[idx]);
@@ -411,7 +459,9 @@ void PaintStyleEditor::on_TouchupDashed_clicked()
 {
     if (FreezeUpdate)
         return;
-    int idx = PaintList->currentRow();
+    QListWidgetItem* it = PaintList->currentItem();
+    int idx = it->data(Qt::UserRole).toInt();
+
     if (idx >= thePainters.size())
         return;
     Painter& FP(thePainters[idx]);
@@ -433,7 +483,9 @@ void PaintStyleEditor::on_TouchupDashOn_valueChanged()
 
 void PaintStyleEditor::on_DrawFill_clicked(bool b)
 {
-    int idx = PaintList->currentRow();
+    QListWidgetItem* it = PaintList->currentItem();
+    int idx = it->data(Qt::UserRole).toInt();
+
     if (idx >= thePainters.size())
         return;
     thePainters[idx].fillActive(b);
@@ -443,15 +495,17 @@ void PaintStyleEditor::on_DrawFill_clicked(bool b)
 
 void PaintStyleEditor::on_FillColor_clicked()
 {
-    int idx = PaintList->currentRow();
+    QListWidgetItem* it = PaintList->currentItem();
+    int idx = it->data(Qt::UserRole).toInt();
+
     if (idx >= thePainters.size())
         return;
     Painter& FP(thePainters[idx]);
     QColor rgb = QColorDialog::getColor(FP.fillColor(), this
 #if (QT_VERSION >= QT_VERSION_CHECK(4, 5, 0))
-                                            , tr("Select Color"), QColorDialog::ShowAlphaChannel
+                                        , tr("Select Color"), QColorDialog::ShowAlphaChannel
 #endif
-                                           );
+                                        );
     if (rgb.isValid()) {
         makeBoundaryIcon(FillColor, rgb);
         FP.foregroundFill(rgb);
@@ -460,7 +514,9 @@ void PaintStyleEditor::on_FillColor_clicked()
 
 void PaintStyleEditor::on_DrawIcon_clicked(bool b)
 {
-    int idx = PaintList->currentRow();
+    QListWidgetItem* it = PaintList->currentItem();
+    int idx = it->data(Qt::UserRole).toInt();
+
     if (idx >= thePainters.size())
         return;
     thePainters[idx].iconActive(b);
@@ -472,7 +528,9 @@ void PaintStyleEditor::on_IconName_textEdited()
 {
     if (FreezeUpdate)
         return;
-    int idx = PaintList->currentRow();
+    QListWidgetItem* it = PaintList->currentItem();
+    int idx = it->data(Qt::UserRole).toInt();
+
     if (idx >= thePainters.size())
         return;
     Painter& FP(thePainters[idx]);
@@ -491,7 +549,9 @@ void PaintStyleEditor::on_FixedIcon_valueChanged()
 
 void PaintStyleEditor::on_DrawLabel_clicked(bool b)
 {
-    int idx = PaintList->currentRow();
+    QListWidgetItem* it = PaintList->currentItem();
+    int idx = it->data(Qt::UserRole).toInt();
+
     if (idx >= thePainters.size())
         return;
     thePainters[idx].labelActive(b);
@@ -501,7 +561,9 @@ void PaintStyleEditor::on_DrawLabel_clicked(bool b)
 
 void PaintStyleEditor::on_LabelHalo_clicked(bool b)
 {
-    int idx = PaintList->currentRow();
+    QListWidgetItem* it = PaintList->currentItem();
+    int idx = it->data(Qt::UserRole).toInt();
+
     if (idx >= thePainters.size())
         return;
     thePainters[idx].labelHalo(b);
@@ -509,7 +571,9 @@ void PaintStyleEditor::on_LabelHalo_clicked(bool b)
 
 void PaintStyleEditor::on_LabelArea_clicked(bool b)
 {
-    int idx = PaintList->currentRow();
+    QListWidgetItem* it = PaintList->currentItem();
+    int idx = it->data(Qt::UserRole).toInt();
+
     if (idx >= thePainters.size())
         return;
     thePainters[idx].labelArea(b);
@@ -517,7 +581,9 @@ void PaintStyleEditor::on_LabelArea_clicked(bool b)
 
 void PaintStyleEditor::on_LabelTag_textEdited()
 {
-    int idx = PaintList->currentRow();
+    QListWidgetItem* it = PaintList->currentItem();
+    int idx = it->data(Qt::UserRole).toInt();
+
     if (idx >= thePainters.size())
         return;
     thePainters[idx].labelTag(LabelTag->text());
@@ -525,7 +591,9 @@ void PaintStyleEditor::on_LabelTag_textEdited()
 
 void PaintStyleEditor::on_LabelBackgroundTag_textEdited()
 {
-    int idx = PaintList->currentRow();
+    QListWidgetItem* it = PaintList->currentItem();
+    int idx = it->data(Qt::UserRole).toInt();
+
     if (idx >= thePainters.size())
         return;
     thePainters[idx].labelBackgroundTag(LabelBackgroundTag->text());
@@ -533,15 +601,17 @@ void PaintStyleEditor::on_LabelBackgroundTag_textEdited()
 
 void PaintStyleEditor::on_LabelColor_clicked()
 {
-    int idx = PaintList->currentRow();
+    QListWidgetItem* it = PaintList->currentItem();
+    int idx = it->data(Qt::UserRole).toInt();
+
     if (idx >= thePainters.size())
         return;
     Painter& FP(thePainters[idx]);
     QColor rgb = QColorDialog::getColor(FP.labelBoundary().Color, this
 #if (QT_VERSION >= QT_VERSION_CHECK(4, 5, 0))
-                                            , tr("Select Color"), QColorDialog::ShowAlphaChannel
+                                        , tr("Select Color"), QColorDialog::ShowAlphaChannel
 #endif
-                                           );
+                                        );
     if (rgb.isValid()) {
         makeBoundaryIcon(LabelColor, rgb);
         FP.label(rgb, ProportionalLabel->value(), FixedLabel->value());
@@ -552,7 +622,9 @@ void PaintStyleEditor::on_ProportionalLabel_valueChanged()
 {
     if (FreezeUpdate)
         return;
-    int idx = PaintList->currentRow();
+    QListWidgetItem* it = PaintList->currentItem();
+    int idx = it->data(Qt::UserRole).toInt();
+
     if (idx >= thePainters.size())
         return;
     Painter& FP(thePainters[idx]);
@@ -566,7 +638,9 @@ void PaintStyleEditor::on_FixedLabel_valueChanged()
 
 void PaintStyleEditor::on_DrawLabelBackground_clicked(bool b)
 {
-    int idx = PaintList->currentRow();
+    QListWidgetItem* it = PaintList->currentItem();
+    int idx = it->data(Qt::UserRole).toInt();
+
     if (idx >= thePainters.size())
         return;
     thePainters[idx].labelBackgroundActive(b);
@@ -574,15 +648,17 @@ void PaintStyleEditor::on_DrawLabelBackground_clicked(bool b)
 
 void PaintStyleEditor::on_LabelBackgroundlColor_clicked()
 {
-    int idx = PaintList->currentRow();
+    QListWidgetItem* it = PaintList->currentItem();
+    int idx = it->data(Qt::UserRole).toInt();
+
     if (idx >= thePainters.size())
         return;
     Painter& FP(thePainters[idx]);
     QColor rgb = QColorDialog::getColor(FP.labelBackgroundColor(), this
 #if (QT_VERSION >= QT_VERSION_CHECK(4, 5, 0))
-                                            , tr("Select Color"), QColorDialog::ShowAlphaChannel
+                                        , tr("Select Color"), QColorDialog::ShowAlphaChannel
 #endif
-                                           );
+                                        );
     if (rgb.isValid()) {
         makeBoundaryIcon(LabelBackgroundlColor, rgb);
         FP.labelBackground(rgb);
@@ -591,15 +667,18 @@ void PaintStyleEditor::on_LabelBackgroundlColor_clicked()
 
 void PaintStyleEditor::on_LabelFont_currentFontChanged(const QFont & font)
 {
-    int idx = PaintList->currentRow();
+    QListWidgetItem* it = PaintList->currentItem();
+    int idx = it->data(Qt::UserRole).toInt();
+
     if (idx >= thePainters.size())
         return;
     thePainters[idx].setLabelFont(font.toString());
 }
 
-void PaintStyleEditor::updatePaintList()
+void PaintStyleEditor::refreshPainter()
 {
-    int idx = PaintList->currentRow();
+    QListWidgetItem* it = PaintList->currentItem();
+    int idx = it->data(Qt::UserRole).toInt();
     if (idx >= thePainters.size())
         return;
     Painter& FP(thePainters[idx]);
@@ -612,5 +691,10 @@ void PaintStyleEditor::on_buttonBox_clicked(QAbstractButton * button)
     if (buttonBox->buttonRole(button) == QDialogButtonBox::ApplyRole) {
         emit(stylesApplied(&thePainters));
     }
+}
+
+void PaintStyleEditor::on_edFilter_textChanged(const QString &text)
+{
+    updatePaintList();
 }
 

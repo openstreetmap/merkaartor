@@ -1,4 +1,7 @@
 v0.17
+    * CHG : style update
+    * ADD : Style Editor: allow to filter the style list
+    * FIX : Styles: draw icons for ways, too
     * FIX : allow to shrink properties dock
     * ADD : Support for XAPI
     * ADD : ":dirty" and ":uploaded" pseudo tags for finding/filtering
