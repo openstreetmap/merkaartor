@@ -25,7 +25,7 @@ public:
 
     virtual void setName(const QString& s);
 
-    virtual Layer* getMapLayer();
+    virtual Layer* getLayer();
     virtual void setLayerVisible(bool b, bool updateLayer=true);
     virtual void setLayerReadonly(bool b);
     virtual	void initActions();
@@ -39,9 +39,6 @@ protected:
     virtual void mouseMoveEvent(QMouseEvent *event);
     virtual void mouseReleaseEvent(QMouseEvent* anEvent);
     virtual void mouseDoubleClickEvent(QMouseEvent *event);
-
-    virtual void checkStateSet();
-    virtual void nextCheckState();
 
     QPointer<Layer> theLayer;
     QMenu* ctxMenu;
@@ -71,6 +68,8 @@ protected slots:
 
     void on_cbVisible_stateChanged ( int state );
     void on_edName_editingFinished();
+
+    void checkedStatusToggled(bool newStatus);
 
 private:
     Ui::LayerWidget ui;

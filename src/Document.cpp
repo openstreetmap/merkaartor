@@ -164,6 +164,7 @@ bool Document::toXML(QDomElement xParent, QProgressDialog * progress)
     mapDoc = xParent.ownerDocument().createElement("MapDocument");
     xParent.appendChild(mapDoc);
 
+    mapDoc.setAttribute("layernum", p->layerNum);
     if (p->lastDownloadLayer)
         mapDoc.setAttribute("lastdownloadlayer", p->lastDownloadLayer->id());
 
@@ -231,6 +232,10 @@ Document* Document::fromXML(QString title, const QDomElement e, double version, 
     }
 
     if (NewDoc) {
+        if (e.hasAttribute("layernum"))
+            NewDoc->p->layerNum = e.attribute("layernum").toInt();
+        else
+            NewDoc->p->layerNum = 1;
         if (e.hasAttribute("lastdownloadlayer"))
             NewDoc->setLastDownloadLayer(NewDoc->getLayer(e.attribute("lastdownloadlayer")));
 

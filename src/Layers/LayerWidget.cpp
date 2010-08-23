@@ -34,6 +34,8 @@ LayerWidget::LayerWidget(Layer* aLayer, QWidget* aParent)
     ui.edName->setFrame(false);
     ui.edName->setCursorPosition(0);
     ui.edName->setStyleSheet(" background: transparent; ");
+
+    connect(this, SIGNAL(toggled(bool)), SLOT(checkedStatusToggled(bool)));
 }
 
 LayerWidget::~LayerWidget()
@@ -113,17 +115,10 @@ void LayerWidget::on_edName_editingFinished()
     else
         ui.edName->setText(theLayer->name());
 }
-void LayerWidget::checkStateSet()
-{
-    QAbstractButton::checkStateSet();
-    //emit (layerSelected(this));
-}
 
-void LayerWidget::nextCheckState()
+void LayerWidget::checkedStatusToggled(bool newVal)
 {
-    QAbstractButton::nextCheckState();
-    theLayer->setSelected(isChecked());
-    //emit (layerSelected(this));
+    theLayer->setSelected(newVal);
 }
 
 void LayerWidget::setName(const QString& s)
@@ -131,7 +126,7 @@ void LayerWidget::setName(const QString& s)
     ui.edName->setText(s);
 }
 
-Layer* LayerWidget::getMapLayer()
+Layer* LayerWidget::getLayer()
 {
     return theLayer;
 }

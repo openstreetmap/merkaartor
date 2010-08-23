@@ -159,12 +159,12 @@ void Command::fromXML(Document* d, const QDomElement& e, Command* C)
 // COMMANDLIST
 
 CommandList::CommandList()
-: Command(0), Size(0)
+: Command(0), Size(0), isReversed(false)
 {
 }
 
 CommandList::CommandList(QString aDesc, Feature* aFeat)
-: Command(0), Size(0)
+: Command(0), Size(0), isReversed(false)
 {
     description = aDesc;
     mainFeature = aFeat;
@@ -174,6 +174,11 @@ CommandList::~CommandList(void)
 {
     for (int i=0; i<Subs.size(); ++i)
         delete Subs[i];
+}
+
+void CommandList::setReversed(bool val)
+{
+    isReversed = val;
 }
 
 void CommandList::add(Command* aCommand)
@@ -194,14 +199,24 @@ int CommandList::size()
 
 void CommandList::redo()
 {
-    for (int i=0; i<Size; ++i)
-        Subs[i]->redo();
+    if (!isReversed) {
+        for (int i=0; i<Size; ++i)
+            Subs[i]->redo();
+    } else {
+        for (int i=0; i<Size; ++i)
+            Subs[i]->undo();
+    }
 }
 
 void CommandList::undo()
 {
-    for (int i=Size; i; --i)
-        Subs[i-1]->undo();
+    if (!isReversed) {
+        for (int i=0; i<Size; ++i)
+            Subs[i]->undo();
+    } else {
+        for (int i=0; i<Size; ++i)
+            Subs[i]->redo();
+    }
 }
 
 bool CommandList::buildDirtyList(DirtyList& theList)
@@ -230,6 +245,8 @@ bool CommandList::toXML(QDomElement& xParent) const
     xParent.appendChild(e);
 
     e.setAttribute("xml:id", id());
+    if (isReversed)
+        e.setAttribute("reversed", "true");
     e.setAttribute("description", description);
     if (mainFeature) {
         e.setAttribute("feature", mainFeature->id());
@@ -247,13 +264,14 @@ CommandList* CommandList::fromXML(Document* d, const QDomElement& e)
 {
     CommandList* l = new CommandList();
     l->setId(e.attribute("xml:id"));
+    l->isReversed = (e.attribute("reversed") == "true");
     if (e.hasAttribute("description"))
         l->description = e.attribute("description");
     if (e.hasAttribute("feature")) {
-        if (e.attribute("featureclass") == "TrackPoint") {
+        if (e.attribute("featureclass") == "Node") {
             l->mainFeature = (Feature*) Feature::getTrackPointOrCreatePlaceHolder(d, (Layer *) d->getDirtyOrOriginLayer(), e.attribute("feature"));
         } else
-        if (e.attribute("featureclass") == "Road") {
+        if (e.attribute("featureclass") == "Way") {
             l->mainFeature = (Feature*) Feature::getWayOrCreatePlaceHolder(d, (Layer *) d->getDirtyOrOriginLayer(), e.attribute("feature"));
         } else
         if (e.attribute("featureclass") == "Relation") {
@@ -508,7 +526,7 @@ CommandHistory* CommandHistory::fromXML(Document* d, QDomElement& e, QProgressDi
             OK = false;
         }
 
-        if (progress->wasCanceled())
+        if (progress && progress->wasCanceled())
             break;
 
         c = c.nextSiblingElement();

@@ -461,7 +461,7 @@ Relation * Relation::fromXML(Document * d, Layer * L, const QDomElement e)
 {
     QString id = (e.hasAttribute("id") ? e.attribute("id") : e.attribute("xml:id"));
     if (!id.startsWith('{') && !id.startsWith('-'))
-        id = "relation_" + id;
+        id = "rel_" + id;
 
     Relation* R = dynamic_cast<Relation*>(d->getFeature(id));
     if (!R) {

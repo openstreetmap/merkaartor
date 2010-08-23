@@ -725,8 +725,36 @@ Document* MainWindow::getDocumentFromClipboard()
 
 void MainWindow::on_editCutAction_triggered()
 {
+    //Deletion
+    QList<Feature*> Sel;
+    for (int i=0; i<p->theProperties->size(); ++i)
+        Sel.push_back(p->theProperties->selection(i));
+    if (Sel.size() == 0) return;
+
+    CommandList* theList  = new CommandList(MainWindow::tr("Cut Features"), Sel[0]);
+    for (int i=0; i<Sel.size(); ++i) {
+        QList<Feature*> Alternatives;
+        theList->add(new RemoveFeatureCommand(document(), Sel[i], Alternatives));
+    }
+
+    if (theList->size()) {
+        document()->addHistory(theList);
+    }
+    else {
+        delete theList;
+        return;
+    }
+
+    // Export
     QClipboard *clipboard = QApplication::clipboard();
     QMimeData* md = new QMimeData();
+
+    QDomDocument doc;
+    QDomElement root = doc.createElement("MerkaartorUndo");
+    doc.appendChild(root);
+    theList->toXML(root);
+    md->setData("application/x-merkaartor-undo+xml", doc.toString(2).toUtf8());
+    qDebug() << doc.toString(2);
 
     QString osm = theDocument->exportOSM(this, p->theProperties->selection());
     md->setText(osm);
@@ -749,34 +777,9 @@ void MainWindow::on_editCutAction_triggered()
     }
 
     clipboard->setMimeData(md);
-    invalidateView();
 
-    //Deletion
-    QList<Feature*> Sel;
-    for (int i=0; i<p->theProperties->size(); ++i)
-        Sel.push_back(p->theProperties->selection(i));
-    if (Sel.size() == 0) return;
-
-    CommandList* theList  = new CommandList(MainWindow::tr("Cut feature %1").arg(Sel[0]->id()), Sel[0]);
-    for (int i=0; i<Sel.size(); ++i) {
-        QList<Feature*> Alternatives;
-
-        int parents=0;
-        for(int j=0; j<Sel[i]->sizeParents();++j) {
-            if (!Sel.contains(CAST_FEATURE(Sel[i]->getParent(j))))
-                ++parents;
-        }
-        if (!parents)
-            theList->add(new RemoveFeatureCommand(document(), Sel[i], Alternatives));
-    }
-
-    if (theList->size()) {
-        document()->addHistory(theList);
-        view()->properties()->setSelection(0);
-        view()->properties()->checkMenuStatus();
-    }
-    else
-        delete theList;
+    view()->properties()->setSelection(0);
+    view()->properties()->checkMenuStatus();
     view()->invalidate(true, false);
 }
 
@@ -811,7 +814,39 @@ void MainWindow::on_editCopyAction_triggered()
 
 void MainWindow::on_editPasteFeatureAction_triggered()
 {
+    DrawingLayer* l = dynamic_cast<DrawingLayer*>(theDocument->getDirtyOrOriginLayer());
+    if (!l)
+        return;
+
     Document* doc;
+
+    QClipboard *clipboard = QApplication::clipboard();
+    if (clipboard->mimeData()->hasFormat("application/x-merkaartor-undo+xml")) {
+        QDomDocument* theXmlDoc = new QDomDocument();
+        if (!theXmlDoc->setContent(clipboard->mimeData()->data("application/x-merkaartor-undo+xml"))) {
+            delete theXmlDoc;
+            return;
+        }
+        QDomElement root = theXmlDoc->firstChildElement("MerkaartorUndo");
+        if (root.isNull())
+            return;
+
+        QDomNodeList nl = theXmlDoc->elementsByTagName("RemoveFeatureCommand");
+        for (int i=0; i<nl.size(); ++i) {
+            nl.at(i).toElement().setAttribute("layer", l->id());
+        }
+
+        CommandList* theList = CommandList::fromXML(theDocument, root.firstChildElement("CommandList"));
+        theList->setReversed(true);
+        theList->redo();
+        theList->setDescription("Paste Features");
+        theDocument->addHistory(theList);
+
+        view()->invalidate(true, false);
+
+        return;
+    }
+
     if (!(doc = getDocumentFromClipboard()))
         return;
 
@@ -845,7 +880,7 @@ void MainWindow::on_editPasteFeatureAction_triggered()
     delete doc;
 
     p->theProperties->setSelection(theFeats);
-    invalidateView();
+    view()->invalidate(true, false);
 }
 
 void MainWindow::on_editPasteOverwriteAction_triggered()
