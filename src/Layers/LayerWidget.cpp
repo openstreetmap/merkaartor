@@ -94,7 +94,7 @@ void LayerWidget::on_cbVisible_stateChanged ( int state )
     setLayerVisible((state > Qt::Unchecked));
 }
 
-void LayerWidget::mouseDoubleClickEvent(QMouseEvent *event)
+void LayerWidget::mouseDoubleClickEvent(QMouseEvent */*event*/)
 {
     ui.edName->setReadOnly(false);
     ui.edName->setAttribute(Qt::WA_TransparentForMouseEvents, false);

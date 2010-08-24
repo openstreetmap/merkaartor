@@ -168,8 +168,8 @@ void RemoveFeatureCommand::undo()
     theLayer->remove(theFeature);
     if (oldLayer->size() < Idx)
         Idx = oldLayer->size();
-    theFeature->setDeleted(false);
     oldLayer->add(theFeature,Idx);
+    theFeature->setDeleted(false);
     decDirtyLevel(oldLayer, theFeature);
     if (CascadedCleanUp)
         CascadedCleanUp->undo();
@@ -206,6 +206,7 @@ bool RemoveFeatureCommand::toXML(QDomElement& xParent) const
 
     e.setAttribute("xml:id", id());
     e.setAttribute("layer", oldLayer->id());
+    e.setAttribute("newlayer", theLayer->id());
     e.setAttribute("feature", theFeature->xmlId());
     e.setAttribute("index", QString::number(Idx));
 
@@ -239,7 +240,10 @@ RemoveFeatureCommand * RemoveFeatureCommand::fromXML(Document* d, QDomElement e)
 
     a->setId(e.attribute("xml:id"));
     a->oldLayer = d->getLayer(e.attribute("layer"));
-    a->theLayer = d->getDirtyOrOriginLayer();
+    if (e.hasAttribute("newlayer"))
+        a->theLayer = d->getLayer(e.attribute("newlayer"));
+        else
+            a->theLayer = d->getDirtyOrOriginLayer();
     a->theFeature = d->getFeature(e.attribute("feature"), false);
     a->Idx = e.attribute("index").toInt();
 
