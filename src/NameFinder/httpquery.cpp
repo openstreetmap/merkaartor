@@ -25,64 +25,65 @@
 namespace NameFinder
 {
 
-	HttpQuery::HttpQuery ( QObject *parent, QIODevice *device ) : QObject ( parent )
-	{
-		myService = "http://gazetteer.openstreetmap.org/namefinder/search.xml";
-		myDevice = device;
-	}
-	HttpQuery::HttpQuery ( QObject *parent, QUrl service, QIODevice *device ) : QObject ( parent )
-	{
-		myService = service;
-		myDevice = device;
-	}
+    HttpQuery::HttpQuery ( QObject *parent, QIODevice *device ) : QObject ( parent )
+    {
+        myService = "http://nominatim.openstreetmap.org/search";
+        myDevice = device;
+    }
+    HttpQuery::HttpQuery ( QObject *parent, QUrl service, QIODevice *device ) : QObject ( parent )
+    {
+        myService = service;
+        myDevice = device;
+    }
 
 
-	HttpQuery::~HttpQuery()
-	{
-	}
+    HttpQuery::~HttpQuery()
+    {
+    }
 
-	bool HttpQuery::startSearch ( QString question )
-	{
-		connect(&connection, SIGNAL(responseHeaderReceived(const QHttpResponseHeader &)), this, SLOT(on_responseHeaderReceived(const QHttpResponseHeader &)));
-		connect(&connection,SIGNAL(requestFinished(int, bool)),this,SLOT(on_requestFinished(int, bool)));
-		//if (!myService.isValid() || myService.scheme() != "http" || myService.path().isEmpty())
-		//  return false;
+    bool HttpQuery::startSearch ( QString question )
+    {
+        connect(&connection, SIGNAL(responseHeaderReceived(const QHttpResponseHeader &)), this, SLOT(on_responseHeaderReceived(const QHttpResponseHeader &)));
+        connect(&connection,SIGNAL(requestFinished(int, bool)),this,SLOT(on_requestFinished(int, bool)));
+        //if (!myService.isValid() || myService.scheme() != "http" || myService.path().isEmpty())
+        //  return false;
 
-		myService.addQueryItem ( "find",question );
-		connection.setHost ( myService.host(), myService.port ( 80 ) );
-		
-		QHttpRequestHeader request( "GET", myService.path() + "?" + myService.encodedQuery() );
-		if (myService.port(80) != 80)
-			request.setValue( "Host", myService.host() + ":" + myService.port ( 80 ) );
-		else
-			request.setValue( "Host", myService.host() );
-		request.setValue( "Connection", "Keep-Alive" );
+        myService.addQueryItem ( "q",question );
+        myService.addQueryItem ( "format","xml" );
+        connection.setHost ( myService.host(), myService.port ( 80 ) );
 
-		connection.setProxy(M_PREFS->getProxy(myService));
-		reqId = connection.request( request, NULL, myDevice ); 
-		connection.close();
-		return true;
-	}
+        QHttpRequestHeader request( "GET", myService.path() + "?" + myService.encodedQuery() );
+        if (myService.port(80) != 80)
+            request.setValue( "Host", myService.host() + ":" + myService.port ( 80 ) );
+        else
+            request.setValue( "Host", myService.host() );
+        request.setValue( "Connection", "Keep-Alive" );
 
-	void HttpQuery::on_responseHeaderReceived(const QHttpResponseHeader & hdr)
-	{
-		switch (hdr.statusCode()) {
-			case 200:
-				break;
-			default:
-				qDebug() << hdr.statusCode();
-				qDebug() << hdr.reasonPhrase();
-				break;
-		}
-	}
+        connection.setProxy(M_PREFS->getProxy(myService));
+        reqId = connection.request( request, NULL, myDevice );
+        connection.close();
+        return true;
+    }
 
-	void HttpQuery::on_requestFinished ( int id, bool error )
-	{
-		if ((id == reqId) && !error) {
-			emit done();
-		}
-		else if ((id == reqId) && error) {
-			emit doneWithError(connection.error());
-		}
-	}
+    void HttpQuery::on_responseHeaderReceived(const QHttpResponseHeader & hdr)
+    {
+        switch (hdr.statusCode()) {
+            case 200:
+                break;
+            default:
+                qDebug() << hdr.statusCode();
+                qDebug() << hdr.reasonPhrase();
+                break;
+        }
+    }
+
+    void HttpQuery::on_requestFinished ( int id, bool error )
+    {
+        if ((id == reqId) && !error) {
+            emit done();
+        }
+        else if ((id == reqId) && error) {
+            emit doneWithError(connection.error());
+        }
+    }
 }

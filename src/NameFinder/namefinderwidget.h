@@ -35,11 +35,11 @@ class QItemSelection;
 namespace NameFinder {
 
 
-class NameFinderWidget : public QWidget {
+    class NameFinderWidget : public QWidget {
         Q_OBJECT
         Q_DISABLE_COPY(NameFinderWidget)
-public:
-        explicit NameFinderWidget(QWidget *parent = 0);
+    public:
+                explicit NameFinderWidget(QWidget *parent = 0);
         virtual ~NameFinderWidget();
         /**
          * Executes the search
@@ -50,34 +50,34 @@ public:
          */
         void search(QString object);
         //! Returns the coordinates of selected map feature
-	QPointF selectedCoords();
-        //! Returns the zoom level of the selected map feature
-        int selectedZoom();
+        QPointF selectedCoords();
+        //! Returns the bbox of the selected map feature
+        QRectF selectedBbox();
 
-signals:
-	void selectionChanged();
-	void doubleClicked();
-	void done();
+    signals:
+        void selectionChanged();
+        void doubleClicked();
+        void done();
 
-protected:
+    protected:
         virtual void changeEvent(QEvent *e);
 
 
-private:
+    private:
         Ui::NameFinderWidgetUi *m_ui;
 
         QBuffer buffer;
         HttpQuery *query;
         NameFinderTableModel *model;
         QList<NameFinderResult> *results;
-	QItemSelectionModel *selection;
+        QItemSelectionModel *selection;
 
 
-private slots:
-	void display();
-	void displayError(QHttp::Error);
-	void selection_selectionChanged(const QItemSelection & selected, const QItemSelection & deselected);
-	void doubleClick();
+    private slots:
+        void display();
+        void displayError(QHttp::Error);
+        void selection_selectionChanged(const QItemSelection & selected, const QItemSelection & deselected);
+        void doubleClick();
     };
 }
 #endif // NAMEFINDERWIDGET_H

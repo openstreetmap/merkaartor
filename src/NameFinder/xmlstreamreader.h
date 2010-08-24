@@ -28,7 +28,7 @@
 namespace NameFinder {
 
     /**	\brief Reads the XML file and places results in a QList of NameFinderResult
-    	@author Łukasz Jernaś <deejay1@srem.org>
+        @author Łukasz Jernaś <deejay1@srem.org>
     */
     class XmlStreamReader {
 public:
@@ -46,9 +46,9 @@ private:
 
         void readSearchResultsElement();
         void readNamedElement(QList<NameFinderResult> *results);
-        void readDescriptionElement(NameFinderResult *result);
-        //! Reads nearby places from the query
-        void readNearestPlacesElement(NameFinderResult *result);
+//        void readDescriptionElement(NameFinderResult *result);
+//        //! Reads nearby places from the query
+//        void readNearestPlacesElement(NameFinderResult *result);
         void skipElement();
         int i;
 
