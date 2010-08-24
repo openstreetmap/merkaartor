@@ -399,7 +399,7 @@ void Layer::setId(const QString& id)
 
 const QString& Layer::id() const
 {
-    if (Id == "")
+    if (Id.isEmpty())
         Id = QUuid::createUuid().toString();
     return Id;
 }

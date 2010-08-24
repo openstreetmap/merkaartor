@@ -59,6 +59,7 @@ public slots:
     virtual void on_editUndoAction_triggered();
     virtual void on_editRedoAction_triggered();
     virtual void on_editMapStyleAction_triggered();
+    virtual void on_editCutAction_triggered();
     virtual void on_editCopyAction_triggered();
     virtual void on_editPasteFeatureAction_triggered();
     virtual void on_editPasteOverwriteAction_triggered();

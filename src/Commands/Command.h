@@ -65,6 +65,7 @@ class CommandList : public Command
         int size();
         void add(Command* aCommand);
         virtual bool buildDirtyList(DirtyList& theList);
+        void setReversed(bool val);
 
         virtual bool toXML(QDomElement& xParent) const;
         static CommandList* fromXML(Document* d, const QDomElement& e);
@@ -72,6 +73,7 @@ class CommandList : public Command
     private:
         QList<Command*> Subs;
         int Size;
+        bool isReversed;
 };
 
 class CommandHistory

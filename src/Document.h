@@ -39,6 +39,8 @@ private:
 public:
     ~Document();
 
+    const QString& id() const;
+
     void addDefaultLayers();
 
     void setLayerDock(LayerDock* aDock);

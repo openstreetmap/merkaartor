@@ -231,10 +231,10 @@ RelationRemoveFeatureCommand * RelationRemoveFeatureCommand::fromXML(Document * 
         a->oldLayer = NULL;
     a->theRelation = Feature::getRelationOrCreatePlaceHolder(d, a->theLayer, e.attribute("relation"));
     Feature* F = NULL;
-    if (e.attribute("featureclass") == "TrackPoint") {
+    if (e.attribute("featureclass") == "Node") {
         F = (Feature*) Feature::getTrackPointOrCreatePlaceHolder(d, a->theLayer, e.attribute("feature"));
     } else
-    if (e.attribute("featureclass") == "Road") {
+    if (e.attribute("featureclass") == "Way") {
         F = (Feature*) Feature::getWayOrCreatePlaceHolder(d, a->theLayer, e.attribute("feature"));
     } else
     if (e.attribute("featureclass") == "Relation") {

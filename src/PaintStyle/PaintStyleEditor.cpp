@@ -693,7 +693,7 @@ void PaintStyleEditor::on_buttonBox_clicked(QAbstractButton * button)
     }
 }
 
-void PaintStyleEditor::on_edFilter_textChanged(const QString &text)
+void PaintStyleEditor::on_edFilter_textChanged(const QString &/*text*/)
 {
     updatePaintList();
 }

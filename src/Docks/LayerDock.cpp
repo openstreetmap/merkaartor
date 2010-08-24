@@ -18,7 +18,7 @@
 
 #define CHILD_WIDGETS (p->Content->children())
 #define CHILD_WIDGET(x) (dynamic_cast<LayerWidget*>(p->Content->children().at(x)))
-#define CHILD_LAYER(x) (dynamic_cast<LayerWidget*>(p->Content->children().at(x))->getMapLayer())
+#define CHILD_LAYER(x) (dynamic_cast<LayerWidget*>(p->Content->children().at(x))->getLayer())
 
 class LayerDockPrivate
 {
@@ -105,7 +105,7 @@ void LayerDock::dropEvent(QDropEvent *event)
         return;
     }
 
-    p->Main->document()->moveLayer(p->theDropWidget->getMapLayer(), p->Layout->indexOf(p->theDropWidget));
+    p->Main->document()->moveLayer(p->theDropWidget->getLayer(), p->Layout->indexOf(p->theDropWidget));
     emit(layersChanged(false));
     update();
 }
@@ -156,6 +156,19 @@ void LayerDock::deleteLayer(Layer* aLayer)
     }
 
     update();
+}
+
+Layer* LayerDock::getSelectedLayer()
+{
+    for (int i=CHILD_WIDGETS.size()-1; i >= 0; i--) {
+        if (!CHILD_WIDGET(i))
+            continue;
+        if (CHILD_WIDGET(i)->isChecked()) {
+            return CHILD_LAYER(i);
+        }
+    }
+
+    return NULL;
 }
 
 void LayerDock::createContent()
@@ -256,7 +269,7 @@ void LayerDock::resizeEvent(QResizeEvent* )
 
 void LayerDock::layerChanged(LayerWidget* l, bool adjustViewport)
 {
-    l->getAssociatedMenu()->setTitle(l->getMapLayer()->name());
+    l->getAssociatedMenu()->setTitle(l->getLayer()->name());
     emit(layersChanged(adjustViewport));
 }
 
@@ -411,8 +424,8 @@ void LayerDock::readonlyNoneLayers(bool)
 void LayerDock::closeLayers(bool)
 {
     for (int i=0; i<p->selWidgets.size(); ++i) {
-        if (p->selWidgets[i]->getMapLayer()->canDelete())
-            layerClosed(p->selWidgets[i]->getMapLayer());
+        if (p->selWidgets[i]->getLayer()->canDelete())
+            layerClosed(p->selWidgets[i]->getLayer());
     }
 }
 
@@ -501,7 +514,7 @@ void LayerDock::mousePressEvent ( QMouseEvent * ev )
         p->lastSelWidget = aWidget;
 
         if (p->Main->info())
-            p->Main->info()->setHtml(aWidget->getMapLayer()->toHtml());
+            p->Main->info()->setHtml(aWidget->getLayer()->toHtml());
     }
     ev->accept();
 }

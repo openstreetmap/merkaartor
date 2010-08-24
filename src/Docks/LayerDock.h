@@ -30,6 +30,8 @@ class LayerDock : public MDockAncestor
         void addLayer(Layer* aLayer);
         void deleteLayer(Layer* aLayer);
 
+        Layer* getSelectedLayer();
+
     private slots:
         void layerChanged(LayerWidget*, bool adjustViewport);
         void layerClosed(Layer*);

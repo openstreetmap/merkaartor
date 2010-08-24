@@ -140,6 +140,7 @@ MainWindow::MainWindow(QWidget *parent)
         , toolBarManager(0)
 {
     setlocale(LC_NUMERIC, "C");  // impose decimal point separator
+    qsrand(QDateTime::currentDateTime().toTime_t());  //initialize random generator
 
     p = new MainWindowPrivate;
 
@@ -723,6 +724,67 @@ Document* MainWindow::getDocumentFromClipboard()
     return NULL;
 }
 
+void MainWindow::on_editCutAction_triggered()
+{
+    // Export
+    QClipboard *clipboard = QApplication::clipboard();
+    QMimeData* md = new QMimeData();
+
+    QString osm = theDocument->exportOSM(this, p->theProperties->selection());
+    md->setText(osm);
+    md->setData("application/x-openstreetmap+xml", osm.toUtf8());
+
+    ImportExportKML kmlexp(theDocument);
+    QBuffer kmlBuf;
+    kmlBuf.open(QIODevice::WriteOnly | QIODevice::Truncate);
+    if (kmlexp.setDevice(&kmlBuf)) {
+        kmlexp.export_(p->theProperties->selection());
+        md->setData("application/vnd.google-earth.kml+xml", kmlBuf.data());
+    }
+
+    ExportGPX gpxexp(theDocument);
+    QBuffer gpxBuf;
+    gpxBuf.open(QIODevice::WriteOnly | QIODevice::Truncate);
+    if (gpxexp.setDevice(&gpxBuf)) {
+        gpxexp.export_(p->theProperties->selection());
+        md->setData("application/gpx+xml", gpxBuf.data());
+    }
+
+    //Deletion
+    QList<Feature*> Sel;
+    for (int i=0; i<p->theProperties->size(); ++i)
+        Sel.push_back(p->theProperties->selection(i));
+    if (Sel.size() == 0) return;
+
+    CommandList* theList  = new CommandList(MainWindow::tr("Cut Features"), Sel[0]);
+    for (int i=0; i<Sel.size(); ++i) {
+        QList<Feature*> Alternatives;
+        theList->add(new RemoveFeatureCommand(document(), Sel[i], Alternatives));
+    }
+
+    if (theList->size()) {
+        document()->addHistory(theList);
+    }
+    else {
+        delete theList;
+        return;
+    }
+
+    QDomDocument doc;
+    QDomElement root = doc.createElement("MerkaartorUndo");
+    root.setAttribute("documentid", theDocument->id());
+    doc.appendChild(root);
+    theList->toXML(root);
+    md->setData("application/x-merkaartor-undo+xml", doc.toString(2).toUtf8());
+//    qDebug() << doc.toString(2);
+
+    clipboard->setMimeData(md);
+
+    view()->properties()->setSelection(0);
+    view()->properties()->checkMenuStatus();
+    view()->invalidate(true, false);
+}
+
 void MainWindow::on_editCopyAction_triggered()
 {
     QClipboard *clipboard = QApplication::clipboard();
@@ -754,7 +816,42 @@ void MainWindow::on_editCopyAction_triggered()
 
 void MainWindow::on_editPasteFeatureAction_triggered()
 {
+    DrawingLayer* l = dynamic_cast<DrawingLayer*>(theDocument->getDirtyOrOriginLayer());
+    if (!l)
+        return;
+
     Document* doc;
+
+    QClipboard *clipboard = QApplication::clipboard();
+    if (clipboard->mimeData()->hasFormat("application/x-merkaartor-undo+xml")) {
+        QDomDocument* theXmlDoc = new QDomDocument();
+        if (!theXmlDoc->setContent(clipboard->mimeData()->data("application/x-merkaartor-undo+xml"))) {
+            delete theXmlDoc;
+        } else {
+            QDomElement root = theXmlDoc->firstChildElement("MerkaartorUndo");
+            if (!root.isNull()) {
+                QString docId = root.attribute("documentid");
+                if (theDocument->id() == docId) {
+
+                    QDomNodeList nl = theXmlDoc->elementsByTagName("RemoveFeatureCommand");
+                    for (int i=0; i<nl.size(); ++i) {
+                        nl.at(i).toElement().setAttribute("layer", l->id());
+                    }
+
+                    CommandList* theList = CommandList::fromXML(theDocument, root.firstChildElement("CommandList"));
+                    theList->setReversed(true);
+                    theList->redo();
+                    theList->setDescription("Paste Features");
+                    theDocument->addHistory(theList);
+
+                    view()->invalidate(true, false);
+
+                    return;
+                }
+            }
+        }
+    }
+
     if (!(doc = getDocumentFromClipboard()))
         return;
 
@@ -776,7 +873,7 @@ void MainWindow::on_editPasteFeatureAction_triggered()
 //		} else
 //		if (Relation* RR = CAST_RELATION(F)) {
 //		}
-        F->layer()->remove(F);
+//        F->layer()->remove(F);
         theList->add(new AddFeatureCommand(theDocument->getDirtyOrOriginLayer(), F, true));
     }
 
@@ -788,7 +885,7 @@ void MainWindow::on_editPasteFeatureAction_triggered()
     delete doc;
 
     p->theProperties->setSelection(theFeats);
-    invalidateView();
+    view()->invalidate(true, false);
 }
 
 void MainWindow::on_editPasteOverwriteAction_triggered()

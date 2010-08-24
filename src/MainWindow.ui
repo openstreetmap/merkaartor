@@ -24,7 +24,7 @@
      <x>0</x>
      <y>0</y>
      <width>1100</width>
-     <height>21</height>
+     <height>25</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuHelp">
@@ -70,6 +70,7 @@
     <addaction name="editUndoAction"/>
     <addaction name="editRedoAction"/>
     <addaction name="separator"/>
+    <addaction name="editCutAction"/>
     <addaction name="editCopyAction"/>
     <addaction name="editPasteFeatureAction"/>
     <addaction name="editPasteMergeAction"/>
@@ -1749,6 +1750,18 @@
   <action name="layersNewDrawingAction">
    <property name="text">
     <string>Add new Drawing layer</string>
+   </property>
+  </action>
+  <action name="editCutAction">
+   <property name="icon">
+    <iconset resource="../Icons/AllIcons.qrc">
+     <normaloff>:/Icons/actions/edit-cut.png</normaloff>:/Icons/actions/edit-cut.png</iconset>
+   </property>
+   <property name="text">
+    <string>Cu&amp;t</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+X</string>
    </property>
   </action>
  </widget>

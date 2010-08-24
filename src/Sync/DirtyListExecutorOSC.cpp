@@ -257,7 +257,7 @@ bool DirtyListExecutorOSC::stop()
 //                } else {
 //                    QRegExp rx(".*relation.*(\\d+)", Qt::CaseInsensitive);
 //                    if (rx.indexIn(DataOut) > -1) {
-//                        errFeat = "relation_" + rx.cap(1);
+//                        errFeat = "rel_" + rx.cap(1);
 //                    }
 //                }
 //            }
@@ -275,7 +275,7 @@ bool DirtyListExecutorOSC::stop()
 //                } else {
 //                    QRegExp rx(".*relation.*(\\d+)", Qt::CaseInsensitive);
 //                    if (rx.indexIn(DataOut) > -1) {
-//                        errFeat = "relation_" + rx.cap(1);
+//                        errFeat = "rel_" + rx.cap(1);
 //                    }
 //                }
 //            }

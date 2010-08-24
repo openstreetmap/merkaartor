@@ -67,7 +67,7 @@ public:
     int FilterRevision;
     QString title;
     int layerNum;
-
+    mutable QString Id;
 
     QList<FeaturePainter> theFeaturePainters;
 
@@ -108,6 +108,13 @@ Document::Document(const Document&, LayerDock*)
 Document::~Document()
 {
     delete p;
+}
+
+const QString& Document::id() const
+{
+    if (p->Id.isEmpty())
+        p->Id = QUuid::createUuid().toString();
+    return p->Id;
 }
 
 void Document::setPainters(QList<Painter> aPainters)
@@ -164,6 +171,8 @@ bool Document::toXML(QDomElement xParent, QProgressDialog * progress)
     mapDoc = xParent.ownerDocument().createElement("MapDocument");
     xParent.appendChild(mapDoc);
 
+    mapDoc.setAttribute("xml:id", id());
+    mapDoc.setAttribute("layernum", p->layerNum);
     if (p->lastDownloadLayer)
         mapDoc.setAttribute("lastdownloadlayer", p->lastDownloadLayer->id());
 
@@ -231,6 +240,12 @@ Document* Document::fromXML(QString title, const QDomElement e, double version, 
     }
 
     if (NewDoc) {
+        if (e.hasAttribute("xml:id"))
+            NewDoc->p->Id = e.attribute("xml:id");
+        if (e.hasAttribute("layernum"))
+            NewDoc->p->layerNum = e.attribute("layernum").toInt();
+        else
+            NewDoc->p->layerNum = 1;
         if (e.hasAttribute("lastdownloadlayer"))
             NewDoc->setLastDownloadLayer(NewDoc->getLayer(e.attribute("lastdownloadlayer")));
 
