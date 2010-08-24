@@ -22,103 +22,97 @@
 namespace NameFinder
 {
 
-	NameFinderTableModel::NameFinderTableModel ( QObject *parent )
-			: QAbstractTableModel ( parent )
-	{
-		showColumns = 3;
-		myResults = NULL;
-	}
+    NameFinderTableModel::NameFinderTableModel ( QObject *parent )
+            : QAbstractTableModel ( parent )
+    {
+        showColumns = 2;
+        myResults = NULL;
+    }
 
 
-	NameFinderTableModel::~NameFinderTableModel()
-	{
-	}
+    NameFinderTableModel::~NameFinderTableModel()
+    {
+    }
 
 
-	int NameFinderTableModel::rowCount ( const QModelIndex &parent ) const
-	{
-		Q_UNUSED(parent)
-		if ( myResults == NULL )
-			return 0;
-		if ( !myResults->isEmpty() )
-			return myResults->count();
-		return 0;
-	}
+    int NameFinderTableModel::rowCount ( const QModelIndex &parent ) const
+    {
+        Q_UNUSED(parent)
+        if ( myResults == NULL )
+            return 0;
+        if ( !myResults->isEmpty() )
+            return myResults->count();
+        return 0;
+    }
 
-	int NameFinderTableModel::columnCount ( const QModelIndex &parent ) const
-	{
-		Q_UNUSED(parent)
-		return showColumns;
-	}
+    int NameFinderTableModel::columnCount ( const QModelIndex &parent ) const
+    {
+        Q_UNUSED(parent)
+        return showColumns;
+    }
 
-	void NameFinderTableModel::setResults ( QList<NameFinderResult> *results )
-	{
-		myResults = results;
-		reset();
-	}
-	QVariant NameFinderTableModel::headerData ( int section, Qt::Orientation orientation, int role ) const
-	{
-		if ( role != Qt::DisplayRole )
-			return QVariant();
-		if ( orientation == Qt::Horizontal )
-		{
-			switch ( section )
-			{
-				case 0:
-					return QString ( tr ( "Name" ) );
-					//break;
-				case 1:
-					return QString ( tr ( "Type" ) );
-					//break;
-				case 2:
-					return QString ( tr ( "Near" ) );
-					//break;
-				default:
-					return QString ( tr ( "Unknown field" ) );
-			}
-		}
-		else
-		{
-			return section;
-		}
-		return QVariant();
-	}
+    void NameFinderTableModel::setResults ( QList<NameFinderResult> *results )
+    {
+        myResults = results;
+        reset();
+    }
+    QVariant NameFinderTableModel::headerData ( int section, Qt::Orientation orientation, int role ) const
+    {
+        if ( role != Qt::DisplayRole )
+            return QVariant();
+        if ( orientation == Qt::Horizontal )
+        {
+            switch ( section )
+            {
+                case 0:
+                    return QString ( tr ( "Class" ) );
+                    //break;
+                case 1:
+                    return QString ( tr ( "Name" ) );
+                    //break;
+                default:
+                    return QString ( tr ( "Unknown field" ) );
+            }
+        }
+        else
+        {
+            return section;
+        }
+        return QVariant();
+    }
 
-	QVariant NameFinderTableModel::data ( const QModelIndex &index, int role ) const
-	{
-		if ( !index.isValid() )
-			return QVariant();
-		if ( role == Qt::TextAlignmentRole )
-		{
-			return int ( Qt::AlignCenter | Qt::AlignVCenter );
-		}
-		else if ( role == Qt::DisplayRole )
-		{
-			if ( myResults == NULL )
-				return QVariant();
-			if ( !myResults->isEmpty() )
-			{
-				switch ( index.column() )
-				{
-					case 0:
-						return myResults->at ( index.row() ).name;
-						break;
-					case 1:
-						return myResults->at ( index.row() ).type;
-						break;
-					case 2:
-						return myResults->value ( index.row() ).near.value ( 0 ).name;
-						break;
-					default:
-						return QVariant();
-				}
-			}
-			return QVariant();
-		}
-		return QVariant();
-	}
-	NameFinderResult NameFinderTableModel::resultAt ( int index )
-	{
-		return myResults->at ( index );
-	}
+    QVariant NameFinderTableModel::data ( const QModelIndex &index, int role ) const
+    {
+        if ( !index.isValid() )
+            return QVariant();
+        if ( role == Qt::TextAlignmentRole )
+        {
+            return int ( Qt::AlignCenter | Qt::AlignVCenter );
+        }
+        else if ( role == Qt::DisplayRole )
+        {
+            if ( myResults == NULL )
+                return QVariant();
+            if ( !myResults->isEmpty() )
+            {
+                switch ( index.column() )
+                {
+                    case 0:
+                        return myResults->at ( index.row() ).category;
+                        break;
+                    case 1:
+                        return myResults->at ( index.row() ).name;
+                        break;
+                    default:
+                        return QVariant();
+                }
+            }
+            return QVariant();
+        }
+        return QVariant();
+    }
+    NameFinderResult NameFinderTableModel::resultAt ( int index )
+    {
+        return myResults->at ( index );
+    }
 }

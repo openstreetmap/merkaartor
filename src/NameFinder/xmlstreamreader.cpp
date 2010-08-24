@@ -19,6 +19,8 @@
  ***************************************************************************/
 #include "xmlstreamreader.h"
 
+#include <QStringList>
+
 namespace NameFinder {
 
     XmlStreamReader::XmlStreamReader(QIODevice *device) {
@@ -57,7 +59,7 @@ namespace NameFinder {
             }
 
             if (reader.isStartElement()) {
-                if (reader.name() == "named") {
+                if (reader.name() == "place") {
                     readNamedElement(&myResults);
                 } else {
                     skipElement();
@@ -70,13 +72,14 @@ namespace NameFinder {
     }
     void XmlStreamReader::readNamedElement(QList<NameFinderResult> *results) {
         NameFinderResult myResult;
-        myResult.name = reader.attributes().value("name").toString();
-        myResult.type = reader.attributes().value("type").toString();
-        myResult.zoom = reader.attributes().value("zoom").toString().toInt();
+        myResult.name = reader.attributes().value("display_name").toString();
+        myResult.type = reader.attributes().value("osm_type").toString();
+        QStringList sBbox = reader.attributes().value("boundingbox").toString().split(",");
+        myResult.bbox = QRectF(QPointF(sBbox[2].toDouble(), sBbox[0].toDouble()), QPointF(sBbox[3].toDouble(), sBbox[1].toDouble()));
         myResult.lon = reader.attributes().value("lon").toString().toDouble();
         myResult.lat = reader.attributes().value("lat").toString().toDouble();
-        myResult.category = reader.attributes().value("category").toString();
-        myResult.info = reader.attributes().value("info").toString();
+        myResult.category = reader.attributes().value("class").toString();
+        myResult.info = reader.attributes().value("type").toString();
 
         reader.readNext();
         while (!reader.atEnd()) {
@@ -86,12 +89,12 @@ namespace NameFinder {
             }
 
             if (reader.isStartElement()) {
-                if (reader.name() == "named") {
+                if (reader.name() == "place") {
                     readNamedElement(results);
-                } else if (reader.name() == "description") {
-                    readDescriptionElement(&myResult);
-                } else if (reader.name() == "nearestplaces") {
-                    readNearestPlacesElement(&myResult);
+//                } else if (reader.name() == "description") {
+//                    readDescriptionElement(&myResult);
+//                } else if (reader.name() == "nearestplaces") {
+//                    readNearestPlacesElement(&myResult);
                 } else {
                     skipElement();
                 }
@@ -118,38 +121,38 @@ namespace NameFinder {
         }
     }
 
-    void XmlStreamReader::readDescriptionElement(NameFinderResult *result) {
-        result->description = reader.readElementText();
-        while (!reader.atEnd()) {
-            if (reader.isEndElement()) {
-                reader.readNext();
-                break;
-            } else {
-                skipElement();
-            }
-        }
-    }
-
-    void XmlStreamReader::readNearestPlacesElement(NameFinderResult *result) {
-        reader.readNext();
-        while (!reader.atEnd()) {
-            if (reader.isEndElement()) {
-                reader.readNext();
-                break;
-            }
-            if (reader.isStartElement()) {
-                if (reader.name() == "named") {
-                    QList<NameFinderResult> nearResults;
-                    readNamedElement(&nearResults);
-                    result->near = nearResults;
-                } else {
-                    skipElement();
-                }
-            } else {
-                reader.readNext();
-            }
-        }
-    }
+//    void XmlStreamReader::readDescriptionElement(NameFinderResult *result) {
+//        result->description = reader.readElementText();
+//        while (!reader.atEnd()) {
+//            if (reader.isEndElement()) {
+//                reader.readNext();
+//                break;
+//            } else {
+//                skipElement();
+//            }
+//        }
+//    }
+//
+//    void XmlStreamReader::readNearestPlacesElement(NameFinderResult *result) {
+//        reader.readNext();
+//        while (!reader.atEnd()) {
+//            if (reader.isEndElement()) {
+//                reader.readNext();
+//                break;
+//            }
+//            if (reader.isStartElement()) {
+//                if (reader.name() == "named") {
+//                    QList<NameFinderResult> nearResults;
+//                    readNamedElement(&nearResults);
+//                    result->near = nearResults;
+//                } else {
+//                    skipElement();
+//                }
+//            } else {
+//                reader.readNext();
+//            }
+//        }
+//    }
 
     QList<NameFinderResult> XmlStreamReader::getResults() {
         return myResults;

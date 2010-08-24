@@ -30,116 +30,117 @@
 
 namespace NameFinder
 {
-	NameFinderWidget::NameFinderWidget ( QWidget *parent ) :
-			QWidget ( parent ),
-			m_ui ( new Ui::NameFinderWidgetUi )
-	{
-		m_ui->setupUi ( this );
-		model = new NameFinderTableModel();
-		m_ui->tableView->setModel ( model );
-		m_ui->tableView->horizontalHeader()->setStretchLastSection(true);
-		m_ui->tableView->verticalHeader()->setVisible(false);
-		selection = m_ui->tableView->selectionModel();
-		connect(selection, SIGNAL(selectionChanged(const QItemSelection&,const QItemSelection&)), this,SLOT(selection_selectionChanged(const QItemSelection&,const QItemSelection&)));
-		connect(m_ui->tableView, SIGNAL(doubleClicked(QModelIndex)), this, SLOT (doubleClick()));
-	}
+    NameFinderWidget::NameFinderWidget ( QWidget *parent ) :
+            QWidget ( parent ),
+            m_ui ( new Ui::NameFinderWidgetUi )
+    {
+        m_ui->setupUi ( this );
+        model = new NameFinderTableModel();
+        m_ui->tableView->setModel ( model );
+        m_ui->tableView->horizontalHeader()->setStretchLastSection(true);
+//        m_ui->tableView->horizontalHeader()->setResizeMode(QHeaderView::ResizeToContents);
+        m_ui->tableView->verticalHeader()->setVisible(false);
+        selection = m_ui->tableView->selectionModel();
+        connect(selection, SIGNAL(selectionChanged(const QItemSelection&,const QItemSelection&)), this,SLOT(selection_selectionChanged(const QItemSelection&,const QItemSelection&)));
+        connect(m_ui->tableView, SIGNAL(doubleClicked(QModelIndex)), this, SLOT (doubleClick()));
+    }
 
-	NameFinderWidget::~NameFinderWidget()
-	{
-		delete m_ui;
-		delete model;
-		delete selection;
-	}
+    NameFinderWidget::~NameFinderWidget()
+    {
+        delete m_ui;
+        delete model;
+        delete selection;
+    }
 
-	void NameFinderWidget::changeEvent ( QEvent *e )
-	{
-		switch ( e->type() )
-		{
-			case QEvent::LanguageChange:
-				m_ui->retranslateUi ( this );
-				break;
-			default:
-				break;
-		}
-	}
-
-	void NameFinderWidget::search ( QString object )
-	{
-		query = new HttpQuery ( this, &buffer );
-		connect ( query, SIGNAL ( done() ), this, SLOT ( display() ) );
-		connect ( query, SIGNAL ( doneWithError(QHttp::Error) ), this, SLOT ( displayError(QHttp::Error) ));
-
-		query->startSearch ( object );
-	}
-
-	void NameFinderWidget::display()
-	{
-		XmlStreamReader reader ( &buffer );
-		reader.read();
-		model->setResults ( new QList<NameFinderResult> ( reader.getResults() ) );
-
-		emit done();
-	}
-
-	//! Displays a QMessageBox with the connection error
-	void NameFinderWidget::displayError(QHttp::Error error)
-	{
-		QMessageBox errorBox;
-		errorBox.setIcon(QMessageBox::Critical);
-		errorBox.setWindowTitle(tr("Error!"));
-		switch (error)
-		{
-		    case QHttp::HostNotFound:
-			errorBox.setText(tr("Name finder service host not found."));
-			break;
-		    case QHttp::ConnectionRefused:
-			errorBox.setText(tr("Name finder service host refused connection."));
-			break;
-		    case QHttp::AuthenticationRequiredError:
-			errorBox.setText(tr("Name finder service requires authentication."));
-		    default:
-			errorBox.setText(tr("Unknown error."));
-		}
-		errorBox.exec();
-		emit done();
-	}
-
-	QPointF NameFinderWidget::selectedCoords()
-	{
-		QModelIndexList selectedIndexes = selection->selectedIndexes();
-		QModelIndex selectedIndex;
-		NameFinderResult result;
-		foreach (selectedIndex, selectedIndexes)
-		{
-			result = model->resultAt ( selectedIndex.row() );
-			return QPointF ( result.lat, result.lon );
-		}
-		return QPointF ();
-
-	}
-
-        int NameFinderWidget::selectedZoom()
+    void NameFinderWidget::changeEvent ( QEvent *e )
+    {
+        switch ( e->type() )
         {
-                QModelIndexList selectedIndexes = selection->selectedIndexes();
-                QModelIndex selectedIndex;
-                NameFinderResult result;
-                foreach (selectedIndex, selectedIndexes)
-                {
-                        result = model->resultAt ( selectedIndex.row() );
-                        return result.zoom;
-                }
-                return 16;
+        case QEvent::LanguageChange:
+            m_ui->retranslateUi ( this );
+            break;
+        default:
+            break;
         }
+    }
 
-	void NameFinderWidget::selection_selectionChanged(const QItemSelection & selected, const QItemSelection & deselected)
-	{
-		Q_UNUSED(selected)
-		Q_UNUSED(deselected)
-		emit selectionChanged();
-	}
+    void NameFinderWidget::search ( QString object )
+    {
+        query = new HttpQuery ( this, &buffer );
+        connect ( query, SIGNAL ( done() ), this, SLOT ( display() ) );
+        connect ( query, SIGNAL ( doneWithError(QHttp::Error) ), this, SLOT ( displayError(QHttp::Error) ));
 
-	void NameFinderWidget::doubleClick()
-	{
-	    emit doubleClicked();
-	}
+        query->startSearch ( object );
+    }
+
+    void NameFinderWidget::display()
+    {
+        XmlStreamReader reader ( &buffer );
+        reader.read();
+        model->setResults ( new QList<NameFinderResult> ( reader.getResults() ) );
+
+        emit done();
+    }
+
+    //! Displays a QMessageBox with the connection error
+    void NameFinderWidget::displayError(QHttp::Error error)
+    {
+        QMessageBox errorBox;
+        errorBox.setIcon(QMessageBox::Critical);
+        errorBox.setWindowTitle(tr("Error!"));
+        switch (error)
+        {
+        case QHttp::HostNotFound:
+            errorBox.setText(tr("Name finder service host not found."));
+            break;
+        case QHttp::ConnectionRefused:
+            errorBox.setText(tr("Name finder service host refused connection."));
+            break;
+        case QHttp::AuthenticationRequiredError:
+            errorBox.setText(tr("Name finder service requires authentication."));
+        default:
+            errorBox.setText(tr("Unknown error."));
+        }
+        errorBox.exec();
+        emit done();
+    }
+
+    QPointF NameFinderWidget::selectedCoords()
+    {
+        QModelIndexList selectedIndexes = selection->selectedIndexes();
+        QModelIndex selectedIndex;
+        NameFinderResult result;
+        foreach (selectedIndex, selectedIndexes)
+        {
+            result = model->resultAt ( selectedIndex.row() );
+            return QPointF ( result.lat, result.lon );
+        }
+        return QPointF ();
+
+    }
+
+    QRectF NameFinderWidget::selectedBbox()
+    {
+        QModelIndexList selectedIndexes = selection->selectedIndexes();
+        QModelIndex selectedIndex;
+        NameFinderResult result;
+        foreach (selectedIndex, selectedIndexes)
+        {
+            result = model->resultAt ( selectedIndex.row() );
+            return result.bbox;
+        }
+        return QRectF();
+    }
+
+    void NameFinderWidget::selection_selectionChanged(const QItemSelection & selected, const QItemSelection & deselected)
+    {
+        Q_UNUSED(selected)
+        Q_UNUSED(deselected)
+        emit selectionChanged();
+    }
+
+    void NameFinderWidget::doubleClick()
+    {
+        emit doubleClicked();
+    }
 }

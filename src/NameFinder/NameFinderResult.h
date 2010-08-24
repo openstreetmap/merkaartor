@@ -22,6 +22,8 @@
 #define NAMEFINDERWIDGET_RESULT_H_
 
 #include <QList>
+#include <QRectF>
+
 namespace NameFinder {
 //! Structure holding a single result of a query to the NameFinder service.
     /**
@@ -43,10 +45,11 @@ public:
         double lat;
         //! Longtitude of the POI
         double lon;
-        //! The description as returned by the service.
-        QString description;
-        //! QList holding places which are near the result.
-        QList<NameFinderResult> near;
+        QRectF bbox;
+//        //! The description as returned by the service.
+//        QString description;
+//        //! QList holding places which are near the result.
+//        QList<NameFinderResult> near;
 
     };
 }
