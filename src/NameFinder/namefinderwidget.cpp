@@ -64,8 +64,9 @@ namespace NameFinder
         }
     }
 
-    void NameFinderWidget::search ( QString object )
+    void NameFinderWidget::search ( QString object, QPointF coord )
     {
+        theCenter = coord;
         query = new HttpQuery ( this, &buffer );
         connect ( query, SIGNAL ( done() ), this, SLOT ( display() ) );
         connect ( query, SIGNAL ( doneWithError(QHttp::Error) ), this, SLOT ( displayError(QHttp::Error) ));
@@ -75,7 +76,7 @@ namespace NameFinder
 
     void NameFinderWidget::display()
     {
-        XmlStreamReader reader ( &buffer );
+        XmlStreamReader reader ( &buffer, theCenter );
         reader.read();
         model->setResults ( new QList<NameFinderResult> ( reader.getResults() ) );
 
@@ -113,7 +114,7 @@ namespace NameFinder
         foreach (selectedIndex, selectedIndexes)
         {
             result = model->resultAt ( selectedIndex.row() );
-            return QPointF ( result.lat, result.lon );
+            return result.coord;
         }
         return QPointF ();
 

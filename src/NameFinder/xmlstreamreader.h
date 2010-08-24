@@ -32,7 +32,7 @@ namespace NameFinder {
     */
     class XmlStreamReader {
 public:
-        XmlStreamReader(QIODevice *buffer);
+        XmlStreamReader(QIODevice *buffer, QPointF coord);
         ~XmlStreamReader();
         //! Reads the XML result.
         bool read();
@@ -43,6 +43,7 @@ private:
         QList<NameFinderResult> myResults;
         QXmlStreamReader reader;
         QIODevice *myDevice;
+        QPointF theCenter;
 
         void readSearchResultsElement();
         void readNamedElement(QList<NameFinderResult> *results);

@@ -47,6 +47,7 @@ public slots:
 protected:
 
 private:
+    Coord theCenter;
     CoordBox theNewViewport;
 
     void changeEvent(QEvent*);
