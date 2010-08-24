@@ -26,6 +26,7 @@ GotoDialog::GotoDialog(const MapView& aView, QWidget *parent)
     setWindowFlags(windowFlags() | Qt::MSWindowsFixedSizeDialogHint);
 
     CoordBox B = aView.viewport();
+    theCenter = B.center();
     int OsmZoom = int((log((360.0 / coordToAng(B.latDiff()))) / log(2.0)) + 1);
     OsmZoom = qMin(OsmZoom, 18);
     OsmZoom = qMax(OsmZoom, 1);
@@ -91,12 +92,6 @@ GotoDialog::GotoDialog(const MapView& aView, QWidget *parent)
     resize(1,1);
 }
 
-void GotoDialog::on_searchButton_clicked()
-{
-        QString searchString = NameFinderEdit->text();
-        searchWidget->search(searchString);
-        searchButton->setEnabled(false);
-}
 void GotoDialog::on_buttonBox_clicked(QAbstractButton * button)
 {
     if (buttonBox->buttonRole(button) == QDialogButtonBox::AcceptRole) {
@@ -173,6 +168,15 @@ void GotoDialog::on_NameFinderEdit_textChanged(const QString & text)
         searchButton->setDefault(false);
         buttonBox->button(QDialogButtonBox::Ok)->setDefault(true);
     }
+}
+
+void GotoDialog::on_searchButton_clicked()
+{
+        QString searchString = NameFinderEdit->text();
+        QPointF C = theCenter.toQPointF();
+
+        searchWidget->search(searchString, C);
+        searchButton->setEnabled(false);
 }
 
 void GotoDialog::searchWidget_doubleClicked()

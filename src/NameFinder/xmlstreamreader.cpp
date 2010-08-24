@@ -20,11 +20,13 @@
 #include "xmlstreamreader.h"
 
 #include <QStringList>
+#include <QLineF>
 
 namespace NameFinder {
 
-    XmlStreamReader::XmlStreamReader(QIODevice *device) {
+    XmlStreamReader::XmlStreamReader(QIODevice *device, QPointF coord) {
         myDevice = device;
+        theCenter = coord;
     }
 
 
@@ -47,9 +49,13 @@ namespace NameFinder {
             }
         }
         myDevice->close();
+
+        qSort(myResults.begin(), myResults.end());
+
 // Implement error handling
         return true;
     }
+
     void XmlStreamReader::readSearchResultsElement() {
         reader.readNext();
         while (!reader.atEnd()) {
@@ -76,10 +82,11 @@ namespace NameFinder {
         myResult.type = reader.attributes().value("osm_type").toString();
         QStringList sBbox = reader.attributes().value("boundingbox").toString().split(",");
         myResult.bbox = QRectF(QPointF(sBbox[2].toDouble(), sBbox[0].toDouble()), QPointF(sBbox[3].toDouble(), sBbox[1].toDouble()));
-        myResult.lon = reader.attributes().value("lon").toString().toDouble();
-        myResult.lat = reader.attributes().value("lat").toString().toDouble();
+        myResult.coord = QPointF(reader.attributes().value("lon").toString().toDouble(), reader.attributes().value("lat").toString().toDouble());
         myResult.category = reader.attributes().value("class").toString();
         myResult.info = reader.attributes().value("type").toString();
+
+        myResult.distance = QLineF(theCenter, myResult.coord).length();
 
         reader.readNext();
         while (!reader.atEnd()) {

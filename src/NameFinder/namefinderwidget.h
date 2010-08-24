@@ -48,7 +48,7 @@ namespace NameFinder {
          * WARNING: this widget currently
          * doesn't do any data validation on it!
          */
-        void search(QString object);
+        void search(QString object, QPointF coord);
         //! Returns the coordinates of selected map feature
         QPointF selectedCoords();
         //! Returns the bbox of the selected map feature
@@ -71,6 +71,7 @@ namespace NameFinder {
         NameFinderTableModel *model;
         QList<NameFinderResult> *results;
         QItemSelectionModel *selection;
+        QPointF theCenter;
 
 
     private slots:

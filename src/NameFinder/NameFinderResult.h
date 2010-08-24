@@ -39,17 +39,21 @@ public:
         QString category;
         //! Value of the category
         QString info;
-        //! Zoom level according to the spec
-        int zoom;
-        //! Latitude of the POI
-        double lat;
-        //! Longtitude of the POI
-        double lon;
+        //! Coord of the POI
+        QPointF coord;
+        //! BBox of the feature
         QRectF bbox;
+        //! Distance from coord to viewport center
+        double distance;
 //        //! The description as returned by the service.
 //        QString description;
 //        //! QList holding places which are near the result.
 //        QList<NameFinderResult> near;
+
+        bool operator<(const NameFinderResult &other) const
+        {
+            return distance < other.distance;
+        }
 
     };
 }
