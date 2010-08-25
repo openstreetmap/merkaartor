@@ -58,6 +58,11 @@ bool NavitBin::setFilename(const QString& filename)
     return true;
 }
 
+QString NavitBin::filename()
+{
+    return m_filename;
+}
+
 bool NavitBin::readTile(int aIndex) const
 {
 //    qDebug() << "Reading: "  << aIndex;

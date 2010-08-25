@@ -17,8 +17,11 @@
 
 #include <QLocale>
 #include <QByteArray>
+#include <QHash>
 
 #include "NavitBin.h"
+#include "PaintStyle/PrimitivePainter.h"
+class MasPaintStyle;
 
 class NavitAdapter : public QObject, public IMapAdapter
 {
@@ -118,6 +121,9 @@ private:
     bool loaded;
 
     NavitBin navit;
+
+    QHash< quint32, PrimitivePainter* > myStyles;
+    QList<PrimitivePainter> thePrimitivePainters;
 };
 
 #endif // NAVITADAPTER_H
