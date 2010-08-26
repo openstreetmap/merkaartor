@@ -1,12 +1,14 @@
 #ifndef MERKATOR_PROJECTION_H_
 #define MERKATOR_PROJECTION_H_
 
-#include "Preferences/MerkaartorPreferences.h"
 #include "Maps/Coord.h"
 
 #include <QPointF>
 
 #ifndef _MOBILE
+
+#include "Preferences/MerkaartorPreferences.h"
+
 #ifdef USE_PROJ
 #include <proj_api.h>
 typedef projPJ ProjProjection;
@@ -32,13 +34,15 @@ class Projection
         double latAnglePerM() const;
         double lonAnglePerM(double Lat) const;
         QPointF project(const Coord& Map) const;
-        QPointF project(Node* aNode) const;
         Coord inverse(const QPointF& Screen) const;
 
-#ifndef _MOBILE
-        static ProjProjection getProjection(QString projString);
         bool setProjectionType(QString aProjectionType);
         QString getProjectionType() const;
+        bool projIsLatLong() const;
+
+#ifndef _MOBILE
+        QPointF project(Node* aNode) const;
+        static ProjProjection getProjection(QString projString);
         QString getProjectionProj4() const;
 
         static void projTransform(ProjProjection srcdefn,
@@ -46,14 +50,12 @@ class Projection
                            long point_count, int point_offset, double *x, double *y, double *z );
         void projTransformToWGS84(long point_count, int point_offset, double *x, double *y, double *z ) const;
         void projTransformFromWGS84(long point_count, int point_offset, double *x, double *y, double *z ) const;
-        bool projIsLatLong() const;
         QRectF getProjectedViewport(const CoordBox& Viewport, const QRect& screen) const;
 
         int projectionRevision() const;
-
+#endif
         bool toXML(QDomElement xParent);
         void fromXML(const QDomElement e);
-#endif
 
     protected:
 #ifndef _MOBILE

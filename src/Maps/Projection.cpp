@@ -1,5 +1,4 @@
 #include "Maps/Projection.h"
-#include "Node.h"
 
 #include <QRect>
 #include <QRectF>
@@ -14,6 +13,9 @@
 #define EQUATORIALMETERPERDEGREE    222638.981555556
 
 #ifndef _MOBILE
+
+#include "Node.h"
+
 #ifndef USE_PROJ
 #include <ggl/extensions/gis/projections/parameters.hpp>
 #include <ggl/extensions/gis/projections/factory.hpp>
@@ -29,7 +31,9 @@ using namespace ggl;
 class ProjectionPrivate
 {
 public:
+#ifndef _MOBILE
     ProjProjection theWGS84Proj;
+#endif
     QString projType;
     QString projProj4;
     QRectF ProjectedViewport;
@@ -75,7 +79,7 @@ public:
 //Projection
 
 Projection::Projection(void)
-: theProj(0), p(new ProjectionPrivate)
+: p(new ProjectionPrivate)
 {
 #ifdef USE_PROJ
 #ifdef Q_OS_WIN
@@ -83,9 +87,11 @@ Projection::Projection(void)
     const char* proj_dir = QDir::toNativeSeparators(pdir).toUtf8().constData();
 //    const char* proj_dir = "E:\\cbro\\src\\merkaartor-devel\\binaries\\bin\\share\\proj";
     pj_set_searchpath(1, &proj_dir);
-#endif
-#endif
+#endif // Q_OS_WIN
+#endif // USE_PROJ
+
 #ifndef _MOBILE
+    theProj = NULL;
     p->theWGS84Proj = Projection::getProjection("+proj=longlat +ellps=WGS84 +datum=WGS84");
     setProjectionType(M_PREFS->getProjectionType());
 #endif
@@ -93,38 +99,32 @@ Projection::Projection(void)
 
 Projection::~Projection(void)
 {
+#ifndef _MOBILE
 #ifdef USE_PROJ
     pj_free(theProj);
 #else
     SAFE_DELETE(theProj)
 #endif
+#endif // _MOBILE
     delete p;
 }
 
 QPointF Projection::project(const Coord & Map) const
 {
-#ifndef _MOBILE
     if (p->IsMercator)
         return p->mercatorProject(Map);
     else
     if (p->IsLatLong)
         return p->latlonProject(Map);
+#ifndef _MOBILE
     else
         return projProject(Map);
-#else
-    int numberOfTiles, tilesize;
-    numberOfTiles = tilesize = 1;
-    QPointF coordinate(intToAng(Map.lon()), intToAng(Map.lat()));
-    double x = (coordinate.x()+180.) * (numberOfTiles*tilesize) /360.;                // coord to pixel!
-    double y = (1.-(log(tan(M_PI/4+angToRad(coordinate.y())/2)) /M_PI)) * (numberOfTiles*tilesize) /2;
-
-    return QPointF(x, y);
 #endif
 }
 
+#ifndef _MOBILE
 QPointF Projection::project(Node* aNode) const
 {
-#ifndef _MOBILE
     if (aNode && aNode->projectionRevision() == p->ProjectionRevision)
         return aNode->projection();
 
@@ -141,35 +141,19 @@ QPointF Projection::project(Node* aNode) const
     aNode->setProjection(pt);
 
     return pt;
-#else
-    if (aNode && aNode->projectionRevision() == p->ProjectionRevision)
-        return aNode->projection();
-
-    QPointF pt = project(aNode->position());
-    aNode->setProjectionRevision(p->ProjectionRevision);
-    aNode->setProjection(pt);
-
-    return pt;
-#endif
 }
+#endif
 
 Coord Projection::inverse(const QPointF & Screen) const
 {
-#ifndef _MOBILE
     if (p->IsLatLong)
         return p->latlonInverse(Screen);
     else
     if (p->IsMercator)
         return p->mercatorInverse(Screen);
+#ifndef _MOBILE
     else
         return projInverse(Screen);
-#else
-    int numberOfTiles, tilesize;
-    numberOfTiles = tilesize = 1;
-    double longitude = (Screen.x() * (360.0/(numberOfTiles*(double)tilesize)) ) -180.0;
-    double latitude = radToAng(atan(sinh((1.0-Screen.y() * (2.0/(numberOfTiles*(double)tilesize)) ) *M_PI)));
-
-    return Coord(angToInt(latitude), angToInt(longitude));
 #endif
 }
 
@@ -253,16 +237,6 @@ Coord Projection::projInverse(const QPointF & pProj) const
 #endif
 }
 
-bool Projection::projIsLatLong() const
-{
-    return p->IsLatLong;
-}
-
-//bool Projection::projIsMercator()
-//{
-//    return p->IsMercator;
-//}
-
 QRectF Projection::getProjectedViewport(const CoordBox& Viewport, const QRect& screen) const
 {
     QPointF bl, tr;
@@ -314,11 +288,20 @@ QRectF Projection::getProjectedViewport(const CoordBox& Viewport, const QRect& s
 
     return pViewport;
 }
+#endif // _MOBILE
 
-#endif
+bool Projection::projIsLatLong() const
+{
+    return p->IsLatLong;
+}
+
+//bool Projection::projIsMercator()
+//{
+//    return p->IsMercator;
+//}
+
 
 #ifndef _MOBILE
-
 ProjProjection Projection::getProjection(QString projString)
 {
 #ifdef USE_PROJ
@@ -336,12 +319,14 @@ ProjProjection Projection::getProjection(QString projString)
 #endif
     return theProj;
 }
+#endif // _MOBILE
 
 bool Projection::setProjectionType(QString aProjectionType)
 {
     if (aProjectionType == p->projType)
         return true;
 
+#ifndef _MOBILE
 #ifdef USE_PROJ
     if (theProj) {
         pj_free(theProj);
@@ -350,6 +335,8 @@ bool Projection::setProjectionType(QString aProjectionType)
 #else
     SAFE_DELETE(theProj)
 #endif
+#endif // _MOBILE
+
     p->ProjectionRevision++;
     p->projType = aProjectionType;
     p->projProj4 = QString();
@@ -378,6 +365,7 @@ bool Projection::setProjectionType(QString aProjectionType)
         return true;
     }
 
+#ifndef _MOBILE
     try {
         p->projProj4 = M_PREFS->getProjection(aProjectionType).projection;
         theProj = getProjection(p->projProj4);
@@ -395,9 +383,12 @@ bool Projection::setProjectionType(QString aProjectionType)
         return false;
     }
     return (theProj != NULL || p->IsLatLong || p->IsMercator);
+#else
+    return false;
+#endif // _MOBILE
 }
-#endif
 
+#ifndef _MOBILE
 QString Projection::getProjectionType() const
 {
     return p->projType;
@@ -407,6 +398,12 @@ QString Projection::getProjectionProj4() const
 {
     return p->projProj4;
 }
+
+int Projection::projectionRevision() const
+{
+    return p->ProjectionRevision;
+}
+#endif
 
 // Common routines
 
@@ -421,11 +418,6 @@ double Projection::lonAnglePerM(double Lat) const
     double LengthOfOneDegreeLat = EQUATORIALRADIUS * M_PI / 180;
     double LengthOfOneDegreeLon = LengthOfOneDegreeLat * fabs(cos(Lat));
     return 1 / LengthOfOneDegreeLon;
-}
-
-int Projection::projectionRevision() const
-{
-    return p->ProjectionRevision;
 }
 
 bool Projection::toXML(QDomElement xParent)
