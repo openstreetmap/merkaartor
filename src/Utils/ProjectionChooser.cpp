@@ -22,11 +22,16 @@ QString ProjectionChooser::getProjection(QString title, QWidget* parent)
     ProjectionChooser* dlg = new ProjectionChooser(parent);
     dlg->setWindowTitle(title);
 
+    int idx = 0, curIdx = 0;
     foreach (ProjectionItem it, *M_PREFS->getProjectionsList()->getProjections()) {
         if (it.deleted)
             continue;
         dlg->ui->cbPredefined->addItem(it.name, it.projection);
+        if (it.name.contains(":4326"))
+            curIdx = idx;
+        ++idx;
     }
+    dlg->ui->cbPredefined->setCurrentIndex(curIdx);
 
     dlg->ui->chkPredefined->setChecked(true);
     if (dlg->exec() == QDialog::Accepted) {

@@ -223,22 +223,24 @@ bool ImportExportSHP::import(Layer* aLayer)
     }
 
     theProjection = new Projection();
-    if (theSrs && !toWGS84) {
-        theSrs->morphFromESRI();
-        {
-            char* cTheProj4;
-            if (theSrs->exportToProj4(&cTheProj4) == OGRERR_NONE) {
-                qDebug() << "SHP: to proj4 : " << cTheProj4;
-            } else {
-                qDebug() << "SHP: to proj4 error: " << CPLGetLastErrorMsg();
-                return false;
+    if (theSrs) {
+        if (toWGS84) {
+            theSrs->morphFromESRI();
+            {
+                char* cTheProj4;
+                if (theSrs->exportToProj4(&cTheProj4) == OGRERR_NONE) {
+                    qDebug() << "SHP: to proj4 : " << cTheProj4;
+                } else {
+                    qDebug() << "SHP: to proj4 error: " << CPLGetLastErrorMsg();
+                    return false;
+                }
+                QString theProj4(cTheProj4);
+                // Hack because GDAL (as of 1.6.1) do not recognize "DATUM["D_OSGB_1936"" from the WKT
+                QString datum = theSrs->GetAttrValue("DATUM");
+                if (datum == "OSGB_1936" && !theProj4.contains("+datum"))
+                    theProj4 += " +datum=OSGB36";
+                theProjection->setProjectionType(QString(theProj4));
             }
-            QString theProj4(cTheProj4);
-            // Hack because GDAL (as of 1.6.1) do not recognize "DATUM["D_OSGB_1936"" from the WKT
-            QString datum = theSrs->GetAttrValue("DATUM");
-            if (datum == "OSGB_1936" && !theProj4.contains("+datum"))
-                theProj4 += " +datum=OSGB36";
-            theProjection->setProjectionType(QString(theProj4));
         }
     } else {
         QString sPrj;
