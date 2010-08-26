@@ -453,6 +453,8 @@ NavitAdapter::NavitAdapter()
     foreach (QString l, osmAttr) {
         QStringList flds = l.split("\t", QString::SkipEmptyParts);
         item_type typ = item_from_name(flds[2].toLatin1().data());
+        if (typ == type_none)
+            continue;
         NavitFeature f;
         QStringList sl = flds[1].split(",");
         foreach(QString t, sl) {

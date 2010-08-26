@@ -299,7 +299,7 @@ bool ImageMapLayer::toXML(QDomElement& xParent, QProgressDialog * /* progress */
 
         c.setAttribute("name", p->selServer);
     } else if (p->bgType != NONE_ADAPTER_UUID) {
-        c = e.ownerDocument().createElement(p->theMapAdapter->getName().remove(' '));
+        c = e.ownerDocument().createElement("Data");
         e.appendChild(c);
 
         p->theMapAdapter->toXML(c);

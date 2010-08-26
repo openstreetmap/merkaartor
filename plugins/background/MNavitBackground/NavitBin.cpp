@@ -92,7 +92,6 @@ bool NavitBin::readTile(int aIndex) const
         NavitFeature aFeat;
         data >> len;
         data >> type;
-//        qDebug() << "-- type: " << QString("%1").arg(type, 0, 16);
         aFeat.type = type;
         data >> coordLen;
         for (int i=0; i<coordLen/2; ++i) {
@@ -104,7 +103,7 @@ bool NavitBin::readTile(int aIndex) const
             QByteArray attribute;
             data >> attrLen;
             data >> attrType;
-//            qDebug() << "-- attrType: " << QString("%1").arg(attrType, 0, 16);
+            qDebug() << "-- attrType: " << QString("%1").arg(attrType, 0, 16);
             switch (type) {
             case type_submap: {
                 NavitPointer ptr;
@@ -189,6 +188,7 @@ bool NavitBin::readTile(int aIndex) const
             }
 
             default:
+                qDebug() << "-- type: " << QString("%1").arg(type, 0, 16);
                 for (unsigned int i=0; i<(attrLen-1)*sizeof(qint32); ++i) {
                     data >> attr;
                     attribute.append(attr);
