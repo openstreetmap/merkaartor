@@ -1,0 +1,5 @@
+<RCC>
+    <qresource prefix="/Styles">
+        <file alias="Mapnik.mas">../../../Styles/Mapnik.mas</file>
+    </qresource>
+</RCC>

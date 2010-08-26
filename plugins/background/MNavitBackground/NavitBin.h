@@ -18,6 +18,8 @@
 #include <QHash>
 #include <QStringList>
 
+#include "NavitFeature.h"
+
 class NavitZip;
 
 enum attr_type {
@@ -34,32 +36,6 @@ enum item_type {
 #include "item_def.h"
 #undef ITEM2
 #undef ITEM
-};
-
-class NavitAttribute
-{
-public:
-    NavitAttribute()
-        : type(0) {}
-    NavitAttribute(qint32 theType, QByteArray theAttribute)
-        : type(theType), attribute(theAttribute) {}
-
-public:
-    quint32 type;
-    QByteArray attribute;
-};
-
-class NavitFeature
-{
-public:
-    NavitFeature()
-        : type(0) {}
-
-public:
-    quint32 type;
-    quint16 order;
-    QVector<QPoint> coordinates;
-    QList<NavitAttribute> attributes;
 };
 
 class NavitPointer

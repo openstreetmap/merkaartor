@@ -2549,8 +2549,11 @@ void MainWindow::loadDocument(QString fn)
     }
 
     QDomDocument* theXmlDoc = new QDomDocument();
-    if (!theXmlDoc->setContent(&file)) {
-        QMessageBox::critical(this, tr("Invalid file"), tr("%1 is not a valid XML file.").arg(fn));
+    QString errorMsg;
+    int errorLine;
+    int errorColumn;
+    if (!theXmlDoc->setContent(&file, false, &errorMsg, &errorLine, &errorColumn)) {
+        QMessageBox::critical(this, tr("Invalid file"), tr("%1 is not a valid XML file.\n%2 at line %3, col %4").arg(fn).arg(errorMsg).arg(errorLine).arg(errorColumn));
         file.close();
         delete theXmlDoc;
         theXmlDoc = NULL;
