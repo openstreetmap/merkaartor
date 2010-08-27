@@ -1,4 +1,5 @@
 #include "MapView.h"
+#include "MouseMachine.h"
 
 #include <QPainter>
 
@@ -6,6 +7,8 @@
 
 //#define START_COORDBOX CoordBox(Coord(COORD_MAX/4, -COORD_MAX/4), Coord(-COORD_MAX/4, COORD_MAX/4))
 #define START_COORDBOX CoordBox(Coord(50.8607371, 4.3314877), Coord(50.8296372, 4.3802123)) // BXL
+
+#include "GosmoreAdapter.h"
 
 class MapViewPrivate
 {
@@ -20,6 +23,8 @@ public:
     Projection theProjection;
     QTransform theTransform;
 
+    MouseMachine* mm;
+
     double PixelPerM;
     double ZoomLevel;
     CoordBox Viewport;
@@ -28,6 +33,8 @@ public:
 
     bool StaticBufferUpToDate;
     QPixmap* StaticBuffer;
+
+    GosmoreAdapter* theAdapter;
 };
 
 MapView::MapView(QWidget *parent) :
@@ -35,8 +42,16 @@ MapView::MapView(QWidget *parent) :
 {
     p = new MapViewPrivate;
     p->theProjection.setProjectionType("EPSG:3857");
+    p->mm = new MouseMachine(this);
+    connect(p->mm, SIGNAL(scroll(QPoint)), SLOT(panScreen(QPoint)));
+//    connect(p->mm, SIGNAL(singleTap(QPoint)), SLOT(slotClicked(QPoint)));
+//    connect(p->mm, SIGNAL(doubleTap(QPoint)), SLOT(slotDoubleClicked(QPoint)));
+//    connect(p->mm, SIGNAL(tapAndHold(QPoint)), SLOT(slotTapAndHold(QPoint)));
 
-    setMouseTracking(true);
+    p->theAdapter = new GosmoreAdapter();
+    p->theAdapter->setPak("/home/cbro/Downloads/gosmore.pak");
+
+    setMouseTracking(false);
     setAttribute(Qt::WA_NoSystemBackground);
 }
 
@@ -86,7 +101,10 @@ void MapView::paintEvent(QPaintEvent * anEvent)
     QPainter P;
     P.begin(this);
 
-    P.drawPixmap(p->theVectorPanDelta, *p->StaticBuffer);
+//    P.drawPixmap(p->theVectorPanDelta, *p->StaticBuffer);
+    QRectF dum;
+    QRectF wgs84box = p->Viewport.toRectF();
+    P.drawPixmap(0, 0, p->theAdapter->getPixmap(wgs84box, dum, rect()));
 
     drawScale(P);
     drawGPS(P);

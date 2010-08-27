@@ -19,11 +19,13 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     p = new MainWindowPrivate;
     ui->setupUi(this);
+    p->theView = new MapView(this);
     setCentralWidget(p->theView);
 }
 
 MainWindow::~MainWindow()
 {
+    delete p->theView;
     delete ui;
 }
 

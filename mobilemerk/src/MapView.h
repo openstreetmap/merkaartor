@@ -17,7 +17,6 @@ public:
     ~MapView();
 
 public:
-    void panScreen(QPoint delta);
     void drawScale(QPainter & P);
     void drawGPS(QPainter & P);
 
@@ -37,6 +36,9 @@ public:
 
     bool toXML(QDomElement xParent);
     void fromXML(const QDomElement p);
+
+protected slots:
+    void panScreen(QPoint delta);
 
 protected:
     MapViewPrivate* p;

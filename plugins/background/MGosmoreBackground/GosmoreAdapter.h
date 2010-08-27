@@ -110,6 +110,9 @@ public:
     virtual void fromXML(const QDomElement xParent);
     virtual QString toPropertiesHtml();
 
+public:
+    void setPak(QString fileName);
+
 public slots:
     void onLoadFile();
 
@@ -123,8 +126,6 @@ private:
 
     QFile* pak;
     uchar* gosmap;
-
-    void setPak(QString fileName);
 
     QList<PrimitivePainter> thePrimitivePainters;
     QHash< int, PrimitivePainter* > myStyles;
