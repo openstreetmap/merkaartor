@@ -10,6 +10,7 @@
 //
 //
 #include "Preferences/FilterPreferencesDialog.h"
+#include "Utils/TagSelector.h"
 
 #include <QMessageBox>
 #include <QDir>
@@ -39,6 +40,9 @@ void FilterPreferencesDialog::addFilter(const FilterItem & srv)
         item->setData(Qt::UserRole, (int) theItems.size()-1);
         lvFilters->addItem(item);
     }
+
+    TagSelector* t = TagSelector::parse(srv.filter);
+    qDebug() << t->asExpression(false);
 }
 
 void FilterPreferencesDialog::on_btApply_clicked(void)

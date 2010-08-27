@@ -365,7 +365,11 @@ void MapRenderer::render(
             {
                 for (it = itm.value().constBegin(); it != itm.value().constEnd(); ++it) {
                     P->save();
-                    P->setOpacity((*it)->layer()->getAlpha());
+                    double alpha = (*it)->layer()->getAlpha();
+                    if ((*it)->isReadonly())
+                        alpha /= 2;
+                    P->setOpacity(alpha);
+
                     if (Way * R = CAST_WAY(*it)) {
                         for (int i=0; i<R->sizeParents(); ++i)
                             if (!R->getParent(i)->isDeleted() && R->getParent(i)->hasPainter(theView->pixelPerM()))
@@ -387,7 +391,11 @@ void MapRenderer::render(
             {
                 for (it = itm.value().constBegin(); it != itm.value().constEnd(); ++it) {
                     P->save();
-                    P->setOpacity((*it)->layer()->getAlpha());
+                    double alpha = (*it)->layer()->getAlpha();
+                    if ((*it)->isReadonly())
+                        alpha /= 2;
+                    P->setOpacity(alpha);
+
                     if (Way * R = CAST_WAY(*it)) {
                         for (int i=0; i<R->sizeParents(); ++i)
                             if (!R->getParent(i)->isDeleted() && R->getParent(i)->hasPainter(theView->pixelPerM()))
@@ -408,7 +416,11 @@ void MapRenderer::render(
         for (itm = theFeatures.constBegin() ;itm != theFeatures.constEnd(); ++itm) {
             for (it = itm.value().constBegin(); it != itm.value().constEnd(); ++it) {
                 P->save();
-                P->setOpacity((*it)->layer()->getAlpha());
+                double alpha = (*it)->layer()->getAlpha();
+                if ((*it)->isReadonly())
+                    alpha /= 2;
+                P->setOpacity(alpha);
+
                 if (Way * R = CAST_WAY(*it)) {
                     for (int i=0; i<R->sizeParents(); ++i)
                         if (!R->getParent(i)->isDeleted() && R->getParent(i)->hasPainter(theView->pixelPerM()))
@@ -427,7 +439,11 @@ void MapRenderer::render(
         for (itm = theFeatures.constBegin() ;itm != theFeatures.constEnd(); ++itm) {
             for (it = itm.value().constBegin(); it != itm.value().constEnd(); ++it) {
                 P->save();
-                P->setOpacity((*it)->layer()->getAlpha());
+                double alpha = (*it)->layer()->getAlpha();
+                if ((*it)->isReadonly())
+                    alpha /= 2;
+                P->setOpacity(alpha);
+
                 if (Way * R = CAST_WAY(*it)) {
                     for (int i=0; i<R->sizeParents(); ++i)
                         if (!R->getParent(i)->isDeleted() && R->getParent(i)->hasPainter(theView->pixelPerM()))
@@ -446,7 +462,11 @@ void MapRenderer::render(
     {
         for (it = itm.value().constBegin() ;it != itm.value().constEnd(); ++it)
         {
-            P->setOpacity((*it)->layer()->getAlpha());
+            double alpha = (*it)->layer()->getAlpha();
+            if ((*it)->isReadonly())
+                alpha /= 2;
+            P->setOpacity(alpha);
+
             (*it)->draw(*P, aView);
         }
     }

@@ -10,19 +10,7 @@ INCLUDEPATH += $$MERKAARTOR_SRC_DIR/src/PaintStyle
 DEPENDPATH += $$MERKAARTOR_SRC_DIR/src/PaintStyle
 include(../../../src/PaintStyle/PaintStyle.pri)
 
-HEADERS += \
-    IMapAdapter.h \
-    IImageManager.h \
-    GosmoreAdapter.h \
-    libgosm.h \
-    GosmoreFeature.h
-
-SOURCES += \
-    Utils/TagSelector.cpp \
-    Utils/SvgCache.cpp \
-    GosmoreAdapter.cpp \
-    libgosm.cpp \
-    GosmoreFeature.cpp
+include(MGosmoreBackground.pri)
 
 COMMON_DIR=$${MERKAARTOR_SRC_DIR}/binaries
 
@@ -31,7 +19,3 @@ win32 {
     LIBS += -L$$COMMON_DIR/lib
 }
 
-DEFINES += NOGTK
-
-RESOURCES += \
-    MGosmoreBackground.qrc

@@ -413,10 +413,11 @@ bool Feature::isReadonly() const
                     if (D->filterRevision() != p->FilterRevision) {
                         p->FilterRevision = D->filterRevision();
                         if (D->getTagFilter()) {
-                            if (D->getTagFilter()->matches(this,NULL) != TagSelect_NoMatch)
+                            if (D->getTagFilter()->matches(this,NULL) != TagSelect_NoMatch) {
                                 p->ReadOnly = false;
-                            else
+                            } else {
                                 p->ReadOnly = true;
+                            }
                         } else
                             p->ReadOnly = false;
                     }

@@ -29,7 +29,7 @@ bool canParseValue(const QString& Expression, int& idx, QString& Key)
     unsigned short opened =0;
     while (idx < Expression.length())
     {
-        if ( ((Expression[idx] == '_') || (Expression[idx].isLetterOrNumber()) || (Expression[idx].isPunct()) || (Expression[idx] == '*') || (Expression[idx] == '?'))
+        if ( ((Expression[idx] == '_') || (Expression[idx].isLetterOrNumber()) /*|| (Expression[idx].isPunct())*/ || (Expression[idx] == '*') || (Expression[idx] == ':') || (Expression[idx] == '?'))
                 &&  ( (Expression[idx] != '[') && (Expression[idx] != ']') && (Expression[idx] != ',') && (Expression[idx] != '(')&& (Expression[idx] != ')')) )
             Key += Expression[idx++];
         else if ( Expression[idx] == '[' )
@@ -77,8 +77,8 @@ TagSelectorOperator* parseTagSelectorOperator(const QString& Expression, int& id
 
     if (canParseLiteral(Expression, idx, "is"))
         Oper = "=";
-    if (canParseSymbol(Expression, idx, '='))
-        Oper = "=";
+    if (canParseLiteral(Expression, idx, "!="))
+        Oper = "!=";
     if (canParseSymbol(Expression, idx, '<'))
         Oper = "<";
     if (canParseSymbol(Expression, idx, '>'))
@@ -87,6 +87,8 @@ TagSelectorOperator* parseTagSelectorOperator(const QString& Expression, int& id
         Oper = "<=";
     if (canParseLiteral(Expression, idx, ">="))
         Oper = ">=";
+    if (canParseSymbol(Expression, idx, '='))
+        Oper = "=";
     if (Oper.isNull())
         return 0;
 
@@ -347,6 +349,8 @@ TagSelectorOperator::TagSelectorOperator(const QString& key, const QString& oper
         theOp = GE;
     else if (Oper == "<=")
         theOp = LE;
+    else if (Oper == "!=")
+        theOp = NE;
     else
         theOp = EQ;
 }
@@ -376,6 +380,9 @@ TagSelectorMatchResult TagSelectorOperator::matches(const IFeature* F, double Pi
             case EQ:
                 return (F->xmlId() == Value ? TagSelect_Match : TagSelect_NoMatch);
                 break;
+            case NE:
+                return (F->xmlId() != Value ? TagSelect_Match : TagSelect_NoMatch);
+                break;
             case GT:
                 return (F->xmlId() > Value ? TagSelect_Match : TagSelect_NoMatch);
                 break;
@@ -395,6 +402,9 @@ TagSelectorMatchResult TagSelectorOperator::matches(const IFeature* F, double Pi
             switch (theOp) {
             case EQ:
                 return (QString::compare(F->user(), Value, Qt::CaseInsensitive) == 0 ? TagSelect_Match : TagSelect_NoMatch);
+                break;
+            case NE:
+                return (QString::compare(F->user(), Value, Qt::CaseInsensitive) != 0 ? TagSelect_Match : TagSelect_NoMatch);
                 break;
             case GT:
                 return (QString::compare(F->user(), Value, Qt::CaseInsensitive) > 0 ? TagSelect_Match : TagSelect_NoMatch);
@@ -419,6 +429,9 @@ TagSelectorMatchResult TagSelectorOperator::matches(const IFeature* F, double Pi
                     case EQ:
                         return (F->time().date() == dtValue.date() ? TagSelect_Match : TagSelect_NoMatch);
                         break;
+                    case NE:
+                        return (F->time().date() != dtValue.date() ? TagSelect_Match : TagSelect_NoMatch);
+                        break;
                     case GT:
                         return (F->time().date() > dtValue.date() ? TagSelect_Match : TagSelect_NoMatch);
                         break;
@@ -436,6 +449,9 @@ TagSelectorMatchResult TagSelectorOperator::matches(const IFeature* F, double Pi
                     switch (theOp) {
                     case EQ:
                         return (F->time() == dtValue ? TagSelect_Match : TagSelect_NoMatch);
+                        break;
+                    case NE:
+                        return (F->time() != dtValue ? TagSelect_Match : TagSelect_NoMatch);
                         break;
                     case GT:
                         return (F->time() > dtValue ? TagSelect_Match : TagSelect_NoMatch);
@@ -458,6 +474,9 @@ TagSelectorMatchResult TagSelectorOperator::matches(const IFeature* F, double Pi
             switch (theOp) {
             case EQ:
                 return (F->versionNumber() == numValue ? TagSelect_Match : TagSelect_NoMatch);
+                break;
+            case NE:
+                return (F->versionNumber() != numValue ? TagSelect_Match : TagSelect_NoMatch);
                 break;
             case GT:
                 return (F->versionNumber() > numValue ? TagSelect_Match : TagSelect_NoMatch);
@@ -485,6 +504,9 @@ TagSelectorMatchResult TagSelectorOperator::matches(const IFeature* F, double Pi
             switch (theOp) {
             case EQ:
                 return (PixelPerM == valN ? TagSelect_Match : TagSelect_NoMatch);
+                break;
+            case NE:
+                return (PixelPerM != valN ? TagSelect_Match : TagSelect_NoMatch);
                 break;
             case GT:
                 return (PixelPerM > valN ? TagSelect_Match : TagSelect_NoMatch);
@@ -521,6 +543,20 @@ TagSelectorMatchResult TagSelectorOperator::matches(const IFeature* F, double Pi
                 }
                 break;
 
+            case NE:
+                if (valB) {
+                    if (F->isDirty())
+                        return TagSelect_NoMatch;
+                    else
+                        return TagSelect_Match;
+                } else {
+                    if (!F->isDirty())
+                        return TagSelect_NoMatch;
+                    else
+                        return TagSelect_Match;
+                }
+                break;
+
             default:
                 return TagSelect_NoMatch;
             }
@@ -546,6 +582,20 @@ TagSelectorMatchResult TagSelectorOperator::matches(const IFeature* F, double Pi
                 }
                 break;
 
+            case NE:
+                if (valB) {
+                    if (F->isUploaded())
+                        return TagSelect_NoMatch;
+                    else
+                        return TagSelect_Match;
+                } else {
+                    if (!F->isUploaded())
+                        return TagSelect_NoMatch;
+                    else
+                        return TagSelect_Match;
+                }
+                break;
+
             default:
                 return TagSelect_NoMatch;
             }
@@ -561,7 +611,10 @@ TagSelectorMatchResult TagSelectorOperator::matches(const IFeature* F, double Pi
         if (val == emptyString && specialValue != TagSelectValue_Empty)
             return TagSelect_NoMatch;
         if (specialValue == TagSelectValue_Empty) {
-            return (val.toUpper() == emptyString && theOp == EQ) ? TagSelect_Match : TagSelect_NoMatch;
+            if (theOp == EQ)
+                return (val.toUpper() == emptyString) ? TagSelect_Match : TagSelect_NoMatch;
+            else
+                return (val.toUpper() != emptyString) ? TagSelect_Match : TagSelect_NoMatch;
         } else if (UseRegExp) {
             return rx.exactMatch(val) ? TagSelect_Match : TagSelect_NoMatch;
         } else {
@@ -584,6 +637,20 @@ TagSelectorMatchResult TagSelectorOperator::matches(const IFeature* F, double Pi
                     }
                     break;
 
+                case NE:
+                    if (valB) {
+                        if (val.toLower() == "false" || val.toLower() == "no" || val == "0")
+                            return TagSelect_Match;
+                        else
+                            return TagSelect_NoMatch;
+                    } else {
+                        if (val.toLower() == "true" || val.toLower() == "yes" || val == "1")
+                            return TagSelect_Match;
+                        else
+                            return TagSelect_NoMatch;
+                    }
+                    break;
+
                 default:
                     return TagSelect_NoMatch;
                 }
@@ -591,6 +658,9 @@ TagSelectorMatchResult TagSelectorOperator::matches(const IFeature* F, double Pi
                 switch (theOp) {
                 case EQ:
                     return (keyN == valN) ? TagSelect_Match : TagSelect_NoMatch;
+                    break;
+                case NE:
+                    return (keyN != valN) ? TagSelect_Match : TagSelect_NoMatch;
                     break;
                 case GT:
                     return (keyN > valN) ? TagSelect_Match : TagSelect_NoMatch;
@@ -609,6 +679,9 @@ TagSelectorMatchResult TagSelectorOperator::matches(const IFeature* F, double Pi
                 switch (theOp) {
                 case EQ:
                     return (QString::compare(val, Value, Qt::CaseInsensitive)) == 0 ? TagSelect_Match : TagSelect_NoMatch;
+                    break;
+                case NE:
+                    return (QString::compare(val, Value, Qt::CaseInsensitive)) != 0 ? TagSelect_Match : TagSelect_NoMatch;
                     break;
                 case GT:
                     return (QString::compare(val, Value, Qt::CaseInsensitive)) > 0 ? TagSelect_Match : TagSelect_NoMatch;

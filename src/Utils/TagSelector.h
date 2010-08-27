@@ -49,6 +49,7 @@ class TagSelectorOperator : public TagSelector
 {
     enum Ops {
         EQ,
+        NE,
         GT,
         LT,
         LE,
