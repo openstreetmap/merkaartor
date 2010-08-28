@@ -278,8 +278,10 @@ bool ImportExportSHP::import(Layer* aLayer)
                 for (int i=0; i<poFeature->GetFieldCount(); ++i) {
                     OGRFieldDefn  *fd = poFeature->GetFieldDefnRef(i);
                     QString k(fd->GetNameRef());
-                    k.prepend("_");
-                    k.append("_");
+                    if (!g_Merk_NoGuardedTagsImport) {
+                        k.prepend("_");
+                        k.append("_");
+                    }
                     F->setTag(k, poFeature->GetFieldAsString(i));
                 }
             }
