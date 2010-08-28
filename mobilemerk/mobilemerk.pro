@@ -4,16 +4,21 @@
 QT += svg xml
 TARGET = mobilemerk
 TEMPLATE = app
-INCLUDEPATH += ../src
-DEPENDPATH += ../src
 DEFINES += _MOBILE
-SOURCES += main.cpp \
-    MainWindow.cpp \
-    MapView.cpp \
-    Maps/Coord.cpp \
-    Maps/Projection.cpp
-HEADERS += MainWindow.h \
-    MapView.h \
-    Maps/Coord.h \
-    Maps/Projection.h
-FORMS += MainWindow.ui
+
+include(src/src.pri)
+
+INCLUDEPATH += thirdparty/MouseMachine
+DEPENDPATH += thirdparty/MouseMachine
+include(thirdparty/MouseMachine/MouseMachine.pri)
+
+INCLUDEPATH += ../plugins/background/MGosmoreBackground
+DEPENDPATH += ../plugins/background/MGosmoreBackground
+include(../plugins/background/MGosmoreBackground/MGosmoreBackground.pri)
+
+INCLUDEPATH += ../src/PaintStyle
+DEPENDPATH += ../src/PaintStyle
+include(../src/PaintStyle/PaintStyle.pri)
+
+INCLUDEPATH += ../interfaces
+DEPENDPATH += ../interfaces

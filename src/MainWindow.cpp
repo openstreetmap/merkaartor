@@ -859,9 +859,9 @@ void MainWindow::on_editPasteFeatureAction_triggered()
     theList->setDescription("Paste Features");
 
     QList<Feature*> theFeats;
-    for (FeatureIterator k(doc); !k.isEnd(); ++k) {
-        theFeats.push_back(k.get());
-    }
+    for (int i=0; i<doc->layerSize(); ++i)
+        for (int j=0; j<doc->getLayer(i)->size(); ++j)
+            theFeats.push_back(doc->getLayer(i)->get(j));
     for (int i=0; i<theFeats.size(); ++i) {
         Feature*F = theFeats.at(i);
         if (theDocument->getFeature(F->id(), false))
