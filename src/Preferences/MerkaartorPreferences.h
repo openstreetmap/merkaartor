@@ -89,6 +89,7 @@ class IPaintStyle;
 
 extern bool g_Merk_Portable;
 extern bool g_Merk_Frisius;
+extern bool g_Merk_NoGuardedTagsImport;
 
 typedef QString FilterType;
 

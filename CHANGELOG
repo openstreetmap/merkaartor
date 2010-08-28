@@ -1,4 +1,5 @@
 v0.17
+    * ADD : "--importag-tags-as-is" command-line switch to prevent adding underscores to imported tags (closes #3102)
     * CHG : Use Nominatim (http://nominatim.openstreetmap.org/) for place name lookup due to gazetteer closure
     * ADD : Cut functionality
     * ADD : double-clicking a feature selects the feature and its children
