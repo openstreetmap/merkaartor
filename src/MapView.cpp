@@ -976,9 +976,10 @@ bool MapView::event(QEvent *event)
             setFocus();
             ke->accept();
 
-            if (!isSelectionLocked())
-                lockSelection();
-            else {
+//            if (!isSelectionLocked())
+//                lockSelection();
+//            else
+            {
                 FeatureSnapInteraction* intr = dynamic_cast<FeatureSnapInteraction*>(interaction());
                 if (intr)
                     intr->nextSnap();
@@ -990,9 +991,10 @@ bool MapView::event(QEvent *event)
             setFocus();
             ke->accept();
 
-            if (!isSelectionLocked())
-                lockSelection();
-            else {
+//            if (!isSelectionLocked())
+//                lockSelection();
+//            else
+            {
                 FeatureSnapInteraction* intr = dynamic_cast<FeatureSnapInteraction*>(interaction());
                 if (intr)
                     intr->nextSnap();

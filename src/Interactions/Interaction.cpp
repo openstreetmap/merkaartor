@@ -5,6 +5,7 @@
 #include "Maps/Projection.h"
 #include "Node.h"
 #include "PropertiesDock.h"
+#include "Utils/Utils.h"
 
 #include <QtGui/QMouseEvent>
 #include <QtGui/QPainter>
@@ -371,8 +372,8 @@ void FeatureSnapInteraction::updateSnap(QMouseEvent* event)
     Feature* ReadOnlySnap = 0;
     if (!SnapActive) return;
     //QTime Start(QTime::currentTime());
-//    CoordBox HotZone(XY_TO_COORD(event->pos()-QPointF(15,15)),XY_TO_COORD(event->pos()+QPointF(15,15)));
     CoordBox HotZone(XY_TO_COORD(event->pos()-QPointF(M_PREFS->getMaxGeoPicWidth()+5,M_PREFS->getMaxGeoPicWidth()+5)),XY_TO_COORD(event->pos()+QPointF(M_PREFS->getMaxGeoPicWidth()+5,M_PREFS->getMaxGeoPicWidth()+5)));
+    CoordBox HotZoneSnap(XY_TO_COORD(event->pos()-QPointF(15,15)),XY_TO_COORD(event->pos()+QPointF(15,15)));
     SnapList.clear();
     double BestDistance = 5;
     double BestReadonlyDistance = 5;
@@ -388,23 +389,41 @@ void FeatureSnapInteraction::updateSnap(QMouseEvent* event)
         foreach(MapFeaturePtr F, ret) {
             if (F)
             {
+                if (std::find(NoSnap.begin(),NoSnap.end(),F) != NoSnap.end())
+                    continue;
                 if (F->notEverythingDownloaded())
                     continue;
                 if ((R = CAST_WAY(F))) {
                     if ( NoRoads || NoSelectRoads)
                         continue;
+
+                    if (HotZoneSnap.contains(R->boundingBox()))
+                        SnapList.push_back(F);
+                    else {
+                        QPointF lastPoint = R->getNode(0)->position().toQPointF();
+                        QPointF aP;
+                        for (int j=1; j<R->size(); ++j) {
+                            aP = R->getNode(j)->position().toQPointF();
+                            QLineF l(lastPoint, aP);
+                            QPointF a, b;
+                            if (Utils::QRectInterstects(HotZoneSnap.toQRectF(), l, a, b)) {
+                                SnapList.push_back(F);
+                                break;
+                            }
+                            lastPoint = aP;
+                        }
+                    }
                 }
                 if ((N = CAST_NODE(F))) {
                     if (NoSelectPoints)
                         continue;
                     if (!N->isSelectable(theView))
                         continue;
+                    if (HotZoneSnap.contains(N->boundingBox()))
+                        SnapList.push_back(F);
                 }
-                if (std::find(NoSnap.begin(),NoSnap.end(),F) != NoSnap.end())
-                    continue;
 
                 double Distance = F->pixelDistance(event->pos(), 5.01, areNodesSelectable, view());
-                SnapList.push_back(F);
                 if (Distance < BestDistance && !F->isReadonly())
                 {
                     BestDistance = Distance;
