@@ -364,6 +364,7 @@ CoordBox Way::boundingBox() const
 void Way::updateMeta()
 {
     Feature::updateMeta();
+    MetaUpToDate = true;
 
     p->Area = 0;
     p->Distance = 0;
@@ -379,12 +380,7 @@ void Way::updateMeta()
             }
 
     if (p->Nodes.size() == 0)
-    {
-        MetaUpToDate = true;
         return;
-    }
-
-    p->doUpdateVirtuals();
 
     bool isArea = false;
     if (tagValue("junction", "") != "roundabout")
@@ -416,7 +412,7 @@ void Way::updateMeta()
         setRenderPriority(RenderPriority(RenderPriority::IsLinear,Priority, layer));
     }
 
-    MetaUpToDate = true;
+    p->doUpdateVirtuals();
 }
 
 double Way::distance()

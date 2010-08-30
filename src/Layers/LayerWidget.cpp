@@ -11,6 +11,9 @@
 #include <QApplication>
 #include <QMouseEvent>
 #include <QStylePainter>
+#include <QInputDialog>
+
+#include "ui_FilterEditDialog.h"
 
 #define LINEHEIGHT 25
 
@@ -572,3 +575,38 @@ void OsbLayerWidget::initActions()
     closeAction->setEnabled(theLayer->canDelete());
 }
 
+// FilterLayerWidget
+
+FilterLayerWidget::FilterLayerWidget(FilterLayer* aLayer, QWidget* aParent)
+    : LayerWidget(aLayer, aParent)
+{
+    initActions();
+}
+
+void FilterLayerWidget::initActions()
+{
+    LayerWidget::initActions();
+    ctxMenu->addSeparator();
+    associatedMenu->addSeparator();
+
+    actZoom = new QAction(tr("Zoom"), ctxMenu);
+    ctxMenu->addAction(actZoom);
+    associatedMenu->addAction(actZoom);
+    connect(actZoom, SIGNAL(triggered(bool)), this, SLOT(zoomLayer(bool)));
+}
+
+void FilterLayerWidget::mouseDoubleClickEvent(QMouseEvent */*event*/)
+{
+    FilterLayer* Fl = dynamic_cast<FilterLayer*>(theLayer.data());
+
+    QDialog* dlg = new QDialog(this);
+    Ui::FilterEditDialog ui;
+    ui.setupUi(dlg);
+    ui.edName->setText(Fl->name());
+    ui.edFilter->setText(Fl->filter());
+    if (dlg->exec() == QDialog::Accepted) {
+        setName(ui.edName->text());
+        Fl->setName(ui.edName->text());
+        Fl->setFilter(ui.edFilter->text());
+    }
+}

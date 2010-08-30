@@ -44,7 +44,8 @@ public:
         ImageLayerType,
         OsbLayerType,
         TrackLayerType,
-        UploadedLayerType
+        UploadedLayerType,
+        FilterLayerType
     } LayerType;
 
     enum LayerGroup {
@@ -52,6 +53,7 @@ public:
         Map				    = 0x00000001,
         Draw				= 0x00000002,
         Tracks				= 0x00000004,
+        Filters				= 0x00000008,
         All					= 0xffffffff
     };
 
@@ -282,6 +284,39 @@ protected:
     OsbLayerPrivate* pp;
 
 };
+
+class FilterLayer : public Layer
+{
+    Q_OBJECT
+public:
+    FilterLayer(const QString& aName, const QString& aFilter);
+    virtual ~FilterLayer();
+
+    bool toXML(QDomElement& e, QProgressDialog * progress);
+    static FilterLayer* fromXML(Document* d, const QDomElement e, QProgressDialog * progress);
+
+    virtual /* const */ LayerType classType() const {return Layer::FilterLayerType;}
+    virtual const LayerGroups classGroups() const {return(Layer::Filters);}
+
+    virtual LayerWidget* newWidget(void);
+
+    virtual bool canDelete() const { return true; }
+
+public:
+    virtual void setFilter(const QString& aFilter);
+    virtual QString filter() { return theSelectorString; }
+    virtual TagSelector* selector() { return theSelector; }
+
+    virtual void setVisible(bool b);
+    virtual void setReadonly(bool b);
+    virtual void setAlpha(const qreal alpha);
+
+protected:
+    QString theSelectorString;
+    TagSelector* theSelector;
+
+};
+
 
 Q_DECLARE_METATYPE ( QUuid )
 

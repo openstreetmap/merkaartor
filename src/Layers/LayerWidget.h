@@ -168,6 +168,22 @@ class OsbLayerWidget : public LayerWidget
         virtual void initActions();
 };
 
+class FilterLayerWidget : public LayerWidget
+{
+    Q_OBJECT
+
+    public:
+        FilterLayerWidget(FilterLayer* aLayer, QWidget* aParent = 0);
+        virtual ~FilterLayerWidget() {};
+
+    protected:
+        void mouseDoubleClickEvent(QMouseEvent */*event*/);
+
+    public:
+        virtual void initActions();
+};
+
+
 
 #endif
 

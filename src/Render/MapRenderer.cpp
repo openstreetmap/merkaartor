@@ -235,7 +235,7 @@ void MapRenderer::render(
         {
             for (it = itm.value().constBegin(); it != itm.value().constEnd(); ++it)
             {
-                double alpha = (*it)->layer()->getAlpha();
+                double alpha = (*it)->getAlpha();
                 if ((*it)->isReadonly())
                     alpha /= 2;
                 thePainter->setOpacity(alpha);
@@ -365,7 +365,7 @@ void MapRenderer::render(
             {
                 for (it = itm.value().constBegin(); it != itm.value().constEnd(); ++it) {
                     P->save();
-                    double alpha = (*it)->layer()->getAlpha();
+                    double alpha = (*it)->getAlpha();
                     if ((*it)->isReadonly())
                         alpha /= 2;
                     P->setOpacity(alpha);
@@ -391,7 +391,7 @@ void MapRenderer::render(
             {
                 for (it = itm.value().constBegin(); it != itm.value().constEnd(); ++it) {
                     P->save();
-                    double alpha = (*it)->layer()->getAlpha();
+                    double alpha = (*it)->getAlpha();
                     if ((*it)->isReadonly())
                         alpha /= 2;
                     P->setOpacity(alpha);
@@ -416,7 +416,7 @@ void MapRenderer::render(
         for (itm = theFeatures.constBegin() ;itm != theFeatures.constEnd(); ++itm) {
             for (it = itm.value().constBegin(); it != itm.value().constEnd(); ++it) {
                 P->save();
-                double alpha = (*it)->layer()->getAlpha();
+                double alpha = (*it)->getAlpha();
                 if ((*it)->isReadonly())
                     alpha /= 2;
                 P->setOpacity(alpha);
@@ -439,7 +439,7 @@ void MapRenderer::render(
         for (itm = theFeatures.constBegin() ;itm != theFeatures.constEnd(); ++itm) {
             for (it = itm.value().constBegin(); it != itm.value().constEnd(); ++it) {
                 P->save();
-                double alpha = (*it)->layer()->getAlpha();
+                double alpha = (*it)->getAlpha();
                 if ((*it)->isReadonly())
                     alpha /= 2;
                 P->setOpacity(alpha);
@@ -462,7 +462,7 @@ void MapRenderer::render(
     {
         for (it = itm.value().constBegin() ;it != itm.value().constEnd(); ++it)
         {
-            double alpha = (*it)->layer()->getAlpha();
+            double alpha = (*it)->getAlpha();
             if ((*it)->isReadonly())
                 alpha /= 2;
             P->setOpacity(alpha);

@@ -378,10 +378,9 @@ void Node::partChanged(Feature*, int)
 void Node::updateMeta()
 {
     Feature::updateMeta();
+    MetaUpToDate = true;
 
     p->IsWaypoint = (findKey("_waypoint_") != tagSize());
-
-    MetaUpToDate = true;
 }
 
 bool Node::toXML(QDomElement xParent, QProgressDialog * progress, bool strict)

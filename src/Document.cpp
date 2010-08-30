@@ -158,6 +158,13 @@ void Document::addDefaultLayers()
         p->uploadedLayer = new UploadedLayer(tr("Uploaded layer"));
         add(p->uploadedLayer);
     }
+
+    foreach (FilterItem it, *M_PREFS->getFiltersList()->getFilters()) {
+        if (it.deleted)
+            continue;
+        FilterLayer* f = new FilterLayer(it.name, it.filter);
+        addFilterLayer(f);
+    }
 }
 
 bool Document::toXML(QDomElement xParent, QProgressDialog * progress)
@@ -201,29 +208,23 @@ Document* Document::fromXML(QString title, const QDomElement e, double version, 
     while(!c.isNull()) {
         if (c.tagName() == "ImageMapLayer") {
             /*ImageMapLayer* l =*/ ImageMapLayer::fromXML(NewDoc, c, progress);
-        } else
-        if (c.tagName() == "DeletedMapLayer") {
+        } else if (c.tagName() == "DeletedMapLayer") {
             /*DeletedMapLayer* l =*/ DeletedLayer::fromXML(NewDoc, c, progress);
-        } else
-        if (c.tagName() == "DirtyLayer" || c.tagName() == "DirtyMapLayer") {
+        } else if (c.tagName() == "DirtyLayer" || c.tagName() == "DirtyMapLayer") {
             /*DirtyMapLayer* l =*/ DirtyLayer::fromXML(NewDoc, c, progress);
-        } else
-        if (c.tagName() == "UploadedLayer" || c.tagName() == "UploadedMapLayer") {
+        } else if (c.tagName() == "UploadedLayer" || c.tagName() == "UploadedMapLayer") {
             /*UploadedMapLayer* l =*/ UploadedLayer::fromXML(NewDoc, c, progress);
-        } else
-        if (c.tagName() == "DrawingLayer" || c.tagName() == "DrawingMapLayer") {
+        } else if (c.tagName() == "DrawingLayer" || c.tagName() == "DrawingMapLayer") {
             /*DrawingMapLayer* l =*/ DrawingLayer::fromXML(NewDoc, c, progress);
-        } else
-        if (c.tagName() == "TrackLayer" || c.tagName() == "TrackMapLayer") {
+        } else if (c.tagName() == "TrackLayer" || c.tagName() == "TrackMapLayer") {
             /*TrackMapLayer* l =*/ TrackLayer::fromXML(NewDoc, c, progress);
-        } else
-        if (c.tagName() == "ExtractedLayer") {
+        } else if (c.tagName() == "ExtractedLayer") {
             /*DrawingMapLayer* l =*/ DrawingLayer::fromXML(NewDoc, c, progress);
-        } else
-        if (c.tagName() == "OsbLayer" || c.tagName() == "OsbMapLayer") {
+        } else if (c.tagName() == "OsbLayer" || c.tagName() == "OsbMapLayer") {
             /*OsbMapLayer* l =*/ OsbLayer::fromXML(NewDoc, c, progress);
-        } else
-        if (c.tagName() == "CommandHistory") {
+        } else if (c.tagName() == "FilterLayer") {
+            /*OsbMapLayer* l =*/ FilterLayer::fromXML(NewDoc, c, progress);
+        } else if (c.tagName() == "CommandHistory") {
             if (version > 1.0)
                 h = CommandHistory::fromXML(NewDoc, c, progress);
         }
@@ -348,6 +349,21 @@ DrawingLayer* Document::addDrawingLayer(DrawingLayer *aLayer)
     if (!theLayer)
         theLayer = new DrawingLayer(tr("Drawing layer #%1").arg(++p->layerNum));
     add(theLayer);
+    return theLayer;
+}
+
+FilterLayer* Document::addFilterLayer(FilterLayer *aLayer)
+{
+    FilterLayer* theLayer = aLayer;
+    if (!theLayer)
+        theLayer = new FilterLayer(tr("Filter layer #%1").arg(++p->layerNum), "false");
+    add(theLayer);
+
+    FeatureIterator it(this);
+    for(;!it.isEnd(); ++it) {
+        it.get()->updateFilters();
+    }
+
     return theLayer;
 }
 

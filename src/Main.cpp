@@ -193,6 +193,7 @@ int main(int argc, char** argv)
             " DirtyLayerWidget { background-color: #c8c8c8; }"
             " UploadedLayerWidget { background-color: #c8c8c8; }"
             " OsbLayerWidget { background-color: #a2d1c0; }"
+            " FilterLayerWidget { background-color: #c8c8c8; }"
 
             " LayerWidget:checked { background-color: lightsteelblue; }"
             );

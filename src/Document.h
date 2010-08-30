@@ -50,6 +50,7 @@ public:
     void moveLayer(Layer* aLayer, int pos);
     ImageMapLayer* addImageLayer(ImageMapLayer* aLayer = NULL);
     DrawingLayer* addDrawingLayer(DrawingLayer* aLayer = NULL);
+    FilterLayer* addFilterLayer(FilterLayer* aLayer = NULL);
     void remove(Layer* aLayer);
     bool exists(Layer* aLayer) const;
     bool exists(Feature* aFeature) const;
