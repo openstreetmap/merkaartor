@@ -230,6 +230,7 @@ class Feature : public QObject, public IFeature
          * @return true if is read-only
          */
         virtual bool isReadonly();
+        virtual void setReadonly(bool val);
 
         /** set the logical delete state of the feature
          */

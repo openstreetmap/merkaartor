@@ -381,6 +381,21 @@ void Node::updateMeta()
     MetaUpToDate = true;
 
     p->IsWaypoint = (findKey("_waypoint_") != tagSize());
+
+    if (!isPOI()) {
+        int i=0;
+        int prtReadonly=0, prtWritable=0;
+        for (; i<sizeParents(); ++i) {
+            if (getParent(i)->isReadonly())
+                ++prtReadonly;
+            else
+                ++prtWritable;
+        }
+        if (!isReadonly()) {
+            if (prtReadonly && !prtWritable)
+                setReadonly(true);
+        }
+    }
 }
 
 bool Node::toXML(QDomElement xParent, QProgressDialog * progress, bool strict)

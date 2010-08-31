@@ -12,6 +12,7 @@
 #include <QMouseEvent>
 #include <QStylePainter>
 #include <QInputDialog>
+#include <QMessageBox>
 
 #include "ui_FilterEditDialog.h"
 
@@ -195,11 +196,6 @@ void LayerWidget::initActions()
     ctxMenu->addMenu(alphaMenu);
     connect(alphaMenu, SIGNAL(triggered(QAction*)), this, SLOT(setOpacity(QAction*)));
     associatedMenu->addMenu(alphaMenu);
-
-    actZoom = new QAction(tr("Zoom"), ctxMenu);
-    ctxMenu->addAction(actZoom);
-    associatedMenu->addAction(actZoom);
-    connect(actZoom, SIGNAL(triggered(bool)), this, SLOT(zoomLayer(bool)));
 }
 
 void LayerWidget::setOpacity(QAction *act)
@@ -210,6 +206,18 @@ void LayerWidget::setOpacity(QAction *act)
 
 void LayerWidget::close()
 {
+    if (theLayer.data()->getDirtyLevel()) {
+        if (QMessageBox::question(this, tr("Layer CLose: Dirty objects present"),
+                                     tr("There are dirty features on this layer.\n"
+                                        "Are you sure you want to close it? (no Undo possible)"),
+                                     QMessageBox::Ok | QMessageBox::Cancel, QMessageBox::Cancel) == QMessageBox::Cancel)
+            return;
+    } else if (theLayer.data()->size())
+        if (QMessageBox::question(this, tr("Layer CLose: Not empty"),
+                                     tr("Are you sure you want to close this layer? (no Undo possible)"),
+                                     QMessageBox::Ok | QMessageBox::Cancel, QMessageBox::Cancel) == QMessageBox::Cancel)
+            return;
+
     emit(layerClosed(theLayer));
 }
 
@@ -276,6 +284,11 @@ void DrawingLayerWidget::initActions()
 
     ctxMenu->addSeparator();
     associatedMenu->addSeparator();
+
+    actZoom = new QAction(tr("Zoom"), ctxMenu);
+    ctxMenu->addAction(actZoom);
+    associatedMenu->addAction(actZoom);
+    connect(actZoom, SIGNAL(triggered(bool)), this, SLOT(zoomLayer(bool)));
 
     closeAction = new QAction(tr("Close"), this);
     connect(closeAction, SIGNAL(triggered()), this, SLOT(close()));
@@ -373,8 +386,12 @@ void ImageLayerWidget::initActions()
 
     LayerWidget::initActions();
     ImageMapLayer* il = ((ImageMapLayer *)theLayer.data());
-    if (il && il->boundingBox().isNull())
-        actZoom->setVisible(false);
+    if (il && !il->boundingBox().isNull()) {
+        actZoom = new QAction(tr("Zoom"), ctxMenu);
+        ctxMenu->addAction(actZoom);
+        associatedMenu->addAction(actZoom);
+        connect(actZoom, SIGNAL(triggered(bool)), this, SLOT(zoomLayer(bool)));
+    }
 
     actReadonly->setVisible(false);
 
@@ -586,13 +603,15 @@ FilterLayerWidget::FilterLayerWidget(FilterLayer* aLayer, QWidget* aParent)
 void FilterLayerWidget::initActions()
 {
     LayerWidget::initActions();
+
     ctxMenu->addSeparator();
     associatedMenu->addSeparator();
 
-    actZoom = new QAction(tr("Zoom"), ctxMenu);
-    ctxMenu->addAction(actZoom);
-    associatedMenu->addAction(actZoom);
-    connect(actZoom, SIGNAL(triggered(bool)), this, SLOT(zoomLayer(bool)));
+    closeAction = new QAction(tr("Close"), this);
+    connect(closeAction, SIGNAL(triggered()), this, SLOT(close()));
+    ctxMenu->addAction(closeAction);
+    associatedMenu->addAction(closeAction);
+    closeAction->setEnabled(theLayer->canDelete());
 }
 
 void FilterLayerWidget::mouseDoubleClickEvent(QMouseEvent */*event*/)

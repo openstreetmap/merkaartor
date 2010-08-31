@@ -159,6 +159,11 @@ void Document::addDefaultLayers()
         add(p->uploadedLayer);
     }
 
+    addFilterLayers();
+}
+
+void Document::addFilterLayers()
+{
     foreach (FilterItem it, *M_PREFS->getFiltersList()->getFilters()) {
         if (it.deleted)
             continue;

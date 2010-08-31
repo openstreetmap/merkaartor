@@ -49,6 +49,7 @@ class LayerDock : public MDockAncestor
         void readonlyAllLayers(bool);
         void readonlyNoneLayers(bool);
         void closeLayers(bool);
+        void resetLayers();
 
     signals:
         void layersChanged(bool adjustViewport);
@@ -58,7 +59,6 @@ class LayerDock : public MDockAncestor
 
     protected:
         LayerDockPrivate* p;
-
 #if QT_VERSION < 0x040500
         virtual bool event (QEvent* ev);
 #endif

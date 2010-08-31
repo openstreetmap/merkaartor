@@ -20,7 +20,6 @@
 #include "Command.h"
 #include "DirtyList.h"
 
-#include <QMessageBox>
 #include <QMenu>
 
 DirtyDock::DirtyDock(MainWindow* aParent)

@@ -192,6 +192,13 @@ void Layer::setVisible(bool b) {
     if (theWidget) {
         theWidget->setLayerVisible(p->Visible, false);
     }
+
+    if (p->theDocument) {
+        FeatureIterator it(p->theDocument);
+        for(;!it.isEnd(); ++it) {
+            it.get()->invalidateMeta();
+        }
+    }
 }
 
 bool Layer::isVisible() const
@@ -214,6 +221,13 @@ void Layer::setEnabled(bool b) {
         theWidget->setVisible(b);
         theWidget->getAssociatedMenu()->menuAction()->setVisible(b);
     }
+
+    if (p->theDocument) {
+        FeatureIterator it(p->theDocument);
+        for(;!it.isEnd(); ++it) {
+            it.get()->invalidateMeta();
+        }
+    }
 }
 
 bool Layer::isEnabled() const
@@ -223,6 +237,13 @@ bool Layer::isEnabled() const
 
 void Layer::setReadonly(bool b) {
     p->Readonly = b;
+
+    if (p->theDocument) {
+        FeatureIterator it(p->theDocument);
+        for(;!it.isEnd(); ++it) {
+            it.get()->invalidateMeta();
+        }
+    }
 }
 
 bool Layer::isReadonly() const
@@ -388,6 +409,13 @@ void Layer::deleteWidget(void)
 void Layer::setAlpha(const qreal a)
 {
     p->alpha = a;
+
+    if (p->theDocument) {
+        FeatureIterator it(p->theDocument);
+        for(;!it.isEnd(); ++it) {
+            it.get()->invalidateMeta();
+        }
+    }
 }
 
 qreal Layer::getAlpha() const
@@ -1581,41 +1609,5 @@ LayerWidget* FilterLayer::newWidget(void)
 {
     theWidget = new FilterLayerWidget(this);
     return theWidget;
-}
-
-void FilterLayer::setVisible(bool b)
-{
-    Layer::setVisible(b);
-
-    if (p->theDocument) {
-        FeatureIterator it(p->theDocument);
-        for(;!it.isEnd(); ++it) {
-            it.get()->invalidateMeta();
-        }
-    }
-}
-
-void FilterLayer::setReadonly(bool b)
-{
-    Layer::setReadonly(b);
-
-    if (p->theDocument) {
-        FeatureIterator it(p->theDocument);
-        for(;!it.isEnd(); ++it) {
-            it.get()->invalidateMeta();
-        }
-    }
-}
-
-void FilterLayer::setAlpha(const qreal a)
-{
-    Layer::setAlpha(a);
-
-    if (p->theDocument) {
-        FeatureIterator it(p->theDocument);
-        for(;!it.isEnd(); ++it) {
-            it.get()->invalidateMeta();
-        }
-    }
 }
 

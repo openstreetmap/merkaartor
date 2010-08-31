@@ -69,6 +69,16 @@ public:
      */
     virtual bool isDirty() const { return false; }
 
+    /** check if the feature is visible
+     * @return true if visible
+     */
+    virtual bool isVisible() { return true; }
+
+    /** check if the feature is read-only
+     * @return true if is read-only
+     */
+    virtual bool isReadonly() { return true; }
+
 protected:
     QList<QPair<QString, QString> > Tags;
 };

@@ -307,10 +307,6 @@ public:
     virtual QString filter() { return theSelectorString; }
     virtual TagSelector* selector() { return theSelector; }
 
-    virtual void setVisible(bool b);
-    virtual void setReadonly(bool b);
-    virtual void setAlpha(const qreal alpha);
-
 protected:
     QString theSelectorString;
     TagSelector* theSelector;

@@ -13,7 +13,6 @@
 #include <QApplication>
 #include <QtGui/QPainter>
 #include <QtGui/QPainterPath>
-#include <QMessageBox>
 #include <QProgressDialog>
 
 #include <algorithm>

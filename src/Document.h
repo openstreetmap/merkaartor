@@ -42,6 +42,7 @@ public:
     const QString& id() const;
 
     void addDefaultLayers();
+    void addFilterLayers();
 
     void setLayerDock(LayerDock* aDock);
     LayerDock* getLayerDock(void);

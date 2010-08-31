@@ -402,6 +402,13 @@ bool Feature::isUploadable() const
         return false;
 }
 
+void Feature::setReadonly(bool val)
+{
+    p->ReadOnly = val;
+    if (p->ReadOnly)
+        p->Alpha /= 2.0;
+}
+
 bool Feature::isReadonly()
 {
     if (!MetaUpToDate)
@@ -740,7 +747,7 @@ void Feature::updateFilters()
     for (int i=0; i<D->layerSize(); ++i) {
         if (D->getLayer(i)->classType() == Layer::FilterLayerType) {
             FilterLayer* Fl = dynamic_cast<FilterLayer*>(D->getLayer(i));
-            if (!Fl->selector())
+            if (!Fl->isEnabled() || !Fl->selector())
                 continue;
             if (Fl->selector()->matches(this, 0) != TagSelect_NoMatch)
                 p->FilterLayers << Fl;
@@ -782,23 +789,15 @@ void Feature::updateMeta()
     }
 
     if (L->isReadonly())
-        p->ReadOnly = true;
+        setReadonly(true);
     else {
-        int i=0;
-        for (; i<p->Parents.size(); ++i)
-            if (!p->Parents[i]->isReadonly()) {
-            break;
-        }
-        if (i != sizeParents())
-            p->ReadOnly = false;
-        else {
-            p->ReadOnly = false;
-            foreach(FilterLayer* Fl, p->FilterLayers) {
-                if (Fl->isReadonly()) {
-                    p->ReadOnly = true;
-                    break;
-                }
+        setReadonly(false);
+        foreach(FilterLayer* Fl, p->FilterLayers) {
+            if (Fl->isReadonly()) {
+                setReadonly(true);
+                break;
             }
+
         }
     }
 }

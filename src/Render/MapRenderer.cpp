@@ -236,8 +236,6 @@ void MapRenderer::render(
             for (it = itm.value().constBegin(); it != itm.value().constEnd(); ++it)
             {
                 double alpha = (*it)->getAlpha();
-                if ((*it)->isReadonly())
-                    alpha /= 2;
                 thePainter->setOpacity(alpha);
 
                 R = NULL;
@@ -366,8 +364,6 @@ void MapRenderer::render(
                 for (it = itm.value().constBegin(); it != itm.value().constEnd(); ++it) {
                     P->save();
                     double alpha = (*it)->getAlpha();
-                    if ((*it)->isReadonly())
-                        alpha /= 2;
                     P->setOpacity(alpha);
 
                     if (Way * R = CAST_WAY(*it)) {
@@ -392,8 +388,6 @@ void MapRenderer::render(
                 for (it = itm.value().constBegin(); it != itm.value().constEnd(); ++it) {
                     P->save();
                     double alpha = (*it)->getAlpha();
-                    if ((*it)->isReadonly())
-                        alpha /= 2;
                     P->setOpacity(alpha);
 
                     if (Way * R = CAST_WAY(*it)) {
@@ -417,8 +411,6 @@ void MapRenderer::render(
             for (it = itm.value().constBegin(); it != itm.value().constEnd(); ++it) {
                 P->save();
                 double alpha = (*it)->getAlpha();
-                if ((*it)->isReadonly())
-                    alpha /= 2;
                 P->setOpacity(alpha);
 
                 if (Way * R = CAST_WAY(*it)) {
@@ -440,8 +432,6 @@ void MapRenderer::render(
             for (it = itm.value().constBegin(); it != itm.value().constEnd(); ++it) {
                 P->save();
                 double alpha = (*it)->getAlpha();
-                if ((*it)->isReadonly())
-                    alpha /= 2;
                 P->setOpacity(alpha);
 
                 if (Way * R = CAST_WAY(*it)) {
@@ -463,8 +453,6 @@ void MapRenderer::render(
         for (it = itm.value().constBegin() ;it != itm.value().constEnd(); ++it)
         {
             double alpha = (*it)->getAlpha();
-            if ((*it)->isReadonly())
-                alpha /= 2;
             P->setOpacity(alpha);
 
             (*it)->draw(*P, aView);
