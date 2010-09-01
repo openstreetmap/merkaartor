@@ -274,7 +274,7 @@ void Relation::add(const QString& Role, Feature* F)
     F->setParentFeature(this);
     p->BBoxUpToDate = false;
     MetaUpToDate = false;
-    if (layer() && !isDeleted() && isVisible()) {
+    if (layer() && !isDeleted()) {
         CoordBox bb = boundingBox();
         layer()->indexAdd(bb, this);
     }
@@ -291,7 +291,7 @@ void Relation::add(const QString& Role, Feature* F, int Idx)
     F->setParentFeature(this);
     p->BBoxUpToDate = false;
     MetaUpToDate = false;
-    if (layer() && !isDeleted() && isVisible()) {
+    if (layer() && !isDeleted()) {
         CoordBox bb = boundingBox();
         layer()->indexAdd(bb, this);
     }
@@ -310,7 +310,7 @@ void Relation::remove(int Idx)
         F->unsetParentFeature(this);
     p->BBoxUpToDate = false;
     MetaUpToDate = false;
-    if (layer() && !isDeleted() && isVisible()) {
+    if (layer() && !isDeleted()) {
         CoordBox bb = boundingBox();
         layer()->indexAdd(bb, this);
     }

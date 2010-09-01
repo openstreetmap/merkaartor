@@ -439,13 +439,6 @@ void Feature::setVisible(bool state)
 {
     if (state == p->Visible)
         return;
-
-    if (layer()) {
-        if (!state)
-            layer()->indexRemove(boundingBox(), this);
-        else
-            layer()->indexAdd(boundingBox(), this);
-    }
     p->Visible = state;
 }
 

@@ -8,6 +8,7 @@
 #include <QPushButton>
 
 #include "ui_LayerWidget.h"
+#include "ui_FilterEditDialog.h"
 
 class MainWindow;
 class Layer;
@@ -181,6 +182,12 @@ class FilterLayerWidget : public LayerWidget
 
     public:
         virtual void initActions();
+
+    private:
+        Ui::FilterEditDialog* ui;
+
+    protected slots:
+       void on_filterHelperClicked();
 };
 
 

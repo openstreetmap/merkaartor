@@ -295,10 +295,8 @@ void MapView::buildFeatureSet()
     QRectF clipRect = p->theTransform.inverted().mapRect(QRectF(rect().adjusted(-200, -200, 200, 200)));
 
     p->theCoastlines.clear();
-    for (int i=0; i<theDocument->layerSize(); ++i) {
-        if (theDocument->getLayer(i)->isVisible())
-            theDocument->getLayer(i)->getFeatureSet(p->theFeatures, p->theCoastlines, theDocument, p->invalidRects, clipRect, theProjection, p->theTransform);
-    }
+    for (int i=0; i<theDocument->layerSize(); ++i)
+        theDocument->getLayer(i)->getFeatureSet(p->theFeatures, p->theCoastlines, theDocument, p->invalidRects, clipRect, theProjection, p->theTransform);
 }
 
 bool testColor(const QImage& theImage, const QPoint& P, const QRgb& targetColor)

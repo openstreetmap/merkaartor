@@ -310,26 +310,26 @@ TagSelectorOperator::TagSelectorOperator(const QString& key, const QString& oper
     , specialKey(TagSelectKey_None)
     , specialValue(TagSelectValue_None)
 {
-    if (key.toUpper() == ":ID")
+    if (key.toLower() == ":id")
         specialKey = TagSelectKey_Id;
-    else if (key.toUpper() == ":USER")
+    else if (key.toLower() == ":user")
         specialKey = TagSelectKey_User;
-    else if (key.toUpper() == ":TIME") {
+    else if (key.toLower() == ":time") {
         specialKey = TagSelectKey_Time;
         dtValue = QDateTime::fromString(value, Qt::ISODate);
-    } else if (key.toUpper() == ":VERSION") {
+    } else if (key.toLower() == ":version") {
         specialKey = TagSelectKey_Version;
         bool ok;
         numValue = value.toDouble(&ok);
         if (!ok)
             numValue = -1;
-    } else if (key.toUpper() == ":ZOOMLEVEL")
+    } else if (key.toLower() == ":zoomlevel")
         specialKey = TagSelectKey_ZoomLevel;
-    else if (key.toUpper() == ":PIXELPERM")
+    else if (key.toLower() == ":pixelperm")
         specialKey = TagSelectKey_PixelPerM;
-    else if (key.toUpper() == ":DIRTY")
+    else if (key.toLower() == ":dirty")
         specialKey = TagSelectKey_Dirty;
-    else if (key.toUpper() == ":UPLOADED")
+    else if (key.toLower() == ":uploaded")
         specialKey = TagSelectKey_Uploaded;
 
     if (value.toUpper() == "_NULL_") {

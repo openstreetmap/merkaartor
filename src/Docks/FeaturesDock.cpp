@@ -379,7 +379,6 @@ void FeaturesDock::updateList()
     } else {
         for (int j=0; j<Main->document()->layerSize(); ++j) {
             if (!Main->document()->getLayer(j)->size()
-                || !Main->document()->getLayer(j)->isVisible()
                 || Main->document()->getLayer(j)->isIndexingBlocked()
                 )
                 continue;
@@ -389,6 +388,9 @@ void FeaturesDock::updateList()
 
             QList < MapFeaturePtr > ret = Main->document()->getLayer(j)->indexFind(theViewport);
             foreach (MapFeaturePtr F, ret) {
+                if (F->isHidden())
+                    continue;
+
                 if (ui.cbWithin->isChecked()) {
                     if (ggl::within(F->boundingBox(), Main->view()->viewport()))
                         addItem(F);

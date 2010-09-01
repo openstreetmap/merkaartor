@@ -23,7 +23,7 @@ class SelectionDialog : public QDialog, public Ui::SelectionDialog
     Q_OBJECT
 
     public:
-        SelectionDialog(QWidget *parent = 0);
+        SelectionDialog(QWidget *parent = 0, bool showMaxResult=true);
         ~SelectionDialog();
 
     private slots:

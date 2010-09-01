@@ -436,12 +436,12 @@ void LayerDock::resetLayers()
         if (CHILD_WIDGET(i)) {
             if (CHILD_LAYER(i)->classType() == Layer::FilterLayerType)
                 toDelete << CHILD_LAYER(i);
+            else if ((CHILD_LAYER(i)->classType() == Layer::DirtyLayerType || CHILD_LAYER(i)->classType() == Layer::UploadedLayerType) && CHILD_LAYER(i)->size() == 0)
+                toDelete << CHILD_LAYER(i);
             else {
-                CHILD_WIDGET(i)->blockSignals(true);
                 CHILD_WIDGET(i)->setLayerVisible(true);
                 CHILD_LAYER(i)->setReadonly(false);
                 CHILD_LAYER(i)->setAlpha(1.0);
-                CHILD_WIDGET(i)->blockSignals(false);
             }
         }
     }

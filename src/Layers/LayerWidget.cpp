@@ -14,7 +14,7 @@
 #include <QInputDialog>
 #include <QMessageBox>
 
-#include "ui_FilterEditDialog.h"
+#include "Utils/SelectionDialog.h"
 
 #define LINEHEIGHT 25
 
@@ -250,8 +250,15 @@ void LayerWidget::setLayerVisible(bool b, bool updateLayer)
 {
     if (updateLayer)
         theLayer->setVisible(b);
+
+    actVisible->blockSignals(true);
     actVisible->setChecked(b);
+    actVisible->blockSignals(false);
+
+    ui.cbVisible->blockSignals(true);
     ui.cbVisible->setChecked(b);
+    ui.cbVisible->blockSignals(false);
+
     update();
     emit(layerChanged(this, false));
 }
@@ -619,13 +626,27 @@ void FilterLayerWidget::mouseDoubleClickEvent(QMouseEvent */*event*/)
     FilterLayer* Fl = dynamic_cast<FilterLayer*>(theLayer.data());
 
     QDialog* dlg = new QDialog(this);
-    Ui::FilterEditDialog ui;
-    ui.setupUi(dlg);
-    ui.edName->setText(Fl->name());
-    ui.edFilter->setText(Fl->filter());
+    ui = new Ui::FilterEditDialog;
+    ui->setupUi(dlg);
+    ui->edName->setText(Fl->name());
+    ui->edFilter->setText(Fl->filter());
+    connect(ui->btFilterHelper, SIGNAL(clicked()), SLOT(on_filterHelperClicked()));
     if (dlg->exec() == QDialog::Accepted) {
-        setName(ui.edName->text());
-        Fl->setName(ui.edName->text());
-        Fl->setFilter(ui.edFilter->text());
+        setName(ui->edName->text());
+        Fl->setName(ui->edName->text());
+        Fl->setFilter(ui->edFilter->text());
+    }
+    delete ui;
+}
+
+void FilterLayerWidget::on_filterHelperClicked()
+{
+    SelectionDialog* Sel = new SelectionDialog(g_Merk_MainWindow, false);
+    if (!Sel)
+        return;
+
+    Sel->edTagQuery->setText(ui->edFilter->text());
+    if (Sel->exec() == QDialog::Accepted) {
+        ui->edFilter->setText(Sel->edTagQuery->text());
     }
 }

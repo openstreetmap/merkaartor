@@ -239,7 +239,7 @@ void Way::add(Node* Pt, int Idx)
     p->SmoothedUpToDate = false;
     p->wasPathComplete = false;
     p->VirtualsUptodate = false;
-    if (layer() && !isDeleted() && isVisible()) {
+    if (layer() && !isDeleted()) {
         CoordBox bb = boundingBox();
         layer()->indexAdd(bb, this);
     }
@@ -279,7 +279,7 @@ void Way::remove(int idx)
     p->SmoothedUpToDate = false;
     p->wasPathComplete = false;
     p->VirtualsUptodate = false;
-    if (layer() && !isDeleted() && isVisible()) {
+    if (layer() && !isDeleted()) {
         CoordBox bb = boundingBox();
         layer()->indexAdd(bb, this);
     }

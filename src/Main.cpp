@@ -239,6 +239,7 @@ int main(int argc, char** argv)
     instance.processEvents();
 
     MainWindow Main;
+    g_Merk_MainWindow = &Main;
     instance.setActivationWindow(&Main, false);
     QObject::connect(&instance, SIGNAL(messageReceived(const QString&)),
              &instance, SLOT(activateWindow()));

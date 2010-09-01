@@ -15,10 +15,12 @@
 
 #include <QCompleter>
 
-SelectionDialog::SelectionDialog(QWidget *parent)
+SelectionDialog::SelectionDialog(QWidget *parent, bool showMaxResult)
  : QDialog(parent)
 {
     setupUi(this);
+    if (!showMaxResult)
+        widgetMaxResult->setVisible(false);
 
     setWindowFlags(windowFlags() & ~Qt::WindowContextHelpButtonHint);
     setWindowFlags(windowFlags() | Qt::MSWindowsFixedSizeDialogHint);
@@ -29,13 +31,28 @@ SelectionDialog::SelectionDialog(QWidget *parent)
     MainWindow* mw = (MainWindow *)(this->parent());
 
     QCompleter* completer = new QCompleter(mw->document()->getTagList(), (QObject *)this);
+
     cbKey->insertItems(-1, mw->document()->getTagList());
+    //special keys
+    cbKey->insertItem(-1, ":zoomlevel");
+    cbKey->insertItem(-1, ":version");
+    cbKey->insertItem(-1, ":user");
+    cbKey->insertItem(-1, ":uploaded");
+    cbKey->insertItem(-1, ":time");
+    cbKey->insertItem(-1, ":pixelperm");
+    cbKey->insertItem(-1, ":dirty");
+    cbKey->insertItem(-1, ":id");
+
     completer->setCompletionMode(QCompleter::InlineCompletion);
     completer->setModelSorting(QCompleter::CaseInsensitivelySortedModel);
     cbKey->setCompleter(completer);
     cbKey->setEditable(true);
 
+
     cbValue->insertItems(-1, mw->document()->getTagValueList("*"));
+    //special values
+    cbValue->insertItem(-1, "_NULL_");
+
     cbValue->setEditable(true);
 
     edName->setText(M_PREFS->getLastSearchName());
@@ -58,6 +75,7 @@ void SelectionDialog::on_cbKey_editTextChanged(const QString & text)
     QStringList sl = mw->document()->getTagValueList(text);
     QCompleter* completer = new QCompleter(sl, (QObject *)this);
     cbValue->insertItems(-1, mw->document()->getTagValueList(text));
+    cbValue->insertItem(-1, "_NULL_");
     completer->setCompletionMode(QCompleter::InlineCompletion);
     completer->setModelSorting(QCompleter::CaseInsensitivelySortedModel);
     if (cbValue->completer())

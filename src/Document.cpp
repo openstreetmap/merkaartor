@@ -1063,14 +1063,11 @@ bool VisibleFeatureIterator::check()
 {
     if (!FeatureIterator::check())
         return false;
-    else {
-        if (theDocument->getLayer(curLayerIdx)->isVisible()) {
-            if (CAST_NODE(theDocument->getLayer(curLayerIdx)->get(curFeatureIdx))
-                    && !(theDocument->getLayer(curLayerIdx)->arePointsDrawable()))
+    else if (theDocument->getLayer(curLayerIdx)->get(curFeatureIdx)->isHidden())
+        return false;
+    else if (CAST_NODE(theDocument->getLayer(curLayerIdx)->get(curFeatureIdx))
+            && !(theDocument->getLayer(curLayerIdx)->arePointsDrawable()))
                 return false;
-        } else
-            return false;
-    }
 
     return true;
 }
