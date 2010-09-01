@@ -382,13 +382,12 @@ void FeatureSnapInteraction::updateSnap(QMouseEvent* event)
     Way* R;
     Node* N;
     for (int j=0; j<document()->layerSize(); ++j) {
-        if (!document()->getLayer(j)->isVisible())
-            continue;
-
         QList < MapFeaturePtr > ret = document()->getLayer(j)->indexFind(HotZone);
         foreach(MapFeaturePtr F, ret) {
             if (F)
             {
+                if (F->isHidden())
+                    continue;
                 if (std::find(NoSnap.begin(),NoSnap.end(),F) != NoSnap.end())
                     continue;
                 if (F->notEverythingDownloaded())

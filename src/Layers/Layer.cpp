@@ -138,6 +138,8 @@ void Layer::getFeatureSet(QMap<RenderPriority, QSet <Feature*> >& theFeatures, Q
         indexFind(invalidRects[i], &ret);
     }
     foreach(MapFeaturePtr F, ret) {
+        if (F->isHidden())
+            continue;
         if (theFeatures[F->renderPriority()].contains(F))
             continue;
 
@@ -190,6 +192,13 @@ void Layer::setVisible(bool b) {
     if (theWidget) {
         theWidget->setLayerVisible(p->Visible, false);
     }
+
+    if (p->theDocument) {
+        FeatureIterator it(p->theDocument);
+        for(;!it.isEnd(); ++it) {
+            it.get()->invalidateMeta();
+        }
+    }
 }
 
 bool Layer::isVisible() const
@@ -212,6 +221,13 @@ void Layer::setEnabled(bool b) {
         theWidget->setVisible(b);
         theWidget->getAssociatedMenu()->menuAction()->setVisible(b);
     }
+
+    if (p->theDocument) {
+        FeatureIterator it(p->theDocument);
+        for(;!it.isEnd(); ++it) {
+            it.get()->invalidateMeta();
+        }
+    }
 }
 
 bool Layer::isEnabled() const
@@ -221,6 +237,13 @@ bool Layer::isEnabled() const
 
 void Layer::setReadonly(bool b) {
     p->Readonly = b;
+
+    if (p->theDocument) {
+        FeatureIterator it(p->theDocument);
+        for(;!it.isEnd(); ++it) {
+            it.get()->invalidateMeta();
+        }
+    }
 }
 
 bool Layer::isReadonly() const
@@ -243,6 +266,7 @@ void Layer::add(Feature* aFeature)
     if (!aFeature->isDeleted() && !aFeature->isVirtual())
         indexAdd(aFeature->boundingBox(), aFeature);
     p->Features.push_back(aFeature);
+    aFeature->invalidateMeta();
     notifyIdUpdate(aFeature->id(),aFeature);
 }
 
@@ -385,6 +409,13 @@ void Layer::deleteWidget(void)
 void Layer::setAlpha(const qreal a)
 {
     p->alpha = a;
+
+    if (p->theDocument) {
+        FeatureIterator it(p->theDocument);
+        for(;!it.isEnd(); ++it) {
+            it.get()->invalidateMeta();
+        }
+    }
 }
 
 qreal Layer::getAlpha() const
@@ -1529,3 +1560,54 @@ QString OsbLayer::toHtml()
 
     return toMainHtml().arg(S);
 }
+
+// FilterLayer
+
+FilterLayer::FilterLayer(const QString & aName, const QString& aFilter)
+    : Layer(aName)
+    , theSelectorString(aFilter)
+{
+    p->Visible = true;
+    theSelector = TagSelector::parse(theSelectorString);
+}
+
+FilterLayer::~ FilterLayer()
+{
+}
+
+void FilterLayer::setFilter(const QString& aFilter)
+{
+    theSelectorString = aFilter;
+    delete theSelector;
+    theSelector = TagSelector::parse(theSelectorString);
+
+    FeatureIterator it(p->theDocument);
+    for(;!it.isEnd(); ++it) {
+        it.get()->updateFilters();
+    }
+}
+
+bool FilterLayer::toXML(QDomElement& xParent, QProgressDialog * progress)
+{
+    QDomElement e = xParent.ownerDocument().createElement(metaObject()->className());
+    xParent.appendChild(e);
+    Layer::toXML(e, progress);
+    e.setAttribute("filter", theSelectorString);
+
+    return true;
+}
+
+FilterLayer* FilterLayer::fromXML(Document* d, const QDomElement e, QProgressDialog * progress)
+{
+    FilterLayer* l = new FilterLayer(e.attribute("name"), e.attribute("filter"));
+    Layer::fromXML(l, d, e, progress);
+    d->add(l);
+    return l;
+}
+
+LayerWidget* FilterLayer::newWidget(void)
+{
+    theWidget = new FilterLayerWidget(this);
+    return theWidget;
+}
+

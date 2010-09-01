@@ -235,9 +235,7 @@ void MapRenderer::render(
         {
             for (it = itm.value().constBegin(); it != itm.value().constEnd(); ++it)
             {
-                double alpha = (*it)->layer()->getAlpha();
-                if ((*it)->isReadonly())
-                    alpha /= 2;
+                double alpha = (*it)->getAlpha();
                 thePainter->setOpacity(alpha);
 
                 R = NULL;
@@ -365,9 +363,7 @@ void MapRenderer::render(
             {
                 for (it = itm.value().constBegin(); it != itm.value().constEnd(); ++it) {
                     P->save();
-                    double alpha = (*it)->layer()->getAlpha();
-                    if ((*it)->isReadonly())
-                        alpha /= 2;
+                    double alpha = (*it)->getAlpha();
                     P->setOpacity(alpha);
 
                     if (Way * R = CAST_WAY(*it)) {
@@ -391,9 +387,7 @@ void MapRenderer::render(
             {
                 for (it = itm.value().constBegin(); it != itm.value().constEnd(); ++it) {
                     P->save();
-                    double alpha = (*it)->layer()->getAlpha();
-                    if ((*it)->isReadonly())
-                        alpha /= 2;
+                    double alpha = (*it)->getAlpha();
                     P->setOpacity(alpha);
 
                     if (Way * R = CAST_WAY(*it)) {
@@ -416,9 +410,7 @@ void MapRenderer::render(
         for (itm = theFeatures.constBegin() ;itm != theFeatures.constEnd(); ++itm) {
             for (it = itm.value().constBegin(); it != itm.value().constEnd(); ++it) {
                 P->save();
-                double alpha = (*it)->layer()->getAlpha();
-                if ((*it)->isReadonly())
-                    alpha /= 2;
+                double alpha = (*it)->getAlpha();
                 P->setOpacity(alpha);
 
                 if (Way * R = CAST_WAY(*it)) {
@@ -439,9 +431,7 @@ void MapRenderer::render(
         for (itm = theFeatures.constBegin() ;itm != theFeatures.constEnd(); ++itm) {
             for (it = itm.value().constBegin(); it != itm.value().constEnd(); ++it) {
                 P->save();
-                double alpha = (*it)->layer()->getAlpha();
-                if ((*it)->isReadonly())
-                    alpha /= 2;
+                double alpha = (*it)->getAlpha();
                 P->setOpacity(alpha);
 
                 if (Way * R = CAST_WAY(*it)) {
@@ -462,9 +452,7 @@ void MapRenderer::render(
     {
         for (it = itm.value().constBegin() ;it != itm.value().constEnd(); ++it)
         {
-            double alpha = (*it)->layer()->getAlpha();
-            if ((*it)->isReadonly())
-                alpha /= 2;
+            double alpha = (*it)->getAlpha();
             P->setOpacity(alpha);
 
             (*it)->draw(*P, aView);

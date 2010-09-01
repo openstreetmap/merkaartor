@@ -229,7 +229,8 @@ class Feature : public QObject, public IFeature
         /** check if the feature is read-only
          * @return true if is read-only
          */
-        virtual bool isReadonly() const;
+        virtual bool isReadonly();
+        virtual void setReadonly(bool val);
 
         /** set the logical delete state of the feature
          */
@@ -247,12 +248,12 @@ class Feature : public QObject, public IFeature
         /** check if the feature is visible
          * @return true if visible
          */
-        virtual bool isVisible() const;
+        virtual bool isVisible();
 
         /** check if the feature is hidden
          * @return true if hidden
          */
-        virtual bool isHidden() const;
+        virtual bool isHidden();
 
         /** check if the feature has been uploaded
          * @return true if uploaded
@@ -285,6 +286,8 @@ class Feature : public QObject, public IFeature
         bool hasPainter(double PixelPerM) const;
         void invalidatePainter();
         QVector<qreal> getParentDashes() const;
+
+        virtual qreal getAlpha();
 
         virtual void remove(int Idx) = 0;
         virtual void remove(Feature* F) = 0;
@@ -319,6 +322,7 @@ class Feature : public QObject, public IFeature
         virtual IFeature::FeatureType getType() const = 0;
         virtual void updateMeta();
         virtual void updateIndex();
+        virtual void updateFilters();
         virtual void invalidateMeta();
         double widthOf();
 

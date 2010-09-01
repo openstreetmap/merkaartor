@@ -8,6 +8,7 @@
 #include <QPushButton>
 
 #include "ui_LayerWidget.h"
+#include "ui_FilterEditDialog.h"
 
 class MainWindow;
 class Layer;
@@ -167,6 +168,28 @@ class OsbLayerWidget : public LayerWidget
     public:
         virtual void initActions();
 };
+
+class FilterLayerWidget : public LayerWidget
+{
+    Q_OBJECT
+
+    public:
+        FilterLayerWidget(FilterLayer* aLayer, QWidget* aParent = 0);
+        virtual ~FilterLayerWidget() {};
+
+    protected:
+        void mouseDoubleClickEvent(QMouseEvent */*event*/);
+
+    public:
+        virtual void initActions();
+
+    private:
+        Ui::FilterEditDialog* ui;
+
+    protected slots:
+       void on_filterHelperClicked();
+};
+
 
 
 #endif

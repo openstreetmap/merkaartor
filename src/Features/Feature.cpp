@@ -155,6 +155,8 @@ class MapFeaturePrivate
         int DirtyLevel;
         bool VirtualsUpdatesBlocked;
         double Width;
+        QList<FilterLayer*> FilterLayers;
+        double Alpha;
 };
 
 void MapFeaturePrivate::initVersionNumber()
@@ -364,6 +366,13 @@ int Feature::getDirtyLevel() const
     return p->DirtyLevel;
 }
 
+qreal Feature::getAlpha()
+{
+    if (!MetaUpToDate)
+        updateMeta();
+    return p->Alpha;
+}
+
 bool Feature::isDirty() const
 {
     if (g_Merk_Frisius)
@@ -393,40 +402,17 @@ bool Feature::isUploadable() const
         return false;
 }
 
-bool Feature::isReadonly() const
+void Feature::setReadonly(bool val)
 {
-    Layer* L = qobject_cast<Layer*>(parent());
-    if (L) {
-        if (L->isReadonly())
-            return true;
-        else {
-            int i=0;
-            for (; i<p->Parents.size(); ++i)
-                if (!p->Parents[i]->isReadonly()) {
-                break;
-            }
-            if (i != sizeParents())
-                p->ReadOnly = false;
-            else {
-                Document* D = L->getDocument();
-                if (D) {
-                    if (D->filterRevision() != p->FilterRevision) {
-                        p->FilterRevision = D->filterRevision();
-                        if (D->getTagFilter()) {
-                            if (D->getTagFilter()->matches(this,NULL) != TagSelect_NoMatch) {
-                                p->ReadOnly = false;
-                            } else {
-                                p->ReadOnly = true;
-                            }
-                        } else
-                            p->ReadOnly = false;
-                    }
-                }
-            }
-        }
-    } else
-        return true;
+    p->ReadOnly = val;
+    if (p->ReadOnly)
+        p->Alpha /= 2.0;
+}
 
+bool Feature::isReadonly()
+{
+    if (!MetaUpToDate)
+        updateMeta();
     return p->ReadOnly;
 }
 
@@ -453,23 +439,20 @@ void Feature::setVisible(bool state)
 {
     if (state == p->Visible)
         return;
-
-    if (layer()) {
-        if (!state)
-            layer()->indexRemove(boundingBox(), this);
-        else
-            layer()->indexAdd(boundingBox(), this);
-    }
     p->Visible = state;
 }
 
-bool Feature::isVisible() const
+bool Feature::isVisible()
 {
+    if (!MetaUpToDate)
+        updateMeta();
     return p->Visible;
 }
 
-bool Feature::isHidden() const
+bool Feature::isHidden()
 {
+    if (!MetaUpToDate)
+        updateMeta();
     return !p->Visible;
 }
 
@@ -742,8 +725,74 @@ void Feature::updateIndex()
     }
 }
 
+void Feature::updateFilters()
+{
+    p->FilterLayers.clear();
+
+    Layer* L = layer();
+    if (!L)
+        return;
+
+    Document* D = L->getDocument();
+    if (!D)
+        return;
+
+    for (int i=0; i<D->layerSize(); ++i) {
+        if (D->getLayer(i)->classType() == Layer::FilterLayerType) {
+            FilterLayer* Fl = dynamic_cast<FilterLayer*>(D->getLayer(i));
+            if (!Fl->isEnabled() || !Fl->selector())
+                continue;
+            if (Fl->selector()->matches(this, 0) != TagSelect_NoMatch)
+                p->FilterLayers << Fl;
+        }
+    }
+    invalidateMeta();
+}
+
 void Feature::updateMeta()
 {
+    updateFilters();
+
+    Layer* L = layer();
+    if (!L)
+        return;
+
+    if (!L->isVisible())
+        p->Visible = false;
+    else {
+        p->Visible = true;
+        foreach(FilterLayer* Fl, p->FilterLayers) {
+            if (!Fl->isVisible()) {
+                p->Visible = false;
+                break;
+            }
+        }
+    }
+
+    if (L->getAlpha() != 1.0)
+        p->Alpha = L->getAlpha();
+    else {
+        p->Alpha = 1.0;
+        foreach(FilterLayer* Fl, p->FilterLayers) {
+            if (Fl->getAlpha() != 1) {
+                p->Alpha = Fl->getAlpha();
+                break;
+            }
+        }
+    }
+
+    if (L->isReadonly())
+        setReadonly(true);
+    else {
+        setReadonly(false);
+        foreach(FilterLayer* Fl, p->FilterLayers) {
+            if (Fl->isReadonly()) {
+                setReadonly(true);
+                break;
+            }
+
+        }
+    }
 }
 
 int Feature::sizeParents() const

@@ -106,12 +106,6 @@
       <string>Set Areas &amp;opacity</string>
      </property>
     </widget>
-    <widget class="QMenu" name="menuFilters">
-     <property name="title">
-      <string>&amp;Filters</string>
-     </property>
-     <addaction name="filterNoneAction"/>
-    </widget>
     <addaction name="viewZoomAllAction"/>
     <addaction name="viewZoomWindowAction"/>
     <addaction name="viewZoomOutAction"/>
@@ -123,7 +117,6 @@
     <addaction name="separator"/>
     <addaction name="viewGotoAction"/>
     <addaction name="menuBookmarks"/>
-    <addaction name="menuFilters"/>
    </widget>
    <widget class="QMenu" name="menuFile">
     <property name="title">
@@ -263,6 +256,7 @@
     </property>
     <addaction name="layersNewImageAction"/>
     <addaction name="layersNewDrawingAction"/>
+    <addaction name="layersNewFilterAction"/>
     <addaction name="separator"/>
    </widget>
    <widget class="QMenu" name="menuGps">
@@ -1762,6 +1756,11 @@
    </property>
    <property name="shortcut">
     <string>Ctrl+X</string>
+   </property>
+  </action>
+  <action name="layersNewFilterAction">
+   <property name="text">
+    <string>Add new Filter layer</string>
    </property>
   </action>
  </widget>

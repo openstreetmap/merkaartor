@@ -429,29 +429,60 @@ void LayerDock::closeLayers(bool)
     }
 }
 
+void LayerDock::resetLayers()
+{
+    QList<Layer*> toDelete;
+    for (int i=0; i < CHILD_WIDGETS.size(); ++i) {
+        if (CHILD_WIDGET(i)) {
+            if (CHILD_LAYER(i)->classType() == Layer::FilterLayerType)
+                toDelete << CHILD_LAYER(i);
+            else if ((CHILD_LAYER(i)->classType() == Layer::DirtyLayerType || CHILD_LAYER(i)->classType() == Layer::UploadedLayerType) && CHILD_LAYER(i)->size() == 0)
+                toDelete << CHILD_LAYER(i);
+            else {
+                CHILD_WIDGET(i)->setLayerVisible(true);
+                CHILD_LAYER(i)->setReadonly(false);
+                CHILD_LAYER(i)->setAlpha(1.0);
+            }
+        }
+    }
+    foreach (Layer* f, toDelete)
+        layerClosed(f);
+    p->Main->document()->addFilterLayers();
+}
+
 void LayerDock::contextMenuEvent(QContextMenuEvent* anEvent)
 {
     LayerWidget* aWidget = dynamic_cast<LayerWidget*>(childAt(anEvent->pos()));
 
-    p->selWidgets.clear();
-    for (int i=0; i < CHILD_WIDGETS.size(); ++i) {
-        if (CHILD_WIDGET(i) && CHILD_WIDGET(i)->isChecked())
-            p->selWidgets.push_back(CHILD_WIDGET(i));
-    }
-
-    if ((p->selWidgets.size() == 0 || p->selWidgets.size() == 1) && aWidget) {
+    if (aWidget) {
+        p->selWidgets.clear();
         for (int i=0; i < CHILD_WIDGETS.size(); ++i) {
-            if (CHILD_WIDGET(i))
-                CHILD_WIDGET(i)->setChecked(false);
+            if (CHILD_WIDGET(i) && CHILD_WIDGET(i)->isChecked())
+                p->selWidgets.push_back(CHILD_WIDGET(i));
         }
-        aWidget->setChecked(true);
-        p->lastSelWidget = aWidget;
 
-        aWidget->showContextMenu(anEvent);
-    } else
-    if (p->selWidgets.size()) {
-        p->ctxMenu->exec(anEvent->globalPos());
-   }
+        if (p->selWidgets.size() == 0 || p->selWidgets.size() == 1) {
+            for (int i=0; i < CHILD_WIDGETS.size(); ++i) {
+                if (CHILD_WIDGET(i))
+                    CHILD_WIDGET(i)->setChecked(false);
+            }
+            aWidget->setChecked(true);
+            p->lastSelWidget = aWidget;
+
+            aWidget->showContextMenu(anEvent);
+        } else if (p->selWidgets.size()) {
+            p->ctxMenu->exec(anEvent->globalPos());
+        }
+    } else {
+        //Contextual Menu
+        QMenu* ctxMenu = new QMenu(this);
+
+        QAction* actResetLayers = new QAction(tr("Reset Layers to default"), ctxMenu);
+        ctxMenu->addAction(actResetLayers);
+        connect(actResetLayers, SIGNAL(triggered(bool)), this, SLOT(resetLayers()));
+
+        ctxMenu->exec(anEvent->globalPos());
+    }
 }
 
 #if QT_VERSION < 0x040500

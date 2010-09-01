@@ -11,6 +11,10 @@
 #include <QApplication>
 #include <QMouseEvent>
 #include <QStylePainter>
+#include <QInputDialog>
+#include <QMessageBox>
+
+#include "Utils/SelectionDialog.h"
 
 #define LINEHEIGHT 25
 
@@ -192,11 +196,6 @@ void LayerWidget::initActions()
     ctxMenu->addMenu(alphaMenu);
     connect(alphaMenu, SIGNAL(triggered(QAction*)), this, SLOT(setOpacity(QAction*)));
     associatedMenu->addMenu(alphaMenu);
-
-    actZoom = new QAction(tr("Zoom"), ctxMenu);
-    ctxMenu->addAction(actZoom);
-    associatedMenu->addAction(actZoom);
-    connect(actZoom, SIGNAL(triggered(bool)), this, SLOT(zoomLayer(bool)));
 }
 
 void LayerWidget::setOpacity(QAction *act)
@@ -207,6 +206,18 @@ void LayerWidget::setOpacity(QAction *act)
 
 void LayerWidget::close()
 {
+    if (theLayer.data()->getDirtyLevel()) {
+        if (QMessageBox::question(this, tr("Layer CLose: Dirty objects present"),
+                                     tr("There are dirty features on this layer.\n"
+                                        "Are you sure you want to close it? (no Undo possible)"),
+                                     QMessageBox::Ok | QMessageBox::Cancel, QMessageBox::Cancel) == QMessageBox::Cancel)
+            return;
+    } else if (theLayer.data()->size())
+        if (QMessageBox::question(this, tr("Layer CLose: Not empty"),
+                                     tr("Are you sure you want to close this layer? (no Undo possible)"),
+                                     QMessageBox::Ok | QMessageBox::Cancel, QMessageBox::Cancel) == QMessageBox::Cancel)
+            return;
+
     emit(layerClosed(theLayer));
 }
 
@@ -239,8 +250,15 @@ void LayerWidget::setLayerVisible(bool b, bool updateLayer)
 {
     if (updateLayer)
         theLayer->setVisible(b);
+
+    actVisible->blockSignals(true);
     actVisible->setChecked(b);
+    actVisible->blockSignals(false);
+
+    ui.cbVisible->blockSignals(true);
     ui.cbVisible->setChecked(b);
+    ui.cbVisible->blockSignals(false);
+
     update();
     emit(layerChanged(this, false));
 }
@@ -273,6 +291,11 @@ void DrawingLayerWidget::initActions()
 
     ctxMenu->addSeparator();
     associatedMenu->addSeparator();
+
+    actZoom = new QAction(tr("Zoom"), ctxMenu);
+    ctxMenu->addAction(actZoom);
+    associatedMenu->addAction(actZoom);
+    connect(actZoom, SIGNAL(triggered(bool)), this, SLOT(zoomLayer(bool)));
 
     closeAction = new QAction(tr("Close"), this);
     connect(closeAction, SIGNAL(triggered()), this, SLOT(close()));
@@ -370,8 +393,12 @@ void ImageLayerWidget::initActions()
 
     LayerWidget::initActions();
     ImageMapLayer* il = ((ImageMapLayer *)theLayer.data());
-    if (il && il->boundingBox().isNull())
-        actZoom->setVisible(false);
+    if (il && !il->boundingBox().isNull()) {
+        actZoom = new QAction(tr("Zoom"), ctxMenu);
+        ctxMenu->addAction(actZoom);
+        associatedMenu->addAction(actZoom);
+        connect(actZoom, SIGNAL(triggered(bool)), this, SLOT(zoomLayer(bool)));
+    }
 
     actReadonly->setVisible(false);
 
@@ -572,3 +599,54 @@ void OsbLayerWidget::initActions()
     closeAction->setEnabled(theLayer->canDelete());
 }
 
+// FilterLayerWidget
+
+FilterLayerWidget::FilterLayerWidget(FilterLayer* aLayer, QWidget* aParent)
+    : LayerWidget(aLayer, aParent)
+{
+    initActions();
+}
+
+void FilterLayerWidget::initActions()
+{
+    LayerWidget::initActions();
+
+    ctxMenu->addSeparator();
+    associatedMenu->addSeparator();
+
+    closeAction = new QAction(tr("Close"), this);
+    connect(closeAction, SIGNAL(triggered()), this, SLOT(close()));
+    ctxMenu->addAction(closeAction);
+    associatedMenu->addAction(closeAction);
+    closeAction->setEnabled(theLayer->canDelete());
+}
+
+void FilterLayerWidget::mouseDoubleClickEvent(QMouseEvent */*event*/)
+{
+    FilterLayer* Fl = dynamic_cast<FilterLayer*>(theLayer.data());
+
+    QDialog* dlg = new QDialog(this);
+    ui = new Ui::FilterEditDialog;
+    ui->setupUi(dlg);
+    ui->edName->setText(Fl->name());
+    ui->edFilter->setText(Fl->filter());
+    connect(ui->btFilterHelper, SIGNAL(clicked()), SLOT(on_filterHelperClicked()));
+    if (dlg->exec() == QDialog::Accepted) {
+        setName(ui->edName->text());
+        Fl->setName(ui->edName->text());
+        Fl->setFilter(ui->edFilter->text());
+    }
+    delete ui;
+}
+
+void FilterLayerWidget::on_filterHelperClicked()
+{
+    SelectionDialog* Sel = new SelectionDialog(g_Merk_MainWindow, false);
+    if (!Sel)
+        return;
+
+    Sel->edTagQuery->setText(ui->edFilter->text());
+    if (Sel->exec() == QDialog::Accepted) {
+        ui->edFilter->setText(Sel->edTagQuery->text());
+    }
+}

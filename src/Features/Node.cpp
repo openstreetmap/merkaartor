@@ -159,7 +159,7 @@ void Node::setPosition(const Coord& aCoord)
     Position = aCoord;
     BBox = CoordBox(Position,Position);
     p->ProjectionRevision = 0;
-    if (layer() && !isDeleted() && isVisible()) {
+    if (layer() && !isDeleted()) {
         layer()->indexAdd(BBox, this);
     }
     notifyChanges();
@@ -378,10 +378,24 @@ void Node::partChanged(Feature*, int)
 void Node::updateMeta()
 {
     Feature::updateMeta();
+    MetaUpToDate = true;
 
     p->IsWaypoint = (findKey("_waypoint_") != tagSize());
 
-    MetaUpToDate = true;
+    if (!isPOI()) {
+        int i=0;
+        int prtReadonly=0, prtWritable=0;
+        for (; i<sizeParents(); ++i) {
+            if (getParent(i)->isReadonly())
+                ++prtReadonly;
+            else
+                ++prtWritable;
+        }
+        if (!isReadonly()) {
+            if (prtReadonly && !prtWritable)
+                setReadonly(true);
+        }
+    }
 }
 
 bool Node::toXML(QDomElement xParent, QProgressDialog * progress, bool strict)

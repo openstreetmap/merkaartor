@@ -68,6 +68,7 @@ public slots:
 
     virtual void on_layersNewImageAction_triggered();
     virtual void on_layersNewDrawingAction_triggered();
+    virtual void on_layersNewFilterAction_triggered();
 
     virtual void on_fileNewAction_triggered();
     virtual void on_fileDownloadAction_triggered();
@@ -223,7 +224,6 @@ public slots:
     void projectionSet(const QString& prj);
     void projectionTriggered(QAction* anAction);
 #endif
-    void filterTriggered(QAction* anAction);
     void styleTriggered(QAction* anAction);
     void updateGpsPosition(float latitude, float longitude, QDateTime time, float altitude, float speed, float heading);
     void applyStyles(QList<Painter>* thePainters);
@@ -279,7 +279,6 @@ private:
     void updateRecentOpenMenu();
     void updateRecentImportMenu();
     void updateProjectionMenu();
-    void updateFilterMenu();
     void updateStyleMenu();
     Document* getDocumentFromClipboard();
     bool selectExportedFeatures(QList<Feature*>& theFeatures);

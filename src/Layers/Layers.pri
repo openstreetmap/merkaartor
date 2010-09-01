@@ -1,16 +1,11 @@
 INCLUDEPATH += Layers
 DEPENDPATH += Layers
-
-HEADERS += \
-    Layer.h \
+HEADERS += Layer.h \
     ImageMapLayer.h \
     LayerIterator.h \
-    LayerWidget.h \
-
-SOURCES += \
-    Layer.cpp \
+    LayerWidget.h
+SOURCES += Layer.cpp \
     ImageMapLayer.cpp \
-    LayerWidget.cpp \
-
-FORMS += \
-    LayerWidget.ui
+    LayerWidget.cpp
+FORMS += LayerWidget.ui \
+    FilterEditDialog.ui

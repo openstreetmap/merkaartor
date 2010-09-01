@@ -76,6 +76,16 @@ public:
      */
     virtual bool isDirty() const = 0;
 
+    /** check if the feature is visible
+     * @return true if visible
+     */
+    virtual bool isVisible() = 0;
+
+    /** check if the feature is read-only
+     * @return true if is read-only
+     */
+    virtual bool isReadonly() = 0;
+
 };
 
 #endif // IFEATURE_H

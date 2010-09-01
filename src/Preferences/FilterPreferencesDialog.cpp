@@ -11,6 +11,9 @@
 //
 #include "Preferences/FilterPreferencesDialog.h"
 #include "Utils/TagSelector.h"
+#include "MainWindow.h"
+
+#include "Utils/SelectionDialog.h"
 
 #include <QMessageBox>
 #include <QDir>
@@ -76,6 +79,18 @@ void FilterPreferencesDialog::on_btDel_clicked(void)
 
     delete lvFilters->takeItem(lvFilters->currentRow());
     on_lvFilters_itemSelectionChanged();
+}
+
+void FilterPreferencesDialog::on_btFilterHelper_clicked()
+{
+    SelectionDialog* Sel = new SelectionDialog(g_Merk_MainWindow, false);
+    if (!Sel)
+        return;
+
+    Sel->edTagQuery->setText(edFilterString->text());
+    if (Sel->exec() == QDialog::Accepted) {
+        edFilterString->setText(Sel->edTagQuery->text());
+    }
 }
 
 void FilterPreferencesDialog::on_lvFilters_itemSelectionChanged()

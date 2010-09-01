@@ -13,7 +13,6 @@
 #include <QApplication>
 #include <QtGui/QPainter>
 #include <QtGui/QPainterPath>
-#include <QMessageBox>
 #include <QProgressDialog>
 
 #include <algorithm>
@@ -240,7 +239,7 @@ void Way::add(Node* Pt, int Idx)
     p->SmoothedUpToDate = false;
     p->wasPathComplete = false;
     p->VirtualsUptodate = false;
-    if (layer() && !isDeleted() && isVisible()) {
+    if (layer() && !isDeleted()) {
         CoordBox bb = boundingBox();
         layer()->indexAdd(bb, this);
     }
@@ -280,7 +279,7 @@ void Way::remove(int idx)
     p->SmoothedUpToDate = false;
     p->wasPathComplete = false;
     p->VirtualsUptodate = false;
-    if (layer() && !isDeleted() && isVisible()) {
+    if (layer() && !isDeleted()) {
         CoordBox bb = boundingBox();
         layer()->indexAdd(bb, this);
     }
@@ -364,6 +363,7 @@ CoordBox Way::boundingBox() const
 void Way::updateMeta()
 {
     Feature::updateMeta();
+    MetaUpToDate = true;
 
     p->Area = 0;
     p->Distance = 0;
@@ -379,12 +379,7 @@ void Way::updateMeta()
             }
 
     if (p->Nodes.size() == 0)
-    {
-        MetaUpToDate = true;
         return;
-    }
-
-    p->doUpdateVirtuals();
 
     bool isArea = false;
     if (tagValue("junction", "") != "roundabout")
@@ -416,7 +411,7 @@ void Way::updateMeta()
         setRenderPriority(RenderPriority(RenderPriority::IsLinear,Priority, layer));
     }
 
-    MetaUpToDate = true;
+    p->doUpdateVirtuals();
 }
 
 double Way::distance()

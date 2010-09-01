@@ -41,6 +41,7 @@ public slots:
     void on_btApply_clicked();
     void on_btAdd_clicked();
     void on_btDel_clicked();
+    void on_btFilterHelper_clicked();
     void on_lvFilters_itemSelectionChanged();
     void on_buttonBox_clicked(QAbstractButton * button);
 
