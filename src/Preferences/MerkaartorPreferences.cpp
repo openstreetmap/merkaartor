@@ -359,7 +359,7 @@ void MerkaartorPreferences::on_requestFinished ( int id, bool error )
         } else
             if (c.tagName() == "Filters") {
             FiltersList aFiltList = FiltersList::fromXml(c);
-//            theFiltersList.add(aFiltList);
+            theFiltersList.add(aFiltList);
         }
 
         c = c.nextSiblingElement();
