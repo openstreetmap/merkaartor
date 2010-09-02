@@ -223,7 +223,7 @@ void MoveNodeInteraction::snapMouseReleaseEvent(QMouseEvent * event, Feature* Cl
         view()->invalidate(true, false);
     } else
         if (theList)
-            delete theList;
+            SAFE_DELETE(theList);
     Moving.clear();
     OriginalPosition.clear();
     clearNoSnap();
