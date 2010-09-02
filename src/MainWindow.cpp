@@ -1755,6 +1755,7 @@ void MainWindow::on_fileNewAction_triggered()
         p->theFeats->invalidate();
         delete theDocument;
         theDocument = new Document(theLayers);
+        theView->setDocument(theDocument);
         theDocument->addDefaultLayers();
         if (M_PREFS->getWorldOsbAutoload() && !M_PREFS->getWorldOsbUri().isEmpty()) {
             Layer* newLayer = new OsbLayer( "World", M_PREFS->getWorldOsbUri() + "/world.osb" );
@@ -1767,7 +1768,6 @@ void MainWindow::on_fileNewAction_triggered()
             theDocument->add(newLayer);
         }
 
-        theView->setDocument(theDocument);
         theDocument->history().setActions(ui->editUndoAction, ui->editRedoAction, ui->fileUploadAction);
         connect (theDocument, SIGNAL(historyChanged()), theDirty, SLOT(updateList()));
         connect (theDocument, SIGNAL(historyChanged()), this, SIGNAL(content_changed()));
