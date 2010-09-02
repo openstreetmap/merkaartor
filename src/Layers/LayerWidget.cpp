@@ -248,9 +248,6 @@ QMenu* LayerWidget::getAssociatedMenu()
 
 void LayerWidget::setLayerVisible(bool b, bool updateLayer)
 {
-    if (updateLayer)
-        theLayer->setVisible(b);
-
     actVisible->blockSignals(true);
     actVisible->setChecked(b);
     actVisible->blockSignals(false);
@@ -260,7 +257,11 @@ void LayerWidget::setLayerVisible(bool b, bool updateLayer)
     ui.cbVisible->blockSignals(false);
 
     update();
-    emit(layerChanged(this, false));
+
+    if (updateLayer) {
+        theLayer->setVisible(b);
+        emit(layerChanged(this, false));
+    }
 }
 
 void LayerWidget::setLayerReadonly(bool b)

@@ -88,7 +88,7 @@ Document::Document()
 }
 
 Document::Document(LayerDock* aDock)
-: p(new MapDocumentPrivate)
+    : p(new MapDocumentPrivate)
 {
     p->theDock = aDock;
     setFilterType(M_PREFS->getCurrentFilter());
