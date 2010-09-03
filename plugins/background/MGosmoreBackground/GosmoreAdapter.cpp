@@ -85,7 +85,7 @@ GosmoreAdapter::GosmoreAdapter()
     theMenu->addAction(loadFile);
 
     loaded = false;
-//    setPak("d:/gosmore?.pak");
+//    setFile("d:/gosmore?.pak");
 
     MasPaintStyle theStyle;
     theStyle.loadPainters(":/Styles/Mapnik.mas");
@@ -332,11 +332,11 @@ GosmoreAdapter::~GosmoreAdapter()
 {
 }
 
-void GosmoreAdapter::setPak(QString fileName)
+void GosmoreAdapter::setFile(const QString& fn)
 {
     if (pak)
         delete pak;
-    pak = new QFile(fileName, this);
+    pak = new QFile(fn, this);
     if (!pak->open(QIODevice::ReadOnly)) {
         QMessageBox::critical(0,QCoreApplication::translate("GosmoreAdapter","No valid file"),QCoreApplication::translate("GosmoreAdapter","File not found."));
         return;
@@ -366,7 +366,7 @@ void GosmoreAdapter::onLoadFile()
     if (fileName.isEmpty())
         return;
 
-    setPak(fileName);
+    setFile(fileName);
 }
 
 QString	GosmoreAdapter::getHost() const
@@ -421,7 +421,6 @@ void SetColour (QColor *c, int hexTrip)
 
 QPixmap GosmoreAdapter::getPixmap(const QRectF& wgs84Bbox, const QRectF& /*projBbox*/, const QRect& src) const
 {
-
     if (!loaded)
         return QPixmap();
 
@@ -430,8 +429,19 @@ QPixmap GosmoreAdapter::getPixmap(const QRectF& wgs84Bbox, const QRectF& /*projB
     QPainter P(&pix);
     P.setRenderHint(QPainter::Antialiasing);
 
-    QPoint tl = gosmoreProject(wgs84Bbox.topLeft());
-    QPoint br = gosmoreProject(wgs84Bbox.bottomRight());
+    render(&P, wgs84Bbox, wgs84Bbox, src);
+
+    P.end();
+    return pix;
+}
+
+void GosmoreAdapter::render(QPainter* P, const QRectF& fullbox, const QRectF& selbox, const QRect& src) const
+{
+    if (!loaded)
+        return;
+
+    QPoint tl = gosmoreProject(fullbox.topLeft());
+    QPoint br = gosmoreProject(fullbox.bottomRight());
     QRectF pBox(tl, br);
 
     QTransform tfm;
@@ -445,10 +455,10 @@ QPixmap GosmoreAdapter::getPixmap(const QRectF& wgs84Bbox, const QRectF& /*projB
     double DeltaLat = src.height() - (src.height() / 2 - PLat);
 
     double LengthOfOneDegreeLat = 6378137.0 * M_PI / 180;
-    double LengthOfOneDegreeLon = LengthOfOneDegreeLat * fabs(cos(angToRad(wgs84Bbox.center().y())));
+    double LengthOfOneDegreeLon = LengthOfOneDegreeLat * fabs(cos(angToRad(fullbox.center().y())));
     double lonAnglePerM =  1 / LengthOfOneDegreeLon;
-    double PixelPerM = src.width() / (double)wgs84Bbox.width() * lonAnglePerM;
-    qDebug() << PixelPerM;
+    double PixelPerM = src.width() / (double)fullbox.width() * lonAnglePerM;
+//    qDebug() << PixelPerM;
 
     tfm.setMatrix(ScaleLon, 0, 0, 0, -ScaleLat, 0, DeltaLon, DeltaLat, 1);
 
@@ -463,6 +473,12 @@ QPixmap GosmoreAdapter::getPixmap(const QRectF& wgs84Bbox, const QRectF& /*projB
                                : (style[i].areaColour >> 1) & 0xefefef); // Dark border for polys
         }
     }
+
+    tl = gosmoreProject(selbox.topLeft());
+    br = gosmoreProject(selbox.bottomRight());
+    pBox = QRectF(tl, br).adjusted(-1000, -1000, 1000, 1000);
+    QPainterPath clipPath;
+    clipPath.addRect(pBox);
 
     OsmItr itr (tl.x() - 1000, tl.y() - 1000,
                 br.x() + 1000, br.y() + 1000);
@@ -515,17 +531,18 @@ QPixmap GosmoreAdapter::getPixmap(const QRectF& wgs84Bbox, const QRectF& /*projB
         pth.closeSubpath();
 
         if (!pth.isEmpty()) {
-            QPainterPath pp = tfm.map(pth);
+//            QPainterPath pp = tfm.map(pth);
+            QPainterPath pp = tfm.map(clipPath.intersected(pth));
             if (myStyles[StyleNr(w)]) {
                 if (myStyles[StyleNr(w)]->matchesZoom(PixelPerM)) {
-                    myStyles[StyleNr(w)]->drawBackground(&pp, &P, PixelPerM);
-                    myStyles[StyleNr(w)]->drawForeground(&pp, &P, PixelPerM);
-                    myStyles[StyleNr(w)]->drawTouchup(&pp, &P, PixelPerM);
-                    //          myStyles[StyleNr(w)]->drawLabel(&pp, &P, PixelPerM);
+                    myStyles[StyleNr(w)]->drawBackground(&pp, P, PixelPerM);
+//                    myStyles[StyleNr(w)]->drawForeground(&pp, P, PixelPerM);
+                    myStyles[StyleNr(w)]->drawTouchup(&pp, P, PixelPerM);
+                    //          myStyles[StyleNr(w)]->drawLabel(&pp, P, PixelPerM);
                 }
             } else {
-                P.setPen(QPen(Qt::black, 2));
-                P.drawPath(pp);
+                P->setPen(QPen(Qt::black, 2));
+                P->drawPath(pp);
             }
 //            P.setBrush(styleColour[Style (w) - style][0]);
 //            P.setPen(Qt::NoPen);
@@ -551,8 +568,8 @@ QPixmap GosmoreAdapter::getPixmap(const QRectF& wgs84Bbox, const QRectF& /*projB
 
             if (myStyles[StyleNr(w)] && myStyles[StyleNr(w)]->matchesZoom(PixelPerM)) {
                 QPointF pp = tfm.map(pt);
-                myStyles[StyleNr(w)]->drawTouchup(&pp, &P, PixelPerM);
-                myStyles[StyleNr(w)]->drawLabel(&pp, &P, PixelPerM, strL[0]);
+                myStyles[StyleNr(w)]->drawTouchup(&pp, P, PixelPerM);
+                myStyles[StyleNr(w)]->drawLabel(&pp, P, PixelPerM, strL[0]);
             }
         }
         // ways (including areas on WinMob : FIXME)
@@ -576,21 +593,22 @@ QPixmap GosmoreAdapter::getPixmap(const QRectF& wgs84Bbox, const QRectF& /*projB
         //      P.setPen(QPen(styleColour[Style (w) - style][1], Style (w)->lineWidth));
         //      P.drawPath(tfm.map(pth));
 
-            QPainterPath pp = tfm.map(pth);
+//            QPainterPath pp = tfm.map(pth);
+            QPainterPath pp = tfm.map(clipPath.intersected(pth));
             if (myStyles[StyleNr(w)]) {
                 if (myStyles[StyleNr(w)]->matchesZoom(PixelPerM)) {
-                    P.save();
-                    P.setCompositionMode(QPainter::CompositionMode_DestinationOver);
-                    myStyles[StyleNr(w)]->drawBackground(&pp, &P, PixelPerM);
-                    P.restore();
-                    myStyles[StyleNr(w)]->drawForeground(&pp, &P, PixelPerM);
-                    myStyles[StyleNr(w)]->drawTouchup(&pp, &P, PixelPerM);
+//                    P->save();
+//                    P->setCompositionMode(QPainter::CompositionMode_DestinationOver);
+//                    myStyles[StyleNr(w)]->drawBackground(&pp, P, PixelPerM);
+//                    P->restore();
+                    myStyles[StyleNr(w)]->drawForeground(&pp, P, PixelPerM);
+                    myStyles[StyleNr(w)]->drawTouchup(&pp, P, PixelPerM);
                     //                myStyles[StyleNr(w)]->drawLabel(&pp, &P, PixelPerM, strL[0]);
                 }
             } else {
-                qDebug() << StyleNr(w);
-                P.setPen(QPen(Qt::black, 2));
-                P.drawPath(pp);
+//                qDebug() << StyleNr(w);
+                P->setPen(QPen(Qt::black, 2));
+                P->drawPath(pp);
             }
 
         } /* If it has one or more segments */
@@ -679,9 +697,6 @@ QPixmap GosmoreAdapter::getPixmap(const QRectF& wgs84Bbox, const QRectF& /*projB
 //            }
 //        }
 //    }
-    P.end();
-
-    return pix;
 }
 
 IImageManager* GosmoreAdapter::getImageManager()
@@ -716,7 +731,7 @@ void GosmoreAdapter::fromXML(const QDomElement xParent)
         if (fs.tagName() == "Images") {
             QString fn = fs.attribute("filename");
             if (!fn.isEmpty())
-                setPak(fn);
+                setFile(fn);
         }
 
         fs = fs.nextSiblingElement();
@@ -733,4 +748,6 @@ QString GosmoreAdapter::toPropertiesHtml()
     return h;
 }
 
+#ifndef _MOBILE
 Q_EXPORT_PLUGIN2(MGosmoreBackgroundPlugin, GosmoreAdapter)
+#endif

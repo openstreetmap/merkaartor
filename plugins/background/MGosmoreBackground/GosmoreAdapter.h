@@ -111,7 +111,9 @@ public:
     virtual QString toPropertiesHtml();
 
 public:
-    void setPak(QString fileName);
+    void setFile(const QString& fn);
+    void render(QPainter* P, const QRectF& fullbox, const QRectF& selbox, const QRect& src) const;
+
 
 public slots:
     void onLoadFile();

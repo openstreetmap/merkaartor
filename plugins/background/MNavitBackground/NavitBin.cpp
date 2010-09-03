@@ -103,7 +103,7 @@ bool NavitBin::readTile(int aIndex) const
             QByteArray attribute;
             data >> attrLen;
             data >> attrType;
-            qDebug() << "-- attrType: " << QString("%1").arg(attrType, 0, 16);
+//            qDebug() << "-- attrType: " << QString("%1").arg(attrType, 0, 16);
             switch (type) {
             case type_submap: {
                 NavitPointer ptr;
@@ -171,7 +171,7 @@ bool NavitBin::readTile(int aIndex) const
                 case attr_country_id: {
                     quint32 ctry_id;
                     data >> ctry_id;
-                    qDebug() << "Country id: " << ctry_id;
+//                    qDebug() << "Country id: " << ctry_id;
                 }
 
                 default:
@@ -188,7 +188,7 @@ bool NavitBin::readTile(int aIndex) const
             }
 
             default:
-                qDebug() << "-- type: " << QString("%1").arg(type, 0, 16);
+//                qDebug() << "-- type: " << QString("%1").arg(type, 0, 16);
                 for (unsigned int i=0; i<(attrLen-1)*sizeof(qint32); ++i) {
                     data >> attr;
                     attribute.append(attr);
@@ -252,7 +252,7 @@ bool NavitBin::getFeatures(const QRect& pBox, QList <NavitFeature>& theFeats) co
     NavitTile t = indexTile;
     qreal r = 40030174. / pBox.width();
     int order = log2(r);
-    qDebug() << "order: " << order;
+//    qDebug() << "order: " << order;
 
     return walkTiles(pBox, t, order, theFeats);
 }

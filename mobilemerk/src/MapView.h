@@ -37,6 +37,8 @@ public:
     bool toXML(QDomElement xParent);
     void fromXML(const QDomElement p);
 
+    void invalidate();
+
 protected slots:
     void panScreen(QPoint delta);
 
@@ -46,9 +48,18 @@ protected:
     void paintEvent(QPaintEvent * anEvent);
     void transformCalc(QTransform& theTransform, const Projection& theProjection, const CoordBox& TargetMap, const QRect& Screen);
 
+private:
+    void updateStaticBuffer();
+
 signals:
 
 public slots:
+    virtual void on_MoveLeft_activated();
+    virtual void on_MoveRight_activated();
+    virtual void on_MoveUp_activated();
+    virtual void on_MoveDown_activated();
+    virtual void on_ZoomIn_activated();
+    virtual void on_ZoomOut_activated();
 
 };
 

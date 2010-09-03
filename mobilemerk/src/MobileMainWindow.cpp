@@ -1,7 +1,10 @@
-#include "MainWindow.h"
-#include "ui_MainWindow.h"
+#include "MobileMainWindow.h"
+#include "ui_MobileMainWindow.h"
 
 #include "MapView.h"
+
+//#define START_COORDBOX CoordBox(Coord(COORD_MAX/4, -COORD_MAX/4), Coord(-COORD_MAX/4, COORD_MAX/4))
+#define START_COORDBOX CoordBox(Coord(50.8607371, 4.3314877), Coord(50.8296372, 4.3802123)) // BXL
 
 class MainWindowPrivate
 {
@@ -21,6 +24,13 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->setupUi(this);
     p->theView = new MapView(this);
     setCentralWidget(p->theView);
+
+    QTimer::singleShot(0, this, SLOT(initialize()));
+}
+
+void MainWindow::initialize()
+{
+    p->theView->setViewport(START_COORDBOX, p->theView->rect());
 }
 
 MainWindow::~MainWindow()

@@ -21,6 +21,10 @@ protected:
 private:
     Ui::MainWindow *ui;
     MainWindowPrivate* p;
+
+private slots:
+    void initialize();
+
 };
 
 #endif // MAINWINDOW_H

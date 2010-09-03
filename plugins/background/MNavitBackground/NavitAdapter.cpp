@@ -485,7 +485,11 @@ void NavitAdapter::onLoadFile()
         return;
 
     loaded = navit.setFilename(fileName);
-    return;
+}
+
+void NavitAdapter::setFile(const QString& fn)
+{
+    loaded = navit.setFilename(fn);
 }
 
 QString	NavitAdapter::getHost() const
@@ -528,41 +532,51 @@ QPixmap NavitAdapter::getPixmap(const QRectF& wgs84Bbox, const QRectF& /*projBbo
     if (!loaded)
         return QPixmap();
 
-    qDebug() << "wgs84: " << wgs84Bbox;
-    qDebug() << "src: " << src;
-    QRectF pBox(NavitProject(wgs84Bbox.topLeft()), NavitProject(wgs84Bbox.bottomRight()));
-
-    QList<NavitFeature> theFeats;
-    navit.getFeatures(pBox.toRect(), theFeats);
-
-    qDebug () << "Feats: " << theFeats.size();
-    if (!theFeats.size())
-        return QPixmap();
-
-    QTransform tfm;
-
-    double ScaleLon = src.width() / pBox.width();
-    double ScaleLat = src.height() / pBox.height();
-
-    double PLon = pBox.center().x() * ScaleLon;
-    double PLat = pBox.center().y() * ScaleLat;
-    double DeltaLon = src.width() / 2 - PLon;
-    double DeltaLat = src.height() - (src.height() / 2 - PLat);
-
-    double LengthOfOneDegreeLat = 6378137.0 * M_PI / 180;
-    double LengthOfOneDegreeLon = LengthOfOneDegreeLat * fabs(cos(angToRad(wgs84Bbox.center().y())));
-    double lonAnglePerM =  1 / LengthOfOneDegreeLon;
-    double PixelPerM = src.width() / (double)wgs84Bbox.width() * lonAnglePerM;
-
-    tfm.setMatrix(ScaleLon, 0, 0, 0, -ScaleLat, 0, DeltaLon, DeltaLat, 1);
-
     QPixmap pix(src.size());
     pix.fill(Qt::transparent);
     QPainter P(&pix);
     P.setRenderHint(QPainter::Antialiasing);
 
+    render(&P, wgs84Bbox, wgs84Bbox, src);
+
+    P.end();
+    return pix;
+}
+
+void NavitAdapter::render(QPainter* P, const QRectF& fullbox, const QRectF& selbox, const QRect& src) const
+{
+    if (!loaded)
+        return;
+
+    QRectF fBox(NavitProject(fullbox.topLeft()), NavitProject(fullbox.bottomRight()));
+    QRectF sBox(NavitProject(selbox.topLeft()), NavitProject(selbox.bottomRight()));
+
+    QList<NavitFeature> theFeats;
+    navit.getFeatures(sBox.toRect(), theFeats);
+
+    qDebug () << "Feats: " << theFeats.size();
+    if (!theFeats.size())
+        return;
+
+    QTransform tfm;
+
+    double ScaleLon = src.width() / fBox.width();
+    double ScaleLat = src.height() / fBox.height();
+
+    double PLon = fBox.center().x() * ScaleLon;
+    double PLat = fBox.center().y() * ScaleLat;
+    double DeltaLon = src.width() / 2 - PLon;
+    double DeltaLat = src.height() - (src.height() / 2 - PLat);
+
+    double LengthOfOneDegreeLat = 6378137.0 * M_PI / 180;
+    double LengthOfOneDegreeLon = LengthOfOneDegreeLat * fabs(cos(angToRad(fullbox.center().y())));
+    double lonAnglePerM =  1 / LengthOfOneDegreeLon;
+    double PixelPerM = src.width() / (double)fullbox.width() * lonAnglePerM;
+
+    tfm.setMatrix(ScaleLon, 0, 0, 0, -ScaleLat, 0, DeltaLon, DeltaLat, 1);
+
     QPainterPath clipPath;
-    clipPath.addRect(pBox.adjusted(-1000, -1000, 1000, 1000));
+    clipPath.addRect(sBox.adjusted(-1000, -1000, 1000, 1000));
     foreach (NavitFeature f, theFeats) {
         if (f.coordinates.size() > 1) {
             QPolygonF d(f.coordinates);
@@ -587,32 +601,33 @@ QPixmap NavitAdapter::getPixmap(const QRectF& wgs84Bbox, const QRectF& /*projBbo
                 if (myStyles.contains(f.type)) {
                     if (myStyles[f.type]->matchesZoom(PixelPerM)) {
                         QPainterPath pp = tfm.map(aPath);
-                        myStyles[f.type]->drawBackground(&pp, &P, PixelPerM);
-                        myStyles[f.type]->drawForeground(&pp, &P, PixelPerM);
-                        myStyles[f.type]->drawTouchup(&pp, &P, PixelPerM);
-                        //          f.painter()->drawLabel(&pp, &P, PixelPerM);
+                        if ((f.type & 0xc0000000) == 0xc0000000) {
+                            pp.closeSubpath();
+                            myStyles[f.type]->drawBackground(&pp, P, PixelPerM);
+                        } else {
+                            myStyles[f.type]->drawForeground(&pp, P, PixelPerM);
+                        }
+                        myStyles[f.type]->drawTouchup(&pp, P, PixelPerM);
+                        //          f.painter()->drawLabel(&pp, P, PixelPerM);
                     }
                 }
             }
         } else {
             if (f.coordinates.size() == 1) {
-                if (!pBox.contains(f.coordinates[0]))
+                if (!sBox.contains(f.coordinates[0]))
                     continue;
                 //                P.setPen(QPen(Qt::red, 5));
                 //                P.drawPoint(f.coordinates[0]);
                 if (myStyles.contains(f.type)) {
                     if (myStyles[f.type]->matchesZoom(PixelPerM)) {
                         QPointF pp = tfm.map(f.coordinates[0]);
-                        myStyles[f.type]->drawTouchup(&pp, &P, PixelPerM);
+                        myStyles[f.type]->drawTouchup(&pp, P, PixelPerM);
                         //                myStyles[StyleNr(w)]->drawLabel(&pp, &P, PixelPerM, strL[0]);
                     }
                 }
             }
         }
     }
-    P.end();
-
-    return pix;
 }
 
 IImageManager* NavitAdapter::getImageManager()
@@ -664,4 +679,6 @@ QString NavitAdapter::toPropertiesHtml()
     return h;
 }
 
-Q_EXPORT_PLUGIN2(MWalkingPapersBackgroundPlugin, NavitAdapter)
+#ifndef _MOBILE
+Q_EXPORT_PLUGIN2(MNavitBackgroundPlugin, NavitAdapter)
+#endif

@@ -12,9 +12,19 @@ INCLUDEPATH += thirdparty/MouseMachine
 DEPENDPATH += thirdparty/MouseMachine
 include(thirdparty/MouseMachine/MouseMachine.pri)
 
-INCLUDEPATH += ../plugins/background/MGosmoreBackground
-DEPENDPATH += ../plugins/background/MGosmoreBackground
-include(../plugins/background/MGosmoreBackground/MGosmoreBackground.pri)
+contains(GOSMORE,1) {
+    DEFINES += USE_GOSMORE
+    INCLUDEPATH += ../plugins/background/MGosmoreBackground
+    DEPENDPATH += ../plugins/background/MGosmoreBackground
+    include(../plugins/background/MGosmoreBackground/MGosmoreBackground.pri)
+}
+
+contains(NAVIT,1) {
+    DEFINES += USE_NAVIT
+    INCLUDEPATH += ../plugins/background/MNavitBackground
+    DEPENDPATH += ../plugins/background/MNavitBackground
+    include(../plugins/background/MNavitBackground/MNavitBackground.pri)
+}
 
 INCLUDEPATH += ../src/PaintStyle
 DEPENDPATH += ../src/PaintStyle

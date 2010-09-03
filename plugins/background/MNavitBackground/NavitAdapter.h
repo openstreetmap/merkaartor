@@ -110,6 +110,10 @@ public:
     virtual void fromXML(const QDomElement xParent);
     virtual QString toPropertiesHtml();
 
+public:
+    void setFile(const QString& fn);
+    void render(QPainter* P, const QRectF& fullbox, const QRectF& selbox, const QRect& src) const;
+
 public slots:
     void onLoadFile();
 

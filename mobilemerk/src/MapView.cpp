@@ -2,21 +2,23 @@
 #include "MouseMachine.h"
 
 #include <QPainter>
+#include <QShortcut>
 
 #include <errno.h>
 
-//#define START_COORDBOX CoordBox(Coord(COORD_MAX/4, -COORD_MAX/4), Coord(-COORD_MAX/4, COORD_MAX/4))
-#define START_COORDBOX CoordBox(Coord(50.8607371, 4.3314877), Coord(50.8296372, 4.3802123)) // BXL
-
+#ifdef USE_GOSMORE
 #include "GosmoreAdapter.h"
+#else
+#include "NavitAdapter.h"
+#endif
 
 class MapViewPrivate
 {
 public:
     MapViewPrivate()
         : PixelPerM(0.0)
-        , Viewport(START_COORDBOX)
         , StaticBufferUpToDate(false)
+        , StaticBuffer(0)
     {}
 
 public:
@@ -24,6 +26,12 @@ public:
     QTransform theTransform;
 
     MouseMachine* mm;
+    QShortcut* MoveLeft;
+    QShortcut* MoveRight;
+    QShortcut* MoveUp;
+    QShortcut* MoveDown;
+    QShortcut* ZoomIn;
+    QShortcut* ZoomOut;
 
     double PixelPerM;
     double ZoomLevel;
@@ -34,7 +42,11 @@ public:
     bool StaticBufferUpToDate;
     QPixmap* StaticBuffer;
 
+#ifdef USE_GOSMORE
     GosmoreAdapter* theAdapter;
+#else
+    NavitAdapter* theAdapter;
+#endif
 };
 
 MapView::MapView(QWidget *parent) :
@@ -48,16 +60,68 @@ MapView::MapView(QWidget *parent) :
 //    connect(p->mm, SIGNAL(doubleTap(QPoint)), SLOT(slotDoubleClicked(QPoint)));
 //    connect(p->mm, SIGNAL(tapAndHold(QPoint)), SLOT(slotTapAndHold(QPoint)));
 
+#ifdef USE_GOSMORE
     p->theAdapter = new GosmoreAdapter();
-    p->theAdapter->setPak("/home/cbro/Downloads/gosmore.pak");
+    p->theAdapter->setFile("/home/cbro/Downloads/gosmore.pak");
+#else
+    p->theAdapter = new NavitAdapter();
+    p->theAdapter->setFile("/home/cbro/Downloads/osm_bbox_2.3,49.4,6.6,51.6.bin");
+#endif
 
     setMouseTracking(false);
     setAttribute(Qt::WA_NoSystemBackground);
+
+    p->MoveRight = new QShortcut(QKeySequence(Qt::Key_Right), this);
+    connect(p->MoveRight, SIGNAL(activated()), this, SLOT(on_MoveRight_activated()));
+    p->MoveLeft = new QShortcut(QKeySequence(Qt::Key_Left), this);
+    connect(p->MoveLeft, SIGNAL(activated()), this, SLOT(on_MoveLeft_activated()));
+    p->MoveUp = new QShortcut(QKeySequence(Qt::Key_Up), this);
+    connect(p->MoveUp, SIGNAL(activated()), this, SLOT(on_MoveUp_activated()));
+    p->MoveDown = new QShortcut(QKeySequence(Qt::Key_Down), this);
+    connect(p->MoveDown, SIGNAL(activated()), this, SLOT(on_MoveDown_activated()));
+    p->ZoomIn = new QShortcut(QKeySequence("+"), this);
+    connect(p->ZoomIn, SIGNAL(activated()), this, SLOT(on_ZoomIn_activated()));
+    p->ZoomOut = new QShortcut(QKeySequence("-"), this);
+    connect(p->ZoomOut, SIGNAL(activated()), this, SLOT(on_ZoomOut_activated()));
 }
 
 MapView::~MapView()
 {
     delete p;
+}
+
+void MapView::on_MoveLeft_activated()
+{
+    QPoint p(rect().width()/4,0);
+    panScreen(p);
+}
+
+void MapView::on_MoveRight_activated()
+{
+    QPoint p(-rect().width()/4,0);
+    panScreen(p);
+}
+
+void MapView::on_MoveUp_activated()
+{
+    QPoint p(0,rect().height()/4);
+    panScreen(p);
+}
+
+void MapView::on_MoveDown_activated()
+{
+    QPoint p(0,-rect().height()/4);
+    panScreen(p);
+}
+
+void MapView::on_ZoomIn_activated()
+{
+    zoom(2.0, rect().center());
+}
+
+void MapView::on_ZoomOut_activated()
+{
+    zoom(0.5, rect().center());
 }
 
 void MapView::panScreen(QPoint delta)
@@ -67,6 +131,7 @@ void MapView::panScreen(QPoint delta)
     CoordBox r1, r2;
 
     Coord cDelta = p->theProjection.inverse(p->theTransform.inverted().map(QPointF(delta)))  - p->theProjection.inverse(p->theTransform.inverted().map(QPointF(0., 0.)));
+    p->invalidRects.clear();
 
     if (delta.x()) {
         if (delta.x() < 0)
@@ -91,8 +156,13 @@ void MapView::panScreen(QPoint delta)
 
     p->theTransform.translate(qreal(delta.x())/p->theTransform.m11(), qreal(delta.y())/p->theTransform.m22());
     viewportRecalc(rect());
-    p->StaticBufferUpToDate = false;
 
+    invalidate();
+}
+
+void MapView::invalidate()
+{
+    p->StaticBufferUpToDate = false;
     update();
 }
 
@@ -101,10 +171,9 @@ void MapView::paintEvent(QPaintEvent * anEvent)
     QPainter P;
     P.begin(this);
 
-//    P.drawPixmap(p->theVectorPanDelta, *p->StaticBuffer);
-    QRectF dum;
-    QRectF wgs84box = p->Viewport.toRectF();
-    P.drawPixmap(0, 0, p->theAdapter->getPixmap(wgs84box, dum, rect()));
+    if (!p->StaticBufferUpToDate)
+        updateStaticBuffer();
+    P.drawPixmap(p->theVectorPanDelta, *p->StaticBuffer);
 
     drawScale(P);
     drawGPS(P);
@@ -261,6 +330,9 @@ void MapView::setViewport(const CoordBox & TargetMap)
         p->Viewport = CoordBox (TargetMap.center()-COORD_ENLARGE*10, TargetMap.center()+COORD_ENLARGE*10);
     else
         p->Viewport = TargetMap;
+
+    p->invalidRects.clear();
+    p->StaticBufferUpToDate = false;
 }
 
 void MapView::setViewport(const CoordBox & TargetMap,
@@ -275,6 +347,9 @@ void MapView::setViewport(const CoordBox & TargetMap,
     viewportRecalc(Screen);
 
     p->ZoomLevel = p->theTransform.m11();
+
+    p->invalidRects.clear();
+    p->StaticBufferUpToDate = false;
 }
 
 void MapView::zoom(double d, const QPoint & Around)
@@ -305,6 +380,8 @@ void MapView::zoom(double d, const QPoint & Around,
     viewportRecalc(Screen);
 
     p->ZoomLevel = ScaleLon;
+
+    invalidate();
 }
 
 void MapView::resize(QSize oldS, QSize newS)
@@ -326,5 +403,53 @@ void MapView::setCenter(Coord & Center, const QRect & /*Screen*/)
 double MapView::pixelPerM() const
 {
     return p->PixelPerM;
+}
+
+void MapView::updateStaticBuffer()
+{
+#ifndef QT_NO_DEBUG_OUTPUT
+    QDateTime tm = QDateTime::currentDateTime();
+#endif
+    if (!p->StaticBuffer || (p->StaticBuffer->size() != size()))
+    {
+        delete p->StaticBuffer;
+        p->StaticBuffer = new QPixmap(size());
+    }
+
+    QPainter P;
+
+    if (!p->theVectorPanDelta.isNull()) {
+        QRegion exposed;
+        p->StaticBuffer->scroll(p->theVectorPanDelta.x(), p->theVectorPanDelta.y(), p->StaticBuffer->rect(), &exposed);
+        P.begin(p->StaticBuffer);
+        P.setClipping(true);
+        P.setClipRegion(exposed);
+        P.eraseRect(p->StaticBuffer->rect());
+    } else {
+        p->StaticBuffer->fill(Qt::transparent);
+        P.begin(p->StaticBuffer);
+    }
+    P.setRenderHint(QPainter::Antialiasing);
+
+    QRectF fullbox = p->Viewport.toRectF();
+    if (!p->invalidRects.isEmpty()) {
+        foreach (CoordBox cb, p->invalidRects) {
+            QRectF selbox = cb.toRectF();
+            p->theAdapter->render(&P, fullbox, selbox, rect());
+        }
+    } else {
+        QRectF selbox = fullbox;
+        p->theAdapter->render(&P, fullbox, selbox, rect());
+    }
+    P.end();
+
+#ifndef QT_NO_DEBUG_OUTPUT
+    int ms = tm.time().msecsTo(QDateTime::currentDateTime().time());
+    qDebug() << "Paint buffer: " << ms << " msecs";
+#endif
+
+    p->invalidRects.clear();
+    p->theVectorPanDelta = QPoint(0, 0);
+    p->StaticBufferUpToDate = true;
 }
 
