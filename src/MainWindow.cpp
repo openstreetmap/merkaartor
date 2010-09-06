@@ -2438,8 +2438,7 @@ void MainWindow::preferencesChanged(void)
         }
         else
         {
-            if (QApplication::style()->objectName() != "")
-                QApplication::setStyle(QStyleFactory::create(M_PREFS->getMerkaartorStyleString()));
+            QApplication::setStyle(QStyleFactory::create(M_PREFS->getMerkaartorStyleString()));
         }
     }
     ui->mnuProjections->menuAction()->setEnabled(true);
