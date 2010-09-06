@@ -211,8 +211,8 @@ void CommandList::redo()
 void CommandList::undo()
 {
     if (!isReversed) {
-        for (int i=0; i<Size; ++i)
-            Subs[i]->undo();
+        for (int i=Size; i; --i)
+            Subs[i-1]->undo();
     } else {
         for (int i=0; i<Size; ++i)
             Subs[i]->redo();
