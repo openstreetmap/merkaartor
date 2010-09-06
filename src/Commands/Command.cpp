@@ -203,8 +203,8 @@ void CommandList::redo()
         for (int i=0; i<Size; ++i)
             Subs[i]->redo();
     } else {
-        for (int i=0; i<Size; ++i)
-            Subs[i]->undo();
+        for (int i=Size; i; --i)
+            Subs[i-1]->undo();
     }
 }
 
