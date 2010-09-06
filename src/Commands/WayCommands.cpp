@@ -152,8 +152,8 @@ void WayRemoveNodeCommand::undo()
     if (theLayer && oldLayer && (theLayer != oldLayer)) {
         theLayer->remove(theRoad);
         oldLayer->add(theRoad);
-        decDirtyLevel(oldLayer, theRoad);
     }
+    decDirtyLevel(oldLayer, theRoad);
 }
 
 void WayRemoveNodeCommand::redo()
@@ -167,9 +167,9 @@ void WayRemoveNodeCommand::redo()
 
     if (theLayer && oldLayer && (theLayer != oldLayer)) {
         oldLayer->remove(theRoad);
-        incDirtyLevel(oldLayer, theRoad);
         theLayer->add(theRoad);
     }
+    incDirtyLevel(oldLayer, theRoad);
     Command::redo();
 }
 

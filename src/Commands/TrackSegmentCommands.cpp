@@ -126,8 +126,8 @@ void TrackSegmentRemoveNodeCommand::undo()
     if (theLayer && oldLayer && (theLayer != oldLayer)) {
         theLayer->remove(theTrackSegment);
         oldLayer->add(theTrackSegment);
-        decDirtyLevel(oldLayer, theTrackSegment);
     }
+    decDirtyLevel(oldLayer, theTrackSegment);
 }
 
 void TrackSegmentRemoveNodeCommand::redo()
@@ -136,9 +136,9 @@ void TrackSegmentRemoveNodeCommand::redo()
     oldLayer = theTrackSegment->layer();
     if (theLayer && oldLayer && (theLayer != oldLayer)) {
         oldLayer->remove(theTrackSegment);
-        incDirtyLevel(oldLayer, theTrackSegment);
         theLayer->add(theTrackSegment);
     }
+    incDirtyLevel(oldLayer, theTrackSegment);
     Command::redo();
 }
 

@@ -163,8 +163,8 @@ void RelationRemoveFeatureCommand::undo()
     if (theLayer && oldLayer && (theLayer != oldLayer)) {
         theLayer->remove(theRelation);
         oldLayer->add(theRelation);
-        decDirtyLevel(oldLayer, theRelation);
     }
+    decDirtyLevel(oldLayer, theRelation);
 }
 
 void RelationRemoveFeatureCommand::redo()
@@ -173,9 +173,9 @@ void RelationRemoveFeatureCommand::redo()
     theRelation->remove(Idx);
     if (theLayer && oldLayer && (theLayer != oldLayer)) {
         oldLayer->remove(theRelation);
-        incDirtyLevel(oldLayer, theRelation);
         theLayer->add(theRelation);
     }
+    incDirtyLevel(oldLayer, theRelation);
     Command::redo();
 }
 
