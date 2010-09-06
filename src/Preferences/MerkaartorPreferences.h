@@ -114,6 +114,13 @@ class Tool
 typedef QMap<QString, Tool> ToolList;
 typedef QMapIterator<QString, Tool> ToolListIterator;
 
+struct OsmServer
+{
+    bool Selected;
+    QString Url;
+    QString User;
+    QString Password;
+};
 
 // Outside of merkaartorpreferences, because initializing it will need translations
 // Classic chicken & egg problem.
