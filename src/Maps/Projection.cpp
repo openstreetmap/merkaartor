@@ -198,7 +198,7 @@ QPointF Projection::projProject(const Coord & Map) const
 
     projUV out = pj_fwd(in, theProj);
 
-    return QPoint((int)out.u, int(out.v));
+    return QPointF(out.u, out.v);
 #else
     try {
         point_ll_deg in(longitude<>(coordToAng(Map.lon())), latitude<>(coordToAng(Map.lat())));
