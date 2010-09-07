@@ -41,7 +41,7 @@ Downloader::Downloader(const QString& aWeb, const QString& aUser, const QString&
   Id(0),Error(false), AnimatorLabel(0), AnimatorBar(0), AnimationTimer(0)
 {
     Web = QUrl(aWeb);
-    Request.setHost(Web.host(),Web.port());
+    Request.setHost(Web.host(),Web.port(80));
     //IdAuth = Request.setUser(User.toUtf8(), Password.toUtf8());
 //	connect(&Request,SIGNAL(done(bool)), this,SLOT(allDone(bool)));
     connect(&Request,SIGNAL(requestFinished(int, bool)),this,SLOT(on_requestFinished(int, bool)));
