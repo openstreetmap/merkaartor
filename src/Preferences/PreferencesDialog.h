@@ -17,13 +17,26 @@
 #include <QBuffer>
 #include <QListWidgetItem>
 
-
 #include <ui_PreferencesDialog.h>
+#include "ui_OsmServerWidget.h"
 #include "Preferences/MerkaartorPreferences.h"
 
 /**
     @author cbro <cbro@semperpax.com>
 */
+
+class OsmServerWidget : public QWidget, public Ui::OsmServerWidget
+{
+    Q_OBJECT
+
+public:
+    OsmServerWidget(QWidget * parent = 0, Qt::WindowFlags f = 0);
+
+public slots:
+    void on_tbOsmServerAdd_clicked();
+    void on_tbOsmServerDel_clicked();
+    void on_rbOsmServerSelected_clicked();
+};
 
 class PreferencesDialog : public QDialog, public Ui::PreferencesDialog
 {

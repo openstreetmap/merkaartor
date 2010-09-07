@@ -1,13 +1,10 @@
 INCLUDEPATH += Preferences
 DEPENDPATH += Preferences
-
-contains(LIBPROXY, 1) {
+contains(LIBPROXY, 1) { 
     DEFINES += USE_LIBPROXY
     LIBS += -lproxy
 }
-
-HEADERS +=  \
-    MerkaartorPreferences.h \
+HEADERS += MerkaartorPreferences.h \
     PreferencesDialog.h \
     WMSPreferencesDialog.h \
     TMSPreferencesDialog.h \
@@ -18,9 +15,7 @@ HEADERS +=  \
     TmsServersList.h \
     BookmarksList.h \
     FilterPreferencesDialog.h
-
-SOURCES +=  \
-    MerkaartorPreferences.cpp \
+SOURCES += MerkaartorPreferences.cpp \
     PreferencesDialog.cpp \
     WMSPreferencesDialog.cpp \
     TMSPreferencesDialog.cpp \
@@ -31,10 +26,9 @@ SOURCES +=  \
     TmsServersList.cpp \
     BookmarksList.cpp \
     FilterPreferencesDialog.cpp
-
-FORMS +=  \
-    PreferencesDialog.ui \
+FORMS += PreferencesDialog.ui \
     WMSPreferencesDialog.ui \
     TMSPreferencesDialog.ui \
     ProjPreferencesDialog.ui \
-    FilterPreferencesDialog.ui
+    FilterPreferencesDialog.ui \
+    OsmServerWidget.ui

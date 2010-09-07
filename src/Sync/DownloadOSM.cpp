@@ -37,17 +37,11 @@
 /* DOWNLOADER */
 
 Downloader::Downloader(const QString& aWeb, const QString& aUser, const QString& aPwd)
-: Port(80), Web(aWeb), User(aUser), Password(aPwd),
+: User(aUser), Password(aPwd),
   Id(0),Error(false), AnimatorLabel(0), AnimatorBar(0), AnimationTimer(0)
 {
-    int p = Web.lastIndexOf(':');
-    if (p != -1)
-    {
-        Port = Web.right(Web.length()-(p+1)).toUInt();
-        Web = Web.left(p);
-    }
-
-    Request.setHost(Web,Port);
+    Web = QUrl(aWeb);
+    Request.setHost(Web.host(),Web.port());
     //IdAuth = Request.setUser(User.toUtf8(), Password.toUtf8());
 //	connect(&Request,SIGNAL(done(bool)), this,SLOT(allDone(bool)));
     connect(&Request,SIGNAL(requestFinished(int, bool)),this,SLOT(on_requestFinished(int, bool)));
@@ -179,7 +173,7 @@ bool Downloader::go(const QString& url)
 {
     if (Error) return false;
 
-    qDebug() << "Downloader::go: " << url;
+    qDebug() << "Downloader::go: " << Web << url;
 
     if (AnimationTimer)
         AnimationTimer->start(200);
@@ -188,12 +182,12 @@ bool Downloader::go(const QString& url)
     ResponseBuffer.open(QIODevice::WriteOnly);
     QHttpRequestHeader Header("GET",url);
     Header.setValue("Accept-Encoding", "gzip,deflate");
-    if (Port == 80)
-        Header.setValue("Host",Web);
+    if (Web.port(80) == 80)
+        Header.setValue("Host",Web.host());
     else
-        Header.setValue("Host",Web+':'+QString::number(Port));
+        Header.setValue("Host",Web.host()+':'+Web.port());
     Content.clear();
-    Request.setProxy(M_PREFS->getProxy(QUrl(QString("http://" + Header.value("Host") + url))));
+    Request.setProxy(M_PREFS->getProxy(Web));
     Id = Request.request(Header,QByteArray(), &ResponseBuffer);
 
     if (Loop.exec() == QDialog::Rejected)
@@ -222,7 +216,7 @@ bool Downloader::go(const QString& url)
     }
 
 #ifdef DEBUG_EVERY_CALL
-    showDebug("GET", url, QByteArray() ,Content);
+    showDebug("GET", Web.path() + url, QByteArray() ,Content);
 #endif
     Result = Request.lastResponse().statusCode();
     LocationText = Request.lastResponse().value("Location");
@@ -241,18 +235,18 @@ bool Downloader::request(const QString& Method, const QString& URL, const QStrin
     QByteArray ba(Data.toUtf8());
     QBuffer Buf(&ba);
 
-    QHttpRequestHeader Header(Method,URL);
-    if (Port == 80)
-        Header.setValue("Host",Web);
+    QHttpRequestHeader Header(Method,Web.path() + URL);
+    if (Web.port(80) == 80)
+        Header.setValue("Host",Web.host());
     else
-        Header.setValue("Host",Web+':'+QString::number(Port));
+        Header.setValue("Host",Web.host()+':'+Web.port());
 
     QString auth = QString("%1:%2").arg(User).arg(Password);
     QByteArray ba_auth = auth.toUtf8().toBase64();
     Header.setValue("Authorization", QString("Basic %1").arg(QString(ba_auth)));
 
     Content.clear();
-    Request.setProxy(M_PREFS->getProxy(QUrl(QString("http://" + Header.value("Host") + URL))));
+    Request.setProxy(M_PREFS->getProxy(Web));
     Id = Request.request(Header,ba);
 
     if (Loop.exec() == QDialog::Rejected)
@@ -352,23 +346,23 @@ const QString &Downloader::locationText()
 
 QString Downloader::getURLToOpenChangeSet()
 {
-    return QString("/api/%1/changeset/create").arg(M_PREFS->apiVersion());
+    return QString("/changeset/create");
 }
 
 QString Downloader::getURLToCloseChangeSet(const QString& Id)
 {
-    return QString("/api/%1/changeset/%2/close").arg(M_PREFS->apiVersion()).arg(Id);
+    return QString("/changeset/%1/close").arg(Id);
 }
 
 QString Downloader::getURLToUploadDiff(QString changesetId)
 {
-    return QString("/api/%1/changeset/%2/upload").arg(M_PREFS->apiVersion()).arg(changesetId);
+    return QString("/changeset/%1/upload").arg(changesetId);
 }
 
 QString Downloader::getURLToFetch(const QString &What)
 {
-    QString URL = QString("/api/%1/%2?%3=");
-    return URL.arg(M_PREFS->apiVersion()).arg(What).arg(What);
+    QString URL = QString("/%1?%2=");
+    return URL.arg(What).arg(What);
 }
 
 QString Downloader::getURLToFetchFull(QString id)
@@ -381,8 +375,8 @@ QString Downloader::getURLToFetchFull(QString id)
     QString type = What.cap(1);
     if (type == "rel")
         type = "relation";
-    QString URL = QString("/api/%1/%2/%3/full");
-    return URL.arg(M_PREFS->apiVersion()).arg(type).arg(What.cap(2));
+    QString URL = QString("/%1/%2/full");
+    return URL.arg(type).arg(What.cap(2));
 }
 
 QString Downloader::getURLToFetchFull(Feature* aFeature)
@@ -392,38 +386,37 @@ QString Downloader::getURLToFetchFull(Feature* aFeature)
 
 QString Downloader::getURLToFetch(const QString &What, const QString& Id)
 {
-    QString URL = QString("/api/%1/%2/%3");
-    return URL.arg(M_PREFS->apiVersion()).arg(What).arg(Id);
+    QString URL = QString("/%1/%2");
+    return URL.arg(What).arg(Id);
 }
 
 QString Downloader::getURLToCreate(const QString &What)
 {
-    QString URL = QString("/api/%1/%2/create");
-    return URL.arg(M_PREFS->apiVersion()).arg(What);
+    QString URL = QString("/%1/create");
+    return URL.arg(What);
 }
 
 QString Downloader::getURLToUpdate(const QString &What, const QString& Id)
 {
-    QString URL = QString("/api/%1/%2/%3");
-    return URL.arg(M_PREFS->apiVersion()).arg(What).arg(Id);
+    QString URL = QString("/%1/%2");
+    return URL.arg(What).arg(Id);
 }
 
 QString Downloader::getURLToDelete(const QString &What, const QString& Id)
 {
-    QString URL = QString("/api/%1/%2/%3");
-    return URL.arg(M_PREFS->apiVersion()).arg(What).arg(Id);
+    QString URL = QString("/%1/%2");
+    return URL.arg(What).arg(Id);
 }
 
 QString Downloader::getURLToMap()
 {
-    QString apiURL = QString("/api/%1").arg(M_PREFS->apiVersion());
-    QString URL = apiURL + QString("/map?bbox=%1,%2,%3,%4");
+    QString URL("/map?bbox=%1,%2,%3,%4");
     return URL;
 }
 
 QString Downloader::getURLToTrackPoints()
 {
-    QString URL = QString("/api/%1").arg(M_PREFS->apiVersion()) + QString("/trackpoints?bbox=%1,%2,%3,%4&page=%5");
+    QString URL = QString("/trackpoints?bbox=%1,%2,%3,%4&page=%5");
     return URL;
 }
 
@@ -432,7 +425,7 @@ bool downloadOSM(QWidget* aParent, const QUrl& theUrl, const QString& aUser, con
     QString aWeb = theUrl.host();
     //QString URL = theUrl.path();
     QString URL = theUrl.toString(QUrl::RemoveScheme | QUrl::RemoveAuthority);
-    Downloader Rcv(aWeb, aUser, aPassword);
+    Downloader Rcv(theUrl.toString(), aUser, aPassword);
 
     IProgressWindow* aProgressWindow = dynamic_cast<IProgressWindow*>(aParent);
     if (aProgressWindow) {
@@ -512,10 +505,8 @@ bool downloadOSM(QWidget* aParent, const QString& aWeb, const QString& aUser, co
     QString URL = Rcv.getURLToMap();
     URL = URL.arg(coordToAng(aBox.bottomLeft().lon()), 0, 'f').arg(coordToAng(aBox.bottomLeft().lat()), 0, 'f').arg(coordToAng(aBox.topRight().lon()), 0, 'f').arg(coordToAng(aBox.topRight().lat()), 0, 'f');
 
-    QUrl theUrl;
-    theUrl.setHost(aWeb);
-    theUrl.setPath(URL);
-    theUrl.setScheme("http");
+    QUrl theUrl(aWeb);
+    theUrl.setPath(theUrl.path() + URL);
 
     return downloadOSM(aParent, theUrl, aUser, aPassword, theDocument, theLayer);
 }

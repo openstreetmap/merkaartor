@@ -36,6 +36,67 @@ static void makeBoundaryIcon(QToolButton* bt, QColor C)
     bt->setIcon(pm);
 }
 
+OsmServerWidget::OsmServerWidget(QWidget * parent, Qt::WindowFlags f)
+    : QWidget(parent, f)
+{
+    setupUi(this);
+    setAttribute(Qt::WA_DeleteOnClose);
+}
+
+void OsmServerWidget::on_tbOsmServerAdd_clicked()
+{
+    QLayout* lay = parentWidget()->layout();
+    if (!lay)
+        return;
+
+    OsmServerWidget* w = new OsmServerWidget(parentWidget());
+    lay->addWidget(w);
+
+    for (int i=0; i<lay->count(); ++i) {
+        OsmServerWidget* w = dynamic_cast<OsmServerWidget*>(lay->itemAt(i)->widget());
+        if (w)
+            w->tbOsmServerDel->setEnabled(true);
+    }
+}
+
+void OsmServerWidget::on_tbOsmServerDel_clicked()
+{
+    QLayout* lay = parentWidget()->layout();
+    if (!lay)
+        return;
+
+    if (rbOsmServerSelected->isChecked()) {
+        OsmServerWidget* w = dynamic_cast<OsmServerWidget*>(lay->itemAt(0)->widget());
+        if (w)
+            w->rbOsmServerSelected->setChecked(true);
+    }
+    if (lay->count() > 2)
+        close();
+    else if (lay->count() == 2 ) {
+        for (int i=0; i<lay->count(); ++i) {
+            OsmServerWidget* w = dynamic_cast<OsmServerWidget*>(lay->itemAt(i)->widget());
+            if (w)
+                w->tbOsmServerDel->setEnabled(false);
+            close();
+        }
+    }
+}
+
+void OsmServerWidget::on_rbOsmServerSelected_clicked()
+{
+    QLayout* lay = parentWidget()->layout();
+    if (!lay)
+        return;
+
+    for (int i=0; i<lay->count(); ++i) {
+        OsmServerWidget* w = dynamic_cast<OsmServerWidget*>(lay->itemAt(i)->widget());
+        if (w)
+            w->rbOsmServerSelected->setChecked(false);
+    }
+
+    rbOsmServerSelected->setChecked(true);
+}
+
 PreferencesDialog::PreferencesDialog(QWidget* parent)
     : QDialog(parent)
 {
@@ -137,9 +198,30 @@ void PreferencesDialog::loadPrefs()
     if (l < Language->count())
         Language->setCurrentIndex(l);
     TranslateTags->setChecked(M_PREFS->getTranslateTags());
-    edOsmUrl->setText(M_PREFS->getOsmWebsite());
-    edOsmUser->setText(M_PREFS->getOsmUser());
-    edOsmPwd->setText(M_PREFS->getOsmPassword());
+
+    OsmServerList* theOsmServers = M_PREFS->getOsmServers();
+    if (!theOsmServers->size()) {
+        OsmServerWidget* wOSmServer = new OsmServerWidget(grpOSM);
+
+        wOSmServer->edOsmServerUrl->setText(M_PREFS->getOsmWebsite());
+        wOSmServer->edOsmServerUser->setText(M_PREFS->getOsmUser());
+        wOSmServer->edOsmServerPwd->setText(M_PREFS->getOsmPassword());
+        wOSmServer->rbOsmServerSelected->setChecked(true);
+        wOSmServer->tbOsmServerDel->setEnabled(false);
+
+        OsmServersLayout->addWidget(wOSmServer);
+    } else {
+        foreach(OsmServer srv, *theOsmServers) {
+            OsmServerWidget* wOSmServer = new OsmServerWidget(grpOSM);
+
+            wOSmServer->edOsmServerUrl->setText(srv.Url);
+            wOSmServer->edOsmServerUser->setText(srv.User);
+            wOSmServer->edOsmServerPwd->setText(srv.Password);
+            wOSmServer->rbOsmServerSelected->setChecked(srv.Selected);
+
+            OsmServersLayout->addWidget(wOSmServer);
+        }
+    }
 
     edXapiUrl->setText(M_PREFS->getXapiUrl());
 
@@ -264,14 +346,29 @@ void PreferencesDialog::savePrefs()
     //M_PREFS->setUse06Api(bbUse06Api->isChecked());
 
     bool OsmDataChanged = false;
-    if (edOsmUrl->text() != M_PREFS->getOsmWebsite() ||
-        edOsmUser->text() != M_PREFS->getOsmUser() ||
-        edOsmPwd->text() != M_PREFS->getOsmPassword())
-        OsmDataChanged = true;
 
-    M_PREFS->setOsmWebsite(edOsmUrl->text());
-    M_PREFS->setOsmUser(edOsmUser->text());
-    M_PREFS->setOsmPassword(edOsmPwd->text());
+    OsmServerList* theServerList = M_PREFS->getOsmServers();
+    theServerList->clear();
+    for (int i=0; i< OsmServersLayout->count(); ++i) {
+        OsmServerWidget* wOsmServer = dynamic_cast<OsmServerWidget*>(OsmServersLayout->itemAt(i)->widget());
+        if (!wOsmServer)
+            continue;
+
+        OsmServer srv;
+        srv.Url = wOsmServer->edOsmServerUrl->text();
+        srv.User = wOsmServer->edOsmServerUser->text();
+        srv.Password = wOsmServer->edOsmServerPwd->text();
+        srv.Selected = wOsmServer->rbOsmServerSelected->isChecked();
+
+        if (srv.Selected && (srv.Url != M_PREFS->getOsmWebsite() || srv.User != M_PREFS->getOsmUser() || srv.Password != M_PREFS->getOsmPassword())) {
+            M_PREFS->setOsmWebsite(srv.Url);
+            M_PREFS->setOsmUser(srv.User);
+            M_PREFS->setOsmPassword(srv.Password);
+            OsmDataChanged = true;
+        }
+
+        theServerList->append(srv);
+    }
 
     M_PREFS->setXapiUrl(edXapiUrl->text());
 

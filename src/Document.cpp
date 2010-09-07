@@ -139,7 +139,7 @@ const Painter* Document::getPainter(int i)
 void Document::addDefaultLayers()
 {
     ImageMapLayer*l = addImageLayer();
-    l->setMapAdapter(M_PREFS->getBackgroundPlugin(), M_PREFS->getSelectedServer());
+    l->setMapAdapter(M_PREFS->getBackgroundPlugin(), M_PREFS->getSelectedMapServer());
     if (M_PREFS->getBackgroundPlugin() != NONE_ADAPTER_UUID) {
         l->setVisible(M_PREFS->getBgVisible());
         // Sync the menu entry label & visible checkbox to the layer

@@ -19,6 +19,7 @@ class Layer;
 #include <QtCore/QEventLoop>
 #include <QtCore/QObject>
 #include <QtNetwork/QHttp>
+#include <QUrl>
 
 
 class Downloader : public QObject
@@ -57,9 +58,9 @@ class Downloader : public QObject
         void on_Cancel_clicked();
 
     private:
-        int Port;
         QHttp Request;
-        QString Web, User, Password;
+        QUrl Web;
+        QString User, Password;
         QByteArray Content;
         int Result;
         QString LocationText;

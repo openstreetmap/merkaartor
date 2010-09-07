@@ -333,7 +333,7 @@ void ImageLayerWidget::setWms(QAction* act)
 {
     WmsServerList* L = M_PREFS->getWmsServers();
     WmsServer S = L->value(act->data().toString());
-    M_PREFS->setSelectedServer(S.WmsName);
+    M_PREFS->setSelectedMapServer(S.WmsName);
 
     ((ImageMapLayer *)theLayer.data())->setMapAdapter(WMS_ADAPTER_UUID, S.WmsName);
     theLayer->setVisible(true);
@@ -346,7 +346,7 @@ void ImageLayerWidget::setTms(QAction* act)
 {
     TmsServerList* L = M_PREFS->getTmsServers();
     TmsServer S = L->value(act->data().toString());
-    M_PREFS->setSelectedServer(S.TmsName);
+    M_PREFS->setSelectedMapServer(S.TmsName);
 
     ((ImageMapLayer *)theLayer.data())->setMapAdapter(TMS_ADAPTER_UUID, S.TmsName);
     theLayer->setVisible(true);
@@ -427,7 +427,7 @@ void ImageLayerWidget::initActions()
             act->setData(S.WmsName);
             wmsMenu->addAction(act);
             if (M_PREFS->getBackgroundPlugin() == WMS_ADAPTER_UUID)
-                if (S.WmsName == M_PREFS->getSelectedServer())
+                if (S.WmsName == M_PREFS->getSelectedMapServer())
                     act->setChecked(true);
         }
     }
@@ -443,7 +443,7 @@ void ImageLayerWidget::initActions()
             act->setData(S.TmsName);
             tmsMenu->addAction(act);
             if (M_PREFS->getBackgroundPlugin() == TMS_ADAPTER_UUID)
-                if (S.TmsName == M_PREFS->getSelectedServer())
+                if (S.TmsName == M_PREFS->getSelectedMapServer())
                     act->setChecked(true);
         }
     }

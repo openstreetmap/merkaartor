@@ -121,6 +121,8 @@ struct OsmServer
     QString User;
     QString Password;
 };
+typedef QList<OsmServer> OsmServerList;
+typedef QListIterator<OsmServer> OsmServerIterator;
 
 // Outside of merkaartorpreferences, because initializing it will need translations
 // Classic chicken & egg problem.
@@ -403,11 +405,17 @@ public:
     void loadBookmarks();
     void saveBookmarks();
 
+    /* Servers */
+    void loadOsmServers();
+    void saveOsmServers();
+
     BookmarkList*  getBookmarks();
     WmsServerList* getWmsServers();
     TmsServerList* getTmsServers();
-    void setSelectedServer(const QString & theValue);
-    QString getSelectedServer() const;
+    OsmServerList* getOsmServers();
+
+    void setSelectedMapServer(const QString & theValue);
+    QString getSelectedMapServer() const;
 
 protected:
     QVector<qreal> parentDashes;
@@ -444,6 +452,7 @@ private:
     WmsServersList theWmsServerList;
     TmsServersList theTmsServerList;
     BookmarksList theBookmarkList;
+    OsmServerList theOsmServers;
 
     RendererOptions::DirectionalArrowsShowOptions m_DirectionalArrowsVisible;
 

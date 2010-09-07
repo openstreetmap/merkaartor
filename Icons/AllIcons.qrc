@@ -61,6 +61,8 @@
         <file>actions/emblem-unreadable.png</file>
         <file>actions/emblem-important.png</file>
         <file>actions/software-update-available.png</file>
+        <file>actions/list-add.png</file>
+        <file>actions/list-remove.png</file>
         <file>geotagged.png</file>
         <file alias="grab.png">Grab.png</file>
         <file>grabbing.png</file>

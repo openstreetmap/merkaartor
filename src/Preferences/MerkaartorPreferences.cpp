@@ -194,6 +194,7 @@ void MerkaartorPreferences::save(bool UserPwdChanged)
     saveWMSes();
     saveTMSes();
     saveBookmarks();
+    saveOsmServers();
 
     if (UserPwdChanged)
         fromOsmPref();
@@ -258,16 +259,13 @@ void MerkaartorPreferences::fromOsmPref()
 
     if (getOsmUser().isEmpty() || getOsmPassword().isEmpty()) return;
 
-    QUrl osmWeb;
-    osmWeb.setScheme("http");
-    osmWeb.setAuthority(getOsmWebsite());
+    QUrl osmWeb(getOsmWebsite());
     if (osmWeb.port() == -1)
         osmWeb.setPort(80);
 
     httpRequest.setHost(osmWeb.host(), osmWeb.port());
 
-    QHttpRequestHeader Header("GET", QString("/api/%1/user/preferences/").arg(apiVersion()));
-    qDebug() << "MerkaartorPreferences::fromOsmPref :" <<  QString("GET /api/%1/user/preferences/").arg(apiVersion());
+    QHttpRequestHeader Header("GET", osmWeb.path() + "/user/preferences/");
     if (osmWeb.port() == 80)
         Header.setValue("Host",osmWeb.host());
     else
@@ -369,9 +367,7 @@ void MerkaartorPreferences::on_requestFinished ( int id, bool error )
 
 void MerkaartorPreferences::putOsmPref(const QString& k, const QString& v)
 {
-    QUrl osmWeb;
-    osmWeb.setScheme("http");
-    osmWeb.setAuthority(getOsmWebsite());
+    QUrl osmWeb(getOsmWebsite());
     if (osmWeb.port() == -1)
         osmWeb.setPort(80);
 
@@ -380,7 +376,7 @@ void MerkaartorPreferences::putOsmPref(const QString& k, const QString& v)
 
     httpRequest.setHost(osmWeb.host(), osmWeb.port());
 
-    QHttpRequestHeader Header("PUT", QString("/api/%1/user/preferences/%2").arg(apiVersion()).arg(k));
+    QHttpRequestHeader Header("PUT", osmWeb.path() + QString("/user/preferences/%1").arg(k));
     if (osmWeb.port() == 80)
         Header.setValue("Host",osmWeb.host());
     else
@@ -396,15 +392,13 @@ void MerkaartorPreferences::putOsmPref(const QString& k, const QString& v)
 
 void MerkaartorPreferences::deleteOsmPref(const QString& k)
 {
-    QUrl osmWeb;
-    osmWeb.setScheme("http");
-    osmWeb.setAuthority(getOsmWebsite());
+    QUrl osmWeb(getOsmWebsite());
     if (osmWeb.port() == -1)
         osmWeb.setPort(80);
 
     httpRequest.setHost(osmWeb.host(), osmWeb.port());
 
-    QHttpRequestHeader Header("DELETE", QString("/api/%1/user/preferences/%2").arg(apiVersion()).arg(k));
+    QHttpRequestHeader Header("DELETE", osmWeb.path() + QString("/user/preferences/%1").arg(k));
     if (osmWeb.port() == 80)
         Header.setValue("Host",osmWeb.host());
     else
@@ -445,6 +439,7 @@ void MerkaartorPreferences::initialize()
     loadWMSes();
     loadTMSes();
     loadBookmarks();
+    loadOsmServers();
 
     fromOsmPref();
 
@@ -622,6 +617,11 @@ void MerkaartorPreferences::setWmsServers()
     //Sets->setValue("WSM/servers", Servers);
 }
 
+OsmServerList* MerkaartorPreferences::getOsmServers()
+{
+    return &theOsmServers;
+}
+
 /* TMS */
 
 TmsServerList* MerkaartorPreferences::getTmsServers()
@@ -649,12 +649,12 @@ void MerkaartorPreferences::setTmsServers()
 
 /* */
 
-QString MerkaartorPreferences::getSelectedServer() const
+QString MerkaartorPreferences::getSelectedMapServer() const
 {
     return Sets->value("backgroundImage/SelectedServer").toString();
 }
 
-void MerkaartorPreferences::setSelectedServer(const QString & theValue)
+void MerkaartorPreferences::setSelectedMapServer(const QString & theValue)
 {
     Sets->setValue("backgroundImage/SelectedServer", theValue);
 }
@@ -1043,7 +1043,13 @@ bool MerkaartorPreferences::getDrawTileBoundary()
 
 QString MerkaartorPreferences::getOsmWebsite() const
 {
-    return Sets->value("osm/Website", "www.openstreetmap.org").toString();
+    QString s = Sets->value("osm/Website", "www.openstreetmap.org").toString();
+
+    QUrl u = QUrl::fromUserInput(s);
+    if (u.path().isEmpty())
+        u.setPath("/api/" + apiVersion());
+
+    return u.toString();
 }
 
 void MerkaartorPreferences::setOsmWebsite(const QString & theValue)
@@ -1734,6 +1740,37 @@ void MerkaartorPreferences::saveBookmarks()
     file.write(theXmlDoc.toString().toUtf8());
     file.close();
 }
+
+/* OSM Servers */
+
+void MerkaartorPreferences::loadOsmServers()
+{
+    int size = Sets->beginReadArray("OsmServers");
+    for (int i = 0; i < size; ++i) {
+        Sets->setArrayIndex(i);
+        OsmServer server;
+        server.Selected = Sets->value("selected").toBool();
+        server.Url = Sets->value("url").toString();
+        server.User = Sets->value("user").toString();
+        server.Password = Sets->value("password").toString();
+        theOsmServers.append(server);
+    }
+    Sets->endArray();
+}
+
+void MerkaartorPreferences::saveOsmServers()
+{
+    Sets->beginWriteArray("OsmServers");
+    for (int i = 0; i < theOsmServers.size(); ++i) {
+        Sets->setArrayIndex(i);
+        Sets->setValue("selected", theOsmServers.at(i).Selected);
+        Sets->setValue("url", theOsmServers.at(i).Url);
+        Sets->setValue("user", theOsmServers.at(i).User);
+        Sets->setValue("password", theOsmServers.at(i).Password);
+    }
+    Sets->endArray();
+}
+
 
 /* */
 

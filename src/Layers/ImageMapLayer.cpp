@@ -105,7 +105,7 @@ LayerWidget* ImageMapLayer::newWidget(void)
 void ImageMapLayer::updateWidget()
 {
     theWidget->initActions();
-    setMapAdapter(M_PREFS->getBackgroundPlugin(), M_PREFS->getSelectedServer());
+    setMapAdapter(M_PREFS->getBackgroundPlugin(), M_PREFS->getSelectedMapServer());
     theWidget->update();
 }
 
