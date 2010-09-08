@@ -174,7 +174,7 @@ void PropertiesDock::checkMenuStatus()
     Main->ui->editRemoveAction->setEnabled(Selection.size());
     Main->ui->editMoveAction->setEnabled(true);
     Main->ui->editReverseAction->setEnabled(IsRoad);
-    Main->ui->roadAddStreetNumbersAction->setEnabled(NumRoads > 1);
+    Main->ui->roadAddStreetNumbersAction->setEnabled(NumRoads >= 1);
     Main->ui->roadJoinAction->setEnabled(NumRoads >= 1 && canJoinRoads(this));
     Main->ui->roadCreateJunctionAction->setEnabled(NumRoads > 1 && canCreateJunction(this));
     Main->ui->roadSplitAction->setEnabled((IsParentRoadInner && !IsParentArea) || (NumRoads && NumPoints) || (NumAreas && NumPoints > 1));

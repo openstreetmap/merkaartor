@@ -11,6 +11,7 @@
 #include "Relation.h"
 #include "Interaction.h"
 #include "EditInteraction.h"
+#include "CreateSingleWayInteraction.h"
 #include "PaintStyle/MasPaintStyle.h"
 #include "Maps/Projection.h"
 #include "GPS/qgps.h"
@@ -957,57 +958,112 @@ void MapView::on_MoveDown_activated()
 
 bool MapView::event(QEvent *event)
 {
-    if (event->type() == QEvent::ToolTip) {
-        QHelpEvent *helpEvent = static_cast<QHelpEvent *>(event);
-         //Coord p = theProjection.inverse(helpEvent->pos());
-        if (M_PREFS->getMapTooltip()) {
-            if (!toolTip().isEmpty())
-                QToolTip::showText(helpEvent->globalPos(), toolTip());
-            else
-                QToolTip::hideText();
-         }
-        return true;
-    } else
-    if ( event->type() == QEvent::KeyPress ) {
-        QKeyEvent *ke = static_cast< QKeyEvent* >( event );
-        if ( ke->key() == Qt::Key_Tab ) {
-            setFocus();
-            ke->accept();
-
-//            if (!isSelectionLocked())
-//                lockSelection();
-//            else
-            {
-                FeatureSnapInteraction* intr = dynamic_cast<FeatureSnapInteraction*>(interaction());
-                if (intr)
-                    intr->nextSnap();
+    switch (event->type()) {
+    case QEvent::ToolTip: {
+            QHelpEvent *helpEvent = static_cast<QHelpEvent *>(event);
+            //Coord p = theProjection.inverse(helpEvent->pos());
+            if (M_PREFS->getMapTooltip()) {
+                if (!toolTip().isEmpty())
+                    QToolTip::showText(helpEvent->globalPos(), toolTip());
+                else
+                    QToolTip::hideText();
             }
-
-            return true;
-        } else
-        if ( ke->key() == Qt::Key_Backtab ) {
-            setFocus();
-            ke->accept();
-
-//            if (!isSelectionLocked())
-//                lockSelection();
-//            else
-            {
-                FeatureSnapInteraction* intr = dynamic_cast<FeatureSnapInteraction*>(interaction());
-                if (intr)
-                    intr->nextSnap();
-            }
-
             return true;
         }
-    } else
-    if ( event->type() == QEvent::Leave ) {
-        if (Main)
-            Main->info()->unsetHoverHtml();
-        FeatureSnapInteraction* intr = dynamic_cast<FeatureSnapInteraction*>(interaction());
-        if (intr)
-            intr->clearLastSnap();
-        update();
+
+    case QEvent::KeyPress: {
+            QKeyEvent *ke = static_cast< QKeyEvent* >( event );
+            switch ( ke->key() ) {
+            case Qt::Key_Tab:
+                setFocus();
+                ke->accept();
+
+                //            if (!isSelectionLocked())
+                //                lockSelection();
+                //            else
+                {
+                    FeatureSnapInteraction* intr = dynamic_cast<FeatureSnapInteraction*>(interaction());
+                    if (intr)
+                        intr->nextSnap();
+                }
+                return true;
+
+            case Qt::Key_Backtab:
+                setFocus();
+                ke->accept();
+
+                //            if (!isSelectionLocked())
+                //                lockSelection();
+                //            else
+                {
+                    FeatureSnapInteraction* intr = dynamic_cast<FeatureSnapInteraction*>(interaction());
+                    if (intr)
+                        intr->nextSnap();
+                }
+                return true;
+
+            case Qt::Key_O: {
+                    CreateSingleWayInteraction* intr = dynamic_cast<CreateSingleWayInteraction*>(interaction());
+                    if (!intr)
+                        return false;
+
+                    setFocus();
+                    ke->accept();
+                    intr->setSnapAngle(45.);
+
+                    return true;
+                }
+
+            case Qt::Key_H: {
+                    CreateSingleWayInteraction* intr = dynamic_cast<CreateSingleWayInteraction*>(interaction());
+                    if (!intr)
+                        return false;
+
+                    setFocus();
+                    ke->accept();
+                    intr->setSnapAngle(30.);
+
+                    return true;
+                }
+
+            default:
+                break;
+
+            }
+        }
+
+    case QEvent::KeyRelease: {
+            QKeyEvent *ke = static_cast< QKeyEvent* >( event );
+            switch ( ke->key() ) {
+            case Qt::Key_O:
+            case Qt::Key_H:
+                {
+                    CreateSingleWayInteraction* intr = dynamic_cast<CreateSingleWayInteraction*>(interaction());
+                    if (!intr)
+                        return false;
+
+                    ke->accept();
+                    intr->setSnapAngle(0);
+
+                    return true;
+                }
+
+            default:
+                break;
+            }
+        }
+
+    case QEvent::Leave: {
+            if (Main)
+                Main->info()->unsetHoverHtml();
+            FeatureSnapInteraction* intr = dynamic_cast<FeatureSnapInteraction*>(interaction());
+            if (intr)
+                intr->clearLastSnap();
+            update();
+        }
+
+    default:
+        break;
     }
 
     return QWidget::event(event);
