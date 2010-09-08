@@ -119,16 +119,20 @@ class MapView :	public QWidget
 
         int numImages;
 
-        QShortcut* MoveLeft;
-        QShortcut* MoveRight;
-        QShortcut* MoveUp;
-        QShortcut* MoveDown;
+        QShortcut* MoveLeftShortcut;
+        QShortcut* MoveRightShortcut;
+        QShortcut* MoveUpShortcut;
+        QShortcut* MoveDownShortcut;
+        QShortcut* ZoomInShortcut;
+        QShortcut* ZoomOutShortcut;
 
     public slots:
         virtual void on_MoveLeft_activated();
         virtual void on_MoveRight_activated();
         virtual void on_MoveUp_activated();
         virtual void on_MoveDown_activated();
+        virtual void on_ZoomIn_activated();
+        virtual void on_ZoomOut_activated();
 
     signals:
         void interactionChanged(Interaction* anInteraction);

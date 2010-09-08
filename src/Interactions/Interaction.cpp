@@ -13,7 +13,10 @@
 #include <math.h>
 
 Interaction::Interaction(MapView* aView)
-: theView(aView), Panning(false), Dragging(false), StartDrag(0,0), EndDrag(0,0)
+    : theView(aView), Panning(false), Dragging(false),
+    LastSnap(0), SnapActive(true),
+    NoSelectPoints(false), NoSelectRoads(false), NoSelectVirtuals(true)
+    , StartDrag(0,0), EndDrag(0,0)
 {
     connect(this, SIGNAL(requestCustomContextMenu(const QPoint &)), theView, SLOT(on_customContextMenuRequested(const QPoint &)));
 }
@@ -192,173 +195,7 @@ void Interaction::paintEvent(QPaintEvent*, QPainter& thePainter)
     }
 }
 
-/***************/
-
-FeatureSnapInteraction::FeatureSnapInteraction(MapView* theView)
-        : Interaction(theView), SnapActive(true),
-      NoSelectPoints(false), NoSelectRoads(false)
-          , NoSelectVirtuals(true), LastSnap(0)
-{
-//    handCursor = QCursor(QPixmap(":/Icons/grab.png"));
-//    grabCursor = QCursor(QPixmap(":/Icons/grabbing.png"));
-    handCursor = QCursor(Qt::OpenHandCursor);
-    grabCursor = QCursor(Qt::ClosedHandCursor);
-    defaultCursor = QCursor(Qt::ArrowCursor);
-}
-
-void FeatureSnapInteraction::paintEvent(QPaintEvent* anEvent, QPainter& thePainter)
-{
-    Interaction::paintEvent(anEvent, thePainter);
-
-    for (int i=0; i<main()->features()->highlightedSize(); ++i)
-        if (document()->exists(main()->features()->highlighted(i)))
-            main()->features()->highlighted(i)->drawHighlight(thePainter, view());
-    for (int i=0; i<main()->properties()->size(); ++i)
-        if (document()->exists(main()->properties()->selection(i)))
-            main()->properties()->selection(i)->drawFocus(thePainter, view());
-    for (int i=0; i<main()->properties()->highlightedSize(); ++i)
-        if (document()->exists(main()->properties()->highlighted(i)))
-            main()->properties()->highlighted(i)->drawHighlight(thePainter, view());
-
-#ifndef _MOBILE
-    if (LastSnap && document()->exists(LastSnap)) {
-        LastSnap->drawHover(thePainter, view());
-        view()->setToolTip(LastSnap->toHtml());
-    } else {
-        view()->setToolTip("");
-    }
-#endif
-}
-
-void FeatureSnapInteraction::mousePressEvent(QMouseEvent * event)
-{
-    updateSnap(event);
-    if (event->button() == Qt::LeftButton)
-        snapMousePressEvent(event,LastSnap);
-    if (!(M_PREFS->getMouseSingleButton() && LastSnap))
-        Interaction::mousePressEvent(event);
-}
-
-void FeatureSnapInteraction::mouseReleaseEvent(QMouseEvent * event)
-{
-    if (event->button() == Qt::RightButton && !Panning && !Dragging)
-        emit(requestCustomContextMenu(event->pos()));
-
-    updateSnap(event);
-    snapMouseReleaseEvent(event,LastSnap);
-    if (!(M_PREFS->getMouseSingleButton() && LastSnap))
-        Interaction::mouseReleaseEvent(event);
-}
-
-void FeatureSnapInteraction::mouseMoveEvent(QMouseEvent* event)
-{
-    updateSnap(event);
-    view()->setCursor(cursor());
-    snapMouseMoveEvent(event, LastSnap);
-    if (!(M_PREFS->getMouseSingleButton() && LastSnap))
-        Interaction::mouseMoveEvent(event);
-}
-
-void FeatureSnapInteraction::mouseDoubleClickEvent(QMouseEvent* event)
-{
-    updateSnap(event);
-    view()->setCursor(cursor());
-    snapMouseDoubleClickEvent(event, LastSnap);
-    if (!(M_PREFS->getMouseSingleButton() && LastSnap))
-        Interaction::mouseDoubleClickEvent(event);
-}
-
-void FeatureSnapInteraction::snapMousePressEvent(QMouseEvent * , Feature*)
-{
-}
-
-void FeatureSnapInteraction::snapMouseReleaseEvent(QMouseEvent * , Feature*)
-{
-}
-
-void FeatureSnapInteraction::snapMouseMoveEvent(QMouseEvent* , Feature*)
-{
-}
-
-void FeatureSnapInteraction::snapMouseDoubleClickEvent(QMouseEvent* , Feature*)
-{
-}
-
-void FeatureSnapInteraction::activateSnap(bool b)
-{
-    SnapActive = b;
-}
-
-void FeatureSnapInteraction::addToNoSnap(Feature* F)
-{
-    NoSnap.push_back(F);
-}
-
-void FeatureSnapInteraction::clearNoSnap()
-{
-    NoSnap.clear();
-}
-
-void FeatureSnapInteraction::clearSnap()
-{
-    StackSnap.clear();
-}
-
-void FeatureSnapInteraction::clearLastSnap()
-{
-    LastSnap = 0;
-}
-
-QList<Feature*> FeatureSnapInteraction::snapList()
-{
-    return StackSnap;
-}
-
-void FeatureSnapInteraction::addSnap(Feature* aSnap)
-{
-    StackSnap.append(aSnap);
-}
-
-void FeatureSnapInteraction::setSnap(QList<Feature*> aSnapList)
-{
-    StackSnap = aSnapList;
-    curStackSnap = 0;
-}
-
-void FeatureSnapInteraction::nextSnap()
-{
-    curStackSnap++;
-    if (curStackSnap > StackSnap.size() -1)
-        curStackSnap = 0;
-    view()->properties()->setSelection(StackSnap[curStackSnap]);
-    view()->update();
-}
-
-void FeatureSnapInteraction::previousSnap()
-{
-    curStackSnap--;
-    if (curStackSnap < 0)
-        curStackSnap = StackSnap.size() -1;
-    view()->properties()->setSelection(StackSnap[curStackSnap]);
-    view()->update();
-}
-
-void FeatureSnapInteraction::setDontSelectPoints(bool b)
-{
-    NoSelectPoints = b;
-}
-
-void FeatureSnapInteraction::setDontSelectRoads(bool b)
-{
-    NoSelectRoads = b;
-}
-
-void FeatureSnapInteraction::setDontSelectVirtual(bool b)
-{
-    NoSelectVirtuals = b;
-}
-
-void FeatureSnapInteraction::updateSnap(QMouseEvent* event)
+void Interaction::updateSnap(QMouseEvent* event)
 {
     if (panning())
     {
@@ -464,6 +301,172 @@ void FeatureSnapInteraction::updateSnap(QMouseEvent* event)
             else
                 main()->info()->unsetHoverHtml();
     }
+}
+
+Feature* Interaction::lastSnap()
+{
+    return LastSnap;
+}
+
+
+/***************/
+
+FeatureSnapInteraction::FeatureSnapInteraction(MapView* theView)
+        : Interaction(theView)
+{
+//    handCursor = QCursor(QPixmap(":/Icons/grab.png"));
+//    grabCursor = QCursor(QPixmap(":/Icons/grabbing.png"));
+    handCursor = QCursor(Qt::OpenHandCursor);
+    grabCursor = QCursor(Qt::ClosedHandCursor);
+    defaultCursor = QCursor(Qt::ArrowCursor);
+}
+
+void FeatureSnapInteraction::paintEvent(QPaintEvent* anEvent, QPainter& thePainter)
+{
+    Interaction::paintEvent(anEvent, thePainter);
+
+    for (int i=0; i<main()->features()->highlightedSize(); ++i)
+        if (document()->exists(main()->features()->highlighted(i)))
+            main()->features()->highlighted(i)->drawHighlight(thePainter, view());
+    for (int i=0; i<main()->properties()->size(); ++i)
+        if (document()->exists(main()->properties()->selection(i)))
+            main()->properties()->selection(i)->drawFocus(thePainter, view());
+    for (int i=0; i<main()->properties()->highlightedSize(); ++i)
+        if (document()->exists(main()->properties()->highlighted(i)))
+            main()->properties()->highlighted(i)->drawHighlight(thePainter, view());
+
+#ifndef _MOBILE
+    if (LastSnap && document()->exists(LastSnap)) {
+        LastSnap->drawHover(thePainter, view());
+        view()->setToolTip(LastSnap->toHtml());
+    } else {
+        view()->setToolTip("");
+    }
+#endif
+}
+
+void FeatureSnapInteraction::mousePressEvent(QMouseEvent * event)
+{
+    if (event->button() == Qt::LeftButton)
+        snapMousePressEvent(event,LastSnap);
+    if (!(M_PREFS->getMouseSingleButton() && LastSnap))
+        Interaction::mousePressEvent(event);
+}
+
+void FeatureSnapInteraction::mouseReleaseEvent(QMouseEvent * event)
+{
+    if (event->button() == Qt::RightButton && !Panning && !Dragging)
+        emit(requestCustomContextMenu(event->pos()));
+
+    snapMouseReleaseEvent(event,LastSnap);
+    if (!(M_PREFS->getMouseSingleButton() && LastSnap))
+        Interaction::mouseReleaseEvent(event);
+}
+
+void FeatureSnapInteraction::mouseMoveEvent(QMouseEvent* event)
+{
+    view()->setCursor(cursor());
+    snapMouseMoveEvent(event, LastSnap);
+    if (!(M_PREFS->getMouseSingleButton() && LastSnap))
+        Interaction::mouseMoveEvent(event);
+}
+
+void FeatureSnapInteraction::mouseDoubleClickEvent(QMouseEvent* event)
+{
+    view()->setCursor(cursor());
+    snapMouseDoubleClickEvent(event, LastSnap);
+    if (!(M_PREFS->getMouseSingleButton() && LastSnap))
+        Interaction::mouseDoubleClickEvent(event);
+}
+
+void FeatureSnapInteraction::snapMousePressEvent(QMouseEvent * , Feature*)
+{
+}
+
+void FeatureSnapInteraction::snapMouseReleaseEvent(QMouseEvent * , Feature*)
+{
+}
+
+void FeatureSnapInteraction::snapMouseMoveEvent(QMouseEvent* , Feature*)
+{
+}
+
+void FeatureSnapInteraction::snapMouseDoubleClickEvent(QMouseEvent* , Feature*)
+{
+}
+
+void FeatureSnapInteraction::activateSnap(bool b)
+{
+    SnapActive = b;
+}
+
+void FeatureSnapInteraction::addToNoSnap(Feature* F)
+{
+    NoSnap.push_back(F);
+}
+
+void FeatureSnapInteraction::clearNoSnap()
+{
+    NoSnap.clear();
+}
+
+void FeatureSnapInteraction::clearSnap()
+{
+    StackSnap.clear();
+}
+
+void FeatureSnapInteraction::clearLastSnap()
+{
+    LastSnap = 0;
+}
+
+QList<Feature*> FeatureSnapInteraction::snapList()
+{
+    return StackSnap;
+}
+
+void FeatureSnapInteraction::addSnap(Feature* aSnap)
+{
+    StackSnap.append(aSnap);
+}
+
+void FeatureSnapInteraction::setSnap(QList<Feature*> aSnapList)
+{
+    StackSnap = aSnapList;
+    curStackSnap = 0;
+}
+
+void FeatureSnapInteraction::nextSnap()
+{
+    curStackSnap++;
+    if (curStackSnap > StackSnap.size() -1)
+        curStackSnap = 0;
+    view()->properties()->setSelection(StackSnap[curStackSnap]);
+    view()->update();
+}
+
+void FeatureSnapInteraction::previousSnap()
+{
+    curStackSnap--;
+    if (curStackSnap < 0)
+        curStackSnap = StackSnap.size() -1;
+    view()->properties()->setSelection(StackSnap[curStackSnap]);
+    view()->update();
+}
+
+void FeatureSnapInteraction::setDontSelectPoints(bool b)
+{
+    NoSelectPoints = b;
+}
+
+void FeatureSnapInteraction::setDontSelectRoads(bool b)
+{
+    NoSelectRoads = b;
+}
+
+void FeatureSnapInteraction::setDontSelectVirtual(bool b)
+{
+    NoSelectVirtuals = b;
 }
 
 #ifndef Q_OS_SYMBIAN

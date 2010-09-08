@@ -25,6 +25,8 @@ class EditInteraction :	public FeatureSnapInteraction
         virtual QCursor cursor() const;
 #endif
 
+        virtual bool isIdle() const;
+
     public slots:
         void on_remove_triggered();
         void on_reverse_triggered();

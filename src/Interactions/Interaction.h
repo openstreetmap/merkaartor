@@ -33,37 +33,54 @@ class QPainter;
 class Interaction : public QObject
 {
     Q_OBJECT
-    public:
-        Interaction(MapView* theView);
-        virtual ~Interaction();
+public:
+    Interaction(MapView* theView);
+    virtual ~Interaction();
 
-        virtual void mousePressEvent(QMouseEvent * event);
-        virtual void mouseReleaseEvent(QMouseEvent * event);
-        virtual void mouseMoveEvent(QMouseEvent* event);
-        virtual void mouseDoubleClickEvent(QMouseEvent* event);
-        virtual void wheelEvent(QWheelEvent* ev);
+    virtual void mousePressEvent(QMouseEvent * event);
+    virtual void mouseReleaseEvent(QMouseEvent * event);
+    virtual void mouseMoveEvent(QMouseEvent* event);
+    virtual void mouseDoubleClickEvent(QMouseEvent* event);
+    virtual void wheelEvent(QWheelEvent* ev);
 
-        virtual void paintEvent(QPaintEvent* anEvent, QPainter& thePainter);
-        virtual QString toHtml() = 0;
+    virtual void paintEvent(QPaintEvent* anEvent, QPainter& thePainter);
+    virtual QString toHtml() = 0;
 
-        MapView* view();
-        Document* document();
-        MainWindow* main();
-        const Projection& projection() const;
-        const QTransform& transform() const;
-        bool panning() const;
-    protected:
-        MapView* theView;
-        bool Panning;
-        QPoint FirstPan;
-        QPoint LastPan;
-    signals:
-        void requestCustomContextMenu(const QPoint & pos);
+    MapView* view();
+    Document* document();
+    MainWindow* main();
+    const Projection& projection() const;
+    const QTransform& transform() const;
+    bool panning() const;
 
-    protected:
-        bool Dragging;
-        Coord StartDrag;
-        Coord EndDrag;
+    void updateSnap(QMouseEvent* event);
+    Feature* lastSnap();
+
+protected:
+    MapView* theView;
+    bool Panning;
+    QPoint FirstPan;
+    QPoint LastPan;
+
+    Feature* LastSnap;
+    QList<Feature*> NoSnap;
+    bool SnapActive;
+    bool NoSelectPoints;
+    bool NoSelectWays;
+    bool NoSelectRoads;
+    bool NoSelectVirtuals;
+
+    QList<Feature*> StackSnap;
+    QList<Feature*> SnapList;
+    int curStackSnap;
+
+signals:
+    void requestCustomContextMenu(const QPoint & pos);
+
+protected:
+    bool Dragging;
+    Coord StartDrag;
+    Coord EndDrag;
 };
 
 class FeatureSnapInteraction : public Interaction
@@ -103,24 +120,11 @@ public:
 #endif
 
 private:
-    void updateSnap(QMouseEvent* event);
-
-    QList<Feature*> NoSnap;
-    bool SnapActive;
-    bool NoSelectPoints;
-    bool NoSelectWays;
-    bool NoSelectRoads;
-    bool NoSelectVirtuals;
-
     QCursor handCursor;
     QCursor grabCursor;
     QCursor defaultCursor;
 
 protected:
-    Feature* LastSnap;
-    QList<Feature*> StackSnap;
-    QList<Feature*> SnapList;
-    int curStackSnap;
 };
 
 #endif

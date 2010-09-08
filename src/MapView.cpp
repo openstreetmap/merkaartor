@@ -12,6 +12,7 @@
 #include "Interaction.h"
 #include "EditInteraction.h"
 #include "CreateSingleWayInteraction.h"
+#include "CreateNodeInteraction.h"
 #include "PaintStyle/MasPaintStyle.h"
 #include "Maps/Projection.h"
 #include "GPS/qgps.h"
@@ -81,14 +82,18 @@ MapView::MapView(QWidget* parent) :
     setAcceptDrops(true);
 #endif
 
-    MoveRight = new QShortcut(QKeySequence(Qt::Key_Right), this);
-    connect(MoveRight, SIGNAL(activated()), this, SLOT(on_MoveRight_activated()));
-    MoveLeft = new QShortcut(QKeySequence(Qt::Key_Left), this);
-    connect(MoveLeft, SIGNAL(activated()), this, SLOT(on_MoveLeft_activated()));
-    MoveUp = new QShortcut(QKeySequence(Qt::Key_Up), this);
-    connect(MoveUp, SIGNAL(activated()), this, SLOT(on_MoveUp_activated()));
-    MoveDown = new QShortcut(QKeySequence(Qt::Key_Down), this);
-    connect(MoveDown, SIGNAL(activated()), this, SLOT(on_MoveDown_activated()));
+    MoveRightShortcut = new QShortcut(QKeySequence(Qt::Key_Right), this);
+    connect(MoveRightShortcut, SIGNAL(activated()), this, SLOT(on_MoveRight_activated()));
+    MoveLeftShortcut = new QShortcut(QKeySequence(Qt::Key_Left), this);
+    connect(MoveLeftShortcut, SIGNAL(activated()), this, SLOT(on_MoveLeft_activated()));
+    MoveUpShortcut = new QShortcut(QKeySequence(Qt::Key_Up), this);
+    connect(MoveUpShortcut, SIGNAL(activated()), this, SLOT(on_MoveUp_activated()));
+    MoveDownShortcut = new QShortcut(QKeySequence(Qt::Key_Down), this);
+    connect(MoveDownShortcut, SIGNAL(activated()), this, SLOT(on_MoveDown_activated()));
+    ZoomInShortcut = new QShortcut(QKeySequence(Qt::Key_PageUp), this);
+    connect(ZoomInShortcut, SIGNAL(activated()), this, SLOT(on_ZoomIn_activated()));
+    ZoomOutShortcut = new QShortcut(QKeySequence(Qt::Key_PageDown), this);
+    connect(ZoomOutShortcut, SIGNAL(activated()), this, SLOT(on_ZoomOut_activated()));
 }
 
 MapView::~MapView()
@@ -589,19 +594,22 @@ void MapView::mousePressEvent(QMouseEvent* event)
         return;
 
     if (theInteraction) {
+        theInteraction->updateSnap(event);
         if (Main)
             Main->info()->setHtml(theInteraction->toHtml());
         theInteraction->mousePressEvent(event);
     }
 }
 
-void MapView::mouseReleaseEvent(QMouseEvent* event)
+void MapView::mouseReleaseEvent(QMouseEvent* anEvent)
 {
     if (!document())
         return;
 
-    if (theInteraction)
-        theInteraction->mouseReleaseEvent(event);
+    if (theInteraction) {
+        theInteraction->updateSnap(anEvent);
+        theInteraction->mouseReleaseEvent(anEvent);
+    }
 }
 
 void MapView::mouseMoveEvent(QMouseEvent* anEvent)
@@ -611,8 +619,11 @@ void MapView::mouseMoveEvent(QMouseEvent* anEvent)
 
     if (!updatesEnabled())
         return;
-    if (theInteraction)
+
+    if (theInteraction) {
+        theInteraction->updateSnap(anEvent);
         theInteraction->mouseMoveEvent(anEvent);
+    }
 }
 
 void MapView::mouseDoubleClickEvent(QMouseEvent* anEvent)
@@ -622,17 +633,36 @@ void MapView::mouseDoubleClickEvent(QMouseEvent* anEvent)
 
     if (!updatesEnabled())
         return;
-    if (theInteraction)
-        theInteraction->mouseDoubleClickEvent(anEvent);
+
+    if (theInteraction) {
+        theInteraction->updateSnap(anEvent);
+
+        Node* N = CAST_NODE(theInteraction->lastSnap());
+        if (!theInteraction->lastSnap() || !N)
+            CreateNodeInteraction::createNode(XY_TO_COORD(anEvent->pos()), theInteraction->lastSnap());
+        else if (N) {
+            EditInteraction* EI = dynamic_cast<EditInteraction*>(theInteraction);
+            if (EI || EI->isIdle())  {
+                CreateSingleWayInteraction* CI = new CreateSingleWayInteraction(main(), this, N, false);
+                N->invalidatePainter();
+                launch(CI);
+                main()->info()->setHtml(interaction()->toHtml());
+                setCursor(CI->cursor());
+                update();
+                return;
+            }
+        }
+    }
 }
 
-void MapView::wheelEvent(QWheelEvent* ev)
+void MapView::wheelEvent(QWheelEvent* anEvent)
 {
     if (!document())
         return;
 
-    if (theInteraction)
-        theInteraction->wheelEvent(ev);
+    if (theInteraction) {
+        theInteraction->wheelEvent(anEvent);
+    }
 }
 
 void MapView::launch(Interaction* anInteraction)
@@ -956,6 +986,18 @@ void MapView::on_MoveDown_activated()
     invalidate(true, true);
 }
 
+void MapView::on_ZoomIn_activated()
+{
+    zoom(M_PREFS->getZoomIn()/100., rect().center());
+    invalidate(true, true);
+}
+
+void MapView::on_ZoomOut_activated()
+{
+    zoom(M_PREFS->getZoomOut()/100., rect().center());
+    invalidate(true, true);
+}
+
 bool MapView::event(QEvent *event)
 {
     switch (event->type()) {
@@ -1002,7 +1044,8 @@ bool MapView::event(QEvent *event)
                 }
                 return true;
 
-            case Qt::Key_O: {
+            case Qt::Key_O:
+                {
                     CreateSingleWayInteraction* intr = dynamic_cast<CreateSingleWayInteraction*>(interaction());
                     if (!intr)
                         return false;
@@ -1014,7 +1057,8 @@ bool MapView::event(QEvent *event)
                     return true;
                 }
 
-            case Qt::Key_H: {
+            case Qt::Key_H:
+                {
                     CreateSingleWayInteraction* intr = dynamic_cast<CreateSingleWayInteraction*>(interaction());
                     if (!intr)
                         return false;
