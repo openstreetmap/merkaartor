@@ -534,7 +534,7 @@ int createJunction(Document* theDocument, CommandList* theList, PropertiesDock* 
     return Way::createJunction(theDocument, theList, R1, R2, doIt);
 }
 
-#define STREET_NUMBERS_LENGTH 1500.0
+#define STREET_NUMBERS_LENGTH .0000629
 #define STREET_NUMBERS_ANGLE 30.0
 
 void createStreetNumbers(Document* theDocument, CommandList* theList, Way* theRoad, bool Left)
