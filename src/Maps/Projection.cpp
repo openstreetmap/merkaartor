@@ -51,8 +51,13 @@ public:
 
     QPointF mercatorProject(const Coord& c) const
     {
-        double x = coordToAng(c.lon()) / 180. * EQUATORIALMETERHALFCIRCUMFERENCE;
-        double y = log(tan(coordToRad(c.lat())) + 1/cos(coordToRad(c.lat()))) / M_PI * (EQUATORIALMETERHALFCIRCUMFERENCE);
+        return mercatorProject(QPointF(coordToAng(c.lon()), coordToAng(c.lat())));
+    }
+
+    QPointF mercatorProject(const QPointF& c) const
+    {
+        double x = coordToAng(c.x()) / 180. * EQUATORIALMETERHALFCIRCUMFERENCE;
+        double y = log(tan(coordToRad(c.y())) + 1/cos(coordToRad(c.y()))) / M_PI * (EQUATORIALMETERHALFCIRCUMFERENCE);
 
         return QPointF(x, y);
     }
@@ -67,7 +72,12 @@ public:
 
     inline QPointF latlonProject(const Coord& c) const
     {
-        return QPointF(coordToAng(c.lon())*EQUATORIALMETERPERDEGREE, coordToAng(c.lat())*EQUATORIALMETERPERDEGREE);
+        return latlonProject(QPointF(coordToAng(c.lon()), coordToAng(c.lat())));
+    }
+
+    inline QPointF latlonProject(const QPointF& c) const
+    {
+        return QPointF(coordToAng(c.x())*EQUATORIALMETERPERDEGREE, coordToAng(c.y())*EQUATORIALMETERPERDEGREE);
     }
 
     inline Coord latlonInverse(const QPointF& point) const
@@ -122,6 +132,19 @@ QPointF Projection::project(const Coord & Map) const
 #endif
 }
 
+QPointF Projection::project(const QPointF & Map) const
+{
+    if (p->IsMercator)
+        return p->mercatorProject(Map);
+    else
+    if (p->IsLatLong)
+        return p->latlonProject(Map);
+#ifndef _MOBILE
+    else
+        return projProject(Map);
+#endif
+}
+
 #ifndef _MOBILE
 QPointF Projection::project(Node* aNode) const
 {
@@ -143,6 +166,20 @@ QPointF Projection::project(Node* aNode) const
     return pt;
 }
 #endif
+
+QLineF Projection::project(const QLineF & Map) const
+{
+    if (p->IsMercator)
+        return QLineF(p->mercatorProject(Map.p1()), p->mercatorProject(Map.p2()));
+    else
+    if (p->IsLatLong)
+        return QLineF(p->latlonProject(Map.p1()), p->latlonProject(Map.p2()));
+#ifndef _MOBILE
+    else
+        return QLineF(projProject(Map.p1()), projProject(Map.p2()));
+#endif
+}
+
 
 Coord Projection::inverse(const QPointF & Screen) const
 {
@@ -190,18 +227,23 @@ void Projection::projTransformToWGS84(long point_count, int point_offset, double
 
 QPointF Projection::projProject(const Coord & Map) const
 {
+    return projProject(QPointF(coordToAng(Map.lon()), coordToAng(Map.lat())));
+}
+
+QPointF Projection::projProject(const QPointF & Map) const
+{
 #ifdef USE_PROJ
     projUV in;
 
-    in.u = angToRad(Map.lon());
-    in.v = angToRad(Map.lat());
+    in.u = angToRad(Map.x());
+    in.v = angToRad(Map.y());
 
     projUV out = pj_fwd(in, theProj);
 
     return QPointF(out.u, out.v);
 #else
     try {
-        point_ll_deg in(longitude<>(coordToAng(Map.lon())), latitude<>(coordToAng(Map.lat())));
+        point_ll_deg in(longitude<>(Map.x()), latitude<>(Map.lat()));
         point_2d out;
 
         theProj->forward(in, out);

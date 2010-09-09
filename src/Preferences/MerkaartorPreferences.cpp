@@ -32,6 +32,7 @@
 #endif
     bool g_Merk_Frisius = true;
     bool g_Merk_NoGuardedTagsImport = false;
+    bool g_Merk_Segment_Mode = false;
     MainWindow* g_Merk_MainWindow = NULL;
 
 

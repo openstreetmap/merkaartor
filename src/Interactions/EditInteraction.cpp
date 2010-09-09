@@ -53,9 +53,9 @@ QString EditInteraction::toHtml()
 {
     QString help;
     if (!M_PREFS->getMouseSingleButton())
-        help = (MainWindow::tr("LEFT-CLICK to select;RIGHT-CLICK to pan;CTRL-LEFT-CLICK to toggle selection;SHIFT-LEFT-CLICK to add to selection;LEFT-DRAG for area selection;CTRL-RIGHT-DRAG for zoom;"));
+        help = (MainWindow::tr("LEFT-CLICK to select;RIGHT-CLICK to pan;CTRL-LEFT-CLICK to toggle selection;SHIFT-LEFT-CLICK to add to selection;LEFT-DRAG for area selection;CTRL-RIGHT-DRAG for zoom;DOUBLE-CLICK to create a node;DOUBLE-CLICK on a node to start a way;"));
     else
-        help = (MainWindow::tr("CLICK to select/move;CTRL-CLICK to toggle selection;SHIFT-CLICK to add to selection;SHIFT-DRAG for area selection;CTRL-DRAG for zoom;"));
+        help = (MainWindow::tr("CLICK to select/move;CTRL-CLICK to toggle selection;SHIFT-CLICK to add to selection;SHIFT-DRAG for area selection;CTRL-DRAG for zoom;DOUBLE-CLICK to create a node;DOUBLE-CLICK on a node to start a way;"));
 
     QStringList helpList = help.split(";");
 
@@ -105,6 +105,11 @@ static bool modifiersForDrag(Qt::KeyboardModifiers modifiers)
         return true;
 }
 
+static bool modifiersForSegmentSelect(Qt::KeyboardModifiers modifiers)
+{
+    return modifiers.testFlag(Qt::AltModifier);
+}
+
 static bool modifiersForGreedyAdd(Qt::KeyboardModifiers modifiers)
 {
     // whether drag select should include intersected as well as contained features
@@ -118,6 +123,7 @@ static bool modifiersForGreedyAdd(Qt::KeyboardModifiers modifiers)
 
 void EditInteraction::snapMousePressEvent(QMouseEvent * ev, Feature* aLast)
 {
+    g_Merk_Segment_Mode = false;
     Qt::KeyboardModifiers modifiers = ev->modifiers();
     if (!view()->isSelectionLocked()) {
         if (modifiers) {
@@ -126,6 +132,11 @@ void EditInteraction::snapMousePressEvent(QMouseEvent * ev, Feature* aLast)
 
             if (modifiersForAdd(modifiers) && aLast)
                 view()->properties()->addSelection(aLast);
+
+            if (modifiersForSegmentSelect(modifiers) && aLast) {
+                g_Merk_Segment_Mode = true;
+                view()->properties()->setSelection(aLast);
+            }
         } else {
             StackSnap = SnapList;
 //				if (aLast)
@@ -233,7 +244,11 @@ void EditInteraction::snapMouseReleaseEvent(QMouseEvent * ev , Feature* aLast)
 
 void EditInteraction::snapMouseMoveEvent(QMouseEvent* anEvent, Feature* aLast)
 {
-    Q_UNUSED(anEvent);
+    if (modifiersForSegmentSelect(anEvent->modifiers()) && aLast)
+        g_Merk_Segment_Mode = true;
+    else
+        g_Merk_Segment_Mode = false;
+
     if (currentMode == MoveMode) {
         theMoveInteraction->snapMouseMoveEvent(anEvent, aLast);
     }

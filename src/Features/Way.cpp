@@ -35,6 +35,7 @@ class WayPrivate
             , IsCoastline(false), Area(0), Distance(0)
             , wasPathComplete(false), VirtualsUptodate(false)
             , ProjectionRevision(0)
+            , BestSegment(-1)
         {
         }
         Way* theWay;
@@ -57,6 +58,7 @@ class WayPrivate
 #ifndef _MOBILE
         int ProjectionRevision;
 #endif
+        int BestSegment;
 
         void updateSmoothed(bool DoSmooth);
         void addSmoothedBezier(int i, int j, int k, int l);
@@ -468,11 +470,12 @@ void Way::draw(QPainter& P, MapView* theView)
 void Way::drawSpecial(QPainter& thePainter, QPen& Pen, MapView* theView)
 {
     thePainter.setPen(Pen);
-    thePainter.drawPath(theView->transform().map(p->thePath));
-
-    QPolygonF Pl;
-    buildPolygonFromRoad(this,theView->projection(),Pl);
-    thePainter.drawPoints(theView->transform().map(Pl));
+    if (!g_Merk_Segment_Mode) {
+        thePainter.drawPath(theView->transform().map(p->thePath));
+    } else {
+        if (p->BestSegment != -1)
+            thePainter.drawLine(theView->transform().map(theView->projection().project(getSegment(p->BestSegment))));
+    }
 }
 
 void Way::drawParentsSpecial(QPainter& thePainter, QPen& Pen, MapView* theView)
@@ -496,7 +499,14 @@ void Way::drawChildrenSpecial(QPainter& thePainter, QPen& Pen, MapView *theView,
     thePainter.setPen(TP);
 
     QPolygonF Pl;
-    buildPolygonFromRoad(this,theView->projection(),Pl);
+    if (!g_Merk_Segment_Mode)
+        buildPolygonFromRoad(this,theView->projection(),Pl);
+    else {
+        if (p->BestSegment != -1)
+            for (int i=p->BestSegment; i<=p->BestSegment+1; ++i)
+                if (getNode(i)->isVisible() && !getNode(i)->isVirtual())
+                    Pl.append(theView->projection().project(getNode(i)));
+    }
     thePainter.drawPoints(theView->transform().map(Pl));
 }
 
@@ -504,6 +514,8 @@ void Way::drawChildrenSpecial(QPainter& thePainter, QPen& Pen, MapView *theView,
 double Way::pixelDistance(const QPointF& Target, double ClearEndDistance, bool selectNodes, MapView* theView) const
 {
     double Best = 1000000;
+    p->BestSegment = -1;
+
     if (selectNodes) {
         for (unsigned int i=0; i<p->Nodes.size(); ++i)
         {
@@ -527,13 +539,15 @@ double Way::pixelDistance(const QPointF& Target, double ClearEndDistance, bool s
                 Best = D;
         }
     else
-        for (unsigned int i=1; i<p->Nodes.size(); ++i)
+        for (unsigned int i=0; i<p->Nodes.size()-1; ++i)
         {
-            if (p->Nodes.at(i) && p->Nodes.at(i-1)) {
-                LineF F(theView->toView(p->Nodes.at(i-1)),theView->toView(p->Nodes.at(i)));
+            if (p->Nodes.at(i) && p->Nodes.at(i+1)) {
+                LineF F(theView->toView(p->Nodes.at(i)),theView->toView(p->Nodes.at(i+1)));
                 double D = F.capDistance(Target);
-                if (D < ClearEndDistance)
+                if (D < ClearEndDistance) {
                     Best = D;
+                    p->BestSegment = i;
+                }
             }
         }
     return Best;
@@ -1172,4 +1186,19 @@ int Way::createJunction(Document* theDocument, CommandList* theList, Way* R1, Wa
     }
 
     return numInter;
+}
+
+int Way::segmentCount()
+{
+    return p->Nodes.size()-1;
+}
+
+QLineF Way::getSegment(int i)
+{
+    return QLineF(p->Nodes[i]->position().toQPointF(), p->Nodes[i+1]->position().toQPointF());
+}
+
+int Way::bestSegment()
+{
+    return p->BestSegment;
 }

@@ -60,6 +60,10 @@ class Way : public Feature
         const std::vector<NodePtr>& getNodes() const;
         const std::vector<NodePtr>& getVirtuals() const;
 
+        int segmentCount();
+        QLineF getSegment(int i);
+        int bestSegment();
+
         bool isNodeAtEnd(Node* node);
 
         /** Set the tag "key=value" to the current object

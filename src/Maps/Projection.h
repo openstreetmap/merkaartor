@@ -33,6 +33,8 @@ class Projection
 
         double latAnglePerM() const;
         double lonAnglePerM(double Lat) const;
+        QLineF project(const QLineF & Map) const;
+        QPointF project(const QPointF& Map) const;
         QPointF project(const Coord& Map) const;
         Coord inverse(const QPointF& Screen) const;
 
@@ -61,6 +63,7 @@ class Projection
 #ifndef _MOBILE
         ProjProjection theProj;
         QPointF projProject(const Coord& Map) const;
+        QPointF projProject(const QPointF& Map) const;
         Coord projInverse(const QPointF& Screen) const;
 #endif
 
