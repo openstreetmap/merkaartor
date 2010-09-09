@@ -1,6 +1,5 @@
 v0.17
-    * ADD : Clicking in edit mode in a clear area switch to way creation mode (Potlach style)
-    * ADD : Double-click in a clear area in edit mode creates a node (Potlach Style)
+    * ADD : Double-click creates a node; Double-clicking a node starts a new way
     * ADD : Hardcoded PgUp/PgDown for Zoom in/Zoom out (Potlach style)
     * ADD : Snap to angle functionality when creating way: keeping "o" pressed snap to 45° angles, "h" snap to 30° angles
     * ADD : Ability to enter and select multiple OSM servers in preferences (closes #3107)
