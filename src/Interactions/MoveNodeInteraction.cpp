@@ -96,10 +96,17 @@ void MoveNodeInteraction::snapMousePressEvent(QMouseEvent * event, Feature* aLas
                 StartDragPosition = Pt->position();
         }
         else if (Way* R = CAST_WAY(sel[i])) {
-            for (int j=0; j<R->size(); ++j)
-                if (std::find(Moving.begin(),Moving.end(),R->get(j)) == Moving.end()) {
-                    Moving.push_back(R->getNode(j));
-                }
+            if (!g_Merk_Segment_Mode) {
+                for (int j=0; j<R->size(); ++j)
+                    if (std::find(Moving.begin(),Moving.end(),R->get(j)) == Moving.end()) {
+                        Moving.push_back(R->getNode(j));
+                    }
+            } else {
+                for (int j=R->bestSegment(); j<=R->bestSegment()+1; ++j)
+                    if (std::find(Moving.begin(),Moving.end(),R->get(j)) == Moving.end()) {
+                        Moving.push_back(R->getNode(j));
+                    }
+            }
             addToNoSnap(R);
         }
         else if (Relation* L = CAST_RELATION(sel[i])) {

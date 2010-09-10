@@ -470,12 +470,10 @@ void Way::draw(QPainter& P, MapView* theView)
 void Way::drawSpecial(QPainter& thePainter, QPen& Pen, MapView* theView)
 {
     thePainter.setPen(Pen);
-    if (!g_Merk_Segment_Mode) {
+    if (p->BestSegment != -1)
+        thePainter.drawLine(theView->transform().map(theView->projection().project(getSegment(p->BestSegment))));
+    else
         thePainter.drawPath(theView->transform().map(p->thePath));
-    } else {
-        if (p->BestSegment != -1)
-            thePainter.drawLine(theView->transform().map(theView->projection().project(getSegment(p->BestSegment))));
-    }
 }
 
 void Way::drawParentsSpecial(QPainter& thePainter, QPen& Pen, MapView* theView)
@@ -499,14 +497,13 @@ void Way::drawChildrenSpecial(QPainter& thePainter, QPen& Pen, MapView *theView,
     thePainter.setPen(TP);
 
     QPolygonF Pl;
-    if (!g_Merk_Segment_Mode)
+    if (p->BestSegment != -1) {
+        for (int i=p->BestSegment; i<=p->BestSegment+1; ++i)
+            if (getNode(i)->isVisible() && !getNode(i)->isVirtual())
+                Pl.append(theView->projection().project(getNode(i)));
+    } else
         buildPolygonFromRoad(this,theView->projection(),Pl);
-    else {
-        if (p->BestSegment != -1)
-            for (int i=p->BestSegment; i<=p->BestSegment+1; ++i)
-                if (getNode(i)->isVisible() && !getNode(i)->isVirtual())
-                    Pl.append(theView->projection().project(getNode(i)));
-    }
+
     thePainter.drawPoints(theView->transform().map(Pl));
 }
 
@@ -546,7 +543,8 @@ double Way::pixelDistance(const QPointF& Target, double ClearEndDistance, bool s
                 double D = F.capDistance(Target);
                 if (D < ClearEndDistance) {
                     Best = D;
-                    p->BestSegment = i;
+                    if (g_Merk_Segment_Mode)
+                        p->BestSegment = i;
                 }
             }
         }

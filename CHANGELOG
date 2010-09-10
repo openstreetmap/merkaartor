@@ -1,4 +1,5 @@
 v0.17
+    * ADD : Way segments: Keeping ALT depressed allows to move way segment
     * ADD : Double-click creates a node; Double-clicking a node starts a new way
     * ADD : Hardcoded PgUp/PgDown for Zoom in/Zoom out (Potlach style)
     * ADD : Snap to angle functionality when creating way: keeping "o" pressed snap to 45° angles, "h" snap to 30° angles

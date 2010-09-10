@@ -244,7 +244,7 @@ void EditInteraction::snapMouseReleaseEvent(QMouseEvent * ev , Feature* aLast)
 
 void EditInteraction::snapMouseMoveEvent(QMouseEvent* anEvent, Feature* aLast)
 {
-    if (modifiersForSegmentSelect(anEvent->modifiers()) && aLast)
+    if (modifiersForSegmentSelect(anEvent->modifiers()))
         g_Merk_Segment_Mode = true;
     else
         g_Merk_Segment_Mode = false;
