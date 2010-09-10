@@ -636,22 +636,7 @@ void MapView::mouseDoubleClickEvent(QMouseEvent* anEvent)
 
     if (theInteraction) {
         theInteraction->updateSnap(anEvent);
-
-        Node* N = CAST_NODE(theInteraction->lastSnap());
-        if (!theInteraction->lastSnap() || !N)
-            CreateNodeInteraction::createNode(XY_TO_COORD(anEvent->pos()), theInteraction->lastSnap());
-        else if (N) {
-            EditInteraction* EI = dynamic_cast<EditInteraction*>(theInteraction);
-            if (EI || EI->isIdle())  {
-                CreateSingleWayInteraction* CI = new CreateSingleWayInteraction(main(), this, N, false);
-                N->invalidatePainter();
-                launch(CI);
-                main()->info()->setHtml(interaction()->toHtml());
-                setCursor(CI->cursor());
-                update();
-                return;
-            }
-        }
+        theInteraction->mouseDoubleClickEvent(anEvent);
     }
 }
 

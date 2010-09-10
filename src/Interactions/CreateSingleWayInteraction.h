@@ -19,6 +19,7 @@ class CreateSingleWayInteraction : public FeatureSnapInteraction
         virtual void snapMousePressEvent(QMouseEvent * event, Feature* aLast);
         virtual void snapMouseReleaseEvent(QMouseEvent * event, Feature* aLast);
         virtual void snapMouseMoveEvent(QMouseEvent* event, Feature* aLast);
+        virtual void snapMouseDoubleClickEvent(QMouseEvent* , Feature*);
         virtual void paintEvent(QPaintEvent* anEvent, QPainter& thePainter);
         virtual QString toHtml();
 #ifndef Q_OS_SYMBIAN

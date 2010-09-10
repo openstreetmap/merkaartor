@@ -1,4 +1,5 @@
 #include "CreateSingleWayInteraction.h"
+#include "CreateNodeInteraction.h"
 #include "DocumentCommands.h"
 #include "WayCommands.h"
 #include "NodeCommands.h"
@@ -69,6 +70,7 @@ void CreateSingleWayInteraction::paintEvent(QPaintEvent* anEvent, QPainter& theP
     if (theRoad && (!theRoad->layer() || theRoad->isDeleted())) { // The road was begon and then undoed. Restarting....
         HaveFirst = false;
         theRoad = NULL;
+        Creating = false;
     }
 
     if (HaveFirst)
@@ -131,6 +133,7 @@ void CreateSingleWayInteraction::snapMouseReleaseEvent(QMouseEvent* anEvent, Fea
     if (M_PREFS->getMouseSingleButton() && anEvent->button() == Qt::RightButton) {
         HaveFirst = false;
         theRoad = NULL;
+        Creating = false;
     } else
     if ( Creating && !panning() )
     {
@@ -227,6 +230,16 @@ void CreateSingleWayInteraction::snapMouseReleaseEvent(QMouseEvent* anEvent, Fea
     }
     Creating = false;
     LastCursor = anEvent->pos();
+}
+
+void CreateSingleWayInteraction::snapMouseDoubleClickEvent(QMouseEvent* anEvent, Feature*)
+{
+    HaveFirst = false;
+    theRoad = NULL;
+    Creating = false;
+
+    if ((lastSnap() && lastSnap()->getType() == IFeature::LineString) || !lastSnap())
+        CreateNodeInteraction::createNode(XY_TO_COORD(anEvent->pos()), lastSnap());
 }
 
 #ifndef Q_OS_SYMBIAN
