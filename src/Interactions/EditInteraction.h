@@ -36,10 +36,6 @@ class EditInteraction :	public FeatureSnapInteraction
         Coord StartDrag;
         Coord EndDrag;
 
-        EditModeEnum currentMode;
-
-        MoveNodeInteraction* theMoveInteraction;
-        QCursor moveCursor;
         QCursor defaultCursor;
 };
 

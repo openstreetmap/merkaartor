@@ -333,6 +333,7 @@ public:
     /* Mouse bevaviour */
     M_PARAM_DECLARE_BOOL(MouseSingleButton)
     M_PARAM_DECLARE_BOOL(SeparateMoveMode)
+    M_PARAM_DECLARE_BOOL(SelectModeCreation)
 
     // Geotag
     M_PARAM_DECLARE_INT(MaxGeoPicWidth)

@@ -23,10 +23,7 @@
 
 EditInteraction::EditInteraction(MapView* theView)
 : FeatureSnapInteraction(theView), Dragging(false), StartDrag(0,0), EndDrag(0,0)
-    , currentMode(EditMode)
-    , theMoveInteraction(0)
 {
-    moveCursor = QCursor(QPixmap(":/Icons/move.xpm"));
     defaultCursor = QCursor(Qt::ArrowCursor);
 
     connect(main(),SIGNAL(remove_triggered()),this,SLOT(on_remove_triggered()));
@@ -35,7 +32,6 @@ EditInteraction::EditInteraction(MapView* theView)
 
     if (!M_PREFS->getSeparateMoveMode()) {
         setDontSelectVirtual(false);
-        theMoveInteraction = new MoveNodeInteraction(theView);
     }
 }
 
@@ -46,7 +42,6 @@ EditInteraction::~EditInteraction(void)
         main()->ui->editRemoveAction->setEnabled(false);
         main()->ui->editReverseAction->setEnabled(false);
     }
-    SAFE_DELETE(theMoveInteraction);
 }
 
 QString EditInteraction::toHtml()
@@ -150,16 +145,10 @@ void EditInteraction::snapMousePressEvent(QMouseEvent * ev, Feature* aLast)
         view()->properties()->checkMenuStatus();
         view()->update();
     }
-    if (currentMode == MoveMode) {
-        theMoveInteraction->snapMousePressEvent(ev, aLast);
-    }
 }
 
 bool EditInteraction::isIdle() const
 {
-    if (currentMode == MoveMode)
-        return false;
-
     if (Dragging && !(StartDrag == EndDrag))
         return false;
 
@@ -175,9 +164,6 @@ void EditInteraction::snapMouseReleaseEvent(QMouseEvent * ev , Feature* aLast)
     if (ev->button() != Qt::LeftButton)
         return;
 
-    if (currentMode == MoveMode) {
-        theMoveInteraction->snapMouseReleaseEvent(ev, aLast);
-    } else
     if (Dragging)
     {
         QList<Feature*> List;
@@ -233,9 +219,6 @@ void EditInteraction::snapMouseReleaseEvent(QMouseEvent * ev , Feature* aLast)
     } else {
         if (!panning() && !modifiers) {
             view()->properties()->setSelection(aLast);
-            if (view()->properties()->isSelected(aLast) && !M_PREFS->getSeparateMoveMode()) {
-                currentMode = MoveMode;
-            }
             view()->properties()->checkMenuStatus();
             view()->update();
         }
@@ -249,37 +232,25 @@ void EditInteraction::snapMouseMoveEvent(QMouseEvent* anEvent, Feature* aLast)
     else
         g_Merk_Segment_Mode = false;
 
-    if (currentMode == MoveMode) {
-        theMoveInteraction->snapMouseMoveEvent(anEvent, aLast);
-    }
     if (Dragging)
     {
         EndDrag = XY_TO_COORD(anEvent->pos());
         view()->update();
-    } else
-    if (anEvent->buttons() == Qt::NoButton) {
-        if (aLast && view()->properties()->isSelected(aLast) && !M_PREFS->getSeparateMoveMode())
-        {
-            currentMode = MoveMode;
-        } else
-        {
-            currentMode = EditMode;
-        }
     }
 }
 
 void EditInteraction::snapMouseDoubleClickEvent(QMouseEvent* anEvent, Feature* aLast)
 {
-    Qt::KeyboardModifiers modifiers = anEvent->modifiers();
-    if (!panning() && !modifiers) {
-        if (aLast) {
-            QList<Feature*> theFeatures;
-            theFeatures << aLast;
-            for (int i=0; i<aLast->size(); ++i)
-                theFeatures << aLast->get(i);
-            view()->properties()->setSelection(theFeatures);
-            view()->properties()->checkMenuStatus();
-            view()->update();
+//    Qt::KeyboardModifiers modifiers = anEvent->modifiers();
+//    if (!panning() && !modifiers) {
+//        if (aLast) {
+//            QList<Feature*> theFeatures;
+//            theFeatures << aLast;
+//            for (int i=0; i<aLast->size(); ++i)
+//                theFeatures << aLast->get(i);
+//            view()->properties()->setSelection(theFeatures);
+//            view()->properties()->checkMenuStatus();
+//            view()->update();
 //        } else {
 //            Node* N = new Node(XY_TO_COORD(anEvent->pos()));
 //            if (M_PREFS->apiVersionNum() < 0.6)
@@ -289,8 +260,8 @@ void EditInteraction::snapMouseDoubleClickEvent(QMouseEvent* anEvent, Feature* a
 //            document()->addHistory(theList);
 //            main()->properties()->setSelection(N);
 //            view()->invalidate(true, false);
-       }
-    }
+//       }
+//    }
 }
 
 void EditInteraction::on_remove_triggered()
@@ -339,9 +310,6 @@ void EditInteraction::on_reverse_triggered()
 #ifndef Q_OS_SYMBIAN
 QCursor EditInteraction::cursor() const
 {
-    if (currentMode == MoveMode)
-        return moveCursor;
-
     if (LastSnap)
         return defaultCursor;
 

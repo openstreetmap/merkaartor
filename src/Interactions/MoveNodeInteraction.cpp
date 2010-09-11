@@ -302,3 +302,11 @@ Coord MoveNodeInteraction::calculateNewPosition(QMouseEvent *event, Feature *aLa
     }
     return TargetC;
 }
+
+bool MoveNodeInteraction::isIdle()
+{
+    if (Moving.size() && !panning())
+        return false;
+
+    return true;
+}

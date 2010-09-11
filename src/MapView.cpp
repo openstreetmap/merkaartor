@@ -13,6 +13,7 @@
 #include "EditInteraction.h"
 #include "CreateSingleWayInteraction.h"
 #include "CreateNodeInteraction.h"
+#include "MoveNodeInteraction.h"
 #include "PaintStyle/MasPaintStyle.h"
 #include "Maps/Projection.h"
 #include "GPS/qgps.h"
@@ -622,6 +623,31 @@ void MapView::mouseMoveEvent(QMouseEvent* anEvent)
 
     if (theInteraction) {
         theInteraction->updateSnap(anEvent);
+
+        if (!M_PREFS->getSeparateMoveMode()) {
+            EditInteraction* EI = dynamic_cast<EditInteraction*>(theInteraction);
+            if (EI && EI->isIdle()) {
+                if (EI->lastSnap() && Main->properties()->isSelected(EI->lastSnap())) {
+                    MoveNodeInteraction* MI = new MoveNodeInteraction(this);
+                    launch(MI);
+                    main()->info()->setHtml(interaction()->toHtml());
+                    setCursor(MI->cursor());
+                    update();
+                    return;
+                }
+            }
+            MoveNodeInteraction* MI = dynamic_cast<MoveNodeInteraction*>(theInteraction);
+            if (MI && !MI->lastSnap() && MI->isIdle()) {
+                EditInteraction* EI = new EditInteraction(this);
+                launch(EI);
+                main()->info()->setHtml(interaction()->toHtml());
+                setCursor(EI->cursor());
+                update();
+                return;
+            }
+
+        }
+
         theInteraction->mouseMoveEvent(anEvent);
     }
 }
@@ -636,6 +662,28 @@ void MapView::mouseDoubleClickEvent(QMouseEvent* anEvent)
 
     if (theInteraction) {
         theInteraction->updateSnap(anEvent);
+
+        if (M_PREFS->getSelectModeCreation()) {
+            MoveNodeInteraction* MI = NULL;
+            if (!M_PREFS->getSeparateMoveMode()) {
+                MI = dynamic_cast<MoveNodeInteraction*>(theInteraction);
+            }
+            EditInteraction* EI = dynamic_cast<EditInteraction*>(theInteraction);
+            if ((EI && EI->isIdle()) || (MI && MI->isIdle())) {
+                if ((theInteraction->lastSnap() && theInteraction->lastSnap()->getType() == IFeature::LineString) || !theInteraction->lastSnap())
+                    CreateNodeInteraction::createNode(XY_TO_COORD(anEvent->pos()), theInteraction->lastSnap());
+                else if (theInteraction->lastSnap() && theInteraction->lastSnap()->getType() == IFeature::Point) {
+                    Node* N = CAST_NODE(theInteraction->lastSnap());
+                    CreateSingleWayInteraction* CI = new CreateSingleWayInteraction(main(), this, N, false);
+                    N->invalidatePainter();
+                    launch(CI);
+                    main()->info()->setHtml(interaction()->toHtml());
+                    setCursor(CI->cursor());
+                    update();
+                    return;
+                }
+            }
+        }
         theInteraction->mouseDoubleClickEvent(anEvent);
     }
 }

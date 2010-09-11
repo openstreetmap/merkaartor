@@ -1344,6 +1344,7 @@ M_PARAM_IMPLEMENT_STRING(OpenStreetBugsUrl, data, "http://openstreetbugs.schokok
     M_PARAM_IMPLEMENT_BOOL(MouseSingleButton, Mouse, false)
 #endif
 M_PARAM_IMPLEMENT_BOOL(SeparateMoveMode, Mouse, true)
+M_PARAM_IMPLEMENT_BOOL(SelectModeCreation, Mouse, false)
 
 // Geotag
 M_PARAM_IMPLEMENT_INT(MaxGeoPicWidth, geotag, 160)

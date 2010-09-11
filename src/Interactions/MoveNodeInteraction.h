@@ -22,6 +22,8 @@ class MoveNodeInteraction : public FeatureSnapInteraction
         virtual QCursor cursor() const;
 #endif
 
+        virtual bool isIdle();
+
     private:
         Coord calculateNewPosition(QMouseEvent* event, Feature* aLast, CommandList* theList);
         QList<Node*> Moving;
