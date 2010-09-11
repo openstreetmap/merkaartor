@@ -637,10 +637,8 @@ bool downloadFeatures(MainWindow* Main, const QList<QString>& idList , Document*
     for (int i=0; i<idList.size(); ++i) {
         QString URL = Rcv.getURLToFetchFull(idList[i]);
 
-        QUrl theUrl;
-        theUrl.setHost(osmWebsite);
-        theUrl.setPath(URL);
-        theUrl.setScheme("http");
+        QUrl theUrl(osmWebsite);
+        theUrl.setPath(theUrl.path() + URL);
 
         downloadOSM(Main, theUrl, osmUser, osmPwd, theDocument, theLayer);
     }
