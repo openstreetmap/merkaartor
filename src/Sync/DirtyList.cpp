@@ -407,7 +407,7 @@ bool DirtyListDescriber::eraseRelation(Relation* R)
 DirtyListExecutor::DirtyListExecutor(Document* aDoc, const DirtyListBuild& aFuture, const QString& aWeb, const QString& aUser, const QString& aPwd, int aTasks)
 : DirtyListVisit(aDoc, aFuture, false), Tasks(aTasks), Done(0), Web(aWeb), User(aUser), Pwd(aPwd), theDownloader(0)
 {
-    theDownloader = new Downloader(Web, User, Pwd);
+    theDownloader = new Downloader(User, Pwd);
 }
 
 DirtyListExecutor::~DirtyListExecutor()
@@ -423,7 +423,8 @@ bool DirtyListExecutor::sendRequest(const QString& Method, const QString& URL, c
 
     QMessageBox::StandardButton theChoice = QMessageBox::Retry;
     while (theChoice == QMessageBox::Retry) {
-        if (!theDownloader->request(Method,URL,Data))
+        QUrl theUrl(Web+URL);
+        if (!theDownloader->request(Method,theUrl,Data))
         {
             qDebug() << QString("Upload error: request (%1); Server message is '%2'").arg(theDownloader->resultCode()).arg(theDownloader->resultText());
             if (theDownloader->resultCode() == 401) {

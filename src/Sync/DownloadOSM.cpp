@@ -36,12 +36,10 @@
 
 /* DOWNLOADER */
 
-Downloader::Downloader(const QString& aWeb, const QString& aUser, const QString& aPwd)
+Downloader::Downloader(const QString& aUser, const QString& aPwd)
 : User(aUser), Password(aPwd),
   Id(0),Error(false), AnimatorLabel(0), AnimatorBar(0), AnimationTimer(0)
 {
-    Web = QUrl(aWeb);
-    Request.setHost(Web.host(),Web.port(80));
     //IdAuth = Request.setUser(User.toUtf8(), Password.toUtf8());
 //	connect(&Request,SIGNAL(done(bool)), this,SLOT(allDone(bool)));
     connect(&Request,SIGNAL(requestFinished(int, bool)),this,SLOT(on_requestFinished(int, bool)));
@@ -169,25 +167,24 @@ QByteArray gzipDecode(const QByteArray& In)
 
 
 
-bool Downloader::go(const QString& url)
+bool Downloader::go(const QUrl& url)
 {
     if (Error) return false;
 
-    qDebug() << "Downloader::go: " << Web << url;
+    Request.setHost(url.host(),url.port(80));
 
     if (AnimationTimer)
         AnimationTimer->start(200);
     Content.clear();
     QBuffer ResponseBuffer(&Content);
     ResponseBuffer.open(QIODevice::WriteOnly);
-    QHttpRequestHeader Header("GET",url);
+    QString sReq = url.toString(QUrl::RemoveScheme | QUrl::RemoveAuthority);
+    qDebug() << "Downloader::go: " << url << sReq;
+    QHttpRequestHeader Header("GET",sReq);
     Header.setValue("Accept-Encoding", "gzip,deflate");
-    if (Web.port(80) == 80)
-        Header.setValue("Host",Web.host());
-    else
-        Header.setValue("Host",Web.host()+':'+Web.port());
+    Header.setValue("Host",url.host()+':'+url.port(80));
     Content.clear();
-    Request.setProxy(M_PREFS->getProxy(Web));
+    Request.setProxy(M_PREFS->getProxy(url));
     Id = Request.request(Header,QByteArray(), &ResponseBuffer);
 
     if (Loop.exec() == QDialog::Rejected)
@@ -218,35 +215,48 @@ bool Downloader::go(const QString& url)
 #ifdef DEBUG_EVERY_CALL
     showDebug("GET", Web.path() + url, QByteArray() ,Content);
 #endif
-    Result = Request.lastResponse().statusCode();
+    SAFE_DELETE(AnimationTimer);
     LocationText = Request.lastResponse().value("Location");
+
+    Result = Request.lastResponse().statusCode();
+    switch (Result) {
+    case 301:
+    case 302:
+    case 307: {
+            qDebug() << "New location: " << LocationText;
+            if (!LocationText.isEmpty()) {
+                QUrl aURL(LocationText);
+                return go(aURL);
+            }
+            break;
+        }
+    }
+
     ResultText = Request.lastResponse().reasonPhrase();
     ErrorText = Request.lastResponse().value("Error");
-    SAFE_DELETE(AnimationTimer);
     return !Error;
 }
 
-bool Downloader::request(const QString& Method, const QString& URL, const QString& Data)
+bool Downloader::request(const QString& Method, const QUrl& url, const QString& Data)
 {
     if (Error) return false;
 
-    qDebug() << "Downloader::request: " << URL;
+    Request.setHost(url.host(),url.port(80));
+    qDebug() << "Downloader::request: " << url;
 
     QByteArray ba(Data.toUtf8());
     QBuffer Buf(&ba);
 
-    QHttpRequestHeader Header(Method,Web.path() + URL);
-    if (Web.port(80) == 80)
-        Header.setValue("Host",Web.host());
-    else
-        Header.setValue("Host",Web.host()+':'+Web.port());
+    QString sReq = url.toString(QUrl::RemoveScheme | QUrl::RemoveAuthority);
+    QHttpRequestHeader Header(Method,sReq);
+    Header.setValue("Host",url.host()+':'+url.port(80));
 
     QString auth = QString("%1:%2").arg(User).arg(Password);
     QByteArray ba_auth = auth.toUtf8().toBase64();
     Header.setValue("Authorization", QString("Basic %1").arg(QString(ba_auth)));
 
     Content.clear();
-    Request.setProxy(M_PREFS->getProxy(Web));
+    Request.setProxy(M_PREFS->getProxy(url));
     Id = Request.request(Header,ba);
 
     if (Loop.exec() == QDialog::Rejected)
@@ -422,10 +432,7 @@ QString Downloader::getURLToTrackPoints()
 
 bool downloadOSM(QWidget* aParent, const QUrl& theUrl, const QString& aUser, const QString& aPassword, Document* theDocument, Layer* theLayer)
 {
-    QString aWeb = theUrl.host();
-    //QString URL = theUrl.path();
-    QString URL = theUrl.toString(QUrl::RemoveScheme | QUrl::RemoveAuthority);
-    Downloader Rcv(theUrl.toString(), aUser, aPassword);
+    Downloader Rcv(aUser, aPassword);
 
     IProgressWindow* aProgressWindow = dynamic_cast<IProgressWindow*>(aParent);
     if (aProgressWindow) {
@@ -449,7 +456,7 @@ bool downloadOSM(QWidget* aParent, const QUrl& theUrl, const QString& aUser, con
 
         Rcv.setAnimator(dlg, Lbl, Bar, true);
     }
-    if (!Rcv.go(URL))
+    if (!Rcv.go(theUrl))
     {
 #ifndef Q_OS_SYMBIAN
         aParent->setCursor(QCursor(Qt::ArrowCursor));
@@ -466,8 +473,8 @@ bool downloadOSM(QWidget* aParent, const QUrl& theUrl, const QString& aUser, con
         break;
     case 301:
     case 302:
-    case 307:
-        aWeb = Rcv.locationText();
+    case 307: {
+        QString aWeb = Rcv.locationText();
         if (!aWeb.isEmpty()) {
             QUrl aURL(aWeb);
             return downloadOSM(aParent, aURL, aUser, aPassword, theDocument, theLayer);
@@ -479,6 +486,7 @@ bool downloadOSM(QWidget* aParent, const QUrl& theUrl, const QString& aUser, con
             return false;
         }
         break;
+    }
     case 401:
         QMessageBox::warning(aParent,QApplication::translate("Downloader","Download failed"),QApplication::translate("Downloader","Username/password invalid"));
         return false;
@@ -489,7 +497,7 @@ bool downloadOSM(QWidget* aParent, const QUrl& theUrl, const QString& aUser, con
         QMessageBox::warning(aParent,QApplication::translate("Downloader","Download failed"), msg);
         return false;
     }
-    Downloader Down(aWeb, aUser, aPassword);
+    Downloader Down(aUser, aPassword);
     bool OK = importOSM(aParent, Rcv.content(), theDocument, theLayer, &Down);
     return OK;
 }
@@ -501,13 +509,11 @@ bool downloadOSM(QWidget* aParent, const QString& aWeb, const QString& aUser, co
         QMessageBox::warning(aParent,QApplication::translate("Downloader","Unresolved conflicts"), QApplication::translate("Downloader","Please resolve existing conflicts first"));
         return false;
     }
-    Downloader Rcv(aWeb, aUser, aPassword);
+    Downloader Rcv(aUser, aPassword);
     QString URL = Rcv.getURLToMap();
     URL = URL.arg(coordToAng(aBox.bottomLeft().lon()), 0, 'f').arg(coordToAng(aBox.bottomLeft().lat()), 0, 'f').arg(coordToAng(aBox.topRight().lon()), 0, 'f').arg(coordToAng(aBox.topRight().lat()), 0, 'f');
 
-    QUrl theUrl(aWeb);
-    theUrl.setPath(theUrl.path() + URL);
-
+    QUrl theUrl(aWeb+URL);
     return downloadOSM(aParent, theUrl, aUser, aPassword, theDocument, theLayer);
 }
 
@@ -532,7 +538,7 @@ bool downloadOSM(QWidget* Main, const QString& aUser, const QString& aPassword, 
 
 bool downloadTracksFromOSM(QWidget* Main, const QString& aWeb, const QString& aUser, const QString& aPassword, const CoordBox& aBox , Document* theDocument)
 {
-    Downloader theDownloader(aWeb, aUser, aPassword);
+    Downloader theDownloader(aUser, aPassword);
     QList<TrackLayer*> theTracklayers;
     //TrackMapLayer* trackLayer = new TrackMapLayer(QApplication::translate("Downloader","Downloaded tracks"));
     //theDocument->add(trackLayer);
@@ -564,7 +570,8 @@ bool downloadTracksFromOSM(QWidget* Main, const QString& aWeb, const QString& aU
                 arg(coordToAng(aBox.topRight().lon())).
                 arg(coordToAng(aBox.topRight().lat())).
                 arg(Page);
-        if (!theDownloader.go(URL))
+        QUrl theUrl(aWeb+URL);
+        if (!theDownloader.go(theUrl))
             return false;
         if (theDownloader.resultCode() != 200)
             return false;
@@ -632,13 +639,11 @@ bool downloadFeatures(MainWindow* Main, const QList<QString>& idList , Document*
         Main->view()->setUpdatesEnabled(false);
 
     bool OK = true;
-    Downloader Rcv(osmWebsite, osmUser, osmPwd);
+    Downloader Rcv(osmUser, osmPwd);
 
     for (int i=0; i<idList.size(); ++i) {
         QString URL = Rcv.getURLToFetchFull(idList[i]);
-
-        QUrl theUrl(osmWebsite);
-        theUrl.setPath(theUrl.path() + URL);
+        QUrl theUrl(osmWebsite+URL);
 
         downloadOSM(Main, theUrl, osmUser, osmPwd, theDocument, theLayer);
     }
@@ -671,7 +676,7 @@ bool downloadOpenstreetbugs(MainWindow* Main, const CoordBox& aBox, Document* th
     if (Main)
         Main->view()->setUpdatesEnabled(false);
 
-    Downloader theDownloader(osbUrl.host(), "", "");
+    Downloader theDownloader("", "");
     QList<TrackLayer*> theTracklayers;
     TrackLayer* trackLayer = new TrackLayer(QApplication::translate("Downloader","OpenStreetBugs"));
     trackLayer->setUploadable(false);
@@ -705,7 +710,7 @@ bool downloadOpenstreetbugs(MainWindow* Main, const CoordBox& aBox, Document* th
     osbUrl.addQueryItem("r", COORD2STRING(coordToAng(aBox.topRight().lon())));
     osbUrl.addQueryItem("open", "yes");
 
-    if (!theDownloader.go(osbUrl.toString()))
+    if (!theDownloader.go(osbUrl))
         return false;
     if (theDownloader.resultCode() != 200)
         return false;

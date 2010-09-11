@@ -36,7 +36,7 @@ DirtyListExecutorOSC::DirtyListExecutorOSC(Document* aDoc, const DirtyListBuild&
 DirtyListExecutorOSC::DirtyListExecutorOSC(Document* aDoc, const DirtyListBuild& aFuture, const QString& aWeb, const QString& aUser, const QString& aPwd, int aTasks)
 : DirtyListVisit(aDoc, aFuture, false), Tasks(aTasks), Done(0), Web(aWeb), User(aUser), Pwd(aPwd), theDownloader(0)
 {
-    theDownloader = new Downloader(Web, User, Pwd);
+    theDownloader = new Downloader(User, Pwd);
 }
 
 DirtyListExecutorOSC::~DirtyListExecutorOSC()
@@ -54,7 +54,8 @@ int DirtyListExecutorOSC::sendRequest(const QString& Method, const QString& URL,
 
     QMessageBox::StandardButton theChoice = QMessageBox::Retry;
     while (theChoice == QMessageBox::Retry) {
-        if (!theDownloader->request(Method,URL,Data))
+        QUrl theUrl(Web+URL);
+        if (!theDownloader->request(Method,theUrl,Data))
         {
             qDebug() << QString("Upload error: request (%1); Server message is '%2'").arg(theDownloader->resultCode()).arg(theDownloader->resultText());
             if (theDownloader->resultCode() == 401) {

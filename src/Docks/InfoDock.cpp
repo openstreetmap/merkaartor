@@ -67,9 +67,10 @@ void InfoDock::on_anchorClicked(const QUrl & link)
     QString osmUser = M_PREFS->getOsmUser();
     QString osmPwd = M_PREFS->getOsmPassword();
 
-    Downloader theDownloader(osmWebsite, osmUser, osmPwd);
+    Downloader theDownloader(osmUser, osmPwd);
+    QUrl theUrl(osmWebsite+link.path());
 
-    if (theDownloader.request("GET", link.path(), data)) {
+    if (theDownloader.request("GET", theUrl, data)) {
         QTextBrowser* b = new QTextBrowser;
         QString s = QString::fromUtf8(theDownloader.content().constData());
         b->setPlainText(s);
