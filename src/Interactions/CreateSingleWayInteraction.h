@@ -30,6 +30,8 @@ public:
         void setSnapAngle(double angle);
         double snapAngle();
 
+        virtual void closeAndFinish();
+
     private:
         MainWindow* Main;
         QPointF LastCursor;

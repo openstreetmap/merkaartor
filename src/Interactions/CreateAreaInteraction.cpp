@@ -255,3 +255,19 @@ QCursor CreateAreaInteraction::cursor() const
     return QCursor(Qt::CrossCursor);
 }
 #endif
+
+void CreateAreaInteraction::closeAndFinish()
+{
+    if (!theRoad || theRoad->size() < 3)
+        return;
+
+    Node* N = theRoad->getNode(0);
+    CommandList* theList  = new CommandList(MainWindow::tr("Close Area %1").arg(theRoad->description()), theRoad);
+    addToRoad(NULL, N, theList);
+    document()->addHistory(theList);
+    view()->invalidate(true, false);
+    if (theRelation)
+        Main->properties()->setSelection(theRelation);
+    else
+        Main->properties()->setSelection(theRoad);
+}

@@ -182,7 +182,7 @@ bool Downloader::go(const QUrl& url)
     qDebug() << "Downloader::go: " << url << sReq;
     QHttpRequestHeader Header("GET",sReq);
     Header.setValue("Accept-Encoding", "gzip,deflate");
-    Header.setValue("Host",url.host()+':'+url.port(80));
+    Header.setValue("Host",url.host()+':'+QString::number(url.port(80)));
     Content.clear();
     Request.setProxy(M_PREFS->getProxy(url));
     Id = Request.request(Header,QByteArray(), &ResponseBuffer);

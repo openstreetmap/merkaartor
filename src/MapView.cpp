@@ -13,6 +13,7 @@
 #include "EditInteraction.h"
 #include "CreateSingleWayInteraction.h"
 #include "CreateNodeInteraction.h"
+#include "CreateAreaInteraction.h"
 #include "MoveNodeInteraction.h"
 #include "PaintStyle/MasPaintStyle.h"
 #include "Maps/Projection.h"
@@ -1099,6 +1100,27 @@ bool MapView::event(QEvent *event)
                     setFocus();
                     ke->accept();
                     intr->setSnapAngle(30.);
+
+                    return true;
+                }
+
+            case Qt::Key_C:
+                {
+                    CreateSingleWayInteraction* CI = dynamic_cast<CreateSingleWayInteraction*>(interaction());
+                    if (CI) {
+                        setFocus();
+                        ke->accept();
+                        CI->closeAndFinish();
+                    } else {
+                        CreateAreaInteraction* AI = dynamic_cast<CreateAreaInteraction*>(interaction());
+                        if (AI) {
+                            setFocus();
+                            ke->accept();
+                            AI->closeAndFinish();
+                        }
+                        else
+                            return false;
+                    }
 
                     return true;
                 }

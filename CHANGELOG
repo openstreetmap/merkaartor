@@ -1,4 +1,5 @@
 v0.17
+    * ADD : When creating a way or area, press "C" to close the current way
     * FIX : remove dependency on GDAL data files when importing OSGB36 shapefiles + correct projection (closes #3119)
     * ADD : New preference: "Allow node/way creation in select mode". When checked, allows double-click to create a node and double-click on a node to start a way in select mode.
     * ADD : When drawing ways, double-clicking finishes the current way (Potlach/JOSM style)

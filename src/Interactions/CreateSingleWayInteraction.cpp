@@ -248,3 +248,20 @@ QCursor CreateSingleWayInteraction::cursor() const
     return QCursor(Qt::CrossCursor);
 }
 #endif
+
+void CreateSingleWayInteraction::closeAndFinish()
+{
+    if (!theRoad || theRoad->size() < 3)
+        return;
+
+    Node* N = theRoad->getNode(0);
+    CommandList* theList  = new CommandList(MainWindow::tr("Close Road %1").arg(theRoad->description()), theRoad);
+    theList->add(new WayAddNodeCommand(theRoad,N,Main->document()->getDirtyOrOriginLayer(theRoad)));
+    document()->addHistory(theList);
+    view()->invalidate(true, false);
+    Main->properties()->setSelection(theRoad);
+
+    HaveFirst = false;
+    theRoad = NULL;
+    Creating = false;
+}
