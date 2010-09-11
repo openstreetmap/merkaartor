@@ -233,14 +233,20 @@ QPointF Projection::projProject(const Coord & Map) const
 QPointF Projection::projProject(const QPointF & Map) const
 {
 #ifdef USE_PROJ
-    projUV in;
+//    projUV in;
 
-    in.u = angToRad(Map.x());
-    in.v = angToRad(Map.y());
+//    in.u = angToRad(Map.x());
+//    in.v = angToRad(Map.y());
 
-    projUV out = pj_fwd(in, theProj);
+//    projUV out = pj_fwd(in, theProj);
 
-    return QPointF(out.u, out.v);
+//    return QPointF(out.u, out.v);
+    double x = angToRad(Map.x());
+    double y = angToRad(Map.y());
+
+    projTransformFromWGS84(1, 0, &x, &y, NULL);
+
+    return QPointF(x, y);
 #else
     try {
         point_ll_deg in(longitude<>(Map.x()), latitude<>(Map.lat()));
@@ -258,13 +264,20 @@ QPointF Projection::projProject(const QPointF & Map) const
 Coord Projection::projInverse(const QPointF & pProj) const
 {
 #ifdef USE_PROJ
-    projUV in;
-    in.u = pProj.x();
-    in.v = pProj.y();
+//    projUV in;
+//    in.u = pProj.x();
+//    in.v = pProj.y();
 
-    projUV out = pj_inv(in, theProj);
+//    projUV out = pj_inv(in, theProj);
 
-    return Coord(radToCoord(out.v), radToCoord(out.u));
+//    return Coord(radToCoord(out.v), radToCoord(out.u));
+
+    double x = pProj.x();
+    double y = pProj.y();
+
+    projTransformToWGS84(1, 0, &x, &y, NULL);
+
+    return Coord(radToCoord(y), radToCoord(x));
 #else
     try {
         point_2d in(pProj.x(), pProj.y());

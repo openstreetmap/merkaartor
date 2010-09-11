@@ -207,30 +207,28 @@ bool ImportExportSHP::import(Layer* aLayer)
     theProjection = NULL;
 
     if (theSrs) {
-        toWGS84 = OGRCreateCoordinateTransformation(theSrs, &wgs84srs);
-
-        // { char *wkt; theSrs->exportToPrettyWkt(&wkt); qDebug() << "SHP: input SRS:" << endl << wkt; }
-
         // Workaround for OSGB - otherwise its datum is ignored (TODO: why?)
         QString gcs = theSrs->GetAttrValue("GEOGCS");
         if (gcs == "GCS_OSGB_1936" || gcs == "OSGB 1936") {
             qDebug() << "SHP: substituting GCS_OSGB_1936 with EPSG:27700";
-            if ((ogrError = theSrs->importFromEPSG(27700)) != OGRERR_NONE) {
+            OGRSpatialReference * the27700Srs = new OGRSpatialReference();
+            if ((ogrError = the27700Srs->importFromEPSG(27700)) != OGRERR_NONE) {
                 qDebug("SHP: couldn't initialise EPSG:27700: %d: %s", ogrError, CPLGetLastErrorMsg());
-                return false;
+                delete the27700Srs;
+            } else {
+                theSrs = the27700Srs;
+                toWGS84 = OGRCreateCoordinateTransformation(theSrs, &wgs84srs);
             }
         }
     }
 
     theProjection = new Projection();
     if (theSrs) {
-        if (toWGS84) {
+        if (!toWGS84) {
             theSrs->morphFromESRI();
             {
                 char* cTheProj4;
-                if (theSrs->exportToProj4(&cTheProj4) == OGRERR_NONE) {
-                    qDebug() << "SHP: to proj4 : " << cTheProj4;
-                } else {
+                if (theSrs->exportToProj4(&cTheProj4) != OGRERR_NONE) {
                     qDebug() << "SHP: to proj4 error: " << CPLGetLastErrorMsg();
                     return false;
                 }
@@ -239,6 +237,7 @@ bool ImportExportSHP::import(Layer* aLayer)
                 QString datum = theSrs->GetAttrValue("DATUM");
                 if (datum == "OSGB_1936" && !theProj4.contains("+datum"))
                     theProj4 += " +datum=OSGB36";
+                qDebug() << "SHP: to proj4 : " << theProj4;
                 theProjection->setProjectionType(QString(theProj4));
             }
         }
