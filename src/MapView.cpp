@@ -599,6 +599,8 @@ void MapView::mousePressEvent(QMouseEvent* event)
         theInteraction->updateSnap(event);
         if (Main)
             Main->info()->setHtml(theInteraction->toHtml());
+
+        if (event->button())
         theInteraction->mousePressEvent(event);
     }
 }
@@ -715,8 +717,7 @@ void MapView::launch(Interaction* anInteraction)
         emit interactionChanged(anInteraction);
         if (EI)
             EI->setSnap(theSnapList);
-    }
-    else {
+    } else {
 #ifndef Q_OS_SYMBIAN
         setCursor(QCursor(Qt::ArrowCursor));
 #endif
@@ -755,7 +756,7 @@ void MapView::on_customContextMenuRequested(const QPoint & pos)
     if (!Main)
         return;
 
-    if (/*EditInteraction* ei = */dynamic_cast<EditInteraction*>(theInteraction)) {
+    if (/*EditInteraction* ei = */dynamic_cast<EditInteraction*>(theInteraction) || dynamic_cast<MoveNodeInteraction*>(theInteraction)) {
         QMenu menu;
 
         //FIXME Some of these actions on WIN32-MSVC corrupts the heap.
@@ -1125,6 +1126,10 @@ bool MapView::event(QEvent *event)
                     return true;
                 }
 
+            case Qt::Key_Alt:
+                    g_Merk_Segment_Mode = true;
+                    return false;
+
             default:
                 break;
 
@@ -1132,6 +1137,7 @@ bool MapView::event(QEvent *event)
         }
 
     case QEvent::KeyRelease: {
+            g_Merk_Segment_Mode = false;
             QKeyEvent *ke = static_cast< QKeyEvent* >( event );
             switch ( ke->key() ) {
             case Qt::Key_O:

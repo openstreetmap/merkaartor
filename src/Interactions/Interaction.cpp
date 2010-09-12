@@ -319,6 +319,8 @@ FeatureSnapInteraction::FeatureSnapInteraction(MapView* theView)
     handCursor = QCursor(Qt::OpenHandCursor);
     grabCursor = QCursor(Qt::ClosedHandCursor);
     defaultCursor = QCursor(Qt::ArrowCursor);
+
+    theView->setCursor(cursor());
 }
 
 void FeatureSnapInteraction::paintEvent(QPaintEvent* anEvent, QPainter& thePainter)

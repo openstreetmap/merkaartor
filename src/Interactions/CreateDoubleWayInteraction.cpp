@@ -24,6 +24,8 @@ CreateDoubleWayInteraction::CreateDoubleWayInteraction(MainWindow* aMain, MapVie
     theDock->show();
     DockData.DriveRight->setChecked(M_PREFS->getRightSideDriving());
     DockData.RoadDistance->setText(QString().setNum(M_PREFS->getDoubleRoadDistance()));
+
+    aView->setCursor(cursor());
 }
 
 CreateDoubleWayInteraction::~CreateDoubleWayInteraction()

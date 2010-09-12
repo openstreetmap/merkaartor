@@ -118,7 +118,6 @@ static bool modifiersForGreedyAdd(Qt::KeyboardModifiers modifiers)
 
 void EditInteraction::snapMousePressEvent(QMouseEvent * ev, Feature* aLast)
 {
-    g_Merk_Segment_Mode = false;
     Qt::KeyboardModifiers modifiers = ev->modifiers();
     if (!view()->isSelectionLocked()) {
         if (modifiers) {
@@ -129,7 +128,6 @@ void EditInteraction::snapMousePressEvent(QMouseEvent * ev, Feature* aLast)
                 view()->properties()->addSelection(aLast);
 
             if (modifiersForSegmentSelect(modifiers) && aLast) {
-                g_Merk_Segment_Mode = true;
                 view()->properties()->setSelection(aLast);
             }
         } else {
@@ -227,11 +225,6 @@ void EditInteraction::snapMouseReleaseEvent(QMouseEvent * ev , Feature* aLast)
 
 void EditInteraction::snapMouseMoveEvent(QMouseEvent* anEvent, Feature* aLast)
 {
-    if (modifiersForSegmentSelect(anEvent->modifiers()))
-        g_Merk_Segment_Mode = true;
-    else
-        g_Merk_Segment_Mode = false;
-
     if (Dragging)
     {
         EndDrag = XY_TO_COORD(anEvent->pos());

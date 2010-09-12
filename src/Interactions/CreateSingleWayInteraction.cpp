@@ -81,7 +81,7 @@ void CreateSingleWayInteraction::paintEvent(QPaintEvent* anEvent, QPainter& theP
         else
             PreviousPoint = COORD_TO_XY(FirstPoint);
         QBrush SomeBrush(QColor(0xff,0x77,0x11,128));
-        QPen TP(SomeBrush,view()->pixelPerM()*4+2);
+        QPen TP(SomeBrush,qBound(3, int(view()->pixelPerM()*4+2), 10));
         ::draw(thePainter,TP,Feature::UnknownDirection, PreviousPoint,LastCursor ,4 ,view()->projection());
 
         Coord NewPoint = XY_TO_COORD(LastCursor);

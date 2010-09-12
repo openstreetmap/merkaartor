@@ -6,6 +6,7 @@
 *~
 *.qm
 *.moc
+*.rc
 moc*.cpp
 qrc*.cpp
 ui*.h

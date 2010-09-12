@@ -24,6 +24,7 @@
 #include "MoveNodeInteraction.h"
 #include "RotateInteraction.h"
 #include "ZoomInteraction.h"
+#include "ExtrudeInteraction.h"
 #include "Maps/Coord.h"
 #include "DownloadOSM.h"
 #include "ImportGPX.h"
@@ -1902,6 +1903,19 @@ void MainWindow::on_roadSimplifyAction_triggered()
     }
 }
 
+void MainWindow::on_featureSelectChildrenAction_triggered()
+{
+    QList<Feature*> theFeatures;
+    foreach (Feature* F, p->theProperties->selection()) {
+        theFeatures << F;
+        for (int i=0; i<F->size(); ++i)
+            theFeatures << F->get(i);
+    }
+    p->theProperties->setSelection(theFeatures);
+    p->theProperties->checkMenuStatus();
+    invalidateView();
+}
+
 void MainWindow::on_featureDeleteAction_triggered()
 {
     Feature* F = p->theProperties->selection(0);
@@ -2064,6 +2078,16 @@ void MainWindow::on_roadAxisAlignAction_triggered()
         theDocument->addHistory(theList);
         invalidateView();
     }
+}
+
+void MainWindow::on_roadExtrudeAction_triggered()
+{
+    Way* w = CAST_WAY(p->theProperties->selection(0));
+    if (!w)
+        return;
+
+    theView->launch(new ExtrudeInteraction(theView, w));
+    theInfo->setHtml(theView->interaction()->toHtml());
 }
 
 void MainWindow::on_nodeAlignAction_triggered()

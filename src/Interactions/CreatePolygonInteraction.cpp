@@ -17,6 +17,7 @@
 CreatePolygonInteraction::CreatePolygonInteraction(MainWindow* aMain, MapView* aView, int sides)
     : Interaction(aView), Main(aMain), Origin(0,0), Sides(sides), HaveOrigin(false), bAngle(0.0), bScale(QPointF(1., 1.))
 {
+    aView->setCursor(cursor());
 }
 
 CreatePolygonInteraction::~CreatePolygonInteraction()

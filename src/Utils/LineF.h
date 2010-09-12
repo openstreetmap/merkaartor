@@ -62,6 +62,12 @@ inline Coord toCoord(const QPointF& F)
 class LineF
 {
 public:
+    LineF(const QLineF& l)
+        : P1(l.p1()), P2(l.p2())
+    {
+        init();
+    }
+
     LineF(const QPointF& aP1, const QPointF& aP2)
         : P1(aP1), P2(aP2), Valid(true)
     {

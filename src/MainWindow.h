@@ -120,10 +120,13 @@ public slots:
     virtual void on_roadAddStreetNumbersAction_triggered();
     virtual void on_roadSubdivideAction_triggered();
     virtual void on_roadAxisAlignAction_triggered();
+    virtual void on_roadExtrudeAction_triggered();
 
+    virtual void on_featureSelectChildrenAction_triggered();
     virtual void on_featureDeleteAction_triggered();
     virtual void on_featureCommitAction_triggered();
     virtual void on_featureOsbClose_triggered();
+
     virtual void on_nodeAlignAction_triggered();
     virtual void on_nodeSpreadAction_triggered();
     virtual void on_nodeMergeAction_triggered();

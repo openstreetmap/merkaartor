@@ -25,6 +25,8 @@ CreateRoundaboutInteraction::CreateRoundaboutInteraction(MainWindow* aMain, MapV
     Main->addDockWidget(Qt::LeftDockWidgetArea, theDock);
     theDock->show();
     DockData.DriveRight->setChecked(M_PREFS->getRightSideDriving());
+
+    aView->setCursor(cursor());
 }
 
 CreateRoundaboutInteraction::~CreateRoundaboutInteraction()

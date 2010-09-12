@@ -2,31 +2,33 @@ INCLUDEPATH += Interactions
 DEPENDPATH += Interactions
 
 HEADERS += \
-	CreateAreaInteraction.h \
-	CreateDoubleWayInteraction.h \
-	CreateNodeInteraction.h \
-	CreateRoundaboutInteraction.h \
-	CreatePolygonInteraction.h \
-	CreateSingleWayInteraction.h \
-	EditInteraction.h \
-	Interaction.h \
-	MoveNodeInteraction.h \
-	RotateInteraction.h \
-	ZoomInteraction.h \
+    CreateAreaInteraction.h \
+    CreateDoubleWayInteraction.h \
+    CreateNodeInteraction.h \
+    CreateRoundaboutInteraction.h \
+    CreatePolygonInteraction.h \
+    CreateSingleWayInteraction.h \
+    EditInteraction.h \
+    Interaction.h \
+    MoveNodeInteraction.h \
+    RotateInteraction.h \
+    ZoomInteraction.h \
+    ExtrudeInteraction.h
 
 SOURCES += \
-	CreateAreaInteraction.cpp \
-	CreateDoubleWayInteraction.cpp \
-	CreateNodeInteraction.cpp \
-	CreateSingleWayInteraction.cpp \
-	CreateRoundaboutInteraction.cpp \
-	CreatePolygonInteraction.cpp \
-	EditInteraction.cpp \
-	Interaction.cpp \
-	MoveNodeInteraction.cpp \
-	RotateInteraction.cpp \
-	ZoomInteraction.cpp \
+    CreateAreaInteraction.cpp \
+    CreateDoubleWayInteraction.cpp \
+    CreateNodeInteraction.cpp \
+    CreateSingleWayInteraction.cpp \
+    CreateRoundaboutInteraction.cpp \
+    CreatePolygonInteraction.cpp \
+    EditInteraction.cpp \
+    Interaction.cpp \
+    MoveNodeInteraction.cpp \
+    RotateInteraction.cpp \
+    ZoomInteraction.cpp \
+    ExtrudeInteraction.cpp
 
 FORMS +=  \
-	CreateDoubleWayDock.ui \
-	CreateRoundaboutDock.ui \
+    CreateDoubleWayDock.ui \
+    CreateRoundaboutDock.ui \
