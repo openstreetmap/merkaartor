@@ -127,7 +127,7 @@ void EditInteraction::snapMousePressEvent(QMouseEvent * ev, Feature* aLast)
             if (modifiersForAdd(modifiers) && aLast)
                 view()->properties()->addSelection(aLast);
 
-            if (modifiersForSegmentSelect(modifiers) && aLast) {
+            if (g_Merk_Segment_Mode && aLast) {
                 view()->properties()->setSelection(aLast);
             }
         } else {

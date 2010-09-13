@@ -24,7 +24,7 @@
      <x>0</x>
      <y>0</y>
      <width>1100</width>
-     <height>21</height>
+     <height>25</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuHelp">
@@ -62,7 +62,6 @@
     <addaction name="areaSplitAction"/>
     <addaction name="areaTerraceAction"/>
     <addaction name="roadAxisAlignAction"/>
-    <addaction name="roadExtrudeAction"/>
    </widget>
    <widget class="QMenu" name="menuEdit">
     <property name="title">
@@ -81,6 +80,7 @@
     <addaction name="editRemoveAction"/>
     <addaction name="editMoveAction"/>
     <addaction name="editRotateAction"/>
+    <addaction name="roadExtrudeAction"/>
     <addaction name="editPropertiesAction"/>
     <addaction name="separator"/>
     <addaction name="editSelectAction"/>
@@ -1767,6 +1767,9 @@
    </property>
   </action>
   <action name="roadExtrudeAction">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
    <property name="text">
     <string>E&amp;xtrude</string>
    </property>

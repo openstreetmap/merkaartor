@@ -2082,11 +2082,7 @@ void MainWindow::on_roadAxisAlignAction_triggered()
 
 void MainWindow::on_roadExtrudeAction_triggered()
 {
-    Way* w = CAST_WAY(p->theProperties->selection(0));
-    if (!w)
-        return;
-
-    theView->launch(new ExtrudeInteraction(theView, w));
+    theView->launch(new ExtrudeInteraction(theView));
     theInfo->setHtml(theView->interaction()->toHtml());
 }
 
@@ -3564,6 +3560,7 @@ void MainWindow::mapView_interactionChanged(Interaction* anInteraction)
     ui->createNodeAction->setChecked(dynamic_cast<CreateNodeInteraction*>(anInteraction) != NULL);
     ui->createRoadAction->setChecked(dynamic_cast<CreateSingleWayInteraction*>(anInteraction) != NULL);
     ui->createAreaAction->setChecked(dynamic_cast<CreateAreaInteraction*>(anInteraction) != NULL);
+    ui->roadExtrudeAction->setChecked(dynamic_cast<ExtrudeInteraction*>(anInteraction) != NULL);
 }
 
 void MainWindow::updateMenu()

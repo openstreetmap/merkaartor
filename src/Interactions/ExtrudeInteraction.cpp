@@ -12,9 +12,8 @@
 
 #include <QtGui/QPainter>
 
-ExtrudeInteraction::ExtrudeInteraction(MapView* aView, Way* aRoad)
+ExtrudeInteraction::ExtrudeInteraction(MapView* aView)
     : FeatureSnapInteraction(aView)
-    , theRoad(aRoad)
     , Creating(false)
     , BestSegment(-1)
 {
@@ -87,7 +86,10 @@ void ExtrudeInteraction::snapMouseMoveEvent(QMouseEvent* ev, Feature* lastSnap)
 
 void ExtrudeInteraction::snapMousePressEvent(QMouseEvent* anEvent, Feature* lastSnap)
 {
-    Q_UNUSED(lastSnap)
+    theRoad = CAST_WAY(lastSnap);
+    if (!theRoad)
+        return;
+
     if (theRoad->bestSegment() != -1) {
         Creating = true;
         QLineF l = theRoad->getSegment(theRoad->bestSegment());

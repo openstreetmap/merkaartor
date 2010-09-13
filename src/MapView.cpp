@@ -15,6 +15,7 @@
 #include "CreateNodeInteraction.h"
 #include "CreateAreaInteraction.h"
 #include "MoveNodeInteraction.h"
+#include "ExtrudeInteraction.h"
 #include "PaintStyle/MasPaintStyle.h"
 #include "Maps/Projection.h"
 #include "GPS/qgps.h"
@@ -590,18 +591,24 @@ void MapView::updateStaticBuffer()
     StaticBufferUpToDate = true;
 }
 
-void MapView::mousePressEvent(QMouseEvent* event)
+void MapView::mousePressEvent(QMouseEvent* anEvent)
 {
     if (!document())
         return;
 
     if (theInteraction) {
-        theInteraction->updateSnap(event);
+        if ((anEvent->modifiers() & Qt::AltModifier) || dynamic_cast<ExtrudeInteraction*>(theInteraction))
+            g_Merk_Segment_Mode = true;
+        else
+            g_Merk_Segment_Mode = false;
+
+
+        theInteraction->updateSnap(anEvent);
         if (Main)
             Main->info()->setHtml(theInteraction->toHtml());
 
-        if (event->button())
-        theInteraction->mousePressEvent(event);
+        if (anEvent->button())
+        theInteraction->mousePressEvent(anEvent);
     }
 }
 
@@ -611,6 +618,12 @@ void MapView::mouseReleaseEvent(QMouseEvent* anEvent)
         return;
 
     if (theInteraction) {
+        if ((anEvent->modifiers() & Qt::AltModifier) || dynamic_cast<ExtrudeInteraction*>(theInteraction))
+            g_Merk_Segment_Mode = true;
+        else
+            g_Merk_Segment_Mode = false;
+
+
         theInteraction->updateSnap(anEvent);
         theInteraction->mouseReleaseEvent(anEvent);
     }
@@ -625,6 +638,11 @@ void MapView::mouseMoveEvent(QMouseEvent* anEvent)
         return;
 
     if (theInteraction) {
+        if ((anEvent->modifiers() & Qt::AltModifier) || dynamic_cast<ExtrudeInteraction*>(theInteraction))
+            g_Merk_Segment_Mode = true;
+        else
+            g_Merk_Segment_Mode = false;
+
         theInteraction->updateSnap(anEvent);
 
         if (!M_PREFS->getSeparateMoveMode()) {
@@ -664,6 +682,11 @@ void MapView::mouseDoubleClickEvent(QMouseEvent* anEvent)
         return;
 
     if (theInteraction) {
+        if ((anEvent->modifiers() & Qt::AltModifier) || dynamic_cast<ExtrudeInteraction*>(theInteraction))
+            g_Merk_Segment_Mode = true;
+        else
+            g_Merk_Segment_Mode = false;
+
         theInteraction->updateSnap(anEvent);
 
         if (M_PREFS->getSelectModeCreation()) {
@@ -1126,10 +1149,6 @@ bool MapView::event(QEvent *event)
                     return true;
                 }
 
-            case Qt::Key_Alt:
-                    g_Merk_Segment_Mode = true;
-                    return false;
-
             default:
                 break;
 
@@ -1137,7 +1156,6 @@ bool MapView::event(QEvent *event)
         }
 
     case QEvent::KeyRelease: {
-            g_Merk_Segment_Mode = false;
             QKeyEvent *ke = static_cast< QKeyEvent* >( event );
             switch ( ke->key() ) {
             case Qt::Key_O:
