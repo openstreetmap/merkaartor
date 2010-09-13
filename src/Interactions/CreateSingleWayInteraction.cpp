@@ -17,6 +17,7 @@ CreateSingleWayInteraction::CreateSingleWayInteraction(MainWindow* aMain, MapVie
     : FeatureSnapInteraction(aView), Main(aMain), theRoad(0), FirstPoint(0,0),
      FirstNode(firstNode), HaveFirst(false), Prepend(false), IsCurved(aCurved), Creating(false)
      , SnapAngle(0)
+     , ParallelMode(false)
 {
     if (firstNode)
     {
@@ -42,9 +43,9 @@ void CreateSingleWayInteraction::setSnapAngle(double angle)
     SnapAngle = angle;
 }
 
-double CreateSingleWayInteraction::snapAngle()
+void CreateSingleWayInteraction::setParallelMode(bool val)
 {
-    return SnapAngle;
+    ParallelMode = val;
 }
 
 QString CreateSingleWayInteraction::toHtml()
@@ -117,7 +118,95 @@ void CreateSingleWayInteraction::snapMouseMoveEvent(QMouseEvent* ev, Feature* la
         l2.setAngle(l1.angle() + a);
         LastCursor = l2.p2();
     }
-    else
+    else if (HaveFirst && ParallelMode)
+    {
+        QPointF PreviousPoint;
+        if (theRoad && theRoad->size() && !Prepend)
+            PreviousPoint = COORD_TO_XY(CAST_NODE(theRoad->get(theRoad->size()-1))->position());
+        else
+            PreviousPoint = COORD_TO_XY(FirstPoint);
+
+        CoordBox HotZone(XY_TO_COORD(ev->pos()-QPointF(M_PREFS->getMaxGeoPicWidth()+5,M_PREFS->getMaxGeoPicWidth()+5)),XY_TO_COORD(ev->pos()+QPointF(M_PREFS->getMaxGeoPicWidth()+5,M_PREFS->getMaxGeoPicWidth()+5)));
+        double BestDistanceNW = 9999, AngleNW = 0;
+        double BestDistanceNE = 9999, AngleNE = 0;
+        int BestSegmentNW = -1, BestSegmentNE = -1;
+        double* BestDistance;
+        int* BestSegment;
+
+        Way* R;
+        for (int j=0; j<document()->layerSize(); ++j) {
+            QList < MapFeaturePtr > ret = document()->getLayer(j)->indexFind(HotZone);
+            foreach(MapFeaturePtr F, ret) {
+                if (!(R = CAST_WAY(F)))
+                    continue;
+
+                if (R->isHidden())
+                    continue;
+                if (R->notEverythingDownloaded())
+                    continue;
+
+                double Distance = 9999;
+                for (unsigned int i=0; i<R.size()-1; ++i)
+                {
+                    LineF F(theView->toView(p->Nodes.at(i)),theView->toView(p->Nodes.at(i+1)));
+                    double D = F.capDistance(Target);
+                    if (D < 9999 && D < Distance) {
+                        Distance = D;
+                        p->BestSegment = i;
+                    }
+                }
+
+                double Distance = R->pixelDistance(ev->pos(), 9999, false, theView);
+                if (R->bestSegment() == -1)
+                    continue;
+                QLineF l(COORD_TO_XY(R->getSegment(R->bestSegment()).p1()), COORD_TO_XY(R->getSegment(R->bestSegment()).p2()));
+                double a = l.angle();
+                qDebug() << R->bestSegment() << a;
+                if ((a >= 0 && a < 90) || (a < -270 && a >= -360)) {
+                    BestDistance = &BestDistanceNW;
+                    BestSegment = &BestSegmentNW;
+                    AngleNW = a;
+                } else if ((a >= 90 && a < 180) || (a < -180 && a >= -270)) {
+                    BestDistance = &BestDistanceNE;
+                    BestSegment = &BestSegmentNE;
+                    AngleNE = a;
+                } else if ((a >= 180 && a < 270) || (a < -90 && a >= -180)) {
+                    BestDistance = &BestDistanceNW;
+                    BestSegment = &BestSegmentNW;
+                    AngleNW = a;
+                } else if ((a >= 270 && a < 360) || (a < 0 && a >= -90)) {
+                    BestDistance = &BestDistanceNE;
+                    BestSegment = &BestSegmentNE;
+                    AngleNE = a;
+                }
+
+                if (Distance < *BestDistance) {
+                    *BestDistance = Distance;
+                    *BestSegment = R->bestSegment();
+                }
+
+                qDebug() << BestDistanceNE << BestDistanceNW << AngleNE << AngleNW;
+            }
+        }
+
+        QLineF l(PreviousPoint, ev->pos());
+        double a = l.angle();
+        if ((a >= 0 && a < 90) || (a < -270 && a >= -360)) {
+            if (BestDistanceNW < 9999)
+                a = AngleNW;
+        } else if ((a >= 90 && a < 180) || (a < -180 && a >= -270)) {
+            if (BestDistanceNE < 9999)
+                a = AngleNE;
+        } else if ((a >= 180 && a < 270) || (a < -90 && a >= -180)) {
+            if (BestDistanceNW < 9999)
+                a = AngleNW - 180;
+        } else if ((a >= 270 && a < 360) || (a < 0 && a >= -90)) {
+            if (BestDistanceNE < 9999)
+                a = AngleNE - 180;
+        }
+        l.setAngle(a);
+        LastCursor = l.p2();
+    } else
         LastCursor = ev->pos();
     view()->update();
 }
@@ -145,7 +234,7 @@ void CreateSingleWayInteraction::snapMouseReleaseEvent(QMouseEvent* anEvent, Fea
                 FirstNode = Pt;
             else if (Way* aRoad = dynamic_cast<Way*>(lastSnap))
             {
-                Coord P(XY_TO_COORD(anEvent->pos()));
+                Coord P(XY_TO_COORD(LastCursor));
                 int SnapIdx = findSnapPointIndex(aRoad, P);
                 Node* N = new Node(P);
                 if (M_PREFS->apiVersionNum() < 0.6)
@@ -196,7 +285,7 @@ void CreateSingleWayInteraction::snapMouseReleaseEvent(QMouseEvent* anEvent, Fea
             }
             else if (Way* aRoad = dynamic_cast<Way*>(lastSnap))
             {
-                Coord P(XY_TO_COORD(anEvent->pos()));
+                Coord P(XY_TO_COORD(LastCursor));
                 int SnapIdx = findSnapPointIndex(aRoad, P);
                 Node* N = new Node(P);
                 if (M_PREFS->apiVersionNum() < 0.6)
@@ -210,7 +299,7 @@ void CreateSingleWayInteraction::snapMouseReleaseEvent(QMouseEvent* anEvent, Fea
             }
             if (!To)
             {
-                To = new Node(XY_TO_COORD(anEvent->pos()));
+                To = new Node(XY_TO_COORD(LastCursor));
                 if (M_PREFS->apiVersionNum() < 0.6)
                     To->setTag("created_by", QString("Merkaartor v%1%2").arg(STRINGIFY(VERSION)).arg(STRINGIFY(REVISION)));
                 L->add(new AddFeatureCommand(Main->document()->getDirtyOrOriginLayer(),To,true));
@@ -226,7 +315,7 @@ void CreateSingleWayInteraction::snapMouseReleaseEvent(QMouseEvent* anEvent, Fea
             view()->invalidate(true, false);
             Main->properties()->setSelection(theRoad);
         }
-        FirstPoint = XY_TO_COORD(anEvent->pos());
+        FirstPoint = XY_TO_COORD(LastCursor);
     }
     Creating = false;
     LastCursor = anEvent->pos();

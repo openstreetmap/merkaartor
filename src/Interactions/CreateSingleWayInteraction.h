@@ -28,7 +28,7 @@ class CreateSingleWayInteraction : public FeatureSnapInteraction
 
 public:
         void setSnapAngle(double angle);
-        double snapAngle();
+        void setParallelMode(bool val);
 
         virtual void closeAndFinish();
 
@@ -43,6 +43,7 @@ public:
         bool IsCurved;
         bool Creating;
         double SnapAngle;
+        bool ParallelMode;
 };
 
 #endif // INTERACTION\CREATEDOUBLEWAYINTERACTION_H

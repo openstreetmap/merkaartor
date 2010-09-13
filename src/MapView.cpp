@@ -1128,6 +1128,19 @@ bool MapView::event(QEvent *event)
                     return true;
                 }
 
+            case Qt::Key_P:
+                {
+                    CreateSingleWayInteraction* intr = dynamic_cast<CreateSingleWayInteraction*>(interaction());
+                    if (!intr)
+                        return false;
+
+                    setFocus();
+                    ke->accept();
+                    intr->setParallelMode(true);
+
+                    return true;
+                }
+
             case Qt::Key_C:
                 {
                     CreateSingleWayInteraction* CI = dynamic_cast<CreateSingleWayInteraction*>(interaction());
@@ -1145,7 +1158,6 @@ bool MapView::event(QEvent *event)
                         else
                             return false;
                     }
-
                     return true;
                 }
 
@@ -1171,6 +1183,18 @@ bool MapView::event(QEvent *event)
                     return true;
                 }
 
+            case Qt::Key_P:
+                {
+                    CreateSingleWayInteraction* intr = dynamic_cast<CreateSingleWayInteraction*>(interaction());
+                    if (!intr)
+                        return false;
+
+                    ke->accept();
+                    intr->setParallelMode(false);
+
+                    return true;
+                }
+
             default:
                 break;
             }
@@ -1190,7 +1214,7 @@ bool MapView::event(QEvent *event)
     }
 
     return QWidget::event(event);
- }
+}
 
 bool MapView::isSelectionLocked()
 {

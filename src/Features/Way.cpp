@@ -541,7 +541,7 @@ double Way::pixelDistance(const QPointF& Target, double ClearEndDistance, bool s
             if (p->Nodes.at(i) && p->Nodes.at(i+1)) {
                 LineF F(theView->toView(p->Nodes.at(i)),theView->toView(p->Nodes.at(i+1)));
                 double D = F.capDistance(Target);
-                if (D < ClearEndDistance) {
+                if (D < ClearEndDistance && D < Best) {
                     Best = D;
                     if (g_Merk_Segment_Mode)
                         p->BestSegment = i;
