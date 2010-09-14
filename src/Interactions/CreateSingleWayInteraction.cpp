@@ -120,18 +120,19 @@ void CreateSingleWayInteraction::snapMouseMoveEvent(QMouseEvent* ev, Feature* la
     }
     else if (HaveFirst && ParallelMode)
     {
+#define CLEAR_DISTANCE 200
         QPointF PreviousPoint;
         if (theRoad && theRoad->size() && !Prepend)
             PreviousPoint = COORD_TO_XY(CAST_NODE(theRoad->get(theRoad->size()-1))->position());
         else
             PreviousPoint = COORD_TO_XY(FirstPoint);
 
-        CoordBox HotZone(XY_TO_COORD(ev->pos()-QPointF(M_PREFS->getMaxGeoPicWidth()+5,M_PREFS->getMaxGeoPicWidth()+5)),XY_TO_COORD(ev->pos()+QPointF(M_PREFS->getMaxGeoPicWidth()+5,M_PREFS->getMaxGeoPicWidth()+5)));
+        CoordBox HotZone(XY_TO_COORD(ev->pos()-QPointF(CLEAR_DISTANCE, CLEAR_DISTANCE)),XY_TO_COORD(ev->pos()+QPointF(CLEAR_DISTANCE, CLEAR_DISTANCE)));
         double BestDistanceNW = 9999, AngleNW = 0;
         double BestDistanceNE = 9999, AngleNE = 0;
-        int BestSegmentNW = -1, BestSegmentNE = -1;
         double* BestDistance;
-        int* BestSegment;
+        double* BestAngle;
+        double curAngle;
 
         Way* R;
         for (int j=0; j<document()->layerSize(); ++j) {
@@ -145,44 +146,36 @@ void CreateSingleWayInteraction::snapMouseMoveEvent(QMouseEvent* ev, Feature* la
                 if (R->notEverythingDownloaded())
                     continue;
 
-                double Distance = 9999;
-                for (unsigned int i=0; i<R.size()-1; ++i)
+                for (unsigned int i=0; i<R->size()-1; ++i)
                 {
-                    LineF F(theView->toView(p->Nodes.at(i)),theView->toView(p->Nodes.at(i+1)));
-                    double D = F.capDistance(Target);
-                    if (D < 9999 && D < Distance) {
-                        Distance = D;
-                        p->BestSegment = i;
+                    LineF F(COORD_TO_XY(R->getNode(i)),COORD_TO_XY(R->getNode(i+1)));
+                    double D = F.capDistance(ev->pos());
+                    if (D < CLEAR_DISTANCE) {
+                        QLineF l(COORD_TO_XY(R->getNode(i)), COORD_TO_XY(R->getNode(i+1)));
+                        double a = l.angle();
+                        if ((a >= 0 && a < 90) || (a < -270 && a >= -360)) {
+                            BestDistance = &BestDistanceNE;
+                            BestAngle = &AngleNE;
+                            curAngle = a;
+                        } else if ((a >= 90 && a < 180) || (a < -180 && a >= -270)) {
+                            BestDistance = &BestDistanceNW;
+                            BestAngle = &AngleNW;
+                            curAngle = a;
+                        } else if ((a >= 180 && a < 270) || (a < -90 && a >= -180)) {
+                            BestDistance = &BestDistanceNE;
+                            BestAngle = &AngleNE;
+                            curAngle = a - 180;
+                        } else if ((a >= 270 && a < 360) || (a < 0 && a >= -90)) {
+                            BestDistance = &BestDistanceNW;
+                            BestAngle = &AngleNW;
+                            curAngle = a - 180;
+                        }
+
+                        if (D < *BestDistance) {
+                            *BestDistance = D;
+                            *BestAngle = curAngle;
+                        }
                     }
-                }
-
-                double Distance = R->pixelDistance(ev->pos(), 9999, false, theView);
-                if (R->bestSegment() == -1)
-                    continue;
-                QLineF l(COORD_TO_XY(R->getSegment(R->bestSegment()).p1()), COORD_TO_XY(R->getSegment(R->bestSegment()).p2()));
-                double a = l.angle();
-                qDebug() << R->bestSegment() << a;
-                if ((a >= 0 && a < 90) || (a < -270 && a >= -360)) {
-                    BestDistance = &BestDistanceNW;
-                    BestSegment = &BestSegmentNW;
-                    AngleNW = a;
-                } else if ((a >= 90 && a < 180) || (a < -180 && a >= -270)) {
-                    BestDistance = &BestDistanceNE;
-                    BestSegment = &BestSegmentNE;
-                    AngleNE = a;
-                } else if ((a >= 180 && a < 270) || (a < -90 && a >= -180)) {
-                    BestDistance = &BestDistanceNW;
-                    BestSegment = &BestSegmentNW;
-                    AngleNW = a;
-                } else if ((a >= 270 && a < 360) || (a < 0 && a >= -90)) {
-                    BestDistance = &BestDistanceNE;
-                    BestSegment = &BestSegmentNE;
-                    AngleNE = a;
-                }
-
-                if (Distance < *BestDistance) {
-                    *BestDistance = Distance;
-                    *BestSegment = R->bestSegment();
                 }
 
                 qDebug() << BestDistanceNE << BestDistanceNW << AngleNE << AngleNW;
@@ -192,17 +185,17 @@ void CreateSingleWayInteraction::snapMouseMoveEvent(QMouseEvent* ev, Feature* la
         QLineF l(PreviousPoint, ev->pos());
         double a = l.angle();
         if ((a >= 0 && a < 90) || (a < -270 && a >= -360)) {
-            if (BestDistanceNW < 9999)
-                a = AngleNW;
-        } else if ((a >= 90 && a < 180) || (a < -180 && a >= -270)) {
             if (BestDistanceNE < 9999)
                 a = AngleNE;
-        } else if ((a >= 180 && a < 270) || (a < -90 && a >= -180)) {
+        } else if ((a >= 90 && a < 180) || (a < -180 && a >= -270)) {
             if (BestDistanceNW < 9999)
-                a = AngleNW - 180;
-        } else if ((a >= 270 && a < 360) || (a < 0 && a >= -90)) {
+                a = AngleNW;
+        } else if ((a >= 180 && a < 270) || (a < -90 && a >= -180)) {
             if (BestDistanceNE < 9999)
                 a = AngleNE - 180;
+        } else if ((a >= 270 && a < 360) || (a < 0 && a >= -90)) {
+            if (BestDistanceNW < 9999)
+                a = AngleNW - 180;
         }
         l.setAngle(a);
         LastCursor = l.p2();

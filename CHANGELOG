@@ -1,4 +1,5 @@
 v0.17
+    * ADD : When creating a way or area, press "P" to snap the current segment as a parallel of the closest existing segment with the same general direction
     * ADD : Extrude interaction for ways (JOSM style)
     * ADD : When creating a way or area, press "C" to close the current way
     * FIX : remove dependency on GDAL data files when importing OSGB36 shapefiles + correct projection (closes #3119)
