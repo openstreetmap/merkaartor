@@ -1,4 +1,5 @@
 v0.17
+    * CHG : Split Rotation interaction between pure rotation and scale
     * ADD : When creating a way or area, press "P" to snap the current segment as a parallel of the closest existing segment with the same general direction
     * ADD : Extrude interaction for ways (JOSM style)
     * ADD : When creating a way or area, press "C" to close the current way

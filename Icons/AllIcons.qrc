@@ -67,6 +67,9 @@
         <file alias="grab.png">Grab.png</file>
         <file>grabbing.png</file>
         <file>actions/edit-cut.png</file>
+        <file>actions/transform-move.png</file>
+        <file>actions/transform-rotate.png</file>
+        <file>actions/transform-scale.png</file>
     </qresource>
     <qresource prefix="/Art">
         <file>Mapnik/airport.png</file>

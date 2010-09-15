@@ -23,6 +23,7 @@
 #include "EditInteraction.h"
 #include "MoveNodeInteraction.h"
 #include "RotateInteraction.h"
+#include "ScaleInteraction.h"
 #include "ZoomInteraction.h"
 #include "ExtrudeInteraction.h"
 #include "Maps/Coord.h"
@@ -1024,6 +1025,12 @@ void MainWindow::on_editMoveAction_triggered()
 void MainWindow::on_editRotateAction_triggered()
 {
     view()->launch(new RotateInteraction(view()));
+    theInfo->setHtml(theView->interaction()->toHtml());
+}
+
+void MainWindow::on_editScaleAction_triggered()
+{
+    view()->launch(new ScaleInteraction(view()));
     theInfo->setHtml(theView->interaction()->toHtml());
 }
 
@@ -3557,6 +3564,7 @@ void MainWindow::mapView_interactionChanged(Interaction* anInteraction)
     ui->editPropertiesAction->setChecked(dynamic_cast<EditInteraction*>(anInteraction) != NULL);
     ui->editMoveAction->setChecked(dynamic_cast<MoveNodeInteraction*>(anInteraction) != NULL);
     ui->editRotateAction->setChecked(dynamic_cast<RotateInteraction*>(anInteraction) != NULL);
+    ui->editScaleAction->setChecked(dynamic_cast<ScaleInteraction*>(anInteraction) != NULL);
     ui->createNodeAction->setChecked(dynamic_cast<CreateNodeInteraction*>(anInteraction) != NULL);
     ui->createRoadAction->setChecked(dynamic_cast<CreateSingleWayInteraction*>(anInteraction) != NULL);
     ui->createAreaAction->setChecked(dynamic_cast<CreateAreaInteraction*>(anInteraction) != NULL);

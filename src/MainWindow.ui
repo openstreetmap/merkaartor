@@ -80,6 +80,7 @@
     <addaction name="editRemoveAction"/>
     <addaction name="editMoveAction"/>
     <addaction name="editRotateAction"/>
+    <addaction name="editScaleAction"/>
     <addaction name="roadExtrudeAction"/>
     <addaction name="editPropertiesAction"/>
     <addaction name="separator"/>
@@ -363,6 +364,7 @@
    <addaction name="editPropertiesAction"/>
    <addaction name="editMoveAction"/>
    <addaction name="editRotateAction"/>
+   <addaction name="editScaleAction"/>
    <addaction name="createNodeAction"/>
    <addaction name="createRoadAction"/>
    <addaction name="createAreaAction"/>
@@ -505,7 +507,7 @@
    </property>
    <property name="icon">
     <iconset resource="../Icons/AllIcons.qrc">
-     <normaloff>:/Icons/actions/edit_move.png</normaloff>:/Icons/actions/edit_move.png</iconset>
+     <normaloff>:/Icons/actions/transform-move.png</normaloff>:/Icons/actions/transform-move.png</iconset>
    </property>
    <property name="text">
     <string>&amp;Move</string>
@@ -1515,7 +1517,7 @@
    </property>
    <property name="icon">
     <iconset resource="../Icons/AllIcons.qrc">
-     <normaloff>:/Icons/actions/edit_rotate.png</normaloff>:/Icons/actions/edit_rotate.png</iconset>
+     <normaloff>:/Icons/actions/transform-rotate.png</normaloff>:/Icons/actions/transform-rotate.png</iconset>
    </property>
    <property name="text">
     <string>Rotate</string>
@@ -1785,6 +1787,18 @@
   <action name="featureSelectChildrenAction">
    <property name="text">
     <string>Include children in selection</string>
+   </property>
+  </action>
+  <action name="editScaleAction">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="../Icons/AllIcons.qrc">
+     <normaloff>:/Icons/actions/transform-scale.png</normaloff>:/Icons/actions/transform-scale.png</iconset>
+   </property>
+   <property name="text">
+    <string>Scale</string>
    </property>
   </action>
  </widget>

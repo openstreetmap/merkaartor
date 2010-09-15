@@ -110,6 +110,7 @@ public slots:
     virtual void on_editRemoveAction_triggered();
     virtual void on_editMoveAction_triggered();
     virtual void on_editRotateAction_triggered();
+    virtual void on_editScaleAction_triggered();
     virtual void on_editReverseAction_triggered();
 
     virtual void on_roadSplitAction_triggered();

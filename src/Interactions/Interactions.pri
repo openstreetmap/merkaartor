@@ -12,6 +12,7 @@ HEADERS += \
     Interaction.h \
     MoveNodeInteraction.h \
     RotateInteraction.h \
+    ScaleInteraction.h \
     ZoomInteraction.h \
     ExtrudeInteraction.h
 
@@ -26,6 +27,7 @@ SOURCES += \
     Interaction.cpp \
     MoveNodeInteraction.cpp \
     RotateInteraction.cpp \
+    ScaleInteraction.cpp \
     ZoomInteraction.cpp \
     ExtrudeInteraction.cpp
 

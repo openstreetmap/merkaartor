@@ -21,7 +21,7 @@
 #include <QPainter>
 
 RotateInteraction::RotateInteraction(MapView* aView)
-: FeatureSnapInteraction(aView), StartDragPosition(0,0)
+    : FeatureSnapInteraction(aView), StartDragPosition(0,0)
 {
     QPixmap pm(":/Icons/rotate.png");
     rotateCursor =  QCursor(pm.scaledToWidth(22));
@@ -35,7 +35,7 @@ RotateInteraction::~RotateInteraction(void)
 QString RotateInteraction::toHtml()
 {
     QString help;
-    help = (MainWindow::tr("HOVER to select;LEFT-DRAG to rotate/scale"));
+    help = (MainWindow::tr("HOVER to select;LEFT-DRAG to rotate"));
 
     QStringList helpList = help.split(";");
 
@@ -60,15 +60,16 @@ QString RotateInteraction::toHtml()
 #ifndef Q_OS_SYMBIAN
 QCursor RotateInteraction::cursor() const
 {
-    if (LastSnap)
+    if (LastSnap || Rotating.size()) {
         return rotateCursor;
+    }
 
     return FeatureSnapInteraction::cursor();
 }
 #endif
 
 
-void RotateInteraction::snapMousePressEvent(QMouseEvent * event, Feature* aLast)
+void RotateInteraction::snapMousePressEvent(QMouseEvent * anEvent, Feature* aLast)
 {
     QList<Feature*> sel;
     if (view()->isSelectionLocked()) {
@@ -82,7 +83,6 @@ void RotateInteraction::snapMousePressEvent(QMouseEvent * event, Feature* aLast)
             sel.append(aLast);
     }
     Angle = 0.0;
-    Radius = 1.0;
     clearNoSnap();
     Rotating.clear();
     OriginalPosition.clear();
@@ -90,16 +90,11 @@ void RotateInteraction::snapMousePressEvent(QMouseEvent * event, Feature* aLast)
     if (!sel.size())
         return;
 
-    StartDragPosition = XY_TO_COORD(event->pos());
+    StartDragPosition = XY_TO_COORD(anEvent->pos());
     CoordBox selBB = sel[0]->boundingBox();
     for (int j=0; j<sel.size(); j++) {
         selBB.merge(sel[j]->boundingBox());
-        if (Node* Pt = dynamic_cast<Node*>(sel[j]))
-        {
-            Rotating.push_back(Pt);
-            StartDragPosition = Pt->position();
-        }
-        else if (Way* R = dynamic_cast<Way*>(sel[j])) {
+        if (Way* R = dynamic_cast<Way*>(sel[j])) {
             for (int i=0; i<R->size(); ++i)
                 if (std::find(Rotating.begin(),Rotating.end(),R->get(i)) == Rotating.end())
                     Rotating.push_back(R->getNode(i));
@@ -117,21 +112,21 @@ void RotateInteraction::snapMousePressEvent(QMouseEvent * event, Feature* aLast)
         Rotating.clear();
 }
 
-void RotateInteraction::snapMouseReleaseEvent(QMouseEvent * event, Feature* /*Closer*/)
+void RotateInteraction::snapMouseReleaseEvent(QMouseEvent * anEvent, Feature* /*Closer*/)
 {
-    Q_UNUSED(event);
+    Q_UNUSED(anEvent);
 
-    if ((Angle != 0.0 || Radius != 1.0) && Rotating.size() && !panning())
+    if (Angle != 0.0 && Rotating.size() && !panning())
     {
         CommandList* theList;
-        theList = new CommandList(MainWindow::tr("Scale/Rotate Nodes").arg(Rotating[0]->id()), Rotating[0]);
+        theList = new CommandList(MainWindow::tr("Rotate Feature").arg(Rotating[0]->id()), Rotating[0]);
         for (int i=0; i<Rotating.size(); ++i)
         {
             Rotating[i]->setPosition(OriginalPosition[i]);
             if (Rotating[i]->layer()->isTrack())
-                theList->add(new MoveNodeCommand(Rotating[i],rotatePosition(OriginalPosition[i], Angle, Radius), Rotating[i]->layer()));
+                theList->add(new MoveNodeCommand(Rotating[i],rotatePosition(OriginalPosition[i], Angle), Rotating[i]->layer()));
             else
-                theList->add(new MoveNodeCommand(Rotating[i],rotatePosition(OriginalPosition[i], Angle, Radius), document()->getDirtyOrOriginLayer(Rotating[i]->layer())));
+                theList->add(new MoveNodeCommand(Rotating[i],rotatePosition(OriginalPosition[i], Angle), document()->getDirtyOrOriginLayer(Rotating[i]->layer())));
         }
 
 
@@ -139,32 +134,27 @@ void RotateInteraction::snapMouseReleaseEvent(QMouseEvent * event, Feature* /*Cl
         view()->invalidate(true, false);
     }
     Angle = 0.0;
-    Radius = 1.0;
     Rotating.clear();
     OriginalPosition.clear();
     clearNoSnap();
 }
 
-void RotateInteraction::snapMouseMoveEvent(QMouseEvent* event, Feature* /*Closer*/)
+void RotateInteraction::snapMouseMoveEvent(QMouseEvent* anEvent, Feature* /*Closer*/)
 {
     if (Rotating.size() && !panning())
     {
-        if (!(event->modifiers() & Qt::ControlModifier))
-            Radius = distance(RotationCenter,event->pos()) / distance(RotationCenter, COORD_TO_XY(StartDragPosition));
-        if (!(event->modifiers() & Qt::ShiftModifier))
-            Angle = calculateNewAngle(event);
+        Angle = calculateNewAngle(anEvent);
         for (int i=0; i<Rotating.size(); ++i)
-            Rotating[i]->setPosition(rotatePosition(OriginalPosition[i], Angle, Radius));
+            Rotating[i]->setPosition(rotatePosition(OriginalPosition[i], Angle));
         view()->invalidate(true, false);
     }
 }
 
-Coord RotateInteraction::rotatePosition(Coord position, double angle, double radius)
+Coord RotateInteraction::rotatePosition(Coord position, double angle)
 {
     QPointF p = COORD_TO_XY(position);
     QLineF v(RotationCenter, p);
     v.setAngle(v.angle() + angle);
-    v.setLength(v.length() * radius);
 
     return XY_TO_COORD(v.p2());
 }

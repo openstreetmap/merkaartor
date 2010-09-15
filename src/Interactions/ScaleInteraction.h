@@ -1,5 +1,5 @@
-#ifndef MERKATOR_ROTATEINTERACTION_H_
-#define MERKATOR_ROTATEINTINTERACTION_H_
+#ifndef MERKATOR_SCALEINTERACTION_H_
+#define MERKATOR_SCALEINTERACTION_H_
 
 #include "Interaction.h"
 #include "Maps/Coord.h"
@@ -8,11 +8,11 @@
 
 class CommandList;
 
-class RotateInteraction : public FeatureSnapInteraction
+class ScaleInteraction : public FeatureSnapInteraction
 {
     public:
-        RotateInteraction(MapView* aView);
-        ~RotateInteraction(void);
+        ScaleInteraction(MapView* aView);
+        ~ScaleInteraction(void);
 
         virtual void paintEvent(QPaintEvent* anEvent, QPainter& thePainter);
         virtual void snapMousePressEvent(QMouseEvent * event, Feature* aLast);
@@ -24,17 +24,16 @@ class RotateInteraction : public FeatureSnapInteraction
 #endif
 
     private:
-        Coord rotatePosition(Coord position, double angle);
-        double calculateNewAngle(QMouseEvent* event);
-        QList<Node*> Rotating;
+        Coord scalePosition(Coord position, double radius);
+        QList<Node*> Scaling;
         QList<Coord> OriginalPosition;
         Coord StartDragPosition;
-        QPointF RotationCenter;
-        double Angle;
+        QPointF ScaleCenter;
+        double Radius;
 
         QCursor rotateCursor;
 };
 
-#endif
+#endif // MERKATOR_SCALEINTERACTION_H_
 
 
