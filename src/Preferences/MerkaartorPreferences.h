@@ -72,6 +72,13 @@ class IPaintStyle;
     public: \
         void set##Param(int theValue); \
         int get##Param();
+#define M_PARAM_DECLARE_INT_DELAYED(Param) \
+    private: \
+        int m_##Param; \
+    public: \
+        void set##Param(int theValue); \
+        void save##Param(); \
+        int get##Param();
 #define M_PARAM_DECLARE_DOUBLE(Param) \
     private: \
         double m_##Param; \
@@ -213,7 +220,7 @@ public:
     void setDirectionalArrowsVisible(RendererOptions::DirectionalArrowsShowOptions theValue);
     RendererOptions getRenderOptions();
 
-    M_PARAM_DECLARE_INT(TagListFirstColumnWidth)
+    M_PARAM_DECLARE_INT_DELAYED(TagListFirstColumnWidth)
 
     /* MainWindow state */
     void saveMainWindowState(const class MainWindow * mainWindow);

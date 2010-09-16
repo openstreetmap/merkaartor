@@ -84,6 +84,24 @@
         } \
         return  m_##Param; \
     }
+#define M_PARAM_IMPLEMENT_INT_DELAYED(Param, Category, Default) \
+    bool mb_##Param = false; \
+    void MerkaartorPreferences::set##Param(int theValue) \
+    { \
+        m_##Param = theValue; \
+    } \
+    void MerkaartorPreferences::save##Param() \
+    { \
+      Sets->setValue(#Category"/"#Param, m_##Param); \
+    } \
+    int MerkaartorPreferences::get##Param() \
+    { \
+        if (!::mb_##Param) { \
+            ::mb_##Param = true; \
+            m_##Param = Sets->value(#Category"/"#Param, Default).toInt(); \
+        } \
+        return  m_##Param; \
+    }
 
 #define M_PARAM_IMPLEMENT_DOUBLE(Param, Category, Default) \
     bool mb_##Param = false; \
@@ -188,7 +206,6 @@ void MerkaartorPreferences::save(bool UserPwdChanged)
     setTmsServers();
     setTools();
     setAlphaList();
-    Sets->sync();
 
     saveProjections();
     saveFilters();
@@ -196,6 +213,9 @@ void MerkaartorPreferences::save(bool UserPwdChanged)
     saveTMSes();
     saveBookmarks();
     saveOsmServers();
+
+    saveTagListFirstColumnWidth();
+    Sets->sync();
 
     if (UserPwdChanged)
         fromOsmPref();
@@ -1323,7 +1343,7 @@ M_PARAM_IMPLEMENT_BOOL(MapTooltip, visual, false)
 M_PARAM_IMPLEMENT_BOOL(InfoOnHover, visual, true)
 M_PARAM_IMPLEMENT_BOOL(ShowParents, visual, true)
 
-M_PARAM_IMPLEMENT_INT(TagListFirstColumnWidth, visual, 0)
+M_PARAM_IMPLEMENT_INT_DELAYED(TagListFirstColumnWidth, visual, 0)
 M_PARAM_IMPLEMENT_BOOL(TranslateTags, locale, true)
 
 /* World OSB manager */

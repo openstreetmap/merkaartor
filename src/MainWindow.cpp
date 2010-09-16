@@ -434,6 +434,7 @@ void MainWindow::handleMessage(const QString &msg)
 
 MainWindow::~MainWindow(void)
 {
+    M_PREFS->save();
     p->theProperties->setSelection(NULL);
 
     delete M_STYLE;
