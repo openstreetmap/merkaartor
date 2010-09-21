@@ -101,12 +101,16 @@ GeoImageDock::GeoImageDock(MainWindow *aMain)
     previousImageAction->setShortcutContext(Qt::WidgetWithChildrenShortcut);
     saveImageAction = new QAction(tr("Save geotagged image..."), this);
 
+    QAction* sep = new QAction(this);
+    sep->setSeparator(true);
+
     addAction(centerAction);
-    addAction(remImagesAction);
     addAction(nextImageAction);
     addAction(previousImageAction);
     addAction(toClipboardAction);
     addAction(saveImageAction);
+    addAction(sep);
+    addAction(remImagesAction);
 
     connect(centerAction, SIGNAL(triggered()), this, SLOT(centerMap()));
     connect(remImagesAction, SIGNAL(triggered()), this, SLOT(removeImages()));
