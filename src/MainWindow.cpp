@@ -2522,6 +2522,13 @@ void MainWindow::on_fileSaveAction_triggered()
 
 void MainWindow::saveDocument()
 {
+    QFile file(fileName);
+    if (!file.open(QIODevice::WriteOnly | QIODevice::Text)) {
+        QMessageBox::critical(this, tr("Unable to open save file"), tr("%1 could not be opened for writing.").arg(fileName));
+        on_fileSaveAsAction_triggered();
+        return;
+    }
+
 #ifndef Q_OS_SYMBIAN
     QApplication::setOverrideCursor(Qt::BusyCursor);
 #endif
@@ -2543,11 +2550,6 @@ void MainWindow::saveDocument()
     theDocument->toXML(root, &progress);
     theView->toXML(root);
 
-    QFile file(fileName);
-    if (!file.open(QIODevice::WriteOnly | QIODevice::Text)) {
-        QMessageBox::critical(this, tr("Unable to open save file"), tr("%1 could not be opened for writing.").arg(fileName));
-        return;
-    }
     file.write(theXmlDoc->toString().toUtf8());
     file.close();
     delete theXmlDoc;
