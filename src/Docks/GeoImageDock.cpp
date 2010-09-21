@@ -87,15 +87,18 @@ GeoImageDock::GeoImageDock(MainWindow *aMain)
     setWidget(Image);
     setObjectName("geoImageDock");
 
+    setFocusPolicy(Qt::StrongFocus);
     setContextMenuPolicy(Qt::ActionsContextMenu);
 
     centerAction = new QAction(tr("Center map"), this);
     remImagesAction = new QAction(tr("Remove Images"), this);
     toClipboardAction = new QAction(tr("Copy filename to clipboard"), this);
-    nextImageAction = new QAction(tr("Select next image"), Main); // make it available from everywhere
+    nextImageAction = new QAction(tr("Select next image"), this);
     nextImageAction->setShortcut(tr("PgDown"));
-    previousImageAction = new QAction(tr("Select previous image"), Main); // make it available from everywhere
+    nextImageAction->setShortcutContext(Qt::WidgetWithChildrenShortcut);
+    previousImageAction = new QAction(tr("Select previous image"), this);
     previousImageAction->setShortcut(tr("PgUp"));
+    previousImageAction->setShortcutContext(Qt::WidgetWithChildrenShortcut);
     saveImageAction = new QAction(tr("Save geotagged image..."), this);
 
     addAction(centerAction);

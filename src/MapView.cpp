@@ -94,8 +94,10 @@ MapView::MapView(QWidget* parent) :
     MoveDownShortcut = new QShortcut(QKeySequence(Qt::Key_Down), this);
     connect(MoveDownShortcut, SIGNAL(activated()), this, SLOT(on_MoveDown_activated()));
     ZoomInShortcut = new QShortcut(QKeySequence(Qt::Key_PageUp), this);
+    ZoomInShortcut->setContext(Qt::WidgetShortcut);
     connect(ZoomInShortcut, SIGNAL(activated()), this, SLOT(on_ZoomIn_activated()));
     ZoomOutShortcut = new QShortcut(QKeySequence(Qt::Key_PageDown), this);
+    ZoomOutShortcut->setContext(Qt::WidgetShortcut);
     connect(ZoomOutShortcut, SIGNAL(activated()), this, SLOT(on_ZoomOut_activated()));
 }
 
