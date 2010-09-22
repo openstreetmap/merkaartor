@@ -272,7 +272,7 @@ void Interaction::updateSnap(QMouseEvent* event)
             }
         }
     }
-    if (!NoSelectVirtuals && areNodesSelectable) {
+    if (!NoSelectVirtuals && areNodesSelectable && M_PREFS->getVirtualNodesVisible()) {
         R = CAST_WAY(LastSnap);
         if (R) {
             Node* N = R->pixelDistanceVirtual(event->pos(), 5.01, view());
