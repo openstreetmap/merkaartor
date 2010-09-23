@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>719</width>
-    <height>544</height>
+    <width>726</width>
+    <height>557</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -192,7 +192,7 @@
            <number>0</number>
           </property>
           <item>
-           <layout class="QGridLayout">
+           <layout class="QGridLayout" name="TagSelectionLayout">
             <property name="margin">
              <number>0</number>
             </property>
@@ -208,6 +208,13 @@
             </item>
             <item row="0" column="1">
              <widget class="QLineEdit" name="TagSelection"/>
+            </item>
+            <item row="0" column="2">
+             <widget class="QToolButton" name="btSelectorHelper">
+              <property name="text">
+               <string>...</string>
+              </property>
+             </widget>
             </item>
            </layout>
           </item>
@@ -316,8 +323,8 @@
               <rect>
                <x>0</x>
                <y>0</y>
-               <width>400</width>
-               <height>242</height>
+               <width>455</width>
+               <height>211</height>
               </rect>
              </property>
              <attribute name="label">
@@ -585,8 +592,8 @@
               <rect>
                <x>0</x>
                <y>0</y>
-               <width>366</width>
-               <height>79</height>
+               <width>455</width>
+               <height>86</height>
               </rect>
              </property>
              <attribute name="label">
@@ -738,8 +745,8 @@
               <rect>
                <x>0</x>
                <y>0</y>
-               <width>366</width>
-               <height>163</height>
+               <width>455</width>
+               <height>191</height>
               </rect>
              </property>
              <attribute name="label">
@@ -1064,8 +1071,8 @@
               <rect>
                <x>0</x>
                <y>0</y>
-               <width>366</width>
-               <height>196</height>
+               <width>458</width>
+               <height>221</height>
               </rect>
              </property>
              <attribute name="label">

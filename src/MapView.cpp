@@ -653,7 +653,7 @@ void MapView::mouseMoveEvent(QMouseEvent* anEvent)
                 if (EI->lastSnap() && Main->properties()->isSelected(EI->lastSnap())) {
                     MoveNodeInteraction* MI = new MoveNodeInteraction(this);
                     launch(MI);
-                    main()->info()->setHtml(interaction()->toHtml());
+//                    main()->info()->setHtml(interaction()->toHtml());
                     setCursor(MI->cursor());
                     update();
                     return;
@@ -663,7 +663,7 @@ void MapView::mouseMoveEvent(QMouseEvent* anEvent)
             if (MI && !MI->lastSnap() && MI->isIdle()) {
                 EditInteraction* EI = new EditInteraction(this);
                 launch(EI);
-                main()->info()->setHtml(interaction()->toHtml());
+//                main()->info()->setHtml(interaction()->toHtml());
                 setCursor(EI->cursor());
                 update();
                 return;

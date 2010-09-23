@@ -32,7 +32,7 @@
     </widget>
    </item>
    <item>
-    <layout class="QHBoxLayout" name="horizontalLayout">
+    <layout class="QHBoxLayout" name="FilterLayout">
      <item>
       <widget class="QLineEdit" name="edFilter"/>
      </item>

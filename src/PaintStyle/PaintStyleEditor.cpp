@@ -3,6 +3,8 @@
 #include "MainWindow.h"
 #include "Document.h"
 
+#include "Utils/SelectionDialog.h"
+
 #include <QtGui/QCheckBox>
 #include <QtGui/QColorDialog>
 #include <QtGui/QDoubleSpinBox>
@@ -698,3 +700,14 @@ void PaintStyleEditor::on_edFilter_textChanged(const QString &/*text*/)
     updatePaintList();
 }
 
+void PaintStyleEditor::on_btSelectorHelper_clicked()
+{
+    SelectionDialog* Sel = new SelectionDialog(g_Merk_MainWindow, false);
+    if (!Sel)
+        return;
+
+    Sel->edTagQuery->setText(TagSelection->text());
+    if (Sel->exec() == QDialog::Accepted) {
+        TagSelection->setText(Sel->edTagQuery->text());
+    }
+}

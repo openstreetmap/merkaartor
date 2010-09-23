@@ -66,6 +66,7 @@ class PaintStyleEditor : public QDialog, public Ui::PaintStyleEditor
         void on_LabelArea_clicked(bool b);
 
         void on_edFilter_textChanged(const QString& text);
+        void on_btSelectorHelper_clicked();
 
     public:
         GlobalPainter	theGlobalPainter;
