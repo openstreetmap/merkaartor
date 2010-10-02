@@ -148,6 +148,7 @@ void MapView::invalidate(bool updateStaticBuffer, bool updateMap)
         p->invalidRects.clear();
         p->invalidRects.push_back(p->Viewport);
         p->theVectorPanDelta = QPoint(0, 0);
+        SAFE_DELETE(StaticBackground);
         StaticBufferUpToDate = false;
     }
     if (theDocument && updateMap) {

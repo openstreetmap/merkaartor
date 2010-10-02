@@ -162,8 +162,8 @@
             if (g_Merk_Ignore_Preferences || g_Merk_Reset_Preferences) \
                 m_##Param = Default; \
             else { \
-                QString sColor = Sets->value(#Category"/"#Param, QVariant(Default)).toString(); \
-                if (sColor.isEmpty()) \
+                QString sColor = Sets->value(#Category"/"#Param, "").toString(); \
+                if (sColor.isEmpty() || !QColor(sColor).isValid()) \
                     m_##Param = Default; \
                 else \
                     m_##Param = Sets->value(#Category"/"#Param).value<QColor>(); \
