@@ -427,7 +427,7 @@ void MainWindow::handleMessage(const QString &msg)
     }
 
     if (fileNames.isEmpty())
-        QDir::setCurrent(M_PREFS->getWorkingDir());
+        QDir::setCurrent(M_PREFS->getworkingdir());
     else
         loadFiles(fileNames);
 }
@@ -438,7 +438,7 @@ MainWindow::~MainWindow(void)
     p->theProperties->setSelection(NULL);
 
     delete M_STYLE;
-    M_PREFS->setWorkingDir(QDir::currentPath());
+    M_PREFS->setworkingdir(QDir::currentPath());
     delete theDocument;
     delete theView;
     delete p->theProperties;
@@ -548,8 +548,9 @@ void MainWindow::createToolBarManager()
     toolBarManager->addToolBar(ui->toolBar, "");
 
     QSettings* Sets = M_PREFS->getQSettings();
-    if (Sets->contains("MainWindow/Toolbars"))
-        toolBarManager->restoreState(Sets->value("MainWindow/Toolbars").toByteArray());
+    if (!g_Merk_Ignore_Preferences && !g_Merk_Reset_Preferences)
+            if (Sets->contains("MainWindow/Toolbars"))
+                toolBarManager->restoreState(Sets->value("MainWindow/Toolbars").toByteArray());
 }
 
 void MainWindow::on_toolsToolbarsAction_triggered()
@@ -1044,7 +1045,7 @@ static void changeCurrentDirToFile(const QString& s)
 {
     QFileInfo info(s);
     QDir::setCurrent(info.absolutePath());
-    M_PREFS->setWorkingDir(QDir::currentPath());
+    M_PREFS->setworkingdir(QDir::currentPath());
 }
 
 #ifndef GEOIMAGE
@@ -2502,7 +2503,7 @@ void MainWindow::preferencesChanged(void)
 void MainWindow::on_fileSaveAsAction_triggered()
 {
     fileName = QFileDialog::getSaveFileName(this,
-        tr("Save Merkaartor document"), QString("%1/%2.mdc").arg(M_PREFS->getWorkingDir()).arg(tr("untitled")), tr("Merkaartor documents Files (*.mdc)"));
+        tr("Save Merkaartor document"), QString("%1/%2.mdc").arg(M_PREFS->getworkingdir()).arg(tr("untitled")), tr("Merkaartor documents Files (*.mdc)"));
 
     if (fileName != "") {
         saveDocument();
@@ -2657,7 +2658,7 @@ void MainWindow::on_exportOSMAction_triggered()
         return;
 
     QString fileName = QFileDialog::getSaveFileName(this,
-        tr("Export OSM"), M_PREFS->getWorkingDir() + "/untitled.osm", tr("OSM Files (*.osm)"));
+        tr("Export OSM"), M_PREFS->getworkingdir() + "/untitled.osm", tr("OSM Files (*.osm)"));
 
     if (fileName != "") {
         createProgressDialog();
@@ -2680,7 +2681,7 @@ void MainWindow::on_exportOSMBinAction_triggered()
         return;
 
     QString fileName = QFileDialog::getSaveFileName(this,
-        tr("Export Binary OSM"), M_PREFS->getWorkingDir() + "/untitled.osb", tr("OSM Binary Files (*.osb)"));
+        tr("Export Binary OSM"), M_PREFS->getworkingdir() + "/untitled.osb", tr("OSM Binary Files (*.osb)"));
 
     if (fileName != "") {
 #ifndef Q_OS_SYMBIAN
@@ -2701,7 +2702,7 @@ void MainWindow::on_exportOSMBinAction_triggered()
 void MainWindow::on_exportOSCAction_triggered()
 {
     QString fileName = QFileDialog::getSaveFileName(this,
-        tr("Export osmChange"), M_PREFS->getWorkingDir() + "/untitled.osc", tr("osmChange Files (*.osc)"));
+        tr("Export osmChange"), M_PREFS->getworkingdir() + "/untitled.osc", tr("osmChange Files (*.osc)"));
 
     if (fileName != "") {
 #ifndef Q_OS_SYMBIAN
@@ -2727,7 +2728,7 @@ void MainWindow::on_exportGPXAction_triggered()
         return;
 
     QString fileName = QFileDialog::getSaveFileName(this,
-        tr("Export GPX"), M_PREFS->getWorkingDir() + "/untitled.gpx", tr("GPX Files (*.gpx)"));
+        tr("Export GPX"), M_PREFS->getworkingdir() + "/untitled.gpx", tr("GPX Files (*.gpx)"));
 
     if (fileName != "") {
 #ifndef Q_OS_SYMBIAN
@@ -2752,7 +2753,7 @@ void MainWindow::on_exportKMLAction_triggered()
         return;
 
     QString fileName = QFileDialog::getSaveFileName(this,
-        tr("Export KML"), M_PREFS->getWorkingDir() + "/untitled.kml", tr("KML Files (*.kml)"));
+        tr("Export KML"), M_PREFS->getworkingdir() + "/untitled.kml", tr("KML Files (*.kml)"));
 
     if (fileName != "") {
 #ifndef Q_OS_SYMBIAN

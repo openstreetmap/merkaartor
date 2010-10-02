@@ -22,16 +22,16 @@ CreateDoubleWayInteraction::CreateDoubleWayInteraction(MainWindow* aMain, MapVie
     theDock->setAllowedAreas(Qt::LeftDockWidgetArea);
     Main->addDockWidget(Qt::LeftDockWidgetArea, theDock);
     theDock->show();
-    DockData.DriveRight->setChecked(M_PREFS->getRightSideDriving());
-    DockData.RoadDistance->setText(QString().setNum(M_PREFS->getDoubleRoadDistance()));
+    DockData.DriveRight->setChecked(M_PREFS->getrightsidedriving());
+    DockData.RoadDistance->setText(QString().setNum(M_PREFS->getdoubleroaddistance()));
 
     aView->setCursor(cursor());
 }
 
 CreateDoubleWayInteraction::~CreateDoubleWayInteraction()
 {
-    M_PREFS->setRightSideDriving(DockData.DriveRight->isChecked());
-    M_PREFS->setDoubleRoadDistance(DockData.RoadDistance->text().toDouble());
+    M_PREFS->setrightsidedriving(DockData.DriveRight->isChecked());
+    M_PREFS->setdoubleroaddistance(DockData.RoadDistance->text().toDouble());
 
     delete theDock;
     view()->update();

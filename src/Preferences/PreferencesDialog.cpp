@@ -447,12 +447,18 @@ void PreferencesDialog::savePrefs()
 
     M_PREFS->setBgColor(BgColor);
     M_PREFS->setBackgroundOverwriteStyle(cbBackgroundOverwriteStyle->isChecked());
-    M_PREFS->setFocusColor(FocusColor,FocusWidth->value());
-    M_PREFS->setHoverColor(HoverColor,HoverWidth->value());
-    M_PREFS->setHighlightColor(HighlightColor,HighlightWidth->value());
-    M_PREFS->setDirtyColor(DirtyColor,DirtyWidth->value());
-    M_PREFS->setRelationsColor(RelationsColor,RelationsWidth->value());
-    M_PREFS->setGpxTrackColor(GpxTrackColor,GpxTrackWidth->value());
+    M_PREFS->setFocusColor(FocusColor);
+    M_PREFS->setFocusWidth(FocusWidth->value());
+    M_PREFS->setHoverColor(HoverColor);
+    M_PREFS->setHoverWidth(HoverWidth->value());
+    M_PREFS->setHighlightColor(HighlightColor);
+    M_PREFS->setHighlightWidth(HighlightWidth->value());
+    M_PREFS->setDirtyColor(DirtyColor);
+    M_PREFS->setDirtyWidth(DirtyWidth->value());
+    M_PREFS->setRelationsColor(RelationsColor);
+    M_PREFS->setRelationsWidth(RelationsWidth->value());
+    M_PREFS->setGpxTrackColor(GpxTrackColor);
+    M_PREFS->setGpxTrackWidth(GpxTrackWidth->value());
 
     M_PREFS->setAutoSaveDoc(cbAutoSaveDoc->isChecked());
     M_PREFS->setAutoExtractTracks(cbAutoExtractTracks->isChecked());

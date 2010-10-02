@@ -96,6 +96,8 @@ void showHelp()
     fprintf(stdout, "  -p, --portable\t\tExecute Merkaartor as a portable application (all files saved in the application directory)\n");
     fprintf(stdout, "  --enable_special_layers\t\tEnable old style \"Dirty\" and \"Uploaded\" layers\n");
     fprintf(stdout, "  --importag-tags-as-is\t\tDo not add underscores to imported tags (allow for immediate upload)\n");
+    fprintf(stdout, "  --ignore-preferences\t\tIgnore saved preferences\n");
+    fprintf(stdout, "  --reset-preferences\t\tReset saved preferences to default\n");
     fprintf(stdout, "  [filenames]\t\tOpen designated files \n");
 }
 
@@ -122,6 +124,10 @@ int main(int argc, char** argv)
             g_Merk_Frisius = false;
         } else if (argsIn[i] == "--importag-tags-as-is") {
             g_Merk_NoGuardedTagsImport = true;
+        } else if (argsIn[i] == "--ignore-preferences") {
+            g_Merk_Ignore_Preferences = true;
+        } else if (argsIn[i] == "--reset-preferences") {
+            g_Merk_Reset_Preferences = true;
         } else
             argsOut << argsIn[i];
     }

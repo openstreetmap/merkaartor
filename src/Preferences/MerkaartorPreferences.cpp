@@ -33,6 +33,8 @@
     bool g_Merk_Frisius = true;
     bool g_Merk_NoGuardedTagsImport = false;
     bool g_Merk_Segment_Mode = false;
+    bool g_Merk_Ignore_Preferences = false;
+    bool g_Merk_Reset_Preferences = false;
     MainWindow* g_Merk_MainWindow = NULL;
 
 
@@ -42,13 +44,18 @@
     void MerkaartorPreferences::set##Param(bool theValue) \
     { \
         m_##Param = theValue; \
-        Sets->setValue(#Category"/"#Param, theValue); \
+        if (!g_Merk_Ignore_Preferences) { \
+            Sets->setValue(#Category"/"#Param, theValue); \
+        } \
     } \
     bool MerkaartorPreferences::get##Param() \
     { \
         if (!::mb_##Param) { \
             ::mb_##Param = true; \
-            m_##Param = Sets->value(#Category"/"#Param, Default).toBool(); \
+            if (g_Merk_Ignore_Preferences || g_Merk_Reset_Preferences) \
+                m_##Param = Default; \
+            else \
+                m_##Param = Sets->value(#Category"/"#Param, Default).toBool(); \
         } \
         return  m_##Param; \
     }
@@ -58,13 +65,18 @@
     void MerkaartorPreferences::set##Param(QString theValue) \
     { \
         m_##Param = theValue; \
-        Sets->setValue(#Category"/"#Param, theValue); \
+        if (!g_Merk_Ignore_Preferences) { \
+            Sets->setValue(#Category"/"#Param, theValue); \
+        } \
     } \
     QString MerkaartorPreferences::get##Param() \
     { \
         if (!::mb_##Param) { \
             ::mb_##Param = true; \
-            m_##Param = Sets->value(#Category"/"#Param, Default).toString(); \
+            if (g_Merk_Ignore_Preferences || g_Merk_Reset_Preferences) \
+                m_##Param = Default; \
+            else \
+                m_##Param = Sets->value(#Category"/"#Param, Default).toString(); \
         } \
         return  m_##Param; \
     }
@@ -74,13 +86,18 @@
     void MerkaartorPreferences::set##Param(int theValue) \
     { \
         m_##Param = theValue; \
-        Sets->setValue(#Category"/"#Param, theValue); \
+        if (!g_Merk_Ignore_Preferences) { \
+            Sets->setValue(#Category"/"#Param, theValue); \
+        } \
     } \
     int MerkaartorPreferences::get##Param() \
     { \
         if (!::mb_##Param) { \
             ::mb_##Param = true; \
-            m_##Param = Sets->value(#Category"/"#Param, Default).toInt(); \
+            if (g_Merk_Ignore_Preferences || g_Merk_Reset_Preferences) \
+                m_##Param = Default; \
+            else \
+                m_##Param = Sets->value(#Category"/"#Param, Default).toInt(); \
         } \
         return  m_##Param; \
     }
@@ -92,13 +109,18 @@
     } \
     void MerkaartorPreferences::save##Param() \
     { \
-      Sets->setValue(#Category"/"#Param, m_##Param); \
+        if (!g_Merk_Ignore_Preferences) { \
+            Sets->setValue(#Category"/"#Param, m_##Param); \
+        } \
     } \
     int MerkaartorPreferences::get##Param() \
     { \
         if (!::mb_##Param) { \
             ::mb_##Param = true; \
-            m_##Param = Sets->value(#Category"/"#Param, Default).toInt(); \
+            if (g_Merk_Ignore_Preferences || g_Merk_Reset_Preferences) \
+                m_##Param = Default; \
+            else \
+                m_##Param = Sets->value(#Category"/"#Param, Default).toInt(); \
         } \
         return  m_##Param; \
     }
@@ -108,13 +130,44 @@
     void MerkaartorPreferences::set##Param(double theValue) \
     { \
         m_##Param = theValue; \
-        Sets->setValue(#Category"/"#Param, theValue); \
+        if (!g_Merk_Ignore_Preferences) { \
+            Sets->setValue(#Category"/"#Param, theValue); \
+        } \
     } \
     double MerkaartorPreferences::get##Param() \
     { \
         if (!::mb_##Param) { \
             ::mb_##Param = true; \
-            m_##Param = Sets->value(#Category"/"#Param, Default).toDouble(); \
+            if (g_Merk_Ignore_Preferences || g_Merk_Reset_Preferences) \
+                m_##Param = Default; \
+            else \
+                m_##Param = Sets->value(#Category"/"#Param, Default).toDouble(); \
+        } \
+        return  m_##Param; \
+    }
+
+#define M_PARAM_IMPLEMENT_COLOR(Param, Category, Default) \
+    bool mb_##Param = false; \
+    void MerkaartorPreferences::set##Param(QColor theValue) \
+    { \
+        m_##Param = theValue; \
+        if (!g_Merk_Ignore_Preferences) { \
+            Sets->setValue(#Category"/"#Param, QVariant(theValue)); \
+        } \
+    } \
+    QColor MerkaartorPreferences::get##Param() \
+    { \
+        if (!::mb_##Param) { \
+            ::mb_##Param = true; \
+            if (g_Merk_Ignore_Preferences || g_Merk_Reset_Preferences) \
+                m_##Param = Default; \
+            else { \
+                QString sColor = Sets->value(#Category"/"#Param, QVariant(Default)).toString(); \
+                if (sColor.isEmpty()) \
+                    m_##Param = Default; \
+                else \
+                    m_##Param = Sets->value(#Category"/"#Param).value<QColor>(); \
+            } \
         } \
         return  m_##Param; \
     }
@@ -153,25 +206,28 @@ Tool::Tool()
 /* MekaartorPreferences */
 
 MerkaartorPreferences::MerkaartorPreferences()
+    : Sets(0)
 {
-    if (!g_Merk_Portable) {
-        Sets = new QSettings();
+    if (!g_Merk_Ignore_Preferences) {
+        if (!g_Merk_Portable) {
+            Sets = new QSettings();
 
-        QSettings oldSettings("BartVanhauwaert", "Merkaartor");
-        QStringList oldKeys = oldSettings.allKeys();
-        foreach(QString k, oldKeys) {
-            Sets->setValue(k, oldSettings.value(k));
-            Sets->sync();
-            oldSettings.remove(k);
+            QSettings oldSettings("BartVanhauwaert", "Merkaartor");
+            QStringList oldKeys = oldSettings.allKeys();
+            foreach(QString k, oldKeys) {
+                Sets->setValue(k, oldSettings.value(k));
+                Sets->sync();
+                oldSettings.remove(k);
+            }
+            oldSettings.clear();
+        } else {
+            Sets = new QSettings(qApp->applicationDirPath() + "/merkaartor.ini", QSettings::IniFormat);
         }
-        oldSettings.clear();
-    } else {
-        Sets = new QSettings(qApp->applicationDirPath() + "/merkaartor.ini", QSettings::IniFormat);
+        version = Sets->value("version/version", "0").toString();
     }
 
     theToolList = new ToolList();
 
-    version = Sets->value("version/version", "0").toString();
 
     connect(&httpRequest, SIGNAL(responseHeaderReceived(const QHttpResponseHeader &)), this, SLOT(on_responseHeaderReceived(const QHttpResponseHeader &)));
     connect(&httpRequest,SIGNAL(requestFinished(int, bool)),this,SLOT(on_requestFinished(int, bool)));
@@ -201,6 +257,9 @@ MerkaartorPreferences::~MerkaartorPreferences()
 
 void MerkaartorPreferences::save(bool UserPwdChanged)
 {
+    if (g_Merk_Ignore_Preferences)
+        return;
+
     Sets->setValue("version/version", QString("%1").arg(STRINGIFY(VERSION)));
     setWmsServers();
     setTmsServers();
@@ -464,15 +523,18 @@ void MerkaartorPreferences::initialize()
 
     fromOsmPref();
 
-    QStringList sl = Sets->value("downloadosm/bookmarks").toStringList();
-    if (sl.size()) {
-        for (int i=0; i<sl.size(); i+=5) {
-            Bookmark B(sl[i], CoordBox(Coord(angToCoord(sl[i+1].toDouble()),angToCoord(sl[i+2].toDouble())),
-                                    Coord(angToCoord(sl[i+3].toDouble()),angToCoord(sl[i+4].toDouble()))));
-            theBookmarkList.addBookmark(B);
+    QStringList sl;
+    if (!g_Merk_Ignore_Preferences && !g_Merk_Reset_Preferences) {
+        sl = Sets->value("downloadosm/bookmarks").toStringList();
+        if (sl.size()) {
+            for (int i=0; i<sl.size(); i+=5) {
+                Bookmark B(sl[i], CoordBox(Coord(angToCoord(sl[i+1].toDouble()),angToCoord(sl[i+2].toDouble())),
+                                           Coord(angToCoord(sl[i+3].toDouble()),angToCoord(sl[i+4].toDouble()))));
+                theBookmarkList.addBookmark(B);
+            }
+            save();
+            Sets->remove("downloadosm/bookmarks");
         }
-        save();
-        Sets->remove("downloadosm/bookmarks");
     }
 
     QStringList alphaList = getAlphaList();
@@ -486,62 +548,55 @@ void MerkaartorPreferences::initialize()
         }
     }
 
-    QStringList tl = Sets->value("Tools/list").toStringList();
-    for (int i=0; i<tl.size(); i+=TOOL_FIELD_SIZE) {
-        Tool t(tl[i], tl[i+1]);
-        theToolList->insert(tl[i], t);
+    QStringList tl;
+    if (!g_Merk_Ignore_Preferences && !g_Merk_Reset_Preferences) {
+        tl = Sets->value("Tools/list").toStringList();
+        for (int i=0; i<tl.size(); i+=TOOL_FIELD_SIZE) {
+            Tool t(tl[i], tl[i+1]);
+            theToolList->insert(tl[i], t);
+        }
     }
     if (!theToolList->contains("Inkscape")) {
         Tool t("Inkscape", "");
         theToolList->insert("Inkscape", t);
     }
 
-    QStringList Servers = Sets->value("WSM/servers").toStringList();
-    if (Servers.size()) {
-        for (int i=0; i<Servers.size(); i+=7) {
-            WmsServer S(Servers[i], Servers[i+1], Servers[i+2], Servers[i+3], Servers[i+4], Servers[i+5], Servers[i+6]);
-            theWmsServerList.addServer(S);
+    QStringList Servers;
+    if (!g_Merk_Ignore_Preferences && !g_Merk_Reset_Preferences) {
+        Servers = Sets->value("WSM/servers").toStringList();
+        if (Servers.size()) {
+            for (int i=0; i<Servers.size(); i+=7) {
+                WmsServer S(Servers[i], Servers[i+1], Servers[i+2], Servers[i+3], Servers[i+4], Servers[i+5], Servers[i+6]);
+                theWmsServerList.addServer(S);
+            }
+            save();
+            Sets->remove("WSM/servers");
         }
-        save();
-        Sets->remove("WSM/servers");
-    }
-    Servers = Sets->value("TMS/servers").toStringList();
-    if (Servers.size()) {
-        for (int i=0; i<Servers.size(); i+=6) {
-            TmsServer S(Servers[i], Servers[i+1], Servers[i+2], "EPSG:900913", Servers[i+3].toInt(), Servers[i+4].toInt(), Servers[i+5].toInt());
-            theTmsServerList.addServer(S);
+
+        Servers = Sets->value("TMS/servers").toStringList();
+        if (Servers.size()) {
+            for (int i=0; i<Servers.size(); i+=6) {
+                TmsServer S(Servers[i], Servers[i+1], Servers[i+2], "EPSG:900913", Servers[i+3].toInt(), Servers[i+4].toInt(), Servers[i+5].toInt());
+                theTmsServerList.addServer(S);
+            }
+            save();
+            Sets->remove("TMS/servers");
         }
-        save();
-        Sets->remove("TMS/servers");
     }
-    //if (Servers.size() == 0) {
-    //	TmsServer osmmapnik("OSM Mapnik", "tile.openstreetmap.org", "/%1/%2/%3.png", 256, 0, 17);
-    //	theTmsServerList.insert("OSM Mapnik", osmmapnik);
-    //	TmsServer osmth("OSM T@H", "tah.openstreetmap.org", "/Tiles/tile/%1/%2/%3.png", 256, 0, 17);
-    //	theTmsServerList.insert("OSM T@H", osmth);
-    //	TmsServer cycle("Cycle Map", "andy.sandbox.cloudmade.com", "/tiles/cycle/%1/%2/%3.png", 256, 0, 17);
-    //	theTmsServerList.insert("Gravitystorm Cycle", cycle);
-    //	TmsServer oam("OpenAerialMap", "tile.openaerialmap.org", "/tiles/1.0.0/openaerialmap-900913/%1/%2/%3.png", 256, 0, 17);
-    //	theTmsServerList.insert("OpenAerialMap", oam);
-    //	TmsServer npe("New Popular Edition (NPE)", "npe.openstreetmap.org", "/%1/%2/%3.png", 256, 6, 15);
-    //	theTmsServerList.insert("New Popular Edition (NPE)", npe);
-    //	TmsServer osmmaplint("OSM Maplint", "tah.openstreetmap.org", "/Tiles/maplint/%1/%2/%3.png", 256, 12, 16);
-    //	theTmsServerList.insert("OSM Maplint", osmmaplint);
-    //	setSelectedTmsServer("OSM Mapnik");
-    //	save();
-    //}
 
     // PRoxy upgrade
-    if (Sets->contains("proxy/Use")) {
-        bool b = Sets->value("proxy/Use").toBool();
-        QString h = Sets->value("proxy/Host").toString();
-        int p = Sets->value("proxy/Port").toInt();
+    if (!g_Merk_Ignore_Preferences && !g_Merk_Reset_Preferences) {
+        if (Sets->contains("proxy/Use")) {
+            bool b = Sets->value("proxy/Use").toBool();
+            QString h = Sets->value("proxy/Host").toString();
+            int p = Sets->value("proxy/Port").toInt();
 
-        Sets->remove("proxy");
+            Sets->remove("proxy");
 
-        setProxyUse(b);
-        setProxyHost(h);
-        setProxyPort(p);
+            setProxyUse(b);
+            setProxyHost(h);
+            setProxyPort(p);
+        }
     }
 
     parentDashes << 1 << 5;
@@ -550,16 +605,6 @@ void MerkaartorPreferences::initialize()
 const QVector<qreal> MerkaartorPreferences::getParentDashes() const
 {
     return parentDashes;
-}
-
-bool MerkaartorPreferences::getRightSideDriving() const
-{
-    return Sets->value("roadstructure/rightsidedriving",true).toBool();
-}
-
-void MerkaartorPreferences::setRightSideDriving(bool theValue)
-{
-    Sets->setValue("roadstructure/rightsidedriving", theValue);
 }
 
 double MerkaartorPreferences::apiVersionNum() const
@@ -586,25 +631,9 @@ void MerkaartorPreferences::setUse06Api(bool b)
     Sets->setValue("osm/use06api", b);
 }
 
-double MerkaartorPreferences::getDoubleRoadDistance() const
-{
-    return Sets->value("roadstructure/doubleroaddistance","20").toDouble();
-}
-
-void MerkaartorPreferences::setDoubleRoadDistance(double theValue)
-{
-    Sets->setValue("roadstructure/doubleroaddistance", theValue);
-}
-
-QString MerkaartorPreferences::getWorkingDir() const
-{
-    return Sets->value("general/workingdir", "").toString();
-}
-
-void MerkaartorPreferences::setWorkingDir(const QString & theValue)
-{
-    Sets->setValue("general/workingdir", theValue);
-}
+M_PARAM_IMPLEMENT_BOOL(rightsidedriving, roadstructure, true);
+M_PARAM_IMPLEMENT_DOUBLE(doubleroaddistance, roadstructure, 20.);
+M_PARAM_IMPLEMENT_STRING(workingdir, general, "");
 
 BookmarkList* MerkaartorPreferences::getBookmarks()
 {
@@ -670,25 +699,20 @@ void MerkaartorPreferences::setTmsServers()
 
 /* */
 
-QString MerkaartorPreferences::getSelectedMapServer() const
-{
-    return Sets->value("backgroundImage/SelectedServer").toString();
-}
-
-void MerkaartorPreferences::setSelectedMapServer(const QString & theValue)
-{
-    Sets->setValue("backgroundImage/SelectedServer", theValue);
-}
-
+M_PARAM_IMPLEMENT_STRING(SelectedServer, backgroundImage, "");
 
 bool MerkaartorPreferences::getBgVisible() const
 {
-    return Sets->value("backgroundImage/Visible", false).toBool();
+    if (g_Merk_Ignore_Preferences || g_Merk_Reset_Preferences)
+        return false;
+    else
+        return Sets->value("backgroundImage/Visible", false).toBool();
 }
 
 void MerkaartorPreferences::setBgVisible(bool theValue)
 {
-    Sets->setValue("backgroundImage/Visible", theValue);
+    if (!g_Merk_Ignore_Preferences)
+        Sets->setValue("backgroundImage/Visible", theValue);
 }
 
 /* Plugins */
@@ -714,12 +738,16 @@ IMapAdapter* MerkaartorPreferences::getBackgroundPlugin(const QUuid& anAdapterUi
 
 void MerkaartorPreferences::setBackgroundPlugin(const QUuid & theValue)
 {
-    Sets->setValue("backgroundImage/BackgroundPlugin", theValue.toString());
+    if (!g_Merk_Ignore_Preferences)
+        Sets->setValue("backgroundImage/BackgroundPlugin", theValue.toString());
 }
 
 QUuid MerkaartorPreferences::getBackgroundPlugin() const
 {
-    QString s = Sets->value("backgroundImage/BackgroundPlugin", "").toString();
+    QString s;
+    if (!g_Merk_Ignore_Preferences && !g_Merk_Reset_Preferences) {
+        s = Sets->value("backgroundImage/BackgroundPlugin", "").toString();
+    }
     return QUuid(s);
 }
 
@@ -728,25 +756,8 @@ QMap<QUuid, IMapAdapter *> MerkaartorPreferences::getBackgroundPlugins()
     return mBackgroundPlugins;
 }
 
-void MerkaartorPreferences::setCacheDir(const QString & theValue)
-{
-    Sets->setValue("backgroundImage/CacheDir", theValue);
-}
-
-QString MerkaartorPreferences::getCacheDir() const
-{
-    return Sets->value("backgroundImage/CacheDir", HOMEDIR + "/BackgroundCache").toString();
-}
-
-int MerkaartorPreferences::getCacheSize() const
-{
-    return Sets->value("backgroundImage/CacheSize", 0).toInt();
-}
-
-void MerkaartorPreferences::setCacheSize(int theValue)
-{
-    Sets->setValue("backgroundImage/CacheSize", theValue);
-}
+M_PARAM_IMPLEMENT_STRING(CacheDir, backgroundImage, HOMEDIR + "/BackgroundCache");
+M_PARAM_IMPLEMENT_INT(CacheSize, backgroundImage, 0);
 
 /* Search */
 M_PARAM_IMPLEMENT_INT(LastMaxSearchResults, search, 100);
@@ -758,87 +769,99 @@ M_PARAM_IMPLEMENT_STRING(LastSearchTagSelector, search, "");
 
 void MerkaartorPreferences::saveMainWindowState(const MainWindow * mainWindow)
 {
-//    Sets->setValue("MainWindow/Position", mainWindow->pos());
-//    Sets->setValue("MainWindow/Size", mainWindow->size());
-    Sets->setValue("MainWindow/Geometry", mainWindow->saveGeometry());
-    Sets->setValue("MainWindow/State", mainWindow->saveState());
-    Sets->setValue("MainWindow/Fullscreen", mainWindow->ui->windowShowAllAction->isEnabled());
-    Sets->setValue("MainWindow/FullscreenState", mainWindow->fullscreenState);
+    if (!g_Merk_Ignore_Preferences) {
+        //    Sets->setValue("MainWindow/Position", mainWindow->pos());
+        //    Sets->setValue("MainWindow/Size", mainWindow->size());
+        Sets->setValue("MainWindow/Geometry", mainWindow->saveGeometry());
+        Sets->setValue("MainWindow/State", mainWindow->saveState());
+        Sets->setValue("MainWindow/Fullscreen", mainWindow->ui->windowShowAllAction->isEnabled());
+        Sets->setValue("MainWindow/FullscreenState", mainWindow->fullscreenState);
+    }
 }
 
 void MerkaartorPreferences::restoreMainWindowState(MainWindow * mainWindow) const
 {
-//    if (Sets->contains("MainWindow/Position"))
-//        mainWindow->move( Sets->value("MainWindow/Position").toPoint());
-//
-//    if (Sets->contains("MainWindow/Size"))
-//        mainWindow->resize( Sets->value("MainWindow/Size").toSize());
+    if (!g_Merk_Ignore_Preferences && !g_Merk_Reset_Preferences) {
+        //    if (Sets->contains("MainWindow/Position"))
+        //        mainWindow->move( Sets->value("MainWindow/Position").toPoint());
+        //
+        //    if (Sets->contains("MainWindow/Size"))
+        //        mainWindow->resize( Sets->value("MainWindow/Size").toSize());
 
-    if (Sets->contains("MainWindow/Geometry"))
-        mainWindow->restoreGeometry(Sets->value("MainWindow/Geometry").toByteArray() );
+        if (Sets->contains("MainWindow/Geometry"))
+            mainWindow->restoreGeometry(Sets->value("MainWindow/Geometry").toByteArray() );
 
-    if (Sets->contains("MainWindow/State"))
-        mainWindow->restoreState( Sets->value("MainWindow/State").toByteArray() );
+        if (Sets->contains("MainWindow/State"))
+            mainWindow->restoreState( Sets->value("MainWindow/State").toByteArray() );
 
-    if (Sets->contains("MainWindow/FullscreenState"))
-        mainWindow->fullscreenState = Sets->value("MainWindow/FullscreenState").toByteArray();
+        if (Sets->contains("MainWindow/FullscreenState"))
+            mainWindow->fullscreenState = Sets->value("MainWindow/FullscreenState").toByteArray();
 
-    if (Sets->value("MainWindow/Fullscreen", false).toBool()) {
-        mainWindow->ui->windowHideAllAction->setEnabled(false);
-        mainWindow->ui->windowHideAllAction->setVisible(false);
-        mainWindow->ui->windowShowAllAction->setEnabled(true);
-        mainWindow->ui->windowShowAllAction->setVisible(true);
-    } else {
-        mainWindow->ui->windowHideAllAction->setEnabled(true);
-        mainWindow->ui->windowHideAllAction->setVisible(true);
-        mainWindow->ui->windowShowAllAction->setEnabled(false);
-        mainWindow->ui->windowShowAllAction->setVisible(false);
+        if (Sets->value("MainWindow/Fullscreen", false).toBool()) {
+            mainWindow->ui->windowHideAllAction->setEnabled(false);
+            mainWindow->ui->windowHideAllAction->setVisible(false);
+            mainWindow->ui->windowShowAllAction->setEnabled(true);
+            mainWindow->ui->windowShowAllAction->setVisible(true);
+        } else {
+            mainWindow->ui->windowHideAllAction->setEnabled(true);
+            mainWindow->ui->windowHideAllAction->setVisible(true);
+            mainWindow->ui->windowShowAllAction->setEnabled(false);
+            mainWindow->ui->windowShowAllAction->setVisible(false);
+        }
     }
 }
 
 void MerkaartorPreferences::setInitialPosition(MapView* vw)
 {
-    QStringList ip;
-    CoordBox cb = vw->viewport();
-    ip.append(QString::number(cb.bottomLeft().lat(), 'f', 8));
-    ip.append(QString::number(cb.bottomLeft().lon(), 'f', 8));
-    ip.append(QString::number(cb.topRight().lat(), 'f', 8));
-    ip.append(QString::number(cb.topRight().lon(), 'f', 8));
+    if (!g_Merk_Ignore_Preferences) {
+        QStringList ip;
+        CoordBox cb = vw->viewport();
+        ip.append(QString::number(cb.bottomLeft().lat(), 'f', 8));
+        ip.append(QString::number(cb.bottomLeft().lon(), 'f', 8));
+        ip.append(QString::number(cb.topRight().lat(), 'f', 8));
+        ip.append(QString::number(cb.topRight().lon(), 'f', 8));
 
-    Sets->setValue("MainWindow/InitialPosition", ip);
-//    Sets->setValue("MainWindow/ViewRect", vw->rect());
+        Sets->setValue("MainWindow/InitialPosition", ip);
+        //    Sets->setValue("MainWindow/ViewRect", vw->rect());
+    }
 }
 
 void MerkaartorPreferences::initialPosition(MapView* vw)
 {
-    if (!Sets->contains("MainWindow/InitialPosition")) {
-        vw->setViewport(WORLD_COORDBOX, vw->rect());
-        return;
+    if (!g_Merk_Ignore_Preferences && !g_Merk_Reset_Preferences) {
+        if (!Sets->contains("MainWindow/InitialPosition")) {
+            vw->setViewport(WORLD_COORDBOX, vw->rect());
+            return;
+        }
+
+        const QStringList & ip = Sets->value("MainWindow/InitialPosition").toStringList();
+
+        const Coord bottomLeft(ip[0].toDouble(), ip[1].toDouble());
+        const Coord topRight(ip[2].toDouble(),ip[3].toDouble());
+
+        vw->setViewport(CoordBox(bottomLeft, topRight), vw->rect());
+        //    if (!Sets->contains("MainWindow/ViewRect"))
+        //        vw->setViewport(CoordBox(bottomLeft, topRight), vw->rect());
+        //    else {
+        //        QRect rt = Sets->value("MainWindow/ViewRect").toRect();
+        //        vw->setViewport(CoordBox(bottomLeft, topRight), rt);
+        //    }
     }
-
-    const QStringList & ip = Sets->value("MainWindow/InitialPosition").toStringList();
-
-    const Coord bottomLeft(ip[0].toDouble(), ip[1].toDouble());
-    const Coord topRight(ip[2].toDouble(),ip[3].toDouble());
-
-    vw->setViewport(CoordBox(bottomLeft, topRight), vw->rect());
-//    if (!Sets->contains("MainWindow/ViewRect"))
-//        vw->setViewport(CoordBox(bottomLeft, topRight), vw->rect());
-//    else {
-//        QRect rt = Sets->value("MainWindow/ViewRect").toRect();
-//        vw->setViewport(CoordBox(bottomLeft, topRight), rt);
-//    }
 }
 
 #ifndef _MOBILE
 void MerkaartorPreferences::setProjectionType(QString theValue)
 {
-    Sets->setValue("projection/Type", theValue);
+    if (!g_Merk_Ignore_Preferences)
+        Sets->setValue("projection/Type", theValue);
 }
 
 QString MerkaartorPreferences::getProjectionType()
 {
-    return Sets->value("projection/Type", "Mercator").toString();
+    if (!g_Merk_Ignore_Preferences && !g_Merk_Reset_Preferences)
+        return Sets->value("projection/Type", "Mercator").toString();
+    else
+        return "Mercator";
 }
 
 ProjectionsList* MerkaartorPreferences::getProjectionsList()
@@ -854,12 +877,16 @@ ProjectionItem MerkaartorPreferences::getProjection(QString aProj)
 
 void MerkaartorPreferences::setCurrentFilter(FilterType theValue)
 {
-    Sets->setValue("filter/Type", theValue);
+    if (!g_Merk_Ignore_Preferences)
+        Sets->setValue("filter/Type", theValue);
 }
 
 QString MerkaartorPreferences::getCurrentFilter()
 {
-    return Sets->value("filter/Type", "").toString();
+    if (!g_Merk_Ignore_Preferences && !g_Merk_Reset_Preferences)
+        return Sets->value("filter/Type", "").toString();
+    else
+        return "";
 }
 
 FiltersList* MerkaartorPreferences::getFiltersList()
@@ -881,179 +908,45 @@ qreal MerkaartorPreferences::getAlpha(QString lvl)
 
 QStringList MerkaartorPreferences::getAlphaList() const
 {
-    return Sets->value("visual/alpha").toStringList();
+    if (!g_Merk_Ignore_Preferences && !g_Merk_Reset_Preferences)
+        return Sets->value("visual/alpha").toStringList();
+    else
+        return QStringList();
 }
 
 void MerkaartorPreferences::setAlphaList()
 {
-    QStringList alphaList;
-    QHashIterator<QString, qreal> i(alpha);
-    while (i.hasNext()) {
-        i.next();
-        alphaList << i.key() << QString().setNum(i.value());
+    if (!g_Merk_Ignore_Preferences) {
+        QStringList alphaList;
+        QHashIterator<QString, qreal> i(alpha);
+        while (i.hasNext()) {
+            i.next();
+            alphaList << i.key() << QString().setNum(i.value());
+        }
+        Sets->setValue("visual/alpha", alphaList);
     }
-    Sets->setValue("visual/alpha", alphaList);
 }
 
-int MerkaartorPreferences::getHoverWidth() const
-{
-    return Sets->value("visual/HoverWidth",1).toInt();
-}
+M_PARAM_IMPLEMENT_INT(HoverWidth, visual, 1);
+M_PARAM_IMPLEMENT_INT(HighlightWidth, visual, 1);
+M_PARAM_IMPLEMENT_INT(DirtyWidth, visual, 2);
+M_PARAM_IMPLEMENT_INT(FocusWidth, visual, 3);
+M_PARAM_IMPLEMENT_INT(RelationsWidth, visual, 3);
+M_PARAM_IMPLEMENT_INT(GpxTrackWidth, visual, 3);
 
-int MerkaartorPreferences::getHighlightWidth() const
-{
-    return Sets->value("visual/HighlightWidth",1).toInt();
-}
-
-int MerkaartorPreferences::getDirtyWidth() const
-{
-    return Sets->value("visual/DirtyWidth",2).toInt();
-}
-
-int MerkaartorPreferences::getFocusWidth() const
-{
-    return Sets->value("visual/FocusWidth",3).toInt();
-}
-
-int MerkaartorPreferences::getRelationsWidth() const
-{
-    return Sets->value("visual/RelationsWidth",3).toInt();
-}
-
-int MerkaartorPreferences::getGpxTrackWidth() const
-{
-    return Sets->value("visual/GpxTrackWidth",3).toInt();
-}
-
-QColor mb_BgColor;
-QColor MerkaartorPreferences::getBgColor() const
-{
-    if (!::mb_BgColor.isValid()) {
-        QString sColor = Sets->value("visual/BgColor").toString();
-        if (sColor.isEmpty())
-            ::mb_BgColor = Qt::white;
-        else
-            ::mb_BgColor = Sets->value("visual/BgColor").value<QColor>();
-    }
-    return ::mb_BgColor;
-}
-
-void MerkaartorPreferences::setBgColor(const QColor theValue)
-{
-    ::mb_BgColor = theValue;
-    Sets->setValue("visual/BgColor", QVariant(theValue));
-}
-
-
-QColor mb_WaterColor;
-QColor MerkaartorPreferences::getWaterColor() const
-{
-    if (!::mb_WaterColor.isValid()) {
-        QString sColor = Sets->value("visual/WaterColor").toString();
-        if (sColor.isEmpty())
-            ::mb_WaterColor = QColor(181, 208, 208);
-        else
-            mb_WaterColor = Sets->value("visual/WaterColor").value<QColor>();
-    }
-    return ::mb_WaterColor;
-}
-
-void MerkaartorPreferences::setWaterColor(const QColor theValue)
-{
-    ::mb_WaterColor = theValue;
-    Sets->setValue("visual/WaterColor", QVariant(theValue));
-}
-
-
-QColor MerkaartorPreferences::getFocusColor() const
-{
-    QString sColor = Sets->value("visual/FocusColor").toString();
-    if (sColor.isEmpty())
-        return Qt::blue;
-    return Sets->value("visual/FocusColor").value<QColor>();
-}
-
-QColor MerkaartorPreferences::getHoverColor() const
-{
-    QString sColor = Sets->value("visual/HoverColor").toString();
-    if (sColor.isEmpty())
-        return Qt::magenta;
-    return Sets->value("visual/HoverColor").value<QColor>();
-}
-
-QColor MerkaartorPreferences::getHighlightColor() const
-{
-    QString sColor = Sets->value("visual/HighlightColor").toString();
-    if (sColor.isEmpty())
-        return Qt::darkCyan;
-    return Sets->value("visual/HighlightColor").value<QColor>();
-}
-
-QColor MerkaartorPreferences::getDirtyColor() const
-{
-    QString sColor = Sets->value("visual/DirtyColor").toString();
-    if (sColor.isEmpty())
-        return QColor(255, 85, 0);
-    return Sets->value("visual/DirtyColor").value<QColor>();
-}
-
-QColor MerkaartorPreferences::getRelationsColor() const
-{
-    QString sColor = Sets->value("visual/RelationsColor").toString();
-    if (sColor.isEmpty())
-        return QColor(0, 170, 0);
-    return Sets->value("visual/RelationsColor").value<QColor>();
-}
-
-QColor MerkaartorPreferences::getGpxTrackColor() const
-{
-    QString sColor = Sets->value("visual/GpxTrackColor").toString();
-    if (sColor.isEmpty())
-        return QColor(50, 220, 220);
-    return Sets->value("visual/GpxTrackColor").value<QColor>();
-}
-
-void MerkaartorPreferences::setHoverColor(const QColor theValue, int Width)
-{
-    Sets->setValue("visual/HoverColor", QVariant(theValue));
-    Sets->setValue("visual/HoverWidth", Width);
-}
-
-void MerkaartorPreferences::setHighlightColor(const QColor theValue, int Width)
-{
-    Sets->setValue("visual/HighlightColor", QVariant(theValue));
-    Sets->setValue("visual/HighlightWidth", Width);
-}
-
-void MerkaartorPreferences::setDirtyColor(const QColor theValue, int Width)
-{
-    Sets->setValue("visual/DirtyColor", QVariant(theValue));
-    Sets->setValue("visual/DirtyWidth", Width);
-}
-
-void MerkaartorPreferences::setFocusColor(const QColor theValue, int Width)
-{
-    Sets->setValue("visual/FocusColor", QVariant(theValue));
-    Sets->setValue("visual/FocusWidth", Width);
-}
-
-void MerkaartorPreferences::setRelationsColor(const QColor theValue, int Width)
-{
-    Sets->setValue("visual/RelationsColor", QVariant(theValue));
-    Sets->setValue("visual/RelationsWidth", Width);
-}
-
-void MerkaartorPreferences::setGpxTrackColor(const QColor theValue, int Width)
-{
-    Sets->setValue("visual/GpxTrackColor", QVariant(theValue));
-    Sets->setValue("visual/GpxTrackWidth", Width);
-}
+M_PARAM_IMPLEMENT_COLOR(BgColor, visual, Qt::white)
+M_PARAM_IMPLEMENT_COLOR(WaterColor, visual, QColor(181, 208, 208))
+M_PARAM_IMPLEMENT_COLOR(FocusColor, visual, Qt::blue);
+M_PARAM_IMPLEMENT_COLOR(HoverColor, visual, Qt::magenta);
+M_PARAM_IMPLEMENT_COLOR(HighlightColor, visual, Qt::darkCyan);
+M_PARAM_IMPLEMENT_COLOR(DirtyColor, visual, QColor(255, 85, 0));
+M_PARAM_IMPLEMENT_COLOR(RelationsColor, visual, QColor(0, 170, 0));
+M_PARAM_IMPLEMENT_COLOR(GpxTrackColor, visual, QColor(50, 220, 220));
 
 QHash< QString, qreal > * MerkaartorPreferences::getAlphaPtr()
 {
     return &alpha;
 }
-
 
 bool MerkaartorPreferences::getDrawTileBoundary()
 {
@@ -1064,7 +957,11 @@ bool MerkaartorPreferences::getDrawTileBoundary()
 
 QString MerkaartorPreferences::getOsmWebsite() const
 {
-    QString s = Sets->value("osm/Website", "www.openstreetmap.org").toString();
+    QString s;
+    if (!g_Merk_Ignore_Preferences && !g_Merk_Reset_Preferences)
+        s = Sets->value("osm/Website", "www.openstreetmap.org").toString();
+    else
+        s = "www.openstreetmap.org";
 
     QUrl u = QUrl::fromUserInput(s);
     if (u.path().isEmpty())
@@ -1075,7 +972,8 @@ QString MerkaartorPreferences::getOsmWebsite() const
 
 void MerkaartorPreferences::setOsmWebsite(const QString & theValue)
 {
-    Sets->setValue("osm/Website", theValue);
+    if (!g_Merk_Ignore_Preferences)
+        Sets->setValue("osm/Website", theValue);
 }
 
 M_PARAM_IMPLEMENT_STRING(XapiUrl, osm, "http://www.informationfreeway.org/api/0.6/")
@@ -1083,76 +981,38 @@ M_PARAM_IMPLEMENT_BOOL(AutoHistoryCleanup, data, true);
 
 QString MerkaartorPreferences::getOsmUser() const
 {
-    return Sets->value("osm/User").toString();
+    if (!g_Merk_Ignore_Preferences && !g_Merk_Reset_Preferences)
+        return Sets->value("osm/User").toString();
+    else
+        return "";
 }
 
 void MerkaartorPreferences::setOsmUser(const QString & theValue)
 {
-    Sets->setValue("osm/User", theValue);
+    if (!g_Merk_Ignore_Preferences)
+        Sets->setValue("osm/User", theValue);
 }
 
 QString MerkaartorPreferences::getOsmPassword() const
 {
-    return Sets->value("osm/Password").toString();
+    if (!g_Merk_Ignore_Preferences && !g_Merk_Reset_Preferences)
+        return Sets->value("osm/Password").toString();
+    else
+        return "";
 }
 
 void MerkaartorPreferences::setOsmPassword(const QString & theValue)
 {
-    Sets->setValue("osm/Password", theValue);
+    if (!g_Merk_Ignore_Preferences)
+        Sets->setValue("osm/Password", theValue);
 }
 
-M_PARAM_IMPLEMENT_DOUBLE(MaxDistNodes, data, 0.0)
+M_PARAM_IMPLEMENT_DOUBLE(MaxDistNodes, data, 0.0);
 
-bool MerkaartorPreferences::getAutoSaveDoc() const
-{
-    return Sets->value("data/AutoSaveDoc", false).toBool();
-}
+M_PARAM_IMPLEMENT_BOOL(AutoSaveDoc, data, false);
+M_PARAM_IMPLEMENT_BOOL(AutoExtractTracks, data, false);
 
-void MerkaartorPreferences::setAutoSaveDoc(bool theValue)
-{
-    Sets->setValue("data/AutoSaveDoc", theValue);
-}
-
-void MerkaartorPreferences::setAutoExtractTracks(bool theValue)
-{
-    Sets->setValue("data/AutoExtractTracks", theValue);
-}
-
-bool MerkaartorPreferences::getAutoExtractTracks() const
-{
-    return Sets->value("data/AutoExtractTracks", false).toBool();
-}
-
-#define M_PARAM_IMPLEMENT_BOOL(Param, Category, Default) \
-    bool mb_##Param = false; \
-    void MerkaartorPreferences::set##Param(bool theValue) \
-    { \
-        m_##Param = theValue; \
-        Sets->setValue(#Category"/"#Param, theValue); \
-    } \
-    bool MerkaartorPreferences::get##Param() \
-    { \
-        if (!::mb_##Param) { \
-            ::mb_##Param = true; \
-            m_##Param = Sets->value(#Category"/"#Param, Default).toBool(); \
-        } \
-        return  m_##Param; \
-    }
-
-bool mb_DirectionalArrowsVisible = false;
-RendererOptions::DirectionalArrowsShowOptions MerkaartorPreferences::getDirectionalArrowsVisible()
-{
-    if (!::mb_DirectionalArrowsVisible) {
-        ::mb_DirectionalArrowsVisible = true;
-        m_DirectionalArrowsVisible = (RendererOptions::DirectionalArrowsShowOptions)Sets->value("visual/DirectionalArrowsVisible", RendererOptions::ArrowsOneway).toInt();
-    }
-    return m_DirectionalArrowsVisible;
-}
-void MerkaartorPreferences::setDirectionalArrowsVisible(RendererOptions::DirectionalArrowsShowOptions theValue)
-{
-    m_DirectionalArrowsVisible = theValue;
-    Sets->setValue("visual/DirectionalArrowsVisible", (int)theValue);
-}
+M_PARAM_IMPLEMENT_INT(DirectionalArrowsVisible, visual, 1);
 
 RendererOptions MerkaartorPreferences::getRenderOptions()
 {
@@ -1171,7 +1031,7 @@ RendererOptions MerkaartorPreferences::getRenderOptions()
     if (getScaleVisible()) opt.options |= RendererOptions::ScaleVisible; else opt.options &= ~RendererOptions::ScaleVisible;
     if (getLatLonGridVisible()) opt.options |= RendererOptions::LatLonGridVisible; else opt.options &= ~RendererOptions::LatLonGridVisible;
     if (getZoomBoris()) opt.options |= RendererOptions::LockZoom; else opt.options &= ~RendererOptions::LockZoom;
-    opt.arrowOptions = getDirectionalArrowsVisible();
+    opt.arrowOptions &= getDirectionalArrowsVisible();
 
     return opt;
 }
@@ -1179,12 +1039,16 @@ RendererOptions MerkaartorPreferences::getRenderOptions()
 /* Export Type */
 void MerkaartorPreferences::setExportType(ExportType theValue)
 {
-    Sets->setValue("export/Type", theValue);
+    if (!g_Merk_Ignore_Preferences)
+        Sets->setValue("export/Type", theValue);
 }
 
 ExportType MerkaartorPreferences::getExportType() const
 {
-    return (ExportType)Sets->value("export/Type", 0).toInt();
+    if (!g_Merk_Ignore_Preferences && !g_Merk_Reset_Preferences)
+        return (ExportType)Sets->value("export/Type", 0).toInt();
+    else
+        return (ExportType)0;
 }
 
 /* Tools */
@@ -1195,15 +1059,17 @@ ToolList* MerkaartorPreferences::getTools() const
 
 void MerkaartorPreferences::setTools()
 {
-    QStringList tl;
-    ToolListIterator i(*theToolList);
-    while (i.hasNext()) {
-        i.next();
-        Tool t = i.value();
-        tl.append(t.ToolName);
-        tl.append(t.ToolPath);
+    if (!g_Merk_Ignore_Preferences) {
+        QStringList tl;
+        ToolListIterator i(*theToolList);
+        while (i.hasNext()) {
+            i.next();
+            Tool t = i.value();
+            tl.append(t.ToolName);
+            tl.append(t.ToolPath);
+        }
+        Sets->setValue("Tools/list", tl);
     }
-    Sets->setValue("Tools/list", tl);
 }
 
 Tool MerkaartorPreferences::getTool(QString toolName) const
@@ -1223,12 +1089,16 @@ Tool MerkaartorPreferences::getTool(QString toolName) const
 /* Recent */
 QStringList MerkaartorPreferences::getRecentOpen() const
 {
-    return Sets->value("recent/open").toStringList();
+    if (!g_Merk_Ignore_Preferences && !g_Merk_Reset_Preferences)
+        return Sets->value("recent/open").toStringList();
+    else
+        return QStringList();
 }
 
 void MerkaartorPreferences::setRecentOpen(const QStringList & theValue)
 {
-    Sets->setValue("recent/open", theValue);
+    if (!g_Merk_Ignore_Preferences)
+        Sets->setValue("recent/open", theValue);
 }
 
 void MerkaartorPreferences::addRecentOpen(const QString & theValue)
@@ -1248,12 +1118,16 @@ void MerkaartorPreferences::addRecentOpen(const QString & theValue)
 
 QStringList MerkaartorPreferences::getRecentImport() const
 {
-    return Sets->value("recent/import").toStringList();
+    if (!g_Merk_Ignore_Preferences && !g_Merk_Reset_Preferences)
+        return Sets->value("recent/import").toStringList();
+    else
+        return QStringList();
 }
 
 void MerkaartorPreferences::setRecentImport(const QStringList & theValue)
 {
-    Sets->setValue("recent/import", theValue);
+    if (!g_Merk_Ignore_Preferences)
+        Sets->setValue("recent/import", theValue);
 }
 
 void MerkaartorPreferences::addRecentImport(const QString & theValue)
@@ -1273,12 +1147,16 @@ void MerkaartorPreferences::addRecentImport(const QString & theValue)
 
 QStringList MerkaartorPreferences::getShortcuts() const
 {
-    return Sets->value("Tools/shortcuts").toStringList();
+    if (!g_Merk_Ignore_Preferences && !g_Merk_Reset_Preferences)
+        return Sets->value("Tools/shortcuts").toStringList();
+    else
+        return QStringList();
 }
 
 void MerkaartorPreferences::setShortcuts(const QStringList & theValue)
 {
-    Sets->setValue("Tools/shortcuts", theValue);
+    if (!g_Merk_Ignore_Preferences)
+        Sets->setValue("Tools/shortcuts", theValue);
 }
 
 /* Styles */
@@ -1767,30 +1645,34 @@ void MerkaartorPreferences::saveBookmarks()
 
 void MerkaartorPreferences::loadOsmServers()
 {
-    int size = Sets->beginReadArray("OsmServers");
-    for (int i = 0; i < size; ++i) {
-        Sets->setArrayIndex(i);
-        OsmServer server;
-        server.Selected = Sets->value("selected").toBool();
-        server.Url = Sets->value("url").toString();
-        server.User = Sets->value("user").toString();
-        server.Password = Sets->value("password").toString();
-        theOsmServers.append(server);
+    if (!g_Merk_Ignore_Preferences && !g_Merk_Reset_Preferences) {
+        int size = Sets->beginReadArray("OsmServers");
+        for (int i = 0; i < size; ++i) {
+            Sets->setArrayIndex(i);
+            OsmServer server;
+            server.Selected = Sets->value("selected").toBool();
+            server.Url = Sets->value("url").toString();
+            server.User = Sets->value("user").toString();
+            server.Password = Sets->value("password").toString();
+            theOsmServers.append(server);
+        }
+        Sets->endArray();
     }
-    Sets->endArray();
 }
 
 void MerkaartorPreferences::saveOsmServers()
 {
-    Sets->beginWriteArray("OsmServers");
-    for (int i = 0; i < theOsmServers.size(); ++i) {
-        Sets->setArrayIndex(i);
-        Sets->setValue("selected", theOsmServers.at(i).Selected);
-        Sets->setValue("url", theOsmServers.at(i).Url);
-        Sets->setValue("user", theOsmServers.at(i).User);
-        Sets->setValue("password", theOsmServers.at(i).Password);
+    if (!g_Merk_Ignore_Preferences) {
+        Sets->beginWriteArray("OsmServers");
+        for (int i = 0; i < theOsmServers.size(); ++i) {
+            Sets->setArrayIndex(i);
+            Sets->setValue("selected", theOsmServers.at(i).Selected);
+            Sets->setValue("url", theOsmServers.at(i).Url);
+            Sets->setValue("user", theOsmServers.at(i).User);
+            Sets->setValue("password", theOsmServers.at(i).Password);
+        }
+        Sets->endArray();
     }
-    Sets->endArray();
 }
 
 
@@ -1798,15 +1680,20 @@ void MerkaartorPreferences::saveOsmServers()
 
 QString getDefaultLanguage()
 {
-    QSettings Sets;
-    QString lang = Sets.value("locale/language").toString();
-    if (lang == "")
-        lang = QLocale::system().name().split("_")[0];
-    return lang;
+    if (!g_Merk_Ignore_Preferences && !g_Merk_Reset_Preferences) {
+        QSettings Sets;
+        QString lang = Sets.value("locale/language").toString();
+        if (lang == "")
+            lang = QLocale::system().name().split("_")[0];
+        return lang;
+    } else
+        return QLocale::system().name().split("_")[0];
 }
 
 void setDefaultLanguage(const QString& theValue)
 {
-    QSettings Sets;
-    Sets.setValue("locale/language", theValue);
+    if (!g_Merk_Ignore_Preferences) {
+        QSettings Sets;
+        Sets.setValue("locale/language", theValue);
+    }
 }

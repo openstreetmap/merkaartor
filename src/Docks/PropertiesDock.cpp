@@ -594,7 +594,7 @@ void PropertiesDock::resetValues()
     /* first column is the width of the default text (Edit this to add...)  */
     /* And the rest of the space is assigned to the second column           */
     if (CurrentTagView) {
-		if (M_PREFS->getTagListFirstColumnWidth() && M_PREFS->getTagListFirstColumnWidth() < CurrentTagView->width())
+        if (M_PREFS->getTagListFirstColumnWidth() && M_PREFS->getTagListFirstColumnWidth() < CurrentTagView->width())
             CurrentTagView->setColumnWidth(
                 0, M_PREFS->getTagListFirstColumnWidth()
             );
@@ -1009,7 +1009,7 @@ bool PropertiesDock::loadTemplates(const QString& filename)
         File.setFileName(M_PREFS->getDefaultTemplate());
 
     if (!File.open(QIODevice::ReadOnly)) {
-        QMessageBox::warning(Main,"Template read error", "Error reading template file");
+        qDebug() << tr("Error reading template file");
         return false;
     }
 

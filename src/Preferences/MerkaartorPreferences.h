@@ -85,6 +85,12 @@ class IPaintStyle;
     public: \
         void set##Param(double theValue); \
         double get##Param();
+#define M_PARAM_DECLARE_COLOR(Param) \
+    private: \
+        QColor m_##Param; \
+    public: \
+        void set##Param(QColor theValue); \
+        QColor get##Param();
 
 #define SAFE_DELETE(x) {delete (x); x = NULL;}
 #define STRINGIFY(x) XSTRINGIFY(x)
@@ -98,6 +104,8 @@ extern bool g_Merk_Portable;
 extern bool g_Merk_Frisius;
 extern bool g_Merk_NoGuardedTagsImport;
 extern bool g_Merk_Segment_Mode;
+extern bool g_Merk_Ignore_Preferences;
+extern bool g_Merk_Reset_Preferences;
 extern MainWindow* g_Merk_MainWindow;
 
 typedef QString FilterType;
@@ -162,23 +170,16 @@ public:
     const QString apiVersion() const;
     double apiVersionNum() const;
 
-    void setRightSideDriving(bool theValue);
-    bool getRightSideDriving() const;
-
-    void setDoubleRoadDistance(double theValue);
-    double getDoubleRoadDistance() const;
-
-    void setWorkingDir(const QString & theValue);
-    QString getWorkingDir() const;
+    M_PARAM_DECLARE_BOOL(rightsidedriving);
+    M_PARAM_DECLARE_DOUBLE(doubleroaddistance);
+    M_PARAM_DECLARE_STRING(workingdir);
 
     void setBgVisible(bool theValue);
     bool getBgVisible() const;
 
     /* Tile Cache */
-    void setCacheDir(const QString & theValue);
-    QString getCacheDir() const;
-    void setCacheSize(int theValue);
-    int getCacheSize() const;
+    M_PARAM_DECLARE_STRING(CacheDir);
+    M_PARAM_DECLARE_INT(CacheSize);
 
     /* Search */
     M_PARAM_DECLARE_INT(LastMaxSearchResults);
@@ -193,31 +194,23 @@ public:
     qreal getAlpha(QString lvl);
     QHash<QString, qreal>* getAlphaPtr();
 
-    QColor getBgColor() const;
-    void setBgColor(const QColor theValue);
-    QColor getWaterColor() const;
-    void setWaterColor(const QColor theValue);
-    QColor getFocusColor() const;
-    int getFocusWidth() const;
-    void setFocusColor(const QColor theValue, int width);
-    QColor getHoverColor() const;
-    int getHoverWidth() const;
-    void setHoverColor(const QColor theValue, int width);
-    QColor getHighlightColor() const;
-    int getHighlightWidth() const;
-    void setHighlightColor(const QColor theValue, int width);
-    QColor getDirtyColor() const;
-    int getDirtyWidth() const;
-    void setDirtyColor(const QColor theValue, int width);
-    QColor getRelationsColor() const;
-    int getRelationsWidth() const;
-    void setRelationsColor(const QColor theValue, int width);
-    QColor getGpxTrackColor() const;
-    int getGpxTrackWidth() const;
-    void setGpxTrackColor(const QColor theValue, int width);
+    M_PARAM_DECLARE_INT(HoverWidth);
+    M_PARAM_DECLARE_INT(HighlightWidth);
+    M_PARAM_DECLARE_INT(DirtyWidth);
+    M_PARAM_DECLARE_INT(FocusWidth);
+    M_PARAM_DECLARE_INT(RelationsWidth);
+    M_PARAM_DECLARE_INT(GpxTrackWidth);
 
-    RendererOptions::DirectionalArrowsShowOptions getDirectionalArrowsVisible();
-    void setDirectionalArrowsVisible(RendererOptions::DirectionalArrowsShowOptions theValue);
+    M_PARAM_DECLARE_COLOR(BgColor)
+    M_PARAM_DECLARE_COLOR(WaterColor)
+    M_PARAM_DECLARE_COLOR(FocusColor);
+    M_PARAM_DECLARE_COLOR(HoverColor);
+    M_PARAM_DECLARE_COLOR(HighlightColor);
+    M_PARAM_DECLARE_COLOR(DirtyColor);
+    M_PARAM_DECLARE_COLOR(RelationsColor);
+    M_PARAM_DECLARE_COLOR(GpxTrackColor);
+
+    M_PARAM_DECLARE_INT(DirectionalArrowsVisible);
     RendererOptions getRenderOptions();
 
     M_PARAM_DECLARE_INT_DELAYED(TagListFirstColumnWidth)
@@ -244,13 +237,10 @@ public:
     void setOsmPassword(const QString & theValue);
     QString getOsmPassword() const;
 
-    M_PARAM_DECLARE_DOUBLE(MaxDistNodes)
+    M_PARAM_DECLARE_DOUBLE(MaxDistNodes);
 
-    void setAutoSaveDoc(bool theValue);
-    bool getAutoSaveDoc() const;
-
-    void setAutoExtractTracks(bool theValue);
-    bool getAutoExtractTracks() const;
+    M_PARAM_DECLARE_BOOL(AutoSaveDoc);
+    M_PARAM_DECLARE_BOOL(AutoExtractTracks);
 
     /* Export Type */
     void setExportType(ExportType theValue);
@@ -423,8 +413,7 @@ public:
     TmsServerList* getTmsServers();
     OsmServerList* getOsmServers();
 
-    void setSelectedMapServer(const QString & theValue);
-    QString getSelectedMapServer() const;
+    M_PARAM_DECLARE_STRING(SelectedServer);
 
 protected:
     QVector<qreal> parentDashes;
@@ -462,8 +451,6 @@ private:
     TmsServersList theTmsServerList;
     BookmarksList theBookmarkList;
     OsmServerList theOsmServers;
-
-    RendererOptions::DirectionalArrowsShowOptions m_DirectionalArrowsVisible;
 
 #ifdef USE_LIBPROXY
     pxProxyFactory                          *proxyFactory;

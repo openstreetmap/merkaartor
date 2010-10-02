@@ -105,7 +105,7 @@ LayerWidget* ImageMapLayer::newWidget(void)
 void ImageMapLayer::updateWidget()
 {
     theWidget->initActions();
-    setMapAdapter(M_PREFS->getBackgroundPlugin(), M_PREFS->getSelectedMapServer());
+    setMapAdapter(M_PREFS->getBackgroundPlugin(), M_PREFS->getSelectedServer());
     theWidget->update();
 }
 
@@ -537,26 +537,33 @@ QRect ImageMapLayer::drawFull(MapView& theView, QRect& rect) const
     QRectF fScreen(rect);
     CoordBox Viewport(p->theProjection.inverse(p->theTransform.inverted().map(fScreen.bottomLeft())),
                      p->theProjection.inverse(p->theTransform.inverted().map(fScreen.topRight())));
-    QRectF vp;
-    vp = p->theProjection.getProjectedViewport(p->Viewport, rect);
-    QRectF wgs84vp = QRectF(QPointF(coordToAng(Viewport.bottomLeft().lon()), coordToAng(Viewport.bottomLeft().lat()))
-                        , QPointF(coordToAng(Viewport.topRight().lon()), coordToAng(Viewport.topRight().lat())));
+    if (
+            Viewport.bottomLeft().lat() >= -90. && Viewport.bottomLeft().lat() <= 90.
+            && Viewport.bottomLeft().lon() >= -180. && Viewport.bottomLeft().lon() <= 180.
+            && Viewport.topRight().lat() >= -90. && Viewport.topRight().lat() <= 90.
+            && Viewport.topRight().lon() >= -180. && Viewport.topRight().lon() <= 180.
+            ) {
+        QRectF vp;
+        vp = p->theProjection.getProjectedViewport(p->Viewport, rect);
+        QRectF wgs84vp = QRectF(QPointF(coordToAng(Viewport.bottomLeft().lon()), coordToAng(Viewport.bottomLeft().lat()))
+                                , QPointF(coordToAng(Viewport.topRight().lon()), coordToAng(Viewport.topRight().lat())));
 
-    if (p->theMapAdapter->getType() == IMapAdapter::DirectBackground) {
-        QPixmap pm = p->theMapAdapter->getPixmap(wgs84vp, vp, rect);
-        if (!pm.isNull() && pm.rect() != rect)
-            p->pm = pm.scaled(rect.size(), Qt::IgnoreAspectRatio);
-        else
-            p->pm = pm;
-    } else {
-        QString url (p->theMapAdapter->getQuery(wgs84vp, vp, rect));
-        if (!url.isEmpty()) {
-            qDebug() << "ImageMapLayer::drawFull: getting: " << url;
-            QPixmap pm = p->theMapAdapter->getImageManager()->getImage(p->theMapAdapter,url);
-            if (!pm.isNull())
+        if (p->theMapAdapter->getType() == IMapAdapter::DirectBackground) {
+            QPixmap pm = p->theMapAdapter->getPixmap(wgs84vp, vp, rect);
+            if (!pm.isNull() && pm.rect() != rect)
                 p->pm = pm.scaled(rect.size(), Qt::IgnoreAspectRatio);
             else
-                return rect;
+                p->pm = pm;
+        } else {
+            QString url (p->theMapAdapter->getQuery(wgs84vp, vp, rect));
+            if (!url.isEmpty()) {
+                qDebug() << "ImageMapLayer::drawFull: getting: " << url;
+                QPixmap pm = p->theMapAdapter->getImageManager()->getImage(p->theMapAdapter,url);
+                if (!pm.isNull())
+                    p->pm = pm.scaled(rect.size(), Qt::IgnoreAspectRatio);
+                else
+                    return rect;
+            }
         }
     }
 

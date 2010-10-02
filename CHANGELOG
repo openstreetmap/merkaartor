@@ -1,4 +1,5 @@
 v0.17
+    * ADD : New CL options: "--ignore-preferences" && "--reset-preferences"
     * FIX : Re-enable PgUp/PgDown in Geoimage dock (dock must be focused) (fixes #3126); coincidentaly, PgUp/PgDown for zooming only works when the map view is focused.
     * FIX : If a document cannot be saved (e.g. is readonly), propose the "save as..." dialog (fixes #3125)
     * CHG : Split Rotation interaction between pure rotation and scale

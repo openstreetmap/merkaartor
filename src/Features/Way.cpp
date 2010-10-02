@@ -979,6 +979,10 @@ QString Way::toHtml()
 
     QString D;
 
+    if (isClosed()) {
+        D += "<i>"+QApplication::translate("MapFeature", "Closed way")+"</i>";
+        D += "<br/>";
+    }
     D += "<i>"+QApplication::translate("MapFeature", "Length")+": </i>" + distanceLabel;
     D += "<br/>";
     D += "<i>"+QApplication::translate("MapFeature", "Size")+": </i>" + QApplication::translate("MapFeature", "%1 nodes").arg(size());

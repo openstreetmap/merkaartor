@@ -24,14 +24,14 @@ CreateRoundaboutInteraction::CreateRoundaboutInteraction(MainWindow* aMain, MapV
     theDock->setAllowedAreas(Qt::LeftDockWidgetArea);
     Main->addDockWidget(Qt::LeftDockWidgetArea, theDock);
     theDock->show();
-    DockData.DriveRight->setChecked(M_PREFS->getRightSideDriving());
+    DockData.DriveRight->setChecked(M_PREFS->getrightsidedriving());
 
     aView->setCursor(cursor());
 }
 
 CreateRoundaboutInteraction::~CreateRoundaboutInteraction()
 {
-    M_PREFS->setRightSideDriving(DockData.DriveRight->isChecked());
+    M_PREFS->setrightsidedriving(DockData.DriveRight->isChecked());
     delete theDock;
     view()->update();
 }

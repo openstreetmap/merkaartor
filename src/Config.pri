@@ -26,13 +26,10 @@ contains(RELEASE,1) {
     SVNREV="release"
 } else {
     isEmpty(SVNREV) {
-        SVNREV = $$system(svnversion)
-    }
-    contains(SVNREV, exported) | isEmpty(SVNREV) {
         SVNREV = $$system(git describe --tags)
         REVISION=""
     } else {
-        REVISION="-svn"
+        REVISION="-git"
     }
 }
 
