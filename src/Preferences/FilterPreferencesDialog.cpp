@@ -64,7 +64,7 @@ void FilterPreferencesDialog::on_btApply_clicked(void)
 
 void FilterPreferencesDialog::on_btAdd_clicked(void)
 {
-    addFilter(FilterItem(edFilterName->text(), edFilterString->text()));
+    addFilter(FilterItem(QUuid::createUuid(), edFilterName->text(), edFilterString->text()));
     lvFilters->setCurrentRow(lvFilters->count() - 1);
     on_lvFilters_itemSelectionChanged();
 }

@@ -307,6 +307,9 @@ void PreferencesDialog::loadPrefs()
     GpxTrackWidth->setValue(M_PREFS->getGpxTrackWidth());
     cbSimpleGpxTrack->setChecked(M_PREFS->getSimpleGpxTrack());
 
+    cbAutoLoadDoc->setChecked(M_PREFS->getHasAutoLoadDocument());
+    edAutoLoadDoc->setText(M_PREFS->getAutoLoadDocumentFilename());
+    edAutoLoadDoc->setEnabled(cbAutoLoadDoc->isChecked());
     cbAutoSaveDoc->setChecked(M_PREFS->getAutoSaveDoc());
     cbAutoExtractTracks->setChecked(M_PREFS->getAutoExtractTracks());
     cbReadonlyTracksDefault->setChecked(M_PREFS->getReadonlyTracksDefault());
@@ -460,6 +463,8 @@ void PreferencesDialog::savePrefs()
     M_PREFS->setGpxTrackColor(GpxTrackColor);
     M_PREFS->setGpxTrackWidth(GpxTrackWidth->value());
 
+    M_PREFS->setHasAutoLoadDocument(cbAutoLoadDoc->isChecked());
+    M_PREFS->setAutoLoadDocumentFilename((edAutoLoadDoc->text()));
     M_PREFS->setAutoSaveDoc(cbAutoSaveDoc->isChecked());
     M_PREFS->setAutoExtractTracks(cbAutoExtractTracks->isChecked());
     M_PREFS->setReadonlyTracksDefault(cbReadonlyTracksDefault->isChecked());
@@ -665,6 +670,14 @@ void PreferencesDialog::on_btBrowse_clicked()
     QString s = QFileDialog::getOpenFileName(this,tr("Select tool executable"));
     if (!s.isNull()) {
         edToolPath->setText(s);
+    }
+}
+
+void PreferencesDialog::on_btAutoloadBrowse_clicked()
+{
+    QString s = QFileDialog::getOpenFileName(this,tr("Select template document"), "", tr("Merkaartor document (*.mdc)"));
+    if (!s.isNull()) {
+        edAutoLoadDoc->setText(s);
     }
 }
 

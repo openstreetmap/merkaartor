@@ -18,10 +18,11 @@
 FilterItem::FilterItem ()
     : name(""), filter(""), deleted(false)
 {
+    id = QUuid::createUuid();
 }
 
-FilterItem::FilterItem (QString aName, QString aFilter, bool aDeleted)
-    : name(aName), filter(aFilter), deleted(aDeleted)
+FilterItem::FilterItem (QUuid aId, QString aName, QString aFilter, bool aDeleted)
+    : id(aId), name(aName), filter(aFilter), deleted(aDeleted)
 {
 }
 
@@ -29,6 +30,7 @@ void FilterItem::toXml(QDomElement parent)
 {
     QDomElement p = parent.ownerDocument().createElement("Filter");
     parent.appendChild(p);
+    p.setAttribute("xml:id", id.toString());
     p.setAttribute("name", name);
     if (deleted)
         p.setAttribute("deleted", "true");
@@ -43,6 +45,10 @@ FilterItem FilterItem::fromXml(QDomElement parent)
 
     if (parent.tagName() == "Filter") {
         theFilter.filter = parent.text().trimmed();
+        if (parent.hasAttribute("xml:id"))
+            theFilter.id = QUuid(parent.attribute("xml:id"));
+        else
+            theFilter.id = QUuid::createUuid();
         theFilter.name = parent.attribute("name");
         theFilter.deleted = (parent.attribute("deleted") == "true" ? true : false);
     }

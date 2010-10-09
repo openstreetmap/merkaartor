@@ -35,8 +35,9 @@
     bool g_Merk_Segment_Mode = false;
     bool g_Merk_Ignore_Preferences = false;
     bool g_Merk_Reset_Preferences = false;
-    MainWindow* g_Merk_MainWindow = NULL;
+    bool g_Merk_IgnoreStartupTemplate = false;
 
+    MainWindow* g_Merk_MainWindow = NULL;
 
 
 #define M_PARAM_IMPLEMENT_BOOL(Param, Category, Default) \
@@ -858,10 +859,10 @@ void MerkaartorPreferences::setProjectionType(QString theValue)
 
 QString MerkaartorPreferences::getProjectionType()
 {
-    if (!g_Merk_Ignore_Preferences && !g_Merk_Reset_Preferences)
-        return Sets->value("projection/Type", "Mercator").toString();
-    else
-        return "Mercator";
+    //    if (!g_Merk_Ignore_Preferences && !g_Merk_Reset_Preferences)
+    //        return Sets->value("projection/Type", "Mercator").toString();
+    //    else
+    return "Mercator";
 }
 
 ProjectionsList* MerkaartorPreferences::getProjectionsList()
@@ -1234,6 +1235,8 @@ M_PARAM_IMPLEMENT_BOOL(WorldOsbAutoshow, WOSB, false)
 
 /* Data */
 M_PARAM_IMPLEMENT_STRING(OpenStreetBugsUrl, data, "http://openstreetbugs.schokokeks.org/api/0.1/")
+M_PARAM_IMPLEMENT_BOOL(HasAutoLoadDocument, data, false)
+M_PARAM_IMPLEMENT_STRING(AutoLoadDocumentFilename, data, "")
 
 /* Mouse bevaviour */
 #ifdef _MOBILE

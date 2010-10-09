@@ -21,7 +21,8 @@ class FilterItem
 {
     public:
         FilterItem ();
-        FilterItem (QString aName, QString aProjection, bool aDeleted = false);
+        FilterItem (QUuid aId, QString aName, QString aProjection, bool aDeleted = false);
+        QUuid id;
         QString name;
         QString filter;
         bool deleted;

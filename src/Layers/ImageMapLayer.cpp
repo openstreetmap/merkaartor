@@ -268,7 +268,7 @@ bool ImageMapLayer::isTiled()
     return (p->theMapAdapter->isTiled());
 }
 
-bool ImageMapLayer::toXML(QDomElement& xParent, QProgressDialog * /* progress */)
+bool ImageMapLayer::toXML(QDomElement& xParent, bool /*asTemplate*/, QProgressDialog * /* progress */)
 {
     bool OK = true;
 

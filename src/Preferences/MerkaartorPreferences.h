@@ -39,7 +39,7 @@ class IMapAdapter;
 class IPaintStyle;
 
 //#define WORLD_COORDBOX CoordBox(Coord(1.3, -1.3), Coord(-1.3, 1.3))
-#define WORLD_COORDBOX CoordBox(Coord(COORD_MAX/4, -COORD_MAX/4), Coord(-COORD_MAX/4, COORD_MAX/4))
+#define WORLD_COORDBOX CoordBox(Coord(COORD_MAX*.80/2, -COORD_MAX*.80), Coord(-COORD_MAX*.80/2, COORD_MAX*.80))
 #define BUILTIN_STYLES_DIR ":/Styles"
 #define BUILTIN_TEMPLATES_DIR ":/Templates"
 
@@ -53,6 +53,7 @@ class IPaintStyle;
 
 #define HOMEDIR (g_Merk_Portable ? qApp->applicationDirPath() : QDir::homePath() + "/.merkaartor")
 #define SHAREDIR (g_Merk_Portable ? qApp->applicationDirPath() : STRINGIFY(SHARE_DIR))
+#define TEMPLATE_DOCUMENT (HOMEDIR + "/Startup.mdc")
 
 #define M_PARAM_DECLARE_BOOL(Param) \
     private: \
@@ -106,6 +107,8 @@ extern bool g_Merk_NoGuardedTagsImport;
 extern bool g_Merk_Segment_Mode;
 extern bool g_Merk_Ignore_Preferences;
 extern bool g_Merk_Reset_Preferences;
+extern bool g_Merk_IgnoreStartupTemplate;
+
 extern MainWindow* g_Merk_MainWindow;
 
 typedef QString FilterType;
@@ -357,6 +360,8 @@ public:
 
     /* Data */
     M_PARAM_DECLARE_STRING(OpenStreetBugsUrl)
+    M_PARAM_DECLARE_BOOL(HasAutoLoadDocument)
+    M_PARAM_DECLARE_STRING(AutoLoadDocumentFilename)
 
     /* FeaturesDock */
     M_PARAM_DECLARE_BOOL(FeaturesWithin)

@@ -68,6 +68,9 @@ public slots:
     void on_lvTools_itemSelectionChanged();
     void on_btBrowse_clicked();
 
+    /* Data */
+    void on_btAutoloadBrowse_clicked();
+
 private:
     void updateStyles();
     void loadPrefs();

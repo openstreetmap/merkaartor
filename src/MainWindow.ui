@@ -24,7 +24,7 @@
      <x>0</x>
      <y>0</y>
      <width>1100</width>
-     <height>25</height>
+     <height>20</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuHelp">
@@ -154,6 +154,7 @@
     <addaction name="separator"/>
     <addaction name="fileSaveAction"/>
     <addaction name="fileSaveAsAction"/>
+    <addaction name="fileSaveAsTemplateAction"/>
     <addaction name="separator"/>
     <addaction name="fileDownloadAction"/>
     <addaction name="fileDownloadMoreAction"/>
@@ -1799,6 +1800,11 @@
    </property>
    <property name="text">
     <string>Scale</string>
+   </property>
+  </action>
+  <action name="fileSaveAsTemplateAction">
+   <property name="text">
+    <string>Save as Template Document...</string>
    </property>
   </action>
  </widget>

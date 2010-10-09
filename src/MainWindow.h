@@ -78,6 +78,7 @@ public slots:
     virtual void on_fileImportAction_triggered();
     virtual void on_fileOpenAction_triggered();
     virtual void on_fileSaveAsAction_triggered();
+    virtual void on_fileSaveAsTemplateAction_triggered();
     virtual void on_fileSaveAction_triggered();
     virtual void on_fileWorkOfflineAction_triggered();
     virtual void on_filePrintAction_triggered();
@@ -238,7 +239,9 @@ public:
     void loadFiles(const QStringList & fileNames);
     void loadUrl(const QUrl& u);
     void loadDocument(QString fn);
-    void saveDocument();
+    void loadTemplateDocument(QString fn);
+    void saveDocument(const QString& fn);
+    void saveTemplateDocument(const QString& fn);
     void downloadFeatures(const QList<Feature*>& aDownloadList);
 
     void createProgressDialog();
@@ -286,6 +289,9 @@ private:
     void updateStyleMenu();
     Document* getDocumentFromClipboard();
     bool selectExportedFeatures(QList<Feature*>& theFeatures);
+
+    Document* doLoadDocument(QFile* file);
+    void doSaveDocument(QFile* fn, bool asTemplate=false);
 
 protected:
     void closeEvent(QCloseEvent * event);

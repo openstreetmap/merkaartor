@@ -139,14 +139,14 @@ const Painter* Document::getPainter(int i)
 void Document::addDefaultLayers()
 {
     ImageMapLayer*l = addImageLayer();
-    l->setMapAdapter(M_PREFS->getBackgroundPlugin(), M_PREFS->getSelectedServer());
-    if (M_PREFS->getBackgroundPlugin() != NONE_ADAPTER_UUID) {
-        l->setVisible(M_PREFS->getBgVisible());
-        // Sync the menu entry label & visible checkbox to the layer
-        QMenu *lMenu = l->getWidget()->getAssociatedMenu();
-        lMenu->menuAction()->menu()->actions().at(0)->setChecked(M_PREFS->getBgVisible());
-        lMenu->setTitle(l->name());
-    }
+//    l->setMapAdapter(M_PREFS->getBackgroundPlugin(), M_PREFS->getSelectedServer());
+//    if (M_PREFS->getBackgroundPlugin() != NONE_ADAPTER_UUID) {
+//        l->setVisible(M_PREFS->getBgVisible());
+//        // Sync the menu entry label & visible checkbox to the layer
+//        QMenu *lMenu = l->getWidget()->getAssociatedMenu();
+//        lMenu->menuAction()->menu()->actions().at(0)->setChecked(M_PREFS->getBgVisible());
+//        lMenu->setTitle(l->name());
+//    }
 
     if (g_Merk_Frisius) {
         DrawingLayer* aLayer = addDrawingLayer();
@@ -167,12 +167,12 @@ void Document::addFilterLayers()
     foreach (FilterItem it, *M_PREFS->getFiltersList()->getFilters()) {
         if (it.deleted)
             continue;
-        FilterLayer* f = new FilterLayer(it.name, it.filter);
+        FilterLayer* f = new FilterLayer(it.id.toString(), it.name, it.filter);
         addFilterLayer(f);
     }
 }
 
-bool Document::toXML(QDomElement xParent, QProgressDialog * progress)
+bool Document::toXML(QDomElement xParent, bool asTemplate, QProgressDialog * progress)
 {
     bool OK = true;
 
@@ -185,7 +185,7 @@ bool Document::toXML(QDomElement xParent, QProgressDialog * progress)
 
     mapDoc.setAttribute("xml:id", id());
     mapDoc.setAttribute("layernum", p->layerNum);
-    if (p->lastDownloadLayer)
+    if (p->lastDownloadLayer && !asTemplate)
         mapDoc.setAttribute("lastdownloadlayer", p->lastDownloadLayer->id());
 
     for (int i=0; i<p->Layers.size(); ++i) {
@@ -193,11 +193,13 @@ bool Document::toXML(QDomElement xParent, QProgressDialog * progress)
     }
 
     for (int i=0; i<p->Layers.size(); ++i) {
-        if (p->Layers[i]->isEnabled())
-            p->Layers[i]->toXML(mapDoc, progress);
+        if (p->Layers[i]->isEnabled()) {
+            p->Layers[i]->toXML(mapDoc, asTemplate, progress);
+        }
     }
 
-    OK = history().toXML(mapDoc, progress);
+    if (!asTemplate)
+        OK = history().toXML(mapDoc, progress);
 
     return OK;
 }
@@ -361,7 +363,7 @@ FilterLayer* Document::addFilterLayer(FilterLayer *aLayer)
 {
     FilterLayer* theLayer = aLayer;
     if (!theLayer)
-        theLayer = new FilterLayer(tr("Filter layer #%1").arg(++p->layerNum), "false");
+        theLayer = new FilterLayer(QUuid::createUuid(), tr("Filter layer #%1").arg(++p->layerNum), "false");
     add(theLayer);
 
     FeatureIterator it(this);

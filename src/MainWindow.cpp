@@ -355,8 +355,6 @@ MainWindow::MainWindow(QWidget *parent)
 
     createToolBarManager();  // has to be before restorestate
     M_PREFS->restoreMainWindowState( this );
-    on_fileNewAction_triggered();
-    setWindowTitle(QString("%1 - %2").arg(theDocument->title()).arg(p->title));
 
 #ifndef _MOBILE
     if (!M_PREFS->getProjectionsList()->getProjections()->size()) {
@@ -405,7 +403,15 @@ void MainWindow::delayedInit()
         p->theListeningServer->listen(QHostAddress::LocalHost, 8111);
     }
 
-    M_PREFS->initialPosition(theView);
+//    M_PREFS->initialPosition(theView);
+    if (M_PREFS->getHasAutoLoadDocument())
+        loadTemplateDocument(M_PREFS->getAutoLoadDocumentFilename());
+    else if (!g_Merk_IgnoreStartupTemplate)
+        loadTemplateDocument(TEMPLATE_DOCUMENT);
+    else {
+        theView->setViewport(WORLD_COORDBOX, theView->rect());
+        on_fileNewAction_triggered();
+    }
     invalidateView();
 }
 
@@ -434,11 +440,9 @@ void MainWindow::handleMessage(const QString &msg)
 
 MainWindow::~MainWindow(void)
 {
-    M_PREFS->save();
     p->theProperties->setSelection(NULL);
 
     delete M_STYLE;
-    M_PREFS->setworkingdir(QDir::currentPath());
     delete theDocument;
     delete theView;
     delete p->theProperties;
@@ -1427,7 +1431,7 @@ void MainWindow::on_fileOpenAction_triggered()
 
     QStringList fileNames = QFileDialog::getOpenFileNames(
                     this,
-                    tr("Open track files"),
+                    tr("Open files"),
                     "", FILTER_OPEN_SUPPORTED);
 
     loadFiles(fileNames);
@@ -2505,30 +2509,34 @@ void MainWindow::on_fileSaveAsAction_triggered()
     fileName = QFileDialog::getSaveFileName(this,
         tr("Save Merkaartor document"), QString("%1/%2.mdc").arg(M_PREFS->getworkingdir()).arg(tr("untitled")), tr("Merkaartor documents Files (*.mdc)"));
 
-    if (fileName != "") {
-        saveDocument();
+    if (!fileName.isEmpty()) {
+        saveDocument(fileName);
         M_PREFS->addRecentOpen(fileName);
         updateRecentOpenMenu();
+    }
+}
+
+void MainWindow::on_fileSaveAsTemplateAction_triggered()
+{
+    QString tfileName = QFileDialog::getSaveFileName(this,
+        tr("Save Merkaartor template document"), QString("%1/%2.mdc").arg(M_PREFS->getworkingdir()).arg(tr("untitled")), tr("Merkaartor documents Files (*.mdc)"));
+
+    if (!tfileName.isEmpty()) {
+        saveTemplateDocument(tfileName);
     }
 }
 
 void MainWindow::on_fileSaveAction_triggered()
 {
     if (fileName != "") {
-        saveDocument();
+        saveDocument(fileName);
     } else {
         on_fileSaveAsAction_triggered();
     }
 }
 
-void MainWindow::saveDocument()
+void MainWindow::doSaveDocument(QFile* file, bool asTemplate)
 {
-    QFile file(fileName);
-    if (!file.open(QIODevice::WriteOnly | QIODevice::Text)) {
-        QMessageBox::critical(this, tr("Unable to open save file"), tr("%1 could not be opened for writing.").arg(fileName));
-        on_fileSaveAsAction_triggered();
-        return;
-    }
 
 #ifndef Q_OS_SYMBIAN
     QApplication::setOverrideCursor(Qt::BusyCursor);
@@ -2548,11 +2556,10 @@ void MainWindow::saveDocument()
     QProgressDialog progress("Saving document...", "Cancel", 0, 0);
     progress.setWindowModality(Qt::WindowModal);
 
-    theDocument->toXML(root, &progress);
+    theDocument->toXML(root, asTemplate, &progress);
     theView->toXML(root);
 
-    file.write(theXmlDoc->toString().toUtf8());
-    file.close();
+    file->write(theXmlDoc->toString().toUtf8());
     delete theXmlDoc;
 
     progress.setValue(progress.maximum());
@@ -2563,34 +2570,50 @@ void MainWindow::saveDocument()
 #ifndef Q_OS_SYMBIAN
     QApplication::restoreOverrideCursor();
 #endif
-
 }
 
-void MainWindow::loadDocument(QString fn)
+void MainWindow::saveDocument(const QString& fn)
 {
     QFile file(fn);
-    if (!file.open(QIODevice::ReadOnly)) {
-        QMessageBox::critical(this, tr("Invalid file"), tr("%1 could not be opened.").arg(fn));
+    if (!file.open(QIODevice::WriteOnly | QIODevice::Text)) {
+        QMessageBox::critical(this, tr("Unable to open save file"), tr("%1 could not be opened for writing.").arg(fn));
+        on_fileSaveAsAction_triggered();
         return;
     }
 
+    doSaveDocument(&file);
+    file.close();
+}
+
+void MainWindow::saveTemplateDocument(const QString& fn)
+{
+    QFile file(fn);
+    if (!file.open(QIODevice::WriteOnly | QIODevice::Text)) {
+        QMessageBox::critical(this, tr("Unable to open save template document"), tr("%1 could not be opened for writing.").arg(fn));
+        return;
+    }
+
+    doSaveDocument(&file, true);
+    file.close();
+}
+
+Document* MainWindow::doLoadDocument(QFile* file)
+{
     QDomDocument* theXmlDoc = new QDomDocument();
     QString errorMsg;
     int errorLine;
     int errorColumn;
-    if (!theXmlDoc->setContent(&file, false, &errorMsg, &errorLine, &errorColumn)) {
-        QMessageBox::critical(this, tr("Invalid file"), tr("%1 is not a valid XML file.\n%2 at line %3, col %4").arg(fn).arg(errorMsg).arg(errorLine).arg(errorColumn));
-        file.close();
+    if (!theXmlDoc->setContent(file, false, &errorMsg, &errorLine, &errorColumn)) {
+        QMessageBox::critical(this, tr("Invalid file"), tr("%1 is not a valid XML file.\n%2 at line %3, col %4").arg(file->fileName()).arg(errorMsg).arg(errorLine).arg(errorColumn));
         delete theXmlDoc;
         theXmlDoc = NULL;
-        return;
+        return NULL;
     }
-    file.close();
 
     QDomElement docElem = theXmlDoc->documentElement();
     if (docElem.tagName() != "MerkaartorDocument") {
-        QMessageBox::critical(this, tr("Invalid file"), tr("%1 is not a valid Merkaartor document.").arg(fn));
-        return;
+        QMessageBox::critical(this, tr("Invalid file"), tr("%1 is not a valid Merkaartor document.").arg(file->fileName()));
+        return NULL;
     }
     double version = docElem.attribute("version").toDouble();
 
@@ -2603,28 +2626,14 @@ void MainWindow::loadDocument(QString fn)
     progress.setMaximum(progress.maximum() + theXmlDoc->elementsByTagName("trkpt").count());
     progress.setMaximum(progress.maximum() + theXmlDoc->elementsByTagName("wpt").count());
 
+    Document* newDoc = NULL;
     QDomElement e = docElem.firstChildElement();
     while(!e.isNull()) {
         if (e.tagName() == "MapDocument") {
-            Document* newDoc = Document::fromXML(QFileInfo(fn).fileName(), e, version, theLayers, &progress);
+            newDoc = Document::fromXML(QFileInfo(*file).fileName(), e, version, theLayers, &progress);
 
             if (progress.wasCanceled())
                 break;
-
-            if (newDoc) {
-                p->theProperties->setSelection(0);
-                p->theFeats->invalidate();
-                delete theDocument;
-                theDocument = newDoc;
-                theView->setDocument(theDocument);
-                on_editPropertiesAction_triggered();
-                theDocument->history().setActions(ui->editUndoAction, ui->editRedoAction, ui->fileUploadAction);
-                connect (theDocument, SIGNAL(historyChanged()), theDirty, SLOT(updateList()));
-                connect (theDocument, SIGNAL(historyChanged()), this, SIGNAL(content_changed()));
-                theDirty->updateList();
-                fileName = fn;
-                setWindowTitle(QString("%1 - %2").arg(theDocument->title()).arg(p->title));
-            }
         } else
         if (e.tagName() == "MapView") {
             view()->fromXML(e);
@@ -2644,9 +2653,66 @@ void MainWindow::loadDocument(QString fn)
     if (theGeoImage)
         theGeoImage->clear();
 #endif
+    return newDoc;
+}
+
+void MainWindow::loadDocument(QString fn)
+{
+    QFile file(fn);
+    if (!file.open(QIODevice::ReadOnly)) {
+        QMessageBox::critical(this, tr("Invalid file"), tr("%1 could not be opened.").arg(fn));
+        return;
+    }
+
+    Document* newDoc = doLoadDocument(&file);
+    file.close();
+
+    if (newDoc) {
+        p->theProperties->setSelection(0);
+        p->theFeats->invalidate();
+        delete theDocument;
+        theDocument = newDoc;
+        theView->setDocument(theDocument);
+        on_editPropertiesAction_triggered();
+        theDocument->history().setActions(ui->editUndoAction, ui->editRedoAction, ui->fileUploadAction);
+        connect (theDocument, SIGNAL(historyChanged()), theDirty, SLOT(updateList()));
+        connect (theDocument, SIGNAL(historyChanged()), this, SIGNAL(content_changed()));
+        theDirty->updateList();
+        fileName = fn;
+        setWindowTitle(QString("%1 - %2").arg(theDocument->title()).arg(p->title));
+    }
 
     M_PREFS->addRecentOpen(fn);
     updateRecentOpenMenu();
+
+    emit content_changed();
+}
+
+void MainWindow::loadTemplateDocument(QString fn)
+{
+    Document* newDoc = NULL;
+    QFile file(fn);
+    if (file.open(QIODevice::ReadOnly)) {
+        newDoc = doLoadDocument(&file);
+        file.close();
+    }
+
+    if (newDoc) {
+        p->theProperties->setSelection(0);
+        p->theFeats->invalidate();
+        delete theDocument;
+        theDocument = newDoc;
+        theView->setDocument(theDocument);
+        on_editPropertiesAction_triggered();
+        theDocument->history().setActions(ui->editUndoAction, ui->editRedoAction, ui->fileUploadAction);
+        connect (theDocument, SIGNAL(historyChanged()), theDirty, SLOT(updateList()));
+        connect (theDocument, SIGNAL(historyChanged()), this, SIGNAL(content_changed()));
+        theDirty->updateList();
+        fileName = fn;
+        theDocument->setTitle(tr("untitled"));
+    } else
+        on_fileNewAction_triggered();
+    setWindowTitle(QString("%1 - %2").arg(theDocument->title()).arg(p->title));
 
     emit content_changed();
 }
@@ -2910,8 +2976,11 @@ void MainWindow::closeEvent(QCloseEvent * event)
     }
 
     M_PREFS->saveMainWindowState( this );
-    M_PREFS->setInitialPosition(theView);
-//4.3237,50.8753,4.3378,50.8838
+//    M_PREFS->setInitialPosition(theView);
+    M_PREFS->setworkingdir(QDir::currentPath());
+
+    saveTemplateDocument(TEMPLATE_DOCUMENT);
+    M_PREFS->save();
     QMainWindow::closeEvent(event);
 }
 

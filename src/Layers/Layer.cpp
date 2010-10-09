@@ -637,8 +637,11 @@ QString Layer::toPropertiesHtml()
     return h;
 }
 
-bool Layer::toXML(QDomElement& e, QProgressDialog * /*progress*/)
+bool Layer::toXML(QDomElement& e, bool asTemplate, QProgressDialog * progress)
 {
+    Q_UNUSED(asTemplate);
+    Q_UNUSED(progress);
+
     e.setAttribute("xml:id", id());
     e.setAttribute("name", p->Name);
     e.setAttribute("alpha", QString::number(p->alpha,'f',2));
@@ -684,34 +687,36 @@ LayerWidget* DrawingLayer::newWidget(void)
 }
 
 
-bool DrawingLayer::toXML(QDomElement& xParent, QProgressDialog * progress)
+bool DrawingLayer::toXML(QDomElement& xParent, bool asTemplate, QProgressDialog * progress)
 {
     bool OK = true;
 
     QDomElement e = xParent.ownerDocument().createElement(metaObject()->className());
     xParent.appendChild(e);
-    Layer::toXML(e, progress);
+    Layer::toXML(e, asTemplate, progress);
 
-    QDomElement o = xParent.ownerDocument().createElement("osm");
-    e.appendChild(o);
-    o.setAttribute("version", "0.6");
-    o.setAttribute("generator", QString("Merkaartor %1").arg(STRINGIFY(VERSION)));
+    if (!asTemplate) {
+        QDomElement o = xParent.ownerDocument().createElement("osm");
+        e.appendChild(o);
+        o.setAttribute("version", "0.6");
+        o.setAttribute("generator", QString("Merkaartor %1").arg(STRINGIFY(VERSION)));
 
-    if (p->Features.size()) {
-        QDomElement bb = xParent.ownerDocument().createElement("bound");
-        o.appendChild(bb);
-        CoordBox layBB = boundingBox();
-        QString S = QString().number(coordToAng(layBB.bottomLeft().lat()),'f',6) + ",";
-        S += QString().number(coordToAng(layBB.bottomLeft().lon()),'f',6) + ",";
-        S += QString().number(coordToAng(layBB.topRight().lat()),'f',6) + ",";
-        S += QString().number(coordToAng(layBB.topRight().lon()),'f',6);
-        bb.setAttribute("box", S);
-        bb.setAttribute("origin", QString("http://www.openstreetmap.org/api/%1").arg(M_PREFS->apiVersion()));
+        if (p->Features.size()) {
+            QDomElement bb = xParent.ownerDocument().createElement("bound");
+            o.appendChild(bb);
+            CoordBox layBB = boundingBox();
+            QString S = QString().number(coordToAng(layBB.bottomLeft().lat()),'f',6) + ",";
+            S += QString().number(coordToAng(layBB.bottomLeft().lon()),'f',6) + ",";
+            S += QString().number(coordToAng(layBB.topRight().lat()),'f',6) + ",";
+            S += QString().number(coordToAng(layBB.topRight().lon()),'f',6);
+            bb.setAttribute("box", S);
+            bb.setAttribute("origin", QString("http://www.openstreetmap.org/api/%1").arg(M_PREFS->apiVersion()));
+        }
+
+        QList<MapFeaturePtr>::iterator it;
+        for(it = p->Features.begin(); it != p->Features.end(); it++)
+            (*it)->toXML(o, progress);
     }
-
-    QList<MapFeaturePtr>::iterator it;
-    for(it = p->Features.begin(); it != p->Features.end(); it++)
-        (*it)->toXML(o, progress);
 
     return OK;
 }
@@ -735,7 +740,7 @@ DrawingLayer * DrawingLayer::doFromXML(DrawingLayer* l, Document* d, const QDomE
 
     QDomElement c = e.firstChildElement();
     if (c.tagName() != "osm")
-        return NULL;
+        return l;
 
     QSet<Way*> addedWays;
     int i=0;
@@ -933,13 +938,15 @@ QString TrackLayer::toHtml()
     return toMainHtml().arg(S);
 }
 
-bool TrackLayer::toXML(QDomElement& xParent, QProgressDialog * progress)
+bool TrackLayer::toXML(QDomElement& xParent, bool asTemplate, QProgressDialog * progress)
 {
     bool OK = true;
+    if (asTemplate)
+        return OK;
 
     QDomElement e = xParent.ownerDocument().createElement(metaObject()->className());
     xParent.appendChild(e);
-    Layer::toXML(e, progress);
+    Layer::toXML(e, asTemplate, progress);
 
     QDomElement o = xParent.ownerDocument().createElement("gpx");
     e.appendChild(o);
@@ -1082,7 +1089,7 @@ DeletedLayer::~ DeletedLayer()
 {
 }
 
-bool DeletedLayer::toXML(QDomElement& , QProgressDialog * )
+bool DeletedLayer::toXML(QDomElement& , bool, QProgressDialog * )
 {
     return true;
 }
@@ -1473,7 +1480,7 @@ void OsbLayer::getFeatureSet(QMap<RenderPriority, QSet <Feature*> >& theFeatures
 //	return pp->theImp->getFeature(d, this, ref);
 //}
 
-bool OsbLayer::toXML(QDomElement& xParent, QProgressDialog * progress)
+bool OsbLayer::toXML(QDomElement& xParent, bool asTemplate, QProgressDialog * progress)
 {
     Q_UNUSED(progress);
 
@@ -1484,7 +1491,7 @@ bool OsbLayer::toXML(QDomElement& xParent, QProgressDialog * progress)
 
     QDomElement e = xParent.ownerDocument().createElement(metaObject()->className());
     xParent.appendChild(e);
-    Layer::toXML(e, progress);
+    Layer::toXML(e, asTemplate, progress);
     e.setAttribute("filename", pp->theImp->getFilename());
 
     return OK;
@@ -1563,10 +1570,11 @@ QString OsbLayer::toHtml()
 
 // FilterLayer
 
-FilterLayer::FilterLayer(const QString & aName, const QString& aFilter)
+FilterLayer::FilterLayer(const QString& aId, const QString & aName, const QString& aFilter)
     : Layer(aName)
     , theSelectorString(aFilter)
 {
+    setId(aId);
     p->Visible = true;
     theSelector = TagSelector::parse(theSelectorString);
 }
@@ -1587,11 +1595,11 @@ void FilterLayer::setFilter(const QString& aFilter)
     }
 }
 
-bool FilterLayer::toXML(QDomElement& xParent, QProgressDialog * progress)
+bool FilterLayer::toXML(QDomElement& xParent, bool asTemplate, QProgressDialog * progress)
 {
     QDomElement e = xParent.ownerDocument().createElement(metaObject()->className());
     xParent.appendChild(e);
-    Layer::toXML(e, progress);
+    Layer::toXML(e, asTemplate, progress);
     e.setAttribute("filter", theSelectorString);
 
     return true;
@@ -1599,7 +1607,12 @@ bool FilterLayer::toXML(QDomElement& xParent, QProgressDialog * progress)
 
 FilterLayer* FilterLayer::fromXML(Document* d, const QDomElement e, QProgressDialog * progress)
 {
-    FilterLayer* l = new FilterLayer(e.attribute("name"), e.attribute("filter"));
+    QString id;
+    if (e.hasAttribute("xml:id"))
+        id = e.attribute("xml:id");
+    else
+        id = QUuid::createUuid().toString();
+    FilterLayer* l = new FilterLayer(id, e.attribute("name"), e.attribute("filter"));
     Layer::fromXML(l, d, e, progress);
     d->add(l);
     return l;

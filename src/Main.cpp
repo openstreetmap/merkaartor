@@ -98,6 +98,7 @@ void showHelp()
     fprintf(stdout, "  --importag-tags-as-is\t\tDo not add underscores to imported tags (allow for immediate upload)\n");
     fprintf(stdout, "  --ignore-preferences\t\tIgnore saved preferences\n");
     fprintf(stdout, "  --reset-preferences\t\tReset saved preferences to default\n");
+    fprintf(stdout, "  --ignore-startup-template\t\tIgnore the saved startup template document and start with a new document\n");
     fprintf(stdout, "  [filenames]\t\tOpen designated files \n");
 }
 
@@ -128,6 +129,8 @@ int main(int argc, char** argv)
             g_Merk_Ignore_Preferences = true;
         } else if (argsIn[i] == "--reset-preferences") {
             g_Merk_Reset_Preferences = true;
+        } else if (argsIn[i] == "--ignore-startup-template") {
+            g_Merk_IgnoreStartupTemplate = true;
         } else
             argsOut << argsIn[i];
     }

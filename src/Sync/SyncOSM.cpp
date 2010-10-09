@@ -36,14 +36,14 @@ void syncOSM(MainWindow* theMain, const QString& aWeb, const QString& aUser, con
             if (M_PREFS->getAutoHistoryCleanup() && !theMain->document()->getDirtyOrOriginLayer()->getDirtySize())
                 theMain->document()->history().cleanup();
 
-            if (theMain->fileName != "") {
+            if (!theMain->fileName.isEmpty()) {
                 if (M_PREFS->getAutoSaveDoc()) {
-                    theMain->saveDocument();
+                    theMain->saveDocument(theMain->fileName);
                 } else {
                     if (QMessageBox::warning(theMain,MainWindow::tr("Unsaved changes"),
                                              MainWindow::tr("It is strongly recommended to save the changes to your document after an upload.\nDo you want to do this now?"),
                                              QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes) == QMessageBox::Yes) {
-                        theMain->saveDocument();
+                        theMain->saveDocument(theMain->fileName);
 
                     }
                 }
