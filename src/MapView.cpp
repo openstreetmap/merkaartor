@@ -1013,7 +1013,6 @@ void MapView::fromXML(const QDomElement p)
 
     if (!cb.isNull())
         setViewport(cb, rect());
-    invalidate(true, true);
 }
 
 void MapView::on_MoveLeft_activated()

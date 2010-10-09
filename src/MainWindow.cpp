@@ -404,14 +404,7 @@ void MainWindow::delayedInit()
     }
 
 //    M_PREFS->initialPosition(theView);
-    if (M_PREFS->getHasAutoLoadDocument())
-        loadTemplateDocument(M_PREFS->getAutoLoadDocumentFilename());
-    else if (!g_Merk_IgnoreStartupTemplate)
-        loadTemplateDocument(TEMPLATE_DOCUMENT);
-    else {
-        theView->setViewport(WORLD_COORDBOX, theView->rect());
-        on_fileNewAction_triggered();
-    }
+    on_fileNewAction_triggered();
     invalidateView();
 }
 
@@ -1765,21 +1758,29 @@ void MainWindow::on_fileNewAction_triggered()
     if (!theDocument || !theDocument->hasUnsavedChanges() || mayDiscardUnsavedChanges(this)) {
         M_PREFS->cleanupBackgroundPlugins();
         p->theFeats->invalidate();
-        delete theDocument;
-        theDocument = new Document(theLayers);
-        theView->setDocument(theDocument);
-        theDocument->addDefaultLayers();
-        if (M_PREFS->getWorldOsbAutoload() && !M_PREFS->getWorldOsbUri().isEmpty()) {
-            Layer* newLayer = new OsbLayer( "World", M_PREFS->getWorldOsbUri() + "/world.osb" );
-            if (M_PREFS->getWorldOsbAutoshow())
-                newLayer->setVisible(true);
-            else
-                newLayer->setVisible(false);
-            newLayer->setReadonly(true);
+        SAFE_DELETE(theDocument)
 
-            theDocument->add(newLayer);
+        if (M_PREFS->getHasAutoLoadDocument())
+            loadTemplateDocument(M_PREFS->getAutoLoadDocumentFilename());
+        else if (!g_Merk_IgnoreStartupTemplate)
+            loadTemplateDocument(TEMPLATE_DOCUMENT);
+
+        if (!theDocument) {
+            theView->setViewport(WORLD_COORDBOX, theView->rect());
+            theDocument = new Document(theLayers);
+            theDocument->addDefaultLayers();
+            if (M_PREFS->getWorldOsbAutoload() && !M_PREFS->getWorldOsbUri().isEmpty()) {
+                Layer* newLayer = new OsbLayer( "World", M_PREFS->getWorldOsbUri() + "/world.osb" );
+                if (M_PREFS->getWorldOsbAutoshow())
+                    newLayer->setVisible(true);
+                else
+                    newLayer->setVisible(false);
+                newLayer->setReadonly(true);
+
+                theDocument->add(newLayer);
+            }
         }
-
+        theView->setDocument(theDocument);
         theDocument->history().setActions(ui->editUndoAction, ui->editRedoAction, ui->fileUploadAction);
         connect (theDocument, SIGNAL(historyChanged()), theDirty, SLOT(updateList()));
         connect (theDocument, SIGNAL(historyChanged()), this, SIGNAL(content_changed()));
@@ -2698,23 +2699,8 @@ void MainWindow::loadTemplateDocument(QString fn)
     }
 
     if (newDoc) {
-        p->theProperties->setSelection(0);
-        p->theFeats->invalidate();
-        delete theDocument;
         theDocument = newDoc;
-        theView->setDocument(theDocument);
-        on_editPropertiesAction_triggered();
-        theDocument->history().setActions(ui->editUndoAction, ui->editRedoAction, ui->fileUploadAction);
-        connect (theDocument, SIGNAL(historyChanged()), theDirty, SLOT(updateList()));
-        connect (theDocument, SIGNAL(historyChanged()), this, SIGNAL(content_changed()));
-        theDirty->updateList();
-        fileName = fn;
-        theDocument->setTitle(tr("untitled"));
-    } else
-        on_fileNewAction_triggered();
-    setWindowTitle(QString("%1 - %2").arg(theDocument->title()).arg(p->title));
-
-    emit content_changed();
+    }
 }
 
 void MainWindow::on_exportOSMAction_triggered()
