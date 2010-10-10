@@ -1,4 +1,5 @@
 v0.17
+    * FIX : Filter out invalid value for first Tag list column width (fixes #3129)
     * FIX : Remove tags from autocomplete suggestions when cleared from features (fixes #3113)
     * ADD : Allow to start merkaartor with a document template specified in preferences
     * CHG : Layers & View settings are now saved in a $HOME/Startup.mdc document rather than thru QSettings
