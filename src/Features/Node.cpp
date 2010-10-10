@@ -13,18 +13,22 @@ class NodePrivate
 {
     public:
         NodePrivate()
-        : IsWaypoint(false), ProjectionRevision(0)
+        : IsWaypoint(false)
+        , IsPOI(false)
+        , ProjectionRevision(0)
         , HasPhoto(false)
+        , Photo(0)
         , photoLocationBR(true)
         {
         }
 
         bool IsWaypoint;
+        bool IsPOI;
 #ifndef _MOBILE
         int ProjectionRevision;
 #endif
         bool HasPhoto;
-        QPixmap Photo;
+        QPixmap* Photo;
         bool photoLocationBR;
 };
 
@@ -46,7 +50,6 @@ Node::Node(const Node& other)
     , Projected(other.Projected)
     , p(new NodePrivate)
 {
-    setTime(other.time());
     BBox = other.boundingBox();
     p->ProjectionRevision = other.projectionRevision();
     setRenderPriority(RenderPriority(RenderPriority::IsSingular,0., 0));
@@ -54,6 +57,7 @@ Node::Node(const Node& other)
 
 Node::~Node(void)
 {
+    SAFE_DELETE(p->Photo);
     delete p;
 }
 
@@ -106,14 +110,12 @@ bool Node::isInteresting() const
     return false;
 }
 
-bool Node::isPOI() const
+bool Node::isPOI()
 {
-    // if the user has added special tags, that's fine also
-    for (int i=0; i<tagSize(); ++i)
-        if ((tagKey(i) != "created_by") && (tagKey(i) != "ele"))
-            return true;
+    if (!MetaUpToDate)
+        updateMeta();
 
-    return false;
+    return p->IsPOI;
 }
 
 bool Node::isWaypoint()
@@ -124,7 +126,7 @@ bool Node::isWaypoint()
     return p->IsWaypoint;
 }
 
-bool Node::isSelectable(MapView* theView) const
+bool Node::isSelectable(MapView* theView)
 {
     // If Node has non-default tags -> POI -> always selectable
     if (isPOI())
@@ -214,11 +216,15 @@ bool Node::hasPhoto() const
 
 QPixmap Node::photo() const
 {
-    return p->Photo;
+    if (p->Photo)
+        return *(p->Photo);
+    else
+        return QPixmap();
 }
 void Node::setPhoto(QPixmap thePhoto)
 {
-    p->Photo = thePhoto.scaled(M_PREFS->getMaxGeoPicWidth(), M_PREFS->getMaxGeoPicWidth(), Qt::KeepAspectRatio);
+    SAFE_DELETE(p->Photo);
+    p->Photo = new QPixmap(thePhoto.scaled(M_PREFS->getMaxGeoPicWidth(), M_PREFS->getMaxGeoPicWidth(), Qt::KeepAspectRatio));
     p->HasPhoto = true;
 }
 
@@ -250,10 +256,10 @@ void Node::draw(QPainter& thePainter , MapView* theView)
                  phPt = me + QPoint(10*rt, 10*rt);
              } else {
                  qreal rt = qBound(0.2, theView->pixelPerM(), 1.0);
-                 double phRt = 1. * p->Photo.width() / p->Photo.height();
+                 double phRt = 1. * p->Photo->width() / p->Photo->height();
                  phPt = me - QPoint(10*rt, 10*rt) - QPoint(M_PREFS->getMaxGeoPicWidth()*rt, M_PREFS->getMaxGeoPicWidth()*rt/phRt);
              }
-             thePainter.drawPixmap(phPt, p->Photo.scaledToWidth(M_PREFS->getMaxGeoPicWidth()*rt));
+             thePainter.drawPixmap(phPt, p->Photo->scaledToWidth(M_PREFS->getMaxGeoPicWidth()*rt));
          }
      }
 #endif
@@ -277,7 +283,7 @@ void Node::drawHover(QPainter& thePainter, MapView* theView)
             QPoint me(theView->toView(this));
 
             qreal rt = qBound(0.2, theView->pixelPerM(), 1.0);
-            double phRt = 1. * p->Photo.width() / p->Photo.height();
+            double phRt = 1. * p->Photo->width() / p->Photo->height();
             QPoint phPt;
             if (p->photoLocationBR) {
                 phPt = me + QPoint(10*rt, 10*rt);
@@ -339,7 +345,7 @@ double Node::pixelDistance(const QPointF& Target, double, bool, MapView* theView
     if (p->HasPhoto) {
         if (TEST_RFLAGS(RendererOptions::PhotosVisible) && theView->pixelPerM() > M_PREFS->getRegionalZoom()) {
             qreal rt = qBound(0.2, theView->pixelPerM(), 1.0);
-            double phRt = 1. * p->Photo.width() / p->Photo.height();
+            double phRt = 1. * p->Photo->width() / p->Photo->height();
             QPoint phPt;
             if (p->photoLocationBR) {
                 phPt = me + QPoint(10*rt, 10*rt);
@@ -382,7 +388,13 @@ void Node::updateMeta()
 
     p->IsWaypoint = (findKey("_waypoint_") != tagSize());
 
-    if (!isPOI()) {
+    p->IsPOI = false;
+    // if the user has added special tags, that's fine also
+    for (int i=0; i<tagSize(); ++i)
+        if ((tagKey(i) != "created_by") && (tagKey(i) != "ele"))
+            p->IsPOI = true;
+
+    if (!p->IsPOI) {
         int i=0;
         int prtReadonly=0, prtWritable=0;
         for (; i<sizeParents(); ++i) {
@@ -558,17 +570,17 @@ Node * Node::fromGPX(Document* d, Layer* L, const QDomElement e)
             Pt->setElevation(c.text().toFloat());
         } else
         if (c.tagName() == "name") {
-            Pt->setTag("name", c.text(), false);
+            Pt->setTag("name", c.text());
         } else
         if (c.tagName() == "cmt") {
-            Pt->setTag("_comment_", c.text(), false);
+            Pt->setTag("_comment_", c.text());
         } else
         if (c.tagName() == "desc") {
-            Pt->setTag("_description_", c.text(), false);
+            Pt->setTag("_description_", c.text());
         }
         else if (c.tagName() == "cmt")
         {
-            Pt->setTag("_comment_", c.text(), false);
+            Pt->setTag("_comment_", c.text());
         }
         else if (c.tagName() == "extensions") // for OpenStreetBugs
         {

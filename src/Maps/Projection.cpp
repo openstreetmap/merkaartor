@@ -93,8 +93,8 @@ Projection::Projection(void)
 {
 #ifdef USE_PROJ
 #ifdef Q_OS_WIN
-    QString pdir(qApp->applicationDirPath() + "/" STRINGIFY(SHARE_DIR) "/proj");
-    const char* proj_dir = QDir::toNativeSeparators(pdir).toUtf8().constData();
+    QString pdir(QDir::toNativeSeparators(qApp->applicationDirPath() + "/" STRINGIFY(SHARE_DIR) "/proj"));
+    const char* proj_dir = pdir.toUtf8().constData();
 //    const char* proj_dir = "E:\\cbro\\src\\merkaartor-devel\\binaries\\bin\\share\\proj";
     pj_set_searchpath(1, &proj_dir);
 #endif // Q_OS_WIN

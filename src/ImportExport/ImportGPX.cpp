@@ -66,11 +66,11 @@ static Node* importTrkPt(const QDomElement& Root, Document* /* theDocument */, L
         }
         else if (t.tagName() == "desc")
         {
-            Pt->setTag("_description_", t.text(), false);
+            Pt->setTag("_description_", t.text());
         }
         else if (t.tagName() == "cmt")
         {
-            Pt->setTag("_comment_", t.text(), false);
+            Pt->setTag("_comment_", t.text());
         }
         else if (t.tagName() == "extensions") // for OpenStreetBugs
         {

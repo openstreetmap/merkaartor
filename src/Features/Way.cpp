@@ -36,6 +36,7 @@ class WayPrivate
             , wasPathComplete(false), VirtualsUptodate(false)
             , ProjectionRevision(0)
             , BestSegment(-1)
+            , Width(0)
         {
         }
         Way* theWay;
@@ -59,13 +60,46 @@ class WayPrivate
         int ProjectionRevision;
 #endif
         int BestSegment;
+        double Width;
 
+        void CalculateWidth();
         void updateSmoothed(bool DoSmooth);
         void addSmoothedBezier(int i, int j, int k, int l);
         void doUpdateVirtuals();
         void removeVirtuals();
         void addVirtuals();
 };
+
+#define DEFAULTWIDTH 6
+#define LANEWIDTH 4
+
+void WayPrivate::CalculateWidth()
+{
+    QString s(theWay->tagValue("width",QString()));
+    if (!s.isNull()) {
+        Width = s.toDouble();
+        return;
+    }
+    QString h = theWay->tagValue("highway",QString());
+    if (s.isNull()) {
+        Width = DEFAULTWIDTH;
+        return;
+    }
+
+    if ( (h == "motorway") || (h=="motorway_link") )
+        Width =  4*LANEWIDTH; // 3 lanes plus emergency
+    else if ( (h == "trunk") || (h=="trunk_link") )
+        Width =  3*LANEWIDTH; // 2 lanes plus emergency
+    else if ( (h == "primary") || (h=="primary_link") )
+        Width =  2*LANEWIDTH; // 2 lanes
+    else if (h == "secondary")
+        Width =  2*LANEWIDTH; // 2 lanes
+    else if (h == "tertiary")
+        Width =  1.5*LANEWIDTH; // shared middle lane
+    else if (h == "cycleway")
+        Width =  1.5;
+    Width = DEFAULTWIDTH;
+}
 
 void WayPrivate::addSmoothedBezier(int i, int j, int k, int l)
 {
@@ -369,6 +403,7 @@ void Way::updateMeta()
 
     p->Area = 0;
     p->Distance = 0;
+    p->CalculateWidth();
 
     p->NotEverythingDownloaded = false;
     if (lastUpdated() == Feature::NotYetDownloaded)
@@ -441,6 +476,14 @@ double Way::area()
         updateMeta();
 
     return p->Area;
+}
+
+double Way::widthOf()
+{
+    if (MetaUpToDate == false)
+        updateMeta();
+
+    return p->Width;
 }
 
 void Way::draw(QPainter& P, MapView* theView)
@@ -741,9 +784,9 @@ bool Way::deleteChildren(Document* theDocument, CommandList* theList,
     return true;
 }
 
-void Way::setTag(const QString& key, const QString& value, bool addToTagList)
+void Way::setTag(const QString& key, const QString& value)
 {
-    Feature::setTag(key, value, addToTagList);
+    Feature::setTag(key, value);
     MetaUpToDate = false;
     if (key == "natural") {
         if (value == "coastline")
@@ -753,9 +796,9 @@ void Way::setTag(const QString& key, const QString& value, bool addToTagList)
     }
 }
 
-void Way::setTag(int index, const QString& key, const QString& value, bool addToTagList)
+void Way::setTag(int index, const QString& key, const QString& value)
 {
-    Feature::setTag(index, key, value, addToTagList);
+    Feature::setTag(index, key, value);
     MetaUpToDate = false;
     if (key == "natural") {
         if (value == "coastline")

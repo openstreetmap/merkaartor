@@ -72,7 +72,7 @@ class Way : public Feature
          * @param key the key of the tag
          * @param value the value corresponding to the key
          */
-        virtual void setTag(const QString& key, const QString& value, bool addToTagList=true);
+        virtual void setTag(const QString& key, const QString& value);
 
         /** Set the tag "key=value" at the position index
          * If a tag with the same key exist, it is replaced
@@ -81,7 +81,7 @@ class Way : public Feature
          * @param key the key of the tag
          * @param value the value corresponding to the key
         */
-        virtual void setTag(int index, const QString& key, const QString& value, bool addToTagList=true);
+        virtual void setTag(int index, const QString& key, const QString& value);
 
         /** remove all the tags for the curent feature
          */
@@ -99,6 +99,7 @@ class Way : public Feature
         double area();
         bool isClosed() const;
         double distance();
+        double widthOf();
 
         virtual bool deleteChildren(Document* theDocument, CommandList* theList, bool force = false);
 

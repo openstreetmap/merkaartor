@@ -155,7 +155,7 @@ class Feature : public QObject, public IFeature
          * @param key the key of the tag
          * @param value the value corresponding to the key
          */
-        virtual void setTag(const QString& key, const QString& value, bool addToTagList=true);
+        virtual void setTag(const QString& key, const QString& value);
 
         /** Set the tag "key=value" at the position index
          * If a tag with the same key exist, it is replaced
@@ -164,7 +164,7 @@ class Feature : public QObject, public IFeature
          * @param key the key of the tag
          * @param value the value corresponding to the key
         */
-        virtual void setTag(int index, const QString& key, const QString& value, bool addToTagList=true);
+        virtual void setTag(int index, const QString& key, const QString& value);
 
         /** remove all the tags for the curent feature
          */
@@ -273,13 +273,6 @@ class Feature : public QObject, public IFeature
         virtual bool isSpecial() const;
         virtual void setSpecial(bool val);
 
-        /** check if the feature is drawable
-         * @return true if to be drawn
-         */
-        virtual bool isSelectable(MapView*) const {return true;}
-
-        virtual bool isInteresting() const {return true;}
-
         const FeaturePainter* getPainter(double PixelPerM) const;
         const FeaturePainter* getCurrentPainter() const;
         bool hasPainter() const;
@@ -324,7 +317,6 @@ class Feature : public QObject, public IFeature
         virtual void updateIndex();
         virtual void updateFilters();
         virtual void invalidateMeta();
-        double widthOf();
 
         virtual bool deleteChildren(Document* , CommandList*, bool = false ) { return true; }
 

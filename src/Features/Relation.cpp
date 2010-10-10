@@ -36,14 +36,17 @@ class RelationPrivate
 {
     public:
         RelationPrivate(Relation* R)
-            : theRelation(R), theModel(0), ModelReferences(0),
-                BBoxUpToDate(false)
+            : theRelation(R), theModel(0), ModelReferences(0)
+            , BBoxUpToDate(false)
+            , Width(0)
         {
         }
         ~RelationPrivate()
         {
             delete theModel;
         }
+        void CalculateWidth();
+
         Relation* theRelation;
         QList<QPair<QString, MapFeaturePtr> > Members;
         RelationMemberModel* theModel;
@@ -53,7 +56,41 @@ class RelationPrivate
         bool BBoxUpToDate;
 
         RenderPriority theRenderPriority;
-};
+
+        double Width;
+    };
+
+#define DEFAULTWIDTH 6
+#define LANEWIDTH 4
+
+void RelationPrivate::CalculateWidth()
+{
+    QString s(theRelation->tagValue("width",QString()));
+    if (!s.isNull()) {
+        Width = s.toDouble();
+        return;
+    }
+    QString h = theRelation->tagValue("highway",QString());
+    if (s.isNull()) {
+        Width = DEFAULTWIDTH;
+        return;
+    }
+
+    if ( (h == "motorway") || (h=="motorway_link") )
+        Width =  4*LANEWIDTH; // 3 lanes plus emergency
+    else if ( (h == "trunk") || (h=="trunk_link") )
+        Width =  3*LANEWIDTH; // 2 lanes plus emergency
+    else if ( (h == "primary") || (h=="primary_link") )
+        Width =  2*LANEWIDTH; // 2 lanes
+    else if (h == "secondary")
+        Width =  2*LANEWIDTH; // 2 lanes
+    else if (h == "tertiary")
+        Width =  1.5*LANEWIDTH; // shared middle lane
+    else if (h == "cycleway")
+        Width =  1.5;
+    Width = DEFAULTWIDTH;
+}
+
 
 Relation::Relation()
 {
@@ -418,6 +455,8 @@ void Relation::updateMeta()
     Feature::updateMeta();
     MetaUpToDate = true;
 
+    p->CalculateWidth();
+
     p->theRenderPriority = RenderPriority(RenderPriority::IsSingular, 0., 0);
     for (int i=0; i<p->Members.size(); ++i) {
         if (p->Members.at(i).second->renderPriority() < p->theRenderPriority)
@@ -648,6 +687,14 @@ Relation* Relation::fromBinary(Document* d, OsbLayer* L, QDataStream& ds, qint8 
     return R;
 }
 
+double Relation::widthOf()
+{
+    if (MetaUpToDate == false)
+        updateMeta();
+
+    return p->Width;
+}
+
 /* RELATIONMODEL */
 
 RelationMemberModel::RelationMemberModel(RelationPrivate *aParent, MainWindow* aMain)
@@ -729,10 +776,4 @@ bool RelationMemberModel::setData(const QModelIndex &index, const QVariant &valu
     }
     return false;
 }
-
-
-
-
-
-
 

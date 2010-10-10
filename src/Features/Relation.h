@@ -63,6 +63,8 @@ class Relation : public Feature
         virtual void toBinary(QDataStream& ds, QHash <QString, quint64>& theIndex);
         static Relation* fromBinary(Document* d, OsbLayer* L, QDataStream& ds, qint8 c, qint64 id);
 
+        double widthOf();
+
     private:
         RelationPrivate* p;
 };

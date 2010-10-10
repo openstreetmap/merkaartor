@@ -2700,6 +2700,7 @@ void MainWindow::loadTemplateDocument(QString fn)
 
     if (newDoc) {
         theDocument = newDoc;
+        theDocument->setTitle(tr("untitled"));
     }
 }
 

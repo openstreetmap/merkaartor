@@ -105,7 +105,6 @@ class MapFeaturePrivate
                 , LongId(0)
                 , Virtual(false), Special(false), DirtyLevel(0)
                 , VirtualsUpdatesBlocked(false)
-                , Width(0)
         {
             initVersionNumber();
         }
@@ -118,7 +117,6 @@ class MapFeaturePrivate
                 , LongId(0)
                 , Virtual(other.Virtual), Special(other.Special), DirtyLevel(0)
                 , VirtualsUpdatesBlocked(other.VirtualsUpdatesBlocked)
-                , Width(other.Width)
         {
             initVersionNumber();
         }
@@ -129,7 +127,7 @@ class MapFeaturePrivate
         void initVersionNumber();
 
         mutable QString Id;
-        QList<QPair<QString, QString> > Tags;
+        QList<QPair<quint32, quint32> > Tags;
         int TagsSize;
         Feature::ActorType LastActor;
         QList<const FeaturePainter*> PossiblePainters;
@@ -154,7 +152,6 @@ class MapFeaturePrivate
         bool Special;
         int DirtyLevel;
         bool VirtualsUpdatesBlocked;
-        double Width;
         QList<FilterLayer*> FilterLayers;
         double Alpha;
 };
@@ -187,35 +184,6 @@ Feature::~Feature(void)
 //    while (sizeParents())
 //        getParent(0)->remove(this);
     delete p;
-}
-
-#define DEFAULTWIDTH 6
-#define LANEWIDTH 4
-
-double Feature::widthOf()
-{
-    if (p->Width)
-        return p->Width;
-
-    QString s(tagValue("width",QString()));
-    if (!s.isNull())
-        p->Width = s.toDouble();
-    QString h = tagValue("highway",QString());
-    if ( (h == "motorway") || (h=="motorway_link") )
-        p->Width =  4*LANEWIDTH; // 3 lanes plus emergency
-    else if ( (h == "trunk") || (h=="trunk_link") )
-        p->Width =  3*LANEWIDTH; // 2 lanes plus emergency
-    else if ( (h == "primary") || (h=="primary_link") )
-        p->Width =  2*LANEWIDTH; // 2 lanes
-    else if (h == "secondary")
-        p->Width =  2*LANEWIDTH; // 2 lanes
-    else if (h == "tertiary")
-        p->Width =  1.5*LANEWIDTH; // shared middle lane
-    else if (h == "cycleway")
-        p->Width =  1.5;
-    p->Width = DEFAULTWIDTH;
-
-    return p->Width;
 }
 
 void Feature::setVersionNumber(int vn)
@@ -481,85 +449,85 @@ bool Feature::isSpecial() const
     return p->Special;
 }
 
-void Feature::setTag(int index, const QString& key, const QString& value, bool addToTagList)
+void Feature::setTag(int index, const QString& key, const QString& value)
 {
-    p->Width = 0;
+    Q_ASSERT(parent());
+    Document* theDoc = dynamic_cast<Layer*>(parent())->getDocument();
+    Q_ASSERT(theDoc);
+
+    QPair<quint32, quint32> pi = theDoc->addToTagList(key, value);
 
     int i = 0;
     for (; i<p->Tags.size(); ++i)
-        if (p->Tags[i].first == key)
+        if (p->Tags[i].first == pi.first)
         {
-            if (p->Tags[i].second == value)
+            if (p->Tags[i].second == pi.second)
                 return;
-            p->Tags[i].second = value;
+            theDoc->removeFromTagList(p->Tags[i].first, p->Tags[i].second);
+            p->Tags[i].second = pi.second;
             break;
         }
     if (i == p->Tags.size()) {
-        p->Tags.insert(p->Tags.begin() + index, qMakePair(key,value));
+        p->Tags.insert(p->Tags.begin() + index, pi);
         p->TagsSize++;
     }
     invalidatePainter();
     invalidateMeta();
-
-    if (parent() && addToTagList)
-        if (dynamic_cast<Layer*>(parent())->getDocument())
-            dynamic_cast<Layer*>(parent())->getDocument()->addToTagList(key, value);
 }
 
-void Feature::setTag(const QString& key, const QString& value, bool addToTagList)
+void Feature::setTag(const QString& key, const QString& value)
 {
-    p->Width = 0;
+    Q_ASSERT(parent());
+    Document* theDoc = dynamic_cast<Layer*>(parent())->getDocument();
+    Q_ASSERT(theDoc);
+
+    QPair<quint32, quint32> pi = theDoc->addToTagList(key, value);
 
     int i = 0;
     for (; i<p->Tags.size(); ++i)
-        if (p->Tags[i].first == key)
+        if (p->Tags[i].first == pi.first)
         {
-            if (p->Tags[i].second == value)
+            if (p->Tags[i].second == pi.second)
                 return;
-            p->Tags[i].second = value;
+            theDoc->removeFromTagList(p->Tags[i].first, p->Tags[i].second);
+            p->Tags[i].second = pi.second;
             break;
         }
     if (i == p->Tags.size()) {
-        p->Tags.push_back(qMakePair(key,value));
+        p->Tags.push_back(pi);
         p->TagsSize++;
     }
     invalidateMeta();
     invalidatePainter();
-
-    if (parent() && addToTagList)
-        if (dynamic_cast<Layer*>(parent())->getDocument())
-            dynamic_cast<Layer*>(parent())->getDocument()->addToTagList(key, value);
 }
 
 void Feature::clearTags()
 {
-    p->Width = 0;
+    Q_ASSERT(parent());
+    Document* theDoc = dynamic_cast<Layer*>(parent())->getDocument();
+    Q_ASSERT(theDoc);
 
-    p->Tags.clear();
-    p->TagsSize = 0;
+    for (int i=0; i<p->Tags.size(); ++i) {
+        theDoc->removeFromTagList(p->Tags[i].first, p->Tags[i].second);
+        p->Tags.erase(p->Tags.begin()+i);
+        p->TagsSize--;
+    }
     invalidateMeta();
     invalidatePainter();
 }
 
-void Feature::invalidateMeta()
-{
-    MetaUpToDate = false;
-}
-
-void Feature::invalidatePainter()
-{
-    p->PossiblePaintersUpToDate = false;
-    p->PixelPerMForPainter = -1;
-}
-
 void Feature::clearTag(const QString& k)
 {
-    p->Width = 0;
+    Q_ASSERT(parent());
+    Document* theDoc = dynamic_cast<Layer*>(parent())->getDocument();
+    Q_ASSERT(theDoc);
+
+    quint32 ik = theDoc->getTagKeyIndex(k);
 
     for (int i=0; i<p->Tags.size(); ++i)
-        if (p->Tags[i].first == k)
+        if (p->Tags[i].first == ik)
         {
-            p->PixelPerMForPainter = -1;
+            theDoc->removeFromTagList(p->Tags[i].first, p->Tags[i].second);
             p->Tags.erase(p->Tags.begin()+i);
             p->TagsSize--;
             break;
@@ -570,8 +538,11 @@ void Feature::clearTag(const QString& k)
 
 void Feature::removeTag(int idx)
 {
-    p->Width = 0;
+    Q_ASSERT(parent());
+    Document* theDoc = dynamic_cast<Layer*>(parent())->getDocument();
+    Q_ASSERT(theDoc);
 
+    theDoc->removeFromTagList(p->Tags[idx].first, p->Tags[idx].second);
     p->Tags.erase(p->Tags.begin()+idx);
     p->TagsSize--;
     invalidateMeta();
@@ -585,18 +556,26 @@ int Feature::tagSize() const
 
 QString Feature::tagValue(int i) const
 {
-    return p->Tags[i].second;
+    Q_ASSERT(parent());
+    Document* theDoc = dynamic_cast<Layer*>(parent())->getDocument();
+    Q_ASSERT(theDoc);
+
+    return theDoc->getTagValue(p->Tags[i].second);
 }
 
 QString Feature::tagKey(int i) const
 {
-    return p->Tags[i].first;
+    Q_ASSERT(parent());
+    Document* theDoc = dynamic_cast<Layer*>(parent())->getDocument();
+    Q_ASSERT(theDoc);
+
+    return theDoc->getTagKey(p->Tags[i].first);
 }
 
 int Feature::findKey(const QString &k) const
 {
     for (int i=0; i<p->TagsSize; ++i)
-        if (p->Tags[i].first == k)
+        if (tagKey(i) == k)
             return i;
     return p->Tags.size();
 }
@@ -604,9 +583,20 @@ int Feature::findKey(const QString &k) const
 QString Feature::tagValue(const QString& k, const QString& Default) const
 {
     for (int i=0; i<p->TagsSize; ++i)
-        if (p->Tags[i].first == k)
-            return p->Tags[i].second;
+        if (tagKey(i) == k)
+            return tagValue(i);
     return Default;
+}
+
+void Feature::invalidateMeta()
+{
+    MetaUpToDate = false;
+}
+
+void Feature::invalidatePainter()
+{
+    p->PossiblePaintersUpToDate = false;
+    p->PixelPerMForPainter = -1;
 }
 
 void MapFeaturePrivate::updatePossiblePainters()

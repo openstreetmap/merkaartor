@@ -55,13 +55,13 @@ class Node : public Feature
         virtual const Feature* get(int Idx) const;
         virtual bool isNull() const;
         virtual bool isInteresting() const;
-        virtual bool isPOI() const;
+        virtual bool isPOI();
         virtual bool isWaypoint();
 
         /** check if the feature is drawable
          * @return true if to be drawn
          */
-        virtual bool isSelectable(MapView* view) const;
+        virtual bool isSelectable(MapView* view);
 
         const Coord& position() const;
         void setPosition(const Coord& aCoord);

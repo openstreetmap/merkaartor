@@ -30,9 +30,10 @@ SelectionDialog::SelectionDialog(QWidget *parent, bool showMaxResult)
 
     MainWindow* mw = (MainWindow *)(this->parent());
 
-    QCompleter* completer = new QCompleter(mw->document()->getTagList(), (QObject *)this);
+    QStringList ksl = mw->document()->getTagKeyList();
+    QCompleter* completer = new QCompleter(ksl, (QObject *)this);
 
-    cbKey->insertItems(-1, mw->document()->getTagList());
+    cbKey->insertItems(-1, ksl);
     //special keys
     cbKey->insertItem(-1, ":zoomlevel");
     cbKey->insertItem(-1, ":version");

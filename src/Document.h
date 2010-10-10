@@ -71,17 +71,21 @@ public:
     void undoHistory();
     void clear();
 
-    void addToTagList(QString k, QString v);
-    QStringList getTagList() ;
-    QStringList getTagValueList(QString k) ;
+    QPair<quint32, quint32> addToTagList(QString k, QString v);
+    void removeFromTagList(quint32 k, quint32 v);
     QList<QString> getTagKeys();
     QList<QString> getTagValues();
+    QString getTagKey(int idx);
+    quint32 getTagKeyIndex(const QString& s);
+    QStringList getTagKeyList();
     QString getTagValue(int idx);
+    quint32 getTagValueIndex(const QString& s);
+    QStringList getTagValueList(QString k) ;
 
     void setDirtyLayer(DirtyLayer* aLayer);
     Layer* getDirtyLayer();
-    Layer* getDirtyOrOriginLayer(Layer* aLayer = NULL) const;
-    Layer* getDirtyOrOriginLayer(Feature* F) const;
+    Layer* getDirtyOrOriginLayer(Layer* aLayer = NULL);
+    Layer* getDirtyOrOriginLayer(Feature* F);
     int getDirtySize() const;
 
     void setUploadedLayer(UploadedLayer* aLayer);

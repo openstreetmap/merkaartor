@@ -13,9 +13,10 @@
 #include <math.h>
 
 Interaction::Interaction(MapView* aView)
-    : theView(aView), Panning(false), Dragging(false),
-    LastSnap(0), SnapActive(true),
-    NoSelectPoints(false), NoSelectRoads(false), NoSelectVirtuals(true)
+    : theView(aView), Panning(false)
+    , LastSnap(0), SnapActive(true)
+    , NoSelectPoints(false), NoSelectRoads(false), NoSelectVirtuals(true)
+    , Dragging(false)
     , StartDrag(0,0), EndDrag(0,0)
 {
     connect(this, SIGNAL(requestCustomContextMenu(const QPoint &)), theView, SLOT(on_customContextMenuRequested(const QPoint &)));

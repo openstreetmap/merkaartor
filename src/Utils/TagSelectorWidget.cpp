@@ -16,8 +16,9 @@ TagSelectorWidget::TagSelectorWidget(MainWindow* mw, QWidget *parent) :
     ui->cbKey->setInsertPolicy(QComboBox::InsertAlphabetically);
     ui->cbValue->setInsertPolicy(QComboBox::InsertAlphabetically);
 
-    QCompleter* completer = new QCompleter(main->document()->getTagList(), (QObject *)this);
-    ui->cbKey->insertItems(-1, main->document()->getTagList());
+    QStringList ksl = main->document()->getTagKeyList();
+    QCompleter* completer = new QCompleter(ksl, (QObject *)this);
+    ui->cbKey->insertItems(-1, ksl);
     completer->setCompletionMode(QCompleter::InlineCompletion);
     completer->setModelSorting(QCompleter::CaseInsensitivelySortedModel);
     ui->cbKey->setCompleter(completer);

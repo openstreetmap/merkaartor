@@ -62,7 +62,9 @@ public:
     Layer*					lastDownloadLayer;
     QHash<Layer*, CoordBox>		downloadBoxes;
 
-    QHash< QString, QSet<QString> * >		tagList;
+    QStringList tagKeys;
+    QStringList tagValues;
+    QHash< quint32, QList<quint32> >		tagList;
     TagSelector* tagFilter;
     int FilterRevision;
     QString title;
@@ -185,7 +187,7 @@ bool Document::toXML(QDomElement xParent, bool asTemplate, QProgressDialog * pro
 
     mapDoc.setAttribute("xml:id", id());
     mapDoc.setAttribute("layernum", p->layerNum);
-    if (p->lastDownloadLayer && !asTemplate)
+    if (p->lastDownloadLayer)
         mapDoc.setAttribute("lastdownloadlayer", p->lastDownloadLayer->id());
 
     for (int i=0; i<p->Layers.size(); ++i) {
@@ -374,55 +376,83 @@ FilterLayer* Document::addFilterLayer(FilterLayer *aLayer)
     return theLayer;
 }
 
-void Document::addToTagList(QString k, QString v)
+QPair<quint32, quint32> Document::addToTagList(QString k, QString v)
 {
-#ifndef _MOBILE
-    bool ok;
-    v.toDouble(&ok);
-    if (ok)
-        return;
-    if (p->tagList.contains(k)) {
-        if (!p->tagList.value(k)->contains(v)) {
-            //static_cast< QSet<QString> * >(p->tagList.value(k))->insert(v);
-            p->tagList.value(k)->insert(v);
-        }
-    } else {
-        QSet<QString> *values = new QSet<QString>;
-        values->insert(v);
-        p->tagList.insert(k, values);
+    qint32 ik, iv;
+
+    ik = p->tagKeys.indexOf(k);
+    if (ik == -1) {
+        p->tagKeys.append(k);
+        ik = p->tagKeys.size()-1;
     }
-#endif
+    iv = p->tagValues.indexOf(v);
+    if (iv == -1) {
+        p->tagValues.append(v);
+        iv = p->tagValues.size()-1;
+    }
+
+    if (!k.isEmpty() && !v.isEmpty())
+        p->tagList[ik].append(iv);
+
+    return qMakePair((quint32)ik, (quint32)iv);
+}
+
+void Document::removeFromTagList(quint32 k, quint32 v)
+{
+    p->tagList[k].removeOne(v);
+    if (p->tagList[k].isEmpty())
+        p->tagList.remove(k);
 }
 
 QList<QString> Document::getTagKeys()
 {
-    return p->tagList.keys();
+    return p->tagKeys;
 }
 
 QList<QString> Document::getTagValues()
 {
-    return getTagValueList("*");
-}
-
-QStringList Document::getTagList()
-{
-    return p->tagList.uniqueKeys();
+    return p->tagValues;
 }
 
 QStringList Document::getTagValueList(QString k)
 {
+    QSet<quint32> retList;
     if (k == "*") {
-        QSet<QString> allValues;
-        QSet<QString> *tagValues;
-        foreach (tagValues, p->tagList) {
-            allValues += *tagValues;
-        }
-        return allValues.toList();
-    } else if (p->tagList.contains(k)) {
-        return p->tagList.value(k)->toList();
-    } else {
-        return QStringList();
-    }
+        foreach (QList<quint32> list, p->tagList)
+            retList.unite(list.toSet());
+    } else
+        retList = p->tagList[p->tagKeys.indexOf(k)].toSet();
+
+    QStringList res;
+    foreach (quint32 i, retList)
+        res << getTagValue(i);
+
+    return res;
+}
+
+QString Document::getTagKey(int idx)
+{
+    return p->tagKeys.at(idx);
+}
+
+quint32 Document::getTagKeyIndex(const QString& s)
+{
+    return p->tagKeys.indexOf(s);
+}
+
+QStringList Document::getTagKeyList()
+{
+    return p->tagKeys.toSet().toList();
+}
+
+QString Document::getTagValue(int idx)
+{
+    return p->tagValues.at(idx);
+}
+
+quint32 Document::getTagValueIndex(const QString& s)
+{
+    return p->tagValues.indexOf(s);
 }
 
 void Document::remove(Layer* aLayer)
@@ -530,17 +560,25 @@ Layer* Document::getDirtyLayer()
     return p->dirtyLayer;
 }
 
-Layer* Document::getDirtyOrOriginLayer(Layer* aLayer) const
+Layer* Document::getDirtyOrOriginLayer(Layer* aLayer)
 {
     if (g_Merk_Frisius) {
         if (aLayer)
             return aLayer;
         else {
+            DrawingLayer* firstDrLayer = NULL;
             for (int i=0; i<layerSize(); ++i) {
-                if (getLayer(i)->isSelected() && getLayer(i)->classType() == Layer::DrawingLayerType)
-                    return (Layer*)getLayer(i);
+                if (getLayer(i)->classType() == Layer::DrawingLayerType) {
+                    if (!firstDrLayer)
+                        firstDrLayer = dynamic_cast<DrawingLayer*>(getLayer(i));
+                    if (getLayer(i)->isSelected())
+                        return (Layer*)getLayer(i);
+                }
             }
-            return (Layer*)getLastDownloadLayer();
+            if (firstDrLayer)
+                return firstDrLayer;
+            else
+                return addDrawingLayer();
         }
     }
 
@@ -550,10 +588,11 @@ Layer* Document::getDirtyOrOriginLayer(Layer* aLayer) const
         return aLayer;
 }
 
-Layer* Document::getDirtyOrOriginLayer(Feature* F) const
+Layer* Document::getDirtyOrOriginLayer(Feature* F)
 {
-    if (g_Merk_Frisius)
-        return F->layer();
+    if (g_Merk_Frisius) {
+        return getDirtyOrOriginLayer(F->layer());
+    }
 
     if (!F || !F->layer() || F->layer()->isUploadable())
         return p->dirtyLayer;

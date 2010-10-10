@@ -739,72 +739,69 @@ DrawingLayer * DrawingLayer::doFromXML(DrawingLayer* l, Document* d, const QDomE
     l->blockIndexing(true);
 
     QDomElement c = e.firstChildElement();
-    if (c.tagName() != "osm")
-        return l;
+    if (c.tagName() == "osm") {
+        QSet<Way*> addedWays;
+        int i=0;
+        c = c.firstChildElement();
+        while(!c.isNull()) {
+            if (c.tagName() == "bound") {
+            } else
+                if (c.tagName() == "way") {
+                Way* R = Way::fromXML(d, l, c);
+                if (R)
+                    addedWays << R;
+                //			l->add(R);
+                i++;
+            } else
+                if (c.tagName() == "relation") {
+                /* Relation* r = */ Relation::fromXML(d, l, c);
+                                    //			l->add(r);
+                                    i++;
+                                } else
+                                    if (c.tagName() == "node") {
+                                    /* Node* N = */ Node::fromXML(d, l, c);
+                                                    //			l->add(N);
+                                                    i++;
+                                                } else
+                                                    if (c.tagName() == "trkseg") {
+                                                    TrackSegment* T = TrackSegment::fromXML(d, l, c, progress);
+                                                    l->add(T);
+                                                    i++;
+                                                }
 
-    QSet<Way*> addedWays;
-    int i=0;
-    c = c.firstChildElement();
-    while(!c.isNull()) {
-        if (c.tagName() == "bound") {
-        } else
-        if (c.tagName() == "way") {
-            Way* R = Way::fromXML(d, l, c);
-            if (R)
-                addedWays << R;
-//			l->add(R);
-            i++;
-        } else
-        if (c.tagName() == "relation") {
-            /* Relation* r = */ Relation::fromXML(d, l, c);
-//			l->add(r);
-            i++;
-        } else
-        if (c.tagName() == "node") {
-            /* Node* N = */ Node::fromXML(d, l, c);
-//			l->add(N);
-            i++;
-        } else
-        if (c.tagName() == "trkseg") {
-            TrackSegment* T = TrackSegment::fromXML(d, l, c, progress);
-            l->add(T);
-            i++;
-        }
+                                                if (i >= progress->maximum()/100) {
+                                                    progress->setValue(progress->value()+i);
+                                                    i=0;
+                                                }
 
-        if (i >= progress->maximum()/100) {
-            progress->setValue(progress->value()+i);
-            i=0;
-        }
+                                                if (progress->wasCanceled())
+                                                    break;
 
-        if (progress->wasCanceled())
-            break;
+                                                c = c.nextSiblingElement();
+                                            }
 
-        c = c.nextSiblingElement();
+        if (i > 0) progress->setValue(progress->value()+i);
+
+        QString savlbl = progress->labelText();
+        int savval = progress->value();
+        int savmax = progress->maximum();
+
+        //    if (M_PREFS->getUseVirtualNodes()) {
+        //        progress.setLabelText("Updating virtual...");
+        //        progress.setMaximum(addedWays.size());
+        //        progress.setValue(0);
+        //        foreach (Way* value, addedWays) {
+        //            value->updateVirtuals();
+        //            progress.setValue(progress.value()+1);
+        //            qApp->processEvents();
+        //        }
+        //    }
+        progress->setLabelText(savlbl);
+        progress->setMaximum(savmax);
+        progress->setValue(savval);
+        qApp->processEvents();
     }
-
-    if (i > 0) progress->setValue(progress->value()+i);
-
-    QString savlbl = progress->labelText();
-    int savval = progress->value();
-    int savmax = progress->maximum();
-
-//    if (M_PREFS->getUseVirtualNodes()) {
-//        progress.setLabelText("Updating virtual...");
-//        progress.setMaximum(addedWays.size());
-//        progress.setValue(0);
-//        foreach (Way* value, addedWays) {
-//            value->updateVirtuals();
-//            progress.setValue(progress.value()+1);
-//            qApp->processEvents();
-//        }
-//    }
     l->blockIndexing(false);
-
-    progress->setLabelText(savlbl);
-    progress->setMaximum(savmax);
-    progress->setValue(savval);
-    qApp->processEvents();
-
     return l;
 }
 
