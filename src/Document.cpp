@@ -78,9 +78,6 @@ public:
 Document::Document()
     : p(new MapDocumentPrivate)
 {
-    if (!(M_PREFS->apiVersionNum() > 0.5))
-        addToTagList("created_by", QString("Merkaartor v%1%2").arg(STRINGIFY(VERSION)).arg(STRINGIFY(REVISION)));
-
     setFilterType(M_PREFS->getCurrentFilter());
     p->title = tr("untitled");
 

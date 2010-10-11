@@ -21,9 +21,6 @@ static QString tagOSM(const Feature& F)
         if (F.tagKey(i).startsWith('_') && (F.tagKey(i).endsWith('_')))
             continue;
 
-        if (M_PREFS->apiVersionNum() > 0.5 && F.tagKey(i) == "created_by")
-            continue;
-
         const QString & tagKey = Utils::encodeAttributes( F.tagKey(i) );
         const QString & tagValue = Utils::encodeAttributes( F.tagValue(i) );
 
@@ -34,9 +31,7 @@ static QString tagOSM(const Feature& F)
 
 QString versionAttribute(const Feature& F)
 {
-    if (M_PREFS->apiVersionNum() > 0.5)
-        return QString(" version=\"%1\"").arg(F.versionNumber());
-    return "";
+    return QString(" version=\"%1\"").arg(F.versionNumber());
 }
 
 QString exportOSM(const Node& Pt, const QString& ChangesetId)

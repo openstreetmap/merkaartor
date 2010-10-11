@@ -103,8 +103,6 @@ void CreateAreaInteraction::startNewRoad(QMouseEvent* anEvent, Feature* aFeature
         CommandList* theList  = new CommandList(MainWindow::tr("Create Area %1").arg(aRoad->description()), aRoad);
         int SnapIdx = findSnapPointIndex(aRoad, P);
         Node* N = new Node(P);
-        if (M_PREFS->apiVersionNum() < 0.6)
-            N->setTag("created_by", QString("Merkaartor v%1%2").arg(STRINGIFY(VERSION)).arg(STRINGIFY(REVISION)));
         theList->add(new AddFeatureCommand(main()->document()->getDirtyOrOriginLayer(),N,true));
         theList->add(new WayAddNodeCommand(aRoad,N,SnapIdx));
         document()->addHistory(theList);
@@ -117,8 +115,6 @@ void CreateAreaInteraction::createNewRoad(CommandList* L)
 {
     Node* From = 0;
     theRoad = new Way;
-    if (M_PREFS->apiVersionNum() < 0.6)
-        theRoad->setTag("created_by", QString("Merkaartor v%1%2").arg(STRINGIFY(VERSION)).arg(STRINGIFY(REVISION)));
     if (FirstNode)
     {
         From = FirstNode;
@@ -129,8 +125,6 @@ void CreateAreaInteraction::createNewRoad(CommandList* L)
     else
     {
         From = new Node(FirstPoint);
-        if (M_PREFS->apiVersionNum() < 0.6)
-            From->setTag("created_by", QString("Merkaartor v%1%2").arg(STRINGIFY(VERSION)).arg(STRINGIFY(REVISION)));
         L->add(new AddFeatureCommand(Main->document()->getDirtyOrOriginLayer(),From,true));
     }
     L->add(new AddFeatureCommand(Main->document()->getDirtyOrOriginLayer(),theRoad,true));
@@ -146,8 +140,6 @@ void CreateAreaInteraction::finishRoad(CommandList* L)
     else if (LastRoad)
     {
         theRelation = new Relation;
-        if (M_PREFS->apiVersionNum() < 0.6)
-            theRelation->setTag("created_by", QString("Merkaartor v%1%2").arg(STRINGIFY(VERSION)).arg(STRINGIFY(REVISION)));
         theRelation->setTag("type","multipolygon");
         theRelation->add("outer",LastRoad);
         theRelation->add("inner",theRoad);
@@ -181,8 +173,6 @@ void CreateAreaInteraction::addToRoad(QMouseEvent* anEvent, Feature* Snap, Comma
         Coord P(XY_TO_COORD(anEvent->pos()));
         int SnapIdx = findSnapPointIndex(aRoad, P);
         Node* N = new Node(P);
-        if (M_PREFS->apiVersionNum() < 0.6)
-            N->setTag("created_by", QString("Merkaartor v%1%2").arg(STRINGIFY(VERSION)).arg(STRINGIFY(REVISION)));
         CommandList* theList  = new CommandList(MainWindow::tr("Area: Add node %1 to Road %2").arg(N->description()).arg(theRoad->description()), N);
         theList->add(new AddFeatureCommand(main()->document()->getDirtyOrOriginLayer(),N,true));
         theList->add(new WayAddNodeCommand(aRoad,N,SnapIdx));
@@ -193,8 +183,6 @@ void CreateAreaInteraction::addToRoad(QMouseEvent* anEvent, Feature* Snap, Comma
     if (!To)
     {
         To = new Node(XY_TO_COORD(anEvent->pos()));
-        if (M_PREFS->apiVersionNum() < 0.6)
-            To->setTag("created_by", QString("Merkaartor v%1%2").arg(STRINGIFY(VERSION)).arg(STRINGIFY(REVISION)));
         L->add(new AddFeatureCommand(Main->document()->getDirtyOrOriginLayer(),To,true));
         L->setDescription(MainWindow::tr("Area: Add node %1 to Road %2").arg(To->description()).arg(theRoad->description()));
         L->setFeature(To);

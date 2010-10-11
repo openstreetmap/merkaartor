@@ -176,10 +176,6 @@ void CreateDoubleWayInteraction::mousePressEvent(QMouseEvent* anEvent)
                 Node* B2 = new Node(XY_TO_COORD(
                     FB2.project(LastCursor)));
 
-                if (M_PREFS->apiVersionNum() < 0.6) {
-                    B1->setTag("created_by", QString("Merkaartor v%1%2").arg(STRINGIFY(VERSION)).arg(STRINGIFY(REVISION)));
-                    B2->setTag("created_by", QString("Merkaartor v%1%2").arg(STRINGIFY(VERSION)).arg(STRINGIFY(REVISION)));
-                }
                 L->add(new AddFeatureCommand(Main->document()->getDirtyOrOriginLayer(),B1,true));
                 L->add(new AddFeatureCommand(Main->document()->getDirtyOrOriginLayer(),B2,true));
                 L->add(new WayAddNodeCommand(R1,B1));
@@ -220,12 +216,6 @@ void CreateDoubleWayInteraction::mousePressEvent(QMouseEvent* anEvent)
                 R2 = new Way;
 
                 CommandList* L  = new CommandList(MainWindow::tr("Create double-way Road %1").arg(R1->id()), R1);
-                    if (M_PREFS->apiVersionNum() < 0.6) {
-                    A1->setTag("created_by", QString("Merkaartor v%1%2").arg(STRINGIFY(VERSION)).arg(STRINGIFY(REVISION)));
-                    A2->setTag("created_by", QString("Merkaartor v%1%2").arg(STRINGIFY(VERSION)).arg(STRINGIFY(REVISION)));
-                    B1->setTag("created_by", QString("Merkaartor v%1%2").arg(STRINGIFY(VERSION)).arg(STRINGIFY(REVISION)));
-                    B2->setTag("created_by", QString("Merkaartor v%1%2").arg(STRINGIFY(VERSION)).arg(STRINGIFY(REVISION)));
-                    }
                 L->add(new AddFeatureCommand(Main->document()->getDirtyOrOriginLayer(),A1,true));
                 L->add(new AddFeatureCommand(Main->document()->getDirtyOrOriginLayer(),A2,true));
                 L->add(new AddFeatureCommand(Main->document()->getDirtyOrOriginLayer(),B1,true));
@@ -235,10 +225,6 @@ void CreateDoubleWayInteraction::mousePressEvent(QMouseEvent* anEvent)
                 L->add(new AddFeatureCommand(Main->document()->getDirtyOrOriginLayer(),R2,true));
                 R1->setTag("oneway","yes");
                 R2->setTag("oneway","yes");
-                if (M_PREFS->apiVersionNum() < 0.6) {
-                    R1->setTag("created_by", QString("Merkaartor v%1%2").arg(STRINGIFY(VERSION)).arg(STRINGIFY(REVISION)));
-                    R2->setTag("created_by", QString("Merkaartor v%1%2").arg(STRINGIFY(VERSION)).arg(STRINGIFY(REVISION)));
-                }
                 L->add(new WayAddNodeCommand(R1,A1));
                 L->add(new WayAddNodeCommand(R1,B1));
                 L->add(new WayAddNodeCommand(R2,B2));

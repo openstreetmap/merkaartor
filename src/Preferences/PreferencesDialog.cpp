@@ -251,8 +251,6 @@ void PreferencesDialog::loadPrefs()
 
     cbLocalServer->setChecked(M_PREFS->getLocalServer());
 
-    //bbUse06Api->setChecked((M_PREFS->apiVersionNum() > 0.5));
-
     edCacheDir->setText(M_PREFS->getCacheDir());
     sbCacheSize->setValue(M_PREFS->getCacheSize());
 

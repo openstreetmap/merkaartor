@@ -189,7 +189,7 @@ bool isNodeInteresting(Node *n)
 void simplifyRoads(Document* theDocument, CommandList* theList, PropertiesDock* theDock, double threshold)
 {
     if (uninterestingKeys.isEmpty())
-        uninterestingKeys << "created_by" << "source";
+        uninterestingKeys << "source";
 
     for (int i = 0;  i < theDock->size();  ++i)
         if (Way* w = CAST_WAY(theDock->selection(i))) {

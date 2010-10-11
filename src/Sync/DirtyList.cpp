@@ -297,31 +297,24 @@ bool DirtyListDescriber::showChanges(QWidget* aParent)
 
     runVisit();
 
-    if (M_PREFS->apiVersionNum() < 0.6) {
-        Ui.lblChangesetComment->setVisible(false);
-        Ui.edChangesetComment->setVisible(false);
-    } else {
-        CoordBox bbox = theDocument->getDirtyOrOriginLayer()->boundingBox();
-        QString bboxComment = QString("BBOX:%1,%2,%3,%4")
+    CoordBox bbox = theDocument->getDirtyOrOriginLayer()->boundingBox();
+    QString bboxComment = QString("BBOX:%1,%2,%3,%4")
             .arg(QString::number(coordToAng(bbox.bottomLeft().lon()), 'f', 2))
             .arg(QString::number(coordToAng(bbox.bottomLeft().lat()), 'f', 2))
             .arg(QString::number(coordToAng(bbox.topRight().lon()), 'f', 2))
             .arg(QString::number(coordToAng(bbox.topRight().lat()), 'f', 2));
 
-        QString statComment = QString("ADD:%1 UPD:%2 DEL:%3").arg(glbAdded).arg(glbUpdated).arg(glbDeleted);
+    QString statComment = QString("ADD:%1 UPD:%2 DEL:%3").arg(glbAdded).arg(glbUpdated).arg(glbDeleted);
 
-        glbChangeSetComment = bboxComment + " " + statComment;
-        Ui.edChangesetComment->setText(glbChangeSetComment);
-    }
+    glbChangeSetComment = bboxComment + " " + statComment;
+    Ui.edChangesetComment->setText(glbChangeSetComment);
 
     bool ok = (dlg->exec() == QDialog::Accepted);
 
-    if (M_PREFS->apiVersionNum() > 0.5) {
-        if (!Ui.edChangesetComment->text().isEmpty())
-            glbChangeSetComment = Ui.edChangesetComment->text();
-        else
-            glbChangeSetComment = "-";
-    }
+    if (!Ui.edChangesetComment->text().isEmpty())
+        glbChangeSetComment = Ui.edChangesetComment->text();
+    else
+        glbChangeSetComment = "-";
 
     Task = Ui.ChangesList->count();
     SAFE_DELETE(dlg);
@@ -492,7 +485,6 @@ bool DirtyListExecutor::start()
 {
     ChangeSetId = "";
     Progress->setValue(++Done);
-    if (!(M_PREFS->apiVersionNum() > 0.5)) return true;
 
     qDebug() << QString("OPEN changeset");
 
@@ -520,7 +512,6 @@ bool DirtyListExecutor::start()
 bool DirtyListExecutor::stop()
 {
     Progress->setValue(++Done);
-    if (!(M_PREFS->apiVersionNum() > 0.5)) return true;
 
     qDebug() << QString("CLOSE changeset");
 
@@ -651,13 +642,11 @@ bool DirtyListExecutor::updateRelation(Relation* R)
     if (sendRequest("PUT",URL,DataIn,DataOut))
     {
         R->setLastUpdated(Feature::OSMServer);
-        if (M_PREFS->apiVersionNum() > 0.5)
-        {
-            int NewVersion = DataOut.toInt();
-            if (NewVersion <= R->versionNumber())
-                NewVersion = R->versionNumber()+1;
-            R->setVersionNumber(NewVersion);
-        }
+        int NewVersion = DataOut.toInt();
+        if (NewVersion <= R->versionNumber())
+            NewVersion = R->versionNumber()+1;
+        R->setVersionNumber(NewVersion);
+
         if (!g_Merk_Frisius) {
             R->layer()->remove(R);
             document()->getUploadedLayer()->add(R);
@@ -684,13 +673,12 @@ bool DirtyListExecutor::updateRoad(Way* R)
     if (sendRequest("PUT",URL,DataIn,DataOut))
     {
         R->setLastUpdated(Feature::OSMServer);
-        if (M_PREFS->apiVersionNum() > 0.5)
-        {
-            int NewVersion = DataOut.toInt();
-            if (NewVersion <= R->versionNumber())
-                NewVersion = R->versionNumber()+1;
-            R->setVersionNumber(NewVersion);
-        }
+
+        int NewVersion = DataOut.toInt();
+        if (NewVersion <= R->versionNumber())
+            NewVersion = R->versionNumber()+1;
+        R->setVersionNumber(NewVersion);
+
         if (!g_Merk_Frisius) {
             R->layer()->remove(R);
             document()->getUploadedLayer()->add(R);
@@ -718,13 +706,12 @@ bool DirtyListExecutor::updatePoint(Node* Pt)
     if (sendRequest("PUT",URL,DataIn,DataOut))
     {
         Pt->setLastUpdated(Feature::OSMServer);
-        if (M_PREFS->apiVersionNum() > 0.5)
-        {
-            int NewVersion = DataOut.toInt();
-            if (NewVersion <= Pt->versionNumber())
-                NewVersion = Pt->versionNumber()+1;
-            Pt->setVersionNumber(NewVersion);
-        }
+
+        int NewVersion = DataOut.toInt();
+        if (NewVersion <= Pt->versionNumber())
+            NewVersion = Pt->versionNumber()+1;
+        Pt->setVersionNumber(NewVersion);
+
         if (!g_Merk_Frisius) {
             Pt->layer()->remove(Pt);
             document()->getUploadedLayer()->add(Pt);
@@ -748,8 +735,7 @@ bool DirtyListExecutor::erasePoint(Node *Pt)
 //	URL = URL.arg(stripToOSMId(Pt->id()));
     QString URL = theDownloader->getURLToDelete("node",stripToOSMId(Pt->id()));
     QString DataIn, DataOut;
-    if (M_PREFS->apiVersionNum() > 0.5)
-        DataIn = wrapOSM(exportOSM(*Pt, ChangeSetId), ChangeSetId);
+    DataIn = wrapOSM(exportOSM(*Pt, ChangeSetId), ChangeSetId);
     if (sendRequest("DELETE",URL,DataIn,DataOut))
     {
         Pt->setLastUpdated(Feature::OSMServer);
@@ -776,8 +762,7 @@ bool DirtyListExecutor::eraseRoad(Way *R)
 //	URL = URL.arg(stripToOSMId(R->id()));
     QString URL = theDownloader->getURLToDelete("way",stripToOSMId(R->id()));
     QString DataIn, DataOut;
-    if (M_PREFS->apiVersionNum() > 0.5)
-        DataIn = wrapOSM(exportOSM(*R, ChangeSetId), ChangeSetId);
+    DataIn = wrapOSM(exportOSM(*R, ChangeSetId), ChangeSetId);
     if (sendRequest("DELETE",URL,DataIn,DataOut))
     {
         R->setLastUpdated(Feature::OSMServer);
@@ -802,8 +787,7 @@ bool DirtyListExecutor::eraseRelation(Relation *R)
     QEventLoop L; L.processEvents(QEventLoop::ExcludeUserInputEvents);
     QString URL = theDownloader->getURLToDelete("relation",stripToOSMId(R->id()));
     QString DataIn, DataOut;
-    if (M_PREFS->apiVersionNum() > 0.5)
-        DataIn = wrapOSM(exportOSM(*R, ChangeSetId), ChangeSetId);
+    DataIn = wrapOSM(exportOSM(*R, ChangeSetId), ChangeSetId);
     if (sendRequest("DELETE",URL,DataIn,DataOut))
     {
         R->setLastUpdated(Feature::OSMServer);

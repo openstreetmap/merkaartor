@@ -867,7 +867,7 @@ TagSelector* TagSelectorHasTags::copy() const
 
 TagSelectorMatchResult TagSelectorHasTags::matches(const IFeature* F, double /*PixelPerM*/) const
 {
-    return (F->tagSize()==0 || (F->tagSize()==1 && F->tagKey(0)=="created_by" )) ? TagSelect_NoMatch : TagSelect_Match;
+    return (F->tagSize()==0) ? TagSelect_NoMatch : TagSelect_Match;
 }
 
 QString TagSelectorHasTags::asExpression(bool) const

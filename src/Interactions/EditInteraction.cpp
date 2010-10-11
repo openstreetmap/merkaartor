@@ -246,8 +246,6 @@ void EditInteraction::snapMouseDoubleClickEvent(QMouseEvent* anEvent, Feature* a
 //            view()->update();
 //        } else {
 //            Node* N = new Node(XY_TO_COORD(anEvent->pos()));
-//            if (M_PREFS->apiVersionNum() < 0.6)
-//                N->setTag("created_by", QString("Merkaartor v%1%2").arg(STRINGIFY(VERSION)).arg(STRINGIFY(REVISION)));
 //            CommandList* theList  = new CommandList(MainWindow::tr("Create point %1").arg(N->id()), N);
 //            theList->add(new AddFeatureCommand(main()->document()->getDirtyOrOriginLayer(),N,true));
 //            document()->addHistory(theList);

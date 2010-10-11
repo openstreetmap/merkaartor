@@ -268,13 +268,9 @@ void ImportExportOsmBin::tagsToBinary(Feature* F, QDataStream& ds)
 {
     qint64 k, v;
     quint8 tagSize = (quint8)qMin(F->tagSize(), (int) 255);
-    if (F->tagValue("created_by", "dummy") != "dummy")
-        tagSize--;
 
     ds << tagSize;
     for (int i=0; i<F->tagSize(); ++i) {
-        if (F->tagKey(i) == "created_by")
-            continue;
         k = theTagKeysIndex[F->tagKey(i)];
         v = theTagValuesIndex[F->tagValue(i)];
         ds << k;

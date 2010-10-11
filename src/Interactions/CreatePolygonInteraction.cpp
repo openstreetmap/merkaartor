@@ -82,16 +82,12 @@ void CreatePolygonInteraction::mousePressEvent(QMouseEvent * event)
             Node* First = new Node(XY_TO_COORD(m.map(Prev)));
             Way* R = new Way;
             R->add(First);
-            if (M_PREFS->apiVersionNum() < 0.6)
-                R->setTag("created_by", QString("Merkaartor v%1%2").arg(STRINGIFY(VERSION)).arg(STRINGIFY(REVISION)));
             CommandList* L  = new CommandList(MainWindow::tr("Create Polygon %1").arg(R->id()), R);
             L->add(new AddFeatureCommand(Main->document()->getDirtyOrOriginLayer(),First,true));
             for (double a = 2*M_PI - Angle*3/2; a>0; a-=Angle)
             {
                 QPointF Next(CenterF.x()+cos(a)*Radius,CenterF.y()+sin(a)*Radius);
                 Node* New = new Node(XY_TO_COORD(m.map(Next)));
-                if (M_PREFS->apiVersionNum() < 0.6)
-                    New->setTag("created_by", QString("Merkaartor v%1%2").arg(STRINGIFY(VERSION)).arg(STRINGIFY(REVISION)));
                 L->add(new AddFeatureCommand(Main->document()->getDirtyOrOriginLayer(),New,true));
                 R->add(New);
             }

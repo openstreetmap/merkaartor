@@ -254,8 +254,6 @@ void MoveNodeInteraction::snapMouseMoveEvent(QMouseEvent* event, Feature* Closer
                 Node* N = new Node(*v);
                 N->setVirtual(false);
                 N->setPosition(OriginalPosition[i]+Diff);
-                if (M_PREFS->apiVersionNum() < 0.6)
-                    N->setTag("created_by", QString("Merkaartor v%1%2").arg(STRINGIFY(VERSION)).arg(STRINGIFY(REVISION)));
 
                 if (view()->properties()->isSelected(v)) {
                     view()->properties()->toggleSelection(v);

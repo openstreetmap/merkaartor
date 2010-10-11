@@ -14,7 +14,6 @@ class NodePrivate
     public:
         NodePrivate()
         : IsWaypoint(false)
-        , IsPOI(false)
         , ProjectionRevision(0)
         , HasPhoto(false)
         , Photo(0)
@@ -23,7 +22,6 @@ class NodePrivate
         }
 
         bool IsWaypoint;
-        bool IsPOI;
 #ifndef _MOBILE
         int ProjectionRevision;
 #endif
@@ -100,9 +98,8 @@ bool Node::isInteresting() const
     if (id().left(5) == "node_")
         return true;
     // if the user has added special tags, that's fine also
-    for (int i=0; i<tagSize(); ++i)
-        if ((tagKey(i) != "created_by") && (tagKey(i) != "ele"))
-            return true;
+    if (tagSize())
+        return true;
     // if it is part of a road, then too
     if (sizeParents())
         return true;
@@ -112,10 +109,7 @@ bool Node::isInteresting() const
 
 bool Node::isPOI()
 {
-    if (!MetaUpToDate)
-        updateMeta();
-
-    return p->IsPOI;
+    return (tagSize()>0);
 }
 
 bool Node::isWaypoint()
@@ -388,13 +382,7 @@ void Node::updateMeta()
 
     p->IsWaypoint = (findKey("_waypoint_") != tagSize());
 
-    p->IsPOI = false;
-    // if the user has added special tags, that's fine also
-    for (int i=0; i<tagSize(); ++i)
-        if ((tagKey(i) != "created_by") && (tagKey(i) != "ele"))
-            p->IsPOI = true;
-
-    if (!p->IsPOI) {
+    if (!isPOI()) {
         int i=0;
         int prtReadonly=0, prtWritable=0;
         for (; i<sizeParents(); ++i) {

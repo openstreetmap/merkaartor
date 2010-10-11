@@ -325,12 +325,8 @@ void FeaturesDock::addItem(MapFeaturePtr F)
     if (curFeatType == IFeature::Point || curFeatType == Feature::All)
     {
         if (Node* N = CAST_NODE(F)) {
-        for (int i=0; i<N->tagSize(); ++i)
-            if ((N->tagKey(i) != "created_by") && (N->tagKey(i) != "ele")) {
-                QListWidgetItem* anItem = new QListWidgetItem(N->description(), ui.FeaturesList);
-                anItem->setData(Qt::UserRole, QVariant::fromValue(F));
-                break;
-            }
+            QListWidgetItem* anItem = new QListWidgetItem(N->description(), ui.FeaturesList);
+            anItem->setData(Qt::UserRole, QVariant::fromValue(F));
         }
     }
 }

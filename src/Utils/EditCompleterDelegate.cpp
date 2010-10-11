@@ -63,8 +63,7 @@ QWidget* EditCompleterDelegate::createEditor(QWidget* parent, const QStyleOption
         QModelIndex i = index.model()->index(index.row(), 0);
         QString k = index.model()->data(i).toString();
         if (
-                (k != "name") &&
-                (k != "created_by")
+                (k != "name")
             ) {
             QStringList sl = mw->document()->getTagValueList(k);
             sl.sort();
@@ -81,12 +80,6 @@ QWidget* EditCompleterDelegate::createEditor(QWidget* parent, const QStyleOption
             edit = cb;
         } else {
             QLineEdit* le = new QLineEdit(parent);
-            if (
-                    (k == "created_by")
-                ) {
-                le->setEnabled(false);
-            }
-
             edit = le;
         }
     }

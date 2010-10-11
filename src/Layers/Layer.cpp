@@ -850,33 +850,24 @@ void TrackLayer::extractLayer()
             PL.clear();
 
             P = new Node( S->getNode(0)->position() );
-            if (M_PREFS->apiVersionNum() < 0.6)
-                P->setTag("created_by", QString("Merkaartor v%1%2").arg(STRINGIFY(VERSION)).arg(STRINGIFY(REVISION)));
             P->setTime(S->getNode(0)->time());
             P->setElevation(S->getNode(0)->elevation());
             P->setSpeed(S->getNode(0)->speed());
-            //P->setTag("ele", QString::number(S->get(0)->elevation()));
             PL.append(P);
             int startP = 0;
 
             P = new Node( S->getNode(1)->position() );
-            if (M_PREFS->apiVersionNum() < 0.6)
-                P->setTag("created_by", QString("Merkaartor v%1%2").arg(STRINGIFY(VERSION)).arg(STRINGIFY(REVISION)));
             P->setTime(S->getNode(1)->time());
             P->setElevation(S->getNode(1)->elevation());
             P->setSpeed(S->getNode(1)->speed());
-            //P->setTag("ele", QString::number(S->get(1)->elevation()));
             PL.append(P);
             int endP = 1;
 
             for (int j=2; j < S->size(); j++) {
                 P = new Node( S->getNode(j)->position() );
-                if (M_PREFS->apiVersionNum() < 0.6)
-                    P->setTag("created_by", QString("Merkaartor v%1%2").arg(STRINGIFY(VERSION)).arg(STRINGIFY(REVISION)));
                 P->setTime(S->getNode(j)->time());
                 P->setElevation(S->getNode(j)->elevation());
                 P->setSpeed(S->getNode(j)->speed());
-                //P->setTag("ele", QString::number(S->get(j)->elevation()));
                 PL.append(P);
                 endP = PL.size()-1;
 
@@ -895,8 +886,6 @@ void TrackLayer::extractLayer()
 
             Way* R = new Way();
             R->setLastUpdated(Feature::OSMServer);
-            if (M_PREFS->apiVersionNum() < 0.6)
-                R->setTag("created_by", QString("Merkaartor v%1%2").arg(STRINGIFY(VERSION)).arg(STRINGIFY(REVISION)));
             extL->add(R);
             for (int i=0; i < PL.size(); i++) {
                 extL->add(PL[i]);

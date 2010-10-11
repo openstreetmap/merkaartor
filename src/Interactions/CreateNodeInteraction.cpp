@@ -102,16 +102,12 @@ void CreateNodeInteraction::createNode(Coord P, Feature* aFeat)
         theList  = new CommandList(MainWindow::tr("Create node in Road: %1").arg(aRoad->id()), aRoad);
         int SnapIdx = findSnapPointIndex(aRoad, P);
         N = new Node(P);
-        if (M_PREFS->apiVersionNum() < 0.6)
-            N->setTag("created_by", QString("Merkaartor v%1%2").arg(STRINGIFY(VERSION)).arg(STRINGIFY(REVISION)));
         theList->add(new AddFeatureCommand(g_Merk_MainWindow->document()->getDirtyOrOriginLayer(aRoad->layer()),N,true));
         theList->add(new WayAddNodeCommand(aRoad,N,SnapIdx,g_Merk_MainWindow->document()->getDirtyOrOriginLayer(aRoad->layer())));
     }
     else
     {
         N = new Node(P);
-        if (M_PREFS->apiVersionNum() < 0.6)
-            N->setTag("created_by", QString("Merkaartor v%1%2").arg(STRINGIFY(VERSION)).arg(STRINGIFY(REVISION)));
         theList  = new CommandList(MainWindow::tr("Create point %1").arg(N->id()), N);
         theList->add(new AddFeatureCommand(g_Merk_MainWindow->document()->getDirtyOrOriginLayer(),N,true));
     }

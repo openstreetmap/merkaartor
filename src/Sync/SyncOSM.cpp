@@ -25,13 +25,8 @@ void syncOSM(MainWindow* theMain, const QString& aWeb, const QString& aUser, con
     if (Describer.showChanges(theMain))
     {
         Future.resetUpdates();
-        if (M_PREFS->apiVersionNum() > 0.5) {
-            DirtyListExecutorOSC Exec(theMain->document(),Future,aWeb,aUser,aPwd,Describer.tasks());
-            ok = Exec.executeChanges(theMain);
-        }  else {
-            DirtyListExecutor Exec(theMain->document(),Future,aWeb,aUser,aPwd,Describer.tasks());
-            ok = Exec.executeChanges(theMain);
-        }
+        DirtyListExecutorOSC Exec(theMain->document(),Future,aWeb,aUser,aPwd,Describer.tasks());
+        ok = Exec.executeChanges(theMain);
         if (ok) {
             if (M_PREFS->getAutoHistoryCleanup() && !theMain->document()->getDirtyOrOriginLayer()->getDirtySize())
                 theMain->document()->history().cleanup();

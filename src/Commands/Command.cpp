@@ -92,13 +92,6 @@ int Command::getDirtyLevel()
 void Command::undo()
 {
     if (mainFeature) {
-        if (M_PREFS->apiVersionNum() < 0.6) {
-            mainFeature->setUploaded(wasUploaded);
-            if (oldCreated != TAG_UNDEF_VALUE)
-                mainFeature->setTag("created_by", oldCreated);
-            else
-                mainFeature->clearTag("created_by");
-        }
         isUndone = true;
         mainFeature->notifyChanges();
     }
@@ -107,12 +100,6 @@ void Command::undo()
 void Command::redo()
 {
     if (mainFeature) {
-        if (M_PREFS->apiVersionNum() < 0.6) {
-            oldCreated = mainFeature->tagValue("created_by", TAG_UNDEF_VALUE);
-            mainFeature->setTag("created_by",QString("Merkaartor v%1%2").arg(STRINGIFY(VERSION)).arg(STRINGIFY(REVISION)));
-            wasUploaded = mainFeature->isUploaded();
-            mainFeature->setUploaded(false);
-        }
         isUndone = false;
         mainFeature->notifyChanges();
     }

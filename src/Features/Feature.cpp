@@ -451,6 +451,9 @@ bool Feature::isSpecial() const
 
 void Feature::setTag(int index, const QString& key, const QString& value)
 {
+    if (key.toLower() == "created_by")
+        return;
+
     Q_ASSERT(parent());
     Document* theDoc = dynamic_cast<Layer*>(parent())->getDocument();
     Q_ASSERT(theDoc);
@@ -477,6 +480,9 @@ void Feature::setTag(int index, const QString& key, const QString& value)
 
 void Feature::setTag(const QString& key, const QString& value)
 {
+    if (key.toLower() == "created_by")
+        return;
+
     Q_ASSERT(parent());
     Document* theDoc = dynamic_cast<Layer*>(parent())->getDocument();
     Q_ASSERT(theDoc);
@@ -601,18 +607,11 @@ void Feature::invalidatePainter()
 
 void MapFeaturePrivate::updatePossiblePainters()
 {
-    //if the object has no tags or only the created_by tag, we don't check for style
-    //search is about 15 times faster like that !!!
-    //However, still match features with no tags and no parent, i.e. "lost" trackpoints
+    //still match features with no tags and no parent, i.e. "lost" trackpoints
     if ( (theFeature->layer()->isTrack()) && M_PREFS->getDisableStyleForTracks() ) return blankPainters();
 
     if ( (theFeature->layer()->isTrack()) || theFeature->sizeParents() ) {
-        int i;
-        for (i=0; i<theFeature->tagSize(); ++i)
-            if ((theFeature->tagKey(i) != "created_by") && (theFeature->tagKey(i) != "ele"))
-                break;
-
-        if (i == theFeature->tagSize()) return blankPainters();
+        if (!theFeature->tagSize()) return blankPainters();
     }
 
     PossiblePainters.clear();
@@ -1059,7 +1058,7 @@ void Feature::mergeTags(Document* theDocument, CommandList* L, Feature* Dest, Fe
         else
         {
             QString v2 = Dest->tagValue(j);
-            if (v1 != v2 && k !="created_by")
+            if (v1 != v2)
             {
                 L->add(new SetTagCommand(Dest,k,QString("%1;%2").arg(v2).arg(v1), theDocument->getDirtyOrOriginLayer(Dest->layer())));
             }
@@ -1100,7 +1099,7 @@ QString Feature::toMainHtml(QString type, QString systemtype)
         QStringList sTags;
         int t=0;
         for (int i=0; i<tagSize(); ++i) {
-            if (tagKey(i) != "created_by" && tagKey(i) != "ele" && tagKey(i) != "_description_" && tagKey(i) != "_comment_") {
+            if (tagKey(i) != "_description_" && tagKey(i) != "_comment_") {
                 ++t;
                 sTags << tagKey(i) + "&nbsp;=&nbsp;" + "<b>" + tagValue(i) + "</b>";
             }
