@@ -14,5 +14,6 @@
   <WmsServer styles="" layers="ppnc1,ppnc2,ppnc3,ppnc4,ppnc5,ppnc6,ppnc7" projections="EPSG:31370" format="image/png" path="/WMS/com.esri.wms.Esrimap/PPNC?version1.1.1&amp;" address="cartopro1.wallonie.be" name="Wallonie PPNC" />
   <WmsServer styles="" layers="osm" projections="EPSG:4326" format="image/png" path="/cgi-bin/c2corg4osm?" address="www.camptocamp.org" name="camptocamp.org" />
   <WmsServer styles="" layers="GlobeXplorer Image" projections="EPSG:4326" format="image/jpeg" path="/gexservlets/wms?" address="wms.globexplorer.com" name="GlobeXplorer DigitalGlobe" deleted="true" />
+  <WmsServer styles="" sourcetag="Cnes/Spot Image" layers="spotmaps4osm" projections="EPSG:4326" format="image/jpeg" path="/cgi-bin/mapserv?map=/home/ortho/ortho.map&amp;" address="spotmaps.youmapps.org" name="SPOTMaps (France)"/>
  </WmsServers>
 </MerkaartorList>
