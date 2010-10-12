@@ -87,6 +87,7 @@ win32 {
 
 macx {
     RC_FILE = $$PWD/../Icons/merkaartor.icns
+    INCLUDEPATH += /opt/local/include
 }
 
 contains(NVIDIA_HACK,1) {
