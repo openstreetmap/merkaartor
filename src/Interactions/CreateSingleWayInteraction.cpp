@@ -245,8 +245,6 @@ void CreateSingleWayInteraction::snapMouseReleaseEvent(QMouseEvent* anEvent, Fea
             {
                 Node* From = 0;
                 theRoad = new Way;
-                if (IsCurved)
-                    theRoad->setTag("smooth","yes");
                 if (FirstNode) {
                     From = FirstNode;
                     if (!From->isDirty() && !From->hasOSMId() && From->isUploadable())
@@ -258,6 +256,13 @@ void CreateSingleWayInteraction::snapMouseReleaseEvent(QMouseEvent* anEvent, Fea
                     L->add(new AddFeatureCommand(Main->document()->getDirtyOrOriginLayer(),From,true));
                 }
                 L->add(new AddFeatureCommand(Main->document()->getDirtyOrOriginLayer(),theRoad,true));
+                if (M_PREFS->getAutoSourceTag()) {
+                    QStringList sl = Main->document()->getCurrentSourceTags();
+                    if (sl.size())
+                        theRoad->setTag("source", sl.join(";"));
+                }
+                if (IsCurved)
+                    theRoad->setTag("smooth","yes");
                 L->add(new WayAddNodeCommand(theRoad,From));
                 L->setDescription(MainWindow::tr("Create Road: %1").arg(theRoad->description()));
                 L->setFeature(theRoad);

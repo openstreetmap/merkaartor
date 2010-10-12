@@ -17,6 +17,9 @@
 #include "PaintStyle/IPaintStyle.h"
 #include "PaintStyle/FeaturePainter.h"
 
+#include "LayerIterator.h"
+#include "IMapAdapter.h"
+
 #include <QtCore/QString>
 #include <QMultiMap>
 #include <QProgressDialog>
@@ -1005,6 +1008,20 @@ QString Document::toPropertiesHtml()
 
     return h;
 }
+
+QStringList Document::getCurrentSourceTags()
+{
+    QStringList theSrc;
+    for (LayerIterator<ImageMapLayer*> ImgIt(this); !ImgIt.isEnd(); ++ImgIt) {
+        if (ImgIt.get()->isVisible()) {
+            QString s = ImgIt.get()->getMapAdapter()->getSourceTag();
+            if (!s.isEmpty())
+                theSrc << ImgIt.get()->getMapAdapter()->getSourceTag();
+        }
+    }
+    return theSrc;
+}
+
 /* FEATUREITERATOR */
 
 FeatureIterator::FeatureIterator(Document *aDoc)

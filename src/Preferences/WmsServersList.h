@@ -36,8 +36,10 @@ class WmsServer
 {
     public:
         WmsServer();
-        WmsServer(const WmsServer& other);
-        WmsServer(QString Name, QString Adress, QString Path, QString Layers, QString Projections, QString Styles, QString ImgFormat
+//        WmsServer(const WmsServer& other);
+        WmsServer(QString Name, QString Adress, QString Path, QString Layers
+                  , QString SourceTag
+                  , QString Projections, QString Styles, QString ImgFormat
                   , int IsTiled = 0
                   , WmscLayer CLayer = WmscLayer()
                   , bool Deleted=false
@@ -51,6 +53,7 @@ class WmsServer
         QString WmsAdress;
         QString WmsPath;
         QString WmsLayers;
+        QString WmsSourceTag;
         QString WmsProjections;
         QString WmsStyles;
         QString WmsImgFormat;

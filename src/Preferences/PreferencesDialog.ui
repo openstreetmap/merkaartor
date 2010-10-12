@@ -21,7 +21,7 @@
       <enum>QTabWidget::North</enum>
      </property>
      <property name="currentIndex">
-      <number>5</number>
+      <number>8</number>
      </property>
      <widget class="QWidget" name="tab_4">
       <attribute name="title">
@@ -1304,6 +1304,13 @@
             <string>Map Adapter</string>
            </property>
            <layout class="QVBoxLayout" name="verticalLayout_8">
+            <item>
+             <widget class="QCheckBox" name="cbAutoSourceTag">
+              <property name="text">
+               <string>Automatically add &quot;source&quot; tag when creating features over a background map</string>
+              </property>
+             </widget>
+            </item>
             <item>
              <widget class="QCheckBox" name="cbUseShapefileForBackground">
               <property name="text">

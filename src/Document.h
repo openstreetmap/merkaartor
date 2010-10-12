@@ -126,6 +126,8 @@ public:
     int getPaintersSize();
     const Painter* getPainter(int i);
 
+    QStringList getCurrentSourceTags();
+
 private:
     MapDocumentPrivate* p;
 

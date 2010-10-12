@@ -26,10 +26,11 @@
 #define EQUATORIALMETERHALFCIRCUMFERENCE  20037508.34
 #define EQUATORIALMETERPERDEGREE    222638.981555556
 
-TileMapAdapter::TileMapAdapter(const QString& host, const QString& path, const QString& projection, int theTilesize, int minZoom, int maxZoom, bool blOrigin)
-    :MapAdapter(host, path, projection, minZoom, maxZoom)
-    , tilesize(theTilesize)
-    , BlOrigin(blOrigin)
+TileMapAdapter::TileMapAdapter(const TmsServer& ts)
+    :MapAdapter(ts.TmsAdress, ts.TmsPath, ts.TmsProjection, ts.TmsMinZoom, ts.TmsMaxZoom)
+    , theServer(ts)
+    , tilesize(ts.TmsTileSize)
+    , BlOrigin(ts.TmsBlOrigin)
 {
     name = "tiles";
 
@@ -135,4 +136,9 @@ int TileMapAdapter::getTilesWE(int zoomlevel) const
 int TileMapAdapter::getTilesNS(int zoomlevel) const
 {
     return int(pow(2, zoomlevel+0.0));
+}
+
+QString	TileMapAdapter::getSourceTag() const
+{
+    return theServer.TmsSourceTag;
 }

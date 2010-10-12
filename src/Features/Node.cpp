@@ -380,7 +380,7 @@ void Node::updateMeta()
     Feature::updateMeta();
     MetaUpToDate = true;
 
-    p->IsWaypoint = (findKey("_waypoint_") != tagSize());
+    p->IsWaypoint = (findKey("_waypoint_") != -1);
 
     if (!isPOI()) {
         int i=0;
@@ -594,7 +594,7 @@ QString Node::toHtml()
     int i;
 
 
-    if ((i = findKey("_waypoint_")) < tagSize())
+    if ((i = findKey("_waypoint_")) != -1)
         D += "<p><b>"+QApplication::translate("MapFeature", "Waypoint")+"</b><br/>";
     D += "<i>"+QApplication::translate("MapFeature", "coord")+": </i>" + COORD2STRING(coordToAng(position().lat())) + " (" + Coord2Sexa(position().lat()) + ") / " + COORD2STRING(coordToAng(position().lon())) + " (" + Coord2Sexa(position().lon()) + ")";
 
@@ -602,9 +602,9 @@ QString Node::toHtml()
         D += "<br/><i>"+QApplication::translate("MapFeature", "elevation")+": </i>" + QString::number(elevation(), 'f', 4);
     if (speed())
         D += "<br/><i>"+QApplication::translate("MapFeature", "speed")+": </i>" + QString::number(speed(), 'f', 4);
-    if ((i = findKey("_description_")) < tagSize())
+    if ((i = findKey("_description_")) != -1)
         D += "<br/><i>"+QApplication::translate("MapFeature", "description")+": </i>" + tagValue(i);
-    if ((i = findKey("_comment_")) < tagSize())
+    if ((i = findKey("_comment_")) != -1)
         D += "<br/><i>"+QApplication::translate("MapFeature", "comment")+": </i>" + tagValue(i);
 
     return Feature::toMainHtml(QApplication::translate("MapFeature", "Node"), "node").arg(D);

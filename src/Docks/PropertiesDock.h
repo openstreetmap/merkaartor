@@ -60,6 +60,7 @@ class PropertiesDock : public MDockAncestor
         void on_btMemberDown_clicked();
         void on_RemoveMemberButton_clicked();
         void on_RemoveTagButton_clicked();
+        void on_SourceTagButton_clicked();
         void on_SelectionList_itemSelectionChanged();
         void on_SelectionList_itemDoubleClicked(QListWidgetItem* item);
         void executePendingSelectionChange();
@@ -75,8 +76,8 @@ class PropertiesDock : public MDockAncestor
         void cleanUpUi();
         void switchUi();
         void switchToNoUi();
-        void switchToTrackPointUi();
-        void switchToRoadUi();
+        void switchToNodeUi();
+        void switchToWayUi();
         void switchToMultiUi();
         void switchToRelationUi();
         void fillMultiUiSelectionBox();

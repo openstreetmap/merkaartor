@@ -182,7 +182,7 @@ void ImageMapLayer::setMapAdapter(const QUuid& theAdapterUid, const QString& ser
         tsl = M_PREFS->getTmsServers();
         p->selServer = server;
         TmsServer ts = tsl->value(p->selServer);
-        p->tmsa = new TileMapAdapter(ts.TmsAdress, ts.TmsPath, ts.TmsProjection, ts.TmsTileSize, ts.TmsMinZoom, ts.TmsMaxZoom, ts.TmsBlOrigin);
+        p->tmsa = new TileMapAdapter(ts);
         p->theMapAdapter = p->tmsa;
 
         setName(tr("Map - TMS - %1").arg(ts.TmsName));

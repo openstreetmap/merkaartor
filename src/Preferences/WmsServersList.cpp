@@ -17,24 +17,29 @@
 
 WmsServer::WmsServer()
 {
-    WmsServer(QApplication::translate("MerkaartorPreferences","New Server"), "", "", "", "", "", "");
+    WmsServer(QApplication::translate("MerkaartorPreferences","New Server"), "", "", "", "", "", "", "");
 }
 
-WmsServer::WmsServer(const WmsServer& other)
-    : WmsName(other.WmsName), WmsAdress(other.WmsAdress), WmsPath(other.WmsPath), WmsLayers(other.WmsLayers),
-        WmsProjections(other.WmsProjections), WmsStyles(other.WmsStyles), WmsImgFormat(other.WmsImgFormat)
-        , WmsIsTiled(other.WmsIsTiled)
-        , WmsCLayer(other.WmsCLayer)
-        , deleted(other.deleted)
-{
-}
+//WmsServer::WmsServer(const WmsServer& other)
+//    : WmsName(other.WmsName), WmsAdress(other.WmsAdress), WmsPath(other.WmsPath), WmsLayers(other.WmsLayers)
+//    , WmsSourceTag(other.WmsSourceTag)
+//    , WmsProjections(other.WmsProjections), WmsStyles(other.WmsStyles), WmsImgFormat(other.WmsImgFormat)
+//    , WmsIsTiled(other.WmsIsTiled)
+//    , WmsCLayer(other.WmsCLayer)
+//    , deleted(other.deleted)
+//{
+//}
 
-WmsServer::WmsServer(QString Name, QString Adress, QString Path, QString Layers, QString Projections, QString Styles, QString ImgFormat
+WmsServer::WmsServer(QString Name, QString Adress, QString Path, QString Layers
+                     , QString SourceTag
+                     , QString Projections, QString Styles, QString ImgFormat
                      , int IsTiled
                      , WmscLayer CLayer
                      , bool Deleted
                                     )
-    : WmsName(Name), WmsAdress(Adress), WmsPath(Path), WmsLayers(Layers), WmsProjections(Projections), WmsStyles(Styles), WmsImgFormat(ImgFormat)
+    : WmsName(Name), WmsAdress(Adress), WmsPath(Path), WmsLayers(Layers)
+    , WmsSourceTag(SourceTag)
+    , WmsProjections(Projections), WmsStyles(Styles), WmsImgFormat(ImgFormat)
     , WmsIsTiled(IsTiled)
     , WmsCLayer(CLayer)
     , deleted(Deleted)
@@ -55,6 +60,8 @@ void WmsServer::toXml(QDomElement parent)
     p.setAttribute("projections", WmsProjections);
     p.setAttribute("styles", WmsStyles);
     p.setAttribute("format", WmsImgFormat);
+    if (!WmsSourceTag.isEmpty())
+        p.setAttribute("sourcetag", WmsSourceTag);
     if (deleted)
         p.setAttribute("deleted", "true");
     if (WmsIsTiled > 0) {
@@ -101,6 +108,7 @@ WmsServer WmsServer::fromXml(QDomElement parent)
         theServer.WmsProjections = parent.attribute("projections");
         theServer.WmsStyles = parent.attribute("styles");
         theServer.WmsImgFormat = parent.attribute("format");
+        theServer.WmsSourceTag = parent.attribute("sourcetag");
         theServer.deleted = (parent.attribute("deleted") == "true" ? true : false);
 
         theServer.WmsIsTiled = 0;

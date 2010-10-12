@@ -583,7 +583,7 @@ int Feature::findKey(const QString &k) const
     for (int i=0; i<p->TagsSize; ++i)
         if (tagKey(i) == k)
             return i;
-    return p->Tags.size();
+    return -1;
 }
 
 QString Feature::tagValue(const QString& k, const QString& Default) const
@@ -1053,7 +1053,7 @@ void Feature::mergeTags(Document* theDocument, CommandList* L, Feature* Dest, Fe
         QString k = Src->tagKey(i);
         QString v1 = Src->tagValue(i);
         int j = Dest->findKey(k);
-        if (j == Dest->tagSize())
+        if (j == -1)
             L->add(new SetTagCommand(Dest,k,v1, theDocument->getDirtyOrOriginLayer(Dest->layer())));
         else
         {

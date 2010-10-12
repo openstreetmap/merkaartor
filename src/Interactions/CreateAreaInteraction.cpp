@@ -128,6 +128,11 @@ void CreateAreaInteraction::createNewRoad(CommandList* L)
         L->add(new AddFeatureCommand(Main->document()->getDirtyOrOriginLayer(),From,true));
     }
     L->add(new AddFeatureCommand(Main->document()->getDirtyOrOriginLayer(),theRoad,true));
+    if (M_PREFS->getAutoSourceTag()) {
+        QStringList sl = Main->document()->getCurrentSourceTags();
+        if (sl.size())
+            theRoad->setTag("source", sl.join(";"));
+    }
     L->add(new WayAddNodeCommand(theRoad,From));
     L->setDescription(MainWindow::tr("Area: Create Road %1").arg(theRoad->description()));
     L->setFeature(theRoad);
@@ -140,10 +145,15 @@ void CreateAreaInteraction::finishRoad(CommandList* L)
     else if (LastRoad)
     {
         theRelation = new Relation;
+        L->add(new AddFeatureCommand(Main->document()->getDirtyOrOriginLayer(),theRelation,true));
+        if (M_PREFS->getAutoSourceTag()) {
+            QStringList sl = Main->document()->getCurrentSourceTags();
+            if (sl.size())
+                theRelation->setTag("source", sl.join(";"));
+        }
         theRelation->setTag("type","multipolygon");
         theRelation->add("outer",LastRoad);
         theRelation->add("inner",theRoad);
-        L->add(new AddFeatureCommand(Main->document()->getDirtyOrOriginLayer(),theRelation,true));
         LastRoad = 0;
     }
     else

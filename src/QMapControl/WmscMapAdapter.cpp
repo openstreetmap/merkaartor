@@ -127,3 +127,8 @@ int WmscMapAdapter::getTilesNS(int zoomlevel) const
     qreal unitPerTile = theServer.WmsCLayer.Resolutions[zoomlevel] * tilesize; // Size of 1 tile in projected units
     return qRound(theServer.WmsCLayer.BoundingBox.height() / unitPerTile);
 }
+
+QString WmscMapAdapter::getSourceTag() const
+{
+    return theServer.WmsSourceTag;
+}

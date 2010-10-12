@@ -17,10 +17,10 @@
 
 TmsServer::TmsServer()
 {
-    TmsServer(QApplication::translate("MerkaartorPreferences","New Server"), "", "", "EPSG:900913", 256, 0, 17);
+    TmsServer(QApplication::translate("MerkaartorPreferences","New Server"), "", "", "EPSG:900913", 256, 0, 17, "");
 }
 
-TmsServer::TmsServer(QString Name, QString Adress, QString Path, QString Projection, int tileSize, int minZoom, int maxZoom, QString baseUrl, bool Origin, bool Deleted)
+TmsServer::TmsServer(QString Name, QString Adress, QString Path, QString Projection, int tileSize, int minZoom, int maxZoom, QString SourceTag, QString baseUrl, bool Origin, bool Deleted)
     : TmsName(Name)
     , TmsAdress(Adress)
     , TmsPath(Path)
@@ -28,6 +28,7 @@ TmsServer::TmsServer(QString Name, QString Adress, QString Path, QString Project
     , TmsTileSize(tileSize)
     , TmsMinZoom(minZoom)
     , TmsMaxZoom(maxZoom)
+    , TmsSourceTag(SourceTag)
     , TmsBaseUrl(baseUrl)
     , TmsBlOrigin(Origin)
     , deleted(Deleted)
@@ -47,6 +48,8 @@ void TmsServer::toXml(QDomElement parent)
     p.setAttribute("tilesize", QString::number(TmsTileSize));
     p.setAttribute("minzoom", QString::number(TmsMinZoom));
     p.setAttribute("maxzoom", QString::number(TmsMaxZoom));
+    if (!TmsSourceTag.isEmpty())
+        p.setAttribute("sourcetag", TmsSourceTag);
     if (!TmsProjection.isEmpty())
         p.setAttribute("projection", TmsProjection);
     if (!TmsBaseUrl.isEmpty())
@@ -72,6 +75,7 @@ TmsServer TmsServer::fromXml(QDomElement parent)
         theServer.TmsTileSize = parent.attribute("tilesize").toInt();
         theServer.TmsMinZoom = parent.attribute("minzoom").toInt();
         theServer.TmsMaxZoom = parent.attribute("maxzoom").toInt();
+        theServer.TmsSourceTag = parent.attribute("sourcetag");
         theServer.TmsBaseUrl = parent.attribute("tmsBaseUrl");
         theServer.TmsBlOrigin = (parent.attribute("tmsorigin") == "true" ? true : false);
         theServer.deleted = (parent.attribute("deleted") == "true" ? true : false);

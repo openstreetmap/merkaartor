@@ -330,6 +330,9 @@ public:
     M_PARAM_DECLARE_BOOL(WorldOsbAutoload)
     M_PARAM_DECLARE_BOOL(WorldOsbAutoshow)
 
+    /* Background */
+    M_PARAM_DECLARE_BOOL(AutoSourceTag)
+
     /* Mouse bevaviour */
     M_PARAM_DECLARE_BOOL(MouseSingleButton)
     M_PARAM_DECLARE_BOOL(SeparateMoveMode)

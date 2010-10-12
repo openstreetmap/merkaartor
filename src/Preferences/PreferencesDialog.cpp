@@ -332,6 +332,7 @@ void PreferencesDialog::loadPrefs()
     comboCustomStyle->setCurrentIndex(comboCustomStyle->findText(M_PREFS->getMerkaartorStyleString()));
 
     cbUseShapefileForBackground->setChecked(M_PREFS->getUseShapefileForBackground());
+    cbAutoSourceTag->setChecked(M_PREFS->getAutoSourceTag());
 }
 
 void PreferencesDialog::savePrefs()
@@ -484,6 +485,7 @@ void PreferencesDialog::savePrefs()
     M_PREFS->setMerkaartorStyleString(comboCustomStyle->currentText());
 
     M_PREFS->setUseShapefileForBackground(cbUseShapefileForBackground->isChecked());
+    M_PREFS->setAutoSourceTag(cbAutoSourceTag->isChecked());
 
     M_PREFS->save(OsmDataChanged);
 }

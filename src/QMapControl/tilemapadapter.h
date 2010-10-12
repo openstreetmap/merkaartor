@@ -21,6 +21,8 @@
 #define TILEMAPADAPTER_H
 
 #include "mapadapter.h"
+#include "TmsServersList.h"
+
 //! MapAdapter for servers with image tiles
 /*!
  * Use this derived MapAdapter to display maps from OpenStreetMap
@@ -41,7 +43,7 @@ public:
      * @param minZoom the minimum zoom level
      * @param maxZoom the maximum zoom level
      */
-    TileMapAdapter(const QString& host, const QString& serverPath, const QString& projection, int tilesize, int minZoom = 0, int maxZoom = 17, bool blOrigin = false);
+    TileMapAdapter(const TmsServer& ts);
 
     virtual ~TileMapAdapter();
 
@@ -62,6 +64,12 @@ public:
      * @return the size of the tiles
      */
     virtual int		getTileSize	() const;
+
+    //! returns the source tag to be applied when drawing over this map
+    /*!
+     * @return the source tag
+     */
+    virtual QString	getSourceTag() const;
 
     virtual void zoom_in();
     virtual void zoom_out();
@@ -84,6 +92,7 @@ public:
     virtual QString toPropertiesHtml() {return "";}
 
 protected:
+    TmsServer theServer;
     int	tilesize;
     bool BlOrigin;
     bool isProj4326;

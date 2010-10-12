@@ -84,6 +84,11 @@ void CreatePolygonInteraction::mousePressEvent(QMouseEvent * event)
             R->add(First);
             CommandList* L  = new CommandList(MainWindow::tr("Create Polygon %1").arg(R->id()), R);
             L->add(new AddFeatureCommand(Main->document()->getDirtyOrOriginLayer(),First,true));
+            if (M_PREFS->getAutoSourceTag()) {
+                QStringList sl = Main->document()->getCurrentSourceTags();
+                if (sl.size())
+                    R->setTag("source", sl.join(";"));
+            }
             for (double a = 2*M_PI - Angle*3/2; a>0; a-=Angle)
             {
                 QPointF Next(CenterF.x()+cos(a)*Radius,CenterF.y()+sin(a)*Radius);

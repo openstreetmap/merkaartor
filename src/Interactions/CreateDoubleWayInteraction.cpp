@@ -223,6 +223,13 @@ void CreateDoubleWayInteraction::mousePressEvent(QMouseEvent* anEvent)
 
                 L->add(new AddFeatureCommand(Main->document()->getDirtyOrOriginLayer(),R1,true));
                 L->add(new AddFeatureCommand(Main->document()->getDirtyOrOriginLayer(),R2,true));
+                if (M_PREFS->getAutoSourceTag()) {
+                    QStringList sl = Main->document()->getCurrentSourceTags();
+                    if (sl.size()) {
+                        R1->setTag("source", sl.join(";"));
+                        R2->setTag("source", sl.join(";"));
+                    }
+                }
                 R1->setTag("oneway","yes");
                 R2->setTag("oneway","yes");
                 L->add(new WayAddNodeCommand(R1,A1));

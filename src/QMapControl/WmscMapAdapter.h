@@ -65,6 +65,12 @@ public:
      */
     virtual int		getTileSize	() const;
 
+    //! returns the source tag to be applied when drawing over this map
+    /*!
+     * @return the source tag
+     */
+    virtual QString	getSourceTag() const;
+
     double PI;
 
     virtual void zoom_in();

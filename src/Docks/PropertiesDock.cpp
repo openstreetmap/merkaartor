@@ -384,9 +384,9 @@ void PropertiesDock::switchUi()
         if (FullSelection[0]->isVirtual())
             switchToNoUi();
         else if (CAST_NODE(FullSelection[0]))
-            switchToTrackPointUi();
+            switchToNodeUi();
         else if (CAST_WAY(FullSelection[0]))
-            switchToRoadUi();
+            switchToWayUi();
         else if (CAST_RELATION(FullSelection[0]))
             switchToRelationUi();
         else
@@ -417,7 +417,7 @@ void PropertiesDock::switchToMultiUi()
     setWindowTitle(tr("Properties - Multiple elements"));
 }
 
-void PropertiesDock::switchToTrackPointUi()
+void PropertiesDock::switchToNodeUi()
 {
     NowShowing = TrackPointUiShowing;
     QWidget* NewUi = new QWidget(this);
@@ -430,10 +430,11 @@ void PropertiesDock::switchToTrackPointUi()
     connect(TrackPointUi.Longitude,SIGNAL(editingFinished()),this, SLOT(on_TrackPointLon_editingFinished()));
     connect(TrackPointUi.Latitude,SIGNAL(editingFinished()),this, SLOT(on_TrackPointLat_editingFinished()));
     connect(TrackPointUi.RemoveTagButton,SIGNAL(clicked()),this, SLOT(on_RemoveTagButton_clicked()));
+    connect(TrackPointUi.SourceTagButton,SIGNAL(clicked()),this, SLOT(on_SourceTagButton_clicked()));
     setWindowTitle(tr("Properties - Node"));
 }
 
-void PropertiesDock::switchToRoadUi()
+void PropertiesDock::switchToWayUi()
 {
     NowShowing = RoadUiShowing;
     QWidget* NewUi = new QWidget(this);
@@ -444,6 +445,7 @@ void PropertiesDock::switchToRoadUi()
         CurrentUi->deleteLater();
     CurrentUi = NewUi;
     connect(RoadUi.RemoveTagButton,SIGNAL(clicked()),this, SLOT(on_RemoveTagButton_clicked()));
+    connect(RoadUi.SourceTagButton,SIGNAL(clicked()),this, SLOT(on_SourceTagButton_clicked()));
     setWindowTitle(tr("Properties - Road"));
 }
 
@@ -462,6 +464,7 @@ void PropertiesDock::switchToRelationUi()
     connect(RelationUi.MembersView, SIGNAL(clicked(QModelIndex)), this, SLOT(on_Member_clicked(QModelIndex)));
     connect(RelationUi.RemoveMemberButton,SIGNAL(clicked()),this, SLOT(on_RemoveMemberButton_clicked()));
     connect(RelationUi.RemoveTagButton,SIGNAL(clicked()),this, SLOT(on_RemoveTagButton_clicked()));
+    connect(RelationUi.SourceTagButton,SIGNAL(clicked()),this, SLOT(on_SourceTagButton_clicked()));
     connect(RelationUi.btMemberUp, SIGNAL(clicked()), SLOT(on_btMemberUp_clicked()));
     connect(RelationUi.btMemberDown, SIGNAL(clicked()), SLOT(on_btMemberDown_clicked()));
     setWindowTitle(tr("Properties - Relation"));
@@ -691,7 +694,7 @@ void PropertiesDock::on_RemoveTagButton_clicked()
             QString KeyName = Content.toString();
             L = new CommandList(MainWindow::tr("Clear Tag '%1' on %2").arg(KeyName).arg(Selection[0]->id()), Selection[0]);
             for (int i=0; i<Selection.size(); ++i)
-                if (Selection[i]->findKey(KeyName) < Selection[i]->tagSize())
+                if (Selection[i]->findKey(KeyName) != -1)
                     L->add(new ClearTagCommand(Selection[i],KeyName,Main->document()->getDirtyOrOriginLayer(Selection[i]->layer())));
         }
     }
@@ -706,7 +709,7 @@ void PropertiesDock::on_RemoveTagButton_clicked()
             {
                 QString KeyName = Content.toString();
                 for (int i=0; i<Selection.size(); ++i)
-                    if (Selection[i]->findKey(KeyName) < Selection[i]->tagSize())
+                    if (Selection[i]->findKey(KeyName) != -1)
                         L->add(new ClearTagCommand(Selection[i],KeyName,Main->document()->getDirtyOrOriginLayer(Selection[i]->layer())));
             }
         }
@@ -718,6 +721,22 @@ void PropertiesDock::on_RemoveTagButton_clicked()
         Main->document()->addHistory(L);
         Main->invalidateView();
     }
+}
+
+void PropertiesDock::on_SourceTagButton_clicked()
+{
+    QStringList sl = Main->document()->getCurrentSourceTags();
+    if (!sl.size())
+        return;
+
+    QString src = Selection[0]->tagValue("source", "");
+    if (!src.isEmpty())
+        sl.prepend(src);
+
+    CommandList* L = new CommandList(MainWindow::tr("Set \"source\" tas on %1").arg(Selection[0]->id()), Selection[0]);
+    L->add(new SetTagCommand(Selection[0], "source", sl.join(";")));
+    Main->document()->addHistory(L);
+    Main->invalidateView();
 }
 
 void PropertiesDock::on_RemoveMemberButton_clicked()

@@ -948,7 +948,7 @@ Feature::TrafficDirectionType trafficDirection(const Way* R)
     // TODO some duplication with Way trafficDirection
     QString d;
     int idx=R->findKey("oneway");
-    if (idx<R->tagSize())
+    if (idx != -1)
     {
         d = R->tagValue(idx);
         if ( (d == "yes") || (d == "1") || (d == "true")) return Feature::OneWay;
@@ -957,7 +957,7 @@ Feature::TrafficDirectionType trafficDirection(const Way* R)
     }
 
     idx=R->findKey("junction");
-    if (idx<R->tagSize())
+    if (idx != -1)
     {
         d = R->tagValue(idx);
         if(d=="roundabout") return Feature::OneWay;

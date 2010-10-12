@@ -91,6 +91,12 @@ public:
      */
     virtual int 		getZoom		() const;
 
+    //! returns the source tag to be applied when drawing over this map
+    /*!
+     * @return the source tag
+     */
+    virtual QString	getSourceTag		() const { return "Yahoo"; }
+
     virtual int		getAdaptedZoom()   const;
     virtual int 	getAdaptedMinZoom	() const;
     virtual int		getAdaptedMaxZoom	() const;

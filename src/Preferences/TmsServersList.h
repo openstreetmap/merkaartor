@@ -21,7 +21,7 @@ class TmsServer
 {
     public:
         TmsServer();
-        TmsServer(QString Name, QString Adress, QString Path, QString Projection, int tileSize, int minZoom, int maxZoom, QString TmsBaseUrl = "", bool Origin=false, bool Deleted=false);
+        TmsServer(QString Name, QString Adress, QString Path, QString Projection, int tileSize, int minZoom, int maxZoom, QString SourceTag, QString TmsBaseUrl = "", bool Origin=false, bool Deleted=false);
 
         void toXml(QDomElement parent);
         static TmsServer fromXml(QDomElement parent);
@@ -34,6 +34,7 @@ class TmsServer
         int TmsTileSize;
         int TmsMinZoom;
         int TmsMaxZoom;
+        QString TmsSourceTag;
         QString TmsBaseUrl;
         bool TmsBlOrigin;
         bool deleted;

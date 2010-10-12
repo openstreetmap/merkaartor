@@ -1,4 +1,5 @@
 v0.17
+    * ADD : Auto-add "source" tag when drawing over a background map; define the value in the WMS and TMS editors
     * FIX : Filter out invalid value for first Tag list column width (fixes #3129)
     * FIX : Remove tags from autocomplete suggestions when cleared from features (fixes #3113)
     * ADD : Allow to start merkaartor with a document template specified in preferences

@@ -109,6 +109,7 @@ void WMSPreferencesDialog::on_btApplyWmsServer_clicked(void)
         WS.WmsStyles = selWmscLayer.Styles;
     }
     WS.WmsIsTiled = isTiled;
+    WS.WmsSourceTag = edSourceTag->text();
 
     lvWmsServers->currentItem()->setText(WS.WmsName);
     selectedServer = WS.WmsName;
@@ -126,11 +127,15 @@ void WMSPreferencesDialog::on_btAddWmsServer_clicked(void)
     }
     if (isTiled)
         addServer(WmsServer(edWmsName->text(), theAdress, theUrl.toString(QUrl::RemoveScheme | QUrl::RemoveAuthority),
-            edWmsLayers->text(), selWmscLayer.Projection, selWmscLayer.Styles, selWmscLayer.ImgFormat,
-            isTiled, selWmscLayer));
+            edWmsLayers->text()
+            , edSourceTag->text()
+            , selWmscLayer.Projection, selWmscLayer.Styles, selWmscLayer.ImgFormat
+            , isTiled, selWmscLayer));
     else
         addServer(WmsServer(edWmsName->text(), theAdress, theUrl.toString(QUrl::RemoveScheme | QUrl::RemoveAuthority),
-            edWmsLayers->text(), cbWmsProj->currentText(), edWmsStyles->text(), cbWmsImgFormat->currentText()));
+            edWmsLayers->text()
+            , edSourceTag->text()
+            , cbWmsProj->currentText(), edWmsStyles->text(), cbWmsImgFormat->currentText()));
     lvWmsServers->setCurrentRow(lvWmsServers->count() - 1);
     on_lvWmsServers_itemSelectionChanged();
 }
@@ -170,6 +175,7 @@ void WMSPreferencesDialog::on_lvWmsServers_itemSelectionChanged()
     on_cbWmsProj_currentIndexChanged(WS.WmsProjections);
     edWmsStyles->setText(WS.WmsStyles);
     cbWmsImgFormat->setEditText(WS.WmsImgFormat);
+    edSourceTag->setText(WS.WmsSourceTag);
     isTiled = WS.WmsIsTiled;
     if (isTiled > 0)
         selWmscLayer = WS.WmsCLayer;

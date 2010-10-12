@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>506</width>
-    <height>587</height>
+    <height>646</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -238,6 +238,16 @@ p, li { white-space: pre-wrap; }
             </size>
            </property>
           </spacer>
+         </item>
+         <item>
+          <widget class="QLabel" name="label_8">
+           <property name="text">
+            <string>&quot;source&quot; tag value</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QLineEdit" name="edSourceTag"/>
          </item>
          <item>
           <widget class="QPushButton" name="btApplyTmsServer">

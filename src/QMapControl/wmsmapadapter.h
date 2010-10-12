@@ -85,6 +85,12 @@ public:
      */
     virtual int 		getZoom		() const { return -1; }
 
+    //! returns the source tag to be applied when drawing over this map
+    /*!
+     * @return the source tag
+     */
+    virtual QString	getSourceTag() const;
+
     virtual int		getAdaptedZoom() const { return -1; }
     virtual int 	getAdaptedMinZoom() const { return -1; }
     virtual int		getAdaptedMaxZoom() const { return -1; }

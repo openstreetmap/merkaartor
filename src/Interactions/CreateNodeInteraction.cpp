@@ -108,8 +108,13 @@ void CreateNodeInteraction::createNode(Coord P, Feature* aFeat)
     else
     {
         N = new Node(P);
-        theList  = new CommandList(MainWindow::tr("Create point %1").arg(N->id()), N);
+        theList  = new CommandList(MainWindow::tr("Create POI %1").arg(N->id()), N);
         theList->add(new AddFeatureCommand(g_Merk_MainWindow->document()->getDirtyOrOriginLayer(),N,true));
+        if (M_PREFS->getAutoSourceTag()) {
+            QStringList sl = g_Merk_MainWindow->document()->getCurrentSourceTags();
+            if (sl.size())
+                N->setTag("source", sl.join(";"));
+        }
     }
     g_Merk_MainWindow->document()->addHistory(theList);
     g_Merk_MainWindow->properties()->setSelection(N);

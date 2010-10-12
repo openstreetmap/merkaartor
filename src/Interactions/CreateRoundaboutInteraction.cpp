@@ -81,11 +81,16 @@ void CreateRoundaboutInteraction::mousePressEvent(QMouseEvent * event)
             Node* First = new Node(XY_TO_COORD(Prev));
             Way* R = new Way;
             R->add(First);
+            CommandList* L  = new CommandList(MainWindow::tr("Create Roundabout %1").arg(R->id()), R);
+            L->add(new AddFeatureCommand(Main->document()->getDirtyOrOriginLayer(),First,true));
+            if (M_PREFS->getAutoSourceTag()) {
+                QStringList sl = Main->document()->getCurrentSourceTags();
+                if (sl.size())
+                    R->setTag("source", sl.join(";"));
+            }
             // "oneway" is implied on roundabouts
             //R->setTag("oneway","yes");
             R->setTag("junction","roundabout");
-            CommandList* L  = new CommandList(MainWindow::tr("Create Roundabout %1").arg(R->id()), R);
-            L->add(new AddFeatureCommand(Main->document()->getDirtyOrOriginLayer(),First,true));
             for (double a = Angle*3/2; a<2*M_PI; a+=Angle)
             {
                 QPointF Next(CenterF.x()+cos(Modifier*a)*Radius,CenterF.y()+sin(Modifier*a)*Radius);

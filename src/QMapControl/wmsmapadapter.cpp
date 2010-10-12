@@ -88,3 +88,8 @@ QString WMSMapAdapter::getQuery(const QRectF& /*wgs84Bbox*/, const QRectF& projB
                          .append(loc.toString(projBbox.topRight().y(),'f',6))
                          ;
 }
+
+QString WMSMapAdapter::getSourceTag() const
+{
+    return theServer.WmsSourceTag;
+}
