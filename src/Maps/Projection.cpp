@@ -425,6 +425,7 @@ bool Projection::setProjectionType(QString aProjectionType)
         p->projProj4 = M_PREFS->getProjection(aProjectionType).projection;
         theProj = getProjection(p->projProj4);
         if (!theProj) {
+            p->projType = "EPSG:3857";
             p->IsMercator = true;
             return false;
         } else
@@ -433,6 +434,7 @@ bool Projection::setProjectionType(QString aProjectionType)
 #else
             if (theProj->params().is_latlong)
 #endif
+                p->projType = "EPSG:43263857";
                 p->IsLatLong = true;
     } catch (...) {
         return false;

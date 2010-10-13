@@ -865,7 +865,7 @@ QString MerkaartorPreferences::getProjectionType()
     //    if (!g_Merk_Ignore_Preferences && !g_Merk_Reset_Preferences)
     //        return Sets->value("projection/Type", "Mercator").toString();
     //    else
-    return "Mercator";
+    return "EPSG:3857";
 }
 
 ProjectionsList* MerkaartorPreferences::getProjectionsList()

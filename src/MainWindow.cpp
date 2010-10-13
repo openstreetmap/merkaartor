@@ -395,7 +395,6 @@ void MainWindow::delayedInit()
     createToolBarManager();
 
     updateWindowMenu();
-    updateProjectionMenu();
 
     if (M_PREFS->getLocalServer()) {
         p->theListeningServer = new QTcpServer(this);
@@ -1755,6 +1754,10 @@ void MainWindow::on_fileNewAction_triggered()
 {
     theView->launch(0);
     p->theProperties->setSelection(0);
+
+    if (theDocument)
+        saveTemplateDocument(TEMPLATE_DOCUMENT);
+
     if (!theDocument || !theDocument->hasUnsavedChanges() || mayDiscardUnsavedChanges(this)) {
         M_PREFS->cleanupBackgroundPlugins();
         p->theFeats->invalidate();
@@ -1766,7 +1769,6 @@ void MainWindow::on_fileNewAction_triggered()
             loadTemplateDocument(TEMPLATE_DOCUMENT);
 
         if (!theDocument) {
-            theView->setViewport(WORLD_COORDBOX, theView->rect());
             theDocument = new Document(theLayers);
             theDocument->addDefaultLayers();
             if (M_PREFS->getWorldOsbAutoload() && !M_PREFS->getWorldOsbUri().isEmpty()) {
@@ -1779,6 +1781,8 @@ void MainWindow::on_fileNewAction_triggered()
 
                 theDocument->add(newLayer);
             }
+            theView->projection().setProjectionType(M_PREFS->getProjectionType());
+            theView->setViewport(WORLD_COORDBOX, theView->rect());
         }
         theView->setDocument(theDocument);
         theDocument->history().setActions(ui->editUndoAction, ui->editRedoAction, ui->fileUploadAction);
@@ -1789,7 +1793,6 @@ void MainWindow::on_fileNewAction_triggered()
         fileName = "";
         setWindowTitle(QString("%1 - %2").arg(theDocument->title()).arg(p->title));
 
-        theView->projection().setProjectionType(M_PREFS->getProjectionType());
         updateProjectionMenu();
 
         emit content_changed();
