@@ -151,6 +151,8 @@ RemoveFeatureCommand::~RemoveFeatureCommand()
 
 void RemoveFeatureCommand::redo()
 {
+    if (!theFeature)
+        return;
     if (CascadedCleanUp)
         CascadedCleanUp->redo();
     oldLayer = theFeature->layer();
@@ -164,6 +166,8 @@ void RemoveFeatureCommand::redo()
 
 void RemoveFeatureCommand::undo()
 {
+    if (!theFeature)
+        return;
     Command::undo();
     theLayer->remove(theFeature);
     if (oldLayer->size() < Idx)
@@ -177,6 +181,8 @@ void RemoveFeatureCommand::undo()
 
 bool RemoveFeatureCommand::buildDirtyList(DirtyList &theList)
 {
+    if (!theFeature)
+        return false;
     if (isUndone)
         return false;
     if (!oldLayer->isUploadable())
