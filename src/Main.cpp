@@ -168,19 +168,10 @@ int main(int argc, char** argv)
         pLogFile = fopen(logFilename.toLatin1(), "a");
     qInstallMsgHandler(myMessageOutput);
 
-    qDebug() << "**** " << QDateTime::currentDateTime().toString(Qt::ISODate) << " -- Starting " << QString("%1 %2%3(%4)").arg(qApp->applicationName()).arg(STRINGIFY(VERSION)).arg(STRINGIFY(REVISION)).arg(STRINGIFY(SVNREV));
+    qDebug() << "**** " << QDateTime::currentDateTime().toString(Qt::ISODate) << " -- Starting " << USER_AGENT;
     qDebug() <<	"-------" << QString("using QT version %1 (built with %2)").arg(qVersion()).arg(QT_VERSION_STR);
 #ifdef USE_PROJ
     qDebug() <<	"-------" << QString("using PROJ4 version %1").arg(STRINGIFY(PJ_VERSION));
-#endif
-#ifdef Q_WS_X11
-    qDebug() << "-------" << "on X11";
-#endif
-#ifdef Q_WS_WIN
-    qDebug() << "-------" << "on Windows";
-#endif
-#ifdef Q_WS_MACX
-    qDebug() << "-------" << "on Mac OS/X";
 #endif
     qDebug() << "-------" << "with arguments: " << QCoreApplication::arguments();
 

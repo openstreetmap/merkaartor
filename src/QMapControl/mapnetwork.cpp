@@ -78,7 +78,7 @@ void MapNetwork::launchRequest(QUrl url, QString hash)
         header = QHttpRequestHeader("GET", url.encodedPath());
     header.setValue("Host", url.host());
     header.setValue("Accept", "image/*");
-    header.setValue("User-Agent", "Mozilla");
+    header.setValue("User-Agent", USER_AGENT);
 
     int getId = http->request(header);
 

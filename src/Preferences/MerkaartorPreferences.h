@@ -38,6 +38,21 @@ class MapView;
 class IMapAdapter;
 class IPaintStyle;
 
+#ifdef Q_WS_X11
+#define PLATFORM "X11"
+#else
+#ifdef Q_WS_WIN
+#define PLATFORM "Windows"
+#else
+#ifdef Q_WS_MACX
+#define PLATFORM "Macintosh"
+#else
+#define PLATFORM "Other"
+#endif
+#endif
+#endif
+#define USER_AGENT (QString("%1/%2%3 (%4;%5)").arg(qApp->applicationName()).arg(STRINGIFY(VERSION)).arg(STRINGIFY(REVISION)).arg(PLATFORM).arg(STRINGIFY(SVNREV)))
+
 //#define WORLD_COORDBOX CoordBox(Coord(1.3, -1.3), Coord(-1.3, 1.3))
 #define WORLD_COORDBOX CoordBox(Coord(COORD_MAX*.80/2, -COORD_MAX*.80), Coord(-COORD_MAX*.80/2, COORD_MAX*.80))
 #define BUILTIN_STYLES_DIR ":/Styles"

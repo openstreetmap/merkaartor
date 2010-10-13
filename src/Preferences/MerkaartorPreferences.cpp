@@ -351,6 +351,7 @@ void MerkaartorPreferences::fromOsmPref()
         Header.setValue("Host",osmWeb.host());
     else
         Header.setValue("Host",osmWeb.host() + ':' + QString::number(osmWeb.port()));
+    Header.setValue("User-Agent", USER_AGENT);
 
     QString auth = QString("%1:%2").arg(getOsmUser()).arg(getOsmPassword());
     QByteArray ba_auth = auth.toUtf8().toBase64();
@@ -462,6 +463,7 @@ void MerkaartorPreferences::putOsmPref(const QString& k, const QString& v)
         Header.setValue("Host",osmWeb.host());
     else
         Header.setValue("Host",osmWeb.host() + ':' + QString::number(osmWeb.port()));
+    Header.setValue("User-Agent", USER_AGENT);
 
     QString auth = QString("%1:%2").arg(getOsmUser()).arg(getOsmPassword());
     QByteArray ba_auth = auth.toUtf8().toBase64();
@@ -484,6 +486,7 @@ void MerkaartorPreferences::deleteOsmPref(const QString& k)
         Header.setValue("Host",osmWeb.host());
     else
         Header.setValue("Host",osmWeb.host() + ':' + QString::number(osmWeb.port()));
+    Header.setValue("User-Agent", USER_AGENT);
 
     QString auth = QString("%1:%2").arg(getOsmUser()).arg(getOsmPassword());
     QByteArray ba_auth = auth.toUtf8().toBase64();

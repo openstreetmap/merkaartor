@@ -58,6 +58,7 @@ namespace NameFinder
         else
             request.setValue( "Host", myService.host() );
         request.setValue( "Connection", "Keep-Alive" );
+        request.setValue("User-Agent", USER_AGENT);
 
         connection.setProxy(M_PREFS->getProxy(myService));
         reqId = connection.request( request, NULL, myDevice );

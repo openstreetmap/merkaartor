@@ -233,13 +233,12 @@ int TMSPreferencesDialog::sendRequest(QUrl url)
         requestUrl += "?" + url.encodedQuery();
     QHttpRequestHeader header("GET", requestUrl);
     qDebug() << header.toString();
-    const char *userAgent = "Mozilla/9.876 (X11; U; Linux 2.2.12-20 i686, en) Gecko/25250101 Netscape/5.432b1";
 
     QString host = url.host();
     if (url.port() != -1)
         host += ":" + QString::number(url.port());
     header.setValue("Host", host);
-    header.setValue("User-Agent", userAgent);
+    header.setValue("User-Agent", USER_AGENT);
 
     http->setHost(url.host(), url.port() == -1 ? 80 : url.port());
     http->setProxy(M_PREFS->getProxy(url));

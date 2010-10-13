@@ -289,10 +289,9 @@ void WMSPreferencesDialog::requestCapabilities(QUrl url)
 
     QHttpRequestHeader header("GET", url.path() + "?" + url.encodedQuery());
     qDebug() << header.toString();
-    const char *userAgent = "Mozilla/9.876 (X11; U; Linux 2.2.12-20 i686, en) Gecko/25250101 Netscape/5.432b1";
 
     header.setValue("Host", url.host());
-    header.setValue("User-Agent", userAgent);
+    header.setValue("User-Agent", USER_AGENT);
 
     http->setHost(url.host(), url.port() == -1 ? 80 : url.port());
     http->setProxy(M_PREFS->getProxy(url));
