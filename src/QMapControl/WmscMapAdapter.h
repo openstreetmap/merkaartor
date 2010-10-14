@@ -71,6 +71,12 @@ public:
      */
     virtual QString	getSourceTag() const;
 
+    //! returns the Url of the usage license
+    /*!
+     * @return the Url of the usage license
+     */
+    virtual QString	getLicenseUrl() const;
+
     double PI;
 
     virtual void zoom_in();

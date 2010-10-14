@@ -93,3 +93,8 @@ QString WMSMapAdapter::getSourceTag() const
 {
     return theServer.WmsSourceTag;
 }
+
+QString WMSMapAdapter::getLicenseUrl() const
+{
+    return theServer.WmsLicenseUrl;
+}

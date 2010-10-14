@@ -16,8 +16,10 @@
 
 #include <QLocale>
 #include <QPainter>
+#include <QMessageBox>
 
 #include "LayerWidget.h"
+#include "ui_LicenseDisplayDialog.h"
 
 // ImageMapLayerPrivate
 
@@ -150,6 +152,7 @@ void ImageMapLayer::setMapAdapter(const QUuid& theAdapterUid, const QString& ser
     p->theMapAdapter = NULL;
     p->pm = QPixmap();
 
+    QString id = theAdapterUid.toString();
     p->bgType = theAdapterUid;
     M_PREFS->setBackgroundPlugin(theAdapterUid);
     if (p->bgType == NONE_ADAPTER_UUID) {
@@ -177,6 +180,7 @@ void ImageMapLayer::setMapAdapter(const QUuid& theAdapterUid, const QString& ser
             setName(tr("Map - WMS-Tiled - %1").arg(p->theMapAdapter->getName()));
             break;
         }
+        id += p->theMapAdapter->getName();
     } else
     if (p->bgType == TMS_ADAPTER_UUID) {
         tsl = M_PREFS->getTmsServers();
@@ -185,7 +189,8 @@ void ImageMapLayer::setMapAdapter(const QUuid& theAdapterUid, const QString& ser
         p->tmsa = new TileMapAdapter(ts);
         p->theMapAdapter = p->tmsa;
 
-        setName(tr("Map - TMS - %1").arg(ts.TmsName));
+        setName(tr("Map - TMS - %1").arg(p->theMapAdapter->getName()));
+        id += p->theMapAdapter->getName();
     } else
     if (p->bgType == SHAPE_ADAPTER_UUID) {
         if (!M_PREFS->getUseShapefileForBackground()) {
@@ -215,6 +220,54 @@ void ImageMapLayer::setMapAdapter(const QUuid& theAdapterUid, const QString& ser
             setName(tr("Map - %1").arg(p->theMapAdapter->getName()));
         } else
             p->bgType = NONE_ADAPTER_UUID;
+    }
+    // Display License
+    if (p->theMapAdapter) {
+        QString s = p->theMapAdapter->getLicenseUrl();
+        if (!s.isEmpty()) {
+            QSettings* set = M_PREFS->getQSettings();
+            QStringList AcceptedLicenses = set->value("backgroundImage/AcceptedLicenses").toStringList();
+            if (!AcceptedLicenses.contains(id)) {
+                QUrl u(s);
+                if (u.isValid()) {
+                    Ui::LicenseDisplayDialog ui;
+                    QDialog dlg(g_Merk_MainWindow);
+                    ui.setupUi(&dlg);
+                    dlg.setWindowTitle(tr("Licensing Terms: %1").arg(name()));
+                    ui.webView->load(u);
+
+                    bool OK = false;
+                    while (!OK) {
+                        if (dlg.exec()) {
+                            if (!ui.cbAgree->isChecked()) {
+                                QMessageBox::StandardButton ret = QMessageBox::warning(&dlg, tr("License Terms not accepted"), tr("You have not ticked the checkbox expressing your agreement with the licensing terms.\nAs such, you won't be able to use this source as a map layer.\nIs it really what you meant?"), QMessageBox::Yes|QMessageBox::No, QMessageBox::No);
+                                if (ret == QMessageBox::Yes)
+                                    OK = true;
+                            } else
+                                OK = true;
+                        }
+                    }
+                    if (!ui.cbAgree->isChecked()) {
+                        SAFE_DELETE(p->wmsa)
+                                SAFE_DELETE(p->wmsca)
+                                SAFE_DELETE(p->tmsa)
+                                if (p->theImageManager)
+                                    p->theImageManager->abortLoading();
+                        SAFE_DELETE(p->theImageManager)
+                                on_loadingFinished();
+                        p->theMapAdapter = NULL;
+                        p->pm = QPixmap();
+
+                        p->bgType = NONE_ADAPTER_UUID;
+                        setName(tr("Map - None"));
+                        setVisible(false);
+                    } else {
+                        AcceptedLicenses << id;
+                        set->setValue("backgroundImage/AcceptedLicenses", AcceptedLicenses);
+                    }
+                }
+            }
+        }
     }
     if (p->theMapAdapter) {
         p->theProjection.setProjectionType(p->theMapAdapter->projection());

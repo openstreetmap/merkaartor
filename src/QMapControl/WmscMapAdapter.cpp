@@ -132,3 +132,8 @@ QString WmscMapAdapter::getSourceTag() const
 {
     return theServer.WmsSourceTag;
 }
+
+QString WmscMapAdapter::getLicenseUrl() const
+{
+    return theServer.WmsLicenseUrl;
+}

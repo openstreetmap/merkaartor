@@ -92,6 +92,12 @@ public:
      */
     virtual QString	getSourceTag		() const = 0;
 
+    //! returns the Url of the usage license
+    /*!
+     * @return the Url of the usage license
+     */
+    virtual QString	getLicenseUrl() const = 0;
+
     virtual int		getAdaptedZoom()   const = 0;
     virtual int 	getAdaptedMinZoom	() const = 0;
     virtual int		getAdaptedMaxZoom	() const = 0;
@@ -125,6 +131,6 @@ public:
 };
 
 Q_DECLARE_INTERFACE ( IMapAdapter,
-                      "com.cbsoft.Merkaartor.IMapAdapter/1.7" )
+                      "com.cbsoft.Merkaartor.IMapAdapter/1.8" )
 
 #endif

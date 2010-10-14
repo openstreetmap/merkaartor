@@ -8,4 +8,5 @@ SOURCES += Layer.cpp \
     ImageMapLayer.cpp \
     LayerWidget.cpp
 FORMS += LayerWidget.ui \
-    FilterEditDialog.ui
+    FilterEditDialog.ui \
+    Layers/LicenseDisplayDialog.ui

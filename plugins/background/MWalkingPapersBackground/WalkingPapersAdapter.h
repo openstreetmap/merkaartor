@@ -90,6 +90,12 @@ public:
      */
     virtual QString	getSourceTag		() const { return ""; }
 
+    //! returns the Url of the usage license
+    /*!
+     * @return the Url of the usage license
+     */
+    virtual QString	getLicenseUrl() const {return "";}
+
     virtual int		getAdaptedZoom() const { return -1; }
     virtual int 	getAdaptedMinZoom() const { return -1; }
     virtual int		getAdaptedMaxZoom() const { return -1; }

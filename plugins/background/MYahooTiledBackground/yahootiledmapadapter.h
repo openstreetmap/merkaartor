@@ -97,6 +97,12 @@ public:
      */
     virtual QString	getSourceTag		() const { return "Yahoo"; }
 
+    //! returns the Url of the usage license
+    /*!
+     * @return the Url of the usage license
+     */
+    virtual QString	getLicenseUrl() const {return "";}
+
     virtual int		getAdaptedZoom()   const;
     virtual int 	getAdaptedMinZoom	() const;
     virtual int		getAdaptedMaxZoom	() const;

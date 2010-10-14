@@ -17,27 +17,19 @@
 
 WmsServer::WmsServer()
 {
-    WmsServer(QApplication::translate("MerkaartorPreferences","New Server"), "", "", "", "", "", "", "");
+    WmsServer(QApplication::translate("MerkaartorPreferences","New Server"), "", "", "", "", "", "", "", "");
 }
-
-//WmsServer::WmsServer(const WmsServer& other)
-//    : WmsName(other.WmsName), WmsAdress(other.WmsAdress), WmsPath(other.WmsPath), WmsLayers(other.WmsLayers)
-//    , WmsSourceTag(other.WmsSourceTag)
-//    , WmsProjections(other.WmsProjections), WmsStyles(other.WmsStyles), WmsImgFormat(other.WmsImgFormat)
-//    , WmsIsTiled(other.WmsIsTiled)
-//    , WmsCLayer(other.WmsCLayer)
-//    , deleted(other.deleted)
-//{
-//}
 
 WmsServer::WmsServer(QString Name, QString Adress, QString Path, QString Layers
                      , QString SourceTag
+                     , QString LicenseUrl
                      , QString Projections, QString Styles, QString ImgFormat
                      , int IsTiled
                      , WmscLayer CLayer
                      , bool Deleted
                                     )
     : WmsName(Name), WmsAdress(Adress), WmsPath(Path), WmsLayers(Layers)
+    , WmsLicenseUrl(LicenseUrl)
     , WmsSourceTag(SourceTag)
     , WmsProjections(Projections), WmsStyles(Styles), WmsImgFormat(ImgFormat)
     , WmsIsTiled(IsTiled)
@@ -62,6 +54,8 @@ void WmsServer::toXml(QDomElement parent)
     p.setAttribute("format", WmsImgFormat);
     if (!WmsSourceTag.isEmpty())
         p.setAttribute("sourcetag", WmsSourceTag);
+    if (!WmsLicenseUrl.isEmpty())
+        p.setAttribute("licenseurl", WmsLicenseUrl);
     if (deleted)
         p.setAttribute("deleted", "true");
     if (WmsIsTiled > 0) {
@@ -109,6 +103,7 @@ WmsServer WmsServer::fromXml(QDomElement parent)
         theServer.WmsStyles = parent.attribute("styles");
         theServer.WmsImgFormat = parent.attribute("format");
         theServer.WmsSourceTag = parent.attribute("sourcetag");
+        theServer.WmsLicenseUrl = parent.attribute("licenseurl");
         theServer.deleted = (parent.attribute("deleted") == "true" ? true : false);
 
         theServer.WmsIsTiled = 0;

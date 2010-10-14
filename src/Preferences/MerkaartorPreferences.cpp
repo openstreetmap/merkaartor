@@ -570,7 +570,7 @@ void MerkaartorPreferences::initialize()
         Servers = Sets->value("WSM/servers").toStringList();
         if (Servers.size()) {
             for (int i=0; i<Servers.size(); i+=7) {
-                WmsServer S(Servers[i], Servers[i+1], Servers[i+2], Servers[i+3], Servers[i+4], Servers[i+5], Servers[i+6], "");
+                WmsServer S(Servers[i], Servers[i+1], Servers[i+2], Servers[i+3], Servers[i+4], Servers[i+5], Servers[i+6], "", "");
                 theWmsServerList.addServer(S);
             }
             save();
@@ -580,7 +580,7 @@ void MerkaartorPreferences::initialize()
         Servers = Sets->value("TMS/servers").toStringList();
         if (Servers.size()) {
             for (int i=0; i<Servers.size(); i+=6) {
-                TmsServer S(Servers[i], Servers[i+1], Servers[i+2], "EPSG:900913", Servers[i+3].toInt(), Servers[i+4].toInt(), Servers[i+5].toInt(), "");
+                TmsServer S(Servers[i], Servers[i+1], Servers[i+2], "EPSG:900913", Servers[i+3].toInt(), Servers[i+4].toInt(), Servers[i+5].toInt(), "", "");
                 theTmsServerList.addServer(S);
             }
             save();

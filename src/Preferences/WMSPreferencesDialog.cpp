@@ -110,6 +110,7 @@ void WMSPreferencesDialog::on_btApplyWmsServer_clicked(void)
     }
     WS.WmsIsTiled = isTiled;
     WS.WmsSourceTag = edSourceTag->text();
+    WS.WmsLicenseUrl = edLicenseUrl->text();
 
     lvWmsServers->currentItem()->setText(WS.WmsName);
     selectedServer = WS.WmsName;
@@ -129,12 +130,14 @@ void WMSPreferencesDialog::on_btAddWmsServer_clicked(void)
         addServer(WmsServer(edWmsName->text(), theAdress, theUrl.toString(QUrl::RemoveScheme | QUrl::RemoveAuthority),
             edWmsLayers->text()
             , edSourceTag->text()
+            , edLicenseUrl->text()
             , selWmscLayer.Projection, selWmscLayer.Styles, selWmscLayer.ImgFormat
             , isTiled, selWmscLayer));
     else
         addServer(WmsServer(edWmsName->text(), theAdress, theUrl.toString(QUrl::RemoveScheme | QUrl::RemoveAuthority),
             edWmsLayers->text()
             , edSourceTag->text()
+            , edLicenseUrl->text()
             , cbWmsProj->currentText(), edWmsStyles->text(), cbWmsImgFormat->currentText()));
     lvWmsServers->setCurrentRow(lvWmsServers->count() - 1);
     on_lvWmsServers_itemSelectionChanged();
@@ -176,6 +179,7 @@ void WMSPreferencesDialog::on_lvWmsServers_itemSelectionChanged()
     edWmsStyles->setText(WS.WmsStyles);
     cbWmsImgFormat->setEditText(WS.WmsImgFormat);
     edSourceTag->setText(WS.WmsSourceTag);
+    edLicenseUrl->setText(WS.WmsLicenseUrl);
     isTiled = WS.WmsIsTiled;
     if (isTiled > 0)
         selWmscLayer = WS.WmsCLayer;

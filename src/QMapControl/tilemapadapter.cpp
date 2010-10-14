@@ -142,3 +142,8 @@ QString	TileMapAdapter::getSourceTag() const
 {
     return theServer.TmsSourceTag;
 }
+
+QString TileMapAdapter::getLicenseUrl() const
+{
+    return theServer.TmsLicenseUrl;
+}

@@ -72,6 +72,7 @@ void TMSPreferencesDialog::on_btApplyTmsServer_clicked(void)
     WS.TmsMaxZoom = sbMaxZoom->value();
     WS.TmsBlOrigin = cbBotLeftOrigin->isChecked();
     WS.TmsSourceTag = edSourceTag->text();
+    WS.TmsLicenseUrl = edLicenseUrl->text();
     if (cbSRS->currentIndex() == 1)
         WS.TmsProjection = "EPSG:4326";
     else
@@ -104,7 +105,7 @@ void TMSPreferencesDialog::on_btAddTmsServer_clicked(void)
     else
         proj = "EPSG:900913";
 
-    addServer(TmsServer(edTmsName->text(), theAdress, theUrl.toString(QUrl::RemoveScheme | QUrl::RemoveAuthority), proj, sbTileSize->value(), sbMinZoom->value(), sbMaxZoom->value(), edSourceTag->text(), theBaseUrl, cbBotLeftOrigin->isChecked()));
+    addServer(TmsServer(edTmsName->text(), theAdress, theUrl.toString(QUrl::RemoveScheme | QUrl::RemoveAuthority), proj, sbTileSize->value(), sbMinZoom->value(), sbMaxZoom->value(), edSourceTag->text(), edLicenseUrl->text(), theBaseUrl, cbBotLeftOrigin->isChecked()));
     lvTmsServers->setCurrentRow(lvTmsServers->count() - 1);
     on_lvTmsServers_itemSelectionChanged();
 }
@@ -135,6 +136,7 @@ void TMSPreferencesDialog::on_lvTmsServers_itemSelectionChanged()
     sbMinZoom->setValue(WS.TmsMinZoom);
     sbMaxZoom->setValue(WS.TmsMaxZoom);
     edSourceTag->setText(WS.TmsSourceTag);
+    edLicenseUrl->setText(WS.TmsLicenseUrl);
     cbBotLeftOrigin->setChecked(WS.TmsBlOrigin);
     int ix = cbSRS->findText(WS.TmsProjection, Qt::MatchContains | Qt::MatchCaseSensitive);
     cbSRS->setCurrentIndex(ix);
