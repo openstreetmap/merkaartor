@@ -1,4 +1,5 @@
 v0.17
+    * FIX : Infloop on next/previous image when none visible (fixes #3135)
     * CHG : Do not wait for "CLOSE changeset" response
     * ADD : Provision for a license term url to be agreed for map backgrounds
     * ADD : Proper User-Agent for network requests

@@ -189,6 +189,11 @@ void GeoImageDock::setImage(int ImageId)
                 if (usedTrackPoints.size()) {
                     if (++lookImage >= usedTrackPoints.size())
                         lookImage = 0;
+                    if (lookImage == ImageId) {
+                        Image->setImage("");
+                        curImage = -1;
+                        return;
+                    }
                 } else
                     break;
             } else {
@@ -625,23 +630,23 @@ void GeoImageDock::loadImages(QStringList fileNames)
             Coord newPos(angToCoord(lat), angToCoord(lon));
             Node *Pt = 0;
             int i = 0;
-            for (; i<theLayer->size(); ++i) // use existing TrackPoint if there is one in small distance
+            for (; i<theLayer->size(); ++i) { // use existing TrackPoint if there is one in small distance
                 if ((Pt = CAST_NODE(theLayer->get(i))) &&
                  Pt->position().distanceFrom(newPos) <= .002)
                     break;
                 else
                     Pt = 0;
-            if (!Pt)
+            }
+            if (!Pt) {
                 Pt = new Node(newPos);
+                theLayer->add(Pt);
+                theLayer->indexAdd(Pt->boundingBox(), Pt);
+            }
 
             //Pt->setTag("_waypoint_", "true");
             Pt->setTag("_picture_", "GeoTagged");
             Pt->setPhoto(QPixmap(file));
             addUsedTrackpoint(NodeData(Pt, file, time, i == theLayer->size()));
-            if (i == theLayer->size()) {
-                theLayer->add(Pt);
-                theLayer->indexAdd(Pt->boundingBox(), Pt);
-            }
         } else if (!time.isNull() && res == 2) {
 
             if (offset == -1) { // ask the user to specify an offset for the images
