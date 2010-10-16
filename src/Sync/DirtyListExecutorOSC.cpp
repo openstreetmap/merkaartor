@@ -294,11 +294,9 @@ bool DirtyListExecutorOSC::stop()
     QEventLoop L; L.processEvents(QEventLoop::ExcludeUserInputEvents);
 
     URL = theDownloader->getURLToCloseChangeSet(ChangeSetId);
-    if (sendRequest("PUT",URL,DataIn,DataOut) != 200)
-    {
-        ChangeSetId = "";
-        return false;
-    }
+    QUrl theUrl(Web+URL);
+    theDownloader->request("PUT",theUrl,DataIn, true);
+
     return true;
 }
 

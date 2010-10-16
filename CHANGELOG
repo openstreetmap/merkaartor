@@ -1,4 +1,5 @@
 v0.17
+    * CHG : Do not wait for "CLOSE changeset" response
     * ADD : Provision for a license term url to be agreed for map backgrounds
     * ADD : Proper User-Agent for network requests
     * ADD : Auto-add "source" tag when drawing over a background map; define the value in the WMS and TMS editors

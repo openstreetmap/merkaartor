@@ -238,7 +238,7 @@ bool Downloader::go(const QUrl& url)
     return !Error;
 }
 
-bool Downloader::request(const QString& Method, const QUrl& url, const QString& Data)
+bool Downloader::request(const QString& Method, const QUrl& url, const QString& Data, bool FireForget)
 {
     if (Error) return false;
 
@@ -260,6 +260,9 @@ bool Downloader::request(const QString& Method, const QUrl& url, const QString& 
     Content.clear();
     Request.setProxy(M_PREFS->getProxy(url));
     Id = Request.request(Header,ba);
+
+    if (FireForget)
+        return true;
 
     if (Loop.exec() == QDialog::Rejected)
     {
