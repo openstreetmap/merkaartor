@@ -287,7 +287,7 @@ void TMSPreferencesDialog::httpRequestFinished(int /*id*/, bool error)
         return;
 
     QDomElement e = doc.firstChildElement();
-    if (e.nodeName().toLower() == "services") {
+    if (e.nodeName() == "Services") {
         QDomNodeList l = e.elementsByTagName("TileMapService");
         for (int i=0; i<l.size(); ++i) {
             QString href = l.at(i).toElement().attribute("href");
@@ -295,7 +295,7 @@ void TMSPreferencesDialog::httpRequestFinished(int /*id*/, bool error)
                 sendRequest(QUrl(href));
             }
         }
-    } else if (e.nodeName().toLower() == "tilemapservice") {
+    } else if (e.nodeName() == "TileMapService") {
         QDomNodeList l = e.elementsByTagName("TileMap");
         for (int i=0; i<l.size(); ++i) {
             QString href = l.at(i).toElement().attribute("href");
@@ -303,7 +303,7 @@ void TMSPreferencesDialog::httpRequestFinished(int /*id*/, bool error)
                 sendRequest(QUrl(href));
             }
         }
-    } else if (e.nodeName().toLower() == "tilemap") {
+    } else if (e.nodeName() == "TileMap") {
         QString url;
         QString title;
         QString srs;
@@ -316,23 +316,23 @@ void TMSPreferencesDialog::httpRequestFinished(int /*id*/, bool error)
         url = e.attribute("tilemapservice");
         QDomElement c = e.firstChildElement();
         while (!c.isNull()) {
-            if (c.nodeName().toLower() == "title") {
+            if (c.nodeName() == "Title") {
                 title = c.firstChild().toText().nodeValue();
                 url = url + title + "/";
-            } else if (c.nodeName().toLower() == "srs") {
+            } else if (c.nodeName() == "SRS") {
                 srs = c.firstChild().toText().nodeValue();
-            } else if (c.nodeName().toLower() == "boundingbox") {
+            } else if (c.nodeName() == "BoundingBox") {
                 Coord bl(angToCoord(c.attribute("miny").toDouble()), angToCoord(c.attribute("minx").toDouble()));
                 Coord tr(angToCoord(c.attribute("maxy").toDouble()), angToCoord(c.attribute("maxx").toDouble()));
                 bbox = CoordBox(bl, tr);
-            } else if (c.nodeName().toLower() == "origin") {
+            } else if (c.nodeName() == "Origin") {
                 Coord pt(angToCoord(c.attribute("y").toDouble()), angToCoord(c.attribute("x").toDouble()));
                 origin = pt;
-            } else if (c.nodeName().toLower() == "tileformat") {
+            } else if (c.nodeName() == "TileFormat") {
                 tilesize.setWidth(c.attribute("width").toInt());
                 tilesize.setHeight(c.attribute("height").toInt());
                 tileformat = c.attribute("extension");
-            } else if (c.nodeName().toLower() == "tilesets") {
+            } else if (c.nodeName() == "TileSets") {
                 QDomElement t = c.firstChildElement();
                 while (!t.isNull()) {
                     int o = t.attribute("order").toInt();
@@ -373,7 +373,7 @@ void TMSPreferencesDialog::httpRequestFinished(int /*id*/, bool error)
 void TMSPreferencesDialog::on_lvTmsServices_itemSelectionChanged()
 {
     TileService ts = services[lvTmsServices->currentItem()->text()];
-    int ix = cbSRS->findText(ts.SRS, Qt::MatchContains | Qt::MatchCaseSensitive);
+    int ix = cbSRS->findText(ts.SRS, Qt::MatchContains);
     cbSRS->setCurrentIndex(ix);
     cbBotLeftOrigin->setChecked(ts.Origin);
     sbTileSize->setValue(ts.TileSize);

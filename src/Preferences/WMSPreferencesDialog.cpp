@@ -193,8 +193,7 @@ void WMSPreferencesDialog::on_lvWmsServers_itemSelectionChanged()
 
     QUrl theUrl(edWmsUrl->text());
     if ((theUrl.host() != "") && (theUrl.path() != "")) {
-        QUrl url(edWmsUrl->text() + "VERSION=1.1.1&SERVICE=WMS&request=GetCapabilities");
-        requestCapabilities(url);
+        on_btShowCapabilities_clicked();
     }
 }
 
@@ -267,9 +266,11 @@ void WMSPreferencesDialog::on_btShowCapabilities_clicked(void)
         QMessageBox::critical(this, tr("Merkaartor: GetCapabilities"), tr("Address and Path cannot be blank."), QMessageBox::Ok);
     }
 
-    theUrl.addQueryItem("VERSION", "1.1.1");
-    theUrl.addQueryItem("SERVICE", "WMS");
-    theUrl.addQueryItem("request", "GetCapabilities");
+    if (!theUrl.hasQueryItem("VERSION"))
+        theUrl.addQueryItem("VERSION", "1.1.1");
+    if (!theUrl.hasQueryItem("SERVICE"))
+        theUrl.addQueryItem("SERVICE", "WMS");
+    theUrl.addQueryItem("REQUEST", "GetCapabilities");
 //    QUrl url(edWmsUrl->text() + "VERSION=1.1.1&SERVICE=WMS&request=GetCapabilities");
     requestCapabilities(theUrl);
 }

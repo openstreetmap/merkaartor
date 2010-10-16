@@ -81,28 +81,54 @@ QString WmscMapAdapter::getQuery(int i, int j, int /* z */) const
     QPointF ul = QPointF(i*tileWidth+theServer.WmsCLayer.BoundingBox.topLeft().x(), -theServer.WmsCLayer.BoundingBox.topLeft().y()-j*tileHeight);
     QPointF br = QPointF((i+1)*tileWidth+theServer.WmsCLayer.BoundingBox.topLeft().x(), -theServer.WmsCLayer.BoundingBox.topLeft().y()- (j+1)*tileHeight);
 
-    QString path =  QString()
-                        .append(theServer.WmsPath)
-                        .append("SERVICE=WMS")
-                        .append("&VERSION=1.1.1")
-                        .append("&REQUEST=GetMap")
-                        .append("&TRANSPARENT=TRUE")
-                        .append("&LAYERS=").append(theServer.WmsLayers)
-                        .append("&SRS=").append(theServer.WmsProjections)
-                        .append("&STYLES=").append(theServer.WmsStyles)
-                        .append("&FORMAT=").append(theServer.WmsImgFormat)
-                        .append("&WIDTH=").append(QString::number(tilesize))
-                        .append("&HEIGHT=").append(QString::number(tilesize))
-                        .append("&BBOX=")
+    QUrl theUrl(theServer.WmsPath);
+    if (!theUrl.hasQueryItem("VERSION"))
+        theUrl.addQueryItem("VERSION", "1.1.1");
+    if (!theUrl.hasQueryItem("SERVICE"))
+        theUrl.addQueryItem("SERVICE", "WMS");
+    theUrl.addQueryItem("REQUEST", "GetMap");
+
+    theUrl.addQueryItem("TRANSPARENT", "TRUE");
+    theUrl.addQueryItem("LAYERS", theServer.WmsLayers);
+    theUrl.addQueryItem("SRS", theServer.WmsProjections);
+    theUrl.addQueryItem("STYLES", theServer.WmsStyles);
+    theUrl.addQueryItem("FORMAT", theServer.WmsImgFormat);
+    theUrl.addQueryItem("WIDTH", QString::number(tilesize));
+    theUrl.addQueryItem("HEIGHT", QString::number(tilesize));
+    theUrl.addQueryItem("BBOX", QString()
                         .append(loc.toString(ul.x(),'f',6)).append(",")
                         .append(loc.toString(br.y(),'f',6)).append(",")
                         .append(loc.toString(br.x(),'f',6)).append(",")
-                        .append(loc.toString(ul.y(),'f',6));
-                         ;
+                        .append(loc.toString(ul.y(),'f',6))
+            );
     if (theServer.WmsIsTiled == 1)
-        path += "&tiled=true";
+        theUrl.addQueryItem("tiled", "true");
 
-    return path;
+
+    return theUrl.toString(QUrl::RemoveScheme | QUrl::RemoveAuthority);
+
+//    QString path =  QString()
+//                        .append(theServer.WmsPath)
+//                        .append("SERVICE=WMS")
+//                        .append("&VERSION=1.1.1")
+//                        .append("&REQUEST=GetMap")
+//                        .append("&TRANSPARENT=TRUE")
+//                        .append("&LAYERS=").append(theServer.WmsLayers)
+//                        .append("&SRS=").append(theServer.WmsProjections)
+//                        .append("&STYLES=").append(theServer.WmsStyles)
+//                        .append("&FORMAT=").append(theServer.WmsImgFormat)
+//                        .append("&WIDTH=").append(QString::number(tilesize))
+//                        .append("&HEIGHT=").append(QString::number(tilesize))
+//                        .append("&BBOX=")
+//                        .append(loc.toString(ul.x(),'f',6)).append(",")
+//                        .append(loc.toString(br.y(),'f',6)).append(",")
+//                        .append(loc.toString(br.x(),'f',6)).append(",")
+//                        .append(loc.toString(ul.y(),'f',6));
+//                         ;
+//    if (theServer.WmsIsTiled == 1)
+//        path += "&tiled=true";
+
+//    return path;
 }
 
 bool WmscMapAdapter::isValid(int x, int y, int z) const

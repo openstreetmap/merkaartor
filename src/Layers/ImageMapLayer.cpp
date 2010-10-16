@@ -597,7 +597,10 @@ QRect ImageMapLayer::drawFull(MapView& theView, QRect& rect) const
             && Viewport.topRight().lon() >= -180. && Viewport.topRight().lon() <= 180.
             ) {
         QRectF vp;
-        vp = p->theProjection.getProjectedViewport(p->Viewport, rect);
+        if (p->theProjection.projIsLatLong())
+            vp = p->Viewport.toQRectF();
+        else
+            vp = p->theProjection.getProjectedViewport(p->Viewport, rect);
         QRectF wgs84vp = QRectF(QPointF(coordToAng(Viewport.bottomLeft().lon()), coordToAng(Viewport.bottomLeft().lat()))
                                 , QPointF(coordToAng(Viewport.topRight().lon()), coordToAng(Viewport.topRight().lat())));
 
@@ -629,7 +632,28 @@ QRect ImageMapLayer::drawFull(MapView& theView, QRect& rect) const
 QRect ImageMapLayer::drawTiled(MapView& theView, QRect& rect) const
 {
     QRectF vp;
-    vp = p->theProjection.getProjectedViewport(p->Viewport, rect);
+    if (p->theProjection.projIsLatLong()) {
+        vp = p->Viewport.toQRectF();
+        QPointF pCenter(vp.center());
+
+        double wv, hv;
+        //wv = (pViewport.width() / Viewport.londiff()) * ((double)screen.width() / Viewport.londiff());
+        //hv = (pViewport.height() / Viewport.latdiff()) * ((double)screen.height() / Viewport.latdiff());
+
+        double Aspect = (double)rect.width() / rect.height();
+        double pAspect = fabs(vp.width() / vp.height());
+
+        if (pAspect > Aspect) {
+            wv = fabs(vp.width());
+            hv = fabs(vp.height() * pAspect / Aspect);
+        } else {
+            wv = fabs(vp.width() * Aspect / pAspect);
+            hv = fabs(vp.height());
+        }
+
+        vp = QRectF((pCenter.x() - wv/2), (pCenter.y() + hv/2), wv, -hv);
+    } else
+        vp = p->theProjection.getProjectedViewport(p->Viewport, rect);
 
     qreal tileWidth, tileHeight;
     int maxZoom = p->theMapAdapter->getAdaptedMaxZoom();
@@ -750,8 +774,14 @@ QRect ImageMapLayer::drawTiled(MapView& theView, QRect& rect) const
     }
     painter.end();
 
-    Coord ulCoord = p->theProjection.inverse(vlm.topLeft());
-    Coord lrCoord = p->theProjection.inverse(vlm.bottomRight());
+    Coord ulCoord, lrCoord;
+    if (p->theProjection.projIsLatLong()) {
+        ulCoord = Coord(vlm.topLeft().y(), vlm.topLeft().x());
+        lrCoord = Coord(vlm.bottomRight().y(), vlm.bottomRight().x());
+    } else {
+        ulCoord = p->theProjection.inverse(vlm.topLeft());
+        lrCoord = p->theProjection.inverse(vlm.bottomRight());
+    }
 
     const QPointF tl = theView.transform().map(theView.projection().project(ulCoord));
     const QPointF br = theView.transform().map(theView.projection().project(lrCoord));

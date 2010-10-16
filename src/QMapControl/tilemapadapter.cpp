@@ -32,7 +32,7 @@ TileMapAdapter::TileMapAdapter(const TmsServer& ts)
     , tilesize(ts.TmsTileSize)
     , BlOrigin(ts.TmsBlOrigin)
 {
-    name = "tiles";
+    name = ts.TmsName;
 
     serverPath.replace("%1", "%z");
     serverPath.replace("%2", "%x");
