@@ -63,7 +63,8 @@ public:
     /*!
      * @return the size of the tiles
      */
-    virtual int		getTileSize	() const;
+    virtual int		getTileSizeW	() const;
+    virtual int		getTileSizeH	() const;
 
     //! returns the source tag to be applied when drawing over this map
     /*!
@@ -99,6 +100,8 @@ public:
     virtual bool toXML(QDomElement /*xParent*/) { return true; }
     virtual void fromXML(const QDomElement /*xParent*/) {}
     virtual QString toPropertiesHtml() {return "";}
+
+    virtual void setSettings(QSettings* /*aSet*/) {}
 
 protected:
     WmsServer theServer;

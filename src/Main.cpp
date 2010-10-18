@@ -227,11 +227,13 @@ int main(int argc, char** argv)
         QObject *plugin = loader.instance();
         if (plugin) {
             IMapAdapter *plg = qobject_cast<IMapAdapter *>(plugin);
-            if (plg)
+            if (plg) {
 #ifndef USE_WEBKIT
                 if (plg->getType() != IMapAdapter::BrowserBackground)
 #endif
                     M_PREFS->addBackgroundPlugin(plg);
+                plg->setSettings(M_PREFS->getQSettings());
+            }
         }
     }
 

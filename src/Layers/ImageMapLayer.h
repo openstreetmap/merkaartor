@@ -56,7 +56,7 @@ public:
     virtual void zoom_in();
     virtual void zoom_out();
     virtual int getCurrentZoom();
-    virtual void setCurrentZoom(const CoordBox& viewport, const QRect& rect);
+    virtual void setCurrentZoom(MapView& theView, const CoordBox& viewport, const QRect& rect);
     virtual qreal pixelPerM();
 
     bool isTiled();

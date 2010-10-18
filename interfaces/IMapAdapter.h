@@ -8,6 +8,7 @@
 #include <QUuid>
 #include <QMenu>
 #include <QDomElement>
+#include <QSettings>
 
 #include "IImageManager.h"
 
@@ -66,7 +67,8 @@ public:
     /*!
      * @return the size of the tiles
      */
-    virtual int		getTileSize	() const = 0;
+    virtual int		getTileSizeW	() const = 0;
+    virtual int		getTileSizeH	() const = 0;
 
     //! returns the min zoom value
     /*!
@@ -128,9 +130,11 @@ public:
     virtual void fromXML(const QDomElement xParent) = 0;
     virtual QString toPropertiesHtml() = 0;
 
+    virtual void setSettings(QSettings* aSet) = 0;
+
 };
 
 Q_DECLARE_INTERFACE ( IMapAdapter,
-                      "com.cbsoft.Merkaartor.IMapAdapter/1.8" )
+                      "com.cbsoft.Merkaartor.IMapAdapter/1.9" )
 
 #endif

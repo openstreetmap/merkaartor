@@ -18,27 +18,45 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 #include <QtPlugin>
+#include <QDesktopServices>
+#include <QPainter>
+#include <QSettings>
+#include <QUrl>
 
 #include "CadastreFrance.h"
 
-// {67CC0481-8C6A-4735-8666-BBA6A1B04E19}
+#include "cadastrewrapper.h"
+#include "searchdialog.h"
+#include "tile.h"
+
+#include "IImageManager.h"
+
 static const QUuid theUid ( 0x14a9ff26, 0x634e, 0x4406, 0x94, 0xa5, 0x4c, 0x6d, 0x9c, 0xf0, 0xb1, 0x1d);
 
 CadastreFranceAdapter::CadastreFranceAdapter()
-        : theImageManager(0)
+    : theImageManager(0), theMenu(new QMenu()), theSettings(0)
+    , current_zoom(0), min_zoom(0), max_zoom(6)
 {
     loc = QLocale(QLocale::English);
     loc.setNumberOptions(QLocale::OmitGroupSeparator);
-}
 
+    Resolutions << 16 << 8. << 4. << 2 << 1.0 << 0.5 << 0.2;
+}
 
 CadastreFranceAdapter::~CadastreFranceAdapter()
 {
 }
 
+void CadastreFranceAdapter::setSettings(QSettings* aSet)
+{
+    theSettings = aSet;
+    CadastreWrapper::instance()->setRootCacheDir(QDir(theSettings->value("backgroundImage/CacheDir").toString()));
+    updateMenu();
+}
+
 QString	CadastreFranceAdapter::getHost() const
 {
-    return "";
+    return "www.cadastre.gouv.fr";
 }
 
 QUuid CadastreFranceAdapter::getId() const
@@ -48,7 +66,7 @@ QUuid CadastreFranceAdapter::getId() const
 
 IMapAdapter::Type CadastreFranceAdapter::getType() const
 {
-    return IMapAdapter::DirectBackground;
+    return IMapAdapter::NetworkBackground;
 }
 
 QString	CadastreFranceAdapter::getName() const
@@ -58,24 +76,24 @@ QString	CadastreFranceAdapter::getName() const
 
 QString CadastreFranceAdapter::projection() const
 {
-    return ("EPSG:3857");
+    return m_city.projection();
 }
 
-QString CadastreFranceAdapter::getQuery(const QRectF& wgs84Bbox, const QRectF& /*projBbox*/, const QRect& size) const
+QRectF CadastreFranceAdapter::getBoundingbox() const
 {
-    if (size.width() < 150 || size.height() < 150)
-        return "";
+    double L = qMax(m_city.geometry().width(), m_city.geometry().height());
+    QRectF bb(m_city.geometry());
+    QRectF R = QRectF(QPointF(bb.center().x()-L/2, bb.center().y()-L/2),
+                      QPointF(bb.center().x()+L/2, bb.center().y()+L/2));
+    return R;
+//    return QRectF(R.bottomLeft(), R.topRight());
+}
 
-    return QString()
-                        .append("qrc:/Html/ymap.html?")
-                        .append("WIDTH=").append(QString::number(size.width()+100))
-                        .append("&HEIGHT=").append(QString::number(size.height()+100))
-                        .append("&BBOX=")
-                        .append(loc.toString(wgs84Bbox.bottomLeft().x(),'f',8)).append(",")
-                        .append(loc.toString(wgs84Bbox.bottomLeft().y(),'f',8)).append(",")
-                        .append(loc.toString(wgs84Bbox.topRight().x(),'f',8)).append(",")
-                        .append(loc.toString(wgs84Bbox.topRight().y(),'f',8))
-                        ;
+QMenu* CadastreFranceAdapter::getMenu() const
+{
+    disconnect(theMenu, 0, this, 0);
+    connect(theMenu, SIGNAL(triggered(QAction*)), SLOT(cityTriggered(QAction*)), Qt::QueuedConnection);
+    return theMenu;
 }
 
 IImageManager* CadastreFranceAdapter::getImageManager()
@@ -86,6 +104,255 @@ IImageManager* CadastreFranceAdapter::getImageManager()
 void CadastreFranceAdapter::setImageManager(IImageManager* anImageManager)
 {
     theImageManager = anImageManager;
+    CadastreWrapper::instance()->setNetworkManager(theImageManager->getNetworkManager());
+    theImageManager->setCachePermanent(true);
 }
 
-Q_EXPORT_PLUGIN2(MYahooBackgroundPlugin, CadastreFranceAdapter)
+void CadastreFranceAdapter::updateMenu()
+{
+    theMenu->clear();
+
+    QAction* grabCity = new QAction(tr("Grab City..."), this);
+    connect(grabCity, SIGNAL(triggered()), SLOT(onGrabCity()), Qt::QueuedConnection);
+    theMenu->addAction(grabCity);
+
+    theMenu->addSeparator();
+
+    QDir cache = CadastreWrapper::instance()->getCacheDir();
+    QFileInfoList fl = cache.entryInfoList(QDir::NoDotAndDotDot | QDir::Dirs);
+    foreach (QFileInfo fi, fl) {
+        QSettings sets(fi.absoluteFilePath()+"/cache.ini", QSettings::IniFormat);
+        QAction* cityAct = new QAction(sets.value("name").toString(), this);
+        cityAct->setData(fi.fileName());
+        theMenu->addAction(cityAct);
+    }
+}
+
+void CadastreFranceAdapter::cityTriggered(QAction *act)
+{
+    QString name = act->text();
+    m_code = act->data().toString();
+    if (m_code.isEmpty())
+        return;
+    if (!theImageManager)
+        return;
+    m_city = City();
+
+//    QSettings sets(dir.absoluteFilePath("cache.ini"), QSettings::IniFormat);
+//    if (!sets.value("complete").toBool()) {
+        connect(CadastreWrapper::instance(), SIGNAL(resultsAvailable(QMap<QString,QString>)), this, SLOT(resultsAvailable(QMap<QString,QString>)));
+        QString ville = name.left(name.lastIndexOf('(')-1);
+        QString department = QString("%1").arg(name.mid(name.lastIndexOf('(')+1, 2).toInt(), 3, 10, QChar('0'));
+        CadastreWrapper::instance()->search(ville, department);
+//    } else {
+//        m_city = City(m_code);
+//        m_city.setName(sets.value("name").toString());
+//        m_city.setDepartement((sets.value("department").toString()));
+//        m_city.setGeometry(sets.value("geometry").toRect());
+//        m_city.setProjection(sets.value("projection").toString());
+//    }
+}
+
+void CadastreFranceAdapter::resultsAvailable(QMap<QString, QString> results)
+{
+    disconnect(CadastreWrapper::instance(), SIGNAL(resultsAvailable(QMap<QString,QString>)), this, SLOT(resultsAvailable(QMap<QString,QString>)));
+    m_city = CadastreWrapper::instance()->requestCity(m_code);
+//    if (!CadastreWrapper::instance()->downloadTiles(m_city))
+//        return;
+
+    QDir dir = CadastreWrapper::instance()->getCacheDir();
+    Q_ASSERT(dir.cd(m_city.code()));
+    if (theImageManager)
+        theImageManager->setCacheDir(dir);
+}
+
+void CadastreFranceAdapter::onGrabCity()
+{
+    if (!theImageManager)
+        return;
+    m_city = City();
+
+    SearchDialog *dial = new SearchDialog();
+    dial->setModal(true);
+    if (dial->exec()) {
+        QString code = dial->cityCode();
+        qDebug() << code;
+        m_city = CadastreWrapper::instance()->requestCity(code);
+        qDebug() << m_city.code();
+        qDebug() << m_city.name();
+        qDebug() << m_city.geometry();
+//        CadastreWrapper::instance()->downloadTiles(m_city);
+
+        QDir dir = CadastreWrapper::instance()->getCacheDir();
+        Q_ASSERT(dir.cd(m_city.code()));
+        if (theImageManager)
+            theImageManager->setCacheDir(dir);
+    }
+//    updateMenu();
+}
+
+bool CadastreFranceAdapter::isValid(int x, int y, int z) const
+{
+    // Origin is bottom-left
+    y = getTilesNS(current_zoom)-1 - y;
+
+    if (m_city.code().isEmpty())
+        return false;
+
+    if ((x<0) || (x>=getTilesWE(z)) ||
+            (y<0) || (y>=getTilesNS(z)))
+    {
+        return false;
+    }
+    return true;
+
+}
+
+QString CadastreFranceAdapter::getQuery(int i, int j, int /* z */)  const
+{
+    qreal tileWidth = getBoundingbox().width() / getTilesWE(current_zoom);
+    qreal tileHeight = getBoundingbox().height() / getTilesNS(current_zoom);
+
+    QPointF ul = QPointF(i*tileWidth+getBoundingbox().topLeft().x(), getBoundingbox().bottomLeft().y()-j*tileHeight);
+    QPointF br = QPointF((i+1)*tileWidth+getBoundingbox().topLeft().x(), getBoundingbox().bottomLeft().y()- (j+1)*tileHeight);
+
+    QUrl theUrl("http://www.cadastre.gouv.fr/scpc/wms?version=1.1&request=GetMap&layers=CDIF:LS3,CDIF:LS2,CDIF:LS1,CDIF:PARCELLE,CDIF:NUMERO,CDIF:PT3,CDIF:PT2,CDIF:PT1,CDIF:LIEUDIT,CDIF:COMMUNE&format=image/png&exception=application/vnd.ogc.se_inimage&styles=LS3_90,LS2_90,LS1_90,PARCELLE_90,NUMERO_90,PT3_90,PT2_90,PT1_90,LIEUDIT_90,COMMUNE_90");
+    theUrl.addQueryItem("WIDTH", QString::number(getTileSizeW()));
+    theUrl.addQueryItem("HEIGHT", QString::number(getTileSizeH()));
+    theUrl.addQueryItem("BBOX", QString()
+                        .append(loc.toString(ul.x(),'f',6)).append(",")
+                        .append(loc.toString(br.y(),'f',6)).append(",")
+                        .append(loc.toString(br.x(),'f',6)).append(",")
+                        .append(loc.toString(ul.y(),'f',6))
+                        );
+
+    return theUrl.toString(QUrl::RemoveScheme | QUrl::RemoveAuthority);
+}
+
+QString CadastreFranceAdapter::getQuery(const QRectF& , const QRectF& projBbox, const QRect& size) const
+{
+    if (m_city.code().isEmpty())
+        return QString();
+
+    QUrl theUrl("http://www.cadastre.gouv.fr/scpc/wms?version=1.1&request=GetMap&layers=CDIF:LS3,CDIF:LS2,CDIF:LS1,CDIF:PARCELLE,CDIF:NUMERO,CDIF:PT3,CDIF:PT2,CDIF:PT1,CDIF:LIEUDIT,CDIF:COMMUNE&format=image/png&exception=application/vnd.ogc.se_inimage&styles=LS3_90,LS2_90,LS1_90,PARCELLE_90,NUMERO_90,PT3_90,PT2_90,PT1_90,LIEUDIT_90,COMMUNE_90");
+    theUrl.addQueryItem("WIDTH", QString::number(size.width()));
+    theUrl.addQueryItem("HEIGHT", QString::number(size.height()));
+    theUrl.addQueryItem("BBOX", QString()
+                        .append(loc.toString(projBbox.bottomLeft().x(),'f',6)).append(",")
+                        .append(loc.toString(projBbox.bottomLeft().y(),'f',6)).append(",")
+                        .append(loc.toString(projBbox.topRight().x(),'f',6)).append(",")
+                        .append(loc.toString(projBbox.topRight().y(),'f',6))
+                        );
+
+    return theUrl.toString(QUrl::RemoveScheme | QUrl::RemoveAuthority);
+}
+
+QPixmap CadastreFranceAdapter::getPixmap(const QRectF& /*wgs84Bbox*/, const QRectF& projBbox, const QRect& src) const
+{
+    QPixmap pix(src.size());
+    pix.fill(Qt::transparent);
+    QPainter p(&pix);
+    p.scale(src.width()/projBbox.width(), src.height()/projBbox.height());
+    p.translate(-projBbox.left(), -projBbox.bottom());
+
+    if (!m_city.code().isEmpty()) {
+        QDir dir = CadastreWrapper::instance()->getCacheDir();
+        Q_ASSERT(dir.cd(m_city.code()));
+
+        for (int r=0; r<m_city.tileRows(); ++r) {
+            for (int c=0; c<m_city.tileColumns(); ++c) {
+                QRectF g = QRectF(m_city.tileGeometry(r, c));
+                QRectF inter = g.intersected(projBbox);
+                if (!inter.isNull()) {
+                    QImage img(dir.absoluteFilePath(QString("%1-%2.png").arg(r).arg(c)));
+                    p.drawImage(g.topLeft(), img);
+                }
+            }
+        }
+    }
+
+    p.end();
+    return pix;
+}
+
+void CadastreFranceAdapter::cleanup()
+{
+}
+
+bool CadastreFranceAdapter::toXML(QDomElement xParent)
+{
+}
+
+void CadastreFranceAdapter::fromXML(const QDomElement xParent)
+{
+}
+
+QString CadastreFranceAdapter::toPropertiesHtml()
+{
+}
+
+bool CadastreFranceAdapter::isTiled() const { return true; }
+
+int CadastreFranceAdapter::getTilesWE(int zoomlevel) const
+{
+    qreal unitPerTile = Resolutions[zoomlevel] * getTileSizeW(); // Size of 1 tile in projected units
+    return qRound(getBoundingbox().width() / unitPerTile);
+}
+
+int CadastreFranceAdapter::getTilesNS(int zoomlevel) const
+{
+    qreal unitPerTile = Resolutions[zoomlevel] * getTileSizeH(); // Size of 1 tile in projected units
+    return qRound(getBoundingbox().height() / unitPerTile);
+}
+
+int	CadastreFranceAdapter::getTileSizeW	() const
+{
+    return 256;
+}
+
+int	CadastreFranceAdapter::getTileSizeH	() const
+{
+    return 256;
+}
+
+void CadastreFranceAdapter::zoom_in()
+{
+    current_zoom = current_zoom < max_zoom ? current_zoom+1 : max_zoom;
+
+}
+void CadastreFranceAdapter::zoom_out()
+{
+    current_zoom = current_zoom > min_zoom ? current_zoom-1 : min_zoom;
+}
+
+int CadastreFranceAdapter::getMinZoom() const
+{
+    return min_zoom;
+}
+
+int CadastreFranceAdapter::getMaxZoom() const
+{
+    return max_zoom;
+}
+
+int CadastreFranceAdapter::getAdaptedMinZoom() const
+{
+    return 0;
+}
+
+int CadastreFranceAdapter::getAdaptedMaxZoom() const
+{
+    return max_zoom > min_zoom ? max_zoom - min_zoom : min_zoom - max_zoom;
+}
+
+int CadastreFranceAdapter::getZoom() const
+{
+    return current_zoom;
+}
+
+int CadastreFranceAdapter::getAdaptedZoom() const
+{
+    return max_zoom < min_zoom ? min_zoom - current_zoom : current_zoom - min_zoom;
+}
+
+Q_EXPORT_PLUGIN2(MCadastreFranceBackgroundPlugin, CadastreFranceAdapter)

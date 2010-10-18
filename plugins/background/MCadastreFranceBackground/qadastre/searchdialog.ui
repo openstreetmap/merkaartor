@@ -7,11 +7,11 @@
     <x>0</x>
     <y>0</y>
     <width>363</width>
-    <height>180</height>
+    <height>191</height>
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Dialog</string>
+   <string>Search city</string>
   </property>
   <layout class="QGridLayout" name="gridLayout">
    <item row="0" column="0">
@@ -37,7 +37,14 @@
       </spacer>
      </item>
      <item>
-      <widget class="QComboBox" name="department"/>
+      <widget class="QComboBox" name="department">
+       <property name="editable">
+        <bool>true</bool>
+       </property>
+       <property name="insertPolicy">
+        <enum>QComboBox::NoInsert</enum>
+       </property>
+      </widget>
      </item>
     </layout>
    </item>

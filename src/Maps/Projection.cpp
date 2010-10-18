@@ -296,26 +296,9 @@ QRectF Projection::getProjectedViewport(const CoordBox& Viewport, const QRect& s
 {
     QPointF bl, tr;
     QRectF pViewport;
-    double x, y;
 
-    if (p->IsLatLong || p->IsMercator)
-        tr = project(Viewport.topRight());
-    else {
-        x = coordToRad(Viewport.topRight().lon());
-        y = coordToRad(Viewport.topRight().lat());
-        projTransformFromWGS84(1, 0, &x, &y, NULL);
-        tr = QPointF(x, y);
-    }
-
-    if (p->IsLatLong || p->IsMercator)
-        bl = project(Viewport.bottomLeft());
-    else {
-        x = coordToRad(Viewport.bottomLeft().lon());
-        y = coordToRad(Viewport.bottomLeft().lat());
-        projTransformFromWGS84(1, 0, &x, &y, NULL);
-        bl = QPointF(x, y);
-    }
-
+    tr = project(Viewport.topRight());
+    bl = project(Viewport.bottomLeft());
     pViewport = QRectF(bl.x(), tr.y(), tr.x() - bl.x(), bl.y() - tr.y());
 
     QPointF pCenter(pViewport.center());
@@ -451,7 +434,16 @@ QString Projection::getProjectionType() const
 
 QString Projection::getProjectionProj4() const
 {
-    return p->projProj4;
+    if (p->IsLatLong)
+        return "+init=EPSG:4326";
+    else if (p->IsMercator)
+        return "+init=EPSG:3857";
+    else
+#ifdef USE_PROJ
+        return QString(pj_get_def(theProj, 0));
+#else
+        return p->projProj4;
+#endif
 }
 
 int Projection::projectionRevision() const

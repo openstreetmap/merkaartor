@@ -22,58 +22,65 @@
 
 #include <QDateTime>
 
-IImageManager::IImageManager() 
-	: cacheSize(0), cacheMaxSize(0)
+IImageManager::IImageManager()
+    : cacheSize(0), cacheMaxSize(0)
 
 {
+    m_networkManager = new QNetworkAccessManager();
 }
 
-void IImageManager::setCacheDir(const QDir& path)
+IImageManager::~IImageManager()
 {
-	cacheDir = path;
-	cacheSize = 0;
-	if (!cacheDir.exists()) {
-		cacheDir.mkpath(cacheDir.absolutePath());
-	} else {
-		cacheInfo = cacheDir.entryInfoList(QDir::Files, QDir::Time | QDir::Reversed);
-		for (int i=0; i<cacheInfo.size(); i++) {
-			cacheSize += cacheInfo[i].size();
-		}
-	}
+    delete m_networkManager;
 }
 
-void IImageManager::setCacheMaxSize(int max)
+QNetworkAccessManager* IImageManager::getNetworkManager() const
 {
-	cacheMaxSize = max*1024*1024;
+    return m_networkManager;
 }
 
 bool IImageManager::useDiskCache(QString filename)
 {
-	// qDebug() << cacheDir.absolutePath() << filename;
+    // qDebug() << cacheDir.absolutePath() << filename;
 
-	if (!cacheMaxSize)
-		return false;
+    if (!cacheMaxSize && !cachePermanent)
+        return false;
 
-	if (!cacheDir.exists(filename))
-		return false;
+    if (!cacheDir.exists(filename))
+        return false;
 
-	if (M_PREFS->getOfflineMode())
-		return true;
-	
-	int random = qrand() % 100;
-	QFileInfo info(cacheDir.absolutePath() + "/" + filename);
-	int days = info.lastModified().daysTo(QDateTime::currentDateTime());
+    if (M_PREFS->getOfflineMode())
+        return true;
 
-	return  random < (10 * days) ? false : true;
+    if (cachePermanent)
+        return true;
+
+    int random = qrand() % 100;
+    QFileInfo info(cacheDir.absolutePath() + "/" + filename);
+    int days = info.lastModified().daysTo(QDateTime::currentDateTime());
+
+    return  random < (10 * days) ? false : true;
 }
 
 void IImageManager::adaptCache()
 {
-	QFileInfo info;
-	while (cacheSize > cacheMaxSize) {
-		info = cacheInfo.takeFirst();
-		cacheDir.remove(info.fileName());
-		cacheSize -= info.size();
-	}
+    if (cachePermanent)
+        return;
+
+    QFileInfo info;
+    while (cacheSize > cacheMaxSize) {
+        info = cacheInfo.takeFirst();
+        cacheDir.remove(info.fileName());
+        cacheSize -= info.size();
+    }
 }
 
+void IImageManager::setCachePermanent(bool val)
+{
+    cachePermanent = val;
+}
+
+bool IImageManager::isCachePermanant() const
+{
+    return cachePermanent;
+}

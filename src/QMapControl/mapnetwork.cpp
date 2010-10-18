@@ -21,19 +21,21 @@
 
 #include "Preferences/MerkaartorPreferences.h"
 
+#include <QNetworkRequest>
+#include <QNetworkReply>
+
 #define MAX_REQ 8
 
 MapNetwork::MapNetwork(IImageManager* parent)
-        : parent(parent), http(new QHttp(this)), loaded(0)
+        : parent(parent), loaded(0)
 {
-    connect(http, SIGNAL(requestFinished(int, bool)),
-            this, SLOT(requestFinished(int, bool)));
+    m_networkManager = parent->getNetworkManager();
+    connect(m_networkManager, SIGNAL(finished(QNetworkReply*)),
+            this, SLOT(requestFinished(QNetworkReply*)));
 }
 
 MapNetwork::~MapNetwork()
 {
-    http->abort();
-    delete http;
 }
 
 
@@ -67,73 +69,67 @@ void MapNetwork::launchRequest()
 
 void MapNetwork::launchRequest(QUrl url, QString hash)
 {
-    http->setProxy(M_PREFS->getProxy(url));
-    http->setHost(url.host(), url.port() == -1 ? 80 : url.port());
-    http->setUser(url.userName(), url.password());
+    m_networkManager->setProxy(M_PREFS->getProxy(url));
+    QNetworkRequest req(url);
 
-    QHttpRequestHeader header;
-    if (url.hasQuery())
-        header = QHttpRequestHeader("GET", url.encodedPath() + "?" + url.encodedQuery());
-    else
-        header = QHttpRequestHeader("GET", url.encodedPath());
-    header.setValue("Host", url.host());
-    header.setValue("Accept", "image/*");
-    header.setValue("User-Agent", USER_AGENT);
+    req.setRawHeader("Host", url.host().toLatin1());
+    req.setRawHeader("Accept", "image/*");
+    req.setRawHeader("User-Agent", USER_AGENT.toLatin1());
 
-    int getId = http->request(header);
+    QNetworkReply* rply = m_networkManager->get(req);
 
     if (vectorMutex.tryLock()) {
-        loadingMap[getId] = hash;
+        loadingMap[rply] = hash;
         vectorMutex.unlock();
     }
 }
 
-void MapNetwork::requestFinished(int id, bool error)
+void MapNetwork::requestFinished(QNetworkReply* reply)
 {
-    int statusCode = http->lastResponse().statusCode();
-
-    if (!loadingMap.contains(id)){
+    if (!loadingMap.contains(reply)){
         // Don't react on setProxy and setHost requestFinished...
         return;
     }
 
-    if (error) {
-        qDebug() << "network error: " << statusCode << " " << http->errorString();
-        loadingMap.remove(id);
+    int statusCode = reply->attribute(QNetworkRequest::HttpStatusCodeAttribute).toInt();
+
+    if (reply->error() != QNetworkReply::NoError) {
+        qDebug() << "network error: " << statusCode << " " << reply->errorString();
+        loadingMap.remove(reply);
     } else
         switch (statusCode) {
             case 301:
             case 302:
             case 307:
-                qDebug() << "redirected: " << id;
-                launchRequest(QUrl(http->lastResponse().value("Location")), loadingMap[id]);
-                loadingMap.remove(id);
+                qDebug() << "redirected: " << loadingMap[reply];
+                launchRequest(reply->attribute(QNetworkRequest::RedirectionTargetAttribute).toUrl(), loadingMap[reply]);
+                loadingMap.remove(reply);
                 return;
             case 404:
-                qDebug() << "404 error: " << id;
-                loadingMap.remove(id);
+                qDebug() << "404 error: " << loadingMap[reply];
+                loadingMap.remove(reply);
                 break;
             case 500:
-                qDebug() << "500 error: " << id;
-                loadingMap.remove(id);
+                qDebug() << "500 error: " << loadingMap[reply];
+                loadingMap.remove(reply);
                 break;
                 // Redirected
             default:
                 if (statusCode != 200)
-                    qDebug() << "Other http code (" << statusCode << "): "  << id;
+                    qDebug() << "Other http code (" << statusCode << "): "  << loadingMap[reply];
                 if (vectorMutex.tryLock()) {
                     // check if id is in map?
-                    if (loadingMap.contains(id)) {
+                    if (loadingMap.contains(reply)) {
 
-                        QString hash = loadingMap[id];
-                        loadingMap.remove(id);
+                        QString hash = loadingMap[reply];
+                        loadingMap.remove(reply);
                         vectorMutex.unlock();
         // 		qDebug() << "request finished for id: " << id;
                         QByteArray ax;
 
-                        if (http->bytesAvailable() > 0) {
+                        if (reply->bytesAvailable() > 0) {
                             QPixmap pm;
-                            ax = http->readAll();
+                            ax = reply->readAll();
         //			qDebug() << ax.size();
 
                             if (pm.loadFromData(ax)) {
@@ -162,10 +158,9 @@ void MapNetwork::requestFinished(int id, bool error)
 
 void MapNetwork::abortLoading()
 {
-    http->clearPendingRequests();
-// 	http->abort();
-
     if (vectorMutex.tryLock()) {
+        foreach (QNetworkReply* rply, loadingMap.keys())
+            rply->abort();
         loadingMap.clear();
         while (!loadingRequests.isEmpty())
             delete loadingRequests.dequeue();

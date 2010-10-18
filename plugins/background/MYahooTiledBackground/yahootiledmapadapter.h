@@ -71,7 +71,8 @@ public:
     /*!
      * @return the size of the tiles
      */
-    virtual int		getTileSize	() const;
+    virtual int		getTileSizeW	() const;
+    virtual int		getTileSizeH	() const;
 
     //! returns the min zoom value
     /*!
@@ -132,6 +133,8 @@ public:
     virtual bool toXML(QDomElement /*xParent*/) { return true; }
     virtual void fromXML(const QDomElement /*xParent*/) {}
     virtual QString toPropertiesHtml() {return "";}
+
+    virtual void setSettings(QSettings* /*aSet*/) {}
 
 private:
     QLocale loc;

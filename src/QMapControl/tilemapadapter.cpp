@@ -82,7 +82,12 @@ QRectF TileMapAdapter::getBoundingbox() const
         return QRectF(QPointF(-EQUATORIALMETERHALFCIRCUMFERENCE, -EQUATORIALMETERHALFCIRCUMFERENCE), QPointF(EQUATORIALMETERHALFCIRCUMFERENCE, EQUATORIALMETERHALFCIRCUMFERENCE));
 }
 
-int TileMapAdapter::getTileSize() const
+int TileMapAdapter::getTileSizeW() const
+{
+    return tilesize;
+}
+
+int TileMapAdapter::getTileSizeH() const
 {
     return tilesize;
 }

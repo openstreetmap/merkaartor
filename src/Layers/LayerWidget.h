@@ -47,6 +47,7 @@ protected:
     QAction* actZoom;
     QAction* actVisible;
     QAction* actReadonly;
+    QAction* actSupMenu;
     QMenu* associatedMenu;
     QPoint dragStartPosition;
 
@@ -124,6 +125,8 @@ class ImageLayerWidget : public LayerWidget
         QMenu* wmsMenu;
         QMenu* tmsMenu;
 
+        QList<QAction*> plugActions;
+
     private slots:
         void setWms(QAction*);
         void setTms(QAction*);
@@ -131,6 +134,9 @@ class ImageLayerWidget : public LayerWidget
         void setBackground(QAction*);
 
         void setProjection();
+
+    protected:
+        virtual void showContextMenu(QContextMenuEvent* anEvent);
 };
 
 class DirtyLayerWidget : public LayerWidget

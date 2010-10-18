@@ -32,7 +32,11 @@ public:
     QPixmap pm;
     Projection theProjection;
     QString selServer;
+
     IImageManager* theImageManager;
+    BrowserImageManager* theBrowserImageManager;
+    ImageManager* theNetworkImageManager;
+
     TileMapAdapter* tmsa;
     WMSMapAdapter* wmsa;
     WmscMapAdapter* wmsca;
@@ -45,6 +49,8 @@ public:
     {
         theMapAdapter = NULL;
         theImageManager = NULL;
+        theBrowserImageManager = NULL;
+        theNetworkImageManager = NULL;
         tmsa = NULL;
         wmsa = NULL;
         wmsca = NULL;
@@ -83,6 +89,7 @@ CoordBox ImageMapLayer::boundingBox()
         if (!p->theMapAdapter || p->theMapAdapter->getBoundingbox().isNull())
             return CoordBox();
 
+    p->theProjection.setProjectionType(p->theMapAdapter->projection());
     QRectF r = p->theMapAdapter->getBoundingbox();
     Coord tl = p->theProjection.inverse(r.topLeft());
     Coord br = p->theProjection.inverse(r.bottomRight());
@@ -147,7 +154,7 @@ void ImageMapLayer::setMapAdapter(const QUuid& theAdapterUid, const QString& ser
     SAFE_DELETE(p->tmsa)
     if (p->theImageManager)
         p->theImageManager->abortLoading();
-    SAFE_DELETE(p->theImageManager)
+    p->theImageManager = NULL;
     on_loadingFinished();
     p->theMapAdapter = NULL;
     p->pm = QPixmap();
@@ -270,45 +277,44 @@ void ImageMapLayer::setMapAdapter(const QUuid& theAdapterUid, const QString& ser
         }
     }
     if (p->theMapAdapter) {
-        p->theProjection.setProjectionType(p->theMapAdapter->projection());
-        ImageManager* m;
-#ifdef USE_WEBKIT
-        BrowserImageManager* b;
-#endif
         switch (p->theMapAdapter->getType()) {
             case IMapAdapter::DirectBackground:
                 break;
             case IMapAdapter::BrowserBackground :
 #ifdef USE_WEBKIT
-                b = new BrowserImageManager();
-                connect(b, SIGNAL(imageRequested()),
-                    this, SLOT(on_imageRequested()), Qt::QueuedConnection);
-                connect(b, SIGNAL(imageReceived()),
-                    this, SLOT(on_imageReceived()), Qt::QueuedConnection);
-                connect(b, SIGNAL(loadingFinished()),
-                    this, SLOT(on_loadingFinished()), Qt::QueuedConnection);
+                if (!p->theBrowserImageManager) {
+                    p->theBrowserImageManager = new BrowserImageManager();
+                    connect(p->theBrowserImageManager, SIGNAL(imageRequested()),
+                        this, SLOT(on_imageRequested()), Qt::QueuedConnection);
+                    connect(p->theBrowserImageManager, SIGNAL(imageReceived()),
+                        this, SLOT(on_imageReceived()), Qt::QueuedConnection);
+                    connect(p->theBrowserImageManager, SIGNAL(loadingFinished()),
+                        this, SLOT(on_loadingFinished()), Qt::QueuedConnection);
+                }
+                p->theBrowserImageManager->setCacheDir(M_PREFS->getCacheDir());
+                p->theBrowserImageManager->setCacheMaxSize(M_PREFS->getCacheSize());
                 #ifdef BROWSERIMAGEMANAGER_IS_THREADED
                     m->start();
                 #endif // BROWSERIMAGEMANAGER_IS_THREADED
-                p->theImageManager = b;
+                p->theImageManager = p->theBrowserImageManager;
                 p->theMapAdapter->setImageManager(p->theImageManager);
 #endif
                 break;
             case IMapAdapter::NetworkBackground :
-                m = new ImageManager();
-                connect(m, SIGNAL(imageRequested()),
-                    this, SLOT(on_imageRequested()), Qt::QueuedConnection);
-                connect(m, SIGNAL(imageReceived()),
-                    this, SLOT(on_imageReceived()), Qt::QueuedConnection);
-                connect(m, SIGNAL(loadingFinished()),
-                    this, SLOT(on_loadingFinished()), Qt::QueuedConnection);
-                p->theImageManager = m;
+                if (!p->theNetworkImageManager) {
+                    p->theNetworkImageManager = new ImageManager();
+                    connect(p->theNetworkImageManager, SIGNAL(imageRequested()),
+                        this, SLOT(on_imageRequested()), Qt::QueuedConnection);
+                    connect(p->theNetworkImageManager, SIGNAL(imageReceived()),
+                        this, SLOT(on_imageReceived()), Qt::QueuedConnection);
+                    connect(p->theNetworkImageManager, SIGNAL(loadingFinished()),
+                        this, SLOT(on_loadingFinished()), Qt::QueuedConnection);
+                }
+                p->theNetworkImageManager->setCacheDir(M_PREFS->getCacheDir());
+                p->theNetworkImageManager->setCacheMaxSize(M_PREFS->getCacheSize());
+                p->theImageManager = p->theNetworkImageManager;
                 p->theMapAdapter->setImageManager(p->theImageManager);
                 break;
-        }
-        if (p->theImageManager) {
-            p->theImageManager->setCacheDir(M_PREFS->getCacheDir());
-            p->theImageManager->setCacheMaxSize(M_PREFS->getCacheSize());
         }
     }
 }
@@ -365,7 +371,6 @@ ImageMapLayer * ImageMapLayer::fromXML(Document* d, const QDomElement& e, QProgr
 {
     ImageMapLayer* l = new ImageMapLayer(e.attribute("name"));
     l->blockIndexing(true);
-    d->addImageLayer(l);
     l->setId(e.attribute("xml:id"));
 
     QDomElement c = e.firstChildElement();
@@ -391,6 +396,8 @@ ImageMapLayer * ImageMapLayer::fromXML(Document* d, const QDomElement& e, QProgr
 
     l->blockIndexing(false);
     l->reIndex();
+
+    d->addImageLayer(l);
     return l;
 }
 
@@ -472,14 +479,39 @@ int ImageMapLayer::getCurrentZoom()
     return p->theMapAdapter->getAdaptedZoom();
 }
 
-void ImageMapLayer::setCurrentZoom(const CoordBox& viewport, const QRect& rect)
+void ImageMapLayer::setCurrentZoom(MapView& theView, const CoordBox& viewport, const QRect& rect)
 {
     QRectF vp;
-    vp = p->theProjection.getProjectedViewport(viewport, rect);
+    if (p->theProjection.projIsLatLong()) {
+        vp = viewport.toQRectF();
+        QPointF pCenter(vp.center());
+
+        double wv, hv;
+        //wv = (pViewport.width() / Viewport.londiff()) * ((double)screen.width() / Viewport.londiff());
+        //hv = (pViewport.height() / Viewport.latdiff()) * ((double)screen.height() / Viewport.latdiff());
+
+        double Aspect = (double)rect.width() / rect.height();
+        double pAspect = fabs(vp.width() / vp.height());
+
+        if (pAspect > Aspect) {
+            wv = fabs(vp.width());
+            hv = fabs(vp.height() * pAspect / Aspect);
+        } else {
+            wv = fabs(vp.width() * Aspect / pAspect);
+            hv = fabs(vp.height());
+        }
+
+        vp = QRectF((pCenter.x() - wv/2), (pCenter.y() + hv/2), wv, -hv);
+    } else if (p->theProjection.getProjectionProj4() == theView.projection().getProjectionProj4()) {
+        vp.setTopLeft(theView.transform().inverted().map(rect.topLeft()));
+        vp.setBottomRight(theView.transform().inverted().map(rect.bottomRight()));
+    } else
+        vp = p->theProjection.getProjectedViewport(viewport, rect);
 
     qreal tileWidth, tileHeight;
     int maxZoom = p->theMapAdapter->getAdaptedMaxZoom();
-    int tilesize = p->theMapAdapter->getTileSize();
+    int tilesizeW = p->theMapAdapter->getTileSizeW();
+    int tilesizeH = p->theMapAdapter->getTileSizeH();
     QPointF mapmiddle_px = vp.center();
 
     // Set zoom level to 0.
@@ -489,8 +521,8 @@ void ImageMapLayer::setCurrentZoom(const CoordBox& viewport, const QRect& rect)
 
     tileWidth = p->theMapAdapter->getBoundingbox().width() / p->theMapAdapter->getTilesWE(p->theMapAdapter->getAdaptedZoom());
     tileHeight = p->theMapAdapter->getBoundingbox().height() / p->theMapAdapter->getTilesNS(p->theMapAdapter->getAdaptedZoom());
-    qreal w = ((qreal)rect.width() / tilesize) * tileWidth;
-    qreal h = ((qreal)rect.height() / tilesize) * tileHeight;
+    qreal w = ((qreal)rect.width() / tilesizeW) * tileWidth;
+    qreal h = ((qreal)rect.height() / tilesizeH) * tileHeight;
     QPointF upperLeft = QPointF(mapmiddle_px.x() - w/2, mapmiddle_px.y() + h/2);
     QPointF lowerRight = QPointF(mapmiddle_px.x() + w/2, mapmiddle_px.y() - h/2);
     QRectF vlm = QRectF(upperLeft, lowerRight);
@@ -500,8 +532,8 @@ void ImageMapLayer::setCurrentZoom(const CoordBox& viewport, const QRect& rect)
 
         tileWidth = p->theMapAdapter->getBoundingbox().width() / p->theMapAdapter->getTilesWE(p->theMapAdapter->getAdaptedZoom());
         tileHeight = p->theMapAdapter->getBoundingbox().height() / p->theMapAdapter->getTilesNS(p->theMapAdapter->getAdaptedZoom());
-        w = ((qreal)rect.width() / tilesize) * tileWidth;
-        h = ((qreal)rect.height() / tilesize) * tileHeight;
+        w = ((qreal)rect.width() / tilesizeW) * tileWidth;
+        h = ((qreal)rect.height() / tilesizeH) * tileHeight;
         upperLeft = QPointF(mapmiddle_px.x() - w/2, mapmiddle_px.y() + h/2);
         lowerRight = QPointF(mapmiddle_px.x() + w/2, mapmiddle_px.y() - h/2);
         vlm = QRectF(upperLeft, lowerRight);
@@ -516,7 +548,7 @@ qreal ImageMapLayer::pixelPerM()
     if (!isTiled())
         return -1.;
 
-    return (p->theMapAdapter->getTileSize() * p->theMapAdapter->getTilesWE(p->theMapAdapter->getAdaptedZoom())) / EQUATORIAL_CIRCUMFERENCE;
+    return (p->theMapAdapter->getTileSizeW() * p->theMapAdapter->getTilesWE(p->theMapAdapter->getAdaptedZoom())) / EQUATORIAL_CIRCUMFERENCE;
 }
 
 void ImageMapLayer::forceRedraw(MapView& theView, QRect Screen)
@@ -528,8 +560,6 @@ void ImageMapLayer::forceRedraw(MapView& theView, QRect Screen)
         p->pm = QPixmap(Screen.size());
         p->pm.fill(Qt::transparent);
     }
-
-    MapView::transformCalc(p->theTransform, p->theProjection, theView.viewport(), Screen);
 
 //    QRectF fScreen(Screen);
 //    p->Viewport =
@@ -546,6 +576,8 @@ void ImageMapLayer::draw(MapView& theView, QRect& rect)
 {
     if (!p->theMapAdapter)
         return;
+
+    p->theProjection.setProjectionType(p->theMapAdapter->projection());
 
     if (p->theMapAdapter->isTiled())
         p->pr = drawTiled(theView, rect);
@@ -588,8 +620,13 @@ void ImageMapLayer::draw(MapView& theView, QRect& rect)
 QRect ImageMapLayer::drawFull(MapView& theView, QRect& rect) const
 {
     QRectF fScreen(rect);
+    MapView::transformCalc(p->theTransform, p->theProjection, theView.viewport(), rect);
+
     CoordBox Viewport(p->theProjection.inverse(p->theTransform.inverted().map(fScreen.bottomLeft())),
                      p->theProjection.inverse(p->theTransform.inverted().map(fScreen.topRight())));
+    QPointF bl = theView.toView(Viewport.bottomLeft());
+    QPointF tr = theView.toView(Viewport.topRight());
+
     if (
             Viewport.bottomLeft().lat() >= -90. && Viewport.bottomLeft().lat() <= 90.
             && Viewport.bottomLeft().lon() >= -180. && Viewport.bottomLeft().lon() <= 180.
@@ -597,10 +634,34 @@ QRect ImageMapLayer::drawFull(MapView& theView, QRect& rect) const
             && Viewport.topRight().lon() >= -180. && Viewport.topRight().lon() <= 180.
             ) {
         QRectF vp;
-        if (p->theProjection.projIsLatLong())
+        if (p->theProjection.projIsLatLong()) {
             vp = p->Viewport.toQRectF();
-        else
+            QPointF pCenter(vp.center());
+
+            double wv, hv;
+            //wv = (pViewport.width() / Viewport.londiff()) * ((double)screen.width() / Viewport.londiff());
+            //hv = (pViewport.height() / Viewport.latdiff()) * ((double)screen.height() / Viewport.latdiff());
+
+            double Aspect = (double)rect.width() / rect.height();
+            double pAspect = fabs(vp.width() / vp.height());
+
+            if (pAspect > Aspect) {
+                wv = fabs(vp.width());
+                hv = fabs(vp.height() * pAspect / Aspect);
+            } else {
+                wv = fabs(vp.width() * Aspect / pAspect);
+                hv = fabs(vp.height());
+            }
+
+            vp = QRectF((pCenter.x() - wv/2), (pCenter.y() + hv/2), wv, -hv);
+        } else if (p->theProjection.getProjectionProj4() == theView.projection().getProjectionProj4()) {
+            bl = QPointF(rect.bottomLeft());
+            tr = QPointF(rect.topRight());
+            vp.setTopLeft(theView.transform().inverted().map(rect.topLeft()));
+            vp.setBottomRight(theView.transform().inverted().map(rect.bottomRight()));
+        } else
             vp = p->theProjection.getProjectedViewport(p->Viewport, rect);
+
         QRectF wgs84vp = QRectF(QPointF(coordToAng(Viewport.bottomLeft().lon()), coordToAng(Viewport.bottomLeft().lat()))
                                 , QPointF(coordToAng(Viewport.topRight().lon()), coordToAng(Viewport.topRight().lat())));
 
@@ -623,10 +684,7 @@ QRect ImageMapLayer::drawFull(MapView& theView, QRect& rect) const
         }
     }
 
-    const QPointF bl = theView.toView(Viewport.bottomLeft());
-    const QPointF tr = theView.toView(Viewport.topRight());
-
-    return QRectF(bl.x(), tr.y(), tr.x() - bl.x(), bl.y() - tr.y()).toRect();
+    return QRectF(bl.x(), tr.y(), tr.x() - bl.x() +1, bl.y() - tr.y() + 1).toRect();
 }
 
 QRect ImageMapLayer::drawTiled(MapView& theView, QRect& rect) const
@@ -652,14 +710,18 @@ QRect ImageMapLayer::drawTiled(MapView& theView, QRect& rect) const
         }
 
         vp = QRectF((pCenter.x() - wv/2), (pCenter.y() + hv/2), wv, -hv);
+    } else if (p->theProjection.getProjectionProj4() == theView.projection().getProjectionProj4()) {
+        vp.setTopLeft(theView.transform().inverted().map(rect.topLeft()));
+        vp.setBottomRight(theView.transform().inverted().map(rect.bottomRight()));
     } else
         vp = p->theProjection.getProjectedViewport(p->Viewport, rect);
 
     qreal tileWidth, tileHeight;
     int maxZoom = p->theMapAdapter->getAdaptedMaxZoom();
-    int tilesize = p->theMapAdapter->getTileSize();
-    QPointF screenmiddle = QPointF(vp.width()/2, -vp.height()/2);
-    QPointF mapmiddle_px = vp.center();
+    int tilesizeW = p->theMapAdapter->getTileSizeW();
+    int tilesizeH = p->theMapAdapter->getTileSizeH();
+    QPointF vp0Center = QPointF(vp.width()/2, -vp.height()/2);
+    QPointF vpCenter = vp.center();
 
     if (!M_PREFS->getZoomBoris()) {
         // Set zoom level to 0.
@@ -670,10 +732,10 @@ QRect ImageMapLayer::drawTiled(MapView& theView, QRect& rect) const
 
     tileWidth = p->theMapAdapter->getBoundingbox().width() / p->theMapAdapter->getTilesWE(p->theMapAdapter->getAdaptedZoom());
     tileHeight = p->theMapAdapter->getBoundingbox().height() / p->theMapAdapter->getTilesNS(p->theMapAdapter->getAdaptedZoom());
-    qreal w = ((qreal)rect.width() / tilesize) * tileWidth;
-    qreal h = ((qreal)rect.height() / tilesize) * tileHeight;
-    QPointF upperLeft = QPointF(mapmiddle_px.x() - w/2, mapmiddle_px.y() + h/2);
-    QPointF lowerRight = QPointF(mapmiddle_px.x() + w/2, mapmiddle_px.y() - h/2);
+    qreal w = ((qreal)rect.width() / tilesizeW) * tileWidth;
+    qreal h = ((qreal)rect.height() / tilesizeH) * tileHeight;
+    QPointF upperLeft = QPointF(vpCenter.x() - w/2, vpCenter.y() + h/2);
+    QPointF lowerRight = QPointF(vpCenter.x() + w/2, vpCenter.y() - h/2);
     QRectF vlm = QRectF(upperLeft, lowerRight);
 
     if (!M_PREFS->getZoomBoris()) {
@@ -682,97 +744,23 @@ QRect ImageMapLayer::drawTiled(MapView& theView, QRect& rect) const
 
             tileWidth = p->theMapAdapter->getBoundingbox().width() / p->theMapAdapter->getTilesWE(p->theMapAdapter->getZoom());
             tileHeight = p->theMapAdapter->getBoundingbox().height() / p->theMapAdapter->getTilesNS(p->theMapAdapter->getZoom());
-            w = ((qreal)rect.width() / tilesize) * tileWidth;
-            h = ((qreal)rect.height() / tilesize) * tileHeight;
-            upperLeft = QPointF(mapmiddle_px.x() - w/2, mapmiddle_px.y() + h/2);
-            lowerRight = QPointF(mapmiddle_px.x() + w/2, mapmiddle_px.y() - h/2);
+            w = ((qreal)rect.width() / tilesizeW) * tileWidth;
+            h = ((qreal)rect.height() / tilesizeH) * tileHeight;
+            upperLeft = QPointF(vpCenter.x() - w/2, vpCenter.y() + h/2);
+            lowerRight = QPointF(vpCenter.x() + w/2, vpCenter.y() - h/2);
             vlm = QRectF(upperLeft, lowerRight);
         }
         if (p->theMapAdapter->getAdaptedZoom() && vp.contains(vlm)) {
             p->theMapAdapter->zoom_out();
             tileWidth = p->theMapAdapter->getBoundingbox().width() / p->theMapAdapter->getTilesWE(p->theMapAdapter->getZoom());
             tileHeight = p->theMapAdapter->getBoundingbox().height() / p->theMapAdapter->getTilesNS(p->theMapAdapter->getZoom());
-            w = ((qreal)rect.width() / tilesize) * tileWidth;
-            h = ((qreal)rect.height() / tilesize) * tileHeight;
-            upperLeft = QPointF(mapmiddle_px.x() - w/2, mapmiddle_px.y() + h/2);
-            lowerRight = QPointF(mapmiddle_px.x() + w/2, mapmiddle_px.y() - h/2);
+            w = ((qreal)rect.width() / tilesizeW) * tileWidth;
+            h = ((qreal)rect.height() / tilesizeH) * tileHeight;
+            upperLeft = QPointF(vpCenter.x() - w/2, vpCenter.y() + h/2);
+            lowerRight = QPointF(vpCenter.x() + w/2, vpCenter.y() - h/2);
             vlm = QRectF(upperLeft, lowerRight);
         }
     }
-
-    p->pm = QPixmap(rect.size());
-    p->pm.fill(Qt::transparent);
-    QPainter painter(&p->pm);
-
-    // Actual drawing
-    int i, j;
-    QPointF mapmiddle_px0 = QPointF(mapmiddle_px.x()-p->theMapAdapter->getBoundingbox().left(), p->theMapAdapter->getBoundingbox().bottom()-mapmiddle_px.y());
-    int mapmiddle_tile_x = mapmiddle_px0.x()/tileWidth;
-    int mapmiddle_tile_y = mapmiddle_px0.y()/tileHeight;
-    qDebug() << "z: " << p->theMapAdapter->getAdaptedZoom() << "; t_x: " << mapmiddle_tile_x << "; t_y: " << mapmiddle_tile_y ;
-
-    qreal cross_x = mapmiddle_px0.x() - int(mapmiddle_px0.x()/tileWidth)*tileWidth;		// position on middle tile
-    qreal cross_y = mapmiddle_px0.y() - int(mapmiddle_px0.y()/tileHeight)*tileHeight;
-    qDebug() << "cross_x: " << cross_x << "; cross_y: " << cross_y;
-
-        // calculate how many surrounding tiles have to be drawn to fill the display
-    qreal space_left = screenmiddle.x() - cross_x;
-    int tiles_left = space_left/tileWidth;
-    if (space_left>0)
-        tiles_left+=1;
-
-    qreal space_above = screenmiddle.y() - cross_y;
-    int tiles_above = space_above/tileHeight;
-    if (space_above>0)
-        tiles_above+=1;
-
-    qreal space_right = screenmiddle.x() - (tileWidth-cross_x);
-    int tiles_right = space_right/tileWidth;
-    if (space_right>0)
-        tiles_right+=1;
-
-    qreal space_bottom = screenmiddle.y() - (tileHeight-cross_y);
-    int tiles_bottom = space_bottom/tileHeight;
-    if (space_bottom>0)
-        tiles_bottom+=1;
-
-    QList<Tile> tiles;
-    int cross_scr_x = cross_x * tilesize / tileWidth;
-    int cross_scr_y = cross_y * tilesize / tileHeight;
-
-    for (i=-tiles_left+mapmiddle_tile_x; i<=tiles_right+mapmiddle_tile_x; i++)
-    {
-        for (j=-tiles_above+mapmiddle_tile_y; j<=tiles_bottom+mapmiddle_tile_y; j++)
-        {
-#ifdef Q_CC_MSVC
-            double priority = _hypot(i - mapmiddle_tile_x, j - mapmiddle_tile_y);
-#else
-            double priority = hypot(i - mapmiddle_tile_x, j - mapmiddle_tile_y);
-#endif
-            tiles.append(Tile(i, j, priority));
-        }
-    }
-
-    qSort(tiles);
-
-    for (QList<Tile>::const_iterator tile = tiles.begin(); tile != tiles.end(); ++tile)
-    {
-        if (p->theMapAdapter->isValid(tile->i, tile->j, p->theMapAdapter->getZoom()))
-        {
-            QPixmap pm = p->theMapAdapter->getImageManager()->getImage(p->theMapAdapter, tile->i, tile->j, p->theMapAdapter->getZoom());
-            if (!pm.isNull())
-                painter.drawPixmap(((tile->i-mapmiddle_tile_x)*tilesize)+rect.width()/2 -cross_scr_x,
-                            ((tile->j-mapmiddle_tile_y)*tilesize)+rect.height()/2-cross_scr_y,
-                                                    pm);
-
-            if (M_PREFS->getDrawTileBoundary()) {
-                painter.drawRect(((tile->i-mapmiddle_tile_x)*tilesize)-cross_scr_x+rect.width()/2,
-                          ((tile->j-mapmiddle_tile_y)*tilesize)-cross_scr_y-rect.height()/2,
-                                            tilesize, tilesize);
-            }
-        }
-    }
-    painter.end();
 
     Coord ulCoord, lrCoord;
     if (p->theProjection.projIsLatLong()) {
@@ -783,10 +771,86 @@ QRect ImageMapLayer::drawTiled(MapView& theView, QRect& rect) const
         lrCoord = p->theProjection.inverse(vlm.bottomRight());
     }
 
+    // Actual drawing
+    int i, j;
+    QPointF vpCenter0 = QPointF(vpCenter.x()-p->theMapAdapter->getBoundingbox().left(), p->theMapAdapter->getBoundingbox().bottom()-vpCenter.y());
+    int mapmiddle_tile_x = vpCenter0.x()/tileWidth;
+    int mapmiddle_tile_y = vpCenter0.y()/tileHeight;
+    qDebug() << "z: " << p->theMapAdapter->getAdaptedZoom() << "; t_x: " << mapmiddle_tile_x << "; t_y: " << mapmiddle_tile_y ;
+
+    qreal cross_x = vpCenter0.x() - int(vpCenter0.x()/tileWidth)*tileWidth;		// position on middle tile
+    qreal cross_y = vpCenter0.y() - int(vpCenter0.y()/tileHeight)*tileHeight;
+    qDebug() << "cross_x: " << cross_x << "; cross_y: " << cross_y;
+
+        // calculate how many surrounding tiles have to be drawn to fill the display
+    qreal space_left = vp0Center.x() - cross_x;
+    int tiles_left = space_left/tileWidth;
+    if (space_left>0)
+        tiles_left+=1;
+
+    qreal space_above = vp0Center.y() - cross_y;
+    int tiles_above = space_above/tileHeight;
+    if (space_above>0)
+        tiles_above+=1;
+
+    qreal space_right = vp0Center.x() - (tileWidth-cross_x);
+    int tiles_right = space_right/tileWidth;
+    if (space_right>0)
+        tiles_right+=1;
+
+    qreal space_bottom = vp0Center.y() - (tileHeight-cross_y);
+    int tiles_bottom = space_bottom/tileHeight;
+    if (space_bottom>0)
+        tiles_bottom+=1;
+
+    QList<Tile> tiles;
+    int cross_scr_x = cross_x * tilesizeW / tileWidth;
+    int cross_scr_y = cross_y * tilesizeH / tileHeight;
+
+    p->pm = QPixmap(rect.size());
+    p->pm.fill(Qt::transparent);
+    QPainter painter(&p->pm);
+
+    qDebug() << "Tiles: " << tiles_right+tiles_left+1 << "x" << tiles_bottom+tiles_above+1;
+    for (i=-tiles_left+mapmiddle_tile_x; i<=tiles_right+mapmiddle_tile_x; i++)
+    {
+        for (j=-tiles_above+mapmiddle_tile_y; j<=tiles_bottom+mapmiddle_tile_y; j++)
+        {
+            if (p->theMapAdapter->isValid(i, j, p->theMapAdapter->getZoom()))
+            {
+#ifdef Q_CC_MSVC
+                double priority = _hypot(i - mapmiddle_tile_x, j - mapmiddle_tile_y);
+#else
+                double priority = hypot(i - mapmiddle_tile_x, j - mapmiddle_tile_y);
+#endif
+                tiles.append(Tile(i, j, priority));
+            }
+        }
+    }
+
+    qSort(tiles);
+
+    for (QList<Tile>::const_iterator tile = tiles.begin(); tile != tiles.end(); ++tile)
+    {
+        QPixmap pm = p->theMapAdapter->getImageManager()->getImage(p->theMapAdapter, tile->i, tile->j, p->theMapAdapter->getZoom());
+        if (!pm.isNull())
+            painter.drawPixmap(((tile->i-mapmiddle_tile_x)*tilesizeW)+rect.width()/2 -cross_scr_x,
+                               ((tile->j-mapmiddle_tile_y)*tilesizeH)+rect.height()/2-cross_scr_y,
+                               pm);
+
+        if (M_PREFS->getDrawTileBoundary()) {
+            painter.drawRect(((tile->i-mapmiddle_tile_x)*tilesizeW)+rect.width()/2 -cross_scr_x,
+                             ((tile->j-mapmiddle_tile_y)*tilesizeH)+rect.height()/2-cross_scr_y,
+                             tilesizeW, tilesizeH);
+        }
+    }
+    painter.end();
+
     const QPointF tl = theView.transform().map(theView.projection().project(ulCoord));
     const QPointF br = theView.transform().map(theView.projection().project(lrCoord));
-
     qDebug() << "tl: " << tl << "; br: " << br;
+    qDebug() << "vp: " << vp;
+    qDebug() << "vlm: " << vlm;
     return QRectF(tl, br).toRect();
 }
 
@@ -937,7 +1001,7 @@ QString ImageMapLayer::toPropertiesHtml()
             h += "<i>" + tr("Server") + ": </i>" + p->theMapAdapter->getHost();
             h += "<br/>";
             if (p->theMapAdapter->isTiled()) {
-                h += "<i>" + tr("Tile size") + ": </i>" + QString("%1").arg(p->theMapAdapter->getTileSize());
+                h += "<i>" + tr("Tile size") + ": </i>" + QString("%1x%2").arg(p->theMapAdapter->getTileSizeW()).arg(p->theMapAdapter->getTileSizeH());
                 h += "<br/>";
                 h += "<i>" + tr("Min/Max zoom") + ": </i>" + QString("%1/%2").arg(p->theMapAdapter->getMinZoom()).arg(p->theMapAdapter->getMaxZoom());
                 h += "<br/>";

@@ -355,9 +355,11 @@ void ImageLayerWidget::setTms(QAction* act)
     emit (layerChanged(this, true));
 }
 
-void ImageLayerWidget::setOther(QAction* act)
+void ImageLayerWidget::setOther(QAction* /*act*/)
 {
-    QUuid u(act->data().toString());
+    QMenu* menu;
+    Q_ASSERT(menu = qobject_cast<QMenu*>(sender()));
+    QUuid u(menu->menuAction()->data().value<QUuid>());
 
     ((ImageMapLayer *)theLayer.data())->setMapAdapter(u);
     theLayer->setVisible(true);
@@ -393,7 +395,7 @@ void ImageLayerWidget::initActions()
     //actgrWms = new QActionGroup(this);
 
     LayerWidget::initActions();
-    ImageMapLayer* il = ((ImageMapLayer *)theLayer.data());
+//    ImageMapLayer* il = ((ImageMapLayer *)theLayer.data());
 
     actZoom = new QAction(tr("Zoom"), ctxMenu);
     ctxMenu->addAction(actZoom);
@@ -467,6 +469,15 @@ void ImageLayerWidget::initActions()
         associatedMenu->addAction(actShape);
     }
 
+    connect(ctxMenu, SIGNAL(triggered(QAction*)), this, SLOT(setBackground(QAction*)));
+}
+
+void ImageLayerWidget::showContextMenu(QContextMenuEvent* anEvent)
+{
+    foreach (QAction* a, plugActions)
+        delete a;
+    plugActions.clear();
+
     QMapIterator <QUuid, IMapAdapter *> it(M_PREFS->getBackgroundPlugins());
     while (it.hasNext()) {
         it.next();
@@ -476,15 +487,17 @@ void ImageLayerWidget::initActions()
         actBackPlug->setData(QVariant::fromValue(it.key()));
 
         if (it.value()->getMenu()) {
-            actBackPlug->setMenu(it.value()->getMenu());
             disconnect(it.value()->getMenu(), 0, 0, 0);
+            actBackPlug->setMenu(it.value()->getMenu());
             connect(it.value()->getMenu(), SIGNAL(triggered(QAction*)), SLOT(setOther(QAction*)));
         }
 
         ctxMenu->addAction(actBackPlug);
         associatedMenu->addAction(actBackPlug);
+        plugActions << actBackPlug;
     }
-    connect(ctxMenu, SIGNAL(triggered(QAction*)), this, SLOT(setBackground(QAction*)));
+
+    LayerWidget::showContextMenu(anEvent);
 }
 
 // TrackLayerWidget

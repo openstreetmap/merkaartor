@@ -2501,6 +2501,7 @@ void MainWindow::preferencesChanged(void)
             p->theListeningServer = NULL;
         }
     }
+    if (M_PREFS->getProxyUse())
 
     updateStyleMenu();
     updateMenu();
@@ -3055,7 +3056,7 @@ void MainWindow::updateProjectionMenu()
     connect (ui->mnuProjections, SIGNAL(triggered(QAction *)), this, SLOT(projectionTriggered(QAction *)));
 #endif
     ui->mnuProjections->menuAction()->setEnabled(true);
-    if (M_PREFS->getZoomBoris()) {
+    if (M_PREFS->getZoomBoris() && theDocument) {
         ImageMapLayer* l = NULL;
         for (LayerIterator<ImageMapLayer*> ImgIt(theDocument); !ImgIt.isEnd(); ++ImgIt) {
             l = ImgIt.get();

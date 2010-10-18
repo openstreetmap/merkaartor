@@ -9,7 +9,7 @@ HEADERS += \
            QMapControl/tilemapadapter.h
 
 SOURCES += \
-           QMapControl/IImageManager.cpp \
+           IImageManager.cpp \
            QMapControl/imagemanager.cpp \
            QMapControl/mapadapter.cpp \
            QMapControl/mapnetwork.cpp \

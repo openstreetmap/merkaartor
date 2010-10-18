@@ -229,7 +229,6 @@ MerkaartorPreferences::MerkaartorPreferences()
 
     theToolList = new ToolList();
 
-
     connect(&httpRequest, SIGNAL(responseHeaderReceived(const QHttpResponseHeader &)), this, SLOT(on_responseHeaderReceived(const QHttpResponseHeader &)));
     connect(&httpRequest,SIGNAL(requestFinished(int, bool)),this,SLOT(on_requestFinished(int, bool)));
 
@@ -602,8 +601,13 @@ void MerkaartorPreferences::initialize()
             setProxyPort(p);
         }
     }
+    // Set global proxy
+    QNetworkProxy::setApplicationProxy(getProxy(QUrl("http://merkaartor.be")));
 
     parentDashes << 1 << 5;
+
+    //Ensure we have a CacheDir value in QSettings
+    Sets->setValue("backgroundImage/CacheDir", Sets->value("backgroundImage/CacheDir", HOMEDIR + "/BackgroundCache"));
 }
 
 const QVector<qreal> MerkaartorPreferences::getParentDashes() const

@@ -138,6 +138,7 @@ BrowserImageManager::BrowserImageManager(QObject* parent)
     }
 
     page = new BrowserWebPage();
+    page->setNetworkAccessManager(m_networkManager);
     page->setViewportSize(QSize(1024, 1024));
 
     connect(page, SIGNAL(loadFinished(bool)), this, SLOT(pageLoadFinished(bool)));
@@ -248,10 +249,10 @@ void BrowserImageManager::pageLoadFinished(bool ok)
         page->mainFrame()->render(&P, QRegion(0,0,page->sw,page->sh));
         P.end();
 
-        if (page->sw != BROWSER_TILE_SIZE || page->sh != BROWSER_TILE_SIZE) {
-            QPixmap tmpPx = pt.scaled(QSize(BROWSER_TILE_SIZE, BROWSER_TILE_SIZE));
-            pt = tmpPx;
-        }
+//        if (page->sw != BROWSER_TILE_SIZE || page->sh != BROWSER_TILE_SIZE) {
+//            QPixmap tmpPx = pt.scaled(QSize(BROWSER_TILE_SIZE, BROWSER_TILE_SIZE));
+//            pt = tmpPx;
+//        }
 
         receivedImage(pt, R.hash);
     } else {
@@ -280,7 +281,7 @@ QPixmap BrowserImageManager::prefetchImage(IMapAdapter* anAdapter, int x, int y,
 {
     QString host = anAdapter->getHost();
     QString url = anAdapter->getQuery(x, y, z);
-    QString strHash = QString("%1;%2;%3;%4;%5").arg(anAdapter->getName()).arg(QString::number(x)).arg(QString::number(y)).arg(QString::number(z)).arg(anAdapter->getTileSize());
+    QString strHash = QString("%1;%2;%3;%4;%5").arg(anAdapter->getName()).arg(QString::number(x)).arg(QString::number(y)).arg(QString::number(z)).arg(anAdapter->getTileSizeW());
     QString hash = QString(strHash.toAscii().toBase64());
 
     prefetch.append(hash);
@@ -368,3 +369,27 @@ void BrowserImageManager::timeout()
     pageLoadFinished(false);
 }
 #endif // BROWSERIMAGEMANAGER_IS_THREADED
+
+void BrowserImageManager::setCacheDir(const QDir& path)
+{
+    cacheDir = path;
+    cacheSize = 0;
+    if (!cacheDir.exists()) {
+        cacheDir.mkpath(cacheDir.absolutePath());
+    } else {
+        cacheInfo = cacheDir.entryInfoList(QDir::Files, QDir::Time | QDir::Reversed);
+        for (int i=0; i<cacheInfo.size(); i++) {
+            cacheSize += cacheInfo[i].size();
+        }
+    }
+}
+
+QDir BrowserImageManager::getCacheDir()
+{
+    return cacheDir;
+}
+
+void BrowserImageManager::setCacheMaxSize(int max)
+{
+    cacheMaxSize = max*1024*1024;
+}

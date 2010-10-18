@@ -74,6 +74,10 @@ class ImageManager : public QObject, public IImageManager
          */
         void abortLoading();
 
+        void setCacheDir(const QDir& path);
+        QDir getCacheDir();
+        void setCacheMaxSize(int max);
+
     private:
         QPixmap emptyPixmap;
         MapNetwork* net;

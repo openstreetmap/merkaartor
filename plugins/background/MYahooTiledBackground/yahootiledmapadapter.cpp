@@ -127,7 +127,12 @@ QString YahooTiledMapAdapter::getQ(QPointF ul, QPointF br) const
 
 //*********** mapadapter
 
-int YahooTiledMapAdapter::getTileSize() const
+int YahooTiledMapAdapter::getTileSizeW() const
+{
+    return tilesize;
+}
+
+int YahooTiledMapAdapter::getTileSizeH() const
 {
     return tilesize;
 }

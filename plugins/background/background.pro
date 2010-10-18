@@ -4,7 +4,7 @@ TEMPLATE = subdirs
     SUBDIRS += \
         # MArbitraryRasterMapBackground \
         # MNavitBackground \
-        # MCadastreFranceBackground \
+        MCadastreFranceBackground \
         MYahooTiledBackground \
         MYahooBackground \
         MWalkingPapersBackground

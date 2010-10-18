@@ -31,46 +31,46 @@
 
 #include "IImageManager.h"
 /**
-	@author Kai Winter <kaiwinter@gmx.de>
+    @author Kai Winter <kaiwinter@gmx.de>
 */
 class ImageManager;
 class MapNetwork : QObject
 {
-	Q_OBJECT
-	public:
-		MapNetwork(IImageManager* parent);
-		~MapNetwork();
+    Q_OBJECT
+    public:
+        MapNetwork(IImageManager* parent);
+        ~MapNetwork();
 
-		void loadImage(const QString& hash, const QString& host, const QString& url);
+        void loadImage(const QString& hash, const QString& host, const QString& url);
 
-		/*!
-		 * checks if the given url is already loading
-		 * @param url the url of the image
-		 * @return boolean, if the image is already loading
-		 */
-		bool imageIsLoading(QString hash);
+        /*!
+         * checks if the given url is already loading
+         * @param url the url of the image
+         * @return boolean, if the image is already loading
+         */
+        bool imageIsLoading(QString hash);
 
-		/*!
-		 * Aborts all current loading threads.
-		 * This is useful when changing the zoom-factor, though newly needed images loads faster
- 		*/
-		void abortLoading();
+        /*!
+         * Aborts all current loading threads.
+         * This is useful when changing the zoom-factor, though newly needed images loads faster
+        */
+        void abortLoading();
 
-	private:
-		IImageManager* parent;
-		QHttp* http;
-		QMap<int, QString> loadingMap;
-		QQueue<LoadingRequest*> loadingRequests;
-		double loaded;
-		QMutex vectorMutex;
-		MapNetwork& operator=(const MapNetwork& rhs);
-		MapNetwork(const MapNetwork& old);
-		void launchRequest();
-		void launchRequest(QUrl url, QString hash);
+    private:
+        IImageManager* parent;
+        QNetworkAccessManager* m_networkManager;
+        QMap<QNetworkReply*, QString> loadingMap;
+        QQueue<LoadingRequest*> loadingRequests;
+        double loaded;
+        QMutex vectorMutex;
+        MapNetwork& operator=(const MapNetwork& rhs);
+        MapNetwork(const MapNetwork& old);
+        void launchRequest();
+        void launchRequest(QUrl url, QString hash);
 
 
-	private slots:
-		void requestFinished(int id, bool error);
+    private slots:
+        void requestFinished(QNetworkReply* reply);
 };
 
 #endif

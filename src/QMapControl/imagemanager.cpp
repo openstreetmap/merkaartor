@@ -126,7 +126,7 @@ void ImageManager::receivedImage(const QPixmap& pixmap, const QString& hash)
         QPixmapCache::insert(hash, pm);
     } else {
         QPixmapCache::insert(hash, pixmap);
-        if (cacheMaxSize) {
+        if (cacheMaxSize || cachePermanent) {
             pixmap.save(cacheDir.absolutePath() + "/" + hash + ".png");
             QFileInfo info(cacheDir.absolutePath() + "/" + hash + ".png");
             cacheInfo.append(info);
@@ -155,4 +155,28 @@ void ImageManager::abortLoading()
 {
     net->abortLoading();
     loadingQueueEmpty();
+}
+
+void ImageManager::setCacheDir(const QDir& path)
+{
+    cacheDir = path;
+    cacheSize = 0;
+    if (!cacheDir.exists()) {
+        cacheDir.mkpath(cacheDir.absolutePath());
+    } else {
+        cacheInfo = cacheDir.entryInfoList(QDir::Files, QDir::Time | QDir::Reversed);
+        for (int i=0; i<cacheInfo.size(); i++) {
+            cacheSize += cacheInfo[i].size();
+        }
+    }
+}
+
+QDir ImageManager::getCacheDir()
+{
+    return cacheDir;
+}
+
+void ImageManager::setCacheMaxSize(int max)
+{
+    cacheMaxSize = max*1024*1024;
 }

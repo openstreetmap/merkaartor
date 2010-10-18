@@ -55,7 +55,12 @@ QRectF	WmscMapAdapter::getBoundingbox() const
     return theServer.WmsCLayer.BoundingBox;
 }
 
-int WmscMapAdapter::getTileSize() const
+int WmscMapAdapter::getTileSizeW() const
+{
+    return tilesize;
+}
+
+int WmscMapAdapter::getTileSizeH() const
 {
     return tilesize;
 }
@@ -78,8 +83,8 @@ QString WmscMapAdapter::getQuery(int i, int j, int /* z */) const
     qreal tileWidth = getBoundingbox().width() / getTilesWE(current_zoom);
     qreal tileHeight = getBoundingbox().height() / getTilesNS(current_zoom);
 
-    QPointF ul = QPointF(i*tileWidth+theServer.WmsCLayer.BoundingBox.topLeft().x(), -theServer.WmsCLayer.BoundingBox.topLeft().y()-j*tileHeight);
-    QPointF br = QPointF((i+1)*tileWidth+theServer.WmsCLayer.BoundingBox.topLeft().x(), -theServer.WmsCLayer.BoundingBox.topLeft().y()- (j+1)*tileHeight);
+    QPointF ul = QPointF(i*tileWidth+getBoundingbox().topLeft().x(), getBoundingbox().bottomLeft().y()-j*tileHeight);
+    QPointF br = QPointF((i+1)*tileWidth+getBoundingbox().topLeft().x(), getBoundingbox().bottomLeft().y()- (j+1)*tileHeight);
 
     QUrl theUrl(theServer.WmsPath);
     if (!theUrl.hasQueryItem("VERSION"))
@@ -93,8 +98,8 @@ QString WmscMapAdapter::getQuery(int i, int j, int /* z */) const
     theUrl.addQueryItem("SRS", theServer.WmsProjections);
     theUrl.addQueryItem("STYLES", theServer.WmsStyles);
     theUrl.addQueryItem("FORMAT", theServer.WmsImgFormat);
-    theUrl.addQueryItem("WIDTH", QString::number(tilesize));
-    theUrl.addQueryItem("HEIGHT", QString::number(tilesize));
+    theUrl.addQueryItem("WIDTH", QString::number(getTileSizeW()));
+    theUrl.addQueryItem("HEIGHT", QString::number(getTileSizeH()));
     theUrl.addQueryItem("BBOX", QString()
                         .append(loc.toString(ul.x(),'f',6)).append(",")
                         .append(loc.toString(br.y(),'f',6)).append(",")
@@ -133,8 +138,11 @@ QString WmscMapAdapter::getQuery(int i, int j, int /* z */) const
 
 bool WmscMapAdapter::isValid(int x, int y, int z) const
 {
-    if ((x<0) || (x>getTilesWE(z)) ||
-            (y<0) || (y>getTilesNS(z)))
+    // Origin is bottom-left
+    y = getTilesNS(current_zoom)-1 - y;
+
+    if ((x<0) || (x>=getTilesWE(z)) ||
+            (y<0) || (y>=getTilesNS(z)))
     {
         return false;
     }
@@ -144,14 +152,14 @@ bool WmscMapAdapter::isValid(int x, int y, int z) const
 
 int WmscMapAdapter::getTilesWE(int zoomlevel) const
 {
-    qreal unitPerTile = theServer.WmsCLayer.Resolutions[zoomlevel] * tilesize; // Size of 1 tile in projected units
-    return qRound(theServer.WmsCLayer.BoundingBox.width() / unitPerTile);
+    qreal unitPerTile = theServer.WmsCLayer.Resolutions[zoomlevel] * getTileSizeW(); // Size of 1 tile in projected units
+    return qRound(getBoundingbox().width() / unitPerTile);
 }
 
 int WmscMapAdapter::getTilesNS(int zoomlevel) const
 {
-    qreal unitPerTile = theServer.WmsCLayer.Resolutions[zoomlevel] * tilesize; // Size of 1 tile in projected units
-    return qRound(theServer.WmsCLayer.BoundingBox.height() / unitPerTile);
+    qreal unitPerTile = theServer.WmsCLayer.Resolutions[zoomlevel] * getTileSizeH(); // Size of 1 tile in projected units
+    return qRound(getBoundingbox().height() / unitPerTile);
 }
 
 QString WmscMapAdapter::getSourceTag() const
