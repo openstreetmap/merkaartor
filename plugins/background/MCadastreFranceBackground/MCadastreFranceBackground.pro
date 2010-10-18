@@ -1,5 +1,6 @@
 include(../../common.pri)
 include(../common.pri)
+include(qadastre.pri)
 
 TARGET = $$qtLibraryTarget(MYahooBackgroundPlugin)
 DEPENDPATH += $${MERKAARTOR_SRC_DIR}/interfaces
