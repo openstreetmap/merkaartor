@@ -33,7 +33,7 @@ contains(RELEASE,1) {
     }
 }
 
-win32 {
+win32|macx {
     system(echo $${LITERAL_HASH}define SVNREV $${SVNREV} > revision.h )
 } else {
     system('echo -n "$${LITERAL_HASH}define SVNREV $${SVNREV}" > revision.h')
