@@ -56,11 +56,6 @@ void CadastreBrowser::on_actionLoad_triggered()
     SearchDialog *dial = new SearchDialog(this);
     dial->setModal(true);
     if (dial->exec()) {
-        QProgressDialog *pDial = new QProgressDialog(this);
-        pDial->setMaximum(0);
-        pDial->setMinimum(0);
-        pDial->setValue(0);
-        pDial->show();
         QString code = dial->cityCode();
         qDebug() << code;
         City my_city = CadastreWrapper::instance()->requestCity(code);
@@ -78,8 +73,6 @@ void CadastreBrowser::on_actionLoad_triggered()
                 m_scene.addItem(tile);
             }
         }
-        pDial->hide();
-        pDial->deleteLater();
     }
 }
 

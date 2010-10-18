@@ -21,6 +21,7 @@
 #include <QObject>
 #include <QNetworkAccessManager>
 #include <QMap>
+#include <QProgressDialog>
 #include "city.h"
 
 class CadastreWrapper : public QObject
@@ -52,6 +53,7 @@ private:
     QMap<QString, QRect> m_waitingTiles;
     // reply ==> filename
     QMap<QNetworkReply*, QString> m_pendingTiles;
+    QProgressDialog *m_progress;
 };
 
 #endif // CADASTREWRAPPER_H
