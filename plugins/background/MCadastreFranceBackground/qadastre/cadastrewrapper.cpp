@@ -138,7 +138,7 @@ void CadastreWrapper::networkFinished(QNetworkReply *reply)
         m_pendingTiles.remove(reply);
         if (m_progress) {
             m_progress->setValue(m_progress->value()+1);
-            m_progress->setLabelText(tr("Downloading: %2/%3").arg(m_progress->value()).arg(m_progress->maximum()));
+            m_progress->setLabelText(tr("Downloaded: %2/%3").arg(m_progress->value()).arg(m_progress->maximum()));
         }
     } else if (reply->url() == QUrl("http://www.cadastre.gouv.fr/scpc/accueil.do")) {
         qDebug() << "Ok, I've got a cookie... I LOVE COOKIES.";
