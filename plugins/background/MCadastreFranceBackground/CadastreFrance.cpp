@@ -48,7 +48,7 @@ QUuid CadastreFranceAdapter::getId() const
 
 IMapAdapter::Type CadastreFranceAdapter::getType() const
 {
-    return IMapAdapter::NetworkBackground;
+    return IMapAdapter::DirectBackground;
 }
 
 QString	CadastreFranceAdapter::getName() const

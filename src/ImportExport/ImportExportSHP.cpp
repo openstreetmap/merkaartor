@@ -129,6 +129,7 @@ Feature* ImportExportSHP::parseGeometry(Layer* aLayer, OGRGeometry *poGeometry)
                 if (!aLayer->exists(outer))
                     aLayer->add(outer);
                 Relation* rel = new Relation;
+                aLayer->add(rel);
                 rel->setTag("type", "multipolygon");
                 rel->add("outer", outer);
                 for (int i=0;  i<numHoles;  i++) {

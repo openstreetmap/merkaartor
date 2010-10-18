@@ -189,8 +189,8 @@ Feature* parsePoint(QDomElement& e, Layer* aLayer)
             Coord p(angToCoord(lat), angToCoord(lon));
 
             P = new Node(p);
-            P->setTag("%kml:guid", kmlId);
             aLayer->add(P);
+            P->setTag("%kml:guid", kmlId);
         }
 
         c = c.nextSiblingElement();

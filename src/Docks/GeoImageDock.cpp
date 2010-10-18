@@ -381,8 +381,11 @@ void GeoImageDock::loadImage(QString file, Coord pos)
             break;
         else
             Pt = 0;
-    if (!Pt)
+    if (!Pt) {
         Pt = new Node(pos);
+        theLayer->add(Pt);
+        theLayer->indexAdd(Pt->boundingBox(), Pt);
+    }
 
     QDateTime time = QFileInfo(file).created();
 
@@ -390,11 +393,6 @@ void GeoImageDock::loadImage(QString file, Coord pos)
     Pt->setTag("_picture_", "GeoTagged");
     Pt->setPhoto(QPixmap(file));
     addUsedTrackpoint(NodeData(Pt, file, time, i == theLayer->size()));
-    if (i == theLayer->size()) {
-        theLayer->add(Pt);
-        theLayer->indexAdd(Pt->boundingBox(), Pt);
-    }
-
 }
 
 void GeoImageDock::loadImages(QStringList fileNames)
