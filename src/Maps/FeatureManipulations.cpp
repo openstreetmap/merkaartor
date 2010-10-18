@@ -419,8 +419,8 @@ static void splitRoad(Document* theDocument, CommandList* theList, Way* In, cons
         if (std::find(Points.begin(),Points.end(),FirstPart->get(i)) != Points.end())
         {
             Way* NextPart = new Way;
-            copyTags(NextPart,FirstPart);
             theList->add(new AddFeatureCommand(theDocument->getDirtyOrOriginLayer(In->layer()),NextPart,true));
+            copyTags(NextPart,FirstPart);
             theList->add(new WayAddNodeCommand(NextPart, FirstPart->getNode(i), theDocument->getDirtyOrOriginLayer(In->layer())));
             while ( (i+1) < FirstPart->size() )
             {
