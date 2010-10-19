@@ -141,11 +141,11 @@ void LayerWidget::showContextMenu(QContextMenuEvent* anEvent)
 
     if (ctxMenu) {
         if (actZoom) {
-            actZoom->setVisible(true);
+            actZoom->setEnabled(true);
             ImageMapLayer* il = dynamic_cast<ImageMapLayer *>(theLayer.data());
             if (il) {
                 if (!il->getMapAdapter() || il->getMapAdapter()->getBoundingbox().isNull())
-                    actZoom->setVisible(false);
+                    actZoom->setEnabled(false);
             } else
                 actZoom->setEnabled(theLayer->size());
         }
@@ -394,12 +394,11 @@ void ImageLayerWidget::initActions()
 
     LayerWidget::initActions();
     ImageMapLayer* il = ((ImageMapLayer *)theLayer.data());
-    if (il && !il->boundingBox().isNull()) {
-        actZoom = new QAction(tr("Zoom"), ctxMenu);
-        ctxMenu->addAction(actZoom);
-        associatedMenu->addAction(actZoom);
-        connect(actZoom, SIGNAL(triggered(bool)), this, SLOT(zoomLayer(bool)));
-    }
+
+    actZoom = new QAction(tr("Zoom"), ctxMenu);
+    ctxMenu->addAction(actZoom);
+    associatedMenu->addAction(actZoom);
+    connect(actZoom, SIGNAL(triggered(bool)), this, SLOT(zoomLayer(bool)));
 
     actReadonly->setVisible(false);
 

@@ -78,9 +78,9 @@ bool GdalAdapter::loadImage(const QString& fn)
             theSrs->morphFromESRI();
             char* theProj4;
             if (theSrs->exportToProj4(&theProj4) == OGRERR_NONE) {
-                qDebug() << "SHP: to proj4 : " << theProj4;
+                qDebug() << "GDAL: to proj4 : " << theProj4;
             } else {
-                qDebug() << "SHP: to proj4 error: " << CPLGetLastErrorMsg();
+                qDebug() << "GDAL: to proj4 error: " << CPLGetLastErrorMsg();
                 return false;
             }
             theProjection = QString(theProj4);

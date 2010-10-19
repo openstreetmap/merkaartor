@@ -424,14 +424,16 @@ bool Projection::setProjectionType(QString aProjectionType)
             p->projType = "EPSG:3857";
             p->IsMercator = true;
             return false;
-        } else
-#ifdef USE_PROJ
-            if (pj_is_latlong(theProj))
-#else
-            if (theProj->params().is_latlong)
-#endif
-                p->projType = "EPSG:43263857";
-                p->IsLatLong = true;
+        }
+//        else {
+//#ifdef USE_PROJ
+//            if (pj_is_latlong(theProj))
+//#else
+//            if (theProj->params().is_latlong)
+//#endif
+//                p->projType = "EPSG:4326";
+//                p->IsLatLong = true;
+//        }
     } catch (...) {
         return false;
     }
