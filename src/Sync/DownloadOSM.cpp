@@ -56,12 +56,13 @@ void Downloader::animate()
 
 void Downloader::setAnimator(QProgressDialog *anAnimator, QLabel* anAnimatorLabel, QProgressBar* anAnimatorBar, bool anAnimate)
 {
+    if (AnimationTimer)
+        delete AnimationTimer;
+
     AnimatorLabel = anAnimatorLabel;
     AnimatorBar = anAnimatorBar;
     if (AnimatorBar && anAnimate)
     {
-        if (AnimationTimer)
-            delete AnimationTimer;
         AnimationTimer = new QTimer(this);
         connect(AnimationTimer,SIGNAL(timeout()),this,SLOT(animate()));
     }

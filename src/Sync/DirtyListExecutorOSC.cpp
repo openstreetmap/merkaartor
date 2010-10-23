@@ -295,6 +295,7 @@ bool DirtyListExecutorOSC::stop()
 
     URL = theDownloader->getURLToCloseChangeSet(ChangeSetId);
     QUrl theUrl(Web+URL);
+    theDownloader->setAnimator(NULL, NULL, NULL, false);
     theDownloader->request("PUT",theUrl,DataIn, true);
 
     return true;
