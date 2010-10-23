@@ -32,7 +32,9 @@ class CadastreWrapper : public QObject
 {
 Q_OBJECT
 public:
+    explicit CadastreWrapper(QObject *parent = 0);
     static CadastreWrapper *instance();
+
     void search (const QString &city, const QString &department);
     bool ready() { return m_gotCookie; }
     City requestCity (const QString &code);
@@ -51,9 +53,6 @@ private slots:
     void networkFinished(QNetworkReply *reply);
 
 private:
-
-    explicit CadastreWrapper(QObject *parent = 0);
-
     static CadastreWrapper *m_instance;
 
     QNetworkAccessManager *m_networkManager;

@@ -128,6 +128,14 @@ void CadastreFranceAdapter::updateMenu()
     }
 }
 
+void CadastreFranceAdapter::initializeCity(QString name)
+{
+    connect(CadastreWrapper::instance(), SIGNAL(resultsAvailable(QMap<QString,QString>)), this, SLOT(resultsAvailable(QMap<QString,QString>)));
+    QString ville = name.left(name.lastIndexOf('(')-1);
+    QString department = QString("%1").arg(name.mid(name.lastIndexOf('(')+1, 2).toInt(), 3, 10, QChar('0'));
+    CadastreWrapper::instance()->search(ville, department);
+}
+
 void CadastreFranceAdapter::cityTriggered(QAction *act)
 {
     QString name = act->text();
@@ -137,20 +145,7 @@ void CadastreFranceAdapter::cityTriggered(QAction *act)
     if (!theImageManager)
         return;
     m_city = City();
-
-//    QSettings sets(dir.absoluteFilePath("cache.ini"), QSettings::IniFormat);
-//    if (!sets.value("complete").toBool()) {
-        connect(CadastreWrapper::instance(), SIGNAL(resultsAvailable(QMap<QString,QString>)), this, SLOT(resultsAvailable(QMap<QString,QString>)));
-        QString ville = name.left(name.lastIndexOf('(')-1);
-        QString department = QString("%1").arg(name.mid(name.lastIndexOf('(')+1, 2).toInt(), 3, 10, QChar('0'));
-        CadastreWrapper::instance()->search(ville, department);
-//    } else {
-//        m_city = City(m_code);
-//        m_city.setName(sets.value("name").toString());
-//        m_city.setDepartement((sets.value("department").toString()));
-//        m_city.setGeometry(sets.value("geometry").toRect());
-//        m_city.setProjection(sets.value("projection").toString());
-//    }
+    initializeCity(name);
 }
 
 void CadastreFranceAdapter::resultsAvailable(QMap<QString, QString> results)
@@ -171,24 +166,17 @@ void CadastreFranceAdapter::onGrabCity()
     if (!theImageManager)
         return;
     m_city = City();
+    disconnect(CadastreWrapper::instance(), SIGNAL(resultsAvailable(QMap<QString,QString>)), this, SLOT(resultsAvailable(QMap<QString,QString>)));
 
     SearchDialog *dial = new SearchDialog();
+    dial->cadastre->setRootCacheDir(QDir(theSettings->value("backgroundImage/CacheDir").toString()));
     dial->setModal(true);
     if (dial->exec()) {
-        QString code = dial->cityCode();
-        qDebug() << code;
-        m_city = CadastreWrapper::instance()->requestCity(code);
-        qDebug() << m_city.code();
-        qDebug() << m_city.name();
-        qDebug() << m_city.geometry();
-//        CadastreWrapper::instance()->downloadTiles(m_city);
-
-        QDir dir = CadastreWrapper::instance()->getCacheDir();
-        Q_ASSERT(dir.cd(m_city.code()));
-        if (theImageManager)
-            theImageManager->setCacheDir(dir);
+        QString name = dial->cityName();
+        if (!name.isEmpty())
+            initializeCity(name);
     }
-//    updateMenu();
+    updateMenu();
 }
 
 bool CadastreFranceAdapter::isValid(int x, int y, int z) const

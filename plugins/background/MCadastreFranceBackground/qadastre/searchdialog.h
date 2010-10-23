@@ -22,6 +22,8 @@
 #include <QDialog>
 #include <QMap>
 
+class CadastreWrapper;
+
 namespace Ui {
     class SearchDialog;
 }
@@ -33,6 +35,10 @@ public:
     ~SearchDialog();
 
     QString cityCode();
+    QString cityName();
+
+public:
+    CadastreWrapper *cadastre;
 
 protected:
     void changeEvent(QEvent *e);

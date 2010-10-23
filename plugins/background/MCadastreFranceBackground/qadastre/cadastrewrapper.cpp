@@ -45,6 +45,9 @@ CadastreWrapper *CadastreWrapper::instance()
 CadastreWrapper::CadastreWrapper(QObject *parent) :
     QObject(parent), m_gotCookie(false)
 {
+    m_networkManager = new QNetworkAccessManager(this);
+    connect(m_networkManager, SIGNAL(finished(QNetworkReply*)), this, SLOT(networkFinished(QNetworkReply*)));
+    m_networkManager->get(QNetworkRequest(QUrl("http://www.cadastre.gouv.fr/scpc/accueil.do")));
     setRootCacheDir(QDesktopServices::storageLocation(QDesktopServices::DataLocation));
 }
 
@@ -237,7 +240,6 @@ void CadastreWrapper::networkFinished(QNetworkReply *reply)
         QString pageData = reply->readAll();
         if (pageData.isEmpty())
             return;
-        qDebug() << pageData;
         QString name, code, projection;
         code = reply->url().queryItemValue("c");
         qDebug() << code;

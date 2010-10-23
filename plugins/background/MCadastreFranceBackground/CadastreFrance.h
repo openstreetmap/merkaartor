@@ -152,6 +152,9 @@ private:
     QString m_code;
     City m_city;
 
+private:
+    void initializeCity(QString name);
+
 protected:
     void updateMenu();
 };
