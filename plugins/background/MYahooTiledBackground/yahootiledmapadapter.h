@@ -20,6 +20,7 @@
 #ifndef YAHOOTILEDMAPADAPTER_H
 #define YAHOOTILEDMAPADAPTER_H
 
+#include "IMapAdapterFactory.h"
 #include "IMapAdapter.h"
 
 #include <QLocale>
@@ -29,7 +30,7 @@
  * Use this derived MapAdapter to display maps from WMS servers
  *	@author Kai Winter <kaiwinter@gmx.de>
 */
-class YahooTiledMapAdapter : public QObject, public IMapAdapter
+class YahooTiledMapAdapter : public IMapAdapter
 {
     Q_OBJECT
     Q_INTERFACES(IMapAdapter)
@@ -41,7 +42,6 @@ public:
      */
     YahooTiledMapAdapter();
     virtual ~YahooTiledMapAdapter();
-
 
     //! returns the unique identifier (Uuid) of this MapAdapter
     /*!
@@ -148,6 +148,31 @@ private:
     int current_zoom;
 
     virtual QString getQ(QPointF ul, QPointF br) const;
+};
+
+class YahooTiledMapAdapterFactory : public QObject, public IMapAdapterFactory
+{
+    Q_OBJECT
+    Q_INTERFACES(IMapAdapterFactory)
+
+public:
+    //! Creates an instance of the actual plugin
+    /*!
+     * @return  a pointer to the MapAdapter
+     */
+    IMapAdapter* CreateInstance() {return new YahooTiledMapAdapter(); }
+
+    //! returns the unique identifier (Uuid) of this MapAdapter
+    /*!
+     * @return  the unique identifier (Uuid) of this MapAdapter
+     */
+    virtual QUuid	getId		() const;
+
+    //! returns the name of this MapAdapter
+    /*!
+     * @return  the name of this MapAdapter
+     */
+    virtual QString	getName		() const;
 };
 
 #endif

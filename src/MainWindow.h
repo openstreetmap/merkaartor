@@ -46,6 +46,8 @@ public:
     virtual ~MainWindow();
 
 public slots:
+    void invalidateView(bool UpdateDock = true);
+
     virtual void on_createRoundaboutAction_triggered();
     virtual void on_createPolygonAction_triggered();
     virtual void on_createRectangleAction_triggered();
@@ -234,7 +236,6 @@ public slots:
     void applyStyles(QList<Painter>* thePainters);
 
 public:
-    void invalidateView(bool UpdateDock = true);
     bool importFiles(Document * mapDocument, const QStringList & filesNames, QStringList * importedFileNames = NULL);
     void loadFiles(const QStringList & fileNames);
     void loadUrl(const QUrl& u);

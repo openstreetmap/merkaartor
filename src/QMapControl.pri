@@ -1,6 +1,5 @@
 # Input
 HEADERS += \
-           IImageManager.h \
            QMapControl/imagemanager.h \
            QMapControl/mapadapter.h \
            QMapControl/mapnetwork.h \

@@ -21,7 +21,7 @@
 #include <ui_MainWindow.h>
 #include "MapView.h"
 
-#include "IMapAdapter.h"
+#include "IMapAdapterFactory.h"
 #include "PaintStyle/IPaintStyle.h"
 #include "PaintStyle/MasPaintStyle.h"
 
@@ -725,18 +725,12 @@ void MerkaartorPreferences::setBgVisible(bool theValue)
 
 /* Plugins */
 
-void MerkaartorPreferences::addBackgroundPlugin(IMapAdapter* aPlugin)
+void MerkaartorPreferences::addBackgroundPlugin(IMapAdapterFactory* aPlugin)
 {
     mBackgroundPlugins.insert(aPlugin->getId(), aPlugin);
 }
 
-void MerkaartorPreferences::cleanupBackgroundPlugins()
-{
-    foreach(IMapAdapter* adapter, mBackgroundPlugins)
-        adapter->cleanup();
-}
-
-IMapAdapter* MerkaartorPreferences::getBackgroundPlugin(const QUuid& anAdapterUid)
+IMapAdapterFactory* MerkaartorPreferences::getBackgroundPlugin(const QUuid& anAdapterUid)
 {
     if (mBackgroundPlugins.contains(anAdapterUid))
         return mBackgroundPlugins[anAdapterUid];
@@ -759,7 +753,7 @@ QUuid MerkaartorPreferences::getBackgroundPlugin() const
     return QUuid(s);
 }
 
-QMap<QUuid, IMapAdapter *> MerkaartorPreferences::getBackgroundPlugins()
+QMap<QUuid, IMapAdapterFactory *> MerkaartorPreferences::getBackgroundPlugins()
 {
     return mBackgroundPlugins;
 }

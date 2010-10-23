@@ -6,6 +6,7 @@
 #include "Layer.h"
 #include "Preferences/MerkaartorPreferences.h"
 
+#include "IMapAdapterFactory.h"
 #include "IMapAdapter.h"
 
 #include <QApplication>
@@ -139,20 +140,15 @@ void LayerWidget::showContextMenu(QContextMenuEvent* anEvent)
 {
     //initActions();
 
-    if (ctxMenu) {
-        if (actZoom) {
-            actZoom->setEnabled(true);
-            ImageMapLayer* il = dynamic_cast<ImageMapLayer *>(theLayer.data());
-            if (il) {
-                if (!il->getMapAdapter() || il->getMapAdapter()->getBoundingbox().isNull())
-                    actZoom->setEnabled(false);
-            } else
-                actZoom->setEnabled(theLayer->size());
-        }
-        if (closeAction)
-            closeAction->setEnabled(theLayer->canDelete());
-        ctxMenu->exec(anEvent->globalPos());
+    if (!ctxMenu)
+        return;
+
+    if (actZoom) {
+        actZoom->setEnabled(theLayer->size());
     }
+    if (closeAction)
+        closeAction->setEnabled(theLayer->canDelete());
+    ctxMenu->exec(anEvent->globalPos());
 }
 
 #define NUMOP 3
@@ -226,7 +222,7 @@ void LayerWidget::clear()
     emit(layerCleared(theLayer));
 }
 
-void LayerWidget::zoomLayer(bool)
+void LayerWidget::zoomLayer()
 {
     emit (layerZoom(theLayer));
 }
@@ -296,7 +292,7 @@ void DrawingLayerWidget::initActions()
     actZoom = new QAction(tr("Zoom"), ctxMenu);
     ctxMenu->addAction(actZoom);
     associatedMenu->addAction(actZoom);
-    connect(actZoom, SIGNAL(triggered(bool)), this, SLOT(zoomLayer(bool)));
+    connect(actZoom, SIGNAL(triggered(bool)), this, SLOT(zoomLayer()));
 
     closeAction = new QAction(tr("Close"), this);
     connect(closeAction, SIGNAL(triggered()), this, SLOT(close()));
@@ -355,20 +351,7 @@ void ImageLayerWidget::setTms(QAction* act)
     emit (layerChanged(this, true));
 }
 
-void ImageLayerWidget::setOther(QAction* /*act*/)
-{
-    QMenu* menu;
-    Q_ASSERT(menu = qobject_cast<QMenu*>(sender()));
-    QUuid u(menu->menuAction()->data().value<QUuid>());
-
-    ((ImageMapLayer *)theLayer.data())->setMapAdapter(u);
-    theLayer->setVisible(true);
-
-    this->update(rect());
-    emit (layerChanged(this, true));
-}
-
-void ImageLayerWidget::setBackground(QAction* act)
+void ImageLayerWidget::setPlugin(QAction* act)
 {
     QUuid aUuid = act->data().value<QUuid>();
     if (aUuid.isNull())
@@ -400,7 +383,7 @@ void ImageLayerWidget::initActions()
     actZoom = new QAction(tr("Zoom"), ctxMenu);
     ctxMenu->addAction(actZoom);
     associatedMenu->addAction(actZoom);
-    connect(actZoom, SIGNAL(triggered(bool)), this, SLOT(zoomLayer(bool)));
+    connect(actZoom, SIGNAL(triggered(bool)), this, SLOT(zoomLayer()));
 
     actReadonly->setVisible(false);
 
@@ -449,6 +432,25 @@ void ImageLayerWidget::initActions()
         }
     }
 
+    pluginsMenu = new QMenu(tr("Plugins"), this);
+    QMapIterator <QUuid, IMapAdapterFactory *> it(M_PREFS->getBackgroundPlugins());
+    QMap<QString, QUuid> plugins;
+    while (it.hasNext()) {
+        it.next();
+
+        plugins[it.value()->getName()] = it.key();
+    }
+    QMapIterator <QString, QUuid> pluginsIt(plugins);
+    while (pluginsIt.hasNext()) {
+        pluginsIt.next();
+
+        QAction* actBackPlug = new QAction(pluginsIt.key(), this);
+        actBackPlug->setChecked((M_PREFS->getBackgroundPlugin() == pluginsIt.value()));
+        actBackPlug->setData(QVariant::fromValue(pluginsIt.value()));
+
+        pluginsMenu->addAction(actBackPlug);
+    }
+
     actNone->setChecked((M_PREFS->getBackgroundPlugin() == NONE_ADAPTER_UUID));
     if (M_PREFS->getUseShapefileForBackground())
         actShape->setChecked((M_PREFS->getBackgroundPlugin() == SHAPE_ADAPTER_UUID));
@@ -464,40 +466,50 @@ void ImageLayerWidget::initActions()
     associatedMenu->addMenu(tmsMenu);
     connect(tmsMenu, SIGNAL(triggered(QAction*)), this, SLOT(setTms(QAction*)));
 
+    ctxMenu->addMenu(pluginsMenu);
+    associatedMenu->addMenu(pluginsMenu);
+    connect(pluginsMenu, SIGNAL(triggered(QAction*)), this, SLOT(setPlugin(QAction*)));
+
     if (M_PREFS->getUseShapefileForBackground()) {
         ctxMenu->addAction(actShape);
         associatedMenu->addAction(actShape);
     }
-
-    connect(ctxMenu, SIGNAL(triggered(QAction*)), this, SLOT(setBackground(QAction*)));
 }
 
 void ImageLayerWidget::showContextMenu(QContextMenuEvent* anEvent)
 {
-    foreach (QAction* a, plugActions)
-        delete a;
-    plugActions.clear();
+    if (!ctxMenu)
+        return;
 
-    QMapIterator <QUuid, IMapAdapter *> it(M_PREFS->getBackgroundPlugins());
-    while (it.hasNext()) {
-        it.next();
+    ImageMapLayer* theMapLayer = qobject_cast<ImageMapLayer*>(theLayer);
+    QList<QAction*> plugActions;
 
-        QAction* actBackPlug = new QAction(it.value()->getName(), this);
-        actBackPlug->setChecked((M_PREFS->getBackgroundPlugin() == it.key()));
-        actBackPlug->setData(QVariant::fromValue(it.key()));
+    QAction* sep = new QAction(this);
+    sep->setSeparator(true);
 
-        if (it.value()->getMenu()) {
-            disconnect(it.value()->getMenu(), 0, 0, 0);
-            actBackPlug->setMenu(it.value()->getMenu());
-            connect(it.value()->getMenu(), SIGNAL(triggered(QAction*)), SLOT(setOther(QAction*)));
+    actZoom->setEnabled(false);
+    if (theMapLayer && theMapLayer->getMapAdapter()) {
+        if (!theMapLayer->getMapAdapter()->getBoundingbox().isNull())
+            actZoom->setEnabled(true);
+
+        if (theMapLayer->getMapAdapter()->getMenu()) {
+            ctxMenu->addAction(sep);
+            plugActions << sep;
+            foreach (QAction* a, theMapLayer->getMapAdapter()->getMenu()->actions()) {
+                ctxMenu->addAction(a);
+                plugActions << a;
+            }
         }
-
-        ctxMenu->addAction(actBackPlug);
-        associatedMenu->addAction(actBackPlug);
-        plugActions << actBackPlug;
     }
+    closeAction->setEnabled(theLayer->canDelete());
 
-    LayerWidget::showContextMenu(anEvent);
+    ctxMenu->exec(anEvent->globalPos());
+
+    foreach (QAction* a, plugActions) {
+        if (ctxMenu->actions().contains(a))
+            ctxMenu->removeAction(a);
+    }
+    delete sep;
 }
 
 // TrackLayerWidget
@@ -522,7 +534,7 @@ void TrackLayerWidget::initActions()
     actZoom = new QAction(tr("Zoom"), ctxMenu);
     ctxMenu->addAction(actZoom);
     associatedMenu->addAction(actZoom);
-    connect(actZoom, SIGNAL(triggered(bool)), this, SLOT(zoomLayer(bool)));
+    connect(actZoom, SIGNAL(triggered(bool)), this, SLOT(zoomLayer()));
 
     ctxMenu->addSeparator();
     associatedMenu->addSeparator();
@@ -561,7 +573,7 @@ void DirtyLayerWidget::initActions()
     actZoom = new QAction(tr("Zoom"), ctxMenu);
     ctxMenu->addAction(actZoom);
     associatedMenu->addAction(actZoom);
-    connect(actZoom, SIGNAL(triggered(bool)), this, SLOT(zoomLayer(bool)));
+    connect(actZoom, SIGNAL(triggered(bool)), this, SLOT(zoomLayer()));
 }
 
 // UploadLayerWidget
@@ -581,7 +593,7 @@ void UploadedLayerWidget::initActions()
     actZoom = new QAction(tr("Zoom"), ctxMenu);
     ctxMenu->addAction(actZoom);
     associatedMenu->addAction(actZoom);
-    connect(actZoom, SIGNAL(triggered(bool)), this, SLOT(zoomLayer(bool)));
+    connect(actZoom, SIGNAL(triggered(bool)), this, SLOT(zoomLayer()));
 
     closeAction = new QAction(tr("Clear"), this);
     connect(closeAction, SIGNAL(triggered()), this, SLOT(clear()));

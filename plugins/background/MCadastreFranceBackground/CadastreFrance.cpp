@@ -32,9 +32,22 @@
 #include "IImageManager.h"
 
 static const QUuid theUid ( 0x14a9ff26, 0x634e, 0x4406, 0x94, 0xa5, 0x4c, 0x6d, 0x9c, 0xf0, 0xb1, 0x1d);
+static const QString theName("Cadastre (France)");
+
+QUuid CadastreFranceAdapterFactory::getId() const
+{
+    return theUid;
+}
+
+QString	CadastreFranceAdapterFactory::getName() const
+{
+    return theName;
+}
+
+/**************/
 
 CadastreFranceAdapter::CadastreFranceAdapter()
-    : theImageManager(0), theMenu(new QMenu()), theSettings(0)
+    : theImageManager(0), theMenu(0), theSettings(0)
     , current_zoom(0), min_zoom(0), max_zoom(6)
 {
     loc = QLocale(QLocale::English);
@@ -45,6 +58,16 @@ CadastreFranceAdapter::CadastreFranceAdapter()
 
 CadastreFranceAdapter::~CadastreFranceAdapter()
 {
+}
+
+QUuid CadastreFranceAdapter::getId() const
+{
+    return theUid;
+}
+
+QString	CadastreFranceAdapter::getName() const
+{
+    return theName;
 }
 
 void CadastreFranceAdapter::setSettings(QSettings* aSet)
@@ -59,19 +82,9 @@ QString	CadastreFranceAdapter::getHost() const
     return "www.cadastre.gouv.fr";
 }
 
-QUuid CadastreFranceAdapter::getId() const
-{
-    return QUuid(theUid);
-}
-
 IMapAdapter::Type CadastreFranceAdapter::getType() const
 {
     return IMapAdapter::NetworkBackground;
-}
-
-QString	CadastreFranceAdapter::getName() const
-{
-    return "Cadastre (France)";
 }
 
 QString CadastreFranceAdapter::projection() const
@@ -91,8 +104,6 @@ QRectF CadastreFranceAdapter::getBoundingbox() const
 
 QMenu* CadastreFranceAdapter::getMenu() const
 {
-    disconnect(theMenu, 0, this, 0);
-    connect(theMenu, SIGNAL(triggered(QAction*)), SLOT(cityTriggered(QAction*)), Qt::QueuedConnection);
     return theMenu;
 }
 
@@ -110,10 +121,11 @@ void CadastreFranceAdapter::setImageManager(IImageManager* anImageManager)
 
 void CadastreFranceAdapter::updateMenu()
 {
-    theMenu->clear();
+    delete theMenu;
+    theMenu = new QMenu(0);
 
     QAction* grabCity = new QAction(tr("Grab City..."), this);
-    connect(grabCity, SIGNAL(triggered()), SLOT(onGrabCity()), Qt::QueuedConnection);
+    connect(grabCity, SIGNAL(triggered()), SLOT(onGrabCity()));
     theMenu->addAction(grabCity);
 
     theMenu->addSeparator();
@@ -126,6 +138,7 @@ void CadastreFranceAdapter::updateMenu()
         cityAct->setData(fi.fileName());
         theMenu->addAction(cityAct);
     }
+    connect(theMenu, SIGNAL(triggered(QAction*)), SLOT(cityTriggered(QAction*)));
 }
 
 void CadastreFranceAdapter::initializeCity(QString name)
@@ -159,6 +172,10 @@ void CadastreFranceAdapter::resultsAvailable(QMap<QString, QString> results)
     Q_ASSERT(dir.cd(m_city.code()));
     if (theImageManager)
         theImageManager->setCacheDir(dir);
+
+    emit(forceProjection());
+    emit(forceZoom());
+    emit(forceRefresh());
 }
 
 void CadastreFranceAdapter::onGrabCity()
@@ -166,12 +183,12 @@ void CadastreFranceAdapter::onGrabCity()
     if (!theImageManager)
         return;
     m_city = City();
-    disconnect(CadastreWrapper::instance(), SIGNAL(resultsAvailable(QMap<QString,QString>)), this, SLOT(resultsAvailable(QMap<QString,QString>)));
 
     SearchDialog *dial = new SearchDialog();
     dial->cadastre->setRootCacheDir(QDir(theSettings->value("backgroundImage/CacheDir").toString()));
     dial->setModal(true);
     if (dial->exec()) {
+        m_code = dial->cityCode();
         QString name = dial->cityName();
         if (!name.isEmpty())
             initializeCity(name);
@@ -269,6 +286,7 @@ void CadastreFranceAdapter::cleanup()
 
 bool CadastreFranceAdapter::toXML(QDomElement xParent)
 {
+    return true;
 }
 
 void CadastreFranceAdapter::fromXML(const QDomElement xParent)
@@ -277,6 +295,7 @@ void CadastreFranceAdapter::fromXML(const QDomElement xParent)
 
 QString CadastreFranceAdapter::toPropertiesHtml()
 {
+    return "";
 }
 
 bool CadastreFranceAdapter::isTiled() const { return true; }
@@ -343,4 +362,4 @@ int CadastreFranceAdapter::getAdaptedZoom() const
     return max_zoom < min_zoom ? min_zoom - current_zoom : current_zoom - min_zoom;
 }
 
-Q_EXPORT_PLUGIN2(MCadastreFranceBackgroundPlugin, CadastreFranceAdapter)
+Q_EXPORT_PLUGIN2(MCadastreFranceBackgroundPlugin, CadastreFranceAdapterFactory)

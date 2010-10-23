@@ -12,7 +12,7 @@
 #include "proj_api.h"
 #endif
 
-#include "IMapAdapter.h"
+#include "IMapAdapterFactory.h"
 
 #if defined(Q_OS_WIN)
 extern Q_CORE_EXPORT void qWinMsgHandler(QtMsgType t, const char* str);
@@ -226,14 +226,9 @@ int main(int argc, char** argv)
         QPluginLoader loader(pluginsDir.absoluteFilePath(fileName));
         QObject *plugin = loader.instance();
         if (plugin) {
-            IMapAdapter *plg = qobject_cast<IMapAdapter *>(plugin);
-            if (plg) {
-#ifndef USE_WEBKIT
-                if (plg->getType() != IMapAdapter::BrowserBackground)
-#endif
-                    M_PREFS->addBackgroundPlugin(plg);
-                plg->setSettings(M_PREFS->getQSettings());
-            }
+            IMapAdapterFactory *fac = qobject_cast<IMapAdapterFactory *>(plugin);
+            if (fac)
+                M_PREFS->addBackgroundPlugin(fac);
         }
     }
 

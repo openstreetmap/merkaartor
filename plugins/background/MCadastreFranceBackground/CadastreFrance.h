@@ -20,13 +20,14 @@
 #ifndef CADASTREFRANCEADAPTER_H
 #define CADASTREFRANCEADAPTER_H
 
+#include "IMapAdapterFactory.h"
 #include "IMapAdapter.h"
 
 #include <QLocale>
 
 #include "city.h"
 
-class CadastreFranceAdapter : public QObject, public IMapAdapter
+class CadastreFranceAdapter : public IMapAdapter
 {
     Q_OBJECT
     Q_INTERFACES(IMapAdapter)
@@ -35,24 +36,23 @@ public:
     CadastreFranceAdapter();
     virtual ~CadastreFranceAdapter();
 
-
     //! returns the unique identifier (Uuid) of this MapAdapter
     /*!
      * @return  the unique identifier (Uuid) of this MapAdapter
      */
     virtual QUuid	getId		() const;
 
-    //! returns the type of this MapAdapter
-    /*!
-     * @return  the type of this MapAdapter
-     */
-    virtual IMapAdapter::Type	getType		() const;
-
     //! returns the name of this MapAdapter
     /*!
      * @return  the name of this MapAdapter
      */
     virtual QString	getName		() const;
+
+    //! returns the type of this MapAdapter
+    /*!
+     * @return  the type of this MapAdapter
+     */
+    virtual IMapAdapter::Type	getType		() const;
 
     //! returns the host of this MapAdapter
     /*!
@@ -157,6 +157,31 @@ private:
 
 protected:
     void updateMenu();
+};
+
+class CadastreFranceAdapterFactory : public QObject, public IMapAdapterFactory
+{
+    Q_OBJECT
+    Q_INTERFACES(IMapAdapterFactory)
+
+public:
+    //! Creates an instance of the actual plugin
+    /*!
+     * @return  a pointer to the MapAdapter
+     */
+    IMapAdapter* CreateInstance() {return new CadastreFranceAdapter(); }
+
+    //! returns the unique identifier (Uuid) of this MapAdapter
+    /*!
+     * @return  the unique identifier (Uuid) of this MapAdapter
+     */
+    virtual QUuid	getId		() const;
+
+    //! returns the name of this MapAdapter
+    /*!
+     * @return  the name of this MapAdapter
+     */
+    virtual QString	getName		() const;
 };
 
 #endif

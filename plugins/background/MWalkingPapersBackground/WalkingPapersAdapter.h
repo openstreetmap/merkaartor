@@ -13,6 +13,7 @@
 #ifndef WALKINGPAPERSADAPTER_H
 #define WALKINGPAPERSADAPTER_H
 
+#include "IMapAdapterFactory.h"
 #include "IMapAdapter.h"
 
 #include <QLocale>
@@ -27,7 +28,7 @@ public:
 };
 
 
-class WalkingPapersAdapter : public QObject, public IMapAdapter
+class WalkingPapersAdapter : public IMapAdapter
 {
     Q_OBJECT
     Q_INTERFACES(IMapAdapter)
@@ -143,6 +144,32 @@ private:
 
     QRectF theCoordBbox;
     QList<WalkingPapersImage> theImages;
+};
+
+
+class WalkingPapersAdapterFactory : public QObject, public IMapAdapterFactory
+{
+    Q_OBJECT
+    Q_INTERFACES(IMapAdapterFactory)
+
+public:
+    //! Creates an instance of the actual plugin
+    /*!
+     * @return  a pointer to the MapAdapter
+     */
+    IMapAdapter* CreateInstance() {return new WalkingPapersAdapter(); }
+
+    //! returns the unique identifier (Uuid) of this MapAdapter
+    /*!
+     * @return  the unique identifier (Uuid) of this MapAdapter
+     */
+    virtual QUuid	getId		() const;
+
+    //! returns the name of this MapAdapter
+    /*!
+     * @return  the name of this MapAdapter
+     */
+    virtual QString	getName		() const;
 };
 
 #endif // WALKINGPAPERSADAPTER_H

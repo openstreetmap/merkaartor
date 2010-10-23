@@ -23,6 +23,19 @@
 
 // {67CC0481-8C6A-4735-8666-BBA6A1B04E19}
 static const QUuid theUid ( 0x67cc0481, 0x8c6a, 0x4735, 0x86, 0x66, 0xbb, 0xa6, 0xa1, 0xb0, 0x4e, 0x19);
+static const QString theName("Yahoo! (WMS)");
+
+QUuid YahooLegalMapAdapterFactory::getId() const
+{
+    return theUid;
+}
+
+QString	YahooLegalMapAdapterFactory::getName() const
+{
+    return theName;
+}
+
+/**************/
 
 YahooLegalMapAdapter::YahooLegalMapAdapter()
         : theImageManager(0)
@@ -43,7 +56,7 @@ QString	YahooLegalMapAdapter::getHost() const
 
 QUuid YahooLegalMapAdapter::getId() const
 {
-    return QUuid(theUid);
+    return theUid;
 }
 
 IMapAdapter::Type YahooLegalMapAdapter::getType() const
@@ -53,7 +66,7 @@ IMapAdapter::Type YahooLegalMapAdapter::getType() const
 
 QString	YahooLegalMapAdapter::getName() const
 {
-    return "Yahoo! (WMS)";
+    return theName;
 }
 
 QString YahooLegalMapAdapter::projection() const
@@ -88,4 +101,4 @@ void YahooLegalMapAdapter::setImageManager(IImageManager* anImageManager)
     theImageManager = anImageManager;
 }
 
-Q_EXPORT_PLUGIN2(MYahooBackgroundPlugin, YahooLegalMapAdapter)
+Q_EXPORT_PLUGIN2(MYahooBackgroundPlugin, YahooLegalMapAdapterFactory)

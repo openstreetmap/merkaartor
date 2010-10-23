@@ -40,6 +40,20 @@
 #define EQUATORIALMETERPERDEGREE    222638.981555556
 
 static const QUuid theUid ("{c580b2bc-dd14-40b2-8bb6-241da2a1fdb3}");
+static const QString theName("Walking Papers");
+
+QUuid WalkingPapersAdapterFactory::getId() const
+{
+    return theUid;
+}
+
+QString	WalkingPapersAdapterFactory::getName() const
+{
+    return theName;
+}
+
+/**************/
+
 
 #define FILTER_OPEN_SUPPORTED \
     tr("Supported formats")+" (*.jpg *.png *.bmp)\n" \
@@ -70,6 +84,16 @@ WalkingPapersAdapter::WalkingPapersAdapter()
 
 WalkingPapersAdapter::~WalkingPapersAdapter()
 {
+}
+
+QUuid WalkingPapersAdapter::getId() const
+{
+    return theUid;
+}
+
+QString	WalkingPapersAdapter::getName() const
+{
+    return theName;
 }
 
 bool WalkingPapersAdapter::alreadyLoaded(QString fn) const
@@ -257,19 +281,9 @@ QString	WalkingPapersAdapter::getHost() const
     return "";
 }
 
-QUuid WalkingPapersAdapter::getId() const
-{
-    return QUuid(theUid);
-}
-
 IMapAdapter::Type WalkingPapersAdapter::getType() const
 {
     return IMapAdapter::DirectBackground;
-}
-
-QString	WalkingPapersAdapter::getName() const
-{
-    return "Walking Papers";
 }
 
 QMenu* WalkingPapersAdapter::getMenu() const
@@ -413,4 +427,4 @@ QString WalkingPapersAdapter::toPropertiesHtml()
 }
 
 
-Q_EXPORT_PLUGIN2(MWalkingPapersBackgroundPlugin, WalkingPapersAdapter)
+Q_EXPORT_PLUGIN2(MWalkingPapersBackgroundPlugin, WalkingPapersAdapterFactory)

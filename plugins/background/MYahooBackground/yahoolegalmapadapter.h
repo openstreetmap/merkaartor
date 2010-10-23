@@ -20,11 +20,12 @@
 #ifndef YAHOOLEGALMAPADAPTER_H
 #define YAHOOLEGALMAPADAPTER_H
 
+#include "IMapAdapterFactory.h"
 #include "IMapAdapter.h"
 
 #include <QLocale>
 
-class YahooLegalMapAdapter : public QObject, public IMapAdapter
+class YahooLegalMapAdapter : public IMapAdapter
 {
     Q_OBJECT
     Q_INTERFACES(IMapAdapter)
@@ -130,6 +131,31 @@ private:
 
     QLocale loc;
     IImageManager* theImageManager;
+};
+
+class YahooLegalMapAdapterFactory : public QObject, public IMapAdapterFactory
+{
+    Q_OBJECT
+    Q_INTERFACES(IMapAdapterFactory)
+
+public:
+    //! Creates an instance of the actual plugin
+    /*!
+     * @return  a pointer to the MapAdapter
+     */
+    IMapAdapter* CreateInstance() {return new YahooLegalMapAdapter(); }
+
+    //! returns the unique identifier (Uuid) of this MapAdapter
+    /*!
+     * @return  the unique identifier (Uuid) of this MapAdapter
+     */
+    virtual QUuid	getId		() const;
+
+    //! returns the name of this MapAdapter
+    /*!
+     * @return  the name of this MapAdapter
+     */
+    virtual QString	getName		() const;
 };
 
 #endif

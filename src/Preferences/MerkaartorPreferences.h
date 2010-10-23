@@ -35,7 +35,7 @@
 
 class MainWindow;
 class MapView;
-class IMapAdapter;
+class IMapAdapterFactory;
 class IPaintStyle;
 
 #ifdef Q_WS_X11
@@ -385,12 +385,11 @@ public:
     M_PARAM_DECLARE_BOOL(FeaturesWithin)
 
     /* Plugins */
-    void addBackgroundPlugin(IMapAdapter* aPlugin);
-    void cleanupBackgroundPlugins();
+    void addBackgroundPlugin(IMapAdapterFactory* aPlugin);
     void setBackgroundPlugin(const QUuid& theValue);
     QUuid getBackgroundPlugin() const;
-    IMapAdapter* getBackgroundPlugin(const QUuid& anAdapterUid);
-    QMap<QUuid, IMapAdapter *> getBackgroundPlugins();
+    IMapAdapterFactory* getBackgroundPlugin(const QUuid& anAdapterUid);
+    QMap<QUuid, IMapAdapterFactory *> getBackgroundPlugins();
 
     /* Projections */
     void loadProjection(QString fn);
@@ -467,7 +466,7 @@ private:
     ToolList* theToolList;
     QSettings * Sets;
     QStringList projTypes;
-    QMap<QUuid, IMapAdapter *> mBackgroundPlugins;
+    QMap<QUuid, IMapAdapterFactory *> mBackgroundPlugins;
     ProjectionsList theProjectionsList;
     FiltersList theFiltersList;
     WmsServersList theWmsServerList;

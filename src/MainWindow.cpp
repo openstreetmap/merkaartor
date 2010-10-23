@@ -1759,7 +1759,6 @@ void MainWindow::on_fileNewAction_triggered()
         saveTemplateDocument(TEMPLATE_DOCUMENT);
 
     if (!theDocument || !theDocument->hasUnsavedChanges() || mayDiscardUnsavedChanges(this)) {
-        M_PREFS->cleanupBackgroundPlugins();
         p->theFeats->invalidate();
         SAFE_DELETE(theDocument)
 

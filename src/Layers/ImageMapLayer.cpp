@@ -5,6 +5,7 @@
 #include "Preferences/MerkaartorPreferences.h"
 #include "Maps/Projection.h"
 
+#include "IMapAdapterFactory.h"
 #include "IMapAdapter.h"
 #include "QMapControl/imagemanager.h"
 #ifdef USE_WEBKIT
@@ -57,9 +58,7 @@ public:
     }
     ~ImageMapLayerPrivate()
     {
-        SAFE_DELETE(wmsa)
-        SAFE_DELETE(wmsca)
-        SAFE_DELETE(tmsa)
+        SAFE_DELETE(theMapAdapter)
         SAFE_DELETE(theImageManager)
     }
 };
@@ -149,14 +148,12 @@ void ImageMapLayer::setMapAdapter(const QUuid& theAdapterUid, const QString& ser
     WmsServerList* wsl;
     TmsServerList* tsl;
 
-    SAFE_DELETE(p->wmsa)
-    SAFE_DELETE(p->wmsca)
-    SAFE_DELETE(p->tmsa)
     if (p->theImageManager)
         p->theImageManager->abortLoading();
     p->theImageManager = NULL;
     on_loadingFinished();
-    p->theMapAdapter = NULL;
+    if (p->theMapAdapter)
+        SAFE_DELETE(p->theMapAdapter);
     p->pm = QPixmap();
 
     QString id = theAdapterUid.toString();
@@ -222,9 +219,15 @@ void ImageMapLayer::setMapAdapter(const QUuid& theAdapterUid, const QString& ser
             setVisible(true);
     } else
     {
-        p->theMapAdapter = M_PREFS->getBackgroundPlugin(p->bgType);
+        p->theMapAdapter = M_PREFS->getBackgroundPlugin(p->bgType)->CreateInstance();
         if (p->theMapAdapter) {
             setName(tr("Map - %1").arg(p->theMapAdapter->getName()));
+            p->theMapAdapter->setSettings(M_PREFS->getQSettings());
+            ImageLayerWidget* theImageWidget = qobject_cast<ImageLayerWidget*>(theWidget);
+            Q_ASSERT(theImageWidget);
+            connect(p->theMapAdapter, SIGNAL(forceZoom()), theImageWidget, SLOT(zoomLayer()));
+            connect(p->theMapAdapter, SIGNAL(forceProjection()), theImageWidget, SLOT(setProjection()));
+            connect(p->theMapAdapter, SIGNAL(forceRefresh()), g_Merk_MainWindow, SLOT(invalidateView()));
         } else
             p->bgType = NONE_ADAPTER_UUID;
     }
@@ -373,31 +376,32 @@ ImageMapLayer * ImageMapLayer::fromXML(Document* d, const QDomElement& e, QProgr
     l->blockIndexing(true);
     l->setId(e.attribute("xml:id"));
 
-    QDomElement c = e.firstChildElement();
+    l->blockIndexing(false);
 
+    d->addImageLayer(l);
+    l->reIndex();
+
+    QDomElement c = e.firstChildElement();
     QString server;
     QUuid bgtype = QUuid(e.attribute("bgtype"));
     if (c.tagName() == "WmsServer") {
         server = c.attribute("name");
+        l->setMapAdapter(bgtype, server);
     } else
     if (c.tagName() == "TmsServer") {
         server = c.attribute("name");
+        l->setMapAdapter(bgtype, server);
     } else {
-        IMapAdapter* theMapAdapter = M_PREFS->getBackgroundPlugin(bgtype);
-        if (theMapAdapter)
-            theMapAdapter->fromXML(c);
+        l->setMapAdapter(bgtype, server);
+        if (l->getMapAdapter())
+            l->getMapAdapter()->fromXML(c);
     }
-    l->setMapAdapter(bgtype, server);
 
     l->setAlpha(e.attribute("alpha").toDouble());
     l->setVisible((e.attribute("visible") == "true" ? true : false));
     l->setSelected((e.attribute("selected") == "true" ? true : false));
     l->setEnabled((e.attribute("enabled") == "false" ? false : true));
 
-    l->blockIndexing(false);
-    l->reIndex();
-
-    d->addImageLayer(l);
     return l;
 }
 

@@ -61,7 +61,7 @@ signals:
 
 protected slots:
     void setOpacity(QAction*);
-    void zoomLayer(bool);
+    void zoomLayer();
     void visibleLayer(bool);
     void readonlyLayer(bool);
     void close();
@@ -124,14 +124,12 @@ class ImageLayerWidget : public LayerWidget
         QAction* actProjection;
         QMenu* wmsMenu;
         QMenu* tmsMenu;
-
-        QList<QAction*> plugActions;
+        QMenu* pluginsMenu;
 
     private slots:
         void setWms(QAction*);
         void setTms(QAction*);
-        void setOther(QAction*);
-        void setBackground(QAction*);
+        void setPlugin(QAction*);
 
         void setProjection();
 

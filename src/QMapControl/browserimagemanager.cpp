@@ -145,7 +145,7 @@ BrowserImageManager::BrowserImageManager(QObject* parent)
 
     timeoutTimer = new QTimer();
     connect(timeoutTimer, SIGNAL(timeout()), this, SLOT(timeout()));
-    timeoutTimer->setInterval(3000);
+    timeoutTimer->setInterval(5000);
 
 //    QWebView* theVw = new QWebView((QWidget*)parent);
 //    theVw->setPage(page);

@@ -27,8 +27,10 @@
  *
  *	@author Kai Winter <kaiwinter@gmx.de>
 */
-class IMapAdapter
+class IMapAdapter : public QObject
 {
+    Q_OBJECT
+
 public:
     enum Type
     {
@@ -45,17 +47,17 @@ public:
      */
     virtual QUuid	getId		() const = 0;
 
-    //! returns the type of this MapAdapter
-    /*!
-     * @return  the type of this MapAdapter
-     */
-    virtual IMapAdapter::Type	getType		() const = 0;
-
     //! returns the name of this MapAdapter
     /*!
      * @return  the name of this MapAdapter
      */
     virtual QString	getName		() const = 0;
+
+    //! returns the type of this MapAdapter
+    /*!
+     * @return  the type of this MapAdapter
+     */
+    virtual IMapAdapter::Type	getType		() const = 0;
 
     //! returns the host of this MapAdapter
     /*!
@@ -131,6 +133,11 @@ public:
     virtual QString toPropertiesHtml() = 0;
 
     virtual void setSettings(QSettings* aSet) = 0;
+
+signals:
+    void forceRefresh();
+    void forceZoom();
+    void forceProjection();
 
 };
 

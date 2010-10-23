@@ -34,6 +34,19 @@
 
 // {10F45DE0-E529-11DE-8B99-9E7D56D89593}
 static const QUuid theUid ( 0x10F45DE0, 0xE529, 0x11DE, 0x8B, 0x99, 0x9E, 0x7D, 0x56, 0xD8, 0x95, 0x93);
+static const QString theName("Yahoo! (Tiled)");
+
+QUuid YahooTiledMapAdapterFactory::getId() const
+{
+    return theUid;
+}
+
+QString	YahooTiledMapAdapterFactory::getName() const
+{
+    return theName;
+}
+
+/**************/
 
 YahooTiledMapAdapter::YahooTiledMapAdapter()
     : theImageManager(0)
@@ -61,7 +74,7 @@ QString	YahooTiledMapAdapter::getHost() const
 
 QUuid YahooTiledMapAdapter::getId() const
 {
-    return QUuid(theUid);
+    return theUid;
 }
 
 IMapAdapter::Type YahooTiledMapAdapter::getType() const
@@ -71,7 +84,7 @@ IMapAdapter::Type YahooTiledMapAdapter::getType() const
 
 QString	YahooTiledMapAdapter::getName() const
 {
-    return "Yahoo! (Tiled)";
+    return theName;
 }
 
 QRectF	YahooTiledMapAdapter::getBoundingbox() const
@@ -208,4 +221,4 @@ bool YahooTiledMapAdapter::isValid(int x, int y, int z) const
 }
 
 
-Q_EXPORT_PLUGIN2(MYahooTiledBackgroundPlugin, YahooTiledMapAdapter)
+Q_EXPORT_PLUGIN2(MYahooTiledBackgroundPlugin, YahooTiledMapAdapterFactory)

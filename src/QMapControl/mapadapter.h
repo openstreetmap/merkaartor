@@ -47,7 +47,7 @@
  *
  *	@author Kai Winter <kaiwinter@gmx.de>
 */
-class MapAdapter : public QObject, public IMapAdapter
+class MapAdapter : public IMapAdapter
 {
     //friend class ImageManager;
     //friend class BrowserImageManager;

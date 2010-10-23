@@ -13,6 +13,7 @@
 #ifndef GDALADAPTER_H
 #define GDALADAPTER_H
 
+#include "IMapAdapterFactory.h"
 #include "IMapAdapter.h"
 
 #include <QLocale>
@@ -28,7 +29,7 @@ public:
     double adfGeoTransform[6];
 };
 
-class GdalAdapter : public QObject, public IMapAdapter
+class GdalAdapter : public IMapAdapter
 {
     Q_OBJECT
     Q_INTERFACES(IMapAdapter)
@@ -54,17 +55,17 @@ public:
      */
     virtual QUuid	getId		() const;
 
-    //! returns the type of this MapAdapter
-    /*!
-     * @return  the type of this MapAdapter
-     */
-    virtual IMapAdapter::Type	getType		() const;
-
     //! returns the name of this MapAdapter
     /*!
      * @return  the name of this MapAdapter
      */
     virtual QString	getName		() const;
+
+    //! returns the type of this MapAdapter
+    /*!
+     * @return  the type of this MapAdapter
+     */
+    virtual IMapAdapter::Type	getType		() const;
 
     //! returns the host of this MapAdapter
     /*!
@@ -163,6 +164,31 @@ private:
 //	int bandCount;
 //	int ixR, ixG, ixB, ixA;
 //	GDALColorTable * colTable;
+};
+
+class GdalAdapterFactory : public QObject, public IMapAdapterFactory
+{
+    Q_OBJECT
+    Q_INTERFACES(IMapAdapterFactory)
+
+public:
+    //! Creates an instance of the actual plugin
+    /*!
+     * @return  a pointer to the MapAdapter
+     */
+    IMapAdapter* CreateInstance() {return new GdalAdapter(); }
+
+    //! returns the unique identifier (Uuid) of this MapAdapter
+    /*!
+     * @return  the unique identifier (Uuid) of this MapAdapter
+     */
+    virtual QUuid	getId		() const;
+
+    //! returns the name of this MapAdapter
+    /*!
+     * @return  the name of this MapAdapter
+     */
+    virtual QString	getName		() const;
 };
 
 #endif // GDALADAPTER_H

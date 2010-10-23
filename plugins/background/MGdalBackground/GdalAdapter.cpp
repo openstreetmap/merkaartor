@@ -25,6 +25,19 @@
 #define IN_MEMORY_LIMIT 100000000
 
 static const QUuid theUid ("{867e78e9-3156-45f8-a9a7-e5cfa52f8507}");
+static const QString theName("GeoTIFF");
+
+QUuid GdalAdapterFactory::getId() const
+{
+    return theUid;
+}
+
+QString	GdalAdapterFactory::getName() const
+{
+    return theName;
+}
+
+/**************/
 
 #define FILTER_OPEN_SUPPORTED \
     tr("Supported formats")+" (*.tif *.tiff)\n" \
@@ -46,6 +59,16 @@ GdalAdapter::GdalAdapter()
 
 GdalAdapter::~GdalAdapter()
 {
+}
+
+QUuid GdalAdapter::getId() const
+{
+    return theUid;
+}
+
+QString	GdalAdapter::getName() const
+{
+    return theName;
 }
 
 bool GdalAdapter::alreadyLoaded(QString fn) const
@@ -239,19 +262,9 @@ QString	GdalAdapter::getHost() const
     return "";
 }
 
-QUuid GdalAdapter::getId() const
-{
-    return QUuid(theUid);
-}
-
 IMapAdapter::Type GdalAdapter::getType() const
 {
     return IMapAdapter::DirectBackground;
-}
-
-QString	GdalAdapter::getName() const
-{
-    return "GeoTIFF";
 }
 
 QMenu* GdalAdapter::getMenu() const
@@ -378,4 +391,4 @@ QString GdalAdapter::toPropertiesHtml()
     return h;
 }
 
-Q_EXPORT_PLUGIN2(MGdalBackgroundPlugin, GdalAdapter)
+Q_EXPORT_PLUGIN2(MGdalBackgroundPlugin, GdalAdapterFactory)

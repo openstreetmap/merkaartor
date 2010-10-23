@@ -4,14 +4,14 @@ include(../common.pri)
 TARGET = $$qtLibraryTarget(MYahooTiledBackgroundPlugin)
 DEPENDPATH += $${MERKAARTOR_SRC_DIR}/interfaces
 INCLUDEPATH += $${MERKAARTOR_SRC_DIR}/interfaces
-HEADERS += \
-	IMapAdapter.h \
-	IImageManager.h \
-	yahootiledmapadapter.h
+include ($${MERKAARTOR_SRC_DIR}/interfaces/Interfaces.pri)
 
-SOURCES += \ 
-	yahootiledmapadapter.cpp
+HEADERS += \
+    yahootiledmapadapter.h
+
+SOURCES += \
+    yahootiledmapadapter.cpp
 
 RESOURCES += \
-	MYahooTiledBackground.qrc
+    MYahooTiledBackground.qrc
 

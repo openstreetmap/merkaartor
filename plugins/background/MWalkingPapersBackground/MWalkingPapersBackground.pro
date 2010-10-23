@@ -5,9 +5,9 @@ QT += network
 TARGET = $$qtLibraryTarget(MWalkingPapersBackgroundPlugin)
 DEPENDPATH += $${MERKAARTOR_SRC_DIR}/interfaces
 INCLUDEPATH += $${MERKAARTOR_SRC_DIR}/interfaces
+include ($${MERKAARTOR_SRC_DIR}/interfaces/Interfaces.pri)
+
 HEADERS += \
-    IMapAdapter.h \
-    IImageManager.h \
     WalkingPapersAdapter.h
 
 SOURCES += \
