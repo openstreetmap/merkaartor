@@ -65,6 +65,8 @@
 		    Source="$(var.BinPath)\plugins\background\MGdalBackgroundPlugind0.dll" DiskId="1" />
             <File Id="MWalkingPapersBackgroundPlugind0.dll" Name="MWalkingPapersBackgroundPlugind0.dll"
 		    Source="$(var.BinPath)\plugins\background\MWalkingPapersBackgroundPlugind0.dll" DiskId="1" />
+            <File Id="MCadastreFranceBackgroundPlugind0.dll" Name="MCadastreFranceBackgroundPlugind0.dll"
+		    Source="$(var.BinPath)\plugins\background\MCadastreFranceBackgroundPlugind0.dll" DiskId="1" />
          </Component>
       </DirectoryRef>
       
