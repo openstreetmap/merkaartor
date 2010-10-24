@@ -713,9 +713,9 @@ QString Document::exportOSM(QMainWindow* main, const CoordBox& aCoordBox, bool r
     return theXmlDoc.toString(2);
 }
 
-QString Document::exportOSM(QMainWindow* main, QList<Feature*> aFeatures)
+QString Document::exportOSM(QMainWindow* main, QList<Feature*> aFeatures, bool forCopyPaste)
 {
-    QList<Feature*> exportedFeatures = exportCoreOSM(aFeatures);
+    QList<Feature*> exportedFeatures = exportCoreOSM(aFeatures, forCopyPaste);
     CoordBox aCoordBox;
 
     IProgressWindow* aProgressWindow = dynamic_cast<IProgressWindow*>(main);
@@ -768,7 +768,7 @@ QString Document::exportOSM(QMainWindow* main, QList<Feature*> aFeatures)
     return theXmlDoc.toString(2);
 }
 
-QList<Feature*> Document::exportCoreOSM(QList<Feature*> aFeatures)
+QList<Feature*> Document::exportCoreOSM(QList<Feature*> aFeatures, bool forCopyPaste)
 {
     QList<Feature*> exportedFeatures;
     QList<Feature*>::Iterator i;
@@ -790,16 +790,23 @@ QList<Feature*> Document::exportCoreOSM(QList<Feature*> aFeatures)
             } else {
                 //FIXME Not working for relation (not made of point?)
                 if (Relation* G = dynamic_cast<Relation*>(*i)) {
-                    for (int j=0; j < G->size(); j++) {
-                        if (Way* R = dynamic_cast<Way*>(G->get(j))) {
-                            for (int k=0; k < R->size(); k++) {
-                                if (Node* P = dynamic_cast<Node*>(R->get(k))) {
-                                    if (!exportedFeatures.contains(P))
-                                        exportedFeatures.append(P);
+                    if (!forCopyPaste) {
+                        for (int j=0; j < G->size(); j++) {
+                            if (Way* R = CAST_WAY(G->get(j))) {
+                                for (int k=0; k < R->size(); k++) {
+                                    if (Node* P = dynamic_cast<Node*>(R->get(k))) {
+                                        if (!exportedFeatures.contains(P))
+                                            exportedFeatures.append(P);
+                                    }
                                 }
+                                if (!exportedFeatures.contains(R))
+                                    exportedFeatures.append(R);
+                            } else
+                            if (Node* P = CAST_NODE(G->get(j))) {
+                                if (!exportedFeatures.contains(P))
+                                    exportedFeatures.append(P);
                             }
-                        if (!exportedFeatures.contains(R))
-                            exportedFeatures.append(R);
+
                         }
                     }
                     if (!exportedFeatures.contains(G))

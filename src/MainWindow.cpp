@@ -787,7 +787,7 @@ void MainWindow::on_editCopyAction_triggered()
     QClipboard *clipboard = QApplication::clipboard();
     QMimeData* md = new QMimeData();
 
-    QString osm = theDocument->exportOSM(this, p->theProperties->selection());
+    QString osm = theDocument->exportOSM(this, p->theProperties->selection(), true);
     md->setText(osm);
     md->setData("application/x-openstreetmap+xml", osm.toUtf8());
 
@@ -858,20 +858,45 @@ void MainWindow::on_editPasteFeatureAction_triggered()
     QList<Feature*> theFeats;
     for (int i=0; i<doc->layerSize(); ++i)
         for (int j=0; j<doc->getLayer(i)->size(); ++j)
-            theFeats.push_back(doc->getLayer(i)->get(j));
+            if (!doc->getLayer(i)->get(j)->isNull())
+                theFeats.push_back(doc->getLayer(i)->get(j));
     for (int i=0; i<theFeats.size(); ++i) {
         Feature*F = theFeats.at(i);
         if (theDocument->getFeature(F->id(), false))
             F->resetId();
 
-//		if (TrackPoint* P = CAST_NODE(F)) {
-//		} else
-//		if (Road* R = CAST_WAY(F)) {
-//		} else
-//		if (Relation* RR = CAST_RELATION(F)) {
-//		}
-//        F->layer()->remove(F);
+        // get tags
+        QList<QPair<QString, QString> > Tags;
+        for (int j=0; j<F->tagSize(); ++j) {
+            Tags << qMakePair(F->tagKey(j), F->tagValue(j));
+        }
+        F->clearTags();
+
+        // Re-link null features to the ones in the current document
+        for (int j=0; j<F->size(); ++j) {
+            Feature* C = F->get(j);
+            if (C->isNull()) {
+                if (Feature* CC = theDocument->getFeature(C->id(), false)) {
+                    if (Relation* R = CAST_RELATION(F)) {
+                        QString role = R->getRole(j);
+                        R->remove(j);
+                        R->add(role, CC, j);
+                    } else if (Way* W = CAST_WAY(F)) {
+                        Node* N = CAST_NODE(CC);
+                        W->remove(j);
+                        W->add(N, j);
+                    }
+                } else
+                    theFeats.push_back(C);
+            }
+        }
+        F->setLayer(0);
         theList->add(new AddFeatureCommand(theDocument->getDirtyOrOriginLayer(), F, true));
+
+        //Put tags
+        for (int j=0; j<Tags.size(); ++j) {
+            F->setTag(Tags[j].first, Tags[j].second);
+        }
     }
 
     if (theList->size())
