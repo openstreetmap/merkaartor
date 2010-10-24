@@ -143,11 +143,15 @@ void PaintStyleEditor::on_btDown_clicked()
 
 void PaintStyleEditor::on_PaintList_itemSelectionChanged()
 {
-    FreezeUpdate = true;
     QListWidgetItem* it = PaintList->currentItem();
-    int idx = it->data(Qt::UserRole).toInt();
+
+    int idx = -1;
+    if (it)
+        idx = it->data(Qt::UserRole).toInt();
 
     if (idx < 0) {
+        FreezeUpdate = false;
+
         editArea->setEnabled(false);
         DuplicateButton->setEnabled(false);
         RemoveButton->setEnabled(false);
@@ -159,6 +163,8 @@ void PaintStyleEditor::on_PaintList_itemSelectionChanged()
     }
     if (idx >= thePainters.size())
         return;
+
+    FreezeUpdate = true;
     Painter& FP(thePainters[idx]);
     TagSelection->setText(FP.userName());
     if (FP.zoomBoundaries().first == 0)
