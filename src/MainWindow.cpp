@@ -599,8 +599,10 @@ void MainWindow::adjustLayers(bool adjustViewport)
             l = ImgIt.get();
             break;
         }
-        if (l && l->isTiled())
+        if (l && l->isTiled()) {
             theView->projection().setProjectionType(l->projection());
+            updateProjectionMenu();
+        }
     }
     if (adjustViewport) {
         CoordBox theVp;
@@ -3263,6 +3265,7 @@ void MainWindow::projectionSet(const QString& prj)
 {
     if(false == theView->projection().setProjectionType(prj))
         QMessageBox::critical(this, tr("Invalid projection"), tr("Unable to set projection \"%1\".").arg(prj));
+    updateProjectionMenu();
     theView->setViewport(theView->viewport(), theView->rect());
     invalidateView();
 }
