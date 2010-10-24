@@ -62,12 +62,10 @@ void MapNetwork::launchRequest()
     QUrl U("http://" + QString(R->host).append(R->url));
     qDebug() << "getting: " << U.toString();
 
-    launchRequest(U, R->hash);
-
-    delete R;
+    launchRequest(U, R);
 }
 
-void MapNetwork::launchRequest(QUrl url, QString hash)
+void MapNetwork::launchRequest(QUrl url, LoadingRequest* R)
 {
     m_networkManager->setProxy(M_PREFS->getProxy(url));
     QNetworkRequest req(url);
@@ -77,11 +75,15 @@ void MapNetwork::launchRequest(QUrl url, QString hash)
     req.setRawHeader("User-Agent", USER_AGENT.toLatin1());
 
     QNetworkReply* rply = m_networkManager->get(req);
+    loadingMap[rply] = R;
 
-    if (vectorMutex.tryLock()) {
-        loadingMap[rply] = hash;
-        vectorMutex.unlock();
-    }
+    QTimer* timeoutTimer = new QTimer();
+    connect(timeoutTimer, SIGNAL(timeout()), this, SLOT(timeout()));
+    timeoutTimer->setInterval(5000);
+    timeoutTimer->setSingleShot(true);
+
+    timeoutMap[timeoutTimer] = rply;
+    timeoutTimer->start();
 }
 
 void MapNetwork::requestFinished(QNetworkReply* reply)
@@ -90,64 +92,57 @@ void MapNetwork::requestFinished(QNetworkReply* reply)
         // Don't react on setProxy and setHost requestFinished...
         return;
     }
+    QTimer* t = timeoutMap.key(reply);
+    Q_ASSERT(t);
+    t->stop();
+    timeoutMap.remove(t);
+    delete t;
+
+    LoadingRequest* R = loadingMap[reply];
+    loadingMap.remove(reply);
 
     int statusCode = reply->attribute(QNetworkRequest::HttpStatusCodeAttribute).toInt();
 
     if (reply->error() != QNetworkReply::NoError) {
         qDebug() << "network error: " << statusCode << " " << reply->errorString();
-        loadingMap.remove(reply);
     } else
         switch (statusCode) {
             case 301:
             case 302:
             case 307:
-                qDebug() << "redirected: " << loadingMap[reply];
-                launchRequest(reply->attribute(QNetworkRequest::RedirectionTargetAttribute).toUrl(), loadingMap[reply]);
-                loadingMap.remove(reply);
+                qDebug() << "redirected: " << R->host << R->url;
+                launchRequest(reply->attribute(QNetworkRequest::RedirectionTargetAttribute).toUrl(), new LoadingRequest(R->hash, R->host, R->url));
                 return;
             case 404:
-                qDebug() << "404 error: " << loadingMap[reply];
-                loadingMap.remove(reply);
+                qDebug() << "404 error: " << R->host << R->url;
                 break;
             case 500:
-                qDebug() << "500 error: " << loadingMap[reply];
-                loadingMap.remove(reply);
+                qDebug() << "500 error: " << R->host << R->url;
                 break;
                 // Redirected
             default:
                 if (statusCode != 200)
-                    qDebug() << "Other http code (" << statusCode << "): "  << loadingMap[reply];
-                if (vectorMutex.tryLock()) {
-                    // check if id is in map?
-                    if (loadingMap.contains(reply)) {
+                    qDebug() << "Other http code (" << statusCode << "): "  << R->host << R->url;
+                QString hash = R->hash;
+                // 		qDebug() << "request finished for id: " << id;
+                QByteArray ax;
 
-                        QString hash = loadingMap[reply];
-                        loadingMap.remove(reply);
-                        vectorMutex.unlock();
-        // 		qDebug() << "request finished for id: " << id;
-                        QByteArray ax;
+                if (reply->bytesAvailable() > 0) {
+                    QPixmap pm;
+                    ax = reply->readAll();
+                    //			qDebug() << ax.size();
 
-                        if (reply->bytesAvailable() > 0) {
-                            QPixmap pm;
-                            ax = reply->readAll();
-        //			qDebug() << ax.size();
-
-                            if (pm.loadFromData(ax)) {
-                                loaded += pm.size().width() * pm.size().height() * pm.depth() / 8 / 1024;
-        // 				qDebug() << "Network loaded: " << (loaded);
-                            } else {
-                                qDebug() << "NETWORK_PIXMAP_ERROR: " << ax;
-                            }
-                            parent->receivedImage(pm, hash);
-                        }
-
-                    } else
-                        vectorMutex.unlock();
-
+                    if (pm.loadFromData(ax)) {
+                        loaded += pm.size().width() * pm.size().height() * pm.depth() / 8 / 1024;
+                        // 				qDebug() << "Network loaded: " << (loaded);
+                    } else {
+                        qDebug() << "NETWORK_PIXMAP_ERROR: " << ax;
+                    }
+                    parent->receivedImage(pm, hash);
                 }
                 break;
         }
-
+    delete R;
 
     launchRequest();
     if (loadingMap.isEmpty() && loadingRequests.isEmpty()) {
@@ -158,15 +153,12 @@ void MapNetwork::requestFinished(QNetworkReply* reply)
 
 void MapNetwork::abortLoading()
 {
-    if (vectorMutex.tryLock()) {
-        foreach (QNetworkReply* rply, loadingMap.keys())
-            rply->abort();
-        loadingMap.clear();
-        while (!loadingRequests.isEmpty())
-            delete loadingRequests.dequeue();
-        //loadingRequests.clear();
-        vectorMutex.unlock();
-    }
+    foreach (QNetworkReply* rply, loadingMap.keys())
+        rply->abort();
+    loadingMap.clear();
+    while (!loadingRequests.isEmpty())
+        delete loadingRequests.dequeue();
+    //loadingRequests.clear();
 }
 
 bool MapNetwork::imageIsLoading(QString hash)
@@ -175,5 +167,33 @@ bool MapNetwork::imageIsLoading(QString hash)
     while (i.hasNext())
         if (i.next()->hash == hash)
             return true;
-    return loadingMap.values().contains(hash);
+
+    QMapIterator<QNetworkReply*, LoadingRequest*> j(loadingMap);
+    while (j.hasNext())
+        if (j.next().value()->hash == hash)
+            return true;
+
+    return false;
+}
+
+void MapNetwork::timeout()
+{
+    QTimer* t = qobject_cast<QTimer*>(sender());
+    Q_ASSERT(t);
+
+    QNetworkReply* rply = timeoutMap[t];
+    if (!loadingMap.contains(rply))
+        return;
+
+    LoadingRequest* R = loadingMap[rply];
+    qDebug() << "MapNetwork::timeout: " << R->host << R->url;
+    loadingMap.remove(rply);
+    loadingRequests.enqueue(R);
+
+    rply->abort();
+    timeoutMap.remove(t);
+    delete t;
+
+    if (loadingMap.size() < MAX_REQ)
+        launchRequest();
 }

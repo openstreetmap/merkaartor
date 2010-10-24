@@ -59,18 +59,20 @@ class MapNetwork : QObject
     private:
         IImageManager* parent;
         QNetworkAccessManager* m_networkManager;
-        QMap<QNetworkReply*, QString> loadingMap;
+        QMap<QNetworkReply*, LoadingRequest*> loadingMap;
+        QMap<QTimer*, QNetworkReply*> timeoutMap;
         QQueue<LoadingRequest*> loadingRequests;
+
         double loaded;
-        QMutex vectorMutex;
         MapNetwork& operator=(const MapNetwork& rhs);
         MapNetwork(const MapNetwork& old);
         void launchRequest();
-        void launchRequest(QUrl url, QString hash);
+        void launchRequest(QUrl url, LoadingRequest* R);
 
 
     private slots:
         void requestFinished(QNetworkReply* reply);
+        void timeout();
 };
 
 #endif
