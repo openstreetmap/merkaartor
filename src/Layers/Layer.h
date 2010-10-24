@@ -54,7 +54,7 @@ public:
         Draw				= 0x00000002,
         Tracks				= 0x00000004,
         Filters				= 0x00000008,
-        All					= 0xffffffff
+        All					= 0x0000ffff
     };
 
     Q_DECLARE_FLAGS(LayerGroups, LayerGroup)

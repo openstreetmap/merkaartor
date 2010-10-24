@@ -86,6 +86,7 @@ bool GdalAdapter::loadImage(const QString& fn)
 
     QFileInfo fi(fn);
     GdalImage img;
+    QRectF bbox;
 
     poDataset = (GDALDataset *) GDALOpen( QDir::toNativeSeparators(fi.absoluteFilePath()).toUtf8().constData(), GA_ReadOnly );
     if( poDataset == NULL )
@@ -119,9 +120,9 @@ bool GdalAdapter::loadImage(const QString& fn)
         qDebug( "Pixel Size = (%.6f,%.6f)\n",
                 img.adfGeoTransform[1], img.adfGeoTransform[5] );
 
-        theBbox.setTopLeft(QPointF(img.adfGeoTransform[0], img.adfGeoTransform[3]));
-        theBbox.setWidth(img.adfGeoTransform[1]*poDataset->GetRasterXSize());
-        theBbox.setHeight(img.adfGeoTransform[5]*poDataset->GetRasterYSize());
+        bbox.setTopLeft(QPointF(img.adfGeoTransform[0], img.adfGeoTransform[3]));
+        bbox.setWidth(img.adfGeoTransform[1]*poDataset->GetRasterXSize());
+        bbox.setHeight(img.adfGeoTransform[5]*poDataset->GetRasterYSize());
     } else
         return false;
 
@@ -136,6 +137,7 @@ bool GdalAdapter::loadImage(const QString& fn)
     img.theFilename = fn;
     img.theImg.load(fn);
     theImages.push_back(img);
+    theBbox = theBbox.united(bbox);
 
     return true;
 }
@@ -151,7 +153,7 @@ void GdalAdapter::onLoadImage()
     if (fileNames.isEmpty())
         return;
 
-    theBbox = QRectF();
+//    theBbox = QRectF();
 //    theImages.clear();
 
     for (int i=0; i<fileNames.size(); i++) {
@@ -161,6 +163,8 @@ void GdalAdapter::onLoadImage()
 
     if (!fileOk) {
         QMessageBox::critical(0,QCoreApplication::translate("GdalBackground","No valid file"),QCoreApplication::translate("GdalBackground","No valid GeoTIFF file could be found."));
+    } else {
+        emit forceZoom();
     }
 
 //	theType == GdalAdapter::Unknown;

@@ -330,7 +330,7 @@ bool ImageMapLayer::isTiled()
     return (p->theMapAdapter->isTiled());
 }
 
-bool ImageMapLayer::toXML(QDomElement& xParent, bool /*asTemplate*/, QProgressDialog * /* progress */)
+bool ImageMapLayer::toXML(QDomElement& xParent, bool asTemplate, QProgressDialog * /* progress */)
 {
     bool OK = true;
 
@@ -360,7 +360,7 @@ bool ImageMapLayer::toXML(QDomElement& xParent, bool /*asTemplate*/, QProgressDi
         e.appendChild(c);
 
         c.setAttribute("name", p->selServer);
-    } else if (p->bgType != NONE_ADAPTER_UUID) {
+    } else if (p->bgType != NONE_ADAPTER_UUID && !asTemplate) {
         c = e.ownerDocument().createElement("Data");
         e.appendChild(c);
 

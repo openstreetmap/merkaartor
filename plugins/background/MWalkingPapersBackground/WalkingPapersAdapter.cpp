@@ -271,6 +271,8 @@ void WalkingPapersAdapter::onLoadImage()
 
     if (!fileOk) {
         QMessageBox::critical(0,QCoreApplication::translate("WalkingPapersBackground","No valid file"),QCoreApplication::translate("WalkingPapersBackground","Cannot load file."));
+    } else {
+        emit forceZoom();
     }
 
     return;

@@ -324,7 +324,7 @@ void LayerDock::tabChanged(int idx)
     for (int i=CHILD_WIDGETS.size()-1; i >= 0; i--) {
         if (!CHILD_WIDGET(i))
             continue;
-        if ((CHILD_LAYER(i)->isEnabled()) && (CHILD_LAYER(i)->classGroups() & p->tab->tabData(idx).toInt()))
+        if ((CHILD_LAYER(i)->isEnabled()) && (CHILD_LAYER(i)->classGroups() & (p->tab->tabData(idx).toUInt())))
             CHILD_WIDGET(i)->setVisible(true);
         else
             CHILD_WIDGET(i)->setVisible(false);

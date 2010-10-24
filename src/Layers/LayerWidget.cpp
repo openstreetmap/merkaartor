@@ -358,6 +358,7 @@ void ImageLayerWidget::setPlugin(QAction* act)
         return;
 
     ((ImageMapLayer *)theLayer.data())->setMapAdapter(aUuid);
+    theLayer->setVisible(true);
 
     this->update(rect());
     emit (layerChanged(this, true));
@@ -496,9 +497,11 @@ void ImageLayerWidget::showContextMenu(QContextMenuEvent* anEvent)
 
         if (theMapLayer->getMapAdapter()->getMenu()) {
             ctxMenu->addAction(sep);
+            associatedMenu->addAction(sep);
             plugActions << sep;
             foreach (QAction* a, theMapLayer->getMapAdapter()->getMenu()->actions()) {
                 ctxMenu->addAction(a);
+                associatedMenu->addAction(a);
                 plugActions << a;
             }
         }
@@ -510,6 +513,8 @@ void ImageLayerWidget::showContextMenu(QContextMenuEvent* anEvent)
     foreach (QAction* a, plugActions) {
         if (ctxMenu->actions().contains(a))
             ctxMenu->removeAction(a);
+        if (associatedMenu->actions().contains(a))
+            associatedMenu->removeAction(a);
     }
     delete sep;
 }
