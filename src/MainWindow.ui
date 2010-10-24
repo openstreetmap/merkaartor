@@ -24,7 +24,7 @@
      <x>0</x>
      <y>0</y>
      <width>1100</width>
-     <height>20</height>
+     <height>21</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuHelp">
@@ -75,7 +75,6 @@
     <addaction name="editPasteFeatureAction"/>
     <addaction name="editPasteMergeAction"/>
     <addaction name="editPasteOverwriteAction"/>
-    <addaction name="editPasteFeaturesAction"/>
     <addaction name="separator"/>
     <addaction name="editRemoveAction"/>
     <addaction name="editMoveAction"/>
@@ -355,7 +354,7 @@
    <addaction name="fileSaveAction"/>
    <addaction name="separator"/>
    <addaction name="editCopyAction"/>
-   <addaction name="editPasteFeaturesAction"/>
+   <addaction name="editPasteFeatureAction"/>
    <addaction name="editPasteMergeAction"/>
    <addaction name="editRemoveAction"/>
    <addaction name="separator"/>
@@ -1086,13 +1085,13 @@
     <string>Selected...</string>
    </property>
   </action>
-  <action name="editPasteFeaturesAction">
+  <action name="editPasteFeatureAction">
    <property name="icon">
     <iconset resource="../Icons/AllIcons.qrc">
      <normaloff>:/Icons/actions/edit_paste.png</normaloff>:/Icons/actions/edit_paste.png</iconset>
    </property>
    <property name="text">
-    <string>Paste Features</string>
+    <string>Paste Feature(s)</string>
    </property>
    <property name="iconText">
     <string>Paste</string>
@@ -1105,9 +1104,6 @@
    </property>
    <property name="shortcut">
     <string>Ctrl+V, F</string>
-   </property>
-   <property name="visible">
-    <bool>false</bool>
    </property>
   </action>
   <action name="exportOSMAction">
@@ -1540,14 +1536,6 @@
   <action name="layersNewImageAction">
    <property name="text">
     <string>Add new Image layer</string>
-   </property>
-  </action>
-  <action name="editPasteFeatureAction">
-   <property name="text">
-    <string>Paste Feature(s)</string>
-   </property>
-   <property name="shortcut">
-    <string>Ctrl+V, F</string>
    </property>
   </action>
   <action name="windowFeatsAction">

@@ -975,14 +975,9 @@ void MainWindow::on_editPasteMergeAction_triggered()
     invalidateView();
 }
 
-void MainWindow::on_editPasteFeaturesAction_triggered()
-{
-    invalidateView();
-}
-
 void MainWindow::clipboardChanged()
 {
-    ui->editPasteFeaturesAction->setEnabled(false);
+    ui->editPasteFeatureAction->setEnabled(false);
     ui->editPasteMergeAction->setEnabled(false);
     ui->editPasteOverwriteAction->setEnabled(false);
 
@@ -1002,7 +997,7 @@ void MainWindow::clipboardChanged()
         return;
     }
 
-    ui->editPasteFeaturesAction->setEnabled(true);
+    ui->editPasteFeatureAction->setEnabled(true);
     ui->editPasteMergeAction->setEnabled(true);
     ui->editPasteOverwriteAction->setEnabled(true);
 
