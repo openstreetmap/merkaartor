@@ -441,6 +441,8 @@ void FeatureSnapInteraction::setSnap(QList<Feature*> aSnapList)
 
 void FeatureSnapInteraction::nextSnap()
 {
+    if (!StackSnap.size())
+        return;
     curStackSnap++;
     if (curStackSnap > StackSnap.size() -1)
         curStackSnap = 0;
@@ -450,6 +452,8 @@ void FeatureSnapInteraction::nextSnap()
 
 void FeatureSnapInteraction::previousSnap()
 {
+    if (!StackSnap.size())
+        return;
     curStackSnap--;
     if (curStackSnap < 0)
         curStackSnap = StackSnap.size() -1;
