@@ -87,6 +87,7 @@ win32 {
 
 macx {
     RC_FILE = $$PWD/../Icons/merkaartor.icns
+	QMAKE_INFO_PLIST = $$PWD/../macos/Info.plist
     INCLUDEPATH += /opt/local/include
 }
 
