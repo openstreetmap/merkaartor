@@ -224,6 +224,7 @@ void PreferencesDialog::loadPrefs()
     }
 
     edXapiUrl->setText(M_PREFS->getXapiUrl());
+    edNominatimUrl->setText(M_PREFS->getNominatimUrl());
 
     edGpsPort->setText(M_PREFS->getGpsPort());
     edGpsdHost->setText(M_PREFS->getGpsdHost());
@@ -374,6 +375,7 @@ void PreferencesDialog::savePrefs()
     }
 
     M_PREFS->setXapiUrl(edXapiUrl->text());
+    M_PREFS->setNominatimUrl(edNominatimUrl->text());
 
     M_PREFS->setGpsPort(edGpsPort->text());
     M_PREFS->setGpsdHost(edGpsdHost->text());

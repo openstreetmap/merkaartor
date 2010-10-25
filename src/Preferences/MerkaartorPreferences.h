@@ -247,6 +247,7 @@ public:
     QString getOsmWebsite() const;
 
     M_PARAM_DECLARE_STRING(XapiUrl)
+    M_PARAM_DECLARE_STRING(NominatimUrl)
     M_PARAM_DECLARE_BOOL(AutoHistoryCleanup)
 
     void setOsmUser(const QString & theValue);

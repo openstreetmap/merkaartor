@@ -27,7 +27,7 @@ namespace NameFinder
 
     HttpQuery::HttpQuery ( QObject *parent, QIODevice *device ) : QObject ( parent )
     {
-        myService = "http://nominatim.openstreetmap.org/search";
+        myService = M_PREFS->getNominatimUrl();
         myDevice = device;
     }
     HttpQuery::HttpQuery ( QObject *parent, QUrl service, QIODevice *device ) : QObject ( parent )

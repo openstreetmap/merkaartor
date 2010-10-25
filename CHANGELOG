@@ -1,4 +1,5 @@
 v0.17
+    * ADD : Allow to specify the Nominatim url in preferences
     * ADD : French Cadastre plugin
     * FIX : Infloop on next/previous image when none visible (fixes #3135)
     * CHG : Do not wait for "CLOSE changeset" response
