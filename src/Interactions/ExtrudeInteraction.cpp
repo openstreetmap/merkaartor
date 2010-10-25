@@ -80,12 +80,16 @@ void ExtrudeInteraction::paintEvent(QPaintEvent* anEvent, QPainter& thePainter)
 
 void ExtrudeInteraction::snapMouseMoveEvent(QMouseEvent* ev, Feature* lastSnap)
 {
+    Q_UNUSED(lastSnap)
+
     LastCursor = ev->posF();
     view()->update();
 }
 
 void ExtrudeInteraction::snapMousePressEvent(QMouseEvent* anEvent, Feature* lastSnap)
 {
+    Q_UNUSED(lastSnap)
+
     theRoad = CAST_WAY(lastSnap);
     if (!theRoad)
         return;
@@ -101,6 +105,9 @@ void ExtrudeInteraction::snapMousePressEvent(QMouseEvent* anEvent, Feature* last
 
 void ExtrudeInteraction::snapMouseReleaseEvent(QMouseEvent* anEvent, Feature* lastSnap)
 {
+    Q_UNUSED(anEvent)
+    Q_UNUSED(lastSnap)
+
     if (Creating) {
         QLineF l(OrigSegment.p1(), QPointF(anEvent->posF()));
         qreal a = OrigSegment.angleTo(l);
@@ -142,6 +149,7 @@ void ExtrudeInteraction::snapMouseReleaseEvent(QMouseEvent* anEvent, Feature* la
 
 void ExtrudeInteraction::snapMouseDoubleClickEvent(QMouseEvent* anEvent, Feature*)
 {
+    Q_UNUSED(anEvent)
 }
 
 #ifndef Q_OS_SYMBIAN

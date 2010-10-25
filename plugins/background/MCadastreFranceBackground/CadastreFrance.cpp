@@ -163,6 +163,8 @@ void CadastreFranceAdapter::cityTriggered(QAction *act)
 
 void CadastreFranceAdapter::resultsAvailable(QMap<QString, QString> results)
 {
+    Q_UNUSED(results)
+
     disconnect(CadastreWrapper::instance(), SIGNAL(resultsAvailable(QMap<QString,QString>)), this, SLOT(resultsAvailable(QMap<QString,QString>)));
     m_city = CadastreWrapper::instance()->requestCity(m_code);
 //    if (!CadastreWrapper::instance()->downloadTiles(m_city))
@@ -286,11 +288,14 @@ void CadastreFranceAdapter::cleanup()
 
 bool CadastreFranceAdapter::toXML(QDomElement xParent)
 {
+    Q_UNUSED(xParent)
+
     return true;
 }
 
 void CadastreFranceAdapter::fromXML(const QDomElement xParent)
 {
+    Q_UNUSED(xParent)
 }
 
 QString CadastreFranceAdapter::toPropertiesHtml()

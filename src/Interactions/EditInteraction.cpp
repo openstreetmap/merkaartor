@@ -225,6 +225,9 @@ void EditInteraction::snapMouseReleaseEvent(QMouseEvent * ev , Feature* aLast)
 
 void EditInteraction::snapMouseMoveEvent(QMouseEvent* anEvent, Feature* aLast)
 {
+    Q_UNUSED(anEvent)
+    Q_UNUSED(aLast)
+
     if (Dragging)
     {
         EndDrag = XY_TO_COORD(anEvent->pos());
@@ -234,6 +237,9 @@ void EditInteraction::snapMouseMoveEvent(QMouseEvent* anEvent, Feature* aLast)
 
 void EditInteraction::snapMouseDoubleClickEvent(QMouseEvent* anEvent, Feature* aLast)
 {
+    Q_UNUSED(anEvent)
+    Q_UNUSED(aLast)
+
 //    Qt::KeyboardModifiers modifiers = anEvent->modifiers();
 //    if (!panning() && !modifiers) {
 //        if (aLast) {

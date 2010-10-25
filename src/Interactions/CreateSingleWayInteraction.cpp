@@ -146,7 +146,7 @@ void CreateSingleWayInteraction::snapMouseMoveEvent(QMouseEvent* ev, Feature* la
                 if (R->notEverythingDownloaded())
                     continue;
 
-                for (unsigned int i=0; i<R->size()-1; ++i)
+                for (int i=0; i<R->size()-1; ++i)
                 {
                     LineF F(COORD_TO_XY(R->getNode(i)),COORD_TO_XY(R->getNode(i+1)));
                     double D = F.capDistance(ev->pos());
