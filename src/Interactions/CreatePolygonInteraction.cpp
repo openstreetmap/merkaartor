@@ -79,7 +79,7 @@ void CreatePolygonInteraction::mousePressEvent(QMouseEvent * event)
             m.scale(bScale.x(), bScale.y());
 
             QPointF Prev(CenterF.x()+cos(-Angle/2)*Radius,CenterF.y()+sin(-Angle/2)*Radius);
-            Node* First = new Node(XY_TO_COORD(m.map(Prev)));
+            Node* First = new Node(XY_TO_COORD(m.map(Prev.toPoint())));
             Way* R = new Way;
             R->add(First);
             CommandList* L  = new CommandList(MainWindow::tr("Create Polygon %1").arg(R->id()), R);
@@ -92,7 +92,7 @@ void CreatePolygonInteraction::mousePressEvent(QMouseEvent * event)
             for (double a = 2*M_PI - Angle*3/2; a>0; a-=Angle)
             {
                 QPointF Next(CenterF.x()+cos(a)*Radius,CenterF.y()+sin(a)*Radius);
-                Node* New = new Node(XY_TO_COORD(m.map(Next)));
+                Node* New = new Node(XY_TO_COORD(m.map(Next.toPoint())));
                 L->add(new AddFeatureCommand(Main->document()->getDirtyOrOriginLayer(),New,true));
                 R->add(New);
             }

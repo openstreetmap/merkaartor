@@ -34,7 +34,7 @@ class CreateAreaInteraction : public FeatureSnapInteraction
         void finishRoad(CommandList* L);
 
         MainWindow* Main;
-        QPointF LastCursor;
+        QPoint LastCursor;
         Relation* theRelation;
         Way* theRoad;
         Way* LastRoad;

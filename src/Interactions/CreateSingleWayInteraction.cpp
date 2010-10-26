@@ -116,7 +116,7 @@ void CreateSingleWayInteraction::snapMouseMoveEvent(QMouseEvent* ev, Feature* la
         double a = l1.angleTo(l2);
         a = qRound(a/SnapAngle) * SnapAngle;
         l2.setAngle(l1.angle() + a);
-        LastCursor = l2.p2();
+        LastCursor = l2.p2().toPoint();
     }
     else if (HaveFirst && ParallelMode)
     {
@@ -127,7 +127,7 @@ void CreateSingleWayInteraction::snapMouseMoveEvent(QMouseEvent* ev, Feature* la
         else
             PreviousPoint = COORD_TO_XY(FirstPoint);
 
-        CoordBox HotZone(XY_TO_COORD(ev->pos()-QPointF(CLEAR_DISTANCE, CLEAR_DISTANCE)),XY_TO_COORD(ev->pos()+QPointF(CLEAR_DISTANCE, CLEAR_DISTANCE)));
+        CoordBox HotZone(XY_TO_COORD(ev->pos()-QPoint(CLEAR_DISTANCE, CLEAR_DISTANCE)),XY_TO_COORD(ev->pos()+QPoint(CLEAR_DISTANCE, CLEAR_DISTANCE)));
         double BestDistanceNW = 9999, AngleNW = 0;
         double BestDistanceNE = 9999, AngleNE = 0;
         double* BestDistance;
@@ -198,7 +198,7 @@ void CreateSingleWayInteraction::snapMouseMoveEvent(QMouseEvent* ev, Feature* la
                 a = AngleNW - 180;
         }
         l.setAngle(a);
-        LastCursor = l.p2();
+        LastCursor = l.p2().toPoint();
     } else
         LastCursor = ev->pos();
     view()->update();

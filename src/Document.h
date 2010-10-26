@@ -109,6 +109,7 @@ public:
     void addDownloadBox(Layer*l, CoordBox aBox);
     void removeDownloadBox(Layer*l);
     const QList<CoordBox> getDownloadBoxes() const;
+    bool isDownloadedSafe(const Coord& c) const;
 
     bool hasUnsavedChanges();
     QPair<bool, CoordBox> boundingBox();

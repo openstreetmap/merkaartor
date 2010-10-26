@@ -168,13 +168,13 @@ void CreateDoubleWayInteraction::mousePressEvent(QMouseEvent* anEvent)
                 A1 = R1->getNode(i1);
                 A2 = R2->getNode(i2-1);
                 L->add(new MoveNodeCommand(A1,XY_TO_COORD(
-                    P1.intersectionWith(N1))));
+                    P1.intersectionWith(N1).toPoint())));
                 L->add(new MoveNodeCommand(A2,XY_TO_COORD(
-                    P2.intersectionWith(N2))));
+                    P2.intersectionWith(N2).toPoint())));
                 Node* B1 = new Node(XY_TO_COORD(
-                    FB1.project(LastCursor)));
+                    FB1.project(LastCursor).toPoint()));
                 Node* B2 = new Node(XY_TO_COORD(
-                    FB2.project(LastCursor)));
+                    FB2.project(LastCursor).toPoint()));
 
                 L->add(new AddFeatureCommand(Main->document()->getDirtyOrOriginLayer(),B1,true));
                 L->add(new AddFeatureCommand(Main->document()->getDirtyOrOriginLayer(),B2,true));
@@ -205,13 +205,13 @@ void CreateDoubleWayInteraction::mousePressEvent(QMouseEvent* anEvent)
                 FB2.slide(-rB*Modifier);
 
                 Node* A1 = new Node(XY_TO_COORD(
-                    FA1.project(COORD_TO_XY(PreviousPoint))));
+                    FA1.project(COORD_TO_XY(PreviousPoint)).toPoint()));
                 Node* A2 = new Node(XY_TO_COORD(
-                    FA2.project(COORD_TO_XY(PreviousPoint))));
+                    FA2.project(COORD_TO_XY(PreviousPoint)).toPoint()));
                 Node* B1 = new Node(XY_TO_COORD(
-                    FB1.project(LastCursor)));
+                    FB1.project(LastCursor).toPoint()));
                 Node* B2 = new Node(XY_TO_COORD(
-                    FB2.project(LastCursor)));
+                    FB2.project(LastCursor).toPoint()));
                 R1 = new Way;
                 R2 = new Way;
 

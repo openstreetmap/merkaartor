@@ -46,16 +46,6 @@ Document* Interaction::document()
     return theView->document();
 }
 
-const Projection& Interaction::projection() const
-{
-    return theView->projection();
-}
-
-const QTransform& Interaction::transform() const
-{
-    return theView->transform();
-}
-
 void Interaction::mousePressEvent(QMouseEvent * anEvent)
 {
     if (anEvent->buttons() & Qt::MidButton) {
@@ -210,8 +200,8 @@ void Interaction::updateSnap(QMouseEvent* event)
     Feature* ReadOnlySnap = 0;
     if (!SnapActive) return;
     //QTime Start(QTime::currentTime());
-    CoordBox HotZone(XY_TO_COORD(event->pos()-QPointF(M_PREFS->getMaxGeoPicWidth()+5,M_PREFS->getMaxGeoPicWidth()+5)),XY_TO_COORD(event->pos()+QPointF(M_PREFS->getMaxGeoPicWidth()+5,M_PREFS->getMaxGeoPicWidth()+5)));
-    CoordBox HotZoneSnap(XY_TO_COORD(event->pos()-QPointF(15,15)),XY_TO_COORD(event->pos()+QPointF(15,15)));
+    CoordBox HotZone(XY_TO_COORD(event->pos()-QPoint(M_PREFS->getMaxGeoPicWidth()+5,M_PREFS->getMaxGeoPicWidth()+5)),XY_TO_COORD(event->pos()+QPoint(M_PREFS->getMaxGeoPicWidth()+5,M_PREFS->getMaxGeoPicWidth()+5)));
+    CoordBox HotZoneSnap(XY_TO_COORD(event->pos()-QPoint(15,15)),XY_TO_COORD(event->pos()+QPoint(15,15)));
     SnapList.clear();
     double BestDistance = 5;
     double BestReadonlyDistance = 5;
@@ -320,6 +310,8 @@ FeatureSnapInteraction::FeatureSnapInteraction(MapView* theView)
     handCursor = QCursor(Qt::OpenHandCursor);
     grabCursor = QCursor(Qt::ClosedHandCursor);
     defaultCursor = QCursor(Qt::ArrowCursor);
+//    warningCursor = QCursor(Qt::ForbiddenCursor);
+    warningCursor = QCursor(QPixmap(":/Icons/cursor-warning"), 16, 5);
 
     theView->setCursor(cursor());
 }
@@ -368,7 +360,10 @@ void FeatureSnapInteraction::mouseReleaseEvent(QMouseEvent * event)
 
 void FeatureSnapInteraction::mouseMoveEvent(QMouseEvent* event)
 {
-    view()->setCursor(cursor());
+    if (!document()->isDownloadedSafe(theView->fromView(event->pos())))
+        view()->setCursor(warningCursor);
+    else
+        view()->setCursor(cursor());
     snapMouseMoveEvent(event, LastSnap);
     if (!(M_PREFS->getMouseSingleButton() && LastSnap))
         Interaction::mouseMoveEvent(event);
@@ -376,7 +371,10 @@ void FeatureSnapInteraction::mouseMoveEvent(QMouseEvent* event)
 
 void FeatureSnapInteraction::mouseDoubleClickEvent(QMouseEvent* event)
 {
-    view()->setCursor(cursor());
+    if (!document()->isDownloadedSafe(theView->fromView(event->pos())))
+        view()->setCursor(warningCursor);
+    else
+        view()->setCursor(cursor());
     snapMouseDoubleClickEvent(event, LastSnap);
     if (!(M_PREFS->getMouseSingleButton() && LastSnap))
         Interaction::mouseDoubleClickEvent(event);

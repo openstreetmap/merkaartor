@@ -52,6 +52,7 @@ class MapViewPrivate
 {
 public:
     QTransform theTransform;
+    QTransform theInvertedTransform;
     double PixelPerM;
     double NodeWidth;
     double ZoomLevel;
@@ -164,7 +165,7 @@ void MapView::panScreen(QPoint delta)
 
     CoordBox r1, r2;
 
-    Coord cDelta = theProjection.inverse(p->theTransform.inverted().map(QPointF(delta)))  - theProjection.inverse(p->theTransform.inverted().map(QPointF(0., 0.)));
+    Coord cDelta = theProjection.inverse(p->theInvertedTransform.map(delta))  - theProjection.inverse(p->theInvertedTransform.map(QPoint(0, 0)));
 
     if (delta.x()) {
         if (delta.x() < 0)
@@ -188,6 +189,7 @@ void MapView::panScreen(QPoint delta)
     //qDebug() << "r2 : " << p->theTransform.map(theProjection.project(r2.topLeft())) << ", " << p->theTransform.map(theProjection.project(r2.bottomRight()));
 
     p->theTransform.translate(qreal(delta.x())/p->theTransform.m11(), qreal(delta.y())/p->theTransform.m22());
+    p->theInvertedTransform = p->theTransform.inverted();
     viewportRecalc(rect());
     StaticBufferUpToDate = false;
 
@@ -295,7 +297,7 @@ void MapView::drawGPS(QPainter & P)
     if (Main->gps()->getGpsDevice()) {
         if (Main->gps()->getGpsDevice()->fixStatus() == QGPSDevice::StatusActive) {
             Coord vp(angToCoord(Main->gps()->getGpsDevice()->latitude()), angToCoord(Main->gps()->getGpsDevice()->longitude()));
-            QPointF g = p->theTransform.map(projection().project(vp));
+            QPoint g = toView(vp);
             QPixmap pm = getPixmapFromFile(":/Gps/Gps_Marker.svg", 32);
             P.drawPixmap(g - QPoint(16, 16), pm);
         }
@@ -304,7 +306,7 @@ void MapView::drawGPS(QPainter & P)
 
 void MapView::buildFeatureSet()
 {
-    QRectF clipRect = p->theTransform.inverted().mapRect(QRectF(rect().adjusted(-200, -200, 200, 200)));
+    QRectF clipRect = p->theInvertedTransform.mapRect(QRectF(rect().adjusted(-200, -200, 200, 200)));
 
     p->theCoastlines.clear();
     for (int i=0; i<theDocument->layerSize(); ++i)
@@ -700,7 +702,7 @@ void MapView::mouseDoubleClickEvent(QMouseEvent* anEvent)
             EditInteraction* EI = dynamic_cast<EditInteraction*>(theInteraction);
             if ((EI && EI->isIdle()) || (MI && MI->isIdle())) {
                 if ((theInteraction->lastSnap() && theInteraction->lastSnap()->getType() == IFeature::LineString) || !theInteraction->lastSnap())
-                    CreateNodeInteraction::createNode(XY_TO_COORD(anEvent->pos()), theInteraction->lastSnap());
+                    CreateNodeInteraction::createNode(fromView(anEvent->pos()), theInteraction->lastSnap());
                 else if (theInteraction->lastSnap() && theInteraction->lastSnap()->getType() == IFeature::Point) {
                     Node* N = CAST_NODE(theInteraction->lastSnap());
                     CreateSingleWayInteraction* CI = new CreateSingleWayInteraction(main(), this, N, false);
@@ -767,6 +769,11 @@ QTransform& MapView::transform()
     return p->theTransform;
 }
 
+QTransform& MapView::invertedTransform()
+{
+    return p->theInvertedTransform;
+}
+
 QPoint MapView::toView(const Coord& aCoord) const
 {
     return p->theTransform.map(theProjection.project(aCoord)).toPoint();
@@ -775,6 +782,11 @@ QPoint MapView::toView(const Coord& aCoord) const
 QPoint MapView::toView(Node* aPt) const
 {
     return p->theTransform.map(theProjection.project(aPt)).toPoint();
+}
+
+Coord MapView::fromView(const QPoint& aPt) const
+{
+    return theProjection.inverse(p->theInvertedTransform.map(aPt));
 }
 
 void MapView::on_customContextMenuRequested(const QPoint & pos)
@@ -952,7 +964,7 @@ void MapView::dropEvent(QDropEvent *event)
     else {
         QMenu menu(this);
         QString imageFn = locFiles[0];
-        Coord mapC = theProjection.inverse(p->theTransform.inverted().map(event->pos()));
+        Coord mapC = fromView(event->pos());
         Coord pos = GeoImageDock::getGeoDataFromImage(imageFn);
 
         if (pos.isNull()) {
@@ -1256,11 +1268,10 @@ CoordBox MapView::viewport() const
 
 void MapView::viewportRecalc(const QRect & Screen)
 {
-    QRectF fScreen(Screen);
-    Coord bl = theProjection.inverse(p->theTransform.inverted().map(fScreen.bottomLeft()));
-    Coord br = theProjection.inverse(p->theTransform.inverted().map(fScreen.bottomRight()));
-    Coord tr = theProjection.inverse(p->theTransform.inverted().map(fScreen.topRight()));
-    Coord tl = theProjection.inverse(p->theTransform.inverted().map(fScreen.topLeft()));
+    Coord bl = fromView(Screen.bottomLeft());
+    Coord br = fromView(Screen.bottomRight());
+    Coord tr = fromView(Screen.topRight());
+    Coord tl = fromView(Screen.topLeft());
     double t = qMax(tr.lat(), tl.lat());
     double b = qMin(br.lat(), bl.lat());
     double l = qMin(tl.lon(), bl.lon());
@@ -1271,9 +1282,9 @@ void MapView::viewportRecalc(const QRect & Screen)
         p->PixelPerM = Screen.width() / (double)p->Viewport.lonDiff() * theProjection.lonAnglePerM(coordToRad(p->Viewport.center().lat()));
     } else {
         // measure geographical distance between mid left and mid right of the screen
-        int mid = (fScreen.topLeft().y() + fScreen.bottomLeft().y()) / 2;
-        Coord left = theProjection.inverse(p->theTransform.inverted().map(QPointF(fScreen.left(), mid)));
-        Coord right = theProjection.inverse(p->theTransform.inverted().map(QPointF(fScreen.right(), mid)));
+        int mid = (Screen.topLeft().y() + Screen.bottomLeft().y()) / 2;
+        Coord left = fromView(QPoint(Screen.left(), mid));
+        Coord right = fromView(QPoint(Screen.right(), mid));
         p->PixelPerM = Screen.width() / (left.distanceFrom(right)*1000);
     }
 
@@ -1340,6 +1351,7 @@ void MapView::setViewport(const CoordBox & TargetMap,
     else
         targetVp = TargetMap;
     transformCalc(p->theTransform, theProjection, targetVp, Screen);
+    p->theInvertedTransform = p->theTransform.inverted();
     viewportRecalc(Screen);
 
     p->NodeWidth = p->PixelPerM * M_PREFS->getNodeSize();
@@ -1408,7 +1420,7 @@ void MapView::adjustZoomToBoris()
 void MapView::zoom(double d, const QPoint & Around,
                              const QRect & Screen)
 {
-    Coord Before = theProjection.inverse(p->theTransform.inverted().map(QPointF(Around)));
+    Coord Before = fromView(Around);
     QPointF pBefore = theProjection.project(Before);
 
     double ScaleLon = p->theTransform.m11() * d;
@@ -1417,6 +1429,7 @@ void MapView::zoom(double d, const QPoint & Around,
     double DeltaLon = (Around.x() - pBefore.x() * ScaleLon);
 
     p->theTransform.setMatrix(ScaleLon, 0, 0, 0, ScaleLat, 0, DeltaLon, DeltaLat, 1);
+    p->theInvertedTransform = p->theTransform.inverted();
     viewportRecalc(Screen);
 
     p->NodeWidth = p->PixelPerM * M_PREFS->getNodeSize();
@@ -1449,11 +1462,11 @@ void MapView::resize(QSize oldS, QSize newS)
 void MapView::setCenter(Coord & Center, const QRect & /*Screen*/)
 {
     Coord curCenter(p->Viewport.center());
-    QPointF curCenterScreen = p->theTransform.map(theProjection.project(curCenter));
-    QPointF newCenterScreen = p->theTransform.map(theProjection.project(Center));
+    QPoint curCenterScreen = toView(curCenter);
+    QPoint newCenterScreen = toView(Center);
 
-    QPointF panDelta = (curCenterScreen - newCenterScreen);
-    panScreen(panDelta.toPoint());
+    QPoint panDelta = (curCenterScreen - newCenterScreen);
+    panScreen(panDelta);
 }
 
 double MapView::pixelPerM() const

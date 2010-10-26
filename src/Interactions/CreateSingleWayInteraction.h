@@ -34,7 +34,7 @@ public:
 
     private:
         MainWindow* Main;
-        QPointF LastCursor;
+        QPoint LastCursor;
         Way* theRoad;
         Coord FirstPoint;
         Node* FirstNode;

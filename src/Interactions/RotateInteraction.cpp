@@ -156,7 +156,7 @@ Coord RotateInteraction::rotatePosition(Coord position, double angle)
     QLineF v(RotationCenter, p);
     v.setAngle(v.angle() + angle);
 
-    return XY_TO_COORD(v.p2());
+    return XY_TO_COORD(v.p2().toPoint());
 }
 
 double RotateInteraction::calculateNewAngle(QMouseEvent *event)

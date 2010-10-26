@@ -156,7 +156,7 @@ Coord ScaleInteraction::scalePosition(Coord position, double radius)
     QLineF v(ScaleCenter, p);
     v.setLength(v.length() * radius);
 
-    return XY_TO_COORD(v.p2());
+    return XY_TO_COORD(v.p2().toPoint());
 }
 
 void ScaleInteraction::paintEvent(QPaintEvent* anEvent, QPainter& thePainter)

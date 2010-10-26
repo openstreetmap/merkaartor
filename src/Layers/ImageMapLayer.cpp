@@ -507,8 +507,8 @@ void ImageMapLayer::setCurrentZoom(MapView& theView, const CoordBox& viewport, c
 
         vp = QRectF((pCenter.x() - wv/2), (pCenter.y() + hv/2), wv, -hv);
     } else if (p->theProjection.getProjectionProj4() == theView.projection().getProjectionProj4()) {
-        vp.setTopLeft(theView.transform().inverted().map(rect.topLeft()));
-        vp.setBottomRight(theView.transform().inverted().map(rect.bottomRight()));
+        vp.setTopLeft(theView.invertedTransform().map(rect.topLeft()));
+        vp.setBottomRight(theView.invertedTransform().map(rect.bottomRight()));
     } else
         vp = p->theProjection.getProjectedViewport(viewport, rect);
 
@@ -661,8 +661,8 @@ QRect ImageMapLayer::drawFull(MapView& theView, QRect& rect) const
         } else if (p->theProjection.getProjectionProj4() == theView.projection().getProjectionProj4()) {
             bl = QPointF(rect.bottomLeft());
             tr = QPointF(rect.topRight());
-            vp.setTopLeft(theView.transform().inverted().map(rect.topLeft()));
-            vp.setBottomRight(theView.transform().inverted().map(rect.bottomRight()));
+            vp.setTopLeft(theView.invertedTransform().map(rect.topLeft()));
+            vp.setBottomRight(theView.invertedTransform().map(rect.bottomRight()));
         } else
             vp = p->theProjection.getProjectedViewport(p->Viewport, rect);
 
@@ -715,8 +715,8 @@ QRect ImageMapLayer::drawTiled(MapView& theView, QRect& rect) const
 
         vp = QRectF((pCenter.x() - wv/2), (pCenter.y() + hv/2), wv, -hv);
     } else if (p->theProjection.getProjectionProj4() == theView.projection().getProjectionProj4()) {
-        vp.setTopLeft(theView.transform().inverted().map(rect.topLeft()));
-        vp.setBottomRight(theView.transform().inverted().map(rect.bottomRight()));
+        vp.setTopLeft(theView.invertedTransform().map(rect.topLeft()));
+        vp.setBottomRight(theView.invertedTransform().map(rect.bottomRight()));
     } else
         vp = p->theProjection.getProjectedViewport(p->Viewport, rect);
 

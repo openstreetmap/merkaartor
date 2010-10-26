@@ -27,8 +27,8 @@ class QPainter;
 
 #include <algorithm>
 
-#define XY_TO_COORD(x)  projection().inverse(transform().inverted().map(QPointF(x)))
-#define COORD_TO_XY(x)  transform().map(projection().project(x))
+#define XY_TO_COORD(x)  theView->fromView(x)
+#define COORD_TO_XY(x)  theView->toView(x)
 
 class Interaction : public QObject
 {
@@ -49,8 +49,6 @@ public:
     MapView* view();
     Document* document();
     MainWindow* main();
-    const Projection& projection() const;
-    const QTransform& transform() const;
     bool panning() const;
 
     void updateSnap(QMouseEvent* event);
@@ -123,6 +121,7 @@ private:
     QCursor handCursor;
     QCursor grabCursor;
     QCursor defaultCursor;
+    QCursor warningCursor;
 
 protected:
 };

@@ -70,6 +70,8 @@
         <file>actions/transform-move.png</file>
         <file>actions/transform-rotate.png</file>
         <file>actions/transform-scale.png</file>
+        <file alias="cursor-error.png">dialog-error.png</file>
+        <file alias="cursor-warning">dialog-warning.png</file>
     </qresource>
     <qresource prefix="/Art">
         <file>Mapnik/airport.png</file>

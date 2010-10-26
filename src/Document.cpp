@@ -922,6 +922,18 @@ const QList<CoordBox> Document::getDownloadBoxes() const
     return p->downloadBoxes.values();
 }
 
+bool Document::isDownloadedSafe(const Coord& c) const
+{
+    QHashIterator<Layer*, CoordBox>it(p->downloadBoxes);
+    while(it.hasNext()) {
+        it.next();
+        if (it.value().contains(c))
+            return true;
+    }
+
+    return false;
+}
+
 Layer * Document::getLastDownloadLayer() const
 {
     return p->lastDownloadLayer;
