@@ -58,7 +58,7 @@ void CadastreWrapper::setNetworkManager(QNetworkAccessManager *aManager)
     m_networkManager->get(QNetworkRequest(QUrl("http://www.cadastre.gouv.fr/scpc/accueil.do")));
 }
 
-void CadastreWrapper::search(const QString &city, const QString &department)
+void CadastreWrapper::searchVille(const QString &city, const QString &department)
 {
     // {"numerovoie": "", "indiceRepetition": "", "nomvoie": "", "lieuDit": "", "ville": city.upper(), "codePostal": "", "codeDepartement": dept, "nbResultatParPage": 20, "x": 0, "y" : 0}
     QString data = QString("numerovoie=&indiceRepetition=&nomvoie=&lieuDit=&ville=%1&codePostal=&codeDepartement=%2&nbResultatParPage=20&x=0&y=0")
@@ -70,8 +70,21 @@ void CadastreWrapper::search(const QString &city, const QString &department)
     m_networkManager->post(QNetworkRequest(QUrl("http://www.cadastre.gouv.fr/scpc/rechercherPlan.do")), data.toAscii());
 }
 
+void CadastreWrapper::searchCode(const QString &code, const QString &department)
+{
+    // {"numerovoie": "", "indiceRepetition": "", "nomvoie": "", "lieuDit": "", "ville": city.upper(), "codePostal": "", "codeDepartement": dept, "nbResultatParPage": 20, "x": 0, "y" : 0}
+    QString data = QString("numerovoie=&indiceRepetition=&nomvoie=&lieuDit=&codeCommune=%1&codeDepartement=%2&nbResultatParPage=20&x=0&y=0")
+                   .arg(QString::fromAscii(QUrl::toPercentEncoding(code.toUpper())))
+                   .arg(department);
+    qDebug() << data;
+    qDebug() << data.toAscii();
+    qDebug() << m_networkManager;
+    m_networkManager->post(QNetworkRequest(QUrl("http://www.cadastre.gouv.fr/scpc/rechercherPlan.do")), data.toAscii());
+}
+
 City CadastreWrapper::requestCity(const QString &code)
 {
+    qDebug() << "Request city: " << code;
     QDir cache = m_cacheDir;
     QNetworkReply *reply = m_networkManager->get(QNetworkRequest(QUrl("http://www.cadastre.gouv.fr/scpc/afficherCarteCommune.do?c=" + code)));
     while (!reply->isFinished())
@@ -201,6 +214,7 @@ void CadastreWrapper::networkFinished(QNetworkReply *reply)
         }
     } else if (reply->url() == QUrl("http://www.cadastre.gouv.fr/scpc/accueil.do")) {
         qDebug() << "Ok, I've got a cookie... I LOVE COOKIES.";
+        reply->readAll();
         m_gotCookie = true;
     } else if (reply->url() == QUrl("http://www.cadastre.gouv.fr/scpc/rechercherPlan.do")) {
         QString pageData = reply->readAll();
@@ -240,6 +254,7 @@ void CadastreWrapper::networkFinished(QNetworkReply *reply)
         QString pageData = reply->readAll();
         if (pageData.isEmpty())
             return;
+//        qDebug() << pageData;
         QString name, code, projection;
         code = reply->url().queryItemValue("c");
         qDebug() << code;
@@ -313,6 +328,7 @@ void CadastreWrapper::networkFinished(QNetworkReply *reply)
         settings.setValue("projection", projection);
         settings.sync();
     }
+    reply->close();
 }
 
 void CadastreWrapper::setRootCacheDir(QDir dir)

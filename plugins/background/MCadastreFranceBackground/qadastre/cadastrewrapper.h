@@ -35,7 +35,8 @@ public:
     explicit CadastreWrapper(QObject *parent = 0);
     static CadastreWrapper *instance();
 
-    void search (const QString &city, const QString &department);
+    void searchVille (const QString &city, const QString &department);
+    void searchCode (const QString &code, const QString &department);
     bool ready() { return m_gotCookie; }
     City requestCity (const QString &code);
     bool downloadTiles(City city);

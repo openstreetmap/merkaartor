@@ -360,9 +360,9 @@ void FeatureSnapInteraction::mouseReleaseEvent(QMouseEvent * event)
 
 void FeatureSnapInteraction::mouseMoveEvent(QMouseEvent* event)
 {
-    if (!document()->isDownloadedSafe(theView->fromView(event->pos())))
-        view()->setCursor(warningCursor);
-    else
+//    if (!document()->isDownloadedSafe(theView->fromView(event->pos())))
+//        view()->setCursor(warningCursor);
+//    else
         view()->setCursor(cursor());
     snapMouseMoveEvent(event, LastSnap);
     if (!(M_PREFS->getMouseSingleButton() && LastSnap))
@@ -371,9 +371,9 @@ void FeatureSnapInteraction::mouseMoveEvent(QMouseEvent* event)
 
 void FeatureSnapInteraction::mouseDoubleClickEvent(QMouseEvent* event)
 {
-    if (!document()->isDownloadedSafe(theView->fromView(event->pos())))
-        view()->setCursor(warningCursor);
-    else
+//    if (!document()->isDownloadedSafe(theView->fromView(event->pos())))
+//        view()->setCursor(warningCursor);
+//    else
         view()->setCursor(cursor());
     snapMouseDoubleClickEvent(event, LastSnap);
     if (!(M_PREFS->getMouseSingleButton() && LastSnap))

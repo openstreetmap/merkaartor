@@ -21,6 +21,7 @@
 #include "cadastrewrapper.h"
 
 #include <QMessageBox>
+#include <QDebug>
 
 SearchDialog::SearchDialog(QWidget *parent) :
     QDialog(parent),
@@ -59,7 +60,7 @@ void SearchDialog::on_searchButton_clicked()
     if (ui->name->text().isEmpty())
         return;
     QString department = QString("%1").arg(ui->department->currentIndex() + 1, 3, 10, QChar('0'));
-    cadastre->search(ui->name->text(), department);
+    cadastre->searchVille(ui->name->text(), department);
     ui->results->clear();
     m_results.clear();
     ui->results->setEnabled(false);
@@ -74,6 +75,7 @@ void SearchDialog::on_results_activated(int index)
 
 void SearchDialog::resultsAvailable(QMap<QString, QString> results)
 {
+    qDebug() << "SearchDialog::resultsAvailable: " << results;
     m_results = results;
     if (results.count() == 0) {
         QMessageBox::warning(this, tr("No result"), tr("Your search gave no result."));
@@ -81,7 +83,7 @@ void SearchDialog::resultsAvailable(QMap<QString, QString> results)
         ui->results->setEnabled(true);
         QMap<QString, QString>::iterator i = results.begin();
         while (i != results.end()) {
-            ui->results->addItem(i.value());
+            ui->results->addItem(i.value(), i.key());
             ++i;
         }
         ui->results->setCurrentIndex(0);
@@ -91,29 +93,10 @@ void SearchDialog::resultsAvailable(QMap<QString, QString> results)
 
 QString SearchDialog::cityCode()
 {
-    QMap<QString, QString>::iterator i = m_results.begin();
-    while (i != m_results.end()) {
-        if (ui->results->currentText() == i.value())
-            return i.key();
-        ++i;
-    }
-    return QString::null;
+    return ui->results->itemData(ui->results->currentIndex()).toString();
 }
 
 QString SearchDialog::cityName()
 {
-    QString code;
-
-    QMap<QString, QString>::iterator i = m_results.begin();
-    while (i != m_results.end()) {
-        if (ui->results->currentText() == i.value())
-            code = i.key();
-        ++i;
-    }
-
-    if (code.isEmpty())
-        return QString();
-
-    City city = cadastre->requestCity(code);
-    return city.name();
+    return QString("%1 (%2)").arg(ui->results->currentText()).arg(ui->department->currentText());
 }

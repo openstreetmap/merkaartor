@@ -150,6 +150,7 @@ private:
     QList<qreal> Resolutions;
 
     QString m_code;
+    QString m_department;
     City m_city;
 
 private:
