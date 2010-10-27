@@ -104,12 +104,15 @@ public:
     bool importCSV(const QString& filename, DrawingLayer* NewLayer);
     bool importOSC(const QString& filename, DrawingLayer* NewLayer);
 
+    QDateTime getLastDownloadLayerTime() const;
     Layer* getLastDownloadLayer() const;
     void setLastDownloadLayer(Layer * aLayer);
+
     void addDownloadBox(Layer*l, CoordBox aBox);
     void removeDownloadBox(Layer*l);
     const QList<CoordBox> getDownloadBoxes() const;
-    bool isDownloadedSafe(const Coord& c) const;
+    const QList<CoordBox> getDownloadBoxes(Layer* l) const;
+    bool isDownloadedSafe(const CoordBox& bb) const;
 
     bool hasUnsavedChanges();
     QPair<bool, CoordBox> boundingBox();

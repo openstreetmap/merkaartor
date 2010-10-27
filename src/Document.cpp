@@ -57,13 +57,14 @@ public:
             delete Layers[i];
         }
     }
-    CommandHistory*				History;
-    QList<Layer*>		Layers;
-    DirtyLayer*				dirtyLayer;
-    UploadedLayer*			uploadedLayer;
-    LayerDock*					theDock;
-    Layer*					lastDownloadLayer;
-    QHash<Layer*, CoordBox>		downloadBoxes;
+    CommandHistory*	History;
+    QList<Layer*> Layers;
+    DirtyLayer*	dirtyLayer;
+    UploadedLayer* uploadedLayer;
+    LayerDock*	theDock;
+    Layer*	lastDownloadLayer;
+    QDateTime lastDownloadTimestamp;
+    QHash<Layer*, CoordBox>	downloadBoxes;
 
     QStringList tagKeys;
     QStringList tagValues;
@@ -187,8 +188,10 @@ bool Document::toXML(QDomElement xParent, bool asTemplate, QProgressDialog * pro
 
     mapDoc.setAttribute("xml:id", id());
     mapDoc.setAttribute("layernum", p->layerNum);
-    if (p->lastDownloadLayer)
+    if (p->lastDownloadLayer) {
         mapDoc.setAttribute("lastdownloadlayer", p->lastDownloadLayer->id());
+        mapDoc.setAttribute("lastdownloadtimestamp", p->lastDownloadTimestamp.toUTC().toString(Qt::ISODate)+"Z");
+    }
 
     for (int i=0; i<p->Layers.size(); ++i) {
         progress->setMaximum(progress->maximum() + p->Layers[i]->getDisplaySize());
@@ -200,8 +203,9 @@ bool Document::toXML(QDomElement xParent, bool asTemplate, QProgressDialog * pro
         }
     }
 
-    if (!asTemplate)
+    if (!asTemplate) {
         OK = history().toXML(mapDoc, progress);
+    }
 
     return OK;
 }
@@ -212,6 +216,17 @@ Document* Document::fromXML(QString title, const QDomElement e, double version, 
     NewDoc->p->title = title;
 
     CommandHistory* h = 0;
+
+    if (e.hasAttribute("xml:id"))
+        NewDoc->p->Id = e.attribute("xml:id");
+    if (e.hasAttribute("layernum"))
+        NewDoc->p->layerNum = e.attribute("layernum").toInt();
+    else
+        NewDoc->p->layerNum = 1;
+    if (e.hasAttribute("lastdownloadlayer")) {
+        NewDoc->p->lastDownloadTimestamp = QDateTime::fromString(e.attribute("lastdownloadtimestamp").left(19), Qt::ISODate);
+        NewDoc->p->lastDownloadTimestamp.setTimeSpec(Qt::UTC);
+    }
 
     QDomElement c = e.firstChildElement();
     while(!c.isNull()) {
@@ -244,21 +259,17 @@ Document* Document::fromXML(QString title, const QDomElement e, double version, 
         c = c.nextSiblingElement();
     }
 
+    if (e.hasAttribute("lastdownloadlayer")) {
+        NewDoc->p->lastDownloadLayer = NewDoc->getLayer(e.attribute("lastdownloadlayer"));
+    }
+
+
     if (progress->wasCanceled()) {
         delete NewDoc;
         NewDoc = NULL;
     }
 
     if (NewDoc) {
-        if (e.hasAttribute("xml:id"))
-            NewDoc->p->Id = e.attribute("xml:id");
-        if (e.hasAttribute("layernum"))
-            NewDoc->p->layerNum = e.attribute("layernum").toInt();
-        else
-            NewDoc->p->layerNum = 1;
-        if (e.hasAttribute("lastdownloadlayer"))
-            NewDoc->setLastDownloadLayer(NewDoc->getLayer(e.attribute("lastdownloadlayer")));
-
         if (h)
             NewDoc->setHistory(h);
 
@@ -922,16 +933,26 @@ const QList<CoordBox> Document::getDownloadBoxes() const
     return p->downloadBoxes.values();
 }
 
-bool Document::isDownloadedSafe(const Coord& c) const
+const QList<CoordBox> Document::getDownloadBoxes(Layer* l) const
+{
+    return p->downloadBoxes.values(l);
+}
+
+bool Document::isDownloadedSafe(const CoordBox& bb) const
 {
     QHashIterator<Layer*, CoordBox>it(p->downloadBoxes);
     while(it.hasNext()) {
         it.next();
-        if (it.value().contains(c))
+        if (it.value().intersects(bb))
             return true;
     }
 
     return false;
+}
+
+QDateTime Document::getLastDownloadLayerTime() const
+{
+    return p->lastDownloadTimestamp;
 }
 
 Layer * Document::getLastDownloadLayer() const
@@ -942,6 +963,7 @@ Layer * Document::getLastDownloadLayer() const
 void Document::setLastDownloadLayer(Layer * aLayer)
 {
     p->lastDownloadLayer = aLayer;
+    p->lastDownloadTimestamp = QDateTime::currentDateTime();
 }
 
 void Document::on_imageRequested(ImageMapLayer* anImageLayer)

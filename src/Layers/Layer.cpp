@@ -716,6 +716,17 @@ bool DrawingLayer::toXML(QDomElement& xParent, bool asTemplate, QProgressDialog 
         QList<MapFeaturePtr>::iterator it;
         for(it = p->Features.begin(); it != p->Features.end(); it++)
             (*it)->toXML(o, progress);
+
+        QList<CoordBox> downloadBoxes = p->theDocument->getDownloadBoxes(this);
+        if (downloadBoxes.size() && p->theDocument->getLastDownloadLayerTime().secsTo(QDateTime::currentDateTime()) < 12*3600) { // Do not export downloaded areas if older than 12h
+            QDomElement downloaded = xParent.ownerDocument().createElement("DownloadedAreas");
+            e.appendChild(downloaded);
+
+            QListIterator<CoordBox>it(downloadBoxes);
+            while(it.hasNext()) {
+                it.next().toXML("DownloadedBoundingBox", downloaded);
+            }
+        }
     }
 
     return OK;
@@ -739,67 +750,53 @@ DrawingLayer * DrawingLayer::doFromXML(DrawingLayer* l, Document* d, const QDomE
     l->blockIndexing(true);
 
     QDomElement c = e.firstChildElement();
-    if (c.tagName() == "osm") {
-        QSet<Way*> addedWays;
-        int i=0;
-        c = c.firstChildElement();
-        while(!c.isNull()) {
-            if (c.tagName() == "bound") {
-            } else
-                if (c.tagName() == "way") {
-                Way* R = Way::fromXML(d, l, c);
-                if (R)
-                    addedWays << R;
-                //			l->add(R);
-                i++;
-            } else
-                if (c.tagName() == "relation") {
-                /* Relation* r = */ Relation::fromXML(d, l, c);
-                                    //			l->add(r);
-                                    i++;
-                                } else
-                                    if (c.tagName() == "node") {
-                                    /* Node* N = */ Node::fromXML(d, l, c);
-                                                    //			l->add(N);
-                                                    i++;
-                                                } else
-                                                    if (c.tagName() == "trkseg") {
-                                                    TrackSegment* T = TrackSegment::fromXML(d, l, c, progress);
-                                                    l->add(T);
-                                                    i++;
-                                                }
+    while (!c.isNull()) {
+        if (c.tagName() == "osm") {
+            QSet<Way*> addedWays;
+            int i=0;
+            QDomElement o = c.firstChildElement();
+            while(!o.isNull()) {
+                if (o.tagName() == "bound") {
+                } else  if (o.tagName() == "way") {
+                    Way* R = Way::fromXML(d, l, o);
+                    if (R)
+                        addedWays << R;
+                    i++;
+                } else if (o.tagName() == "relation") {
+                    /* Relation* r = */ Relation::fromXML(d, l, o);
+                    i++;
+                } else  if (o.tagName() == "node") {
+                    /* Node* N = */ Node::fromXML(d, l, o);
+                    i++;
+                } else if (o.tagName() == "trkseg") {
+                    TrackSegment* T = TrackSegment::fromXML(d, l, o, progress);
+                    l->add(T);
+                    i++;
+                }
 
-                                                if (i >= progress->maximum()/100) {
-                                                    progress->setValue(progress->value()+i);
-                                                    i=0;
-                                                }
+                if (i >= progress->maximum()/100) {
+                    progress->setValue(progress->value()+i);
+                    i=0;
+                }
 
-                                                if (progress->wasCanceled())
-                                                    break;
+                if (progress->wasCanceled())
+                    break;
 
-                                                c = c.nextSiblingElement();
-                                            }
+                o = o.nextSiblingElement();
+            }
 
-        if (i > 0) progress->setValue(progress->value()+i);
-
-        QString savlbl = progress->labelText();
-        int savval = progress->value();
-        int savmax = progress->maximum();
-
-        //    if (M_PREFS->getUseVirtualNodes()) {
-        //        progress.setLabelText("Updating virtual...");
-        //        progress.setMaximum(addedWays.size());
-        //        progress.setValue(0);
-        //        foreach (Way* value, addedWays) {
-        //            value->updateVirtuals();
-        //            progress.setValue(progress.value()+1);
-        //            qApp->processEvents();
-        //        }
-        //    }
-        progress->setLabelText(savlbl);
-        progress->setMaximum(savmax);
-        progress->setValue(savval);
-        qApp->processEvents();
+            if (i > 0) progress->setValue(progress->value()+i);
+            qApp->processEvents();
+        } else if (c.tagName() == "DownloadedAreas") {
+            if (d->getLastDownloadLayerTime().secsTo(QDateTime::currentDateTime()) < 12*3600) {    // Do not import downloaded areas if older than 12h
+                QDomElement bb = c.firstChildElement();
+                while(!bb.isNull()) {
+                    d->addDownloadBox(l, CoordBox::fromXML(bb));
+                    bb = bb.nextSiblingElement();
+                }
+            }
+        }
+        c =c.nextSiblingElement();
     }
     l->blockIndexing(false);
     return l;

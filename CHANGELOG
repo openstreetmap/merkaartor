@@ -1,4 +1,6 @@
 v0.17
+    * ADD : Do not allow to delete OSM nodes in non-downloaded areas (refs #3083)
+    * ADD : Save the downloaded areas in the MDC. Expired after 12h.
     * ADD : Allow to specify the Nominatim url in preferences
     * ADD : French Cadastre plugin
     * FIX : Infloop on next/previous image when none visible (fixes #3135)

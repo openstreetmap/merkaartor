@@ -672,7 +672,7 @@ void Way::buildPath(const Projection &theProjection, const QTransform& /*theTran
     bool toClip = !cr.contains(p->roadRect);
 //    bool toClip = false;
     if (!toClip) {
-        p->thePath = QPainterPath(p->theFullPath);
+        p->thePath = p->theFullPath;
     } else {
         if (area() > 0) {
             QPainterPath clipPath;
@@ -753,33 +753,29 @@ void Way::buildPath(const Projection &theProjection, const QTransform& /*theTran
     }
 }
 
-bool Way::deleteChildren(Document* theDocument, CommandList* theList,
-                         bool force)
+bool Way::deleteChildren(Document* theDocument, CommandList* theList)
 {
     if (lastUpdated() == Feature::OSMServerConflict)
         return true;
 
-    MDiscardableMessage dlg(NULL,
-        MainWindow::tr("Delete Children."),
-        MainWindow::tr("Do you want to delete the children nodes also?"));
-    if (force || dlg.check() == QDialog::Accepted) {
-        QList<Feature*> Alternatives;
-        QMap<Feature*, int> ToDelete;
-        for (int i=(int)p->Nodes.size()-1; i>=0; --i) {
-            Node* N = p->Nodes[i];
-            int sizeValidParents = 0;
-            for (int j=0; j<N->sizeParents(); ++j)
-                if (!N->getParent(j)->isDeleted())
-                    sizeValidParents++;
-            if (sizeValidParents == 1) {
-                ToDelete[N] = i;
-            }
+    QList<Feature*> Alternatives;
+    QMap<Feature*, int> ToDelete;
+    for (int i=(int)p->Nodes.size()-1; i>=0; --i) {
+        Node* N = p->Nodes[i];
+        if (!theDocument->isDownloadedSafe(N->boundingBox()) && N->hasOSMId())
+            continue;
+        int sizeValidParents = 0;
+        for (int j=0; j<N->sizeParents(); ++j)
+            if (!N->getParent(j)->isDeleted())
+                sizeValidParents++;
+        if (sizeValidParents == 1) {
+            ToDelete[N] = i;
         }
-        QList<Feature*> ToDeleteKeys = ToDelete.uniqueKeys();
-        for (int i=0; i<ToDeleteKeys.size(); ++i) {
-            if (!ToDeleteKeys[i]->isDeleted())
-                theList->add(new RemoveFeatureCommand(theDocument, ToDeleteKeys[i], Alternatives));
-        }
+    }
+    QList<Feature*> ToDeleteKeys = ToDelete.uniqueKeys();
+    for (int i=0; i<ToDeleteKeys.size(); ++i) {
+        if (!ToDeleteKeys[i]->isDeleted())
+            theList->add(new RemoveFeatureCommand(theDocument, ToDeleteKeys[i], Alternatives));
     }
     return true;
 }

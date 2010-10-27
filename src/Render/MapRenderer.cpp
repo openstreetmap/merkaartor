@@ -26,8 +26,8 @@ void BackgroundStyleLayer::draw(Way* R)
     if (paintsel) {
         paintsel->drawBackground(R,r->thePainter,r->theView);
         return;
-    }
-    if (/*!globalZoom(r->theProjection) && */!R->hasPainter()) //FIXME Untagged roads level of zoom?
+    } else
+//    if (/*!globalZoom(r->theProjection) && */!R->hasPainter()) //FIXME Untagged roads level of zoom?
     {
         QPen thePen(QColor(0,0,0),1);
 
@@ -147,7 +147,7 @@ void TouchupStyleLayer::draw(Node* Pt)
     const FeaturePainter* paintsel = Pt->getPainter(r->theView->pixelPerM());
     if (paintsel)
         paintsel->drawTouchup(Pt,r->thePainter,r->theView);
-    else if (!Pt->hasPainter()) {
+    else {
         if (! ((Pt->isReadonly() || !Pt->isSelectable(r->theView)) && (!Pt->isPOI() && !Pt->isWaypoint())))
 //        if (!Pt->isReadonly() && Pt->isSelectable(r->theView))
         {

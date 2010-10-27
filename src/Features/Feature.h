@@ -318,7 +318,7 @@ class Feature : public QObject, public IFeature
         virtual void updateFilters();
         virtual void invalidateMeta();
 
-        virtual bool deleteChildren(Document* , CommandList*, bool = false ) { return true; }
+        virtual bool deleteChildren(Document* , CommandList* ) { return true; }
 
         static Relation * GetSingleParentRelation(Feature * mapFeature);
         static Node* getTrackPointOrCreatePlaceHolder(Document *theDocument, Layer *theLayer, const QString& Id);

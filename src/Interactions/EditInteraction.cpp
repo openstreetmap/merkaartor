@@ -263,36 +263,59 @@ void EditInteraction::snapMouseDoubleClickEvent(QMouseEvent* anEvent, Feature* a
 
 void EditInteraction::on_remove_triggered()
 {
+    if (view()->properties()->size() == 0) return;
+
     QList<Feature*> Sel;
-    for (int i=0; i<view()->properties()->size(); ++i)
-        Sel.push_back(view()->properties()->selection(i));
-    if (Sel.size() == 0) return;
+    for (int i=0; i<view()->properties()->size(); ++i) {
+        if (!document()->isDownloadedSafe(view()->properties()->selection(i)->boundingBox()) && view()->properties()->selection(i)->hasOSMId())
+            continue;
+        else
+            Sel.push_back(view()->properties()->selection(i));
+    }
+    if (Sel.size() == 0) {
+        QMessageBox::critical(NULL, tr("Cannot delete"), tr("Cannot delete the selection because it is outside the downloaded area."));
+        return;
+    } else if (Sel.size() != view()->properties()->size()) {
+        if (!QMessageBox::warning(NULL, tr("Cannot delete everything"),
+                             tr("The complete selection cannot be deleted because part of it is outside the downloaded area.\n"
+                                "Delete what can be?"),
+                             QMessageBox::Yes|QMessageBox::No, QMessageBox::Yes))
+            return;
+    }
+
     CommandList* theList;
     if (Sel.size() == 1)
         theList  = new CommandList(MainWindow::tr("Remove feature %1").arg(Sel[0]->id()), Sel[0]);
     else
         theList  = new CommandList(MainWindow::tr("Remove features"), NULL);
-    bool deleteChildrenOK = true;
-    for (int i=0; i<Sel.size() && deleteChildrenOK; ++i) {
+
+    bool deleteChildrenOKDefined = false;
+    bool deleteChildrenOK = false;
+    for (int i=0; i<Sel.size(); ++i) {
         if (document()->exists(Sel[i])) {
             QList<Feature*> Alternatives;
 
-            deleteChildrenOK = Sel[i]->deleteChildren(document(), theList);
+            if (Sel[i]->size() && !deleteChildrenOKDefined) {
+                MDiscardableMessage dlg(NULL,
+                    MainWindow::tr("Delete Children."),
+                    MainWindow::tr("Do you want to delete the children nodes also?\n"
+                                   "Note that OSM nodes outside the downloaded area will be kept."));
+                deleteChildrenOKDefined = true;
+                deleteChildrenOK = (dlg.check() == QDialog::Accepted);
+            }
+            if (deleteChildrenOK)
+                Sel[i]->deleteChildren(document(), theList);
             theList->add(new RemoveFeatureCommand(document(), Sel[i], Alternatives));
         }
     }
 
-    if (!deleteChildrenOK) {
-        theList->undo();
+    if (theList->size()) {
+        document()->addHistory(theList);
+        view()->properties()->setSelection(0);
+        view()->properties()->checkMenuStatus();
+    }
+    else
         delete theList;
-    } else
-        if (theList->size()) {
-            document()->addHistory(theList);
-            view()->properties()->setSelection(0);
-            view()->properties()->checkMenuStatus();
-        }
-        else
-            delete theList;
     view()->invalidate(true, false);
 }
 

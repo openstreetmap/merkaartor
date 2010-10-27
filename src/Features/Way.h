@@ -101,7 +101,7 @@ class Way : public Feature
         double distance();
         double widthOf();
 
-        virtual bool deleteChildren(Document* theDocument, CommandList* theList, bool force = false);
+        virtual bool deleteChildren(Document* theDocument, CommandList* theList);
 
         QPainterPath getPath();
         void buildPath(Projection const &theProjection, const QTransform& thensform, const QRectF& clipRect);
