@@ -34,16 +34,34 @@ WMSPreferencesDialog::WMSPreferencesDialog(QWidget* parent)
     loadPrefs();
 
     edWmsLayers->setVisible(false);
-    frWmsSettings->setVisible(false);
     lblWMSC->setVisible(false);
+    frWmsSettings->setVisible(true);
     isTiled = 0;
     frTileIt->setEnabled(false);
+    edWmsUrl->setValidator(&wmsValid);
 
     connect(tvWmsLayers, SIGNAL(itemChanged(QTreeWidgetItem *, int)), this, SLOT(on_tvWmsLayers_itemChanged(QTreeWidgetItem *, int)));
 }
 
 WMSPreferencesDialog::~WMSPreferencesDialog()
 {
+}
+
+void WMSPreferencesDialog::updateUrl()
+{
+    QUrl theUrl(edWmsUrl->text());
+    if (!theUrl.hasQueryItem("VERSION"))
+        theUrl.addQueryItem("VERSION", "1.1.1");
+    if (!theUrl.hasQueryItem("SERVICE"))
+        theUrl.addQueryItem("SERVICE", "WMS");
+
+    theUrl.removeQueryItem("TRANSPARENT"); theUrl.addQueryItem("TRANSPARENT", "TRUE");
+    theUrl.removeQueryItem("LAYERS"); theUrl.addQueryItem("LAYERS", edWmsLayers->text());
+    theUrl.removeQueryItem("SRS"); theUrl.addQueryItem("SRS", cbWmsProj->currentText());
+    theUrl.removeQueryItem("STYLES"); theUrl.addQueryItem("STYLES", edWmsStyles->text());
+    theUrl.removeQueryItem("FORMAT"); theUrl.addQueryItem("FORMAT", cbWmsImgFormat->currentText());
+
+    edWmsUrl->setText(theUrl.toString());
 }
 
 void WMSPreferencesDialog::addServer(const WmsServer & srv)
@@ -78,6 +96,33 @@ void WMSPreferencesDialog::generateWmscLayer()
         startRes /= 2.;
         selWmscLayer.Resolutions << startRes;
     }
+}
+
+void WMSPreferencesDialog::on_edWmsUrl_textEdited(const QString &newText)
+{
+    QUrl u(newText);
+
+    if (u.hasEncodedQueryItem("LAYERS"))
+        edWmsLayers->setText(QUrl::fromPercentEncoding(u.queryItemValue("LAYERS").toLatin1()));
+    if (u.hasEncodedQueryItem("SRS"))
+        cbWmsProj->setEditText(QUrl::fromPercentEncoding(u.queryItemValue("SRS").toLatin1()));
+    if (u.hasEncodedQueryItem("STYLES"))
+        edWmsStyles->setText(QUrl::fromPercentEncoding(u.queryItemValue("STYLES").toLatin1()));
+    if (u.hasEncodedQueryItem("FORMAT"))
+        cbWmsImgFormat->setEditText(QUrl::fromPercentEncoding(u.queryItemValue("FORMAT").toLatin1()));
+}
+
+void WMSPreferencesDialog::on_edWmsUrl_editingFinished()
+{
+    QUrl u(edWmsUrl->text());
+    if (u.isValid() && !u.host().isEmpty() && !u.path().isEmpty()) {
+        on_btShowCapabilities_clicked();
+    }
+}
+
+void WMSPreferencesDialog::on_edWmsStyles_textEdited(const QString &/*newText*/)
+{
+    updateUrl();
 }
 
 void WMSPreferencesDialog::on_btApplyWmsServer_clicked(void)
@@ -156,11 +201,11 @@ void WMSPreferencesDialog::on_btDelWmsServer_clicked(void)
 
 void WMSPreferencesDialog::on_lvWmsServers_itemSelectionChanged()
 {
-    frWmsSettings->setVisible(false);
     frTileIt->setEnabled(false);
     cbTileIt->setChecked(false);
     sbZoomLevels->setValue(0);
     lblWMSC->setVisible(false);
+    frWmsSettings->setVisible(true);
     isTiled = 0;
     selWmscLayer = WmscLayer();
 
@@ -175,7 +220,6 @@ void WMSPreferencesDialog::on_lvWmsServers_itemSelectionChanged()
     edWmsUrl->setText("http://" + WS.WmsAdress + WS.WmsPath);
     edWmsLayers->setText(WS.WmsLayers);
     cbWmsProj->setEditText(WS.WmsProjections);
-    on_cbWmsProj_currentIndexChanged(WS.WmsProjections);
     edWmsStyles->setText(WS.WmsStyles);
     cbWmsImgFormat->setEditText(WS.WmsImgFormat);
     edSourceTag->setText(WS.WmsSourceTag);
@@ -188,11 +232,12 @@ void WMSPreferencesDialog::on_lvWmsServers_itemSelectionChanged()
         cbTileIt->setChecked(true);
         sbZoomLevels->setValue(selWmscLayer.Resolutions.size());
     }
+    on_cbWmsProj_currentIndexChanged(WS.WmsProjections);
 
     selectedServer = WS.WmsName;
 
-    QUrl theUrl(edWmsUrl->text());
-    if ((theUrl.host() != "") && (theUrl.path() != "")) {
+    QUrl u(edWmsUrl->text());
+    if (u.isValid() && !u.host().isEmpty() && !u.path().isEmpty()) {
         on_btShowCapabilities_clicked();
     }
 }
@@ -210,6 +255,12 @@ void WMSPreferencesDialog::on_cbWmsProj_currentIndexChanged(const QString &text)
     {
         frTileIt->setEnabled(true);
     }
+    updateUrl();
+}
+
+void WMSPreferencesDialog::on_cbWmsImgFormat_currentIndexChanged(const QString &/*text*/)
+{
+    updateUrl();
 }
 
 QString WMSPreferencesDialog::getSelectedServer()
@@ -350,14 +401,24 @@ void WMSPreferencesDialog::httpRequestFinished(bool error)
         return;
     }
 
-    frWmsSettings->setVisible(true);
     lblWMSC->setVisible(false);
+    frWmsSettings->setVisible(true);
     isTiled = 0;
 
     QDomDocument theXmlDoc;
     theXmlDoc.setContent(http->readAll());
 
     QDomElement docElem = theXmlDoc.documentElement();
+
+    if (edWmsName->text().isEmpty()) {
+        QDomElement svcElem = docElem.firstChildElement("Service");
+        if (!svcElem.isNull()) {
+            QDomNodeList aNodeList = svcElem.elementsByTagName("Title");
+            if (aNodeList.size())
+                edWmsName->setText(aNodeList.item(0).firstChild().toText().nodeValue());
+        }
+    }
+
     QDomElement capElem = docElem.firstChildElement("Capability");
     if (capElem.isNull()) {
         // No "Capability"
@@ -399,6 +460,7 @@ void WMSPreferencesDialog::httpRequestFinished(bool error)
     formatList.sort();
     cbWmsImgFormat->addItems(formatList);
     cbWmsImgFormat->setEditText(oldFormat);
+    on_cbWmsImgFormat_currentIndexChanged(oldFormat);
 
     QDomElement vendorElem = capElem.firstChildElement("VendorSpecificCapabilities");
     if (!vendorElem.isNull()) {
@@ -422,8 +484,8 @@ void WMSPreferencesDialog::parseVendorSpecific(QDomElement &vendorElem)
 
 void WMSPreferencesDialog::parseTileSet(QDomElement &tilesetElem, WmscLayer &aLayer)
 {
-    frWmsSettings->setVisible(false);
     lblWMSC->setVisible(true);
+    frWmsSettings->setVisible(false);
     isTiled = 1;
 
     QDomElement elem = tilesetElem.firstChildElement();
@@ -523,4 +585,5 @@ void WMSPreferencesDialog::on_tvWmsLayers_itemChanged(QTreeWidgetItem *twi, int)
         ++it;
     }
     edWmsLayers->setText(theLayers.join(","));
+    updateUrl();
 }

@@ -76,11 +76,16 @@ QString WMSMapAdapter::getQuery(const QRectF& /*wgs84Bbox*/, const QRectF& projB
         theUrl.addQueryItem("SERVICE", "WMS");
     theUrl.addQueryItem("REQUEST", "GetMap");
 
-    theUrl.addQueryItem("TRANSPARENT", "TRUE");
-    theUrl.addQueryItem("LAYERS", theServer.WmsLayers);
-    theUrl.addQueryItem("SRS", theServer.WmsProjections);
-    theUrl.addQueryItem("STYLES", theServer.WmsStyles);
-    theUrl.addQueryItem("FORMAT", theServer.WmsImgFormat);
+    if (!theUrl.hasQueryItem("TRANSPARENT"))
+        theUrl.addQueryItem("TRANSPARENT", "TRUE");
+    if (!theUrl.hasQueryItem("LAYERS"))
+        theUrl.addQueryItem("LAYERS", theServer.WmsLayers);
+    if (!theUrl.hasQueryItem("SRS"))
+        theUrl.addQueryItem("SRS", theServer.WmsProjections);
+    if (!theUrl.hasQueryItem("STYLES"))
+        theUrl.addQueryItem("STYLES", theServer.WmsStyles);
+    if (!theUrl.hasQueryItem("FORMAT"))
+        theUrl.addQueryItem("FORMAT", theServer.WmsImgFormat);
     theUrl.addQueryItem("WIDTH", QString::number(size.width()));
     theUrl.addQueryItem("HEIGHT", QString::number(size.height()));
     theUrl.addQueryItem("BBOX", loc.toString(projBbox.bottomLeft().x(),'f',6).append(",")
@@ -90,26 +95,6 @@ QString WMSMapAdapter::getQuery(const QRectF& /*wgs84Bbox*/, const QRectF& projB
             );
 
     return theUrl.toString(QUrl::RemoveScheme | QUrl::RemoveAuthority);
-
-
-//    return QString()
-//                        .append(theServer.WmsPath)
-//                        .append("SERVICE=WMS")
-//                        .append("&VERSION=1.1.1")
-//                        .append("&REQUEST=GetMap")
-//                        .append("&TRANSPARENT=TRUE")
-//                        .append("&LAYERS=").append(theServer.WmsLayers)
-//                        .append("&SRS=").append(theServer.WmsProjections)
-//                        .append("&STYLES=").append(theServer.WmsStyles)
-//                        .append("&FORMAT=").append(theServer.WmsImgFormat)
-//                        .append("&WIDTH=").append(QString::number(size.width()))
-//                        .append("&HEIGHT=").append(QString::number(size.height()))
-//                        .append("&BBOX=")
-//                        .append(loc.toString(projBbox.bottomLeft().x(),'f',6)).append(",")
-//                         .append(loc.toString(projBbox.bottomLeft().y(),'f',6)).append(",")
-//                         .append(loc.toString(projBbox.topRight().x(),'f',6)).append(",")
-//                         .append(loc.toString(projBbox.topRight().y(),'f',6))
-//                         ;
 }
 
 QString WMSMapAdapter::getSourceTag() const

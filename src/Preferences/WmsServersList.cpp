@@ -48,10 +48,13 @@ void WmsServer::toXml(QDomElement parent)
     p.setAttribute("name", WmsName);
     p.setAttribute("address", WmsAdress);
     p.setAttribute("path", WmsPath);
-    p.setAttribute("layers", WmsLayers);
     p.setAttribute("projections", WmsProjections);
-    p.setAttribute("styles", WmsStyles);
-    p.setAttribute("format", WmsImgFormat);
+    if (!WmsLayers.isEmpty())
+        p.setAttribute("layers", WmsLayers);
+    if (!WmsStyles.isEmpty())
+        p.setAttribute("styles", WmsStyles);
+    if (!WmsImgFormat.isEmpty())
+        p.setAttribute("format", WmsImgFormat);
     if (!WmsSourceTag.isEmpty())
         p.setAttribute("sourcetag", WmsSourceTag);
     if (!WmsLicenseUrl.isEmpty())

@@ -93,11 +93,16 @@ QString WmscMapAdapter::getQuery(int i, int j, int /* z */) const
         theUrl.addQueryItem("SERVICE", "WMS");
     theUrl.addQueryItem("REQUEST", "GetMap");
 
-    theUrl.addQueryItem("TRANSPARENT", "TRUE");
-    theUrl.addQueryItem("LAYERS", theServer.WmsLayers);
-    theUrl.addQueryItem("SRS", theServer.WmsProjections);
-    theUrl.addQueryItem("STYLES", theServer.WmsStyles);
-    theUrl.addQueryItem("FORMAT", theServer.WmsImgFormat);
+    if (!theUrl.hasQueryItem("TRANSPARENT"))
+        theUrl.addQueryItem("TRANSPARENT", "TRUE");
+    if (!theUrl.hasQueryItem("LAYERS"))
+        theUrl.addQueryItem("LAYERS", theServer.WmsLayers);
+    if (!theUrl.hasQueryItem("SRS"))
+        theUrl.addQueryItem("SRS", theServer.WmsProjections);
+    if (!theUrl.hasQueryItem("STYLES"))
+        theUrl.addQueryItem("STYLES", theServer.WmsStyles);
+    if (!theUrl.hasQueryItem("FORMAT"))
+        theUrl.addQueryItem("FORMAT", theServer.WmsImgFormat);
     theUrl.addQueryItem("WIDTH", QString::number(getTileSizeW()));
     theUrl.addQueryItem("HEIGHT", QString::number(getTileSizeH()));
     theUrl.addQueryItem("BBOX", QString()
@@ -111,29 +116,6 @@ QString WmscMapAdapter::getQuery(int i, int j, int /* z */) const
 
 
     return theUrl.toString(QUrl::RemoveScheme | QUrl::RemoveAuthority);
-
-//    QString path =  QString()
-//                        .append(theServer.WmsPath)
-//                        .append("SERVICE=WMS")
-//                        .append("&VERSION=1.1.1")
-//                        .append("&REQUEST=GetMap")
-//                        .append("&TRANSPARENT=TRUE")
-//                        .append("&LAYERS=").append(theServer.WmsLayers)
-//                        .append("&SRS=").append(theServer.WmsProjections)
-//                        .append("&STYLES=").append(theServer.WmsStyles)
-//                        .append("&FORMAT=").append(theServer.WmsImgFormat)
-//                        .append("&WIDTH=").append(QString::number(tilesize))
-//                        .append("&HEIGHT=").append(QString::number(tilesize))
-//                        .append("&BBOX=")
-//                        .append(loc.toString(ul.x(),'f',6)).append(",")
-//                        .append(loc.toString(br.y(),'f',6)).append(",")
-//                        .append(loc.toString(br.x(),'f',6)).append(",")
-//                        .append(loc.toString(ul.y(),'f',6));
-//                         ;
-//    if (theServer.WmsIsTiled == 1)
-//        path += "&tiled=true";
-
-//    return path;
 }
 
 bool WmscMapAdapter::isValid(int x, int y, int z) const
