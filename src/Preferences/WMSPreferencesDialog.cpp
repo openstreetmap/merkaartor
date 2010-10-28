@@ -527,24 +527,24 @@ QTreeWidgetItem * WMSPreferencesDialog::parseLayers(QDomElement& aLayerElem, QTr
 
     QDomElement title = aLayerElem.firstChildElement("Title");
     QDomElement name = aLayerElem.firstChildElement("Name");
+    if (name.isNull())
+        return NULL;
 
     QTreeWidgetItem *newItem = new QTreeWidgetItem;
     newItem->setFlags(Qt::NoItemFlags |Qt::ItemIsEnabled);
-    if (!title.isNull())
-        newItem->setText(0, title.firstChild().toText().nodeValue());
-    else
-        if (!name.isNull())
-            newItem->setText(0,name.firstChild().toText().nodeValue());
+    newItem->setText(0,name.firstChild().toText().nodeValue());
+    newItem->setToolTip(0, title.firstChild().toText().nodeValue());
 
-    if (!name.isNull()) {
-        QString theName = name.firstChild().toText().nodeValue();
-        newItem->setFlags(Qt::ItemIsUserCheckable | Qt::ItemIsSelectable | Qt::ItemIsEnabled);
-        newItem->setData(0, Qt::UserRole, theName);
-        if (edWmsLayers->text().contains(theName))
+    QString theName = name.firstChild().toText().nodeValue();
+    newItem->setFlags(Qt::ItemIsUserCheckable | Qt::ItemIsSelectable | Qt::ItemIsEnabled);
+    newItem->setData(0, Qt::UserRole, theName);
+    foreach (QString s, edWmsLayers->text().split(',')) {
+        if (theName == s)
             newItem->setCheckState(0, Qt::Checked);
         else
             newItem->setCheckState(0, Qt::Unchecked);
     }
+
     if (aLayerItem)
         aLayerItem->addChild(newItem);
 

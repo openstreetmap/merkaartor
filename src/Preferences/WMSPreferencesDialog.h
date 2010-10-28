@@ -30,7 +30,7 @@
 class WmsUrlValidator: public QValidator
 {
 public:
-    State validate ( QString & input, int & pos ) const
+    State validate ( QString & input, int & /*pos*/ ) const
     {
         QUrl u(input);
         if (!u.isValid())
@@ -53,8 +53,8 @@ public:
         return QValidator::Acceptable;
     }
 
-    virtual void fixup ( QString & input ) const
-    {
+//    virtual void fixup ( QString & input ) const
+//    {
 //        QUrl u(input);
 //        if (!u.isValid())
 //            return;
@@ -62,7 +62,7 @@ public:
 //            u.removeEncodedQueryItem("BBOX");
 //        }
 //        input = u.toString();
-    }
+//    }
 
 };
 
