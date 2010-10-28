@@ -1,0 +1,33 @@
+255 G : set color space : white ?
+26 122 172 rG : bleu - eau
+255 204 51 rG : orange sombre - bati
+255 229 153 rG : orange clair - bati sans murs
+152 195 218 rG : bleu pâle - eau
+X Y W H re : crée sur la pile un rectangle de WxH aux coordonnées x,y
+X Y dx1 dy1 dx2 dy2 ... f* : dessine un polygone commençant à X,Y et prenant des lignes dxN,dyN, remplissage odd-even
+X Y dx1 dy1 dx2 dy2 ... f : dessine un polygone commençant à X,Y et prenant des lignes dxN,dyN, remplissage «normal»
+X Y dx1 dy1 dx2 dy2 ... S : dessine le contour d'un polygone....
+X w : set line width to float X
+q : save state
+Q : restore state
+K : set color space : black ?
+* M : setmiterlimit ?
+Y : P clip newpath ? 
+^ : récupérer des coordonnées précédentes et les mettre en négatif sur la pile
+
+
+/re{4 -2 roll m exch dup lx exch ly neg lx h}!
+/p{N 2 idiv{N -2 roll rlineto}repeat}!
+/N/counttomark #
+/P{N 0 gt{N -2 roll moveto p}if}!
+
+
+/m/moveto #/l/lineto 
+/lx{0 rlineto}!/ly{0 exch rlineto}!
+
+/^{3 index neg 3 index neg}!
+
+/v{0 0 6 2 roll c}!/y{2 copy c}!
+
+#/c/rcurveto
+
