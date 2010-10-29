@@ -102,7 +102,6 @@ class MapFeaturePrivate
                 PixelPerMForPainter(-1), CurrentPainter(0), HasPainter(false),
                 theFeature(0), LastPartNotification(0),
                 Time(QDateTime::currentDateTime()), Deleted(false), Visible(true), Uploaded(false), ReadOnly(false), FilterRevision(-1)
-                , LongId(0)
                 , Virtual(false), Special(false), DirtyLevel(0)
                 , VirtualsUpdatesBlocked(false)
         {
@@ -114,7 +113,6 @@ class MapFeaturePrivate
                 PixelPerMForPainter(-1), CurrentPainter(0), HasPainter(false),
                 theFeature(0), LastPartNotification(0),
                 Time(other.Time), Deleted(false), Visible(true), Uploaded(false), ReadOnly(false), FilterRevision(-1)
-                , LongId(0)
                 , Virtual(other.Virtual), Special(other.Special), DirtyLevel(0)
                 , VirtualsUpdatesBlocked(other.VirtualsUpdatesBlocked)
         {
@@ -126,7 +124,7 @@ class MapFeaturePrivate
         void updatePainters(double PixelPerM);
         void initVersionNumber();
 
-        mutable QString Id;
+        mutable IFeature::FId Id;
         QList<QPair<quint32, quint32> > Tags;
         int TagsSize;
         Feature::ActorType LastActor;
@@ -146,7 +144,6 @@ class MapFeaturePrivate
         bool Uploaded;
         bool ReadOnly;
         int FilterRevision;
-        qint64 LongId;
         RenderPriority theRenderPriority;
         bool Virtual;
         bool Special;
@@ -232,9 +229,14 @@ Feature::ActorType Feature::lastUpdated() const
         return p->LastActor;
 }
 
-void Feature::setId(const QString& id)
+QString Feature::stripToOSMId(const IFeature::FId& id)
 {
-    if (id == p->Id)
+    return QString::number(id.numId);
+}
+
+void Feature::setId(const IFeature::FId& id)
+{
+    if (id.type == p->Id.type && id.numId == p->Id.numId)
         return;
 
     if (parent())
@@ -245,41 +247,26 @@ void Feature::setId(const QString& id)
     p->Id = id;
 }
 
-const QString& Feature::resetId()
+const IFeature::FId& Feature::resetId()
 {
-    p->Id = QString::number(randomId());
+    p->Id.type = getType();
+    p->Id.numId = randomId();
     if (parent())
         dynamic_cast<Layer*>(parent())->notifyIdUpdate(p->Id,const_cast<Feature*>(this));
     return p->Id;
 }
 
-const QString& Feature::id() const
+const IFeature::FId& Feature::id() const
 {
-    if (p->Id.isEmpty())
+    if (p->Id.type == IFeature::Uninitialized)
     {
-        p->Id = QString::number(randomId());
+        p->Id.type = getType();
+        p->Id.numId = randomId();
         Layer* L = dynamic_cast<Layer*>(parent());
         if (L)
             L->notifyIdUpdate(p->Id,const_cast<Feature*>(this));
     }
     return p->Id;
-}
-
-qint64 Feature::idToLong() const
-{
-    if (p->LongId)
-        return p->LongId;
-
-    if (hasOSMId()) {
-        bool ok;
-        QString s = stripToOSMId(id());
-        p->LongId = s.toLongLong(&ok);
-        Q_ASSERT(ok);
-    } else {
-        p->LongId = randomId();
-    }
-
-    return p->LongId;
 }
 
 QString Feature::xmlId() const
@@ -289,9 +276,7 @@ QString Feature::xmlId() const
 
 bool Feature::hasOSMId() const
 {
-    if (p->Id[0] == 'n' || p->Id[0] == 'w' || p->Id[0] == 'r')
-        return true;
-    return false;
+    return (p->Id.numId >= 0);
 }
 
 const QDateTime& Feature::time() const
@@ -952,14 +937,6 @@ void Feature::tagsFromXML(Document* d, Feature * f, QDomElement e)
     }
 }
 
-QString Feature::stripToOSMId(const QString& id)
-{
-    int f = id.lastIndexOf("_");
-    if (f>0)
-        return id.right(id.length()-(f+1));
-    return id;
-}
-
 Relation * Feature::GetSingleParentRelation(Feature * mapFeature)
 {
     int parents = mapFeature->sizeParents();
@@ -986,62 +963,41 @@ Relation * Feature::GetSingleParentRelation(Feature * mapFeature)
 }
 
 //Static
-Node* Feature::getTrackPointOrCreatePlaceHolder(Document *theDocument, Layer *theLayer, const QString& Id)
+Node* Feature::getTrackPointOrCreatePlaceHolder(Document *theDocument, Layer *theLayer, const IFeature::FId& Id)
 {
-    Node* Part = dynamic_cast<Node*>(theDocument->getFeature("node_"+Id));
+    Node* Part = CAST_NODE(theDocument->getFeature(Id));
     if (!Part)
     {
-        Part = dynamic_cast<Node*>(theDocument->getFeature(Id));
-        if (!Part)
-        {
-            Part = new Node(Coord(0,0));
-            if (Id.startsWith('{') || Id.startsWith('-'))
-                Part->setId(Id);
-            else
-                Part->setId("node_"+Id);
-            Part->setLastUpdated(Feature::NotYetDownloaded);
-            theLayer->add(Part);
-        }
+        Part = new Node(Coord(0,0));
+        Part->setId(Id);
+        Part->setLastUpdated(Feature::NotYetDownloaded);
+        theLayer->add(Part);
     }
     return Part;
 }
 
-Way* Feature::getWayOrCreatePlaceHolder(Document *theDocument, Layer *theLayer, const QString& Id)
+Way* Feature::getWayOrCreatePlaceHolder(Document *theDocument, Layer *theLayer, const IFeature::FId& Id)
 {
-    Way* Part = dynamic_cast<Way*>(theDocument->getFeature("way_"+Id));
+    Way* Part = CAST_WAY(theDocument->getFeature(Id));
     if (!Part)
     {
-        Part = dynamic_cast<Way*>(theDocument->getFeature(Id));
-        if (!Part)
-        {
-            Part = new Way;
-            if (Id.startsWith('{') || Id.startsWith('-'))
-                Part->setId(Id);
-            else
-                Part->setId("way_"+Id);
-            Part->setLastUpdated(Feature::NotYetDownloaded);
-            theLayer->add(Part);
-        }
+        Part = new Way;
+        Part->setId(Id);
+        Part->setLastUpdated(Feature::NotYetDownloaded);
+        theLayer->add(Part);
     }
     return Part;
 }
 
-Relation* Feature::getRelationOrCreatePlaceHolder(Document *theDocument, Layer *theLayer, const QString& Id)
+Relation* Feature::getRelationOrCreatePlaceHolder(Document *theDocument, Layer *theLayer, const IFeature::FId& Id)
 {
-    Relation* Part = dynamic_cast<Relation*>(theDocument->getFeature("rel_"+Id));
+    Relation* Part = CAST_RELATION(theDocument->getFeature(Id));
     if (!Part)
     {
-        Part = dynamic_cast<Relation*>(theDocument->getFeature(Id));
-        if (!Part)
-        {
-            Part = new Relation;
-            if (Id.startsWith('{') || Id.startsWith('-'))
-                Part->setId(Id);
-            else
-                Part->setId("rel_"+Id);
-            Part->setLastUpdated(Feature::NotYetDownloaded);
-            theLayer->add(Part);
-        }
+        Part = new Relation;
+        Part->setId(Id);
+        Part->setLastUpdated(Feature::NotYetDownloaded);
+        theLayer->add(Part);
     }
     return Part;
 }
@@ -1072,9 +1028,9 @@ QString Feature::toMainHtml(QString type, QString systemtype)
     QString desc;
     QString name(tagValue("name",""));
     if (!name.isEmpty())
-        desc = QString("<big><b>%1</b></big><br/><small>(%2)</small>").arg(name).arg(id());
+        desc = QString("<big><b>%1</b></big><br/><small>(%2)</small>").arg(name).arg(id().numId);
     else
-        desc = QString("<big><b>%1</b></big>").arg(id());
+        desc = QString("<big><b>%1</b></big>").arg(id().numId);
 
     QString S =
     "<html><head/><body>"
@@ -1112,8 +1068,7 @@ QString Feature::toMainHtml(QString type, QString systemtype)
         }
     }
 
-    int f = id().lastIndexOf("_");
-    if (f>0) {
+    if (hasOSMId()) {
         S += "<hr/>"
         "<a href='/" + systemtype + "/" + xmlId() + "/history'>"+QApplication::translate("MapFeature", "History")+"</a>";
         if (systemtype == "node") {

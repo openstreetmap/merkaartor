@@ -3,18 +3,30 @@
 
 #include <QString>
 #include <QDateTime>
+#include <QPair>
+#include <QMetaType>
 
 class IFeature
 {
 public:
     typedef enum {
-        Point				= 0x00000000,
-        LineString			= 0x00000001,
-        Polygon             = 0x00000002,
-        OsmSegment			= 0x10000000,
-        OsmRelation			= 0x10000001,
-        All					= 0xffffffff
+        Uninitialized       = 0x00,
+        Point				= 0x01,
+        LineString			= 0x02,
+        Polygon             = 0x04,
+        OsmRelation			= 0x10,
+        GpxSegment			= 0x20,
+        Conflict            = 0x40,
+        Special             = 0x80,
+        All					= 0xff
     } FeatureType;
+
+    struct FId {
+        FId() : type(IFeature::Uninitialized), numId(0) {}
+        FId(char a, qint64 b) : type(a), numId(b) {}
+        char type;
+        qint64 numId;
+    };
 
 public:
     virtual FeatureType getType() const = 0;
@@ -29,6 +41,12 @@ public:
     virtual const IFeature* getParent(int i) const = 0;
 
     virtual bool hasPainter(double PixelPerM) const = 0;
+
+    /** Give the id of the feature.
+     *  If the feature has no id, a random id is generated
+     * @return the id of the current feature
+     */
+    const IFeature::FId& id() const;
 
     /** check if the feature is logically deleted
      * @return true if logically deleted
@@ -87,5 +105,7 @@ public:
     virtual bool isReadonly() = 0;
 
 };
+
+Q_DECLARE_METATYPE(IFeature::FId)
 
 #endif // IFEATURE_H

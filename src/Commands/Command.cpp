@@ -65,7 +65,7 @@ bool Command::buildUndoList(QListWidget* theListWidget)
 {
     QListWidgetItem* it = new QListWidgetItem(getDescription(), theListWidget);
     if (getFeature())
-        it->setData(Qt::UserRole, getFeature()->id());
+        it->setData(Qt::UserRole, QVariant::fromValue(getFeature()->id()));
 
     return true;
 }
@@ -129,7 +129,7 @@ void Command::fromXML(Document* d, const QDomElement& e, Command* C)
     while(!c.isNull()) {
         if (c.tagName() == "Command") {
             Feature* F;
-            if (!(F = d->getFeature(c.attribute("feature"), false)))
+            if (!(F = d->getFeature(IFeature::FId(IFeature::All, c.attribute("feature").toLongLong()))))
                 return;
 
             C->setId(c.attribute("xml:id"));
@@ -236,7 +236,7 @@ bool CommandList::toXML(QDomElement& xParent) const
         e.setAttribute("reversed", "true");
     e.setAttribute("description", description);
     if (mainFeature) {
-        e.setAttribute("feature", mainFeature->id());
+        e.setAttribute("feature", mainFeature->id().numId);
         e.setAttribute("featureclass", mainFeature->getClass());
     }
 
@@ -256,13 +256,13 @@ CommandList* CommandList::fromXML(Document* d, const QDomElement& e)
         l->description = e.attribute("description");
     if (e.hasAttribute("feature")) {
         if (e.attribute("featureclass") == "Node") {
-            l->mainFeature = (Feature*) Feature::getTrackPointOrCreatePlaceHolder(d, (Layer *) d->getDirtyOrOriginLayer(), e.attribute("feature"));
+            l->mainFeature = (Feature*) Feature::getTrackPointOrCreatePlaceHolder(d, (Layer *) d->getDirtyOrOriginLayer(), IFeature::FId(IFeature::Point, e.attribute("feature").toLongLong()));
         } else
         if (e.attribute("featureclass") == "Way") {
-            l->mainFeature = (Feature*) Feature::getWayOrCreatePlaceHolder(d, (Layer *) d->getDirtyOrOriginLayer(), e.attribute("feature"));
+            l->mainFeature = (Feature*) Feature::getWayOrCreatePlaceHolder(d, (Layer *) d->getDirtyOrOriginLayer(), IFeature::FId(IFeature::LineString, e.attribute("feature").toLongLong()));
         } else
         if (e.attribute("featureclass") == "Relation") {
-            l->mainFeature = (Feature*) Feature::getRelationOrCreatePlaceHolder(d, (Layer *) d->getDirtyOrOriginLayer(), e.attribute("feature"));
+            l->mainFeature = (Feature*) Feature::getRelationOrCreatePlaceHolder(d, (Layer *) d->getDirtyOrOriginLayer(), IFeature::FId(IFeature::OsmRelation, e.attribute("feature").toLongLong()));
         }
     }
 

@@ -5,12 +5,9 @@
 
 #include "Preferences/MerkaartorPreferences.h"
 
-static QString stripToOSMId(const QString& id)
+static QString stripToOSMId(const IFeature::FId& id)
 {
-    int f = id.lastIndexOf("_");
-    if (f>0)
-        return id.right(id.length()-(f+1));
-    return id;
+    return QString::number(id.numId);
 }
 
 static QString tagOSM(const Feature& F)
@@ -63,7 +60,7 @@ QString exportOSM(const Way& R, const QString& ChangesetId)
         S+=QString("<nd ref=\"%1\"/>").arg(stripToOSMId(R.get(0)->id()));
         for (int i=1; i<R.size(); ++i)
             if (!R.getNode(i)->isVirtual())
-                if (R.get(i)->id() != R.get(i-1)->id())
+                if (R.get(i)->id().numId != R.get(i-1)->id().numId)
                     S+=QString("<nd ref=\"%1\"/>").arg(stripToOSMId(R.get(i)->id()));
     }
     S += tagOSM(R);

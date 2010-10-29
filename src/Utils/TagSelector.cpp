@@ -841,7 +841,7 @@ TagSelectorMatchResult TagSelectorTypeIs::matches(const IFeature* F, double /*Pi
     else if (t == "relation")
         return (F->getType() == IFeature::OsmRelation) ? TagSelect_Match : TagSelect_NoMatch;
     else if (t == "tracksegment")
-        return (F->getType() == IFeature::OsmSegment) ? TagSelect_Match : TagSelect_NoMatch;
+        return (F->getType() == IFeature::GpxSegment) ? TagSelect_Match : TagSelect_NoMatch;
 
     return TagSelect_NoMatch;
 }

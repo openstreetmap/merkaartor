@@ -22,7 +22,7 @@ static Node* importTrkPt(const QDomElement& Root, Document* /* theDocument */, L
     Node* Pt = new Node(Coord(angToCoord(Lat),angToCoord(Lon)));
     Pt->setLastUpdated(Feature::Log);
     if (Root.hasAttribute("xml:id"))
-        Pt->setId(Root.attribute("xml:id"));
+        Pt->setId(IFeature::FId(IFeature::Point, Root.attribute("xml:id").toLongLong()));
 
     theLayer->add(Pt);
 
@@ -77,7 +77,7 @@ static Node* importTrkPt(const QDomElement& Root, Document* /* theDocument */, L
             QDomNodeList li = t.elementsByTagName("id");
             if (li.size()) {
                 QString id = li.at(0).toElement().text();
-                Pt->setId("osb_" + id);
+                Pt->setId(IFeature::FId(IFeature::Point | IFeature::Special, id.toLongLong()));
                 Pt->setTag("_special_", "yes"); // Assumed to be OpenstreetBugs as they don't use their own namesoace
                 Pt->setSpecial(true);
             }
@@ -93,7 +93,7 @@ static void importTrkSeg(const QDomElement& Root, Document* theDocument, Layer* 
     TrackSegment* S = new TrackSegment;
 
     if (Root.hasAttribute("xml:id"))
-        S->setId(Root.attribute("xml:id"));
+        S->setId(IFeature::FId(IFeature::GpxSegment, Root.attribute("xml:id").toLongLong()));
 
     Node* lastPoint = NULL;
 
@@ -142,7 +142,7 @@ static void importRte(const QDomElement& Root, Document* theDocument, Layer* the
     TrackSegment* S = new TrackSegment;
 
     if (Root.hasAttribute("xml:id"))
-        S->setId(Root.attribute("xml:id"));
+        S->setId(IFeature::FId(IFeature::GpxSegment, Root.attribute("xml:id").toLongLong()));
 
     Node* lastPoint = NULL;
 

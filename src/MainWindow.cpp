@@ -864,7 +864,7 @@ void MainWindow::on_editPasteFeatureAction_triggered()
                 theFeats.push_back(doc->getLayer(i)->get(j));
     for (int i=0; i<theFeats.size(); ++i) {
         Feature*F = theFeats.at(i);
-        if (theDocument->getFeature(F->id(), false))
+        if (theDocument->getFeature(F->id()))
             F->resetId();
 
         // get tags
@@ -878,7 +878,7 @@ void MainWindow::on_editPasteFeatureAction_triggered()
         for (int j=0; j<F->size(); ++j) {
             Feature* C = F->get(j);
             if (C->isNull()) {
-                if (Feature* CC = theDocument->getFeature(C->id(), false)) {
+                if (Feature* CC = theDocument->getFeature(C->id())) {
                     if (Relation* R = CAST_RELATION(F)) {
                         QString role = R->getRole(j);
                         R->remove(j);
@@ -1415,20 +1415,23 @@ void MainWindow::loadUrl(const QUrl& u)
         properties()->setSelection(0);
 
         Feature* F;
-        QString mId;
+        IFeature::FId mId;
         QString sel = u.queryItemValue("select");
         if (!sel.isNull()) {
             QStringList sl = sel.split(",");
             foreach (QString f, sl) {
                 if (f.startsWith("node")) {
                     f.remove("node");
-                    mId = "node_" + f;
+                    mId.type = IFeature::Point;
+                    mId.numId = f.toLongLong();
                 } else if (f.startsWith("way")) {
                     f.remove("way");
-                    mId = "way_" + f;
+                    mId.type = IFeature::LineString;
+                    mId.numId = f.toLongLong();
                 } else if (f.startsWith("relation")) {
                     f.remove("relation");
-                    mId = "rel_" + f;
+                    mId.type = IFeature::OsmRelation;
+                    mId.numId = f.toLongLong();
                 }
                 F = theDocument->getFeature(mId);
                 if (F)
@@ -2155,7 +2158,7 @@ void MainWindow::on_nodeSpreadAction_triggered()
 void MainWindow::on_nodeMergeAction_triggered()
 {
     Feature* F = p->theProperties->selection(0);
-    CommandList* theList = new CommandList(MainWindow::tr("Merge Nodes into %1").arg(F->id()), F);
+    CommandList* theList = new CommandList(MainWindow::tr("Merge Nodes into %1").arg(F->id().numId), F);
     mergeNodes(theDocument, theList, p->theProperties);
     if (theList->empty())
         delete theList;
@@ -2170,7 +2173,7 @@ void MainWindow::on_nodeMergeAction_triggered()
 void MainWindow::on_nodeDetachAction_triggered()
 {
     Feature* F = p->theProperties->selection(0);
-    CommandList* theList = new CommandList(MainWindow::tr("Detach Node %1").arg(F->id()), F);
+    CommandList* theList = new CommandList(MainWindow::tr("Detach Node %1").arg(F->id().numId), F);
     detachNode(theDocument, theList, p->theProperties);
     if (theList->empty())
         delete theList;

@@ -22,12 +22,9 @@
 int glbAdded, glbUpdated, glbDeleted;
 QString glbChangeSetComment;
 
-QString stripToOSMId(const QString& id)
+QString stripToOSMId(const IFeature::FId& id)
 {
-    int f = id.lastIndexOf("_");
-    if (f>0)
-        return id.right(id.length()-(f+1));
-    return id;
+    return QString::number(id.numId);
 }
 
 QString userName(const Feature* F)
@@ -317,79 +314,79 @@ bool DirtyListDescriber::showChanges(QWidget* aParent)
         glbChangeSetComment = "-";
 
     Task = Ui.ChangesList->count();
-    SAFE_DELETE(dlg);
+    SAFE_DELETE(dlg)
     return ok;
 }
 
 
 bool DirtyListDescriber::addRoad(Way* R)
 {
-    QListWidgetItem* it = new QListWidgetItem(QApplication::translate("DirtyListExecutor","ADD road %1").arg(R->id()) + userName(R), theListWidget);
-    it->setData(Qt::UserRole, R->id());
+    QListWidgetItem* it = new QListWidgetItem(QApplication::translate("DirtyListExecutor","ADD road %1").arg(R->id().numId) + userName(R), theListWidget);
+    it->setData(Qt::UserRole, QVariant::fromValue(R->id()));
     ++glbAdded;
     return false;
 }
 
 bool DirtyListDescriber::addPoint(Node* Pt)
 {
-    QListWidgetItem* it = new QListWidgetItem(QApplication::translate("DirtyListExecutor","ADD trackpoint %1").arg(Pt->id()) + userName(Pt), theListWidget);
-    it->setData(Qt::UserRole, Pt->id());
+    QListWidgetItem* it = new QListWidgetItem(QApplication::translate("DirtyListExecutor","ADD trackpoint %1").arg(Pt->id().numId) + userName(Pt), theListWidget);
+    it->setData(Qt::UserRole, QVariant::fromValue(Pt->id()));
     ++glbAdded;
     return false;
 }
 
 bool DirtyListDescriber::addRelation(Relation* R)
 {
-    QListWidgetItem* it = new QListWidgetItem(QApplication::translate("DirtyListExecutor","ADD relation %1").arg(R->id()) + userName(R), theListWidget);
-    it->setData(Qt::UserRole, R->id());
+    QListWidgetItem* it = new QListWidgetItem(QApplication::translate("DirtyListExecutor","ADD relation %1").arg(R->id().numId) + userName(R), theListWidget);
+    it->setData(Qt::UserRole, QVariant::fromValue(R->id()));
     ++glbAdded;
     return false;
 }
 
 bool DirtyListDescriber::updatePoint(Node* Pt)
 {
-    QListWidgetItem* it = new QListWidgetItem(QApplication::translate("DirtyListExecutor","UPDATE trackpoint %1").arg(Pt->id()) + userName(Pt), theListWidget);
-    it->setData(Qt::UserRole, Pt->id());
+    QListWidgetItem* it = new QListWidgetItem(QApplication::translate("DirtyListExecutor","UPDATE trackpoint %1").arg(Pt->id().numId) + userName(Pt), theListWidget);
+    it->setData(Qt::UserRole, QVariant::fromValue(Pt->id()));
     ++glbUpdated;
     return false;
 }
 
 bool DirtyListDescriber::updateRelation(Relation* R)
 {
-    QListWidgetItem* it = new QListWidgetItem(QApplication::translate("DirtyListExecutor","UPDATE relation %1").arg(R->id()) + userName(R), theListWidget);
-    it->setData(Qt::UserRole, R->id());
+    QListWidgetItem* it = new QListWidgetItem(QApplication::translate("DirtyListExecutor","UPDATE relation %1").arg(R->id().numId) + userName(R), theListWidget);
+    it->setData(Qt::UserRole, QVariant::fromValue(R->id()));
     ++glbUpdated;
     return false;
 }
 
 bool DirtyListDescriber::updateRoad(Way* R)
 {
-    QListWidgetItem* it = new QListWidgetItem(QApplication::translate("DirtyListExecutor","UPDATE road %1").arg(R->id()) + userName(R), theListWidget);
-    it->setData(Qt::UserRole, R->id());
+    QListWidgetItem* it = new QListWidgetItem(QApplication::translate("DirtyListExecutor","UPDATE road %1").arg(R->id().numId) + userName(R), theListWidget);
+    it->setData(Qt::UserRole, QVariant::fromValue(R->id()));
     ++glbUpdated;
     return false;
 }
 
 bool DirtyListDescriber::erasePoint(Node* Pt)
 {
-    QListWidgetItem* it = new QListWidgetItem(QApplication::translate("DirtyListExecutor","REMOVE trackpoint %1").arg(Pt->id()) + userName(Pt), theListWidget);
-    it->setData(Qt::UserRole, Pt->id());
+    QListWidgetItem* it = new QListWidgetItem(QApplication::translate("DirtyListExecutor","REMOVE trackpoint %1").arg(Pt->id().numId) + userName(Pt), theListWidget);
+    it->setData(Qt::UserRole, QVariant::fromValue(Pt->id()));
     ++glbDeleted;
     return false;
 }
 
 bool DirtyListDescriber::eraseRoad(Way* R)
 {
-    QListWidgetItem* it = new QListWidgetItem(QApplication::translate("DirtyListExecutor","REMOVE road %1").arg(R->id()) + userName(R), theListWidget);
-    it->setData(Qt::UserRole, R->id());
+    QListWidgetItem* it = new QListWidgetItem(QApplication::translate("DirtyListExecutor","REMOVE road %1").arg(R->id().numId) + userName(R), theListWidget);
+    it->setData(Qt::UserRole, QVariant::fromValue(R->id()));
     ++glbDeleted;
     return false;
 }
 
 bool DirtyListDescriber::eraseRelation(Relation* R)
 {
-    QListWidgetItem* it = new QListWidgetItem(QApplication::translate("DirtyListExecutor","REMOVE relation %1").arg(R->id()) + userName(R), theListWidget);
-    it->setData(Qt::UserRole, R->id());
+    QListWidgetItem* it = new QListWidgetItem(QApplication::translate("DirtyListExecutor","REMOVE relation %1").arg(R->id().numId) + userName(R), theListWidget);
+    it->setData(Qt::UserRole, QVariant::fromValue(R->id()));
     ++glbDeleted;
     return false;
 }
@@ -533,21 +530,22 @@ bool DirtyListExecutor::addRelation(Relation *R)
 {
     Progress->setValue(++Done);
 
-    qDebug() << QString("ADD relation %1").arg(R->id());
+    qDebug() << QString("ADD relation %1").arg(R->id().numId);
 
-    Progress->setLabelText(tr("ADD relation %1").arg(R->id()) + userName(R));
+    Progress->setLabelText(tr("ADD relation %1").arg(R->id().numId) + userName(R));
     QEventLoop L; L.processEvents(QEventLoop::ExcludeUserInputEvents);
 
-    QString DataIn, DataOut, OldId;
+    QString DataIn, DataOut;
+    IFeature::FId OldId;
     OldId = R->id();
-    R->setId("0");
+    R->setId(IFeature::FId(IFeature::OsmRelation, 0));
     DataIn = wrapOSM(exportOSM(*R, ChangeSetId), ChangeSetId);
     R->setId(OldId);
     QString URL=theDownloader->getURLToCreate("relation");
     if (sendRequest("PUT",URL,DataIn,DataOut))
     {
         // chop off extra spaces, newlines etc
-        R->setId("rel_"+QString::number(DataOut.toInt()));
+        R->setId(IFeature::FId(IFeature::OsmRelation, DataOut.toInt()));
         R->setLastUpdated(Feature::OSMServer);
         R->setVersionNumber(1);
         if (!g_Merk_Frisius) {
@@ -565,21 +563,22 @@ bool DirtyListExecutor::addRoad(Way *R)
 {
     Progress->setValue(++Done);
 
-    qDebug() << QString("ADD road %1").arg(R->id());
+    qDebug() << QString("ADD road %1").arg(R->id().numId);
 
-    Progress->setLabelText(tr("ADD road %1").arg(R->id()) + userName(R));
+    Progress->setLabelText(tr("ADD road %1").arg(R->id().numId) + userName(R));
     QEventLoop L; L.processEvents(QEventLoop::ExcludeUserInputEvents);
 
-    QString DataIn, DataOut, OldId;
+    QString DataIn, DataOut;
+    IFeature::FId OldId;
     OldId = R->id();
-    R->setId("0");
+    R->setId(IFeature::FId(IFeature::LineString, 0));
     DataIn = wrapOSM(exportOSM(*R, ChangeSetId), ChangeSetId);
     R->setId(OldId);
     QString URL=theDownloader->getURLToCreate("way");
     if (sendRequest("PUT",URL,DataIn,DataOut))
     {
         // chop off extra spaces, newlines etc
-        R->setId("way_"+QString::number(DataOut.toInt()));
+        R->setId(IFeature::FId(IFeature::LineString, DataOut.toInt()));
         R->setLastUpdated(Feature::OSMServer);
         R->setVersionNumber(1);
         if (!g_Merk_Frisius) {
@@ -598,21 +597,22 @@ bool DirtyListExecutor::addPoint(Node* Pt)
 {
     Progress->setValue(++Done);
 
-    qDebug() << QString("ADD trackpoint %1").arg(Pt->id());
+    qDebug() << QString("ADD trackpoint %1").arg(Pt->id().numId);
 
-    Progress->setLabelText(tr("ADD trackpoint %1").arg(Pt->id()) + userName(Pt));
+    Progress->setLabelText(tr("ADD trackpoint %1").arg(Pt->id().numId) + userName(Pt));
     QEventLoop L; L.processEvents(QEventLoop::ExcludeUserInputEvents);
 
-    QString DataIn, DataOut, OldId;
+    QString DataIn, DataOut;
+    IFeature::FId OldId;
     OldId = Pt->id();
-    Pt->setId("0");
+    Pt->setId(IFeature::FId(IFeature::Point, 0));
     DataIn = wrapOSM(exportOSM(*Pt, ChangeSetId), ChangeSetId);
     Pt->setId(OldId);
     QString URL=theDownloader->getURLToCreate("node");
     if (sendRequest("PUT",URL,DataIn,DataOut))
     {
         // chop off extra spaces, newlines etc
-        Pt->setId("node_"+QString::number(DataOut.toInt()));
+        Pt->setId(IFeature::FId(IFeature::Point, DataOut.toInt()));
         Pt->setLastUpdated(Feature::OSMServer);
         Pt->setVersionNumber(1);
         if (!g_Merk_Frisius) {
@@ -632,9 +632,9 @@ bool DirtyListExecutor::updateRelation(Relation* R)
 {
     Progress->setValue(++Done);
 
-    qDebug() << QString("UPDATE relation %1").arg(R->id());
+    qDebug() << QString("UPDATE relation %1").arg(R->id().numId);
 
-    Progress->setLabelText(tr("UPDATE relation %1").arg(R->id()) + userName(R));
+    Progress->setLabelText(tr("UPDATE relation %1").arg(R->id().numId) + userName(R));
     QEventLoop L; L.processEvents(QEventLoop::ExcludeUserInputEvents);
     QString URL = theDownloader->getURLToUpdate("relation",stripToOSMId(R->id()));
     QString DataIn, DataOut;
@@ -663,9 +663,9 @@ bool DirtyListExecutor::updateRoad(Way* R)
 {
     Progress->setValue(++Done);
 
-    qDebug() << QString("UPDATE road %1").arg(R->id());
+    qDebug() << QString("UPDATE road %1").arg(R->id().numId);
 
-    Progress->setLabelText(tr("UPDATE road %1").arg(R->id()) + userName(R));
+    Progress->setLabelText(tr("UPDATE road %1").arg(R->id().numId) + userName(R));
     QEventLoop L; L.processEvents(QEventLoop::ExcludeUserInputEvents);
     QString URL = theDownloader->getURLToUpdate("way",stripToOSMId(R->id()));
     QString DataIn, DataOut;
@@ -694,9 +694,9 @@ bool DirtyListExecutor::updatePoint(Node* Pt)
 {
     Progress->setValue(++Done);
 
-    qDebug() << QString("UPDATE trackpoint %1").arg(Pt->id());
+    qDebug() << QString("UPDATE trackpoint %1").arg(Pt->id().numId);
 
-    Progress->setLabelText(tr("UPDATE trackpoint %1").arg(Pt->id()) + userName(Pt));
+    Progress->setLabelText(tr("UPDATE trackpoint %1").arg(Pt->id().numId) + userName(Pt));
     QEventLoop L; L.processEvents(QEventLoop::ExcludeUserInputEvents);
 //	QString URL("/api/0.3/node/%1");
 //	URL = URL.arg(stripToOSMId(Pt->id()));
@@ -727,9 +727,9 @@ bool DirtyListExecutor::erasePoint(Node *Pt)
 {
     Progress->setValue(++Done);
 
-    qDebug() << QString("REMOVE trackpoint %1").arg(Pt->id());
+    qDebug() << QString("REMOVE trackpoint %1").arg(Pt->id().numId);
 
-    Progress->setLabelText(tr("REMOVE trackpoint %1").arg(Pt->id()) + userName(Pt));
+    Progress->setLabelText(tr("REMOVE trackpoint %1").arg(Pt->id().numId) + userName(Pt));
     QEventLoop L; L.processEvents(QEventLoop::ExcludeUserInputEvents);
 //	QString URL("/api/0.3/node/%1");
 //	URL = URL.arg(stripToOSMId(Pt->id()));
@@ -754,9 +754,9 @@ bool DirtyListExecutor::eraseRoad(Way *R)
 {
     Progress->setValue(++Done);
 
-    qDebug() << QString("REMOVE road %1").arg(R->id());
+    qDebug() << QString("REMOVE road %1").arg(R->id().numId);
 
-    Progress->setLabelText(tr("REMOVE road %1").arg(R->id()) + userName(R));
+    Progress->setLabelText(tr("REMOVE road %1").arg(R->id().numId) + userName(R));
     QEventLoop L; L.processEvents(QEventLoop::ExcludeUserInputEvents);
 //	QString URL("/api/0.3/way/%1");
 //	URL = URL.arg(stripToOSMId(R->id()));
@@ -781,9 +781,9 @@ bool DirtyListExecutor::eraseRelation(Relation *R)
 {
     Progress->setValue(++Done);
 
-    qDebug() << QString("REMOVE relation %1").arg(R->id());
+    qDebug() << QString("REMOVE relation %1").arg(R->id().numId);
 
-    Progress->setLabelText(tr("REMOVE relation %1").arg(R->id()) + userName(R));
+    Progress->setLabelText(tr("REMOVE relation %1").arg(R->id().numId) + userName(R));
     QEventLoop L; L.processEvents(QEventLoop::ExcludeUserInputEvents);
     QString URL = theDownloader->getURLToDelete("relation",stripToOSMId(R->id()));
     QString DataIn, DataOut;

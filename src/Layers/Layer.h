@@ -82,8 +82,8 @@ public:
     QList<Feature *> get();
     Feature* get(int i);
     const Feature* get(int i) const;
-    Feature* get(const QString& id, bool exact=true);
-    void notifyIdUpdate(const QString& id, Feature* aFeature);
+    Feature* get(const IFeature::FId& id);
+    void notifyIdUpdate(const IFeature::FId& id, Feature* aFeature);
 
     virtual void get(const CoordBox& hz, QList<Feature*>& theFeatures);
     void getFeatureSet(QMap<RenderPriority, QSet <Feature*> >& theFeatures, QSet<Way*>& theCoastlines, Document* theDocument,

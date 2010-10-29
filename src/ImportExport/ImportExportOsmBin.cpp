@@ -327,7 +327,7 @@ void ImportExportOsmBin::tagsPopularity(Feature * F)
 bool ImportExportOsmBin::prepare(qint32 selRegion)
 {
     for (int j=0; j< theFeatures.size(); ++j) {
-        qint64 idx = theFeatures[j]->idToLong();
+        qint64 idx = theFeatures[j]->id().numId;
         if (Node* N = CAST_NODE(theFeatures[j])) {
             if (!N->isPOI())
                 continue;
@@ -619,14 +619,14 @@ Feature* ImportExportOsmBin::getFeature(OsbRegion* osr, Document* d, OsbLayer* t
     if (d) {
         switch (c) {
             case 'N':
-                F = d->getFeature(QString("node_%1").arg(QString::number(id)));
+            F = d->getFeature(IFeature::FId(IFeature::Point, id));
                 break;
             case 'A':
             case 'R':
-                F = d->getFeature(QString("way_%1").arg(QString::number(id)));
+                F = d->getFeature(IFeature::FId(IFeature::LineString, id));
                 break;
             case 'L':
-                F = d->getFeature(QString("rel_%1").arg(QString::number(id)));
+                F = d->getFeature(IFeature::FId(IFeature::OsmRelation, id));
                 break;
             default:
                 F = NULL;
@@ -677,22 +677,22 @@ Feature* ImportExportOsmBin::getFeature(OsbRegion* osr, Document* d, OsbLayer* t
     switch (c) {
         case 'N':
             if (d)
-                oF = d->getFeature(QString("node_%1").arg(QString::number(id)));
+                oF = d->getFeature(IFeature::FId(IFeature::Point, id));
             else
-                oF = ((Layer*)theLayer)->get(QString("node_%1").arg(QString::number(id)));
+                oF = ((Layer*)theLayer)->get(IFeature::FId(IFeature::Point, id));
             break;
         case 'A':
         case 'R':
             if (d)
-                oF = d->getFeature(QString("way_%1").arg(QString::number(id)));
+                oF = d->getFeature(IFeature::FId(IFeature::LineString, id));
             else
-                oF = ((Layer*)theLayer)->get(QString("way_%1").arg(QString::number(id)));
+                oF = ((Layer*)theLayer)->get(IFeature::FId(IFeature::LineString, id));
             break;
         case 'L':
             if (d)
-                oF = d->getFeature(QString("rel_%1").arg(QString::number(id)));
+                oF = d->getFeature(IFeature::FId(IFeature::OsmRelation, id));
             else
-                oF = ((Layer*)theLayer)->get(QString("rel_%1").arg(QString::number(id)));
+                oF = ((Layer*)theLayer)->get(IFeature::FId(IFeature::OsmRelation, id));
             break;
         default:
             oF = NULL;

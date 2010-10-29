@@ -99,7 +99,7 @@ void CreateNodeInteraction::createNode(Coord P, Feature* aFeat)
     if (aRoad)
     {
         g_Merk_MainWindow->properties()->setSelection(0);
-        theList  = new CommandList(MainWindow::tr("Create node in Road: %1").arg(aRoad->id()), aRoad);
+        theList  = new CommandList(MainWindow::tr("Create node in Road: %1").arg(aRoad->id().numId), aRoad);
         int SnapIdx = findSnapPointIndex(aRoad, P);
         N = new Node(P);
         theList->add(new AddFeatureCommand(g_Merk_MainWindow->document()->getDirtyOrOriginLayer(aRoad->layer()),N,true));
@@ -108,7 +108,7 @@ void CreateNodeInteraction::createNode(Coord P, Feature* aFeat)
     else
     {
         N = new Node(P);
-        theList  = new CommandList(MainWindow::tr("Create POI %1").arg(N->id()), N);
+        theList  = new CommandList(MainWindow::tr("Create POI %1").arg(N->id().numId), N);
         theList->add(new AddFeatureCommand(g_Merk_MainWindow->document()->getDirtyOrOriginLayer(),N,true));
         if (M_PREFS->getAutoSourceTag()) {
             QStringList sl = g_Merk_MainWindow->document()->getCurrentSourceTags();

@@ -1,3 +1,4 @@
+#include "IFeature.h"
 #include "Feature.h"
 #include "Node.h"
 #include "Way.h"

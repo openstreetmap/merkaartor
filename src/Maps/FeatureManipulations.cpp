@@ -1486,7 +1486,7 @@ static bool axisAlignPreprocess(/* in */ PropertiesDock *theDock, const Projecti
             p1 = p2;
             p2 = proj.project(n2);
             if (n1 == n2 || p1 == p2) {
-                qWarning() << "ERROR: duplicate nodes found during axis align in" << theWay->id();
+                qWarning() << "ERROR: duplicate nodes found during axis align in" << theWay->id().numId;
                 return false;
             }
             midpoints[i] = (p1 + p2) * 0.5;

@@ -381,18 +381,18 @@ QString Downloader::getURLToFetch(const QString &What)
     return URL.arg(What).arg(What);
 }
 
-QString Downloader::getURLToFetchFull(QString id)
+QString Downloader::getURLToFetchFull(IFeature::FId id)
 {
-    QRegExp What("(.*)_(\\d*)");
-    int pos = What.indexIn(id);
-    if (pos == -1)
-        return QString();
-
-    QString type = What.cap(1);
-    if (type == "rel")
+    QString type;
+    if (id.type & IFeature::Point)
+        type = "node";
+    else if (id.type & IFeature::LineString)
+        type = "way";
+    else if (id.type & IFeature::OsmRelation)
         type = "relation";
+
     QString URL = QString("/%1/%2/full");
-    return URL.arg(type).arg(What.cap(2));
+    return URL.arg(type).arg(id.numId);
 }
 
 QString Downloader::getURLToFetchFull(Feature* aFeature)
@@ -605,7 +605,7 @@ bool checkForConflicts(Document* theDocument)
 
 bool downloadFeatures(MainWindow* Main, const QList<Feature*>& aDownloadList , Document* theDocument)
 {
-    QList<QString> list;
+    QList<IFeature::FId> list;
     foreach (Feature* F, aDownloadList) {
         list << F->id();
     }
@@ -615,16 +615,16 @@ bool downloadFeatures(MainWindow* Main, const QList<Feature*>& aDownloadList , D
     return ok;
 }
 
-bool downloadFeature(MainWindow* Main, const QString& id, Document* theDocument, Layer* theLayer)
+bool downloadFeature(MainWindow* Main, const IFeature::FId& id, Document* theDocument, Layer* theLayer)
 {
-    QList<QString> list;
+    QList<IFeature::FId> list;
     list << id;
     bool ok = downloadFeatures(Main, list, theDocument, theLayer);
 
     return ok;
 }
 
-bool downloadFeatures(MainWindow* Main, const QList<QString>& idList , Document* theDocument, Layer* theLayer)
+bool downloadFeatures(MainWindow* Main, const QList<IFeature::FId>& idList , Document* theDocument, Layer* theLayer)
 {
     if (!theLayer) {
         if (!theDocument->getLastDownloadLayer()) {

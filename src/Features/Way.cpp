@@ -149,7 +149,6 @@ void WayPrivate::addVirtuals()
         l.setLength(l.length()/2);
         Node* v = new Node(toCoord(l.p2()));
         v->setVirtual(true);
-        v->setId("v" + v->id());
         v->setParentFeature(theWay);
         theWay->layer()->add(v);
         virtualNodes.push_back(v);
@@ -252,8 +251,8 @@ QString Way::description() const
 {
     QString s(tagValue("name",""));
     if (!s.isEmpty())
-        return QString("%1 (%2)").arg(s).arg(id());
-    return QString("%1").arg(id());
+        return QString("%1 (%2)").arg(s).arg(id().numId);
+    return QString("%1").arg(id().numId);
 }
 
 void Way::add(Node* Pt)
@@ -893,11 +892,9 @@ bool Way::toXML(QDomElement xParent, QProgressDialog * progress, bool strict)
 
 Way * Way::fromXML(Document* d, Layer * L, const QDomElement e)
 {
-    QString id = (e.hasAttribute("id") ? e.attribute("id") : e.attribute("xml:id"));
-    if (!id.startsWith('{') && !id.startsWith('-'))
-        id = "way_" + id;
-
-    Way* R = dynamic_cast<Way*>(d->getFeature(id));
+    QString sid = (e.hasAttribute("id") ? e.attribute("id") : e.attribute("xml:id"));
+    IFeature::FId id(IFeature::LineString, sid.toLongLong());
+    Way* R = CAST_WAY(d->getFeature(id));
 
     if (!R) {
         R = new Way();
@@ -917,11 +914,9 @@ Way * Way::fromXML(Document* d, Layer * L, const QDomElement e)
     QDomElement c = e.firstChildElement();
     while(!c.isNull()) {
         if (c.tagName() == "nd") {
-            QString nId = c.attribute("ref");
-            if (!nId.startsWith('{') && !nId.startsWith('-'))
-                nId = "node_" + nId;
-            //TrackPoint* Part = MapFeature::getTrackPointOrCreatePlaceHolder(d, L, NULL, c.attribute("ref"));
-            Node* Part = dynamic_cast<Node*>(d->getFeature(nId));
+            QString sId = c.attribute("ref");
+            IFeature::FId nId(IFeature::Point, sId.toLongLong());
+            Node* Part = CAST_NODE(d->getFeature(nId));
             if (!Part)
             {
                 Part = new Node(Coord(0,0));
@@ -1044,14 +1039,14 @@ void Way::toBinary(QDataStream& ds, QHash <QString, quint64>& theIndex)
         type = 'A';
         sz--;
     }
-    theIndex[type  + QString::number(idToLong())] = ds.device()->pos();
+    theIndex[type  + QString::number(id().numId)] = ds.device()->pos();
     ds << (qint8)type;
-    ds << idToLong();
+    ds << id().numId;
     ds << (qint32)sz;
     for (int i=0; i < sz; ++i) {
         Node* N = CAST_NODE(get(i));
         if (N->sizeParents() > 1)
-            ds << (qint8)'N' << (qint64)(N->idToLong());
+            ds << (qint8)'N' << (qint64)(N->id().numId);
         else
             ds << (qint8)'C' << N->position().lat() << N->position().lon();
     }
@@ -1062,7 +1057,6 @@ Way* Way::fromBinary(Document* d, OsbLayer* L, QDataStream& ds, qint8 c, qint64 
     char type = c;
 
     qint32	fSize;
-    QString strId;
     qint32 lat, lon;
 
     quint8 nodeType;
@@ -1078,12 +1072,8 @@ Way* Way::fromBinary(Document* d, OsbLayer* L, QDataStream& ds, qint8 c, qint64 
         return NULL;
     }
 
-    if (id < 1)
-        strId = QString::number(id);
-    else
-        strId = QString("way_%1").arg(QString::number(id));
-
-    Way* R = dynamic_cast<Way*>(d->getFeature(strId));
+    IFeature::FId strId(IFeature::LineString, id);
+    Way* R = CAST_WAY(d->getFeature(strId));
     if (!R) {
         R = new Way();
         R->setId(strId);
@@ -1116,7 +1106,7 @@ Way* Way::fromBinary(Document* d, OsbLayer* L, QDataStream& ds, qint8 c, qint64 
                 break;
             case 'N':
                 ds >> refId;
-                N = CAST_NODE(d->getFeature(QString("node_%1").arg(refId)));
+                N = CAST_NODE(d->getFeature(IFeature::FId(IFeature::Point, refId)));
                 Q_ASSERT(N);
 
         }

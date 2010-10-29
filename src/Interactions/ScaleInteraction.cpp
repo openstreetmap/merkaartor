@@ -119,7 +119,7 @@ void ScaleInteraction::snapMouseReleaseEvent(QMouseEvent * anEvent, Feature* /*C
     if (Radius != 1.0 && Scaling.size() && !panning())
     {
         CommandList* theList;
-        theList = new CommandList(MainWindow::tr("Scale Feature").arg(Scaling[0]->id()), Scaling[0]);
+        theList = new CommandList(MainWindow::tr("Scale Feature").arg(Scaling[0]->id().numId), Scaling[0]);
         for (int i=0; i<Scaling.size(); ++i)
         {
             Scaling[i]->setPosition(OriginalPosition[i]);

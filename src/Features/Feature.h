@@ -116,22 +116,17 @@ class Feature : public QObject, public IFeature
 
         /** Set the id for the current feature.
          */
-        void setId(const QString& id);
+        void setId(const IFeature::FId& id);
 
         /** Reset the id for the current feature to a random one.
          */
-        const QString& resetId();
+        const IFeature::FId& resetId();
 
         /** Give the id of the feature.
          *  If the feature has no id, a random id is generated
          * @return the id of the current feature
          */
-        const QString& id() const;
-        /** Give the id of the feature in a form suitable for xml integration.
-         *  If the feature has no id, a random id is generated
-         * @return the id of the current feature
-         */
-        qint64 idToLong() const;
+        const IFeature::FId& id() const;
 
         QString xmlId() const;
         bool hasOSMId() const;
@@ -321,12 +316,12 @@ class Feature : public QObject, public IFeature
         virtual bool deleteChildren(Document* , CommandList* ) { return true; }
 
         static Relation * GetSingleParentRelation(Feature * mapFeature);
-        static Node* getTrackPointOrCreatePlaceHolder(Document *theDocument, Layer *theLayer, const QString& Id);
-        static Way* getWayOrCreatePlaceHolder(Document *theDocument, Layer *theLayer, const QString& Id);
-        static Relation* getRelationOrCreatePlaceHolder(Document *theDocument, Layer *theLayer, const QString& Id);
+        static Node* getTrackPointOrCreatePlaceHolder(Document *theDocument, Layer *theLayer, const IFeature::FId& Id);
+        static Way* getWayOrCreatePlaceHolder(Document *theDocument, Layer *theLayer, const IFeature::FId& Id);
+        static Relation* getRelationOrCreatePlaceHolder(Document *theDocument, Layer *theLayer, const IFeature::FId& Id);
         static void mergeTags(Document* theDocument, CommandList* L, Feature* Dest, Feature* Src);
 
-        static QString stripToOSMId(const QString& id);
+        static QString stripToOSMId(const IFeature::FId& id);
 
     private:
         MapFeaturePrivate* p;

@@ -164,7 +164,7 @@ void CreateDoubleWayInteraction::mousePressEvent(QMouseEvent* anEvent)
 
                 Node* A1;
                 Node* A2;
-                CommandList* L  = new CommandList(MainWindow::tr("Add nodes to double-way Road %1").arg(R1->id()), R1);
+                CommandList* L  = new CommandList(MainWindow::tr("Add nodes to double-way Road %1").arg(R1->id().numId), R1);
                 A1 = R1->getNode(i1);
                 A2 = R2->getNode(i2-1);
                 L->add(new MoveNodeCommand(A1,XY_TO_COORD(
@@ -215,7 +215,7 @@ void CreateDoubleWayInteraction::mousePressEvent(QMouseEvent* anEvent)
                 R1 = new Way;
                 R2 = new Way;
 
-                CommandList* L  = new CommandList(MainWindow::tr("Create double-way Road %1").arg(R1->id()), R1);
+                CommandList* L  = new CommandList(MainWindow::tr("Create double-way Road %1").arg(R1->id().numId), R1);
                 L->add(new AddFeatureCommand(Main->document()->getDirtyOrOriginLayer(),A1,true));
                 L->add(new AddFeatureCommand(Main->document()->getDirtyOrOriginLayer(),A2,true));
                 L->add(new AddFeatureCommand(Main->document()->getDirtyOrOriginLayer(),B1,true));

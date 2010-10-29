@@ -95,7 +95,7 @@ bool Node::isNull() const
 bool Node::isInteresting() const
 {
     // does its id look like one from osm
-    if (id().left(5) == "node_")
+    if (hasOSMId())
         return true;
     // if the user has added special tags, that's fine also
     if (tagSize())
@@ -366,9 +366,9 @@ QString Node::description() const
 {
     QString s(tagValue("name",""));
     if (!s.isEmpty())
-        return QString("%1 (%2)").arg(s).arg(id());
+        return QString("%1 (%2)").arg(s).arg(id().numId);
     return
-        QString("%1").arg(id());
+        QString("%1").arg(id().numId);
 }
 
 void Node::partChanged(Feature*, int)
@@ -478,7 +478,7 @@ bool Node::toGPX(QDomElement xParent, QProgressDialog * progress, bool forExport
 
     // OpenStreetBug
     s = tagValue("_special_","");
-    if (!s.isEmpty() && id().startsWith("osb_")) {
+    if (!s.isEmpty() && id().type & IFeature::Special) {
         QDomElement c = xParent.ownerDocument().createElement("extensions");
         e.appendChild(c);
         QDomElement osbId = xParent.ownerDocument().createElement("id");
@@ -499,11 +499,9 @@ Node * Node::fromXML(Document* d, Layer* L, const QDomElement e)
     double Lat = e.attribute("lat").toDouble();
     double Lon = e.attribute("lon").toDouble();
 
-    QString id = (e.hasAttribute("id") ? e.attribute("id") : e.attribute("xml:id"));
-    if (!id.startsWith('{') && !id.startsWith('-'))
-        id = "node_" + id;
-
-    Node* Pt = dynamic_cast<Node*>(d->getFeature(id));
+    QString sid = (e.hasAttribute("id") ? e.attribute("id") : e.attribute("xml:id"));
+    IFeature::FId id(IFeature::Point, sid.toLongLong());
+    Node* Pt = CAST_NODE(d->getFeature(id));
     if (!Pt) {
         Pt = new Node(Coord(angToCoord(Lat),angToCoord(Lon)));
         Pt->setId(id);
@@ -528,11 +526,9 @@ Node * Node::fromGPX(Document* d, Layer* L, const QDomElement e)
     double Lat = e.attribute("lat").toDouble();
     double Lon = e.attribute("lon").toDouble();
 
-    QString id = (e.hasAttribute("id") ? e.attribute("id") : e.attribute("xml:id"));
-    if (!id.startsWith('{') && !id.startsWith('-'))
-        id = "node_" + id;
-
-    Node* Pt = dynamic_cast<Node*>(d->getFeature(id));
+    QString sid = (e.hasAttribute("id") ? e.attribute("id") : e.attribute("xml:id"));
+    IFeature::FId id(IFeature::Point, sid.toLongLong());
+    Node* Pt = CAST_NODE(d->getFeature(id));
     if (!Pt) {
         Pt = new Node(Coord(angToCoord(Lat),angToCoord(Lon)));
         Pt->setId(id);
@@ -575,7 +571,7 @@ Node * Node::fromGPX(Document* d, Layer* L, const QDomElement e)
             QDomNodeList li = c.elementsByTagName("id");
             if (li.size()) {
                 QString id = li.at(0).toElement().text();
-                Pt->setId("osb_" + id);
+                Pt->setId(IFeature::FId(IFeature::Point | IFeature::Special, id.toLongLong()));
                 Pt->setTag("_special_", "yes"); // Assumed to be OpenstreetBugs as they don't use their own namesoace
                 Pt->setSpecial(true);
             }
@@ -614,8 +610,8 @@ void Node::toBinary(QDataStream& ds, QHash <QString, quint64>& theIndex)
 {
     Q_UNUSED(theIndex);
 
-    theIndex["N" + QString::number(idToLong())] = ds.device()->pos();
-    ds << (qint8)'N' << idToLong() << (qint32)(Position.lon()) << (qint32)(Position.lat());
+    theIndex["N" + QString::number(id().numId)] = ds.device()->pos();
+    ds << (qint8)'N' << id().numId << (qint32)(Position.lon()) << (qint32)(Position.lat());
 }
 
 Node* Node::fromBinary(Document* d, OsbLayer* L, QDataStream& ds, qint8 c, qint64 id)
@@ -624,7 +620,6 @@ Node* Node::fromBinary(Document* d, OsbLayer* L, QDataStream& ds, qint8 c, qint6
 
     qint32	lon;
     qint32	lat;
-    QString strId;
 
     ds >> lon;
     ds >> lat;
@@ -633,11 +628,8 @@ Node* Node::fromBinary(Document* d, OsbLayer* L, QDataStream& ds, qint8 c, qint6
         return NULL;
 
     Coord cd( lat, lon );
-    if (id < 1)
-        strId = QString::number(id);
-    else
-        strId = QString("node_%1").arg(QString::number(id));
 
+    IFeature::FId strId(IFeature::Point, id);
     Node* Pt = CAST_NODE(d->getFeature(strId));
     if (!Pt) {
         Pt = new Node(cd);

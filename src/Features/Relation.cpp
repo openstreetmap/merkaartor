@@ -141,8 +141,8 @@ QString Relation::description() const
 {
     QString s(tagValue("name",""));
     if (!s.isEmpty())
-        return QString("%1 (%2)").arg(s).arg(id());
-    return QString("%1").arg(id());
+        return QString("%1 (%2)").arg(s).arg(id().numId);
+    return QString("%1").arg(id().numId);
 }
 
 const RenderPriority& Relation::renderPriority()
@@ -497,11 +497,12 @@ bool Relation::toXML(QDomElement xParent, QProgressDialog * progress, bool stric
 
 Relation * Relation::fromXML(Document * d, Layer * L, const QDomElement e)
 {
-    QString id = (e.hasAttribute("id") ? e.attribute("id") : e.attribute("xml:id"));
-    if (!id.startsWith('{') && !id.startsWith('-'))
-        id = "rel_" + id;
+    QString sid = (e.hasAttribute("id") ? e.attribute("id") : e.attribute("xml:id"));
+    IFeature::FId id;
+    id.type = IFeature::OsmRelation;
+    id.numId = sid.toLongLong();
 
-    Relation* R = dynamic_cast<Relation*>(d->getFeature(id));
+    Relation* R = CAST_RELATION(d->getFeature(id));
     if (!R) {
         R = new Relation;
         R->setId(id);
@@ -519,10 +520,9 @@ Relation * Relation::fromXML(Document * d, Layer * L, const QDomElement e)
             QString Type = c.attribute("type");
             Feature* F = 0;
             if (Type == "node") {
-                QString nId = c.attribute("ref");
-                if (!nId.startsWith('{') && !nId.startsWith('-'))
-                    nId = "node_" + nId;
-                Node* Part = dynamic_cast<Node*>(d->getFeature(nId));
+                QString sId = c.attribute("ref");
+                IFeature::FId nId(IFeature::Point, sId.toLongLong());
+                Node* Part = CAST_NODE(d->getFeature(nId));
                 if (!Part)
                 {
                     Part = new Node(Coord(0,0));
@@ -532,10 +532,9 @@ Relation * Relation::fromXML(Document * d, Layer * L, const QDomElement e)
                 }
                 F = Part;
             } else if (Type == "way") {
-                QString rId = c.attribute("ref");
-                if (!rId.startsWith('{') && !rId.startsWith('-'))
-                    rId = "way_" + rId;
-                Way* Part = dynamic_cast<Way*>(d->getFeature(rId));
+                QString sId = c.attribute("ref");
+                IFeature::FId rId(IFeature::LineString, sId.toLongLong());
+                Way* Part = CAST_WAY(d->getFeature(rId));
                 if (!Part)
                 {
                     Part = new Way;
@@ -545,9 +544,8 @@ Relation * Relation::fromXML(Document * d, Layer * L, const QDomElement e)
                 }
                 F = Part;
             } else if (Type == "relation") {
-                QString RId = c.attribute("ref");
-                if (!RId.startsWith('{') && !RId.startsWith('-'))
-                    RId = "rel_" + RId;
+                QString sId = c.attribute("ref");
+                IFeature::FId RId(IFeature::OsmRelation, sId.toLongLong());
                 Relation* Part = dynamic_cast<Relation*>(d->getFeature(RId));
                 if (!Part)
                 {
@@ -591,25 +589,25 @@ void Relation::toBinary(QDataStream& ds, QHash <QString, quint64>& theIndex)
     quint8 Type = '\0';
     quint64 ref;
 
-    theIndex["L" + QString::number(idToLong())] = ds.device()->pos();
+    theIndex["L" + id().numId] = ds.device()->pos();
     ds << (qint8)'L';
-    ds << idToLong();
+    ds << id().numId;
     ds << size();
     for (int i=0; i<size(); ++i) {
         if (dynamic_cast<const Node*>(get(i))) {
             Type='N';
-            ref = get(i)->idToLong();
+            ref = get(i)->id().numId;
         }
         else if (dynamic_cast<const Way*>(get(i))) {
             Type='R';
-            ref = get(i)->idToLong();
+            ref = get(i)->id().numId;
         }
         else if (dynamic_cast<const Relation*>(get(i))) {
             Type='L';
-            ref = get(i)->idToLong();
+            ref = get(i)->id().numId;
         }
 //		ds << (qint8) Type << ref << getRole(i);
-        ds << Type << get(i)->idToLong() << getRole(i);
+        ds << Type << get(i)->id().numId << getRole(i);
     }
 }
 
@@ -618,7 +616,6 @@ Relation* Relation::fromBinary(Document* d, OsbLayer* L, QDataStream& ds, qint8 
     Q_UNUSED(c);
 
     qint32	fSize;
-    QString strId;
     quint8 Type;
     qint64 refId;
     QString Role;
@@ -634,12 +631,8 @@ Relation* Relation::fromBinary(Document* d, OsbLayer* L, QDataStream& ds, qint8 
         return NULL;
     }
 
-    if (id < 1)
-        strId = QString::number(id);
-    else
-        strId = QString("rel_%1").arg(QString::number(id));
-
-    Relation* R = dynamic_cast<Relation*>(d->getFeature(strId));
+    IFeature::FId strId(IFeature::OsmRelation, id);
+    Relation* R = CAST_RELATION(d->getFeature(strId));
     if (!R) {
         R = new Relation();
         R->setId(strId);
@@ -667,13 +660,13 @@ Relation* Relation::fromBinary(Document* d, OsbLayer* L, QDataStream& ds, qint8 
         Feature* F;
         switch (Type) {
             case 'N':
-                F = d->getFeature(QString("node_%1").arg(refId));
+                F = d->getFeature(IFeature::FId(IFeature::Point, refId));
                 break;
             case 'R':
-                F = d->getFeature(QString("way_%1").arg(refId));
+                F = d->getFeature(IFeature::FId(IFeature::LineString, refId));
                 break;
             case 'L':
-                F = d->getFeature(QString("rel_%1").arg(refId));
+                F = d->getFeature(IFeature::FId(IFeature::OsmRelation, refId));
                 break;
         default:
                 F = NULL;
@@ -767,7 +760,7 @@ bool RelationMemberModel::setData(const QModelIndex &index, const QVariant &valu
     if (index.isValid() && role == Qt::EditRole)
     {
         Feature* Tmp = Parent->Members[index.row()].second;
-        CommandList* L = new CommandList(MainWindow::tr("Relation Modified %1").arg(Parent->theRelation->id()), Parent->theRelation);
+        CommandList* L = new CommandList(MainWindow::tr("Relation Modified %1").arg(Parent->theRelation->id().numId), Parent->theRelation);
         L->add(new RelationRemoveFeatureCommand(Parent->theRelation, index.row(), Main->document()->getDirtyOrOriginLayer(Parent->theRelation->layer())));
         L->add(new RelationAddFeatureCommand(Parent->theRelation,value.toString(),Tmp,index.row(), Main->document()->getDirtyOrOriginLayer(Parent->theRelation->layer())));
         Main->document()->addHistory(L);

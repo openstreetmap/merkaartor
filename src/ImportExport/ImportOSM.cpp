@@ -50,14 +50,12 @@ void OSMHandler::parseNode(const QXmlAttributes& atts)
     double Lat = atts.value("lat").toDouble();
     double Lon = atts.value("lon").toDouble();
     QString id = atts.value("id");
-    if (id[0] != '-' && id[0] != '{')
-        id = "node_"+id;
-    Node* Pt = dynamic_cast<Node*>(theDocument->getFeature(id));
+    Node* Pt = CAST_NODE(theDocument->getFeature(IFeature::FId(IFeature::Point, id.toLongLong())));
     if (Pt)
     {
         Node* userPt = Pt;
         Pt = new Node(Coord(angToCoord(Lat),angToCoord(Lon)));
-        Pt->setId("conflict_"+id);
+        Pt->setId(IFeature::FId(IFeature::Point | IFeature::Conflict, id.toLongLong()));
         Pt->setLastUpdated(Feature::OSMServerConflict);
         parseStandardAttributes(atts,Pt);
 
@@ -100,7 +98,7 @@ void OSMHandler::parseNode(const QXmlAttributes& atts)
         Pt = new Node(Coord(angToCoord(Lat),angToCoord(Lon)));
         theLayer->add(Pt);
         NewFeature = true;
-        Pt->setId(id);
+        Pt->setId(IFeature::FId(IFeature::Point, id.toLongLong()));
         Pt->setLastUpdated(Feature::OSMServer);
     }
 
@@ -120,7 +118,7 @@ void OSMHandler::parseNd(const QXmlAttributes& atts)
 {
     Way* R = dynamic_cast<Way*>(Current);
     if (!R) return;
-    Node *Part = Feature::getTrackPointOrCreatePlaceHolder(theDocument, theLayer, atts.value("ref"));
+    Node *Part = Feature::getTrackPointOrCreatePlaceHolder(theDocument, theLayer, IFeature::FId(IFeature::Point, atts.value("ref").toLongLong()));
     if (NewFeature)
         R->add(Part);
 }
@@ -128,15 +126,13 @@ void OSMHandler::parseNd(const QXmlAttributes& atts)
 void OSMHandler::parseWay(const QXmlAttributes& atts)
 {
     QString id = atts.value("id");
-    if (id[0] != '-' && id[0] != '{')
-        id = "way_"+id;
     QString ts = atts.value("timestamp"); ts.truncate(19);
-    Way* R = dynamic_cast<Way*>(theDocument->getFeature(id));
+    Way* R = CAST_WAY(theDocument->getFeature(IFeature::FId(IFeature::LineString, id.toLongLong())));
     if (R)
     {
         Way* userRd = R;
         R = new Way();
-        R->setId("conflict_"+id);
+        R->setId(IFeature::FId(IFeature::LineString | IFeature::Conflict, id.toLongLong()));
         R->setLastUpdated(Feature::OSMServerConflict);
         parseStandardAttributes(atts,R);
 
@@ -181,7 +177,7 @@ void OSMHandler::parseWay(const QXmlAttributes& atts)
         R = new Way;
         theLayer->add(R);
         NewFeature = true;
-        R->setId(id);
+        R->setId(IFeature::FId(IFeature::LineString, id.toLongLong()));
         R->setLastUpdated(Feature::OSMServer);
     }
 
@@ -201,11 +197,11 @@ void OSMHandler::parseMember(const QXmlAttributes& atts)
     QString Type = atts.value("type");
     Feature* F = 0;
     if (Type == "node")
-        F = Feature::getTrackPointOrCreatePlaceHolder(theDocument, theLayer, atts.value("ref"));
+        F = Feature::getTrackPointOrCreatePlaceHolder(theDocument, theLayer, IFeature::FId(IFeature::Point, atts.value("ref").toLongLong()));
     else if (Type == "way")
-        F = Feature::getWayOrCreatePlaceHolder(theDocument, theLayer, atts.value("ref"));
+        F = Feature::getWayOrCreatePlaceHolder(theDocument, theLayer, IFeature::FId(IFeature::LineString, atts.value("ref").toLongLong()));
     else if (Type == "relation")
-        F = Feature::getRelationOrCreatePlaceHolder(theDocument, theLayer, atts.value("ref"));
+        F = Feature::getRelationOrCreatePlaceHolder(theDocument, theLayer, IFeature::FId(IFeature::OsmRelation, atts.value("ref").toLongLong()));
 
     if (F && F != R)
         R->add(atts.value("role"),F);
@@ -214,15 +210,13 @@ void OSMHandler::parseMember(const QXmlAttributes& atts)
 void OSMHandler::parseRelation(const QXmlAttributes& atts)
 {
     QString id = atts.value("id");
-    if (id[0] != '-' && id[0] != '{')
-        id = "rel_"+id;
     QString ts = atts.value("timestamp"); ts.truncate(19);
-    Relation* R = dynamic_cast<Relation*>(theDocument->getFeature(id));
+    Relation* R = CAST_RELATION(theDocument->getFeature(IFeature::FId(IFeature::OsmRelation, id.toLongLong())));
     if (R)
     {
         Relation* userR = R;
         R = new Relation();
-        R->setId("conflict_"+id);
+        R->setId(IFeature::FId(IFeature::OsmRelation | IFeature::Conflict, id.toLongLong()));
         R->setLastUpdated(Feature::OSMServerConflict);
         parseStandardAttributes(atts,R);
 
@@ -266,7 +260,7 @@ void OSMHandler::parseRelation(const QXmlAttributes& atts)
     {
         R = new Relation;
         NewFeature = true;
-        R->setId(id);
+        R->setId(IFeature::FId(IFeature::OsmRelation, id.toLongLong()));
         theLayer->add(R);
         R->setLastUpdated(Feature::OSMServer);
     }

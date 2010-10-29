@@ -81,7 +81,7 @@ void CreateRoundaboutInteraction::mousePressEvent(QMouseEvent * event)
             Node* First = new Node(XY_TO_COORD(Prev.toPoint()));
             Way* R = new Way;
             R->add(First);
-            CommandList* L  = new CommandList(MainWindow::tr("Create Roundabout %1").arg(R->id()), R);
+            CommandList* L  = new CommandList(MainWindow::tr("Create Roundabout %1").arg(R->id().numId), R);
             L->add(new AddFeatureCommand(Main->document()->getDirtyOrOriginLayer(),First,true));
             if (M_PREFS->getAutoSourceTag()) {
                 QStringList sl = Main->document()->getCurrentSourceTags();

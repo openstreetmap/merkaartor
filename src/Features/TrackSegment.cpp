@@ -372,7 +372,7 @@ TrackSegment* TrackSegment::fromGPX(Document* d, Layer* L, const QDomElement e, 
     TrackSegment* l = new TrackSegment();
 
     if (e.hasAttribute("xml:id"))
-        l->setId(e.attribute("xml:id"));
+        l->setId(IFeature::FId(IFeature::GpxSegment, e.attribute("xml:id").toLongLong()));
 
     QDomElement c = e.firstChildElement();
     while(!c.isNull()) {

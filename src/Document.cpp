@@ -538,23 +538,15 @@ QList<Feature*> Document::getFeatures(Layer::LayerType layerType)
     return theFeatures;
 }
 
-Feature* Document::getFeature(const QString& id, bool exact)
+Feature* Document::getFeature(const IFeature::FId& id)
 {
     for (int i=0; i<p->Layers.size(); ++i)
     {
         Feature* F = p->Layers[i]->get(id);
         if (F)
             return F;
-        if (!exact) {
-            if ((F = p->Layers[i]->get("node_"+id)))
-                return F;
-            if ((F = p->Layers[i]->get("way_"+id)))
-                return F;
-            if ((F = p->Layers[i]->get("rel_"+id)))
-                return F;
-        }
     }
-    return 0;
+    return NULL;
 }
 
 void Document::setDirtyLayer(DirtyLayer* aLayer)

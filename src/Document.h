@@ -61,7 +61,7 @@ public:
     Layer* getLayer(int i);
     const Layer* getLayer(int i) const;
 
-    Feature* getFeature(const QString& id, bool exact=true);
+    Feature* getFeature(const IFeature::FId& id);
     QList<Feature*> getFeatures(Layer::LayerType layerType = Layer::UndefinedType);
     void setHistory(CommandHistory* h);
     CommandHistory& history();

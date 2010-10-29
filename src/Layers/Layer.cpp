@@ -48,7 +48,7 @@ public:
     QList<MapFeaturePtr> Features;
     MyRTree theRTree;
 
-    QHash<QString, MapFeaturePtr> IdMap;
+    QHash<qint64, MapFeaturePtr> IdMap;
     QString Name;
     QString Description;
     bool Visible;
@@ -276,13 +276,22 @@ void Layer::add(Feature* aFeature, int Idx)
     std::rotate(p->Features.begin()+Idx,p->Features.end()-1,p->Features.end());
 }
 
-void Layer::notifyIdUpdate(const QString& id, Feature* aFeature)
+void Layer::notifyIdUpdate(const IFeature::FId& id, Feature* aFeature)
 {
-    if (!aFeature)
-        p->IdMap.remove(id);
+    QHash<qint64, MapFeaturePtr>::iterator i;
+
+    if (!aFeature) {
+        i = p->IdMap.find(id.numId);
+        while (i != p->IdMap.end()) {
+            if (i.value()->id().type & id.type)
+                i = p->IdMap.erase(i);
+            else
+                ++i;
+        }
+    }
     else {
         if (!aFeature->isVirtual())
-            p->IdMap[id] = aFeature;
+            p->IdMap.insertMulti(id.numId, aFeature);
     }
 }
 
@@ -366,26 +375,17 @@ Feature* Layer::get(int i)
     return p->Features.at(i);
 }
 
-Feature* Layer::get(const QString& id, bool exact)
+Feature* Layer::get(const IFeature::FId& id)
 {
-    QHash<QString, MapFeaturePtr>::const_iterator i;
+    QHash<qint64, MapFeaturePtr>::const_iterator i;
 
-    i = p->IdMap.find(id);
-    if (i != p->IdMap.end())
-        return i.value();
-
-    if (!exact) {
-        i = p->IdMap.find(QString("node_"+id));
-        if (i != p->IdMap.end())
+    i = p->IdMap.find(id.numId);
+    while (i != p->IdMap.end()) {
+        if (i.value()->id().type & id.type)
             return i.value();
-        i = p->IdMap.find(QString("way_"+id));
-        if (i != p->IdMap.end())
-            return i.value();
-        i = p->IdMap.find(QString("rel_"+id));
-        if (i != p->IdMap.end())
-            return i.value();
+        ++i;
     }
-    return 0;
+    return NULL;
 }
 
 const Feature* Layer::get(int i) const

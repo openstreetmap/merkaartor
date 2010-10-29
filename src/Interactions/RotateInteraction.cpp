@@ -119,7 +119,7 @@ void RotateInteraction::snapMouseReleaseEvent(QMouseEvent * anEvent, Feature* /*
     if (Angle != 0.0 && Rotating.size() && !panning())
     {
         CommandList* theList;
-        theList = new CommandList(MainWindow::tr("Rotate Feature").arg(Rotating[0]->id()), Rotating[0]);
+        theList = new CommandList(MainWindow::tr("Rotate Feature").arg(Rotating[0]->id().numId), Rotating[0]);
         for (int i=0; i<Rotating.size(); ++i)
         {
             Rotating[i]->setPosition(OriginalPosition[i]);

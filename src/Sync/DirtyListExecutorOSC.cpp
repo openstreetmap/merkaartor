@@ -205,25 +205,17 @@ bool DirtyListExecutorOSC::stop()
                 QDomElement resRoot = nl.at(0).toElement();
                 QDomElement c = resRoot.firstChildElement();
                 while (!c.isNull()) {
-                    Feature* F = theDocument->getFeature(c.attribute("old_id"), false);
-                    if (F) {
-                        QString idPrefix;
-                        switch (F->getType()) {
-                        case IFeature::Point:
-                            idPrefix = "node_";
-                            break;
-                        case IFeature::LineString:
-                        case IFeature::Polygon:
-                            idPrefix = "way_";
-                            break;
-                        case IFeature::OsmRelation:
-                            idPrefix = "rel_";
-                            break;
-                        default:
-                            break;
-                        }
+                    IFeature::FeatureType aType;
+                    if (c.tagName() == "node")
+                        aType = IFeature::Point;
+                    else if (c.tagName() == "way")
+                        aType = IFeature::LineString;
+                    else if (c.tagName() == "relation")
+                        aType = IFeature::OsmRelation;
 
-                        F->setId(idPrefix + c.attribute("new_id"));
+                    Feature* F = theDocument->getFeature(IFeature::FId(aType, c.attribute("old_id").toLongLong()));
+                    if (F) {
+                        F->setId(IFeature::FId(aType, c.attribute("new_id").toLongLong()));
                         F->setVersionNumber(c.attribute("new_version").toInt());
                         F->setLastUpdated(Feature::OSMServer);
                         F->setUser("me");
@@ -341,9 +333,9 @@ void DirtyListExecutorOSC::OscDelete(Feature* F)
 
 bool DirtyListExecutorOSC::addRelation(Relation *F)
 {
-    qDebug() << QString("ADD relation %1").arg(F->id());
+    qDebug() << QString("ADD relation %1").arg(F->id().numId);
 
-    Progress->setLabelText(tr("ADD relation %1").arg(F->id()) + userName(F));
+    Progress->setLabelText(tr("ADD relation %1").arg(F->id().numId) + userName(F));
     QEventLoop L; L.processEvents(QEventLoop::ExcludeUserInputEvents);
 
     OscCreate(F);
@@ -355,9 +347,9 @@ bool DirtyListExecutorOSC::addRoad(Way *F)
 {
     Progress->setValue(++Done);
 
-    qDebug() << QString("ADD road %1").arg(F->id());
+    qDebug() << QString("ADD road %1").arg(F->id().numId);
 
-    Progress->setLabelText(tr("ADD road %1").arg(F->id()) + userName(F));
+    Progress->setLabelText(tr("ADD road %1").arg(F->id().numId) + userName(F));
     QEventLoop L; L.processEvents(QEventLoop::ExcludeUserInputEvents);
 
     OscCreate(F);
@@ -370,9 +362,9 @@ bool DirtyListExecutorOSC::addPoint(Node* F)
 {
     Progress->setValue(++Done);
 
-    qDebug() << QString("ADD trackpoint %1").arg(F->id());
+    qDebug() << QString("ADD trackpoint %1").arg(F->id().numId);
 
-    Progress->setLabelText(tr("ADD trackpoint %1").arg(F->id()) + userName(F));
+    Progress->setLabelText(tr("ADD trackpoint %1").arg(F->id().numId) + userName(F));
     QEventLoop L; L.processEvents(QEventLoop::ExcludeUserInputEvents);
 
     OscCreate(F);
@@ -386,9 +378,9 @@ bool DirtyListExecutorOSC::updateRelation(Relation* F)
 {
     Progress->setValue(++Done);
 
-    qDebug() << QString("UPDATE relation %1").arg(F->id());
+    qDebug() << QString("UPDATE relation %1").arg(F->id().numId);
 
-    Progress->setLabelText(tr("UPDATE relation %1").arg(F->id()) + userName(F));
+    Progress->setLabelText(tr("UPDATE relation %1").arg(F->id().numId) + userName(F));
     QEventLoop L; L.processEvents(QEventLoop::ExcludeUserInputEvents);
 
     OscModify(F);
@@ -401,9 +393,9 @@ bool DirtyListExecutorOSC::updateRoad(Way* F)
 {
     Progress->setValue(++Done);
 
-    qDebug() << QString("UPDATE road %1").arg(F->id());
+    qDebug() << QString("UPDATE road %1").arg(F->id().numId);
 
-    Progress->setLabelText(tr("UPDATE road %1").arg(F->id()) + userName(F));
+    Progress->setLabelText(tr("UPDATE road %1").arg(F->id().numId) + userName(F));
     QEventLoop L; L.processEvents(QEventLoop::ExcludeUserInputEvents);
 
     OscModify(F);
@@ -415,9 +407,9 @@ bool DirtyListExecutorOSC::updatePoint(Node* F)
 {
     Progress->setValue(++Done);
 
-    qDebug() << QString("UPDATE trackpoint %1").arg(F->id());
+    qDebug() << QString("UPDATE trackpoint %1").arg(F->id().numId);
 
-    Progress->setLabelText(tr("UPDATE trackpoint %1").arg(F->id()) + userName(F));
+    Progress->setLabelText(tr("UPDATE trackpoint %1").arg(F->id().numId) + userName(F));
     QEventLoop L; L.processEvents(QEventLoop::ExcludeUserInputEvents);
 
     OscModify(F);
@@ -429,9 +421,9 @@ bool DirtyListExecutorOSC::erasePoint(Node *F)
 {
     Progress->setValue(++Done);
 
-    qDebug() << QString("REMOVE trackpoint %1").arg(F->id());
+    qDebug() << QString("REMOVE trackpoint %1").arg(F->id().numId);
 
-    Progress->setLabelText(tr("REMOVE trackpoint %1").arg(F->id()) + userName(F));
+    Progress->setLabelText(tr("REMOVE trackpoint %1").arg(F->id().numId) + userName(F));
     QEventLoop L; L.processEvents(QEventLoop::ExcludeUserInputEvents);
 
     OscDelete(F);
@@ -443,9 +435,9 @@ bool DirtyListExecutorOSC::eraseRoad(Way *F)
 {
     Progress->setValue(++Done);
 
-    qDebug() << QString("REMOVE road %1").arg(F->id());
+    qDebug() << QString("REMOVE road %1").arg(F->id().numId);
 
-    Progress->setLabelText(tr("REMOVE road %1").arg(F->id()) + userName(F));
+    Progress->setLabelText(tr("REMOVE road %1").arg(F->id().numId) + userName(F));
     QEventLoop L; L.processEvents(QEventLoop::ExcludeUserInputEvents);
 
     OscDelete(F);
@@ -457,9 +449,9 @@ bool DirtyListExecutorOSC::eraseRelation(Relation *F)
 {
     Progress->setValue(++Done);
 
-    qDebug() << QString("REMOVE relation %1").arg(F->id());
+    qDebug() << QString("REMOVE relation %1").arg(F->id().numId);
 
-    Progress->setLabelText(tr("REMOVE relation %1").arg(F->id()) + userName(F));
+    Progress->setLabelText(tr("REMOVE relation %1").arg(F->id().numId) + userName(F));
     QEventLoop L; L.processEvents(QEventLoop::ExcludeUserInputEvents);
 
     OscDelete(F);

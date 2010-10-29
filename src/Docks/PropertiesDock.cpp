@@ -146,7 +146,7 @@ void PropertiesDock::checkMenuStatus()
         IsParentRelation = isChildOfSingleRelation(Selection[0]);
         IsParentArea = isChildOfArea(Selection[0]);
         IsOpenStreetBug = isChildOfArea(Selection[0]);
-        IsOpenStreetBug = IsPoint && Selection[0]->id().startsWith("osb_");
+        IsOpenStreetBug = IsPoint && (Selection[0]->id().type & IFeature::Special);
     }
     for (int i=0; i<Selection.size(); ++i)
     {
@@ -503,7 +503,7 @@ void PropertiesDock::resetValues()
 
         if ((Pt) && (NowShowing == TrackPointUiShowing))
         {
-            TrackPointUi.Id->setText(Pt->id());
+            TrackPointUi.Id->setText(QString::number(Pt->id().numId));
             TrackPointUi.Latitude->setText(COORD2STRING(coordToAng(Pt->position().lat())));
             TrackPointUi.Longitude->setText(COORD2STRING(coordToAng(Pt->position().lon())));
             TrackPointUi.TagView->setModel(theModel);
@@ -531,7 +531,7 @@ void PropertiesDock::resetValues()
         }
         else if ((R) && (NowShowing == RoadUiShowing))
         {
-            RoadUi.Id->setText(R->id());
+            RoadUi.Id->setText(QString::number(R->id().numId));
             //RoadUi.Name->setText(R->tagValue("name",""));
             RoadUi.TagView->setModel(theModel);
             RoadUi.TagView->setItemDelegate(delegate);
@@ -692,7 +692,7 @@ void PropertiesDock::on_RemoveTagButton_clicked()
         if (Content.isValid())
         {
             QString KeyName = Content.toString();
-            L = new CommandList(MainWindow::tr("Clear Tag '%1' on %2").arg(KeyName).arg(Selection[0]->id()), Selection[0]);
+            L = new CommandList(MainWindow::tr("Clear Tag '%1' on %2").arg(KeyName).arg(Selection[0]->id().numId), Selection[0]);
             for (int i=0; i<Selection.size(); ++i)
                 if (Selection[i]->findKey(KeyName) != -1)
                     L->add(new ClearTagCommand(Selection[i],KeyName,Main->document()->getDirtyOrOriginLayer(Selection[i]->layer())));
@@ -700,7 +700,7 @@ void PropertiesDock::on_RemoveTagButton_clicked()
     }
     else
     {
-        L = new CommandList(MainWindow::tr("Clear %1 tags on %2").arg(indexes.count()).arg(Selection[0]->id()), Selection[0]);
+        L = new CommandList(MainWindow::tr("Clear %1 tags on %2").arg(indexes.count()).arg(Selection[0]->id().numId), Selection[0]);
         while (!indexes.isEmpty()) {
             QModelIndex index = indexes.takeLast();
             QModelIndex idx = index.sibling(index.row(),0);
@@ -733,7 +733,7 @@ void PropertiesDock::on_SourceTagButton_clicked()
     if (!src.isEmpty())
         sl.prepend(src);
 
-    CommandList* L = new CommandList(MainWindow::tr("Set \"source\" tas on %1").arg(Selection[0]->id()), Selection[0]);
+    CommandList* L = new CommandList(MainWindow::tr("Set \"source\" tas on %1").arg(Selection[0]->id().numId), Selection[0]);
     L->add(new SetTagCommand(Selection[0], "source", sl.join(";")));
     Main->document()->addHistory(L);
     Main->invalidateView();
@@ -833,7 +833,7 @@ void PropertiesDock::on_btMemberUp_clicked()
 {
     Relation* R = dynamic_cast<Relation*>(Selection[0]);
     if (R) {
-        CommandList* theList = new CommandList(MainWindow::tr("Reorder members in relation %1").arg(R->id()), R);
+        CommandList* theList = new CommandList(MainWindow::tr("Reorder members in relation %1").arg(R->id().numId), R);
 
         QModelIndex index;
         foreach(index, CurrentMembersView->selectionModel()->selectedIndexes())
@@ -878,7 +878,7 @@ void PropertiesDock::on_btMemberDown_clicked()
 {
     Relation* R = dynamic_cast<Relation*>(Selection[0]);
     if (R) {
-        CommandList* theList = new CommandList(MainWindow::tr("Reorder members in relation %1").arg(R->id()), R);
+        CommandList* theList = new CommandList(MainWindow::tr("Reorder members in relation %1").arg(R->id().numId), R);
 
         QModelIndex index;
         foreach(index, CurrentMembersView->selectionModel()->selectedIndexes())

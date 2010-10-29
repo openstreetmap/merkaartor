@@ -130,14 +130,14 @@ bool TagModel::setData(const QModelIndex &index, const QVariant &value, int role
                 if (theFeatures.size() > 1)
                     L = new CommandList(MainWindow::tr("Set Tags on multiple features"), NULL);
                 else
-                    L = new CommandList(MainWindow::tr("Set Tags on %1").arg(theFeatures[0]->id()), theFeatures[0]);
+                    L = new CommandList(MainWindow::tr("Set Tags on %1").arg(theFeatures[0]->id().numId), theFeatures[0]);
                 for (int i=0; i<theFeatures.size(); ++i)
                 {
                     if (theFeatures[i]->isVirtual())
                         continue;
 
                     if (!theFeatures[i]->isDirty() && !theFeatures[i]->hasOSMId() && theFeatures[i]->isUploadable()) {
-                        bool userAdded = !theFeatures[i]->id().startsWith("conflict_");
+                        bool userAdded = !(theFeatures[i]->id().type & IFeature::Conflict);
                         L->add(new AddFeatureCommand(Main->document()->getDirtyOrOriginLayer(),theFeatures[i],userAdded));
                     }
                     L->add(new SetTagCommand(theFeatures[i],value.toString(),"", Main->document()->getDirtyOrOriginLayer(theFeatures[i]->layer())));
@@ -161,7 +161,7 @@ bool TagModel::setData(const QModelIndex &index, const QVariant &value, int role
                 if (theFeatures.size() > 1)
                     L = new CommandList(MainWindow::tr("Set Tags on multiple features"), NULL);
                 else
-                    L = new CommandList(MainWindow::tr("Set Tags on %1").arg(theFeatures[0]->id()), theFeatures[0]);
+                    L = new CommandList(MainWindow::tr("Set Tags on %1").arg(theFeatures[0]->id().numId), theFeatures[0]);
             for (int i=0; i<theFeatures.size(); ++i)
             {
                 if (theFeatures[i]->isVirtual())
@@ -170,7 +170,7 @@ bool TagModel::setData(const QModelIndex &index, const QVariant &value, int role
                 int j = theFeatures[i]->findKey(Original);
                 if (j != -1) {
                     if (!theFeatures[i]->isDirty() && !theFeatures[i]->hasOSMId() && theFeatures[i]->isUploadable()) {
-                        bool userAdded = !theFeatures[i]->id().startsWith("conflict_");
+                        bool userAdded = !(theFeatures[i]->id().type & IFeature::Conflict);
                         L->add(new AddFeatureCommand(Main->document()->getDirtyOrOriginLayer(),theFeatures[i],userAdded));
                     }
                     L->add(new SetTagCommand(theFeatures[i],j , Tags[index.row()].first, Tags[index.row()].second, Main->document()->getDirtyOrOriginLayer(theFeatures[i]->layer())));

@@ -285,7 +285,7 @@ void EditInteraction::on_remove_triggered()
 
     CommandList* theList;
     if (Sel.size() == 1)
-        theList  = new CommandList(MainWindow::tr("Remove feature %1").arg(Sel[0]->id()), Sel[0]);
+        theList  = new CommandList(MainWindow::tr("Remove feature %1").arg(Sel[0]->id().numId), Sel[0]);
     else
         theList  = new CommandList(MainWindow::tr("Remove features"), NULL);
 
@@ -324,7 +324,7 @@ void EditInteraction::on_reverse_triggered()
     Feature* Selection = view()->properties()->selection(0);
     if (Way* R = dynamic_cast<Way*>(Selection))
     {
-        CommandList* theList  = new CommandList(MainWindow::tr("Reverse Road %1").arg(R->id()), R);
+        CommandList* theList  = new CommandList(MainWindow::tr("Reverse Road %1").arg(R->id().numId), R);
         reversePoints(document(),theList,R);
         document()->addHistory(theList);
     }

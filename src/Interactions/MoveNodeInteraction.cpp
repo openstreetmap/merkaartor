@@ -148,7 +148,7 @@ void MoveNodeInteraction::snapMouseReleaseEvent(QMouseEvent * event, Feature* Cl
             theList->setFeature(Moving[0]);
         } else {
             if (!Virtual) {
-                theList->setDescription(MainWindow::tr("Move Node %1").arg(Moving[0]->id()));
+                theList->setDescription(MainWindow::tr("Move Node %1").arg(Moving[0]->id().numId));
                 theList->setFeature(Moving[0]);
             }
         }
@@ -211,7 +211,7 @@ void MoveNodeInteraction::snapMouseReleaseEvent(QMouseEvent * event, Feature* Cl
                     // Merge all nodes into the first node that has been found (not the node being moved)
                     Node* merged = samePosPts[0];
                     // Change the command description to reflect the merge
-                    theList->setDescription(MainWindow::tr("Merge Nodes into %1").arg(merged->id()));
+                    theList->setDescription(MainWindow::tr("Merge Nodes into %1").arg(merged->id().numId));
                     theList->setFeature(merged);
 
                     // from mergeNodes(theDocument, theList, theProperties);
@@ -248,7 +248,7 @@ void MoveNodeInteraction::snapMouseMoveEvent(QMouseEvent* event, Feature* Closer
                 Virtual = true;
                 Node* v = Moving[i];
                 Way* aRoad = CAST_WAY(v->getParent(0));
-                theList->setDescription(MainWindow::tr("Create node in Road: %1").arg(aRoad->id()));
+                theList->setDescription(MainWindow::tr("Create node in Road: %1").arg(aRoad->id().numId));
                 theList->setFeature(aRoad);
                 int SnapIdx = aRoad->findVirtual(v)+1;
                 Node* N = new Node(*v);

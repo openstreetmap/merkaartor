@@ -92,13 +92,13 @@ void DirtyDock::on_ChangesList_itemSelectionChanged()
     if (ui.ChangesList->selectedItems().count() != 0) {
 
         if (ui.ChangesList->selectedItems().count() == 1) {
-            F = Main->document()->getFeature(ui.ChangesList->selectedItems()[0]->data(Qt::UserRole).toString());
+            F = Main->document()->getFeature(ui.ChangesList->selectedItems()[0]->data(Qt::UserRole).value<IFeature::FId>());
             if (F)
                 Main->properties()->setSelection(F);
         } else {
             Selection.clear();
             for (int i=0; i < ui.ChangesList->selectedItems().count(); ++i) {
-                F = Main->document()->getFeature(ui.ChangesList->selectedItems()[i]->data(Qt::UserRole).toString());
+                F = Main->document()->getFeature(ui.ChangesList->selectedItems()[i]->data(Qt::UserRole).value<IFeature::FId>());
                 if (F)
                     Selection.push_back(F);
             }
@@ -132,7 +132,7 @@ void DirtyDock::on_centerAction_triggered()
 
     Main->setUpdatesEnabled(false);
     for (int i=0; i < ui.ChangesList->selectedItems().count(); ++i) {
-        F = Main->document()->getFeature(ui.ChangesList->selectedItems()[i]->data(Qt::UserRole).toString());
+        F = Main->document()->getFeature(ui.ChangesList->selectedItems()[i]->data(Qt::UserRole).value<IFeature::FId>());
         if (F) {
             if (cb.isNull())
                 cb = F->boundingBox();
@@ -155,7 +155,7 @@ void DirtyDock::on_centerZoomAction_triggered()
 
     Main->setUpdatesEnabled(false);
     for (int i=0; i < ui.ChangesList->selectedItems().count(); ++i) {
-        F = Main->document()->getFeature(ui.ChangesList->selectedItems()[i]->data(Qt::UserRole).toString());
+        F = Main->document()->getFeature(ui.ChangesList->selectedItems()[i]->data(Qt::UserRole).value<IFeature::FId>());
         if (F) {
             if (cb.isNull())
                 cb = F->boundingBox();

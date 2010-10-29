@@ -74,7 +74,7 @@ bool ImportExportOSC::import(Layer* aLayer)
         theDoc->add(dLayer);
     }
 
-    QList<QString> featIdList;
+    QList<IFeature::FId> featIdList;
     Feature* F;
     QDomElement c = nl.at(0).toElement().firstChildElement();
     while (!c.isNull()) {
@@ -92,7 +92,6 @@ bool ImportExportOSC::import(Layer* aLayer)
                     F = Relation::fromXML(theDoc, aLayer, f);
                     theList->add(new AddFeatureCommand(aLayer, F, true));
                 }
-                QList<QString> featIdList;
                 for (int i=0; i<F->size(); ++i) {
                     if (F->get(i)->notEverythingDownloaded())
                         featIdList << F->get(i)->id();
@@ -103,23 +102,26 @@ bool ImportExportOSC::import(Layer* aLayer)
         } else if (c.tagName() == "modify") {
             QDomElement f = c.firstChildElement();
             while (!f.isNull()) {
-                QString id = (f.hasAttribute("id") ? f.attribute("id") : f.attribute("xml:id"));
+                QString sid = (f.hasAttribute("id") ? f.attribute("id") : f.attribute("xml:id"));
                 if (f.tagName() == "node") {
-                    F = theDoc->getFeature("node_"+id);
+                    IFeature::FId id(Feature::Point, sid.toLongLong());
+                    F = theDoc->getFeature(id);
                     if (!F || F->notEverythingDownloaded())
-                        downloadFeature(0, "node_"+id, theDoc, dLayer);
+                        downloadFeature(0, id, theDoc, dLayer);
                     F = Node::fromXML(theDoc, aLayer, f);
                     theList->add(new AddFeatureCommand(aLayer, F, true));
                 } else if (f.tagName() == "way") {
-                    F = theDoc->getFeature("way_"+id);
+                    IFeature::FId id(Feature::LineString, sid.toLongLong());
+                    F = theDoc->getFeature(id);
                     if (!F || F->notEverythingDownloaded())
-                        downloadFeature(0, "way_"+id, theDoc, dLayer);
+                        downloadFeature(0, id, theDoc, dLayer);
                     F = Way::fromXML(theDoc, aLayer, f);
                     theList->add(new AddFeatureCommand(aLayer, F, true));
                 } else if (f.tagName() == "relation") {
-                    F = theDoc->getFeature("rel_"+id);
+                    IFeature::FId id(Feature::OsmRelation, sid.toLongLong());
+                    F = theDoc->getFeature(id);
                     if (!F || F->notEverythingDownloaded())
-                        downloadFeature(0, "rel_"+id, theDoc, dLayer);
+                        downloadFeature(0, id, theDoc, dLayer);
                     F = Relation::fromXML(theDoc, aLayer, f);
                     theList->add(new AddFeatureCommand(aLayer, F, true));
                 }

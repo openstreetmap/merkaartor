@@ -103,18 +103,18 @@ RelationAddFeatureCommand * RelationAddFeatureCommand::fromXML(Document * d, QDo
         a->oldLayer = d->getLayer(e.attribute("oldlayer"));
     else
         a->oldLayer = NULL;
-    a->theRelation = Feature::getRelationOrCreatePlaceHolder(d, a->theLayer, e.attribute("relation"));
+    a->theRelation = Feature::getRelationOrCreatePlaceHolder(d, a->theLayer, IFeature::FId(IFeature::OsmRelation, e.attribute("relation").toLongLong()));
     Feature* F;
     if (e.attribute("featureclass") == "TrackPoint") {
-        F = (Feature*) Feature::getTrackPointOrCreatePlaceHolder(d, a->theLayer, e.attribute("trackpoint"));
+        F = (Feature*) Feature::getTrackPointOrCreatePlaceHolder(d, a->theLayer, IFeature::FId(IFeature::Point, e.attribute("trackpoint").toLongLong()));
     } else
     if (e.attribute("featureclass") == "Road") {
-        F = (Feature*) Feature::getWayOrCreatePlaceHolder(d, a->theLayer, e.attribute("road"));
+        F = (Feature*) Feature::getWayOrCreatePlaceHolder(d, a->theLayer, IFeature::FId(IFeature::LineString, e.attribute("road").toLongLong()));
     } else
     if (e.attribute("featureclass") == "Relation") {
-        F = (Feature*) Feature::getRelationOrCreatePlaceHolder(d, a->theLayer, e.attribute("road"));
+        F = (Feature*) Feature::getRelationOrCreatePlaceHolder(d, a->theLayer, IFeature::FId(IFeature::OsmRelation, e.attribute("road").toLongLong()));
     } else {
-        if (!(F = d->getFeature(e.attribute("feature"), false)))
+        if (!(F = d->getFeature(IFeature::FId(IFeature::All, e.attribute("feature").toLongLong()))))
             return NULL;
     }
     a->Role = e.attribute("role");
@@ -229,16 +229,16 @@ RelationRemoveFeatureCommand * RelationRemoveFeatureCommand::fromXML(Document * 
         a->oldLayer = d->getLayer(e.attribute("oldlayer"));
     else
         a->oldLayer = NULL;
-    a->theRelation = Feature::getRelationOrCreatePlaceHolder(d, a->theLayer, e.attribute("relation"));
+    a->theRelation = Feature::getRelationOrCreatePlaceHolder(d, a->theLayer, IFeature::FId(IFeature::OsmRelation, e.attribute("relation").toLongLong()));
     Feature* F = NULL;
     if (e.attribute("featureclass") == "Node") {
-        F = (Feature*) Feature::getTrackPointOrCreatePlaceHolder(d, a->theLayer, e.attribute("feature"));
+        F = (Feature*) Feature::getTrackPointOrCreatePlaceHolder(d, a->theLayer, IFeature::FId(IFeature::Point, e.attribute("feature").toLongLong()));
     } else
     if (e.attribute("featureclass") == "Way") {
-        F = (Feature*) Feature::getWayOrCreatePlaceHolder(d, a->theLayer, e.attribute("feature"));
+        F = (Feature*) Feature::getWayOrCreatePlaceHolder(d, a->theLayer, IFeature::FId(IFeature::LineString, e.attribute("feature").toLongLong()));
     } else
     if (e.attribute("featureclass") == "Relation") {
-        F = (Feature*) Feature::getRelationOrCreatePlaceHolder(d, a->theLayer, e.attribute("feature"));
+        F = (Feature*) Feature::getRelationOrCreatePlaceHolder(d, a->theLayer, IFeature::FId(IFeature::OsmRelation, e.attribute("feature").toLongLong()));
     }
     a->theMapFeature = F;
     a->Idx = e.attribute("index").toInt();
