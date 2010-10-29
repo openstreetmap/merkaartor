@@ -751,10 +751,10 @@ QString Document::exportOSM(QMainWindow* main, QList<Feature*> aFeatures, bool f
     o.setAttribute("generator", QString("%1 %2").arg(qApp->applicationName()).arg(STRINGIFY(VERSION)));
 
     if (exportedFeatures.size()) {
-        aCoordBox = exportedFeatures[0]->boundingBox();
+        aCoordBox = exportedFeatures[0]->boundingBox(true);
         exportedFeatures[0]->toXML(o, dlg);
         for (int i=1; i < exportedFeatures.size(); i++) {
-            aCoordBox.merge(exportedFeatures[i]->boundingBox());
+            aCoordBox.merge(exportedFeatures[i]->boundingBox(true));
             exportedFeatures[i]->toXML(o, dlg);
         }
     }

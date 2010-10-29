@@ -53,6 +53,8 @@ class RelationPrivate
         int ModelReferences;
         QPainterPath thePath;
         QPainterPath theBoundingPath;
+
+        mutable CoordBox BBox;
         bool BBoxUpToDate;
 
         RenderPriority theRenderPriority;
@@ -151,12 +153,12 @@ const RenderPriority& Relation::renderPriority()
     return p->theRenderPriority;
 }
 
-CoordBox Relation::boundingBox() const
+const CoordBox& Relation::boundingBox(bool update) const
 {
-    if (!p->BBoxUpToDate)
+    if (!p->BBoxUpToDate && update)
     {
         if (p->Members.size() == 0)
-            BBox = CoordBox(Coord(0,0),Coord(0,0));
+            p->BBox = CoordBox(Coord(0,0),Coord(0,0));
         else
         {
             CoordBox Clip;
@@ -169,11 +171,11 @@ CoordBox Relation::boundingBox() const
                     } else
                         Clip.merge(p->Members[i].second->boundingBox());
                 }
-            BBox = Clip;
+            p->BBox = Clip;
             p->BBoxUpToDate = true;
         }
     }
-    return BBox;
+    return p->BBox;
 }
 
 void Relation::draw(QPainter& P, MapView* theView)
@@ -306,14 +308,14 @@ bool Relation::notEverythingDownloaded()
 void Relation::add(const QString& Role, Feature* F)
 {
     if (layer())
-        layer()->indexRemove(BBox, this);
+        layer()->indexRemove(p->BBox, this);
     p->Members.push_back(qMakePair(Role,F));
     F->setParentFeature(this);
     p->BBoxUpToDate = false;
     MetaUpToDate = false;
     if (layer() && !isDeleted()) {
         CoordBox bb = boundingBox();
-        layer()->indexAdd(bb, this);
+        layer()->indexAdd(boundingBox(), this);
     }
 
     notifyChanges();
@@ -322,7 +324,7 @@ void Relation::add(const QString& Role, Feature* F)
 void Relation::add(const QString& Role, Feature* F, int Idx)
 {
     if (layer())
-        layer()->indexRemove(BBox, this);
+        layer()->indexRemove(p->BBox, this);
     p->Members.push_back(qMakePair(Role,F));
     std::rotate(p->Members.begin()+Idx,p->Members.end()-1,p->Members.end());
     F->setParentFeature(this);
@@ -339,7 +341,7 @@ void Relation::add(const QString& Role, Feature* F, int Idx)
 void Relation::remove(int Idx)
 {
     if (layer())
-        layer()->indexRemove(BBox, this);
+        layer()->indexRemove(p->BBox, this);
     Feature* F = p->Members[Idx].second;
     // only remove as parent if the feature is only a member once
     p->Members.erase(p->Members.begin()+Idx);

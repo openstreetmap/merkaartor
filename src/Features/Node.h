@@ -32,7 +32,7 @@ class Node : public Feature
         virtual IFeature::FeatureType getType() const {return IFeature::Point;}
         virtual void updateMeta();
 
-        virtual CoordBox boundingBox() const;
+        virtual const CoordBox& boundingBox(bool update=true) const;
         virtual void draw(QPainter& P, MapView* theView);
         virtual void drawSpecial(QPainter& P, QPen& Pen, MapView* theView);
         virtual void drawParentsSpecial(QPainter& P, QPen& Pen, MapView* theView);
@@ -95,11 +95,9 @@ class Node : public Feature
         static Node* fromBinary(Document* d, OsbLayer* L, QDataStream& ds, qint8 c, qint64 id);
 
     private:
-        Coord Position;
-
+        CoordBox Position;
         double Elevation;
         double Speed;
-        QPointF Projected;
 
     private:
         NodePrivate* p;

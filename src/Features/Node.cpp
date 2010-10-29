@@ -24,6 +24,7 @@ class NodePrivate
         bool IsWaypoint;
 #ifndef _MOBILE
         int ProjectionRevision;
+        QPointF Projected;
 #endif
         bool HasPhoto;
         QPixmap* Photo;
@@ -31,13 +32,13 @@ class NodePrivate
 };
 
 Node::Node(const Coord& aCoord)
-    : Position(aCoord)
+    : Position(CoordBox(aCoord, aCoord))
     , Elevation(0.0)
     , Speed(0.0)
     , p(new NodePrivate)
 {
-    BBox = CoordBox(Position,Position);
     setRenderPriority(RenderPriority(RenderPriority::IsSingular,0., 0));
+    qDebug() << "Node size: " << sizeof(Node) << sizeof(NodePrivate);
 }
 
 Node::Node(const Node& other)
@@ -45,17 +46,16 @@ Node::Node(const Node& other)
     , Position(other.Position)
     , Elevation(other.Elevation)
     , Speed(other.Speed)
-    , Projected(other.Projected)
     , p(new NodePrivate)
 {
-    BBox = other.boundingBox();
     p->ProjectionRevision = other.projectionRevision();
     setRenderPriority(RenderPriority(RenderPriority::IsSingular,0., 0));
+    qDebug() << "Node size: " << sizeof(Node) << sizeof(NodePrivate);
 }
 
 Node::~Node(void)
 {
-    SAFE_DELETE(p->Photo);
+    SAFE_DELETE(p->Photo)
     delete p;
 }
 
@@ -145,30 +145,29 @@ bool Node::isSelectable(MapView* theView)
 
 const Coord& Node::position() const
 {
-    return Position;
+    return Position.topRight();
 }
 
 void Node::setPosition(const Coord& aCoord)
 {
     if (layer())
-        layer()->indexRemove(BBox, this);
-    Position = aCoord;
-    BBox = CoordBox(Position,Position);
+        layer()->indexRemove(Position, this);
+    Position = CoordBox(aCoord, aCoord);
     p->ProjectionRevision = 0;
     if (layer() && !isDeleted()) {
-        layer()->indexAdd(BBox, this);
+        layer()->indexAdd(Position, this);
     }
     notifyChanges();
 }
 
 const QPointF& Node::projection() const
 {
-    return Projected;
+    return p->Projected;
 }
 
 void Node::setProjection(const QPointF& aProjection)
 {
-    Projected = aProjection;
+    p->Projected = aProjection;
 }
 
 #ifndef _MOBILE
@@ -217,7 +216,7 @@ QPixmap Node::photo() const
 }
 void Node::setPhoto(QPixmap thePhoto)
 {
-    SAFE_DELETE(p->Photo);
+    SAFE_DELETE(p->Photo)
     p->Photo = new QPixmap(thePhoto.scaled(M_PREFS->getMaxGeoPicWidth(), M_PREFS->getMaxGeoPicWidth(), Qt::KeepAspectRatio));
     p->HasPhoto = true;
 }
@@ -227,9 +226,9 @@ bool Node::notEverythingDownloaded()
     return lastUpdated() == Feature::NotYetDownloaded;
 }
 
-CoordBox Node::boundingBox() const
+const CoordBox& Node::boundingBox(bool) const
 {
-    return BBox;
+    return Position;
 }
 
 void Node::draw(QPainter& thePainter , MapView* theView)
@@ -409,8 +408,8 @@ bool Node::toXML(QDomElement xParent, QProgressDialog * progress, bool strict)
     xParent.appendChild(e);
 
     Feature::toXML(e, strict);
-    e.setAttribute("lon",COORD2STRING(coordToAng(Position.lon())));
-    e.setAttribute("lat", COORD2STRING(coordToAng(Position.lat())));
+    e.setAttribute("lon",COORD2STRING(coordToAng(Position.topRight().lon())));
+    e.setAttribute("lat", COORD2STRING(coordToAng(Position.topRight().lat())));
 
     tagsToXML(e, strict);
 
@@ -440,8 +439,8 @@ bool Node::toGPX(QDomElement xParent, QProgressDialog * progress, bool forExport
 
     if (!forExport)
         e.setAttribute("xml:id", xmlId());
-    e.setAttribute("lon",COORD2STRING(coordToAng(Position.lon())));
-    e.setAttribute("lat", COORD2STRING(coordToAng(Position.lat())));
+    e.setAttribute("lon",COORD2STRING(coordToAng(Position.topRight().lon())));
+    e.setAttribute("lat", COORD2STRING(coordToAng(Position.topRight().lat())));
 
     QDomElement c = xParent.ownerDocument().createElement("time");
     e.appendChild(c);
@@ -611,7 +610,7 @@ void Node::toBinary(QDataStream& ds, QHash <QString, quint64>& theIndex)
     Q_UNUSED(theIndex);
 
     theIndex["N" + QString::number(id().numId)] = ds.device()->pos();
-    ds << (qint8)'N' << id().numId << (qint32)(Position.lon()) << (qint32)(Position.lat());
+    ds << (qint8)'N' << id().numId << (qint32)(Position.topRight().lon()) << (qint32)(Position.topRight().lat());
 }
 
 Node* Node::fromBinary(Document* d, OsbLayer* L, QDataStream& ds, qint8 c, qint64 id)

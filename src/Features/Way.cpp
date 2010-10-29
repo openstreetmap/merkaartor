@@ -45,6 +45,8 @@ class WayPrivate
         std::vector<NodePtr> virtualNodes;
         QList<Coord> Smoothed;
         bool SmoothedUpToDate;
+
+        mutable CoordBox BBox;
         bool BBoxUpToDate;
 
         bool IsCoastline;
@@ -263,7 +265,7 @@ void Way::add(Node* Pt)
 void Way::add(Node* Pt, int Idx)
 {
     if (layer())
-        layer()->indexRemove(BBox, this);
+        layer()->indexRemove(p->BBox, this);
     p->Nodes.insert(p->Nodes.begin() + Idx, Pt);
 //	p->Nodes.push_back(Pt);
 //	std::rotate(p->Nodes.begin()+Idx,p->Nodes.end()-1,p->Nodes.end());
@@ -301,7 +303,7 @@ int Way::findVirtual(Feature* Pt) const
 void Way::remove(int idx)
 {
     if (layer())
-        layer()->indexRemove(BBox, this);
+        layer()->indexRemove(p->BBox, this);
 
     Node* Pt = p->Nodes[idx];
     // only remove as parent if the node is only included once
@@ -378,21 +380,21 @@ bool Way::notEverythingDownloaded()
     return p->NotEverythingDownloaded;
 }
 
-CoordBox Way::boundingBox() const
+const CoordBox& Way::boundingBox(bool update) const
 {
-    if (!p->BBoxUpToDate)
+    if (!p->BBoxUpToDate && update)
     {
         if (p->Nodes.size())
         {
-            BBox = CoordBox(p->Nodes[0]->position(),p->Nodes[0]->position());
+            p->BBox = CoordBox(p->Nodes[0]->position(),p->Nodes[0]->position());
             for (unsigned int i=1; i<p->Nodes.size(); ++i)
-                BBox.merge(p->Nodes[i]->position());
+                p->BBox.merge(p->Nodes[i]->position());
         }
         else
-            BBox = CoordBox(Coord(0,0),Coord(0,0));
+            p->BBox = CoordBox(Coord(0,0),Coord(0,0));
         p->BBoxUpToDate = true;
     }
-    return BBox;
+    return p->BBox;
 }
 
 void Way::updateMeta()
@@ -663,8 +665,8 @@ void Way::buildPath(const Projection &theProjection, const QTransform& /*theTran
         p->ProjectionRevision = theProjection.projectionRevision();
         p->wasPathComplete = true;
 
-        QPointF pbl = theProjection.project(BBox.bottomLeft());
-        QPointF ptr = theProjection.project(BBox.topRight());
+        QPointF pbl = theProjection.project(p->BBox.bottomLeft());
+        QPointF ptr = theProjection.project(p->BBox.topRight());
         p->roadRect = QRectF(pbl, ptr);
     }
 

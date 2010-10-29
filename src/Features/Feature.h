@@ -94,7 +94,7 @@ class Feature : public QObject, public IFeature
         /** Return the smalest box contening all the MapFeature
          * @return A coord box
          */
-        virtual CoordBox boundingBox() const = 0;
+        virtual const CoordBox& boundingBox(bool update=true) const = 0;
 
         /** Draw the feature using the given QPainter an Projection
          * @param P The QPainter used to draw
@@ -327,7 +327,6 @@ class Feature : public QObject, public IFeature
         MapFeaturePrivate* p;
 
     protected:
-        mutable CoordBox BBox;
         bool MetaUpToDate;
         qint64 randomId() const;
 

@@ -25,7 +25,7 @@ class TrackSegment : public Feature
         virtual IFeature::FeatureType getType() const {return IFeature::GpxSegment;}
         virtual void updateMeta();
 
-        virtual CoordBox boundingBox() const;
+        virtual const CoordBox& boundingBox(bool update=true) const;
         virtual void draw(QPainter& P, MapView* theView);
         virtual void drawSpecial(QPainter& P, QPen& Pen, MapView* theView);
         virtual void drawParentsSpecial(QPainter& P, QPen& Pen, MapView* theView);

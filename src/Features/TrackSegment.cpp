@@ -23,6 +23,7 @@ class TrackSegmentPrivate
 
         QList<Node*> Nodes;
         double Distance;
+        CoordBox BBox;
 };
 
 TrackSegment::TrackSegment(void)
@@ -32,8 +33,9 @@ TrackSegment::TrackSegment(void)
 }
 
 TrackSegment::TrackSegment(const TrackSegment& other)
-: Feature(other), p(0)
+: Feature(other)
 {
+    p = new TrackSegmentPrivate;
     setRenderPriority(RenderPriority (RenderPriority::IsLinear,0.,99));
 }
 
@@ -244,16 +246,16 @@ void TrackSegment::drawChildrenSpecial(QPainter&, QPen&, MapView*, int)
 }
 
 
-CoordBox TrackSegment::boundingBox() const
+const CoordBox& TrackSegment::boundingBox(bool) const
 {
     if (p->Nodes.size())
     {
-        CoordBox Box(p->Nodes[0]->position(),p->Nodes[0]->position());
+        p->BBox = CoordBox(p->Nodes[0]->position(),p->Nodes[0]->position());
         for (int i=1; i<p->Nodes.size(); ++i)
-            Box.merge(p->Nodes[i]->position());
-        return Box;
-    }
-    return CoordBox(Coord(0,0),Coord(0,0));
+            p->BBox.merge(p->Nodes[i]->position());
+    } else
+        p->BBox = CoordBox();
+    return p->BBox;
 }
 
 double TrackSegment::pixelDistance(const QPointF& , double , bool , MapView*) const

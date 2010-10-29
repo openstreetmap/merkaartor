@@ -97,24 +97,22 @@ class MapFeaturePrivate
 {
     public:
         MapFeaturePrivate()
-            :  TagsSize(0), LastActor(Feature::User),
+            :  LastActor(Feature::User),
                 PossiblePaintersUpToDate(false),
                 PixelPerMForPainter(-1), CurrentPainter(0), HasPainter(false),
                 theFeature(0), LastPartNotification(0),
                 Time(QDateTime::currentDateTime()), Deleted(false), Visible(true), Uploaded(false), ReadOnly(false), FilterRevision(-1)
                 , Virtual(false), Special(false), DirtyLevel(0)
-                , VirtualsUpdatesBlocked(false)
         {
             initVersionNumber();
         }
         MapFeaturePrivate(const MapFeaturePrivate& other)
-            : Tags(other.Tags), TagsSize(other.TagsSize), LastActor(other.LastActor),
+            : Tags(other.Tags), LastActor(other.LastActor),
                 PossiblePaintersUpToDate(false),
                 PixelPerMForPainter(-1), CurrentPainter(0), HasPainter(false),
                 theFeature(0), LastPartNotification(0),
                 Time(other.Time), Deleted(false), Visible(true), Uploaded(false), ReadOnly(false), FilterRevision(-1)
                 , Virtual(other.Virtual), Special(other.Special), DirtyLevel(0)
-                , VirtualsUpdatesBlocked(other.VirtualsUpdatesBlocked)
         {
             initVersionNumber();
         }
@@ -126,7 +124,6 @@ class MapFeaturePrivate
 
         mutable IFeature::FId Id;
         QList<QPair<quint32, quint32> > Tags;
-        int TagsSize;
         Feature::ActorType LastActor;
         QList<const FeaturePainter*> PossiblePainters;
         bool PossiblePaintersUpToDate;
@@ -148,7 +145,6 @@ class MapFeaturePrivate
         bool Virtual;
         bool Special;
         int DirtyLevel;
-        bool VirtualsUpdatesBlocked;
         QList<FilterLayer*> FilterLayers;
         double Alpha;
 };
@@ -165,6 +161,8 @@ Feature::Feature()
 {
      p = new MapFeaturePrivate;
      p->theFeature = this;
+
+     qDebug() << "Feature size: " << sizeof(Feature) << sizeof(MapFeaturePrivate);
 }
 
 Feature::Feature(const Feature& other)
@@ -376,7 +374,7 @@ void Feature::setDeleted(bool delState)
 
     if (layer()) {
         if (delState)
-            layer()->indexRemove(boundingBox(), this);
+            layer()->indexRemove(boundingBox(false), this);
         else
             layer()->indexAdd(boundingBox(), this);
     }
@@ -457,7 +455,6 @@ void Feature::setTag(int index, const QString& key, const QString& value)
         }
     if (i == p->Tags.size()) {
         p->Tags.insert(p->Tags.begin() + index, pi);
-        p->TagsSize++;
     }
     invalidatePainter();
     invalidateMeta();
@@ -486,7 +483,6 @@ void Feature::setTag(const QString& key, const QString& value)
         }
     if (i == p->Tags.size()) {
         p->Tags.push_back(pi);
-        p->TagsSize++;
     }
     invalidateMeta();
     invalidatePainter();
@@ -501,7 +497,6 @@ void Feature::clearTags()
     for (int i=0; i<p->Tags.size(); ++i) {
         theDoc->removeFromTagList(p->Tags[i].first, p->Tags[i].second);
         p->Tags.erase(p->Tags.begin()+i);
-        p->TagsSize--;
     }
     invalidateMeta();
     invalidatePainter();
@@ -520,7 +515,6 @@ void Feature::clearTag(const QString& k)
         {
             theDoc->removeFromTagList(p->Tags[i].first, p->Tags[i].second);
             p->Tags.erase(p->Tags.begin()+i);
-            p->TagsSize--;
             break;
         }
     invalidateMeta();
@@ -535,14 +529,13 @@ void Feature::removeTag(int idx)
 
     theDoc->removeFromTagList(p->Tags[idx].first, p->Tags[idx].second);
     p->Tags.erase(p->Tags.begin()+idx);
-    p->TagsSize--;
     invalidateMeta();
     invalidatePainter();
 }
 
 int Feature::tagSize() const
 {
-    return p->TagsSize;
+    return p->Tags.size();
 }
 
 QString Feature::tagValue(int i) const
@@ -565,7 +558,7 @@ QString Feature::tagKey(int i) const
 
 int Feature::findKey(const QString &k) const
 {
-    for (int i=0; i<p->TagsSize; ++i)
+    for (int i=0; i<p->Tags.size(); ++i)
         if (tagKey(i) == k)
             return i;
     return -1;
@@ -573,7 +566,7 @@ int Feature::findKey(const QString &k) const
 
 QString Feature::tagValue(const QString& k, const QString& Default) const
 {
-    for (int i=0; i<p->TagsSize; ++i)
+    for (int i=0; i<p->Tags.size(); ++i)
         if (tagKey(i) == k)
             return tagValue(i);
     return Default;
@@ -693,9 +686,8 @@ void Feature::updateIndex()
         return;
 
     if (layer()) {
-        layer()->indexRemove(BBox, this);
-        CoordBox bb = boundingBox();
-        layer()->indexAdd(bb, this);
+        layer()->indexRemove(boundingBox(false), this);
+        layer()->indexAdd(boundingBox(true), this);
     }
 }
 
