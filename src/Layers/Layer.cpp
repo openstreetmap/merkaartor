@@ -282,7 +282,7 @@ void Layer::notifyIdUpdate(const IFeature::FId& id, Feature* aFeature)
 
     if (!aFeature) {
         i = p->IdMap.find(id.numId);
-        while (i != p->IdMap.end()) {
+        while (i != p->IdMap.end() && i.key() == id.numId) {
             if (i.value()->id().type & id.type)
                 i = p->IdMap.erase(i);
             else
@@ -380,7 +380,7 @@ Feature* Layer::get(const IFeature::FId& id)
     QHash<qint64, MapFeaturePtr>::const_iterator i;
 
     i = p->IdMap.find(id.numId);
-    while (i != p->IdMap.end()) {
+    while (i != p->IdMap.end() && i.key() == id.numId) {
         if (i.value()->id().type & id.type)
             return i.value();
         ++i;

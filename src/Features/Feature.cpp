@@ -21,9 +21,14 @@
 #include <algorithm>
 
 qint64 g_rndId = 0;
-qint64 Feature::randomId() const
+IFeature::FId Feature::newId(IFeature::FeatureType type, Document* d) const
 {
-    return --g_rndId;
+    IFeature::FId id = IFeature::FId(type, --g_rndId);
+    if (d)
+        while (d->getFeature(id))
+            id = IFeature::FId(type, --g_rndId);
+
+    return id;
 }
 
 //static QString randomId()
@@ -161,8 +166,9 @@ Feature::Feature()
 {
      p = new MapFeaturePrivate;
      p->theFeature = this;
+     p->Id = IFeature::FId(IFeature::Uninitialized, 0);
 
-     qDebug() << "Feature size: " << sizeof(Feature) << sizeof(MapFeaturePrivate);
+//     qDebug() << "Feature size: " << sizeof(Feature) << sizeof(MapFeaturePrivate);
 }
 
 Feature::Feature(const Feature& other)
@@ -170,6 +176,7 @@ Feature::Feature(const Feature& other)
 {
     p = new MapFeaturePrivate(*other.p);
     p->theFeature = this;
+    p->Id = IFeature::FId(IFeature::Uninitialized, 0);
 }
 
 Feature::~Feature(void)
@@ -234,36 +241,35 @@ QString Feature::stripToOSMId(const IFeature::FId& id)
 
 void Feature::setId(const IFeature::FId& id)
 {
-    if (id.type == p->Id.type && id.numId == p->Id.numId)
+    if (id == p->Id)
         return;
 
     if (parent())
     {
-        dynamic_cast<Layer*>(parent())->notifyIdUpdate(p->Id,0);
-        dynamic_cast<Layer*>(parent())->notifyIdUpdate(id,this);
+        if (p->Id.type != IFeature::Uninitialized)
+            dynamic_cast<Layer*>(parent())->notifyIdUpdate(p->Id,0);
+        if (id.type != IFeature::Uninitialized)
+            dynamic_cast<Layer*>(parent())->notifyIdUpdate(id,this);
     }
     p->Id = id;
 }
 
-const IFeature::FId& Feature::resetId()
+const IFeature::FId& Feature::resetId() const
 {
-    p->Id.type = getType();
-    p->Id.numId = randomId();
-    if (parent())
-        dynamic_cast<Layer*>(parent())->notifyIdUpdate(p->Id,const_cast<Feature*>(this));
+    Layer* L = dynamic_cast<Layer*>(parent());
+    if (L) {
+        p->Id = newId(getType(), L->getDocument());
+        L->notifyIdUpdate(p->Id,const_cast<Feature*>(this));
+    } else
+        p->Id = newId(getType(), NULL);
     return p->Id;
 }
 
 const IFeature::FId& Feature::id() const
 {
     if (p->Id.type == IFeature::Uninitialized)
-    {
-        p->Id.type = getType();
-        p->Id.numId = randomId();
-        Layer* L = dynamic_cast<Layer*>(parent());
-        if (L)
-            L->notifyIdUpdate(p->Id,const_cast<Feature*>(this));
-    }
+        resetId();
+
     return p->Id;
 }
 

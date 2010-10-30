@@ -120,7 +120,7 @@ class Feature : public QObject, public IFeature
 
         /** Reset the id for the current feature to a random one.
          */
-        const IFeature::FId& resetId();
+        const IFeature::FId& resetId() const;
 
         /** Give the id of the feature.
          *  If the feature has no id, a random id is generated
@@ -328,7 +328,7 @@ class Feature : public QObject, public IFeature
 
     protected:
         bool MetaUpToDate;
-        qint64 randomId() const;
+        IFeature::FId newId(IFeature::FeatureType type, Document* d=NULL) const;
 
         bool tagsToXML(QDomElement xParent, bool strict);
         static void tagsFromXML(Document* d, Feature* f, QDomElement e);

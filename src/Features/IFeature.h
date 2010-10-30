@@ -24,6 +24,11 @@ public:
     struct FId {
         FId() : type(IFeature::Uninitialized), numId(0) {}
         FId(char a, qint64 b) : type(a), numId(b) {}
+
+        bool operator==(const FId& R) const
+        {
+            return ((type == R.type) && (numId == R.numId));
+        }
         char type;
         qint64 numId;
     };

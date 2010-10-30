@@ -37,6 +37,8 @@ void parseStandardAttributes(const QXmlAttributes& atts, Feature* F)
 {
     QString ts = atts.value("timestamp");
     QDateTime time = QDateTime::fromString(ts.left(19), Qt::ISODate);
+    if (!time.isValid())
+        time = QDateTime::currentDateTime();
     QString user = atts.value("user");
     F->setTime(time);
     F->setUser(user);
@@ -96,10 +98,10 @@ void OSMHandler::parseNode(const QXmlAttributes& atts)
     else
     {
         Pt = new Node(Coord(angToCoord(Lat),angToCoord(Lon)));
-        theLayer->add(Pt);
-        NewFeature = true;
         Pt->setId(IFeature::FId(IFeature::Point, id.toLongLong()));
         Pt->setLastUpdated(Feature::OSMServer);
+        theLayer->add(Pt);
+        NewFeature = true;
     }
 
     if (NewFeature) {
@@ -175,10 +177,10 @@ void OSMHandler::parseWay(const QXmlAttributes& atts)
     else
     {
         R = new Way;
-        theLayer->add(R);
-        NewFeature = true;
         R->setId(IFeature::FId(IFeature::LineString, id.toLongLong()));
         R->setLastUpdated(Feature::OSMServer);
+        theLayer->add(R);
+        NewFeature = true;
     }
 
     if (NewFeature) {
@@ -259,10 +261,10 @@ void OSMHandler::parseRelation(const QXmlAttributes& atts)
     else
     {
         R = new Relation;
-        NewFeature = true;
         R->setId(IFeature::FId(IFeature::OsmRelation, id.toLongLong()));
-        theLayer->add(R);
         R->setLastUpdated(Feature::OSMServer);
+        NewFeature = true;
+        theLayer->add(R);
     }
 
     if (NewFeature) {

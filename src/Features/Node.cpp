@@ -38,7 +38,7 @@ Node::Node(const Coord& aCoord)
     , p(new NodePrivate)
 {
     setRenderPriority(RenderPriority(RenderPriority::IsSingular,0., 0));
-    qDebug() << "Node size: " << sizeof(Node) << sizeof(NodePrivate);
+//    qDebug() << "Node size: " << sizeof(Node) << sizeof(NodePrivate);
 }
 
 Node::Node(const Node& other)
@@ -50,7 +50,7 @@ Node::Node(const Node& other)
 {
     p->ProjectionRevision = other.projectionRevision();
     setRenderPriority(RenderPriority(RenderPriority::IsSingular,0., 0));
-    qDebug() << "Node size: " << sizeof(Node) << sizeof(NodePrivate);
+//    qDebug() << "Node size: " << sizeof(Node) << sizeof(NodePrivate);
 }
 
 Node::~Node(void)
