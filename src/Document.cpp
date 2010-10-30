@@ -187,7 +187,8 @@ bool Document::toXML(QDomElement xParent, bool asTemplate, QProgressDialog * pro
     xParent.appendChild(mapDoc);
 
     mapDoc.setAttribute("xml:id", id());
-    mapDoc.setAttribute("layernum", p->layerNum);
+    if (!asTemplate)
+        mapDoc.setAttribute("layernum", p->layerNum);
     if (p->lastDownloadLayer) {
         mapDoc.setAttribute("lastdownloadlayer", p->lastDownloadLayer->id());
         mapDoc.setAttribute("lastdownloadtimestamp", p->lastDownloadTimestamp.toUTC().toString(Qt::ISODate)+"Z");
@@ -199,6 +200,8 @@ bool Document::toXML(QDomElement xParent, bool asTemplate, QProgressDialog * pro
 
     for (int i=0; i<p->Layers.size(); ++i) {
         if (p->Layers[i]->isEnabled()) {
+            if (asTemplate && p->Layers[i]->classType() == Layer::DrawingLayerType)
+                continue;
             p->Layers[i]->toXML(mapDoc, asTemplate, progress);
         }
     }
@@ -367,7 +370,7 @@ DrawingLayer* Document::addDrawingLayer(DrawingLayer *aLayer)
 {
     DrawingLayer* theLayer = aLayer;
     if (!theLayer)
-        theLayer = new DrawingLayer(tr("Drawing layer #%1").arg(++p->layerNum));
+        theLayer = new DrawingLayer(tr("Drawing layer #%1").arg(p->layerNum++));
     add(theLayer);
     return theLayer;
 }
