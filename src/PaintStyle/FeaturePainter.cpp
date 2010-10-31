@@ -335,13 +335,13 @@ void FeaturePainter::drawTouchup(Node* Pt, QPainter* thePainter, MapView* theVie
             double PixelPerM = theView->pixelPerM();
             double WW = PixelPerM*IconScale+IconOffset;
 
-            QPixmap pm = getPixmapFromFile(IconName,int(WW));
-            if (!pm.isNull()) {
+            QPixmap* pm = getPixmapFromFile(IconName,int(WW));
+            if (!pm->isNull()) {
                 IconOK = true;
                 QPointF C(theView->transform().map(theView->projection().project(Pt)));
                 // cbro-20090109: Don't draw the dot if there is an icon
                 // thePainter->fillRect(QRect(C-QPoint(2,2),QSize(4,4)),QColor(0,0,0,128));
-                thePainter->drawPixmap( int(C.x()-pm.width()/2), int(C.y()-pm.height()/2) , pm);
+                thePainter->drawPixmap( int(C.x()-pm->width()/2), int(C.y()-pm->height()/2) , *pm);
             }
         }
     }
@@ -391,10 +391,10 @@ void FeaturePainter::drawTouchup(Way* R, QPainter* thePainter, MapView* theView)
             double PixelPerM = theView->pixelPerM();
             double WW = PixelPerM*IconScale+IconOffset;
 
-            QPixmap pm = getPixmapFromFile(IconName,int(WW));
-            if (!pm.isNull()) {
+            QPixmap* pm = getPixmapFromFile(IconName,int(WW));
+            if (!pm->isNull()) {
                 QPointF C(theView->transform().map(theView->projection().project(R->boundingBox().center())));
-                thePainter->drawPixmap( int(C.x()-pm.width()/2), int(C.y()-pm.height()/2) , pm);
+                thePainter->drawPixmap( int(C.x()-pm->width()/2), int(C.y()-pm->height()/2) , *pm);
             }
         }
     }

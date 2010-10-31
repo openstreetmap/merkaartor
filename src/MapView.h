@@ -76,7 +76,7 @@ class MapView :	public QWidget
 
         void setViewport(const CoordBox& Map);
         void setViewport(const CoordBox& Map, const QRect& Screen);
-        CoordBox viewport() const;
+        const CoordBox& viewport() const;
         static void transformCalc(QTransform& theTransform, const Projection& theProjection, const CoordBox& TargetMap, const QRect& Screen);
         double pixelPerM() const;
         double nodeWidth() const;

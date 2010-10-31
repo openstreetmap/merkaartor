@@ -103,7 +103,7 @@ class Way : public Feature
 
         virtual bool deleteChildren(Document* theDocument, CommandList* theList);
 
-        QPainterPath getPath();
+        const QPainterPath& getPath() const;
         void buildPath(Projection const &theProjection, const QTransform& thensform, const QRectF& clipRect);
 
         virtual bool toGPX(QDomElement xParent, QProgressDialog * progress, bool forExport=false);

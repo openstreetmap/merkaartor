@@ -442,7 +442,7 @@ void Relation::buildPath(Projection const &theProjection, const QTransform& /*th
     p->theBoundingPath = p->theBoundingPath.intersected(clipPath);
 }
 
-QPainterPath Relation::getPath()
+const QPainterPath& Relation::getPath() const
 {
     p->thePath = QPainterPath();
     for (int i=0; i<size(); ++i)

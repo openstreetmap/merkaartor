@@ -226,10 +226,10 @@ void PrimitivePainter::drawTouchup(QPointF* Pt, QPainter* thePainter, double Pix
         if (!IconName.isEmpty()) {
             double WW = PixelPerM*IconScale+IconOffset;
 
-            QPixmap pm = getPixmapFromFile(IconName,int(WW));
-            if (!pm.isNull()) {
+            QPixmap* pm = getPixmapFromFile(IconName,int(WW));
+            if (!pm->isNull()) {
                 IconOK = true;
-                thePainter->drawPixmap( int(Pt->x()-pm.width()/2), int(Pt->y()-pm.height()/2) , pm);
+                thePainter->drawPixmap( int(Pt->x()-pm->width()/2), int(Pt->y()-pm->height()/2) , *pm);
             }
         }
     }

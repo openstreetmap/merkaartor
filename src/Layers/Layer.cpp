@@ -155,8 +155,9 @@ void Layer::getFeatureSet(QMap<RenderPriority, QSet <Feature*> >& theFeatures, Q
             theFeatures[F->renderPriority()].insert(F);
         } else
         if (CAST_NODE(F)) {
-            if (arePointsDrawable())
-                theFeatures[F->renderPriority()].insert(F);
+            if (arePointsDrawable() && M_PREFS->getTrackPointsVisible())
+                if (!(F->isVirtual() && !M_PREFS->getVirtualNodesVisible()))
+                    theFeatures[F->renderPriority()].insert(F);
         } else
             theFeatures[F->renderPriority()].insert(F);
     }

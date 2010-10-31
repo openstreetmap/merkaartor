@@ -52,7 +52,7 @@ class Relation : public Feature
         virtual void setLayer(Layer* aLayer);
         virtual void partChanged(Feature* F, int ChangeId);
 
-        QPainterPath getPath();
+        const QPainterPath& getPath() const;
         void buildPath(Projection const &theProjection, const QTransform& theTransform, const QRectF& clipRect);
 
         virtual bool toXML(QDomElement xParent, QProgressDialog * progress, bool strict=false);

@@ -643,7 +643,7 @@ void Way::cascadedRemoveIfUsing(Document* theDocument, Feature* aFeature, Comman
     }
 }
 
-QPainterPath Way::getPath()
+const QPainterPath& Way::getPath() const
 {
     return p->thePath;
 }

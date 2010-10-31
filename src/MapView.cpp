@@ -298,8 +298,8 @@ void MapView::drawGPS(QPainter & P)
         if (Main->gps()->getGpsDevice()->fixStatus() == QGPSDevice::StatusActive) {
             Coord vp(angToCoord(Main->gps()->getGpsDevice()->latitude()), angToCoord(Main->gps()->getGpsDevice()->longitude()));
             QPoint g = toView(vp);
-            QPixmap pm = getPixmapFromFile(":/Gps/Gps_Marker.svg", 32);
-            P.drawPixmap(g - QPoint(16, 16), pm);
+            QPixmap* pm = getPixmapFromFile(":/Gps/Gps_Marker.svg", 32);
+            P.drawPixmap(g - QPoint(16, 16), *pm);
         }
     }
 }
@@ -1261,7 +1261,7 @@ void MapView::unlockSelection()
     }
 }
 
-CoordBox MapView::viewport() const
+const CoordBox& MapView::viewport() const
 {
     return p->Viewport;
 }

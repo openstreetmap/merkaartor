@@ -89,7 +89,7 @@ public:
 
     void render(
             QPainter* P,
-            QMap<RenderPriority, QSet <Feature*> > theFeatures,
+            const QMap<RenderPriority, QSet <Feature*> >& theFeatures,
             const RendererOptions& options,
             MapView* aView
     );
