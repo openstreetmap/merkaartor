@@ -153,8 +153,10 @@ private:
     QString m_department;
     City m_city;
 
+    QDir m_cacheFolder;
+
 private:
-    void initializeCity(QString name);
+    void initializeCity(QString code);
 
 protected:
     void updateMenu();

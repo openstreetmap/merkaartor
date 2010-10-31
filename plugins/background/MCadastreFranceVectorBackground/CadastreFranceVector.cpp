@@ -26,8 +26,7 @@
 #include "CadastreFranceVector.h"
 
 #include "cadastrewrapper.h"
-#include "searchdialog.h"
-#include "tile.h"
+#include "cadastredownloaddialog.h"
 
 #include "IImageManager.h"
 
@@ -84,7 +83,7 @@ QString	CadastreFranceVectorAdapter::getHost() const
 
 IMapAdapter::Type CadastreFranceVectorAdapter::getType() const
 {
-    return IMapAdapter::NetworkBackground;
+    return IMapAdapter::DirectBackground;
 }
 
 QString CadastreFranceVectorAdapter::projection() const
@@ -145,38 +144,68 @@ void CadastreFranceVectorAdapter::onGrabCity()
 {
     if (!theImageManager)
         return;
-    m_city = City();
 
-    SearchDialog *dial = new SearchDialog();
-    dial->cadastre->setRootCacheDir(QDir(theSettings->value("backgroundImage/CacheDir").toString()));
+    m_cacheFolder = QDir(theSettings->value("backgroundImage/CacheDir").toString()).absoluteFilePath("qadastre");
+    CadastreDownloadDialog *dial = new CadastreDownloadDialog(this);
     dial->setModal(true);
     if (dial->exec()) {
-        m_code = dial->cityCode();
-        QString name = dial->cityName();
-        if (!name.isEmpty())
-            initializeCity(name);
+        qDebug() << "Cool !";
+        qDebug() << dial->getCityCode() << dial->getCityName() << dial->getBoundingBox();
+        if (!m_cacheFolder.exists(dial->getCityName()))
+            m_cacheFolder.mkdir(dial->getCityCode());
+        QDir cityFolder(m_cacheFolder);
+        cityFolder.cd(dial->getCityCode());
+
+        QSettings parameters(cityFolder.absoluteFilePath("settings.ini"), QSettings::IniFormat);
+        parameters.setValue("name", dial->getCityName());
+        parameters.setValue("code", dial->getCityCode());
+        parameters.setValue("bbox", dial->getBoundingBox());
+        parameters.setValue("projection", dial->getProjection());
+        parameters.sync();
+
+        QFile pdf(cityFolder.absoluteFilePath("map.pdf"));
+        pdf.open(QIODevice::WriteOnly);
+        pdf.write(dial->getResultDevice()->readAll());
+        pdf.close();
+        dial->getResultDevice()->close();
+        dial->getResultDevice()->deleteLater();
+
+        m_code = dial->getCityCode();
+        initializeCity(m_code);
     }
+    dial->deleteLater();
 }
 
 void CadastreFranceVectorAdapter::cityTriggered(QAction *act)
 {
-    QString name = act->text();
     if (act->data().toString().isEmpty())
         return;
     m_code = act->data().toString();
     if (!theImageManager)
         return;
-    m_city = City();
-    initializeCity(name);
+    initializeCity(m_code);
 }
 
-void CadastreFranceVectorAdapter::initializeCity(QString name)
+void CadastreFranceVectorAdapter::initializeCity(QString code)
 {
-    qDebug() << "Initializing " << name;
-    connect(CadastreWrapper::instance(), SIGNAL(resultsAvailable(QMap<QString,QString>)), this, SLOT(resultsAvailable(QMap<QString,QString>)));
-    QString ville = name.left(name.lastIndexOf('(')-1);
-    m_department = QString("%1").arg(name.mid(name.lastIndexOf('(')+1, 2).toInt(), 3, 10, QChar('0'));
-    CadastreWrapper::instance()->searchVille(ville, m_department);
+    QDir folder = QDir(m_cacheFolder.absoluteFilePath(cityCode));
+    QString pdfFileName = folder.absoluteFilePath("map.pdf");
+    QSettings parameters(folder.absoluteFilePath("settings.ini"), QSettings::IniFormat);
+
+    QString name = parameters.value("name").toString();
+    QString code = parameters.value("code").toString();
+    QString bbox = parameters.value("bbox").toString();
+    QString projection = parameters.value("projection").toString();
+
+    // This may leak
+    GraphicProducer *gp = new GraphicProducer(this);
+    connect(gp, SIGNAL(fillPath(QPainterPath,GraphicContext,Qt::FillRule)), this, SLOT(fillPath(QPainterPath,GraphicContext,Qt::FillRule)), Qt::QueuedConnection);
+    connect(gp, SIGNAL(strikePath(QPainterPath,GraphicContext)), this, SLOT(strikePath(QPainterPath,GraphicContext)), Qt::QueuedConnection);
+    connect(gp, SIGNAL(parsingDone(bool)), this, SLOT(documentParsed(bool)));
+    connect(gp, SIGNAL(parsingDone(bool)), gp, SLOT(deleteLater()));
+
+    // Hack to launch in a new thread ?
+    QFuture<bool> result = QtConcurrent::run(gp, &GraphicProducer::parsePDF, pdfFileName);
 }
 
 void CadastreFranceVectorAdapter::resultsAvailable(QMap<QString, QString> results)

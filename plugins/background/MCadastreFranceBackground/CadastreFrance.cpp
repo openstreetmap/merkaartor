@@ -27,7 +27,6 @@
 
 #include "cadastrewrapper.h"
 #include "searchdialog.h"
-#include "tile.h"
 
 #include "IImageManager.h"
 
@@ -54,6 +53,8 @@ CadastreFranceAdapter::CadastreFranceAdapter()
     loc.setNumberOptions(QLocale::OmitGroupSeparator);
 
     Resolutions << 16 << 8. << 4. << 2 << 1.0 << 0.5 << 0.2;
+
+    m_isTiled = true;
 }
 
 CadastreFranceAdapter::~CadastreFranceAdapter()
@@ -127,6 +128,11 @@ void CadastreFranceAdapter::updateMenu()
     QAction* grabCity = new QAction(tr("Grab City..."), this);
     connect(grabCity, SIGNAL(triggered()), SLOT(onGrabCity()));
     theMenu->addAction(grabCity);
+    QAction* tiledToggle = new QAction(tr("Tiled"), this);
+    tiledToggle->setCheckable(true);
+    tiledToggle->setChecked(m_isTiled);
+    connect(tiledToggle, SIGNAL(triggered()), SLOT(toggleTiled()));
+    theMenu->addAction(tiledToggle);
 
     theMenu->addSeparator();
 
@@ -139,6 +145,13 @@ void CadastreFranceAdapter::updateMenu()
         theMenu->addAction(cityAct);
     }
     connect(theMenu, SIGNAL(triggered(QAction*)), SLOT(cityTriggered(QAction*)));
+}
+
+void CadastreFranceAdapter::toggleTiled()
+{
+    m_isTiled = !m_isTiled;
+    updateMenu();
+    emit(forceRefresh());
 }
 
 void CadastreFranceAdapter::onGrabCity()
@@ -307,7 +320,10 @@ QString CadastreFranceAdapter::toPropertiesHtml()
     return "";
 }
 
-bool CadastreFranceAdapter::isTiled() const { return true; }
+bool CadastreFranceAdapter::isTiled() const
+{
+    return m_isTiled;
+}
 
 int CadastreFranceAdapter::getTilesWE(int zoomlevel) const
 {

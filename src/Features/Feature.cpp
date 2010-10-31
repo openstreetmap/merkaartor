@@ -10,6 +10,7 @@
 #include "PaintStyle/MasPaintStyle.h"
 #include "Utils/TagSelector.h"
 #include "MapView.h"
+#include "PropertiesDock.h"
 
 #include "Utils/Utils.h"
 
@@ -867,6 +868,8 @@ void Feature::fromXML(const QDomElement& e, Feature* F)
     bool Deleted = (e.attribute("deleted") == "true");
     int Dirty = (e.hasAttribute("dirtylevel") ? e.attribute("dirtylevel").toInt() : 0);
     bool Uploaded = (e.attribute("uploaded") == "true");
+    bool Special = (e.attribute("special") == "true");
+    bool Selected = (e.attribute("selected") == "true");
 
     QDateTime time;
     time = QDateTime::fromString(e.attribute("timestamp").left(19), Qt::ISODate);
@@ -880,9 +883,14 @@ void Feature::fromXML(const QDomElement& e, Feature* F)
     F->setDeleted(Deleted);
     F->setDirtyLevel(Dirty);
     F->setUploaded(Uploaded);
+    F->setSpecial(Special);
     F->setTime(time);
     F->setUser(user);
     F->setVersionNumber(Version);
+
+    // TODO Manage selection at document level
+//    if(Selected)
+//        g_Merk_MainWindow->properties()->addSelection(F);
 }
 
 void Feature::toXML(QDomElement& e, bool strict)
@@ -899,6 +907,11 @@ void Feature::toXML(QDomElement& e, bool strict)
             e.setAttribute("dirtylevel", getDirtyLevel());
         if (isUploaded())
             e.setAttribute("uploaded","true");
+        if (isSpecial())
+            e.setAttribute("special","true");
+        // TODO Manage selection at document level
+        if (g_Merk_MainWindow->properties()->isSelected(this))
+            e.setAttribute("selected","true");
     }
 }
 

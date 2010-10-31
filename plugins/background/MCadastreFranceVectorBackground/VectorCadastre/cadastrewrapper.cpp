@@ -142,32 +142,6 @@ void CadastreWrapper::bboxAvailable(QObject *networkReply)
         pdfRep->setProperty("boundingBox", QRect(QPoint(bbExtractor.cap(1).toInt(), bbExtractor.cap(2).toInt()), QPoint(bbExtractor.cap(3).toInt(), bbExtractor.cap(4).toInt())));
 
         QString projection = projExtracton.cap(1).trimmed();
-        if (projection.compare("RGF93CC42", Qt::CaseInsensitive) == 0)
-            projection = "+title=Projection conique conforme Zone 1 +proj=lcc +towgs84=0.0000,0.0000,0.0000 +a=6378137.0000 +rf=298.2572221010000 +lat_0=42.000000000 +lon_0=3.000000000 +lat_1=41.250000000 +lat_2=42.750000000 +x_0=1700000.000 +y_0=1200000.000 +units=m +no_defs";
-        else if (projection.compare("RGF93CC43", Qt::CaseInsensitive) == 0)
-            projection = "+title=Projection conique conforme Zone 2 +proj=lcc +towgs84=0.0000,0.0000,0.0000 +a=6378137.0000 +rf=298.2572221010000 +lat_0=43.000000000 +lon_0=3.000000000 +lat_1=42.250000000 +lat_2=43.750000000 +x_0=1700000.000 +y_0=2200000.000 +units=m +no_defs";
-        else if (projection.compare("RGF93CC44", Qt::CaseInsensitive) == 0)
-            projection = "+title=Projection conique conforme Zone 3 +proj=lcc +towgs84=0.0000,0.0000,0.0000 +a=6378137.0000 +rf=298.2572221010000 +lat_0=44.000000000 +lon_0=3.000000000 +lat_1=43.250000000 +lat_2=44.750000000 +x_0=1700000.000 +y_0=3200000.000 +units=m +no_defs";
-        else if (projection.compare("RGF93CC45", Qt::CaseInsensitive) == 0)
-            projection = "+title=Projection conique conforme Zone 4 +proj=lcc +towgs84=0.0000,0.0000,0.0000 +a=6378137.0000 +rf=298.2572221010000 +lat_0=45.000000000 +lon_0=3.000000000 +lat_1=44.250000000 +lat_2=45.750000000 +x_0=1700000.000 +y_0=4200000.000 +units=m +no_defs";
-        else if (projection.compare("RGF93CC46", Qt::CaseInsensitive) == 0)
-            projection = "+title=Projection conique conforme Zone 5 +proj=lcc +towgs84=0.0000,0.0000,0.0000 +a=6378137.0000 +rf=298.2572221010000 +lat_0=46.000000000 +lon_0=3.000000000 +lat_1=45.250000000 +lat_2=46.750000000 +x_0=1700000.000 +y_0=5200000.000 +units=m +no_defs";
-        else if (projection.compare("RGF93CC47", Qt::CaseInsensitive) == 0)
-            projection = "+title=Projection conique conforme Zone 6 +proj=lcc +towgs84=0.0000,0.0000,0.0000 +a=6378137.0000 +rf=298.2572221010000 +lat_0=47.000000000 +lon_0=3.000000000 +lat_1=46.250000000 +lat_2=47.750000000 +x_0=1700000.000 +y_0=6200000.000 +units=m +no_defs";
-        else if (projection.compare("RGF93CC48", Qt::CaseInsensitive) == 0)
-            projection = "+title=Projection conique conforme Zone 7 +proj=lcc +towgs84=0.0000,0.0000,0.0000 +a=6378137.0000 +rf=298.2572221010000 +lat_0=48.000000000 +lon_0=3.000000000 +lat_1=47.250000000 +lat_2=48.750000000 +x_0=1700000.000 +y_0=7200000.000 +units=m +no_defs";
-        else if (projection.compare("RGF93CC49", Qt::CaseInsensitive) == 0)
-            projection = "+title=Projection conique conforme Zone 8 +proj=lcc +towgs84=0.0000,0.0000,0.0000 +a=6378137.0000 +rf=298.2572221010000 +lat_0=49.000000000 +lon_0=3.000000000 +lat_1=48.250000000 +lat_2=49.750000000 +x_0=1700000.000 +y_0=8200000.000 +units=m +no_defs";
-        else if (projection.compare("RGF93CC50", Qt::CaseInsensitive) == 0)
-            projection = "+title=Projection conique conforme Zone 9 +proj=lcc +towgs84=0.0000,0.0000,0.0000 +a=6378137.0000 +rf=298.2572221010000 +lat_0=50.000000000 +lon_0=3.000000000 +lat_1=49.250000000 +lat_2=50.750000000 +x_0=1700000.000 +y_0=9200000.000 +units=m +no_defs";
-        else if (projection.compare("LAMB1", Qt::CaseInsensitive) == 0)
-            projection = "+title=Lambert I +proj=lcc +nadgrids=ntf_r93.gsb,null +towgs84=-168.0000,-60.0000,320.0000 +a=6378249.2000 +rf=293.4660210000000 +pm=2.337229167 +lat_0=49.500000000 +lon_0=0.000000000 +k_0=0.99987734 +lat_1=49.500000000 +x_0=600000.000 +y_0=200000.000 +units=m +no_defs";
-        else if (projection.compare("LAMB2", Qt::CaseInsensitive) == 0)
-            projection = "+title=Lambert II +proj=lcc +nadgrids=ntf_r93.gsb,null +towgs84=-168.0000,-60.0000,320.0000 +a=6378249.2000 +rf=293.4660210000000 +pm=2.337229167 +lat_0=46.800000000 +lon_0=0.000000000 +k_0=0.99987742 +lat_1=46.800000000 +x_0=600000.000 +y_0=200000.000 +units=m +no_defs";
-        else if (projection.compare("LAMB3", Qt::CaseInsensitive) == 0)
-            projection = "+title=Lambert III +proj=lcc +nadgrids=ntf_r93.gsb,null +towgs84=-168.0000,-60.0000,320.0000 +a=6378249.2000 +rf=293.4660210000000 +pm=2.337229167 +lat_0=44.100000000 +lon_0=0.000000000 +k_0=0.99987750 +lat_1=44.100000000 +x_0=600000.000 +y_0=200000.000 +units=m +no_defs";
-        else if (projection.compare("LAMB4", Qt::CaseInsensitive) == 0)
-            projection = "+title=Lambert IV +proj=lcc +nadgrids=ntf_r93.gsb,null +towgs84=-168.0000,-60.0000,320.0000 +a=6378249.2000 +rf=293.4660210000000 +pm=2.337229167 +lat_0=42.165000000 +lon_0=0.000000000 +k_0=0.99994471 +lat_1=42.165000000 +x_0=234.358 +y_0=185861.369 +units=m +no_defs";
         pdfRep->setProperty("projection", projection);
         m_pdfSignalMapper.setMapping(pdfRep, pdfRep);
         connect(pdfRep, SIGNAL(finished()), &m_pdfSignalMapper, SLOT(map()));

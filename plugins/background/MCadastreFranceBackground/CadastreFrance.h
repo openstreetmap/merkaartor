@@ -132,6 +132,7 @@ public:
 public slots:
     void onGrabCity();
     void cityTriggered(QAction* act);
+    void toggleTiled();
 
 private slots:
     void resultsAvailable(QMap<QString,QString> results);
@@ -152,6 +153,8 @@ private:
     QString m_code;
     QString m_department;
     City m_city;
+
+    bool m_isTiled;
 
 private:
     void initializeCity(QString name);

@@ -64,6 +64,7 @@ bool canJoinRoads(PropertiesDock* theDock)
     for (int i=0; i<theDock->size(); ++i)
         if (Way* R = CAST_WAY(theDock->selection(i))) {
             if (R->isClosed()) continue;
+            if (!R->size()) continue;
             Coord start = R->getNode(0)->position();
             Coord end = R->getNode(R->size()-1)->position();
             if (++ends[start] > 2) return false;
