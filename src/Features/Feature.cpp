@@ -109,6 +109,7 @@ class MapFeaturePrivate
                 theFeature(0), LastPartNotification(0),
                 Time(QDateTime::currentDateTime()), Deleted(false), Visible(true), Uploaded(false), ReadOnly(false), FilterRevision(-1)
                 , Virtual(false), Special(false), DirtyLevel(0)
+                , parentLayer(0)
         {
             initVersionNumber();
         }
@@ -119,6 +120,7 @@ class MapFeaturePrivate
                 theFeature(0), LastPartNotification(0),
                 Time(other.Time), Deleted(false), Visible(true), Uploaded(false), ReadOnly(false), FilterRevision(-1)
                 , Virtual(other.Virtual), Special(other.Special), DirtyLevel(0)
+                , parentLayer(0)
         {
             initVersionNumber();
         }
@@ -153,6 +155,7 @@ class MapFeaturePrivate
         int DirtyLevel;
         QList<FilterLayer*> FilterLayers;
         double Alpha;
+        Layer* parentLayer;
 };
 
 void MapFeaturePrivate::initVersionNumber()
@@ -173,7 +176,7 @@ Feature::Feature()
 }
 
 Feature::Feature(const Feature& other)
-: QObject(), MetaUpToDate(false), m_references(0)
+: MetaUpToDate(false), m_references(0)
 {
     p = new MapFeaturePrivate(*other.p);
     p->theFeature = this;
@@ -201,12 +204,12 @@ int Feature::versionNumber() const
 
 void Feature::setLayer(Layer* aLayer)
 {
-    setParent(aLayer);
+    p->parentLayer = aLayer;
 }
 
 Layer* Feature::layer() const
 {
-    return dynamic_cast<Layer*>(parent());
+    return p->parentLayer;
 }
 
 const RenderPriority& Feature::renderPriority()
@@ -228,7 +231,7 @@ void Feature::setLastUpdated(Feature::ActorType A)
 
 Feature::ActorType Feature::lastUpdated() const
 {
-    Layer* L = dynamic_cast<Layer*>(parent());
+    Layer* L = p->parentLayer;
     if (L && L->classType() == Layer::DirtyLayerType)
         return Feature::User;
     else
@@ -245,19 +248,19 @@ void Feature::setId(const IFeature::FId& id)
     if (id == p->Id)
         return;
 
-    if (parent())
+    if (p->parentLayer)
     {
         if (p->Id.type != IFeature::Uninitialized)
-            dynamic_cast<Layer*>(parent())->notifyIdUpdate(p->Id,0);
+            p->parentLayer->notifyIdUpdate(p->Id,0);
         if (id.type != IFeature::Uninitialized)
-            dynamic_cast<Layer*>(parent())->notifyIdUpdate(id,this);
+            p->parentLayer->notifyIdUpdate(id,this);
     }
     p->Id = id;
 }
 
 const IFeature::FId& Feature::resetId() const
 {
-    Layer* L = dynamic_cast<Layer*>(parent());
+    Layer* L = p->parentLayer;
     if (L) {
         p->Id = newId(getType(), L->getDocument());
         L->notifyIdUpdate(p->Id,const_cast<Feature*>(this));
@@ -336,8 +339,8 @@ bool Feature::isDirty() const
     if (g_Merk_Frisius)
         return (p->DirtyLevel > 0);
 
-    if (parent())
-        return (dynamic_cast<Layer*>(parent())->classType() == Layer::DirtyLayerType);
+    if (p->parentLayer)
+        return (p->parentLayer->classType() == Layer::DirtyLayerType);
     else
         return false;
 }
@@ -354,8 +357,8 @@ bool Feature::isUploaded() const
 
 bool Feature::isUploadable() const
 {
-    if (parent())
-        return (dynamic_cast<Layer*>(parent())->isUploadable());
+    if (p->parentLayer)
+        return (p->parentLayer->isUploadable());
     else
         return false;
 }
@@ -444,8 +447,8 @@ void Feature::setTag(int index, const QString& key, const QString& value)
     if (key.toLower() == "created_by")
         return;
 
-    Q_ASSERT(parent());
-    Document* theDoc = dynamic_cast<Layer*>(parent())->getDocument();
+    Q_ASSERT(p->parentLayer);
+    Document* theDoc = p->parentLayer->getDocument();
     Q_ASSERT(theDoc);
 
     QPair<quint32, quint32> pi = theDoc->addToTagList(key, value);
@@ -472,8 +475,8 @@ void Feature::setTag(const QString& key, const QString& value)
     if (key.toLower() == "created_by")
         return;
 
-    Q_ASSERT(parent());
-    Document* theDoc = dynamic_cast<Layer*>(parent())->getDocument();
+    Q_ASSERT(p->parentLayer);
+    Document* theDoc = p->parentLayer->getDocument();
     Q_ASSERT(theDoc);
 
     QPair<quint32, quint32> pi = theDoc->addToTagList(key, value);
@@ -497,8 +500,8 @@ void Feature::setTag(const QString& key, const QString& value)
 
 void Feature::clearTags()
 {
-    Q_ASSERT(parent());
-    Document* theDoc = dynamic_cast<Layer*>(parent())->getDocument();
+    Q_ASSERT(p->parentLayer);
+    Document* theDoc = p->parentLayer->getDocument();
     Q_ASSERT(theDoc);
 
     for (int i=0; i<p->Tags.size(); ++i) {
@@ -511,8 +514,8 @@ void Feature::clearTags()
 
 void Feature::clearTag(const QString& k)
 {
-    Q_ASSERT(parent());
-    Document* theDoc = dynamic_cast<Layer*>(parent())->getDocument();
+    Q_ASSERT(p->parentLayer);
+    Document* theDoc = p->parentLayer->getDocument();
     Q_ASSERT(theDoc);
 
     quint32 ik = theDoc->getTagKeyIndex(k);
@@ -530,8 +533,8 @@ void Feature::clearTag(const QString& k)
 
 void Feature::removeTag(int idx)
 {
-    Q_ASSERT(parent());
-    Document* theDoc = dynamic_cast<Layer*>(parent())->getDocument();
+    Q_ASSERT(p->parentLayer);
+    Document* theDoc = p->parentLayer->getDocument();
     Q_ASSERT(theDoc);
 
     theDoc->removeFromTagList(p->Tags[idx].first, p->Tags[idx].second);
@@ -547,8 +550,8 @@ int Feature::tagSize() const
 
 QString Feature::tagValue(int i) const
 {
-    Q_ASSERT(parent());
-    Document* theDoc = dynamic_cast<Layer*>(parent())->getDocument();
+    Q_ASSERT(p->parentLayer);
+    Document* theDoc = p->parentLayer->getDocument();
     Q_ASSERT(theDoc);
 
     return theDoc->getTagValue(p->Tags[i].second);
@@ -556,8 +559,8 @@ QString Feature::tagValue(int i) const
 
 QString Feature::tagKey(int i) const
 {
-    Q_ASSERT(parent());
-    Document* theDoc = dynamic_cast<Layer*>(parent())->getDocument();
+    Q_ASSERT(p->parentLayer);
+    Document* theDoc = p->parentLayer->getDocument();
     Q_ASSERT(theDoc);
 
     return theDoc->getTagKey(p->Tags[i].first);

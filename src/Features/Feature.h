@@ -75,10 +75,8 @@ namespace boost
 }
 
 /// Used to store objects of the map
-class Feature : public QObject, public IFeature
+class Feature : public IFeature
 {
-    Q_OBJECT
-
     public:
         typedef enum { User, UserResolved, OSMServer, OSMServerConflict, NotYetDownloaded, Log } ActorType;
         typedef enum { UnknownDirection, BothWays, OneWay, OtherWay } TrafficDirectionType;

@@ -12,8 +12,6 @@ class OsbLayer;
 
 class Relation : public Feature
 {
-    Q_OBJECT
-
     public:
         Relation(void);
         Relation(const Relation&);

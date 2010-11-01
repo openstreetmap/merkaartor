@@ -17,8 +17,6 @@ class QProgressDialog;
 
 class Way : public Feature
 {
-    Q_OBJECT
-
     public:
         Way(void);
         Way(const Way& other);

@@ -21,8 +21,6 @@ class QProgressDialog;
 
 class Node : public Feature
 {
-    Q_OBJECT
-
     public:
         Node(const Coord& aCoord);
         Node(const Node& other);

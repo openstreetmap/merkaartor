@@ -44,6 +44,8 @@ public:
     }
     ~LayerPrivate()
     {
+        foreach (MapFeaturePtr f, Features)
+            delete f;
     }
     QList<MapFeaturePtr> Features;
     MyRTree theRTree;
@@ -942,9 +944,9 @@ bool TrackLayer::toXML(QDomElement& xParent, bool asTemplate, QProgressDialog * 
     QList<TrackSegment*>	segments;
     QList<MapFeaturePtr>::iterator it;
     for(it = p->Features.begin(); it != p->Features.end(); it++) {
-        if (TrackSegment* S = qobject_cast<TrackSegment*>(*it))
+        if (TrackSegment* S = CAST_SEGMENT(*it))
             segments.push_back(S);
-        if (Node* P = qobject_cast<Node*>(*it))
+        if (Node* P = CAST_NODE(*it))
             if (!P->tagValue("_waypoint_","").isEmpty())
                 waypoints.push_back(P);
     }

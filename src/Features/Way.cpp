@@ -1111,7 +1111,7 @@ Way* Way::fromBinary(Document* d, OsbLayer* L, QDataStream& ds, qint8 c, qint64 
                 ds >> lon;
 
                 N = new Node(Coord(lat, lon));
-                N->setParent(R);
+//                N->setParent(R);
                 break;
             case 'N':
                 ds >> refId;

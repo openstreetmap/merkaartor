@@ -10,8 +10,6 @@ class QProgressDialog;
 
 class TrackSegment : public Feature
 {
-    Q_OBJECT
-
     public:
         TrackSegment(void);
         ~TrackSegment(void);
