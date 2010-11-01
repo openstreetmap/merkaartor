@@ -28,7 +28,9 @@ SQLite/SpatiaLite
 #include <spatialite/gaiageo.h>
 #include <spatialite.h>
 
+#include "PrimitiveFeature.h"
 #include "PaintStyle/PrimitivePainter.h"
+
 class MasPaintStyle;
 
 class SpatialiteAdapter : public IMapAdapter
@@ -136,7 +138,8 @@ public:
 
 public:
     void setFile(const QString& fn);
-    void render(QPainter* P, const QRectF& fullbox, const QRectF& selbox, const QRect& src) const;
+    void initTable(QString table);
+    void buildFeatures(const QString& table, QPainter* P, const QRectF& fullbox, const QRectF& selbox, const QRect& src) const;
 
 public slots:
     void onLoadFile();
@@ -150,10 +153,16 @@ private:
 
     QHash<QString, PrimitivePainter* > myStyles;
     QList<PrimitivePainter> thePrimitivePainters;
+    mutable QList<PrimitiveFeature> theFeatures;
+
+    mutable QTransform m_transform;
+    mutable double m_PixelPerM;
 
     QString m_dbName;
     sqlite3 *m_handle;
-    sqlite3_stmt *m_highwayStmt;
+    QHash<QString, sqlite3_stmt*> m_stmtHandles;
+
+
 };
 
 class SpatialiteAdapterFactory : public QObject, public IMapAdapterFactory

@@ -6,6 +6,7 @@
 #include <QVector>
 #include <QPair>
 #include <QPoint>
+#include <QPainterPath>
 
 class PrimitivePainter;
 
@@ -25,7 +26,6 @@ public:
 
 class PrimitiveFeature : public IFeature
 {
-    friend class NavitBin;
 
 public:
     PrimitiveFeature();
@@ -101,12 +101,15 @@ public:
     void setType(quint32 aTyp);
 
 public:
-    QList<QPair<QString, QString> > Tags;
-
     quint32 type;
     quint16 order;
     QVector<QPoint> coordinates;
     QList<PrimitiveAttribute> attributes;
+
+    IFeature::FId theId;
+    QString theName;
+    QPainterPath thePath;
+    QList<QPair<QString, QString> > Tags;
 };
 
 #endif // NAVITFEATURE_H

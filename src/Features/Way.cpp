@@ -668,6 +668,12 @@ void Way::buildPath(const Projection &theProjection, const QTransform& /*theTran
         QPointF pbl = theProjection.project(p->BBox.bottomLeft());
         QPointF ptr = theProjection.project(p->BBox.topRight());
         p->roadRect = QRectF(pbl, ptr);
+
+#if QT_VERSION >= 0x040600
+    // Looks like path clipping finally works out-of-the-box
+        p->thePath = p->theFullPath;
+    }
+#else
     }
 
     bool toClip = !cr.contains(p->roadRect);
@@ -752,6 +758,7 @@ void Way::buildPath(const Projection &theProjection, const QTransform& /*theTran
 //            }
         }
     }
+#endif
 }
 
 bool Way::deleteChildren(Document* theDocument, CommandList* theList)

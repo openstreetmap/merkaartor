@@ -28,7 +28,6 @@
 #include "spatialite/gaiageo.h"
 
 #include "MasPaintStyle.h"
-#include "PrimitiveFeature.h"
 
 static const QUuid theUid ("{4509fe81-47d0-4487-b6d0-e8910f2f1f7d}");
 static const QString theName("Spatialite");
@@ -112,6 +111,34 @@ void SpatialiteAdapter::onLoadFile()
     setFile(fileName);
 }
 
+void SpatialiteAdapter::initTable(QString table)
+{
+    QString tag = table.mid(3);
+    QString q = QString("select * from %1 where MBRIntersects(BuildMBR(?, ?, ?, ?),Geometry)").arg(table);
+    int ret = sqlite3_prepare_v2(m_handle, q.toUtf8().data(), q.size(), &m_stmtHandles[table], NULL);
+    if (ret != SQLITE_OK) {
+        qDebug() << "Sqlite: prepare error: " << ret;
+    }
+    q = QString("select distinct sub_type from %1").arg(table);
+    sqlite3_stmt *pStmt;
+    ret = sqlite3_prepare_v2(m_handle, q.toUtf8().data(), q.size(), &pStmt, NULL);
+    if (ret != SQLITE_OK) {
+        qDebug() << "Sqlite: prepare error: " << ret;
+    }
+    while (sqlite3_step(pStmt) == SQLITE_ROW) {
+        QString sub_type((const char*)sqlite3_column_text(pStmt, 0));
+        PrimitiveFeature f;
+        f.Tags.append(qMakePair(tag, sub_type));
+        for(int i=0; i< thePrimitivePainters.size(); ++i) {
+            if (thePrimitivePainters[i].matchesTag(&f, 0)) {
+                myStyles.insert(QString("%1%2").arg(tag).arg(sub_type), &thePrimitivePainters[i]);
+                break;
+            }
+        }
+    }
+    sqlite3_finalize(pStmt);
+}
+
 void SpatialiteAdapter::setFile(const QString& fn)
 {
     if (m_loaded)
@@ -128,31 +155,17 @@ void SpatialiteAdapter::setFile(const QString& fn)
     m_dbName = fn;
     m_loaded = true;
 
-    QString q = QString("select * from ln_highway where MBRIntersects(BuildMBR(?, ?, ?, ?),Geometry)");
-    ret = sqlite3_prepare_v2(m_handle, q.toUtf8().data(), q.size(), &m_highwayStmt, NULL);
-    if (ret != SQLITE_OK) {
-        qDebug() << "Sqlite: prepare error: " << ret;
-    }
-
-    q = QString("select distinct sub_type from ln_highway");
-    sqlite3_stmt *pStmt;
-    ret = sqlite3_prepare_v2(m_handle, q.toUtf8().data(), q.size(), &pStmt, NULL);
-    if (ret != SQLITE_OK) {
-        qDebug() << "Sqlite: prepare error: " << ret;
-    }
-
-    while (sqlite3_step(pStmt) == SQLITE_ROW) {
-        QString sub_type((const char*)sqlite3_column_text(pStmt, 0));
-        PrimitiveFeature f;
-        f.Tags.append(qMakePair(QString("highway"), sub_type));
-        for(int i=0; i< thePrimitivePainters.size(); ++i) {
-            if (thePrimitivePainters[i].matchesTag(&f, 0)) {
-                myStyles.insert(sub_type, &thePrimitivePainters[i]);
-                break;
-            }
-        }
-    }
-    sqlite3_finalize(pStmt);
+    initTable("ln_highway");
+    initTable("ln_amenity");
+    initTable("ln_landuse");
+    initTable("ln_leisure");
+    initTable("pg_amenity");
+    initTable("pg_landuse");
+    initTable("pg_leisure");
+    initTable("pg_building");
+    initTable("ln_building");
+    initTable("pg_waterway");
+    initTable("ln_waterway");
 
     emit (forceRefresh());
 }
@@ -202,48 +215,78 @@ QPixmap SpatialiteAdapter::getPixmap(const QRectF& wgs84Bbox, const QRectF& /*pr
     QPainter P(&pix);
     P.setRenderHint(QPainter::Antialiasing);
 
-    render(&P, wgs84Bbox, wgs84Bbox, src);
+    double ScaleLon = src.width() / wgs84Bbox.width();
+    double ScaleLat = src.height() / wgs84Bbox.height();
+
+    double PLon = wgs84Bbox.center().x() * ScaleLon;
+    double PLat = wgs84Bbox.center().y() * ScaleLat;
+    double DeltaLon = src.width() / 2 - PLon;
+    double DeltaLat = src.height() - (src.height() / 2 - PLat);
+
+    double LengthOfOneDegreeLat = 6378137.0 * M_PI / 180;
+    double LengthOfOneDegreeLon = LengthOfOneDegreeLat * fabs(cos(angToRad(wgs84Bbox.center().y())));
+    double lonAnglePerM =  1 / LengthOfOneDegreeLon;
+    m_PixelPerM = src.width() / (double)wgs84Bbox.width() * lonAnglePerM;
+    qDebug() << "ppm: " << m_PixelPerM;
+
+    m_transform.setMatrix(ScaleLon, 0, 0, 0, -ScaleLat, 0, DeltaLon, DeltaLat, 1);
+
+    theFeatures.clear();
+    buildFeatures("pg_landuse", &P, wgs84Bbox, wgs84Bbox, src);
+    buildFeatures("ln_landuse", &P, wgs84Bbox, wgs84Bbox, src);
+    buildFeatures("pg_amenity", &P, wgs84Bbox, wgs84Bbox, src);
+    buildFeatures("ln_amenity", &P, wgs84Bbox, wgs84Bbox, src);
+    buildFeatures("pg_leisure", &P, wgs84Bbox, wgs84Bbox, src);
+    buildFeatures("ln_leisure", &P, wgs84Bbox, wgs84Bbox, src);
+    buildFeatures("pg_building", &P, wgs84Bbox, wgs84Bbox, src);
+    buildFeatures("ln_building", &P, wgs84Bbox, wgs84Bbox, src);
+    buildFeatures("pg_waterway", &P, wgs84Bbox, wgs84Bbox, src);
+    buildFeatures("ln_waterway", &P, wgs84Bbox, wgs84Bbox, src);
+    buildFeatures("ln_highway", &P, wgs84Bbox, wgs84Bbox, src);
+
+    foreach(PrimitiveFeature f, theFeatures) {
+        PrimitivePainter* fpainter = myStyles[QString("%1%2").arg(f.Tags[0].first).arg(f.Tags[0].second)];
+        if (fpainter->matchesZoom(m_PixelPerM)) {
+            fpainter->drawBackground(&f.thePath, &P, m_PixelPerM);
+        }
+    }
+    foreach(PrimitiveFeature f, theFeatures) {
+        PrimitivePainter* fpainter = myStyles[QString("%1%2").arg(f.Tags[0].first).arg(f.Tags[0].second)];
+        if (fpainter->matchesZoom(m_PixelPerM)) {
+            fpainter->drawForeground(&f.thePath,& P, m_PixelPerM);
+        }
+    }
+    foreach(PrimitiveFeature f, theFeatures) {
+        PrimitivePainter* fpainter = myStyles[QString("%1%2").arg(f.Tags[0].first).arg(f.Tags[0].second)];
+        if (fpainter->matchesZoom(m_PixelPerM)) {
+            fpainter->drawTouchup(&f.thePath, &P, m_PixelPerM);
+        }
+    }
 
     P.end();
     return pix;
 }
 
-void SpatialiteAdapter::render(QPainter* P, const QRectF& fullbox, const QRectF& selbox, const QRect& src) const
+void SpatialiteAdapter::buildFeatures(const QString& table, QPainter* P, const QRectF& fullbox, const QRectF& selbox, const QRect& src) const
 {
-    if (!m_loaded)
-        return;
-
-    QTransform tfm;
-
-    double ScaleLon = src.width() / fullbox.width();
-    double ScaleLat = src.height() / fullbox.height();
-
-    double PLon = fullbox.center().x() * ScaleLon;
-    double PLat = fullbox.center().y() * ScaleLat;
-    double DeltaLon = src.width() / 2 - PLon;
-    double DeltaLat = src.height() - (src.height() / 2 - PLat);
-
-    double LengthOfOneDegreeLat = 6378137.0 * M_PI / 180;
-    double LengthOfOneDegreeLon = LengthOfOneDegreeLat * fabs(cos(angToRad(fullbox.center().y())));
-    double lonAnglePerM =  1 / LengthOfOneDegreeLon;
-    double PixelPerM = src.width() / (double)fullbox.width() * lonAnglePerM;
-
-    tfm.setMatrix(ScaleLon, 0, 0, 0, -ScaleLat, 0, DeltaLon, DeltaLat, 1);
-
+    QString tag = table.mid(3);
     QPainterPath clipPath;
     clipPath.addRect(selbox/*.adjusted(-1000, -1000, 1000, 1000)*/);
+    double x, y;
 
-    sqlite3_bind_double(m_highwayStmt, 1, selbox.bottomLeft().x());
-    sqlite3_bind_double(m_highwayStmt, 2, selbox.topRight().y());
-    sqlite3_bind_double(m_highwayStmt, 3, selbox.topRight().x());
-    sqlite3_bind_double(m_highwayStmt, 4, selbox.bottomLeft().y());
+    sqlite3_stmt* pStmt = m_stmtHandles[table];
 
-    while (sqlite3_step(m_highwayStmt) == SQLITE_ROW) {
-        qint64 id = sqlite3_column_int64(m_highwayStmt, 0);
-        QString sub_type((const char*)sqlite3_column_text(m_highwayStmt, 1));
-        QString name((const char*)sqlite3_column_text(m_highwayStmt, 2));
-        int blobSize = sqlite3_column_bytes(m_highwayStmt, 3);
-        QByteArray ba((const char*)sqlite3_column_blob(m_highwayStmt, 3), blobSize);
+    sqlite3_bind_double(pStmt, 1, selbox.bottomLeft().x());
+    sqlite3_bind_double(pStmt, 2, selbox.topRight().y());
+    sqlite3_bind_double(pStmt, 3, selbox.topRight().x());
+    sqlite3_bind_double(pStmt, 4, selbox.bottomLeft().y());
+
+    while (sqlite3_step(pStmt) == SQLITE_ROW) {
+        qint64 id = sqlite3_column_int64(pStmt, 0);
+        QString sub_type((const char*)sqlite3_column_text(pStmt, 1));
+        QString name((const char*)sqlite3_column_text(pStmt, 2));
+        int blobSize = sqlite3_column_bytes(pStmt, 3);
+        QByteArray ba((const char*)sqlite3_column_blob(pStmt, 3), blobSize);
         const unsigned char* blob = (const unsigned char*)ba.constData();
 
         gaiaGeomCollPtr coll = gaiaFromSpatiaLiteBlobWkb(blob, blobSize);
@@ -252,7 +295,6 @@ void SpatialiteAdapter::render(QPainter* P, const QRectF& fullbox, const QRectF&
         gaiaPointPtr gaianode = coll->FirstPoint;
 
         gaiaLinestringPtr way = coll->FirstLinestring;
-        double x, y;
         while (way) {
             if (way->Points) {
                 QPainterPath path;
@@ -263,24 +305,51 @@ void SpatialiteAdapter::render(QPainter* P, const QRectF& fullbox, const QRectF&
                     path.lineTo(x, y);
                 }
                 if (!path.isEmpty()) {
-                    if (myStyles.contains(sub_type)) {
-                        PrimitivePainter* fpainter = myStyles[sub_type];
-                        if (fpainter->matchesZoom(PixelPerM)) {
-                            QPainterPath pp = tfm.map(path.intersected(clipPath));
-                            fpainter->drawBackground(&pp, P, PixelPerM);
-                            fpainter->drawForeground(&pp, P, PixelPerM);
-                            fpainter->drawTouchup(&pp, P, PixelPerM);
-                            //          f.painter()->drawLabel(&pp, P, PixelPerM);
-                        }
+                    if (myStyles.contains(QString("%1%2").arg(tag).arg(sub_type))) {
+                        PrimitiveFeature f;
+                        f.theId = IFeature::FId(IFeature::LineString, id);
+                        f.theName = name;
+                        f.thePath = m_transform.map(path);
+                        f.Tags.append(qMakePair(tag, sub_type));
+                        theFeatures << f;
                     }
                 }
             }
 
             way = way->Next;
         }
+
+        gaiaPolygonPtr poly = coll->FirstPolygon;
+        while (poly) {
+            gaiaRingPtr ring = poly->Exterior;
+            if (poly->NumInteriors)
+                qDebug() << "has interiors!";
+            if (ring->Points) {
+                QPainterPath path;
+                gaiaGetPoint(ring->Coords, 0, &x, &y);
+                path.moveTo(x, y);
+                for (int i=1; i<ring->Points; ++i) {
+                    gaiaGetPoint(ring->Coords, i, &x, &y);
+                    path.lineTo(x, y);
+                }
+//                path.closeSubpath();
+                if (!path.isEmpty()) {
+                    if (myStyles.contains(QString("%1%2").arg(tag).arg(sub_type))) {
+                        PrimitiveFeature f;
+                        f.theId = IFeature::FId(IFeature::LineString, id);
+                        f.theName = name;
+                        f.thePath = m_transform.map(path);
+                        f.Tags.append(qMakePair(tag, sub_type));
+                        theFeatures << f;
+                    }
+                }
+            }
+
+            poly = poly->Next;
+        }
     }
 
-    sqlite3_reset(m_highwayStmt);
+    sqlite3_reset(pStmt);
 
 //    QRectF fBox(NavitProject(fullbox.topLeft()), NavitProject(fullbox.bottomRight()));
 //    QRectF sBox(NavitProject(selbox.topLeft()), NavitProject(selbox.bottomRight()));
