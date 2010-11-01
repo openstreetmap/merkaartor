@@ -12,6 +12,9 @@ TEMPLATE = subdirs
     contains (GDAL, 1) {
         SUBDIRS += MGdalBackground
     }
+    contains (SPATIALITE, 1) {
+        SUBDIRS += MSpatialiteBackground
+    }
 
 }
 

@@ -61,6 +61,13 @@ QPointF mercatorProject(const QPointF& c)
     return QPointF(x, y);
 }
 
+inline uint qHash(IFeature::FId id)
+{
+    uint h1 = qHash(id.type);
+    uint h2 = qHash(id.numId);
+    return ((h1 << 16) | (h1 >> 16)) ^ h2;
+}
+
 /*****/
 
 SpatialiteAdapter::SpatialiteAdapter()
@@ -90,6 +97,8 @@ SpatialiteAdapter::SpatialiteAdapter()
     for (int i=0; i<theStyle.painterSize(); ++i) {
         thePrimitivePainters.append(PrimitivePainter(*theStyle.getPainter(i)));
     }
+
+    m_cache.setMaxCost(100000);
 }
 
 
@@ -244,22 +253,25 @@ QPixmap SpatialiteAdapter::getPixmap(const QRectF& wgs84Bbox, const QRectF& /*pr
     buildFeatures("ln_waterway", &P, wgs84Bbox, wgs84Bbox, src);
     buildFeatures("ln_highway", &P, wgs84Bbox, wgs84Bbox, src);
 
-    foreach(PrimitiveFeature f, theFeatures) {
-        PrimitivePainter* fpainter = myStyles[QString("%1%2").arg(f.Tags[0].first).arg(f.Tags[0].second)];
+    foreach(PrimitiveFeature* f, theFeatures) {
+        PrimitivePainter* fpainter = myStyles[QString("%1%2").arg(f->Tags[0].first).arg(f->Tags[0].second)];
         if (fpainter->matchesZoom(m_PixelPerM)) {
-            fpainter->drawBackground(&f.thePath, &P, m_PixelPerM);
+            QPainterPath pp = m_transform.map(f->thePath);
+            fpainter->drawBackground(&pp, &P, m_PixelPerM);
         }
     }
-    foreach(PrimitiveFeature f, theFeatures) {
-        PrimitivePainter* fpainter = myStyles[QString("%1%2").arg(f.Tags[0].first).arg(f.Tags[0].second)];
+    foreach(PrimitiveFeature* f, theFeatures) {
+        PrimitivePainter* fpainter = myStyles[QString("%1%2").arg(f->Tags[0].first).arg(f->Tags[0].second)];
         if (fpainter->matchesZoom(m_PixelPerM)) {
-            fpainter->drawForeground(&f.thePath,& P, m_PixelPerM);
+            QPainterPath pp = m_transform.map(f->thePath);
+            fpainter->drawForeground(&pp,& P, m_PixelPerM);
         }
     }
-    foreach(PrimitiveFeature f, theFeatures) {
-        PrimitivePainter* fpainter = myStyles[QString("%1%2").arg(f.Tags[0].first).arg(f.Tags[0].second)];
+    foreach(PrimitiveFeature* f, theFeatures) {
+        PrimitivePainter* fpainter = myStyles[QString("%1%2").arg(f->Tags[0].first).arg(f->Tags[0].second)];
         if (fpainter->matchesZoom(m_PixelPerM)) {
-            fpainter->drawTouchup(&f.thePath, &P, m_PixelPerM);
+            QPainterPath pp = m_transform.map(f->thePath);
+            fpainter->drawTouchup(&pp, &P, m_PixelPerM);
         }
     }
 
@@ -283,6 +295,11 @@ void SpatialiteAdapter::buildFeatures(const QString& table, QPainter* P, const Q
 
     while (sqlite3_step(pStmt) == SQLITE_ROW) {
         qint64 id = sqlite3_column_int64(pStmt, 0);
+        if (m_cache.contains(IFeature::FId(IFeature::LineString, id))) {
+            PrimitiveFeature* f = m_cache[IFeature::FId(IFeature::LineString, id)];
+            theFeatures << f;
+            continue;
+        }
         QString sub_type((const char*)sqlite3_column_text(pStmt, 1));
         QString name((const char*)sqlite3_column_text(pStmt, 2));
         int blobSize = sqlite3_column_bytes(pStmt, 3);
@@ -306,12 +323,13 @@ void SpatialiteAdapter::buildFeatures(const QString& table, QPainter* P, const Q
                 }
                 if (!path.isEmpty()) {
                     if (myStyles.contains(QString("%1%2").arg(tag).arg(sub_type))) {
-                        PrimitiveFeature f;
-                        f.theId = IFeature::FId(IFeature::LineString, id);
-                        f.theName = name;
-                        f.thePath = m_transform.map(path);
-                        f.Tags.append(qMakePair(tag, sub_type));
+                        PrimitiveFeature* f = new PrimitiveFeature();
+                        f->theId = IFeature::FId(IFeature::LineString, id);
+                        f->theName = name;
+                        f->thePath = path;
+                        f->Tags.append(qMakePair(tag, sub_type));
                         theFeatures << f;
+                        m_cache.insert(f->theId, f);
                     }
                 }
             }
@@ -335,12 +353,13 @@ void SpatialiteAdapter::buildFeatures(const QString& table, QPainter* P, const Q
 //                path.closeSubpath();
                 if (!path.isEmpty()) {
                     if (myStyles.contains(QString("%1%2").arg(tag).arg(sub_type))) {
-                        PrimitiveFeature f;
-                        f.theId = IFeature::FId(IFeature::LineString, id);
-                        f.theName = name;
-                        f.thePath = m_transform.map(path);
-                        f.Tags.append(qMakePair(tag, sub_type));
+                        PrimitiveFeature* f = new PrimitiveFeature();
+                        f->theId = IFeature::FId(IFeature::LineString, id);
+                        f->theName = name;
+                        f->thePath = path;
+                        f->Tags.append(qMakePair(tag, sub_type));
                         theFeatures << f;
+                        m_cache.insert(f->theId, f);
                     }
                 }
             }

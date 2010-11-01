@@ -543,10 +543,12 @@ void MapView::updateStaticBackground()
 
         if (M_PREFS->getUseShapefileForBackground())
             StaticBackground->fill(M_PREFS->getWaterColor());
-        else if (M_PREFS->getBackgroundOverwriteStyle() || !M_STYLE->getGlobalPainter().getDrawBackground())
+        else if (M_PREFS->getBackgroundOverwriteStyle())
             StaticBackground->fill(M_PREFS->getBgColor());
-        else
+        else if (M_STYLE->getGlobalPainter().getDrawBackground())
             StaticBackground->fill(M_STYLE->getGlobalPainter().getBackgroundColor());
+        else
+            StaticBackground->fill(Qt::white);
     }
 }
 

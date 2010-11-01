@@ -16,6 +16,7 @@
 # ZBAR                - use the ZBAR library to extract coordinates from barcode
 # LIBPROXY            - use libproxy to find the system proxy
 # PORTABLE=1          - build merkaartor as a portable app (all files in app dir)
+# SPATIALITE=1        - enable use of the spatialite linray
 
 #Static config
 include (Config.pri)
@@ -87,7 +88,7 @@ win32 {
 
 macx {
     RC_FILE = $$PWD/../Icons/merkaartor.icns
-	QMAKE_INFO_PLIST = $$PWD/../macos/Info.plist
+    QMAKE_INFO_PLIST = $$PWD/../macos/Info.plist
     INCLUDEPATH += /opt/local/include
 }
 

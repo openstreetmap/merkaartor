@@ -504,9 +504,9 @@ void Feature::clearTags()
     Document* theDoc = p->parentLayer->getDocument();
     Q_ASSERT(theDoc);
 
-    for (int i=0; i<p->Tags.size(); ++i) {
-        theDoc->removeFromTagList(p->Tags[i].first, p->Tags[i].second);
-        p->Tags.erase(p->Tags.begin()+i);
+    while (p->Tags.size()) {
+        theDoc->removeFromTagList(p->Tags[0].first, p->Tags[0].second);
+        p->Tags.erase(p->Tags.begin());
     }
     invalidateMeta();
     invalidatePainter();

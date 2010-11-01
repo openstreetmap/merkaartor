@@ -19,6 +19,7 @@
 #include <QLocale>
 #include <QByteArray>
 #include <QHash>
+#include <QCache>
 
 /*
 these headers are required in order to support
@@ -153,7 +154,7 @@ private:
 
     QHash<QString, PrimitivePainter* > myStyles;
     QList<PrimitivePainter> thePrimitivePainters;
-    mutable QList<PrimitiveFeature> theFeatures;
+    mutable QList<PrimitiveFeature*> theFeatures;
 
     mutable QTransform m_transform;
     mutable double m_PixelPerM;
@@ -161,6 +162,8 @@ private:
     QString m_dbName;
     sqlite3 *m_handle;
     QHash<QString, sqlite3_stmt*> m_stmtHandles;
+
+    mutable QCache<IFeature::FId, PrimitiveFeature> m_cache;
 
 
 };

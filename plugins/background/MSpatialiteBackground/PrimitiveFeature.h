@@ -100,6 +100,8 @@ public:
 
     void setType(quint32 aTyp);
 
+    int size() {return 1;}
+
 public:
     quint32 type;
     quint16 order;

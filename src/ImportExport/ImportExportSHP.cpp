@@ -136,7 +136,7 @@ Feature* ImportExportSHP::parseGeometry(Layer* aLayer, OGRGeometry *poGeometry)
                     poRing = poPoly->getInteriorRing(i);
                     Way *inner = readWay(aLayer, poRing);
                     if (inner) {
-                        if (aLayer->exists(inner))
+                        if (!aLayer->exists(inner))
                             aLayer->add(inner);
                         rel->add("inner", inner);
                     }
