@@ -66,9 +66,9 @@ bool canJoinRoads(PropertiesDock* theDock)
             if (R->isClosed()) continue;
             if (!R->size()) continue;
             Coord start = R->getNode(0)->position();
-            Coord end = R->getNode(R->size()-1)->position();
-            if (++ends[start] > 2) return false;
-            if (++ends[end] > 2) return false;
+            Coord end = R->getNodes().back()->position();
+            ++ends[start];
+            ++ends[end];
         }
 
     return ends.values().contains(2);
@@ -276,32 +276,49 @@ static Way* join(Document* theDocument, CommandList* L, Way* R1, Way* R2)
     return R1;
 }
 
+template<typename T>
+static void replaceItem(QList<T> &list, T oldItem, T newItem)
+{
+    int i = list.indexOf(oldItem);
+    if (i >= 0)
+        list.replace(i, newItem);
+}
+
 void joinRoads(Document* theDocument, CommandList* theList, PropertiesDock* theDock)
 {
-    QList<Way*> Input;
-    QList<Way*> Output;
-    for (int i=0; i<theDock->size(); ++i)
-        if (Way* R = CAST_WAY(theDock->selection(i)))
-            Input.append(R);
-    while (!Input.isEmpty())
-    {
-        Way *R1 = Input.takeFirst();
-        if (R1->size() >= 4 && !R1->isClosed() && R1->getNode(0)->position() == R1->getNode(R1->size()-1)->position()) {
-            // almost-area; close it properly
-            mergeNodes(theDocument, theList, R1->getNode(0), R1->getNode(R1->size()-1));
-        } else {
-            for (int i = 0;  i < Input.size();  ++i) {
-                Way *R2 = Input[i];
-                if (canJoin(R1, R2)) {
-                    R1 = join(theDocument, theList, R1, R2);
-                    Input.removeAt(i);
-                    i = -1;        // restart the loop
-                }
+    QList<Feature*> selection = theDock->selection();
+    QHash<Coord,QList<Way*> > ends;
+
+    foreach (Feature *F, selection)
+        if (Way* R = CAST_WAY(F))
+            if (!R->isClosed()) {
+                Coord start = R->getNode(0)->position();
+                ends[start] << R;
+                Coord end = R->getNodes().back()->position();
+                ends[end] << R;
             }
+
+    foreach (Coord c, ends.keys()) {
+        QList<Way*> ways = ends[c];
+        if (ways.count() != 2) continue;
+        Way *R1 = ways[0];
+        Way *R2 = ways[1];
+        if (R1 == R2) {
+            Node *firstNode = R1->getNode(0);
+            Node *lastNode = R1->getNode(R1->size()-1);
+            if (firstNode != lastNode && R1->size() >= 4 && firstNode->position() == lastNode->position()) {
+                // almost-area; close it properly
+                mergeNodes(theDocument, theList, R1->getNode(0), R1->getNode(R1->size()-1));
+            }
+        } else {
+            R1 = join(theDocument, theList, R1, R2);
+            // replace R2 with R1 for subsequent operations
+            replaceItem(ends[R2->getNode(0)->position()], R2, R1);
+            replaceItem(ends[R2->getNodes().back()->position()], R2, R1);
+            selection.removeOne(R2);
         }
-        Output.append(R1);
     }
-    theDock->setSelection(Output);
+    theDock->setSelection(selection);
 }
 
 static bool handleWaysplitSpecialRestriction(Document* theDocument, CommandList* theList, Way* FirstPart, Way* NextPart, Relation* theRel)

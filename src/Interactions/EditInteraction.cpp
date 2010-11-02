@@ -321,14 +321,18 @@ void EditInteraction::on_remove_triggered()
 
 void EditInteraction::on_reverse_triggered()
 {
-    Feature* Selection = view()->properties()->selection(0);
-    if (Way* R = dynamic_cast<Way*>(Selection))
-    {
-        CommandList* theList  = new CommandList(MainWindow::tr("Reverse Road %1").arg(R->id().numId), R);
-        reversePoints(document(),theList,R);
+    QList<Feature*> selection = view()->properties()->selection();
+    QString desc = selection.size() == 1 ? tr("Reverse way %1").arg(selection[0]->id().numId) : tr("Reverse %1 ways");
+    CommandList* theList  = new CommandList(MainWindow::tr("Reverse %1 ways").arg(selection.size()), NULL);
+    foreach (Feature* f, selection)
+        if (Way* R = dynamic_cast<Way*>(f))
+            reversePoints(document(), theList, R);
+    if (theList->empty()) {
+        delete theList;
+    } else {
         document()->addHistory(theList);
+        view()->invalidate(true, false);
     }
-    view()->invalidate(true, false);
 }
 
 #ifndef Q_OS_SYMBIAN
