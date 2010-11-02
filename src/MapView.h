@@ -45,6 +45,7 @@ class MapView :	public QWidget
         void drawScale(QPainter & painter);
 
         void panScreen(QPoint delta) ;
+        void rotateScreen(QPoint center, qreal angle);
         void invalidate(bool updateStaticBuffer, bool updateMap);
 
         virtual void paintEvent(QPaintEvent* anEvent);
@@ -77,7 +78,7 @@ class MapView :	public QWidget
         void setViewport(const CoordBox& Map);
         void setViewport(const CoordBox& Map, const QRect& Screen);
         const CoordBox& viewport() const;
-        static void transformCalc(QTransform& theTransform, const Projection& theProjection, const CoordBox& TargetMap, const QRect& Screen);
+        static void transformCalc(QTransform& theTransform, const Projection& theProjection, const qreal& theRotation, const CoordBox& TargetMap, const QRect& Screen);
         double pixelPerM() const;
         double nodeWidth() const;
 

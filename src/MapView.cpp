@@ -60,6 +60,7 @@ public:
     CoordBox Viewport;
     QList<CoordBox> invalidRects;
     QPoint theVectorPanDelta;
+    qreal theVectorRotation;
     QMap<RenderPriority, QSet <Feature*> > theFeatures;
     QSet<Way*> theCoastlines;
     QList<Node*> theVirtualNodes;
@@ -67,7 +68,7 @@ public:
     RendererOptions ROptions;
 
     MapViewPrivate()
-      : PixelPerM(0.0), Viewport(WORLD_COORDBOX)
+      : PixelPerM(0.0), Viewport(WORLD_COORDBOX), theVectorRotation(0.0)
     {}
 };
 
@@ -149,7 +150,7 @@ void MapView::invalidate(bool updateStaticBuffer, bool updateMap)
         p->invalidRects.clear();
         p->invalidRects.push_back(p->Viewport);
         p->theVectorPanDelta = QPoint(0, 0);
-        SAFE_DELETE(StaticBackground);
+        SAFE_DELETE(StaticBackground)
         StaticBufferUpToDate = false;
     }
     if (theDocument && updateMap) {
@@ -184,7 +185,7 @@ void MapView::panScreen(QPoint delta)
 
 
     //qDebug() << "Inv rects size: " << p->invalidRects.size();
-    //qDebug() << "delta: " << delta;
+//    qDebug() << "delta: " << delta;
     //qDebug() << "r1 : " << p->theTransform.map(theProjection.project(r1.topLeft())) << ", " << p->theTransform.map(theProjection.project(r1.bottomRight()));
     //qDebug() << "r2 : " << p->theTransform.map(theProjection.project(r2.topLeft())) << ", " << p->theTransform.map(theProjection.project(r2.bottomRight()));
 
@@ -195,6 +196,20 @@ void MapView::panScreen(QPoint delta)
 
     for (LayerIterator<ImageMapLayer*> ImgIt(theDocument); !ImgIt.isEnd(); ++ImgIt)
         ImgIt.get()->pan(delta);
+    update();
+}
+
+void MapView::rotateScreen(QPoint center, qreal angle)
+{
+    p->theVectorRotation += angle;
+
+    transformCalc(p->theTransform, theProjection, p->theVectorRotation, p->Viewport, rect());
+    p->theInvertedTransform = p->theTransform.inverted();
+    viewportRecalc(rect());
+
+    StaticBufferUpToDate = false;
+//    for (LayerIterator<ImageMapLayer*> ImgIt(theDocument); !ImgIt.isEnd(); ++ImgIt)
+//        ImgIt.get()->pan(delta);
     update();
 }
 
@@ -1118,6 +1133,11 @@ bool MapView::event(QEvent *event)
                 }
                 return true;
 
+            case Qt::Key_T:
+                {
+                    rotateScreen(rect().center(), 15.);
+                }
+
             case Qt::Key_O:
                 {
                     CreateSingleWayInteraction* intr = dynamic_cast<CreateSingleWayInteraction*>(interaction());
@@ -1258,7 +1278,7 @@ void MapView::unlockSelection()
 
     if (SelectionLocked) {
         Main->statusBar()->removeWidget(lockIcon);
-        SAFE_DELETE(lockIcon);
+        SAFE_DELETE(lockIcon)
         SelectionLocked = false;
     }
 }
@@ -1274,6 +1294,7 @@ void MapView::viewportRecalc(const QRect & Screen)
     Coord br = fromView(Screen.bottomRight());
     Coord tr = fromView(Screen.topRight());
     Coord tl = fromView(Screen.topLeft());
+//    qDebug() << bl.toQPointF() << br.toQPointF() << tr.toQPointF() << tl.toQPointF();
     double t = qMax(tr.lat(), tl.lat());
     double b = qMin(br.lat(), bl.lat());
     double l = qMin(tl.lon(), bl.lon());
@@ -1293,13 +1314,12 @@ void MapView::viewportRecalc(const QRect & Screen)
     emit viewportChanged();
 }
 
-void MapView::transformCalc(QTransform& theTransform, const Projection& theProjection, const CoordBox& TargetMap, const QRect& Screen)
+void MapView::transformCalc(QTransform& theTransform, const Projection& theProjection, const qreal& theRotation, const CoordBox& TargetMap, const QRect& Screen)
 {
     QPointF bl = theProjection.project(TargetMap.bottomLeft());
     QPointF tr = theProjection.project(TargetMap.topRight());
     QRectF pViewport = QRectF(bl, QSizeF(tr.x() - bl.x(), tr.y() - bl.y()));
-
-    QPointF pCenter(pViewport.center());
+//    QPointF pCenter(pViewport.center());
 
     double Aspect = (double)Screen.width() / Screen.height();
     double pAspect = pViewport.width() / pViewport.height();
@@ -1316,12 +1336,23 @@ void MapView::transformCalc(QTransform& theTransform, const Projection& theProje
     double ScaleLon = Screen.width() / wv;
     double ScaleLat = Screen.height() / hv;
 
-    double PLon = pCenter.x() * ScaleLon;
-    double PLat = pCenter.y() * ScaleLat;
-    double DeltaLon = Screen.width() / 2 - PLon;
-    double DeltaLat = Screen.height() - (Screen.height() / 2 - PLat);
+//    double PLon = pCenter.x() /* * ScaleLon*/;
+//    double PLat = pCenter.y() /* * ScaleLat*/;
+//    double DeltaLon = Screen.width() / 2 - PLon;
+//    double DeltaLat = Screen.height() - (Screen.height() / 2 - PLat);
 
-    theTransform.setMatrix(ScaleLon, 0, 0, 0, -ScaleLat, 0, DeltaLon, DeltaLat, 1);
+//    theTransform.setMatrix(ScaleLon, 0, 0, 0, -ScaleLat, 0, DeltaLon, DeltaLat, 1);
+    theTransform.reset();
+    theTransform.scale(ScaleLon, -ScaleLat);
+//    theTransform.rotate(theRotation, Qt::ZAxis);
+    theTransform.translate(-bl.x(), -tr.y());
+//    theTransform.translate(-pCenter.x(), -pCenter.y());
+//    QLineF l(QPointF(0, 0), pCenter);
+//    l.setAngle(l.angle()+theRotation);
+//    qDebug() << "p2:" << l.p2();
+//    theTransform.translate(l.p2().x(), l.p2().y());
+//    theTransform.translate(Screen.width()/2, -Screen.height()/2);
+//    theTransform.rotateRadians(theRotation);
 }
 
 void MapView::setViewport(const CoordBox & TargetMap)
@@ -1352,7 +1383,7 @@ void MapView::setViewport(const CoordBox & TargetMap,
         targetVp = CoordBox (TargetMap.center()-COORD_ENLARGE*10, TargetMap.center()+COORD_ENLARGE*10);
     else
         targetVp = TargetMap;
-    transformCalc(p->theTransform, theProjection, targetVp, Screen);
+    transformCalc(p->theTransform, theProjection, p->theVectorRotation, targetVp, Screen);
     p->theInvertedTransform = p->theTransform.inverted();
     viewportRecalc(Screen);
 
@@ -1422,15 +1453,19 @@ void MapView::adjustZoomToBoris()
 void MapView::zoom(double d, const QPoint & Around,
                              const QRect & Screen)
 {
-    Coord Before = fromView(Around);
-    QPointF pBefore = theProjection.project(Before);
+    QPointF pBefore = p->theInvertedTransform.map(Around);
 
     double ScaleLon = p->theTransform.m11() * d;
     double ScaleLat = p->theTransform.m22() * d;
     double DeltaLat = (Around.y() - pBefore.y() * ScaleLat);
     double DeltaLon = (Around.x() - pBefore.x() * ScaleLon);
 
-    p->theTransform.setMatrix(ScaleLon, 0, 0, 0, ScaleLat, 0, DeltaLon, DeltaLat, 1);
+//    p->theTransform.setMatrix(ScaleLon*cos(p->theVectorRotation), 0, 0, 0, ScaleLat*cos(p->theVectorRotation), 0, DeltaLon, DeltaLat, 1);
+    p->theTransform.reset();
+    p->theTransform.scale(ScaleLon, ScaleLat);
+//    p->theTransform.rotate(p->theVectorRotation, Qt::ZAxis);
+    p->theTransform.translate(DeltaLon/ScaleLon, DeltaLat/ScaleLat);
+
     p->theInvertedTransform = p->theTransform.inverted();
     viewportRecalc(Screen);
 

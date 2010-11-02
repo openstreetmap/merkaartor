@@ -624,7 +624,7 @@ void ImageMapLayer::draw(MapView& theView, QRect& rect)
 QRect ImageMapLayer::drawFull(MapView& theView, QRect& rect) const
 {
     QRectF fScreen(rect);
-    MapView::transformCalc(p->theTransform, p->theProjection, theView.viewport(), rect);
+    MapView::transformCalc(p->theTransform, p->theProjection, 0.0, theView.viewport(), rect);
 
     CoordBox Viewport(p->theProjection.inverse(p->theTransform.inverted().map(fScreen.bottomLeft())),
                      p->theProjection.inverse(p->theTransform.inverted().map(fScreen.topRight())));
