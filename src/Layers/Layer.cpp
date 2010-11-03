@@ -40,7 +40,6 @@ public:
 
         IndexingBlocked = false;
         VirtualsUpdatesBlocked = false;
-
     }
     ~LayerPrivate()
     {
@@ -91,9 +90,49 @@ Layer::~Layer()
     SAFE_DELETE(p);
 }
 
-bool __cdecl indexFindCallback(MapFeaturePtr data, void* ctxt)
+struct IndexFindContext {
+    QMap<RenderPriority, QSet <Feature*> >& theFeatures;
+    QRectF& clipRect;
+    QSet<Way*>& theCoastlines;
+    Projection& theProjection;
+    QTransform& theTransform;
+    bool arePointsDrawable;
+};
+
+bool __cdecl indexFindCallbackList(MapFeaturePtr F, void* ctxt)
 {
-    ((QList<MapFeaturePtr>*)(ctxt))->append(data);
+    ((QList<MapFeaturePtr>*)(ctxt))->append(F);
+    return true;
+}
+
+bool __cdecl indexFindCallback(MapFeaturePtr F, void* ctxt)
+{
+    if (F->isHidden())
+        return true;
+
+    IndexFindContext* pCtxt = (IndexFindContext*)ctxt;
+
+    if (pCtxt->theFeatures[F->renderPriority()].contains(F))
+        return true;
+
+    if (Way * R = CAST_WAY(F)) {
+        R->buildPath(pCtxt->theProjection, pCtxt->theTransform, pCtxt->clipRect);
+        pCtxt->theFeatures[F->renderPriority()].insert(F);
+
+        if (R->isCoastline())
+            pCtxt->theCoastlines.insert(R);
+    } else
+    if (Relation * RR = CAST_RELATION(F)) {
+        RR->buildPath(pCtxt->theProjection, pCtxt->theTransform, pCtxt->clipRect);
+        pCtxt->theFeatures[F->renderPriority()].insert(F);
+    } else
+    if (CAST_NODE(F)) {
+        if (pCtxt->arePointsDrawable && M_PREFS->getTrackPointsVisible())
+            if (!(F->isVirtual() && !M_PREFS->getVirtualNodesVisible()))
+                pCtxt->theFeatures[F->renderPriority()].insert(F);
+    } else
+        pCtxt->theFeatures[F->renderPriority()].insert(F);
+
     return true;
 }
 
@@ -135,34 +174,18 @@ void Layer::getFeatureSet(QMap<RenderPriority, QSet <Feature*> >& theFeatures, Q
     if (!size())
         return;
 
-    QList < MapFeaturePtr > ret;
+    IndexFindContext* ctxt = new IndexFindContext;
+    ctxt->theFeatures = theFeatures;
+    ctxt->clipRect = clipRect;
+    ctxt->theCoastlines = theCoastlines;
+    ctxt->theProjection = theProjection;
+    ctxt->theTransform = theTransform;
+    ctxt->arePointsDrawable = arePointsDrawable();
+
     for (int i=0; i < invalidRects.size(); ++i) {
-        indexFind(invalidRects[i], &ret);
+        indexFind(invalidRects[i], ctxt);
     }
-    foreach(MapFeaturePtr F, ret) {
-        if (F->isHidden())
-            continue;
-        if (theFeatures[F->renderPriority()].contains(F))
-            continue;
-
-        if (Way * R = CAST_WAY(F)) {
-            R->buildPath(theProjection, theTransform, clipRect);
-            theFeatures[F->renderPriority()].insert(F);
-
-            if (R->isCoastline())
-                theCoastlines.insert(R);
-        } else
-        if (Relation * RR = CAST_RELATION(F)) {
-            RR->buildPath(theProjection, theTransform, clipRect);
-            theFeatures[F->renderPriority()].insert(F);
-        } else
-        if (CAST_NODE(F)) {
-            if (arePointsDrawable() && M_PREFS->getTrackPointsVisible())
-                if (!(F->isVirtual() && !M_PREFS->getVirtualNodesVisible()))
-                    theFeatures[F->renderPriority()].insert(F);
-        } else
-            theFeatures[F->renderPriority()].insert(F);
-    }
+    delete ctxt;
 }
 
 
@@ -475,12 +498,12 @@ const QList<MapFeaturePtr>& Layer::indexFind(const CoordBox& bb)
     double min[] = {bb.bottomLeft().lon(), bb.bottomLeft().lat()};
     double max[] = {bb.topRight().lon(), bb.topRight().lat()};
     findResult.clear();
-    p->theRTree.Search(min, max, &indexFindCallback, (void*)&findResult);
+    p->theRTree.Search(min, max, &indexFindCallbackList, (void*)&findResult);
 
     return findResult;
 }
 
-void Layer::indexFind(const CoordBox& bb, QList<MapFeaturePtr>* findResult)
+void Layer::indexFind(const CoordBox& bb, IndexFindContext* findResult)
 {
     double min[] = {bb.bottomLeft().lon(), bb.bottomLeft().lat()};
     double max[] = {bb.topRight().lon(), bb.topRight().lat()};
