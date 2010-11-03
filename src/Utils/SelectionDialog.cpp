@@ -89,8 +89,10 @@ void SelectionDialog::on_cbKey_editTextChanged(const QString & text)
 
 void SelectionDialog::on_cbValue_editTextChanged(const QString & text)
 {
-    edTagQuery->setText("[" + cbKey->currentText() + "] is " + text);
-
+    if (!cbKey->currentText().isEmpty())
+        edTagQuery->setText("[" + cbKey->currentText() + "] is " + text);
+    else
+        edTagQuery->setText("[*] is " + text);
 }
 
 void SelectionDialog::on_edName_textChanged(const QString &text)

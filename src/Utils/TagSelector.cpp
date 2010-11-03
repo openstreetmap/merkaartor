@@ -607,33 +607,36 @@ TagSelectorMatchResult TagSelectorOperator::matches(const IFeature* F, double Pi
             break;
         }
     } else {
-        QString val = F->tagValue(Key, emptyString);
-        if (val == emptyString && specialValue != TagSelectValue_Empty)
-            return TagSelect_NoMatch;
-        if (specialValue == TagSelectValue_Empty) {
-            if (theOp == EQ)
-                return (val.toUpper() == emptyString) ? TagSelect_Match : TagSelect_NoMatch;
-            else
-                return (val.toUpper() != emptyString) ? TagSelect_Match : TagSelect_NoMatch;
-        } else if (UseRegExp) {
-            return rx.exactMatch(val) ? TagSelect_Match : TagSelect_NoMatch;
-        } else {
-            bool okkey, okval;
-            double keyN = val.toDouble(&okkey);
-            double valN = Value.toDouble(&okval);
-            if (boolVal)
-                switch (theOp) {
-                case EQ:
+        QList<QString> valueList;
+        if (Key != "*")
+            valueList << F->tagValue(Key, emptyString);
+        else {
+            for (int i=0; i<F->tagSize(); ++i)
+                valueList << F->tagValue(i);
+        }
+        foreach (QString val, valueList) {
+            if (val == emptyString && specialValue != TagSelectValue_Empty)
+                return TagSelect_NoMatch;
+            if (specialValue == TagSelectValue_Empty) {
+                if (theOp == EQ)
+                    if (val.toUpper() == emptyString) return TagSelect_Match;
+                else
+                    if (val.toUpper() != emptyString) return TagSelect_Match;
+            } else if (UseRegExp) {
+                if (rx.exactMatch(val)) return TagSelect_Match;
+            } else {
+                bool okkey, okval;
+                double keyN = val.toDouble(&okkey);
+                double valN = Value.toDouble(&okval);
+                if (boolVal)
+                    switch (theOp) {
+                    case EQ:
                     if (valB) {
                         if (val.toLower() == "true" || val.toLower() == "yes" || val == "1")
                             return TagSelect_Match;
-                        else
-                            return TagSelect_NoMatch;
                     } else {
                         if (val.toLower() == "false" || val.toLower() == "no" || val == "0")
                             return TagSelect_Match;
-                        else
-                            return TagSelect_NoMatch;
                     }
                     break;
 
@@ -641,61 +644,58 @@ TagSelectorMatchResult TagSelectorOperator::matches(const IFeature* F, double Pi
                     if (valB) {
                         if (val.toLower() == "false" || val.toLower() == "no" || val == "0")
                             return TagSelect_Match;
-                        else
-                            return TagSelect_NoMatch;
                     } else {
                         if (val.toLower() == "true" || val.toLower() == "yes" || val == "1")
                             return TagSelect_Match;
-                        else
-                            return TagSelect_NoMatch;
                     }
                     break;
 
                 default:
-                    return TagSelect_NoMatch;
-                }
-            else if (okkey && okval)
-                switch (theOp) {
-                case EQ:
-                    return (keyN == valN) ? TagSelect_Match : TagSelect_NoMatch;
-                    break;
-                case NE:
-                    return (keyN != valN) ? TagSelect_Match : TagSelect_NoMatch;
-                    break;
-                case GT:
-                    return (keyN > valN) ? TagSelect_Match : TagSelect_NoMatch;
-                    break;
-                 case LT:
-                    return (keyN < valN) ? TagSelect_Match : TagSelect_NoMatch;
-                    break;
-                 case GE:
-                    return (keyN >= valN) ? TagSelect_Match : TagSelect_NoMatch;
-                    break;
-                 case LE:
-                    return (keyN <= valN) ? TagSelect_Match : TagSelect_NoMatch;
                     break;
                 }
-            else
-                switch (theOp) {
-                case EQ:
-                    return (QString::compare(val, Value, Qt::CaseInsensitive)) == 0 ? TagSelect_Match : TagSelect_NoMatch;
-                    break;
-                case NE:
-                    return (QString::compare(val, Value, Qt::CaseInsensitive)) != 0 ? TagSelect_Match : TagSelect_NoMatch;
-                    break;
-                case GT:
-                    return (QString::compare(val, Value, Qt::CaseInsensitive)) > 0 ? TagSelect_Match : TagSelect_NoMatch;
-                    break;
-                 case LT:
-                    return (QString::compare(val, Value, Qt::CaseInsensitive)) < 0 ? TagSelect_Match : TagSelect_NoMatch;
-                    break;
-                 case GE:
-                    return (QString::compare(val, Value, Qt::CaseInsensitive)) >= 0 ? TagSelect_Match : TagSelect_NoMatch;
-                    break;
-                 case LE:
-                    return (QString::compare(val, Value, Qt::CaseInsensitive)) <= 0 ? TagSelect_Match : TagSelect_NoMatch;
-                    break;
-                }
+                else if (okkey && okval)
+                    switch (theOp) {
+                    case EQ:
+                        if (keyN == valN) return TagSelect_Match;
+                        break;
+                    case NE:
+                        if (keyN != valN) return TagSelect_Match;
+                        break;
+                    case GT:
+                        if (keyN > valN) return TagSelect_Match;
+                        break;
+                    case LT:
+                        if (keyN < valN) return TagSelect_Match;
+                        break;
+                    case GE:
+                        if (keyN >= valN) return TagSelect_Match;
+                        break;
+                    case LE:
+                        if (keyN <= valN) return TagSelect_Match;
+                        break;
+                    }
+                else
+                    switch (theOp) {
+                    case EQ:
+                        if ((QString::compare(val, Value, Qt::CaseInsensitive)) == 0) return TagSelect_Match;
+                        break;
+                    case NE:
+                        if ((QString::compare(val, Value, Qt::CaseInsensitive)) != 0 ) return TagSelect_Match;
+                        break;
+                    case GT:
+                        if ((QString::compare(val, Value, Qt::CaseInsensitive)) > 0) return TagSelect_Match;
+                        break;
+                    case LT:
+                        if ((QString::compare(val, Value, Qt::CaseInsensitive)) < 0) return TagSelect_Match;
+                        break;
+                    case GE:
+                        if ((QString::compare(val, Value, Qt::CaseInsensitive)) >= 0) return TagSelect_Match;
+                        break;
+                     case LE:
+                        if ((QString::compare(val, Value, Qt::CaseInsensitive)) <= 0) return TagSelect_Match;
+                        break;
+                    }
+            }
         }
     }
     return TagSelect_NoMatch;
