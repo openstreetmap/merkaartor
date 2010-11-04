@@ -200,10 +200,10 @@ Way::~Way(void)
     delete p;
 }
 
-IFeature::FeatureType Way::getType() const
+char Way::getType() const
 {
     if (isClosed())
-        return IFeature::Polygon;
+        return (IFeature::LineString | IFeature::Polygon);
     else
         return IFeature::LineString;
 }

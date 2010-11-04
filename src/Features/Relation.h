@@ -18,7 +18,7 @@ class Relation : public Feature
         virtual ~Relation(void);
 
         virtual QString getClass() const {return "Relation";}
-        virtual IFeature::FeatureType getType() const {return IFeature::OsmRelation;}
+        virtual char getType() const {return IFeature::OsmRelation;}
         virtual void updateMeta();
 
         virtual const CoordBox& boundingBox(bool update=true) const;

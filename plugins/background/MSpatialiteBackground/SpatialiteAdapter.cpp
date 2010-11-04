@@ -123,7 +123,8 @@ void SpatialiteAdapter::onLoadFile()
 void SpatialiteAdapter::initTable(QString table)
 {
     QString tag = table.mid(3);
-    QString q = QString("select * from %1 where MBRIntersects(BuildMBR(?, ?, ?, ?),Geometry)").arg(table);
+    QString q = QString("select * from %1 where ROWID IN "
+                        "(Select rowid from idx_%1_Geometry WHERE xmin > ? and ymin > ? and xmax < ? and ymax < ?);").arg(table);
     int ret = sqlite3_prepare_v2(m_handle, q.toUtf8().data(), q.size(), &m_stmtHandles[table], NULL);
     if (ret != SQLITE_OK) {
         qDebug() << "Sqlite: prepare error: " << ret;
@@ -240,6 +241,7 @@ QPixmap SpatialiteAdapter::getPixmap(const QRectF& wgs84Bbox, const QRectF& /*pr
 
     m_transform.setMatrix(ScaleLon, 0, 0, 0, -ScaleLat, 0, DeltaLon, DeltaLat, 1);
 
+    QTime tm = QTime::currentTime();
     theFeatures.clear();
     buildFeatures("pg_landuse", &P, wgs84Bbox, wgs84Bbox, src);
     buildFeatures("ln_landuse", &P, wgs84Bbox, wgs84Bbox, src);
@@ -253,6 +255,7 @@ QPixmap SpatialiteAdapter::getPixmap(const QRectF& wgs84Bbox, const QRectF& /*pr
     buildFeatures("ln_waterway", &P, wgs84Bbox, wgs84Bbox, src);
     buildFeatures("ln_highway", &P, wgs84Bbox, wgs84Bbox, src);
 
+//    qDebug() << "After build: " << tm.msecsTo(QTime::currentTime());
     foreach(PrimitiveFeature* f, theFeatures) {
         PrimitivePainter* fpainter = myStyles[QString("%1%2").arg(f->Tags[0].first).arg(f->Tags[0].second)];
         if (fpainter->matchesZoom(m_PixelPerM)) {
@@ -274,6 +277,7 @@ QPixmap SpatialiteAdapter::getPixmap(const QRectF& wgs84Bbox, const QRectF& /*pr
             fpainter->drawTouchup(&pp, &P, m_PixelPerM);
         }
     }
+//    qDebug() << "done: " << tm.msecsTo(QTime::currentTime());
 
     P.end();
     return pix;
@@ -282,8 +286,8 @@ QPixmap SpatialiteAdapter::getPixmap(const QRectF& wgs84Bbox, const QRectF& /*pr
 void SpatialiteAdapter::buildFeatures(const QString& table, QPainter* P, const QRectF& fullbox, const QRectF& selbox, const QRect& src) const
 {
     QString tag = table.mid(3);
-    QPainterPath clipPath;
-    clipPath.addRect(selbox/*.adjusted(-1000, -1000, 1000, 1000)*/);
+//    QPainterPath clipPath;
+//    clipPath.addRect(selbox/*.adjusted(-1000, -1000, 1000, 1000)*/);
     double x, y;
 
     sqlite3_stmt* pStmt = m_stmtHandles[table];
@@ -293,7 +297,10 @@ void SpatialiteAdapter::buildFeatures(const QString& table, QPainter* P, const Q
     sqlite3_bind_double(pStmt, 3, selbox.topRight().x());
     sqlite3_bind_double(pStmt, 4, selbox.bottomLeft().y());
 
+    int i=0, j=0;
+    QTime t = QTime::currentTime();
     while (sqlite3_step(pStmt) == SQLITE_ROW) {
+        ++i;
         qint64 id = sqlite3_column_int64(pStmt, 0);
         if (m_cache.contains(IFeature::FId(IFeature::LineString, id))) {
             PrimitiveFeature* f = m_cache[IFeature::FId(IFeature::LineString, id)];
@@ -313,6 +320,7 @@ void SpatialiteAdapter::buildFeatures(const QString& table, QPainter* P, const Q
 
         gaiaLinestringPtr way = coll->FirstLinestring;
         while (way) {
+            ++j;
             if (way->Points) {
                 QPainterPath path;
                 gaiaGetPoint(way->Coords, 0, &x, &y);
@@ -339,6 +347,7 @@ void SpatialiteAdapter::buildFeatures(const QString& table, QPainter* P, const Q
 
         gaiaPolygonPtr poly = coll->FirstPolygon;
         while (poly) {
+            ++j;
             gaiaRingPtr ring = poly->Exterior;
             if (poly->NumInteriors)
                 qDebug() << "has interiors!";
@@ -366,9 +375,12 @@ void SpatialiteAdapter::buildFeatures(const QString& table, QPainter* P, const Q
 
             poly = poly->Next;
         }
+//        qDebug() << "1 row: " << t.msecsTo(QTime::currentTime()) << i << j;
     }
 
     sqlite3_reset(pStmt);
+
+
 
 //    QRectF fBox(NavitProject(fullbox.topLeft()), NavitProject(fullbox.bottomRight()));
 //    QRectF sBox(NavitProject(selbox.topLeft()), NavitProject(selbox.bottomRight()));

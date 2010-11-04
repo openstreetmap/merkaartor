@@ -366,15 +366,16 @@ void MapRenderer::render(
                     double alpha = (*it)->getAlpha();
                     P->setOpacity(alpha);
 
-                    if (Way * R = CAST_WAY(*it)) {
+                    if (CHECK_WAY(*it)) {
+                        Way * R = STATIC_CAST_WAY(*it);
                         for (int i=0; i<R->sizeParents(); ++i)
                             if (!R->getParent(i)->isDeleted() && R->getParent(i)->hasPainter(theView->pixelPerM()))
                                 continue;
                         bglayer.draw(R);
-                    } else if (Node * Pt = CAST_NODE(*it))
-                        bglayer.draw(Pt);
-                    else if (Relation * RR = CAST_RELATION(*it))
-                        bglayer.draw(RR);
+                    } else if (CHECK_NODE(*it))
+                        bglayer.draw(STATIC_CAST_NODE(*it));
+                    else if (CHECK_RELATION(*it))
+                        bglayer.draw(STATIC_CAST_RELATION(*it));
                     P->restore();
                 }
             }
@@ -390,15 +391,16 @@ void MapRenderer::render(
                     double alpha = (*it)->getAlpha();
                     P->setOpacity(alpha);
 
-                    if (Way * R = CAST_WAY(*it)) {
+                    if (CHECK_WAY(*it)) {
+                        Way * R = STATIC_CAST_WAY(*it);
                         for (int i=0; i<R->sizeParents(); ++i)
                             if (!R->getParent(i)->isDeleted() && R->getParent(i)->hasPainter(theView->pixelPerM()))
                                 continue;
                         fglayer.draw(R);
-                    } else if (Node * Pt = CAST_NODE(*it))
-                        fglayer.draw(Pt);
-                    else if (Relation * RR = CAST_RELATION(*it))
-                        fglayer.draw(RR);
+                    } else if (CHECK_NODE(*it))
+                        fglayer.draw(STATIC_CAST_NODE(*it));
+                    else if (CHECK_RELATION(*it))
+                        fglayer.draw(STATIC_CAST_RELATION(*it));
                     P->restore();
                 }
             }
@@ -413,15 +415,16 @@ void MapRenderer::render(
                 double alpha = (*it)->getAlpha();
                 P->setOpacity(alpha);
 
-                if (Way * R = CAST_WAY(*it)) {
+                if (CHECK_WAY(*it)) {
+                    Way * R = STATIC_CAST_WAY(*it);
                     for (int i=0; i<R->sizeParents(); ++i)
                         if (!R->getParent(i)->isDeleted() && R->getParent(i)->hasPainter(theView->pixelPerM()))
                             continue;
                     tchuplayer.draw(R);
-                } else if (Node * Pt = CAST_NODE(*it))
-                    tchuplayer.draw(Pt);
-                else if (Relation * RR = CAST_RELATION(*it))
-                    tchuplayer.draw(RR);
+                } else if (CHECK_NODE(*it))
+                    tchuplayer.draw(STATIC_CAST_NODE(*it));
+                else if (CHECK_RELATION(*it))
+                    tchuplayer.draw(STATIC_CAST_RELATION(*it));
                 P->restore();
             }
         }
@@ -434,15 +437,16 @@ void MapRenderer::render(
                 double alpha = (*it)->getAlpha();
                 P->setOpacity(alpha);
 
-                if (Way * R = CAST_WAY(*it)) {
+                if (CHECK_WAY(*it)) {
+                    Way * R = STATIC_CAST_WAY(*it);
                     for (int i=0; i<R->sizeParents(); ++i)
                         if (!R->getParent(i)->isDeleted() && R->getParent(i)->hasPainter(theView->pixelPerM()))
                             continue;
                     lbllayer.draw(R);
-                } else if (Node * Pt = CAST_NODE(*it))
-                    lbllayer.draw(Pt);
-                else if (Relation * RR = CAST_RELATION(*it))
-                    lbllayer.draw(RR);
+                } else if (CHECK_NODE(*it))
+                    lbllayer.draw(STATIC_CAST_NODE(*it));
+                else if (CHECK_RELATION(*it))
+                    lbllayer.draw(STATIC_CAST_RELATION(*it));
                 P->restore();
             }
         }

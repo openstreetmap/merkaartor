@@ -17,6 +17,17 @@
 #define CAST_RELATION(x) (dynamic_cast<Relation*>(x))
 #define CAST_SEGMENT(x) (dynamic_cast<TrackSegment*>(x))
 
+#define STATIC_CAST_FEATURE(x) (static_cast<Feature*>(x))
+#define STATIC_CAST_NODE(x) (static_cast<Node*>(x))
+#define STATIC_CAST_WAY(x) (static_cast<Way*>(x))
+#define STATIC_CAST_RELATION(x) (static_cast<Relation*>(x))
+#define STATIC_CAST_SEGMENT(x) (static_cast<TrackSegment*>(x))
+
+#define CHECK_NODE(x) ((x)->getType() & IFeature::Point)
+#define CHECK_WAY(x) ((x)->getType() & IFeature::LineString)
+#define CHECK_RELATION(x) ((x)->getType() & IFeature::OsmRelation)
+#define CHECK_SEGMENT(x) ((x)->getType() & IFeature::GpxSegment)
+
 class CommandList;
 class Document;
 class Layer;
@@ -305,7 +316,7 @@ class Feature : public IFeature
         virtual void toBinary(QDataStream& ds, QHash <QString, quint64>& theIndex) = 0;
 
         virtual QString getClass() const = 0;
-        virtual IFeature::FeatureType getType() const = 0;
+        virtual char getType() const = 0;
         virtual void updateMeta();
         virtual void updateIndex();
         virtual void updateFilters();
