@@ -648,7 +648,7 @@ const QPainterPath& Way::getPath() const
     return p->thePath;
 }
 
-void Way::buildPath(const Projection &theProjection, const QTransform& /*theTransform*/, const QRectF& cr)
+void Way::buildPath(const Projection &theProjection, const QTransform& /*theTransform*/, const QRectF& /*cr*/)
 {
     using namespace ggl;
 

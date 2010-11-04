@@ -45,7 +45,7 @@ QString	SpatialiteAdapterFactory::getName() const
 /******/
 
 #define FILTER_OPEN_SUPPORTED \
-    tr("Supported formats")+" (*.sqlite)\n" \
+    tr("Supported formats")+" (*.sqlite *.spatialite)\n" \
     +tr("All Files (*)")
 
 double angToRad(double a)
@@ -124,10 +124,11 @@ void SpatialiteAdapter::initTable(QString table)
 {
     QString tag = table.mid(3);
     QString q = QString("select * from %1 where ROWID IN "
-                        "(Select rowid from idx_%1_Geometry WHERE xmin > ? and ymin > ? and xmax < ? and ymax < ?);").arg(table);
+                        "(Select rowid from idx_%1_Geometry WHERE xmax > ? and ymax > ? and xmin < ? and ymin < ?);").arg(table);
     int ret = sqlite3_prepare_v2(m_handle, q.toUtf8().data(), q.size(), &m_stmtHandles[table], NULL);
     if (ret != SQLITE_OK) {
         qDebug() << "Sqlite: prepare error: " << ret;
+        return;
     }
     q = QString("select distinct sub_type from %1").arg(table);
     sqlite3_stmt *pStmt;
@@ -167,10 +168,10 @@ void SpatialiteAdapter::setFile(const QString& fn)
 
     initTable("ln_highway");
     initTable("ln_amenity");
-    initTable("ln_landuse");
-    initTable("ln_leisure");
     initTable("pg_amenity");
+    initTable("ln_landuse");
     initTable("pg_landuse");
+    initTable("ln_leisure");
     initTable("pg_leisure");
     initTable("pg_building");
     initTable("ln_building");
@@ -241,7 +242,6 @@ QPixmap SpatialiteAdapter::getPixmap(const QRectF& wgs84Bbox, const QRectF& /*pr
 
     m_transform.setMatrix(ScaleLon, 0, 0, 0, -ScaleLat, 0, DeltaLon, DeltaLat, 1);
 
-    QTime tm = QTime::currentTime();
     theFeatures.clear();
     buildFeatures("pg_landuse", &P, wgs84Bbox, wgs84Bbox, src);
     buildFeatures("ln_landuse", &P, wgs84Bbox, wgs84Bbox, src);
@@ -255,7 +255,6 @@ QPixmap SpatialiteAdapter::getPixmap(const QRectF& wgs84Bbox, const QRectF& /*pr
     buildFeatures("ln_waterway", &P, wgs84Bbox, wgs84Bbox, src);
     buildFeatures("ln_highway", &P, wgs84Bbox, wgs84Bbox, src);
 
-//    qDebug() << "After build: " << tm.msecsTo(QTime::currentTime());
     foreach(PrimitiveFeature* f, theFeatures) {
         PrimitivePainter* fpainter = myStyles[QString("%1%2").arg(f->Tags[0].first).arg(f->Tags[0].second)];
         if (fpainter->matchesZoom(m_PixelPerM)) {
@@ -277,9 +276,11 @@ QPixmap SpatialiteAdapter::getPixmap(const QRectF& wgs84Bbox, const QRectF& /*pr
             fpainter->drawTouchup(&pp, &P, m_PixelPerM);
         }
     }
-//    qDebug() << "done: " << tm.msecsTo(QTime::currentTime());
-
     P.end();
+
+    foreach(PrimitiveFeature* f, theFeatures)
+        m_cache.insert(f->theId, f);
+
     return pix;
 }
 
@@ -291,19 +292,18 @@ void SpatialiteAdapter::buildFeatures(const QString& table, QPainter* P, const Q
     double x, y;
 
     sqlite3_stmt* pStmt = m_stmtHandles[table];
+    if (!pStmt)
+        return;
 
     sqlite3_bind_double(pStmt, 1, selbox.bottomLeft().x());
     sqlite3_bind_double(pStmt, 2, selbox.topRight().y());
     sqlite3_bind_double(pStmt, 3, selbox.topRight().x());
     sqlite3_bind_double(pStmt, 4, selbox.bottomLeft().y());
 
-    int i=0, j=0;
-    QTime t = QTime::currentTime();
     while (sqlite3_step(pStmt) == SQLITE_ROW) {
-        ++i;
         qint64 id = sqlite3_column_int64(pStmt, 0);
         if (m_cache.contains(IFeature::FId(IFeature::LineString, id))) {
-            PrimitiveFeature* f = m_cache[IFeature::FId(IFeature::LineString, id)];
+            PrimitiveFeature* f = m_cache.take(IFeature::FId(IFeature::LineString, id));
             theFeatures << f;
             continue;
         }
@@ -320,7 +320,6 @@ void SpatialiteAdapter::buildFeatures(const QString& table, QPainter* P, const Q
 
         gaiaLinestringPtr way = coll->FirstLinestring;
         while (way) {
-            ++j;
             if (way->Points) {
                 QPainterPath path;
                 gaiaGetPoint(way->Coords, 0, &x, &y);
@@ -337,7 +336,6 @@ void SpatialiteAdapter::buildFeatures(const QString& table, QPainter* P, const Q
                         f->thePath = path;
                         f->Tags.append(qMakePair(tag, sub_type));
                         theFeatures << f;
-                        m_cache.insert(f->theId, f);
                     }
                 }
             }
@@ -347,7 +345,6 @@ void SpatialiteAdapter::buildFeatures(const QString& table, QPainter* P, const Q
 
         gaiaPolygonPtr poly = coll->FirstPolygon;
         while (poly) {
-            ++j;
             gaiaRingPtr ring = poly->Exterior;
             if (poly->NumInteriors)
                 qDebug() << "has interiors!";
@@ -368,17 +365,16 @@ void SpatialiteAdapter::buildFeatures(const QString& table, QPainter* P, const Q
                         f->thePath = path;
                         f->Tags.append(qMakePair(tag, sub_type));
                         theFeatures << f;
-                        m_cache.insert(f->theId, f);
                     }
                 }
             }
 
             poly = poly->Next;
         }
-//        qDebug() << "1 row: " << t.msecsTo(QTime::currentTime()) << i << j;
     }
 
     sqlite3_reset(pStmt);
+    sqlite3_clear_bindings(pStmt);
 
 
 
