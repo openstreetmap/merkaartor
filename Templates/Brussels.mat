@@ -31,6 +31,7 @@
    <description locale="cs" >Jméno (francouzky)</description>
    <description locale="de" >Name (franz.)</description>
    <description locale="es" >Nombre (francés)</description>
+   <description locale="et" >Nimi (prantsuse)</description>
    <description locale="fr" >Nom (français)</description>
    <description locale="hu" >Név (vallon)</description>
    <description locale="it" >Nome (francese)</description>
@@ -50,6 +51,7 @@
    <description locale="cs" >Jméno (nizozemsky)</description>
    <description locale="de" >Name (niederl.)</description>
    <description locale="es" >Nombre (alemán)</description>
+   <description locale="et" >Nimi (hollandi)</description>
    <description locale="fr" >Nom (néérlandais)</description>
    <description locale="hu" >Név (flamand)</description>
    <description locale="it" >Nome (olandese)</description>

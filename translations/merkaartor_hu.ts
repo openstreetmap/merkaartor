@@ -4,100 +4,100 @@
 <context>
     <name></name>
     <message>
-        <location filename="../src/MainWindow.cpp" line="921"/>
-        <location filename="../src/MainWindow.cpp" line="935"/>
-        <location filename="../src/MainWindow.cpp" line="950"/>
+        <location filename="../src/MainWindow.cpp" line="1071"/>
+        <location filename="../src/MainWindow.cpp" line="1085"/>
+        <location filename="../src/MainWindow.cpp" line="1100"/>
         <source>Supported formats</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="922"/>
-        <location filename="../src/MainWindow.cpp" line="936"/>
+        <location filename="../src/MainWindow.cpp" line="1072"/>
+        <location filename="../src/MainWindow.cpp" line="1086"/>
         <source>Merkaartor document (*.mdc)
 </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="923"/>
-        <location filename="../src/MainWindow.cpp" line="937"/>
-        <location filename="../src/MainWindow.cpp" line="951"/>
+        <location filename="../src/MainWindow.cpp" line="1073"/>
+        <location filename="../src/MainWindow.cpp" line="1087"/>
+        <location filename="../src/MainWindow.cpp" line="1101"/>
         <source>GPS Exchange format (*.gpx)
 </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="924"/>
-        <location filename="../src/MainWindow.cpp" line="938"/>
-        <location filename="../src/MainWindow.cpp" line="952"/>
+        <location filename="../src/MainWindow.cpp" line="1074"/>
+        <location filename="../src/MainWindow.cpp" line="1088"/>
+        <location filename="../src/MainWindow.cpp" line="1102"/>
         <source>OpenStreetMap format (*.osm)
 </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="925"/>
-        <location filename="../src/MainWindow.cpp" line="939"/>
-        <location filename="../src/MainWindow.cpp" line="953"/>
+        <location filename="../src/MainWindow.cpp" line="1075"/>
+        <location filename="../src/MainWindow.cpp" line="1089"/>
+        <location filename="../src/MainWindow.cpp" line="1103"/>
         <source>OpenStreetMap binary format (*.osb)
 </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="926"/>
-        <location filename="../src/MainWindow.cpp" line="940"/>
-        <location filename="../src/MainWindow.cpp" line="954"/>
+        <location filename="../src/MainWindow.cpp" line="1076"/>
+        <location filename="../src/MainWindow.cpp" line="1090"/>
+        <location filename="../src/MainWindow.cpp" line="1104"/>
         <source>OpenStreetMap change format (*.osc)
 </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="927"/>
-        <location filename="../src/MainWindow.cpp" line="941"/>
-        <location filename="../src/MainWindow.cpp" line="955"/>
+        <location filename="../src/MainWindow.cpp" line="1077"/>
+        <location filename="../src/MainWindow.cpp" line="1091"/>
+        <location filename="../src/MainWindow.cpp" line="1105"/>
         <source>Noni GPSPlot format (*.ngt)
 </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="928"/>
-        <location filename="../src/MainWindow.cpp" line="942"/>
-        <location filename="../src/MainWindow.cpp" line="956"/>
+        <location filename="../src/MainWindow.cpp" line="1078"/>
+        <location filename="../src/MainWindow.cpp" line="1092"/>
+        <location filename="../src/MainWindow.cpp" line="1106"/>
         <source>NMEA GPS log format (*.nmea *.nma)
 </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="929"/>
-        <location filename="../src/MainWindow.cpp" line="943"/>
-        <location filename="../src/MainWindow.cpp" line="957"/>
+        <location filename="../src/MainWindow.cpp" line="1079"/>
+        <location filename="../src/MainWindow.cpp" line="1093"/>
+        <location filename="../src/MainWindow.cpp" line="1107"/>
         <source>KML file (*.kml)
 </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="930"/>
-        <location filename="../src/MainWindow.cpp" line="944"/>
-        <location filename="../src/MainWindow.cpp" line="958"/>
+        <location filename="../src/MainWindow.cpp" line="1080"/>
+        <location filename="../src/MainWindow.cpp" line="1094"/>
+        <location filename="../src/MainWindow.cpp" line="1108"/>
         <source>ESRI Shapefile (*.shp)
 </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="931"/>
-        <location filename="../src/MainWindow.cpp" line="945"/>
-        <location filename="../src/MainWindow.cpp" line="959"/>
+        <location filename="../src/MainWindow.cpp" line="1081"/>
+        <location filename="../src/MainWindow.cpp" line="1095"/>
+        <location filename="../src/MainWindow.cpp" line="1109"/>
         <source>Comma delimited format (*.csv)
 </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="932"/>
-        <location filename="../src/MainWindow.cpp" line="947"/>
-        <location filename="../src/MainWindow.cpp" line="960"/>
+        <location filename="../src/MainWindow.cpp" line="1082"/>
+        <location filename="../src/MainWindow.cpp" line="1097"/>
+        <location filename="../src/MainWindow.cpp" line="1110"/>
         <source>All Files (*)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="946"/>
+        <location filename="../src/MainWindow.cpp" line="1096"/>
         <source>Geotagged images (*.jpg)
 </source>
         <translation type="unfinished"></translation>
@@ -136,6 +136,15 @@ p, li { white-space: pre-wrap; }
         <translation>E program a GNU GPLv2 engedéllyel jár</translation>
     </message>
     <message>
+        <location filename="../src/AboutDialog.ui" line="115"/>
+        <source>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
+p, li { white-space: pre-wrap; }
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;MS Shell Dlg 2&apos;; font-size:8.25pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;a href=&quot;http://merkaartor.be&quot;&gt;&lt;span style=&quot; font-size:8pt; text-decoration: underline; color:#0000ff;&quot;&gt;http://merkaartor.be&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../src/AboutDialog.ui" line="178"/>
         <source>OK</source>
         <translation>OK</translation>
@@ -164,19 +173,6 @@ p, li { white-space: pre-wrap; }
 &lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;MS Shell Dlg 2&apos;; font-size:8.25pt; font-weight:400; font-style:normal;&quot;&gt;
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-size:8pt;&quot;&gt;&lt;span style=&quot; font-style:italic;&quot;&gt;QT változat:&lt;/span&gt; &lt;/p&gt;
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-size:8pt;&quot;&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;%1&lt;/span&gt; (készült &lt;span style=&quot; font-weight:600;&quot;&gt;%2&lt;/span&gt; környezetben)&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
-    </message>
-    <message>
-        <location filename="../src/AboutDialog.ui" line="115"/>
-        <source>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
-&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
-p, li { white-space: pre-wrap; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;MS Shell Dlg 2&apos;; font-size:8.25pt; font-weight:400; font-style:normal;&quot;&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;a href=&quot;http://www.merkaartor.org&quot;&gt;&lt;span style=&quot; font-size:8pt; text-decoration: underline; color:#0000ff;&quot;&gt;http://www.merkaartor.org&lt;/span&gt;&lt;/a&gt; or &lt;a href=&quot;http://merkaartor.yuio.de&quot;&gt;&lt;span style=&quot; font-size:8pt; text-decoration: underline; color:#0000ff;&quot;&gt;http://merkaartor.yuio.de&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
-&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
-p, li { white-space: pre-wrap; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;MS Shell Dlg 2&apos;; font-size:8.25pt; font-weight:400; font-style:normal;&quot;&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;a href=&quot;http://www.merkaartor.org&quot;&gt;&lt;span style=&quot; font-size:8pt; text-decoration: underline; color:#0000ff;&quot;&gt;http://www.merkaartor.org&lt;/span&gt;&lt;/a&gt; vagy &lt;a href=&quot;http://merkaartor.yuio.de&quot;&gt;&lt;span style=&quot; font-size:8pt; text-decoration: underline; color:#0000ff;&quot;&gt;http://merkaartor.yuio.de&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
         <location filename="../src/AboutDialog.ui" line="54"/>
@@ -318,47 +314,51 @@ p, li { white-space: pre-wrap; }
 <context>
     <name>DirtyDock</name>
     <message>
-        <location filename="../src/Docks/DirtyDock.cpp" line="196"/>
+        <location filename="../src/Docks/DirtyDock.cpp" line="67"/>
+        <source>There is &lt;b&gt;no&lt;/b&gt; dirty object</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/Docks/DirtyDock.cpp" line="70"/>
+        <source>There is &lt;b&gt;one&lt;/b&gt; dirty object</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message numerus="yes">
+        <location filename="../src/Docks/DirtyDock.cpp" line="74"/>
+        <source>There are &lt;b&gt;%n&lt;/b&gt; dirty objects</source>
+        <translation type="unfinished">
+            <numerusform></numerusform>
+        </translation>
+    </message>
+    <message>
+        <location filename="../src/Docks/DirtyDock.cpp" line="194"/>
         <source>Undo</source>
         <translation>Vissza</translation>
     </message>
     <message>
-        <location filename="../src/Docks/DirtyDock.cpp" line="197"/>
+        <location filename="../src/Docks/DirtyDock.cpp" line="195"/>
         <source>Center map</source>
         <translation>Térképet középre</translation>
     </message>
     <message>
-        <location filename="../src/Docks/DirtyDock.cpp" line="198"/>
+        <location filename="../src/Docks/DirtyDock.cpp" line="196"/>
         <source>Center &amp;&amp; Zoom map</source>
         <translation>Térképet középre nagyítva</translation>
-    </message>
-    <message>
-        <location filename="../src/Docks/DirtyDock.cpp" line="69"/>
-        <source>There is &lt;b&gt;no&lt;/b&gt; object in the dirty layer</source>
-        <translation>&lt;b&gt;Nincs&lt;/b&gt; semmi a piszkos rétegben</translation>
-    </message>
-    <message>
-        <location filename="../src/Docks/DirtyDock.cpp" line="72"/>
-        <source>There is &lt;b&gt;one&lt;/b&gt; object in the dirty layer</source>
-        <translation>&lt;b&gt;Egy&lt;/b&gt; dolog van a piszkos rétegben</translation>
-    </message>
-    <message numerus="yes">
-        <location filename="../src/Docks/DirtyDock.cpp" line="76"/>
-        <source>There are &lt;b&gt;%n&lt;/b&gt; objects in the dirty layer</source>
-        <translation>
-            <numerusform>&lt;b&gt;%n&lt;/b&gt; dolog van a piszkos rétegben</numerusform>
-        </translation>
     </message>
 </context>
 <context>
     <name>DirtyDockWidget</name>
     <message>
         <location filename="../src/Docks/DirtyDock.ui" line="37"/>
-        <source>There is &lt;b&gt;no&lt;/b&gt; object in the dirty layer</source>
-        <translation>&lt;b&gt;Nincs&lt;/b&gt; semmi a piszkos rétegben</translation>
+        <source>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
+p, li { white-space: pre-wrap; }
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;Sans&apos;; font-size:10pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;There is &lt;span style=&quot; font-weight:600;&quot;&gt;no&lt;/span&gt; dirty object&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Docks/DirtyDock.ui" line="56"/>
+        <location filename="../src/Docks/DirtyDock.ui" line="60"/>
         <source>Cleanup</source>
         <translation>Kitakarít</translation>
     </message>
@@ -371,7 +371,7 @@ p, li { white-space: pre-wrap; }
 <context>
     <name>DirtyLayerWidget</name>
     <message>
-        <location filename="../src/Layers/LayerWidget.cpp" line="503"/>
+        <location filename="../src/Layers/LayerWidget.cpp" line="580"/>
         <source>Zoom</source>
         <translation>Nagyít</translation>
     </message>
@@ -379,98 +379,98 @@ p, li { white-space: pre-wrap; }
 <context>
     <name>DirtyListExecutor</name>
     <message>
-        <location filename="../src/Sync/DirtyList.cpp" line="430"/>
-        <location filename="../src/Sync/DirtyList.cpp" line="437"/>
-        <location filename="../src/Sync/DirtyList.cpp" line="453"/>
+        <location filename="../src/Sync/DirtyList.cpp" line="421"/>
+        <location filename="../src/Sync/DirtyList.cpp" line="428"/>
+        <location filename="../src/Sync/DirtyList.cpp" line="444"/>
         <source>Error uploading request</source>
         <translation>Hiba a kérést feltöltvén</translation>
     </message>
     <message>
-        <location filename="../src/Sync/DirtyList.cpp" line="434"/>
-        <location filename="../src/Sync/DirtyList.cpp" line="454"/>
+        <location filename="../src/Sync/DirtyList.cpp" line="425"/>
+        <location filename="../src/Sync/DirtyList.cpp" line="445"/>
         <source>There was an error uploading this request (%1)
 Server message is &apos;%2&apos;</source>
         <translation>E kérést feltöltvén hiba (%1) történt
 A szolgáló üzenete: „%2”</translation>
     </message>
     <message>
-        <location filename="../src/Sync/DirtyList.cpp" line="334"/>
-        <location filename="../src/Sync/DirtyList.cpp" line="575"/>
+        <location filename="../src/Sync/DirtyList.cpp" line="324"/>
+        <location filename="../src/Sync/DirtyList.cpp" line="568"/>
         <source>ADD road %1</source>
         <translation>HOZZÁADja %1 utat</translation>
     </message>
     <message>
-        <location filename="../src/Sync/DirtyList.cpp" line="342"/>
-        <location filename="../src/Sync/DirtyList.cpp" line="605"/>
+        <location filename="../src/Sync/DirtyList.cpp" line="332"/>
+        <location filename="../src/Sync/DirtyList.cpp" line="602"/>
         <source>ADD trackpoint %1</source>
         <translation>HOZZÁADja %1 nyompontot</translation>
     </message>
     <message>
-        <location filename="../src/Sync/DirtyList.cpp" line="350"/>
-        <location filename="../src/Sync/DirtyList.cpp" line="546"/>
+        <location filename="../src/Sync/DirtyList.cpp" line="340"/>
+        <location filename="../src/Sync/DirtyList.cpp" line="535"/>
         <source>ADD relation %1</source>
         <translation>HOZZÁADja %1 kapcsolatot</translation>
     </message>
     <message>
-        <location filename="../src/Sync/DirtyList.cpp" line="358"/>
-        <location filename="../src/Sync/DirtyList.cpp" line="695"/>
+        <location filename="../src/Sync/DirtyList.cpp" line="348"/>
+        <location filename="../src/Sync/DirtyList.cpp" line="699"/>
         <source>UPDATE trackpoint %1</source>
         <translation>MEGVÁLTOZTATja %1 nyompontot</translation>
     </message>
     <message>
-        <location filename="../src/Sync/DirtyList.cpp" line="366"/>
-        <location filename="../src/Sync/DirtyList.cpp" line="636"/>
+        <location filename="../src/Sync/DirtyList.cpp" line="356"/>
+        <location filename="../src/Sync/DirtyList.cpp" line="637"/>
         <source>UPDATE relation %1</source>
         <translation>MEGVÁLTOZTATja %1 kapcsolatot</translation>
     </message>
     <message>
-        <location filename="../src/Sync/DirtyList.cpp" line="374"/>
-        <location filename="../src/Sync/DirtyList.cpp" line="666"/>
+        <location filename="../src/Sync/DirtyList.cpp" line="364"/>
+        <location filename="../src/Sync/DirtyList.cpp" line="668"/>
         <source>UPDATE road %1</source>
         <translation>MEGVÁLTOZTATja %1 utat</translation>
     </message>
     <message>
-        <location filename="../src/Sync/DirtyList.cpp" line="382"/>
-        <location filename="../src/Sync/DirtyList.cpp" line="726"/>
+        <location filename="../src/Sync/DirtyList.cpp" line="372"/>
+        <location filename="../src/Sync/DirtyList.cpp" line="732"/>
         <source>REMOVE trackpoint %1</source>
         <translation>ELTÁVOLÍTja %1 nyompontot</translation>
     </message>
     <message>
-        <location filename="../src/Sync/DirtyList.cpp" line="390"/>
-        <location filename="../src/Sync/DirtyList.cpp" line="751"/>
+        <location filename="../src/Sync/DirtyList.cpp" line="380"/>
+        <location filename="../src/Sync/DirtyList.cpp" line="759"/>
         <source>REMOVE road %1</source>
         <translation>ELTÁVOLÍTja %1 utat</translation>
     </message>
     <message>
-        <location filename="../src/Sync/DirtyList.cpp" line="398"/>
-        <location filename="../src/Sync/DirtyList.cpp" line="776"/>
+        <location filename="../src/Sync/DirtyList.cpp" line="388"/>
+        <location filename="../src/Sync/DirtyList.cpp" line="786"/>
         <source>REMOVE relation %1</source>
         <translation>ELTÁVOLÍTja %1 kapcsolatot</translation>
     </message>
     <message>
-        <location filename="../src/Sync/DirtyList.cpp" line="431"/>
+        <location filename="../src/Sync/DirtyList.cpp" line="422"/>
         <source>Please check your username and password in the Preferences menu</source>
         <translation>Kérem ellenőrizze nevét és jelszavát a Beállításokban</translation>
     </message>
     <message>
-        <location filename="../src/Sync/DirtyList.cpp" line="498"/>
+        <location filename="../src/Sync/DirtyList.cpp" line="488"/>
         <source>OPEN changeset</source>
         <translation>MEGNYITja a változásokat</translation>
     </message>
     <message>
-        <location filename="../src/Sync/DirtyList.cpp" line="526"/>
+        <location filename="../src/Sync/DirtyList.cpp" line="515"/>
         <source>CLOSE changeset</source>
         <translation>LEZÁRja a változásokat</translation>
     </message>
     <message>
-        <location filename="../src/Sync/DirtyList.cpp" line="436"/>
+        <location filename="../src/Sync/DirtyList.cpp" line="427"/>
         <source>
 API message is &apos;%1&apos;</source>
         <translation>
 Az API-üzenete: „%1”</translation>
     </message>
     <message>
-        <location filename="../src/Sync/DirtyList.cpp" line="471"/>
+        <location filename="../src/Sync/DirtyList.cpp" line="462"/>
         <source>Uploading changes...</source>
         <translation>Feltöltöm a változásokat…</translation>
     </message>
@@ -478,33 +478,33 @@ Az API-üzenete: „%1”</translation>
 <context>
     <name>DirtyListExecutorOSC</name>
     <message>
-        <location filename="../src/Sync/DirtyListExecutorOSC.cpp" line="61"/>
-        <location filename="../src/Sync/DirtyListExecutorOSC.cpp" line="68"/>
-        <location filename="../src/Sync/DirtyListExecutorOSC.cpp" line="82"/>
+        <location filename="../src/Sync/DirtyListExecutorOSC.cpp" line="62"/>
+        <location filename="../src/Sync/DirtyListExecutorOSC.cpp" line="69"/>
+        <location filename="../src/Sync/DirtyListExecutorOSC.cpp" line="83"/>
         <source>Error uploading request</source>
         <translation>Hiba a kérést feltöltvén</translation>
     </message>
     <message>
-        <location filename="../src/Sync/DirtyListExecutorOSC.cpp" line="62"/>
+        <location filename="../src/Sync/DirtyListExecutorOSC.cpp" line="63"/>
         <source>Please check your username and password in the Preferences menu</source>
         <translation>Kérem ellenőrizze nevét és jelszavát a Beállításokban</translation>
     </message>
     <message>
-        <location filename="../src/Sync/DirtyListExecutorOSC.cpp" line="65"/>
+        <location filename="../src/Sync/DirtyListExecutorOSC.cpp" line="66"/>
         <source>There was an error uploading this request (%1)
 Server message is &apos;%2&apos;</source>
         <translation>E kérést feltöltvén hiba (%1) történt
 A szolgáló üzenete: „%2”</translation>
     </message>
     <message>
-        <location filename="../src/Sync/DirtyListExecutorOSC.cpp" line="67"/>
+        <location filename="../src/Sync/DirtyListExecutorOSC.cpp" line="68"/>
         <source>
 API message is &apos;%1&apos;</source>
         <translation>
 Az API-üzenete: „%1”</translation>
     </message>
     <message>
-        <location filename="../src/Sync/DirtyListExecutorOSC.cpp" line="83"/>
+        <location filename="../src/Sync/DirtyListExecutorOSC.cpp" line="84"/>
         <source>There was an error uploading this request (%1)
 &quot;%2&quot;
 Please redownload the problematic feature to handle the conflict.</source>
@@ -513,62 +513,62 @@ Please redownload the problematic feature to handle the conflict.</source>
 Kérem töltse le újra a bajos dolgokat, hogy megoldja az ütközést.</translation>
     </message>
     <message>
-        <location filename="../src/Sync/DirtyListExecutorOSC.cpp" line="99"/>
+        <location filename="../src/Sync/DirtyListExecutorOSC.cpp" line="100"/>
         <source>Checking changes...</source>
         <translation>Változásokat ellenőrzök…</translation>
     </message>
     <message>
-        <location filename="../src/Sync/DirtyListExecutorOSC.cpp" line="170"/>
+        <location filename="../src/Sync/DirtyListExecutorOSC.cpp" line="171"/>
         <source>OPEN changeset</source>
         <translation>MEGNYITja a változásokat</translation>
     </message>
     <message>
-        <location filename="../src/Sync/DirtyListExecutorOSC.cpp" line="288"/>
+        <location filename="../src/Sync/DirtyListExecutorOSC.cpp" line="285"/>
         <source>CLOSE changeset</source>
         <translation>LEZÁRja a változásokat</translation>
     </message>
     <message>
-        <location filename="../src/Sync/DirtyListExecutorOSC.cpp" line="342"/>
+        <location filename="../src/Sync/DirtyListExecutorOSC.cpp" line="338"/>
         <source>ADD relation %1</source>
         <translation>HOZZÁADja %1 kapcsolatot</translation>
     </message>
     <message>
-        <location filename="../src/Sync/DirtyListExecutorOSC.cpp" line="356"/>
+        <location filename="../src/Sync/DirtyListExecutorOSC.cpp" line="352"/>
         <source>ADD road %1</source>
         <translation>HOZZÁADja %1 utat</translation>
     </message>
     <message>
-        <location filename="../src/Sync/DirtyListExecutorOSC.cpp" line="371"/>
+        <location filename="../src/Sync/DirtyListExecutorOSC.cpp" line="367"/>
         <source>ADD trackpoint %1</source>
         <translation>HOZZÁADja %1 nyompontot</translation>
     </message>
     <message>
-        <location filename="../src/Sync/DirtyListExecutorOSC.cpp" line="387"/>
+        <location filename="../src/Sync/DirtyListExecutorOSC.cpp" line="383"/>
         <source>UPDATE relation %1</source>
         <translation>MEGVÁLTOZTATja %1 kapcsolatot</translation>
     </message>
     <message>
-        <location filename="../src/Sync/DirtyListExecutorOSC.cpp" line="402"/>
+        <location filename="../src/Sync/DirtyListExecutorOSC.cpp" line="398"/>
         <source>UPDATE road %1</source>
         <translation>MEGVÁLTOZTATja %1 utat</translation>
     </message>
     <message>
-        <location filename="../src/Sync/DirtyListExecutorOSC.cpp" line="416"/>
+        <location filename="../src/Sync/DirtyListExecutorOSC.cpp" line="412"/>
         <source>UPDATE trackpoint %1</source>
         <translation>MEGVÁLTOZTATja %1 nyompontot</translation>
     </message>
     <message>
-        <location filename="../src/Sync/DirtyListExecutorOSC.cpp" line="430"/>
+        <location filename="../src/Sync/DirtyListExecutorOSC.cpp" line="426"/>
         <source>REMOVE trackpoint %1</source>
         <translation>ELTÁVOLÍTja %1 nyompontot</translation>
     </message>
     <message>
-        <location filename="../src/Sync/DirtyListExecutorOSC.cpp" line="444"/>
+        <location filename="../src/Sync/DirtyListExecutorOSC.cpp" line="440"/>
         <source>REMOVE road %1</source>
         <translation>ELTÁVOLÍTja %1 utat</translation>
     </message>
     <message>
-        <location filename="../src/Sync/DirtyListExecutorOSC.cpp" line="458"/>
+        <location filename="../src/Sync/DirtyListExecutorOSC.cpp" line="454"/>
         <source>REMOVE relation %1</source>
         <translation>ELTÁVOLÍTja %1 kapcsolatot</translation>
     </message>
@@ -576,31 +576,54 @@ Kérem töltse le újra a bajos dolgokat, hogy megoldja az ütközést.</transla
 <context>
     <name>Document</name>
     <message>
+        <location filename="../src/Document.cpp" line="86"/>
+        <location filename="../src/Document.cpp" line="98"/>
         <location filename="../src/Document.cpp" line="108"/>
+        <source>untitled</source>
+        <translation>nevenincs</translation>
+    </message>
+    <message>
+        <location filename="../src/Document.cpp" line="158"/>
+        <location filename="../src/Document.cpp" line="563"/>
         <source>Dirty layer</source>
         <translation>Piszkos réteg</translation>
     </message>
     <message>
-        <location filename="../src/Document.cpp" line="111"/>
+        <location filename="../src/Document.cpp" line="161"/>
         <source>Uploaded layer</source>
         <translation>Feltöltött réteg</translation>
     </message>
     <message>
-        <location filename="../src/Document.cpp" line="274"/>
+        <location filename="../src/Document.cpp" line="356"/>
         <source>Background imagery</source>
         <translation>Háttérkép</translation>
     </message>
     <message>
-        <location filename="../src/Document.cpp" line="508"/>
-        <location filename="../src/Document.cpp" line="565"/>
+        <location filename="../src/Document.cpp" line="373"/>
+        <source>Drawing layer #%1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/Document.cpp" line="382"/>
+        <source>Filter layer #%1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/Document.cpp" line="676"/>
+        <location filename="../src/Document.cpp" line="733"/>
         <source>OSM Export</source>
         <translation>OSM-kivitel</translation>
     </message>
     <message>
-        <location filename="../src/Document.cpp" line="515"/>
-        <location filename="../src/Document.cpp" line="575"/>
+        <location filename="../src/Document.cpp" line="683"/>
+        <location filename="../src/Document.cpp" line="743"/>
         <source>Exporting OSM...</source>
         <translation>Kiviszem OSM-be…</translation>
+    </message>
+    <message>
+        <location filename="../src/Document.cpp" line="1039"/>
+        <source>Document</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -626,17 +649,22 @@ Kérem töltse le újra a bajos dolgokat, hogy megoldja az ütközést.</transla
         <translation>Mostani látómező</translation>
     </message>
     <message>
-        <location filename="../src/DownloadMapDialog.ui" line="86"/>
+        <location filename="../src/DownloadMapDialog.ui" line="88"/>
+        <source>Xapi selector</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/DownloadMapDialog.ui" line="100"/>
         <source>From the map below (map provided by the OpenStreetMap project)</source>
         <translation>Az alábbi térképből (OpenStreetMap-térkép)</translation>
     </message>
     <message>
-        <location filename="../src/DownloadMapDialog.ui" line="98"/>
+        <location filename="../src/DownloadMapDialog.ui" line="112"/>
         <source>Also download raw GPS tracks</source>
         <translation>Nyers GPS-nyomokat is letölt</translation>
     </message>
     <message>
-        <location filename="../src/DownloadMapDialog.ui" line="105"/>
+        <location filename="../src/DownloadMapDialog.ui" line="119"/>
         <source>Resolve all relations</source>
         <translation>Minden kapcsolatot megold</translation>
     </message>
@@ -649,62 +677,62 @@ Kérem töltse le újra a bajos dolgokat, hogy megoldja az ütközést.</transla
 <context>
     <name>Downloader</name>
     <message>
-        <location filename="../src/Sync/DownloadOSM.cpp" line="207"/>
+        <location filename="../src/Sync/DownloadOSM.cpp" line="200"/>
         <source>error</source>
         <translation>hiba</translation>
     </message>
     <message>
-        <location filename="../src/Sync/DownloadOSM.cpp" line="211"/>
+        <location filename="../src/Sync/DownloadOSM.cpp" line="204"/>
         <source>didn&apos;t download enough</source>
         <translation>nem töltött le eleget</translation>
     </message>
     <message>
-        <location filename="../src/Sync/DownloadOSM.cpp" line="509"/>
+        <location filename="../src/Sync/DownloadOSM.cpp" line="515"/>
         <source>Unresolved conflicts</source>
         <translation>Megoldatlan ütközések</translation>
     </message>
     <message>
-        <location filename="../src/Sync/DownloadOSM.cpp" line="509"/>
+        <location filename="../src/Sync/DownloadOSM.cpp" line="515"/>
         <source>Please resolve existing conflicts first</source>
         <translation>Kérem előbb a meglévő ütközéseket oldja meg</translation>
     </message>
     <message>
-        <location filename="../src/Sync/DownloadOSM.cpp" line="452"/>
+        <location filename="../src/Sync/DownloadOSM.cpp" line="458"/>
         <source>Downloading from OSM (connecting)</source>
         <translation>Letöltök OSM-ről (csatlakozok)</translation>
     </message>
     <message>
-        <location filename="../src/Docks/InfoDock.cpp" line="81"/>
-        <location filename="../src/Sync/DownloadOSM.cpp" line="486"/>
+        <location filename="../src/Docks/InfoDock.cpp" line="82"/>
         <location filename="../src/Sync/DownloadOSM.cpp" line="491"/>
         <location filename="../src/Sync/DownloadOSM.cpp" line="497"/>
+        <location filename="../src/Sync/DownloadOSM.cpp" line="503"/>
         <source>Download failed</source>
         <translation>Nem sikerült letölteni</translation>
     </message>
     <message>
-        <location filename="../src/Sync/DownloadOSM.cpp" line="491"/>
+        <location filename="../src/Sync/DownloadOSM.cpp" line="497"/>
         <source>Username/password invalid</source>
         <translation>Érvénytelen név/jelszó</translation>
     </message>
     <message>
-        <location filename="../src/Sync/DownloadOSM.cpp" line="570"/>
+        <location filename="../src/Sync/DownloadOSM.cpp" line="572"/>
         <source>Downloading trackpoints %1-%2</source>
         <translation>Letöltök %1 / %2 nyompontot</translation>
     </message>
     <message>
-        <location filename="../src/ImportExport/ImportOSM.cpp" line="439"/>
-        <location filename="../src/Sync/DownloadOSM.cpp" line="562"/>
-        <location filename="../src/Sync/DownloadOSM.cpp" line="707"/>
+        <location filename="../src/ImportExport/ImportOSM.cpp" line="435"/>
+        <location filename="../src/Sync/DownloadOSM.cpp" line="564"/>
+        <location filename="../src/Sync/DownloadOSM.cpp" line="706"/>
         <source>Parsing XML</source>
         <translation>XML-t dologozok fel</translation>
     </message>
     <message>
-        <location filename="../src/ImportExport/ImportOSM.cpp" line="447"/>
+        <location filename="../src/ImportExport/ImportOSM.cpp" line="443"/>
         <source>Conflicts from %1</source>
         <translation>Ütközések %1 adataiban</translation>
     </message>
     <message>
-        <location filename="../src/Docks/InfoDock.cpp" line="81"/>
+        <location filename="../src/Docks/InfoDock.cpp" line="82"/>
         <source>Unexpected http status code (%1)</source>
         <translation>Váratlan HTTP állapotkód (%1)</translation>
     </message>
@@ -714,35 +742,35 @@ Kérem töltse le újra a bajos dolgokat, hogy megoldja az ütközést.</transla
         <translation>Letöltök: %1,%2 (nagyít %3)...</translation>
     </message>
     <message>
-        <location filename="../src/Sync/DownloadOSM.cpp" line="588"/>
+        <location filename="../src/Sync/DownloadOSM.cpp" line="591"/>
         <source>Downloaded track - nodes %1-%2</source>
         <translation>Letöltött nyom – pontok %1-%2</translation>
     </message>
     <message>
         <location filename="../src/ImportExport/ImportExportOSC.cpp" line="73"/>
-        <location filename="../src/Sync/DownloadOSM.cpp" line="628"/>
-        <location filename="../src/Sync/DownloadOSM.cpp" line="742"/>
-        <location filename="../src/Sync/DownloadOSM.cpp" line="846"/>
+        <location filename="../src/Sync/DownloadOSM.cpp" line="631"/>
+        <location filename="../src/Sync/DownloadOSM.cpp" line="741"/>
+        <location filename="../src/Sync/DownloadOSM.cpp" line="853"/>
         <source>%1 download</source>
         <translation>%1 letöltés</translation>
     </message>
     <message>
-        <location filename="../src/ImportExport/ImportOSM.cpp" line="320"/>
+        <location filename="../src/ImportExport/ImportOSM.cpp" line="316"/>
         <source>Downloading unresolved %1 of %2</source>
         <translation>Letöltök %1 / %2 megoldatlan</translation>
     </message>
     <message>
-        <location filename="../src/ImportExport/ImportOSM.cpp" line="329"/>
+        <location filename="../src/ImportExport/ImportOSM.cpp" line="325"/>
         <source>Parsing unresolved %1 of %2</source>
         <translation>Feldolgozok %1 / %2 megoldatlan</translation>
     </message>
     <message>
-        <location filename="../src/ImportExport/ImportOSM.cpp" line="538"/>
+        <location filename="../src/ImportExport/ImportOSM.cpp" line="534"/>
         <source>Conflicts have been detected</source>
         <translation>Ütközéseket találtam</translation>
     </message>
     <message>
-        <location filename="../src/ImportExport/ImportOSM.cpp" line="539"/>
+        <location filename="../src/ImportExport/ImportOSM.cpp" line="535"/>
         <source>This means that some of the feature you modified since your last download have since been modified by someone else on the server.
 The features have been duplicated as &quot;conflict_...&quot; on the &quot;Conflicts...&quot; layer.
 Before being able to upload your changes, you will have to manually merge the two versions and remove the one from the &quot;Conflicts...&quot; layer.</source>
@@ -751,91 +779,91 @@ A dolgokat átmásoltam mint „conflict_…” a „Conflicts…” rétegbe.
 Mielőtt feltölthetné a változtatásait, saját kezűleg kell összevonnia a két változatot, illetve el kell távolítania egyiket a „Conflicts…” rétegből.</translation>
     </message>
     <message>
-        <location filename="../src/ImportExport/ImportOSM.cpp" line="517"/>
+        <location filename="../src/ImportExport/ImportOSM.cpp" line="513"/>
         <source>Empty roads/relations detected</source>
         <translation>Üres utat/kapcsolatot találtam</translation>
     </message>
     <message>
-        <location filename="../src/ImportExport/ImportOSM.cpp" line="518"/>
+        <location filename="../src/ImportExport/ImportOSM.cpp" line="514"/>
         <source>Empty roads/relations are probably errors.
 Do you want to mark them for deletion?</source>
         <translation>Az üres utak/kapcsolatok valószínűleg hibák.
 Meg akarja jelölni őket törlésre?</translation>
     </message>
     <message>
-        <location filename="../src/ImportExport/ImportOSM.cpp" line="526"/>
+        <location filename="../src/ImportExport/ImportOSM.cpp" line="522"/>
         <source>Remove empty feature %1</source>
         <translation>%1 üres dolgot eltávolít</translation>
     </message>
     <message>
-        <location filename="../src/Sync/DownloadOSM.cpp" line="483"/>
-        <location filename="../src/Sync/DownloadOSM.cpp" line="494"/>
+        <location filename="../src/Sync/DownloadOSM.cpp" line="488"/>
+        <location filename="../src/Sync/DownloadOSM.cpp" line="500"/>
         <source>Unexpected http status code (%1)
 Server message is &apos;%2&apos;</source>
         <translation>Váratlan HTTP állapotkód (%1)
 A szolgáló üzenete: „%2”</translation>
     </message>
     <message>
-        <location filename="../src/Sync/DownloadOSM.cpp" line="485"/>
-        <location filename="../src/Sync/DownloadOSM.cpp" line="496"/>
+        <location filename="../src/Sync/DownloadOSM.cpp" line="490"/>
+        <location filename="../src/Sync/DownloadOSM.cpp" line="502"/>
         <source>
 API message is &apos;%1&apos;</source>
         <translation>
 Az API-üzenete: „%1”</translation>
     </message>
     <message numerus="yes">
-        <location filename="../src/Sync/DownloadOSM.cpp" line="320"/>
+        <location filename="../src/Sync/DownloadOSM.cpp" line="330"/>
         <source>Downloading from OSM (%n bytes)</source>
         <translation>
             <numerusform>Letöltök OSM-ről (%n B)</numerusform>
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../src/Sync/DownloadOSM.cpp" line="322"/>
+        <location filename="../src/Sync/DownloadOSM.cpp" line="332"/>
         <source>Downloading from OSM (%n kBytes)</source>
         <translation>
             <numerusform>Letöltök OSM-ről (%n kB)</numerusform>
         </translation>
     </message>
     <message>
-        <location filename="../src/Sync/DownloadOSM.cpp" line="442"/>
+        <location filename="../src/Sync/DownloadOSM.cpp" line="448"/>
         <source>Downloading...</source>
         <translation>Letöltök…</translation>
     </message>
     <message>
-        <location filename="../src/ImportExport/ImportOSM.cpp" line="433"/>
-        <location filename="../src/Sync/DownloadOSM.cpp" line="555"/>
-        <location filename="../src/Sync/DownloadOSM.cpp" line="700"/>
+        <location filename="../src/ImportExport/ImportOSM.cpp" line="429"/>
+        <location filename="../src/Sync/DownloadOSM.cpp" line="557"/>
+        <location filename="../src/Sync/DownloadOSM.cpp" line="699"/>
         <source>Parsing...</source>
         <translation>Feldolgozok...</translation>
     </message>
     <message>
-        <location filename="../src/ImportExport/ImportOSM.cpp" line="313"/>
+        <location filename="../src/ImportExport/ImportOSM.cpp" line="309"/>
         <source>Downloading unresolved...</source>
         <translation>Letöltöm a megoldatlan…</translation>
     </message>
     <message>
-        <location filename="../src/Sync/DirtyListExecutorOSC.cpp" line="131"/>
+        <location filename="../src/Sync/DirtyListExecutorOSC.cpp" line="132"/>
         <source>Uploading...</source>
         <translation>Feltöltök…</translation>
     </message>
     <message>
-        <location filename="../src/Sync/DirtyListExecutorOSC.cpp" line="153"/>
+        <location filename="../src/Sync/DirtyListExecutorOSC.cpp" line="154"/>
         <source>Preparing changes</source>
         <translation>Elkészítem a változásokat</translation>
     </message>
     <message>
-        <location filename="../src/Sync/DirtyListExecutorOSC.cpp" line="155"/>
+        <location filename="../src/Sync/DirtyListExecutorOSC.cpp" line="156"/>
         <source>Waiting for server response</source>
         <translation>A szolgáló válaszára várok</translation>
     </message>
     <message>
-        <location filename="../src/Sync/DownloadOSM.cpp" line="688"/>
+        <location filename="../src/Sync/DownloadOSM.cpp" line="687"/>
         <source>OpenStreetBugs</source>
         <translation>OpenStreetBugs</translation>
     </message>
     <message>
-        <location filename="../src/Sync/DownloadOSM.cpp" line="713"/>
+        <location filename="../src/Sync/DownloadOSM.cpp" line="712"/>
         <source>Downloading points</source>
         <translation>Letöltök pontokat</translation>
     </message>
@@ -843,9 +871,48 @@ Az API-üzenete: „%1”</translation>
 <context>
     <name>DrawingLayerWidget</name>
     <message>
-        <location filename="../src/Layers/LayerWidget.cpp" line="272"/>
+        <location filename="../src/Layers/LayerWidget.cpp" line="297"/>
         <source>Close</source>
         <translation>Bezár</translation>
+    </message>
+    <message>
+        <location filename="../src/Layers/LayerWidget.cpp" line="292"/>
+        <source>Zoom</source>
+        <translation>Nagyít</translation>
+    </message>
+</context>
+<context>
+    <name>EditInteraction</name>
+    <message>
+        <location filename="../src/Interactions/EditInteraction.cpp" line="276"/>
+        <source>Cannot delete</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/Interactions/EditInteraction.cpp" line="276"/>
+        <source>Cannot delete the selection because it is outside the downloaded area.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/Interactions/EditInteraction.cpp" line="279"/>
+        <source>Cannot delete everything</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/Interactions/EditInteraction.cpp" line="280"/>
+        <source>The complete selection cannot be deleted because part of it is outside the downloaded area.
+Delete what can be?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/Interactions/EditInteraction.cpp" line="325"/>
+        <source>Reverse way %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/Interactions/EditInteraction.cpp" line="325"/>
+        <source>Reverse %1 ways</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -879,52 +946,52 @@ Az API-üzenete: „%1”</translation>
 <context>
     <name>FeaturesDock</name>
     <message>
-        <location filename="../src/Docks/FeaturesDock.cpp" line="414"/>
+        <location filename="../src/Docks/FeaturesDock.cpp" line="427"/>
         <source>Features</source>
         <translation>Dolgok</translation>
     </message>
     <message>
-        <location filename="../src/Docks/FeaturesDock.cpp" line="415"/>
+        <location filename="../src/Docks/FeaturesDock.cpp" line="428"/>
         <source>Center map</source>
         <translation>Térképet középre</translation>
     </message>
     <message>
-        <location filename="../src/Docks/FeaturesDock.cpp" line="416"/>
+        <location filename="../src/Docks/FeaturesDock.cpp" line="429"/>
         <source>Center &amp;&amp; Zoom map</source>
         <translation>Térképet középre nagyítva</translation>
     </message>
     <message>
-        <location filename="../src/Docks/FeaturesDock.cpp" line="417"/>
+        <location filename="../src/Docks/FeaturesDock.cpp" line="430"/>
         <source>Download missing children</source>
         <translation>Hiányzó gyereket letölt</translation>
     </message>
     <message>
-        <location filename="../src/Docks/FeaturesDock.cpp" line="426"/>
+        <location filename="../src/Docks/FeaturesDock.cpp" line="439"/>
         <source>Relations</source>
         <translation>Kapcsolatok</translation>
     </message>
     <message>
-        <location filename="../src/Docks/FeaturesDock.cpp" line="427"/>
+        <location filename="../src/Docks/FeaturesDock.cpp" line="440"/>
         <source>Roads</source>
         <translation>Utak</translation>
     </message>
     <message>
-        <location filename="../src/Docks/FeaturesDock.cpp" line="428"/>
+        <location filename="../src/Docks/FeaturesDock.cpp" line="441"/>
         <source>POI&apos;s</source>
         <translation>POI-k</translation>
     </message>
     <message>
-        <location filename="../src/Docks/FeaturesDock.cpp" line="429"/>
+        <location filename="../src/Docks/FeaturesDock.cpp" line="442"/>
         <source>All</source>
         <translation>Mind</translation>
     </message>
     <message>
-        <location filename="../src/Docks/FeaturesDock.cpp" line="418"/>
+        <location filename="../src/Docks/FeaturesDock.cpp" line="431"/>
         <source>Add to selection</source>
         <translation>Kijelöléshez ad</translation>
     </message>
     <message>
-        <location filename="../src/Docks/FeaturesDock.cpp" line="419"/>
+        <location filename="../src/Docks/FeaturesDock.cpp" line="432"/>
         <source>Delete</source>
         <translation>Töröl</translation>
     </message>
@@ -950,6 +1017,37 @@ Az API-üzenete: „%1”</translation>
         <location filename="../src/Docks/FeaturesDock.ui" line="14"/>
         <source>Features</source>
         <translation>Dolgok</translation>
+    </message>
+</context>
+<context>
+    <name>FilterEditDialog</name>
+    <message>
+        <location filename="../src/Layers/FilterEditDialog.ui" line="14"/>
+        <source>Dialog</source>
+        <translation>Dialog</translation>
+    </message>
+    <message>
+        <location filename="../src/Layers/FilterEditDialog.ui" line="20"/>
+        <source>Name</source>
+        <translation>Név</translation>
+    </message>
+    <message>
+        <location filename="../src/Layers/FilterEditDialog.ui" line="30"/>
+        <source>Filter</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/Layers/FilterEditDialog.ui" line="42"/>
+        <source>...</source>
+        <translation>…</translation>
+    </message>
+</context>
+<context>
+    <name>FilterLayerWidget</name>
+    <message>
+        <location filename="../src/Layers/LayerWidget.cpp" line="649"/>
+        <source>Close</source>
+        <translation>Bezár</translation>
     </message>
 </context>
 <context>
@@ -980,17 +1078,22 @@ Az API-üzenete: „%1”</translation>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Preferences/FilterPreferencesDialog.ui" line="116"/>
+        <location filename="../src/Preferences/FilterPreferencesDialog.ui" line="105"/>
+        <source>...</source>
+        <translation>…</translation>
+    </message>
+    <message>
+        <location filename="../src/Preferences/FilterPreferencesDialog.ui" line="127"/>
         <source>Apply</source>
         <translation>Alkalmaz</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/FilterPreferencesDialog.ui" line="123"/>
+        <location filename="../src/Preferences/FilterPreferencesDialog.ui" line="134"/>
         <source>Add</source>
         <translation>Hozzáad</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/FilterPreferencesDialog.ui" line="130"/>
+        <location filename="../src/Preferences/FilterPreferencesDialog.ui" line="141"/>
         <source>Remove</source>
         <translation>Eltávolít</translation>
     </message>
@@ -999,182 +1102,182 @@ Az API-üzenete: „%1”</translation>
     <name>GeoImageDock</name>
     <message>
         <location filename="../src/Docks/GeoImageDock.cpp" line="85"/>
-        <location filename="../src/Docks/GeoImageDock.cpp" line="903"/>
+        <location filename="../src/Docks/GeoImageDock.cpp" line="913"/>
         <source>Geo Images</source>
         <translation>Földképek</translation>
     </message>
     <message>
-        <location filename="../src/Docks/GeoImageDock.cpp" line="342"/>
-        <location filename="../src/Docks/GeoImageDock.cpp" line="447"/>
+        <location filename="../src/Docks/GeoImageDock.cpp" line="354"/>
+        <location filename="../src/Docks/GeoImageDock.cpp" line="457"/>
         <source>Load geotagged Images</source>
         <translation>Földcímkés képek betöltése</translation>
     </message>
     <message>
-        <location filename="../src/Docks/GeoImageDock.cpp" line="343"/>
-        <location filename="../src/Docks/GeoImageDock.cpp" line="448"/>
+        <location filename="../src/Docks/GeoImageDock.cpp" line="355"/>
+        <location filename="../src/Docks/GeoImageDock.cpp" line="458"/>
         <source>Select the layer to which the images belong:</source>
         <translation>Válassza ki, melyik réteghez tartoznak a képek:</translation>
     </message>
     <message>
-        <location filename="../src/Docks/GeoImageDock.cpp" line="720"/>
+        <location filename="../src/Docks/GeoImageDock.cpp" line="730"/>
         <source>Wrong image?</source>
         <translation>Rossz kép?</translation>
     </message>
     <message>
-        <location filename="../src/Docks/GeoImageDock.cpp" line="469"/>
+        <location filename="../src/Docks/GeoImageDock.cpp" line="479"/>
         <source>Loading Images ...</source>
         <translation>Képeket töltök be …</translation>
     </message>
     <message>
-        <location filename="../src/Docks/GeoImageDock.cpp" line="469"/>
+        <location filename="../src/Docks/GeoImageDock.cpp" line="479"/>
         <source>Abort loading</source>
         <translation>Betöltést megszakít</translation>
     </message>
     <message>
-        <location filename="../src/Docks/GeoImageDock.cpp" line="642"/>
+        <location filename="../src/Docks/GeoImageDock.cpp" line="652"/>
         <source>Specify offset</source>
         <translation>Adjon meg eltolást</translation>
     </message>
     <message>
-        <location filename="../src/Docks/GeoImageDock.cpp" line="644"/>
+        <location filename="../src/Docks/GeoImageDock.cpp" line="654"/>
         <source>Position images more to the:</source>
         <translation>Helyezze a képeket inkább:</translation>
     </message>
     <message>
-        <location filename="../src/Docks/GeoImageDock.cpp" line="645"/>
+        <location filename="../src/Docks/GeoImageDock.cpp" line="655"/>
         <source>end of the track</source>
         <translation>a nyom végére</translation>
     </message>
     <message>
-        <location filename="../src/Docks/GeoImageDock.cpp" line="646"/>
+        <location filename="../src/Docks/GeoImageDock.cpp" line="656"/>
         <source>beginning of the track</source>
         <translation>a nyom elejére</translation>
     </message>
     <message>
-        <location filename="../src/Docks/GeoImageDock.cpp" line="650"/>
+        <location filename="../src/Docks/GeoImageDock.cpp" line="660"/>
         <source>hh:mm:ss</source>
         <translation>óó:pp:mp</translation>
     </message>
     <message>
-        <location filename="../src/Docks/GeoImageDock.cpp" line="715"/>
+        <location filename="../src/Docks/GeoImageDock.cpp" line="725"/>
         <source>ss &apos;seconds&apos;</source>
         <translation>mp „másodperc”</translation>
     </message>
     <message>
-        <location filename="../src/Docks/GeoImageDock.cpp" line="717"/>
+        <location filename="../src/Docks/GeoImageDock.cpp" line="727"/>
         <source>mm &apos;minutes and&apos; ss &apos;seconds&apos;</source>
         <translation>pp „perc és&apos; mp &apos;másodperc&apos;</translation>
     </message>
     <message>
-        <location filename="../src/Docks/GeoImageDock.cpp" line="719"/>
+        <location filename="../src/Docks/GeoImageDock.cpp" line="729"/>
         <source>hh &apos;hours,&apos; mm &apos;minutes and&apos; ss &apos;seconds&apos;</source>
         <translation>óó „óra” pp „perc&apos; mp „másodperc”</translation>
     </message>
     <message>
-        <location filename="../src/Docks/GeoImageDock.cpp" line="721"/>
+        <location filename="../src/Docks/GeoImageDock.cpp" line="731"/>
         <source>Image &quot;%1&quot; was taken %2 before the next trackpoint was recorded.
 Do you still want to use it?</source>
         <translation>„%1” képet %2 idővel a következő nyompont rögzítése előtt készítették.
 Még mindig akarja használni?</translation>
     </message>
     <message>
-        <location filename="../src/Docks/GeoImageDock.cpp" line="722"/>
+        <location filename="../src/Docks/GeoImageDock.cpp" line="732"/>
         <source>Image &quot;%1&quot; was taken %2 after the last trackpoint was recorded.
 Do you still want to use it?</source>
         <translation>„%1” képet %2 idővel a következő nyompont rögzítése után készítették.
 Még mindig akarja használni?</translation>
     </message>
     <message>
-        <location filename="../src/Docks/GeoImageDock.cpp" line="93"/>
-        <location filename="../src/Docks/GeoImageDock.cpp" line="905"/>
+        <location filename="../src/Docks/GeoImageDock.cpp" line="94"/>
+        <location filename="../src/Docks/GeoImageDock.cpp" line="915"/>
         <source>Remove Images</source>
         <translation>Képekeket távolít el</translation>
     </message>
     <message>
-        <location filename="../src/Docks/GeoImageDock.cpp" line="94"/>
-        <location filename="../src/Docks/GeoImageDock.cpp" line="906"/>
+        <location filename="../src/Docks/GeoImageDock.cpp" line="95"/>
+        <location filename="../src/Docks/GeoImageDock.cpp" line="916"/>
         <source>Copy filename to clipboard</source>
         <translation>Fájlnevet vágólapra másol</translation>
     </message>
     <message>
-        <location filename="../src/Docks/GeoImageDock.cpp" line="481"/>
+        <location filename="../src/Docks/GeoImageDock.cpp" line="491"/>
         <source>No such file</source>
         <translation>Nincs ilyen fájl</translation>
     </message>
     <message>
-        <location filename="../src/Docks/GeoImageDock.cpp" line="481"/>
+        <location filename="../src/Docks/GeoImageDock.cpp" line="491"/>
         <source>Can&apos;t find image &quot;%1&quot;.</source>
         <translation>Nem találom „%1” képet.</translation>
     </message>
     <message>
-        <location filename="../src/Docks/GeoImageDock.cpp" line="489"/>
-        <location filename="../src/Docks/GeoImageDock.cpp" line="491"/>
-        <location filename="../src/Docks/GeoImageDock.cpp" line="847"/>
-        <location filename="../src/Docks/GeoImageDock.cpp" line="851"/>
+        <location filename="../src/Docks/GeoImageDock.cpp" line="499"/>
+        <location filename="../src/Docks/GeoImageDock.cpp" line="501"/>
+        <location filename="../src/Docks/GeoImageDock.cpp" line="857"/>
+        <location filename="../src/Docks/GeoImageDock.cpp" line="861"/>
         <source>Exiv2</source>
         <translation>Exiv2</translation>
     </message>
     <message>
-        <location filename="../src/Docks/GeoImageDock.cpp" line="489"/>
+        <location filename="../src/Docks/GeoImageDock.cpp" line="499"/>
         <source>Error while opening &quot;%2&quot;:
 %1</source>
         <translation>Hiba „%2” fájlt megnyitván:
 %1</translation>
     </message>
     <message>
-        <location filename="../src/Docks/GeoImageDock.cpp" line="708"/>
+        <location filename="../src/Docks/GeoImageDock.cpp" line="718"/>
         <source>No TrackPoints</source>
         <translation>Nincs nyompont</translation>
     </message>
     <message>
-        <location filename="../src/Docks/GeoImageDock.cpp" line="708"/>
+        <location filename="../src/Docks/GeoImageDock.cpp" line="718"/>
         <source>No TrackPoints found for image &quot;%1&quot;</source>
         <translation>Nincs nyompont „%1” képhez</translation>
     </message>
     <message>
-        <location filename="../src/Docks/GeoImageDock.cpp" line="491"/>
-        <location filename="../src/Docks/GeoImageDock.cpp" line="851"/>
+        <location filename="../src/Docks/GeoImageDock.cpp" line="501"/>
+        <location filename="../src/Docks/GeoImageDock.cpp" line="861"/>
         <source>Error while loading EXIF-data from &quot;%1&quot;.</source>
         <translation>Hiba az EXIF-adatokat betöltvén „%1” fájlból.</translation>
     </message>
     <message>
-        <location filename="../src/Docks/GeoImageDock.cpp" line="847"/>
+        <location filename="../src/Docks/GeoImageDock.cpp" line="857"/>
         <source>Error while opening &quot;%1&quot;:
 %2</source>
         <translation>Hiba „%1” megnyitásakor:
 %2</translation>
     </message>
     <message>
-        <location filename="../src/Docks/GeoImageDock.cpp" line="95"/>
-        <location filename="../src/Docks/GeoImageDock.cpp" line="907"/>
+        <location filename="../src/Docks/GeoImageDock.cpp" line="96"/>
+        <location filename="../src/Docks/GeoImageDock.cpp" line="917"/>
         <source>Select next image</source>
         <translation>Következő kép</translation>
     </message>
     <message>
-        <location filename="../src/Docks/GeoImageDock.cpp" line="96"/>
+        <location filename="../src/Docks/GeoImageDock.cpp" line="97"/>
         <source>PgDown</source>
         <translation>PgDown</translation>
     </message>
     <message>
-        <location filename="../src/Docks/GeoImageDock.cpp" line="97"/>
-        <location filename="../src/Docks/GeoImageDock.cpp" line="908"/>
+        <location filename="../src/Docks/GeoImageDock.cpp" line="99"/>
+        <location filename="../src/Docks/GeoImageDock.cpp" line="918"/>
         <source>Select previous image</source>
         <translation>Előző kép</translation>
     </message>
     <message>
-        <location filename="../src/Docks/GeoImageDock.cpp" line="98"/>
+        <location filename="../src/Docks/GeoImageDock.cpp" line="100"/>
         <source>PgUp</source>
         <translation>PgUp</translation>
     </message>
     <message>
-        <location filename="../src/Docks/GeoImageDock.cpp" line="356"/>
-        <location filename="../src/Docks/GeoImageDock.cpp" line="461"/>
+        <location filename="../src/Docks/GeoImageDock.cpp" line="368"/>
+        <location filename="../src/Docks/GeoImageDock.cpp" line="471"/>
         <source>Layer is readonly</source>
         <translation>A réteg csak olvasható</translation>
     </message>
     <message>
-        <location filename="../src/Docks/GeoImageDock.cpp" line="357"/>
-        <location filename="../src/Docks/GeoImageDock.cpp" line="462"/>
+        <location filename="../src/Docks/GeoImageDock.cpp" line="369"/>
+        <location filename="../src/Docks/GeoImageDock.cpp" line="472"/>
         <source>The used layer is not writeable. Should it be made writeable?
 If not, you can&apos;t load images that belongs to it.</source>
         <translation>A használt réteg nem írható. Írhatóvá tegyem?
@@ -1201,25 +1304,25 @@ Ha nem az, akkor nem lehet hozzá tartozó képeket betölteni.</translation>
         <translation>URL:</translation>
     </message>
     <message>
-        <location filename="../src/Docks/GeoImageDock.cpp" line="92"/>
-        <location filename="../src/Docks/GeoImageDock.cpp" line="904"/>
+        <location filename="../src/Docks/GeoImageDock.cpp" line="93"/>
+        <location filename="../src/Docks/GeoImageDock.cpp" line="914"/>
         <source>Center map</source>
         <translation>Térképet középre</translation>
     </message>
     <message>
-        <location filename="../src/Docks/GeoImageDock.cpp" line="99"/>
-        <location filename="../src/Docks/GeoImageDock.cpp" line="909"/>
+        <location filename="../src/Docks/GeoImageDock.cpp" line="102"/>
+        <location filename="../src/Docks/GeoImageDock.cpp" line="919"/>
         <source>Save geotagged image...</source>
         <translation>Földcímkés képet met…</translation>
     </message>
     <message>
-        <location filename="../src/Docks/GeoImageDock.cpp" line="298"/>
-        <location filename="../src/Docks/GeoImageDock.cpp" line="403"/>
+        <location filename="../src/Docks/GeoImageDock.cpp" line="310"/>
+        <location filename="../src/Docks/GeoImageDock.cpp" line="413"/>
         <source>Photo layer</source>
         <translation>Fénykép réteg</translation>
     </message>
     <message>
-        <location filename="../src/Docks/GeoImageDock.cpp" line="774"/>
+        <location filename="../src/Docks/GeoImageDock.cpp" line="784"/>
         <source>JPEG Images (*.jpg)</source>
         <translation>JPEG-képek (*.jpg)</translation>
     </message>
@@ -1227,28 +1330,28 @@ Ha nem az, akkor nem lehet hozzá tartozó képeket betölteni.</translation>
 <context>
     <name>GotoDialog</name>
     <message>
-        <location filename="../src/GotoDialog.cpp" line="109"/>
+        <location filename="../src/GotoDialog.cpp" line="104"/>
         <source>Invalid OSM url</source>
         <translation>Érvénytelen OSM URL</translation>
     </message>
     <message>
-        <location filename="../src/GotoDialog.cpp" line="110"/>
+        <location filename="../src/GotoDialog.cpp" line="105"/>
         <source>The specified url is invalid!</source>
         <translation>Érvénytelen a megadott URL!</translation>
     </message>
     <message>
-        <location filename="../src/GotoDialog.cpp" line="118"/>
-        <location filename="../src/GotoDialog.cpp" line="127"/>
+        <location filename="../src/GotoDialog.cpp" line="113"/>
+        <location filename="../src/GotoDialog.cpp" line="122"/>
         <source>Invalid Coordinates format</source>
         <translation>Érvénytelen koordináta-típus</translation>
     </message>
     <message>
-        <location filename="../src/GotoDialog.cpp" line="119"/>
+        <location filename="../src/GotoDialog.cpp" line="114"/>
         <source>Coordinates must be: &apos;&lt;left lon&gt;, &lt;bottom lat&gt;, &lt;right lon&gt;, &lt;top lat&gt;&apos;</source>
         <translation>Kordináta &apos;&lt;bal hossz&gt;, &lt;alsó szél&gt;, &lt;jobb hossz&gt;, &lt;felső szél&gt;&apos; kell legyen</translation>
     </message>
     <message>
-        <location filename="../src/GotoDialog.cpp" line="128"/>
+        <location filename="../src/GotoDialog.cpp" line="123"/>
         <source>Coordinates must be: &apos;&lt;center lat&gt;, &lt;center lon&gt;, &lt;span lat&gt;, &lt;span lon&gt;&apos;</source>
         <translation>Kordináta &apos;&lt;közép hossz&gt;, &lt;közép szél&gt;, &lt;kit szél&gt;, &lt;kit hossz&gt;&apos; kell legyen</translation>
     </message>
@@ -1302,62 +1405,120 @@ Ha nem az, akkor nem lehet hozzá tartozó képeket betölteni.</translation>
 <context>
     <name>ImageLayerWidget</name>
     <message>
-        <location filename="../src/Layers/LayerWidget.cpp" line="287"/>
+        <location filename="../src/Layers/LayerWidget.cpp" line="309"/>
         <source>None</source>
         <translation>Nincs</translation>
     </message>
     <message>
-        <location filename="../src/Layers/LayerWidget.cpp" line="293"/>
+        <location filename="../src/Layers/LayerWidget.cpp" line="315"/>
         <source>Shape adapter</source>
         <translation>Shape-átalakító</translation>
     </message>
     <message>
-        <location filename="../src/Layers/LayerWidget.cpp" line="371"/>
+        <location filename="../src/Layers/LayerWidget.cpp" line="384"/>
+        <source>Zoom</source>
+        <translation>Nagyít</translation>
+    </message>
+    <message>
+        <location filename="../src/Layers/LayerWidget.cpp" line="391"/>
+        <source>Set view projection to layer&apos;s</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/Layers/LayerWidget.cpp" line="396"/>
+        <source>Close</source>
+        <translation>Bezár</translation>
+    </message>
+    <message>
+        <location filename="../src/Layers/LayerWidget.cpp" line="404"/>
         <source>WMS adapter</source>
         <translation>WMS-átalakító</translation>
     </message>
     <message>
-        <location filename="../src/Layers/LayerWidget.cpp" line="387"/>
+        <location filename="../src/Layers/LayerWidget.cpp" line="420"/>
         <source>TMS adapter</source>
         <translation>TMS-átalakító</translation>
+    </message>
+    <message>
+        <location filename="../src/Layers/LayerWidget.cpp" line="436"/>
+        <source>Plugins</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>ImageMapLayer</name>
     <message>
-        <location filename="../src/Layers/ImageMapLayer.cpp" line="66"/>
-        <location filename="../src/Layers/ImageMapLayer.cpp" line="156"/>
-        <location filename="../src/Layers/ImageMapLayer.cpp" line="193"/>
+        <location filename="../src/Layers/ImageMapLayer.cpp" line="73"/>
+        <location filename="../src/Layers/ImageMapLayer.cpp" line="163"/>
+        <location filename="../src/Layers/ImageMapLayer.cpp" line="202"/>
+        <location filename="../src/Layers/ImageMapLayer.cpp" line="272"/>
         <source>Map - None</source>
         <translation>Térkép – nincs</translation>
     </message>
     <message>
-        <location filename="../src/Layers/ImageMapLayer.cpp" line="167"/>
+        <location filename="../src/Layers/ImageMapLayer.cpp" line="174"/>
         <source>Map - WMS - %1</source>
         <translation>Térkép – WMS - %1</translation>
     </message>
     <message>
-        <location filename="../src/Layers/ImageMapLayer.cpp" line="188"/>
+        <location filename="../src/Layers/ImageMapLayer.cpp" line="196"/>
         <source>Map - TMS - %1</source>
         <translation>Térkép – TMS - %1</translation>
     </message>
     <message>
-        <location filename="../src/Layers/ImageMapLayer.cpp" line="209"/>
+        <location filename="../src/Layers/ImageMapLayer.cpp" line="218"/>
         <source>Map - OSB Background</source>
         <translation>Térkép – OSB-háttér</translation>
     </message>
     <message>
-        <location filename="../src/Layers/ImageMapLayer.cpp" line="215"/>
+        <location filename="../src/Layers/ImageMapLayer.cpp" line="224"/>
         <source>Map - %1</source>
         <translation>Térkép – %1</translation>
     </message>
     <message>
-        <location filename="../src/Layers/ImageMapLayer.cpp" line="172"/>
+        <location filename="../src/Layers/ImageMapLayer.cpp" line="246"/>
+        <source>Licensing Terms: %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/Layers/ImageMapLayer.cpp" line="253"/>
+        <source>License Terms not accepted</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/Layers/ImageMapLayer.cpp" line="253"/>
+        <source>You have not ticked the checkbox expressing your agreement with the licensing terms.
+As such, you won&apos;t be able to use this source as a map layer.
+Is it really what you meant?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/Layers/ImageMapLayer.cpp" line="1005"/>
+        <source>Server</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/Layers/ImageMapLayer.cpp" line="1008"/>
+        <source>Tile size</source>
+        <translation type="unfinished">Csempeméret</translation>
+    </message>
+    <message>
+        <location filename="../src/Layers/ImageMapLayer.cpp" line="1010"/>
+        <source>Min/Max zoom</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/Layers/ImageMapLayer.cpp" line="1014"/>
+        <source>Projection</source>
+        <translation type="unfinished">Leképezés</translation>
+    </message>
+    <message>
+        <location filename="../src/Layers/ImageMapLayer.cpp" line="179"/>
         <source>Map - WMS-C - %1</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../src/Layers/ImageMapLayer.cpp" line="177"/>
+        <location filename="../src/Layers/ImageMapLayer.cpp" line="184"/>
         <source>Map - WMS-Tiled - %1</source>
         <translation></translation>
     </message>
@@ -1514,75 +1675,83 @@ p, li { white-space: pre-wrap; }
         <translation>Szélesség</translation>
     </message>
     <message>
-        <location filename="../src/ImportExport/ImportCSVDialog.cpp" line="302"/>
+        <location filename="../src/ImportExport/ImportCSVDialog.cpp" line="305"/>
         <source>Invalid projection</source>
         <translation>Érvénytelen leképezés</translation>
     </message>
     <message>
-        <location filename="../src/ImportExport/ImportCSVDialog.cpp" line="302"/>
+        <location filename="../src/ImportExport/ImportCSVDialog.cpp" line="305"/>
         <source>Unable to set projection.</source>
         <translation>Nem tudok leképezést beállítani.</translation>
     </message>
     <message>
-        <location filename="../src/ImportExport/ImportCSVDialog.cpp" line="321"/>
+        <location filename="../src/ImportExport/ImportCSVDialog.cpp" line="324"/>
         <source>No coordinates</source>
         <translation>Nincs koordináta</translation>
     </message>
     <message>
-        <location filename="../src/ImportExport/ImportCSVDialog.cpp" line="322"/>
+        <location filename="../src/ImportExport/ImportCSVDialog.cpp" line="325"/>
         <source>Latitude or Longitude field missing. It will be impossible to import the file.
 Do you really want to exit?</source>
         <translation>Szélesség vagy hosszúság mező hiányzik. Így képtelenség behozni a fájlt.
 Biztosan ki akar lépni?</translation>
     </message>
     <message>
-        <location filename="../src/ImportExport/ImportCSVDialog.cpp" line="359"/>
+        <location filename="../src/ImportExport/ImportCSVDialog.cpp" line="362"/>
         <source>Load CSV import settings</source>
         <translation>CVS-behozatal beállítás betöltése</translation>
     </message>
     <message>
-        <location filename="../src/ImportExport/ImportCSVDialog.cpp" line="359"/>
-        <location filename="../src/ImportExport/ImportCSVDialog.cpp" line="469"/>
+        <location filename="../src/ImportExport/ImportCSVDialog.cpp" line="362"/>
+        <location filename="../src/ImportExport/ImportCSVDialog.cpp" line="472"/>
         <source>Merkaartor import settings (*.mis)</source>
         <translation>Merkaartor behozatal beállítás (*.mis)</translation>
     </message>
     <message>
-        <location filename="../src/ImportExport/ImportCSVDialog.cpp" line="365"/>
-        <location filename="../src/ImportExport/ImportCSVDialog.cpp" line="378"/>
+        <location filename="../src/ImportExport/ImportCSVDialog.cpp" line="368"/>
+        <location filename="../src/ImportExport/ImportCSVDialog.cpp" line="381"/>
         <source>Invalid file</source>
         <translation>Érvénytelen fájl</translation>
     </message>
     <message>
-        <location filename="../src/ImportExport/ImportCSVDialog.cpp" line="365"/>
+        <location filename="../src/ImportExport/ImportCSVDialog.cpp" line="368"/>
         <source>%1 could not be opened.</source>
         <translation>%1 fájlt nem tudtam megnyitni.</translation>
     </message>
     <message>
-        <location filename="../src/ImportExport/ImportCSVDialog.cpp" line="378"/>
+        <location filename="../src/ImportExport/ImportCSVDialog.cpp" line="381"/>
         <source>%1 is not a CSV import settings file</source>
         <translation>%1 men CSV-behozatal beállítás fájl</translation>
     </message>
     <message>
-        <location filename="../src/ImportExport/ImportCSVDialog.cpp" line="469"/>
+        <location filename="../src/ImportExport/ImportCSVDialog.cpp" line="472"/>
         <source>Save CSV import settings</source>
         <translation>CSV-hehozatal beállítás mentése</translation>
     </message>
     <message>
-        <location filename="../src/ImportExport/ImportCSVDialog.cpp" line="478"/>
+        <location filename="../src/ImportExport/ImportCSVDialog.cpp" line="481"/>
         <source>Unable to open save import settings</source>
         <translation>Képtelen vagyok megnyitni a mentés behozatal-beállítások fájlját</translation>
     </message>
     <message>
-        <location filename="../src/ImportExport/ImportCSVDialog.cpp" line="478"/>
+        <location filename="../src/ImportExport/ImportCSVDialog.cpp" line="481"/>
         <source>%1 could not be opened for writing.</source>
         <translation>Nem tudtam %1 fájlt írásra megnyitni.</translation>
+    </message>
+</context>
+<context>
+    <name>ImportExportSHP</name>
+    <message>
+        <location filename="../src/ImportExport/ImportExportSHP.cpp" line="247"/>
+        <source>Unable to set projection; please specify one</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>InfoDock</name>
     <message>
         <location filename="../src/Docks/InfoDock.cpp" line="24"/>
-        <location filename="../src/Docks/InfoDock.cpp" line="94"/>
+        <location filename="../src/Docks/InfoDock.cpp" line="95"/>
         <source>Info</source>
         <translation>Infó</translation>
     </message>
@@ -1590,109 +1759,158 @@ Biztosan ki akar lépni?</translation>
 <context>
     <name>Layer</name>
     <message>
-        <location filename="../src/Layers/Layer.cpp" line="566"/>
+        <location filename="../src/Layers/Layer.cpp" line="621"/>
         <source>Size</source>
         <translation>Méret</translation>
     </message>
     <message numerus="yes">
-        <location filename="../src/Layers/Layer.cpp" line="566"/>
+        <location filename="../src/Layers/Layer.cpp" line="621"/>
         <source>%n features</source>
         <translation>
             <numerusform>%n dolog</numerusform>
         </translation>
     </message>
+    <message>
+        <location filename="../src/Layers/Layer.cpp" line="638"/>
+        <source>Features</source>
+        <translation>Dolgok</translation>
+    </message>
 </context>
 <context>
     <name>LayerDock</name>
     <message>
-        <location filename="../src/Docks/LayerDock.cpp" line="364"/>
+        <location filename="../src/Docks/LayerDock.cpp" line="384"/>
         <source>Layers</source>
         <translation>Rétegek</translation>
     </message>
     <message>
-        <location filename="../src/Docks/LayerDock.cpp" line="370"/>
+        <location filename="../src/Docks/LayerDock.cpp" line="390"/>
         <source>All</source>
         <translation>Mind</translation>
     </message>
     <message>
-        <location filename="../src/Docks/LayerDock.cpp" line="371"/>
-        <source>Default</source>
-        <translation>Alap</translation>
-    </message>
-    <message>
-        <location filename="../src/Docks/LayerDock.cpp" line="372"/>
-        <source>OSM</source>
-        <translation>OSM</translation>
-    </message>
-    <message>
-        <location filename="../src/Docks/LayerDock.cpp" line="373"/>
+        <location filename="../src/Docks/LayerDock.cpp" line="393"/>
         <source>Tracks</source>
         <translation>Nyomok</translation>
     </message>
     <message>
-        <location filename="../src/Docks/LayerDock.cpp" line="222"/>
-        <location filename="../src/Docks/LayerDock.cpp" line="321"/>
+        <location filename="../src/Docks/LayerDock.cpp" line="236"/>
+        <location filename="../src/Docks/LayerDock.cpp" line="341"/>
         <source>Show All</source>
         <translation>Mindent mutat</translation>
     </message>
     <message>
-        <location filename="../src/Docks/LayerDock.cpp" line="227"/>
-        <location filename="../src/Docks/LayerDock.cpp" line="325"/>
+        <location filename="../src/Docks/LayerDock.cpp" line="241"/>
+        <location filename="../src/Docks/LayerDock.cpp" line="345"/>
         <source>Hide All</source>
         <translation>Mindent rejt</translation>
     </message>
     <message>
-        <location filename="../src/Docks/LayerDock.cpp" line="234"/>
+        <location filename="../src/Docks/LayerDock.cpp" line="248"/>
         <source>Readonly All</source>
         <translation>Minden csak olvasható</translation>
     </message>
     <message>
-        <location filename="../src/Docks/LayerDock.cpp" line="239"/>
+        <location filename="../src/Docks/LayerDock.cpp" line="253"/>
         <source>Readonly None</source>
         <translation>Semmi sem csak olvasható</translation>
     </message>
     <message>
-        <location filename="../src/Docks/LayerDock.cpp" line="246"/>
+        <location filename="../src/Docks/LayerDock.cpp" line="260"/>
         <source>Close</source>
         <translation>Bezár</translation>
+    </message>
+    <message>
+        <location filename="../src/Docks/LayerDock.cpp" line="391"/>
+        <source>Map</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/Docks/LayerDock.cpp" line="392"/>
+        <source>Draw</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/Docks/LayerDock.cpp" line="480"/>
+        <source>Reset Layers to default</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>LayerWidget</name>
     <message>
-        <location filename="../src/Layers/LayerWidget.cpp" line="174"/>
+        <location filename="../src/Layers/LayerWidget.cpp" line="206"/>
+        <source>Layer CLose: Dirty objects present</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/Layers/LayerWidget.cpp" line="207"/>
+        <source>There are dirty features on this layer.
+Are you sure you want to close it? (no Undo possible)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/Layers/LayerWidget.cpp" line="212"/>
+        <source>Layer CLose: Not empty</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/Layers/LayerWidget.cpp" line="213"/>
+        <source>Are you sure you want to close this layer? (no Undo possible)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/Layers/LayerWidget.cpp" line="178"/>
         <source>Low</source>
         <translation>Kis</translation>
     </message>
     <message>
-        <location filename="../src/Layers/LayerWidget.cpp" line="174"/>
+        <location filename="../src/Layers/LayerWidget.cpp" line="178"/>
         <source>High</source>
         <translation>Nagy</translation>
     </message>
     <message>
-        <location filename="../src/Layers/LayerWidget.cpp" line="174"/>
+        <location filename="../src/Layers/LayerWidget.cpp" line="178"/>
         <source>Opaque</source>
         <translation>Teljes</translation>
     </message>
     <message>
-        <location filename="../src/Layers/LayerWidget.cpp" line="177"/>
+        <location filename="../src/Layers/LayerWidget.cpp" line="181"/>
         <source>Opacity</source>
         <translation>Takarás</translation>
     </message>
     <message>
-        <location filename="../src/Layers/LayerWidget.cpp" line="160"/>
+        <location filename="../src/Layers/LayerWidget.cpp" line="164"/>
         <source>Visible</source>
         <translation>Látható</translation>
     </message>
     <message>
-        <location filename="../src/Layers/LayerWidget.cpp" line="166"/>
+        <location filename="../src/Layers/LayerWidget.cpp" line="170"/>
         <source>Readonly</source>
         <translation>Csak olvasható</translation>
     </message>
     <message>
-        <location filename="../src/Layers/LayerWidget.cpp" line="192"/>
-        <source>Zoom</source>
-        <translation>Nagyít</translation>
+        <location filename="../src/Layers/LayerWidget.ui" line="14"/>
+        <source>Form</source>
+        <translation>Űrlap</translation>
+    </message>
+</context>
+<context>
+    <name>LicenseDisplayDialog</name>
+    <message>
+        <location filename="../src/Layers/LicenseDisplayDialog.ui" line="14"/>
+        <source>Licensing Terms</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/Layers/LicenseDisplayDialog.ui" line="21"/>
+        <source>about:blank</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/Layers/LicenseDisplayDialog.ui" line="29"/>
+        <source>I have read and agree to the licensing terms</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1706,58 +1924,56 @@ Biztosan ki akar lépni?</translation>
 <context>
     <name>Main</name>
     <message>
-        <location filename="../src/Main.cpp" line="178"/>
-        <source>Merkaartor v%1%2(%3)
+        <location filename="../src/Main.cpp" line="206"/>
+        <source>%1 v%2%3(%4)
 Loading plugins...</source>
-        <translation>Merkaartor %1%2(%3)
-Betöltöm a dugaszokat…</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Main.cpp" line="210"/>
-        <source>Merkaartor v%1%2(%3)
+        <location filename="../src/Main.cpp" line="235"/>
+        <source>%1 v%2%3(%4)
 Initializing...</source>
-        <translation>Merkaartor %1%2(%3)
-Felkészülök…</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>MainWindow</name>
     <message>
-        <location filename="../src/MainWindow.cpp" line="966"/>
+        <location filename="../src/MainWindow.cpp" line="1116"/>
         <source>Open track file</source>
         <translation>Nyomfájl megnyitása</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="992"/>
-        <location filename="../src/Sync/SyncOSM.cpp" line="43"/>
+        <location filename="../src/MainWindow.cpp" line="1142"/>
+        <location filename="../src/Sync/SyncOSM.cpp" line="38"/>
         <source>Unsaved changes</source>
         <translation>Mentetlen változások</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="993"/>
+        <location filename="../src/MainWindow.cpp" line="1143"/>
         <source>The current map contains unsaved changes that will be lost when starting a new one.
 Do you want to cancel starting a new map or continue and discard the old changes?</source>
         <translation>A térképen elmentetlen változások vannak, amiket el fog veszíteni, amikor újat kezd.
 Mégsem akar új térképet, vagy folytatja eldobva a régi változásokat?</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1147"/>
+        <location filename="../src/MainWindow.cpp" line="1303"/>
         <source>No valid file</source>
         <translation>Nincs érvényes fájl</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1147"/>
-        <location filename="../src/MainWindow.cpp" line="2294"/>
+        <location filename="../src/MainWindow.cpp" line="1303"/>
+        <location filename="../src/MainWindow.cpp" line="2692"/>
         <source>%1 could not be opened.</source>
         <translation>%1 fájlt nem tudtam megnyitni.</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1311"/>
+        <location filename="../src/MainWindow.cpp" line="1472"/>
         <source>Upload OSM</source>
         <translation>Feltöltés OSM-be</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1311"/>
+        <location filename="../src/MainWindow.cpp" line="1472"/>
         <source>You don&apos;t seem to have specified your
 OpenStreetMap username and password.
 Do you want to do this now?</source>
@@ -1766,87 +1982,118 @@ OpenStreetMap azonosítóját és jelszavát.
 Meg akarja tenni ezt most?</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1332"/>
-        <location filename="../src/MainWindow.cpp" line="1346"/>
-        <location filename="../src/MainWindow.cpp" line="1370"/>
+        <location filename="../src/MainWindow.cpp" line="1494"/>
+        <location filename="../src/MainWindow.cpp" line="1508"/>
+        <location filename="../src/MainWindow.cpp" line="1532"/>
         <source>Error downloading</source>
         <translation>Hiba letöltéskor</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1332"/>
-        <location filename="../src/MainWindow.cpp" line="1346"/>
-        <location filename="../src/MainWindow.cpp" line="1370"/>
+        <location filename="../src/MainWindow.cpp" line="1494"/>
+        <location filename="../src/MainWindow.cpp" line="1508"/>
+        <location filename="../src/MainWindow.cpp" line="1532"/>
         <source>The map could not be downloaded</source>
         <translation>Nem tudtam letölteni a térképet</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1808"/>
+        <location filename="../src/MainWindow.cpp" line="2044"/>
         <source>Add Street Numbers</source>
         <translation>Utcaszámokat ad hozzá</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2020"/>
+        <location filename="../src/MainWindow.cpp" line="2321"/>
         <source>Save map style</source>
         <translation>Térképstílus mentése</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2020"/>
-        <location filename="../src/MainWindow.cpp" line="2031"/>
+        <location filename="../src/MainWindow.cpp" line="2321"/>
         <source>Merkaartor map style (*.mas)</source>
         <translation>Merkaartor-térképstílus (*.mas)</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2031"/>
+        <location filename="../src/MainWindow.cpp" line="2332"/>
         <source>Load map style</source>
         <translation>Térképstílus betöltése</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2375"/>
+        <location filename="../src/MainWindow.cpp" line="2333"/>
+        <source>Supported formats</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/MainWindow.cpp" line="2334"/>
+        <source>Merkaartor map style (*.mas)
+</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/MainWindow.cpp" line="2335"/>
+        <source>MapCSS stylesheet (*.css)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/MainWindow.cpp" line="2551"/>
+        <source>Save Merkaartor template document</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/MainWindow.cpp" line="2621"/>
+        <source>Unable to open save template document</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/MainWindow.cpp" line="2636"/>
+        <source>%1 is not a valid XML file.
+%2 at line %3, col %4</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/MainWindow.cpp" line="2742"/>
         <source>Export OSM</source>
         <translation>Kivitel OSM-be</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2375"/>
+        <location filename="../src/MainWindow.cpp" line="2742"/>
         <source>OSM Files (*.osm)</source>
         <translation>OSM-adatok (*.osm)</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2771"/>
+        <location filename="../src/MainWindow.cpp" line="3156"/>
         <source>Add Bookmark</source>
         <translation>Könyvjelző hozzáadása</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2772"/>
+        <location filename="../src/MainWindow.cpp" line="3157"/>
         <source>Specify the name of the bookmark.</source>
         <translation>Kérem adjon nevet a könyvjelzőnek.</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2775"/>
+        <location filename="../src/MainWindow.cpp" line="3160"/>
         <source>Invalid bookmark name</source>
         <translation>Érvénytelen könyvjelzőnév</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2776"/>
+        <location filename="../src/MainWindow.cpp" line="3161"/>
         <source>Bookmark cannot be blank.</source>
         <translation>A könyvjelző nem lehet üres.</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2780"/>
+        <location filename="../src/MainWindow.cpp" line="3165"/>
         <source>Warning: Bookmark name already exists</source>
         <translation>Figyelem: már van ilyen könyvjelzőnév</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2781"/>
+        <location filename="../src/MainWindow.cpp" line="3166"/>
         <source>Enter a new one, keep the same to overwrite or cancel.</source>
         <translation>Adjon meg újat, vagy tartsa meg ugyanazt, hogy felülírjam, vagy töröljem.</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2819"/>
+        <location filename="../src/MainWindow.cpp" line="3204"/>
         <source>Remove Bookmark</source>
         <translation>Könyvjelző eltávolítása</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2820"/>
+        <location filename="../src/MainWindow.cpp" line="3205"/>
         <source>Select the bookmark to remove.</source>
         <translation>Válassza ki az eltávolítandó könyvjelzőt.</translation>
     </message>
@@ -1867,358 +2114,453 @@ Meg akarja tenni ezt most?</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.ui" line="51"/>
-        <location filename="../src/MainWindow.ui" line="608"/>
+        <location filename="../src/MainWindow.ui" line="617"/>
         <source>&amp;Road</source>
         <translation>&amp;Út</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="66"/>
+        <location filename="../src/MainWindow.ui" line="68"/>
         <source>&amp;Edit</source>
         <translation>&amp;Szerkeszt</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="86"/>
+        <location filename="../src/MainWindow.ui" line="90"/>
         <source>&amp;View</source>
         <translation>&amp;Nézet</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="90"/>
+        <location filename="../src/MainWindow.ui" line="94"/>
         <source>&amp;Bookmarks</source>
         <translation>Kö&amp;nyvjelzők</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="98"/>
+        <location filename="../src/MainWindow.ui" line="102"/>
         <source>Set &amp;projection</source>
         <translation>&amp;Leképezés</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="127"/>
+        <location filename="../src/MainWindow.ui" line="124"/>
         <source>&amp;File</source>
         <translation>&amp;Adatok</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="175"/>
+        <location filename="../src/MainWindow.ui" line="176"/>
         <source>&amp;Style</source>
         <translation>&amp;Stílus</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="378"/>
+        <location filename="../src/MainWindow.ui" line="387"/>
         <source>&amp;Quit</source>
         <translation>&amp;Kilép</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="383"/>
+        <location filename="../src/MainWindow.ui" line="392"/>
         <source>&amp;About</source>
         <translation>&amp;Névjegy</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="392"/>
+        <location filename="../src/MainWindow.ui" line="401"/>
         <source>&amp;Open</source>
         <translation>&amp;Megnyit</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="395"/>
+        <location filename="../src/MainWindow.ui" line="404"/>
         <source>Create a new document and import a file</source>
         <translation>Új dokumentumot készít, és behoz egy fájlt</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="407"/>
+        <location filename="../src/MainWindow.ui" line="416"/>
         <source>Zoom &amp;all</source>
         <translation>&amp;Mindent kinagyít</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="410"/>
+        <location filename="../src/MainWindow.ui" line="419"/>
         <source>F2</source>
         <translation>F2</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="415"/>
+        <location filename="../src/MainWindow.ui" line="424"/>
         <source>Zoom &amp;window</source>
         <translation>&amp;Ablakot nagyít</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="418"/>
-        <location filename="../src/MainWindow.ui" line="421"/>
+        <location filename="../src/MainWindow.ui" line="427"/>
+        <location filename="../src/MainWindow.ui" line="430"/>
         <source>Zoom window</source>
         <translation>Ablakot nagyít</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="424"/>
+        <location filename="../src/MainWindow.ui" line="433"/>
         <source>F3</source>
         <translation>F3</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="433"/>
+        <location filename="../src/MainWindow.ui" line="442"/>
         <source>Zoom &amp;out</source>
         <translation>&amp;Kicsinyít</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="445"/>
+        <location filename="../src/MainWindow.ui" line="454"/>
         <source>Zoom &amp;in</source>
         <translation>&amp;Nagyít</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="448"/>
-        <location filename="../src/MainWindow.ui" line="451"/>
+        <location filename="../src/MainWindow.ui" line="457"/>
+        <location filename="../src/MainWindow.ui" line="460"/>
         <source>Zoom in</source>
         <translation>Nagyít</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="459"/>
-        <location filename="../src/MainWindow.ui" line="462"/>
-        <location filename="../src/MainWindow.ui" line="465"/>
+        <location filename="../src/MainWindow.ui" line="468"/>
+        <location filename="../src/MainWindow.ui" line="471"/>
+        <location filename="../src/MainWindow.ui" line="474"/>
         <source>Curved link</source>
         <translation>Görbe bekötő</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="477"/>
-        <location filename="../src/MainWindow.ui" line="996"/>
+        <location filename="../src/MainWindow.ui" line="486"/>
+        <location filename="../src/MainWindow.ui" line="1005"/>
         <source>&amp;Undo</source>
         <translation>&amp;Vissza</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="480"/>
+        <location filename="../src/MainWindow.ui" line="489"/>
         <source>Ctrl+Z</source>
         <translation>Ctrl+Z</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="489"/>
+        <location filename="../src/MainWindow.ui" line="498"/>
         <source>&amp;Redo</source>
         <translation>&amp;Újra</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="492"/>
+        <location filename="../src/MainWindow.ui" line="501"/>
         <source>Ctrl+Y</source>
         <translation>Ctrl+Y</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="516"/>
+        <location filename="../src/MainWindow.ui" line="525"/>
         <source>&amp;Import</source>
         <translation>&amp;Behoz</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="519"/>
+        <location filename="../src/MainWindow.ui" line="528"/>
         <source>Import a file into the current document</source>
         <translation>Fájlt hoz be a mostani dokumentumba</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="534"/>
+        <location filename="../src/MainWindow.ui" line="543"/>
         <source>Ctrl+D</source>
         <translation>Ctrl+D</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="539"/>
+        <location filename="../src/MainWindow.ui" line="548"/>
         <source>Link</source>
         <translation>Bekötő</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="542"/>
-        <location filename="../src/MainWindow.ui" line="545"/>
+        <location filename="../src/MainWindow.ui" line="551"/>
+        <location filename="../src/MainWindow.ui" line="554"/>
         <source>Create link</source>
         <translation>Bekötőt készít</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="548"/>
+        <location filename="../src/MainWindow.ui" line="557"/>
         <source>L</source>
         <translation>L</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="563"/>
+        <location filename="../src/MainWindow.ui" line="572"/>
         <source>Esc</source>
         <translation>Esc</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="578"/>
+        <location filename="../src/MainWindow.ui" line="587"/>
         <source>Ctrl+U</source>
         <translation>Ctrl+U</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="590"/>
+        <location filename="../src/MainWindow.ui" line="599"/>
         <source>R&amp;emove</source>
         <translation>&amp;Töröl</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="596"/>
+        <location filename="../src/MainWindow.ui" line="605"/>
         <source>Del</source>
         <translation>Del</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="982"/>
+        <location filename="../src/MainWindow.ui" line="991"/>
         <source>&amp;Spread</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="985"/>
+        <location filename="../src/MainWindow.ui" line="994"/>
         <source>Spread nodes</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="988"/>
+        <location filename="../src/MainWindow.ui" line="997"/>
         <source>Align and spread selected nodes equally.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1469"/>
+        <location filename="../src/MainWindow.ui" line="1475"/>
         <source>&amp;WMS Servers Editor...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1474"/>
+        <location filename="../src/MainWindow.ui" line="1480"/>
         <source>&amp;TMS Servers Editor...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1553"/>
+        <location filename="../src/MainWindow.ui" line="1551"/>
         <source>Add street &amp;numbers (Karlsruhe scheme)</source>
         <translation>Utca&amp;számokat ad hozzá (Karlsruhe-minta)</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1641"/>
+        <location filename="../src/MainWindow.ui" line="1639"/>
         <source>&amp;Filters Editor...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1649"/>
+        <location filename="../src/MainWindow.ui" line="1647"/>
         <source>&amp;None</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1658"/>
+        <location filename="../src/MainWindow.ui" line="1656"/>
+        <source>&amp;Join Areas</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/MainWindow.ui" line="1659"/>
+        <source>Join touching areas</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/MainWindow.ui" line="1662"/>
+        <source>Join areas which are touching.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/MainWindow.ui" line="1671"/>
         <source>&amp;Split Area</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1661"/>
+        <location filename="../src/MainWindow.ui" line="1674"/>
         <source>Split area between two nodes</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1664"/>
+        <location filename="../src/MainWindow.ui" line="1677"/>
         <source>Split a selected area between two selected nodes into two separates areas.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1673"/>
+        <location filename="../src/MainWindow.ui" line="1686"/>
         <source>&amp;Terrace</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1676"/>
+        <location filename="../src/MainWindow.ui" line="1689"/>
         <source>Terrace area into residences</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1679"/>
+        <location filename="../src/MainWindow.ui" line="1692"/>
         <source>Split a selected area into terraced residences.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1684"/>
+        <location filename="../src/MainWindow.ui" line="1697"/>
         <source>Toolbar Editor...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="209"/>
-        <location filename="../src/MainWindow.ui" line="626"/>
+        <location filename="../src/MainWindow.ui" line="1706"/>
+        <source>A&amp;xis Align</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/MainWindow.ui" line="1709"/>
+        <source>Align edges to regular axes</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/MainWindow.ui" line="1712"/>
+        <source>Align edges to a certain number of regularly spaced axes.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/MainWindow.ui" line="1717"/>
+        <source>&amp;Print...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/MainWindow.ui" line="1722"/>
+        <source>Print preview...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/MainWindow.ui" line="1735"/>
+        <source>Highlight dirt&amp;y features</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/MainWindow.ui" line="1740"/>
+        <source>Add new Drawing layer</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/MainWindow.ui" line="1749"/>
+        <source>Cu&amp;t</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/MainWindow.ui" line="1752"/>
+        <source>Ctrl+X</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/MainWindow.ui" line="1757"/>
+        <source>Add new Filter layer</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/MainWindow.ui" line="1765"/>
+        <source>E&amp;xtrude</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/MainWindow.ui" line="1768"/>
+        <source>Alt+X</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/MainWindow.ui" line="1773"/>
+        <source>Select toggle</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/MainWindow.ui" line="1778"/>
+        <source>Include children in selection</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/MainWindow.ui" line="1790"/>
+        <source>Scale</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/MainWindow.ui" line="1795"/>
+        <source>Save as Template Document...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/MainWindow.ui" line="210"/>
+        <location filename="../src/MainWindow.ui" line="635"/>
         <source>&amp;Node</source>
         <translation>&amp;Pont</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="644"/>
+        <location filename="../src/MainWindow.ui" line="653"/>
         <source>&amp;Reverse</source>
         <translation>Meg&amp;fordít</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="664"/>
+        <location filename="../src/MainWindow.ui" line="673"/>
         <source>&amp;Double carriage way</source>
         <translation>&amp;Dupla út</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="672"/>
+        <location filename="../src/MainWindow.ui" line="681"/>
         <source>&amp;Roundabout</source>
         <translation>&amp;Körforgalom</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="684"/>
+        <location filename="../src/MainWindow.ui" line="693"/>
         <source>&amp;New</source>
         <translation>&amp;Új</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="687"/>
+        <location filename="../src/MainWindow.ui" line="696"/>
         <source>Create a new document</source>
         <translation>Új dokumentumot készít</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="696"/>
+        <location filename="../src/MainWindow.ui" line="705"/>
         <source>&amp;Split</source>
         <translation>&amp;Feloszt</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="711"/>
+        <location filename="../src/MainWindow.ui" line="720"/>
         <source>&amp;Join</source>
         <translation>&amp;Egyesít</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="726"/>
+        <location filename="../src/MainWindow.ui" line="735"/>
         <source>&amp;Break apart</source>
         <translation>Szét&amp;vág</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="740"/>
+        <location filename="../src/MainWindow.ui" line="749"/>
         <source>Re&amp;lation</source>
         <translation>Kap&amp;csolat</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="755"/>
+        <location filename="../src/MainWindow.ui" line="764"/>
         <source>&amp;Area</source>
         <translation>&amp;Terület</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="872"/>
+        <location filename="../src/MainWindow.ui" line="881"/>
         <source>&amp;Save</source>
         <translation>&amp;Ment</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="778"/>
+        <location filename="../src/MainWindow.ui" line="787"/>
         <source>&amp;Curved road</source>
         <translation>&amp;Görbe út</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="787"/>
+        <location filename="../src/MainWindow.ui" line="796"/>
         <source>&amp;Preferences...</source>
         <translation>&amp;Beállítások…</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="792"/>
-        <location filename="../src/MainWindow.ui" line="800"/>
+        <location filename="../src/MainWindow.ui" line="801"/>
+        <location filename="../src/MainWindow.ui" line="809"/>
         <source>&amp;All...</source>
         <translation>&amp;Mind…</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="795"/>
-        <location filename="../src/MainWindow.ui" line="803"/>
+        <location filename="../src/MainWindow.ui" line="804"/>
+        <location filename="../src/MainWindow.ui" line="812"/>
         <source>Export all visible layers to a file</source>
         <translation>Minden látható réteget kivisz egy fájlba</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="823"/>
-        <location filename="../src/MainWindow.ui" line="831"/>
+        <location filename="../src/MainWindow.ui" line="832"/>
+        <location filename="../src/MainWindow.ui" line="840"/>
         <source>&amp;Viewport...</source>
         <translation>&amp;Látómező…</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="826"/>
-        <location filename="../src/MainWindow.ui" line="834"/>
+        <location filename="../src/MainWindow.ui" line="835"/>
+        <location filename="../src/MainWindow.ui" line="843"/>
         <source>Export the features in the viewport to a file</source>
         <translation>A látómezőbeli dolgokat kiviszi egy fájlba</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="839"/>
+        <location filename="../src/MainWindow.ui" line="848"/>
         <source>&amp;Add...</source>
         <translation>&amp;Hozzáad…</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="844"/>
+        <location filename="../src/MainWindow.ui" line="853"/>
         <source>&amp;Remove...</source>
         <translation>&amp;Töröl…</translation>
     </message>
@@ -2233,191 +2575,189 @@ Meg akarja tenni ezt most?</translation>
         <translation>Kérem előbb a meglévő ütközéseket oldja meg</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="849"/>
+        <location filename="../src/MainWindow.ui" line="858"/>
         <source>&amp;Merge</source>
         <translation>&amp;Összerak</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="855"/>
+        <location filename="../src/MainWindow.ui" line="864"/>
         <source>Merge the selected nodes (first selected will remain)</source>
         <translation>Összerakja a kiválasztott pontokat (az első kiválasztott fog megmaradni)</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2230"/>
+        <location filename="../src/MainWindow.cpp" line="2539"/>
         <source>Save Merkaartor document</source>
         <translation>Mentés Merkaartor-dokumentumba</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2230"/>
+        <location filename="../src/MainWindow.cpp" line="2539"/>
+        <location filename="../src/MainWindow.cpp" line="2551"/>
         <source>Merkaartor documents Files (*.mdc)</source>
         <translation>Merkaartor-dokumentum (*.mdc)</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="398"/>
+        <location filename="../src/MainWindow.ui" line="407"/>
         <source>Ctrl+O</source>
         <translation>Ctrl+O</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="632"/>
+        <location filename="../src/MainWindow.ui" line="641"/>
         <source>Ctrl+N</source>
         <translation>Ctrl+N</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="863"/>
+        <location filename="../src/MainWindow.ui" line="872"/>
         <source>Save &amp;As...</source>
         <translation>Ment mi&amp;nt…</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="878"/>
+        <location filename="../src/MainWindow.ui" line="887"/>
         <source>Ctrl+S</source>
         <translation>Ctrl+S</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="887"/>
+        <location filename="../src/MainWindow.ui" line="896"/>
         <source>Download more</source>
         <translation>Letölt még</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="893"/>
-        <location filename="../src/MainWindow.ui" line="896"/>
+        <location filename="../src/MainWindow.ui" line="902"/>
+        <location filename="../src/MainWindow.ui" line="905"/>
         <source>Download the current view to the previous download layer</source>
         <translation>Letölti a mostani nézetet az előző letöltött rétegbe</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="899"/>
+        <location filename="../src/MainWindow.ui" line="908"/>
         <source>Ctrl+Shift+D</source>
         <translation>Ctrl+Shift+D</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1302"/>
+        <location filename="../src/MainWindow.cpp" line="1463"/>
         <source>Old Qt version detected</source>
         <translation>Régi Qt-változatot érzékelve</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1303"/>
+        <location filename="../src/MainWindow.cpp" line="1464"/>
         <source>Your setup uses Qt %1, which contains various known errors in uploading data to OpenStreetMap leading to 401 server response codes. Are you sure you want to continue (which is not recommended).
 For more information see http://wiki.openstreetmap.org/index.php/Problem_uploading_with_Merkaartor</source>
         <translation>E telepítés Qt %1 válozatot használ. Ez különféle ismert hibákat tartalmaz, amik az adatokat OpenStreetMapra feltöltvén 401-es szolgáló válasz kódokat eredményeznek. Biztosan folytatni akarja? (Ezt nem ajánljuk.)
 További tudnivalók: http://wiki.openstreetmap.org/index.php/Problem_uploading_with_Merkaartor</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2230"/>
+        <location filename="../src/MainWindow.cpp" line="2539"/>
+        <location filename="../src/MainWindow.cpp" line="2551"/>
+        <location filename="../src/MainWindow.cpp" line="2731"/>
         <source>untitled</source>
         <translation>nevenincs</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="218"/>
+        <location filename="../src/MainWindow.ui" line="219"/>
         <source>&amp;Window</source>
         <translation>A&amp;blak</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="222"/>
-        <location filename="../src/MainWindow.ui" line="904"/>
+        <location filename="../src/MainWindow.ui" line="223"/>
+        <location filename="../src/MainWindow.ui" line="913"/>
         <source>&amp;Docks</source>
         <translation>&amp;Dokkok</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="915"/>
-        <location filename="../src/MainWindow.ui" line="918"/>
+        <location filename="../src/MainWindow.ui" line="924"/>
+        <location filename="../src/MainWindow.ui" line="927"/>
         <source>Hide/Show the Properties dock</source>
         <translation>Tulajdonságok dokkot rejt/mutat </translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="921"/>
+        <location filename="../src/MainWindow.ui" line="930"/>
         <source>Ctrl+P</source>
         <translation>Ctrl+P</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="932"/>
-        <location filename="../src/MainWindow.ui" line="935"/>
+        <location filename="../src/MainWindow.ui" line="941"/>
+        <location filename="../src/MainWindow.ui" line="944"/>
         <source>Hide/Show the Layers dock</source>
         <translation>Rétegek dokkot rejt/mutat</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="938"/>
+        <location filename="../src/MainWindow.ui" line="947"/>
         <source>Ctrl+L</source>
         <translation>Ctrl+L</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="949"/>
-        <location filename="../src/MainWindow.ui" line="952"/>
+        <location filename="../src/MainWindow.ui" line="958"/>
+        <location filename="../src/MainWindow.ui" line="961"/>
         <source>Hide/Show the Info dock</source>
         <translation>Infó dokkot rejt/mutat</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="955"/>
+        <location filename="../src/MainWindow.ui" line="964"/>
         <source>Ctrl+I</source>
         <translation>Ctrl+I</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="436"/>
+        <location filename="../src/MainWindow.ui" line="445"/>
         <source>-</source>
         <translation>-</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="454"/>
+        <location filename="../src/MainWindow.ui" line="463"/>
         <source>+</source>
         <translation>+</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="614"/>
+        <location filename="../src/MainWindow.ui" line="623"/>
         <source>Ctrl+R</source>
         <translation>Ctrl+R</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="507"/>
+        <location filename="../src/MainWindow.ui" line="516"/>
         <source>Ctrl+M</source>
         <translation>Ctrl+M</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="812"/>
+        <location filename="../src/MainWindow.ui" line="821"/>
         <source>&amp;Find...</source>
         <translation>&amp;Keres…</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="818"/>
+        <location filename="../src/MainWindow.ui" line="827"/>
         <source>Find and select items</source>
         <translation>Keres és kiválaszt elemeket</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="964"/>
+        <location filename="../src/MainWindow.ui" line="973"/>
         <source>&amp;Align</source>
         <translation>&amp;Igazít</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="970"/>
+        <location filename="../src/MainWindow.ui" line="979"/>
         <source>Align selected nodes. First two selected give the line.</source>
         <translation>A kiválasztott pontokat igazítja. Az első kettő kiválasztott határozza meg a vonalat.</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="702"/>
+        <location filename="../src/MainWindow.ui" line="711"/>
         <source>Alt+S</source>
         <translation>Alt+S</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="717"/>
+        <location filename="../src/MainWindow.ui" line="726"/>
         <source>Alt+J</source>
         <translation>Alt+J</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="735"/>
+        <location filename="../src/MainWindow.ui" line="744"/>
         <source>Alt+B</source>
         <translation>Alt+B</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="858"/>
+        <location filename="../src/MainWindow.ui" line="867"/>
         <source>Alt+M</source>
         <translation>Alt+M</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="973"/>
+        <location filename="../src/MainWindow.ui" line="982"/>
         <source>Alt+A</source>
         <translation>Alt+A</translation>
-    </message>
-    <message>
-        <location filename="../src/MainWindow.cpp" line="1290"/>
-        <source>Open track files</source>
-        <translation>Nyomfájl megnyitása</translation>
     </message>
     <message>
         <location filename="../src/Commands/DocumentCommands.cpp" line="124"/>
@@ -2427,14 +2767,14 @@ További tudnivalók: http://wiki.openstreetmap.org/index.php/Problem_uploading_
     <message>
         <location filename="../src/Commands/FeatureCommands.cpp" line="66"/>
         <location filename="../src/Commands/FeatureCommands.cpp" line="74"/>
-        <location filename="../src/Commands/FeatureCommands.cpp" line="188"/>
+        <location filename="../src/Commands/FeatureCommands.cpp" line="189"/>
         <source>Set Tag &apos;%1=%2&apos; on %3</source>
         <translation>„%1=%2” címkét tesz %3 dolgra</translation>
     </message>
     <message>
-        <location filename="../src/Commands/FeatureCommands.cpp" line="307"/>
+        <location filename="../src/Commands/FeatureCommands.cpp" line="308"/>
         <location filename="../src/Commands/FeatureCommands.cpp" line="396"/>
-        <location filename="../src/Docks/PropertiesDock.cpp" line="703"/>
+        <location filename="../src/Docks/PropertiesDock.cpp" line="695"/>
         <source>Clear Tag &apos;%1&apos; on %2</source>
         <translation>%2 „%1” címkéjét törli</translation>
     </message>
@@ -2449,112 +2789,138 @@ További tudnivalók: http://wiki.openstreetmap.org/index.php/Problem_uploading_
         <translation>%1 területet készít</translation>
     </message>
     <message>
-        <location filename="../src/Interactions/CreateAreaInteraction.cpp" line="138"/>
+        <location filename="../src/Interactions/CreateAreaInteraction.cpp" line="137"/>
         <source>Area: Create Road %1</source>
         <translation>Terület: %1 utat készít</translation>
     </message>
     <message>
-        <location filename="../src/Interactions/CreateAreaInteraction.cpp" line="169"/>
+        <location filename="../src/Interactions/CreateAreaInteraction.cpp" line="171"/>
         <source>Area: Finish Road %1</source>
         <translation>Terület: %1 utat befejez</translation>
     </message>
     <message>
         <location filename="../src/Interactions/CreateAreaInteraction.cpp" line="186"/>
-        <location filename="../src/Interactions/CreateAreaInteraction.cpp" line="199"/>
+        <location filename="../src/Interactions/CreateAreaInteraction.cpp" line="197"/>
         <source>Area: Add node %1 to Road %2</source>
         <translation>Terület: %1 pontot %2 úthoz adja</translation>
     </message>
     <message>
-        <location filename="../src/Interactions/CreateDoubleWayInteraction.cpp" line="165"/>
+        <location filename="../src/Interactions/CreateAreaInteraction.cpp" line="263"/>
+        <source>Close Area %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/Interactions/CreateDoubleWayInteraction.cpp" line="167"/>
         <source>Add nodes to double-way Road %1</source>
         <translation>Pontokat ad %1 dupla úthoz</translation>
     </message>
     <message>
-        <location filename="../src/Interactions/CreateDoubleWayInteraction.cpp" line="220"/>
+        <location filename="../src/Interactions/CreateDoubleWayInteraction.cpp" line="218"/>
         <source>Create double-way Road %1</source>
         <translation>Készíti %1 dupla utat</translation>
     </message>
     <message>
-        <location filename="../src/Interactions/CreateNodeInteraction.cpp" line="82"/>
-        <location filename="../src/Interactions/MoveNodeInteraction.cpp" line="240"/>
+        <location filename="../src/Interactions/CreateNodeInteraction.cpp" line="102"/>
+        <location filename="../src/Interactions/MoveNodeInteraction.cpp" line="251"/>
         <source>Create node in Road: %1</source>
         <translation>Pontot készít %1 útra</translation>
     </message>
     <message>
-        <location filename="../src/Interactions/CreateRoundaboutInteraction.cpp" line="87"/>
+        <location filename="../src/Interactions/CreateNodeInteraction.cpp" line="111"/>
+        <source>Create POI %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/Interactions/CreateRoundaboutInteraction.cpp" line="84"/>
         <source>Create Roundabout %1</source>
         <translation>Körforgalmat készít %1</translation>
     </message>
     <message>
-        <location filename="../src/Interactions/CreateSingleWayInteraction.cpp" line="130"/>
-        <location filename="../src/Interactions/CreateSingleWayInteraction.cpp" line="181"/>
-        <location filename="../src/Interactions/CreateSingleWayInteraction.cpp" line="194"/>
+        <location filename="../src/Interactions/CreateSingleWayInteraction.cpp" line="233"/>
+        <location filename="../src/Interactions/CreateSingleWayInteraction.cpp" line="283"/>
+        <location filename="../src/Interactions/CreateSingleWayInteraction.cpp" line="294"/>
         <source>Create Node %1 in Road %2</source>
         <translation>%1 pontot készíti %2 úton</translation>
     </message>
     <message>
-        <location filename="../src/Interactions/CreateSingleWayInteraction.cpp" line="163"/>
+        <location filename="../src/Interactions/CreateSingleWayInteraction.cpp" line="267"/>
         <source>Create Road: %1</source>
         <translation>Utat készít: %1</translation>
     </message>
     <message>
-        <location filename="../src/Interactions/EditInteraction.cpp" line="248"/>
+        <location filename="../src/Interactions/CreateSingleWayInteraction.cpp" line="335"/>
+        <source>Close Road %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/Interactions/EditInteraction.cpp" line="51"/>
+        <source>LEFT-CLICK to select;RIGHT-CLICK to pan;CTRL-LEFT-CLICK to toggle selection;SHIFT-LEFT-CLICK to add to selection;LEFT-DRAG for area selection;CTRL-RIGHT-DRAG for zoom;DOUBLE-CLICK to create a node;DOUBLE-CLICK on a node to start a way;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/Interactions/EditInteraction.cpp" line="53"/>
+        <source>CLICK to select/move;CTRL-CLICK to toggle selection;SHIFT-CLICK to add to selection;SHIFT-DRAG for area selection;CTRL-DRAG for zoom;DOUBLE-CLICK to create a node;DOUBLE-CLICK on a node to start a way;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/Interactions/EditInteraction.cpp" line="288"/>
         <source>Remove feature %1</source>
         <translation>%1 dolgot törli</translation>
     </message>
     <message>
-        <location filename="../src/Interactions/EditInteraction.cpp" line="278"/>
-        <source>Reverse Road %1</source>
-        <translation>%1 utat megfordítja</translation>
+        <location filename="../src/Interactions/EditInteraction.cpp" line="290"/>
+        <source>Remove features</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1671"/>
+        <location filename="../src/Interactions/EditInteraction.cpp" line="301"/>
+        <source>Do you want to delete the children nodes also?
+Note that OSM nodes outside the downloaded area will be kept.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/Interactions/EditInteraction.cpp" line="326"/>
+        <source>Reverse %1 ways</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/MainWindow.cpp" line="1892"/>
         <source>Join Roads</source>
         <translation>Utakat egyesít</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1685"/>
+        <location filename="../src/MainWindow.cpp" line="1906"/>
         <source>Split Roads</source>
         <translation>Utat oszt fel</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1699"/>
+        <location filename="../src/MainWindow.cpp" line="1920"/>
         <source>Break Roads</source>
         <translation>Utat szakít ketté</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2294"/>
-        <location filename="../src/MainWindow.cpp" line="2300"/>
-        <location filename="../src/MainWindow.cpp" line="2310"/>
+        <location filename="../src/MainWindow.cpp" line="2636"/>
+        <location filename="../src/MainWindow.cpp" line="2644"/>
+        <location filename="../src/MainWindow.cpp" line="2692"/>
         <source>Invalid file</source>
         <translation>Érvénytelen fájl</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2300"/>
-        <source>%1 is not a valid XML file.</source>
-        <translation>%1 érvénytelen XML-fájl.</translation>
-    </message>
-    <message>
-        <location filename="../src/MainWindow.cpp" line="1844"/>
+        <location filename="../src/MainWindow.cpp" line="2133"/>
         <source>Align Nodes</source>
         <translation>Pontokat igazít</translation>
     </message>
     <message>
-        <location filename="../src/Interactions/MoveNodeInteraction.cpp" line="203"/>
-        <location filename="../src/MainWindow.cpp" line="1872"/>
+        <location filename="../src/Interactions/MoveNodeInteraction.cpp" line="214"/>
+        <location filename="../src/MainWindow.cpp" line="2161"/>
         <source>Merge Nodes into %1</source>
         <translation>Pontokat %1 dologba rak</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="999"/>
-        <location filename="../src/MainWindow.ui" line="1002"/>
+        <location filename="../src/MainWindow.ui" line="1008"/>
+        <location filename="../src/MainWindow.ui" line="1011"/>
         <source>Hide/Show the Undo dock</source>
         <translation>Vissza dokkot rejt/mutat</translation>
-    </message>
-    <message>
-        <location filename="../src/ImportExport/ImportGPX.cpp" line="290"/>
-        <source>Import GPX</source>
-        <translation>GPX-behozatal</translation>
     </message>
     <message>
         <location filename="../src/ImportExport/ImportNGT.cpp" line="19"/>
@@ -2562,157 +2928,141 @@ További tudnivalók: http://wiki.openstreetmap.org/index.php/Problem_uploading_
         <translation>NGT-behozatal</translation>
     </message>
     <message>
-        <location filename="../src/Features/Relation.cpp" line="753"/>
+        <location filename="../src/Features/Relation.cpp" line="765"/>
         <source>Relation Modified %1</source>
         <translation>%1 kapcsolat változott</translation>
     </message>
     <message>
-        <location filename="../src/Sync/SyncOSM.cpp" line="44"/>
+        <location filename="../src/Sync/SyncOSM.cpp" line="39"/>
         <source>It is strongly recommended to save the changes to your document after an upload.
 Do you want to do this now?</source>
         <translation>Ajánlatos a változásokat elmenteni egy dokumentumba feltöltés után.
 Meg akarja ezt tenni most?</translation>
     </message>
     <message>
-        <location filename="../src/Interactions/CreateNodeInteraction.cpp" line="98"/>
-        <source>Create point %1</source>
-        <translation>%1 pontot készít</translation>
-    </message>
-    <message>
-        <location filename="../src/MainWindow.cpp" line="694"/>
+        <location filename="../src/MainWindow.cpp" line="722"/>
         <source>Clipboard invalid</source>
         <translation>Érvénytelen vágólap</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1970"/>
+        <location filename="../src/MainWindow.cpp" line="2271"/>
         <source>Create Relation %1</source>
         <translation>%1 kapcsolatot készít</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1016"/>
+        <location filename="../src/MainWindow.ui" line="1025"/>
         <source>Ctrl+Alt+A</source>
         <translation>Ctrl+Alt+A</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1031"/>
+        <location filename="../src/MainWindow.ui" line="1040"/>
         <source>Copy the selected feature&apos;s tags to the clipboard; if the feature is a trackpoint, copy the coordinates, too.</source>
         <translation>A kiválasztott dolog címkéit másolja a vágólapra. Ha a dolog nyompont, akkor a helyzetét is másolja.</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1034"/>
+        <location filename="../src/MainWindow.ui" line="1043"/>
         <source>Ctrl+C</source>
         <translation>Ctrl+C</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1042"/>
+        <location filename="../src/MainWindow.ui" line="1051"/>
         <source>Paste (and overwrite) the tags in the clipboard to the selected feature.</source>
         <translation>A vágólapi címkéket beilleszti (illetve felülírja) a kiválasztott dologba.</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1045"/>
+        <location filename="../src/MainWindow.ui" line="1054"/>
         <source>Ctrl+V, O</source>
         <translation>Ctrl+V, O</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1063"/>
+        <location filename="../src/MainWindow.ui" line="1072"/>
         <source>Merge the tags in the clipboard with the ones of the selected feature.</source>
         <translation>A vágólapi címkéket összefésüli a kiválasztott dolog címkéivel.</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1066"/>
+        <location filename="../src/MainWindow.ui" line="1075"/>
         <source>Ctrl+V, M</source>
         <translation>Ctrl+V, M</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1071"/>
-        <location filename="../src/MainWindow.ui" line="1076"/>
+        <location filename="../src/MainWindow.ui" line="1080"/>
+        <location filename="../src/MainWindow.ui" line="1085"/>
         <source>Selected...</source>
         <translation>Kiválasztott…</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1085"/>
-        <source>Paste Features</source>
-        <translation>Dolgokat beilleszt</translation>
-    </message>
-    <message>
-        <location filename="../src/MainWindow.ui" line="1094"/>
+        <location filename="../src/MainWindow.ui" line="1103"/>
         <source>Paste the features in the clipboard; If the features&apos;id are already in the document, overwrite them.</source>
         <translation>Beilleszti a vágólapi dolgokat. Ha e dolgok már a dokumentumban vannak, akkor felülírja azokat.</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1097"/>
-        <location filename="../src/MainWindow.ui" line="1540"/>
+        <location filename="../src/MainWindow.ui" line="1106"/>
         <source>Ctrl+V, F</source>
         <translation>Ctrl+V, F</translation>
     </message>
     <message>
-        <location filename="../src/Features/Way.cpp" line="767"/>
-        <source>Do you want to delete the children nodes also?</source>
-        <translation>A gyerek pontokat is törölni akarja?</translation>
-    </message>
-    <message>
-        <location filename="../src/MainWindow.cpp" line="2398"/>
+        <location filename="../src/MainWindow.cpp" line="2765"/>
         <source>OSM Binary Files (*.osb)</source>
         <translation>OSM gépi fájlok (*.osb)</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1105"/>
+        <location filename="../src/MainWindow.ui" line="1111"/>
         <source>OSM (XML)</source>
         <translation>OSM (XML)</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1110"/>
+        <location filename="../src/MainWindow.ui" line="1116"/>
         <source>OSM (Binary)</source>
         <translation>OSM (gépi kód)</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2310"/>
+        <location filename="../src/MainWindow.cpp" line="2644"/>
         <source>%1 is not a valid Merkaartor document.</source>
         <translation>%1 érvénytelen Merkaartor dokumentum.</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2398"/>
+        <location filename="../src/MainWindow.cpp" line="2765"/>
         <source>Export Binary OSM</source>
         <translation>Kivitel OSM gépi kódba</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1121"/>
-        <location filename="../src/MainWindow.ui" line="1124"/>
+        <location filename="../src/MainWindow.ui" line="1127"/>
+        <location filename="../src/MainWindow.ui" line="1130"/>
         <source>Commit the selected feature from a non-uploadable layer (e.g.Track or Extract) to the dirty layer, ready for upload</source>
         <translation>Átteszi a kiválasztott dolgot egy nem feltölthető rétegből (pl. nyom vagy kivonat) a piszkos rétegbe előkészítve azt a feltöltésre</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2445"/>
+        <location filename="../src/MainWindow.cpp" line="2812"/>
         <source>Export GPX</source>
         <translation>Kivitel GPX-be</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2445"/>
+        <location filename="../src/MainWindow.cpp" line="2812"/>
         <source>GPX Files (*.gpx)</source>
         <translation>GPX adatok (*.gpx)</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2470"/>
+        <location filename="../src/MainWindow.cpp" line="2837"/>
         <source>Export KML</source>
         <translation>Kivitel KML-be</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2470"/>
+        <location filename="../src/MainWindow.cpp" line="2837"/>
         <source>KML Files (*.kml)</source>
         <translation>KML-adatok (*.kml)</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1005"/>
+        <location filename="../src/MainWindow.ui" line="1014"/>
         <source>Ctrl+T</source>
         <translation>Ctrl+T</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1129"/>
+        <location filename="../src/MainWindow.ui" line="1135"/>
         <source>GPX</source>
         <translation>GPX</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1134"/>
+        <location filename="../src/MainWindow.ui" line="1140"/>
         <source>KML</source>
         <translation>KML</translation>
     </message>
@@ -2723,621 +3073,689 @@ Meg akarja ezt tenni most?</translation>
         <translation>Címkézi: %1</translation>
     </message>
     <message>
-        <location filename="../src/Interactions/CreateSingleWayInteraction.cpp" line="171"/>
+        <location filename="../src/Interactions/CreateSingleWayInteraction.cpp" line="275"/>
         <source>Create Node: %1</source>
         <translation>Pontot készít: %1</translation>
     </message>
     <message>
-        <location filename="../src/Interactions/CreateSingleWayInteraction.cpp" line="197"/>
+        <location filename="../src/Interactions/CreateSingleWayInteraction.cpp" line="297"/>
         <source>Add Node %1 to Road %2</source>
         <translation>%1 pontot adja %2 úthoz</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="180"/>
+        <location filename="../src/MainWindow.cpp" line="184"/>
         <source>tile %v / %m</source>
         <translation>csempe %v / %m</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="315"/>
+        <location filename="../src/MainWindow.cpp" line="338"/>
+        <location filename="../src/MainWindow.ui" line="1727"/>
         <source>Properties...</source>
         <translation>Tulajdonságok…</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1021"/>
+        <location filename="../src/MainWindow.cpp" line="1171"/>
         <source>Waypoints</source>
         <translation>Útpontok</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1041"/>
+        <location filename="../src/MainWindow.cpp" line="1191"/>
         <source>Track %1</source>
         <translation>Nyom %1</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="3028"/>
+        <location filename="../src/MainWindow.cpp" line="3414"/>
         <source>GPS error</source>
         <translation>GPS-hiba</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="3029"/>
+        <location filename="../src/MainWindow.cpp" line="3415"/>
         <source>Unable to open GPS port.</source>
         <translation>Nem tudok GPS-kaput nyitni.</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="3038"/>
+        <location filename="../src/MainWindow.cpp" line="3424"/>
         <source>Open NMEA log file</source>
         <translation>NMEA-naplófájl megnyitása</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="256"/>
-        <location filename="../src/MainWindow.ui" line="929"/>
+        <location filename="../src/MainWindow.ui" line="259"/>
+        <location filename="../src/MainWindow.ui" line="938"/>
         <source>&amp;Layers</source>
         <translation>&amp;Réteg</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1013"/>
+        <location filename="../src/MainWindow.ui" line="1022"/>
         <source>Show &amp;downloaded areas</source>
         <translation>Mutatja a le&amp;töltött területeket</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1139"/>
+        <location filename="../src/MainWindow.ui" line="1145"/>
         <source>Toggle Toolbar</source>
         <translation>Eszköztár be/ki</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1142"/>
-        <location filename="../src/MainWindow.ui" line="1145"/>
+        <location filename="../src/MainWindow.ui" line="1148"/>
+        <location filename="../src/MainWindow.ui" line="1151"/>
         <source>Hide/Show the Toolbar</source>
         <translation>Rejti/mutatja az eszköztárt</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1150"/>
+        <location filename="../src/MainWindow.ui" line="1156"/>
         <source>Hide All</source>
         <translation>Mindent rejt</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1153"/>
-        <location filename="../src/MainWindow.ui" line="1161"/>
+        <location filename="../src/MainWindow.ui" line="1159"/>
+        <location filename="../src/MainWindow.ui" line="1167"/>
         <source>Ctrl+F</source>
         <translation>Ctrl+F</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1158"/>
+        <location filename="../src/MainWindow.ui" line="1164"/>
         <source>Show All</source>
         <translation>Mindent mutat</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1169"/>
+        <location filename="../src/MainWindow.ui" line="1175"/>
         <source>&amp;Image layer</source>
         <translation>&amp;Kép réteg</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1185"/>
+        <location filename="../src/MainWindow.ui" line="1191"/>
         <source>Ctrl+Alt+P</source>
         <translation>Ctrl+Alt+P</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1196"/>
+        <location filename="../src/MainWindow.ui" line="1202"/>
         <source>Ctrl+Alt+N</source>
         <translation>Ctrl+Alt+N</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1201"/>
+        <location filename="../src/MainWindow.ui" line="1207"/>
         <source>&amp;Start</source>
         <translation>&amp;Indít</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1209"/>
+        <location filename="../src/MainWindow.ui" line="1215"/>
         <source>&amp;Replay...</source>
         <translation>I&amp;smét…</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1223"/>
-        <location filename="../src/MainWindow.ui" line="1226"/>
+        <location filename="../src/MainWindow.ui" line="1229"/>
+        <location filename="../src/MainWindow.ui" line="1232"/>
         <source>Hide/Show the GPS dock</source>
         <translation>Rejti/mutatja a GPS dokkot</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="659"/>
+        <location filename="../src/MainWindow.ui" line="668"/>
         <source>Ctrl+G</source>
         <translation>Ctrl+G</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="108"/>
-        <source>&amp;Filters</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/MainWindow.ui" line="185"/>
+        <location filename="../src/MainWindow.ui" line="186"/>
         <source>Ta&amp;g templates</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1237"/>
+        <location filename="../src/MainWindow.ui" line="1243"/>
         <source>S&amp;top</source>
         <translation>Meg&amp;állít</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1248"/>
+        <location filename="../src/MainWindow.ui" line="1254"/>
         <source>&amp;Center on GPS</source>
         <translation>GPS &amp;középre</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1256"/>
+        <location filename="../src/MainWindow.ui" line="1262"/>
         <source>Show track &amp;segments</source>
         <translation>Mutatja a nyom&amp;szakaszokat</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1259"/>
+        <location filename="../src/MainWindow.ui" line="1265"/>
         <source>Ctrl+Alt+T</source>
         <translation>Ctrl+Alt+T</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1267"/>
+        <location filename="../src/MainWindow.ui" line="1273"/>
         <source>Show &amp;scale</source>
         <translation>Mutatja a &amp;méretarányt</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1270"/>
+        <location filename="../src/MainWindow.ui" line="1276"/>
         <source>Ctrl+Alt+S</source>
         <translation>Ctrl+Alt+M</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1278"/>
+        <location filename="../src/MainWindow.ui" line="1284"/>
         <source>Show &amp;relations</source>
         <translation>Mutatja a &amp;kapcsolatokat</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1281"/>
+        <location filename="../src/MainWindow.ui" line="1287"/>
         <source>Ctrl+Alt+R</source>
         <translation>Ctrl+Alt+R</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1289"/>
+        <location filename="../src/MainWindow.ui" line="1295"/>
         <source>Show roads background</source>
         <translation>Mutatja az utak hátterét</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1297"/>
+        <location filename="../src/MainWindow.ui" line="1303"/>
         <source>Show roads boundary</source>
         <translation>Mutatja az utak kereteit</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1305"/>
+        <location filename="../src/MainWindow.ui" line="1311"/>
         <source>Show touchup</source>
         <translation>Mutatja a javításokat</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1316"/>
-        <location filename="../src/MainWindow.ui" line="1319"/>
+        <location filename="../src/MainWindow.ui" line="1322"/>
+        <location filename="../src/MainWindow.ui" line="1325"/>
         <source>Record</source>
         <translation>Rögzít</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1333"/>
+        <location filename="../src/MainWindow.ui" line="1339"/>
         <source>Pause</source>
         <translation>Szünet</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1347"/>
-        <location filename="../src/MainWindow.ui" line="1350"/>
+        <location filename="../src/MainWindow.ui" line="1353"/>
+        <location filename="../src/MainWindow.ui" line="1356"/>
         <source>Hide/Show the GeoImage dock</source>
         <translation>Rejti/mutatja a GeoImage dokkot</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1353"/>
+        <location filename="../src/MainWindow.ui" line="1359"/>
         <source>Ctrl+E</source>
         <translation>Ctrl+E</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1084"/>
+        <location filename="../src/MainWindow.cpp" line="1240"/>
         <source>Big Fat Copyright Warning</source>
         <translation>Nagy kövér figyelmeztetés szerzői jogra</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2273"/>
+        <location filename="../src/MainWindow.cpp" line="2608"/>
         <source>Unable to open save file</source>
         <translation>Nem tudom megnyitni a mentésfájlt</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2273"/>
+        <location filename="../src/MainWindow.cpp" line="2608"/>
+        <location filename="../src/MainWindow.cpp" line="2621"/>
         <source>%1 could not be opened for writing.</source>
         <translation>Nem tudtam %1 fájlt írásra megnyitni.</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="528"/>
+        <location filename="../src/MainWindow.ui" line="537"/>
         <source>&amp;Download</source>
         <translation>&amp;Letölt</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="572"/>
+        <location filename="../src/MainWindow.ui" line="581"/>
         <source>&amp;Upload</source>
         <translation>&amp;Feltölt</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="656"/>
+        <location filename="../src/MainWindow.ui" line="665"/>
         <source>&amp;Go To...</source>
         <translation>&amp;Menj…</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="667"/>
+        <location filename="../src/MainWindow.ui" line="676"/>
         <source>Create Double carriage way</source>
         <translation>Dupla utat készít</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="675"/>
+        <location filename="../src/MainWindow.ui" line="684"/>
         <source>Create Roundabout</source>
         <translation>Körforgalmat készít</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="743"/>
+        <location filename="../src/MainWindow.ui" line="752"/>
         <source>Create Relation</source>
         <translation>Kapcsolatot teremt</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="815"/>
+        <location filename="../src/MainWindow.ui" line="824"/>
         <source>Find</source>
         <translation>Keres</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="852"/>
+        <location filename="../src/MainWindow.ui" line="861"/>
         <source>Node Merge</source>
         <translation>Pontokat egyesít</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1118"/>
+        <location filename="../src/MainWindow.ui" line="1124"/>
         <source>Commit feature to the dirty layer</source>
         <translation>Átteszi a dolgot a piszkos rétegbe</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1204"/>
+        <location filename="../src/MainWindow.ui" line="1210"/>
         <source>Start GPS</source>
         <translation>GPS-t indít</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1212"/>
+        <location filename="../src/MainWindow.ui" line="1218"/>
         <source>Replay GPS</source>
         <translation>GPS-t ismétel</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1229"/>
+        <location filename="../src/MainWindow.ui" line="1235"/>
         <source>Ctrl+W</source>
         <translation>Ctrl+W</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1240"/>
+        <location filename="../src/MainWindow.ui" line="1246"/>
         <source>Stop GPS</source>
         <translation>GPS-t megállít</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1322"/>
+        <location filename="../src/MainWindow.ui" line="1328"/>
         <source>Record GPS</source>
         <translation>GPS-szel rögzít</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1336"/>
+        <location filename="../src/MainWindow.ui" line="1342"/>
         <source>Pause GPS</source>
         <translation>GPS szünet</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1358"/>
+        <location filename="../src/MainWindow.ui" line="1364"/>
         <source>World OSB manager...</source>
         <translation>Világ OSB-igazgató…</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1366"/>
+        <location filename="../src/MainWindow.ui" line="1372"/>
         <source>&amp;Shortcut Editor...</source>
         <translation>&amp;Gyorsgomb szerkesztő…</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="287"/>
+        <location filename="../src/MainWindow.ui" line="292"/>
         <source>Show directional &amp;Arrows</source>
         <translation>Mutatja az irányjelző &amp;nyilakat</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="103"/>
+        <location filename="../src/MainWindow.ui" line="107"/>
         <source>Set Areas &amp;opacity</source>
         <translation>Beállítja a területek &amp;takarását</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="131"/>
+        <location filename="../src/MainWindow.ui" line="128"/>
         <source>&amp;Export</source>
         <translation>&amp;Kivisz</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="142"/>
+        <location filename="../src/MainWindow.ui" line="138"/>
         <source>Re&amp;cent open</source>
         <translation>Legutóbb &amp;nyitott</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="147"/>
+        <location filename="../src/MainWindow.ui" line="143"/>
         <source>Recen&amp;t import</source>
         <translation>Legutóbb be&amp;hozott</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="171"/>
+        <location filename="../src/MainWindow.ui" line="172"/>
         <source>T&amp;ools</source>
         <translation>&amp;Eszköz</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="241"/>
+        <location filename="../src/MainWindow.ui" line="242"/>
         <source>Fea&amp;ture</source>
         <translation>&amp;Dolog</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="263"/>
+        <location filename="../src/MainWindow.ui" line="268"/>
         <source>&amp;Gps</source>
         <translation>&amp;GPS</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="276"/>
+        <location filename="../src/MainWindow.ui" line="281"/>
         <source>Rel&amp;ation</source>
         <translation>Kap&amp;csolat</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="331"/>
+        <location filename="../src/MainWindow.ui" line="337"/>
         <source>Main toolbar</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="504"/>
+        <location filename="../src/MainWindow.ui" line="513"/>
         <source>&amp;Move</source>
         <translation>&amp;Mozgat</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="560"/>
+        <location filename="../src/MainWindow.ui" line="569"/>
         <source>&amp;Select</source>
         <translation>Ki&amp;választ</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="763"/>
+        <location filename="../src/MainWindow.ui" line="772"/>
         <source>&amp;Edit...</source>
         <translation>&amp;Szerkeszt…</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="768"/>
-        <location filename="../src/MainWindow.ui" line="1381"/>
+        <location filename="../src/MainWindow.ui" line="777"/>
+        <location filename="../src/MainWindow.ui" line="1387"/>
         <source>&amp;Save...</source>
         <translation>&amp;Ment…</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="773"/>
-        <location filename="../src/MainWindow.ui" line="1371"/>
+        <location filename="../src/MainWindow.ui" line="782"/>
+        <location filename="../src/MainWindow.ui" line="1377"/>
         <source>&amp;Load...</source>
         <translation>&amp;Betölt…</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1025"/>
+        <location filename="../src/MainWindow.ui" line="1034"/>
         <source>&amp;Copy</source>
         <translation>&amp;Másol</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1039"/>
+        <location filename="../src/MainWindow.ui" line="1048"/>
         <source>Paste Tags (&amp;Overwrite)</source>
         <translation>Címkéket szúr be (&amp;átír)</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1054"/>
+        <location filename="../src/MainWindow.ui" line="1063"/>
         <source>Paste Tags (&amp;Merge)</source>
         <translation>Címkéket szúr be (&amp;összerak)</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1376"/>
+        <location filename="../src/MainWindow.ui" line="1382"/>
         <source>&amp;Merge...</source>
         <translation>&amp;Összerak…</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1386"/>
+        <location filename="../src/MainWindow.ui" line="1392"/>
         <source>&amp;Add member</source>
         <translation>Tagot ad &amp;hozzá</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1391"/>
+        <location filename="../src/MainWindow.ui" line="1397"/>
         <source>&amp;Remove member</source>
         <translation>Tagot &amp;kivesz</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1399"/>
+        <location filename="../src/MainWindow.ui" line="1405"/>
         <source>&amp;Never</source>
         <translation>&amp;Soha</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1407"/>
+        <location filename="../src/MainWindow.ui" line="1413"/>
         <source>for &amp;Oneway roads</source>
         <translation>&amp;Egyirányú utakhoz</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1415"/>
+        <location filename="../src/MainWindow.ui" line="1421"/>
         <source>&amp;Always</source>
         <translation>&amp;Mindig</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1424"/>
+        <location filename="../src/MainWindow.ui" line="1430"/>
         <source>&amp;Detach</source>
         <translation>&amp;Kicsatol</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1430"/>
+        <location filename="../src/MainWindow.ui" line="1436"/>
         <source>Detach a node from a Road</source>
         <translation>Kicsatol egy pontot egy útból</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1442"/>
+        <location filename="../src/MainWindow.ui" line="1448"/>
         <source>&amp;Work Offline</source>
         <translation>&amp;Kapcsolat nélküli munka</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1447"/>
+        <location filename="../src/MainWindow.ui" line="1453"/>
         <source>SVG</source>
         <translation>SVG</translation>
     </message>
     <message>
-        <location filename="../src/Interactions/MoveNodeInteraction.cpp" line="193"/>
+        <location filename="../src/Interactions/MoveNodeInteraction.cpp" line="204"/>
         <source>Nodes at the same position found.</source>
         <translation>Pontokat találtam ugyanitt.</translation>
     </message>
     <message>
-        <location filename="../src/Interactions/MoveNodeInteraction.cpp" line="194"/>
+        <location filename="../src/Interactions/MoveNodeInteraction.cpp" line="205"/>
         <source>Do you want to merge all nodes at the drop position?</source>
         <translation>Össze akar rakni minden pontot egyetlen egybe a beejtés helyén?</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="345"/>
+        <location filename="../src/MainWindow.cpp" line="368"/>
         <source>Low</source>
         <translation>Kis</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="345"/>
+        <location filename="../src/MainWindow.cpp" line="368"/>
         <source>High</source>
         <translation>Nagy</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="345"/>
+        <location filename="../src/MainWindow.cpp" line="368"/>
         <source>Opaque</source>
         <translation>Teljes</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="457"/>
+        <location filename="../src/MainWindow.cpp" line="481"/>
         <source>File</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="461"/>
+        <location filename="../src/MainWindow.cpp" line="485"/>
         <source>Edit</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="465"/>
+        <location filename="../src/MainWindow.cpp" line="489"/>
         <source>View</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="469"/>
+        <location filename="../src/MainWindow.cpp" line="493"/>
         <source>Show</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="473"/>
+        <location filename="../src/MainWindow.cpp" line="497"/>
         <source>Directional Arrows</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="477"/>
+        <location filename="../src/MainWindow.cpp" line="501"/>
         <source>GPS</source>
         <translation>GPS</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="481"/>
+        <location filename="../src/MainWindow.cpp" line="505"/>
         <source>Layers</source>
         <translation>Rétegek</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="485"/>
+        <location filename="../src/MainWindow.cpp" line="509"/>
         <source>Create</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="489"/>
+        <location filename="../src/MainWindow.cpp" line="513"/>
         <source>Feature</source>
         <translation>Dolog</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="497"/>
+        <location filename="../src/MainWindow.cpp" line="521"/>
         <source>Node</source>
         <translation>Pont</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="501"/>
+        <location filename="../src/MainWindow.cpp" line="525"/>
         <source>Way</source>
         <translation>Út</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="505"/>
+        <location filename="../src/MainWindow.cpp" line="529"/>
         <source>Relation</source>
         <translation>Kapcsolat</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="509"/>
+        <location filename="../src/MainWindow.cpp" line="533"/>
         <source>Tools</source>
         <translation>Eszközök</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="513"/>
+        <location filename="../src/MainWindow.cpp" line="537"/>
         <source>Windows</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="517"/>
+        <location filename="../src/MainWindow.cpp" line="541"/>
         <source>Help</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1826"/>
+        <location filename="../src/MainWindow.cpp" line="758"/>
+        <source>Cut Features</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/MainWindow.cpp" line="1451"/>
+        <source>Open files</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/MainWindow.cpp" line="2062"/>
         <source>Number of segments to divide into</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1829"/>
+        <location filename="../src/MainWindow.cpp" line="2065"/>
         <source>Subdivide road into %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1858"/>
+        <location filename="../src/MainWindow.cpp" line="2086"/>
+        <source>Axis Align</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/MainWindow.cpp" line="2087"/>
+        <source>Specify the number of regular axes to align edges on (e.g. 4 for rectangular)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/MainWindow.cpp" line="2094"/>
+        <source>triangular</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/MainWindow.cpp" line="2095"/>
+        <source>rectangular</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/MainWindow.cpp" line="2096"/>
+        <source>pentagonal</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/MainWindow.cpp" line="2097"/>
+        <source>hexagonal</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/MainWindow.cpp" line="2098"/>
+        <source>heptagonal</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/MainWindow.cpp" line="2099"/>
+        <source>octagonal</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/MainWindow.cpp" line="2103"/>
+        <source>Align onto %1 axes</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/MainWindow.cpp" line="2105"/>
+        <source>Align onto %1 regular axes</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/MainWindow.cpp" line="2112"/>
+        <location filename="../src/MainWindow.cpp" line="2115"/>
+        <source>Unable to align to axes</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/MainWindow.cpp" line="2113"/>
+        <source>Align to axes operation failed. Please adjust any sharp corners and try again.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/MainWindow.cpp" line="2116"/>
+        <source>Align to axes operation failed and did not converge on a solution.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/MainWindow.cpp" line="2147"/>
         <source>Spread Nodes</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1887"/>
+        <location filename="../src/MainWindow.cpp" line="2176"/>
         <source>Detach Node %1</source>
         <translation>%1 pontot kicsatolja</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1901"/>
+        <location filename="../src/MainWindow.cpp" line="2190"/>
         <source>Add member to relation</source>
         <translation>Tagot ad a kapcsolathoz</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1913"/>
+        <location filename="../src/MainWindow.cpp" line="2202"/>
         <source>Remove member from relation</source>
         <translation>Tagot kivesz a kapcsolatból</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1925"/>
+        <location filename="../src/MainWindow.cpp" line="2214"/>
+        <source>Join areas</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/MainWindow.cpp" line="2226"/>
         <source>Split area</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1940"/>
+        <location filename="../src/MainWindow.cpp" line="2241"/>
         <source>Terrace area into %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2893"/>
-        <source>Invalid Filter</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/MainWindow.cpp" line="2893"/>
-        <source>Unable to set filter &quot;%1&quot;.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/MainWindow.cpp" line="3154"/>
+        <location filename="../src/MainWindow.cpp" line="3540"/>
         <source>Save Tag Templates</source>
         <translation>Címkesablonok mentése</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="3154"/>
+        <location filename="../src/MainWindow.cpp" line="3540"/>
         <source>Merkaartor tag templates (*.mat)</source>
         <translation>Merkaartor-címkesablonok (*.mat)</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="3166"/>
-        <location filename="../src/MainWindow.cpp" line="3180"/>
+        <location filename="../src/MainWindow.cpp" line="3552"/>
+        <location filename="../src/MainWindow.cpp" line="3566"/>
         <source>Open Tag Templates</source>
         <translation>Címkesablon megnyitása</translation>
     </message>
     <message>
-        <location filename="../src/Docks/PropertiesDock.cpp" line="751"/>
+        <location filename="../src/Docks/PropertiesDock.cpp" line="759"/>
         <source>Remove member &apos;%1&apos; on %2</source>
         <translation>„%1” tagot kiveszi %2 dologból</translation>
     </message>
@@ -3349,7 +3767,7 @@ Meg akarja ezt tenni most?</translation>
         <translation>Mozgatja %1 pontot</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1085"/>
+        <location filename="../src/MainWindow.cpp" line="1241"/>
         <source>You are trying to import a KML file. Please be aware that:
 
  - You cannot import to OSM a KML file created from Google Earth. While you might
@@ -3378,203 +3796,205 @@ Ha bizonytalan, kérem kérjen tanácsot a „legal” vagy a „talk” Openstr
 Teljesen biztos ön abban, hogy e KML-t van joga bevinni OSM-be?</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="531"/>
+        <location filename="../src/MainWindow.ui" line="540"/>
         <source>Download map data for a new area</source>
         <translation>Térképadatokat tölt le egy új területhez</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="575"/>
+        <location filename="../src/MainWindow.ui" line="584"/>
         <source>Upload changes to the server</source>
         <translation>Feltölti a változásokat a szolgálóra</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="593"/>
+        <location filename="../src/MainWindow.ui" line="602"/>
         <source>Remove selected features</source>
         <translation>Törli a kiválasztott dolgokat</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="611"/>
+        <location filename="../src/MainWindow.ui" line="620"/>
         <source>Create new road</source>
         <translation>Új utat készít</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="629"/>
+        <location filename="../src/MainWindow.ui" line="638"/>
         <source>Create new node</source>
         <translation>Új pontot készít</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="647"/>
+        <location filename="../src/MainWindow.ui" line="656"/>
         <source>Reverse road direction</source>
         <translation>Megfordítja az út irányát</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="699"/>
+        <location filename="../src/MainWindow.ui" line="708"/>
         <source>Split road into separate (connected) roads</source>
         <translation>Felosztja az utat külön (összekapcsolt) utakra</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="714"/>
+        <location filename="../src/MainWindow.ui" line="723"/>
         <source>Join connected roads to a single road</source>
         <translation>Összekapcsolt utakat egyesít egyetlen úttá</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="729"/>
+        <location filename="../src/MainWindow.ui" line="738"/>
         <source>Break</source>
         <translation>Szakít</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="732"/>
+        <location filename="../src/MainWindow.ui" line="741"/>
         <source>Break apart connected roads</source>
         <translation>Szétszakít összekapcsolt utakat</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="758"/>
+        <location filename="../src/MainWindow.ui" line="767"/>
         <source>Create new area</source>
         <translation>Új területet készít</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="875"/>
+        <location filename="../src/MainWindow.ui" line="884"/>
         <source>Save to file</source>
         <translation>Fájlba ment</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="890"/>
+        <location filename="../src/MainWindow.ui" line="899"/>
         <source>Download more map data for the current area</source>
         <translation>További térképadatokat tölt le a mostani területhez</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="967"/>
+        <location filename="../src/MainWindow.ui" line="976"/>
         <source>Align nodes</source>
         <translation>Pontokat illeszt</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1028"/>
+        <location filename="../src/MainWindow.ui" line="1037"/>
         <source>Copy selected features and tags to the clipboard</source>
         <translation>A kiválasztott dolgokat és címkéket a vágólapra másolja</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1057"/>
+        <location filename="../src/MainWindow.ui" line="1066"/>
         <source>Paste tags</source>
         <translation>Címkebeillesztő</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1060"/>
+        <location filename="../src/MainWindow.ui" line="1069"/>
         <source>Paste tags from the clipboard (Merge with existing tags)</source>
         <translation>Címkéket illeszt be a vágólapról (összefélsülve azokat a meglévő címkékkel)</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1088"/>
+        <location filename="../src/MainWindow.ui" line="1097"/>
         <source>Paste</source>
         <translation>Beilleszt</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1091"/>
+        <location filename="../src/MainWindow.ui" line="1100"/>
         <source>Paste features from the clipboard</source>
         <translation>Dolgokat illeszt be a vágólapról</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1427"/>
+        <location filename="../src/MainWindow.ui" line="1433"/>
         <source>Detach node from a road</source>
         <translation>Pontot csatol ki egy útból</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="912"/>
+        <location filename="../src/MainWindow.ui" line="921"/>
         <source>&amp;Properties</source>
         <translation>&amp;Tulajdonságok</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="946"/>
+        <location filename="../src/MainWindow.ui" line="955"/>
         <source>&amp;Info</source>
         <translation>&amp;Infó</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1220"/>
+        <location filename="../src/MainWindow.ui" line="1226"/>
         <source>&amp;GPS</source>
         <translation>&amp;GPS</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1344"/>
+        <location filename="../src/MainWindow.ui" line="1350"/>
         <source>G&amp;eoImage</source>
         <translation>&amp;Földkép</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1455"/>
+        <location filename="../src/MainWindow.ui" line="1461"/>
         <source>&amp;Styles</source>
         <translation>&amp;Stílus</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1458"/>
-        <location filename="../src/MainWindow.ui" line="1461"/>
+        <location filename="../src/MainWindow.ui" line="1464"/>
+        <location filename="../src/MainWindow.ui" line="1467"/>
         <source>Hide/Show the Styles dock</source>
         <translation>Stílus dokkot rejt/mutat</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2719"/>
+        <location filename="../src/MainWindow.cpp" line="3104"/>
         <source>%1 (int)</source>
         <translation>%1 (int)</translation>
     </message>
     <message>
-        <location filename="../src/Interactions/CreateAreaInteraction.cpp" line="164"/>
+        <location filename="../src/Interactions/CreateAreaInteraction.cpp" line="166"/>
         <source>Add a hole.</source>
         <translation>Lyukat ad hozzá.</translation>
     </message>
     <message>
-        <location filename="../src/Interactions/CreateAreaInteraction.cpp" line="165"/>
+        <location filename="../src/Interactions/CreateAreaInteraction.cpp" line="167"/>
         <source>Do you want to add a(nother) hole to this area?</source>
         <translation>Akar (még) egy lyukat adni e területhez?</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="338"/>
+        <location filename="../src/MainWindow.cpp" line="361"/>
         <source>Cannot load Projections file</source>
         <translation>Nem tudom Projections fájlt betölteni</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="338"/>
+        <location filename="../src/MainWindow.cpp" line="361"/>
         <source>&quot;Projections.xml&quot; could not be opened anywhere. Aborting.</source>
         <translation>„Projections.xml”-t sehol sem tudom megnyitni. Leállok.</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1786"/>
+        <location filename="../src/MainWindow.cpp" line="2022"/>
         <source>Create Junction</source>
         <translation>Összekötőt készít</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2882"/>
+        <location filename="../src/MainWindow.cpp" line="3265"/>
+        <location filename="../src/MainWindow.cpp" line="3274"/>
         <source>Invalid projection</source>
         <translation>Érvénytelen leképezés</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2882"/>
+        <location filename="../src/MainWindow.cpp" line="3265"/>
+        <location filename="../src/MainWindow.cpp" line="3274"/>
         <source>Unable to set projection &quot;%1&quot;.</source>
         <translation>Nem tudom beállítani „%1” leképezést.</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1464"/>
+        <location filename="../src/MainWindow.ui" line="1470"/>
         <source>Ctrl+B</source>
         <translation>Strg+B</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1479"/>
+        <location filename="../src/MainWindow.ui" line="1485"/>
         <source>&amp;Reset Discardable dialogs status</source>
         <translation>Törli az eldobható &amp;párbeszéd állapotot</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1488"/>
+        <location filename="../src/MainWindow.ui" line="1494"/>
         <source>GPS Menu</source>
         <translation>GPS-menü</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1497"/>
+        <location filename="../src/MainWindow.ui" line="1503"/>
         <source>Camera</source>
         <translation>Nézőke</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1502"/>
+        <location filename="../src/MainWindow.ui" line="1508"/>
         <source>Create &amp;Junction</source>
         <translation>&amp;Összekötőt készít</translation>
     </message>
     <message>
-        <location filename="../src/Features/Way.cpp" line="766"/>
+        <location filename="../src/Interactions/EditInteraction.cpp" line="300"/>
         <source>Delete Children.</source>
         <translation>Gyerekeket töröl.</translation>
     </message>
@@ -3590,7 +4010,7 @@ Teljesen biztos ön abban, hogy e KML-t van joga bevinni OSM-be?</translation>
         <translation>Terület készítése</translation>
     </message>
     <message>
-        <location filename="../src/Interactions/CreateDoubleWayInteraction.cpp" line="44"/>
+        <location filename="../src/Interactions/CreateDoubleWayInteraction.cpp" line="46"/>
         <source>Create double way Interaction</source>
         <translation>Dupla út készítése</translation>
     </message>
@@ -3600,42 +4020,43 @@ Teljesen biztos ön abban, hogy e KML-t van joga bevinni OSM-be?</translation>
         <translation>Pont készítése</translation>
     </message>
     <message>
-        <location filename="../src/Interactions/CreatePolygonInteraction.cpp" line="30"/>
+        <location filename="../src/Interactions/CreatePolygonInteraction.cpp" line="31"/>
         <source>LEFT-CLICK to start;DRAG to scale;SHIFT-DRAG to rotate;LEFT-CLICK to end</source>
         <translation>BAL-KATT kezd;HÚZÁS méretez;SHIFT-HÚZÁS forgat;BAL-KATT befejez</translation>
     </message>
     <message>
-        <location filename="../src/Interactions/CreatePolygonInteraction.cpp" line="35"/>
+        <location filename="../src/Interactions/CreatePolygonInteraction.cpp" line="36"/>
         <source>Create Polygon Interaction</source>
         <translation>Sokszög készítése</translation>
     </message>
     <message>
-        <location filename="../src/Interactions/CreatePolygonInteraction.cpp" line="86"/>
+        <location filename="../src/Interactions/CreatePolygonInteraction.cpp" line="85"/>
         <source>Create Polygon %1</source>
         <translation>%1 sokszöget készíti</translation>
     </message>
     <message>
-        <location filename="../src/Interactions/CreateRoundaboutInteraction.cpp" line="43"/>
+        <location filename="../src/Interactions/CreateRoundaboutInteraction.cpp" line="45"/>
         <source>Create roundabout Interaction</source>
         <translation>Körforgalom készítése</translation>
     </message>
     <message>
-        <location filename="../src/Interactions/CreateSingleWayInteraction.cpp" line="44"/>
+        <location filename="../src/Interactions/CreateSingleWayInteraction.cpp" line="57"/>
+        <location filename="../src/Interactions/ExtrudeInteraction.cpp" line="42"/>
         <source>Create way Interaction</source>
         <translation>Út készítése</translation>
     </message>
     <message>
-        <location filename="../src/Interactions/EditInteraction.cpp" line="63"/>
+        <location filename="../src/Interactions/EditInteraction.cpp" line="58"/>
         <source>Edit Interaction</source>
         <translation>Szerkesztés</translation>
     </message>
     <message>
-        <location filename="../src/Interactions/MoveNodeInteraction.cpp" line="139"/>
+        <location filename="../src/Interactions/MoveNodeInteraction.cpp" line="147"/>
         <source>Move Nodes</source>
         <translation>Pontokat mozgat</translation>
     </message>
     <message>
-        <location filename="../src/Interactions/MoveNodeInteraction.cpp" line="143"/>
+        <location filename="../src/Interactions/MoveNodeInteraction.cpp" line="151"/>
         <source>Move Node %1</source>
         <translation>%1 pontot mozgatja</translation>
     </message>
@@ -3651,8 +4072,8 @@ Teljesen biztos ön abban, hogy e KML-t van joga bevinni OSM-be?</translation>
     </message>
     <message>
         <location filename="../src/Interactions/RotateInteraction.cpp" line="38"/>
-        <source>HOVER to select;LEFT-DRAG to rotate/scale</source>
-        <translation>RÁMOZDULÁS kiválaszt; BAL-HÚZÁS forgat/méretez</translation>
+        <source>HOVER to select;LEFT-DRAG to rotate</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../src/Interactions/RotateInteraction.cpp" line="43"/>
@@ -3660,205 +4081,195 @@ Teljesen biztos ön abban, hogy e KML-t van joga bevinni OSM-be?</translation>
         <translation>Forgatás</translation>
     </message>
     <message>
-        <location filename="../src/Interactions/RotateInteraction.cpp" line="127"/>
-        <source>Scale/Rotate Nodes</source>
-        <translation>Pontokat méretez/forgat</translation>
+        <location filename="../src/Interactions/RotateInteraction.cpp" line="122"/>
+        <source>Rotate Feature</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Interactions/ZoomInteraction.cpp" line="23"/>
+        <location filename="../src/Interactions/ZoomInteraction.cpp" line="24"/>
         <source>LEFT-CLICK to first corner -&gt; LEFT-DRAG to specify area -&gt; LEFT-CLICK to zoom</source>
         <translation>BAL-KATT az első sarok -&gt; BAL-HÚZÁS területet ad meg -&gt; BAL-KATT nagyít</translation>
     </message>
     <message>
-        <location filename="../src/Interactions/ZoomInteraction.cpp" line="26"/>
+        <location filename="../src/Interactions/ZoomInteraction.cpp" line="27"/>
         <source>Zoom Interaction</source>
         <translation>Nagyítás</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1626"/>
+        <location filename="../src/MainWindow.cpp" line="1847"/>
         <source>Create Polygon</source>
         <translation>Sokszög készítése</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1626"/>
+        <location filename="../src/MainWindow.cpp" line="1847"/>
         <source>Specify the number of sides</source>
         <translation>Adja meg az oldalak számát</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1744"/>
+        <location filename="../src/MainWindow.cpp" line="1980"/>
         <source>Force Feature upload</source>
         <translation>Dolgok feltöltését erőlteti</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1115"/>
+        <location filename="../src/MainWindow.ui" line="1121"/>
         <source>&amp;Force Upload</source>
         <translation>&amp;Feltöltést erőltet</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1514"/>
+        <location filename="../src/MainWindow.ui" line="1520"/>
         <source>Rotate</source>
         <translation>Forgat</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1517"/>
+        <location filename="../src/MainWindow.ui" line="1523"/>
         <source>Ctrl+A</source>
         <translation>Ctrl+A</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1522"/>
+        <location filename="../src/MainWindow.ui" line="1528"/>
         <source>Polygon</source>
         <translation>Sokszög</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1527"/>
+        <location filename="../src/MainWindow.ui" line="1533"/>
         <source>Rectangle</source>
         <translation>Téglalap</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1532"/>
+        <location filename="../src/MainWindow.ui" line="1538"/>
         <source>Add new Image layer</source>
         <translation>Új képréteget ad hozzá</translation>
     </message>
     <message>
-        <location filename="../src/Interactions/EditInteraction.cpp" line="56"/>
-        <source>LEFT-CLICK to select;RIGHT-CLICK to pan;CTRL-LEFT-CLICK to toggle selection;SHIFT-LEFT-CLICK to add to selection;LEFT-DRAG for area selection;CTRL-RIGHT-DRAG for zoom;</source>
-        <translation>BAL-KATT kiválaszt;JOBB-KATT felugró menü;CTRL-BAL-KATT kiválasztás be/ki;SHIFT-BAL-KATT kiválasztáshoz ad;BAL-HÚZÁS területet választ;CTRL-JOBB-HÚZÁS nagyít;</translation>
-    </message>
-    <message>
-        <location filename="../src/Interactions/EditInteraction.cpp" line="58"/>
-        <source>CLICK to select/move;CTRL-CLICK to toggle selection;SHIFT-CLICK to add to selection;SHIFT-DRAG for area selection;CTRL-DRAG for zoom;</source>
-        <translation>KATT kiválaszt/mozgat;CTRL-KATT kiválasztás be/ki;SHIFT-KATT kiválasztáshoz ad;SHIFT-HÚZÁS területet választ;CTRL-HÚZÁS nagyít;</translation>
-    </message>
-    <message>
-        <location filename="../src/MainWindow.cpp" line="694"/>
+        <location filename="../src/MainWindow.cpp" line="722"/>
         <source>Clipboard do not contain valid data.</source>
         <translation>A vágólapon nincs érvényes adat.</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1790"/>
+        <location filename="../src/MainWindow.cpp" line="2026"/>
         <source>Multiple intersection.</source>
         <translation>Többszöri metszés.</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1791"/>
+        <location filename="../src/MainWindow.cpp" line="2027"/>
         <source>Those roads have multiple intersections.
 Do you still want to create a junction for each one (Unwanted junctions can still be deleted afterhand)?</source>
         <translation>Az utak többször metszik egymást.
 (Később törölheti azt, ami nem kell.) Még mindig akar összekötőt készíteni mindegyikhez?</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1537"/>
+        <location filename="../src/MainWindow.ui" line="1094"/>
         <source>Paste Feature(s)</source>
         <translation>Dolgo(ka)t illeszt be</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1548"/>
+        <location filename="../src/MainWindow.ui" line="1546"/>
         <source>Features</source>
         <translation>Dolgok</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="3254"/>
+        <location filename="../src/MainWindow.cpp" line="3640"/>
         <source>Warning! Could not load the Merkaartor translations for the &quot;%1&quot; language. Switching to default english.</source>
         <translation>Figyelem! Nem tudtam betölteni a Merkaartor-fordítást „%1” nyelvhez. Angolra váltok.</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1576"/>
+        <location filename="../src/MainWindow.ui" line="1574"/>
         <source>Show &amp;virtual nodes</source>
         <translation>&amp;Látszó pontokat mutat</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="493"/>
-        <location filename="../src/MainWindow.ui" line="245"/>
+        <location filename="../src/MainWindow.cpp" line="517"/>
+        <location filename="../src/MainWindow.ui" line="246"/>
         <source>OpenStreetBugs</source>
         <translation>OpenStreetBugs</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="283"/>
+        <location filename="../src/MainWindow.ui" line="288"/>
         <source>S&amp;how</source>
         <translation>&amp;Mutat</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1174"/>
+        <location filename="../src/MainWindow.ui" line="1180"/>
         <source>&amp;Raster/SVG</source>
         <translation>&amp;Kép/SVG</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1182"/>
+        <location filename="../src/MainWindow.ui" line="1188"/>
         <source>Show &amp;nodes</source>
         <translation>&amp;Pontokat mutat</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1193"/>
+        <location filename="../src/MainWindow.ui" line="1199"/>
         <source>Show na&amp;mes</source>
         <translation>&amp;Neveket mutat</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1562"/>
+        <location filename="../src/MainWindow.ui" line="1560"/>
         <source>&amp;Subdivide</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1565"/>
+        <location filename="../src/MainWindow.ui" line="1563"/>
         <source>Subdivide segment equally</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1568"/>
+        <location filename="../src/MainWindow.ui" line="1566"/>
         <source>Subdivide a selected way segment (the way and two adjacent nodes) into segments of equal length.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1584"/>
+        <location filename="../src/MainWindow.ui" line="1582"/>
         <source>Show lat/lon &amp;grid</source>
         <translation>Szél/hossz &amp;hálót mutat</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1592"/>
+        <location filename="../src/MainWindow.ui" line="1590"/>
         <source>&amp;Lock zoom to tiled background</source>
         <translation>Nagyítást &amp;csempés háttérhez rögzít</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1597"/>
+        <location filename="../src/MainWindow.ui" line="1595"/>
         <source>&amp;Projections Editor...</source>
         <translation>&amp;Leképezés-szerkesztő…</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1605"/>
+        <location filename="../src/MainWindow.ui" line="1603"/>
         <source>Show &amp;Photos on map</source>
         <translation>&amp;Fényképeket mutat a térképen</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1610"/>
+        <location filename="../src/MainWindow.ui" line="1608"/>
         <source>OsmChange (OSC)</source>
         <translation>OsmChange (OSC)</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1615"/>
+        <location filename="../src/MainWindow.ui" line="1613"/>
         <source>Force Delete</source>
         <translation>Törlést erőltet</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1620"/>
+        <location filename="../src/MainWindow.ui" line="1618"/>
         <source>Download OpenStreet&amp;Bugs</source>
         <translation>OpenStreet&amp;Bugs-letöltés</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1625"/>
+        <location filename="../src/MainWindow.ui" line="1623"/>
         <source>Close</source>
         <translation>Bezár</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1630"/>
+        <location filename="../src/MainWindow.ui" line="1628"/>
         <source>S&amp;implify</source>
         <translation>&amp;Egyszerűsít</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1633"/>
+        <location filename="../src/MainWindow.ui" line="1631"/>
         <source>Simplify road(s)</source>
         <translation>Ut(ak)at egyszerűsít</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1636"/>
+        <location filename="../src/MainWindow.ui" line="1634"/>
         <source>Simplify way by removing unnecessary child nodes</source>
         <translation>Utakat egyszerűsít a szükségtelen gyerekpontok eltávolításával</translation>
     </message>
@@ -3868,197 +4279,225 @@ Do you still want to create a junction for each one (Unwanted junctions can stil
         <translation>OSMChange-behozatal</translation>
     </message>
     <message>
-        <location filename="../src/Docks/PropertiesDock.cpp" line="711"/>
+        <location filename="../src/Docks/PropertiesDock.cpp" line="703"/>
         <source>Clear %1 tags on %2</source>
         <translation>%1 címkéket törli %2 dolgon</translation>
     </message>
     <message>
-        <location filename="../src/Docks/PropertiesDock.cpp" line="828"/>
-        <location filename="../src/Docks/PropertiesDock.cpp" line="873"/>
+        <location filename="../src/Docks/PropertiesDock.cpp" line="836"/>
+        <location filename="../src/Docks/PropertiesDock.cpp" line="881"/>
         <source>Reorder members in relation %1</source>
         <translation>%1 kapcsolat tagjait rendezi</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1359"/>
+        <location filename="../src/MainWindow.cpp" line="1521"/>
         <source>Error downloading OpenStreetBugs</source>
         <translation>Hiba OpenStreetBugs letöltésekor</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1359"/>
+        <location filename="../src/MainWindow.cpp" line="1521"/>
         <source>The OpenStreetBugs could not be downloaded</source>
         <translation>OpenStreetBugs-ot nem tudtam letölteni</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1713"/>
+        <location filename="../src/MainWindow.cpp" line="1934"/>
         <source>Simplify Roads</source>
         <translation>Utakat egyszerűsít</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1769"/>
+        <location filename="../src/MainWindow.cpp" line="2005"/>
         <source>Network timeout</source>
         <translation>Hálózati időzés</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1769"/>
+        <location filename="../src/MainWindow.cpp" line="2005"/>
         <source>Cannot contact OpenStreetBugs.</source>
         <translation>Nem tudok csatlakozni OpenStreetBugs-hoz.</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1779"/>
+        <location filename="../src/MainWindow.cpp" line="2015"/>
         <source>Error closing bug</source>
         <translation>Hiba lezáráskor</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1779"/>
+        <location filename="../src/MainWindow.cpp" line="2015"/>
         <source>Cannot delete bug. Server message is:
 %1</source>
         <translation>Nem tudok hibát törölni. A szolgáló üzenete:
 %1</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2419"/>
+        <location filename="../src/MainWindow.cpp" line="2786"/>
         <source>Export osmChange</source>
         <translation>OSMChange-kivitel</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2419"/>
+        <location filename="../src/MainWindow.cpp" line="2786"/>
         <source>osmChange Files (*.osc)</source>
         <translation>OSMChange adat (*.osc)</translation>
+    </message>
+    <message>
+        <location filename="../src/Docks/PropertiesDock.cpp" line="736"/>
+        <source>Set &quot;source&quot; tas on %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/Interactions/ExtrudeInteraction.cpp" line="123"/>
+        <source>Extrude Road %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/Interactions/ScaleInteraction.cpp" line="38"/>
+        <source>HOVER to select;LEFT-DRAG to scale</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/Interactions/ScaleInteraction.cpp" line="43"/>
+        <source>Scale Interaction</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/Interactions/ScaleInteraction.cpp" line="122"/>
+        <source>Scale Feature</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>MapFeature</name>
     <message>
-        <location filename="../src/Features/Feature.cpp" line="915"/>
+        <location filename="../src/Features/Feature.cpp" line="1058"/>
         <source>&lt;i&gt;last: &lt;/i&gt;&lt;b&gt;%1&lt;/b&gt; by &lt;b&gt;%2&lt;/b&gt;</source>
         <translation>&lt;i&gt;utoljára: &lt;/i&gt;&lt;b&gt;%1&lt;/b&gt; &lt;b&gt;%2&lt;/b&gt; által</translation>
     </message>
     <message>
-        <location filename="../src/Features/Feature.cpp" line="917"/>
+        <location filename="../src/Features/Feature.cpp" line="1060"/>
         <source>&lt;i&gt;last: &lt;/i&gt;&lt;b&gt;%1&lt;/b&gt;</source>
         <translation>&lt;i&gt;utoljára: &lt;/i&gt;&lt;b&gt;%1&lt;/b&gt;</translation>
     </message>
     <message>
-        <location filename="../src/Features/Feature.cpp" line="920"/>
+        <location filename="../src/Features/Feature.cpp" line="1063"/>
         <source>&lt;br/&gt;&lt;i&gt;layer: &lt;/i&gt;&lt;b&gt;%1&lt;/b&gt; </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Features/Feature.cpp" line="927"/>
+        <location filename="../src/Features/Feature.cpp" line="1087"/>
         <source>History</source>
         <translation>Történelem</translation>
     </message>
     <message>
-        <location filename="../src/Features/Feature.cpp" line="930"/>
+        <location filename="../src/Features/Feature.cpp" line="1090"/>
         <source>Referenced by ways</source>
         <translation>Rá hivatkozó utak</translation>
     </message>
     <message>
-        <location filename="../src/Features/Feature.cpp" line="933"/>
+        <location filename="../src/Features/Feature.cpp" line="1093"/>
         <source>Referenced by relation</source>
         <translation>Rá hivatkozó kapcsolat</translation>
     </message>
     <message>
-        <location filename="../src/Features/Relation.cpp" line="570"/>
+        <location filename="../src/Features/Relation.cpp" line="579"/>
         <source>size</source>
         <translation>méret</translation>
     </message>
     <message>
-        <location filename="../src/Features/Relation.cpp" line="573"/>
-        <location filename="../src/Features/Way.cpp" line="1060"/>
+        <location filename="../src/Features/Relation.cpp" line="582"/>
+        <location filename="../src/Features/Way.cpp" line="1034"/>
         <source>Topleft</source>
         <translation>Bal felső</translation>
     </message>
     <message>
-        <location filename="../src/Features/Relation.cpp" line="575"/>
-        <location filename="../src/Features/Way.cpp" line="1062"/>
+        <location filename="../src/Features/Relation.cpp" line="584"/>
+        <location filename="../src/Features/Way.cpp" line="1036"/>
         <source>Botright</source>
         <translation>Jobb alsó</translation>
     </message>
     <message>
-        <location filename="../src/Features/Relation.cpp" line="577"/>
+        <location filename="../src/Features/Relation.cpp" line="586"/>
         <source>Relation</source>
         <translation>Kapcsolat</translation>
     </message>
     <message>
-        <location filename="../src/Features/Relation.cpp" line="732"/>
+        <location filename="../src/Features/Relation.cpp" line="744"/>
         <source>Role</source>
         <translation>Szerep</translation>
     </message>
     <message>
-        <location filename="../src/Features/Relation.cpp" line="734"/>
+        <location filename="../src/Features/Relation.cpp" line="746"/>
         <source>Member</source>
         <translation>Tag</translation>
     </message>
     <message>
-        <location filename="../src/Features/Way.cpp" line="1064"/>
+        <location filename="../src/Features/Way.cpp" line="1038"/>
         <source>Way</source>
         <translation>Út</translation>
     </message>
     <message>
-        <location filename="../src/Features/Node.cpp" line="608"/>
+        <location filename="../src/Features/Node.cpp" line="594"/>
         <source>coord</source>
         <translation>helyzet</translation>
     </message>
     <message>
-        <location filename="../src/Features/Node.cpp" line="629"/>
+        <location filename="../src/Features/Node.cpp" line="605"/>
         <source>Node</source>
         <translation>Pont</translation>
     </message>
     <message>
-        <location filename="../src/Features/Way.cpp" line="1057"/>
+        <location filename="../src/Features/Way.cpp" line="1031"/>
         <source>%1 nodes</source>
         <translation>%1 pont</translation>
     </message>
     <message>
-        <location filename="../src/Features/Way.cpp" line="1055"/>
+        <location filename="../src/Features/Way.cpp" line="1029"/>
         <source>Length</source>
         <translation>Hossz</translation>
     </message>
     <message>
-        <location filename="../src/Features/Way.cpp" line="1057"/>
+        <location filename="../src/Features/Way.cpp" line="1026"/>
+        <source>Closed way</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/Features/Way.cpp" line="1031"/>
         <source>Size</source>
         <translation>Méret</translation>
     </message>
     <message>
-        <location filename="../src/Features/Way.cpp" line="1064"/>
+        <location filename="../src/Features/Way.cpp" line="1038"/>
         <source>Area</source>
         <translation>Terület</translation>
     </message>
     <message>
-        <location filename="../src/Features/Node.cpp" line="611"/>
+        <location filename="../src/Features/Node.cpp" line="597"/>
         <source>elevation</source>
         <translation>magasság</translation>
     </message>
     <message>
-        <location filename="../src/Features/Node.cpp" line="613"/>
+        <location filename="../src/Features/Node.cpp" line="599"/>
         <source>speed</source>
         <translation>sebesség</translation>
     </message>
     <message>
-        <location filename="../src/Features/Node.cpp" line="620"/>
+        <location filename="../src/Features/Node.cpp" line="593"/>
         <source>Waypoint</source>
         <translation>Útpont</translation>
     </message>
     <message>
-        <location filename="../src/Features/Node.cpp" line="615"/>
-        <location filename="../src/Features/Node.cpp" line="623"/>
+        <location filename="../src/Features/Node.cpp" line="601"/>
         <source>description</source>
         <translation>jellemzés</translation>
     </message>
     <message>
-        <location filename="../src/Features/Node.cpp" line="617"/>
-        <location filename="../src/Features/Node.cpp" line="626"/>
+        <location filename="../src/Features/Node.cpp" line="603"/>
         <source>comment</source>
         <translation>megjegyzés</translation>
     </message>
     <message>
-        <location filename="../src/Features/Relation.cpp" line="570"/>
+        <location filename="../src/Features/Relation.cpp" line="579"/>
         <source>members</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../src/Features/Feature.cpp" line="913"/>
+        <location filename="../src/Features/Feature.cpp" line="1056"/>
         <source>&lt;i&gt;V: &lt;/i&gt;&lt;b&gt;%1&lt;/b&gt; </source>
         <translation>&lt;i&gt;V: &lt;/i&gt;&lt;b&gt;%1&lt;/b&gt; </translation>
     </message>
@@ -4066,57 +4505,72 @@ Do you still want to create a junction for each one (Unwanted junctions can stil
 <context>
     <name>MapView</name>
     <message>
-        <location filename="../src/MapView.cpp" line="279"/>
+        <location filename="../src/MapView.cpp" line="303"/>
         <source>%1 m</source>
         <translation>%1 m</translation>
     </message>
     <message>
-        <location filename="../src/MapView.cpp" line="281"/>
+        <location filename="../src/MapView.cpp" line="305"/>
         <source>%1 km</source>
         <translation>%1 km</translation>
     </message>
     <message>
-        <location filename="../src/MapView.cpp" line="678"/>
+        <location filename="../src/MapView.cpp" line="839"/>
         <source>Feature</source>
         <translation>Dolog</translation>
     </message>
     <message>
-        <location filename="../src/MapView.cpp" line="695"/>
+        <location filename="../src/MapView.cpp" line="856"/>
         <source>Road</source>
         <translation>Út</translation>
     </message>
     <message>
-        <location filename="../src/MapView.cpp" line="687"/>
+        <location filename="../src/MapView.cpp" line="1533"/>
+        <source>View</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/MapView.cpp" line="1534"/>
+        <source>Bounding Box</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/MapView.cpp" line="1546"/>
+        <source>Projection</source>
+        <translation type="unfinished">Leképezés</translation>
+    </message>
+    <message>
+        <location filename="../src/MapView.cpp" line="848"/>
         <source>Node</source>
         <translation>Pont</translation>
     </message>
     <message>
-        <location filename="../src/MapView.cpp" line="703"/>
+        <location filename="../src/MapView.cpp" line="864"/>
         <source>Relation</source>
         <translation>Kapcsolat</translation>
     </message>
     <message>
-        <location filename="../src/MapView.cpp" line="818"/>
+        <location filename="../src/MapView.cpp" line="995"/>
         <source>Cancel</source>
         <translation>Mégsem</translation>
     </message>
     <message>
-        <location filename="../src/MapView.cpp" line="250"/>
+        <location filename="../src/MapView.cpp" line="271"/>
         <source>%1ms;ppm:%2</source>
         <translation>%1ms;ppm:%2</translation>
     </message>
     <message>
-        <location filename="../src/MapView.cpp" line="812"/>
+        <location filename="../src/MapView.cpp" line="989"/>
         <source>Load image</source>
         <translation>Képet betölt</translation>
     </message>
     <message>
-        <location filename="../src/MapView.cpp" line="814"/>
+        <location filename="../src/MapView.cpp" line="991"/>
         <source>Add node position to image</source>
         <translation>Pont helyzetét képhez adja</translation>
     </message>
     <message>
-        <location filename="../src/MapView.cpp" line="816"/>
+        <location filename="../src/MapView.cpp" line="993"/>
         <source>Geotag image with this position</source>
         <translation>Képet földcímkéz e helyzettel</translation>
     </message>
@@ -4125,25 +4579,25 @@ Do you still want to create a junction for each one (Unwanted junctions can stil
     <name>MerkaartorPreferences</name>
     <message>
         <location filename="../src/Preferences/TmsServersList.cpp" line="20"/>
-        <location filename="../src/Preferences/TmsServersList.cpp" line="36"/>
+        <location filename="../src/Preferences/TmsServersList.cpp" line="38"/>
         <location filename="../src/Preferences/WmsServersList.cpp" line="20"/>
-        <location filename="../src/Preferences/WmsServersList.cpp" line="43"/>
+        <location filename="../src/Preferences/WmsServersList.cpp" line="40"/>
         <source>New Server</source>
         <translation>Új szolgáló</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/MerkaartorPreferences.cpp" line="403"/>
-        <location filename="../src/Preferences/MerkaartorPreferences.cpp" line="406"/>
+        <location filename="../src/Preferences/MerkaartorPreferences.cpp" line="504"/>
+        <location filename="../src/Preferences/MerkaartorPreferences.cpp" line="507"/>
         <source>Preferences upload failed</source>
         <translation>Beállítás feltöltése nem sikerült</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/MerkaartorPreferences.cpp" line="403"/>
+        <location filename="../src/Preferences/MerkaartorPreferences.cpp" line="504"/>
         <source>Duplicate key</source>
         <translation>Dupla kulcs</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/MerkaartorPreferences.cpp" line="406"/>
+        <location filename="../src/Preferences/MerkaartorPreferences.cpp" line="507"/>
         <source>More than 150 preferences</source>
         <translation>Több mint 150 beállítás</translation>
     </message>
@@ -4181,21 +4635,16 @@ Do you still want to create a junction for each one (Unwanted junctions can stil
     <name>NameFinder::NameFinderTableModel</name>
     <message>
         <location filename="../src/NameFinder/namefindertablemodel.cpp" line="68"/>
+        <source>Class</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/NameFinder/namefindertablemodel.cpp" line="71"/>
         <source>Name</source>
         <translation>Név</translation>
     </message>
     <message>
-        <location filename="../src/NameFinder/namefindertablemodel.cpp" line="71"/>
-        <source>Type</source>
-        <translation>Típus</translation>
-    </message>
-    <message>
         <location filename="../src/NameFinder/namefindertablemodel.cpp" line="74"/>
-        <source>Near</source>
-        <translation>Mellett</translation>
-    </message>
-    <message>
-        <location filename="../src/NameFinder/namefindertablemodel.cpp" line="77"/>
         <source>Unknown field</source>
         <translation>Ismeretlen mező</translation>
     </message>
@@ -4203,27 +4652,27 @@ Do you still want to create a junction for each one (Unwanted junctions can stil
 <context>
     <name>NameFinder::NameFinderWidget</name>
     <message>
-        <location filename="../src/NameFinder/namefinderwidget.cpp" line="89"/>
+        <location filename="../src/NameFinder/namefinderwidget.cpp" line="91"/>
         <source>Error!</source>
         <translation>Hiba!</translation>
     </message>
     <message>
-        <location filename="../src/NameFinder/namefinderwidget.cpp" line="93"/>
+        <location filename="../src/NameFinder/namefinderwidget.cpp" line="95"/>
         <source>Name finder service host not found.</source>
         <translation>Nincs meg a névkereső-szolgálat gazda.</translation>
     </message>
     <message>
-        <location filename="../src/NameFinder/namefinderwidget.cpp" line="96"/>
+        <location filename="../src/NameFinder/namefinderwidget.cpp" line="98"/>
         <source>Name finder service host refused connection.</source>
         <translation>A névkereső-szolgálat gazda elutasította a kapcsolatot.</translation>
     </message>
     <message>
-        <location filename="../src/NameFinder/namefinderwidget.cpp" line="99"/>
+        <location filename="../src/NameFinder/namefinderwidget.cpp" line="101"/>
         <source>Name finder service requires authentication.</source>
         <translation>A névkereső-szolgálat gazda hitelesítést igényel.</translation>
     </message>
     <message>
-        <location filename="../src/NameFinder/namefinderwidget.cpp" line="101"/>
+        <location filename="../src/NameFinder/namefinderwidget.cpp" line="103"/>
         <source>Unknown error.</source>
         <translation>Ismeretlen hiba.</translation>
     </message>
@@ -4231,7 +4680,7 @@ Do you still want to create a junction for each one (Unwanted junctions can stil
 <context>
     <name>NameFinderWidgetUi</name>
     <message>
-        <location filename="../src/NameFinder/namefinderwidget.ui" line="13"/>
+        <location filename="../src/NameFinder/namefinderwidget.ui" line="14"/>
         <source>Form</source>
         <translation>Űrlap</translation>
     </message>
@@ -4239,111 +4688,101 @@ Do you still want to create a junction for each one (Unwanted junctions can stil
 <context>
     <name>NativeRenderDialog</name>
     <message>
-        <location filename="../src/Render/NativeRenderDialog.cpp" line="36"/>
-        <source>Proceed...</source>
-        <translation>Tovább…</translation>
+        <location filename="../src/Render/NativeRenderDialog.cpp" line="157"/>
+        <location filename="../src/Render/NativeRenderDialog.cpp" line="169"/>
+        <location filename="../src/Render/NativeRenderDialog.cpp" line="193"/>
+        <source>Output filename</source>
+        <translation>Kimenő fájlnév</translation>
     </message>
     <message>
-        <location filename="../src/Render/NativeRenderDialog.cpp" line="133"/>
-        <source>Working. Please Wait...</source>
-        <translation>Dolgozok. Kérem várjon…</translation>
+        <location filename="../src/Render/NativeRenderDialog.cpp" line="157"/>
+        <source>PDF files (*.pdf)</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Render/NativeRenderDialog.cpp" line="133"/>
-        <source>Cancel</source>
-        <translation>Mégsem</translation>
+        <location filename="../src/Render/NativeRenderDialog.cpp" line="169"/>
+        <source>Image files (*.png *.jpg)</source>
+        <translation>Képfájlok (*.png *.jpg)</translation>
     </message>
     <message>
-        <location filename="../src/Render/NativeRenderDialog.ui" line="26"/>
-        <source>SVG</source>
-        <translation>SVG</translation>
+        <location filename="../src/Render/NativeRenderDialog.cpp" line="193"/>
+        <source>SVG files (*.svg)</source>
+        <translation>SVG-fájlok (*.svg)</translation>
     </message>
-    <message>
-        <location filename="../src/Render/NativeRenderDialog.ui" line="67"/>
-        <source>min lat/Lon</source>
-        <translation>min szél/hossz</translation>
-    </message>
-    <message>
-        <location filename="../src/Render/NativeRenderDialog.ui" line="134"/>
-        <source>max lat/Lon</source>
-        <translation>max szél/hossz</translation>
-    </message>
-    <message>
-        <location filename="../src/Render/NativeRenderDialog.ui" line="201"/>
-        <source>Show Scale</source>
-        <translation>Arányt mutat</translation>
-    </message>
-    <message>
-        <location filename="../src/Render/NativeRenderDialog.ui" line="214"/>
-        <source>Show Grid</source>
-        <translation>Rácsot mutat</translation>
-    </message>
-    <message>
-        <location filename="../src/Render/NativeRenderDialog.ui" line="227"/>
-        <source>Show Borders</source>
-        <translation>Határokat mutat</translation>
-    </message>
-    <message>
-        <location filename="../src/Render/NativeRenderDialog.ui" line="240"/>
-        <source>Show License</source>
-        <translation>Engedélyt mutat</translation>
-    </message>
-    <message>
-        <location filename="../src/Render/NativeRenderDialog.ui" line="256"/>
-        <source>Width x Height (px)</source>
-        <translation>Széle x hossza (kpt)</translation>
-    </message>
-    <message>
-        <location filename="../src/Render/NativeRenderDialog.ui" line="279"/>
-        <source>X</source>
-        <translation>X</translation>
-    </message>
+</context>
+<context>
+    <name>NativeRenderWidget</name>
     <message>
         <location filename="../src/Render/NativeRenderDialog.ui" line="14"/>
         <source>Raster/SVG export</source>
-        <translation>Kép/SVG-kivitel</translation>
+        <translation type="unfinished">Kép/SVG-kivitel</translation>
     </message>
     <message>
-        <location filename="../src/Render/NativeRenderDialog.ui" line="20"/>
-        <source>Export type</source>
-        <translation>Kivitel típusa</translation>
+        <location filename="../src/Render/NativeRenderDialog.ui" line="26"/>
+        <source>Options</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Render/NativeRenderDialog.ui" line="33"/>
-        <source>Raster</source>
-        <translation>Kép</translation>
+        <location filename="../src/Render/NativeRenderDialog.ui" line="49"/>
+        <source>min lat/Lon</source>
+        <translation type="unfinished">min szél/hossz</translation>
     </message>
     <message>
-        <location filename="../src/Render/NativeRenderDialog.ui" line="43"/>
-        <source>Export options</source>
-        <translation>Kivitel beállítása</translation>
+        <location filename="../src/Render/NativeRenderDialog.ui" line="90"/>
+        <source>max lat/Lon</source>
+        <translation type="unfinished">max szél/hossz</translation>
     </message>
     <message>
-        <location filename="../src/Render/NativeRenderDialog.cpp" line="159"/>
-        <source>SVG rendering</source>
-        <translation>SVG-t készít</translation>
+        <location filename="../src/Render/NativeRenderDialog.ui" line="174"/>
+        <source>Show Nodes</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Render/NativeRenderDialog.cpp" line="162"/>
-        <source>Raster rendering</source>
-        <translation>Képet készít</translation>
+        <location filename="../src/Render/NativeRenderDialog.ui" line="181"/>
+        <source>Show Relations</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/Render/NativeRenderDialog.ui" line="191"/>
+        <source>Show Scale</source>
+        <translation type="unfinished">Arányt mutat</translation>
+    </message>
+    <message>
+        <location filename="../src/Render/NativeRenderDialog.ui" line="204"/>
+        <source>Show Lat/Lon Grid</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/Render/NativeRenderDialog.ui" line="225"/>
+        <source>Export to PDF...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/Render/NativeRenderDialog.ui" line="232"/>
+        <source>Export to SVG...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/Render/NativeRenderDialog.ui" line="239"/>
+        <source>Export to Raster...</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>OsbLayer</name>
     <message>
-        <location filename="../src/Layers/Layer.cpp" line="1496"/>
+        <location filename="../src/Layers/Layer.cpp" line="1551"/>
         <source># of loaded Regions</source>
         <translation>betöltött régiók száma</translation>
     </message>
     <message>
-        <location filename="../src/Layers/Layer.cpp" line="1496"/>
-        <location filename="../src/Layers/Layer.cpp" line="1497"/>
+        <location filename="../src/Layers/Layer.cpp" line="1551"/>
+        <location filename="../src/Layers/Layer.cpp" line="1552"/>
         <source>%1</source>
         <translation>%1</translation>
     </message>
     <message>
-        <location filename="../src/Layers/Layer.cpp" line="1497"/>
+        <location filename="../src/Layers/Layer.cpp" line="1552"/>
         <source># of loaded Tiles</source>
         <translation>betöltött csempék száma</translation>
     </message>
@@ -4351,189 +4790,224 @@ Do you still want to create a junction for each one (Unwanted junctions can stil
 <context>
     <name>OsbLayerWidget</name>
     <message>
-        <location filename="../src/Layers/LayerWidget.cpp" line="552"/>
+        <location filename="../src/Layers/LayerWidget.cpp" line="627"/>
         <source>Close</source>
         <translation>Bezár</translation>
     </message>
 </context>
 <context>
-    <name>PaintStyleEditor</name>
+    <name>OsmServerWidget</name>
     <message>
-        <location filename="../src/PaintStyle/PaintStyleEditor.cpp" line="45"/>
-        <location filename="../src/PaintStyle/PaintStyleEditor.cpp" line="46"/>
-        <source>Always</source>
-        <translation>Mindig</translation>
+        <location filename="../src/Preferences/OsmServerWidget.ui" line="14"/>
+        <source>Form</source>
+        <translation>Űrlap</translation>
     </message>
     <message>
-        <location filename="../src/PaintStyle/PaintStyleEditor.cpp" line="235"/>
-        <location filename="../src/PaintStyle/PaintStyleEditor.cpp" line="262"/>
-        <location filename="../src/PaintStyle/PaintStyleEditor.cpp" line="306"/>
-        <location filename="../src/PaintStyle/PaintStyleEditor.cpp" line="374"/>
-        <location filename="../src/PaintStyle/PaintStyleEditor.cpp" line="442"/>
-        <location filename="../src/PaintStyle/PaintStyleEditor.cpp" line="532"/>
-        <location filename="../src/PaintStyle/PaintStyleEditor.cpp" line="573"/>
-        <source>Select Color</source>
-        <translation>Színt választ</translation>
+        <location filename="../src/Preferences/OsmServerWidget.ui" line="25"/>
+        <source>URL:</source>
+        <translation>URL:</translation>
     </message>
     <message>
-        <location filename="../src/PaintStyle/PaintStyleEditor.ui" line="13"/>
-        <source>Map style editor</source>
-        <translation>Térképstílus-szerkesztő</translation>
-    </message>
-    <message>
-        <location filename="../src/PaintStyle/PaintStyleEditor.ui" line="86"/>
-        <source>Add</source>
-        <translation>Hozzáad</translation>
-    </message>
-    <message>
-        <location filename="../src/PaintStyle/PaintStyleEditor.ui" line="93"/>
-        <source>Remove</source>
-        <translation>Eltávolít</translation>
-    </message>
-    <message>
-        <location filename="../src/PaintStyle/PaintStyleEditor.ui" line="177"/>
-        <source>Tag selection</source>
-        <translation>Címkeválasztás</translation>
-    </message>
-    <message>
-        <location filename="../src/PaintStyle/PaintStyleEditor.ui" line="197"/>
-        <location filename="../src/PaintStyle/PaintStyleEditor.ui" line="253"/>
-        <source>meter/pixel</source>
-        <translation>méter/képpont</translation>
-    </message>
-    <message>
-        <location filename="../src/PaintStyle/PaintStyleEditor.ui" line="223"/>
-        <source>Visible up to</source>
-        <translation>Látható max</translation>
-    </message>
-    <message>
-        <location filename="../src/PaintStyle/PaintStyleEditor.ui" line="230"/>
-        <source>Visible from scale</source>
-        <translation>Látható min</translation>
-    </message>
-    <message>
-        <location filename="../src/PaintStyle/PaintStyleEditor.ui" line="49"/>
-        <location filename="../src/PaintStyle/PaintStyleEditor.ui" line="129"/>
-        <location filename="../src/PaintStyle/PaintStyleEditor.ui" line="145"/>
-        <location filename="../src/PaintStyle/PaintStyleEditor.ui" line="326"/>
-        <location filename="../src/PaintStyle/PaintStyleEditor.ui" line="521"/>
-        <location filename="../src/PaintStyle/PaintStyleEditor.ui" line="595"/>
-        <location filename="../src/PaintStyle/PaintStyleEditor.ui" line="748"/>
-        <location filename="../src/PaintStyle/PaintStyleEditor.ui" line="1074"/>
-        <location filename="../src/PaintStyle/PaintStyleEditor.ui" line="1319"/>
+        <location filename="../src/Preferences/OsmServerWidget.ui" line="35"/>
+        <location filename="../src/Preferences/OsmServerWidget.ui" line="46"/>
         <source>...</source>
         <translation>…</translation>
     </message>
     <message>
-        <location filename="../src/PaintStyle/PaintStyleEditor.ui" line="372"/>
-        <location filename="../src/PaintStyle/PaintStyleEditor.ui" line="641"/>
-        <location filename="../src/PaintStyle/PaintStyleEditor.ui" line="794"/>
-        <location filename="../src/PaintStyle/PaintStyleEditor.ui" line="967"/>
-        <location filename="../src/PaintStyle/PaintStyleEditor.ui" line="1168"/>
+        <location filename="../src/Preferences/OsmServerWidget.ui" line="74"/>
+        <source>User:</source>
+        <translation>Használó:</translation>
+    </message>
+    <message>
+        <location filename="../src/Preferences/OsmServerWidget.ui" line="84"/>
+        <source>Pwd:</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>PaintStyleEditor</name>
+    <message>
+        <location filename="../src/PaintStyle/PaintStyleEditor.cpp" line="46"/>
+        <location filename="../src/PaintStyle/PaintStyleEditor.cpp" line="47"/>
+        <source>Always</source>
+        <translation>Mindig</translation>
+    </message>
+    <message>
+        <location filename="../src/PaintStyle/PaintStyleEditor.cpp" line="281"/>
+        <location filename="../src/PaintStyle/PaintStyleEditor.cpp" line="312"/>
+        <location filename="../src/PaintStyle/PaintStyleEditor.cpp" line="362"/>
+        <location filename="../src/PaintStyle/PaintStyleEditor.cpp" line="438"/>
+        <location filename="../src/PaintStyle/PaintStyleEditor.cpp" line="514"/>
+        <location filename="../src/PaintStyle/PaintStyleEditor.cpp" line="620"/>
+        <location filename="../src/PaintStyle/PaintStyleEditor.cpp" line="667"/>
+        <source>Select Color</source>
+        <translation>Színt választ</translation>
+    </message>
+    <message>
+        <location filename="../src/PaintStyle/PaintStyleEditor.ui" line="14"/>
+        <source>Map style editor</source>
+        <translation>Térképstílus-szerkesztő</translation>
+    </message>
+    <message>
+        <location filename="../src/PaintStyle/PaintStyleEditor.ui" line="105"/>
+        <source>Add</source>
+        <translation>Hozzáad</translation>
+    </message>
+    <message>
+        <location filename="../src/PaintStyle/PaintStyleEditor.ui" line="112"/>
+        <source>Remove</source>
+        <translation>Eltávolít</translation>
+    </message>
+    <message>
+        <location filename="../src/PaintStyle/PaintStyleEditor.ui" line="205"/>
+        <source>Tag selection</source>
+        <translation>Címkeválasztás</translation>
+    </message>
+    <message>
+        <location filename="../src/PaintStyle/PaintStyleEditor.ui" line="232"/>
+        <location filename="../src/PaintStyle/PaintStyleEditor.ui" line="288"/>
+        <source>meter/pixel</source>
+        <translation>méter/képpont</translation>
+    </message>
+    <message>
+        <location filename="../src/PaintStyle/PaintStyleEditor.ui" line="258"/>
+        <source>Visible up to</source>
+        <translation>Látható max</translation>
+    </message>
+    <message>
+        <location filename="../src/PaintStyle/PaintStyleEditor.ui" line="265"/>
+        <source>Visible from scale</source>
+        <translation>Látható min</translation>
+    </message>
+    <message>
+        <location filename="../src/PaintStyle/PaintStyleEditor.ui" line="50"/>
+        <location filename="../src/PaintStyle/PaintStyleEditor.ui" line="148"/>
+        <location filename="../src/PaintStyle/PaintStyleEditor.ui" line="164"/>
+        <location filename="../src/PaintStyle/PaintStyleEditor.ui" line="215"/>
+        <location filename="../src/PaintStyle/PaintStyleEditor.ui" line="361"/>
+        <location filename="../src/PaintStyle/PaintStyleEditor.ui" line="556"/>
+        <location filename="../src/PaintStyle/PaintStyleEditor.ui" line="630"/>
+        <location filename="../src/PaintStyle/PaintStyleEditor.ui" line="783"/>
+        <location filename="../src/PaintStyle/PaintStyleEditor.ui" line="1109"/>
+        <location filename="../src/PaintStyle/PaintStyleEditor.ui" line="1354"/>
+        <source>...</source>
+        <translation>…</translation>
+    </message>
+    <message>
+        <location filename="../src/PaintStyle/PaintStyleEditor.ui" line="407"/>
+        <location filename="../src/PaintStyle/PaintStyleEditor.ui" line="676"/>
+        <location filename="../src/PaintStyle/PaintStyleEditor.ui" line="829"/>
+        <location filename="../src/PaintStyle/PaintStyleEditor.ui" line="1002"/>
+        <location filename="../src/PaintStyle/PaintStyleEditor.ui" line="1203"/>
         <source>Proportional thickness</source>
         <translation>Arányos vastagság</translation>
     </message>
     <message>
-        <location filename="../src/PaintStyle/PaintStyleEditor.ui" line="392"/>
-        <location filename="../src/PaintStyle/PaintStyleEditor.ui" line="661"/>
-        <location filename="../src/PaintStyle/PaintStyleEditor.ui" line="814"/>
-        <location filename="../src/PaintStyle/PaintStyleEditor.ui" line="987"/>
-        <location filename="../src/PaintStyle/PaintStyleEditor.ui" line="1188"/>
+        <location filename="../src/PaintStyle/PaintStyleEditor.ui" line="427"/>
+        <location filename="../src/PaintStyle/PaintStyleEditor.ui" line="696"/>
+        <location filename="../src/PaintStyle/PaintStyleEditor.ui" line="849"/>
+        <location filename="../src/PaintStyle/PaintStyleEditor.ui" line="1022"/>
+        <location filename="../src/PaintStyle/PaintStyleEditor.ui" line="1223"/>
         <source>Fixed thickness</source>
         <translation>Rögzített vastagság</translation>
     </message>
     <message>
-        <location filename="../src/PaintStyle/PaintStyleEditor.ui" line="454"/>
-        <location filename="../src/PaintStyle/PaintStyleEditor.ui" line="876"/>
+        <location filename="../src/PaintStyle/PaintStyleEditor.ui" line="489"/>
+        <location filename="../src/PaintStyle/PaintStyleEditor.ui" line="911"/>
         <source>Dashed</source>
         <translation>Szaggatott</translation>
     </message>
     <message>
-        <location filename="../src/PaintStyle/PaintStyleEditor.ui" line="468"/>
-        <location filename="../src/PaintStyle/PaintStyleEditor.ui" line="890"/>
+        <location filename="../src/PaintStyle/PaintStyleEditor.ui" line="503"/>
+        <location filename="../src/PaintStyle/PaintStyleEditor.ui" line="925"/>
         <source>off</source>
         <translation>ki</translation>
     </message>
     <message>
-        <location filename="../src/PaintStyle/PaintStyleEditor.ui" line="505"/>
+        <location filename="../src/PaintStyle/PaintStyleEditor.ui" line="540"/>
         <source>Fill area</source>
         <translation>Kitöltés</translation>
     </message>
     <message>
-        <location filename="../src/PaintStyle/PaintStyleEditor.ui" line="927"/>
+        <location filename="../src/PaintStyle/PaintStyleEditor.ui" line="962"/>
         <source>Draw icon</source>
         <translation>Ikont rajzol</translation>
     </message>
     <message>
-        <location filename="../src/PaintStyle/PaintStyleEditor.ui" line="100"/>
+        <location filename="../src/PaintStyle/PaintStyleEditor.ui" line="119"/>
         <source>Duplicate</source>
         <translation>Másol</translation>
     </message>
     <message>
-        <location filename="../src/PaintStyle/PaintStyleEditor.ui" line="33"/>
-        <location filename="../src/PaintStyle/PaintStyleEditor.ui" line="296"/>
+        <location filename="../src/PaintStyle/PaintStyleEditor.ui" line="34"/>
+        <location filename="../src/PaintStyle/PaintStyleEditor.ui" line="331"/>
         <source>Background</source>
         <translation>Háttér</translation>
     </message>
     <message>
-        <location filename="../src/PaintStyle/PaintStyleEditor.ui" line="310"/>
-        <location filename="../src/PaintStyle/PaintStyleEditor.ui" line="579"/>
-        <location filename="../src/PaintStyle/PaintStyleEditor.ui" line="1058"/>
+        <location filename="../src/PaintStyle/PaintStyleEditor.ui" line="81"/>
+        <source>Filter</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/PaintStyle/PaintStyleEditor.ui" line="345"/>
+        <location filename="../src/PaintStyle/PaintStyleEditor.ui" line="614"/>
+        <location filename="../src/PaintStyle/PaintStyleEditor.ui" line="1093"/>
         <source>Draw with color</source>
         <translation>Rajzoló szín</translation>
     </message>
     <message>
-        <location filename="../src/PaintStyle/PaintStyleEditor.ui" line="565"/>
+        <location filename="../src/PaintStyle/PaintStyleEditor.ui" line="600"/>
         <source>Boundary</source>
         <translation>Körvonal</translation>
     </message>
     <message>
-        <location filename="../src/PaintStyle/PaintStyleEditor.ui" line="718"/>
+        <location filename="../src/PaintStyle/PaintStyleEditor.ui" line="753"/>
         <source>Touchup</source>
         <translation>Belső</translation>
     </message>
     <message>
-        <location filename="../src/PaintStyle/PaintStyleEditor.ui" line="732"/>
+        <location filename="../src/PaintStyle/PaintStyleEditor.ui" line="767"/>
         <source>Draw steps</source>
         <translation>Vonalat rajzol</translation>
     </message>
     <message>
-        <location filename="../src/PaintStyle/PaintStyleEditor.ui" line="1044"/>
+        <location filename="../src/PaintStyle/PaintStyleEditor.ui" line="1079"/>
         <source>Label</source>
         <translation>Címke</translation>
     </message>
     <message>
-        <location filename="../src/PaintStyle/PaintStyleEditor.ui" line="1081"/>
+        <location filename="../src/PaintStyle/PaintStyleEditor.ui" line="1116"/>
         <source>Font</source>
         <translation>Betű</translation>
     </message>
     <message>
-        <location filename="../src/PaintStyle/PaintStyleEditor.ui" line="1128"/>
+        <location filename="../src/PaintStyle/PaintStyleEditor.ui" line="1163"/>
         <source>Label tag</source>
         <translation>Felirat</translation>
     </message>
     <message>
-        <location filename="../src/PaintStyle/PaintStyleEditor.ui" line="1303"/>
+        <location filename="../src/PaintStyle/PaintStyleEditor.ui" line="1338"/>
         <source>Draw with background color</source>
         <translation>Háttérszínnel rajzol</translation>
     </message>
     <message>
-        <location filename="../src/PaintStyle/PaintStyleEditor.ui" line="1359"/>
+        <location filename="../src/PaintStyle/PaintStyleEditor.ui" line="1394"/>
         <source>Label with background tag</source>
         <translation>Háttércímkével jelöl</translation>
     </message>
     <message>
-        <location filename="../src/PaintStyle/PaintStyleEditor.ui" line="1244"/>
+        <location filename="../src/PaintStyle/PaintStyleEditor.ui" line="1279"/>
         <source>Halo</source>
         <translation>Körül</translation>
     </message>
     <message>
-        <location filename="../src/PaintStyle/PaintStyleEditor.ui" line="1254"/>
+        <location filename="../src/PaintStyle/PaintStyleEditor.ui" line="1289"/>
         <source>Area</source>
         <translation>Terület</translation>
     </message>
     <message>
-        <location filename="../src/PaintStyle/PaintStyleEditor.ui" line="19"/>
+        <location filename="../src/PaintStyle/PaintStyleEditor.ui" line="20"/>
         <source>Global</source>
         <translation>Mindenre</translation>
     </message>
@@ -4635,436 +5109,480 @@ Mit akar most tenni?</translation>
         <translation>Kis/nagy takarás</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="582"/>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="639"/>
         <source>Map style</source>
         <translation>Térképstílus</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="708"/>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="765"/>
         <source>Custom</source>
         <translation>Egyedi</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="769"/>
-        <source>OSM</source>
-        <translation>OSM</translation>
-    </message>
-    <message>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="777"/>
-        <source>Website:</source>
-        <translation>Webhely:</translation>
-    </message>
-    <message>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="787"/>
-        <source>Username:</source>
-        <translation>Név:</translation>
-    </message>
-    <message>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="797"/>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="1079"/>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="1185"/>
         <source>Password:</source>
         <translation>Jelszó:</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="1060"/>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="1166"/>
         <source>Network</source>
         <translation>Hálózat</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="1066"/>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="1172"/>
         <source>Proxy settings</source>
         <translation>Átjátszó-beállítás</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="1072"/>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="1178"/>
         <source>Use Proxy</source>
         <translation>Átjátszót használ</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="1116"/>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="1222"/>
         <source>Host:</source>
         <translation>Gazda:</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="1109"/>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="1215"/>
         <source>Port:</source>
         <translation>Kapu:</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="1186"/>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="1292"/>
         <source>Background Image</source>
         <translation>Háttérkép</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="1198"/>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="1304"/>
         <source>Cache directory</source>
         <translation>Gyorstár mappa</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="1208"/>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="1314"/>
         <source>Cache size (in Mb; 0 to disable)</source>
         <translation>Gyorstár méret (MB-ban; 0 letilt)</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="1227"/>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="1333"/>
         <source>Map Adapter</source>
         <translation>Térkép-átalakító</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="757"/>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="814"/>
         <source>Data</source>
         <translation>Adatok</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="816"/>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="892"/>
         <source>Documents</source>
         <translation>Dokumentumok</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="822"/>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="928"/>
         <source>Autosave documents after upload</source>
         <translation>Magától ment dokumentumokat feltöltés után</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="684"/>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="741"/>
         <source>Built-in</source>
         <translation>Beépített</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="832"/>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="938"/>
         <source>Tracks</source>
         <translation>Nyomok</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="840"/>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="946"/>
         <source>Automatically extract tracks on open</source>
         <translation>Magától von ki nyomokat megnyitáskor</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="646"/>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="703"/>
         <source>Disable styles for track layers</source>
         <translation>Tiltja a stílusokat nyom rétegekben</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.cpp" line="396"/>
-        <location filename="../src/Preferences/PreferencesDialog.cpp" line="409"/>
-        <location filename="../src/Preferences/PreferencesDialog.cpp" line="422"/>
-        <location filename="../src/Preferences/PreferencesDialog.cpp" line="435"/>
-        <location filename="../src/Preferences/PreferencesDialog.cpp" line="448"/>
-        <location filename="../src/Preferences/PreferencesDialog.cpp" line="460"/>
+        <location filename="../src/Preferences/PreferencesDialog.cpp" line="518"/>
+        <location filename="../src/Preferences/PreferencesDialog.cpp" line="531"/>
+        <location filename="../src/Preferences/PreferencesDialog.cpp" line="544"/>
+        <location filename="../src/Preferences/PreferencesDialog.cpp" line="557"/>
+        <location filename="../src/Preferences/PreferencesDialog.cpp" line="570"/>
+        <location filename="../src/Preferences/PreferencesDialog.cpp" line="583"/>
+        <location filename="../src/Preferences/PreferencesDialog.cpp" line="595"/>
         <source>Select Color</source>
         <translation>Színt választ</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.cpp" line="475"/>
+        <location filename="../src/Preferences/PreferencesDialog.cpp" line="610"/>
         <source>Tool already exists</source>
         <translation>Meglévő eszköz</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.cpp" line="476"/>
+        <location filename="../src/Preferences/PreferencesDialog.cpp" line="611"/>
         <source>A tool of this name already exists.
 Please select another name or click the &lt;Apply&gt; button if you want to modify the existing one</source>
         <translation>Ilyen nevű eszköz már van.
 Kérem válasszon más nevet, vagy kattintson az &lt;Alkalmaz&gt; gombra, ha a meglévőt akarja megváltoztatni</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.cpp" line="495"/>
+        <location filename="../src/Preferences/PreferencesDialog.cpp" line="630"/>
         <source>Cannot delete preset tool</source>
         <translation>Nem törölhet előre beállított eszközt</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.cpp" line="496"/>
+        <location filename="../src/Preferences/PreferencesDialog.cpp" line="631"/>
         <source>Cannot delete preset tool &quot;%1&quot;</source>
         <translation>Nem törölheti „%1” előre beállított eszközt</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.cpp" line="514"/>
+        <location filename="../src/Preferences/PreferencesDialog.cpp" line="649"/>
         <source>Cannot modify preset tool name</source>
         <translation>Nem változtathat előre beállított eszköz nevén</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.cpp" line="515"/>
+        <location filename="../src/Preferences/PreferencesDialog.cpp" line="650"/>
         <source>Cannot modify preset tool &quot;%1&quot;&apos;s name</source>
         <translation>Nem változtathatja meg „%1” előre beállított eszköz nevét</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.cpp" line="540"/>
+        <location filename="../src/Preferences/PreferencesDialog.cpp" line="675"/>
         <source>Select tool executable</source>
         <translation>Eszközprogramot választ</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.cpp" line="548"/>
+        <location filename="../src/Preferences/PreferencesDialog.cpp" line="683"/>
+        <source>Select template document</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/Preferences/PreferencesDialog.cpp" line="683"/>
+        <source>Merkaartor document (*.mdc)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/Preferences/PreferencesDialog.cpp" line="691"/>
         <source>Select Log directory</source>
         <translation>Naplómappát választ</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="158"/>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="165"/>
         <source>Colors</source>
         <translation>Színek</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="437"/>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="171"/>
         <source>Background</source>
         <translation>Háttér</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="360"/>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="431"/>
         <source>Hover</source>
         <translation>Fedés</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="420"/>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="491"/>
         <source>Focus</source>
         <translation>Fókusz</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="413"/>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="484"/>
         <source>Relations</source>
         <translation>Kapcsolatok</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="175"/>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="230"/>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="276"/>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="322"/>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="375"/>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="459"/>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="613"/>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="731"/>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="1021"/>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="1317"/>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="111"/>
+        <source>Allow node/way creation in select mode</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="186"/>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="236"/>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="301"/>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="347"/>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="393"/>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="446"/>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="513"/>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="670"/>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="788"/>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="919"/>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="1127"/>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="1430"/>
         <source>...</source>
         <translation>…</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="576"/>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="551"/>
+        <source>Dirty</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="633"/>
         <source>Style</source>
         <translation>Stílus</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="891"/>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="826"/>
+        <source>OSM API (URL is, e.g., &quot;http://www.openstreetmap.org/api/0.6&quot;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="840"/>
+        <source>XAPI</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="848"/>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="880"/>
+        <source>URL:</source>
+        <translation>URL:</translation>
+    </message>
+    <message>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="869"/>
+        <source>Nominatim (Geo Search)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="903"/>
+        <source>Autload template document</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="997"/>
         <source>GPS</source>
         <translation>GPS</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="998"/>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="1104"/>
         <source>Save NMEA log</source>
         <translation>NMEA-naplót vezet</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="1039"/>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="1145"/>
         <source>Set system time to GPS</source>
         <translation>Rendszeridőt GPS-hez igazít</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="1262"/>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="1339"/>
+        <source>Automatically add &quot;source&quot; tag when creating features over a background map</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="1375"/>
         <source>Tools</source>
         <translation>Eszközök</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="1280"/>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="1393"/>
         <source>Name:</source>
         <translation>Név:</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="1290"/>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="1403"/>
         <source>Path:</source>
         <translation>Ösvény:</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="1339"/>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="1452"/>
         <source>Apply</source>
         <translation>Alkalmaz</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="1346"/>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="1459"/>
         <source>Add</source>
         <translation>Hozzáad</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="1353"/>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="1466"/>
         <source>Remove</source>
         <translation>Eltávolít</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="505"/>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="562"/>
         <source>Locale</source>
         <translation>Nyelv</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="511"/>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="568"/>
         <source>You may need to restart the program for these changes to take effect</source>
         <translation>Talán újra kell indítania a programot, hogy érvényesüljenek e változások</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="520"/>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="577"/>
         <source>Use language</source>
         <translation>E nyelvet használja</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="555"/>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="612"/>
         <source>Translate standard tags</source>
         <translation>Lefordítja a szabványos címkéket</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="246"/>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="292"/>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="338"/>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="391"/>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="475"/>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="252"/>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="317"/>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="363"/>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="409"/>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="462"/>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="529"/>
         <source>Pixels</source>
         <translation>Képpontok</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="97"/>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="118"/>
         <source>Separate Move mode</source>
         <translation>Külön mozgató mód</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="104"/>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="97"/>
         <source>Single mouse button interaction</source>
         <translation>Egyszeri egérgomb kölcsönhatás</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="111"/>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="104"/>
         <source>Use custom Qt style</source>
         <translation>Egyedi QT-stílust használ</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="188"/>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="199"/>
         <source>Overwrite style</source>
         <translation>Stílust felülír</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="670"/>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="727"/>
         <source>Template</source>
         <translation>Sablon</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.cpp" line="387"/>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="676"/>
+        <location filename="../src/Preferences/PreferencesDialog.cpp" line="509"/>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="733"/>
         <source>Tag Template</source>
         <translation>Címkesablon</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="858"/>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="964"/>
         <source>Don&apos;t connect GPX nodes separated by more than (in km; 0 to disable)</source>
         <translation>Ne kössön össze ennél távolabbi GPX-pontokat (km-ben; a 0 mellőzés)</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="1192"/>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="1298"/>
         <source>Tiles Caching (not active for Yahoo! due to legal restrictions)</source>
         <translation>Csempe gyorstárazás (nem működik Yahoo! esetében jogi korlátozások miatt)</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.cpp" line="387"/>
+        <location filename="../src/Preferences/PreferencesDialog.cpp" line="509"/>
         <source>Merkaartor tag template (*.mat)</source>
         <translation>Merkaartor címkesablon (*.mat)</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="847"/>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="953"/>
         <source>Track layers readonly by default</source>
         <translation>Nyomrétegek alapesetben csak olvashatók</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.cpp" line="378"/>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="590"/>
+        <location filename="../src/Preferences/PreferencesDialog.cpp" line="500"/>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="647"/>
         <source>Custom styles directory</source>
         <translation>Egyedi stílus mappa</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="624"/>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="681"/>
         <source>Current style</source>
         <translation>Mostani stílus</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.cpp" line="108"/>
+        <location filename="../src/Preferences/PreferencesDialog.cpp" line="169"/>
         <source>English</source>
         <translation>Angol</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.cpp" line="109"/>
+        <location filename="../src/Preferences/PreferencesDialog.cpp" line="170"/>
         <source>Arabic</source>
         <translation>Arab</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.cpp" line="110"/>
+        <location filename="../src/Preferences/PreferencesDialog.cpp" line="171"/>
         <source>Czech</source>
         <translation>Cseh</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.cpp" line="112"/>
+        <location filename="../src/Preferences/PreferencesDialog.cpp" line="173"/>
         <source>German</source>
         <translation>Német</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.cpp" line="113"/>
+        <location filename="../src/Preferences/PreferencesDialog.cpp" line="174"/>
         <source>French</source>
         <translation>Francia</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.cpp" line="114"/>
+        <location filename="../src/Preferences/PreferencesDialog.cpp" line="175"/>
+        <source>Hungarian</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/Preferences/PreferencesDialog.cpp" line="176"/>
         <source>Italian</source>
         <translation>Olasz</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.cpp" line="116"/>
+        <location filename="../src/Preferences/PreferencesDialog.cpp" line="178"/>
         <source>Polish</source>
         <translation>Lengyel</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.cpp" line="119"/>
+        <location filename="../src/Preferences/PreferencesDialog.cpp" line="181"/>
         <source>Russian</source>
         <translation>Orosz</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="1102"/>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="1208"/>
         <source>User:</source>
         <translation>Használó:</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="1233"/>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="1346"/>
         <source>Enable use of OSB background (needs new document)</source>
         <translation>OSB-háttért használ (új dokumentum kell)</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="427"/>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="498"/>
         <source>Highlight</source>
         <translation>Kiemelés</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="444"/>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="221"/>
         <source>GPX track</source>
         <translation>GPS-nyom</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="482"/>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="259"/>
         <source>Use simple GPX track appearance</source>
         <translation>Egyszerű GPX-nyom megjelenést használ</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="897"/>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="1003"/>
         <source>GPS input</source>
         <translation>GPS bemenet</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="903"/>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="1009"/>
         <source>gpsd</source>
         <translation>gpsd</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="910"/>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="1016"/>
         <source>Serial</source>
         <translation>Soros</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="932"/>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="970"/>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="1038"/>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="1076"/>
         <source>Port</source>
         <translation>Kapu</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="960"/>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="1066"/>
         <source>Host</source>
         <translation>Gazda</translation>
     </message>
@@ -5074,37 +5592,37 @@ Kérem válasszon más nevet, vagy kattintson az &lt;Alkalmaz&gt; gombra, ha a m
         <translation>Látszó pontokat használ (új munkamenet kell)</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.cpp" line="111"/>
+        <location filename="../src/Preferences/PreferencesDialog.cpp" line="172"/>
         <source>Dutch</source>
         <translation>Holland</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.cpp" line="115"/>
+        <location filename="../src/Preferences/PreferencesDialog.cpp" line="177"/>
         <source>Japanase</source>
         <translation>Japán</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.cpp" line="117"/>
+        <location filename="../src/Preferences/PreferencesDialog.cpp" line="179"/>
         <source>Portuguese</source>
         <translation>Portugál</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.cpp" line="120"/>
+        <location filename="../src/Preferences/PreferencesDialog.cpp" line="182"/>
         <source>Slovak</source>
         <translation>Szlovák</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.cpp" line="121"/>
+        <location filename="../src/Preferences/PreferencesDialog.cpp" line="183"/>
         <source>Spanish</source>
         <translation>Spanyol</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.cpp" line="122"/>
+        <location filename="../src/Preferences/PreferencesDialog.cpp" line="184"/>
         <source>Swedish</source>
         <translation>Svéd</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.cpp" line="123"/>
+        <location filename="../src/Preferences/PreferencesDialog.cpp" line="185"/>
         <source>Ukrainian</source>
         <translation>Ukrán</translation>
     </message>
@@ -5114,17 +5632,17 @@ Kérem válasszon más nevet, vagy kattintson az &lt;Alkalmaz&gt; gombra, ha a m
         <translation>Lehet rejtett kapcsolatokat választani</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="216"/>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="287"/>
         <source>Interface</source>
         <translation>Felület</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="1165"/>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="1271"/>
         <source>Enable JOSM-compatible local server on port 8111</source>
         <translation>Megengedi a JOSM-kompatíbilis helyi szolgálót a 8111 kapun</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.cpp" line="118"/>
+        <location filename="../src/Preferences/PreferencesDialog.cpp" line="180"/>
         <source>Brazilian Portuguese</source>
         <translation>Brazíliai portugál</translation>
     </message>
@@ -5173,60 +5691,104 @@ Kérem válasszon más nevet, vagy kattintson az &lt;Alkalmaz&gt; gombra, ha a m
     </message>
 </context>
 <context>
+    <name>Projection</name>
+    <message>
+        <location filename="../src/Maps/Projection.cpp" line="498"/>
+        <source>Document</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>ProjectionChooser</name>
+    <message>
+        <location filename="../src/Utils/ProjectionChooser.ui" line="14"/>
+        <source>Dialog</source>
+        <translation>Dialog</translation>
+    </message>
+    <message>
+        <location filename="../src/Utils/ProjectionChooser.ui" line="22"/>
+        <source>Predefined</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/Utils/ProjectionChooser.ui" line="29"/>
+        <source>Standard (EPSG:...)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/Utils/ProjectionChooser.ui" line="36"/>
+        <source>Custom PROJ4(+proj=...)</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>PropertiesDialog</name>
+    <message>
+        <location filename="../src/PropertiesDialog.ui" line="14"/>
+        <source>Properties</source>
+        <translation>Tulajdonságok</translation>
+    </message>
+</context>
+<context>
     <name>PropertiesDock</name>
     <message>
-        <location filename="../src/Docks/PropertiesDock.cpp" line="490"/>
-        <location filename="../src/Docks/PropertiesDock.cpp" line="1132"/>
+        <location filename="../src/Docks/PropertiesDock.cpp" line="482"/>
+        <location filename="../src/Docks/PropertiesDock.cpp" line="1140"/>
         <source>Properties</source>
         <translation>Tulajdonságok</translation>
     </message>
     <message>
-        <location filename="../src/Docks/PropertiesDock.cpp" line="428"/>
+        <location filename="../src/Docks/PropertiesDock.cpp" line="417"/>
         <source>Properties - Multiple elements</source>
         <translation>Tulajdonságok – Több elem</translation>
     </message>
     <message>
-        <location filename="../src/Docks/PropertiesDock.cpp" line="478"/>
+        <location filename="../src/Docks/PropertiesDock.cpp" line="470"/>
         <source>Properties - Relation</source>
         <translation>Tulajdonságok – Kapcsolat</translation>
     </message>
     <message>
-        <location filename="../src/Docks/PropertiesDock.cpp" line="458"/>
+        <location filename="../src/Docks/PropertiesDock.cpp" line="449"/>
         <source>Properties - Road</source>
         <translation>Tulajdonságok – Út</translation>
     </message>
     <message>
-        <location filename="../src/Docks/PropertiesDock.cpp" line="1133"/>
+        <location filename="../src/Docks/PropertiesDock.cpp" line="1141"/>
         <source>Center map</source>
         <translation>Térképet középre</translation>
     </message>
     <message>
-        <location filename="../src/Docks/PropertiesDock.cpp" line="1134"/>
+        <location filename="../src/Docks/PropertiesDock.cpp" line="1142"/>
         <source>Center &amp;&amp; Zoom map</source>
         <translation>Térképet középre nagyítva</translation>
     </message>
     <message>
-        <location filename="../src/Docks/PropertiesDock.cpp" line="333"/>
+        <location filename="../src/Docks/PropertiesDock.cpp" line="322"/>
         <source>%1/%1 selected item(s)</source>
         <translation>%1/%1 kiválasztott elem</translation>
     </message>
     <message>
-        <location filename="../src/Docks/PropertiesDock.cpp" line="356"/>
+        <location filename="../src/Docks/PropertiesDock.cpp" line="345"/>
         <source>%1/%2 selected item(s)</source>
         <translation>%1/%2 kiválasztott elem</translation>
     </message>
     <message>
-        <location filename="../src/Docks/PropertiesDock.cpp" line="419"/>
+        <location filename="../src/Docks/PropertiesDock.cpp" line="408"/>
         <source>Selected items</source>
         <translation>Kiválasztott elemek</translation>
     </message>
     <message>
-        <location filename="../src/Docks/PropertiesDock.cpp" line="1135"/>
+        <location filename="../src/Docks/PropertiesDock.cpp" line="1031"/>
+        <source>Error reading template file</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/Docks/PropertiesDock.cpp" line="1143"/>
         <source>Select member</source>
         <translation>Tagot választ</translation>
     </message>
     <message>
-        <location filename="../src/Docks/PropertiesDock.cpp" line="444"/>
+        <location filename="../src/Docks/PropertiesDock.cpp" line="434"/>
         <source>Properties - Node</source>
         <translation>Tulajdonságok – Pont</translation>
     </message>
@@ -5393,7 +5955,7 @@ Kérem válasszon más nevet, vagy kattintson az &lt;Alkalmaz&gt; gombra, ha a m
 <context>
     <name>QObject</name>
     <message>
-        <location filename="../src/NameFinder/xmlstreamreader.cpp" line="41"/>
+        <location filename="../src/NameFinder/xmlstreamreader.cpp" line="45"/>
         <source>Not a proper results stream!</source>
         <translation>Nem jó az eredmény-adatfolyam!</translation>
     </message>
@@ -5502,15 +6064,35 @@ Kérem válasszon más nevet, vagy kattintson az &lt;Alkalmaz&gt; gombra, ha a m
         <translation>Tagok</translation>
     </message>
     <message>
-        <location filename="../src/Docks/MinimumRelationProperties.ui" line="119"/>
+        <location filename="../src/Docks/MinimumRelationProperties.ui" line="51"/>
+        <source>Remove selected member(s)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/Docks/MinimumRelationProperties.ui" line="122"/>
         <source>Tags</source>
         <translation>Címkék</translation>
     </message>
     <message>
-        <location filename="../src/Docks/MinimumRelationProperties.ui" line="51"/>
-        <location filename="../src/Docks/MinimumRelationProperties.ui" line="81"/>
-        <location filename="../src/Docks/MinimumRelationProperties.ui" line="97"/>
-        <location filename="../src/Docks/MinimumRelationProperties.ui" line="139"/>
+        <location filename="../src/Docks/MinimumRelationProperties.ui" line="148"/>
+        <source>Add &quot;source&quot; tag</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/Docks/MinimumRelationProperties.ui" line="151"/>
+        <source>S</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/Docks/MinimumRelationProperties.ui" line="164"/>
+        <source>REmove selected tag(s)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/Docks/MinimumRelationProperties.ui" line="54"/>
+        <location filename="../src/Docks/MinimumRelationProperties.ui" line="84"/>
+        <location filename="../src/Docks/MinimumRelationProperties.ui" line="100"/>
+        <location filename="../src/Docks/MinimumRelationProperties.ui" line="167"/>
         <source>...</source>
         <translation>…</translation>
     </message>
@@ -5538,7 +6120,22 @@ Kérem válasszon más nevet, vagy kattintson az &lt;Alkalmaz&gt; gombra, ha a m
         <translation>Címkék</translation>
     </message>
     <message>
-        <location filename="../src/Docks/MinimumRoadProperties.ui" line="81"/>
+        <location filename="../src/Docks/MinimumRoadProperties.ui" line="87"/>
+        <source>Add &quot;source&quot; tag</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/Docks/MinimumRoadProperties.ui" line="90"/>
+        <source>S</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/Docks/MinimumRoadProperties.ui" line="103"/>
+        <source>REmove selected tag(s)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/Docks/MinimumRoadProperties.ui" line="106"/>
         <source>...</source>
         <translation>…</translation>
     </message>
@@ -5584,9 +6181,9 @@ Kérem válasszon más nevet, vagy kattintson az &lt;Alkalmaz&gt; gombra, ha a m
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Utils/SelectionDialog.ui" line="102"/>
-        <source>Maximum returned results</source>
-        <translation>Legnagyobb visszaadott érték</translation>
+        <location filename="../src/Utils/SelectionDialog.ui" line="106"/>
+        <source>Maximum returned results (0 for all)</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../src/Utils/SelectionDialog.ui" line="81"/>
@@ -5664,57 +6261,72 @@ Kérem válasszon más nevet, vagy kattintson az &lt;Alkalmaz&gt; gombra, ha a m
         <translation>Szolgálólista:</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/TMSPreferencesDialog.ui" line="76"/>
+        <location filename="../src/Preferences/TMSPreferencesDialog.ui" line="78"/>
         <source>Name:</source>
         <translation>Név:</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/TMSPreferencesDialog.ui" line="192"/>
-        <source>Tile size</source>
-        <translation>Csempeméret</translation>
+        <location filename="../src/Preferences/TMSPreferencesDialog.ui" line="168"/>
+        <source>Projection:</source>
+        <translation>Leképezés:</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/TMSPreferencesDialog.ui" line="209"/>
-        <source>Minimum zoom</source>
-        <translation>Legkisebb nagyítás</translation>
+        <location filename="../src/Preferences/TMSPreferencesDialog.ui" line="200"/>
+        <source>Tile size:</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Preferences/TMSPreferencesDialog.ui" line="219"/>
-        <source>Maximum zoom</source>
-        <translation>Legnagyobb nagyítás</translation>
+        <location filename="../src/Preferences/TMSPreferencesDialog.ui" line="221"/>
+        <source>Min zoom:</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Preferences/TMSPreferencesDialog.ui" line="245"/>
+        <location filename="../src/Preferences/TMSPreferencesDialog.ui" line="231"/>
+        <source>Max zoom:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/Preferences/TMSPreferencesDialog.ui" line="248"/>
+        <source>&quot;source&quot; tag value:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/Preferences/TMSPreferencesDialog.ui" line="262"/>
+        <source>License URL:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/Preferences/TMSPreferencesDialog.ui" line="289"/>
         <source>Apply</source>
         <translation>Alkalmaz</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/TMSPreferencesDialog.ui" line="252"/>
+        <location filename="../src/Preferences/TMSPreferencesDialog.ui" line="296"/>
         <source>Add</source>
         <translation>Hozzáad</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/TMSPreferencesDialog.ui" line="259"/>
+        <location filename="../src/Preferences/TMSPreferencesDialog.ui" line="303"/>
         <source>Remove</source>
         <translation>Eltávolít</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/TMSPreferencesDialog.ui" line="93"/>
+        <location filename="../src/Preferences/TMSPreferencesDialog.ui" line="99"/>
         <source>Server Url:</source>
         <translation>Szolgáló-URL:</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/TMSPreferencesDialog.ui" line="103"/>
+        <location filename="../src/Preferences/TMSPreferencesDialog.ui" line="111"/>
         <source>Get Services</source>
         <translation>Szolgáltatásokat tudakol</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/TMSPreferencesDialog.ui" line="125"/>
+        <location filename="../src/Preferences/TMSPreferencesDialog.ui" line="133"/>
         <source>Services :</source>
         <translation>Szolgáltatások:</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/TMSPreferencesDialog.ui" line="135"/>
+        <location filename="../src/Preferences/TMSPreferencesDialog.ui" line="143"/>
         <source>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
@@ -5727,44 +6339,39 @@ p, li { white-space: pre-wrap; }
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:8pt; font-weight:600;&quot;&gt;Ez &amp;#8222;szabványos&amp;#8221; &lt;a href=&quot;http://wiki.osgeo.org/wiki/Tile_Map_Service_Specification&quot;&gt;TMS&lt;/a&gt;-szolgáló&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/TMSPreferencesDialog.ui" line="164"/>
-        <source>Projection</source>
-        <translation>Leképezés</translation>
-    </message>
-    <message>
-        <location filename="../src/Preferences/TMSPreferencesDialog.ui" line="172"/>
+        <location filename="../src/Preferences/TMSPreferencesDialog.ui" line="176"/>
         <source>Mercator (EPSG:900913)</source>
         <translation>Mercator (EPSG:900913)</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/TMSPreferencesDialog.ui" line="177"/>
+        <location filename="../src/Preferences/TMSPreferencesDialog.ui" line="181"/>
         <source>Lat/Lon (EPSG:4326)</source>
         <translation>Szél/hossz (EPSG:4326)</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/TMSPreferencesDialog.ui" line="185"/>
+        <location filename="../src/Preferences/TMSPreferencesDialog.ui" line="191"/>
         <source>Origin is bottom-left</source>
         <translation>Bal alsó középpont</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/TMSPreferencesDialog.cpp" line="212"/>
-        <location filename="../src/Preferences/TMSPreferencesDialog.cpp" line="265"/>
-        <location filename="../src/Preferences/TMSPreferencesDialog.cpp" line="275"/>
+        <location filename="../src/Preferences/TMSPreferencesDialog.cpp" line="216"/>
+        <location filename="../src/Preferences/TMSPreferencesDialog.cpp" line="268"/>
+        <location filename="../src/Preferences/TMSPreferencesDialog.cpp" line="278"/>
         <source>Merkaartor: GetServices</source>
         <translation>Merkaartor: tájékozódás szolgáltatásokról</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/TMSPreferencesDialog.cpp" line="212"/>
+        <location filename="../src/Preferences/TMSPreferencesDialog.cpp" line="216"/>
         <source>Address and Path cannot be blank.</source>
         <translation>Cím és ösvény nem lehet üres.</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/TMSPreferencesDialog.cpp" line="266"/>
+        <location filename="../src/Preferences/TMSPreferencesDialog.cpp" line="269"/>
         <source>Download failed: %1.</source>
         <translation>Sikertelen letöltés: %1.</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/TMSPreferencesDialog.cpp" line="275"/>
+        <location filename="../src/Preferences/TMSPreferencesDialog.cpp" line="278"/>
         <source>Error reading services.
 </source>
         <translation>Hiba szolgáltatásokat olvasván.
@@ -5830,7 +6437,7 @@ p, li { white-space: pre-wrap; }
 <context>
     <name>TagTemplateWidgetCombo</name>
     <message>
-        <location filename="../src/TagTemplate/TagTemplate.cpp" line="193"/>
+        <location filename="../src/TagTemplate/TagTemplate.cpp" line="196"/>
         <source>Undefined</source>
         <translation>Határozatlan</translation>
     </message>
@@ -5838,7 +6445,7 @@ p, li { white-space: pre-wrap; }
 <context>
     <name>TagTemplates</name>
     <message>
-        <location filename="../src/TagTemplate/TagTemplate.cpp" line="904"/>
+        <location filename="../src/TagTemplate/TagTemplate.cpp" line="913"/>
         <source>Undefined</source>
         <translation>Határozatlan</translation>
     </message>
@@ -5904,37 +6511,37 @@ p, li { white-space: pre-wrap; }
 <context>
     <name>TrackLayer</name>
     <message>
-        <location filename="../src/Layers/Layer.cpp" line="765"/>
+        <location filename="../src/Layers/Layer.cpp" line="829"/>
         <source>Extract - %1</source>
         <translation>Kivonat – %1</translation>
     </message>
     <message>
-        <location filename="../src/Layers/Layer.cpp" line="867"/>
+        <location filename="../src/Layers/Layer.cpp" line="920"/>
         <source># of track segments</source>
         <translation>nyomvonal szakaszok száma</translation>
     </message>
     <message>
-        <location filename="../src/Layers/Layer.cpp" line="867"/>
+        <location filename="../src/Layers/Layer.cpp" line="920"/>
         <source>%1</source>
         <translation>%1</translation>
     </message>
     <message>
-        <location filename="../src/Layers/Layer.cpp" line="868"/>
+        <location filename="../src/Layers/Layer.cpp" line="921"/>
         <source>Total distance</source>
         <translation>Teljes távolság</translation>
     </message>
     <message>
-        <location filename="../src/Layers/Layer.cpp" line="868"/>
+        <location filename="../src/Layers/Layer.cpp" line="921"/>
         <source>%1 km</source>
         <translation>%1 km</translation>
     </message>
     <message>
-        <location filename="../src/Layers/Layer.cpp" line="869"/>
+        <location filename="../src/Layers/Layer.cpp" line="922"/>
         <source>Total duration</source>
         <translation>Teljes időtartam</translation>
     </message>
     <message>
-        <location filename="../src/Layers/Layer.cpp" line="869"/>
+        <location filename="../src/Layers/Layer.cpp" line="922"/>
         <source>%1h %2m</source>
         <translation>%1h %2m</translation>
     </message>
@@ -5942,17 +6549,17 @@ p, li { white-space: pre-wrap; }
 <context>
     <name>TrackLayerWidget</name>
     <message>
-        <location filename="../src/Layers/LayerWidget.cpp" line="458"/>
+        <location filename="../src/Layers/LayerWidget.cpp" line="536"/>
         <source>Extract Drawing layer</source>
         <translation>Rajzoló réteg kivonata</translation>
     </message>
     <message>
-        <location filename="../src/Layers/LayerWidget.cpp" line="463"/>
+        <location filename="../src/Layers/LayerWidget.cpp" line="541"/>
         <source>Zoom</source>
         <translation>Nagyít</translation>
     </message>
     <message>
-        <location filename="../src/Layers/LayerWidget.cpp" line="471"/>
+        <location filename="../src/Layers/LayerWidget.cpp" line="549"/>
         <source>Close</source>
         <translation>Bezár</translation>
     </message>
@@ -5990,7 +6597,22 @@ p, li { white-space: pre-wrap; }
         <translation>Címkék</translation>
     </message>
     <message>
-        <location filename="../src/Docks/MinimumTrackPointProperties.ui" line="101"/>
+        <location filename="../src/Docks/MinimumTrackPointProperties.ui" line="107"/>
+        <source>Add &quot;source&quot; tag</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/Docks/MinimumTrackPointProperties.ui" line="110"/>
+        <source>S</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/Docks/MinimumTrackPointProperties.ui" line="123"/>
+        <source>REmove selected tag(s)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/Docks/MinimumTrackPointProperties.ui" line="126"/>
         <source>...</source>
         <translation>…</translation>
     </message>
@@ -6036,12 +6658,12 @@ p, li { white-space: pre-wrap; }
 <context>
     <name>UploadedLayerWidget</name>
     <message>
-        <location filename="../src/Layers/LayerWidget.cpp" line="524"/>
+        <location filename="../src/Layers/LayerWidget.cpp" line="600"/>
         <source>Zoom</source>
         <translation>Nagyít</translation>
     </message>
     <message>
-        <location filename="../src/Layers/LayerWidget.cpp" line="529"/>
+        <location filename="../src/Layers/LayerWidget.cpp" line="605"/>
         <source>Clear</source>
         <translation>Töröl</translation>
     </message>
@@ -6049,24 +6671,24 @@ p, li { white-space: pre-wrap; }
 <context>
     <name>WMSPreferencesDialog</name>
     <message>
-        <location filename="../src/Preferences/WMSPreferencesDialog.cpp" line="257"/>
-        <location filename="../src/Preferences/WMSPreferencesDialog.cpp" line="314"/>
-        <location filename="../src/Preferences/WMSPreferencesDialog.cpp" line="339"/>
+        <location filename="../src/Preferences/WMSPreferencesDialog.cpp" line="317"/>
+        <location filename="../src/Preferences/WMSPreferencesDialog.cpp" line="375"/>
+        <location filename="../src/Preferences/WMSPreferencesDialog.cpp" line="400"/>
         <source>Merkaartor: GetCapabilities</source>
         <translation>Merkaartor: képességek tudakolása</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/WMSPreferencesDialog.cpp" line="257"/>
+        <location filename="../src/Preferences/WMSPreferencesDialog.cpp" line="317"/>
         <source>Address and Path cannot be blank.</source>
         <translation>Cím és ösvény nem lehet üres.</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/WMSPreferencesDialog.cpp" line="315"/>
+        <location filename="../src/Preferences/WMSPreferencesDialog.cpp" line="376"/>
         <source>Download failed: %1.</source>
         <translation>Sikertelen letöltés: %1.</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/WMSPreferencesDialog.cpp" line="339"/>
+        <location filename="../src/Preferences/WMSPreferencesDialog.cpp" line="400"/>
         <source>Error reading capabilities.
 </source>
         <translation>Hiba képességeket olvasván.
@@ -6088,62 +6710,72 @@ p, li { white-space: pre-wrap; }
         <translation>Szolgálólista:</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/WMSPreferencesDialog.ui" line="76"/>
+        <location filename="../src/Preferences/WMSPreferencesDialog.ui" line="78"/>
         <source>Name:</source>
         <translation>Név:</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/WMSPreferencesDialog.ui" line="110"/>
+        <location filename="../src/Preferences/WMSPreferencesDialog.ui" line="120"/>
         <source>Layers:</source>
         <translation>Rétegek:</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/WMSPreferencesDialog.ui" line="155"/>
+        <location filename="../src/Preferences/WMSPreferencesDialog.ui" line="163"/>
         <source>Projection:</source>
         <translation>Leképezés:</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/WMSPreferencesDialog.ui" line="236"/>
+        <location filename="../src/Preferences/WMSPreferencesDialog.ui" line="240"/>
+        <source>Image format:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/Preferences/WMSPreferencesDialog.ui" line="264"/>
         <source>Styles:</source>
         <translation>Stílusok:</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/WMSPreferencesDialog.ui" line="222"/>
-        <source>Image format</source>
-        <translation>Képtípus</translation>
+        <location filename="../src/Preferences/WMSPreferencesDialog.ui" line="281"/>
+        <source>&quot;source&quot; tag value:</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Preferences/WMSPreferencesDialog.ui" line="262"/>
+        <location filename="../src/Preferences/WMSPreferencesDialog.ui" line="295"/>
+        <source>License URL:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/Preferences/WMSPreferencesDialog.ui" line="322"/>
         <source>Apply</source>
         <translation>Alkalmaz</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/WMSPreferencesDialog.ui" line="269"/>
+        <location filename="../src/Preferences/WMSPreferencesDialog.ui" line="329"/>
         <source>Add</source>
         <translation>Hozzáad</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/WMSPreferencesDialog.ui" line="276"/>
+        <location filename="../src/Preferences/WMSPreferencesDialog.ui" line="336"/>
         <source>Remove</source>
         <translation>Eltávolít</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/WMSPreferencesDialog.ui" line="93"/>
+        <location filename="../src/Preferences/WMSPreferencesDialog.ui" line="99"/>
         <source>Server Url:</source>
         <translation>Szolgáló-URL:</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/WMSPreferencesDialog.ui" line="124"/>
+        <location filename="../src/Preferences/WMSPreferencesDialog.ui" line="136"/>
         <source>1</source>
         <translation>1</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/WMSPreferencesDialog.ui" line="103"/>
+        <location filename="../src/Preferences/WMSPreferencesDialog.ui" line="111"/>
         <source>Get Capabilities</source>
         <translation>Képességeket tudakol</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/WMSPreferencesDialog.ui" line="132"/>
+        <location filename="../src/Preferences/WMSPreferencesDialog.ui" line="144"/>
         <source>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
@@ -6156,12 +6788,12 @@ p, li { white-space: pre-wrap; }
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Ez gyorstárazós WMS-szolgáló (&lt;/span&gt;&lt;a href=&quot;http://wiki.openstreetmap.org/wiki/Merkaartor/Documentation#WMS-C_Servers&quot;&gt;&lt;span style=&quot; font-weight:600; text-decoration: underline; color:#0000ff;&quot;&gt;WMS-C)&lt;/span&gt;&lt;/a&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/WMSPreferencesDialog.ui" line="178"/>
+        <location filename="../src/Preferences/WMSPreferencesDialog.ui" line="194"/>
         <source>Tile it</source>
         <translation>Kicsempézi</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/WMSPreferencesDialog.ui" line="198"/>
+        <location filename="../src/Preferences/WMSPreferencesDialog.ui" line="214"/>
         <source>Zoom levels</source>
         <translation>Nagyítószintek</translation>
     </message>

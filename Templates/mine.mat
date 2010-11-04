@@ -29,6 +29,7 @@
     <description locale="cs" >Město &gt; 100.000 obyvatel</description>
     <description locale="de" >Großstadt (Einw. &gt; 100.000)</description>
     <description locale="es" >Ciudad (Pob. &gt; 100.000)</description>
+    <description locale="et" >Suurlinn (Pop. &gt; 100.000)</description>
     <description locale="fr" >Ville (Pop. &gt; 100.000)</description>
     <description locale="hu" >Nagyváros &gt; 100.000 lakos</description>
     <description locale="it" >Città (Pop. &gt; 100.000)</description>
@@ -68,6 +69,7 @@
     <description locale="cs" >Vesnice (do 10.000 Obyvatel)</description>
     <description locale="de" >Dorf (Einw. &lt; 10.000)</description>
     <description locale="es" >Pueblo (Pob. &lt;10.000)</description>
+    <description locale="et" >Alev (Pop. &lt; 10.000)</description>
     <description locale="fr" >Village (Pop. &lt; 10.000)</description>
     <description locale="hu" >Falu (10.000 lakosnál kevesebb)</description>
     <description locale="it" >Villaggio (Pop. &lt; 10.000)</description>
@@ -87,6 +89,7 @@
     <description locale="cs" >Ves (několik domů)</description>
     <description locale="de" >Weiler (ein paar Häuser)</description>
     <description locale="es" >Aldea (pocas casas)</description>
+    <description locale="et" >Küla</description>
     <description locale="fr" >Hameau</description>
     <description locale="hu" >Apró település (néhány ház)</description>
     <description locale="it" >Frazione</description>
@@ -129,6 +132,7 @@
     <description locale="cs" >Lokalita (pojmenované místo)</description>
     <description locale="de" >Ort (benannter Platz)</description>
     <description locale="es" >Localidad (lugar)</description>
+    <description locale="et" >Punkt (nimega koht)</description>
     <description locale="fr" >Lieu-dit</description>
     <description locale="hu" >Hely (nevesített hely)</description>
     <description locale="it" >Località (nome luogo)</description>
@@ -149,6 +153,7 @@
    <description locale="cs" >Budova</description>
    <description locale="de" >Gebäude</description>
    <description locale="es" >Edificio</description>
+   <description locale="et" >Hoone</description>
    <description locale="fr" >Bâtiment</description>
    <description locale="hu" >Épület</description>
    <description locale="it" >Palazzo</description>
@@ -216,6 +221,7 @@
    <description locale="cs" >Typ silnice</description>
    <description locale="de" >Straßentyp</description>
    <description locale="es" >Tipo de carretera</description>
+   <description locale="et" >Tee tüüp</description>
    <description locale="fr" >Type de route</description>
    <description locale="hu" >Út típusa</description>
    <description locale="it" >Tipo strada</description>
@@ -256,6 +262,7 @@
     <description locale="cs" >Dálniční nájezd</description>
     <description locale="de" >Autobahnanschlussstelle</description>
     <description locale="es" >Rampa de autopista</description>
+    <description locale="et" >Kiirtee pealesõit</description>
     <description locale="fr" >Bretelle d&apos;accès ou de sortie d&apos;une autoroute</description>
     <description locale="hu" >Autópálya-bekötőút</description>
     <description locale="it" >Svincolo per l&apos;autostrada</description>
@@ -290,6 +297,7 @@
     <description locale="cs" >Nájezd na víceproudou cestu</description>
     <description locale="de" >Schnellstraßenanschlussstelle</description>
     <description locale="es" >Rampa de acceso a carretera</description>
+    <description locale="et" >Kiirtee pealesõit</description>
     <description locale="fr" >Voie d&apos;accès à une voie rapide</description>
     <description locale="hu" >Autóútbekötő</description>
     <description locale="it" >Svincolo per la strada principale</description>
@@ -307,6 +315,7 @@
     <description locale="cs" >Silnice I. třídy</description>
     <description locale="de" >Bundesstraße</description>
     <description locale="es" >Carretera principal</description>
+    <description locale="et" >Esimese klassi tee</description>
     <description locale="fr" >Route nationale</description>
     <description locale="hu" >Elsőrendű főút</description>
     <description locale="it" >Strada primaria</description>
@@ -325,6 +334,7 @@
     <description locale="cs" >Nájezd na silnici I. třídy</description>
     <description locale="de" >Bundesstraßenanschlussstelle</description>
     <description locale="es" >Rampa al camino primario</description>
+    <description locale="et" >Maantee pealesõit</description>
     <description locale="fr" >Voie d&apos;accès à une route nationale</description>
     <description locale="hu" >Elsőrendű bekötőút</description>
     <description locale="it" >Svincolo per strada primaria</description>
@@ -342,6 +352,7 @@
     <description locale="cs" >Silnice II. třídy</description>
     <description locale="de" >Landesstraße</description>
     <description locale="es" >Camino secundario</description>
+    <description locale="et" >II klassi maantee</description>
     <description locale="fr" >Route secondaire</description>
     <description locale="hu" >Másodrendű főút</description>
     <description locale="it" >Strada secondaria</description>
@@ -361,6 +372,7 @@
     <description locale="cs" >Silnice III. třídy</description>
     <description locale="de" >Kreisstraße</description>
     <description locale="es" >Camino terciario</description>
+    <description locale="et" >Kohalik tee</description>
     <description locale="fr" >Petite départementale ou communale</description>
     <description locale="hu" >Egyéb épített út</description>
     <description locale="it" >Strada terziaria</description>
@@ -378,6 +390,7 @@
     <description locale="cs" >Neoznačená cesta</description>
     <description locale="de" >Ortsverbindungsstraße</description>
     <description locale="es" >Carretera sin clasificar</description>
+    <description locale="et" >Klassifitseerimata tee</description>
     <description locale="fr" >Route non-classée</description>
     <description locale="hu" >Kisebb burkolt út</description>
     <description locale="it" >Strada non classificata</description>
@@ -396,6 +409,7 @@
     <description locale="cs" >Obecní komunikace</description>
     <description locale="de" >Ortsstraße</description>
     <description locale="es" >Camino residencial</description>
+    <description locale="et" >Asulatee</description>
     <description locale="fr" >Rue résidentielle</description>
     <description locale="hu" >Települési út</description>
     <description locale="it" >Strada residenziale</description>
@@ -413,6 +427,7 @@
     <description locale="cs" >Účelová komunikace</description>
     <description locale="de" >Zufahrtstraße</description>
     <description locale="es" >Camino de servicio</description>
+    <description locale="et" >Teenindustee</description>
     <description locale="fr" >Route d&apos;accès</description>
     <description locale="hu" >Szolgáló/üzemi út</description>
     <description locale="it" >Strada di servizio</description>
@@ -430,6 +445,7 @@
     <description locale="cs" >Nezpevněná komunikace</description>
     <description locale="de" >Feld- oder Waldweg</description>
     <description locale="es" >Camino de tierra</description>
+    <description locale="et" >Põllutee</description>
     <description locale="fr" >Chemin</description>
     <description locale="hu" >Földút</description>
     <description locale="it" >Strada forestale</description>
@@ -447,6 +463,7 @@
     <description locale="cs" >Obytná zóna</description>
     <description locale="de" >Spielstraße</description>
     <description locale="es" >Camino con prioridad para peatones</description>
+    <description locale="et" >Jalakäija eelistee</description>
     <description locale="fr" >Rue à majorité piétonne</description>
     <description locale="hu" >Lakó/pihenő övezet</description>
     <description locale="it" >Strada pedonale con traffico limitato</description>
@@ -466,6 +483,7 @@
     <description locale="cs" >Komunikace pouze pro chodce</description>
     <description locale="de" >Fußgängerzone</description>
     <description locale="es" >Calle Peatonal</description>
+    <description locale="et" >Ainult jalakäijate tee</description>
     <description locale="fr" >Rue exclusivement piétonne</description>
     <description locale="hu" >Sétálóutca</description>
     <description locale="it" >Strada pedonale</description>
@@ -528,6 +546,7 @@
     <description locale="cs" >Cesta pro koně</description>
     <description locale="de" >Reitweg</description>
     <description locale="es" >Camino para caballos</description>
+    <description locale="et" >Põllutee</description>
     <description locale="fr" >Chemin équestre</description>
     <description locale="hu" >Lovasút</description>
     <description locale="it" >Strada per cavalli</description>
@@ -547,6 +566,7 @@
     <description locale="cs" >Schodiště</description>
     <description locale="de" >Treppe</description>
     <description locale="es" >Escaleras</description>
+    <description locale="et" >Trepp</description>
     <description locale="fr" >Escaliers</description>
     <description locale="hu" >Lépcső</description>
     <description locale="it" >Passi</description>
@@ -567,6 +587,7 @@
     <description locale="cs" >Speciální cesta pro autobus (né vyhrazený pruh)</description>
     <description locale="de" >Spurbus-Strecke</description>
     <description locale="es" >Recorrido de autobuses (punto de información)</description>
+    <description locale="et" >Bussi abitee (mitte bussitee)</description>
     <description locale="fr" >Voie réservée aux bus guidés</description>
     <description locale="hu" >Buszvezetőút</description>
     <description locale="it" >Tramvia (non una strada per autobus)</description>
@@ -580,6 +601,7 @@
     <description locale="cs" >Unsurfaced road (stará značka)</description>
     <description locale="de" >Unbefestigte Straße (veraltet)</description>
     <description locale="es" >Camino sin asfaltar (etiqueta antigua)</description>
+    <description locale="et" >Pindamata tee (vananenud tähis)</description>
     <description locale="fr" >Route sans revêtement (étiquette dépréciée)</description>
     <description locale="hu" >Burkolatlan út (elavult címke)</description>
     <description locale="it" >Non asfaltata (vecchio tag)</description>
@@ -599,6 +621,7 @@
    <description locale="cs" >Využití plochy</description>
    <description locale="de" >Landnutzung</description>
    <description locale="es" >Uso de la tierra</description>
+   <description locale="et" >Maakasutus</description>
    <description locale="fr" >Utilisation du sol</description>
    <description locale="hu" >Földhasználat</description>
    <description locale="it" >Suolo</description>
@@ -653,6 +676,7 @@
     <description locale="cs" >Přestavba</description>
     <description locale="de" >Baulücke</description>
     <description locale="es" >Zona industrial abandonada</description>
+    <description locale="et" >Jäätmaa</description>
     <description locale="fr" >Terrain en friche</description>
     <description locale="hu" >Barna telek</description>
     <description locale="it" >Campo</description>
@@ -672,6 +696,7 @@
     <description locale="cs" >Hřbitov</description>
     <description locale="de" >Friedhof</description>
     <description locale="es" >Cementerio</description>
+    <description locale="et" >Kalmistu</description>
     <description locale="fr" >Cimetière</description>
     <description locale="hu" >Temető</description>
     <description locale="it" >Cimitero</description>
@@ -692,6 +717,7 @@
     <description locale="cs" >Obchodní zóna</description>
     <description locale="de" >Büros</description>
     <description locale="es" >Zona Comercial</description>
+    <description locale="et" >Ärimaa</description>
     <description locale="fr" >Zone tertiaire (bureaux)</description>
     <description locale="hu" >Kereskedelmi övezet</description>
     <description locale="it" >Zona commerciale</description>
@@ -712,6 +738,7 @@
     <description locale="cs" >Staveniště</description>
     <description locale="de" >Baustelle</description>
     <description locale="es" >Zona de Construcción</description>
+    <description locale="et" >Ehitusplats</description>
     <description locale="fr" >Site &quot;en construction&quot;</description>
     <description locale="hu" >Építkezés</description>
     <description locale="it" >Zona in costruzione</description>
@@ -754,6 +781,7 @@
     <description locale="cs" >Les</description>
     <description locale="de" >Wald</description>
     <description locale="es" >Bosque</description>
+    <description locale="et" >Mets</description>
     <description locale="fr" >Forêt</description>
     <description locale="hu" >Erdő</description>
     <description locale="it" >Foresta</description>
@@ -836,6 +864,7 @@
     <description locale="cs" >Vojenský prostor</description>
     <description locale="de" >Militär</description>
     <description locale="es" >Escuela Militar</description>
+    <description locale="et" >Militaarala</description>
     <description locale="fr" >Militaire</description>
     <description locale="hu" >Katonai terület/gyakorlótér</description>
     <description locale="it" >Zona militare</description>
@@ -854,6 +883,7 @@
     <description locale="cs" >Rekreační oblast</description>
     <description locale="de" >Erholungsgebiet</description>
     <description locale="es" >Zona de recreación</description>
+    <description locale="et" >Puhkeala</description>
     <description locale="fr" >Aire de jeux</description>
     <description locale="hu" >Rekreációs terület</description>
     <description locale="it" >Zona di svago</description>
@@ -873,6 +903,7 @@
     <description locale="cs" >Přehrada</description>
     <description locale="de" >Speicherbecken</description>
     <description locale="es" >Reserva (agua)</description>
+    <description locale="et" >Vee reservuaar</description>
     <description locale="fr" >Bassin de retenue</description>
     <description locale="hu" >Víztározó</description>
     <description locale="it" >Riserva (acqua)</description>
@@ -913,6 +944,7 @@
     <description locale="cs" >Nákupní zóna</description>
     <description locale="de" >Einzelhandel</description>
     <description locale="es" >Zona de venta al por menor</description>
+    <description locale="et" >Kaubandustsoon</description>
     <description locale="fr" >Vente au détail</description>
     <description locale="hu" >Kiskereskedelmi övezet</description>
     <description locale="it" >Zona particolareggiata</description>
@@ -931,6 +963,7 @@
     <description locale="cs" >Povrchová těžba</description>
     <description locale="de" >Steinbruch</description>
     <description locale="es" >Explotación minera en la superficie</description>
+    <description locale="et" >Pealmaa kaevandus</description>
     <description locale="fr" >Mine à ciel ouvert</description>
     <description locale="hu" >Külszíni fejtés</description>
     <description locale="it" >Superficie di estrazione di minerali</description>
@@ -949,6 +982,7 @@
     <description locale="cs" >Městská zeleň</description>
     <description locale="de" >Dorfwiese</description>
     <description locale="es" >Parque municipal</description>
+    <description locale="et" >Roheala</description>
     <description locale="fr" >Espace vert</description>
     <description locale="hu" >Falupark</description>
     <description locale="it" >Villaggio verde</description>
@@ -1065,6 +1099,7 @@
     <description locale="cs" >Banka s bankomatem</description>
     <description locale="de" >Bank mit Geldautomat</description>
     <description locale="es" >Banco con cajero automático</description>
+    <description locale="et" >Pank ja sularahaautomaat</description>
     <description locale="fr" >Banque avec DAB</description>
     <description locale="hu" >Bank pénzkiadó automatával</description>
     <description locale="it" >Banca con Bancomat</description>
@@ -1102,6 +1137,7 @@
     <description locale="cs" >Parkování pro kola</description>
     <description locale="de" >Fahrradstellplatz</description>
     <description locale="es" >Aparcamiento de Bicicletas</description>
+    <description locale="et" >Jalgratta parkla</description>
     <description locale="fr" >Parking pour vélos</description>
     <description locale="hu" >Kerékpártároló</description>
     <description locale="it" >Parcheggio per biciclette</description>
@@ -1121,6 +1157,7 @@
     <description locale="cs" >Půjčovna kol</description>
     <description locale="de" >Fahrradmietstation</description>
     <description locale="es" >Alquiler de Bicicletas</description>
+    <description locale="et" >Jalgratta rent</description>
     <description locale="fr" >Location de vélos</description>
     <description locale="hu" >Kerékpárkölcsönző</description>
     <description locale="it" >Noleggio biciclette</description>
@@ -1161,6 +1198,7 @@
     <description locale="cs" >Autobusové nádraží</description>
     <description locale="de" >Bushaltestelle</description>
     <description locale="es" >Estación de autobuses</description>
+    <description locale="et" >Bussijaam</description>
     <description locale="fr" >Gare routière</description>
     <description locale="hu" >Autóbuszállomás</description>
     <description locale="it" >Stazione autobus</description>
@@ -1182,6 +1220,7 @@
     <description locale="cs" >Kavárna</description>
     <description locale="de" >Cafe</description>
     <description locale="es" >Cafetería</description>
+    <description locale="et" >Kohvik</description>
     <description locale="fr" >Café</description>
     <description locale="hu" >Kávézó</description>
     <description locale="it" >Cafè</description>
@@ -1202,6 +1241,7 @@
     <description locale="cs" >Půjčovna aut</description>
     <description locale="de" >Autovermietung</description>
     <description locale="es" >Alquiler de Automóviles</description>
+    <description locale="et" >Auto rent</description>
     <description locale="fr" >Location de voiture</description>
     <description locale="hu" >Autókölcsönző</description>
     <description locale="it" >Noleggo auto</description>
@@ -1222,6 +1262,7 @@
     <description locale="cs" >Sdílení aut</description>
     <description locale="de" >Autotausch</description>
     <description locale="es" >Compartir auto</description>
+    <description locale="et" >Autojagamine</description>
     <description locale="fr" >Co-voiturage</description>
     <description locale="hu" >Közös autók</description>
     <description locale="it" >Car Sharing</description>
@@ -1241,6 +1282,7 @@
     <description locale="cs" >Kino</description>
     <description locale="de" >Kino</description>
     <description locale="es" >Cine</description>
+    <description locale="et" >Kino</description>
     <description locale="fr" >Cinéma</description>
     <description locale="hu" >Mozi</description>
     <description locale="it" >Cinema</description>
@@ -1282,6 +1324,7 @@
     <description locale="cs" >Soud</description>
     <description locale="de" >Gericht</description>
     <description locale="es" >Juzgados</description>
+    <description locale="et" >Kohtumaja</description>
     <description locale="fr" >Palais de justice</description>
     <description locale="hu" >Bíróság</description>
     <description locale="it" >Corte</description>
@@ -1302,6 +1345,7 @@
     <description locale="cs" >Krematorium</description>
     <description locale="de" >Krematorium</description>
     <description locale="es" >Crematorio</description>
+    <description locale="et" >Krematoorium</description>
     <description locale="fr" >Crématorium</description>
     <description locale="hu" >Hamvasztó</description>
     <description locale="it" >Crematorio</description>
@@ -1323,6 +1367,7 @@
     <description locale="cs" >Zdroj pitné vody</description>
     <description locale="de" >Trinkwasser</description>
     <description locale="es" >Manantial de agua potable</description>
+    <description locale="et" >Joogivee allikas</description>
     <description locale="fr" >Source d&apos;eau potable</description>
     <description locale="hu" >Ivóvíz</description>
     <description locale="it" >Fonte di acqua potabile</description>
@@ -1342,6 +1387,7 @@
     <description locale="cs" >Rychlé občerstvení</description>
     <description locale="de" >Schnellimbiss</description>
     <description locale="es" >Comida Rápida</description>
+    <description locale="et" >Kiirtoit</description>
     <description locale="fr" >Restauration rapide</description>
     <description locale="hu" >Gyorsétterem</description>
     <description locale="it" >Fast food</description>
@@ -1422,6 +1468,7 @@
     <description locale="cs" >Malý hřbitov</description>
     <description locale="de" >Grabstelle</description>
     <description locale="es" >Pequeño cementerio</description>
+    <description locale="et" >Väike matmispaik</description>
     <description locale="fr" >Petit cimetière</description>
     <description locale="hu" >Sírhely</description>
     <description locale="it" >Piccolo luogo di sepoltura</description>
@@ -1505,6 +1552,7 @@
     <description locale="cs" >Parkoviště</description>
     <description locale="de" >Parkplatz</description>
     <description locale="es" >Aparcamiento</description>
+    <description locale="et" >Parkimine</description>
     <description locale="fr" >Parking</description>
     <description locale="hu" >Parkoló</description>
     <description locale="it" >Parcheggio</description>
@@ -1558,7 +1606,7 @@
     <description locale="ru" >Место поклонения</description>
     <description locale="sl" >Kraj čaščenja</description>
     <description locale="sv" >Religiös helgedom</description>
-    <description locale="uk" >Ритуальний заклад</description>
+    <description locale="uk" >Культове місце</description>
    </value>
    <value tag="police" >
     <description locale="en" >Police Station</description>
@@ -1675,6 +1723,7 @@
     <description locale="cs" >Státní úřad</description>
     <description locale="de" >Öffentliches Gebäude</description>
     <description locale="es" >Edificio Público</description>
+    <description locale="et" >Avalik ehitis</description>
     <description locale="fr" >Bâtiment public</description>
     <description locale="hu" >Középület</description>
     <description locale="it" >Edificio pubblico</description>
@@ -1695,6 +1744,7 @@
     <description locale="cs" >Veřejný telefon</description>
     <description locale="de" >Telefon</description>
     <description locale="es" >Teléfono Público</description>
+    <description locale="et" >Taksofon</description>
     <description locale="fr" >Téléphone public</description>
     <description locale="hu" >Nyilvános telefon</description>
     <description locale="it" >Telefono pubblico</description>
@@ -1714,6 +1764,7 @@
     <description locale="cs" >Recyklační místo</description>
     <description locale="de" >Recycling-Einrichtung</description>
     <description locale="es" >Facilidades de reciclamiento</description>
+    <description locale="et" >Prügitöötlus jaam</description>
     <description locale="fr" >Point de collecte pour le recyclage</description>
     <description locale="hu" >Újrahasznosítás</description>
     <description locale="it" >Impianti di riciclaggio</description>
@@ -1777,6 +1828,7 @@
     <description locale="cs" >Taxi</description>
     <description locale="de" >Taxi</description>
     <description locale="es" >Taxi</description>
+    <description locale="et" >Takso</description>
     <description locale="fr" >Taxi</description>
     <description locale="hu" >Taxi</description>
     <description locale="it" >Taxi</description>
@@ -1883,6 +1935,7 @@
     <description locale="cs" >Kanál, místo pro odpadky</description>
     <description locale="de" >Mülldeponie</description>
     <description locale="es" >Vertedero</description>
+    <description locale="et" >Prügila</description>
     <description locale="fr" >Déchetterie</description>
     <description locale="hu" >Szemétlerakó/gyűjtő</description>
     <description locale="it" >Smaltimento rifiuti</description>
@@ -1925,6 +1978,7 @@
     <description locale="cs" >Budhistický</description>
     <description locale="de" >Buddistisch</description>
     <description locale="es" >Budista</description>
+    <description locale="et" >Budistlik</description>
     <description locale="fr" >Boudhiste</description>
     <description locale="hu" >Buddhista</description>
     <description locale="it" >Buddista</description>
@@ -1944,6 +1998,7 @@
     <description locale="cs" >Křesťanský</description>
     <description locale="de" >Christlich</description>
     <description locale="es" >Cristiano</description>
+    <description locale="et" >Kristlik</description>
     <description locale="fr" >Chrétien</description>
     <description locale="hu" >Keresztény</description>
     <description locale="it" >Cristiano</description>
@@ -1985,6 +2040,7 @@
     <description locale="cs" >Muslimský</description>
     <description locale="de" >Muslimisch</description>
     <description locale="es" >Musulmán</description>
+    <description locale="et" >Moslemi</description>
     <description locale="fr" >Musulman</description>
     <description locale="hu" >Muzulmán</description>
     <description locale="it" >Musulmano</description>
@@ -2069,6 +2125,7 @@
    <description locale="cs" >Jméno (francouzky)</description>
    <description locale="de" >Name (franz.)</description>
    <description locale="es" >Nombre (francés)</description>
+   <description locale="et" >Nimi (prantsuse)</description>
    <description locale="fr" >Nom (français)</description>
    <description locale="hu" >Név (vallon)</description>
    <description locale="it" >Nome (francese)</description>
@@ -2088,6 +2145,7 @@
    <description locale="cs" >Jméno (nizozemsky)</description>
    <description locale="de" >Name (niederl.)</description>
    <description locale="es" >Nombre (alemán)</description>
+   <description locale="et" >Nimi (hollandi)</description>
    <description locale="fr" >Nom (néérlandais)</description>
    <description locale="hu" >Név (flamand)</description>
    <description locale="it" >Nome (olandese)</description>
@@ -2119,7 +2177,7 @@
   <description locale="ru" >Место поклонения</description>
   <description locale="sl" >Kraj čaščenja</description>
   <description locale="sv" >Religiös helgedom</description>
-  <description locale="uk" >Ритуальний заклад</description>
+  <description locale="uk" >Культове місце</description>
   <widgetref id="name" />
   <widget tag="amenity" type="constant" >
    <description locale="en" >Amenity</description>
@@ -2155,7 +2213,7 @@
     <description locale="ru" >Место поклонения</description>
     <description locale="sl" >Kraj čaščenja</description>
     <description locale="sv" >Religiös helgedom</description>
-    <description locale="uk" >Ритуальний заклад</description>
+    <description locale="uk" >Культове місце</description>
    </value>
   </widget>
   <widgetref id="religion" />
@@ -2168,6 +2226,7 @@
   <description locale="cs" >Katolický kostel</description>
   <description locale="de" >Katholische Kirche</description>
   <description locale="es" >Iglesia Católica</description>
+  <description locale="et" >Katolik kirik</description>
   <description locale="fr" >Eglise catholique</description>
   <description locale="hu" >Katolikus templom</description>
   <description locale="it" >Chiesa cattolica</description>
@@ -2216,7 +2275,7 @@
     <description locale="ru" >Место поклонения</description>
     <description locale="sl" >Kraj čaščenja</description>
     <description locale="sv" >Religiös helgedom</description>
-    <description locale="uk" >Ритуальний заклад</description>
+    <description locale="uk" >Культове місце</description>
    </value>
   </widget>
   <widget tag="religion" type="constant" >
@@ -2248,6 +2307,7 @@
     <description locale="cs" >Křesťanský</description>
     <description locale="de" >Christlich</description>
     <description locale="es" >Cristiano</description>
+    <description locale="et" >Kristlik</description>
     <description locale="fr" >Chrétien</description>
     <description locale="hu" >Keresztény</description>
     <description locale="it" >Cristiano</description>
@@ -2289,6 +2349,7 @@
     <description locale="cs" >Katolický</description>
     <description locale="de" >Katholisch</description>
     <description locale="es" >Católico</description>
+    <description locale="et" >Katoliku</description>
     <description locale="fr" >Catholique</description>
     <description locale="hu" >Katolikus</description>
     <description locale="it" >Cattolico</description>
@@ -2309,6 +2370,7 @@
   <description locale="cs" >Obecné vazby</description>
   <description locale="de" >Generische Relationen</description>
   <description locale="es" >Relaciones Genéricas</description>
+  <description locale="et" >Üldsuhted</description>
   <description locale="fr" >Relations génériques</description>
   <description locale="hu" >Általános kapcsolatok</description>
   <description locale="it" >Relazioni Generiche</description>
@@ -2355,6 +2417,7 @@
   <description locale="cs" >Obecné uzly</description>
   <description locale="de" >Generischer Knoten</description>
   <description locale="es" >Nodos Genéricos</description>
+  <description locale="et" >Üldised punktid</description>
   <description locale="fr" >Nœuds génériques</description>
   <description locale="hu" >Általános pontok</description>
   <description locale="it" >Nodi Generici</description>
