@@ -139,7 +139,7 @@ public:
 
 public:
     void setFile(const QString& fn);
-    void initTable(QString table);
+    void initTable(const QString& table);
     void buildFeatures(const QString& table, QPainter* P, const QRectF& fullbox, const QRectF& selbox, const QRect& src) const;
 
 public slots:
@@ -165,7 +165,7 @@ private:
 
     mutable QCache<IFeature::FId, PrimitiveFeature> m_cache;
 
-
+    QList<QString> m_tables;
 };
 
 class SpatialiteAdapterFactory : public QObject, public IMapAdapterFactory
