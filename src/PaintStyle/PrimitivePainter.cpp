@@ -1,5 +1,5 @@
 #include "PrimitivePainter.h"
-#include "Features/IFeature.h"
+#include "IFeature.h"
 
 #include "Utils/SvgCache.h"
 

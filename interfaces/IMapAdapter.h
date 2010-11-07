@@ -10,23 +10,10 @@
 #include <QDomElement>
 #include <QSettings>
 
-#include "IImageManager.h"
+class IFeature;
+class IProjection;
+class IImageManager;
 
-//! Used to fit map servers into QMapControl
-/*!
- * MapAdapters are needed to convert between world- and display coordinates.
- * This calculations depend on the used map projection.
- * There are two ready-made MapAdapters:
- *  - TileMapAdapter, which is ready to use for OpenStreetMap or Google (Mercator projection)
- *  - WMSMapAdapter, which could be used for the most WMS-Server (some servers show errors, because of image ratio)
- *
- * MapAdapters are also needed to form the HTTP-Queries to load the map tiles.
- * The maps from WMS Servers are also divided into tiles, because those can be better cached.
- *
- * @see TileMapAdapter, @see WMSMapAdapter
- *
- *	@author Kai Winter <kaiwinter@gmx.de>
-*/
 class IMapAdapter : public QObject
 {
     Q_OBJECT
@@ -36,7 +23,8 @@ public:
     {
         NetworkBackground,
         BrowserBackground,
-        DirectBackground
+        DirectBackground,
+        VectorBackground
     };
 
     virtual ~IMapAdapter() {}
@@ -113,6 +101,7 @@ public:
     virtual QString getQuery(int x, int y, int z) const = 0;
     virtual QString getQuery(const QRectF& wgs84Bbox, const QRectF& projBbox, const QRect& size) const = 0;
     virtual QPixmap getPixmap(const QRectF& wgs84Bbox, const QRectF& projBbox, const QRect& size) const = 0;
+    virtual const QList<IFeature*>* getPaths(const QRectF& wgs84Bbox, const IProjection* projection) const { return NULL; }
 
     virtual QString projection() const = 0;
     virtual QRectF	getBoundingbox() const = 0;

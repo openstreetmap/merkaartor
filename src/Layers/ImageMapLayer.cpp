@@ -20,6 +20,8 @@
 #include <QMessageBox>
 
 #include "LayerWidget.h"
+#include "Features.h"
+
 #include "ui_LicenseDisplayDialog.h"
 
 // ImageMapLayerPrivate
@@ -67,7 +69,7 @@ public:
 // ImageMapLayer
 
 ImageMapLayer::ImageMapLayer(const QString & aName)
-    : OsbLayer(aName), p(new ImageMapLayerPrivate)
+    : Layer(aName), p(new ImageMapLayerPrivate)
 {
     p->bgType = NONE_ADAPTER_UUID;
     setName(tr("Map - None"));
@@ -90,17 +92,14 @@ CoordBox ImageMapLayer::boundingBox()
 
     p->theProjection.setProjectionType(p->theMapAdapter->projection());
     QRectF r = p->theMapAdapter->getBoundingbox();
-    Coord tl = p->theProjection.inverse(r.topLeft());
-    Coord br = p->theProjection.inverse(r.bottomRight());
+    Coord tl = p->theProjection.inverse2Coord(r.topLeft());
+    Coord br = p->theProjection.inverse2Coord(r.bottomRight());
     return CoordBox(tl, br);
 }
 
 int ImageMapLayer::size() const
 {
-    if (p->bgType == SHAPE_ADAPTER_UUID && isVisible())
-        return Layer::size();
-    else
-        return 0;
+    return Layer::size();
 }
 
 LayerWidget* ImageMapLayer::newWidget(void)
@@ -207,12 +206,12 @@ void ImageMapLayer::setMapAdapter(const QUuid& theAdapterUid, const QString& ser
             resources.cdUp();
             resources.cd("Resources");
             QString world_shp = resources.absolutePath() + "/" + STRINGIFY(WORLD_SHP);
-            setFilename(world_shp);
+//            setFilename(world_shp);
 #else
-            if (QDir::isAbsolutePath(STRINGIFY(WORLD_SHP)))
-                setFilename(STRINGIFY(WORLD_SHP));
-            else
-                setFilename(QCoreApplication::applicationDirPath() + "/" + STRINGIFY(WORLD_SHP));
+//            if (QDir::isAbsolutePath(STRINGIFY(WORLD_SHP)))
+//                setFilename(STRINGIFY(WORLD_SHP));
+//            else
+//                setFilename(QCoreApplication::applicationDirPath() + "/" + STRINGIFY(WORLD_SHP));
 #endif
         }
             setName(tr("Map - OSB Background"));
@@ -282,6 +281,7 @@ void ImageMapLayer::setMapAdapter(const QUuid& theAdapterUid, const QString& ser
     if (p->theMapAdapter) {
         switch (p->theMapAdapter->getType()) {
             case IMapAdapter::DirectBackground:
+            case IMapAdapter::VectorBackground:
                 break;
             case IMapAdapter::BrowserBackground :
 #ifdef USE_WEBKIT
@@ -621,13 +621,13 @@ void ImageMapLayer::draw(MapView& theView, QRect& rect)
     //        P.drawPixmap(QPoint((pmSize.width()-pms.width())/2, (pmSize.height()-pms.height())/2) + p->theDelta, pms);
 }
 
-QRect ImageMapLayer::drawFull(MapView& theView, QRect& rect) const
+QRect ImageMapLayer::drawFull(MapView& theView, QRect& rect)
 {
     QRectF fScreen(rect);
     MapView::transformCalc(p->theTransform, p->theProjection, 0.0, theView.viewport(), rect);
 
-    CoordBox Viewport(p->theProjection.inverse(p->theTransform.inverted().map(fScreen.bottomLeft())),
-                     p->theProjection.inverse(p->theTransform.inverted().map(fScreen.topRight())));
+    CoordBox Viewport(p->theProjection.inverse2Coord(p->theTransform.inverted().map(fScreen.bottomLeft())),
+                     p->theProjection.inverse2Coord(p->theTransform.inverted().map(fScreen.topRight())));
     QPointF bl = theView.toView(Viewport.bottomLeft());
     QPointF tr = theView.toView(Viewport.topRight());
 
@@ -669,12 +669,50 @@ QRect ImageMapLayer::drawFull(MapView& theView, QRect& rect) const
         QRectF wgs84vp = QRectF(QPointF(coordToAng(Viewport.bottomLeft().lon()), coordToAng(Viewport.bottomLeft().lat()))
                                 , QPointF(coordToAng(Viewport.topRight().lon()), coordToAng(Viewport.topRight().lat())));
 
+        // Act depending on adapter type
         if (p->theMapAdapter->getType() == IMapAdapter::DirectBackground) {
             QPixmap pm = p->theMapAdapter->getPixmap(wgs84vp, vp, rect);
             if (!pm.isNull() && pm.rect() != rect)
                 p->pm = pm.scaled(rect.size(), Qt::IgnoreAspectRatio);
             else
                 p->pm = pm;
+        } else if (p->theMapAdapter->getType() == IMapAdapter::VectorBackground) {
+            QPixmap pm(rect.size());
+            pm.fill(Qt::transparent);
+            QPainter P(&pm);
+            P.setRenderHint(QPainter::Antialiasing);
+            P.setPen(QPen(Qt::black, 2));
+            const QList<IFeature*>* theFeatures = p->theMapAdapter->getPaths(wgs84vp, NULL);
+            if (theFeatures) {
+                foreach(IFeature* f, *theFeatures) {
+                    const QPainterPath& thePath = f->getPath();
+                    if (thePath.elementCount() == 1) {
+                        IFeature::FId id(IFeature::Point, -(f->id().numId));
+                        if (get(id))
+                            continue;
+                        Node* N = new Node(Coord::fromQPointF((QPointF)thePath.elementAt(0)));
+                        N->setId(id);
+                        add(N);
+                        for (int i=0; i<f->tagSize(); ++i)
+                            N->setTag(f->tagKey(i),f->tagValue(i));
+                    } else {
+                        IFeature::FId id(IFeature::LineString, -(f->id().numId));
+                        if (get(id))
+                            continue;
+                        Way* W = new Way();
+                        W->setId(id);
+                        for (int i=0; i<thePath.elementCount(); ++i) {
+                            Node* N = new Node(Coord::fromQPointF((QPointF)thePath.elementAt(i)));
+                            add(N);
+                            W->add(N);
+                        }
+                        add(W);
+                        for (int i=0; i<f->tagSize(); ++i)
+                            W->setTag(f->tagKey(i),f->tagValue(i));
+                    }
+                }
+            }
+            p->pm = pm;
         } else {
             QString url (p->theMapAdapter->getQuery(wgs84vp, vp, rect));
             if (!url.isEmpty()) {
@@ -691,7 +729,7 @@ QRect ImageMapLayer::drawFull(MapView& theView, QRect& rect) const
     return QRectF(bl.x(), tr.y(), tr.x() - bl.x() +1, bl.y() - tr.y() + 1).toRect();
 }
 
-QRect ImageMapLayer::drawTiled(MapView& theView, QRect& rect) const
+QRect ImageMapLayer::drawTiled(MapView& theView, QRect& rect)
 {
     QRectF vp;
     if (p->theProjection.projIsLatLong()) {
@@ -771,8 +809,8 @@ QRect ImageMapLayer::drawTiled(MapView& theView, QRect& rect) const
         ulCoord = Coord(vlm.topLeft().y(), vlm.topLeft().x());
         lrCoord = Coord(vlm.bottomRight().y(), vlm.bottomRight().x());
     } else {
-        ulCoord = p->theProjection.inverse(vlm.topLeft());
-        lrCoord = p->theProjection.inverse(vlm.bottomRight());
+        ulCoord = p->theProjection.inverse2Coord(vlm.topLeft());
+        lrCoord = p->theProjection.inverse2Coord(vlm.bottomRight());
     }
 
     // Actual drawing

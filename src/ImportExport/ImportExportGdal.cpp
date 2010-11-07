@@ -82,7 +82,7 @@ Node *ImportExportGdal::nodeFor(const OGRPoint p)
     if (toWGS84)
         return pointHash[p] = new Node(Coord(angToCoord(p.getY()), angToCoord(p.getX())));
     else {
-        Coord c = theProjection->inverse(QPointF(p.getX(), p.getY()));
+        Coord c = theProjection->inverse2Coord(QPointF(p.getX(), p.getY()));
         return pointHash[p] = new Node(c);
     }
 }

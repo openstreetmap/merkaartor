@@ -1,6 +1,7 @@
 #ifndef MERKATOR_PROJECTION_H_
 #define MERKATOR_PROJECTION_H_
 
+#include "IProjection.h"
 #include "Maps/Coord.h"
 
 #include <QPointF>
@@ -25,7 +26,7 @@ class QRect;
 class Node;
 class ProjectionPrivate;
 
-class Projection
+class Projection : public IProjection
 {
     public:
         Projection(void);
@@ -36,7 +37,8 @@ class Projection
         QLineF project(const QLineF & Map) const;
         QPointF project(const QPointF& Map) const;
         QPointF project(const Coord& Map) const;
-        Coord inverse(const QPointF& Screen) const;
+        Coord inverse2Coord(const QPointF& Screen) const;
+        QPointF inverse2Point(const QPointF& Map) const;
 
         bool setProjectionType(QString aProjectionType);
         QString getProjectionType() const;

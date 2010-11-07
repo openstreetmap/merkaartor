@@ -20,7 +20,7 @@ struct Tile
     bool operator<(const Tile& rhs) const { return priority < rhs.priority; }
 };
 
-class ImageMapLayer : public OsbLayer
+class ImageMapLayer : public Layer
 {
     Q_OBJECT
 public:
@@ -63,8 +63,8 @@ public:
 
     IImageManager* getImageManger();
 private:
-    QRect drawTiled(MapView& theView, QRect& rect) const;
-    QRect drawFull(MapView& theView, QRect& rect) const;
+    QRect drawTiled(MapView& theView, QRect& rect);
+    QRect drawFull(MapView& theView, QRect& rect);
 
 signals:
     void imageRequested(ImageMapLayer*);

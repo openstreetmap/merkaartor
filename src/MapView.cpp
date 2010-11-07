@@ -166,7 +166,7 @@ void MapView::panScreen(QPoint delta)
 
     CoordBox r1, r2;
 
-    Coord cDelta = theProjection.inverse(p->theInvertedTransform.map(delta))  - theProjection.inverse(p->theInvertedTransform.map(QPoint(0, 0)));
+    Coord cDelta = theProjection.inverse2Coord(p->theInvertedTransform.map(delta))  - theProjection.inverse2Coord(p->theInvertedTransform.map(QPoint(0, 0)));
 
     if (delta.x()) {
         if (delta.x() < 0)
@@ -227,14 +227,7 @@ void MapView::paintEvent(QPaintEvent * anEvent)
     QPainter P;
     P.begin(this);
 
-    if (!p->invalidRects.isEmpty())
-        buildFeatureSet();
-
     updateStaticBackground();
-
-    if (!StaticBufferUpToDate) {
-        updateStaticBuffer();
-    }
 
     P.drawPixmap(p->theVectorPanDelta, *StaticBackground);
     P.save();
@@ -242,6 +235,12 @@ void MapView::paintEvent(QPaintEvent * anEvent)
         if (ImgIt.get()->isVisible())
             ImgIt.get()->drawImage(&P);
     P.restore();
+
+    if (!p->invalidRects.isEmpty())
+        buildFeatureSet();
+    if (!StaticBufferUpToDate) {
+        updateStaticBuffer();
+    }
     P.drawPixmap(p->theVectorPanDelta, *StaticBuffer);
 
     drawLatLonGrid(P);
@@ -480,7 +479,7 @@ void MapView::drawLatLonGrid(QPainter & P)
             continue;
 //        QPoint pt = QPoint(0, p->theTransform.map(parallelLines.at(i).at(0)).y());
         QPoint ptt = pt.toPoint() + QPoint(5, -5);
-        P.drawText(ptt, QString("%1").arg(coordToAng(theProjection.inverse(parallelLines.at(i).at(0)).lat()), 0, 'f', 2-prec));
+        P.drawText(ptt, QString("%1").arg(coordToAng(theProjection.inverse2Coord(parallelLines.at(i).at(0)).lat()), 0, 'f', 2-prec));
     }
     for (int i=0; i<medianLines.size(); ++i) {
 
@@ -500,7 +499,7 @@ void MapView::drawLatLonGrid(QPainter & P)
             continue;
 //        QPoint pt = QPoint(p->theTransform.map(medianLines.at(i).at(0)).x(), 0);
         QPoint ptt = pt.toPoint() + QPoint(5, 10);
-        P.drawText(ptt, QString("%1").arg(coordToAng(theProjection.inverse(medianLines.at(i).at(0)).lon()), 0, 'f', 2-prec));
+        P.drawText(ptt, QString("%1").arg(coordToAng(theProjection.inverse2Coord(medianLines.at(i).at(0)).lon()), 0, 'f', 2-prec));
     }
 
     P.restore();
@@ -803,7 +802,7 @@ QPoint MapView::toView(Node* aPt) const
 
 Coord MapView::fromView(const QPoint& aPt) const
 {
-    return theProjection.inverse(p->theInvertedTransform.map(aPt));
+    return theProjection.inverse2Coord(p->theInvertedTransform.map(aPt));
 }
 
 void MapView::on_customContextMenuRequested(const QPoint & pos)

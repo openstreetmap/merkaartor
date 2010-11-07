@@ -24,6 +24,8 @@
 #include <QPair>
 #include <QStringList>
 
+#include <QDebug>
+
 #include <math.h>
 #include "spatialite/gaiageo.h"
 
@@ -208,24 +210,26 @@ void SpatialiteAdapter::initTable(const QString& table)
         qDebug() << "Sqlite: prepare error: " << ret;
         return;
     }
-    q = QString("select distinct sub_type from %1").arg(table);
-    sqlite3_stmt *pStmt;
-    ret = sqlite3_prepare_v2(m_handle, q.toUtf8().data(), q.size(), &pStmt, NULL);
-    if (ret != SQLITE_OK) {
-        qDebug() << "Sqlite: prepare error: " << ret;
-    }
-    while (sqlite3_step(pStmt) == SQLITE_ROW) {
-        QString sub_type((const char*)sqlite3_column_text(pStmt, 0));
-        PrimitiveFeature f;
-        f.Tags.append(qMakePair(tag, sub_type));
-        for(int i=0; i< thePrimitivePainters.size(); ++i) {
-            if (thePrimitivePainters[i].matchesTag(&f, 0)) {
-                myStyles.insert(QString("%1%2").arg(tag).arg(sub_type), &thePrimitivePainters[i]);
-                break;
+    if (getType() == IMapAdapter::DirectBackground) {
+        q = QString("select distinct sub_type from %1").arg(table);
+        sqlite3_stmt *pStmt;
+        ret = sqlite3_prepare_v2(m_handle, q.toUtf8().data(), q.size(), &pStmt, NULL);
+        if (ret != SQLITE_OK) {
+            qDebug() << "Sqlite: prepare error: " << ret;
+        }
+        while (sqlite3_step(pStmt) == SQLITE_ROW) {
+            QString sub_type((const char*)sqlite3_column_text(pStmt, 0));
+            PrimitiveFeature f;
+            f.Tags.append(qMakePair(tag, sub_type));
+            for(int i=0; i< thePrimitivePainters.size(); ++i) {
+                if (thePrimitivePainters[i].matchesTag(&f, 0)) {
+                    myStyles.insert(QString("%1%2").arg(tag).arg(sub_type), &thePrimitivePainters[i]);
+                    break;
+                }
             }
         }
+        sqlite3_finalize(pStmt);
     }
-    sqlite3_finalize(pStmt);
 }
 
 void SpatialiteAdapter::setFile(const QString& fn)
@@ -260,11 +264,6 @@ QUuid SpatialiteAdapter::getId() const
     return QUuid(theUid);
 }
 
-IMapAdapter::Type SpatialiteAdapter::getType() const
-{
-    return IMapAdapter::DirectBackground;
-}
-
 QString	SpatialiteAdapter::getName() const
 {
     return theName;
@@ -283,6 +282,18 @@ QRectF SpatialiteAdapter::getBoundingbox() const
 QString SpatialiteAdapter::projection() const
 {
     return "EPSG:4326";
+}
+
+const QList<IFeature*>* SpatialiteAdapter::getPaths(const QRectF& wgs84Bbox, const IProjection* projection) const
+{
+    if (!m_loaded)
+        return NULL;
+
+    theFeatures.clear();
+    foreach (QString s, m_tables)
+        buildFeatures(s, wgs84Bbox, projection);
+
+    return &theFeatures;
 }
 
 QPixmap SpatialiteAdapter::getPixmap(const QRectF& wgs84Bbox, const QRectF& /*projBbox*/, const QRect& src) const
@@ -313,9 +324,10 @@ QPixmap SpatialiteAdapter::getPixmap(const QRectF& wgs84Bbox, const QRectF& /*pr
 
     theFeatures.clear();
     foreach (QString s, m_tables)
-        buildFeatures(s, &P, wgs84Bbox, wgs84Bbox, src);
+        buildFeatures(s, wgs84Bbox);
 
-    foreach(PrimitiveFeature* f, theFeatures) {
+    foreach(IFeature* iF, theFeatures) {
+        PrimitiveFeature* f = static_cast<PrimitiveFeature*>(iF);
         if (f->theId.type & IFeature::Point)
             continue;
 
@@ -325,7 +337,8 @@ QPixmap SpatialiteAdapter::getPixmap(const QRectF& wgs84Bbox, const QRectF& /*pr
                 fpainter->drawBackground(&pp, &P, m_PixelPerM);
         }
     }
-    foreach(PrimitiveFeature* f, theFeatures) {
+    foreach(IFeature* iF, theFeatures) {
+        PrimitiveFeature* f = static_cast<PrimitiveFeature*>(iF);
         if (f->theId.type & IFeature::Point)
             continue;
 
@@ -336,7 +349,8 @@ QPixmap SpatialiteAdapter::getPixmap(const QRectF& wgs84Bbox, const QRectF& /*pr
                 fpainter->drawForeground(&pp,& P, m_PixelPerM);
         }
     }
-    foreach(PrimitiveFeature* f, theFeatures) {
+    foreach(IFeature* iF, theFeatures) {
+        PrimitiveFeature* f = static_cast<PrimitiveFeature*>(iF);
         PrimitivePainter* fpainter = myStyles[QString("%1%2").arg(f->Tags[0].first).arg(f->Tags[0].second)];
         if (fpainter->matchesZoom(m_PixelPerM)) {
             if (f->theId.type & IFeature::Point) {
@@ -350,13 +364,15 @@ QPixmap SpatialiteAdapter::getPixmap(const QRectF& wgs84Bbox, const QRectF& /*pr
     }
     P.end();
 
-    foreach(PrimitiveFeature* f, theFeatures)
+    foreach(IFeature* iF, theFeatures) {
+        PrimitiveFeature* f = static_cast<PrimitiveFeature*>(iF);
         m_cache.insert(f->theId, f);
+    }
 
     return pix;
 }
 
-void SpatialiteAdapter::buildFeatures(const QString& table, QPainter* P, const QRectF& fullbox, const QRectF& selbox, const QRect& src) const
+void SpatialiteAdapter::buildFeatures(const QString& table, const QRectF& selbox, const IProjection* proj) const
 {
     QString tag = table.mid(3);
 //    QPainterPath clipPath;
@@ -375,13 +391,13 @@ void SpatialiteAdapter::buildFeatures(const QString& table, QPainter* P, const Q
     while (sqlite3_step(pStmt) == SQLITE_ROW) {
         qint64 id = sqlite3_column_int64(pStmt, 0);
         if (m_cache.contains(IFeature::FId(IFeature::LineString, id))) {
-            PrimitiveFeature* f = m_cache.take(IFeature::FId(IFeature::LineString, id));
+            IFeature* f = m_cache.take(IFeature::FId(IFeature::LineString, id));
             theFeatures << f;
             continue;
         }
         QString sub_type((const char*)sqlite3_column_text(pStmt, 1));
-        if (!myStyles.contains(QString("%1%2").arg(tag).arg(sub_type)))
-            continue;
+//        if (!myStyles.contains(QString("%1%2").arg(tag).arg(sub_type)))
+//            continue;
 
         QString name((const char*)sqlite3_column_text(pStmt, 2));
         int blobSize = sqlite3_column_bytes(pStmt, 3);
@@ -389,14 +405,19 @@ void SpatialiteAdapter::buildFeatures(const QString& table, QPainter* P, const Q
         const unsigned char* blob = (const unsigned char*)ba.constData();
 
         gaiaGeomCollPtr coll = gaiaFromSpatiaLiteBlobWkb(blob, blobSize);
-        Q_ASSERT(coll);
+//        Q_ASSERT(coll);
+        if (!coll)
+            continue;
 
         gaiaPointPtr node = coll->FirstPoint;
         while (node) {
             PrimitiveFeature* f = new PrimitiveFeature();
             f->theId = IFeature::FId(IFeature::Point, id);
-            f->theName = name;
-            f->thePath.moveTo(node->X, node->Y);
+            f->Tags.append(qMakePair(QString("name"), name));
+            QPointF pt(node->X, node->Y);
+            if (proj)
+                pt = proj->project(pt);
+            f->thePath.moveTo(pt);
             f->Tags.append(qMakePair(tag, sub_type));
             theFeatures << f;
 
@@ -408,14 +429,21 @@ void SpatialiteAdapter::buildFeatures(const QString& table, QPainter* P, const Q
             if (way->Points) {
                 PrimitiveFeature* f = new PrimitiveFeature();
                 f->theId = IFeature::FId(IFeature::LineString, id);
-                f->theName = name;
+                f->Tags.append(qMakePair(QString("name"), name));
                 f->Tags.append(qMakePair(tag, sub_type));
 
                 gaiaGetPoint(way->Coords, 0, &x, &y);
-                f->thePath.moveTo(x, y);
+                QPointF pt(x, y);
+                if (proj)
+                    pt = proj->project(pt);
+                f->thePath.moveTo(pt);
                 for (int i=1; i<way->Points; ++i) {
                     gaiaGetPoint(way->Coords, i, &x, &y);
-                    f->thePath.lineTo(x, y);
+                    pt.setX(x);
+                    pt.setY(y);
+                    if (proj)
+                        pt = proj->project(pt);
+                    f->thePath.lineTo(pt);
                 }
                 theFeatures << f;
             }
@@ -431,16 +459,22 @@ void SpatialiteAdapter::buildFeatures(const QString& table, QPainter* P, const Q
             if (ring->Points) {
                 PrimitiveFeature* f = new PrimitiveFeature();
                 f->theId = IFeature::FId(IFeature::LineString, id);
-                f->theName = name;
+                f->Tags.append(qMakePair(QString("name"), name));
                 f->Tags.append(qMakePair(tag, sub_type));
 
                 gaiaGetPoint(ring->Coords, 0, &x, &y);
-                f->thePath.moveTo(x, y);
+                QPointF pt(x, y);
+                if (proj)
+                    pt = proj->project(pt);
+                f->thePath.moveTo(pt);
                 for (int i=1; i<ring->Points; ++i) {
                     gaiaGetPoint(ring->Coords, i, &x, &y);
-                    f->thePath.lineTo(x, y);
+                    pt.setX(x);
+                    pt.setY(y);
+                    if (proj)
+                        pt = proj->project(pt);
+                    f->thePath.lineTo(pt);
                 }
-//                path.closeSubpath();
                 theFeatures << f;
             }
 

@@ -25,6 +25,8 @@
 #include <QNetworkRequest>
 #include <QNetworkReply>
 
+#include <QDebug>
+
 #include <math.h>
 
 #ifdef USE_ZBAR

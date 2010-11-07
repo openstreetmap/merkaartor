@@ -6,6 +6,8 @@
 #include <QPair>
 #include <QMetaType>
 
+class QPainterPath;
+
 class IFeature
 {
 public:
@@ -52,7 +54,7 @@ public:
      *  If the feature has no id, a random id is generated
      * @return the id of the current feature
      */
-    const IFeature::FId& id() const;
+    virtual const IFeature::FId& id() const = 0;
 
     /** check if the feature is logically deleted
      * @return true if logically deleted
@@ -110,6 +112,7 @@ public:
      */
     virtual bool isReadonly() = 0;
 
+    virtual const QPainterPath& getPath() const = 0;
 };
 
 Q_DECLARE_METATYPE(IFeature::FId)

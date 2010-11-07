@@ -114,6 +114,11 @@ class Coord
             return QPointF(Lon, Lat);
         }
 
+        static Coord fromQPointF(const QPointF& pt)
+        {
+            return Coord(pt.y(), pt.x());
+        }
+
     private:
         double Lat;
         double Lon;

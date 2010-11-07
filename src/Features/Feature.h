@@ -277,6 +277,8 @@ class Feature : public IFeature
         virtual bool isSpecial() const;
         virtual void setSpecial(bool val);
 
+        virtual const QPainterPath& getPath() const;
+
         const FeaturePainter* getPainter(double PixelPerM) const;
         const FeaturePainter* getCurrentPainter() const;
         bool hasPainter() const;
@@ -345,6 +347,8 @@ class Feature : public IFeature
         long    m_references;
         friend void ::boost::intrusive_ptr_add_ref(Feature * p);
         friend void ::boost::intrusive_ptr_release(Feature * p);
+
+        QPainterPath thePath;
 };
 
 Q_DECLARE_METATYPE( Feature * );

@@ -18,6 +18,7 @@
 #include <QUuid>
 #include <QProgressDialog>
 #include <QPainter>
+#include <QPainterPath>
 
 #include <algorithm>
 
@@ -591,6 +592,11 @@ void Feature::invalidatePainter()
 {
     p->PossiblePaintersUpToDate = false;
     p->PixelPerMForPainter = -1;
+}
+
+const QPainterPath& Feature::getPath() const
+{
+    return QPainterPath();
 }
 
 void MapFeaturePrivate::updatePossiblePainters()

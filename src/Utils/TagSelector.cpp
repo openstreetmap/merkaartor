@@ -1,6 +1,6 @@
 #include "TagSelector.h"
 
-#include "Features/IFeature.h"
+#include "IFeature.h"
 
 void skipWhite(const QString& Expression, int& idx)
 {

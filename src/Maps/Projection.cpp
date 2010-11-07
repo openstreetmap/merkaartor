@@ -132,6 +132,19 @@ QPointF Projection::project(const Coord & Map) const
 #endif
 }
 
+QPointF Projection::inverse2Point(const QPointF & Map) const
+{
+    if (p->IsLatLong)
+        return p->latlonInverse(Map).toQPointF();
+    else
+    if (p->IsMercator)
+        return p->mercatorInverse(Map).toQPointF();
+#ifndef _MOBILE
+    else
+        return projInverse(Map).toQPointF();
+#endif
+}
+
 QPointF Projection::project(const QPointF & Map) const
 {
     if (p->IsMercator)
@@ -181,7 +194,7 @@ QLineF Projection::project(const QLineF & Map) const
 }
 
 
-Coord Projection::inverse(const QPointF & Screen) const
+Coord Projection::inverse2Coord(const QPointF & Screen) const
 {
     if (p->IsLatLong)
         return p->latlonInverse(Screen);

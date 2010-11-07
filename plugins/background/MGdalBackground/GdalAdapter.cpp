@@ -19,6 +19,8 @@
 #include <QPainter>
 #include <QMessageBox>
 
+#include <QDebug>
+
 #include "gdal_priv.h"
 #include "ogrsf_frmts.h"
 

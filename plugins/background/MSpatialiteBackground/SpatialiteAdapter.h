@@ -31,6 +31,7 @@ SQLite/SpatiaLite
 
 #include "PrimitiveFeature.h"
 #include "PaintStyle/PrimitivePainter.h"
+#include "IProjection.h"
 
 class MasPaintStyle;
 
@@ -53,7 +54,7 @@ public:
     /*!
      * @return  the type of this MapAdapter
      */
-    virtual IMapAdapter::Type	getType		() const;
+    virtual IMapAdapter::Type	getType		() const {return IMapAdapter::VectorBackground;}
 
     //! returns the name of this MapAdapter
     /*!
@@ -116,6 +117,7 @@ public:
     virtual QString getQuery(int, int, int)  const { return ""; }
     virtual QString getQuery(const QRectF& , const QRectF& , const QRect& ) const { return ""; }
     virtual QPixmap getPixmap(const QRectF& wgs84Bbox, const QRectF& projBbox, const QRect& size) const ;
+    virtual const QList<IFeature*>* getPaths(const QRectF& wgs84Bbox, const IProjection* projection) const;
 
     virtual QString projection() const;
     virtual QRectF	getBoundingbox() const;
@@ -140,7 +142,7 @@ public:
 public:
     void setFile(const QString& fn);
     void initTable(const QString& table);
-    void buildFeatures(const QString& table, QPainter* P, const QRectF& fullbox, const QRectF& selbox, const QRect& src) const;
+    void buildFeatures(const QString& table, const QRectF& selbox, const IProjection* proj=NULL) const;
 
 public slots:
     void onLoadFile();
@@ -154,7 +156,7 @@ private:
 
     QHash<QString, PrimitivePainter* > myStyles;
     QList<PrimitivePainter> thePrimitivePainters;
-    mutable QList<PrimitiveFeature*> theFeatures;
+    mutable QList<IFeature*> theFeatures;
 
     mutable QTransform m_transform;
     mutable double m_PixelPerM;
@@ -163,7 +165,7 @@ private:
     sqlite3 *m_handle;
     QHash<QString, sqlite3_stmt*> m_stmtHandles;
 
-    mutable QCache<IFeature::FId, PrimitiveFeature> m_cache;
+    mutable QCache<IFeature::FId, IFeature> m_cache;
 
     QList<QString> m_tables;
 };

@@ -1,7 +1,7 @@
 #ifndef PRIMITIVEFEATURE_H
 #define PRIMITIVEFEATURE_H
 
-#include "Features/IFeature.h"
+#include "IFeature.h"
 #include <QList>
 #include <QVector>
 #include <QPair>
@@ -42,6 +42,12 @@ public:
     virtual const IFeature* getParent(int) const { return NULL; }
 
     virtual bool hasPainter(double) const { return false; }
+
+    /** Give the id of the feature.
+     *  If the feature has no id, a random id is generated
+     * @return the id of the current feature
+     */
+    virtual const IFeature::FId& id() const {return theId;}
 
     /** check if the feature is logically deleted
      * @return true if logically deleted
@@ -98,9 +104,9 @@ public:
      */
     virtual bool isReadonly() { return true; }
 
-    void setType(quint32 aTyp);
+    virtual const QPainterPath& getPath() const {return thePath;}
 
-    int size() {return 1;}
+    void setType(quint32 aTyp);
 
 public:
     quint32 type;
@@ -109,7 +115,6 @@ public:
     QList<PrimitiveAttribute> attributes;
 
     IFeature::FId theId;
-    QString theName;
     QPainterPath thePath;
     QList<QPair<QString, QString> > Tags;
 };
