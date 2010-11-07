@@ -352,7 +352,8 @@ void WMSPreferencesDialog::requestCapabilities(QUrl url)
     http->setHost(url.host(), url.port() == -1 ? 80 : url.port());
     http->setProxy(M_PREFS->getProxy(url));
 
-    httpGetId = http->request(header);
+    buf.buffer().clear();
+    httpGetId = http->request(header, 0, &buf);
 }
 
 void WMSPreferencesDialog::readResponseHeader(const QHttpResponseHeader &responseHeader)
@@ -406,7 +407,9 @@ void WMSPreferencesDialog::httpRequestFinished(bool error)
     isTiled = 0;
 
     QDomDocument theXmlDoc;
-    theXmlDoc.setContent(http->readAll());
+//    QString src(buf.buffer());
+//    qDebug() << src;
+    theXmlDoc.setContent(buf.buffer());
 
     QDomElement docElem = theXmlDoc.documentElement();
 
@@ -527,22 +530,34 @@ QTreeWidgetItem * WMSPreferencesDialog::parseLayers(QDomElement& aLayerElem, QTr
 
     QDomElement title = aLayerElem.firstChildElement("Title");
     QDomElement name = aLayerElem.firstChildElement("Name");
-    if (name.isNull())
-        return NULL;
 
     QTreeWidgetItem *newItem = new QTreeWidgetItem;
     newItem->setFlags(Qt::NoItemFlags |Qt::ItemIsEnabled);
-    newItem->setText(0,name.firstChild().toText().nodeValue());
-    newItem->setToolTip(0, title.firstChild().toText().nodeValue());
-
-    QString theName = name.firstChild().toText().nodeValue();
-    newItem->setFlags(Qt::ItemIsUserCheckable | Qt::ItemIsSelectable | Qt::ItemIsEnabled);
-    newItem->setData(0, Qt::UserRole, theName);
-    foreach (QString s, edWmsLayers->text().split(',')) {
-        if (theName == s)
-            newItem->setCheckState(0, Qt::Checked);
+    if (!name.isNull())
+        newItem->setText(0,name.firstChild().toText().nodeValue());
+    else {
+        if (!title.isNull())
+            newItem->setText(0,title.firstChild().toText().nodeValue());
         else
-            newItem->setCheckState(0, Qt::Unchecked);
+            newItem->setText(0,tr("Unnamed"));
+    }
+
+    if (!title.isNull())
+        newItem->setToolTip(0, title.firstChild().toText().nodeValue());
+
+    QString theName;
+    if (!name.isNull()) {
+        theName = name.firstChild().toText().nodeValue();
+        newItem->setFlags(Qt::ItemIsUserCheckable | Qt::ItemIsSelectable | Qt::ItemIsEnabled);
+        newItem->setData(0, Qt::UserRole, theName);
+        foreach (QString s, edWmsLayers->text().split(',')) {
+            if (theName == s)
+                newItem->setCheckState(0, Qt::Checked);
+            else
+                newItem->setCheckState(0, Qt::Unchecked);
+        }
+    } else {
+//        newItem->setFlags(Qt::ItemIsUserCheckable | Qt::ItemIsSelectable | Qt::ItemIsEnabled);
     }
 
     if (aLayerItem)

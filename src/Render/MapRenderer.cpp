@@ -25,8 +25,7 @@ void BackgroundStyleLayer::draw(Way* R)
     const FeaturePainter* paintsel = R->getPainter(r->theView->pixelPerM());
     if (paintsel) {
         paintsel->drawBackground(R,r->thePainter,r->theView);
-        return;
-    } else
+    } else if (!R->hasPainter())
 //    if (/*!globalZoom(r->theProjection) && */!R->hasPainter()) //FIXME Untagged roads level of zoom?
     {
         QPen thePen(QColor(0,0,0),1);
@@ -85,7 +84,7 @@ void TouchupStyleLayer::draw(Way* R)
     const FeaturePainter* paintsel = R->getPainter(r->theView->pixelPerM());
     if (paintsel)
         paintsel->drawTouchup(R,r->thePainter,r->theView);
-    else {
+    else if (!R->hasPainter()) {
         if ( r->theOptions.arrowOptions != RendererOptions::ArrowsNever )
         {
             Feature::TrafficDirectionType TT = trafficDirection(R);
@@ -147,7 +146,7 @@ void TouchupStyleLayer::draw(Node* Pt)
     const FeaturePainter* paintsel = Pt->getPainter(r->theView->pixelPerM());
     if (paintsel)
         paintsel->drawTouchup(Pt,r->thePainter,r->theView);
-    else {
+    else if (!Pt->hasPainter()) {
         if (! ((Pt->isReadonly() || !Pt->isSelectable(r->theView)) && (!Pt->isPOI() && !Pt->isWaypoint())))
 //        if (!Pt->isReadonly() && Pt->isSelectable(r->theView))
         {
@@ -362,9 +361,11 @@ void MapRenderer::render(
             if (bgLayerVisible)
             {
                 for (it = itm.value().constBegin(); it != itm.value().constEnd(); ++it) {
-                    P->save();
                     double alpha = (*it)->getAlpha();
-                    P->setOpacity(alpha);
+                    if (alpha != 1.) {
+                        P->save();
+                        P->setOpacity(alpha);
+                    }
 
                     if (CHECK_WAY(*it)) {
                         Way * R = STATIC_CAST_WAY(*it);
@@ -376,7 +377,9 @@ void MapRenderer::render(
                         bglayer.draw(STATIC_CAST_NODE(*it));
                     else if (CHECK_RELATION(*it))
                         bglayer.draw(STATIC_CAST_RELATION(*it));
-                    P->restore();
+                    if (alpha != 1.) {
+                        P->restore();
+                    }
                 }
             }
             ++itm;
@@ -387,9 +390,11 @@ void MapRenderer::render(
             if (fgLayerVisible)
             {
                 for (it = itm.value().constBegin(); it != itm.value().constEnd(); ++it) {
-                    P->save();
                     double alpha = (*it)->getAlpha();
-                    P->setOpacity(alpha);
+                    if (alpha != 1.) {
+                        P->save();
+                        P->setOpacity(alpha);
+                    }
 
                     if (CHECK_WAY(*it)) {
                         Way * R = STATIC_CAST_WAY(*it);
@@ -401,7 +406,9 @@ void MapRenderer::render(
                         fglayer.draw(STATIC_CAST_NODE(*it));
                     else if (CHECK_RELATION(*it))
                         fglayer.draw(STATIC_CAST_RELATION(*it));
-                    P->restore();
+                    if (alpha != 1.) {
+                        P->restore();
+                    }
                 }
             }
             ++itm;
@@ -411,9 +418,11 @@ void MapRenderer::render(
     {
         for (itm = theFeatures.constBegin() ;itm != theFeatures.constEnd(); ++itm) {
             for (it = itm.value().constBegin(); it != itm.value().constEnd(); ++it) {
-                P->save();
                 double alpha = (*it)->getAlpha();
-                P->setOpacity(alpha);
+                if (alpha != 1.) {
+                    P->save();
+                    P->setOpacity(alpha);
+                }
 
                 if (CHECK_WAY(*it)) {
                     Way * R = STATIC_CAST_WAY(*it);
@@ -425,7 +434,9 @@ void MapRenderer::render(
                     tchuplayer.draw(STATIC_CAST_NODE(*it));
                 else if (CHECK_RELATION(*it))
                     tchuplayer.draw(STATIC_CAST_RELATION(*it));
-                P->restore();
+                if (alpha != 1.) {
+                    P->restore();
+                }
             }
         }
     }
@@ -457,7 +468,8 @@ void MapRenderer::render(
         for (it = itm.value().constBegin() ;it != itm.value().constEnd(); ++it)
         {
             double alpha = (*it)->getAlpha();
-            P->setOpacity(alpha);
+            if (alpha != 1.)
+                P->setOpacity(alpha);
 
             (*it)->draw(*P, aView);
         }

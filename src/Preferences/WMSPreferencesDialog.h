@@ -112,7 +112,7 @@ private:
     QString selectedServer;
     int httpGetId;
     QHttp *http;
-    QBuffer* buf;
+    QBuffer buf;
     int isTiled;
     QList<WmscLayer> wmscLayers;
     WmscLayer selWmscLayer;
