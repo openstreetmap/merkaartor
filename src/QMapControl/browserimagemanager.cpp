@@ -159,13 +159,21 @@ BrowserImageManager::~BrowserImageManager()
     delete timeoutTimer;
 }
 
-QPixmap BrowserImageManager::getImage(IMapAdapter* anAdapter, int x, int y, int z)
+QByteArray BrowserImageManager::getData(IMapAdapter* anAdapter, QString url)
 {
-    QString url = anAdapter->getQuery(x, y, z);
-    return getImage(anAdapter, url);
+    QPixmap pm = getPixmap(anAdapter, url);
+    QBuffer buf;
+    pm.save(&buf);
+    return buf.buffer();
 }
 
-QPixmap BrowserImageManager::getImage(IMapAdapter* anAdapter, QString url)
+QPixmap BrowserImageManager::getPixmap(IMapAdapter* anAdapter, int x, int y, int z)
+{
+    QString url = anAdapter->getQuery(x, y, z);
+    return getPixmap(anAdapter, url);
+}
+
+QPixmap BrowserImageManager::getPixmap(IMapAdapter* anAdapter, QString url)
 {
 //	QPixmap pm(emptyPixmap);
     QPixmap pm;
@@ -254,7 +262,22 @@ void BrowserImageManager::pageLoadFinished(bool ok)
 //            pt = tmpPx;
 //        }
 
-        receivedImage(pt, R.hash);
+        if (!(pt.isNull())) {
+            QPixmapCache::insert(R.hash, pt);
+            QString strHash = QByteArray::fromBase64(R.hash.toAscii());
+
+            if (cacheMaxSize && !strHash.startsWith("Yahoo")) {
+                pt.save(cacheDir.absolutePath() + "/" + R.hash + ".png");
+                QFileInfo info(cacheDir.absolutePath() + "/" + R.hash + ".png");
+                cacheInfo.append(info);
+                cacheSize += info.size();
+
+                adaptCache();
+            }
+        }
+
+        QByteArray ba;
+        receivedData(ba, R.hash);
     } else {
         loadingRequests.enqueue(R);
         qDebug() << "BrowserImageManager::pageLoadFinished - Error: " << " Hash: " << R.hash;
@@ -277,7 +300,7 @@ void BrowserImageManager::slotLoadProgress(int p)
 }
 
 //QPixmap BrowserImageManager::prefetchImage(const QString& host, const QString& url)
-QPixmap BrowserImageManager::prefetchImage(IMapAdapter* anAdapter, int x, int y, int z)
+QPixmap BrowserImageManager::prefetchPixmap(IMapAdapter* anAdapter, int x, int y, int z)
 {
     QString host = anAdapter->getHost();
     QString url = anAdapter->getQuery(x, y, z);
@@ -285,25 +308,11 @@ QPixmap BrowserImageManager::prefetchImage(IMapAdapter* anAdapter, int x, int y,
     QString hash = QString(strHash.toAscii().toBase64());
 
     prefetch.append(hash);
-    return getImage(anAdapter, x, y, z);
+    return getPixmap(anAdapter, x, y, z);
 }
 
-void BrowserImageManager::receivedImage(const QPixmap& pixmap, const QString& hash)
+void BrowserImageManager::receivedData(const QByteArray& ba, const QString& hash)
 {
-    if (!(pixmap.isNull())) {
-        QPixmapCache::insert(hash, pixmap);
-        QString strHash = QByteArray::fromBase64(hash.toAscii());
-
-        if (cacheMaxSize && !strHash.startsWith("Yahoo")) {
-            pixmap.save(cacheDir.absolutePath() + "/" + hash + ".png");
-            QFileInfo info(cacheDir.absolutePath() + "/" + hash + ".png");
-            cacheInfo.append(info);
-            cacheSize += info.size();
-
-            adaptCache();
-        }
-    }
-
     if (prefetch.contains(hash))
     {
         prefetch.removeAt(prefetch.indexOf(hash));

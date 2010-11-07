@@ -41,14 +41,14 @@ class MapNetwork : QObject
         MapNetwork(IImageManager* parent);
         ~MapNetwork();
 
-        void loadImage(const QString& hash, const QString& host, const QString& url);
+        void load(const QString& hash, const QString& host, const QString& url);
 
         /*!
          * checks if the given url is already loading
          * @param url the url of the image
          * @return boolean, if the image is already loading
          */
-        bool imageIsLoading(QString hash);
+        bool isLoading(QString hash);
 
         /*!
          * Aborts all current loading threads.
@@ -63,7 +63,6 @@ class MapNetwork : QObject
         QMap<QTimer*, QNetworkReply*> timeoutMap;
         QQueue<LoadingRequest*> loadingRequests;
 
-        double loaded;
         MapNetwork& operator=(const MapNetwork& rhs);
         MapNetwork(const MapNetwork& old);
         void launchRequest();

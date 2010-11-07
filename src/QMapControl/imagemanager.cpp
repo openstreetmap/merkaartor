@@ -32,15 +32,9 @@ ImageManager::ImageManager(QObject* parent)
     emptyPixmap.fill(Qt::transparent);
 
 #ifndef _MOBILE
-    if (QPixmapCache::cacheLimit() <= 20000)
-    {
-        QPixmapCache::setCacheLimit(20000);	// in kb
-    }
+    m_dataCache.setMaxCost(20000000); // 20mb
 #else
-    if (QPixmapCache::cacheLimit() <= 2048)
-    {
-        QPixmapCache::setCacheLimit(2048);	// in kb
-    }
+    m_dataCache.setMaxCost(2000000); // 2mb
 #endif
 }
 
@@ -50,7 +44,35 @@ ImageManager::~ImageManager()
     delete net;
 }
 
-QPixmap ImageManager::getImage(IMapAdapter* anAdapter, int x, int y, int z)
+QByteArray ImageManager::getData(IMapAdapter* anAdapter, QString url)
+{
+    QString host = anAdapter->getHost();
+    QString strHash = QString("%1%2").arg(anAdapter->getName()).arg(url);
+    QString hash = QString(strHash.toAscii().toBase64());
+    if (hash.size() > 255) {
+        QCryptographicHash crypt(QCryptographicHash::Md5);
+        crypt.addData(hash.toLatin1());
+        hash = QString(crypt.result().toHex());
+    }
+
+    QByteArray ba;
+    if (m_dataCache.contains(hash)) {
+        ba = *m_dataCache.take(hash);
+        return ba;
+    }
+
+    // currently loading?
+    if (!net->isLoading(hash))
+    {
+        // load from net, add empty image
+        net->load(hash, host, url);
+        emit(dataRequested());
+        return ba;
+    }
+    return ba;
+}
+
+QPixmap ImageManager::getPixmap(IMapAdapter* anAdapter, int x, int y, int z)
 {
 //    QSize ts(anAdapter->getTileSize(), anAdapter->getTileSize());
 //    if (emptyPixmap.size() != ts) {
@@ -58,10 +80,10 @@ QPixmap ImageManager::getImage(IMapAdapter* anAdapter, int x, int y, int z)
 //        emptyPixmap.fill(Qt::transparent);
 //    }
     QString url = anAdapter->getQuery(x, y, z);
-    return getImage(anAdapter, url);
+    return getPixmap(anAdapter, url);
 }
 
-QPixmap ImageManager::getImage(IMapAdapter* anAdapter, QString url)
+QPixmap ImageManager::getPixmap(IMapAdapter* anAdapter, QString url)
 {
 // 	qDebug() << "ImageManager::getImage";
 
@@ -80,13 +102,14 @@ QPixmap ImageManager::getImage(IMapAdapter* anAdapter, QString url)
     QPixmap pm;
 
     // is image in picture cache
-    if (QPixmapCache::find(hash, pm))
+    if (m_dataCache.contains(hash)) {
+        pm.loadFromData(*m_dataCache.object(hash));
         return pm;
+    }
 
     // disk cache?
     if (anAdapter->isTiled() && useDiskCache(hash + ".png")) {
         if (pm.load(cacheDir.absolutePath() + "/" + hash + ".png")) {
-            QPixmapCache::insert(hash, pm);
             return pm;
         }
     }
@@ -95,18 +118,18 @@ QPixmap ImageManager::getImage(IMapAdapter* anAdapter, QString url)
         return pm;
 
     // currently loading?
-    if (!net->imageIsLoading(hash))
+    if (!net->isLoading(hash))
     {
         // load from net, add empty image
-        net->loadImage(hash, host, url);
-        emit(imageRequested());
+        net->load(hash, host, url);
+        emit(dataRequested());
         return pm;
     }
     return pm;
 }
 
 //QPixmap ImageManager::prefetchImage(const QString& host, const QString& url)
-QPixmap ImageManager::prefetchImage(IMapAdapter* anAdapter, int x, int y, int z)
+QPixmap ImageManager::prefetchPixmap(IMapAdapter* anAdapter, int x, int y, int z)
 {
     QString host = anAdapter->getHost();
     QString url = anAdapter->getQuery(x, y, z);
@@ -114,19 +137,20 @@ QPixmap ImageManager::prefetchImage(IMapAdapter* anAdapter, int x, int y, int z)
     QString hash = QString(strHash.toAscii().toBase64());
 
     prefetch.append(hash);
-    return getImage(anAdapter, x, y, z);
+    return getPixmap(anAdapter, x, y, z);
 }
 
-void ImageManager::receivedImage(const QPixmap& pixmap, const QString& hash)
+void ImageManager::receivedData(const QByteArray& ba, const QString& hash)
 {
 // 	qDebug() << "ImageManager::receivedImage";
-    if (pixmap.isNull()) {
-        QPixmap pm(256, 256);
-        pm.fill(Qt::gray);
-        QPixmapCache::insert(hash, pm);
-    } else {
-        QPixmapCache::insert(hash, pixmap);
-        if (cacheMaxSize || cachePermanent) {
+
+    QByteArray* a = new QByteArray(ba);
+    m_dataCache.insert(hash, a, a->size());
+    if (cacheMaxSize || cachePermanent) {
+        QPixmap pixmap;
+        pixmap.loadFromData(ba);
+
+        if (!pixmap.isNull()) {
             pixmap.save(cacheDir.absolutePath() + "/" + hash + ".png");
             QFileInfo info(cacheDir.absolutePath() + "/" + hash + ".png");
             cacheInfo.append(info);
@@ -140,7 +164,7 @@ void ImageManager::receivedImage(const QPixmap& pixmap, const QString& hash)
     {
         prefetch.removeAt(prefetch.indexOf(hash));
     }
-    emit(imageReceived());
+    emit(dataReceived());
 }
 
 void ImageManager::loadingQueueEmpty()

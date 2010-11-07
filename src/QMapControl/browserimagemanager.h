@@ -78,13 +78,14 @@ class BrowserImageManager : public QObject, public IImageManager
          * @return the pixmap of the asked image
          */
         //QPixmap getImage(const QString& host, const QString& path);
-        QPixmap getImage(IMapAdapter* anAdapter, int x, int y, int z);
-        QPixmap getImage(IMapAdapter* anAdapter, QString url);
+        QPixmap getPixmap(IMapAdapter* anAdapter, int x, int y, int z);
+        QPixmap getPixmap(IMapAdapter* anAdapter, QString url);
+        QByteArray getData(IMapAdapter* anAdapter, QString url);
 
         //QPixmap prefetchImage(const QString& host, const QString& path);
-        QPixmap prefetchImage(IMapAdapter* anAdapter, int x, int y, int z);
+        QPixmap prefetchPixmap(IMapAdapter* anAdapter, int x, int y, int z);
 
-        void receivedImage(const QPixmap& pixmap, const QString& url);
+        void receivedData(const QByteArray& ba, const QString& url);
 
         /*!
          * This method is called by MapNetwork, after all images in its queue were loaded.

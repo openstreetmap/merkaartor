@@ -27,7 +27,7 @@
 #define MAX_REQ 8
 
 MapNetwork::MapNetwork(IImageManager* parent)
-        : parent(parent), loaded(0)
+        : parent(parent)
 {
     m_networkManager = parent->getNetworkManager();
     connect(m_networkManager, SIGNAL(finished(QNetworkReply*)),
@@ -39,7 +39,7 @@ MapNetwork::~MapNetwork()
 }
 
 
-void MapNetwork::loadImage(const QString& hash, const QString& host, const QString& url)
+void MapNetwork::load(const QString& hash, const QString& host, const QString& url)
 {
     qDebug() << "requesting: " << QString(host).append(url);
 // 	http->setHost(host);
@@ -128,17 +128,8 @@ void MapNetwork::requestFinished(QNetworkReply* reply)
                 QByteArray ax;
 
                 if (reply->bytesAvailable() > 0) {
-                    QPixmap pm;
                     ax = reply->readAll();
-                    //			qDebug() << ax.size();
-
-                    if (pm.loadFromData(ax)) {
-                        loaded += pm.size().width() * pm.size().height() * pm.depth() / 8 / 1024;
-                        // 				qDebug() << "Network loaded: " << (loaded);
-                    } else {
-                        qDebug() << "NETWORK_PIXMAP_ERROR: " << ax;
-                    }
-                    parent->receivedImage(pm, hash);
+                    parent->receivedData(ax, hash);
                 }
                 break;
         }
@@ -161,7 +152,7 @@ void MapNetwork::abortLoading()
     //loadingRequests.clear();
 }
 
-bool MapNetwork::imageIsLoading(QString hash)
+bool MapNetwork::isLoading(QString hash)
 {
     QListIterator<LoadingRequest*> i(loadingRequests);
     while (i.hasNext())

@@ -287,9 +287,9 @@ void ImageMapLayer::setMapAdapter(const QUuid& theAdapterUid, const QString& ser
 #ifdef USE_WEBKIT
                 if (!p->theBrowserImageManager) {
                     p->theBrowserImageManager = new BrowserImageManager();
-                    connect(p->theBrowserImageManager, SIGNAL(imageRequested()),
+                    connect(p->theBrowserImageManager, SIGNAL(dataRequested()),
                         this, SLOT(on_imageRequested()), Qt::QueuedConnection);
-                    connect(p->theBrowserImageManager, SIGNAL(imageReceived()),
+                    connect(p->theBrowserImageManager, SIGNAL(dataReceived()),
                         this, SLOT(on_imageReceived()), Qt::QueuedConnection);
                     connect(p->theBrowserImageManager, SIGNAL(loadingFinished()),
                         this, SLOT(on_loadingFinished()), Qt::QueuedConnection);
@@ -306,9 +306,9 @@ void ImageMapLayer::setMapAdapter(const QUuid& theAdapterUid, const QString& ser
             case IMapAdapter::NetworkBackground :
                 if (!p->theNetworkImageManager) {
                     p->theNetworkImageManager = new ImageManager();
-                    connect(p->theNetworkImageManager, SIGNAL(imageRequested()),
+                    connect(p->theNetworkImageManager, SIGNAL(dataRequested()),
                         this, SLOT(on_imageRequested()), Qt::QueuedConnection);
-                    connect(p->theNetworkImageManager, SIGNAL(imageReceived()),
+                    connect(p->theNetworkImageManager, SIGNAL(dataReceived()),
                         this, SLOT(on_imageReceived()), Qt::QueuedConnection);
                     connect(p->theNetworkImageManager, SIGNAL(loadingFinished()),
                         this, SLOT(on_loadingFinished()), Qt::QueuedConnection);
@@ -717,7 +717,7 @@ QRect ImageMapLayer::drawFull(MapView& theView, QRect& rect)
             QString url (p->theMapAdapter->getQuery(wgs84vp, vp, rect));
             if (!url.isEmpty()) {
                 qDebug() << "ImageMapLayer::drawFull: getting: " << url;
-                QPixmap pm = p->theMapAdapter->getImageManager()->getImage(p->theMapAdapter,url);
+                QPixmap pm = p->theMapAdapter->getImageManager()->getPixmap(p->theMapAdapter,url);
                 if (!pm.isNull())
                     p->pm = pm.scaled(rect.size(), Qt::IgnoreAspectRatio);
                 else
@@ -874,7 +874,7 @@ QRect ImageMapLayer::drawTiled(MapView& theView, QRect& rect)
 
     for (QList<Tile>::const_iterator tile = tiles.begin(); tile != tiles.end(); ++tile)
     {
-        QPixmap pm = p->theMapAdapter->getImageManager()->getImage(p->theMapAdapter, tile->i, tile->j, p->theMapAdapter->getZoom());
+        QPixmap pm = p->theMapAdapter->getImageManager()->getPixmap(p->theMapAdapter, tile->i, tile->j, p->theMapAdapter->getZoom());
         if (!pm.isNull())
             painter.drawPixmap(((tile->i-mapmiddle_tile_x)*tilesizeW)+rect.width()/2 -cross_scr_x,
                                ((tile->j-mapmiddle_tile_y)*tilesizeH)+rect.height()/2-cross_scr_y,
