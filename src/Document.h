@@ -132,6 +132,9 @@ public:
 
     QStringList getCurrentSourceTags();
 
+    static Document* getDocumentFromXml(QDomDocument* theXmlDoc);
+    static Document* getDocumentFromClipboard();
+
 private:
     MapDocumentPrivate* p;
 

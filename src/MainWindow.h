@@ -287,7 +287,6 @@ private:
     void updateRecentImportMenu();
     void updateProjectionMenu();
     void updateStyleMenu();
-    Document* getDocumentFromClipboard();
     bool selectExportedFeatures(QList<Feature*>& theFeatures);
 
     Document* doLoadDocument(QFile* file);

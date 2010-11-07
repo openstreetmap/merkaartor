@@ -656,81 +656,6 @@ Document* MainWindow::document()
     return theDocument;
 }
 
-Document* MainWindow::getDocumentFromClipboard()
-{
-    QClipboard *clipboard = QApplication::clipboard();
-    QDomDocument* theXmlDoc = new QDomDocument();
-
-    if (clipboard->mimeData()->hasFormat("application/x-openstreetmap+xml")) {
-        if (!theXmlDoc->setContent(clipboard->mimeData()->data("application/x-openstreetmap+xml"))) {
-            delete theXmlDoc;
-            return NULL;
-        }
-    } else
-    if (clipboard->mimeData()->hasFormat("application/vnd.google-earth.kml+xml")) {
-        if (!theXmlDoc->setContent(clipboard->mimeData()->data("application/vnd.google-earth.kml+xml"))) {
-            delete theXmlDoc;
-            return NULL;
-        }
-    } else
-    if (clipboard->mimeData()->hasText()) {
-        if (!theXmlDoc->setContent(clipboard->text())) {
-            delete theXmlDoc;
-            return NULL;
-        }
-    } else {
-        delete theXmlDoc;
-        return NULL;
-    }
-
-    QDomElement c = theXmlDoc->documentElement();
-
-    if (c.tagName() == "osm") {
-        Document* NewDoc = new Document(NULL);
-        DrawingLayer* l = new DrawingLayer("Dummy");
-        NewDoc->add(l);
-
-        c = c.firstChildElement();
-        while(!c.isNull()) {
-            if (c.tagName() == "bound") {
-            } else
-            if (c.tagName() == "way") {
-                Way::fromXML(NewDoc, l, c);
-            } else
-            if (c.tagName() == "relation") {
-                Relation::fromXML(NewDoc, l, c);
-            } else
-            if (c.tagName() == "node") {
-                Node::fromXML(NewDoc, l, c);
-            }
-
-            c = c.nextSiblingElement();
-        }
-
-        delete theXmlDoc;
-        return NewDoc;
-    } else
-    if (c.tagName() == "kml") {
-        Document* NewDoc = new Document(NULL);
-        DrawingLayer* l = new DrawingLayer("Dummy");
-        NewDoc->add(l);
-
-        ImportExportKML imp(NewDoc);
-        QByteArray ba = clipboard->text().toUtf8();
-        QBuffer kmlBuf(&ba);
-        kmlBuf.open(QIODevice::ReadOnly);
-        if (imp.setDevice(&kmlBuf))
-            imp.import(l);
-
-        delete theXmlDoc;
-        return NewDoc;
-    } else
-    if (c.tagName() == "gpx") {
-    }
-    QMessageBox::critical(this, tr("Clipboard invalid"), tr("Clipboard does not contain valid data."));
-    return NULL;
-}
-
 void MainWindow::on_editCutAction_triggered()
 {
     // Export
@@ -859,8 +784,10 @@ void MainWindow::on_editPasteFeatureAction_triggered()
         }
     }
 
-    if (!(doc = getDocumentFromClipboard()))
+    if (!(doc = Document::getDocumentFromClipboard())) {
+        QMessageBox::critical(this, tr("Clipboard invalid"), tr("Clipboard do not contain valid data."));
         return;
+    }
 
     CommandList* theList = new CommandList();
     theList->setDescription("Paste Features");
@@ -927,8 +854,10 @@ void MainWindow::on_editPasteOverwriteAction_triggered()
         return;
 
     Document* doc;
-    if (!(doc = getDocumentFromClipboard()))
+    if (!(doc = Document::getDocumentFromClipboard())) {
+        QMessageBox::critical(this, tr("Clipboard invalid"), tr("Clipboard do not contain valid data."));
         return;
+    }
 
     CommandList* theList = new CommandList();
     theList->setDescription("Paste tags (overwrite)");
@@ -959,8 +888,10 @@ void MainWindow::on_editPasteMergeAction_triggered()
         return;
 
     Document* doc;
-    if (!(doc = getDocumentFromClipboard()))
+    if (!(doc = Document::getDocumentFromClipboard())) {
+        QMessageBox::critical(this, tr("Clipboard invalid"), tr("Clipboard do not contain valid data."));
         return;
+    }
 
     CommandList* theList = new CommandList();
     theList->setDescription("Paste tags (merge)");

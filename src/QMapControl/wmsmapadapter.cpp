@@ -64,7 +64,10 @@ QUuid WMSMapAdapter::getId() const
 
 IMapAdapter::Type WMSMapAdapter::getType() const
 {
-    return IMapAdapter::NetworkBackground;
+    if (theServer.WmsImgFormat.startsWith("image"))
+        return IMapAdapter::NetworkBackground;
+    else
+        return IMapAdapter::NetworkDataBackground;
 }
 
 QString WMSMapAdapter::getQuery(const QRectF& /*wgs84Bbox*/, const QRectF& projBbox, const QRect& size) const

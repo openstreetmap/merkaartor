@@ -22,6 +22,7 @@ public:
     enum Type
     {
         NetworkBackground,
+        NetworkDataBackground,
         BrowserBackground,
         DirectBackground,
         VectorBackground
