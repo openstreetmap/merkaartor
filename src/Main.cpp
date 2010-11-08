@@ -11,6 +11,9 @@
 #ifdef USE_PROJ
 #include "proj_api.h"
 #endif
+#ifdef USE_GDAL
+#include "gdal_version.h"
+#endif
 
 #include "IMapAdapterFactory.h"
 
@@ -172,6 +175,9 @@ int main(int argc, char** argv)
     qDebug() <<	"-------" << QString("using QT version %1 (built with %2)").arg(qVersion()).arg(QT_VERSION_STR);
 #ifdef USE_PROJ
     qDebug() <<	"-------" << QString("using PROJ4 version %1").arg(STRINGIFY(PJ_VERSION));
+#endif
+#ifdef USE_GDAL
+    qDebug() <<	"-------" << QString("using GDAL version %1").arg(GDAL_RELEASE_NAME);
 #endif
     qDebug() << "-------" << "with arguments: " << QCoreApplication::arguments();
 

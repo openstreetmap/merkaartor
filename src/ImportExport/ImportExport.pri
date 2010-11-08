@@ -38,7 +38,7 @@ FORMS += \
 
 contains (GDAL, 1) {
     HEADERS += \
-        ImportExportSHP.h
+        ImportExportGdal.h
     SOURCES += \
-        ImportExportSHP.cpp
+        ImportExportGdal.cpp
 }

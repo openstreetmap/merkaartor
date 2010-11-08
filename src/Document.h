@@ -100,9 +100,9 @@ public:
     bool importNMEA(const QString& filename, TrackLayer* NewLayer);
     bool importOSB(const QString& filename, DrawingLayer* NewLayer);
     bool importKML(const QString& filename, TrackLayer* NewLayer);
-    bool importSHP(const QString& filename, DrawingLayer* NewLayer);
     bool importCSV(const QString& filename, DrawingLayer* NewLayer);
     bool importOSC(const QString& filename, DrawingLayer* NewLayer);
+    bool importGDAL(const QString& filename, DrawingLayer* NewLayer);
 
     QDateTime getLastDownloadLayerTime() const;
     Layer* getLastDownloadLayer() const;

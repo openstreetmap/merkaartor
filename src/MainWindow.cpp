@@ -1272,11 +1272,12 @@ bool MainWindow::importFiles(Document * mapDocument, const QStringList & fileNam
             importOK = mapDocument->importCSV(baseFileName, (DrawingLayer*)newLayer);
         }
 #ifdef USE_GDAL
-        else if (fn.toLower().endsWith(".shp")) {
+        else { // Fallback to GDAL
+            qDebug() << "Trying GDAL";
             newLayer = new DrawingLayer( baseFileName );
             newLayer->setUploadable(false);
             mapDocument->add(newLayer);
-            importOK = mapDocument->importSHP(baseFileName, (DrawingLayer*)newLayer);
+            importOK = mapDocument->importGDAL(baseFileName, (DrawingLayer*)newLayer);
         }
 #endif
 

@@ -1,10 +1,10 @@
 //
-// C++ Implementation: ImportExportSHP
+// C++ Implementation: ImportExportGdal
 //
 // Description:
 //
 //
-// Author: cbro <cbro@semperpax.com>, (C) 2008
+// Author: cbro <cbro@semperpax.com>, (C) 2010
 //
 // Copyright: See COPYING file that comes with this distribution
 //
@@ -12,7 +12,7 @@
 
 #include <QtGui>
 
-#include "../ImportExport/ImportExportSHP.h"
+#include "../ImportExport/ImportExportGdal.h"
 #include "Maps/Projection.h"
 #include "Features.h"
 #include "Utils/ProjectionChooser.h"
@@ -24,32 +24,32 @@
 
 bool parseContainer(QDomElement& e, Layer* aLayer);
 
-ImportExportSHP::ImportExportSHP(Document* doc)
+ImportExportGdal::ImportExportGdal(Document* doc)
  : IImportExport(doc), theProjection(0)
 {
 }
 
 
-ImportExportSHP::~ImportExportSHP()
+ImportExportGdal::~ImportExportGdal()
 {
 }
 
 // Specify the input as a QFile
-bool ImportExportSHP::loadFile(QString filename)
+bool ImportExportGdal::loadFile(QString filename)
 {
     FileName = filename;
 
     return true;
 }
 
-bool ImportExportSHP::saveFile(QString)
+bool ImportExportGdal::saveFile(QString)
 {
     return false;
 }
 
 
 // export
-bool ImportExportSHP::export_(const QList<Feature *>& featList)
+bool ImportExportGdal::export_(const QList<Feature *>& featList)
 {
     Q_UNUSED(featList);
 
@@ -73,7 +73,7 @@ static uint qHash(const OGRPoint o)
 }
 
 
-Node *ImportExportSHP::nodeFor(const OGRPoint p)
+Node *ImportExportGdal::nodeFor(const OGRPoint p)
 {
     if (pointHash.contains(p)) {
         return pointHash[p];
@@ -89,7 +89,7 @@ Node *ImportExportSHP::nodeFor(const OGRPoint p)
 
 // IMPORT
 
-Way *ImportExportSHP::readWay(Layer* aLayer, OGRLineString *poRing) {
+Way *ImportExportGdal::readWay(Layer* aLayer, OGRLineString *poRing) {
     int numNode = poRing->getNumPoints();
 
     if (!numNode) return NULL;
@@ -107,7 +107,7 @@ Way *ImportExportSHP::readWay(Layer* aLayer, OGRLineString *poRing) {
     return w;
 }
 
-Feature* ImportExportSHP::parseGeometry(Layer* aLayer, OGRGeometry *poGeometry)
+Feature* ImportExportGdal::parseGeometry(Layer* aLayer, OGRGeometry *poGeometry)
 {
     OGRwkbGeometryType type = wkbFlatten(poGeometry->getGeometryType());
 
@@ -179,7 +179,7 @@ Feature* ImportExportSHP::parseGeometry(Layer* aLayer, OGRGeometry *poGeometry)
 }
 
 // import the  input
-bool ImportExportSHP::import(Layer* aLayer)
+bool ImportExportGdal::import(Layer* aLayer)
 {
     OGRRegisterAll();
 
@@ -218,9 +218,9 @@ bool ImportExportSHP::import(Layer* aLayer)
                 delete the27700Srs;
             } else {
                 theSrs = the27700Srs;
-                toWGS84 = OGRCreateCoordinateTransformation(theSrs, &wgs84srs);
             }
         }
+        toWGS84 = OGRCreateCoordinateTransformation(theSrs, &wgs84srs);
     }
 
     theProjection = new Projection();
@@ -244,14 +244,14 @@ bool ImportExportSHP::import(Layer* aLayer)
         }
     } else {
         QString sPrj;
-        sPrj = ProjectionChooser::getProjection(QCoreApplication::translate("ImportExportSHP", "Unable to set projection; please specify one"));
+        sPrj = ProjectionChooser::getProjection(QCoreApplication::translate("ImportExportGdal", "Unable to set projection; please specify one"));
         if (sPrj.isEmpty()) {
             delete theProjection;
             return false;
         }
 
         if (!theProjection->setProjectionType(sPrj)) {
-//            QMessageBox::critical(0,QCoreApplication::translate("ImportExportSHP","Cannot load file"),QCoreApplication::translate("ImportExportSHP","Unable to set projection."));
+//            QMessageBox::critical(0,QCoreApplication::translate("ImportExportGdal","Cannot load file"),QCoreApplication::translate("ImportExportGdal","Unable to set projection."));
             delete theProjection;
             return false;
         }

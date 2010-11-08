@@ -7,9 +7,9 @@
 #include "ImportNMEA.h"
 #include "ImportExportOsmBin.h"
 #include "ImportExportKML.h"
-#include "ImportExportSHP.h"
 #include "ImportExportCSV.h"
 #include "ImportExportOSC.h"
+#include "ImportExportGdal.h"
 
 #include "LayerWidget.h"
 
@@ -864,13 +864,13 @@ bool Document::importKML(const QString& filename, TrackLayer* NewLayer)
         return false;
 }
 
-bool Document::importSHP(const QString& filename, DrawingLayer* NewLayer)
+bool Document::importGDAL(const QString& filename, DrawingLayer* NewLayer)
 {
     Q_UNUSED(filename)
     Q_UNUSED(NewLayer)
 
 #ifdef USE_GDAL
-    ImportExportSHP imp(this);
+    ImportExportGdal imp(this);
     if (!imp.loadFile(filename))
         return false;
     imp.import(NewLayer);

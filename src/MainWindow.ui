@@ -1764,6 +1764,9 @@
    <property name="text">
     <string>E&amp;xtrude</string>
    </property>
+   <property name="toolTip">
+    <string>Extrude interaction for ways (JOSM style)</string>
+   </property>
    <property name="shortcut">
     <string>Alt+X</string>
    </property>

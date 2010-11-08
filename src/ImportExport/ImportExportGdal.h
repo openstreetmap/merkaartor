@@ -1,16 +1,16 @@
 //
-// C++ Interface: ImportExportSHP
+// C++ Interface: ImportExportGdal
 //
 // Description:
 //
 //
-// Author: cbro <cbro@semperpax.com>, (C) 2008
+// Author: cbro <cbro@semperpax.com>, (C) 2010
 //
 // Copyright: See COPYING file that comes with this distribution
 //
 //
-#ifndef ImportExportSHP_H
-#define ImportExportSHP_H
+#ifndef ImportExportGDAL_H
+#define ImportExportGDAL_H
 
 #include <ImportExport/IImportExport.h>
 
@@ -25,12 +25,12 @@ class OGRCoordinateTransformation;
 /**
     @author cbro <cbro@semperpax.com>
 */
-class ImportExportSHP : public IImportExport
+class ImportExportGdal : public IImportExport
 {
 public:
-    ImportExportSHP(Document* doc);
+    ImportExportGdal(Document* doc);
 
-    ~ImportExportSHP();
+    ~ImportExportGdal();
 
     // Specify the input as a QFile
     virtual bool loadFile(QString filename);
