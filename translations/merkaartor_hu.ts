@@ -649,6 +649,11 @@ Kérem töltse le újra a bajos dolgokat, hogy megoldja az ütközést.</transla
         <translation>Mostani látómező</translation>
     </message>
     <message>
+        <location filename="../src/DownloadMapDialog.ui" line="74"/>
+        <source>WWW link (OSM/Google maps)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../src/DownloadMapDialog.ui" line="88"/>
         <source>Xapi selector</source>
         <translation type="unfinished"></translation>
@@ -667,11 +672,6 @@ Kérem töltse le újra a bajos dolgokat, hogy megoldja az ütközést.</transla
         <location filename="../src/DownloadMapDialog.ui" line="119"/>
         <source>Resolve all relations</source>
         <translation>Minden kapcsolatot megold</translation>
-    </message>
-    <message>
-        <location filename="../src/DownloadMapDialog.ui" line="74"/>
-        <source>WWW link (OSM/google maps)</source>
-        <translation>WWW-hivatkozás (OSM/Google-térkép)</translation>
     </message>
 </context>
 <context>
@@ -1129,6 +1129,19 @@ Delete what can be?</source>
         <translation>Képeket töltök be …</translation>
     </message>
     <message>
+        <location filename="../src/Docks/GeoImageDock.cpp" line="368"/>
+        <location filename="../src/Docks/GeoImageDock.cpp" line="471"/>
+        <source>Layer is read-only</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/Docks/GeoImageDock.cpp" line="369"/>
+        <location filename="../src/Docks/GeoImageDock.cpp" line="472"/>
+        <source>The used layer is not writeable. Should it be made writeable?
+If not, you can&apos;t load images that belong to it.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../src/Docks/GeoImageDock.cpp" line="479"/>
         <source>Abort loading</source>
         <translation>Betöltést megszakít</translation>
@@ -1270,20 +1283,6 @@ Még mindig akarja használni?</translation>
         <translation>PgUp</translation>
     </message>
     <message>
-        <location filename="../src/Docks/GeoImageDock.cpp" line="368"/>
-        <location filename="../src/Docks/GeoImageDock.cpp" line="471"/>
-        <source>Layer is readonly</source>
-        <translation>A réteg csak olvasható</translation>
-    </message>
-    <message>
-        <location filename="../src/Docks/GeoImageDock.cpp" line="369"/>
-        <location filename="../src/Docks/GeoImageDock.cpp" line="472"/>
-        <source>The used layer is not writeable. Should it be made writeable?
-If not, you can&apos;t load images that belongs to it.</source>
-        <translation>A használt réteg nem írható. Írhatóvá tegyem?
-Ha nem az, akkor nem lehet hozzá tartozó képeket betölteni.</translation>
-    </message>
-    <message>
         <location filename="../src/Docks/GeoImageDock.cpp" line="50"/>
         <source>Network timeout</source>
         <translation>Hálózati időzés</translation>
@@ -1366,6 +1365,11 @@ Ha nem az, akkor nem lehet hozzá tartozó képeket betölteni.</translation>
         <translation>Könyvjelző</translation>
     </message>
     <message>
+        <location filename="../src/GotoDialog.ui" line="61"/>
+        <source>WWW link (OSM/Google maps)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../src/GotoDialog.ui" line="88"/>
         <source>lonMin, latMin, lonMax, latMax</source>
         <translation>hosszMin, szélMin, hosszMax, szélMax</translation>
@@ -1395,11 +1399,6 @@ Ha nem az, akkor nem lehet hozzá tartozó képeket betölteni.</translation>
         <location filename="../src/GotoDialog.ui" line="210"/>
         <source>Search</source>
         <translation>Keres</translation>
-    </message>
-    <message>
-        <location filename="../src/GotoDialog.ui" line="61"/>
-        <source>WWW link (OSM/google maps)</source>
-        <translation>WWW-hivatkozás (OSM/Google-térkép)</translation>
     </message>
 </context>
 <context>
@@ -1759,19 +1758,19 @@ Biztosan ki akar lépni?</translation>
 <context>
     <name>Layer</name>
     <message>
-        <location filename="../src/Layers/Layer.cpp" line="621"/>
+        <location filename="../src/Layers/Layer.cpp" line="645"/>
         <source>Size</source>
         <translation>Méret</translation>
     </message>
     <message numerus="yes">
-        <location filename="../src/Layers/Layer.cpp" line="621"/>
+        <location filename="../src/Layers/Layer.cpp" line="645"/>
         <source>%n features</source>
         <translation>
             <numerusform>%n dolog</numerusform>
         </translation>
     </message>
     <message>
-        <location filename="../src/Layers/Layer.cpp" line="638"/>
+        <location filename="../src/Layers/Layer.cpp" line="662"/>
         <source>Features</source>
         <translation>Dolgok</translation>
     </message>
@@ -2356,7 +2355,7 @@ Meg akarja tenni ezt most?</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.ui" line="1677"/>
-        <source>Split a selected area between two selected nodes into two separates areas.</source>
+        <source>Split a selected area between two selected nodes into two separate areas.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -3618,6 +3617,11 @@ Meg akarja ezt tenni most?</translation>
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="../src/MainWindow.cpp" line="722"/>
+        <source>Clipboard does not contain valid data.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../src/MainWindow.cpp" line="758"/>
         <source>Cut Features</source>
         <translation type="unfinished"></translation>
@@ -3753,6 +3757,11 @@ Meg akarja ezt tenni most?</translation>
         <location filename="../src/MainWindow.cpp" line="3566"/>
         <source>Open Tag Templates</source>
         <translation>Címkesablon megnyitása</translation>
+    </message>
+    <message>
+        <location filename="../src/MainWindow.cpp" line="3640"/>
+        <source>Warning! Could not load the Merkaartor translations for the &quot;%1&quot; language. Switching to default English.</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../src/Docks/PropertiesDock.cpp" line="759"/>
@@ -4141,11 +4150,6 @@ Teljesen biztos ön abban, hogy e KML-t van joga bevinni OSM-be?</translation>
         <translation>Új képréteget ad hozzá</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="722"/>
-        <source>Clipboard do not contain valid data.</source>
-        <translation>A vágólapon nincs érvényes adat.</translation>
-    </message>
-    <message>
         <location filename="../src/MainWindow.cpp" line="2026"/>
         <source>Multiple intersection.</source>
         <translation>Többszöri metszés.</translation>
@@ -4166,11 +4170,6 @@ Do you still want to create a junction for each one (Unwanted junctions can stil
         <location filename="../src/MainWindow.ui" line="1546"/>
         <source>Features</source>
         <translation>Dolgok</translation>
-    </message>
-    <message>
-        <location filename="../src/MainWindow.cpp" line="3640"/>
-        <source>Warning! Could not load the Merkaartor translations for the &quot;%1&quot; language. Switching to default english.</source>
-        <translation>Figyelem! Nem tudtam betölteni a Merkaartor-fordítást „%1” nyelvhez. Angolra váltok.</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.ui" line="1574"/>
@@ -4337,11 +4336,6 @@ Do you still want to create a junction for each one (Unwanted junctions can stil
         <translation>OSMChange adat (*.osc)</translation>
     </message>
     <message>
-        <location filename="../src/Docks/PropertiesDock.cpp" line="736"/>
-        <source>Set &quot;source&quot; tas on %1</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="../src/Interactions/ExtrudeInteraction.cpp" line="123"/>
         <source>Extrude Road %1</source>
         <translation type="unfinished"></translation>
@@ -4359,6 +4353,11 @@ Do you still want to create a junction for each one (Unwanted junctions can stil
     <message>
         <location filename="../src/Interactions/ScaleInteraction.cpp" line="122"/>
         <source>Scale Feature</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/Docks/PropertiesDock.cpp" line="736"/>
+        <source>Set &quot;source&quot; tag on %1</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -4771,18 +4770,18 @@ Do you still want to create a junction for each one (Unwanted junctions can stil
 <context>
     <name>OsbLayer</name>
     <message>
-        <location filename="../src/Layers/Layer.cpp" line="1551"/>
+        <location filename="../src/Layers/Layer.cpp" line="1575"/>
         <source># of loaded Regions</source>
         <translation>betöltött régiók száma</translation>
     </message>
     <message>
-        <location filename="../src/Layers/Layer.cpp" line="1551"/>
-        <location filename="../src/Layers/Layer.cpp" line="1552"/>
+        <location filename="../src/Layers/Layer.cpp" line="1575"/>
+        <location filename="../src/Layers/Layer.cpp" line="1576"/>
         <source>%1</source>
         <translation>%1</translation>
     </message>
     <message>
-        <location filename="../src/Layers/Layer.cpp" line="1552"/>
+        <location filename="../src/Layers/Layer.cpp" line="1576"/>
         <source># of loaded Tiles</source>
         <translation>betöltött csempék száma</translation>
     </message>
@@ -5026,10 +5025,9 @@ Do you still want to create a junction for each one (Unwanted junctions can stil
     </message>
     <message>
         <location filename="../src/Docks/PhotoLoadErrorDialog.ui" line="27"/>
-        <source>This photo do not contain geo-tagging EXIF data.
+        <source>This photo does not contain geo-tagging EXIF data.
 What do you want to do next?</source>
-        <translation>E fénykép nem tartalmaz földcímkéző EXIF adatot.
-Mit akar most tenni?</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../src/Docks/PhotoLoadErrorDialog.ui" line="44"/>
@@ -5117,6 +5115,11 @@ Mit akar most tenni?</translation>
         <location filename="../src/Preferences/PreferencesDialog.ui" line="765"/>
         <source>Custom</source>
         <translation>Egyedi</translation>
+    </message>
+    <message>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="903"/>
+        <source>Autoload template document</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../src/Preferences/PreferencesDialog.ui" line="1185"/>
@@ -5344,11 +5347,6 @@ Kérem válasszon más nevet, vagy kattintson az &lt;Alkalmaz&gt; gombra, ha a m
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="903"/>
-        <source>Autload template document</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="../src/Preferences/PreferencesDialog.ui" line="997"/>
         <source>GPS</source>
         <translation>GPS</translation>
@@ -5526,6 +5524,11 @@ Kérem válasszon más nevet, vagy kattintson az &lt;Alkalmaz&gt; gombra, ha a m
         <translation>Olasz</translation>
     </message>
     <message>
+        <location filename="../src/Preferences/PreferencesDialog.cpp" line="177"/>
+        <source>Japanese</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../src/Preferences/PreferencesDialog.cpp" line="178"/>
         <source>Polish</source>
         <translation>Lengyel</translation>
@@ -5595,11 +5598,6 @@ Kérem válasszon más nevet, vagy kattintson az &lt;Alkalmaz&gt; gombra, ha a m
         <location filename="../src/Preferences/PreferencesDialog.cpp" line="172"/>
         <source>Dutch</source>
         <translation>Holland</translation>
-    </message>
-    <message>
-        <location filename="../src/Preferences/PreferencesDialog.cpp" line="177"/>
-        <source>Japanase</source>
-        <translation>Japán</translation>
     </message>
     <message>
         <location filename="../src/Preferences/PreferencesDialog.cpp" line="179"/>
@@ -6085,7 +6083,7 @@ Kérem válasszon más nevet, vagy kattintson az &lt;Alkalmaz&gt; gombra, ha a m
     </message>
     <message>
         <location filename="../src/Docks/MinimumRelationProperties.ui" line="164"/>
-        <source>REmove selected tag(s)</source>
+        <source>Remove selected tag(s)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -6131,7 +6129,7 @@ Kérem válasszon más nevet, vagy kattintson az &lt;Alkalmaz&gt; gombra, ha a m
     </message>
     <message>
         <location filename="../src/Docks/MinimumRoadProperties.ui" line="103"/>
-        <source>REmove selected tag(s)</source>
+        <source>Remove selected tag(s)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -6511,37 +6509,37 @@ p, li { white-space: pre-wrap; }
 <context>
     <name>TrackLayer</name>
     <message>
-        <location filename="../src/Layers/Layer.cpp" line="829"/>
+        <location filename="../src/Layers/Layer.cpp" line="853"/>
         <source>Extract - %1</source>
         <translation>Kivonat – %1</translation>
     </message>
     <message>
-        <location filename="../src/Layers/Layer.cpp" line="920"/>
+        <location filename="../src/Layers/Layer.cpp" line="944"/>
         <source># of track segments</source>
         <translation>nyomvonal szakaszok száma</translation>
     </message>
     <message>
-        <location filename="../src/Layers/Layer.cpp" line="920"/>
+        <location filename="../src/Layers/Layer.cpp" line="944"/>
         <source>%1</source>
         <translation>%1</translation>
     </message>
     <message>
-        <location filename="../src/Layers/Layer.cpp" line="921"/>
+        <location filename="../src/Layers/Layer.cpp" line="945"/>
         <source>Total distance</source>
         <translation>Teljes távolság</translation>
     </message>
     <message>
-        <location filename="../src/Layers/Layer.cpp" line="921"/>
+        <location filename="../src/Layers/Layer.cpp" line="945"/>
         <source>%1 km</source>
         <translation>%1 km</translation>
     </message>
     <message>
-        <location filename="../src/Layers/Layer.cpp" line="922"/>
+        <location filename="../src/Layers/Layer.cpp" line="946"/>
         <source>Total duration</source>
         <translation>Teljes időtartam</translation>
     </message>
     <message>
-        <location filename="../src/Layers/Layer.cpp" line="922"/>
+        <location filename="../src/Layers/Layer.cpp" line="946"/>
         <source>%1h %2m</source>
         <translation>%1h %2m</translation>
     </message>
@@ -6608,7 +6606,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <location filename="../src/Docks/MinimumTrackPointProperties.ui" line="123"/>
-        <source>REmove selected tag(s)</source>
+        <source>Remove selected tag(s)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>

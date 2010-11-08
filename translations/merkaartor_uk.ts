@@ -655,7 +655,7 @@ Please redownload the problematic feature to handle the conflict.</source>
     </message>
     <message>
         <location filename="../src/DownloadMapDialog.ui" line="74"/>
-        <source>WWW link (OSM/google maps)</source>
+        <source>WWW link (OSM/Google maps)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -1162,20 +1162,6 @@ Delete what can be?</source>
         <translation>Оберіть шар до якого належать зображення:</translation>
     </message>
     <message>
-        <location filename="../src/Docks/GeoImageDock.cpp" line="368"/>
-        <location filename="../src/Docks/GeoImageDock.cpp" line="471"/>
-        <source>Layer is readonly</source>
-        <translation>Шар тільки для читання</translation>
-    </message>
-    <message>
-        <location filename="../src/Docks/GeoImageDock.cpp" line="369"/>
-        <location filename="../src/Docks/GeoImageDock.cpp" line="472"/>
-        <source>The used layer is not writeable. Should it be made writeable?
-If not, you can&apos;t load images that belongs to it.</source>
-        <translation>Цей шар тільки для читання. Можливо його треба зробити доступним для запису?
-Якщо ні — вин не зможете завантажити зображення для нього.</translation>
-    </message>
-    <message>
         <location filename="../src/Docks/GeoImageDock.cpp" line="479"/>
         <source>Loading Images ...</source>
         <translation>Завантаження зображень:…</translation>
@@ -1252,6 +1238,19 @@ If not, you can&apos;t load images that belongs to it.</source>
         <location filename="../src/Docks/GeoImageDock.cpp" line="310"/>
         <location filename="../src/Docks/GeoImageDock.cpp" line="413"/>
         <source>Photo layer</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/Docks/GeoImageDock.cpp" line="368"/>
+        <location filename="../src/Docks/GeoImageDock.cpp" line="471"/>
+        <source>Layer is read-only</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/Docks/GeoImageDock.cpp" line="369"/>
+        <location filename="../src/Docks/GeoImageDock.cpp" line="472"/>
+        <source>The used layer is not writeable. Should it be made writeable?
+If not, you can&apos;t load images that belong to it.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -1376,7 +1375,7 @@ Do you still want to use it?</source>
     </message>
     <message>
         <location filename="../src/GotoDialog.ui" line="61"/>
-        <source>WWW link (OSM/google maps)</source>
+        <source>WWW link (OSM/Google maps)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -1760,7 +1759,7 @@ p, li { white-space: pre-wrap; }
 <context>
     <name>Layer</name>
     <message numerus="yes">
-        <location filename="../src/Layers/Layer.cpp" line="621"/>
+        <location filename="../src/Layers/Layer.cpp" line="645"/>
         <source>%n features</source>
         <translation type="unfinished">
             <numerusform>%n елемент</numerusform>
@@ -1769,12 +1768,12 @@ p, li { white-space: pre-wrap; }
         </translation>
     </message>
     <message>
-        <location filename="../src/Layers/Layer.cpp" line="621"/>
+        <location filename="../src/Layers/Layer.cpp" line="645"/>
         <source>Size</source>
         <translation>Розмір</translation>
     </message>
     <message>
-        <location filename="../src/Layers/Layer.cpp" line="638"/>
+        <location filename="../src/Layers/Layer.cpp" line="662"/>
         <source>Features</source>
         <translation>Елементи</translation>
     </message>
@@ -1941,6 +1940,11 @@ Initializing...</source>
 </context>
 <context>
     <name>MainWindow</name>
+    <message>
+        <location filename="../src/MainWindow.cpp" line="722"/>
+        <source>Clipboard does not contain valid data.</source>
+        <translation type="unfinished"></translation>
+    </message>
     <message>
         <location filename="../src/ImportExport/ImportExportOSC.cpp" line="69"/>
         <source>Import osmChange</source>
@@ -2324,11 +2328,6 @@ Note that OSM nodes outside the downloaded area will be kept.</source>
         <location filename="../src/MainWindow.cpp" line="722"/>
         <source>Clipboard invalid</source>
         <translation>Хибні дані буферу обміну</translation>
-    </message>
-    <message>
-        <location filename="../src/MainWindow.cpp" line="722"/>
-        <source>Clipboard do not contain valid data.</source>
-        <translation>Буфер обміну не містить відповідних даних.</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.cpp" line="758"/>
@@ -2892,8 +2891,8 @@ Do you still want to create a junction for each one (Unwanted junctions can stil
     </message>
     <message>
         <location filename="../src/MainWindow.cpp" line="3640"/>
-        <source>Warning! Could not load the Merkaartor translations for the &quot;%1&quot; language. Switching to default english.</source>
-        <translation>УВАГА! Неможливо завантажити переклад Merkaartor’а на мову — &quot;%1&quot;. Використовуємо типово англійську.</translation>
+        <source>Warning! Could not load the Merkaartor translations for the &quot;%1&quot; language. Switching to default English.</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../src/MainWindow.ui" line="14"/>
@@ -3664,6 +3663,11 @@ Do you still want to create a junction for each one (Unwanted junctions can stil
         <translation>Виділені…</translation>
     </message>
     <message>
+        <location filename="../src/MainWindow.ui" line="1677"/>
+        <source>Split a selected area between two selected nodes into two separate areas.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../src/MainWindow.ui" line="1706"/>
         <source>A&amp;xis Align</source>
         <translation type="unfinished"></translation>
@@ -3914,11 +3918,6 @@ Do you still want to create a junction for each one (Unwanted junctions can stil
     <message>
         <location filename="../src/MainWindow.ui" line="1674"/>
         <source>Split area between two nodes</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/MainWindow.ui" line="1677"/>
-        <source>Split a selected area between two selected nodes into two separates areas.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -4341,11 +4340,6 @@ Do you want to do this now?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Docks/PropertiesDock.cpp" line="736"/>
-        <source>Set &quot;source&quot; tas on %1</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="../src/Interactions/ExtrudeInteraction.cpp" line="123"/>
         <source>Extrude Road %1</source>
         <translation type="unfinished"></translation>
@@ -4363,6 +4357,11 @@ Do you want to do this now?</source>
     <message>
         <location filename="../src/Interactions/ScaleInteraction.cpp" line="122"/>
         <source>Scale Feature</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/Docks/PropertiesDock.cpp" line="736"/>
+        <source>Set &quot;source&quot; tag on %1</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -4775,18 +4774,18 @@ Do you want to do this now?</source>
 <context>
     <name>OsbLayer</name>
     <message>
-        <location filename="../src/Layers/Layer.cpp" line="1551"/>
+        <location filename="../src/Layers/Layer.cpp" line="1575"/>
         <source># of loaded Regions</source>
         <translation>Завантажено ділянок — #</translation>
     </message>
     <message>
-        <location filename="../src/Layers/Layer.cpp" line="1551"/>
-        <location filename="../src/Layers/Layer.cpp" line="1552"/>
+        <location filename="../src/Layers/Layer.cpp" line="1575"/>
+        <location filename="../src/Layers/Layer.cpp" line="1576"/>
         <source>%1</source>
         <translation>%1</translation>
     </message>
     <message>
-        <location filename="../src/Layers/Layer.cpp" line="1552"/>
+        <location filename="../src/Layers/Layer.cpp" line="1576"/>
         <source># of loaded Tiles</source>
         <translation>завантажено квадратів — #</translation>
     </message>
@@ -5030,7 +5029,7 @@ Do you want to do this now?</source>
     </message>
     <message>
         <location filename="../src/Docks/PhotoLoadErrorDialog.ui" line="27"/>
-        <source>This photo do not contain geo-tagging EXIF data.
+        <source>This photo does not contain geo-tagging EXIF data.
 What do you want to do next?</source>
         <translation type="unfinished"></translation>
     </message>
@@ -5120,6 +5119,11 @@ What do you want to do next?</source>
         <location filename="../src/Preferences/PreferencesDialog.cpp" line="176"/>
         <source>Italian</source>
         <translation>Italian — Італійська</translation>
+    </message>
+    <message>
+        <location filename="../src/Preferences/PreferencesDialog.cpp" line="177"/>
+        <source>Japanese</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../src/Preferences/PreferencesDialog.cpp" line="178"/>
@@ -5393,6 +5397,11 @@ Please select another name or click the &lt;Apply&gt; button if you want to modi
         <translation>Дані</translation>
     </message>
     <message>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="903"/>
+        <source>Autoload template document</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../src/Preferences/PreferencesDialog.ui" line="1185"/>
         <source>Password:</source>
         <translation>Пароль:</translation>
@@ -5431,11 +5440,6 @@ Please select another name or click the &lt;Apply&gt; button if you want to modi
     <message>
         <location filename="../src/Preferences/PreferencesDialog.ui" line="869"/>
         <source>Nominatim (Geo Search)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="903"/>
-        <source>Autload template document</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -5608,11 +5612,6 @@ Please select another name or click the &lt;Apply&gt; button if you want to modi
         <location filename="../src/Preferences/PreferencesDialog.cpp" line="172"/>
         <source>Dutch</source>
         <translation>Голландська</translation>
-    </message>
-    <message>
-        <location filename="../src/Preferences/PreferencesDialog.cpp" line="177"/>
-        <source>Japanase</source>
-        <translation>Японська</translation>
     </message>
     <message>
         <location filename="../src/Preferences/PreferencesDialog.cpp" line="179"/>
@@ -6096,7 +6095,7 @@ Please select another name or click the &lt;Apply&gt; button if you want to modi
     </message>
     <message>
         <location filename="../src/Docks/MinimumRelationProperties.ui" line="164"/>
-        <source>REmove selected tag(s)</source>
+        <source>Remove selected tag(s)</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -6134,7 +6133,7 @@ Please select another name or click the &lt;Apply&gt; button if you want to modi
     </message>
     <message>
         <location filename="../src/Docks/MinimumRoadProperties.ui" line="103"/>
-        <source>REmove selected tag(s)</source>
+        <source>Remove selected tag(s)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -6509,37 +6508,37 @@ p, li { white-space: pre-wrap; }
 <context>
     <name>TrackLayer</name>
     <message>
-        <location filename="../src/Layers/Layer.cpp" line="920"/>
+        <location filename="../src/Layers/Layer.cpp" line="944"/>
         <source># of track segments</source>
         <translation>сегментів треку — #</translation>
     </message>
     <message>
-        <location filename="../src/Layers/Layer.cpp" line="920"/>
+        <location filename="../src/Layers/Layer.cpp" line="944"/>
         <source>%1</source>
         <translation>%1</translation>
     </message>
     <message>
-        <location filename="../src/Layers/Layer.cpp" line="921"/>
+        <location filename="../src/Layers/Layer.cpp" line="945"/>
         <source>Total distance</source>
         <translation>Загальна відстань</translation>
     </message>
     <message>
-        <location filename="../src/Layers/Layer.cpp" line="921"/>
+        <location filename="../src/Layers/Layer.cpp" line="945"/>
         <source>%1 km</source>
         <translation>%1 км</translation>
     </message>
     <message>
-        <location filename="../src/Layers/Layer.cpp" line="922"/>
+        <location filename="../src/Layers/Layer.cpp" line="946"/>
         <source>Total duration</source>
         <translation>Загальна тривалість</translation>
     </message>
     <message>
-        <location filename="../src/Layers/Layer.cpp" line="922"/>
+        <location filename="../src/Layers/Layer.cpp" line="946"/>
         <source>%1h %2m</source>
         <translation>%1г %2хв</translation>
     </message>
     <message>
-        <location filename="../src/Layers/Layer.cpp" line="829"/>
+        <location filename="../src/Layers/Layer.cpp" line="853"/>
         <source>Extract - %1</source>
         <translation>Видобування - %1</translation>
     </message>
@@ -6606,7 +6605,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <location filename="../src/Docks/MinimumTrackPointProperties.ui" line="123"/>
-        <source>REmove selected tag(s)</source>
+        <source>Remove selected tag(s)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>

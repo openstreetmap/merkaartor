@@ -645,7 +645,7 @@ Please redownload the problematic feature to handle the conflict.</source>
     </message>
     <message>
         <location filename="../src/DownloadMapDialog.ui" line="74"/>
-        <source>WWW link (OSM/google maps)</source>
+        <source>WWW link (OSM/Google maps)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -1133,6 +1133,19 @@ Delete what can be?</source>
         <translation>إختر الطبقة اللتي تنتمي إليها الصورة:</translation>
     </message>
     <message>
+        <location filename="../src/Docks/GeoImageDock.cpp" line="368"/>
+        <location filename="../src/Docks/GeoImageDock.cpp" line="471"/>
+        <source>Layer is read-only</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/Docks/GeoImageDock.cpp" line="369"/>
+        <location filename="../src/Docks/GeoImageDock.cpp" line="472"/>
+        <source>The used layer is not writeable. Should it be made writeable?
+If not, you can&apos;t load images that belong to it.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../src/Docks/GeoImageDock.cpp" line="479"/>
         <source>Loading Images ...</source>
         <translation>جاري تحميل الصور...</translation>
@@ -1312,19 +1325,6 @@ Do you still want to use it?</source>
         <source>PgUp</source>
         <translation type="unfinished"></translation>
     </message>
-    <message>
-        <location filename="../src/Docks/GeoImageDock.cpp" line="368"/>
-        <location filename="../src/Docks/GeoImageDock.cpp" line="471"/>
-        <source>Layer is readonly</source>
-        <translation>الطبقة هي للقراءة فقط</translation>
-    </message>
-    <message>
-        <location filename="../src/Docks/GeoImageDock.cpp" line="369"/>
-        <location filename="../src/Docks/GeoImageDock.cpp" line="472"/>
-        <source>The used layer is not writeable. Should it be made writeable?
-If not, you can&apos;t load images that belongs to it.</source>
-        <translation type="unfinished"></translation>
-    </message>
 </context>
 <context>
     <name>GotoDialog</name>
@@ -1366,7 +1366,7 @@ If not, you can&apos;t load images that belongs to it.</source>
     </message>
     <message>
         <location filename="../src/GotoDialog.ui" line="61"/>
-        <source>WWW link (OSM/google maps)</source>
+        <source>WWW link (OSM/Google maps)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -1750,7 +1750,7 @@ p, li { white-space: pre-wrap; }
 <context>
     <name>Layer</name>
     <message numerus="yes">
-        <location filename="../src/Layers/Layer.cpp" line="621"/>
+        <location filename="../src/Layers/Layer.cpp" line="645"/>
         <source>%n features</source>
         <translation type="unfinished">
             <numerusform></numerusform>
@@ -1762,12 +1762,12 @@ p, li { white-space: pre-wrap; }
         </translation>
     </message>
     <message>
-        <location filename="../src/Layers/Layer.cpp" line="621"/>
+        <location filename="../src/Layers/Layer.cpp" line="645"/>
         <source>Size</source>
         <translation>القياس</translation>
     </message>
     <message>
-        <location filename="../src/Layers/Layer.cpp" line="638"/>
+        <location filename="../src/Layers/Layer.cpp" line="662"/>
         <source>Features</source>
         <translation>الميزات</translation>
     </message>
@@ -2203,6 +2203,11 @@ Note that OSM nodes outside the downloaded area will be kept.</source>
         <translation>الحافظة غير صالحة</translation>
     </message>
     <message>
+        <location filename="../src/MainWindow.cpp" line="722"/>
+        <source>Clipboard does not contain valid data.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../src/MainWindow.cpp" line="758"/>
         <source>Cut Features</source>
         <translation type="unfinished"></translation>
@@ -2418,6 +2423,11 @@ Are you absolutely sure this KML can legally be imported in OSM?</source>
         <location filename="../src/MainWindow.cpp" line="3205"/>
         <source>Select the bookmark to remove.</source>
         <translation>إختر الإشارة المرجعية لحذفها.</translation>
+    </message>
+    <message>
+        <location filename="../src/MainWindow.cpp" line="3640"/>
+        <source>Warning! Could not load the Merkaartor translations for the &quot;%1&quot; language. Switching to default English.</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../src/MainWindow.ui" line="14"/>
@@ -3188,6 +3198,11 @@ Are you absolutely sure this KML can legally be imported in OSM?</source>
         <translation>المختارة...</translation>
     </message>
     <message>
+        <location filename="../src/MainWindow.ui" line="1677"/>
+        <source>Split a selected area between two selected nodes into two separate areas.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../src/MainWindow.ui" line="1706"/>
         <source>A&amp;xis Align</source>
         <translation type="unfinished"></translation>
@@ -3260,7 +3275,7 @@ Are you absolutely sure this KML can legally be imported in OSM?</source>
     <message>
         <location filename="../src/MainWindow.ui" line="1790"/>
         <source>Scale</source>
-        <translation type="unfinished"></translation>
+        <translation>المقياس</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.ui" line="1795"/>
@@ -3423,11 +3438,6 @@ Are you absolutely sure this KML can legally be imported in OSM?</source>
     <message>
         <location filename="../src/MainWindow.ui" line="1674"/>
         <source>Split area between two nodes</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/MainWindow.ui" line="1677"/>
-        <source>Split a selected area between two selected nodes into two separates areas.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -4267,11 +4277,6 @@ Do you want to do this now?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="722"/>
-        <source>Clipboard do not contain valid data.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="../src/MainWindow.cpp" line="2026"/>
         <source>Multiple intersection.</source>
         <translation type="unfinished"></translation>
@@ -4293,11 +4298,6 @@ Do you still want to create a junction for each one (Unwanted junctions can stil
         <translation>الميزات</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="3640"/>
-        <source>Warning! Could not load the Merkaartor translations for the &quot;%1&quot; language. Switching to default english.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="../src/MainWindow.ui" line="1574"/>
         <source>Show &amp;virtual nodes</source>
         <translation type="unfinished"></translation>
@@ -4311,11 +4311,6 @@ Do you still want to create a junction for each one (Unwanted junctions can stil
         <location filename="../src/Docks/PropertiesDock.cpp" line="836"/>
         <location filename="../src/Docks/PropertiesDock.cpp" line="881"/>
         <source>Reorder members in relation %1</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/Docks/PropertiesDock.cpp" line="736"/>
-        <source>Set &quot;source&quot; tas on %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -4336,6 +4331,11 @@ Do you still want to create a junction for each one (Unwanted junctions can stil
     <message>
         <location filename="../src/Interactions/ScaleInteraction.cpp" line="122"/>
         <source>Scale Feature</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/Docks/PropertiesDock.cpp" line="736"/>
+        <source>Set &quot;source&quot; tag on %1</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -4748,18 +4748,18 @@ Do you still want to create a junction for each one (Unwanted junctions can stil
 <context>
     <name>OsbLayer</name>
     <message>
-        <location filename="../src/Layers/Layer.cpp" line="1551"/>
+        <location filename="../src/Layers/Layer.cpp" line="1575"/>
         <source># of loaded Regions</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Layers/Layer.cpp" line="1551"/>
-        <location filename="../src/Layers/Layer.cpp" line="1552"/>
+        <location filename="../src/Layers/Layer.cpp" line="1575"/>
+        <location filename="../src/Layers/Layer.cpp" line="1576"/>
         <source>%1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Layers/Layer.cpp" line="1552"/>
+        <location filename="../src/Layers/Layer.cpp" line="1576"/>
         <source># of loaded Tiles</source>
         <translation type="unfinished"></translation>
     </message>
@@ -5003,7 +5003,7 @@ Do you still want to create a junction for each one (Unwanted junctions can stil
     </message>
     <message>
         <location filename="../src/Docks/PhotoLoadErrorDialog.ui" line="27"/>
-        <source>This photo do not contain geo-tagging EXIF data.
+        <source>This photo does not contain geo-tagging EXIF data.
 What do you want to do next?</source>
         <translation type="unfinished"></translation>
     </message>
@@ -5337,11 +5337,6 @@ Please select another name or click the &lt;Apply&gt; button if you want to modi
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="903"/>
-        <source>Autload template document</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="../src/Preferences/PreferencesDialog.ui" line="928"/>
         <source>Autosave documents after upload</source>
         <translation>إحفظ تلقائياً المستندات بعد التحميل</translation>
@@ -5405,6 +5400,11 @@ Please select another name or click the &lt;Apply&gt; button if you want to modi
         <location filename="../src/Preferences/PreferencesDialog.ui" line="1215"/>
         <source>Port:</source>
         <translation>المنفذ:</translation>
+    </message>
+    <message>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="903"/>
+        <source>Autoload template document</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../src/Preferences/PreferencesDialog.ui" line="1271"/>
@@ -5507,6 +5507,11 @@ Please select another name or click the &lt;Apply&gt; button if you want to modi
         <translation>الإيطالية</translation>
     </message>
     <message>
+        <location filename="../src/Preferences/PreferencesDialog.cpp" line="177"/>
+        <source>Japanese</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../src/Preferences/PreferencesDialog.cpp" line="178"/>
         <source>Polish</source>
         <translation type="unfinished"></translation>
@@ -5580,11 +5585,6 @@ Please select another name or click the &lt;Apply&gt; button if you want to modi
     <message>
         <location filename="../src/Preferences/PreferencesDialog.cpp" line="172"/>
         <source>Dutch</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/Preferences/PreferencesDialog.cpp" line="177"/>
-        <source>Japanase</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -6069,7 +6069,7 @@ Please select another name or click the &lt;Apply&gt; button if you want to modi
     </message>
     <message>
         <location filename="../src/Docks/MinimumRelationProperties.ui" line="164"/>
-        <source>REmove selected tag(s)</source>
+        <source>Remove selected tag(s)</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -6107,7 +6107,7 @@ Please select another name or click the &lt;Apply&gt; button if you want to modi
     </message>
     <message>
         <location filename="../src/Docks/MinimumRoadProperties.ui" line="103"/>
-        <source>REmove selected tag(s)</source>
+        <source>Remove selected tag(s)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -6482,37 +6482,37 @@ p, li { white-space: pre-wrap; }
 <context>
     <name>TrackLayer</name>
     <message>
-        <location filename="../src/Layers/Layer.cpp" line="920"/>
+        <location filename="../src/Layers/Layer.cpp" line="944"/>
         <source># of track segments</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Layers/Layer.cpp" line="920"/>
+        <location filename="../src/Layers/Layer.cpp" line="944"/>
         <source>%1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Layers/Layer.cpp" line="921"/>
+        <location filename="../src/Layers/Layer.cpp" line="945"/>
         <source>Total distance</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Layers/Layer.cpp" line="921"/>
+        <location filename="../src/Layers/Layer.cpp" line="945"/>
         <source>%1 km</source>
         <translation>%1 كلم</translation>
     </message>
     <message>
-        <location filename="../src/Layers/Layer.cpp" line="922"/>
+        <location filename="../src/Layers/Layer.cpp" line="946"/>
         <source>Total duration</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Layers/Layer.cpp" line="922"/>
+        <location filename="../src/Layers/Layer.cpp" line="946"/>
         <source>%1h %2m</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Layers/Layer.cpp" line="829"/>
+        <location filename="../src/Layers/Layer.cpp" line="853"/>
         <source>Extract - %1</source>
         <translation>إستخرج - %1</translation>
     </message>
@@ -6579,7 +6579,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <location filename="../src/Docks/MinimumTrackPointProperties.ui" line="123"/>
-        <source>REmove selected tag(s)</source>
+        <source>Remove selected tag(s)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>

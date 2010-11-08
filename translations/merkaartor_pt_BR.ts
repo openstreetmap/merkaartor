@@ -662,8 +662,8 @@ Baixe novamente o atributo problemático para resolver o conflito.</translation>
     </message>
     <message>
         <location filename="../src/DownloadMapDialog.ui" line="74"/>
-        <source>WWW link (OSM/google maps)</source>
-        <translation>Link WWW (OSM/google maps)</translation>
+        <source>WWW link (OSM/Google maps)</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../src/DownloadMapDialog.ui" line="88"/>
@@ -1145,6 +1145,19 @@ Delete what can be?</source>
         <translation>Selecionar a camada a que pertencem as imagens seguintes:</translation>
     </message>
     <message>
+        <location filename="../src/Docks/GeoImageDock.cpp" line="368"/>
+        <location filename="../src/Docks/GeoImageDock.cpp" line="471"/>
+        <source>Layer is read-only</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/Docks/GeoImageDock.cpp" line="369"/>
+        <location filename="../src/Docks/GeoImageDock.cpp" line="472"/>
+        <source>The used layer is not writeable. Should it be made writeable?
+If not, you can&apos;t load images that belong to it.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../src/Docks/GeoImageDock.cpp" line="479"/>
         <source>Loading Images ...</source>
         <translation>Carregando imagens ...</translation>
@@ -1326,20 +1339,6 @@ Desejas continuar a usá-lo?</translation>
         <source>PgUp</source>
         <translation>PageUp</translation>
     </message>
-    <message>
-        <location filename="../src/Docks/GeoImageDock.cpp" line="368"/>
-        <location filename="../src/Docks/GeoImageDock.cpp" line="471"/>
-        <source>Layer is readonly</source>
-        <translation>Camada apenas leitura</translation>
-    </message>
-    <message>
-        <location filename="../src/Docks/GeoImageDock.cpp" line="369"/>
-        <location filename="../src/Docks/GeoImageDock.cpp" line="472"/>
-        <source>The used layer is not writeable. Should it be made writeable?
-If not, you can&apos;t load images that belongs to it.</source>
-        <translation>A camada em uso não é gravável. Deseja torná-la gravável?
-Se não, você não poderá carregar imagens que pertence a ela.</translation>
-    </message>
 </context>
 <context>
     <name>GotoDialog</name>
@@ -1381,8 +1380,8 @@ Se não, você não poderá carregar imagens que pertence a ela.</translation>
     </message>
     <message>
         <location filename="../src/GotoDialog.ui" line="61"/>
-        <source>WWW link (OSM/google maps)</source>
-        <translation>Link WWW (OSM/google maps)</translation>
+        <source>WWW link (OSM/Google maps)</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../src/GotoDialog.ui" line="88"/>
@@ -1773,7 +1772,7 @@ p, li { white-space: pre-wrap; }
 <context>
     <name>Layer</name>
     <message numerus="yes">
-        <location filename="../src/Layers/Layer.cpp" line="621"/>
+        <location filename="../src/Layers/Layer.cpp" line="645"/>
         <source>%n features</source>
         <translation type="unfinished">
             <numerusform>%n característica</numerusform>
@@ -1781,12 +1780,12 @@ p, li { white-space: pre-wrap; }
         </translation>
     </message>
     <message>
-        <location filename="../src/Layers/Layer.cpp" line="621"/>
+        <location filename="../src/Layers/Layer.cpp" line="645"/>
         <source>Size</source>
         <translation>Tamanho</translation>
     </message>
     <message>
-        <location filename="../src/Layers/Layer.cpp" line="638"/>
+        <location filename="../src/Layers/Layer.cpp" line="662"/>
         <source>Features</source>
         <translation>Recursos</translation>
     </message>
@@ -2220,6 +2219,11 @@ Note that OSM nodes outside the downloaded area will be kept.</source>
         <location filename="../src/MainWindow.cpp" line="722"/>
         <source>Clipboard invalid</source>
         <translation>Conteúdo inválido para a área de transferência</translation>
+    </message>
+    <message>
+        <location filename="../src/MainWindow.cpp" line="722"/>
+        <source>Clipboard does not contain valid data.</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../src/MainWindow.cpp" line="758"/>
@@ -2724,6 +2728,11 @@ Você deseja fazer isso agora?</translation>
         <location filename="../src/MainWindow.cpp" line="3566"/>
         <source>Open Tag Templates</source>
         <translation>Abrir modelos de rótulos</translation>
+    </message>
+    <message>
+        <location filename="../src/MainWindow.cpp" line="3640"/>
+        <source>Warning! Could not load the Merkaartor translations for the &quot;%1&quot; language. Switching to default English.</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../src/MainWindow.ui" line="14"/>
@@ -3494,6 +3503,11 @@ Você deseja fazer isso agora?</translation>
         <translation>Selecionado...</translation>
     </message>
     <message>
+        <location filename="../src/MainWindow.ui" line="1677"/>
+        <source>Split a selected area between two selected nodes into two separate areas.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../src/MainWindow.ui" line="1706"/>
         <source>A&amp;xis Align</source>
         <translation type="unfinished"></translation>
@@ -3730,11 +3744,6 @@ Você deseja fazer isso agora?</translation>
         <location filename="../src/MainWindow.ui" line="1674"/>
         <source>Split area between two nodes</source>
         <translation>Dividir área entre dois nós</translation>
-    </message>
-    <message>
-        <location filename="../src/MainWindow.ui" line="1677"/>
-        <source>Split a selected area between two selected nodes into two separates areas.</source>
-        <translation>Dividir uma área selecionada entre dois nós selecionados em áreas separadas</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.ui" line="1686"/>
@@ -4309,11 +4318,6 @@ Do you want to do this now?</source>
         <translation>Adicionar nova camada de imagem</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="722"/>
-        <source>Clipboard do not contain valid data.</source>
-        <translation>A área de transferência não contem dados válidos.</translation>
-    </message>
-    <message>
         <location filename="../src/MainWindow.cpp" line="2026"/>
         <source>Multiple intersection.</source>
         <translation>Cruzamentos múltiplos.</translation>
@@ -4336,11 +4340,6 @@ Você ainda deseja criar uma junção para cada uma (cruzamentos indesejados pod
         <translation>Recursos</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="3640"/>
-        <source>Warning! Could not load the Merkaartor translations for the &quot;%1&quot; language. Switching to default english.</source>
-        <translation>Aviso! Não foi possível carregar as traduções do Merkaartor para o idioma &quot;%1&quot;. Alternando para o inglês padrão.</translation>
-    </message>
-    <message>
         <location filename="../src/Docks/PropertiesDock.cpp" line="703"/>
         <source>Clear %1 tags on %2</source>
         <translation>Limpar %1 etiquetas em %2</translation>
@@ -4350,11 +4349,6 @@ Você ainda deseja criar uma junção para cada uma (cruzamentos indesejados pod
         <location filename="../src/Docks/PropertiesDock.cpp" line="881"/>
         <source>Reorder members in relation %1</source>
         <translation>Reordenar membros na relação %1</translation>
-    </message>
-    <message>
-        <location filename="../src/Docks/PropertiesDock.cpp" line="736"/>
-        <source>Set &quot;source&quot; tas on %1</source>
-        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../src/Interactions/ExtrudeInteraction.cpp" line="123"/>
@@ -4374,6 +4368,11 @@ Você ainda deseja criar uma junção para cada uma (cruzamentos indesejados pod
     <message>
         <location filename="../src/Interactions/ScaleInteraction.cpp" line="122"/>
         <source>Scale Feature</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/Docks/PropertiesDock.cpp" line="736"/>
+        <source>Set &quot;source&quot; tag on %1</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -4786,18 +4785,18 @@ Você ainda deseja criar uma junção para cada uma (cruzamentos indesejados pod
 <context>
     <name>OsbLayer</name>
     <message>
-        <location filename="../src/Layers/Layer.cpp" line="1551"/>
+        <location filename="../src/Layers/Layer.cpp" line="1575"/>
         <source># of loaded Regions</source>
         <translation># de regiões carregadas</translation>
     </message>
     <message>
-        <location filename="../src/Layers/Layer.cpp" line="1551"/>
-        <location filename="../src/Layers/Layer.cpp" line="1552"/>
+        <location filename="../src/Layers/Layer.cpp" line="1575"/>
+        <location filename="../src/Layers/Layer.cpp" line="1576"/>
         <source>%1</source>
         <translation>%1</translation>
     </message>
     <message>
-        <location filename="../src/Layers/Layer.cpp" line="1552"/>
+        <location filename="../src/Layers/Layer.cpp" line="1576"/>
         <source># of loaded Tiles</source>
         <translation># de Tiles carregados</translation>
     </message>
@@ -5041,10 +5040,9 @@ Você ainda deseja criar uma junção para cada uma (cruzamentos indesejados pod
     </message>
     <message>
         <location filename="../src/Docks/PhotoLoadErrorDialog.ui" line="27"/>
-        <source>This photo do not contain geo-tagging EXIF data.
+        <source>This photo does not contain geo-tagging EXIF data.
 What do you want to do next?</source>
-        <translation>Esta foto não contém dados EXIF de geotags
-O que você quer fazer agora?</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../src/Docks/PhotoLoadErrorDialog.ui" line="44"/>
@@ -5140,8 +5138,8 @@ O que você quer fazer agora?</translation>
     </message>
     <message>
         <location filename="../src/Preferences/PreferencesDialog.cpp" line="177"/>
-        <source>Japanase</source>
-        <translation>Japonês</translation>
+        <source>Japanese</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../src/Preferences/PreferencesDialog.cpp" line="178"/>
@@ -5435,6 +5433,11 @@ Por favor elija otro nombre o haga clic &lt;Aplicar&gt; buton si quiere modifica
         <translation>Dados</translation>
     </message>
     <message>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="903"/>
+        <source>Autoload template document</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../src/Preferences/PreferencesDialog.ui" line="1185"/>
         <source>Password:</source>
         <translation>Senha:</translation>
@@ -5538,11 +5541,6 @@ Por favor elija otro nombre o haga clic &lt;Aplicar&gt; buton si quiere modifica
     <message>
         <location filename="../src/Preferences/PreferencesDialog.ui" line="869"/>
         <source>Nominatim (Geo Search)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="903"/>
-        <source>Autload template document</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -6108,7 +6106,7 @@ Por favor elija otro nombre o haga clic &lt;Aplicar&gt; buton si quiere modifica
     </message>
     <message>
         <location filename="../src/Docks/MinimumRelationProperties.ui" line="164"/>
-        <source>REmove selected tag(s)</source>
+        <source>Remove selected tag(s)</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -6146,7 +6144,7 @@ Por favor elija otro nombre o haga clic &lt;Aplicar&gt; buton si quiere modifica
     </message>
     <message>
         <location filename="../src/Docks/MinimumRoadProperties.ui" line="103"/>
-        <source>REmove selected tag(s)</source>
+        <source>Remove selected tag(s)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -6526,37 +6524,37 @@ p, li { white-space: pre-wrap; }
 <context>
     <name>TrackLayer</name>
     <message>
-        <location filename="../src/Layers/Layer.cpp" line="920"/>
+        <location filename="../src/Layers/Layer.cpp" line="944"/>
         <source># of track segments</source>
         <translation># de segmentos do traçado</translation>
     </message>
     <message>
-        <location filename="../src/Layers/Layer.cpp" line="920"/>
+        <location filename="../src/Layers/Layer.cpp" line="944"/>
         <source>%1</source>
         <translation>%1</translation>
     </message>
     <message>
-        <location filename="../src/Layers/Layer.cpp" line="921"/>
+        <location filename="../src/Layers/Layer.cpp" line="945"/>
         <source>Total distance</source>
         <translation>Distância total</translation>
     </message>
     <message>
-        <location filename="../src/Layers/Layer.cpp" line="921"/>
+        <location filename="../src/Layers/Layer.cpp" line="945"/>
         <source>%1 km</source>
         <translation>%1 km</translation>
     </message>
     <message>
-        <location filename="../src/Layers/Layer.cpp" line="922"/>
+        <location filename="../src/Layers/Layer.cpp" line="946"/>
         <source>Total duration</source>
         <translation>Duração total</translation>
     </message>
     <message>
-        <location filename="../src/Layers/Layer.cpp" line="922"/>
+        <location filename="../src/Layers/Layer.cpp" line="946"/>
         <source>%1h %2m</source>
         <translation>%1h %2m</translation>
     </message>
     <message>
-        <location filename="../src/Layers/Layer.cpp" line="829"/>
+        <location filename="../src/Layers/Layer.cpp" line="853"/>
         <source>Extract - %1</source>
         <translation>Extrair - %1</translation>
     </message>
@@ -6623,7 +6621,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <location filename="../src/Docks/MinimumTrackPointProperties.ui" line="123"/>
-        <source>REmove selected tag(s)</source>
+        <source>Remove selected tag(s)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>

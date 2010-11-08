@@ -14,6 +14,7 @@
    <description locale="hu" >Hely</description>
    <description locale="it" >Luogo</description>
    <description locale="nb" >Sted</description>
+   <description locale="nl" >Plaats</description>
    <description locale="nn" >Stad</description>
    <description locale="pl" >Miejsca</description>
    <description locale="pt" >Local</description>
@@ -35,6 +36,7 @@
     <description locale="it" >Città (Pop. &gt; 100.000)</description>
     <description locale="ja" >市（人口 10万人以上)</description>
     <description locale="nb" >By (Folketall &gt; 100.000)</description>
+    <description locale="nl" >Stad (aantal inwoners&gt; 100.000)</description>
     <description locale="nn" >By (Folketal &gt; 100.000)</description>
     <description locale="pl" >Miasto (ludność &gt; 100 000)</description>
     <description locale="pt" >Cidade (Pop. &gt; 100.000)</description>
@@ -55,6 +57,7 @@
     <description locale="it" >Paese (10.000 &lt; Pop. &lt; 100.000)</description>
     <description locale="ja" >町(人口1万～10万)</description>
     <description locale="nb" >By (10.000 &lt; Folketall &lt; 100.000)</description>
+    <description locale="nl" >Stadje (10.000 &lt; aantal inwoners &lt; 100.000)</description>
     <description locale="nn" >By (10.000 &lt; Folketal &lt; 100.000)</description>
     <description locale="pl" >Miejscowość (ludność 10 000-100 000)</description>
     <description locale="pt" >Vila</description>
@@ -75,6 +78,7 @@
     <description locale="it" >Villaggio (Pop. &lt; 10.000)</description>
     <description locale="ja" >村(人口1万人以下)</description>
     <description locale="nb" >Tettsted (Folketall &lt; 10.000)</description>
+    <description locale="nl" >Dorp (Aantal inwoners &lt; 10.000)</description>
     <description locale="nn" >Tettstad (Folketal &lt; 10.000)</description>
     <description locale="pl" >Wieś (ludność &lt; 10 000</description>
     <description locale="pt" >Aldeia</description>
@@ -95,6 +99,7 @@
     <description locale="it" >Frazione</description>
     <description locale="ja" >集落(数軒の家)</description>
     <description locale="nb" >Sted (noen få hus)</description>
+    <description locale="nl" >Gehucht</description>
     <description locale="nn" >Sted (noken få hus)</description>
     <description locale="pl" >Wólka</description>
     <description locale="pt" >Aldeia (poucas casas)</description>
@@ -159,6 +164,7 @@
    <description locale="it" >Palazzo</description>
    <description locale="ja" >ビル</description>
    <description locale="nb" >Bygning</description>
+   <description locale="nl" >Gebouw</description>
    <description locale="nn" >Bygning</description>
    <description locale="pl" >Budynek</description>
    <description locale="pt" >Edifício</description>
@@ -182,6 +188,7 @@
    <description locale="it" >Area</description>
    <description locale="ja" >エリア</description>
    <description locale="nb" >Område</description>
+   <description locale="nl" >Gebied</description>
    <description locale="nn" >Område</description>
    <description locale="pl" >Obszar</description>
    <description locale="pt" >Área</description>
@@ -205,6 +212,7 @@
    <description locale="it" >Nome</description>
    <description locale="ja" >名前</description>
    <description locale="nb" >Navn</description>
+   <description locale="nl" >Naam</description>
    <description locale="nn" >Namn</description>
    <description locale="pl" >Nazwa</description>
    <description locale="pt" >Nome</description>
@@ -227,6 +235,7 @@
    <description locale="it" >Tipo strada</description>
    <description locale="ja" >ハイウェイ タイプ</description>
    <description locale="nb" >Riksvei Type</description>
+   <description locale="nl" >Wegtype</description>
    <description locale="nn" >Type ferdselsveg</description>
    <description locale="pl" >Typ drogi</description>
    <description locale="pt" >Tipo auto-estrada</description>
@@ -247,6 +256,7 @@
     <description locale="it" >Autostrada</description>
     <description locale="ja" >高速道路</description>
     <description locale="nb" >Motorvei</description>
+    <description locale="nl" >Autoweg</description>
     <description locale="nn" >Motorveg</description>
     <description locale="pl" >Autostrada</description>
     <description locale="pt" >Estrada</description>
@@ -268,6 +278,7 @@
     <description locale="it" >Svincolo per l&apos;autostrada</description>
     <description locale="ja" >高速道路の乗り口</description>
     <description locale="nb" >Adkomst til Motorvei</description>
+    <description locale="nl" >Oprit</description>
     <description locale="nn" >Adkomst til Motorveg</description>
     <description locale="pl" >Dojazd do autostrady</description>
     <description locale="ru" >Въезд на шоссе</description>
@@ -286,6 +297,7 @@
     <description locale="it" >Strada principale</description>
     <description locale="ja" >国道</description>
     <description locale="nb" >Stamvei</description>
+    <description locale="nl" >Expressweg</description>
     <description locale="nn" >Stamveg</description>
     <description locale="pl" >Droga ekspresowa</description>
     <description locale="ru" >Автомагистраль</description>
@@ -303,6 +315,7 @@
     <description locale="it" >Svincolo per la strada principale</description>
     <description locale="ja" >国道の乗り口</description>
     <description locale="nb" >Adkomst til stamvei</description>
+    <description locale="nl" >Oprit naar expressweg</description>
     <description locale="nn" >Adkomst til stamveg</description>
     <description locale="pl" >Dojazd do drogi ekspresowej</description>
     <description locale="ru" >Въезд на автомагистраль</description>
@@ -321,6 +334,7 @@
     <description locale="it" >Strada primaria</description>
     <description locale="ja" >都道府県道</description>
     <description locale="nb" >Hovedvei</description>
+    <description locale="nl" >Hoofdweg</description>
     <description locale="nn" >Hovedveg</description>
     <description locale="pl" >Droga krajowa</description>
     <description locale="pt" >Estrada principal</description>
@@ -340,6 +354,7 @@
     <description locale="it" >Svincolo per strada primaria</description>
     <description locale="ja" >都道府県道の乗り口</description>
     <description locale="nb" >Adkomst til hovedvei</description>
+    <description locale="nl" >Oprit naar hoofdweg</description>
     <description locale="nn" >Adkomst til hovedveg</description>
     <description locale="pl" >Dojazd do drogi krajowej</description>
     <description locale="ru" >Въезд на основную дорогу</description>
@@ -377,6 +392,7 @@
     <description locale="hu" >Egyéb épített út</description>
     <description locale="it" >Strada terziaria</description>
     <description locale="nb" >Småvei</description>
+    <description locale="nl" >Derderangsweg</description>
     <description locale="nn" >Småveg</description>
     <description locale="pl" >Droga powiatowa</description>
     <description locale="pt" >Rua terciária</description>
@@ -415,6 +431,7 @@
     <description locale="it" >Strada residenziale</description>
     <description locale="ja" >生活道路</description>
     <description locale="nb" >Boligvei</description>
+    <description locale="nl" >Weg in de stad</description>
     <description locale="nn" >Boligveg</description>
     <description locale="pl" >Droga lokalna</description>
     <description locale="pt" >Rua residencial</description>
@@ -489,6 +506,7 @@
     <description locale="it" >Strada pedonale</description>
     <description locale="ja" >歩行者専用道</description>
     <description locale="nb" >Gågate</description>
+    <description locale="nl" >Winkelwandelstraat</description>
     <description locale="nn" >Gågate</description>
     <description locale="pl" >Ciąg pieszy</description>
     <description locale="pt" >Via pra pedestres</description>
@@ -510,6 +528,7 @@
     <description locale="it" >Sentiero</description>
     <description locale="ja" >歩道</description>
     <description locale="nb" >Gangvei</description>
+    <description locale="nl" >Voetweg</description>
     <description locale="nn" >Gangveg</description>
     <description locale="pl" >Droga dla pieszych</description>
     <description locale="pt" >Passeio Pedonal</description>
@@ -531,6 +550,7 @@
     <description locale="it" >Ciclabile</description>
     <description locale="ja" >自転車道</description>
     <description locale="nb" >Sykkelvei</description>
+    <description locale="nl" >Fietspad</description>
     <description locale="nn" >Sykkelveg</description>
     <description locale="pl" >Droga rowerowa</description>
     <description locale="pt" >Ciclovia</description>
@@ -573,6 +593,7 @@
     <description locale="iu" >trappsteg</description>
     <description locale="ja" >階段</description>
     <description locale="nb" >Trapper</description>
+    <description locale="nl" >Trappen</description>
     <description locale="nn" >Trappar</description>
     <description locale="pl" >Schody</description>
     <description locale="pt" >Passos</description>
@@ -607,6 +628,7 @@
     <description locale="it" >Non asfaltata (vecchio tag)</description>
     <description locale="ja" >未舗装道路(古いタグ)</description>
     <description locale="nb" >Udekket vei (gammelt merke)</description>
+    <description locale="nl" >Onverharde weg</description>
     <description locale="nn" >Udekket veg (gammelt merke)</description>
     <description locale="pl" >Nieutwardzona droga (przestarzały znacznik)</description>
     <description locale="ru" >Грунтовка (старый тег)</description>
@@ -626,6 +648,7 @@
    <description locale="hu" >Földhasználat</description>
    <description locale="it" >Suolo</description>
    <description locale="ja" >土地利用</description>
+   <description locale="nl" >Landgebruik</description>
    <description locale="pl" >Zagospodarowanie terenu</description>
    <description locale="ru" >Землеиспользование</description>
    <description locale="sl" >Raba tal</description>
@@ -702,6 +725,7 @@
     <description locale="it" >Cimitero</description>
     <description locale="ja" >共同墓地</description>
     <description locale="nb" >Kirkegård</description>
+    <description locale="nl" >Begraafplaats</description>
     <description locale="nn" >Kirkegard</description>
     <description locale="pl" >Cmentarz</description>
     <description locale="pt" >Cemitério</description>
@@ -723,6 +747,7 @@
     <description locale="it" >Zona commerciale</description>
     <description locale="ja" >商業地</description>
     <description locale="nb" >Komersielt område</description>
+    <description locale="nl" >Commerciële zone</description>
     <description locale="nn" >Komersielt område</description>
     <description locale="pl" >Teren handlowy</description>
     <description locale="pt" >Zona comercial</description>
@@ -744,6 +769,7 @@
     <description locale="it" >Zona in costruzione</description>
     <description locale="ja" >建設中エリア</description>
     <description locale="nb" >Byggeplass</description>
+    <description locale="nl" >Constructiezone</description>
     <description locale="nn" >Byggeplass</description>
     <description locale="pl" >Budowa</description>
     <description locale="pt" >Zona de construção</description>
@@ -765,6 +791,7 @@
     <description locale="it" >Fattoria</description>
     <description locale="ja" >農場</description>
     <description locale="nb" >Gård</description>
+    <description locale="nl" >Boerderij</description>
     <description locale="nn" >Gardsbruk</description>
     <description locale="pl" >Gospodarstwo rolne</description>
     <description locale="pt" >Quinta</description>
@@ -787,6 +814,7 @@
     <description locale="it" >Foresta</description>
     <description locale="ja" >森林</description>
     <description locale="nb" >Skog</description>
+    <description locale="nl" >Woud</description>
     <description locale="nn" >Skog</description>
     <description locale="pl" >Las</description>
     <description locale="pt" >Floresta</description>
@@ -828,6 +856,7 @@
     <description locale="it" >Zona industriale</description>
     <description locale="ja" >工業用地</description>
     <description locale="nb" >Industriområde</description>
+    <description locale="nl" >Industriële zone</description>
     <description locale="nn" >Industriområde</description>
     <description locale="pl" >Teren przemysłowy</description>
     <description locale="pt" >Zona industrial</description>
@@ -870,6 +899,7 @@
     <description locale="it" >Zona militare</description>
     <description locale="ja" >軍</description>
     <description locale="nb" >Millitært</description>
+    <description locale="nl" >Militair</description>
     <description locale="nn" >Millitært</description>
     <description locale="pl" >Teren wojskowy</description>
     <description locale="pt" >Militar</description>
@@ -889,6 +919,7 @@
     <description locale="it" >Zona di svago</description>
     <description locale="ja" >遊び場</description>
     <description locale="nb" >Rekreasjonsområde</description>
+    <description locale="nl" >Recreatiegebied</description>
     <description locale="nn" >Rekreasjonsområde</description>
     <description locale="pl" >Teren rekreacyjny</description>
     <description locale="ru" >Место отдыха</description>
@@ -908,6 +939,7 @@
     <description locale="hu" >Víztározó</description>
     <description locale="it" >Riserva (acqua)</description>
     <description locale="nb" >Reservoir (vann)</description>
+    <description locale="nl" >Waterreservoir</description>
     <description locale="nn" >Reservoir (vatn)</description>
     <description locale="pl" >Zbiornik retencyjny</description>
     <description locale="pt" >Reservatório (água)</description>
@@ -929,6 +961,7 @@
     <description locale="it" >Zona residenziale</description>
     <description locale="ja" >住宅地</description>
     <description locale="nb" >Boligområde</description>
+    <description locale="nl" >Residentiële zone</description>
     <description locale="nn" >Boligområde</description>
     <description locale="pl" >Zabudowa mieszkaniowa</description>
     <description locale="pt" >Zona residencial</description>
@@ -950,6 +983,7 @@
     <description locale="it" >Zona particolareggiata</description>
     <description locale="ja" >商業地</description>
     <description locale="nb" >Handelsområde</description>
+    <description locale="nl" >Handelszone</description>
     <description locale="nn" >Handelsområde</description>
     <description locale="pl" >Strefa handlowa</description>
     <description locale="pt" >Zona de retalho</description>
@@ -1005,6 +1039,7 @@
    <description locale="it" >Senso unico</description>
    <description locale="ja" >一方通行</description>
    <description locale="nb" >Enveiskjøring</description>
+   <description locale="nl" >Enkelrichting</description>
    <description locale="nn" >Einvegskjøyring</description>
    <description locale="pl" >Jednokierunkowa</description>
    <description locale="pt" >Sentido único</description>
@@ -1043,6 +1078,7 @@
     <description locale="it" >Centro culturale</description>
     <description locale="ja" >美術館</description>
     <description locale="nb" >Kunstsenter</description>
+    <description locale="nl" >Kunstencentrum</description>
     <description locale="nn" >Kunstsenter</description>
     <description locale="pl" >Centrum kultury/sztuki</description>
     <description locale="pt" >Centro de artes</description>
@@ -1064,6 +1100,7 @@
     <description locale="it" >Bancomat o ritiro contanti</description>
     <description locale="ja" >ATMやキャッシュディスペンサー</description>
     <description locale="nb" >Minibank</description>
+    <description locale="nl" >Geldautomaat</description>
     <description locale="nn" >Minibank</description>
     <description locale="pl" >Bankomat</description>
     <description locale="pt" >Caixa Multibando</description>
@@ -1085,6 +1122,7 @@
     <description locale="it" >Banca</description>
     <description locale="ja" >銀行</description>
     <description locale="nb" >Bank</description>
+    <description locale="nl" >Bank</description>
     <description locale="nn" >Bank</description>
     <description locale="pl" >Bank</description>
     <description locale="pt" >Banco</description>
@@ -1106,6 +1144,7 @@
     <description locale="it" >Banca con Bancomat</description>
     <description locale="ja" >ATMのある銀行店舗</description>
     <description locale="nb" >Bank med Minibank</description>
+    <description locale="nl" >Bank met geldautomaat</description>
     <description locale="nn" >Bank med Minibank</description>
     <description locale="pl" >Bank z bankomatem</description>
     <description locale="pt" >Banco com caixa multibanco</description>
@@ -1144,6 +1183,7 @@
     <description locale="it" >Parcheggio per biciclette</description>
     <description locale="ja" >自転車駐輪場</description>
     <description locale="nb" >Sykkelparkering</description>
+    <description locale="nl" >Parkeerplaats voor fietsen</description>
     <description locale="nn" >Sykkelparkering</description>
     <description locale="pl" >Parking rowerowy</description>
     <description locale="pt" >Parque de estacionamento para bicicletas</description>
@@ -1164,6 +1204,7 @@
     <description locale="it" >Noleggio biciclette</description>
     <description locale="ja" >自転車レンタル</description>
     <description locale="nb" >Sykkelutleie</description>
+    <description locale="nl" >Fietsverhuur</description>
     <description locale="nn" >Sykkelutleige</description>
     <description locale="pl" >Wypożyczalnia rowerów</description>
     <description locale="pt" >Aluguer de bicicletas</description>
@@ -1205,6 +1246,7 @@
     <description locale="it" >Stazione autobus</description>
     <description locale="ja" >バスステーション</description>
     <description locale="nb" >Bussstasjon</description>
+    <description locale="nl" >Busstation</description>
     <description locale="nn" >Bussstasjon</description>
     <description locale="pl" >Dworzec autobusowy</description>
     <description locale="pt" >Estação de autocarros</description>
@@ -1227,6 +1269,7 @@
     <description locale="it" >Cafè</description>
     <description locale="ja" >カフェ</description>
     <description locale="nb" >Kafe</description>
+    <description locale="nl" >Café</description>
     <description locale="nn" >Kafe</description>
     <description locale="pl" >Kafejka</description>
     <description locale="pt" >Café</description>
@@ -1248,6 +1291,7 @@
     <description locale="it" >Noleggo auto</description>
     <description locale="ja" >レンタカー</description>
     <description locale="nb" >Bilutleie</description>
+    <description locale="nl" >Autoverhuur</description>
     <description locale="nn" >Bilutleige</description>
     <description locale="pl" >Wypożyczalnia samochodów</description>
     <description locale="pt" >Aluguer de automóvel</description>
@@ -1269,6 +1313,7 @@
     <description locale="it" >Car Sharing</description>
     <description locale="ja" >カーシェアリング</description>
     <description locale="nb" >Bildeling</description>
+    <description locale="nl" >Autodelen</description>
     <description locale="nn" >Bildeling</description>
     <description locale="pl" >Wspóldzielenie samochodów</description>
     <description locale="pt" >Partilha de carro</description>
@@ -1289,6 +1334,7 @@
     <description locale="it" >Cinema</description>
     <description locale="ja" >映画館</description>
     <description locale="nb" >Kino</description>
+    <description locale="nl" >Bioscoop</description>
     <description locale="nn" >Kino</description>
     <description locale="pl" >Kino</description>
     <description locale="pt" >Cinema</description>
@@ -1331,6 +1377,7 @@
     <description locale="it" >Corte</description>
     <description locale="ja" >裁判所</description>
     <description locale="nb" >Rettssal</description>
+    <description locale="nl" >Gerechtsgebouw</description>
     <description locale="nn" >Rettssal</description>
     <description locale="pl" >Sąd</description>
     <description locale="pt" >Tribunal</description>
@@ -1352,6 +1399,7 @@
     <description locale="it" >Crematorio</description>
     <description locale="ja" >火葬場</description>
     <description locale="nb" >Krematorium</description>
+    <description locale="nl" >Crematorium</description>
     <description locale="nn" >Krematorium</description>
     <description locale="pl" >Krematorium</description>
     <description locale="pt" >Crematório</description>
@@ -1374,6 +1422,7 @@
     <description locale="it" >Fonte di acqua potabile</description>
     <description locale="ja" >飲み水の水源</description>
     <description locale="nb" >Drikkevannskilde</description>
+    <description locale="nl" >Drinkwaterbron</description>
     <description locale="pl" >Źródło wody pitnej</description>
     <description locale="pt" >Fonte com águo potável</description>
     <description locale="ru" >Питьевая вода</description>
@@ -1394,6 +1443,7 @@
     <description locale="it" >Fast food</description>
     <description locale="ja" >ファーストフード</description>
     <description locale="nb" >Fast food</description>
+    <description locale="nl" >Fast food</description>
     <description locale="nn" >Fast food</description>
     <description locale="pl" >Fast food</description>
     <description locale="pt" >Comida de rápida confecção</description>
@@ -1413,6 +1463,7 @@
     <description locale="it" >Pompieri</description>
     <description locale="ja" >消防署</description>
     <description locale="nb" >Brannstasjon</description>
+    <description locale="nl" >Brandweerkazerne</description>
     <description locale="nn" >Brannstasjon</description>
     <description locale="pl" >Straż pożarna</description>
     <description locale="pt" >Bombeiros</description>
@@ -1435,6 +1486,7 @@
     <description locale="it" >Fontana</description>
     <description locale="ja" >噴水</description>
     <description locale="nb" >Fontene</description>
+    <description locale="nl" >Fontein</description>
     <description locale="nn" >Fontene</description>
     <description locale="pl" >Fontanna</description>
     <description locale="pt" >Fonte</description>
@@ -1456,6 +1508,7 @@
     <description locale="it" >Benzina</description>
     <description locale="ja" >ガソリンスタンド</description>
     <description locale="nb" >Bensinstasjon</description>
+    <description locale="nl" >Brandstof</description>
     <description locale="nn" >Bensinstasjon</description>
     <description locale="pl" >Stacja benzynowa</description>
     <description locale="pt" >Combustível</description>
@@ -1475,6 +1528,7 @@
     <description locale="it" >Piccolo luogo di sepoltura</description>
     <description locale="ja" >墓地</description>
     <description locale="nb" >Gravsted</description>
+    <description locale="nl" >Begraafplaats</description>
     <description locale="pl" >Cmentarz (mały)</description>
     <description locale="ru" >Могила</description>
     <description locale="sl" >Majhno pokopališče</description>
@@ -1494,6 +1548,7 @@
     <description locale="it" >Ospedale</description>
     <description locale="ja" >病院</description>
     <description locale="nb" >Sykehus</description>
+    <description locale="nl" >Hospitaal</description>
     <description locale="nn" >Sjukehus</description>
     <description locale="pl" >Szpital</description>
     <description locale="pt" >Hospital</description>
@@ -1516,6 +1571,7 @@
     <description locale="it" >Biblioteca</description>
     <description locale="ja" >図書館</description>
     <description locale="nb" >Bibliotek</description>
+    <description locale="nl" >Bibliotheek</description>
     <description locale="nn" >Bibliotek</description>
     <description locale="pl" >Biblioteka</description>
     <description locale="pt" >Biblioteca</description>
@@ -1559,6 +1615,7 @@
     <description locale="it" >Parcheggio</description>
     <description locale="ja" >駐車場</description>
     <description locale="nb" >Parkering</description>
+    <description locale="nl" >Parkeerplaats</description>
     <description locale="nn" >Parkering</description>
     <description locale="pl" >Parking</description>
     <description locale="pt" >Parque de estacionamento</description>
@@ -1581,6 +1638,7 @@
     <description locale="it" >Farmacia</description>
     <description locale="ja" >薬局</description>
     <description locale="nb" >Apotek</description>
+    <description locale="nl" >Apotheek</description>
     <description locale="nn" >Apotek</description>
     <description locale="pl" >Apteka</description>
     <description locale="pt" >Farmácia</description>
@@ -1602,6 +1660,7 @@
     <description locale="it" >Luogo di culto</description>
     <description locale="ja" >祈りのための場所</description>
     <description locale="nb" >Tilbedelsessted</description>
+    <description locale="nl" >Gebedsplaats</description>
     <description locale="nn" >Tilbedingsted</description>
     <description locale="pl" >Miejsce kultu</description>
     <description locale="ru" >Место поклонения</description>
@@ -1622,6 +1681,7 @@
     <description locale="it" >Stazione di polizia</description>
     <description locale="ja" >警察署・交番</description>
     <description locale="nb" >Politistasjon</description>
+    <description locale="nl" >Politiekazerne</description>
     <description locale="nn" >Politistasjon</description>
     <description locale="pl" >Komenda policji</description>
     <description locale="pt" >Esquadra</description>
@@ -1643,6 +1703,7 @@
     <description locale="it" >Cassetta delle lettere</description>
     <description locale="ja" >ポスト</description>
     <description locale="nb" >Postkasse</description>
+    <description locale="nl" >Brievenbus</description>
     <description locale="nn" >Postkasse</description>
     <description locale="pl" >Skrzynka pocztowa</description>
     <description locale="pt" >Marco de correio</description>
@@ -1665,6 +1726,7 @@
     <description locale="it" >Ufficio postale</description>
     <description locale="ja" >郵便局</description>
     <description locale="nb" >Postkontor</description>
+    <description locale="nl" >Postkantoor</description>
     <description locale="nn" >Postkontor</description>
     <description locale="pl" >Poczta</description>
     <description locale="pt" >Correios</description>
@@ -1687,6 +1749,7 @@
     <description locale="it" >Prigione</description>
     <description locale="ja" >刑務所</description>
     <description locale="nb" >Fengsel</description>
+    <description locale="nl" >Gevangenis</description>
     <description locale="nn" >Fengsel</description>
     <description locale="pl" >Więzienie</description>
     <description locale="pt" >Prisão</description>
@@ -1709,6 +1772,7 @@
     <description locale="it" >Bar</description>
     <description locale="ja" >パブ</description>
     <description locale="nb" >Pub</description>
+    <description locale="nl" >Bar</description>
     <description locale="nn" >Pub</description>
     <description locale="pl" >Pub</description>
     <description locale="pt" >Bar</description>
@@ -1730,6 +1794,7 @@
     <description locale="it" >Edificio pubblico</description>
     <description locale="ja" >公共の建物</description>
     <description locale="nb" >Offentlig bygning</description>
+    <description locale="nl" >Publiek gebouw</description>
     <description locale="nn" >Offentleg bygning</description>
     <description locale="pl" >Budynek publiczny</description>
     <description locale="pt" >edificio público</description>
@@ -1751,6 +1816,7 @@
     <description locale="it" >Telefono pubblico</description>
     <description locale="ja" >公衆電話</description>
     <description locale="nb" >Telefonboks</description>
+    <description locale="nl" >Publieke telefoon</description>
     <description locale="nn" >Telefonboks</description>
     <description locale="pl" >Budka telefoniczna</description>
     <description locale="pt" >Telefone público</description>
@@ -1771,6 +1837,7 @@
     <description locale="it" >Impianti di riciclaggio</description>
     <description locale="ja" >リサイクル施設</description>
     <description locale="nb" >Resirkuleringsanlegg</description>
+    <description locale="nl" >Recyclagevoorzieningen</description>
     <description locale="nn" >Resirkuleringsanlegg</description>
     <description locale="pl" >Centrum recyklingowe</description>
     <description locale="pt" >Instalações de reciclagem</description>
@@ -1791,6 +1858,7 @@
     <description locale="it" >Ristorante</description>
     <description locale="ja" >レストラン・食堂</description>
     <description locale="nb" >Restaurant</description>
+    <description locale="nl" >Restaurant</description>
     <description locale="nn" >Restaurant</description>
     <description locale="pl" >Restauracja</description>
     <description locale="pt" >Restaurante</description>
@@ -1813,6 +1881,7 @@
     <description locale="it" >Scuola</description>
     <description locale="ja" >学校</description>
     <description locale="nb" >Skole</description>
+    <description locale="nl" >School</description>
     <description locale="nn" >Skule</description>
     <description locale="pl" >Szkoła</description>
     <description locale="pt" >Escola</description>
@@ -1835,6 +1904,7 @@
     <description locale="it" >Taxi</description>
     <description locale="ja" >タクシー</description>
     <description locale="nb" >Taxi</description>
+    <description locale="nl" >Taxi</description>
     <description locale="nn" >Taxi</description>
     <description locale="pl" >Postój taksówek</description>
     <description locale="pt" >Taxi</description>
@@ -1857,6 +1927,7 @@
     <description locale="it" >Teatro</description>
     <description locale="ja" >劇場やオペラハウス</description>
     <description locale="nb" >Teater eller Operahus</description>
+    <description locale="nl" >Theater of opera</description>
     <description locale="nn" >Teater eller Operahus</description>
     <description locale="pl" >Teatr lub opera</description>
     <description locale="pt" >Teatro ou Casa de opera</description>
@@ -1878,6 +1949,7 @@
     <description locale="it" >Toilets</description>
     <description locale="ja" >トイレ</description>
     <description locale="nb" >Toaletter</description>
+    <description locale="nl" >Toiletten</description>
     <description locale="nn" >Toalettar</description>
     <description locale="pl" >Szalet</description>
     <description locale="pt" >Casas de banho</description>
@@ -1900,6 +1972,7 @@
     <description locale="it" >Municipio</description>
     <description locale="ja" >役所</description>
     <description locale="nb" >Rådhus</description>
+    <description locale="nl" >Stadhuis</description>
     <description locale="nn" >Rådhus</description>
     <description locale="pl" >Ratusz</description>
     <description locale="ru" >Муниципалитет</description>
@@ -1921,6 +1994,7 @@
     <description locale="it" >Università</description>
     <description locale="ja" >大学</description>
     <description locale="nb" >Universitet</description>
+    <description locale="nl" >Universiteit</description>
     <description locale="nn" >Universitet</description>
     <description locale="pl" >Uniwersytet</description>
     <description locale="pt" >Universidade</description>
@@ -1964,6 +2038,7 @@
    <description locale="it" >Religione</description>
    <description locale="ja" >宗教</description>
    <description locale="nb" >Religion</description>
+   <description locale="nl" >Godsdienst</description>
    <description locale="nn" >Religion</description>
    <description locale="pl" >Religia</description>
    <description locale="pt" >Religião</description>
@@ -1985,6 +2060,7 @@
     <description locale="it" >Buddista</description>
     <description locale="ja" >仏教</description>
     <description locale="nb" >Buddhist</description>
+    <description locale="nl" >Boeddhistisch</description>
     <description locale="nn" >Buddhist</description>
     <description locale="pl" >Buddyzm</description>
     <description locale="pt" >Budista</description>
@@ -2005,6 +2081,7 @@
     <description locale="it" >Cristiano</description>
     <description locale="ja" >キリスト教</description>
     <description locale="nb" >Kristen</description>
+    <description locale="nl" >Christelijk</description>
     <description locale="nn" >Kristen</description>
     <description locale="pl" >Chrześcijaństwo</description>
     <description locale="pt" >Cristã</description>
@@ -2026,6 +2103,7 @@
     <description locale="it" >Ebraico</description>
     <description locale="ja" >ユダヤ教</description>
     <description locale="nb" >Jødisk</description>
+    <description locale="nl" >Joods</description>
     <description locale="nn" >Jødisk</description>
     <description locale="pl" >Judaizm</description>
     <description locale="pt" >Judeu</description>
@@ -2047,6 +2125,7 @@
     <description locale="it" >Musulmano</description>
     <description locale="ja" >イスラム教</description>
     <description locale="nb" >Muslim</description>
+    <description locale="nl" >Moslim</description>
     <description locale="nn" >Muslim</description>
     <description locale="pl" >Islam</description>
     <description locale="pt" >Muçulmano</description>
@@ -2111,6 +2190,7 @@
      <description locale="it" >Numero civico</description>
      <description locale="ja" >住居番号</description>
      <description locale="nb" >Husnummer</description>
+     <description locale="nl" >Huisnummer</description>
      <description locale="nn" >Husnummer</description>
      <description locale="pl" >Numer domu</description>
      <description locale="pt" >Número da Casa</description>
@@ -2131,6 +2211,7 @@
      <description locale="hu" >Utca/közterület</description>
      <description locale="it" >Via</description>
      <description locale="nb" >Gate</description>
+     <description locale="nl" >Huizenstraat</description>
      <description locale="nn" >Gate</description>
      <description locale="pl" >Podjazd</description>
      <description locale="ru" >Улица</description>
@@ -2148,6 +2229,7 @@
      <description locale="hu" >Számozás</description>
      <description locale="it" >Interpolazione numerica</description>
      <description locale="nb" >Nummerinterpolering</description>
+     <description locale="nl" >Soort huisnummering</description>
      <description locale="nn" >Nummerinterpolering</description>
      <description locale="pl" >Interpolacja numerów</description>
      <description locale="pt" >Interpolação do número</description>
@@ -2167,6 +2249,7 @@
        <description locale="it" >pari</description>
        <description locale="ja" >偶数</description>
        <description locale="nb" >partall</description>
+       <description locale="nl" >even</description>
        <description locale="nn" >partal</description>
        <description locale="pl" >parzyste</description>
        <description locale="pt" >mesmo</description>
@@ -2188,6 +2271,7 @@
        <description locale="it" >dispari</description>
        <description locale="ja" >奇数</description>
        <description locale="nb" >oddetall</description>
+       <description locale="nl" >oneven</description>
        <description locale="nn" >oddetal</description>
        <description locale="pl" >nieparzyste</description>
        <description locale="ru" >нечётные</description>
@@ -2208,6 +2292,7 @@
        <description locale="it" >tutti</description>
        <description locale="ja" >全て</description>
        <description locale="nb" >alle</description>
+       <description locale="nl" >alle</description>
        <description locale="nn" >alle</description>
        <description locale="pl" >wszystkie</description>
        <description locale="pt" >Tudo</description>
@@ -2230,6 +2315,7 @@
     <description locale="hu" >Házszám (karlsruhei minta)</description>
     <description locale="it" >Numero civico (Schema Karlsruhe)</description>
     <description locale="nb" >Husnummer (Karlsruhe Schema)</description>
+    <description locale="nl" >Huisnummer (Karlsruhe Schema)</description>
     <description locale="nn" >Husnummer (Karlsruhe Schema)</description>
     <description locale="pl" >Numer domu (schemat Karlsruhe)</description>
     <description locale="ru" >Номер дома (Схема Карлсруе)</description>
@@ -2250,6 +2336,7 @@
     <description locale="hu" >Számozás (Karlsruhe)</description>
     <description locale="it" >Schema numero civico (Karlsruhe)</description>
     <description locale="nb" >Husnummerskjema (Karlsruhe)</description>
+    <description locale="nl" >Huisnummeringsschema (Karlsruhe Schema)</description>
     <description locale="nn" >Husnummerskjema (Karlsruhe)</description>
     <description locale="pl" >Schemat numeracji domów (Karlsruhe)</description>
     <description locale="ru" >Схема нумерации домов (Карлсруе)</description>
@@ -2273,6 +2360,7 @@
   <description locale="it" >Luogo di culto</description>
   <description locale="ja" >祈りのための場所</description>
   <description locale="nb" >Tilbedelsessted</description>
+  <description locale="nl" >Gebedsplaats</description>
   <description locale="nn" >Tilbedingsted</description>
   <description locale="pl" >Miejsce kultu</description>
   <description locale="ru" >Место поклонения</description>
@@ -2308,6 +2396,7 @@
     <description locale="it" >Luogo di culto</description>
     <description locale="ja" >祈りのための場所</description>
     <description locale="nb" >Tilbedelsessted</description>
+    <description locale="nl" >Gebedsplaats</description>
     <description locale="nn" >Tilbedingsted</description>
     <description locale="pl" >Miejsce kultu</description>
     <description locale="ru" >Место поклонения</description>
@@ -2333,6 +2422,7 @@
   <description locale="iu" >Katolsk kyrka</description>
   <description locale="ja" >カソリック教会</description>
   <description locale="nb" >Katolsk kirke</description>
+  <description locale="nl" >Katholieke kerk</description>
   <description locale="nn" >Katolsk kirke</description>
   <description locale="pl" >Kościół katolicki</description>
   <description locale="pt" >Igreja católica</description>
@@ -2370,6 +2460,7 @@
     <description locale="it" >Luogo di culto</description>
     <description locale="ja" >祈りのための場所</description>
     <description locale="nb" >Tilbedelsessted</description>
+    <description locale="nl" >Gebedsplaats</description>
     <description locale="nn" >Tilbedingsted</description>
     <description locale="pl" >Miejsce kultu</description>
     <description locale="ru" >Место поклонения</description>
@@ -2392,6 +2483,7 @@
    <description locale="it" >Religione</description>
    <description locale="ja" >宗教</description>
    <description locale="nb" >Religion</description>
+   <description locale="nl" >Godsdienst</description>
    <description locale="nn" >Religion</description>
    <description locale="pl" >Religia</description>
    <description locale="pt" >Religião</description>
@@ -2413,6 +2505,7 @@
     <description locale="it" >Cristiano</description>
     <description locale="ja" >キリスト教</description>
     <description locale="nb" >Kristen</description>
+    <description locale="nl" >Christelijk</description>
     <description locale="nn" >Kristen</description>
     <description locale="pl" >Chrześcijaństwo</description>
     <description locale="pt" >Cristã</description>
@@ -2455,6 +2548,7 @@
     <description locale="it" >Cattolico</description>
     <description locale="ja" >カソリック</description>
     <description locale="nb" >Katolikk</description>
+    <description locale="nl" >Katholiek</description>
     <description locale="nn" >Katolikk</description>
     <description locale="pl" >Katolickie</description>
     <description locale="pt" >Católico</description>
@@ -2543,6 +2637,7 @@
    <description locale="it" >Nome</description>
    <description locale="ja" >名前</description>
    <description locale="nb" >Navn</description>
+   <description locale="nl" >Naam</description>
    <description locale="nn" >Namn</description>
    <description locale="pl" >Nazwa</description>
    <description locale="pt" >Nome</description>
