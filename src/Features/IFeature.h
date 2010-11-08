@@ -34,7 +34,7 @@ public:
     };
 
 public:
-    virtual FeatureType getType() const = 0;
+    virtual char getType() const = 0;
 
     virtual QString xmlId() const = 0;
     virtual const QDateTime& time() const = 0;

@@ -618,10 +618,11 @@ TagSelectorMatchResult TagSelectorOperator::matches(const IFeature* F, double Pi
             if (val == emptyString && specialValue != TagSelectValue_Empty)
                 return TagSelect_NoMatch;
             if (specialValue == TagSelectValue_Empty) {
-                if (theOp == EQ)
+                if (theOp == EQ) {
                     if (val.toUpper() == emptyString) return TagSelect_Match;
-                else
+                } else {
                     if (val.toUpper() != emptyString) return TagSelect_Match;
+                }
             } else if (UseRegExp) {
                 if (rx.exactMatch(val)) return TagSelect_Match;
             } else {

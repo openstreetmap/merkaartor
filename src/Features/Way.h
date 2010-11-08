@@ -24,7 +24,7 @@ class Way : public Feature
 
     public:
         virtual QString getClass() const {return "Way";}
-        virtual IFeature::FeatureType getType() const;
+        virtual char getType() const;
         virtual void updateMeta();
 
         virtual const CoordBox& boundingBox(bool update=true) const;

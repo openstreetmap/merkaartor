@@ -20,7 +20,7 @@ class TrackSegment : public Feature
 
     public:
         virtual QString getClass() const {return "TrackSegment";}
-        virtual IFeature::FeatureType getType() const {return IFeature::GpxSegment;}
+        virtual char getType() const {return IFeature::GpxSegment;}
         virtual void updateMeta();
 
         virtual const CoordBox& boundingBox(bool update=true) const;

@@ -30,7 +30,7 @@ class PrimitiveFeature : public IFeature
 public:
     PrimitiveFeature();
 
-    virtual FeatureType getType() const { return IFeature::All; }
+    virtual char getType() const { return IFeature::All; }
 
     virtual QString xmlId() const { return QString(); }
     virtual const QDateTime& time() const { return QDateTime::currentDateTime(); }

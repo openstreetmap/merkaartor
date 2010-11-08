@@ -200,10 +200,10 @@ Way::~Way(void)
     delete p;
 }
 
-IFeature::FeatureType Way::getType() const
+char Way::getType() const
 {
     if (isClosed())
-        return IFeature::Polygon;
+        return (IFeature::LineString | IFeature::Polygon);
     else
         return IFeature::LineString;
 }
@@ -648,7 +648,7 @@ const QPainterPath& Way::getPath() const
     return p->thePath;
 }
 
-void Way::buildPath(const Projection &theProjection, const QTransform& /*theTransform*/, const QRectF& cr)
+void Way::buildPath(const Projection &theProjection, const QTransform& /*theTransform*/, const QRectF& /*cr*/)
 {
     using namespace ggl;
 

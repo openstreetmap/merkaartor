@@ -27,7 +27,7 @@ class Node : public Feature
         virtual ~Node();
 
         virtual QString getClass() const {return "Node";}
-        virtual IFeature::FeatureType getType() const {return IFeature::Point;}
+        virtual char getType() const {return IFeature::Point;}
         virtual void updateMeta();
 
         virtual const CoordBox& boundingBox(bool update=true) const;

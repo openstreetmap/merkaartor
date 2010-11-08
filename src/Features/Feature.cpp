@@ -262,10 +262,10 @@ const IFeature::FId& Feature::resetId() const
 {
     Layer* L = p->parentLayer;
     if (L) {
-        p->Id = newId(getType(), L->getDocument());
+        p->Id = newId((IFeature::FeatureType)getType(), L->getDocument());
         L->notifyIdUpdate(p->Id,const_cast<Feature*>(this));
     } else
-        p->Id = newId(getType(), NULL);
+        p->Id = newId((IFeature::FeatureType)getType(), NULL);
     return p->Id;
 }
 
