@@ -24,7 +24,7 @@
    <item>
     <widget class="QLabel" name="label">
      <property name="text">
-      <string>This photo do not contain geo-tagging EXIF data.
+      <string>This photo does not contain geo-tagging EXIF data.
 What do you want to do next?</string>
      </property>
      <property name="alignment">

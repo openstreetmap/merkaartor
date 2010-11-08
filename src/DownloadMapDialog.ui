@@ -71,7 +71,7 @@
         <item>
          <widget class="QRadioButton" name="FromLink">
           <property name="text">
-           <string>WWW link (OSM/google maps)</string>
+           <string>WWW link (OSM/Google maps)</string>
           </property>
          </widget>
         </item>

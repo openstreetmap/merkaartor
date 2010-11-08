@@ -8,7 +8,7 @@
     <x>0</x>
     <y>0</y>
     <width>689</width>
-    <height>476</height>
+    <height>487</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -900,7 +900,7 @@
             <item>
              <widget class="QCheckBox" name="cbAutoLoadDoc">
               <property name="text">
-               <string>Autload template document</string>
+               <string>Autoload template document</string>
               </property>
              </widget>
             </item>
