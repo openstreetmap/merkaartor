@@ -105,6 +105,14 @@
 
 #include <locale.h>
 
+//For About
+#ifdef USE_PROJ
+#include "proj_api.h"
+#endif
+#ifdef USE_GDAL
+#include "gdal_version.h"
+#endif
+
 SlippyMapCache* SlippyMapWidget::theSlippyCache = 0;
 
 class MainWindowPrivate
@@ -1578,7 +1586,17 @@ void MainWindow::on_helpAboutAction_triggered()
     int boostMajVer = BOOST_VERSION / 100000;
     int boostMinVer = BOOST_VERSION / 100 % 1000;
     About.BoostVersion->setText(About.BoostVersion->text().arg(QString::number(boostMajVer)+"."+QString::number(boostMinVer)));
-
+#ifdef USE_PROJ
+    QString projVer = QString(STRINGIFY(PJ_VERSION));
+    About.Proj4Version->setText(About.Proj4Version->text().arg(QString("%1.%2.%3").arg(projVer.left(1)).arg(projVer.mid(1, 1)).arg(projVer.right(1))));
+#else
+    About.Proj4Version->setVisible(false);
+#endif
+#ifdef USE_GDAL
+    About.GdalVersion->setText(About.GdalVersion->text().arg(GDAL_RELEASE_NAME));
+#else
+    About.GdalVersion->setVisible(false);
+#endif
     QFile ct(":/Utils/CHANGELOG");
     ct.open(QIODevice::ReadOnly);
     QTextStream cl(&ct);
