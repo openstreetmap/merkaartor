@@ -365,8 +365,8 @@ void GeoImageDock::loadImage(QString file, Coord pos)
     }
 
     if (theLayer->isReadonly()) { // nodes from readonly layers can not be selected and therefore associated images can not be displayed
-        if (QMessageBox::question(this, tr("Layer is readonly"),
-         tr("The used layer is not writeable. Should it be made writeable?\nIf not, you can't load images that belongs to it."),
+        if (QMessageBox::question(this, tr("Layer is read-only"),
+         tr("The used layer is not writeable. Should it be made writeable?\nIf not, you can't load images that belong to it."),
          QMessageBox::Yes | QMessageBox::Cancel, QMessageBox::Yes) == QMessageBox::Yes)
             theLayer->getWidget()->setLayerReadonly(false); // this makes/updates both the widget and the layer with readonly = false
         else
@@ -468,8 +468,8 @@ void GeoImageDock::loadImages(QStringList fileNames)
     }
 
     if (theLayer->isReadonly()) { // nodes from readonly layers can not be selected and therefore associated images can not be displayed
-        if (QMessageBox::question(this, tr("Layer is readonly"),
-         tr("The used layer is not writeable. Should it be made writeable?\nIf not, you can't load images that belongs to it."),
+        if (QMessageBox::question(this, tr("Layer is read-only"),
+         tr("The used layer is not writeable. Should it be made writeable?\nIf not, you can't load images that belong to it."),
          QMessageBox::Yes | QMessageBox::Cancel, QMessageBox::Yes) == QMessageBox::Yes)
             theLayer->getWidget()->setLayerReadonly(false); // this makes/updates both the widget and the layer with readonly = false
         else

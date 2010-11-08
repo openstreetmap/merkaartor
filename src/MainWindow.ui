@@ -24,7 +24,7 @@
      <x>0</x>
      <y>0</y>
      <width>1100</width>
-     <height>21</height>
+     <height>25</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuHelp">
@@ -1674,7 +1674,7 @@
     <string>Split area between two nodes</string>
    </property>
    <property name="statusTip">
-    <string>Split a selected area between two selected nodes into two separates areas.</string>
+    <string>Split a selected area between two selected nodes into two separate areas.</string>
    </property>
   </action>
   <action name="areaTerraceAction">

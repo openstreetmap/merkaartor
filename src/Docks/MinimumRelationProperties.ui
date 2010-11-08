@@ -161,7 +161,7 @@
         </size>
        </property>
        <property name="toolTip">
-        <string>REmove selected tag(s)</string>
+        <string>Remove selected tag(s)</string>
        </property>
        <property name="text">
         <string>...</string>

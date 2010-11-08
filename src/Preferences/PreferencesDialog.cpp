@@ -174,7 +174,7 @@ void PreferencesDialog::initLanguages(QComboBox* aBox)
     aBox->addItem(tr("French"),"fr");
     aBox->addItem(tr("Hungarian"),"hu");
     aBox->addItem(tr("Italian"),"it");
-    aBox->addItem(tr("Japanase"),"ja");
+    aBox->addItem(tr("Japanese"),"ja");
     aBox->addItem(tr("Polish"),"pl");
     aBox->addItem(tr("Portuguese"),"pt");
     aBox->addItem(tr("Brazilian Portuguese"),"pt_BR");

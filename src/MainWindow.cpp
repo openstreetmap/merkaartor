@@ -719,7 +719,7 @@ Document* MainWindow::getDocumentFromClipboard()
     } else
     if (c.tagName() == "gpx") {
     }
-    QMessageBox::critical(this, tr("Clipboard invalid"), tr("Clipboard do not contain valid data."));
+    QMessageBox::critical(this, tr("Clipboard invalid"), tr("Clipboard does not contain valid data."));
     return NULL;
 }
 
@@ -3637,7 +3637,7 @@ void MainWindow::updateLanguage()
         if (retM)
             QCoreApplication::installTranslator(merkaartorTranslator);
         else
-            statusBar()->showMessage(tr("Warning! Could not load the Merkaartor translations for the \"%1\" language. Switching to default english.").arg(DefaultLanguage), 15000);
+            statusBar()->showMessage(tr("Warning! Could not load the Merkaartor translations for the \"%1\" language. Switching to default English.").arg(DefaultLanguage), 15000);
     }
     ui->retranslateUi(this);
 

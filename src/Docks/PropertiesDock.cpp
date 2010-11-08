@@ -733,7 +733,7 @@ void PropertiesDock::on_SourceTagButton_clicked()
     if (!src.isEmpty())
         sl.prepend(src);
 
-    CommandList* L = new CommandList(MainWindow::tr("Set \"source\" tas on %1").arg(Selection[0]->id().numId), Selection[0]);
+    CommandList* L = new CommandList(MainWindow::tr("Set \"source\" tag on %1").arg(Selection[0]->id().numId), Selection[0]);
     L->add(new SetTagCommand(Selection[0], "source", sl.join(";")));
     Main->document()->addHistory(L);
     Main->invalidateView();
