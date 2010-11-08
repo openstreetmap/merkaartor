@@ -408,7 +408,7 @@ Feature* Layer::get(const IFeature::FId& id)
 
     i = p->IdMap.find(id.numId);
     while (i != p->IdMap.end() && i.key() == id.numId) {
-        if (i.value()->id().type & id.type)
+        if (i.value()->id().type == id.type)
             return i.value();
         ++i;
     }

@@ -900,7 +900,7 @@ void MainWindow::on_editPasteFeatureAction_triggered()
                     theFeats.push_back(C);
             }
         }
-        F->setLayer(0);
+        F->layer()->remove(F);
         theList->add(new AddFeatureCommand(theDocument->getDirtyOrOriginLayer(), F, true));
 
         //Put tags

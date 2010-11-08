@@ -14,9 +14,10 @@ public:
         Point				= 0x01,
         LineString			= 0x02,
         Polygon             = 0x04,
-        OsmRelation			= 0x10,
-        GpxSegment			= 0x20,
-        Conflict            = 0x40,
+        OsmRelation			= 0x08,
+        GpxSegment			= 0x10,
+        Conflict            = 0x20,
+        Import              = 0x40,
         Special             = 0x80,
         All					= 0xff
     } FeatureType;
