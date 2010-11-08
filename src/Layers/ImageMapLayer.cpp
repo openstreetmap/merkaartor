@@ -730,6 +730,7 @@ QRect ImageMapLayer::drawFull(MapView& theView, QRect& rect)
                                 theFeats.push_back(doc->getLayer(i)->get(j));
                     for (int i=0; i<theFeats.size(); ++i) {
                         Feature*F = theFeats.at(i);
+                        // TODO Make reproducable id's or delete everything or ...
                         if (get(F->id()))
                             continue;
 

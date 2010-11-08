@@ -57,7 +57,7 @@ QByteArray ImageManager::getData(IMapAdapter* anAdapter, QString url)
 
     QByteArray ba;
     if (m_dataCache.contains(hash)) {
-        ba = *m_dataCache.take(hash);
+        ba = *m_dataCache.object(hash);
         return ba;
     }
 
