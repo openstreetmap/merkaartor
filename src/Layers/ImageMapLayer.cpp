@@ -678,11 +678,6 @@ QRect ImageMapLayer::drawFull(MapView& theView, QRect& rect)
             else
                 p->pm = pm;
         } else if (p->theMapAdapter->getType() == IMapAdapter::VectorBackground) {
-            QPixmap pm(rect.size());
-            pm.fill(Qt::transparent);
-            QPainter P(&pm);
-            P.setRenderHint(QPainter::Antialiasing);
-            P.setPen(QPen(Qt::black, 2));
             const QList<IFeature*>* theFeatures = p->theMapAdapter->getPaths(wgs84vp, NULL);
             if (theFeatures) {
                 foreach(IFeature* f, *theFeatures) {
@@ -713,64 +708,66 @@ QRect ImageMapLayer::drawFull(MapView& theView, QRect& rect)
                     }
                 }
             }
+            QPixmap pm(rect.size());
+            pm.fill(Qt::transparent);
             p->pm = pm;
         } else if (p->theMapAdapter->getType() == IMapAdapter::NetworkDataBackground) {
-            QString url (p->theMapAdapter->getQuery(wgs84vp, vp, rect));
-            if (!url.isEmpty()) {
-                qDebug() << "ImageMapLayer::drawFull: getting: " << url;
-                QByteArray ba = p->theMapAdapter->getImageManager()->getData(p->theMapAdapter,url);
-                QDomDocument* theXmlDoc = new QDomDocument();
-                theXmlDoc->setContent(ba);
-                Document* doc = Document::getDocumentFromXml(theXmlDoc);
-                if (doc) {
-                    QList<Feature*> theFeats;
-                    for (int i=0; i<doc->layerSize(); ++i)
-                        for (int j=0; j<doc->getLayer(i)->size(); ++j)
-                            if (!doc->getLayer(i)->get(j)->isNull())
-                                theFeats.push_back(doc->getLayer(i)->get(j));
-                    for (int i=0; i<theFeats.size(); ++i) {
-                        Feature*F = theFeats.at(i);
-                        // TODO Make reproducable id's or delete everything or ...
-                        if (get(F->id()))
-                            continue;
+//            QString url (p->theMapAdapter->getQuery(wgs84vp, vp, rect));
+//            if (!url.isEmpty()) {
+//                qDebug() << "ImageMapLayer::drawFull: getting: " << url;
+//                QByteArray ba = p->theMapAdapter->getImageManager()->getData(p->theMapAdapter,url);
+//                QDomDocument* theXmlDoc = new QDomDocument();
+//                theXmlDoc->setContent(ba);
+//                Document* doc = Document::getDocumentFromXml(theXmlDoc);
+//                if (doc) {
+//                    QList<Feature*> theFeats;
+//                    for (int i=0; i<doc->layerSize(); ++i)
+//                        for (int j=0; j<doc->getLayer(i)->size(); ++j)
+//                            if (!doc->getLayer(i)->get(j)->isNull())
+//                                theFeats.push_back(doc->getLayer(i)->get(j));
+//                    for (int i=0; i<theFeats.size(); ++i) {
+//                        Feature*F = theFeats.at(i);
+//                        // TODO Make reproducable id's or delete everything or ...
+//                        if (get(F->id()))
+//                            continue;
 
-                        // get tags
-                        QList<QPair<QString, QString> > Tags;
-                        for (int j=0; j<F->tagSize(); ++j) {
-                            Tags << qMakePair(F->tagKey(j), F->tagValue(j));
-                        }
-                        F->clearTags();
+//                        // get tags
+//                        QList<QPair<QString, QString> > Tags;
+//                        for (int j=0; j<F->tagSize(); ++j) {
+//                            Tags << qMakePair(F->tagKey(j), F->tagValue(j));
+//                        }
+//                        F->clearTags();
 
-                        // Re-link null features to the ones in the current document
-                        for (int j=0; j<F->size(); ++j) {
-                            Feature* C = F->get(j);
-                            if (C->isNull()) {
-                                if (Feature* CC = get(C->id())) {
-                                    if (Relation* R = CAST_RELATION(F)) {
-                                        QString role = R->getRole(j);
-                                        R->remove(j);
-                                        R->add(role, CC, j);
-                                    } else if (Way* W = CAST_WAY(F)) {
-                                        Node* N = CAST_NODE(CC);
-                                        W->remove(j);
-                                        W->add(N, j);
-                                    }
-                                } else
-                                    theFeats.push_back(C);
-                            }
-                        }
-                        F->layer()->remove(F);
-                        add(F);
+//                        // Re-link null features to the ones in the current document
+//                        for (int j=0; j<F->size(); ++j) {
+//                            Feature* C = F->get(j);
+//                            if (C->isNull()) {
+//                                if (Feature* CC = get(C->id())) {
+//                                    if (Relation* R = CAST_RELATION(F)) {
+//                                        QString role = R->getRole(j);
+//                                        R->remove(j);
+//                                        R->add(role, CC, j);
+//                                    } else if (Way* W = CAST_WAY(F)) {
+//                                        Node* N = CAST_NODE(CC);
+//                                        W->remove(j);
+//                                        W->add(N, j);
+//                                    }
+//                                } else
+//                                    theFeats.push_back(C);
+//                            }
+//                        }
+//                        F->layer()->remove(F);
+//                        add(F);
 
-                        //Put tags
-                        for (int j=0; j<Tags.size(); ++j) {
-                            F->setTag(Tags[j].first, Tags[j].second);
-                        }
-                    }
-                }
-                delete doc;
-                delete theXmlDoc;
-            }
+//                        //Put tags
+//                        for (int j=0; j<Tags.size(); ++j) {
+//                            F->setTag(Tags[j].first, Tags[j].second);
+//                        }
+//                    }
+//                }
+//                delete doc;
+//                delete theXmlDoc;
+//            }
             QPixmap pm(rect.size());
             pm.fill(Qt::transparent);
             p->pm = pm;

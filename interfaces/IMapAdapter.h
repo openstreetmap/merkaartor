@@ -102,7 +102,7 @@ public:
     virtual QString getQuery(int x, int y, int z) const = 0;
     virtual QString getQuery(const QRectF& wgs84Bbox, const QRectF& projBbox, const QRect& size) const = 0;
     virtual QPixmap getPixmap(const QRectF& wgs84Bbox, const QRectF& projBbox, const QRect& size) const = 0;
-    virtual const QList<IFeature*>* getPaths(const QRectF& wgs84Bbox, const IProjection* projection) const { return NULL; }
+    virtual const QList<IFeature*>* getPaths(const QRectF& /*wgs84Bbox*/, const IProjection* /*projection*/) const { return NULL; }
 
     virtual QString projection() const = 0;
     virtual QRectF	getBoundingbox() const = 0;

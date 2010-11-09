@@ -101,84 +101,6 @@ SpatialiteAdapter::SpatialiteAdapter()
     }
 
     m_cache.setMaxCost(100000);
-
-    m_tables
-            << "ln_abutters"
-            << "ln_aerialway"
-            << "ln_aeroway"
-            << "ln_amenity"
-            << "ln_barrier"
-            << "ln_boundary"
-            << "ln_building"
-            << "ln_cycleway"
-            << "ln_generic"
-            << "ln_highway"
-            << "ln_historic"
-            << "ln_junction"
-            << "ln_landuse"
-            << "ln_leisure"
-            << "ln_man_made"
-            << "ln_military"
-            << "ln_natural"
-            << "ln_parking"
-            << "ln_place"
-            << "ln_power"
-            << "ln_railway"
-            << "ln_route"
-            << "ln_service"
-            << "ln_shop"
-            << "ln_sport"
-            << "ln_tourism"
-            << "ln_tracktype"
-            << "ln_waterway"
-            << "pg_aeroway"
-            << "pg_amenity"
-            << "pg_barrier"
-            << "pg_boundary"
-            << "pg_building"
-            << "pg_generic"
-            << "pg_highway"
-            << "pg_historic"
-            << "pg_landuse"
-            << "pg_leisure"
-            << "pg_man_made"
-            << "pg_military"
-            << "pg_natural"
-            << "pg_railway"
-            << "pg_shop"
-            << "pg_sport"
-            << "pg_tourism"
-            << "pg_waterway"
-            << "pt_addresses"
-            << "pt_aerialway"
-            << "pt_aeroway"
-            << "pt_amenity"
-            << "pt_barrier"
-            << "pt_boundary"
-            << "pt_building"
-            << "pt_cycleway"
-            << "pt_generic"
-            << "pt_geological"
-            << "pt_highway"
-            << "pt_historic"
-            << "pt_junction"
-            << "pt_landuse"
-            << "pt_leisure"
-            << "pt_man_made"
-            << "pt_military"
-            << "pt_natural"
-            << "pt_place"
-            << "pt_power"
-            << "pt_railway"
-            << "pt_route"
-            << "pt_service"
-            << "pt_shop"
-            << "pt_sport"
-            << "pt_tourism"
-            << "pt_traffic_calming"
-            << "pt_traffic_sign"
-            << "pt_waterway"
-            ;
 }
 
 
@@ -242,6 +164,23 @@ void SpatialiteAdapter::setFile(const QString& fn)
     if (ret != SQLITE_OK)
     {
         QMessageBox::critical(0,QCoreApplication::translate("SpatialiteBackground","No valid file"),QCoreApplication::translate("SpatialiteBackground","Cannot open db."));
+        sqlite3_close (m_handle);
+        return;
+    }
+    QString q = QString("SELECT f_table_name FROM geometry_columns;");
+    sqlite3_stmt *pStmt;
+    ret = sqlite3_prepare_v2(m_handle, q.toUtf8().data(), q.size(), &pStmt, NULL);
+    if (ret != SQLITE_OK) {
+        qDebug() << "Sqlite: prepare error: " << ret;
+    }
+    while (sqlite3_step(pStmt) == SQLITE_ROW) {
+        QString table((const char*)sqlite3_column_text(pStmt, 0));
+        m_tables << table;
+    }
+    sqlite3_finalize(pStmt);
+
+    if (!m_tables.size()) {
+        QMessageBox::critical(0,QCoreApplication::translate("SpatialiteBackground","No valid file"),QCoreApplication::translate("SpatialiteBackground","geometry_columns table absent or invalid"));
         sqlite3_close (m_handle);
         return;
     }
