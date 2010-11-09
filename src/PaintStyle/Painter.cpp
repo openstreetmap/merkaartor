@@ -16,7 +16,7 @@ Painter::Painter()
   ForegroundDashSet(false),
   DrawTouchup(false), TouchupScale(0), TouchupOffset(1),
   TouchupDashSet(false),
-  ForegroundFill(false), DrawTrafficDirectionMarks(false),
+  ForegroundFill(false), ForegroundFillUseIcon(false), DrawTrafficDirectionMarks(false),
   DrawIcon(false), IconScale(0), IconOffset(0),
   DrawLabel(false), LabelScale(0), LabelOffset(0),
   DrawLabelBackground(false), LabelHalo(false), LabelArea(false)
@@ -34,7 +34,7 @@ Painter::Painter(const Painter& f)
   TouchupScale(f.TouchupScale), TouchupOffset(f.TouchupOffset),
   TouchupDashSet(f.TouchupDashSet),
   TouchupDash(f.TouchupDash), TouchupWhite(f.TouchupWhite),
-  ForegroundFill(f.ForegroundFill), ForegroundFillFillColor(f.ForegroundFillFillColor),
+  ForegroundFill(f.ForegroundFill), ForegroundFillFillColor(f.ForegroundFillFillColor), ForegroundFillUseIcon(f.ForegroundFillUseIcon),
   DrawTrafficDirectionMarks(f.DrawTrafficDirectionMarks),
   DrawIcon(f.DrawIcon), IconName(f.IconName), IconScale(f.IconScale), IconOffset(f.IconOffset),
   DrawLabel(f.DrawLabel), LabelTag(f.LabelTag), LabelColor(f.LabelColor), LabelScale(f.LabelScale), LabelOffset(f.LabelOffset),
@@ -71,6 +71,7 @@ Painter& Painter::operator=(const Painter& f)
     TouchupWhite = f.TouchupWhite;
     ForegroundFill = f.ForegroundFill;
     ForegroundFillFillColor = f.ForegroundFillFillColor;
+    ForegroundFillUseIcon = f.ForegroundFillUseIcon;
     DrawTrafficDirectionMarks = f.DrawTrafficDirectionMarks;
     DrawIcon = f.DrawIcon;
     IconName = f.IconName;
@@ -156,6 +157,8 @@ QString Painter::toXML(QString filename) const
         r += " touchupDashDown=\""+QString::number(TouchupDash)+"\" touchupDashUp=\""+QString::number(TouchupWhite)+"\"\n";
     if (ForegroundFill)
         r += " fillColor=\""+::asXML(ForegroundFillFillColor)+"\"\n";
+    if (ForegroundFillUseIcon)
+        r += " fillWithIcon=\"yes\"";
     if (!IconName.isEmpty() && DrawIcon)
     {
         QString iconFilename;
@@ -205,6 +208,8 @@ Painter Painter::fromXML(const QDomElement& e, QString filename)
         if (e.hasAttribute("foregroundDashDown"))
             FP.foregroundDash(e.attribute("foregroundDashDown").toDouble(),e.attribute("foregroundDashUp").toDouble());
     }
+    if (e.hasAttribute("fillWithIcon"))
+        FP.foregroundUseIcon(e.attribute("fillWithIcon") == "yes");
     if (e.hasAttribute("backgroundColor"))
         FP.background(
             toColor(e.attribute("backgroundColor")),e.attribute("backgroundScale").toDouble(),e.attribute("backgroundOffset").toDouble());
@@ -416,6 +421,12 @@ Painter& Painter::foreground(QColor Color, double Scale, double Offset)
     ForegroundScale = Scale;
     ForegroundOffset = Offset;
     ForegroundDashSet = false;
+    return *this;
+}
+
+Painter& Painter::foregroundUseIcon(bool b)
+{
+    ForegroundFillUseIcon = b;
     return *this;
 }
 

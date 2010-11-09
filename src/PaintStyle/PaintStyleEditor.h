@@ -28,6 +28,7 @@ class PaintStyleEditor : public QDialog, public Ui::PaintStyleEditor
         void on_ProportionalBackground_valueChanged();
         void on_FixedBackground_valueChanged();
         void on_DrawForeground_clicked(bool b);
+        void on_DrawFillIcon_clicked(bool b);
         void on_ForegroundColor_clicked();
         void on_ProportionalForeground_valueChanged();
         void on_FixedForeground_valueChanged();

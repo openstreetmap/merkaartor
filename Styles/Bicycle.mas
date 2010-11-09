@@ -1,0 +1,376 @@
+<!--
+stylesheet by Markus Straub, code@ravage.at, 2010
+
+red: illegal value for cycleway
+cyan: usage of cycleway:left or cycleway:right
+
+black street: cycling is forbidden (motorways, trunk, bicycle=no)
+
+white street: all vehicles can go in both directions
+light pink street: oneway (except for bicycles)
+dark pink street: oneway (for all vehicles)
+
+fat grey border: lane
+fat blue border: track
+
+dashed blue: cycleway
+dashed blue-red: pedestrian street/way where cycling is allowed
+
+-->
+
+<!DOCTYPE mapStyle [
+<!ENTITY drivableRoads "[highway] isoneof (primary, primary_link, secondary, secondary_link, tertiary, tertiary_link, residential, unclassified, construction, road, pedestrian, minor, service, living_street)">
+]>
+
+<mapStyle>
+
+<!-- invalid values for cycleway -->
+<painter
+ backgroundColor="#FF0000fc" backgroundScale="2" backgroundOffset="3"
+ foregroundColor="#FF0000fc" foregroundScale="1" foregroundOffset="2"
+ zoomUnder="0.1" zoomUpper="1e+07"
+ drawTrafficDirectionMarks="yes" labelColor="#ddddddff" labelScale="1.2" labelOffset="3"
+ labelFont="DejaVu Sans Condensed,12,-1,5,50,0,0,0,0,0" labelTag="name" labelBackgroundColor="#ffffff7c" labelBackgroundTag=""
+>
+  <selector expr="not [cycleway] is _NULL_ and not [cycleway] isoneof (lane, track, opposite, opposite_lane, opposite_track)"/>
+</painter>
+
+<!-- usage of cycleway:left of cycleway:right -->
+<painter
+ backgroundColor="#00FFFFfc" backgroundScale="2" backgroundOffset="3"
+ foregroundColor="#00FFFFfc" foregroundScale="1" foregroundOffset="2"
+ zoomUnder="0.1" zoomUpper="1e+07"
+ drawTrafficDirectionMarks="yes" labelColor="#ddddddff" labelScale="1.2" labelOffset="3"
+ labelFont="DejaVu Sans Condensed,12,-1,5,50,0,0,0,0,0" labelTag="name" labelBackgroundColor="#ffffff7c" labelBackgroundTag=""
+>
+  <selector expr="not [cycleway:right] is _NULL_ or not [cycleway:right] is _NULL_"/>
+</painter>
+
+<!-- roads where bikes are not allowed: completely gray -->
+<painter
+ backgroundColor="#333333fc" backgroundScale="1.2" backgroundOffset="3"
+ foregroundColor="#333333fc" foregroundScale="1" foregroundOffset="2"
+>
+  <selector expr="[highway] isoneof (motorway, motorway_link, trunk, trunk_link) or [bicycle] is no"/>
+</painter>
+
+
+<!-- //////////////////////// ONEWAYS //////////////////////// -->
+
+<!-- drivable road & oneway & cycleway=opposite_track: slight violet with fat blue border -->
+<painter
+ backgroundColor="#0000FFfc" backgroundScale="2.5" backgroundOffset="3"
+ foregroundColor="#FFEAF4fc" foregroundScale="1" foregroundOffset="2"
+ drawTrafficDirectionMarks="yes"
+>
+  <selector expr="&drivableRoads; and [oneway] is yes and [cycleway] is opposite_track"/>
+</painter>
+
+<!-- drivable road & oneway & cycleway=opposite_lane: slight violet with fat border -->
+<painter
+ backgroundColor="#777777fc" backgroundScale="2.5" backgroundOffset="3"
+ foregroundColor="#FFEAF4fc" foregroundScale="1" foregroundOffset="2"
+ drawTrafficDirectionMarks="yes"
+>
+  <selector expr="&drivableRoads; and [oneway] is yes and [cycleway] is opposite_lane"/>
+</painter>
+
+<!-- drivable road & oneway & cycleway=opposite: slight violet with gray border -->
+<painter
+ backgroundColor="#777777fc" backgroundScale="1.2" backgroundOffset="3"
+ foregroundColor="#FFEAF4fc" foregroundScale="1" foregroundOffset="2"
+ drawTrafficDirectionMarks="yes"
+>
+  <selector expr="&drivableRoads; and [oneway] is yes and [cycleway] is opposite"/>
+</painter>
+
+<!-- drivable road & oneway & cycleway=track: heavy violet with fat blue border -->
+<painter
+ backgroundColor="#0000FFfc" backgroundScale="2.5" backgroundOffset="3"
+ foregroundColor="#FF95CAfc" foregroundScale="1" foregroundOffset="2"
+ drawTrafficDirectionMarks="yes"
+>
+  <selector expr="&drivableRoads; and [oneway] is yes and [cycleway] is track"/>
+</painter>
+
+<!-- drivable road & oneway & cycleway=lane: heavy violet with fat gray border -->
+<painter
+ backgroundColor="#777777fc" backgroundScale="2.5" backgroundOffset="3"
+ foregroundColor="#FF95CAfc" foregroundScale="1" foregroundOffset="2"
+ drawTrafficDirectionMarks="yes"
+>
+  <selector expr="&drivableRoads; and [oneway] is yes and [cycleway] is lane"/>
+</painter>
+
+<!-- drivable road & oneway: heavy violet with gray border -->
+<painter
+ backgroundColor="#777777fc" backgroundScale="1.2" backgroundOffset="3"
+ foregroundColor="#FF95CAfc" foregroundScale="1" foregroundOffset="2"
+ drawTrafficDirectionMarks="yes"
+>
+  <selector expr="&drivableRoads; and [oneway] is yes"/>
+</painter>
+
+
+
+
+<!-- //////////////////////// DEDICATED CYCLEWAYS / FOOTWAYS //////////////////////// -->
+
+<painter
+ backgroundColor="#0000fffc" backgroundScale="0.7" backgroundOffset="3"
+ foregroundColor="#ff8888fc" foregroundScale="0.3" foregroundOffset="2"
+ foregroundDashDown="2" foregroundDashUp="2"
+ drawTrafficDirectionMarks="yes"
+>
+  <selector expr="[highway] isoneof (pedestrian, footway, steps) and [bicycle] isoneof (1, yes, permissive, destination)"/>
+</painter>
+
+<painter
+ foregroundColor="#0000fffc" foregroundScale="0.7" foregroundOffset="2"
+ foregroundDashDown="2" foregroundDashUp="2"
+ drawTrafficDirectionMarks="yes"
+>
+  <selector expr="[highway] is cycleway"/>
+</painter>
+
+
+<!-- //////////////////////// NORMAL ROADS //////////////////////// -->
+
+<!-- drivable roads & track: white with fat gray border -->
+<painter
+ backgroundColor="#0000FFfc" backgroundScale="3" backgroundOffset="3"
+ foregroundColor="#fffffffc" foregroundScale="1" foregroundOffset="2"
+>
+  <selector expr="&drivableRoads; and [cycleway] is track"/>
+</painter>
+
+<!-- drivable roads & lane: white with fat gray border -->
+<painter
+ backgroundColor="#777777fc" backgroundScale="3" backgroundOffset="3"
+ foregroundColor="#fffffffc" foregroundScale="1" foregroundOffset="2"
+>
+  <selector expr="&drivableRoads; and [cycleway] is lane"/>
+</painter>
+
+<!-- drivable roads: white with gray border -->
+<painter
+ backgroundColor="#777777fc" backgroundScale="1.2" backgroundOffset="3"
+ foregroundColor="#fffffffc" foregroundScale="1" foregroundOffset="2"
+>
+  <selector expr="&drivableRoads;"/>
+</painter>
+
+
+
+<!-- //////////////////////// POIs //////////////////////// -->
+
+
+<painter
+ zoomUnder="0.2" zoomUpper="1e+07"
+ icon=":/MapIcons/map-icons/square.small/vehicle/bicycle_rental.png" iconScale="0" iconOffset="0"
+>
+  <selector expr="[amenity] is bicycle_rental"/>
+</painter>
+<painter
+ zoomUnder="0.2" zoomUpper="1e+07"
+ icon=":/MapIcons/map-icons/square.small/sports/cycling.png" iconScale="0" iconOffset="0"
+>
+  <selector expr="[shop] is bicycle"/>
+</painter>
+<painter
+ zoomUnder="0.2" zoomUpper="1e+07"
+ icon=":/MapIcons/map-icons/square.small/vehicle/parking/garage.png" iconScale="0" iconOffset="0"
+>
+  <selector expr="[amenity] is bicycle_parking and [covered] is yes"/>
+</painter>
+<painter
+ zoomUnder="0.2" zoomUpper="1e+07"
+ foregroundColor="#0000FFfc"
+>
+  <selector expr="[amenity] is bicycle_parking"/>
+</painter>
+
+
+
+<painter
+ zoomUnder="0.2" zoomUpper="1e+07"
+ icon=":/Art/Mapnik/mini_round.png" iconScale="0" iconOffset="0"
+ drawTrafficDirectionMarks="no">
+  <selector expr="[highway] is mini_roundabout"/>
+</painter>
+<painter
+ zoomUnder="0.2" zoomUpper="1e+07"
+ icon=":/MapIcons/map-icons/square.small/vehicle/restrictions/traffic-light.png" iconScale="0" iconOffset="0"
+ drawTrafficDirectionMarks="no">
+  <selector expr="[highway] is traffic_signals"/>
+</painter>
+
+
+
+<!-- //////////////////////// AREAS //////////////////////// -->
+
+<painter
+ fillColor="#EEEEEEcd"
+ drawTrafficDirectionMarks="no" labelColor="#333333ff" labelScale="1.5" labelOffset="6"
+ labelFont="DejaVu Sans Condensed,12,-1,5,50,0,0,0,0,0" labelTag="name"labelHalo="yes" labelArea="yes">
+  <selector expr="not [building] is _NULL_"/>
+</painter>
+<painter
+ zoomUnder="0.02" zoomUpper="1e+07"
+ fillColor="#b6fdb6cd"
+ drawTrafficDirectionMarks="no" labelColor="#333333fc" labelScale="7" labelOffset="5.5"
+ labelFont="DejaVu Sans Condensed,12,-1,5,50,0,0,0,0,0" labelTag="name" labelHalo="yes" labelArea="yes">
+  <selector expr="[leisure] is park"/>
+</painter>
+<painter
+ zoomUnder="0.02" zoomUpper="1e+07"
+ fillColor="#8ad3afcd"
+ drawTrafficDirectionMarks="yes">
+  <selector expr="[leisure] is pitch"/>
+</painter>
+<painter
+ zoomUnder="0.02" zoomUpper="1e+07"
+ foregroundColor="#770000fc" foregroundScale="0" foregroundOffset="1"
+ fillColor="#ff777777"
+ drawTrafficDirectionMarks="yes">
+  <selector expr="[leisure] is track"/>
+</painter>
+<painter
+ zoomUnder="0.002" zoomUpper="1e+07"
+ fillColor="#aed1a0cd"
+ drawTrafficDirectionMarks="yes">
+  <selector expr="[natural] is wood"/>
+</painter>
+<painter
+ zoomUnder="0.002" zoomUpper="1e+07"
+ fillColor="#aed1a0cd"
+ drawTrafficDirectionMarks="yes">
+  <selector expr="[natural] is meadow"/>
+</painter>
+<painter
+ zoomUnder="0.002" zoomUpper="1e+07"
+ foregroundColor="#007700fc" foregroundScale="0" foregroundOffset="1"
+ fillColor="#bccf8f77"
+ drawTrafficDirectionMarks="yes">
+  <selector expr="[natural] is scrub"/>
+</painter>
+<painter
+ zoomUnder="0.002" zoomUpper="1e+07"
+ foregroundColor="#007700fc" foregroundScale="0" foregroundOffset="1"
+ fillColor="#55994477"
+ drawTrafficDirectionMarks="yes">
+  <selector expr="[natural] is heath"/>
+</painter>
+<painter
+ zoomUnder="0.002" zoomUpper="1e+07"
+ fillColor="#b5d0d0cd"
+ drawTrafficDirectionMarks="no" labelColor="#6699ccfc" labelScale="7" labelOffset="6"
+ labelFont="DejaVu Sans Condensed,12,-1,5,50,0,0,0,0,0" labelTag="name" labelHalo="yes" labelArea="yes">
+  <selector expr="[natural] is water"/>
+</painter>
+<painter
+ fillColor="#b5d0d0cd"
+ drawTrafficDirectionMarks="yes">
+  <selector expr="[natural] is fell"/>
+</painter>
+<painter
+ fillColor="#f2efe9cd"
+ drawTrafficDirectionMarks="yes">
+  <selector expr="[natural] is land"/>
+</painter>
+<painter
+ zoomUnder="0.03" zoomUpper="1e+07"
+ icon=":/Art/Mapnik/peak.png" iconScale="0" iconOffset="0"
+ drawTrafficDirectionMarks="no" labelColor="#333333ff" labelScale="4.0" labelOffset="9"
+ labelFont="DejaVu Sans Condensed,12,-1,5,50,0,0,0,0,0" labelTag="name" labelHalo="yes">
+  <selector expr="[natural] is peak"/>
+</painter>
+<painter
+ zoomUnder="0.2" zoomUpper="1e+07"
+ icon=":/MapIcons/map-icons/square.small/misc/landmark/spring.png" iconScale="0" iconOffset="0"
+ drawTrafficDirectionMarks="no" labelColor="#333333ff" labelScale="3.5" labelOffset="3"
+ labelFont="DejaVu Sans Condensed,12,-1,5,50,0,0,0,0,0" labelTag="name" labelHalo="yes">
+  <selector expr="[natural] is spring"/>
+</painter>
+<painter
+ zoomUnder="0.2" zoomUpper="1e+07"
+ foregroundColor="#797979fc" foregroundScale="0.3" foregroundOffset="1"
+ touchupColor="#000000ff" touchupScale="0.5" touchupOffset="1"
+ touchupDashDown="1" touchupDashUp="1"
+ drawTrafficDirectionMarks="yes" labelColor="#333333ff" labelScale="3.5" labelOffset="3"
+ labelFont="DejaVu Sans Condensed,12,-1,5,50,0,0,0,0,0" labelTag="name" labelHalo="yes">
+  <selector expr="[natural] is cliff"/>
+</painter>
+
+<painter
+ foregroundColor="#b5d0d0fc" foregroundScale="0" foregroundOffset="2"
+ drawTrafficDirectionMarks="yes" labelColor="#6699ccff" labelScale="1.3" labelOffset="3"
+ labelFont="DejaVu Sans Condensed,12,-1,5,50,0,0,0,0,0" labelTag="name" labelHalo="yes">
+  <selector expr="[waterway] isoneof (river , canal)"/>
+</painter>
+<painter
+ foregroundColor="#b5d0d0fc" foregroundScale="0" foregroundOffset="2"
+ drawTrafficDirectionMarks="yes" labelColor="#6699ccff" labelScale="1.1" labelOffset="3"
+ labelFont="DejaVu Sans Condensed,12,-1,5,50,0,0,0,0,0" labelTag="name" labelHalo="yes">
+  <selector expr="[waterway] isoneof (stream , drain)"/>
+</painter>
+<painter
+ fillColor="#b5d0d0cd"
+ drawTrafficDirectionMarks="yes">
+  <selector expr="[waterway] is riverbank"/>
+</painter>
+<painter
+ fillColor="#444444cd"
+ drawTrafficDirectionMarks="yes">
+  <selector expr="[sport] is basketball"/>
+</painter>
+<painter
+ fillColor="#c85656cd"
+ drawTrafficDirectionMarks="yes">
+  <selector expr="[sport] is tennis"/>
+</painter>
+<painter
+ fillColor="#00aa7fcd"
+ drawTrafficDirectionMarks="yes">
+  <selector expr="[sport] is soccer"/>
+</painter>
+<painter
+ fillColor="#00aa7fcd"
+ drawTrafficDirectionMarks="yes">
+  <selector expr="[sport] is football"/>
+</painter>
+<painter
+ fillColor="#00aa7fcd"
+ drawTrafficDirectionMarks="yes">
+  <selector expr="[sport] is athletics"/>
+</painter>
+<painter
+ fillColor="#00aa7fcd"
+ drawTrafficDirectionMarks="yes">
+  <selector expr="[sport] is skating"/>
+</painter>
+<painter
+ fillColor="#00c38fcd"
+ drawTrafficDirectionMarks="yes">
+  <selector expr="[sport] is multi"/>
+</painter>
+<painter
+ backgroundColor="#0000fffc" backgroundScale="0" backgroundOffset="3"
+ fillColor="#a0b6ffcd"
+ drawTrafficDirectionMarks="yes">
+  <selector expr="[sport] is swimming"/>
+</painter>
+<painter
+ zoomUnder="0.1" zoomUpper="1e+07"
+ backgroundColor="#707070fc" backgroundScale="0.1" backgroundOffset="0"
+ drawTrafficDirectionMarks="no">
+  <selector expr="[power] is line"/>
+</painter>
+<painter
+ zoomUnder="0.2" zoomUpper="1e+07"
+ icon=":/Art/Mapnik/power_tower.png" iconScale="0" iconOffset="0"
+ drawTrafficDirectionMarks="no">
+  <selector expr="[power] is tower"/>
+</painter>
+
+</mapStyle>

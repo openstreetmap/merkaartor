@@ -2240,6 +2240,7 @@ void MainWindow::on_editMapStyleAction_triggered()
         M_STYLE->setPainters(savePainters);
     }
 
+    theDocument->setPainters(dlg->thePainters);
     for (VisibleFeatureIterator i(theDocument); !i.isEnd(); ++i)
         i.get()->invalidatePainter();
     invalidateView();

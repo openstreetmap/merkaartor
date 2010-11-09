@@ -50,6 +50,7 @@ public:
     Painter& backgroundActive(bool b);
     Painter& background(QColor Color, double Scale, double Offset);
     Painter& foregroundActive(bool b);
+    Painter& foregroundUseIcon(bool b);
     Painter& foreground(QColor Color, double Scale, double Offset);
     Painter& foregroundDash(double Dash, double White);
     Painter& touchupActive(bool b);
@@ -113,6 +114,7 @@ public:
     double TouchupDash, TouchupWhite;
     bool ForegroundFill;
     QColor ForegroundFillFillColor;
+    bool ForegroundFillUseIcon;
     bool DrawTrafficDirectionMarks;
     bool DrawIcon;
     QString IconName;

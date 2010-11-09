@@ -205,7 +205,7 @@ void buildPathFromRelation(Relation *R, const Projection &theProjection, QPainte
 */
 void FeaturePainter::drawBackground(Way* R, QPainter* thePainter, MapView* theView) const
 {
-    if (!DrawBackground && !ForegroundFill) return;
+    if (!DrawBackground && !ForegroundFill && !ForegroundFillUseIcon) return;
 
     thePainter->setPen(Qt::NoPen);
     if (DrawBackground)
@@ -222,12 +222,22 @@ void FeaturePainter::drawBackground(Way* R, QPainter* thePainter, MapView* theVi
         }
     }
 
-    if (ForegroundFill && (R->size() > 2))
-    {
-        thePainter->setBrush(ForegroundFillFillColor);
+    thePainter->setBrush(Qt::NoBrush);
+    if (R->size() > 2) {
+        if (ForegroundFillUseIcon) {
+            if (!IconName.isEmpty()) {
+                double PixelPerM = theView->pixelPerM();
+                double WW = PixelPerM*IconScale+IconOffset;
+
+                QPixmap* pm = getPixmapFromFile(IconName,int(WW));
+                if (!pm->isNull()) {
+                    thePainter->setBrush(*pm);
+                }
+            }
+        } else if (ForegroundFill) {
+            thePainter->setBrush(ForegroundFillFillColor);
+        }
     }
-    else
-        thePainter->setBrush(Qt::NoBrush);
 
     if (M_PREFS->getAreaOpacity() != 100 && ForegroundFill) {
         thePainter->setOpacity(qreal(M_PREFS->getAreaOpacity()) / 100);
@@ -237,7 +247,7 @@ void FeaturePainter::drawBackground(Way* R, QPainter* thePainter, MapView* theVi
 
 void FeaturePainter::drawBackground(Relation* R, QPainter* thePainter, MapView* theView) const
 {
-    if (!DrawBackground && !ForegroundFill) return;
+    if (!DrawBackground && !ForegroundFill && !ForegroundFillUseIcon) return;
 
     thePainter->setPen(Qt::NoPen);
     if (DrawBackground)
@@ -254,12 +264,22 @@ void FeaturePainter::drawBackground(Relation* R, QPainter* thePainter, MapView* 
         }
     }
 
-    if (ForegroundFill && (R->size() > 2))
-    {
-        thePainter->setBrush(ForegroundFillFillColor);
+    thePainter->setBrush(Qt::NoBrush);
+    if (R->size() > 2) {
+        if (ForegroundFillUseIcon) {
+            if (!IconName.isEmpty()) {
+                double PixelPerM = theView->pixelPerM();
+                double WW = PixelPerM*IconScale+IconOffset;
+
+                QPixmap* pm = getPixmapFromFile(IconName,int(WW));
+                if (!pm->isNull()) {
+                    thePainter->setBrush(*pm);
+                }
+            }
+        } else if (ForegroundFill) {
+            thePainter->setBrush(ForegroundFillFillColor);
+        }
     }
-    else
-        thePainter->setBrush(Qt::NoBrush);
 
     if (M_PREFS->getAreaOpacity() != 100 && ForegroundFill) {
         thePainter->setOpacity(qreal(M_PREFS->getAreaOpacity()) / 100);
@@ -385,7 +405,7 @@ void FeaturePainter::drawTouchup(Way* R, QPainter* thePainter, MapView* theView)
             thePainter->strokePath(theView->transform().map(R->getPath()),thePen);
         }
     }
-    if (DrawIcon)
+    if (DrawIcon && !ForegroundFillUseIcon)
     {
         if (!IconName.isEmpty()) {
             double PixelPerM = theView->pixelPerM();

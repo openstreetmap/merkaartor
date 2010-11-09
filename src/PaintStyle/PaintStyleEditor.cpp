@@ -195,6 +195,7 @@ void PaintStyleEditor::on_PaintList_itemSelectionChanged()
     TouchupDashOff->setValue(FP.touchupBoundary().DashOff);
     DrawFill->setChecked(FP.fillColor().isValid());
     makeBoundaryIcon(FillColor, FP.fillColor());
+    DrawFillIcon->setChecked(FP.ForegroundFillUseIcon);;
     DrawIcon->setChecked(FP.icon().Draw);
     IconName->setText(FP.icon().Name);
     ProportionalIcon->setValue(FP.icon().Proportional);
@@ -366,6 +367,18 @@ void PaintStyleEditor::on_ForegroundColor_clicked()
         makeBoundaryIcon(ForegroundColor, rgb);
         FP.foreground(rgb, ProportionalForeground->value(), FixedForeground->value());
     }
+}
+
+void PaintStyleEditor::on_DrawFillIcon_clicked(bool b)
+{
+    QListWidgetItem* it = PaintList->currentItem();
+    int idx = it->data(Qt::UserRole).toInt();
+
+    if (idx >= thePainters.size())
+        return;
+    Painter& FP(thePainters[idx]);
+
+    FP.ForegroundFillUseIcon = b;
 }
 
 void PaintStyleEditor::on_ProportionalForeground_valueChanged()

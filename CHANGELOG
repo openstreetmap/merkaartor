@@ -1,4 +1,6 @@
 v0.17
+    * ADD : Bicycle style by Markus Straub
+    * ADD : Styles : allow to texture areas with an icon
     * CHG : When opening/importing, always fallback to GDAL if available. Allows to open most GDAL supported geomtery files.
     * ADD : Vector map layers
     * ADD : Allow "[*] is xxx" (or "*=xxx") construct in tag selection. Means a feature match if any of its tags has xxx as a value (fixes #3146)

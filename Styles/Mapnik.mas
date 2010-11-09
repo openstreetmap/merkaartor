@@ -321,7 +321,7 @@
 <painter
  zoomUnder="0.002" zoomUpper="1e+07"
  fillColor="#8dc56ccd"
- icon=":/Art/Mapnik/forest.png" iconScale="0" iconOffset="0"
+ fillWithIcon="yes" icon=":/Art/Mapnik/forest.png" iconScale="0" iconOffset="0"
  drawTrafficDirectionMarks="yes">
   <selector expr="[landuse] is forest"/>
 </painter>
