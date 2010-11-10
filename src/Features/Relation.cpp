@@ -186,7 +186,7 @@ void Relation::draw(QPainter& P, MapView* theView)
     if (notEverythingDownloaded())
         P.setPen(QPen(Qt::red,M_PREFS->getRelationsWidth(),Qt::DashLine));
     else {
-        if (isDirty() && M_PREFS->getDirtyVisible())
+        if (isDirty() && isUploadable() && M_PREFS->getDirtyVisible())
             P.setPen(QPen(M_PREFS->getDirtyColor(),M_PREFS->getDirtyWidth()));
         else
             P.setPen(QPen(M_PREFS->getRelationsColor(),M_PREFS->getRelationsWidth(),Qt::DashLine));

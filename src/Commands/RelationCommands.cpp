@@ -114,7 +114,7 @@ RelationAddFeatureCommand * RelationAddFeatureCommand::fromXML(Document * d, QDo
     if (e.attribute("featureclass") == "Relation") {
         F = (Feature*) Feature::getRelationOrCreatePlaceHolder(d, a->theLayer, IFeature::FId(IFeature::OsmRelation, e.attribute("road").toLongLong()));
     } else {
-        if (!(F = d->getFeature(IFeature::FId(IFeature::All, e.attribute("feature").toLongLong()))))
+        if (!(F = d->getFeature(IFeature::FId(IFeature::Uninitialized, e.attribute("feature").toLongLong()))))
             return NULL;
     }
     a->Role = e.attribute("role");

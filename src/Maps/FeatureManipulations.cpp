@@ -208,12 +208,13 @@ void simplifyRoads(Document* theDocument, CommandList* theList, PropertiesDock* 
 
 static void appendPoints(Document* theDocument, CommandList* L, Way* Dest, Way* Src, bool prepend, bool reverse)
 {
-    Layer *layer = theDocument->getDirtyOrOriginLayer(Src->layer());
+    Layer *layer = theDocument->getDirtyOrOriginLayer(Dest->layer());
     int srclen = Src->size();
     int destpos = prepend ? 0 : Dest->size();
     for (int i=1; i<srclen; ++i) {
         int j = (reverse ? srclen-i : i) - (prepend != reverse ? 1 : 0);
         Node* Pt = Src->getNode(j);
+        L->add(new AddFeatureCommand(layer, Pt, false));
         L->add(new WayAddNodeCommand(Dest, Pt, destpos++, layer));
     }
 }

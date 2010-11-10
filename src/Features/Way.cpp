@@ -489,7 +489,7 @@ double Way::widthOf()
 
 void Way::draw(QPainter& P, MapView* theView)
 {
-    if (isDirty() && M_PREFS->getDirtyVisible()) {
+    if (isDirty() && isUploadable() && M_PREFS->getDirtyVisible()) {
         QPen thePen(M_PREFS->getDirtyColor(),M_PREFS->getDirtyWidth());
         P.setPen(thePen);
         P.drawPath(theView->transform().map(getPath()));

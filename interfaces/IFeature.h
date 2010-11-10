@@ -32,7 +32,7 @@ public:
         {
             return ((type == R.type) && (numId == R.numId));
         }
-        char type;
+        unsigned char type;
         qint64 numId;
     };
 

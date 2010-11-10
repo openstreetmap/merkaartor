@@ -162,7 +162,7 @@ bool SetTagCommand::toXML(QDomElement& xParent) const
 SetTagCommand * SetTagCommand::fromXML(Document * d, QDomElement e)
 {
     Feature* F;
-    if (!(F = d->getFeature(IFeature::FId(IFeature::All, e.attribute("feature").toLongLong())))) {
+    if (!(F = d->getFeature(IFeature::FId(IFeature::Uninitialized, e.attribute("feature").toLongLong())))) {
         qDebug() << "SetTagCommand::fromXML: Undefined feature: " << e.attribute("feature");
         return NULL;
     }
@@ -266,7 +266,7 @@ bool ClearTagsCommand::toXML(QDomElement& xParent) const
 ClearTagsCommand * ClearTagsCommand::fromXML(Document * d, QDomElement e)
 {
     Feature* F;
-    if (!(F = d->getFeature(IFeature::FId(IFeature::All, e.attribute("feature").toLongLong()))))
+    if (!(F = d->getFeature(IFeature::FId(IFeature::Uninitialized, e.attribute("feature").toLongLong()))))
         return NULL;
 
     ClearTagsCommand* a = new ClearTagsCommand(F);

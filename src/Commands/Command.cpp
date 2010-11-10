@@ -129,7 +129,7 @@ void Command::fromXML(Document* d, const QDomElement& e, Command* C)
     while(!c.isNull()) {
         if (c.tagName() == "Command") {
             Feature* F;
-            if (!(F = d->getFeature(IFeature::FId(IFeature::All, c.attribute("feature").toLongLong()))))
+            if (!(F = d->getFeature(IFeature::FId(IFeature::Uninitialized, c.attribute("feature").toLongLong()))))
                 return;
 
             C->setId(c.attribute("xml:id"));

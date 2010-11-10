@@ -233,8 +233,6 @@ const CoordBox& Node::boundingBox(bool) const
 
 void Node::draw(QPainter& thePainter , MapView* theView)
 {
-    Q_UNUSED(thePainter)
-    Q_UNUSED(theView)
 #ifdef GEOIMAGE
     if (p->HasPhoto) {
          QPoint me = theView->toView(this);
@@ -256,10 +254,13 @@ void Node::draw(QPainter& thePainter , MapView* theView)
          }
      }
 #endif
-    if (isDirty() && M_PREFS->getDirtyVisible()) {
-        QPointF P(theView->toView(this));
-        QRectF R(P-QPointF(2,2),QSize(4,4));
-        thePainter.fillRect(R,M_PREFS->getDirtyColor());
+    if (isDirty() && isUploadable() && M_PREFS->getDirtyVisible()) {
+        QPoint P = theView->toView(this);
+        double theWidth = theView->nodeWidth();
+        if (theWidth >= 1) {
+            QRect R(P-QPoint(theWidth/2,theWidth/2),QSize(theWidth,theWidth));
+            thePainter.fillRect(R,M_PREFS->getDirtyColor());
+        }
     }
 
 }

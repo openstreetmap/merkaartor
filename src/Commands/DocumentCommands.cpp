@@ -57,7 +57,7 @@ bool AddFeatureCommand::buildDirtyList(DirtyList& theList)
         return false;
 
     if (UserAdded)
-        if (theLayer->isUploadable())
+        if (theFeature->isUploadable())
             return theList.add(theFeature);
     return false;
 }
@@ -93,7 +93,7 @@ AddFeatureCommand * AddFeatureCommand::fromXML(Document* d, QDomElement e)
         a->oldLayer = NULL;
 
     Feature* F;
-    if (!(F = d->getFeature(IFeature::FId(IFeature::All, e.attribute("feature").toLongLong()))))
+    if (!(F = d->getFeature(IFeature::FId(IFeature::Uninitialized, e.attribute("feature").toLongLong()))))
         return NULL;
 
     a->theFeature = F;
@@ -248,9 +248,9 @@ RemoveFeatureCommand * RemoveFeatureCommand::fromXML(Document* d, QDomElement e)
     a->oldLayer = d->getLayer(e.attribute("layer"));
     if (e.hasAttribute("newlayer"))
         a->theLayer = d->getLayer(e.attribute("newlayer"));
-        else
-            a->theLayer = d->getDirtyOrOriginLayer();
-        a->theFeature = d->getFeature(IFeature::FId(IFeature::All, e.attribute("feature").toLongLong()));
+    else
+        a->theLayer = d->getDirtyOrOriginLayer();
+    a->theFeature = d->getFeature(IFeature::FId(IFeature::Uninitialized, e.attribute("feature").toLongLong()));
     a->Idx = e.attribute("index").toInt();
 
     QDomElement c = e.firstChildElement();

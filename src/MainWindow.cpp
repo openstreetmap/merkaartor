@@ -1159,6 +1159,7 @@ bool MainWindow::importFiles(Document * mapDocument, const QStringList & fileNam
         }
         else if (fn.toLower().endsWith(".ngt")) {
             newLayer = new TrackLayer( baseFileName );
+            newLayer->setUploadable(false);
             newLayer->blockIndexing(true);
             mapDocument->add(newLayer);
             importOK = importNGT(this, baseFileName, mapDocument, newLayer);
@@ -1168,6 +1169,7 @@ bool MainWindow::importFiles(Document * mapDocument, const QStringList & fileNam
         }
         else if (fn.toLower().endsWith(".nmea") || (fn.toLower().endsWith(".nma"))) {
             newLayer = new TrackLayer( baseFileName );
+            newLayer->setUploadable(false);
             newLayer->blockIndexing(true);
             mapDocument->add(newLayer);
             importOK = mapDocument->importNMEA(baseFileName, (TrackLayer *)newLayer);

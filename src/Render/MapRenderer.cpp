@@ -150,7 +150,7 @@ void TouchupStyleLayer::draw(Node* Pt)
         if (! ((Pt->isReadonly() || !Pt->isSelectable(r->theView)) && (!Pt->isPOI() && !Pt->isWaypoint())))
 //        if (!Pt->isReadonly() && Pt->isSelectable(r->theView))
         {
-            QPoint P = r->theView->transform().map(r->theView->projection().project(Pt)).toPoint();
+            QPoint P = r->theView->toView(Pt);
             double theWidth = r->theView->nodeWidth();
             if (theWidth >= 1) {
                 if (Pt->isWaypoint()) {
