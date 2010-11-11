@@ -30,6 +30,10 @@
 class WmsUrlValidator: public QValidator
 {
 public:
+    explicit WmsUrlValidator(QObject * parent=0)
+        : QValidator(parent)
+    {};
+
     State validate ( QString & input, int & /*pos*/ ) const
     {
         QUrl u(input);

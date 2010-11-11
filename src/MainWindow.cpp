@@ -156,15 +156,8 @@ MainWindow::MainWindow(QWidget *parent)
     theProgressBar = NULL;
     theProgressLabel = NULL;
 
-    p->defStyle = QApplication::style()->objectName();
-    QString qVer = QString(qVersion()).replace(".", "");
-    int iQVer = qVer.toInt();
-    if (iQVer < 451) {
-        QApplication::setStyle(QStyleFactory::create("skulpture"));
-    } else {
-        if (M_PREFS->getMerkaartorStyle())
-            QApplication::setStyle(QStyleFactory::create(M_PREFS->getMerkaartorStyleString()));
-    }
+    if (M_PREFS->getMerkaartorStyle())
+        QApplication::setStyle(QStyleFactory::create(M_PREFS->getMerkaartorStyleString()));
 
     ui->setupUi(this);
     M_STYLE->loadPainters(M_PREFS->getDefaultStyle());
@@ -2011,12 +2004,17 @@ void MainWindow::on_roadAddStreetNumbersAction_triggered()
 
 void MainWindow::on_roadSubdivideAction_triggered()
 {
+#if QT_VERSION < 0x040500
+    {
+        int divisions = QInputDialog::getInteger(this, MainWindow::tr("Number of segments to divide into"), MainWindow::tr("Specify the number of segments"), 2, 99);
+#else
     QInputDialog *Dlg = new QInputDialog(this);
     Dlg->setInputMode(QInputDialog::IntInput);
     Dlg->setIntRange(2, 99);
     Dlg->setLabelText(tr("Number of segments to divide into"));
     if (Dlg->exec() == QDialog::Accepted) {
         int divisions = Dlg->intValue();
+#endif
         CommandList* theList = new CommandList(MainWindow::tr("Subdivide road into %1").arg(divisions), NULL);
         subdivideRoad(theDocument, theList, p->theProperties, divisions);
         if (theList->empty())
@@ -2026,7 +2024,9 @@ void MainWindow::on_roadSubdivideAction_triggered()
             invalidateView();
         }
     }
+#if QT_VERSION > 0x040499
     delete Dlg;
+#endif
 }
 
 void MainWindow::on_roadAxisAlignAction_triggered()
@@ -2907,9 +2907,9 @@ void MainWindow::on_editSelectAction_triggered()
             terms.append(t);
         }
 
-        if (terms.length()) {
-            out += terms[terms.length()-1]->asExpression(true);
-            for (int i=terms.length()-2; i>=0; --i) {
+        if (terms.count()) {
+            out += terms[terms.count()-1]->asExpression(true);
+            for (int i=terms.count()-2; i>=0; --i) {
                 out += " and parent(";
                 out += terms[i]->asExpression(true);
                 out += ") ";

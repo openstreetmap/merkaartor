@@ -492,6 +492,8 @@ bool LayerDock::event (QEvent* ev)
     case QEvent::MouseButtonPress:
         mousePressEvent(static_cast<QMouseEvent *>(ev));
         break;
+    default:
+        break;
     }
     return MDockAncestor::event(ev);
 }

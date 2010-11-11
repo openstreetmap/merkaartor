@@ -965,7 +965,26 @@ QString MerkaartorPreferences::getOsmWebsite() const
     else
         s = "www.openstreetmap.org";
 
+#if QT_VERSION >= 0x040600
     QUrl u = QUrl::fromUserInput(s);
+#else
+    // convenience for creating a valid URL
+    // fails miserably if QString s already contains a schema
+    QString h; // intermediate host
+    QString p; // intermediate path
+
+    int slashpos = s.indexOf('/');
+    if (slashpos >= 1) // there's a path element in s
+    {
+        h = s.left(slashpos);
+        p = s.right(s.size() - 1 - slashpos);
+    }
+
+    QUrl u;
+    u.setHost(h);
+    u.setScheme("http");
+    u.setPath(p);
+#endif
     if (u.path().isEmpty())
         u.setPath("/api/" + apiVersion());
 

@@ -158,7 +158,11 @@ void NativeRenderDialog::exportPDF()
     if (s.isNull())
         return;
 
+#if QT_VERSION >= 0x040500
     QPrinter* prt = preview->printer();
+#else
+    QPrinter* prt = thePrinter;
+#endif
     prt->setOutputFormat(QPrinter::PdfFormat);
     prt->setOutputFileName(s);
     print(prt);
@@ -169,8 +173,11 @@ void NativeRenderDialog::exportRaster()
     QString s = QFileDialog::getSaveFileName(NULL,tr("Output filename"),"",tr("Image files (*.png *.jpg)"));
     if (s.isNull())
         return;
-
+#if QT_VERSION >= 0x040500
     QRect theR = preview->printer()->pageRect();
+#else
+    QRect theR = thePrinter->pageRect();
+#endif
     theR.moveTo(0, 0);
 
     QPixmap pix(theR.size());
@@ -195,7 +202,11 @@ void NativeRenderDialog::exportSVG()
         return;
 
     QSvgGenerator svgg;
+#if QT_VERSION >= 0x040500
     QRect theR = preview->printer()->pageRect();
+#else
+    QRect theR = thePrinter->pageRect();
+#endif
     theR.moveTo(0, 0);
     svgg.setSize(theR.size());
     svgg.setFileName(s);
