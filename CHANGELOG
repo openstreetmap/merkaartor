@@ -1,4 +1,5 @@
 v0.17
+    * ADD : Explicitely add GML to the list of supported format (via GDAL)
     * ADD : Bicycle style by Markus Straub
     * ADD : Styles : allow to texture areas with an icon
     * CHG : When opening/importing, always fallback to GDAL if available. Allows to open most GDAL supported geomtery files.

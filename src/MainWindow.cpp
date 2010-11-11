@@ -1007,7 +1007,7 @@ static void changeCurrentDirToFile(const QString& s)
 
 #ifndef GEOIMAGE
 #define FILTER_OPEN_SUPPORTED \
-    tr("Supported formats")+" (*.mdc *.gpx *.osm *.osb *.osc *.ngt *.nmea *.nma *.kml *.shp *.csv)\n" \
+    tr("Supported formats")+" (*.mdc *.gpx *.osm *.osb *.osc *.ngt *.nmea *.nma *.kml *.shp *.gml *.csv)\n" \
     +tr("Merkaartor document (*.mdc)\n") \
     +tr("GPS Exchange format (*.gpx)\n") \
     +tr("OpenStreetMap format (*.osm)\n") \
@@ -1017,11 +1017,12 @@ static void changeCurrentDirToFile(const QString& s)
     +tr("NMEA GPS log format (*.nmea *.nma)\n") \
     +tr("KML file (*.kml)\n") \
     +tr("ESRI Shapefile (*.shp)\n") \
+    +tr("Geography Markup Language (*.gml)\n") \
     +tr("Comma delimited format (*.csv)\n") \
     +tr("All Files (*)")
 #else
 #define FILTER_OPEN_SUPPORTED \
-    tr("Supported formats")+" (*.mdc *.gpx *.osm *.osb *.osc *.ngt *.nmea *.nma *.kml *.shp *.csv *.jpg)\n" \
+    tr("Supported formats")+" (*.mdc *.gpx *.osm *.osb *.osc *.ngt *.nmea *.nma *.kml *.shp *.gml *.csv *.jpg)\n" \
     +tr("Merkaartor document (*.mdc)\n") \
     +tr("GPS Exchange format (*.gpx)\n") \
     +tr("OpenStreetMap format (*.osm)\n") \
@@ -1031,12 +1032,13 @@ static void changeCurrentDirToFile(const QString& s)
     +tr("NMEA GPS log format (*.nmea *.nma)\n") \
     +tr("KML file (*.kml)\n") \
     +tr("ESRI Shapefile (*.shp)\n") \
+    +tr("Geography Markup Language (*.gml)\n") \
     +tr("Comma delimited format (*.csv)\n") \
     +tr("Geotagged images (*.jpg)\n") \
     +tr("All Files (*)")
 #endif
 #define FILTER_IMPORT_SUPPORTED \
-    tr("Supported formats")+" (*.gpx *.osm *.osb *.osc *.ngt *.nmea *.nma *.kml *.shp *.csv)\n" \
+    tr("Supported formats")+" (*.gpx *.osm *.osb *.osc *.ngt *.nmea *.nma *.kml *.shp *.gml *.csv)\n" \
     +tr("GPS Exchange format (*.gpx)\n") \
     +tr("OpenStreetMap format (*.osm)\n") \
     +tr("OpenStreetMap binary format (*.osb)\n") \
@@ -1045,6 +1047,7 @@ static void changeCurrentDirToFile(const QString& s)
     +tr("NMEA GPS log format (*.nmea *.nma)\n") \
     +tr("KML file (*.kml)\n") \
     +tr("ESRI Shapefile (*.shp)\n") \
+    +tr("Geography Markup Language (*.gml)\n") \
     +tr("Comma delimited format (*.csv)\n") \
     +tr("All Files (*)")
 
