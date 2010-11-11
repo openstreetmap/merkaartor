@@ -208,7 +208,7 @@ QPixmap BrowserImageManager::getPixmap(IMapAdapter* anAdapter, QString url)
         return pm;
 
     loadingRequests.enqueue(LR);
-    emit(imageRequested());
+    emit(dataRequested());
 
 #ifndef BROWSERIMAGEMANAGER_IS_THREADED
     if (loadingRequests.size() <= MAX_REQ)
@@ -317,7 +317,7 @@ void BrowserImageManager::receivedData(const QByteArray& ba, const QString& hash
     {
         prefetch.removeAt(prefetch.indexOf(hash));
     }
-    emit(imageReceived());
+    emit(dataReceived());
 }
 
 void BrowserImageManager::loadingQueueEmpty()

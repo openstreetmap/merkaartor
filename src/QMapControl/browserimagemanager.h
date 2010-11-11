@@ -122,8 +122,8 @@ class BrowserImageManager : public QObject, public IImageManager
         QNetworkAccessManager* qnam;
 
     signals:
-        void imageRequested();
-        void imageReceived();
+        void dataRequested();
+        void dataReceived();
         void loadingFinished();
 
     private slots:
