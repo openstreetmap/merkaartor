@@ -970,7 +970,7 @@ QString MerkaartorPreferences::getOsmWebsite() const
 #else
     // convenience for creating a valid URL
     // fails miserably if QString s already contains a schema
-    QString h; // intermediate host
+    QString h = s; // intermediate host
     QString p; // intermediate path
 
     int slashpos = s.indexOf('/');
