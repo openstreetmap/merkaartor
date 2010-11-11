@@ -11,8 +11,11 @@
             <File Id="libgcc_s_dw2" Name="libgcc_s_dw2-1.dll"
                Source="$(var.MingwPath)\bin\libgcc_s_dw2-1.dll" DiskId="1">
             </File>
-            <File Id="libgdal1" Name="libgdal-1.dll"
-               Source="$(var.DllPath)\libgdal-1.dll" DiskId="1">
+            <File Id="libgdal" Name="libgdal.dll"
+               Source="$(var.DllPath)\libgdal.dll" DiskId="1">
+            </File>
+            <File Id="libxerces" Name="libxerces-c2_8_0.dll"
+               Source="$(var.DllPath)\libxerces-c2_8_0.dll" DiskId="1">
             </File>
             <File Id="libexiv2" Name="libexiv2-5.dll"
                Source="$(var.DllPath)\libexiv2-5.dll" DiskId="1">
