@@ -16,6 +16,7 @@
 #include <QUrl>
 #include <QTextEdit>
 #include <QComboBox>
+#include <QNetworkReply>
 
 // from wikipedia
 #define EQUATORIALRADIUS 6378137.0
@@ -25,7 +26,7 @@
 #define EQUATORIALMETERPERDEGREE    222638.981555556
 
 WMSPreferencesDialog::WMSPreferencesDialog(QWidget* parent)
-    : QDialog(parent)
+    : QDialog(parent), curReply(0)
 {
     setupUi(this);
 
@@ -41,6 +42,8 @@ WMSPreferencesDialog::WMSPreferencesDialog(QWidget* parent)
     edWmsUrl->setValidator(&wmsValid);
 
     connect(tvWmsLayers, SIGNAL(itemChanged(QTreeWidgetItem *, int)), this, SLOT(on_tvWmsLayers_itemChanged(QTreeWidgetItem *, int)));
+    connect (&m_networkManager, SIGNAL(finished(QNetworkReply *)), this, SLOT(httpRequestFinished(QNetworkReply *)));
+
 }
 
 WMSPreferencesDialog::~WMSPreferencesDialog()
@@ -58,7 +61,7 @@ void WMSPreferencesDialog::updateUrl()
     theUrl.removeQueryItem("TRANSPARENT"); theUrl.addQueryItem("TRANSPARENT", "TRUE");
     theUrl.removeQueryItem("LAYERS"); theUrl.addQueryItem("LAYERS", edWmsLayers->text());
     theUrl.removeQueryItem("SRS"); theUrl.addQueryItem("SRS", cbWmsProj->currentText());
-    theUrl.removeQueryItem("STYLES"); theUrl.addQueryItem("STYLES", edWmsStyles->text());
+    theUrl.removeQueryItem("STYLES"); theUrl.addQueryItem("STYLES", cbWmsStyle->currentText());
     theUrl.removeQueryItem("FORMAT"); theUrl.addQueryItem("FORMAT", cbWmsImgFormat->currentText());
 
     edWmsUrl->setText(theUrl.toString());
@@ -78,7 +81,7 @@ void WMSPreferencesDialog::generateWmscLayer()
 {
     selWmscLayer.LayerName = edWmsLayers->text();
     selWmscLayer.Projection = cbWmsProj->currentText();
-    selWmscLayer.Styles = edWmsStyles->text();
+    selWmscLayer.Styles = cbWmsStyle->currentText();
     selWmscLayer.ImgFormat = cbWmsImgFormat->currentText();
     selWmscLayer.TileHeight = 256;
     selWmscLayer.TileWidth = 256;
@@ -107,7 +110,7 @@ void WMSPreferencesDialog::on_edWmsUrl_textEdited(const QString &newText)
     if (u.hasEncodedQueryItem("SRS"))
         cbWmsProj->setEditText(QUrl::fromPercentEncoding(u.queryItemValue("SRS").toLatin1()));
     if (u.hasEncodedQueryItem("STYLES"))
-        edWmsStyles->setText(QUrl::fromPercentEncoding(u.queryItemValue("STYLES").toLatin1()));
+        cbWmsStyle->setEditText(QUrl::fromPercentEncoding(u.queryItemValue("STYLES").toLatin1()));
     if (u.hasEncodedQueryItem("FORMAT"))
         cbWmsImgFormat->setEditText(QUrl::fromPercentEncoding(u.queryItemValue("FORMAT").toLatin1()));
 }
@@ -116,13 +119,8 @@ void WMSPreferencesDialog::on_edWmsUrl_editingFinished()
 {
     QUrl u(edWmsUrl->text());
     if (u.isValid() && !u.host().isEmpty() && !u.path().isEmpty()) {
-        on_btShowCapabilities_clicked();
+        showCapabilities();
     }
-}
-
-void WMSPreferencesDialog::on_edWmsStyles_textEdited(const QString &/*newText*/)
-{
-    updateUrl();
 }
 
 void WMSPreferencesDialog::on_btApplyWmsServer_clicked(void)
@@ -141,7 +139,7 @@ void WMSPreferencesDialog::on_btApplyWmsServer_clicked(void)
     WS.WmsPath = theUrl.toString(QUrl::RemoveScheme | QUrl::RemoveAuthority);
     WS.WmsLayers = edWmsLayers->text();
     WS.WmsProjections = cbWmsProj->currentText();
-    WS.WmsStyles = edWmsStyles->text();
+    WS.WmsStyles = cbWmsStyle->currentText();
     WS.WmsImgFormat = cbWmsImgFormat->currentText();
     if (cbTileIt->isChecked()) {
         isTiled = 2;
@@ -183,7 +181,7 @@ void WMSPreferencesDialog::on_btAddWmsServer_clicked(void)
             edWmsLayers->text()
             , edSourceTag->text()
             , edLicenseUrl->text()
-            , cbWmsProj->currentText(), edWmsStyles->text(), cbWmsImgFormat->currentText()));
+            , cbWmsProj->currentText(), cbWmsStyle->currentText(), cbWmsImgFormat->currentText()));
     lvWmsServers->setCurrentRow(lvWmsServers->count() - 1);
     on_lvWmsServers_itemSelectionChanged();
 }
@@ -220,7 +218,7 @@ void WMSPreferencesDialog::on_lvWmsServers_itemSelectionChanged()
     edWmsUrl->setText("http://" + WS.WmsAdress + WS.WmsPath);
     edWmsLayers->setText(WS.WmsLayers);
     cbWmsProj->setEditText(WS.WmsProjections);
-    edWmsStyles->setText(WS.WmsStyles);
+    cbWmsStyle->setEditText(WS.WmsStyles);
     cbWmsImgFormat->setEditText(WS.WmsImgFormat);
     edSourceTag->setText(WS.WmsSourceTag);
     edLicenseUrl->setText(WS.WmsLicenseUrl);
@@ -232,17 +230,20 @@ void WMSPreferencesDialog::on_lvWmsServers_itemSelectionChanged()
         cbTileIt->setChecked(true);
         sbZoomLevels->setValue(selWmscLayer.Resolutions.size());
     }
-    on_cbWmsProj_currentIndexChanged(WS.WmsProjections);
+    on_cbWmsProj_activated(WS.WmsProjections);
 
     selectedServer = WS.WmsName;
 
+    if (curReply) {
+        curReply->abort();
+    }
     QUrl u(edWmsUrl->text());
     if (u.isValid() && !u.host().isEmpty() && !u.path().isEmpty()) {
-        on_btShowCapabilities_clicked();
+        showCapabilities();
     }
 }
 
-void WMSPreferencesDialog::on_cbWmsProj_currentIndexChanged(const QString &text)
+void WMSPreferencesDialog::on_cbWmsProj_activated(const QString &text)
 {
     frTileIt->setEnabled(false);
     if (
@@ -258,7 +259,32 @@ void WMSPreferencesDialog::on_cbWmsProj_currentIndexChanged(const QString &text)
     updateUrl();
 }
 
-void WMSPreferencesDialog::on_cbWmsImgFormat_currentIndexChanged(const QString &/*text*/)
+void WMSPreferencesDialog::refreshStyles()
+{
+    QStringList layers = edWmsLayers->text().split(',');
+    QStringList theStyles;
+    foreach(QString l, layers) {
+        theStyles << styles[l];
+    }
+    cbWmsStyle->setEditText(theStyles.join(","));
+
+    updateUrl();
+}
+
+void WMSPreferencesDialog::on_cbWmsStyle_activated(int index)
+{
+    QString style = cbWmsStyle->itemData(index).toString();
+    styles[curLayer] = style;
+
+    refreshStyles();
+}
+
+void WMSPreferencesDialog::on_cbWmsStyle_editTextChanged(const QString &/*newText*/)
+{
+    updateUrl();
+}
+
+void WMSPreferencesDialog::on_cbWmsImgFormat_activated(const QString &/*text*/)
 {
     updateUrl();
 }
@@ -310,8 +336,11 @@ void WMSPreferencesDialog::savePrefs()
     M_PREFS->save();
 }
 
-void WMSPreferencesDialog::on_btShowCapabilities_clicked(void)
+void WMSPreferencesDialog::showCapabilities(void)
 {
+    if (curReply)
+        return;
+
     QUrl theUrl(edWmsUrl->text());
     if ((theUrl.host() == "") || (theUrl.path() == "")) {
         QMessageBox::critical(this, tr("Merkaartor: GetCapabilities"), tr("Address and Path cannot be blank."), QMessageBox::Ok);
@@ -323,11 +352,15 @@ void WMSPreferencesDialog::on_btShowCapabilities_clicked(void)
         theUrl.addQueryItem("SERVICE", "WMS");
     theUrl.addQueryItem("REQUEST", "GetCapabilities");
 //    QUrl url(edWmsUrl->text() + "VERSION=1.1.1&SERVICE=WMS&request=GetCapabilities");
+
     requestCapabilities(theUrl);
 }
 
 void WMSPreferencesDialog::requestCapabilities(QUrl url)
 {
+    if (curReply)
+        return;
+
     tvWmsLayers->clear();
 
     QString oldSrs = cbWmsProj->currentText();
@@ -338,68 +371,45 @@ void WMSPreferencesDialog::requestCapabilities(QUrl url)
     cbWmsImgFormat->clear();
     cbWmsImgFormat->setEditText(oldFormat);
 
-    http = new QHttp(this);
-    connect (http, SIGNAL(done(bool)), this, SLOT(httpRequestFinished(bool)));
-    connect(http, SIGNAL(responseHeaderReceived(const QHttpResponseHeader &)),
-        this, SLOT(readResponseHeader(const QHttpResponseHeader &)));
+    m_networkManager.setProxy(M_PREFS->getProxy(url));
+    QNetworkRequest req(url);
 
     QHttpRequestHeader header("GET", url.path() + "?" + url.encodedQuery());
-    qDebug() << header.toString();
 
-    header.setValue("Host", url.host());
-    header.setValue("User-Agent", USER_AGENT);
+    req.setRawHeader("Host", url.host().toLatin1());
+    req.setRawHeader("User-Agent", USER_AGENT.toLatin1());
 
-    http->setHost(url.host(), url.port() == -1 ? 80 : url.port());
-    http->setProxy(M_PREFS->getProxy(url));
-
-    buf.buffer().clear();
-    httpGetId = http->request(header, 0, &buf);
+    curReply = m_networkManager.get(req);
 }
 
-void WMSPreferencesDialog::readResponseHeader(const QHttpResponseHeader &responseHeader)
+void WMSPreferencesDialog::httpRequestFinished(QNetworkReply * reply)
 {
-    qDebug() << responseHeader.toString();
-    switch (responseHeader.statusCode())
-    {
-        case 200:
-            break;
-
-        case 301:
-        case 302:
-        case 307:
-            http->abort();
-            requestCapabilities(QUrl(responseHeader.value("Location")));
-            break;
-
-        default:
-            http->abort();
-            QMessageBox::information(this, tr("Merkaartor: GetCapabilities"),
-                                  tr("Download failed: %1.")
-                                  .arg(responseHeader.reasonPhrase()));
-    }
-}
-
-void WMSPreferencesDialog::httpRequestFinished(bool error)
-{
-    //if (error) {
-    //	if (http->error() != QHttp::Aborted)
-    //		QMessageBox::critical(this, tr("Merkaartor: GetCapabilities"), tr("Error reading capabilities.\n") + http->errorString(), QMessageBox::Ok);
-    //} else {
-    //	QVBoxLayout *mainLayout = new QVBoxLayout;
-    //	QTextEdit* edit = new QTextEdit();
-    //	edit->setPlainText(QString(http->readAll()));
-    //	mainLayout->addWidget(edit);
-
-    //	QDialog* dlg = new QDialog(this);
-    //	dlg->setLayout(mainLayout);
-    //	dlg->show();
-    //	//delete dlg;
-    //}
-
-    if (error) {
-        if (http->error() != QHttp::Aborted)
-            QMessageBox::critical(this, tr("Merkaartor: GetCapabilities"), tr("Error reading capabilities.\n") + http->errorString(), QMessageBox::Ok);
+    if (reply != curReply)
         return;
+
+    int statusCode = reply->attribute(QNetworkRequest::HttpStatusCodeAttribute).toInt();
+    if (reply->error() != QNetworkReply::NoError) {
+        QMessageBox::critical(this, tr("Merkaartor: GetCapabilities"), tr("Error reading capabilities.\n") + reply->errorString(), QMessageBox::Ok);
+    } else {
+        switch (statusCode) {
+            case 200:
+                break;
+            case 301:
+            case 302:
+            case 307:
+            // Redirected
+                requestCapabilities(reply->attribute(QNetworkRequest::RedirectionTargetAttribute).toUrl());
+                curReply->deleteLater();
+                curReply = NULL;
+                return;
+            default:
+                QMessageBox::information(this, tr("Merkaartor: GetCapabilities"),
+                                  tr("Download failed: %1.")
+                                  .arg(statusCode));
+                curReply->deleteLater();
+                curReply = NULL;
+                return;
+        }
     }
 
     lblWMSC->setVisible(false);
@@ -407,9 +417,14 @@ void WMSPreferencesDialog::httpRequestFinished(bool error)
     isTiled = 0;
 
     QDomDocument theXmlDoc;
-//    QString src(buf.buffer());
+    QByteArray buf;
+    buf = reply->readAll();
+//    QString src(buf);
 //    qDebug() << src;
-    theXmlDoc.setContent(buf.buffer());
+    theXmlDoc.setContent(buf);
+    curReply->deleteLater();
+    curReply = NULL;
+
 
     QDomElement docElem = theXmlDoc.documentElement();
 
@@ -418,7 +433,7 @@ void WMSPreferencesDialog::httpRequestFinished(bool error)
         if (!svcElem.isNull()) {
             QDomNodeList aNodeList = svcElem.elementsByTagName("Title");
             if (aNodeList.size())
-                edWmsName->setText(aNodeList.item(0).firstChild().toText().nodeValue());
+                edWmsName->setText(aNodeList.item(0).firstChild().nodeValue());
         }
     }
 
@@ -428,26 +443,23 @@ void WMSPreferencesDialog::httpRequestFinished(bool error)
         return;
     }
 
-    QStringList srsList;
+    srsList.clear();
+    styleList.clear();
     QDomElement layElem = capElem.firstChildElement("Layer");
     while(!layElem.isNull()) {
         QTreeWidgetItem* it = parseLayers(layElem, NULL);
         tvWmsLayers->addTopLevelItem(it);
         tvWmsLayers->expandItem(it);
-        QDomNodeList aNodeList = layElem.elementsByTagName("SRS");
-        for (int i=0; i<aNodeList.size(); ++i) {
-            if (!srsList.contains(aNodeList.item(i).firstChild().toText().nodeValue()))
-                srsList.append(aNodeList.item(i).firstChild().toText().nodeValue());
-        }
 
         layElem = layElem.nextSiblingElement("Layer");
     }
-    QString oldSrs = cbWmsProj->currentText();
-    cbWmsProj->clear();
-    srsList.sort();
-    cbWmsProj->addItems(srsList);
-    cbWmsProj->setEditText(oldSrs);
-    on_cbWmsProj_currentIndexChanged(oldSrs);
+
+    QString oldStyle = cbWmsStyle->currentText();
+//    cbWmsProj->clear();
+//    srsList.sort();
+//    cbWmsProj->addItems(srsList);
+    cbWmsStyle->setEditText(oldStyle);
+//    on_cbWmsProj_currentIndexChanged(oldSrs);
 
     QDomElement reqElem = capElem.firstChildElement("Request");
     QDomElement GetMapElem = reqElem.firstChildElement("GetMap");
@@ -457,13 +469,13 @@ void WMSPreferencesDialog::httpRequestFinished(bool error)
     QString oldFormat = cbWmsImgFormat->currentText();
     cbWmsImgFormat->clear();
     for (int i=0; i<formatNodeList.size(); ++i) {
-        if (!formatList.contains(formatNodeList.item(i).firstChild().toText().nodeValue()))
-            formatList.append(formatNodeList.item(i).firstChild().toText().nodeValue());
+        if (!formatList.contains(formatNodeList.item(i).firstChild().nodeValue()))
+            formatList.append(formatNodeList.item(i).firstChild().nodeValue());
     }
     formatList.sort();
     cbWmsImgFormat->addItems(formatList);
     cbWmsImgFormat->setEditText(oldFormat);
-    on_cbWmsImgFormat_currentIndexChanged(oldFormat);
+    on_cbWmsImgFormat_activated(oldFormat);
 
     QDomElement vendorElem = capElem.firstChildElement("VendorSpecificCapabilities");
     if (!vendorElem.isNull()) {
@@ -494,13 +506,13 @@ void WMSPreferencesDialog::parseTileSet(QDomElement &tilesetElem, WmscLayer &aLa
     QDomElement elem = tilesetElem.firstChildElement();
     while(!elem.isNull()) {
         if (elem.tagName() == "Layers") {
-            aLayer.LayerName = elem.firstChild().toText().nodeValue();
+            aLayer.LayerName = elem.firstChild().nodeValue();
         } else if (elem.tagName() == "SRS") {
-            aLayer.Projection = elem.firstChild().toText().nodeValue();
+            aLayer.Projection = elem.firstChild().nodeValue();
         } else if (elem.tagName() == "Format") {
-            aLayer.ImgFormat = elem.firstChild().toText().nodeValue();
+            aLayer.ImgFormat = elem.firstChild().nodeValue();
         } else if (elem.tagName() == "Styles") {
-            aLayer.Styles = elem.firstChild().toText().nodeValue();
+            aLayer.Styles = elem.firstChild().nodeValue();
         } else if (elem.tagName() == "BoundingBox") {
             QPointF tl, br;
             tl.setX(elem.attribute("minx").toDouble());
@@ -510,20 +522,21 @@ void WMSPreferencesDialog::parseTileSet(QDomElement &tilesetElem, WmscLayer &aLa
             aLayer.BoundingBox = QRectF(tl, br);
         } else if (elem.tagName() == "Resolutions") {
             QStringList resL;
-            resL = elem.firstChild().toText().nodeValue().split(" ", QString::SkipEmptyParts);
+            resL = elem.firstChild().nodeValue().split(" ", QString::SkipEmptyParts);
             foreach(QString res, resL)
                 aLayer.Resolutions << res.toDouble();
         } else if (elem.tagName() == "Width") {
-            aLayer.TileWidth = elem.firstChild().toText().nodeValue().toInt();
+            aLayer.TileWidth = elem.firstChild().nodeValue().toInt();
         } else if (elem.tagName() == "Height") {
-            aLayer.TileHeight = elem.firstChild().toText().nodeValue().toInt();
+            aLayer.TileHeight = elem.firstChild().nodeValue().toInt();
         }
 
         elem = elem.nextSiblingElement();
     }
 }
 
-QTreeWidgetItem * WMSPreferencesDialog::parseLayers(QDomElement& aLayerElem, QTreeWidgetItem* aLayerItem)
+QTreeWidgetItem * WMSPreferencesDialog::parseLayers(const QDomElement& aLayerElem,
+                              QTreeWidgetItem* aLayerItem)
 {
     if (aLayerElem.tagName() != "Layer")
         return NULL;
@@ -534,20 +547,20 @@ QTreeWidgetItem * WMSPreferencesDialog::parseLayers(QDomElement& aLayerElem, QTr
     QTreeWidgetItem *newItem = new QTreeWidgetItem;
     newItem->setFlags(Qt::NoItemFlags |Qt::ItemIsEnabled);
     if (!name.isNull())
-        newItem->setText(0,name.firstChild().toText().nodeValue());
+        newItem->setText(0,name.firstChild().nodeValue());
     else {
         if (!title.isNull())
-            newItem->setText(0,title.firstChild().toText().nodeValue());
+            newItem->setText(0,title.firstChild().nodeValue());
         else
             newItem->setText(0,tr("Unnamed"));
     }
 
     if (!title.isNull())
-        newItem->setToolTip(0, title.firstChild().toText().nodeValue());
+        newItem->setToolTip(0, title.firstChild().nodeValue());
 
     QString theName;
     if (!name.isNull()) {
-        theName = name.firstChild().toText().nodeValue();
+        theName = name.firstChild().nodeValue();
         newItem->setFlags(Qt::ItemIsUserCheckable | Qt::ItemIsSelectable | Qt::ItemIsEnabled);
         newItem->setData(0, Qt::UserRole, theName);
         foreach (QString s, edWmsLayers->text().split(',')) {
@@ -562,6 +575,32 @@ QTreeWidgetItem * WMSPreferencesDialog::parseLayers(QDomElement& aLayerElem, QTr
 
     if (aLayerItem)
         aLayerItem->addChild(newItem);
+
+    QStringList upSrsList;
+    if (aLayerItem)
+        upSrsList = srsList.value(aLayerItem->text(0));
+    QDomElement srsNode = aLayerElem.firstChildElement("SRS");
+    while (!srsNode.isNull()) {
+        if (!upSrsList.contains(srsNode.firstChild().nodeValue()))
+            upSrsList.append(srsNode.firstChild().nodeValue());
+        srsNode = srsNode.nextSiblingElement("SRS");
+    }
+    srsList[newItem->text(0)] = upSrsList;
+
+    QList <QPair<QString, QString> > upStyleList;
+    if (aLayerItem)
+        upStyleList = styleList.value(aLayerItem->text(0));
+    QDomElement styleNode = aLayerElem.firstChildElement("Style");
+    while (!styleNode.isNull()) {
+        QDomElement title = styleNode.firstChildElement("Title");
+        QDomElement name = styleNode.firstChildElement("Name");
+
+        if (!name.isNull() && !upStyleList.contains(qMakePair(name.firstChild().nodeValue(), title.firstChild().nodeValue())))
+            upStyleList.append(qMakePair(name.firstChild().nodeValue(), title.firstChild().nodeValue()));
+
+        styleNode = styleNode.nextSiblingElement("Style");
+    }
+    styleList[newItem->text(0)] = upStyleList;
 
     QDomElement layElem = aLayerElem.firstChildElement("Layer");
     while(!layElem.isNull()) {
@@ -600,5 +639,31 @@ void WMSPreferencesDialog::on_tvWmsLayers_itemChanged(QTreeWidgetItem *twi, int)
         ++it;
     }
     edWmsLayers->setText(theLayers.join(","));
-    updateUrl();
+    refreshStyles();
+}
+
+void WMSPreferencesDialog::on_tvWmsLayers_currentItemChanged(QTreeWidgetItem *current, QTreeWidgetItem *previous)
+{
+    if (current)
+        curLayer = current->text(0);
+    else
+        return;
+
+    QStringList theSRS = srsList[curLayer];
+    QString oldSrs = cbWmsProj->currentText();
+    cbWmsProj->clear();
+    theSRS.sort();
+    cbWmsProj->addItems(theSRS);
+    cbWmsProj->setEditText(oldSrs);
+    on_cbWmsProj_activated(oldSrs);
+
+    QList <QPair<QString, QString> > theStyles = styleList[curLayer];
+    QString oldStyle = cbWmsStyle->currentText();
+    cbWmsStyle->clear();
+    QPair<QString, QString> aStyle;
+    foreach(aStyle, theStyles) {
+        cbWmsStyle->addItem(aStyle.second, QVariant(aStyle.first));
+    }
+    cbWmsStyle->setEditText(oldStyle);
+    on_cbWmsProj_activated(oldSrs);
 }

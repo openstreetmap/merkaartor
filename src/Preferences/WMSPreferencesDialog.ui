@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>550</width>
-    <height>507</height>
+    <width>586</width>
+    <height>583</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -106,13 +106,6 @@
           </layout>
          </item>
          <item>
-          <widget class="QPushButton" name="btShowCapabilities">
-           <property name="text">
-            <string>Get Capabilities</string>
-           </property>
-          </widget>
-         </item>
-         <item>
           <layout class="QHBoxLayout" name="horizontalLayout_5">
            <item>
             <widget class="QLabel" name="label_7">
@@ -125,6 +118,13 @@
             <widget class="QLineEdit" name="edWmsLayers"/>
            </item>
           </layout>
+         </item>
+         <item>
+          <widget class="Line" name="line">
+           <property name="orientation">
+            <enum>Qt::Horizontal</enum>
+           </property>
+          </widget>
          </item>
          <item>
           <widget class="QTreeWidget" name="tvWmsLayers">
@@ -266,7 +266,20 @@ p, li { white-space: pre-wrap; }
                </widget>
               </item>
               <item>
-               <widget class="QLineEdit" name="edWmsStyles"/>
+               <widget class="QComboBox" name="cbWmsStyle">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="editable">
+                 <bool>true</bool>
+                </property>
+                <property name="insertPolicy">
+                 <enum>QComboBox::NoInsert</enum>
+                </property>
+               </widget>
               </item>
              </layout>
             </item>

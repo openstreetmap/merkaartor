@@ -13,7 +13,7 @@
 #define WMSPREFERENCESDIALOG_H
 
 #include <QWidget>
-#include <QHttp>
+#include <QNetworkAccessManager>
 #include <QBuffer>
 
 
@@ -32,7 +32,7 @@ class WmsUrlValidator: public QValidator
 public:
     explicit WmsUrlValidator(QObject * parent=0)
         : QValidator(parent)
-    {};
+    {}
 
     State validate ( QString & input, int & /*pos*/ ) const
     {
@@ -83,27 +83,31 @@ public:
 public slots:
     void on_edWmsUrl_textEdited(const QString & newText);
     void on_edWmsUrl_editingFinished();
-    void on_edWmsStyles_textEdited(const QString & newText);
     void on_btApplyWmsServer_clicked();
     void on_btAddWmsServer_clicked();
     void on_btDelWmsServer_clicked();
-    void on_btShowCapabilities_clicked();
+    void showCapabilities();
     void on_lvWmsServers_itemSelectionChanged();
-    void on_cbWmsProj_currentIndexChanged(const QString & text);
-    void on_cbWmsImgFormat_currentIndexChanged(const QString &/*text*/);
-    void readResponseHeader(const QHttpResponseHeader &responseHeader);
-    void httpRequestFinished(bool error);
+    void on_cbWmsProj_activated(const QString & text);
+    void on_cbWmsStyle_activated ( int index );
+    void on_cbWmsStyle_editTextChanged(const QString & newText);
+    void on_cbWmsImgFormat_activated(const QString &/*text*/);
+    void httpRequestFinished(QNetworkReply * reply);
     void on_buttonBox_clicked(QAbstractButton * button);
     void on_tvWmsLayers_itemChanged(QTreeWidgetItem *, int);
+    void on_tvWmsLayers_currentItemChanged ( QTreeWidgetItem * current, QTreeWidgetItem * previous );
 
 private:
     void updateUrl();
     void loadPrefs();
     void savePrefs();
     void requestCapabilities(QUrl url);
-    QTreeWidgetItem * parseLayers(QDomElement& aLayerElem, QTreeWidgetItem* aLayerItem);
+    QTreeWidgetItem * parseLayers(const QDomElement& aLayerElem,
+                                  QTreeWidgetItem* aLayerItem);
     void parseVendorSpecific(QDomElement& vendorElem);
     void parseTileSet(QDomElement& tilesetElem, WmscLayer& aLayer);
+
+    void refreshStyles();
 
 public:
     QList<WmsServer> theWmsServers;
@@ -114,13 +118,16 @@ private:
     void generateWmscLayer();
 
     QString selectedServer;
-    int httpGetId;
-    QHttp *http;
-    QBuffer buf;
+    QNetworkAccessManager m_networkManager;
+    QNetworkReply* curReply;
     int isTiled;
     QList<WmscLayer> wmscLayers;
     WmscLayer selWmscLayer;
     WmsUrlValidator wmsValid;
+    QMap <QString, QStringList> srsList;
+    QMap <QString, QList <QPair<QString, QString> > > styleList;
+    QMap <QString, QString> styles;
+    QString curLayer;
 };
 
 #endif

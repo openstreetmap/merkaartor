@@ -1,4 +1,5 @@
 v0.17
+    * FIX : WMS Editor - Handle Styles properly
     * ADD : Explicitely add GML to the list of supported format (via GDAL)
     * ADD : Bicycle style by Markus Straub
     * ADD : Styles : allow to texture areas with an icon

@@ -9,24 +9,10 @@ HEADERS += ./IProgressWindow.h \
     ./Maps/FeatureManipulations.h \
     ./MapView.h \
     ./TagModel.h \
-    ./Utils/LineF.h \
-    ./Utils/ShortcutOverrideFilter.h \
-    ./Utils/SlippyMapWidget.h \
-    ./Utils/EditCompleterDelegate.h \
-    ./Utils/PictureViewerDialog.h \
-    ./Utils/PixmapWidget.h \
-    ./Utils/SelectionDialog.h \
-    ./Utils/SvgCache.h \
-    ./Utils/MDiscardableDialog.h \
     ./GotoDialog.h \
     ./TerraceDialog.h \
     ../include/builtin-ggl/ggl/extensions/gis/projections/impl/geocent.h \
-    ../interfaces/IMapAdapter.h \
-    Utils/OsmLink.h \
-    Utils/Utils.h \
-    Utils/TagSelector.h \
-    Utils/TagSelectorWidget.h \
-    Utils/ProjectionChooser.h
+    ../interfaces/IMapAdapter.h
 
 # Source files
 SOURCES += ./Maps/Coord.cpp \
@@ -38,22 +24,9 @@ SOURCES += ./Maps/Coord.cpp \
     ./Main.cpp \
     ./MainWindow.cpp \
     ./TagModel.cpp \
-    ./Utils/ShortcutOverrideFilter.cpp \
-    ./Utils/SlippyMapWidget.cpp \
-    ./Utils/EditCompleterDelegate.cpp \
-    ./Utils/PictureViewerDialog.cpp \
-    ./Utils/PixmapWidget.cpp \
-    ./Utils/SelectionDialog.cpp \
-    ./Utils/SvgCache.cpp \
-    ./Utils/MDiscardableDialog.cpp \
     ./GotoDialog.cpp \
     ./TerraceDialog.cpp \
-    ../include/builtin-ggl/ggl/extensions/gis/projections/impl/geocent.c \
-    Utils/OsmLink.cpp \
-    Utils/Utils.cpp \
-    Utils/TagSelector.cpp \
-    Utils/TagSelectorWidget.cpp \
-    Utils/ProjectionChooser.cpp
+    ../include/builtin-ggl/ggl/extensions/gis/projections/impl/geocent.c
 
 # Forms
 FORMS += ./AboutDialog.ui \
@@ -63,14 +36,9 @@ FORMS += ./AboutDialog.ui \
     ./GotoDialog.ui \
     ./TerraceDialog.ui \
     ./MultiProperties.ui \
-    ./Utils/PictureViewerDialog.ui \
-    ./Utils/SelectionDialog.ui \
-    Utils/TagSelectorWidget.ui \
-    PropertiesDialog.ui \
-    Utils/ProjectionChooser.ui
+    PropertiesDialog.ui
 
 # Resource file(s)
 RESOURCES += ../Icons/AllIcons.qrc \
-    ./Utils/Utils.qrc \
     ../share/share.qrc
 OTHER_FILES += ../CHANGELOG

@@ -157,6 +157,7 @@ include(GPS/GPS.pri)
 include(Tools/Tools.pri)
 include(TagTemplate/TagTemplate.pri)
 include(NameFinder/NameFinder.pri)
+include(Utils/Utils.pri)
 
 
 unix {
