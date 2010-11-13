@@ -874,9 +874,9 @@ bool Document::importGDAL(const QString& filename, DrawingLayer* NewLayer)
     ImportExportGdal imp(this);
     if (!imp.loadFile(filename))
         return false;
-    imp.import(NewLayer);
+    bool ret = imp.import(NewLayer);
 
-    if (NewLayer->size())
+    if (ret && NewLayer->size())
         return true;
     else
         return false;

@@ -40,7 +40,7 @@ bool ExportGPX::export_(const QList<Feature *>& featList)
     QDomDocument theXmlDoc;
     theXmlDoc.appendChild(theXmlDoc.createProcessingInstruction("xml", "version=\"1.0\""));
 
-    QProgressDialog progress("Exporting GPX...", "Cancel", 0, 0);
+    QProgressDialog progress(QApplication::tr("Exporting GPX..."), QApplication::tr("Cancel"), 0, 0);
     progress.setWindowModality(Qt::WindowModal);
     progress.setMaximum(progress.maximum() + featList.count());
 

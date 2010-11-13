@@ -259,8 +259,18 @@ bool ImportExportGdal::import(Layer* aLayer)
 
     OGRFeature *poFeature;
 
+    int sz = poLayer->GetFeatureCount();
+    QProgressDialog progress(QApplication::tr("Importing..."), QApplication::tr("Cancel"), 0, 0);
+    progress.setWindowModality(Qt::WindowModal);
+    if (sz != -1)
+        progress.setMaximum(sz);
+    else {
+        progress.setRange(0, 0);
+        progress.exec();
+    }
+
     poLayer->ResetReading();
-    while( (poFeature = poLayer->GetNextFeature()) != NULL )
+    while( (poFeature = poLayer->GetNextFeature()) != NULL && !progress.wasCanceled())
     {
         OGRGeometry *poGeometry;
 
@@ -290,6 +300,9 @@ bool ImportExportGdal::import(Layer* aLayer)
         {
             qDebug( "no geometry\n" );
         }
+        if (sz != -1)
+            progress.setValue(progress.value()+1);
+        qApp->processEvents();
     }
 
     pointHash.clear();
@@ -299,6 +312,9 @@ bool ImportExportGdal::import(Layer* aLayer)
 
     OGRDataSource::DestroyDataSource( poDS );
 
-    return true;
+    if (progress.wasCanceled())
+        return false;
+    else
+        return true;
 }
 
