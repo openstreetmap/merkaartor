@@ -1,5 +1,5 @@
 //***************************************************************
-// CLass: %CLASS%
+// CLass: GeoTiffAdapter
 //
 // Description:
 //
@@ -10,8 +10,8 @@
 //
 //******************************************************************
 
-#ifndef GDALADAPTER_H
-#define GDALADAPTER_H
+#ifndef GEOTIFFADAPTER_H
+#define GEOTIFFADAPTER_H
 
 #include "IMapAdapterFactory.h"
 #include "IMapAdapter.h"
@@ -29,28 +29,25 @@ public:
     double adfGeoTransform[6];
 };
 
-class GdalAdapter : public IMapAdapter
+class GeoTiffAdapter : public IMapAdapter
 {
     Q_OBJECT
     Q_INTERFACES(IMapAdapter)
 
 public:
-    enum ImgType
+    enum TiffType
     {
         Unknown,
-        GrayScale,
         Rgb,
-        Hsl,
-        Cmyk,
-        YUV,
+        Rgba,
         Palette_Gray,
         Palette_RGBA,
         Palette_CMYK,
         Palette_HLS
     };
 
-    GdalAdapter();
-    virtual ~GdalAdapter();
+    GeoTiffAdapter();
+    virtual ~GeoTiffAdapter();
 
     //! returns the unique identifier (Uuid) of this MapAdapter
     /*!
@@ -170,7 +167,7 @@ private:
 //	GDALColorTable * colTable;
 };
 
-class GdalAdapterFactory : public QObject, public IMapAdapterFactory
+class GeoTiffAdapterFactory : public QObject, public IMapAdapterFactory
 {
     Q_OBJECT
     Q_INTERFACES(IMapAdapterFactory)
@@ -180,7 +177,7 @@ public:
     /*!
      * @return  a pointer to the MapAdapter
      */
-    IMapAdapter* CreateInstance() {return new GdalAdapter(); }
+    IMapAdapter* CreateInstance() {return new GeoTiffAdapter(); }
 
     //! returns the unique identifier (Uuid) of this MapAdapter
     /*!
@@ -195,4 +192,4 @@ public:
     virtual QString	getName		() const;
 };
 
-#endif // GDALADAPTER_H
+#endif // GeoTiffAdapter_H

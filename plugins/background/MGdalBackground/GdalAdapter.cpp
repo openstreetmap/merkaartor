@@ -26,8 +26,8 @@
 
 #define IN_MEMORY_LIMIT 100000000
 
-static const QUuid theUid ("{867e78e9-3156-45f8-a9a7-e5cfa52f8507}");
-static const QString theName("GeoTIFF");
+static const QUuid theUid ("{5c9479df-0b1a-4c49-9559-83d5ffa93911}");
+static const QString theName("GDAL Raster");
 
 QUuid GdalAdapterFactory::getId() const
 {
@@ -41,17 +41,25 @@ QString	GdalAdapterFactory::getName() const
 
 /**************/
 
+inline double radToAng(double a)
+{
+    return a*180/M_PI;
+}
+
+inline double angToRad(double a)
+{
+    return a*M_PI/180.;
+}
+
 #define FILTER_OPEN_SUPPORTED \
-    tr("Supported formats")+" (*.tif *.tiff)\n" \
-    +tr("GeoTIFF files (*.tif *.tiff)\n") \
-    +tr("All Files (*)")
+    tr("All Files (*)")
 
 GdalAdapter::GdalAdapter()
-    : poDataset(0)
+    : poDataset(0), isLatLon(false)
 {
     GDALAllRegister();
 
-    QAction* loadImage = new QAction(tr("Load image..."), this);
+    QAction* loadImage = new QAction(tr("Load file(s)..."), this);
     loadImage->setData(theUid.toString());
     connect(loadImage, SIGNAL(triggered()), SLOT(onLoadImage()));
     theMenu = new QMenu();
@@ -97,6 +105,7 @@ bool GdalAdapter::loadImage(const QString& fn)
         return false;
     }
 
+    isLatLon = false;
     if( strlen(poDataset->GetProjectionRef()) != 0 ) {
         qDebug( "Projection is `%s'\n", poDataset->GetProjectionRef() );
         OGRSpatialReference* theSrs = new OGRSpatialReference(poDataset->GetProjectionRef());
@@ -110,6 +119,7 @@ bool GdalAdapter::loadImage(const QString& fn)
                 return false;
             }
             theProjection = QString(theProj4);
+            isLatLon = (theSrs->IsGeographic() == TRUE);
         }
     } else
         return false;
@@ -136,8 +146,239 @@ bool GdalAdapter::loadImage(const QString& fn)
             poDataset->GetRasterXSize(), poDataset->GetRasterYSize(),
             poDataset->GetRasterCount() );
 
+    GdalAdapter::ImgType theType = GdalAdapter::Unknown;
+    int bandCount = poDataset->GetRasterCount();
+    int ixA = -1;
+    int ixR, ixG, ixB;
+    int ixH, ixS, ixL;
+    int ixC, ixM, ixY, ixK;
+    int ixYuvY, ixYuvU, ixYuvV;
+    double adfMinMax[2];
+    double UnknownUnit;
+    GDALColorTable* colTable = NULL;
+    for (int i=0; i<bandCount; ++i) {
+        GDALRasterBand  *poBand = poDataset->GetRasterBand( i+1 );
+        GDALColorInterp bandtype = poBand->GetColorInterpretation();
+        qDebug() << "Band " << i+1 << " Color: " <<  GDALGetColorInterpretationName(poBand->GetColorInterpretation());
+
+        switch (bandtype)
+        {
+        case GCI_Undefined:
+            theType = GdalAdapter::Unknown;
+            int             bGotMin, bGotMax;
+            adfMinMax[0] = poBand->GetMinimum( &bGotMin );
+            adfMinMax[1] = poBand->GetMaximum( &bGotMax );
+            if( ! (bGotMin && bGotMax) )
+                GDALComputeRasterMinMax((GDALRasterBandH)poBand, TRUE, adfMinMax);
+            UnknownUnit = (adfMinMax[1] - adfMinMax[0]) / 256;
+            break;
+        case GCI_GrayIndex:
+            theType = GdalAdapter::GrayScale;
+            break;
+        case GCI_RedBand:
+            theType = GdalAdapter::Rgb;
+            ixR = i;
+            break;
+        case GCI_GreenBand:
+            theType = GdalAdapter::Rgb;
+            ixG = i;
+            break;
+        case GCI_BlueBand :
+            theType = GdalAdapter::Rgb;
+            ixB = i;
+            break;
+        case GCI_HueBand:
+            theType = GdalAdapter::Hsl;
+            ixH = i;
+            break;
+        case GCI_SaturationBand:
+            theType = GdalAdapter::Hsl;
+            ixS = i;
+            break;
+        case GCI_LightnessBand:
+            theType = GdalAdapter::Hsl;
+            ixL = i;
+            break;
+        case GCI_CyanBand:
+            theType = GdalAdapter::Cmyk;
+            ixC = i;
+            break;
+        case GCI_MagentaBand:
+            theType = GdalAdapter::Cmyk;
+            ixM = i;
+            break;
+        case GCI_YellowBand:
+            theType = GdalAdapter::Cmyk;
+            ixY = i;
+            break;
+        case GCI_BlackBand:
+            theType = GdalAdapter::Cmyk;
+            ixK = i;
+            break;
+        case GCI_YCbCr_YBand:
+            theType = GdalAdapter::YUV;
+            ixYuvY = i;
+            break;
+        case GCI_YCbCr_CbBand:
+            theType = GdalAdapter::YUV;
+            ixYuvU = i;
+            break;
+        case GCI_YCbCr_CrBand:
+            theType = GdalAdapter::YUV;
+            ixYuvV = i;
+            break;
+        case GCI_AlphaBand:
+            ixA = i;
+            break;
+        case GCI_PaletteIndex:
+            colTable = poBand->GetColorTable();
+            switch (colTable->GetPaletteInterpretation())
+            {
+            case GPI_Gray :
+                theType = GdalAdapter::Palette_Gray;
+                break;
+            case GPI_RGB :
+                theType = GdalAdapter::Palette_RGBA;
+                break;
+            case GPI_CMYK :
+                theType = GdalAdapter::Palette_CMYK;
+                break;
+            case GPI_HLS :
+                theType = GdalAdapter::Palette_HLS;
+                break;
+            }
+            break;
+        }
+    }
+
+    QSize theImgSize(poDataset->GetRasterXSize(), poDataset->GetRasterYSize());
+    QImage theImg = QImage(theImgSize, QImage::Format_ARGB32);
+
+    // Make sure that lineBuf holds one whole line of data.
+    float *lineBuf;
+    lineBuf = (float *) CPLMalloc(theImgSize.width() * bandCount * sizeof(float));
+
+    int px, py;
+    //every row loop
+    for (int row = 0; row < theImgSize.height(); row++) {
+        py = row;
+        poDataset->RasterIO( GF_Read, 0, row, theImgSize.width(), 1, lineBuf, theImgSize.width(), 1, GDT_Float32,
+                            bandCount, NULL, sizeof(float) * bandCount, 0, sizeof(float) );
+        // every pixel in row.
+        for (int col = 0; col < theImgSize.width(); col++){
+            px = col;
+            switch (theType)
+            {
+            case GdalAdapter::Unknown:
+            {
+                float* v = lineBuf + (col*bandCount);
+                float val = (*v - adfMinMax[0]) / UnknownUnit;
+                theImg.setPixel(px, py, qRgb(val, val, val));
+                break;
+            }
+            case GdalAdapter::GrayScale:
+            {
+                float* v = lineBuf + (col*bandCount);
+                theImg.setPixel(px, py, qRgb(*v, *v, *v));
+                break;
+            }
+            case GdalAdapter::Rgb:
+            {
+                float* r = lineBuf + (col*bandCount) + ixR;
+                float* g = lineBuf + (col*bandCount) + ixG;
+                float* b = lineBuf + (col*bandCount) + ixB;
+                int a = 255;
+                if (ixA != -1) {
+                    float* fa = lineBuf + (col*bandCount) + ixA;
+                    a = *fa;
+                }
+                theImg.setPixel(px, py, qRgba(*r, *g, *b, a));
+                break;
+            }
+            case GdalAdapter::Hsl:
+            {
+                float* h = lineBuf + (col*bandCount) + ixH;
+                float* s = lineBuf + (col*bandCount) + ixS;
+                float* l = lineBuf + (col*bandCount) + ixL;
+                int a = 255;
+                if (ixA != -1) {
+                    float* fa = lineBuf + (col*bandCount) + ixA;
+                    a = *fa;
+                }
+                QColor C = QColor::fromHsl(*h, *s, *l, a);
+                theImg.setPixel(px, py, C.rgba());
+                break;
+            }
+            case GdalAdapter::Cmyk:
+            {
+                float* c = lineBuf + (col*bandCount) + ixC;
+                float* m = lineBuf + (col*bandCount) + ixM;
+                float* y = lineBuf + (col*bandCount) + ixY;
+                float* k = lineBuf + (col*bandCount) + ixK;
+                int a = 255;
+                if (ixA != -1) {
+                    float* fa = lineBuf + (col*bandCount) + ixA;
+                    a = *fa;
+                }
+                QColor C = QColor::fromCmyk(*c, *m, *y, *k, a);
+                theImg.setPixel(px, py, C.rgba());
+                break;
+            }
+            case GdalAdapter::YUV:
+            {
+                // From http://www.fourcc.org/fccyvrgb.php
+                float* y = lineBuf + (col*bandCount) + ixYuvY;
+                float* u = lineBuf + (col*bandCount) + ixYuvU;
+                float* v = lineBuf + (col*bandCount) + ixYuvV;
+                int a = 255;
+                if (ixA != -1) {
+                    float* fa = lineBuf + (col*bandCount) + ixA;
+                    a = *fa;
+                }
+                float R = 1.164*(*y - 16) + 1.596*(*v - 128);
+                float G = 1.164*(*y - 16) - 0.813*(*v - 128) - 0.391*(*u - 128);
+                float B = 1.164*(*y - 16) + 2.018*(*u - 128);
+
+                theImg.setPixel(px, py, qRgba(R, G, B, a));
+                break;
+            }
+            case GdalAdapter::Palette_Gray:
+            {
+                float* ix = (lineBuf + (col*bandCount));
+                const GDALColorEntry* color = colTable->GetColorEntry(*ix);
+                theImg.setPixel(px, py, qRgb(color->c1, color->c1, color->c1));
+                break;
+            }
+            case GdalAdapter::Palette_RGBA:
+            {
+                float* ix = (lineBuf + (col*bandCount));
+                const GDALColorEntry* color = colTable->GetColorEntry(*ix);
+                theImg.setPixel(px, py, qRgba(color->c1, color->c2, color->c3, color->c4));
+                break;
+            }
+            case GdalAdapter::Palette_HLS:
+            {
+                float* ix = (lineBuf + (col*bandCount));
+                const GDALColorEntry* color = colTable->GetColorEntry(*ix);
+                QColor C = QColor::fromHsl(color->c1, color->c2, color->c3, color->c4);
+                theImg.setPixel(px, py, C.rgba());
+                break;
+            }
+            case GdalAdapter::Palette_CMYK:
+            {
+                float* ix = (lineBuf + (col*bandCount));
+                const GDALColorEntry* color = colTable->GetColorEntry(*ix);
+                QColor C = QColor::fromCmyk(color->c1, color->c2, color->c3, color->c4);
+                theImg.setPixel(px, py, C.rgba());
+                break;
+            }
+            }
+        }
+        QCoreApplication::processEvents();
+    }
+
     img.theFilename = fn;
-    img.theImg.load(fn);
+    img.theImg = QPixmap::fromImage(theImg);
     theImages.push_back(img);
     theBbox = theBbox.united(bbox);
 
@@ -169,97 +410,6 @@ void GdalAdapter::onLoadImage()
         emit forceZoom();
     }
 
-//	theType == GdalAdapter::Unknown;
-//	bandCount = poDataset->GetRasterCount();
-//	for (int i=0; i<bandCount; ++i) {
-//		GDALRasterBand  *poBand = poDataset->GetRasterBand( i+1 );
-//		GDALColorInterp bandtype = poBand->GetColorInterpretation();
-//		qDebug() << "Band " << i+1 << " Color: " <<  GDALGetColorInterpretationName(poBand->GetColorInterpretation());
-//
-//		switch (bandtype)
-//		{
-//			case GCI_RedBand:
-//				theType = GdalAdapter::Rgb;
-//				ixR = i;
-//				break;
-//			case GCI_GreenBand:
-//				theType = GdalAdapter::Rgb;
-//				ixG = i;
-//				break;
-//			case GCI_BlueBand :
-//				theType = GdalAdapter::Rgb;
-//				ixB = i;
-//				break;
-//			case GCI_AlphaBand:
-//				if (theType == GdalAdapter::Rgb)
-//					theType = GdalAdapter::Rgba;
-//				ixA = i;
-//				break;
-//			case GCI_PaletteIndex:
-//				colTable = poBand->GetColorTable();
-//				switch (colTable->GetPaletteInterpretation())
-//				{
-//					case GPI_Gray :
-//						theType = GdalAdapter::Palette_Gray;
-//						break;
-//					case GPI_RGB :
-//						theType = GdalAdapter::Palette_RGBA;
-//						break;
-//					case GPI_CMYK :
-//						theType = GdalAdapter::Palette_CMYK;
-//						break;
-//					case GPI_HLS :
-//						theType = GdalAdapter::Palette_HLS;
-//						break;
-//				}
-//				break;
-//		}
-//	}
-
-//	theImg = QImage(theImgRect.size(), QImage::Format_ARGB32);
-//
-//	// Make sure that lineBuf holds one whole line of data.
-//	float *lineBuf;
-//	lineBuf = (float *) CPLMalloc(theImgRect.width() * bandCount * sizeof(float));
-//
-//	int px, py;
-//	//every row loop
-//	for (int row = 0; row < theImgRect.height(); row++) {
-//		py = row;
-//		poDataset->RasterIO( GF_Read, theImgRect.left(), theImgRect.top() + row, theImgRect.width(), 1, lineBuf, theImgRect.width(), 1, GDT_Float32,
-//							 bandCount, NULL, sizeof(float) * bandCount, 0, sizeof(float) );
-//		// every pixel in row.
-//		for (int col = 0; col < theImgRect.width(); col++){
-//			px = col;
-//			switch (theType)
-//			{
-//				case GdalAdapter::Rgb:
-//				{
-//					float* r = lineBuf + (col*bandCount) + ixR;
-//					float* g = lineBuf + (col*bandCount) + ixG;
-//					float* b = lineBuf + (col*bandCount) + ixB;
-//					theImg.setPixel(px, py, qRgb(*r, *g, *b));
-//					break;
-//				}
-//				case GdalAdapter::Rgba:
-//				{
-//					float* r = lineBuf + (col*bandCount) + ixR;
-//					float* g = lineBuf + (col*bandCount) + ixG;
-//					float* b = lineBuf + (col*bandCount) + ixB;
-//					float* a = lineBuf + (col*bandCount) + ixA;
-//					theImg.setPixel(px, py, qRgba(*r, *g, *b, *a));
-//					break;
-//				}
-//			case GdalAdapter::Palette_RGBA:
-//				{
-//					float* ix = (lineBuf + (col*bandCount));
-//					const GDALColorEntry* color = colTable->GetColorEntry(*ix);
-//					theImg.setPixel(px, py, qRgba(color->c1, color->c2, color->c3, color->c4));
-//				}
-//			}
-//		}
-//		QCoreApplication::processEvents();
-//	}
     return;
 }
 
@@ -280,7 +430,10 @@ QMenu* GdalAdapter::getMenu() const
 
 QRectF GdalAdapter::getBoundingbox() const
 {
-    return theBbox;
+    QRectF projBbox = theBbox;
+    if (isLatLon)
+        projBbox = QRectF(angToRad(theBbox.left()), angToRad(theBbox.top()), angToRad(theBbox.width()), angToRad(theBbox.height()));
+    return projBbox;
 }
 
 QString GdalAdapter::projection() const
@@ -288,20 +441,24 @@ QString GdalAdapter::projection() const
     return theProjection;
 }
 
-QPixmap GdalAdapter::getPixmap(const QRectF& /*wgs84Bbox*/, const QRectF& projBbox, const QRect& src) const
+QPixmap GdalAdapter::getPixmap(const QRectF& /*wgs84Bbox*/, const QRectF& theProjBbox, const QRect& src) const
 {
     QPixmap pix(src.size());
     pix.fill(Qt::transparent);
     QPainter p(&pix);
 
+    QRectF projBbox = theProjBbox;
+    if (isLatLon)
+        projBbox = QRectF(radToAng(theProjBbox.left()), radToAng(theProjBbox.top()), radToAng(theProjBbox.width()), radToAng(theProjBbox.height()));
+
     for (int i=0; i<theImages.size(); ++i) {
         QPixmap theImg = theImages[i].theImg;
 
-        QSize sz(projBbox.width() / theImages[i].adfGeoTransform[1], projBbox.height() / theImages[i].adfGeoTransform[5]);
+        QSizeF sz(projBbox.width() / theImages[i].adfGeoTransform[1], projBbox.height() / theImages[i].adfGeoTransform[5]);
         if (sz.isNull())
             return QPixmap();
 
-        QPoint s((projBbox.left() - theImages[i].adfGeoTransform[0]) / theImages[i].adfGeoTransform[1],
+        QPointF s((projBbox.left() - theImages[i].adfGeoTransform[0]) / theImages[i].adfGeoTransform[1],
                  (projBbox.top() - theImages[i].adfGeoTransform[3]) / theImages[i].adfGeoTransform[5]);
 
         qDebug() << "Pixmap Origin: " << s.x() << "," << s.y();
@@ -310,7 +467,7 @@ QPixmap GdalAdapter::getPixmap(const QRectF& /*wgs84Bbox*/, const QRectF& projBb
         double rtx = src.width() / (double)sz.width();
         double rty = src.height() / (double)sz.height();
 
-        QRect mRect = QRect(s, sz);
+        QRect mRect = QRect(s.toPoint(), sz.toSize());
         QRect iRect = theImg.rect().intersect(mRect);
         QRect sRect = QRect(iRect.topLeft() - mRect.topLeft(), iRect.size());
         QRect fRect = QRect(sRect.x() * rtx, sRect.y() * rty, sRect.width() * rtx, sRect.height() * rty);

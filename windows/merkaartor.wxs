@@ -64,6 +64,10 @@
 		    Source="$(var.BinPath)\plugins\background\MWalkingPapersBackgroundPlugin0.dll" DiskId="1" />
             <File Id="MCadastreFranceBackgroundPlugin0.dll" Name="MCadastreFranceBackgroundPlugin0.dll"
 		    Source="$(var.BinPath)\plugins\background\MCadastreFranceBackgroundPlugin0.dll" DiskId="1" />
+            <File Id="MSpatialiteBackgroundPlugin0.dll" Name="MSpatialiteBackgroundPlugin0.dll"
+		    Source="$(var.BinPath)\plugins\background\MSpatialiteBackgroundPlugin0.dll" DiskId="1" />
+            <File Id="MGdalBackgroundPlugin0.dll" Name="MGdalBackgroundPlugin0.dll"
+		    Source="$(var.BinPath)\plugins\background\MGdalBackgroundPlugin0.dll" DiskId="1" />
          </Component>
       </DirectoryRef>
       
