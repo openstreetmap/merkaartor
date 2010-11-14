@@ -35,6 +35,11 @@
 #endif
 #include <math.h>
 
+#ifdef USE_GPSD_LIB
+    #include <cerrno>
+    #include <cstring> // strerror()
+#endif
+
 #include "Preferences/MerkaartorPreferences.h"
 
 /* GPSSLOTFORWARDER */
@@ -955,11 +960,16 @@ void QGPSDDevice::run()
     QEventLoop l;
 
     Server = new gpsmm();
+    errno = 0;
     gpsdata = Server->open(M_PREFS->getGpsdHost().toAscii().data(),QString::number(M_PREFS->getGpsdPort()).toAscii().data());
     if (!gpsdata) {
-//        QMessageBox::critical(NULL, tr("GPSD connection error"),
-//                              tr("Unable to connect to %1:%2").arg(M_PREFS->getGpsdHost()).arg(QString::number(M_PREFS->getGpsdPort())), QMessageBox::Ok);
-        qDebug() << tr("Unable to connect to %1:%2").arg(M_PREFS->getGpsdHost()).arg(QString::number(M_PREFS->getGpsdPort()));
+#ifndef Q_OS_WIN32
+        QString msg( (errno<0) ? gps_errstr(errno) : strerror(errno) );
+#else
+        QString msg( (errno<0) ? "" : strerror(errno) );
+#endif
+        qDebug() << tr("Unable to connect to %1:%2").arg(M_PREFS->getGpsdHost()).arg(QString::number(M_PREFS->getGpsdPort()))
+                 << ": " << msg;
         return;
     }
 
@@ -979,9 +989,23 @@ void QGPSDDevice::run()
 
 void QGPSDDevice::onDataAvailable()
 {
-    gpsdata = Server->poll();
-    if (!gpsdata)
-        return;
+    #if GPSD_API_MAJOR_VERSION < 5
+       gpsdata = Server->poll();
+       if (!gpsdata)
+           return;
+    #else
+       if ( Server->waiting() )
+           {
+           errno = 0;
+           gpsdata = Server->read();
+           if ( gpsdata == 0 )
+               {
+               QString msg( (errno==0) ? "socket to gpsd was closed" : strerror(errno) );
+               qDebug() << "gpsmm::read() failed: " << msg;
+               return;
+               }
+           }
+    #endif
 
     setFixStatus(StatusVoid);
     switch (gpsdata->fix.mode) {
@@ -1042,6 +1066,10 @@ void QGPSDDevice::onLinkReady()
     if (!Server) return;
 #if GPSD_API_MAJOR_VERSION > 3
     gpsdata = Server->stream(WATCH_ENABLE);
+#ifndef Q_OS_WIN32
+    if ( gpsdata == 0 )
+        qDebug() << "gpsmm::stream() failed: " << gps_errstr(errno) << '\n';
+#endif
 #else
     gpsdata = Server->query("w+x\n");
 #endif
