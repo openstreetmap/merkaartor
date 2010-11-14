@@ -120,6 +120,8 @@ bool GeoTiffAdapter::loadImage(const QString& fn)
                 qDebug() << "GDAL: to proj4 error: " << CPLGetLastErrorMsg();
                 return false;
             }
+            if (theProjection != QString(theProj4))
+                cleanup();
             theProjection = QString(theProj4);
             isLatLon = (theSrs->IsGeographic() == TRUE);
         }
@@ -179,6 +181,7 @@ void GeoTiffAdapter::onLoadImage()
         QMessageBox::critical(0,QCoreApplication::translate("GeoTiffBackground","No valid file"),QCoreApplication::translate("GeoTiffBackground","No valid GeoTIFF file could be found."));
     } else {
         emit forceZoom();
+        emit forceRefresh();
     }
 
     return;

@@ -1335,6 +1335,8 @@ void MainWindow::loadFiles(const QStringList & fileList)
 
     theLayers->setUpdatesEnabled(true);
     view()->setUpdatesEnabled(true);
+
+    invalidateView(false);
 }
 
 void MainWindow::loadUrl(const QUrl& u)
