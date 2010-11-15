@@ -61,8 +61,8 @@
             </File>
             <File Id="MYahooTiledBackgroundPlugind0.dll" Name="MYahooTiledBackgroundPlugind0.dll"
 		    Source="$(var.BinPath)\plugins\background\MYahooTiledBackgroundPlugind0.dll" DiskId="1" />
-            <File Id="MGdalBackgroundPlugind0.dll" Name="MGdalBackgroundPlugind0.dll"
-		    Source="$(var.BinPath)\plugins\background\MGdalBackgroundPlugind0.dll" DiskId="1" />
+            <File Id="MGeoTiffBackgroundPlugind0.dll" Name="MGeoTiffBackgroundPlugind0.dll"
+		    Source="$(var.BinPath)\plugins\background\MGeoTiffBackgroundPlugind0.dll" DiskId="1" />
             <File Id="MWalkingPapersBackgroundPlugind0.dll" Name="MWalkingPapersBackgroundPlugind0.dll"
 		    Source="$(var.BinPath)\plugins\background\MWalkingPapersBackgroundPlugind0.dll" DiskId="1" />
             <File Id="MCadastreFranceBackgroundPlugind0.dll" Name="MCadastreFranceBackgroundPlugind0.dll"
