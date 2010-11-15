@@ -77,12 +77,12 @@ public:
 
     inline QPointF latlonProject(const QPointF& c) const
     {
-        return QPointF(coordToAng(c.x())*EQUATORIALMETERPERDEGREE, coordToAng(c.y())*EQUATORIALMETERPERDEGREE);
+        return QPointF(coordToAng(c.x())/**EQUATORIALMETERPERDEGREE*/, coordToAng(c.y())/**EQUATORIALMETERPERDEGREE*/);
     }
 
     inline Coord latlonInverse(const QPointF& point) const
     {
-        return Coord(angToCoord(point.y()/EQUATORIALMETERPERDEGREE), angToCoord(point.x()/EQUATORIALMETERPERDEGREE));
+        return Coord(angToCoord(point.y()/*/EQUATORIALMETERPERDEGREE*/), angToCoord(point.x()/*/EQUATORIALMETERPERDEGREE*/));
     }
 };
 

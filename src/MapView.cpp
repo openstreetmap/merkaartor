@@ -166,7 +166,7 @@ void MapView::panScreen(QPoint delta)
 
     CoordBox r1, r2;
 
-    Coord cDelta = theProjection.inverse2Coord(p->theInvertedTransform.map(delta))  - theProjection.inverse2Coord(p->theInvertedTransform.map(QPoint(0, 0)));
+    Coord cDelta = theProjection.inverse2Coord(p->theInvertedTransform.map(QPointF(delta)))  - theProjection.inverse2Coord(p->theInvertedTransform.map(QPointF(0, 0)));
 
     if (delta.x()) {
         if (delta.x() < 0)
@@ -802,7 +802,7 @@ QPoint MapView::toView(Node* aPt) const
 
 Coord MapView::fromView(const QPoint& aPt) const
 {
-    return theProjection.inverse2Coord(p->theInvertedTransform.map(aPt));
+    return theProjection.inverse2Coord(p->theInvertedTransform.map(QPointF(aPt)));
 }
 
 void MapView::on_customContextMenuRequested(const QPoint & pos)
@@ -1300,15 +1300,11 @@ void MapView::viewportRecalc(const QRect & Screen)
     double r = qMax(tr.lon(), br.lon());
     p->Viewport = CoordBox(Coord(b, l), Coord(t, r));
 
-    if (theProjection.projIsLatLong()) {
-        p->PixelPerM = Screen.width() / (double)p->Viewport.lonDiff() * theProjection.lonAnglePerM(coordToRad(p->Viewport.center().lat()));
-    } else {
-        // measure geographical distance between mid left and mid right of the screen
-        int mid = (Screen.topLeft().y() + Screen.bottomLeft().y()) / 2;
-        Coord left = fromView(QPoint(Screen.left(), mid));
-        Coord right = fromView(QPoint(Screen.right(), mid));
-        p->PixelPerM = Screen.width() / (left.distanceFrom(right)*1000);
-    }
+    // measure geographical distance between mid left and mid right of the screen
+    int mid = (Screen.topLeft().y() + Screen.bottomLeft().y()) / 2;
+    Coord left = fromView(QPoint(Screen.left(), mid));
+    Coord right = fromView(QPoint(Screen.right(), mid));
+    p->PixelPerM = Screen.width() / (left.distanceFrom(right)*1000);
 
     emit viewportChanged();
 }
@@ -1452,7 +1448,7 @@ void MapView::adjustZoomToBoris()
 void MapView::zoom(double d, const QPoint & Around,
                              const QRect & Screen)
 {
-    QPointF pBefore = p->theInvertedTransform.map(Around);
+    QPointF pBefore = p->theInvertedTransform.map(QPointF(Around));
 
     double ScaleLon = p->theTransform.m11() * d;
     double ScaleLat = p->theTransform.m22() * d;

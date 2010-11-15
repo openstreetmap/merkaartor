@@ -487,29 +487,11 @@ int ImageMapLayer::getCurrentZoom()
 void ImageMapLayer::setCurrentZoom(MapView& theView, const CoordBox& viewport, const QRect& rect)
 {
     QRectF vp;
-    if (p->theProjection.projIsLatLong()) {
-        vp = viewport.toQRectF();
-        QPointF pCenter(vp.center());
+    QRectF fRect(rect);
 
-        double wv, hv;
-        //wv = (pViewport.width() / Viewport.londiff()) * ((double)screen.width() / Viewport.londiff());
-        //hv = (pViewport.height() / Viewport.latdiff()) * ((double)screen.height() / Viewport.latdiff());
-
-        double Aspect = (double)rect.width() / rect.height();
-        double pAspect = fabs(vp.width() / vp.height());
-
-        if (pAspect > Aspect) {
-            wv = fabs(vp.width());
-            hv = fabs(vp.height() * pAspect / Aspect);
-        } else {
-            wv = fabs(vp.width() * Aspect / pAspect);
-            hv = fabs(vp.height());
-        }
-
-        vp = QRectF((pCenter.x() - wv/2), (pCenter.y() + hv/2), wv, -hv);
-    } else if (p->theProjection.getProjectionProj4() == theView.projection().getProjectionProj4()) {
-        vp.setTopLeft(theView.invertedTransform().map(rect.topLeft()));
-        vp.setBottomRight(theView.invertedTransform().map(rect.bottomRight()));
+    if (p->theProjection.getProjectionProj4() == theView.projection().getProjectionProj4()) {
+        vp.setTopLeft(theView.invertedTransform().map(fRect.topLeft()));
+        vp.setBottomRight(theView.invertedTransform().map(fRect.bottomRight()));
     } else
         vp = p->theProjection.getProjectedViewport(viewport, rect);
 
@@ -624,11 +606,11 @@ void ImageMapLayer::draw(MapView& theView, QRect& rect)
 
 QRect ImageMapLayer::drawFull(MapView& theView, QRect& rect)
 {
-    QRectF fScreen(rect);
+    QRectF fRect(rect);
     MapView::transformCalc(p->theTransform, p->theProjection, 0.0, theView.viewport(), rect);
 
-    CoordBox Viewport(p->theProjection.inverse2Coord(p->theTransform.inverted().map(fScreen.bottomLeft())),
-                     p->theProjection.inverse2Coord(p->theTransform.inverted().map(fScreen.topRight())));
+    CoordBox Viewport(p->theProjection.inverse2Coord(p->theTransform.inverted().map(fRect.bottomLeft())),
+                     p->theProjection.inverse2Coord(p->theTransform.inverted().map(fRect.topRight())));
     QPointF bl = theView.toView(Viewport.bottomLeft());
     QPointF tr = theView.toView(Viewport.topRight());
 
@@ -639,31 +621,11 @@ QRect ImageMapLayer::drawFull(MapView& theView, QRect& rect)
             && Viewport.topRight().lon() >= -180. && Viewport.topRight().lon() <= 180.
             ) {
         QRectF vp;
-        if (p->theProjection.projIsLatLong()) {
-            vp = p->Viewport.toQRectF();
-            QPointF pCenter(vp.center());
-
-            double wv, hv;
-            //wv = (pViewport.width() / Viewport.londiff()) * ((double)screen.width() / Viewport.londiff());
-            //hv = (pViewport.height() / Viewport.latdiff()) * ((double)screen.height() / Viewport.latdiff());
-
-            double Aspect = (double)rect.width() / rect.height();
-            double pAspect = fabs(vp.width() / vp.height());
-
-            if (pAspect > Aspect) {
-                wv = fabs(vp.width());
-                hv = fabs(vp.height() * pAspect / Aspect);
-            } else {
-                wv = fabs(vp.width() * Aspect / pAspect);
-                hv = fabs(vp.height());
-            }
-
-            vp = QRectF((pCenter.x() - wv/2), (pCenter.y() + hv/2), wv, -hv);
-        } else if (p->theProjection.getProjectionProj4() == theView.projection().getProjectionProj4()) {
+        if (p->theProjection.getProjectionProj4() == theView.projection().getProjectionProj4()) {
             bl = QPointF(rect.bottomLeft());
             tr = QPointF(rect.topRight());
-            vp.setTopLeft(theView.invertedTransform().map(rect.topLeft()));
-            vp.setBottomRight(theView.invertedTransform().map(rect.bottomRight()));
+            vp.setTopLeft(theView.invertedTransform().map(fRect.topLeft()));
+            vp.setBottomRight(theView.invertedTransform().map(fRect.bottomRight()));
         } else
             vp = p->theProjection.getProjectedViewport(p->Viewport, rect);
 
@@ -791,29 +753,10 @@ QRect ImageMapLayer::drawFull(MapView& theView, QRect& rect)
 QRect ImageMapLayer::drawTiled(MapView& theView, QRect& rect)
 {
     QRectF vp;
-    if (p->theProjection.projIsLatLong()) {
-        vp = p->Viewport.toQRectF();
-        QPointF pCenter(vp.center());
-
-        double wv, hv;
-        //wv = (pViewport.width() / Viewport.londiff()) * ((double)screen.width() / Viewport.londiff());
-        //hv = (pViewport.height() / Viewport.latdiff()) * ((double)screen.height() / Viewport.latdiff());
-
-        double Aspect = (double)rect.width() / rect.height();
-        double pAspect = fabs(vp.width() / vp.height());
-
-        if (pAspect > Aspect) {
-            wv = fabs(vp.width());
-            hv = fabs(vp.height() * pAspect / Aspect);
-        } else {
-            wv = fabs(vp.width() * Aspect / pAspect);
-            hv = fabs(vp.height());
-        }
-
-        vp = QRectF((pCenter.x() - wv/2), (pCenter.y() + hv/2), wv, -hv);
-    } else if (p->theProjection.getProjectionProj4() == theView.projection().getProjectionProj4()) {
-        vp.setTopLeft(theView.invertedTransform().map(rect.topLeft()));
-        vp.setBottomRight(theView.invertedTransform().map(rect.bottomRight()));
+    QRectF fRect(rect);
+    if (p->theProjection.getProjectionProj4() == theView.projection().getProjectionProj4()) {
+        vp.setTopLeft(theView.invertedTransform().map(fRect.topLeft()));
+        vp.setBottomRight(theView.invertedTransform().map(fRect.bottomRight()));
     } else
         vp = p->theProjection.getProjectedViewport(p->Viewport, rect);
 
@@ -831,8 +774,8 @@ QRect ImageMapLayer::drawTiled(MapView& theView, QRect& rect)
         }
     }
 
-    tileWidth = p->theMapAdapter->getBoundingbox().width() / p->theMapAdapter->getTilesWE(p->theMapAdapter->getAdaptedZoom());
-    tileHeight = p->theMapAdapter->getBoundingbox().height() / p->theMapAdapter->getTilesNS(p->theMapAdapter->getAdaptedZoom());
+    tileWidth = p->theMapAdapter->getBoundingbox().width() / p->theMapAdapter->getTilesWE(p->theMapAdapter->getZoom());
+    tileHeight = p->theMapAdapter->getBoundingbox().height() / p->theMapAdapter->getTilesNS(p->theMapAdapter->getZoom());
     qreal w = ((qreal)rect.width() / tilesizeW) * tileWidth;
     qreal h = ((qreal)rect.height() / tilesizeH) * tileHeight;
     QPointF upperLeft = QPointF(vpCenter.x() - w/2, vpCenter.y() + h/2);
@@ -855,21 +798,7 @@ QRect ImageMapLayer::drawTiled(MapView& theView, QRect& rect)
             p->theMapAdapter->zoom_out();
             tileWidth = p->theMapAdapter->getBoundingbox().width() / p->theMapAdapter->getTilesWE(p->theMapAdapter->getZoom());
             tileHeight = p->theMapAdapter->getBoundingbox().height() / p->theMapAdapter->getTilesNS(p->theMapAdapter->getZoom());
-            w = ((qreal)rect.width() / tilesizeW) * tileWidth;
-            h = ((qreal)rect.height() / tilesizeH) * tileHeight;
-            upperLeft = QPointF(vpCenter.x() - w/2, vpCenter.y() + h/2);
-            lowerRight = QPointF(vpCenter.x() + w/2, vpCenter.y() - h/2);
-            vlm = QRectF(upperLeft, lowerRight);
         }
-    }
-
-    Coord ulCoord, lrCoord;
-    if (p->theProjection.projIsLatLong()) {
-        ulCoord = Coord(vlm.topLeft().y(), vlm.topLeft().x());
-        lrCoord = Coord(vlm.bottomRight().y(), vlm.bottomRight().x());
-    } else {
-        ulCoord = p->theProjection.inverse2Coord(vlm.topLeft());
-        lrCoord = p->theProjection.inverse2Coord(vlm.bottomRight());
     }
 
     // Actual drawing
@@ -888,7 +817,6 @@ QRect ImageMapLayer::drawTiled(MapView& theView, QRect& rect)
     int tiles_left = space_left/tileWidth;
     if (space_left>0)
         tiles_left+=1;
-
     qreal space_above = vp0Center.y() - cross_y;
     int tiles_above = space_above/tileHeight;
     if (space_above>0)
@@ -908,7 +836,9 @@ QRect ImageMapLayer::drawTiled(MapView& theView, QRect& rect)
     int cross_scr_x = cross_x * tilesizeW / tileWidth;
     int cross_scr_y = cross_y * tilesizeH / tileHeight;
 
-    p->pm = QPixmap(rect.size());
+    QSize pmSize = rect.size();
+//    QSize pmSize((tiles_right+tiles_left+1)*tilesizeW, (tiles_bottom+tiles_above+1)*tilesizeH);
+    p->pm = QPixmap(pmSize);
     p->pm.fill(Qt::transparent);
     QPainter painter(&p->pm);
 
@@ -931,21 +861,33 @@ QRect ImageMapLayer::drawTiled(MapView& theView, QRect& rect)
 
     qSort(tiles);
 
-    for (QList<Tile>::const_iterator tile = tiles.begin(); tile != tiles.end(); ++tile)
+    int n=0; // Arbitrarily limit the number of tiles to 100
+    for (QList<Tile>::const_iterator tile = tiles.begin(); tile != tiles.end() && n<100; ++tile)
     {
         QPixmap pm = p->theMapAdapter->getImageManager()->getPixmap(p->theMapAdapter, tile->i, tile->j, p->theMapAdapter->getZoom());
         if (!pm.isNull())
-            painter.drawPixmap(((tile->i-mapmiddle_tile_x)*tilesizeW)+rect.width()/2 -cross_scr_x,
-                               ((tile->j-mapmiddle_tile_y)*tilesizeH)+rect.height()/2-cross_scr_y,
+            painter.drawPixmap(((tile->i-mapmiddle_tile_x)*tilesizeW)+pmSize.width()/2 -cross_scr_x,
+                               ((tile->j-mapmiddle_tile_y)*tilesizeH)+pmSize.height()/2-cross_scr_y,
                                pm);
 
         if (M_PREFS->getDrawTileBoundary()) {
-            painter.drawRect(((tile->i-mapmiddle_tile_x)*tilesizeW)+rect.width()/2 -cross_scr_x,
-                             ((tile->j-mapmiddle_tile_y)*tilesizeH)+rect.height()/2-cross_scr_y,
+            painter.drawRect(((tile->i-mapmiddle_tile_x)*tilesizeW)+pmSize.width()/2 -cross_scr_x,
+                             ((tile->j-mapmiddle_tile_y)*tilesizeH)+pmSize.height()/2-cross_scr_y,
                              tilesizeW, tilesizeH);
         }
+        ++n;
     }
     painter.end();
+
+    w = ((qreal)pmSize.width() / tilesizeW) * tileWidth;
+    h = ((qreal)pmSize.height() / tilesizeH) * tileHeight;
+    upperLeft = QPointF(vpCenter.x() - w/2, vpCenter.y() + h/2);
+    lowerRight = QPointF(vpCenter.x() + w/2, vpCenter.y() - h/2);
+    vlm = QRectF(upperLeft, lowerRight);
+
+    Coord ulCoord, lrCoord;
+    ulCoord = p->theProjection.inverse2Coord(vlm.topLeft());
+    lrCoord = p->theProjection.inverse2Coord(vlm.bottomRight());
 
     const QPointF tl = theView.transform().map(theView.projection().project(ulCoord));
     const QPointF br = theView.transform().map(theView.projection().project(lrCoord));
