@@ -367,8 +367,6 @@ bool Feature::isUploadable() const
 void Feature::setReadonly(bool val)
 {
     p->ReadOnly = val;
-    if (p->ReadOnly)
-        p->Alpha /= 2.0;
 }
 
 bool Feature::isReadonly()

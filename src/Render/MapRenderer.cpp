@@ -362,6 +362,8 @@ void MapRenderer::render(
             {
                 for (it = itm.value().constBegin(); it != itm.value().constEnd(); ++it) {
                     double alpha = (*it)->getAlpha();
+                    if ((*it)->isReadonly() && !TEST_RFLAGS(RendererOptions::ForPrinting))
+                        alpha /= 2.0;
                     if (alpha != 1.) {
                         P->save();
                         P->setOpacity(alpha);
@@ -391,6 +393,8 @@ void MapRenderer::render(
             {
                 for (it = itm.value().constBegin(); it != itm.value().constEnd(); ++it) {
                     double alpha = (*it)->getAlpha();
+                    if ((*it)->isReadonly() && !TEST_RFLAGS(RendererOptions::ForPrinting))
+                        alpha /= 2.0;
                     if (alpha != 1.) {
                         P->save();
                         P->setOpacity(alpha);
@@ -419,6 +423,8 @@ void MapRenderer::render(
         for (itm = theFeatures.constBegin() ;itm != theFeatures.constEnd(); ++itm) {
             for (it = itm.value().constBegin(); it != itm.value().constEnd(); ++it) {
                 double alpha = (*it)->getAlpha();
+                if ((*it)->isReadonly() && !TEST_RFLAGS(RendererOptions::ForPrinting))
+                    alpha /= 2.0;
                 if (alpha != 1.) {
                     P->save();
                     P->setOpacity(alpha);
@@ -446,6 +452,8 @@ void MapRenderer::render(
             for (it = itm.value().constBegin(); it != itm.value().constEnd(); ++it) {
                 P->save();
                 double alpha = (*it)->getAlpha();
+                if ((*it)->isReadonly() && !TEST_RFLAGS(RendererOptions::ForPrinting))
+                    alpha /= 2.0;
                 P->setOpacity(alpha);
 
                 if (CHECK_WAY(*it)) {
@@ -468,6 +476,8 @@ void MapRenderer::render(
         for (it = itm.value().constBegin() ;it != itm.value().constEnd(); ++it)
         {
             double alpha = (*it)->getAlpha();
+            if ((*it)->isReadonly() && !TEST_RFLAGS(RendererOptions::ForPrinting))
+                alpha /= 2.0;
             if (alpha != 1.)
                 P->setOpacity(alpha);
 
