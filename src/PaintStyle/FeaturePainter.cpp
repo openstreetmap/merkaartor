@@ -578,7 +578,6 @@ void FeaturePainter::drawLabel(Way* R, QPainter* thePainter, MapView* theView) c
     if (WW < 10) return;
     //double WWR = qMax(PixelPerM*R->widthOf()*BackgroundScale+BackgroundOffset, PixelPerM*R->widthOf()*ForegroundScale+ForegroundOffset);
 
-    QPainterPath textPath;
     QPainterPath tranformedRoadPath = theView->transform().map(R->getPath());
     QFont font = getLabelFont();
 
@@ -596,8 +595,6 @@ void FeaturePainter::drawLabel(Way* R, QPainter* thePainter, MapView* theView) c
             qreal startSegment = 0;
             QPainterPath textPath;
             do {
-                QRegion rg = thePainter->clipRegion();
-
                 qreal curLen = startSegment + ((lenSegment - metrics.width(str)) / 2);
                 int modIncrement = 1;
                 qreal modAngle = 0;
@@ -629,14 +626,16 @@ void FeaturePainter::drawLabel(Way* R, QPainter* thePainter, MapView* theView) c
                 startSegment += lenSegment;
             } while (--repeat >= 0);
 
-            if (getLabelHalo()) {
-                thePainter->setPen(QPen(Qt::white, font.pixelSize()/6));
+            if (theView->rect().intersects(textPath.boundingRect().toRect())) {
+                if (getLabelHalo()) {
+                    thePainter->setPen(QPen(Qt::white, font.pixelSize()/6));
+                    thePainter->drawPath(textPath);
+                }
+                thePainter->setPen(Qt::NoPen);
+                thePainter->setBrush(LabelColor);
                 thePainter->drawPath(textPath);
+                thePainter->setClipRegion(rg);
             }
-            thePainter->setPen(Qt::NoPen);
-            thePainter->setBrush(LabelColor);
-            thePainter->drawPath(textPath);
-            thePainter->setClipRegion(rg);
         }
     }
     if (DrawLabelBackground && !strBg.isEmpty()) {

@@ -596,6 +596,8 @@ void MapView::updateStaticBuffer()
     } else {
         StaticBuffer->fill(Qt::transparent);
         P.begin(StaticBuffer);
+        P.setClipping(true);
+        P.setClipRegion(rect());
     }
 
     if (!p->invalidRects.isEmpty()) {
