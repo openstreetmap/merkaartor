@@ -14,6 +14,9 @@
 #include "ImportExportOSC.h"
 #include "ExportGPX.h"
 #include "ImportExportKML.h"
+#ifdef USE_PROTOBUF
+#include "ImportExportPBF.h"
+#endif
 #include "CreateAreaInteraction.h"
 #include "CreateDoubleWayInteraction.h"
 #include "CreateNodeInteraction.h"
@@ -125,6 +128,9 @@ class MainWindowPrivate
         {
             title = QString("Merkaartor v%1%2(%3)").arg(STRINGIFY(VERSION)).arg(STRINGIFY(REVISION)).arg(STRINGIFY(SVNREV));
         }
+
+        QString FILTER_OPEN_SUPPORTED;
+        QString FILTER_IMPORT_SUPPORTED;
         int lastPrefTabIndex;
         QString defStyle;
         StyleDock* theStyle;
@@ -151,6 +157,43 @@ MainWindow::MainWindow(QWidget *parent)
     qsrand(QDateTime::currentDateTime().toTime_t());  //initialize random generator
 
     p = new MainWindowPrivate;
+
+    QString supported_import_formats("*.gpx *.osm *.osb *.osc *.ngt *.nmea *.nma *.kml *.csv");
+#ifdef GEOIMAGE
+    supported_import_formats += " *.jpg";
+#endif
+#ifdef USE_GDAL
+    supported_import_formats += " *.shp *.gml";
+#endif
+#ifdef USE_PROTOBUF
+    supported_import_formats += " *.pbf";
+#endif
+    QString supported_import_formats_desc =
+            tr("GPS Exchange format (*.gpx)\n") \
+            +tr("OpenStreetMap format (*.osm)\n") \
+            +tr("OpenStreetMap change format (*.osc)\n") \
+            +tr("Noni GPSPlot format (*.ngt)\n") \
+            +tr("NMEA GPS log format (*.nmea *.nma)\n") \
+            +tr("KML file (*.kml)\n") \
+            +tr("Comma delimited format (*.csv)\n");
+
+#ifdef GEOIMAGE
+    supported_import_formats_desc += tr("Geotagged images (*.jpg)\n");
+#endif
+#ifdef USE_GDAL
+    supported_import_formats_desc += tr("ESRI Shapefile (*.shp)\n") + tr("Geography Markup Language (*.gml)\n");
+#endif
+#ifdef USE_PROTOBUF
+    supported_import_formats_desc += tr("Protobuf Binary Format (*.pbf)\n");
+#endif
+
+    p->FILTER_OPEN_SUPPORTED = QString(tr("Supported formats") + " (*.mdc %1)\n").arg(supported_import_formats);
+    p->FILTER_OPEN_SUPPORTED += tr("Merkaartor document (*.mdc)\n") + supported_import_formats_desc;
+    p->FILTER_OPEN_SUPPORTED += tr("All Files (*)");
+
+    p->FILTER_IMPORT_SUPPORTED = QString(tr("Supported formats") + " (%1)\n").arg(supported_import_formats);
+    p->FILTER_IMPORT_SUPPORTED += supported_import_formats_desc;
+    p->FILTER_IMPORT_SUPPORTED += tr("All Files (*)");
 
     theProgressDialog = NULL;
     theProgressBar = NULL;
@@ -998,58 +1041,13 @@ static void changeCurrentDirToFile(const QString& s)
     M_PREFS->setworkingdir(QDir::currentPath());
 }
 
-#ifndef GEOIMAGE
-#define FILTER_OPEN_SUPPORTED \
-    tr("Supported formats")+" (*.mdc *.gpx *.osm *.osb *.osc *.ngt *.nmea *.nma *.kml *.shp *.gml *.csv)\n" \
-    +tr("Merkaartor document (*.mdc)\n") \
-    +tr("GPS Exchange format (*.gpx)\n") \
-    +tr("OpenStreetMap format (*.osm)\n") \
-    +tr("OpenStreetMap binary format (*.osb)\n") \
-    +tr("OpenStreetMap change format (*.osc)\n") \
-    +tr("Noni GPSPlot format (*.ngt)\n") \
-    +tr("NMEA GPS log format (*.nmea *.nma)\n") \
-    +tr("KML file (*.kml)\n") \
-    +tr("ESRI Shapefile (*.shp)\n") \
-    +tr("Geography Markup Language (*.gml)\n") \
-    +tr("Comma delimited format (*.csv)\n") \
-    +tr("All Files (*)")
-#else
-#define FILTER_OPEN_SUPPORTED \
-    tr("Supported formats")+" (*.mdc *.gpx *.osm *.osb *.osc *.ngt *.nmea *.nma *.kml *.shp *.gml *.csv *.jpg)\n" \
-    +tr("Merkaartor document (*.mdc)\n") \
-    +tr("GPS Exchange format (*.gpx)\n") \
-    +tr("OpenStreetMap format (*.osm)\n") \
-    +tr("OpenStreetMap binary format (*.osb)\n") \
-    +tr("OpenStreetMap change format (*.osc)\n") \
-    +tr("Noni GPSPlot format (*.ngt)\n") \
-    +tr("NMEA GPS log format (*.nmea *.nma)\n") \
-    +tr("KML file (*.kml)\n") \
-    +tr("ESRI Shapefile (*.shp)\n") \
-    +tr("Geography Markup Language (*.gml)\n") \
-    +tr("Comma delimited format (*.csv)\n") \
-    +tr("Geotagged images (*.jpg)\n") \
-    +tr("All Files (*)")
-#endif
-#define FILTER_IMPORT_SUPPORTED \
-    tr("Supported formats")+" (*.gpx *.osm *.osb *.osc *.ngt *.nmea *.nma *.kml *.shp *.gml *.csv)\n" \
-    +tr("GPS Exchange format (*.gpx)\n") \
-    +tr("OpenStreetMap format (*.osm)\n") \
-    +tr("OpenStreetMap binary format (*.osb)\n") \
-    +tr("OpenStreetMap change format (*.osc)\n") \
-    +tr("Noni GPSPlot format (*.ngt)\n") \
-    +tr("NMEA GPS log format (*.nmea *.nma)\n") \
-    +tr("KML file (*.kml)\n") \
-    +tr("ESRI Shapefile (*.shp)\n") \
-    +tr("Geography Markup Language (*.gml)\n") \
-    +tr("Comma delimited format (*.csv)\n") \
-    +tr("All Files (*)")
 
 void MainWindow::on_fileImportAction_triggered()
 {
     QStringList fileNames = QFileDialog::getOpenFileNames(
                     this,
-                    tr("Open track file"),
-                    "", FILTER_IMPORT_SUPPORTED);
+                    tr("Import file"),
+                    "", p->FILTER_IMPORT_SUPPORTED);
 
     if (fileNames.isEmpty())
         return;
@@ -1208,6 +1206,14 @@ bool MainWindow::importFiles(Document * mapDocument, const QStringList & fileNam
             mapDocument->add(newLayer);
             importOK = mapDocument->importCSV(baseFileName, (DrawingLayer*)newLayer);
         }
+#ifdef USE_PROTOBUF
+        else if (fn.toLower().endsWith(".pbf")) {
+            newLayer = new DrawingLayer( baseFileName );
+            newLayer->blockIndexing(true);
+            mapDocument->add(newLayer);
+            importOK = mapDocument->importPBF(baseFileName, (DrawingLayer*)newLayer);
+        }
+#endif
 #ifdef USE_GDAL
         else { // Fallback to GDAL
             qDebug() << "Trying GDAL";
@@ -1217,6 +1223,7 @@ bool MainWindow::importFiles(Document * mapDocument, const QStringList & fileNam
             importOK = mapDocument->importGDAL(baseFileName, (DrawingLayer*)newLayer);
         }
 #endif
+
 
         if (!importOK && newLayer)
             mapDocument->remove(newLayer);
@@ -1389,7 +1396,7 @@ void MainWindow::on_fileOpenAction_triggered()
     QStringList fileNames = QFileDialog::getOpenFileNames(
                     this,
                     tr("Open files"),
-                    "", FILTER_OPEN_SUPPORTED);
+                    "", p->FILTER_OPEN_SUPPORTED);
 
     loadFiles(fileNames);
 }

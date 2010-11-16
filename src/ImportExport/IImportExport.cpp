@@ -15,56 +15,56 @@
 #include "../ImportExport/IImportExport.h"
 
 IImportExport::IImportExport(Document* doc)
-		: theDoc(doc), Device(0), ownDevice(false)
+        : theDoc(doc), Device(0), ownDevice(false)
 {
 }
 
 IImportExport::~IImportExport()
 {
-	if (ownDevice) {
-		if (Device && Device->isOpen())
-			Device->close();
-		delete Device;
-	}
+    if (ownDevice) {
+        if (Device && Device->isOpen())
+            Device->close();
+        delete Device;
+    }
 }
 
 // Specify the input as a QIODevice
 bool IImportExport::setDevice(QIODevice* aDevice)
 {
-	Device = aDevice;
-	return true;
+    Device = aDevice;
+    return true;
 }
 
 // Specify the input as a QFile
 bool IImportExport::loadFile(QString filename)
 {
-	FileName = filename;
-	Device = new QFile(filename);
-	ownDevice = true;
-	return Device->open(QIODevice::ReadOnly);
+    FileName = filename;
+    Device = new QFile(filename);
+    ownDevice = true;
+    return Device->open(QIODevice::ReadOnly);
 }
 
 bool IImportExport::saveFile(QString filename)
 {
-	FileName = filename;
-	Device = new QFile(filename);
-	ownDevice = true;
-	return Device->open(QIODevice::WriteOnly | QIODevice::Truncate);
+    FileName = filename;
+    Device = new QFile(filename);
+    ownDevice = true;
+    return Device->open(QIODevice::WriteOnly | QIODevice::Truncate);
 }
 
 bool IImportExport::export_(const QList<Feature *>& featList)
 {
-	theFeatures = featList;
+    theFeatures = featList;
 
-	return true;
+    return true;
 }
 
 CommandList* IImportExport::getCommandList()
 {
-	return theList;
+    return theList;
 }
 
 const QString& IImportExport::getFilename() const
 {
-	return FileName;
+    return FileName;
 }

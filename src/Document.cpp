@@ -11,6 +11,9 @@
 #include "ImportExportCSV.h"
 #include "ImportExportOSC.h"
 #include "ImportExportGdal.h"
+#ifdef USE_PROTOBUF
+#include "ImportExportPBF.h"
+#endif
 
 #include "LayerWidget.h"
 
@@ -898,6 +901,21 @@ bool Document::importCSV(const QString& filename, DrawingLayer* NewLayer)
     else
         return false;
 }
+
+#ifdef USE_PROTOBUF
+bool Document::importPBF(const QString& filename, DrawingLayer* NewLayer)
+{
+    ImportExportPBF imp(this);
+    if (!imp.loadFile(filename))
+        return false;
+    imp.import(NewLayer);
+
+    if (NewLayer->size())
+        return true;
+    else
+        return false;
+}
+#endif
 
 bool Document::importOSB(const QString& filename, DrawingLayer* NewLayer)
 {

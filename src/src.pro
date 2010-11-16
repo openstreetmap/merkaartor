@@ -17,6 +17,7 @@
 # LIBPROXY            - use libproxy to find the system proxy
 # PORTABLE=1          - build merkaartor as a portable app (all files in app dir)
 # SPATIALITE=1        - enable use of the spatialite linray
+# PROTOBUF=1          - enable google protobuf for PBF import
 
 #Static config
 include (Config.pri)
@@ -235,14 +236,18 @@ contains (GDAL, 1) {
         QMAKE_CFLAGS += $$system(gdal-config --cflags)
     }
 }
-world_shp.path = $${SHARE_DIR}
-world_shp.files = $$PWD/../share/world_background.osb
 
 contains (PROJ, 1) {
     DEFINES += USE_PROJ
     LIBS += -lproj
 }
 
+contains (PROTOBUF, 1) {
+    DEFINES += USE_PROTOBUF
+}
+
+world_shp.path = $${SHARE_DIR}
+world_shp.files = $$PWD/../share/world_background.osb
 macx {
     DEFINES += WORLD_SHP=world_background.osb
 } else {

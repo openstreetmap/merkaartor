@@ -103,6 +103,9 @@ public:
     bool importCSV(const QString& filename, DrawingLayer* NewLayer);
     bool importOSC(const QString& filename, DrawingLayer* NewLayer);
     bool importGDAL(const QString& filename, DrawingLayer* NewLayer);
+#ifdef USE_PROTOBUF
+    bool importPBF(const QString& filename, DrawingLayer* NewLayer);
+#endif
 
     QDateTime getLastDownloadLayerTime() const;
     Layer* getLastDownloadLayer() const;

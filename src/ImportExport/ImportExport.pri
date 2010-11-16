@@ -37,8 +37,23 @@ FORMS += \
     ImportExport/ImportCSVDialog.ui
 
 contains (GDAL, 1) {
-    HEADERS += \
-        ImportExportGdal.h
-    SOURCES += \
-        ImportExportGdal.cpp
+HEADERS += \
+    ImportExportGdal.h
+SOURCES += \
+    ImportExportGdal.cpp
+}
+
+contains (PROTOBUF, 1) {
+#PBF
+HEADERS += \
+    ImportExportPBF.h \
+    fileformat.pb.h \
+    osmformat.pb.h
+
+SOURCES += \
+    ImportExportPBF.cpp \
+    fileformat.pb.cc \
+    osmformat.pb.cc
+
+LIBS += -lz -lbz2 -lprotoc
 }
