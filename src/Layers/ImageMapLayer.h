@@ -45,8 +45,6 @@ public:
     virtual /* const */ LayerType classType() const {return Layer::ImageLayerType;}
     virtual const LayerGroups classGroups() const {return(Layer::Map);}
 
-    virtual bool arePointsDrawable() {return false;}
-
     virtual void drawImage(QPainter* P);
     virtual void forceRedraw(MapView& theView, QRect rect);
     virtual void draw(MapView& theView, QRect& rect);
