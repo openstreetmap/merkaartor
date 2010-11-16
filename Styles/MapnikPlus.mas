@@ -176,7 +176,7 @@
 </painter>
 <painter
  zoomUnder="0.2" zoomUpper="1e+07"
- icon=":/Art/Mapnik/bus_stop.png" iconScale="0" iconOffset="0"
+ icon=":/Art/Mapnik/bus_stop.p.12.png" iconScale="0" iconOffset="0"
  drawTrafficDirectionMarks="no" labelColor="#333333ff" labelScale="3.5" labelOffset="3"
  labelFont="DejaVu Sans Condensed,12,-1,5,50,0,0,0,0,0" labelTag="name" labelHalo="yes">
   <selector expr="[highway] is bus_stop"/>
@@ -384,7 +384,7 @@
   <selector expr="[natural] is cliff"/>
 </painter>
 <painter
- zoomUnder="0.03" zoomUpper="1e+07"
+ zoomUnder="0.2" zoomUpper="1e+07"
  fillColor="#f7efb7cd"
  icon=":/Art/Mapnik/parking.png" iconScale="0" iconOffset="0"
  drawTrafficDirectionMarks="yes" labelColor="#333333ff" labelScale="3.5" labelOffset="3"
@@ -392,7 +392,7 @@
   <selector expr="[amenity] is parking"/>
 </painter>
 <painter
- zoomUnder="0.01" zoomUpper="1e+07"
+ zoomUnder="0.05" zoomUpper="1e+07"
  fillColor="#f6666677"
  icon=":/Art/Mapnik/hospital.png" iconScale="0" iconOffset="0"
  drawTrafficDirectionMarks="no" labelColor="#333333ff" labelScale="7" labelOffset="5"
@@ -400,7 +400,7 @@
   <selector expr="[amenity] is hospital"/>
 </painter>
 <painter
- zoomUnder="0.01" zoomUpper="1e+07"
+ zoomUnder="0.05" zoomUpper="1e+07"
  fillColor="#f6666677"
  icon=":/MapIcons/map-icons/square.small/health/pharmacy.png" iconScale="0" iconOffset="0"
  drawTrafficDirectionMarks="no" labelColor="#333333ff" labelScale="3.5" labelOffset="3"
@@ -471,7 +471,7 @@
 </painter>
 <painter
  zoomUnder="0.2" zoomUpper="1e+07"
- icon=":/Art/Mapnik/bus_stop.png" iconScale="0" iconOffset="0"
+ icon=":/Art/Mapnik/bus_stop.p.12.png" iconScale="0" iconOffset="0"
  drawTrafficDirectionMarks="no" labelColor="#333333ff" labelScale="3.5" labelOffset="3"
  labelFont="DejaVu Sans Condensed,12,-1,5,50,0,0,0,0,0" labelTag="name" labelHalo="yes">
   <selector expr="[amenity] is bus_stop"/>
