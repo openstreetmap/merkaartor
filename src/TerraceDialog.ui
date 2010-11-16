@@ -2,18 +2,13 @@
 <ui version="4.0">
  <class>TerraceDialog</class>
  <widget class="QDialog" name="TerraceDialog">
-  <property name="geometry">
-   <rect>
-    <x>0</x>
-    <y>0</y>
-    <width>458</width>
-    <height>219</height>
-   </rect>
-  </property>
   <property name="windowTitle">
    <string>Terrace</string>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
+   <property name="sizeConstraint">
+    <enum>QLayout::SetMinimumSize</enum>
+   </property>
    <item>
     <widget class="QRadioButton" name="radioNoNumbering">
      <property name="text">
@@ -118,8 +113,17 @@
       </item>
       <item row="0" column="1">
        <widget class="QLabel" name="label_5">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Expanding" vsizetype="Minimum">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
         <property name="text">
-         <string>Select a node in the area as well to indicate the end with the first house number</string>
+         <string>Optionally you can also select a node in the area and house numbering will start at that end.</string>
+        </property>
+        <property name="wordWrap">
+         <bool>true</bool>
         </property>
        </widget>
       </item>
