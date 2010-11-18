@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>529</width>
+    <width>714</width>
     <height>629</height>
    </rect>
   </property>
@@ -205,6 +205,13 @@
           </property>
           <property name="tristate">
            <bool>false</bool>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="0">
+         <widget class="QCheckBox" name="cbShowUnstyled">
+          <property name="text">
+           <string>Show unstyled features</string>
           </property>
          </widget>
         </item>

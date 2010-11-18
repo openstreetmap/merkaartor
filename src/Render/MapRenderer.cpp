@@ -19,13 +19,14 @@
 #include "Utils/LineF.h"
 
 #define TEST_RFLAGS(x) theOptions.options.testFlag(x)
+#define TEST_RENDERER_RFLAGS(x) r->theOptions.options.testFlag(x)
 
 void BackgroundStyleLayer::draw(Way* R)
 {
     const FeaturePainter* paintsel = R->getPainter(r->theView->pixelPerM());
     if (paintsel) {
         paintsel->drawBackground(R,r->thePainter,r->theView);
-    } else if (!R->hasPainter())
+    } else if (!R->hasPainter() && !TEST_RENDERER_RFLAGS(RendererOptions::UnstyledHidden))
 //    if (/*!globalZoom(r->theProjection) && */!R->hasPainter()) //FIXME Untagged roads level of zoom?
     {
         QPen thePen(QColor(0,0,0),1);
@@ -84,7 +85,7 @@ void TouchupStyleLayer::draw(Way* R)
     const FeaturePainter* paintsel = R->getPainter(r->theView->pixelPerM());
     if (paintsel)
         paintsel->drawTouchup(R,r->thePainter,r->theView);
-    else if (!R->hasPainter()) {
+    else if (!R->hasPainter() && !TEST_RENDERER_RFLAGS(RendererOptions::UnstyledHidden)) {
         if ( r->theOptions.arrowOptions != RendererOptions::ArrowsNever )
         {
             Feature::TrafficDirectionType TT = trafficDirection(R);
@@ -146,7 +147,7 @@ void TouchupStyleLayer::draw(Node* Pt)
     const FeaturePainter* paintsel = Pt->getPainter(r->theView->pixelPerM());
     if (paintsel)
         paintsel->drawTouchup(Pt,r->thePainter,r->theView);
-    else if (!Pt->hasPainter()) {
+    else if (!Pt->hasPainter() && !TEST_RENDERER_RFLAGS(RendererOptions::UnstyledHidden)) {
         if (! ((Pt->isReadonly() || !Pt->isSelectable(r->theView)) && (!Pt->isPOI() && !Pt->isWaypoint())))
 //        if (!Pt->isReadonly() && Pt->isSelectable(r->theView))
         {

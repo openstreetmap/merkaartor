@@ -23,8 +23,9 @@ public:
         DirtyVisible = 0x800,
         ScaleVisible = 0x1000,
         LatLonGridVisible = 0x2000,
-        LockZoom = 0x4000,
-        ForPrinting = 0x10000
+        UnstyledHidden = 0x4000,
+        LockZoom = 0x10000,
+        ForPrinting = 0x20000
     };
     Q_DECLARE_FLAGS(RenderOptions, RenderOption)
 

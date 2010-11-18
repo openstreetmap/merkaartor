@@ -52,6 +52,7 @@ NativeRenderDialog::NativeRenderDialog(Document *aDoc, const CoordBox& aCoordBox
     connect(ui.cbShowRelations, SIGNAL(toggled(bool)), prtW, SLOT(updatePreview()));
     connect(ui.cbShowGrid, SIGNAL(toggled(bool)), prtW, SLOT(updatePreview()));
     connect(ui.cbShowScale, SIGNAL(toggled(bool)), prtW, SLOT(updatePreview()));
+    connect(ui.cbShowUnstyled, SIGNAL(toggled(bool)), prtW, SLOT(updatePreview()));
     connect(ui.sbMinLat, SIGNAL(valueChanged(double)), prtW, SLOT(updatePreview()));
     connect(ui.sbMaxLat, SIGNAL(valueChanged(double)), prtW, SLOT(updatePreview()));
     connect(ui.sbMinLon, SIGNAL(valueChanged(double)), prtW, SLOT(updatePreview()));
@@ -83,6 +84,8 @@ RendererOptions NativeRenderDialog::options()
         opt.options |= RendererOptions::ScaleVisible;
     if (ui.cbShowGrid->isChecked())
         opt.options |= RendererOptions::LatLonGridVisible;
+    if (!ui.cbShowUnstyled->isChecked())
+        opt.options |= RendererOptions::UnstyledHidden;
 
     return opt;
 }
@@ -93,6 +96,7 @@ void NativeRenderDialog::setOptions(RendererOptions aOpt)
     ui.cbShowRelations->setChecked(aOpt.options & RendererOptions::RelationsVisible);
     ui.cbShowScale->setChecked(aOpt.options & RendererOptions::ScaleVisible);
     ui.cbShowGrid->setChecked(aOpt.options & RendererOptions::LatLonGridVisible);
+    ui.cbShowUnstyled->setChecked(!(aOpt.options & RendererOptions::UnstyledHidden));
 
     prtW->updatePreview();
 }
