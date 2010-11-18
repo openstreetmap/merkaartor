@@ -2,6 +2,7 @@
 #define MERKATOR_LAYERWIDGET_H_
 
 #include "Layer.h"
+#include "OsbLayer.h"
 #include "ImageMapLayer.h"
 
 #include <QActionGroup>

@@ -2,6 +2,7 @@
 
 #include "Feature.h"
 #include "Document.h"
+#include "OsbLayer.h"
 #include "ImageMapLayer.h"
 
 #include "ImportNMEA.h"

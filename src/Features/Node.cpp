@@ -611,7 +611,7 @@ void Node::toBinary(QDataStream& ds, QHash <QString, quint64>& theIndex)
     Q_UNUSED(theIndex);
 
     theIndex["N" + QString::number(id().numId)] = ds.device()->pos();
-    ds << (qint8)'N' << id().numId << (qint32)(Position.topRight().lon()) << (qint32)(Position.topRight().lat());
+    ds << (qint8)'N' << id().numId << (qint32)(Position.topRight().lon()/180.*INT_MAX) << (qint32)(Position.topRight().lat()/180.*INT_MAX);
 }
 
 Node* Node::fromBinary(Document* d, OsbLayer* L, QDataStream& ds, qint8 c, qint64 id)
@@ -627,7 +627,7 @@ Node* Node::fromBinary(Document* d, OsbLayer* L, QDataStream& ds, qint8 c, qint6
     if (!L)
         return NULL;
 
-    Coord cd( lat, lon );
+    Coord cd( (double)lat/INT_MAX*180., (double)lon/INT_MAX*180. );
 
     IFeature::FId strId(IFeature::Point, id);
     Node* Pt = CAST_NODE(d->getFeature(strId));

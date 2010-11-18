@@ -6,6 +6,7 @@
 #include "Document.h"
 #include "Feature.h"
 #include "Layer.h"
+#include "OsbLayer.h"
 
 #ifndef _MOBILE
 #include <ggl/ggl.hpp>

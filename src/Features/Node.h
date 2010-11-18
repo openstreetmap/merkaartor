@@ -7,6 +7,7 @@
 #include "Feature.h"
 #include "Document.h"
 #include "Layer.h"
+#include "OsbLayer.h"
 
 #include <QtCore/QDateTime>
 #include <QtXml>

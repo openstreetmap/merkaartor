@@ -1,10 +1,12 @@
 INCLUDEPATH += Layers
 DEPENDPATH += Layers
 HEADERS += Layer.h \
+    OsbLayer.h \
     ImageMapLayer.h \
     LayerIterator.h \
     LayerWidget.h
 SOURCES += Layer.cpp \
+    OsbLayer.cpp \
     ImageMapLayer.cpp \
     LayerWidget.cpp
 FORMS += LayerWidget.ui \

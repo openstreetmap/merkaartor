@@ -1060,7 +1060,7 @@ void Way::toBinary(QDataStream& ds, QHash <QString, quint64>& theIndex)
         if (N->sizeParents() > 1)
             ds << (qint8)'N' << (qint64)(N->id().numId);
         else
-            ds << (qint8)'C' << N->position().lat() << N->position().lon();
+            ds << (qint8)'C' << (qint32)(N->position().lat()/180.*INT_MAX) << (qint32)(N->position().lon()/180.*INT_MAX);
     }
 }
 
@@ -1113,7 +1113,7 @@ Way* Way::fromBinary(Document* d, OsbLayer* L, QDataStream& ds, qint8 c, qint64 
                 ds >> lat;
                 ds >> lon;
 
-                N = new Node(Coord(lat, lon));
+                N = new Node(Coord( (double)lat/INT_MAX*180., (double)lon/INT_MAX*180. ));
 //                N->setParent(R);
                 break;
             case 'N':

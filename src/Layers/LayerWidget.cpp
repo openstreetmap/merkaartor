@@ -19,6 +19,8 @@
 
 #define LINEHEIGHT 25
 
+class OsbLayer;
+
 LayerWidget::LayerWidget(Layer* aLayer, QWidget* aParent)
 : QPushButton(aParent), theLayer(aLayer), ctxMenu(0), closeAction(0), actZoom(0), associatedMenu(0)
 {
