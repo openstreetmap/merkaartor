@@ -6,11 +6,22 @@ DEPENDPATH += $${MERKAARTOR_SRC_DIR}/interfaces
 INCLUDEPATH += $${MERKAARTOR_SRC_DIR}/interfaces
 include ($${MERKAARTOR_SRC_DIR}/interfaces/Interfaces.pri)
 
+DEPENDPATH += $${MERKAARTOR_SRC_DIR}/src/Utils
+INCLUDEPATH += $${MERKAARTOR_SRC_DIR}/src/Utils
+
+DEFINES += NO_PREFS
+
+
 HEADERS += \
+    ProjectionChooser.h \
     GdalAdapter.h
 
 SOURCES += \
+    ProjectionChooser.cpp \
     GdalAdapter.cpp
+
+FORMS += \
+    ProjectionChooser.ui
 
 COMMON_DIR=$${MERKAARTOR_SRC_DIR}/binaries
 

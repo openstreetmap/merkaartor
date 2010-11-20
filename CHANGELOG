@@ -1,4 +1,6 @@
 v0.17
+    * FIX : GDAL + GeoTIFF : if a ESRI World File (.tfw, *.wld) is present, override file geotransform
+    * FIX : GDAL + GeoTIFF : if the projection cannot be determined, ask for it rather than fail
     * ADD : Printing: Add option to show/hide unstyled features
     * FIX : Cannot access TMS servers that Min-zoom equals Max-zoom (fixes #3157)
     * ADD : GDAL raster background plugin
