@@ -71,6 +71,7 @@ GdalAdapter::GdalAdapter()
 
 GdalAdapter::~GdalAdapter()
 {
+    cleanup();
 }
 
 QUuid GdalAdapter::getId() const
@@ -152,8 +153,10 @@ bool GdalAdapter::loadImage(const QString& fn)
         }
     }
     if(!hasGeo)
-        if ( poDataset->GetGeoTransform( img.adfGeoTransform ) != CE_None )
+        if ( poDataset->GetGeoTransform( img.adfGeoTransform ) != CE_None ) {
+            GDALClose((GDALDatasetH)poDataset);
             return false;
+        }
 
     qDebug( "Origin = (%.6f,%.6f)\n",
             img.adfGeoTransform[0], img.adfGeoTransform[3] );
@@ -165,7 +168,6 @@ bool GdalAdapter::loadImage(const QString& fn)
     bbox.setWidth(img.adfGeoTransform[1]*poDataset->GetRasterXSize());
     bbox.setHeight(img.adfGeoTransform[5]*poDataset->GetRasterYSize());
 
-    QString srsString;
     isLatLon = false;
     if( strlen(poDataset->GetProjectionRef()) != 0 ) {
         qDebug( "Projection is `%s'\n", poDataset->GetProjectionRef() );
@@ -177,21 +179,24 @@ bool GdalAdapter::loadImage(const QString& fn)
                 qDebug() << "GDAL: to proj4 : " << theProj4;
             } else {
                 qDebug() << "GDAL: to proj4 error: " << CPLGetLastErrorMsg();
+                GDALClose((GDALDatasetH)poDataset);
                 return false;
             }
-            if (theProjection != QString(theProj4))
+            QString srsProj = QString(theProj4);
+            if (!srsProj.isEmpty() && theProjection != srsProj) {
                 cleanup();
-            srsString = QString(theProj4);
+                theProjection = srsProj;
+            }
             isLatLon = (theSrs->IsGeographic() == TRUE);
         }
     }
-    if (srsString.isEmpty()) {
-        srsString = ProjectionChooser::getProjection(QCoreApplication::translate("ImportExportGdal", "Unable to set projection; please specify one"));
-        if (srsString.isEmpty()) {
+    if (theProjection.isEmpty()) {
+        theProjection = ProjectionChooser::getProjection(QCoreApplication::translate("ImportExportGdal", "Unable to set projection; please specify one"));
+        if (theProjection.isEmpty()) {
+            GDALClose((GDALDatasetH)poDataset);
             return false;
         }
     }
-    theProjection = srsString;
 
     qDebug( "Driver: %s/%s\n",
             poDataset->GetDriver()->GetDescription(),
@@ -437,6 +442,7 @@ bool GdalAdapter::loadImage(const QString& fn)
     theImages.push_back(img);
     theBbox = theBbox.united(bbox);
 
+    GDALClose((GDALDatasetH)poDataset);
     return true;
 }
 
@@ -460,7 +466,7 @@ void GdalAdapter::onLoadImage()
     }
 
     if (!fileOk) {
-        QMessageBox::critical(0,QCoreApplication::translate("GdalBackground","No valid file"),QCoreApplication::translate("GdalBackground","No valid GeoTIFF file could be found."));
+        QMessageBox::critical(0,QCoreApplication::translate("GdalBackground","No valid file"),QCoreApplication::translate("GdalBackground","No valid GDAL file could be found."));
     } else {
         emit forceZoom();
         emit forceRefresh();
@@ -565,6 +571,7 @@ bool GdalAdapter::toXML(QDomElement xParent)
     QDomElement fs = xParent.ownerDocument().createElement("Images");
     xParent.appendChild(fs);
 
+    fs.setAttribute("projection", theProjection);
     for (int i=0; i<theImages.size(); ++i) {
         QDomElement f = xParent.ownerDocument().createElement("Image");
         fs.appendChild(f);
@@ -582,6 +589,8 @@ void GdalAdapter::fromXML(const QDomElement xParent)
     QDomElement fs = xParent.firstChildElement();
     while(!fs.isNull()) {
         if (fs.tagName() == "Images") {
+            if (fs.hasAttribute("projection"))
+                theProjection = fs.attribute("projection");
             QDomElement f = fs.firstChildElement();
             while(!f.isNull()) {
                 if (f.tagName() == "Image") {
