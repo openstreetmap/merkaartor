@@ -575,7 +575,7 @@ void FeaturePainter::drawLabel(Way* R, QPainter* thePainter, MapView* theView) c
     LineParameters lp = labelBoundary();
     double PixelPerM = theView->pixelPerM();
     double WW = PixelPerM*R->widthOf()*lp.Proportional+lp.Fixed;
-    if (WW < 10) return;
+    if (WW < 10 && !TEST_RFLAGS(RendererOptions::PrintAllLabels)) return;
     //double WWR = qMax(PixelPerM*R->widthOf()*BackgroundScale+BackgroundOffset, PixelPerM*R->widthOf()*ForegroundScale+ForegroundOffset);
 
     QPainterPath tranformedRoadPath = theView->transform().map(R->getPath());
@@ -584,9 +584,9 @@ void FeaturePainter::drawLabel(Way* R, QPainter* thePainter, MapView* theView) c
     if (!str.isEmpty()) {
         QRegion rg = thePainter->clipRegion();
         font.setPixelSize(int(WW));
-        QFontMetrics metrics(font);
+        QFontMetricsF metrics(font);
 
-        if (font.pixelSize() >= 5 && tranformedRoadPath.length() > metrics.width(str)) {
+        if ((font.pixelSize() >= 5 || TEST_RFLAGS(RendererOptions::PrintAllLabels)) && tranformedRoadPath.length() > metrics.width(str)) {
             thePainter->setFont(font);
 
             int repeat = int((tranformedRoadPath.length() / ((metrics.width(str) * LABEL_PATH_DISTANCE))) - 0.5);
@@ -598,7 +598,7 @@ void FeaturePainter::drawLabel(Way* R, QPainter* thePainter, MapView* theView) c
                 qreal curLen = startSegment + ((lenSegment - metrics.width(str)) / 2);
                 int modIncrement = 1;
                 qreal modAngle = 0;
-                int modY = 0;
+                qreal modY = 0;
                 if (cos(angToRad(tranformedRoadPath.angleAtPercent((startSegment+(lenSegment/2))/tranformedRoadPath.length()))) < 0) {
                     modIncrement = -1;
                     modAngle = 180.0;
@@ -608,7 +608,8 @@ void FeaturePainter::drawLabel(Way* R, QPainter* thePainter, MapView* theView) c
                     qreal t = tranformedRoadPath.percentAtLength(curLen);
                     QPointF pt = tranformedRoadPath.pointAtPercent(t);
                     qreal angle = tranformedRoadPath.angleAtPercent(t);
-                    modY = (metrics.ascent()/2)-3;
+//                    modY = (metrics.ascent()/2)-3;
+                    modY = (metrics.height()/2)-metrics.descent();
 
                     QMatrix m;
                     m.translate(pt.x(), pt.y());

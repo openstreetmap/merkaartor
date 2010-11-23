@@ -25,7 +25,8 @@ public:
         LatLonGridVisible = 0x2000,
         UnstyledHidden = 0x4000,
         LockZoom = 0x10000,
-        ForPrinting = 0x20000
+        ForPrinting = 0x20000,
+        PrintAllLabels = 0x40000
     };
     Q_DECLARE_FLAGS(RenderOptions, RenderOption)
 

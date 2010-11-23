@@ -33,7 +33,7 @@ class NativeRenderDialog: public QObject
 
 public:
     NativeRenderDialog(Document *aDoc, const CoordBox& aCoordBox, QWidget *parent = 0);
-    void render(QPainter& P, QRect theR);
+    void render(QPainter& P, QRect theR, RendererOptions opt);
 
     RendererOptions options();
     void setOptions(RendererOptions aOpt);

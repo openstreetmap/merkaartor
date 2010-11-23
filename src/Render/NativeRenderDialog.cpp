@@ -134,14 +134,13 @@ void NativeRenderDialog::print(QPrinter* prt)
     P.setRenderHint(QPainter::Antialiasing);
     QRect theR = prt->pageRect();
     theR.moveTo(0, 0);
-    render(P, theR);
+    render(P, theR, options());
 }
 
-void NativeRenderDialog::render(QPainter& P, QRect theR)
+void NativeRenderDialog::render(QPainter& P, QRect theR, RendererOptions opt)
 {
     P.setClipRect(theR);
     P.setClipping(true);
-    RendererOptions opt = options();
 
     mapview->setGeometry(theR);
     mapview->setViewport(boundingBox(), theR);
@@ -169,7 +168,14 @@ void NativeRenderDialog::exportPDF()
 #endif
     prt->setOutputFormat(QPrinter::PdfFormat);
     prt->setOutputFileName(s);
-    print(prt);
+
+    QPainter P(prt);
+    P.setRenderHint(QPainter::Antialiasing);
+    QRect theR = prt->pageRect();
+    theR.moveTo(0, 0);
+    RendererOptions opt = options();
+    opt.options |= RendererOptions::PrintAllLabels;
+    render(P, theR, opt);
 }
 
 void NativeRenderDialog::exportRaster()
@@ -194,7 +200,7 @@ void NativeRenderDialog::exportRaster()
 
     QPainter P(&pix);
     P.setRenderHint(QPainter::Antialiasing);
-    render(P, theR);
+    render(P, theR, options());
 
     pix.save(s);
 }
@@ -220,6 +226,9 @@ void NativeRenderDialog::exportSVG()
 
     QPainter P(&svgg);
     P.setRenderHint(QPainter::Antialiasing);
-    render(P, theR);
+    RendererOptions opt = options();
+    opt.options |= RendererOptions::PrintAllLabels;
+
+    render(P, theR, opt);
 }
 
