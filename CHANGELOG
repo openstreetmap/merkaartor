@@ -1,4 +1,5 @@
 v0.17
+    * ADD : Bing Maps plugin
     * FIX : GDAL + GeoTIFF : if a ESRI World File (.tfw, *.wld) is present, override file geotransform
     * FIX : GDAL + GeoTIFF : if the projection cannot be determined, ask for it rather than fail
     * ADD : Printing: Add option to show/hide unstyled features
