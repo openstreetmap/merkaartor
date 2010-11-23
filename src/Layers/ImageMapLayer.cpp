@@ -804,12 +804,12 @@ QRect ImageMapLayer::drawTiled(MapView& theView, QRect& rect)
     // Actual drawing
     int i, j;
     QPointF vpCenter0 = QPointF(vpCenter.x()-p->theMapAdapter->getBoundingbox().left(), p->theMapAdapter->getBoundingbox().bottom()-vpCenter.y());
-    int mapmiddle_tile_x = vpCenter0.x()/tileWidth;
-    int mapmiddle_tile_y = vpCenter0.y()/tileHeight;
+    qreal mapmiddle_tile_x = qRound(vpCenter0.x()/tileWidth);
+    qreal mapmiddle_tile_y = qRound(vpCenter0.y()/tileHeight);
     qDebug() << "z: " << p->theMapAdapter->getAdaptedZoom() << "; t_x: " << mapmiddle_tile_x << "; t_y: " << mapmiddle_tile_y ;
 
-    qreal cross_x = vpCenter0.x() - int(vpCenter0.x()/tileWidth)*tileWidth;		// position on middle tile
-    qreal cross_y = vpCenter0.y() - int(vpCenter0.y()/tileHeight)*tileHeight;
+    qreal cross_x = vpCenter0.x() - mapmiddle_tile_x*tileWidth;		// position on middle tile
+    qreal cross_y = vpCenter0.y() - mapmiddle_tile_y*tileHeight;
     qDebug() << "cross_x: " << cross_x << "; cross_y: " << cross_y;
 
         // calculate how many surrounding tiles have to be drawn to fill the display
