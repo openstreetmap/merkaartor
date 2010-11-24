@@ -139,8 +139,19 @@ void ActionsDialog::importShortcuts()
 
 void ActionsDialog::exportShortcuts()
 {
-    QString fileName = QFileDialog::getSaveFileName(this,
-        tr("Save Shortcut scheme"), QString("%1/%2.mss").arg(M_PREFS->getworkingdir()).arg(tr("untitled")), tr("Merkaartor shortcut scheme (*.mss)"));
+    QString fileName;
+    QFileDialog dlg(this, tr("Save Shortcut scheme"), QString("%1/%2.mss").arg(M_PREFS->getworkingdir()).arg(tr("untitled")), tr("Merkaartor shortcut scheme (*.mss)") + "\n" + tr("All Files (*)"));
+    dlg.setFileMode(QFileDialog::AnyFile);
+    dlg.setDefaultSuffix("mss");
+    dlg.setAcceptMode(QFileDialog::AcceptSave);
+
+    if (dlg.exec()) {
+        if (dlg.selectedFiles().size())
+            fileName = dlg.selectedFiles()[0];
+    }
+
+//    QString fileName = QFileDialog::getSaveFileName(this,
+//        tr("Save Shortcut scheme"), QString("%1/%2.mss").arg(M_PREFS->getworkingdir()).arg(tr("untitled")), tr("Merkaartor shortcut scheme (*.mss)"));
 
     if (!fileName.isNull()) {
         QFile file(fileName);

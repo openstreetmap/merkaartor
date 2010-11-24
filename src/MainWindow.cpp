@@ -2276,10 +2276,18 @@ MapView* MainWindow::view()
 
 void MainWindow::on_mapStyleSaveAction_triggered()
 {
-    QString f = QFileDialog::getSaveFileName(this, tr("Save map style"), M_PREFS->getCustomStyle(), tr("Merkaartor map style (*.mas)"));
+    QString f;
+    QFileDialog dlg(this, tr("Save map style"), M_PREFS->getCustomStyle(), tr("Merkaartor map style (*.mas)"));
+    dlg.setFileMode(QFileDialog::AnyFile);
+    dlg.setDefaultSuffix("mas");
+    dlg.setAcceptMode(QFileDialog::AcceptSave);
+
+    if (dlg.exec()) {
+        if (dlg.selectedFiles().size())
+            fileName = dlg.selectedFiles()[0];
+    }
+//    f = QFileDialog::getSaveFileName(this, tr("Save map style"), M_PREFS->getCustomStyle(), tr("Merkaartor map style (*.mas)"));
     if (!f.isNull()) {
-        if (!f.endsWith(".mas"))
-            f.append(".mas");
         M_STYLE->savePainters(f);
     }
     updateStyleMenu();
@@ -2493,8 +2501,18 @@ void MainWindow::preferencesChanged(void)
 
 void MainWindow::on_fileSaveAsAction_triggered()
 {
-    fileName = QFileDialog::getSaveFileName(this,
-        tr("Save Merkaartor document"), QString("%1/%2.mdc").arg(M_PREFS->getworkingdir()).arg(tr("untitled")), tr("Merkaartor documents Files (*.mdc)"));
+    QFileDialog dlg(this, tr("Save Merkaartor document"), QString("%1/%2.mdc").arg(M_PREFS->getworkingdir()).arg(tr("untitled")), tr("Merkaartor documents Files (*.mdc)") + "\n" + tr("All Files (*)"));
+    dlg.setFileMode(QFileDialog::AnyFile);
+    dlg.setDefaultSuffix("mdc");
+    dlg.setAcceptMode(QFileDialog::AcceptSave);
+
+    if (dlg.exec()) {
+        if (dlg.selectedFiles().size())
+            fileName = dlg.selectedFiles()[0];
+    }
+
+//    fileName = QFileDialog::getSaveFileName(this,
+//        tr("Save Merkaartor document"), QString("%1/%2.mdc").arg(M_PREFS->getworkingdir()).arg(tr("untitled")), tr("Merkaartor documents Files (*.mdc)"));
 
     if (!fileName.isEmpty()) {
         saveDocument(fileName);
@@ -2505,8 +2523,19 @@ void MainWindow::on_fileSaveAsAction_triggered()
 
 void MainWindow::on_fileSaveAsTemplateAction_triggered()
 {
-    QString tfileName = QFileDialog::getSaveFileName(this,
-        tr("Save Merkaartor template document"), QString("%1/%2.mdc").arg(M_PREFS->getworkingdir()).arg(tr("untitled")), tr("Merkaartor documents Files (*.mdc)"));
+    QString tfileName;
+
+    QFileDialog dlg(this, tr("Save Merkaartor template document"), QString("%1/%2.mdc").arg(M_PREFS->getworkingdir()).arg(tr("untitled")), tr("Merkaartor documents Files (*.mdc)") + "\n" + tr("All Files (*)"));
+    dlg.setFileMode(QFileDialog::AnyFile);
+    dlg.setDefaultSuffix("mdc");
+    dlg.setAcceptMode(QFileDialog::AcceptSave);
+
+    if (dlg.exec()) {
+        if (dlg.selectedFiles().size())
+            tfileName = dlg.selectedFiles()[0];
+    }
+//    QString tfileName = QFileDialog::getSaveFileName(this,
+//        tr("Save Merkaartor template document"), QString("%1/%2.mdc").arg(M_PREFS->getworkingdir()).arg(tr("untitled")), tr("Merkaartor documents Files (*.mdc)"));
 
     if (!tfileName.isEmpty()) {
         saveTemplateDocument(tfileName);
@@ -2696,8 +2725,18 @@ void MainWindow::on_exportOSMAction_triggered()
     if (!selectExportedFeatures(theFeatures))
         return;
 
-    QString fileName = QFileDialog::getSaveFileName(this,
-        tr("Export OSM"), M_PREFS->getworkingdir() + "/untitled.osm", tr("OSM Files (*.osm)"));
+    QString fileName;
+    QFileDialog dlg(this, tr("Export OSM"), QString("%1/%2.osm").arg(M_PREFS->getworkingdir()).arg(tr("untitled")), tr("OSM Files (*.osm)") + "\n" + tr("All Files (*)"));
+    dlg.setFileMode(QFileDialog::AnyFile);
+    dlg.setDefaultSuffix("osm");
+    dlg.setAcceptMode(QFileDialog::AcceptSave);
+
+    if (dlg.exec()) {
+        if (dlg.selectedFiles().size())
+            fileName = dlg.selectedFiles()[0];
+    }
+//    QString fileName = QFileDialog::getSaveFileName(this,
+//        tr("Export OSM"), M_PREFS->getworkingdir() + "/untitled.osm", tr("OSM Files (*.osm)"));
 
     if (fileName != "") {
         createProgressDialog();
@@ -2719,8 +2758,18 @@ void MainWindow::on_exportOSMBinAction_triggered()
     if (!selectExportedFeatures(theFeatures))
         return;
 
-    QString fileName = QFileDialog::getSaveFileName(this,
-        tr("Export Binary OSM"), M_PREFS->getworkingdir() + "/untitled.osb", tr("OSM Binary Files (*.osb)"));
+    QString fileName;
+    QFileDialog dlg(this, tr("Export Binary OSM"), QString("%1/%2.osb").arg(M_PREFS->getworkingdir()).arg(tr("untitled")), tr("OSM Binary Files (*.osb)") + "\n" + tr("All Files (*)"));
+    dlg.setFileMode(QFileDialog::AnyFile);
+    dlg.setDefaultSuffix("osb");
+    dlg.setAcceptMode(QFileDialog::AcceptSave);
+
+    if (dlg.exec()) {
+        if (dlg.selectedFiles().size())
+            fileName = dlg.selectedFiles()[0];
+    }
+//    QString fileName = QFileDialog::getSaveFileName(this,
+//        tr("Export Binary OSM"), M_PREFS->getworkingdir() + "/untitled.osb", tr("OSM Binary Files (*.osb)"));
 
     if (fileName != "") {
 #ifndef Q_OS_SYMBIAN
@@ -2740,8 +2789,18 @@ void MainWindow::on_exportOSMBinAction_triggered()
 
 void MainWindow::on_exportOSCAction_triggered()
 {
-    QString fileName = QFileDialog::getSaveFileName(this,
-        tr("Export osmChange"), M_PREFS->getworkingdir() + "/untitled.osc", tr("osmChange Files (*.osc)"));
+    QString fileName;
+    QFileDialog dlg(this, tr("Export osmChange"), QString("%1/%2.osc").arg(M_PREFS->getworkingdir()).arg(tr("untitled")), tr("osmChange Files (*.osc)") + "\n" + tr("All Files (*)"));
+    dlg.setFileMode(QFileDialog::AnyFile);
+    dlg.setDefaultSuffix("osc");
+    dlg.setAcceptMode(QFileDialog::AcceptSave);
+
+    if (dlg.exec()) {
+        if (dlg.selectedFiles().size())
+            fileName = dlg.selectedFiles()[0];
+    }
+//    QString fileName = QFileDialog::getSaveFileName(this,
+//        tr("Export osmChange"), M_PREFS->getworkingdir() + "/untitled.osc", tr("osmChange Files (*.osc)"));
 
     if (fileName != "") {
 #ifndef Q_OS_SYMBIAN
@@ -2766,8 +2825,18 @@ void MainWindow::on_exportGPXAction_triggered()
     if (!selectExportedFeatures(theFeatures))
         return;
 
-    QString fileName = QFileDialog::getSaveFileName(this,
-        tr("Export GPX"), M_PREFS->getworkingdir() + "/untitled.gpx", tr("GPX Files (*.gpx)"));
+    QString fileName;
+    QFileDialog dlg(this, tr("Export GPX"), QString("%1/%2.gpx").arg(M_PREFS->getworkingdir()).arg(tr("untitled")), tr("GPX Files (*.gpx)") + "\n" + tr("All Files (*)"));
+    dlg.setFileMode(QFileDialog::AnyFile);
+    dlg.setDefaultSuffix("gpx");
+    dlg.setAcceptMode(QFileDialog::AcceptSave);
+
+    if (dlg.exec()) {
+        if (dlg.selectedFiles().size())
+            fileName = dlg.selectedFiles()[0];
+    }
+//    QString fileName = QFileDialog::getSaveFileName(this,
+//        tr("Export GPX"), M_PREFS->getworkingdir() + "/untitled.gpx", tr("GPX Files (*.gpx)"));
 
     if (fileName != "") {
 #ifndef Q_OS_SYMBIAN
@@ -2791,8 +2860,18 @@ void MainWindow::on_exportKMLAction_triggered()
     if (!selectExportedFeatures(theFeatures))
         return;
 
-    QString fileName = QFileDialog::getSaveFileName(this,
-        tr("Export KML"), M_PREFS->getworkingdir() + "/untitled.kml", tr("KML Files (*.kml)"));
+    QString fileName;
+    QFileDialog dlg(this, tr("Export KML"), QString("%1/%2.kml").arg(M_PREFS->getworkingdir()).arg(tr("untitled")), tr("KML Files (*.kml)") + "\n" + tr("All Files (*)"));
+    dlg.setFileMode(QFileDialog::AnyFile);
+    dlg.setDefaultSuffix("kml");
+    dlg.setAcceptMode(QFileDialog::AcceptSave);
+
+    if (dlg.exec()) {
+        if (dlg.selectedFiles().size())
+            fileName = dlg.selectedFiles()[0];
+    }
+//    QString fileName = QFileDialog::getSaveFileName(this,
+//        tr("Export KML"), M_PREFS->getworkingdir() + "/untitled.kml", tr("KML Files (*.kml)"));
 
     if (fileName != "") {
 #ifndef Q_OS_SYMBIAN
@@ -3495,10 +3574,18 @@ void MainWindow::on_gpsPauseAction_triggered()
 
 void MainWindow::on_toolTemplatesSaveAction_triggered()
 {
-    QString f = QFileDialog::getSaveFileName(this, tr("Save Tag Templates"), "", tr("Merkaartor tag templates (*.mat)"));
+    QString f;
+    QFileDialog dlg(this, tr("Save Tag Templates"), QString("%1/%2.mat").arg(M_PREFS->getworkingdir()).arg(tr("untitled")), tr("Merkaartor tag templates (*.mat)") + "\n" + tr("All Files (*)"));
+    dlg.setFileMode(QFileDialog::AnyFile);
+    dlg.setDefaultSuffix("mat");
+    dlg.setAcceptMode(QFileDialog::AcceptSave);
+
+    if (dlg.exec()) {
+        if (dlg.selectedFiles().size())
+            f = dlg.selectedFiles()[0];
+    }
+//    QString f = QFileDialog::getSaveFileName(this, tr("Save Tag Templates"), "", tr("Merkaartor tag templates (*.mat)"));
     if (!f.isNull()) {
-        if (!f.endsWith(".mat"))
-            f.append(".mat");
         p->theProperties->saveTemplates(f);
     }
 }

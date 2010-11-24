@@ -469,12 +469,20 @@ void ImportCSVDialog::on_btSave_clicked()
         fld.setAttribute("import", f.import ? "true" : "false");
     }
 
-    QString f = QFileDialog::getSaveFileName(this, tr("Save CSV import settings"), "", tr("Merkaartor import settings (*.mis)"));
+    QString f;
+    QFileDialog dlg(this, tr("Save CSV import settings"), QString("%1/%2.mis").arg(M_PREFS->getworkingdir()).arg(tr("untitled")), tr("Merkaartor import settings (*.mis)") + "\n" + tr("All Files (*)"));
+    dlg.setFileMode(QFileDialog::AnyFile);
+    dlg.setDefaultSuffix("mis");
+    dlg.setAcceptMode(QFileDialog::AcceptSave);
+
+    if (dlg.exec()) {
+        if (dlg.selectedFiles().size())
+            f = dlg.selectedFiles()[0];
+    }
+//    f = QFileDialog::getSaveFileName(this, tr("Save CSV import settings"), "", tr("Merkaartor import settings (*.mis)"));
+
     if (f.isEmpty())
         return;
-
-    if (!f.endsWith(".mis"))
-        f.append(".mis");
 
     QFile file(f);
     if (!file.open(QIODevice::WriteOnly | QIODevice::Text)) {

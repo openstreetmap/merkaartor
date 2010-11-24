@@ -157,7 +157,17 @@ void NativeRenderDialog::render(QPainter& P, QRect theR, RendererOptions opt)
 
 void NativeRenderDialog::exportPDF()
 {
-    QString s = QFileDialog::getSaveFileName(NULL,tr("Output filename"),"",tr("PDF files (*.pdf)"));
+    QString s;
+    QFileDialog dlg(NULL, tr("Output filename"), QString("%1/%2.pdf").arg(M_PREFS->getworkingdir()).arg(tr("untitled")), tr("PDF files (*.pdf)") + "\n" + tr("All Files (*)"));
+    dlg.setFileMode(QFileDialog::AnyFile);
+    dlg.setDefaultSuffix("pdf");
+    dlg.setAcceptMode(QFileDialog::AcceptSave);
+
+    if (dlg.exec()) {
+        if (dlg.selectedFiles().size())
+            s = dlg.selectedFiles()[0];
+    }
+//    QString s = QFileDialog::getSaveFileName(NULL,tr("Output filename"),"",tr("PDF files (*.pdf)"));
     if (s.isNull())
         return;
 
@@ -180,7 +190,17 @@ void NativeRenderDialog::exportPDF()
 
 void NativeRenderDialog::exportRaster()
 {
-    QString s = QFileDialog::getSaveFileName(NULL,tr("Output filename"),"",tr("Image files (*.png *.jpg)"));
+    QString s;
+    QFileDialog dlg(NULL, tr("Output filename"), QString("%1/%2.png").arg(M_PREFS->getworkingdir()).arg(tr("untitled")), tr("Image files (*.png *.jpg)") + "\n" + tr("All Files (*)"));
+    dlg.setFileMode(QFileDialog::AnyFile);
+    dlg.setDefaultSuffix("png");
+    dlg.setAcceptMode(QFileDialog::AcceptSave);
+
+    if (dlg.exec()) {
+        if (dlg.selectedFiles().size())
+            s = dlg.selectedFiles()[0];
+    }
+//    QString s = QFileDialog::getSaveFileName(NULL,tr("Output filename"),"",tr("Image files (*.png *.jpg)"));
     if (s.isNull())
         return;
 #if QT_VERSION >= 0x040500
@@ -207,7 +227,17 @@ void NativeRenderDialog::exportRaster()
 
 void NativeRenderDialog::exportSVG()
 {
-    QString s = QFileDialog::getSaveFileName(NULL,tr("Output filename"),"",tr("SVG files (*.svg)"));
+    QString s;
+    QFileDialog dlg(NULL, tr("Output filename"), QString("%1/%2.svg").arg(M_PREFS->getworkingdir()).arg(tr("untitled")), tr("SVG files (*.svg)") + "\n" + tr("All Files (*)"));
+    dlg.setFileMode(QFileDialog::AnyFile);
+    dlg.setDefaultSuffix("svg");
+    dlg.setAcceptMode(QFileDialog::AcceptSave);
+
+    if (dlg.exec()) {
+        if (dlg.selectedFiles().size())
+            s = dlg.selectedFiles()[0];
+    }
+//    QString s = QFileDialog::getSaveFileName(NULL,tr("Output filename"),"",tr("SVG files (*.svg)"));
     if (s.isNull())
         return;
 

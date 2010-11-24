@@ -781,7 +781,17 @@ void GeoImageDock::saveImage()
 
     QFileInfo fi(usedTrackPoints.at(index).filename);
     QString fn = fi.absoluteFilePath() + "/" + fi.completeBaseName() + ".jpg";
-    fn = QFileDialog::getSaveFileName(0, "Specify output filename", fn, tr("JPEG Images (*.jpg)"));
+
+    QFileDialog dlg(0, tr("Specify output filename"), fn, tr("JPEG Images (*.jpg)"));
+    dlg.setFileMode(QFileDialog::AnyFile);
+    dlg.setDefaultSuffix("jpg");
+    dlg.setAcceptMode(QFileDialog::AcceptSave);
+
+    if (dlg.exec()) {
+        if (dlg.selectedFiles().size())
+            fn = dlg.selectedFiles()[0];
+    }
+//    fn = QFileDialog::getSaveFileName(0, "Specify output filename", fn, tr("JPEG Images (*.jpg)"));
     qDebug() << fn;
     if (!fn.isEmpty()) {
         Exiv2::Image::AutoPtr imageIn, imageOut;
