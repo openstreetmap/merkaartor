@@ -60,6 +60,8 @@ public:
     bool isTiled();
 
     IImageManager* getImageManger();
+    virtual void setEnabled(bool b);
+
 private:
     QRect drawTiled(MapView& theView, QRect& rect);
     QRect drawFull(MapView& theView, QRect& rect);

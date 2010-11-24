@@ -237,9 +237,8 @@
 <painter
  zoomUnder="0.02" zoomUpper="1e+07"
  fillColor="#b6fdb6cd"
- drawTrafficDirectionMarks="no" labelColor="#aaaaaafc" labelScale="2.5" labelOffset="1.5"
- labelFont="DejaVu Sans Condensed,12,-1,5,50,0,0,0,0,0" labelTag="" labelBackgroundColor="#00000000" labelBackgroundTag="name"
->
+ drawTrafficDirectionMarks="no" labelColor="#333333fc" labelScale="10" labelOffset="6"
+ labelFont="DejaVu Sans Condensed,12,-1,5,50,0,0,0,0,0" labelTag="name" labelHalo="yes" labelArea="yes">
   <selector expr="[leisure] isoneof (park , garden)"/>
 </painter>
 <painter

@@ -566,9 +566,14 @@ void FeaturePainter::drawLabel(Way* R, QPainter* thePainter, MapView* theView) c
     if (str.isEmpty() && strBg.isEmpty())
         return;
 
+    QRegion rg = thePainter->clipRegion();
     if (getLabelArea()) {
         QPointF C(theView->transform().map(theView->projection().project(R->boundingBox().center())));
-        drawPointLabel(C, str, strBg, thePainter, theView);
+        for (int i=0; i<rg.rects().size(); i++) {
+            if (rg.rects()[i].contains(C.toPoint())) {
+                drawPointLabel(C, str, strBg, thePainter, theView);
+            }
+        }
         return;
     }
 
@@ -582,7 +587,6 @@ void FeaturePainter::drawLabel(Way* R, QPainter* thePainter, MapView* theView) c
     QFont font = getLabelFont();
 
     if (!str.isEmpty()) {
-        QRegion rg = thePainter->clipRegion();
         font.setPixelSize(int(WW));
         QFontMetricsF metrics(font);
 
@@ -607,6 +611,8 @@ void FeaturePainter::drawLabel(Way* R, QPainter* thePainter, MapView* theView) c
                 for (int i = 0; i < str.length(); ++i) {
                     qreal t = tranformedRoadPath.percentAtLength(curLen);
                     QPointF pt = tranformedRoadPath.pointAtPercent(t);
+                    if (!theView->rect().contains(pt.toPoint()))
+                        continue;
                     qreal angle = tranformedRoadPath.angleAtPercent(t);
 //                    modY = (metrics.ascent()/2)-3;
                     modY = (metrics.height()/2)-metrics.descent();
@@ -627,16 +633,14 @@ void FeaturePainter::drawLabel(Way* R, QPainter* thePainter, MapView* theView) c
                 startSegment += lenSegment;
             } while (--repeat >= 0);
 
-            if (theView->rect().intersects(textPath.boundingRect().toRect())) {
-                if (getLabelHalo()) {
-                    thePainter->setPen(QPen(Qt::white, font.pixelSize()/6));
-                    thePainter->drawPath(textPath);
-                }
-                thePainter->setPen(Qt::NoPen);
-                thePainter->setBrush(LabelColor);
+            if (getLabelHalo()) {
+                thePainter->setPen(QPen(Qt::white, font.pixelSize()/6));
                 thePainter->drawPath(textPath);
-                thePainter->setClipRegion(rg);
             }
+            thePainter->setPen(Qt::NoPen);
+            thePainter->setBrush(LabelColor);
+            thePainter->drawPath(textPath);
+            thePainter->setClipRegion(rg);
         }
     }
     if (DrawLabelBackground && !strBg.isEmpty()) {

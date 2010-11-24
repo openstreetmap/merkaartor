@@ -109,6 +109,14 @@ LayerWidget* ImageMapLayer::newWidget(void)
     return theWidget;
 }
 
+void ImageMapLayer::setEnabled(bool b)
+{
+    if (!b)
+        setMapAdapter(NONE_ADAPTER_UUID);
+
+    Layer::setEnabled(b);
+}
+
 void ImageMapLayer::updateWidget()
 {
     theWidget->initActions();

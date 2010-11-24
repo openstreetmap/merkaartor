@@ -300,9 +300,9 @@
 <painter
  zoomUnder="0.02" zoomUpper="1e+07"
  fillColor="#b6fdb6cd"
- drawTrafficDirectionMarks="no" labelColor="#333333fc" labelScale="7" labelOffset="5.5"
+ drawTrafficDirectionMarks="no" labelColor="#333333fc" labelScale="10" labelOffset="6"
  labelFont="DejaVu Sans Condensed,12,-1,5,50,0,0,0,0,0" labelTag="name" labelHalo="yes" labelArea="yes">
-  <selector expr="[leisure] is park"/>
+  <selector expr="[leisure] isoneof (park , garden)"/>
 </painter>
 <painter
  zoomUnder="0.02" zoomUpper="1e+07"
