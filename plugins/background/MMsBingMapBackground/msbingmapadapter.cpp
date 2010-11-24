@@ -200,7 +200,7 @@ int MsBingMapAdapter::getTileSizeH() const
 
 QString MsBingMapAdapter::getSourceTag() const
 {
-    return QString();
+    return "Bing";
 }
 
 QString MsBingMapAdapter::getLicenseUrl() const

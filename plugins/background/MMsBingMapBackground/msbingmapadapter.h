@@ -74,8 +74,8 @@ class MsBingMapAdapter : public MapAdapter
 
         virtual void cleanup() {}
 
-        virtual bool toXML(QDomElement xParent) { return true; }
-        virtual void fromXML(const QDomElement xParent) {}
+        virtual bool toXML(QDomElement /*xParent*/) { return true; }
+        virtual void fromXML(const QDomElement /*xParent*/) {}
         virtual QString toPropertiesHtml() {return "";}
 
         virtual void setSettings(QSettings* /*aSet*/) {}
@@ -85,7 +85,7 @@ class MsBingMapAdapter : public MapAdapter
         virtual void zoom_out();
         virtual QString getQuery(int x, int y, int z) const;
         virtual bool isValid(int x, int y, int z) const;
-        virtual QPixmap getPixmap(const QRectF& wgs84Bbox, const QRectF& projBbox, const QRect& size) const { return QPixmap(); }
+        virtual QPixmap getPixmap(const QRectF& /*wgs84Bbox*/, const QRectF& /*projBbox*/, const QRect& /*size*/) const { return QPixmap(); }
         virtual QMenu* getMenu() const { return NULL; }
 
     private:

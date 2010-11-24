@@ -89,7 +89,7 @@ public:
     /*!
      * @return the source tag
      */
-    virtual QString	getSourceTag		() const { return ""; }
+    virtual QString	getSourceTag		() const { return "cadastre-dgi-fr source : Direction Générale des Impôts - Cadastre. Mise à jour : 2009"; }
 
     //! returns the Url of the usage license
     /*!
