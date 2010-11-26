@@ -446,7 +446,7 @@ QStringList Document::getTagValueList(QString k)
     return res;
 }
 
-QString Document::getTagKey(int idx)
+const QString& Document::getTagKey(int idx) const
 {
     return p->tagKeys.at(idx);
 }

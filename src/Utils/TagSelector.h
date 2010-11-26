@@ -63,6 +63,8 @@ class TagSelectorOperator : public TagSelector
         virtual QString asExpression(bool Precedence) const;
 
     private:
+        TagSelectorMatchResult evaluateVal(const QString& val) const;
+
         QRegExp rx;
         QString Key, Oper, Value;
         Ops theOp;
@@ -71,6 +73,9 @@ class TagSelectorOperator : public TagSelector
         bool UseRegExp;
         TagSelectorSpecialKey specialKey;
         TagSelectorSpecialValue specialValue;
+        bool boolVal, valB;
+        bool okval;
+        double valN;
 };
 
 class TagSelectorIsOneOf : public TagSelector

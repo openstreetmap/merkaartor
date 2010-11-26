@@ -75,7 +75,7 @@ public:
     void removeFromTagList(quint32 k, quint32 v);
     QList<QString> getTagKeys();
     QList<QString> getTagValues();
-    QString getTagKey(int idx);
+    const QString& getTagKey(int idx) const;
     quint32 getTagKeyIndex(const QString& s);
     QStringList getTagKeyList();
     QString getTagValue(int idx);
