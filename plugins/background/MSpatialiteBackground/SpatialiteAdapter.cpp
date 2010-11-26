@@ -18,7 +18,6 @@
 #include <QFileDialog>
 #include <QPainter>
 #include <QMessageBox>
-#include <QInputDialog>
 #include <QTimer>
 #include <QBuffer>
 #include <QPair>

@@ -18,6 +18,7 @@
 #include <QFileDialog>
 #include <QPainter>
 #include <QMessageBox>
+#include <QInputDialog>
 
 #include <QDebug>
 
@@ -66,8 +67,13 @@ GeoTiffAdapter::GeoTiffAdapter()
     QAction* loadImage = new QAction(tr("Load image(s)..."), this);
     loadImage->setData(theUid.toString());
     connect(loadImage, SIGNAL(triggered()), SLOT(onLoadImage()));
+    QAction* setSource = new QAction(tr("Specify \"source\" tag..."), this);
+    setSource->setData(theUid.toString());
+    connect(setSource, SIGNAL(triggered()), SLOT(onSetSourceTag()));
+
     theMenu = new QMenu();
     theMenu->addAction(loadImage);
+    theMenu->addAction(setSource);
 }
 
 
@@ -247,6 +253,20 @@ void GeoTiffAdapter::onLoadImage()
     return;
 }
 
+void GeoTiffAdapter::onSetSourceTag()
+{
+    bool ok;
+    QString text = QInputDialog::getText(0, tr("Please specify automatic \"source\" tag value"),
+                                         tr("Value:"), QLineEdit::Normal, theSourceTag, &ok);
+    if (ok)
+        theSourceTag = text;
+}
+
+QString GeoTiffAdapter::getSourceTag() const
+{
+    return theSourceTag;
+}
+
 QString	GeoTiffAdapter::getHost() const
 {
     return "";
@@ -345,6 +365,8 @@ bool GeoTiffAdapter::toXML(QDomElement xParent)
     xParent.appendChild(fs);
 
     fs.setAttribute("projection", theProjection);
+    if (!theSourceTag.isEmpty())
+        fs.setAttribute("source", theSourceTag);
     for (int i=0; i<theImages.size(); ++i) {
         QDomElement f = xParent.ownerDocument().createElement("Image");
         fs.appendChild(f);
@@ -364,6 +386,8 @@ void GeoTiffAdapter::fromXML(const QDomElement xParent)
         if (fs.tagName() == "Images") {
             if (fs.hasAttribute("projection"))
                 theProjection = fs.attribute("projection");
+            if (fs.hasAttribute("source"))
+                theSourceTag = fs.attribute("source");
             QDomElement f = fs.firstChildElement();
             while(!f.isNull()) {
                 if (f.tagName() == "Image") {
@@ -393,3 +417,4 @@ QString GeoTiffAdapter::toPropertiesHtml()
 }
 
 Q_EXPORT_PLUGIN2(MGeoTiffBackgroundPlugin, GeoTiffAdapterFactory)
+

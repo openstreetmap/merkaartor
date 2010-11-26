@@ -105,8 +105,7 @@ public:
     /*!
      * @return the source tag
      */
-    virtual QString	getSourceTag		() const { return ""; }
-
+    virtual QString	getSourceTag		() const;
     //! returns the Url of the usage license
     /*!
      * @return the Url of the usage license
@@ -147,6 +146,7 @@ public:
 
 public slots:
     void onLoadImage();
+    void onSetSourceTag();
 
 protected:
     bool alreadyLoaded(QString fn) const;
@@ -163,6 +163,7 @@ private:
     bool isLatLon;
 
     QList<GdalImage> theImages;
+    QString theSourceTag;
 
 //	TiffType theType;
 //	int bandCount;
