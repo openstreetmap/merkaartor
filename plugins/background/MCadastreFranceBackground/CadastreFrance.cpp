@@ -387,9 +387,9 @@ int CadastreFranceAdapter::getAdaptedZoom() const
     return max_zoom < min_zoom ? min_zoom - current_zoom : current_zoom - min_zoom;
 }
 
-virtual QString	CadastreFranceAdapter::getSourceTag		() const
+QString	CadastreFranceAdapter::getSourceTag		() const
 {
-    return "cadastre-dgi-fr source : Direction GÃ©nÃ©rale des ImpÃ´ts - Cadastre. Mise Ã  jour : 2010";
+    return "cadastre-dgi-fr source : Direction Générale des Impôts - Cadastre. Mise à jour : 2010";
 }
 
 Q_EXPORT_PLUGIN2(MCadastreFranceBackgroundPlugin, CadastreFranceAdapterFactory)
