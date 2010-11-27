@@ -4,110 +4,119 @@
 <context>
     <name></name>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1071"/>
-        <location filename="../src/MainWindow.cpp" line="1085"/>
-        <location filename="../src/MainWindow.cpp" line="1100"/>
+        <location filename="../src/MainWindow.cpp" line="1003"/>
+        <location filename="../src/MainWindow.cpp" line="1018"/>
+        <location filename="../src/MainWindow.cpp" line="1034"/>
         <source>Supported formats</source>
         <translation>サポートされたフォーマット</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1072"/>
-        <location filename="../src/MainWindow.cpp" line="1086"/>
+        <location filename="../src/MainWindow.cpp" line="1004"/>
+        <location filename="../src/MainWindow.cpp" line="1019"/>
         <source>Merkaartor document (*.mdc)
 </source>
         <translation>Merkaartor文書(*.mdc)
 </translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1073"/>
-        <location filename="../src/MainWindow.cpp" line="1087"/>
-        <location filename="../src/MainWindow.cpp" line="1101"/>
+        <location filename="../src/MainWindow.cpp" line="1005"/>
+        <location filename="../src/MainWindow.cpp" line="1020"/>
+        <location filename="../src/MainWindow.cpp" line="1035"/>
         <source>GPS Exchange format (*.gpx)
 </source>
         <translation>GPS 交換フォーマット (*.gpx)
 </translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1074"/>
-        <location filename="../src/MainWindow.cpp" line="1088"/>
-        <location filename="../src/MainWindow.cpp" line="1102"/>
+        <location filename="../src/MainWindow.cpp" line="1006"/>
+        <location filename="../src/MainWindow.cpp" line="1021"/>
+        <location filename="../src/MainWindow.cpp" line="1036"/>
         <source>OpenStreetMap format (*.osm)
 </source>
         <translation>OpenStreetMapフォーマット(*.osm)
 </translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1075"/>
-        <location filename="../src/MainWindow.cpp" line="1089"/>
-        <location filename="../src/MainWindow.cpp" line="1103"/>
+        <location filename="../src/MainWindow.cpp" line="1007"/>
+        <location filename="../src/MainWindow.cpp" line="1022"/>
+        <location filename="../src/MainWindow.cpp" line="1037"/>
         <source>OpenStreetMap binary format (*.osb)
 </source>
         <translation>OpenStreetMapバイナリフォーマット(*.osb)
 </translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1077"/>
-        <location filename="../src/MainWindow.cpp" line="1091"/>
-        <location filename="../src/MainWindow.cpp" line="1105"/>
+        <location filename="../src/MainWindow.cpp" line="1009"/>
+        <location filename="../src/MainWindow.cpp" line="1024"/>
+        <location filename="../src/MainWindow.cpp" line="1039"/>
         <source>Noni GPSPlot format (*.ngt)
 </source>
         <translation>Noni GPSPlotフォーマット(*.ngt)
 </translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1078"/>
-        <location filename="../src/MainWindow.cpp" line="1092"/>
-        <location filename="../src/MainWindow.cpp" line="1106"/>
+        <location filename="../src/MainWindow.cpp" line="1010"/>
+        <location filename="../src/MainWindow.cpp" line="1025"/>
+        <location filename="../src/MainWindow.cpp" line="1040"/>
         <source>NMEA GPS log format (*.nmea *.nma)
 </source>
         <translation>NMEA GPSログフォーマット(*.nmea *.nma)
 </translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1079"/>
-        <location filename="../src/MainWindow.cpp" line="1093"/>
-        <location filename="../src/MainWindow.cpp" line="1107"/>
+        <location filename="../src/MainWindow.cpp" line="1011"/>
+        <location filename="../src/MainWindow.cpp" line="1026"/>
+        <location filename="../src/MainWindow.cpp" line="1041"/>
         <source>KML file (*.kml)
 </source>
         <translation>KMLファイル (*.kml)
 </translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1080"/>
-        <location filename="../src/MainWindow.cpp" line="1094"/>
-        <location filename="../src/MainWindow.cpp" line="1108"/>
+        <location filename="../src/MainWindow.cpp" line="1012"/>
+        <location filename="../src/MainWindow.cpp" line="1027"/>
+        <location filename="../src/MainWindow.cpp" line="1042"/>
         <source>ESRI Shapefile (*.shp)
 </source>
         <translation>ESRIシェイプファイル (*.shp)
 </translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1082"/>
-        <location filename="../src/MainWindow.cpp" line="1097"/>
-        <location filename="../src/MainWindow.cpp" line="1110"/>
+        <location filename="../src/MainWindow.cpp" line="1015"/>
+        <location filename="../src/MainWindow.cpp" line="1031"/>
+        <location filename="../src/MainWindow.cpp" line="1045"/>
         <source>All Files (*)</source>
         <translation>全てのファイル(*)</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1096"/>
+        <location filename="../src/MainWindow.cpp" line="1030"/>
         <source>Geotagged images (*.jpg)
 </source>
         <translation>ジオタグされた画像(*.jpg)
 </translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1076"/>
-        <location filename="../src/MainWindow.cpp" line="1090"/>
-        <location filename="../src/MainWindow.cpp" line="1104"/>
+        <location filename="../src/MainWindow.cpp" line="1008"/>
+        <location filename="../src/MainWindow.cpp" line="1023"/>
+        <location filename="../src/MainWindow.cpp" line="1038"/>
         <source>OpenStreetMap change format (*.osc)
 </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1081"/>
-        <location filename="../src/MainWindow.cpp" line="1095"/>
-        <location filename="../src/MainWindow.cpp" line="1109"/>
+        <location filename="../src/MainWindow.cpp" line="1014"/>
+        <location filename="../src/MainWindow.cpp" line="1029"/>
+        <location filename="../src/MainWindow.cpp" line="1044"/>
         <source>Comma delimited format (*.csv)
+</source>
+        <translation>カンマ区切り形式(*.csv)
+</translation>
+    </message>
+    <message>
+        <location filename="../src/MainWindow.cpp" line="1013"/>
+        <location filename="../src/MainWindow.cpp" line="1028"/>
+        <location filename="../src/MainWindow.cpp" line="1043"/>
+        <source>Geography Markup Language (*.gml)
 </source>
         <translation type="unfinished"></translation>
     </message>
@@ -124,71 +133,83 @@
         <source>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;MS Shell Dlg 2&apos;; font-size:8.25pt; font-weight:400; font-style:normal;&quot;&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:8pt; font-style:italic;&quot;&gt;Merkaartor version&lt;/span&gt;&lt;span style=&quot; font-size:8pt;&quot;&gt; &lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:8pt; font-weight:600;&quot;&gt;%1%2(%3)&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
-&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
-p, li { white-space: pre-wrap; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;MS Shell Dlg 2&apos;; font-size:8.25pt; font-weight:400; font-style:normal;&quot;&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:8pt; font-style:italic;&quot;&gt;Merkaartor version&lt;/span&gt;&lt;span style=&quot; font-size:8pt;&quot;&gt; &lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:8pt; font-weight:600;&quot;&gt;%1%2(%3)&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-size:small; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:small; font-style:italic;&quot;&gt;Merkaartor version&lt;/span&gt;&lt;span style=&quot; font-size:8pt;&quot;&gt; &lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:small; font-weight:600;&quot;&gt;%1%2(%3)&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../src/AboutDialog.ui" line="42"/>
         <source>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;MS Shell Dlg 2&apos;; font-size:8.25pt; font-weight:400; font-style:normal;&quot;&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-size:8pt;&quot;&gt;&lt;span style=&quot; font-style:italic;&quot;&gt;QT version&lt;/span&gt; &lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-size:8pt;&quot;&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;%1&lt;/span&gt; (built with &lt;span style=&quot; font-weight:600;&quot;&gt;%2&lt;/span&gt;)&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
-&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
-p, li { white-space: pre-wrap; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;MS Shell Dlg 2&apos;; font-size:8.25pt; font-weight:400; font-style:normal;&quot;&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-size:8pt;&quot;&gt;&lt;span style=&quot; font-style:italic;&quot;&gt;QT version&lt;/span&gt; &lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-size:8pt;&quot;&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;%1&lt;/span&gt; (built with &lt;span style=&quot; font-weight:600;&quot;&gt;%2&lt;/span&gt;)&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-size:small; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-size:small;&quot;&gt;&lt;span style=&quot; font-style:italic;&quot;&gt;QT version&lt;/span&gt; &lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-size:small;&quot;&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;%1&lt;/span&gt; (built with &lt;span style=&quot; font-weight:600;&quot;&gt;%2&lt;/span&gt;)&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../src/AboutDialog.ui" line="54"/>
         <source>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;MS Shell Dlg 2&apos;; font-size:8.25pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-size:small; font-weight:400; font-style:normal;&quot;&gt;
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-style:italic;&quot;&gt;Boost version&lt;/span&gt;&lt;br /&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;%1&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/AboutDialog.ui" line="92"/>
+        <location filename="../src/AboutDialog.ui" line="65"/>
+        <source>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
+p, li { white-space: pre-wrap; }
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-size:small; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-style:italic;&quot;&gt;PROJ4 version&lt;/span&gt;&lt;br /&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;%1&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/AboutDialog.ui" line="76"/>
+        <source>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
+p, li { white-space: pre-wrap; }
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-size:small; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-style:italic;&quot;&gt;GDAL version&lt;/span&gt;&lt;br /&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;%1&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/AboutDialog.ui" line="114"/>
         <source>TextLabel</source>
         <translation>テキストラベル</translation>
     </message>
     <message>
-        <location filename="../src/AboutDialog.ui" line="101"/>
+        <location filename="../src/AboutDialog.ui" line="123"/>
         <source>Copyright Bart Vanhauwaert, Chris Browet and others, 2006-2010</source>
-        <translation type="unfinished"></translation>
+        <translation>Copyright Bart Vanhauwaert, Chris Browet and others, 2006-2010</translation>
     </message>
     <message>
-        <location filename="../src/AboutDialog.ui" line="108"/>
+        <location filename="../src/AboutDialog.ui" line="130"/>
         <source>This program is licensed under the GNU Public License v2</source>
         <translation>このプログラムは、GNU一般公衆使用許諾バージョン2のもとでライセンスされています。</translation>
     </message>
     <message>
-        <location filename="../src/AboutDialog.ui" line="115"/>
+        <location filename="../src/AboutDialog.ui" line="137"/>
         <source>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
 &lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;MS Shell Dlg 2&apos;; font-size:8.25pt; font-weight:400; font-style:normal;&quot;&gt;
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;a href=&quot;http://merkaartor.be&quot;&gt;&lt;span style=&quot; font-size:8pt; text-decoration: underline; color:#0000ff;&quot;&gt;http://merkaartor.be&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
+p, li { white-space: pre-wrap; }
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;MS Shell Dlg 2&apos;; font-size:8.25pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;a href=&quot;http://merkaartor.be&quot;&gt;&lt;span style=&quot; font-size:8pt; text-decoration: underline; color:#0000ff;&quot;&gt;http://merkaartor.be&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
-        <location filename="../src/AboutDialog.ui" line="135"/>
+        <location filename="../src/AboutDialog.ui" line="157"/>
         <source>Changelog</source>
         <translation>変更ログ</translation>
     </message>
     <message>
-        <location filename="../src/AboutDialog.ui" line="178"/>
+        <location filename="../src/AboutDialog.ui" line="200"/>
         <source>OK</source>
         <translation>OK</translation>
     </message>
@@ -267,12 +288,17 @@ p, li { white-space: pre-wrap; }
         <translation>タイトルなし</translation>
     </message>
     <message>
-        <location filename="../src/Tools/ActionsDialog.cpp" line="148"/>
+        <location filename="../src/Tools/ActionsDialog.cpp" line="143"/>
+        <source>All Files (*)</source>
+        <translation>全てのファイル(*)</translation>
+    </message>
+    <message>
+        <location filename="../src/Tools/ActionsDialog.cpp" line="159"/>
         <source>Unable to open save file</source>
         <translation>保存ファイルを開くことができません。</translation>
     </message>
     <message>
-        <location filename="../src/Tools/ActionsDialog.cpp" line="148"/>
+        <location filename="../src/Tools/ActionsDialog.cpp" line="159"/>
         <source>%1 could not be opened for writing.</source>
         <translation>%1 を書き込み用に開けません。</translation>
     </message>
@@ -365,7 +391,11 @@ p, li { white-space: pre-wrap; }
 p, li { white-space: pre-wrap; }
 &lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;Sans&apos;; font-size:10pt; font-weight:400; font-style:normal;&quot;&gt;
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;There is &lt;span style=&quot; font-weight:600;&quot;&gt;no&lt;/span&gt; dirty object&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
+p, li { white-space: pre-wrap; }
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;Sans&apos;; font-size:10pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;There is &lt;span style=&quot; font-weight:600;&quot;&gt;no&lt;/span&gt; dirty object&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
         <location filename="../src/Docks/DirtyDock.ui" line="60"/>
@@ -376,7 +406,7 @@ p, li { white-space: pre-wrap; }
 <context>
     <name>DirtyLayerWidget</name>
     <message>
-        <location filename="../src/Layers/LayerWidget.cpp" line="580"/>
+        <location filename="../src/Layers/LayerWidget.cpp" line="582"/>
         <source>Zoom</source>
         <translation>ズーム</translation>
     </message>
@@ -513,12 +543,14 @@ APIメッセージは&apos;%1&apos;です</translation>
         <source>There was an error uploading this request (%1)
 &quot;%2&quot;
 Please redownload the problematic feature to handle the conflict.</source>
-        <translation type="unfinished"></translation>
+        <translation>要求 (%1) をアップロード中にエラーが発生しました。
+&quot;%2&quot;
+衝突を処理するために、問題のある地物を再ダウンロードしてください。</translation>
     </message>
     <message>
         <location filename="../src/Sync/DirtyListExecutorOSC.cpp" line="100"/>
         <source>Checking changes...</source>
-        <translation type="unfinished"></translation>
+        <translation>変更をチェック中...</translation>
     </message>
     <message>
         <location filename="../src/Sync/DirtyListExecutorOSC.cpp" line="171"/>
@@ -579,54 +611,54 @@ Please redownload the problematic feature to handle the conflict.</source>
 <context>
     <name>Document</name>
     <message>
-        <location filename="../src/Document.cpp" line="86"/>
-        <location filename="../src/Document.cpp" line="98"/>
-        <location filename="../src/Document.cpp" line="108"/>
+        <location filename="../src/Document.cpp" line="88"/>
+        <location filename="../src/Document.cpp" line="100"/>
+        <location filename="../src/Document.cpp" line="110"/>
         <source>untitled</source>
         <translation>タイトルなし</translation>
     </message>
     <message>
-        <location filename="../src/Document.cpp" line="158"/>
-        <location filename="../src/Document.cpp" line="563"/>
+        <location filename="../src/Document.cpp" line="160"/>
+        <location filename="../src/Document.cpp" line="565"/>
         <source>Dirty layer</source>
         <translation>変更された</translation>
     </message>
     <message>
-        <location filename="../src/Document.cpp" line="161"/>
+        <location filename="../src/Document.cpp" line="163"/>
         <source>Uploaded layer</source>
         <translation>アップロードされたレイヤー</translation>
     </message>
     <message>
-        <location filename="../src/Document.cpp" line="356"/>
+        <location filename="../src/Document.cpp" line="358"/>
         <source>Background imagery</source>
         <translation>背景画像</translation>
     </message>
     <message>
-        <location filename="../src/Document.cpp" line="373"/>
+        <location filename="../src/Document.cpp" line="375"/>
         <source>Drawing layer #%1</source>
-        <translation type="unfinished"></translation>
+        <translation>レイヤー#%1を描画</translation>
     </message>
     <message>
-        <location filename="../src/Document.cpp" line="382"/>
+        <location filename="../src/Document.cpp" line="384"/>
         <source>Filter layer #%1</source>
-        <translation type="unfinished"></translation>
+        <translation>フィルタレイヤー#%1</translation>
     </message>
     <message>
-        <location filename="../src/Document.cpp" line="676"/>
-        <location filename="../src/Document.cpp" line="733"/>
+        <location filename="../src/Document.cpp" line="678"/>
+        <location filename="../src/Document.cpp" line="735"/>
         <source>OSM Export</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Document.cpp" line="683"/>
-        <location filename="../src/Document.cpp" line="743"/>
+        <location filename="../src/Document.cpp" line="685"/>
+        <location filename="../src/Document.cpp" line="745"/>
         <source>Exporting OSM...</source>
-        <translation type="unfinished"></translation>
+        <translation>OSMをエクスポート中...</translation>
     </message>
     <message>
-        <location filename="../src/Document.cpp" line="1039"/>
+        <location filename="../src/Document.cpp" line="1041"/>
         <source>Document</source>
-        <translation type="unfinished"></translation>
+        <translation>文書</translation>
     </message>
 </context>
 <context>
@@ -654,12 +686,12 @@ Please redownload the problematic feature to handle the conflict.</source>
     <message>
         <location filename="../src/DownloadMapDialog.ui" line="74"/>
         <source>WWW link (OSM/Google maps)</source>
-        <translation type="unfinished"></translation>
+        <translation>WWWリンク(OSM/Googleマップ)</translation>
     </message>
     <message>
         <location filename="../src/DownloadMapDialog.ui" line="88"/>
         <source>Xapi selector</source>
-        <translation type="unfinished"></translation>
+        <translation>Xapiセレクタ</translation>
     </message>
     <message>
         <location filename="../src/DownloadMapDialog.ui" line="100"/>
@@ -755,12 +787,12 @@ APIメッセージは&apos;%1&apos;です</translation>
     <message>
         <location filename="../src/Sync/DownloadOSM.cpp" line="687"/>
         <source>OpenStreetBugs</source>
-        <translation type="unfinished"></translation>
+        <translation>OpenStreetBugs</translation>
     </message>
     <message>
         <location filename="../src/Sync/DownloadOSM.cpp" line="712"/>
         <source>Downloading points</source>
-        <translation type="unfinished"></translation>
+        <translation>ダウンロードするポイント</translation>
     </message>
     <message>
         <location filename="../src/ImportExport/ImportOSM.cpp" line="435"/>
@@ -858,7 +890,7 @@ Do you want to mark them for deletion?</source>
     <message>
         <location filename="../src/Sync/DirtyListExecutorOSC.cpp" line="132"/>
         <source>Uploading...</source>
-        <translation type="unfinished"></translation>
+        <translation>アップロード中...</translation>
     </message>
     <message>
         <location filename="../src/Sync/DirtyListExecutorOSC.cpp" line="154"/>
@@ -868,18 +900,18 @@ Do you want to mark them for deletion?</source>
     <message>
         <location filename="../src/Sync/DirtyListExecutorOSC.cpp" line="156"/>
         <source>Waiting for server response</source>
-        <translation type="unfinished"></translation>
+        <translation>サーバの応答待ち</translation>
     </message>
 </context>
 <context>
     <name>DrawingLayerWidget</name>
     <message>
-        <location filename="../src/Layers/LayerWidget.cpp" line="297"/>
+        <location filename="../src/Layers/LayerWidget.cpp" line="299"/>
         <source>Close</source>
         <translation>閉じる</translation>
     </message>
     <message>
-        <location filename="../src/Layers/LayerWidget.cpp" line="292"/>
+        <location filename="../src/Layers/LayerWidget.cpp" line="294"/>
         <source>Zoom</source>
         <translation>ズーム</translation>
     </message>
@@ -889,17 +921,17 @@ Do you want to mark them for deletion?</source>
     <message>
         <location filename="../src/Interactions/EditInteraction.cpp" line="276"/>
         <source>Cannot delete</source>
-        <translation type="unfinished"></translation>
+        <translation>削除できません</translation>
     </message>
     <message>
         <location filename="../src/Interactions/EditInteraction.cpp" line="276"/>
         <source>Cannot delete the selection because it is outside the downloaded area.</source>
-        <translation type="unfinished"></translation>
+        <translation>ダウンロード領域外なので選択されたものを削除できません。</translation>
     </message>
     <message>
         <location filename="../src/Interactions/EditInteraction.cpp" line="279"/>
         <source>Cannot delete everything</source>
-        <translation type="unfinished"></translation>
+        <translation>全てを削除できません</translation>
     </message>
     <message>
         <location filename="../src/Interactions/EditInteraction.cpp" line="280"/>
@@ -971,7 +1003,7 @@ Delete what can be?</source>
     <message>
         <location filename="../src/Docks/FeaturesDock.cpp" line="432"/>
         <source>Delete</source>
-        <translation type="unfinished"></translation>
+        <translation>削除</translation>
     </message>
     <message>
         <location filename="../src/Docks/FeaturesDock.cpp" line="439"/>
@@ -1014,7 +1046,7 @@ Delete what can be?</source>
     <message>
         <location filename="../src/Docks/FeaturesDock.ui" line="101"/>
         <source>Find...</source>
-        <translation type="unfinished"></translation>
+        <translation>検索...</translation>
     </message>
     <message>
         <location filename="../src/Docks/FeaturesDock.ui" line="108"/>
@@ -1037,7 +1069,7 @@ Delete what can be?</source>
     <message>
         <location filename="../src/Layers/FilterEditDialog.ui" line="30"/>
         <source>Filter</source>
-        <translation type="unfinished"></translation>
+        <translation>フィルタ</translation>
     </message>
     <message>
         <location filename="../src/Layers/FilterEditDialog.ui" line="42"/>
@@ -1048,7 +1080,7 @@ Delete what can be?</source>
 <context>
     <name>FilterLayerWidget</name>
     <message>
-        <location filename="../src/Layers/LayerWidget.cpp" line="649"/>
+        <location filename="../src/Layers/LayerWidget.cpp" line="651"/>
         <source>Close</source>
         <translation>閉じる</translation>
     </message>
@@ -1058,17 +1090,17 @@ Delete what can be?</source>
     <message>
         <location filename="../src/Preferences/FilterPreferencesDialog.ui" line="14"/>
         <source>Filters setup</source>
-        <translation type="unfinished"></translation>
+        <translation>フィルタ設定</translation>
     </message>
     <message>
         <location filename="../src/Preferences/FilterPreferencesDialog.ui" line="20"/>
         <source>Filters</source>
-        <translation type="unfinished"></translation>
+        <translation>フィルタ</translation>
     </message>
     <message>
         <location filename="../src/Preferences/FilterPreferencesDialog.ui" line="47"/>
         <source>Filter list:</source>
-        <translation type="unfinished"></translation>
+        <translation>フィルタリスト:</translation>
     </message>
     <message>
         <location filename="../src/Preferences/FilterPreferencesDialog.ui" line="76"/>
@@ -1078,7 +1110,7 @@ Delete what can be?</source>
     <message>
         <location filename="../src/Preferences/FilterPreferencesDialog.ui" line="93"/>
         <source>Filter</source>
-        <translation type="unfinished"></translation>
+        <translation>フィルタ</translation>
     </message>
     <message>
         <location filename="../src/Preferences/FilterPreferencesDialog.ui" line="105"/>
@@ -1105,25 +1137,25 @@ Delete what can be?</source>
     <name>GeoImageDock</name>
     <message>
         <location filename="../src/Docks/GeoImageDock.cpp" line="85"/>
-        <location filename="../src/Docks/GeoImageDock.cpp" line="913"/>
+        <location filename="../src/Docks/GeoImageDock.cpp" line="923"/>
         <source>Geo Images</source>
         <translation>ジオイメージ</translation>
     </message>
     <message>
         <location filename="../src/Docks/GeoImageDock.cpp" line="94"/>
-        <location filename="../src/Docks/GeoImageDock.cpp" line="915"/>
+        <location filename="../src/Docks/GeoImageDock.cpp" line="925"/>
         <source>Remove Images</source>
         <translation>画像の削除</translation>
     </message>
     <message>
         <location filename="../src/Docks/GeoImageDock.cpp" line="95"/>
-        <location filename="../src/Docks/GeoImageDock.cpp" line="916"/>
+        <location filename="../src/Docks/GeoImageDock.cpp" line="926"/>
         <source>Copy filename to clipboard</source>
         <translation>ファイル名をクリップボードにコピーする</translation>
     </message>
     <message>
         <location filename="../src/Docks/GeoImageDock.cpp" line="96"/>
-        <location filename="../src/Docks/GeoImageDock.cpp" line="917"/>
+        <location filename="../src/Docks/GeoImageDock.cpp" line="927"/>
         <source>Select next image</source>
         <translation>次のイメージを選択</translation>
     </message>
@@ -1134,7 +1166,7 @@ Delete what can be?</source>
     </message>
     <message>
         <location filename="../src/Docks/GeoImageDock.cpp" line="99"/>
-        <location filename="../src/Docks/GeoImageDock.cpp" line="918"/>
+        <location filename="../src/Docks/GeoImageDock.cpp" line="928"/>
         <source>Select previous image</source>
         <translation>前のイメージを選択</translation>
     </message>
@@ -1178,8 +1210,8 @@ Delete what can be?</source>
     <message>
         <location filename="../src/Docks/GeoImageDock.cpp" line="499"/>
         <location filename="../src/Docks/GeoImageDock.cpp" line="501"/>
-        <location filename="../src/Docks/GeoImageDock.cpp" line="857"/>
-        <location filename="../src/Docks/GeoImageDock.cpp" line="861"/>
+        <location filename="../src/Docks/GeoImageDock.cpp" line="867"/>
+        <location filename="../src/Docks/GeoImageDock.cpp" line="871"/>
         <source>Exiv2</source>
         <translation>Exiv2</translation>
     </message>
@@ -1192,39 +1224,39 @@ Delete what can be?</source>
     </message>
     <message>
         <location filename="../src/Docks/GeoImageDock.cpp" line="501"/>
-        <location filename="../src/Docks/GeoImageDock.cpp" line="861"/>
+        <location filename="../src/Docks/GeoImageDock.cpp" line="871"/>
         <source>Error while loading EXIF-data from &quot;%1&quot;.</source>
         <translation>&quot;%1&quot;からのEXIFデータ読み込み時エラー</translation>
     </message>
     <message>
         <location filename="../src/Docks/GeoImageDock.cpp" line="50"/>
         <source>Network timeout</source>
-        <translation type="unfinished"></translation>
+        <translation>ネットワークタイムアウト</translation>
     </message>
     <message>
         <location filename="../src/Docks/GeoImageDock.cpp" line="50"/>
         <source>Cannot read the photo&apos;s details from the Walking Papers server.</source>
-        <translation type="unfinished"></translation>
+        <translation>Walking Papersサーバから写真の詳細を読み込めません。</translation>
     </message>
     <message>
         <location filename="../src/Docks/GeoImageDock.cpp" line="70"/>
         <source>Please specify Walking Papers URL</source>
-        <translation type="unfinished"></translation>
+        <translation>Walking PapersのURLを指定してください</translation>
     </message>
     <message>
         <location filename="../src/Docks/GeoImageDock.cpp" line="71"/>
         <source>URL:</source>
-        <translation type="unfinished"></translation>
+        <translation>URL:</translation>
     </message>
     <message>
         <location filename="../src/Docks/GeoImageDock.cpp" line="93"/>
-        <location filename="../src/Docks/GeoImageDock.cpp" line="914"/>
+        <location filename="../src/Docks/GeoImageDock.cpp" line="924"/>
         <source>Center map</source>
         <translation>中央に表示</translation>
     </message>
     <message>
         <location filename="../src/Docks/GeoImageDock.cpp" line="102"/>
-        <location filename="../src/Docks/GeoImageDock.cpp" line="919"/>
+        <location filename="../src/Docks/GeoImageDock.cpp" line="929"/>
         <source>Save geotagged image...</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1232,7 +1264,7 @@ Delete what can be?</source>
         <location filename="../src/Docks/GeoImageDock.cpp" line="310"/>
         <location filename="../src/Docks/GeoImageDock.cpp" line="413"/>
         <source>Photo layer</source>
-        <translation type="unfinished"></translation>
+        <translation>写真レイヤー</translation>
     </message>
     <message>
         <location filename="../src/Docks/GeoImageDock.cpp" line="368"/>
@@ -1317,12 +1349,17 @@ Do you still want to use it?</source>
 それでもこれを使いますか?</translation>
     </message>
     <message>
-        <location filename="../src/Docks/GeoImageDock.cpp" line="784"/>
+        <location filename="../src/Docks/GeoImageDock.cpp" line="785"/>
         <source>JPEG Images (*.jpg)</source>
+        <translation>JPEG画像(*.jpg)</translation>
+    </message>
+    <message>
+        <location filename="../src/Docks/GeoImageDock.cpp" line="785"/>
+        <source>Specify output filename</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Docks/GeoImageDock.cpp" line="857"/>
+        <location filename="../src/Docks/GeoImageDock.cpp" line="867"/>
         <source>Error while opening &quot;%1&quot;:
 %2</source>
         <translation>&quot;%1&quot;読み込み時エラー:
@@ -1350,12 +1387,12 @@ Do you still want to use it?</source>
     <message>
         <location filename="../src/GotoDialog.cpp" line="114"/>
         <source>Coordinates must be: &apos;&lt;left lon&gt;, &lt;bottom lat&gt;, &lt;right lon&gt;, &lt;top lat&gt;&apos;</source>
-        <translation type="unfinished"></translation>
+        <translation>座標は次のものでなければなりません: &apos;&lt;左経度&gt;, &lt;下緯度&gt;, &lt;右経度&gt;, &lt;上緯度&gt;&apos;</translation>
     </message>
     <message>
         <location filename="../src/GotoDialog.cpp" line="123"/>
         <source>Coordinates must be: &apos;&lt;center lat&gt;, &lt;center lon&gt;, &lt;span lat&gt;, &lt;span lon&gt;&apos;</source>
-        <translation type="unfinished"></translation>
+        <translation>座標は次のものでなければなりません: &apos;&lt;中心緯度&gt;, &lt;中心経度&gt;, &lt;緯度幅&gt;, &lt;経度幅&gt;&apos;</translation>
     </message>
     <message>
         <location filename="../src/GotoDialog.ui" line="14"/>
@@ -1370,7 +1407,7 @@ Do you still want to use it?</source>
     <message>
         <location filename="../src/GotoDialog.ui" line="61"/>
         <source>WWW link (OSM/Google maps)</source>
-        <translation type="unfinished"></translation>
+        <translation>WWWリンク(OSM/Googleマップ)</translation>
     </message>
     <message>
         <location filename="../src/GotoDialog.ui" line="88"/>
@@ -1407,120 +1444,120 @@ Do you still want to use it?</source>
 <context>
     <name>ImageLayerWidget</name>
     <message>
-        <location filename="../src/Layers/LayerWidget.cpp" line="309"/>
+        <location filename="../src/Layers/LayerWidget.cpp" line="311"/>
         <source>None</source>
         <translation>なし</translation>
     </message>
     <message>
-        <location filename="../src/Layers/LayerWidget.cpp" line="315"/>
+        <location filename="../src/Layers/LayerWidget.cpp" line="317"/>
         <source>Shape adapter</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Layers/LayerWidget.cpp" line="384"/>
+        <location filename="../src/Layers/LayerWidget.cpp" line="386"/>
         <source>Zoom</source>
         <translation>ズーム</translation>
     </message>
     <message>
-        <location filename="../src/Layers/LayerWidget.cpp" line="391"/>
+        <location filename="../src/Layers/LayerWidget.cpp" line="393"/>
         <source>Set view projection to layer&apos;s</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Layers/LayerWidget.cpp" line="396"/>
+        <location filename="../src/Layers/LayerWidget.cpp" line="398"/>
         <source>Close</source>
         <translation>閉じる</translation>
     </message>
     <message>
-        <location filename="../src/Layers/LayerWidget.cpp" line="404"/>
+        <location filename="../src/Layers/LayerWidget.cpp" line="406"/>
         <source>WMS adapter</source>
         <translation>WMSアダプター</translation>
     </message>
     <message>
-        <location filename="../src/Layers/LayerWidget.cpp" line="420"/>
+        <location filename="../src/Layers/LayerWidget.cpp" line="422"/>
         <source>TMS adapter</source>
         <translation>TMSアダプター</translation>
     </message>
     <message>
-        <location filename="../src/Layers/LayerWidget.cpp" line="436"/>
+        <location filename="../src/Layers/LayerWidget.cpp" line="438"/>
         <source>Plugins</source>
-        <translation type="unfinished"></translation>
+        <translation>プラグイン</translation>
     </message>
 </context>
 <context>
     <name>ImageMapLayer</name>
     <message>
-        <location filename="../src/Layers/ImageMapLayer.cpp" line="73"/>
-        <location filename="../src/Layers/ImageMapLayer.cpp" line="163"/>
-        <location filename="../src/Layers/ImageMapLayer.cpp" line="202"/>
-        <location filename="../src/Layers/ImageMapLayer.cpp" line="272"/>
+        <location filename="../src/Layers/ImageMapLayer.cpp" line="75"/>
+        <location filename="../src/Layers/ImageMapLayer.cpp" line="170"/>
+        <location filename="../src/Layers/ImageMapLayer.cpp" line="209"/>
+        <location filename="../src/Layers/ImageMapLayer.cpp" line="279"/>
         <source>Map - None</source>
         <translation>マップ - なし</translation>
     </message>
     <message>
-        <location filename="../src/Layers/ImageMapLayer.cpp" line="174"/>
+        <location filename="../src/Layers/ImageMapLayer.cpp" line="181"/>
         <source>Map - WMS - %1</source>
         <translation>マップ - WMS - %1</translation>
     </message>
     <message>
-        <location filename="../src/Layers/ImageMapLayer.cpp" line="179"/>
+        <location filename="../src/Layers/ImageMapLayer.cpp" line="186"/>
         <source>Map - WMS-C - %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Layers/ImageMapLayer.cpp" line="184"/>
+        <location filename="../src/Layers/ImageMapLayer.cpp" line="191"/>
         <source>Map - WMS-Tiled - %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Layers/ImageMapLayer.cpp" line="196"/>
+        <location filename="../src/Layers/ImageMapLayer.cpp" line="203"/>
         <source>Map - TMS - %1</source>
         <translation>マップ - TMS - %1</translation>
     </message>
     <message>
-        <location filename="../src/Layers/ImageMapLayer.cpp" line="218"/>
+        <location filename="../src/Layers/ImageMapLayer.cpp" line="225"/>
         <source>Map - OSB Background</source>
         <translation>マップ - OSB背景</translation>
     </message>
     <message>
-        <location filename="../src/Layers/ImageMapLayer.cpp" line="224"/>
+        <location filename="../src/Layers/ImageMapLayer.cpp" line="231"/>
         <source>Map - %1</source>
         <translation>マップ - %1</translation>
     </message>
     <message>
-        <location filename="../src/Layers/ImageMapLayer.cpp" line="246"/>
+        <location filename="../src/Layers/ImageMapLayer.cpp" line="253"/>
         <source>Licensing Terms: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Layers/ImageMapLayer.cpp" line="253"/>
+        <location filename="../src/Layers/ImageMapLayer.cpp" line="260"/>
         <source>License Terms not accepted</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Layers/ImageMapLayer.cpp" line="253"/>
+        <location filename="../src/Layers/ImageMapLayer.cpp" line="260"/>
         <source>You have not ticked the checkbox expressing your agreement with the licensing terms.
 As such, you won&apos;t be able to use this source as a map layer.
 Is it really what you meant?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Layers/ImageMapLayer.cpp" line="1005"/>
+        <location filename="../src/Layers/ImageMapLayer.cpp" line="1052"/>
         <source>Server</source>
-        <translation type="unfinished"></translation>
+        <translation>サーバ</translation>
     </message>
     <message>
-        <location filename="../src/Layers/ImageMapLayer.cpp" line="1008"/>
+        <location filename="../src/Layers/ImageMapLayer.cpp" line="1055"/>
         <source>Tile size</source>
         <translation>タイルのサイズ</translation>
     </message>
     <message>
-        <location filename="../src/Layers/ImageMapLayer.cpp" line="1010"/>
+        <location filename="../src/Layers/ImageMapLayer.cpp" line="1057"/>
         <source>Min/Max zoom</source>
-        <translation type="unfinished"></translation>
+        <translation>最小/最大ズーム</translation>
     </message>
     <message>
-        <location filename="../src/Layers/ImageMapLayer.cpp" line="1014"/>
+        <location filename="../src/Layers/ImageMapLayer.cpp" line="1061"/>
         <source>Projection</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1560,7 +1597,7 @@ Is it really what you meant?</source>
     <message>
         <location filename="../src/ImportExport/ImportCSVDialog.cpp" line="305"/>
         <source>Unable to set projection.</source>
-        <translation type="unfinished"></translation>
+        <translation>投影法を設定できません。</translation>
     </message>
     <message>
         <location filename="../src/ImportExport/ImportCSVDialog.cpp" line="324"/>
@@ -1571,18 +1608,19 @@ Is it really what you meant?</source>
         <location filename="../src/ImportExport/ImportCSVDialog.cpp" line="325"/>
         <source>Latitude or Longitude field missing. It will be impossible to import the file.
 Do you really want to exit?</source>
-        <translation type="unfinished"></translation>
+        <translation>緯度又は経度のフィールドがありません。このファイルをインポートすることはできません。
+本当に終了しますか?</translation>
     </message>
     <message>
         <location filename="../src/ImportExport/ImportCSVDialog.cpp" line="362"/>
         <source>Load CSV import settings</source>
-        <translation type="unfinished"></translation>
+        <translation>CSV インポート設定を読み込む</translation>
     </message>
     <message>
         <location filename="../src/ImportExport/ImportCSVDialog.cpp" line="362"/>
-        <location filename="../src/ImportExport/ImportCSVDialog.cpp" line="472"/>
+        <location filename="../src/ImportExport/ImportCSVDialog.cpp" line="473"/>
         <source>Merkaartor import settings (*.mis)</source>
-        <translation type="unfinished"></translation>
+        <translation>Merkaartorインポート設定 (*.mis)</translation>
     </message>
     <message>
         <location filename="../src/ImportExport/ImportCSVDialog.cpp" line="368"/>
@@ -1598,20 +1636,30 @@ Do you really want to exit?</source>
     <message>
         <location filename="../src/ImportExport/ImportCSVDialog.cpp" line="381"/>
         <source>%1 is not a CSV import settings file</source>
-        <translation type="unfinished"></translation>
+        <translation>%1はCSVインポート設定ファイルではありません</translation>
     </message>
     <message>
-        <location filename="../src/ImportExport/ImportCSVDialog.cpp" line="472"/>
+        <location filename="../src/ImportExport/ImportCSVDialog.cpp" line="473"/>
         <source>Save CSV import settings</source>
-        <translation type="unfinished"></translation>
+        <translation>CSVインポート設定を保存</translation>
     </message>
     <message>
-        <location filename="../src/ImportExport/ImportCSVDialog.cpp" line="481"/>
+        <location filename="../src/ImportExport/ImportCSVDialog.cpp" line="473"/>
+        <source>untitled</source>
+        <translation>タイトルなし</translation>
+    </message>
+    <message>
+        <location filename="../src/ImportExport/ImportCSVDialog.cpp" line="473"/>
+        <source>All Files (*)</source>
+        <translation>全てのファイル(*)</translation>
+    </message>
+    <message>
+        <location filename="../src/ImportExport/ImportCSVDialog.cpp" line="489"/>
         <source>Unable to open save import settings</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/ImportExport/ImportCSVDialog.cpp" line="481"/>
+        <location filename="../src/ImportExport/ImportCSVDialog.cpp" line="489"/>
         <source>%1 could not be opened for writing.</source>
         <translation>%1 を書き込み用に開けません。</translation>
     </message>
@@ -1623,7 +1671,7 @@ Do you really want to exit?</source>
     <message>
         <location filename="../src/ImportExport/ImportCSVDialog.ui" line="20"/>
         <source>Input</source>
-        <translation type="unfinished"></translation>
+        <translation>入力</translation>
     </message>
     <message>
         <location filename="../src/ImportExport/ImportCSVDialog.ui" line="49"/>
@@ -1635,7 +1683,14 @@ p, li { white-space: pre-wrap; }
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:8pt;&quot;&gt;2&lt;/span&gt;&lt;/p&gt;
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:8pt;&quot;&gt;3&lt;/span&gt;&lt;/p&gt;
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:8pt;&quot;&gt;4&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
+p, li { white-space: pre-wrap; }
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;Courier New&apos;; font-size:8.25pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:8pt;&quot;&gt;1&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:8pt;&quot;&gt;2&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:8pt;&quot;&gt;3&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:8pt;&quot;&gt;4&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
         <location filename="../src/ImportExport/ImportCSVDialog.ui" line="66"/>
@@ -1645,22 +1700,22 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="../src/ImportExport/ImportCSVDialog.ui" line="84"/>
         <source>Specifications</source>
-        <translation type="unfinished"></translation>
+        <translation>仕様</translation>
     </message>
     <message>
         <location filename="../src/ImportExport/ImportCSVDialog.ui" line="96"/>
         <source>First line contains headers</source>
-        <translation type="unfinished"></translation>
+        <translation>先頭行にヘッダを含む</translation>
     </message>
     <message>
         <location filename="../src/ImportExport/ImportCSVDialog.ui" line="103"/>
         <source>Delimiter</source>
-        <translation type="unfinished"></translation>
+        <translation>区切り文字</translation>
     </message>
     <message>
         <location filename="../src/ImportExport/ImportCSVDialog.ui" line="115"/>
         <source>Colon (,)</source>
-        <translation type="unfinished"></translation>
+        <translation>カンマ(,)</translation>
     </message>
     <message>
         <location filename="../src/ImportExport/ImportCSVDialog.ui" line="122"/>
@@ -1670,7 +1725,7 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="../src/ImportExport/ImportCSVDialog.ui" line="129"/>
         <source>Tab</source>
-        <translation type="unfinished"></translation>
+        <translation>タブ</translation>
     </message>
     <message>
         <location filename="../src/ImportExport/ImportCSVDialog.ui" line="136"/>
@@ -1705,12 +1760,12 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="../src/ImportExport/ImportCSVDialog.ui" line="258"/>
         <source>Import</source>
-        <translation type="unfinished"></translation>
+        <translation>インポート</translation>
     </message>
     <message>
         <location filename="../src/ImportExport/ImportCSVDialog.ui" line="284"/>
         <source>Import range</source>
-        <translation type="unfinished"></translation>
+        <translation>インポート範囲</translation>
     </message>
     <message>
         <location filename="../src/ImportExport/ImportCSVDialog.ui" line="290"/>
@@ -1725,18 +1780,18 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="../src/ImportExport/ImportCSVDialog.ui" line="315"/>
         <source>Load settings...</source>
-        <translation type="unfinished"></translation>
+        <translation>設定を読み込む...</translation>
     </message>
     <message>
         <location filename="../src/ImportExport/ImportCSVDialog.ui" line="322"/>
         <source>Save settings...</source>
-        <translation type="unfinished"></translation>
+        <translation>設定を保存...</translation>
     </message>
 </context>
 <context>
-    <name>ImportExportSHP</name>
+    <name>ImportExportGdal</name>
     <message>
-        <location filename="../src/ImportExport/ImportExportSHP.cpp" line="247"/>
+        <location filename="../src/ImportExport/ImportExportGdal.cpp" line="247"/>
         <source>Unable to set projection; please specify one</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1753,19 +1808,19 @@ p, li { white-space: pre-wrap; }
 <context>
     <name>Layer</name>
     <message numerus="yes">
-        <location filename="../src/Layers/Layer.cpp" line="645"/>
+        <location filename="../src/Layers/Layer.cpp" line="643"/>
         <source>%n features</source>
         <translation type="unfinished">
             <numerusform>%n要素</numerusform>
         </translation>
     </message>
     <message>
-        <location filename="../src/Layers/Layer.cpp" line="645"/>
+        <location filename="../src/Layers/Layer.cpp" line="643"/>
         <source>Size</source>
         <translation>サイズ</translation>
     </message>
     <message>
-        <location filename="../src/Layers/Layer.cpp" line="662"/>
+        <location filename="../src/Layers/Layer.cpp" line="660"/>
         <source>Features</source>
         <translation>地物</translation>
     </message>
@@ -1802,7 +1857,7 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="../src/Docks/LayerDock.cpp" line="392"/>
         <source>Draw</source>
-        <translation type="unfinished"></translation>
+        <translation>描画</translation>
     </message>
     <message>
         <location filename="../src/Docks/LayerDock.cpp" line="480"/>
@@ -1833,55 +1888,55 @@ p, li { white-space: pre-wrap; }
 <context>
     <name>LayerWidget</name>
     <message>
-        <location filename="../src/Layers/LayerWidget.cpp" line="164"/>
+        <location filename="../src/Layers/LayerWidget.cpp" line="166"/>
         <source>Visible</source>
         <translation>可視</translation>
     </message>
     <message>
-        <location filename="../src/Layers/LayerWidget.cpp" line="170"/>
+        <location filename="../src/Layers/LayerWidget.cpp" line="172"/>
         <source>Readonly</source>
         <translation>読み込み専用</translation>
     </message>
     <message>
-        <location filename="../src/Layers/LayerWidget.cpp" line="178"/>
+        <location filename="../src/Layers/LayerWidget.cpp" line="180"/>
         <source>Low</source>
         <translation>低い</translation>
     </message>
     <message>
-        <location filename="../src/Layers/LayerWidget.cpp" line="178"/>
+        <location filename="../src/Layers/LayerWidget.cpp" line="180"/>
         <source>High</source>
         <translation>高い</translation>
     </message>
     <message>
-        <location filename="../src/Layers/LayerWidget.cpp" line="178"/>
+        <location filename="../src/Layers/LayerWidget.cpp" line="180"/>
         <source>Opaque</source>
         <translation>不透明</translation>
     </message>
     <message>
-        <location filename="../src/Layers/LayerWidget.cpp" line="181"/>
+        <location filename="../src/Layers/LayerWidget.cpp" line="183"/>
         <source>Opacity</source>
         <translation>不透明度</translation>
     </message>
     <message>
-        <location filename="../src/Layers/LayerWidget.cpp" line="206"/>
+        <location filename="../src/Layers/LayerWidget.cpp" line="208"/>
         <source>Layer CLose: Dirty objects present</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Layers/LayerWidget.cpp" line="207"/>
+        <location filename="../src/Layers/LayerWidget.cpp" line="209"/>
         <source>There are dirty features on this layer.
 Are you sure you want to close it? (no Undo possible)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Layers/LayerWidget.cpp" line="212"/>
+        <location filename="../src/Layers/LayerWidget.cpp" line="214"/>
         <source>Layer CLose: Not empty</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Layers/LayerWidget.cpp" line="213"/>
+        <location filename="../src/Layers/LayerWidget.cpp" line="215"/>
         <source>Are you sure you want to close this layer? (no Undo possible)</source>
-        <translation type="unfinished"></translation>
+        <translation>本当にこのレイヤーを閉じてもいいですか?(元には戻せません)</translation>
     </message>
     <message>
         <location filename="../src/Layers/LayerWidget.ui" line="14"/>
@@ -1899,7 +1954,7 @@ Are you sure you want to close it? (no Undo possible)</source>
     <message>
         <location filename="../src/Layers/LicenseDisplayDialog.ui" line="21"/>
         <source>about:blank</source>
-        <translation type="unfinished"></translation>
+        <translation>about:blank</translation>
     </message>
     <message>
         <location filename="../src/Layers/LicenseDisplayDialog.ui" line="29"/>
@@ -1918,16 +1973,18 @@ Are you sure you want to close it? (no Undo possible)</source>
 <context>
     <name>Main</name>
     <message>
-        <location filename="../src/Main.cpp" line="206"/>
+        <location filename="../src/Main.cpp" line="213"/>
         <source>%1 v%2%3(%4)
 Loading plugins...</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 v%2%3(%4)
+プラグイン読み込み中...</translation>
     </message>
     <message>
-        <location filename="../src/Main.cpp" line="235"/>
+        <location filename="../src/Main.cpp" line="242"/>
         <source>%1 v%2%3(%4)
 Initializing...</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 v%2%3(%4)
+初期化中...</translation>
     </message>
 </context>
 <context>
@@ -1935,7 +1992,7 @@ Initializing...</source>
     <message>
         <location filename="../src/ImportExport/ImportExportOSC.cpp" line="69"/>
         <source>Import osmChange</source>
-        <translation type="unfinished"></translation>
+        <translation>osmChangeをインポート</translation>
     </message>
     <message>
         <location filename="../src/Commands/DocumentCommands.cpp" line="124"/>
@@ -1976,7 +2033,7 @@ Initializing...</source>
     <message>
         <location filename="../src/Interactions/CreateAreaInteraction.cpp" line="137"/>
         <source>Area: Create Road %1</source>
-        <translation type="unfinished"></translation>
+        <translation>領域: 道路作成 %1</translation>
     </message>
     <message>
         <location filename="../src/Interactions/CreateAreaInteraction.cpp" line="166"/>
@@ -1991,7 +2048,7 @@ Initializing...</source>
     <message>
         <location filename="../src/Interactions/CreateAreaInteraction.cpp" line="171"/>
         <source>Area: Finish Road %1</source>
-        <translation type="unfinished"></translation>
+        <translation>領域: 道路終了 %1</translation>
     </message>
     <message>
         <location filename="../src/Interactions/CreateAreaInteraction.cpp" line="186"/>
@@ -2002,12 +2059,12 @@ Initializing...</source>
     <message>
         <location filename="../src/Interactions/CreateAreaInteraction.cpp" line="263"/>
         <source>Close Area %1</source>
-        <translation type="unfinished"></translation>
+        <translation>領域%1を閉じる</translation>
     </message>
     <message>
         <location filename="../src/Interactions/CreateDoubleWayInteraction.cpp" line="167"/>
         <source>Add nodes to double-way Road %1</source>
-        <translation type="unfinished"></translation>
+        <translation>2車線道路%1にノードを追加</translation>
     </message>
     <message>
         <location filename="../src/Interactions/CreateDoubleWayInteraction.cpp" line="218"/>
@@ -2023,10 +2080,10 @@ Initializing...</source>
     <message>
         <location filename="../src/Interactions/CreateNodeInteraction.cpp" line="111"/>
         <source>Create POI %1</source>
-        <translation type="unfinished"></translation>
+        <translation>POI %1 を作成</translation>
     </message>
     <message>
-        <location filename="../src/Interactions/CreateRoundaboutInteraction.cpp" line="84"/>
+        <location filename="../src/Interactions/CreateRoundaboutInteraction.cpp" line="83"/>
         <source>Create Roundabout %1</source>
         <translation>ロータリー%1の作成</translation>
     </message>
@@ -2055,7 +2112,7 @@ Initializing...</source>
     <message>
         <location filename="../src/Interactions/CreateSingleWayInteraction.cpp" line="335"/>
         <source>Close Road %1</source>
-        <translation type="unfinished"></translation>
+        <translation>道路%1を閉じる</translation>
     </message>
     <message>
         <location filename="../src/Interactions/MoveNodeInteraction.cpp" line="204"/>
@@ -2069,7 +2126,7 @@ Initializing...</source>
     </message>
     <message>
         <location filename="../src/Interactions/MoveNodeInteraction.cpp" line="214"/>
-        <location filename="../src/MainWindow.cpp" line="2161"/>
+        <location filename="../src/MainWindow.cpp" line="2118"/>
         <source>Merge Nodes into %1</source>
         <translation>ノードを%1にマージします</translation>
     </message>
@@ -2097,7 +2154,8 @@ Initializing...</source>
         <location filename="../src/Interactions/EditInteraction.cpp" line="301"/>
         <source>Do you want to delete the children nodes also?
 Note that OSM nodes outside the downloaded area will be kept.</source>
-        <translation type="unfinished"></translation>
+        <translation>子ノードも削除しますか?
+ダウンロード領域外のOSMノードは保持されることに注意してください。</translation>
     </message>
     <message>
         <location filename="../src/Interactions/EditInteraction.cpp" line="326"/>
@@ -2105,166 +2163,170 @@ Note that OSM nodes outside the downloaded area will be kept.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="184"/>
+        <location filename="../src/MainWindow.cpp" line="185"/>
         <source>tile %v / %m</source>
         <translation>タイル %v / %m</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="338"/>
+        <location filename="../src/MainWindow.cpp" line="339"/>
         <location filename="../src/MainWindow.ui" line="1727"/>
         <source>Properties...</source>
         <translation>プロパティ...</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="361"/>
+        <location filename="../src/MainWindow.cpp" line="362"/>
         <source>Cannot load Projections file</source>
         <translation>投影法ファイルをロードできません</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="361"/>
+        <location filename="../src/MainWindow.cpp" line="362"/>
         <source>&quot;Projections.xml&quot; could not be opened anywhere. Aborting.</source>
         <translation>&quot;Projections.xml&quot; はどこからも開けませんでした。中断します。</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="368"/>
+        <location filename="../src/MainWindow.cpp" line="369"/>
         <source>Low</source>
         <translation>低い</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="368"/>
+        <location filename="../src/MainWindow.cpp" line="369"/>
         <source>High</source>
         <translation>高い</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="368"/>
+        <location filename="../src/MainWindow.cpp" line="369"/>
         <source>Opaque</source>
         <translation>不透明</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="481"/>
+        <location filename="../src/MainWindow.cpp" line="482"/>
         <source>File</source>
-        <translation type="unfinished"></translation>
+        <translation>ファイル</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="485"/>
+        <location filename="../src/MainWindow.cpp" line="486"/>
         <source>Edit</source>
-        <translation type="unfinished"></translation>
+        <translation>編集</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="489"/>
+        <location filename="../src/MainWindow.cpp" line="490"/>
         <source>View</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="493"/>
+        <location filename="../src/MainWindow.cpp" line="494"/>
         <source>Show</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="497"/>
+        <location filename="../src/MainWindow.cpp" line="498"/>
         <source>Directional Arrows</source>
-        <translation type="unfinished"></translation>
+        <translation>方向付き矢印</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="501"/>
+        <location filename="../src/MainWindow.cpp" line="502"/>
         <source>GPS</source>
         <translation>GPS</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="505"/>
+        <location filename="../src/MainWindow.cpp" line="506"/>
         <source>Layers</source>
         <translation>レイヤー</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="509"/>
+        <location filename="../src/MainWindow.cpp" line="510"/>
         <source>Create</source>
-        <translation type="unfinished"></translation>
+        <translation>作成</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="513"/>
+        <location filename="../src/MainWindow.cpp" line="514"/>
         <source>Feature</source>
         <translation>フィーチャ</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="521"/>
+        <location filename="../src/MainWindow.cpp" line="522"/>
         <source>Node</source>
         <translation>ノード</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="525"/>
+        <location filename="../src/MainWindow.cpp" line="526"/>
         <source>Way</source>
         <translation>ウエイ</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="529"/>
+        <location filename="../src/MainWindow.cpp" line="530"/>
         <source>Relation</source>
         <translation>関連</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="533"/>
+        <location filename="../src/MainWindow.cpp" line="534"/>
         <source>Tools</source>
         <translation>ツール</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="537"/>
+        <location filename="../src/MainWindow.cpp" line="538"/>
         <source>Windows</source>
-        <translation type="unfinished"></translation>
+        <translation>ウィンドウ</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="541"/>
+        <location filename="../src/MainWindow.cpp" line="542"/>
         <source>Help</source>
-        <translation type="unfinished"></translation>
+        <translation>ヘルプ</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="722"/>
+        <location filename="../src/MainWindow.cpp" line="781"/>
+        <location filename="../src/MainWindow.cpp" line="851"/>
+        <location filename="../src/MainWindow.cpp" line="885"/>
         <source>Clipboard invalid</source>
         <translation>クリップボードが不正です</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="722"/>
-        <source>Clipboard does not contain valid data.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/MainWindow.cpp" line="758"/>
+        <location filename="../src/MainWindow.cpp" line="684"/>
         <source>Cut Features</source>
+        <translation>地物の切り取り</translation>
+    </message>
+    <message>
+        <location filename="../src/MainWindow.cpp" line="781"/>
+        <location filename="../src/MainWindow.cpp" line="851"/>
+        <location filename="../src/MainWindow.cpp" line="885"/>
+        <source>Clipboard do not contain valid data.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1116"/>
+        <location filename="../src/MainWindow.cpp" line="1051"/>
         <source>Open track file</source>
         <translation>トラックファイルを開く</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1142"/>
+        <location filename="../src/MainWindow.cpp" line="1077"/>
         <location filename="../src/Sync/SyncOSM.cpp" line="38"/>
         <source>Unsaved changes</source>
         <translation>保存されていない変更</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1143"/>
+        <location filename="../src/MainWindow.cpp" line="1078"/>
         <source>The current map contains unsaved changes that will be lost when starting a new one.
 Do you want to cancel starting a new map or continue and discard the old changes?</source>
         <translation>現在の地図には保存されていない変更があり、新しい地図を開いたときに失われます。
 新しい地図の開始をキャンセルしますか？それとも、継続して古い変更を破棄しますか？</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1171"/>
+        <location filename="../src/MainWindow.cpp" line="1106"/>
         <source>Waypoints</source>
         <translation>ウエイポイント</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1191"/>
+        <location filename="../src/MainWindow.cpp" line="1126"/>
         <source>Track %1</source>
         <translation>トラック %1</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1240"/>
+        <location filename="../src/MainWindow.cpp" line="1177"/>
         <source>Big Fat Copyright Warning</source>
         <translation>重大な著作権の警告</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1241"/>
+        <location filename="../src/MainWindow.cpp" line="1178"/>
         <source>You are trying to import a KML file. Please be aware that:
 
  - You cannot import to OSM a KML file created from Google Earth. While you might
@@ -2292,35 +2354,35 @@ Are you absolutely sure this KML can legally be imported in OSM?</source>
 このKMLをOSMにインポートすることが、法的に完全に確認できていますか？</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1303"/>
+        <location filename="../src/MainWindow.cpp" line="1241"/>
         <source>No valid file</source>
         <translation>不正なファイルです</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1303"/>
-        <location filename="../src/MainWindow.cpp" line="2692"/>
+        <location filename="../src/MainWindow.cpp" line="1241"/>
+        <location filename="../src/MainWindow.cpp" line="2679"/>
         <source>%1 could not be opened.</source>
         <translation>%1 を開けません。</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1463"/>
+        <location filename="../src/MainWindow.cpp" line="1403"/>
         <source>Old Qt version detected</source>
         <translation>古い Qt のバージョンが見つかりました</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1464"/>
+        <location filename="../src/MainWindow.cpp" line="1404"/>
         <source>Your setup uses Qt %1, which contains various known errors in uploading data to OpenStreetMap leading to 401 server response codes. Are you sure you want to continue (which is not recommended).
 For more information see http://wiki.openstreetmap.org/index.php/Problem_uploading_with_Merkaartor</source>
         <translation>あなたの設定は、Qt %1を使用しています。これには、OpenStreetMapにデータをアップロードをするときに知られているいろんなエラーがあり、401サーバ応答コードになってしまうことがあります。（推奨されていませんが、）続けますか？
 さらなる情報は、http://wiki.openstreetmap.org/index.php/Problem_uploading_with_Merkaartor で知ることができます。</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1472"/>
+        <location filename="../src/MainWindow.cpp" line="1412"/>
         <source>Upload OSM</source>
         <translation>OSMのアップロード</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1472"/>
+        <location filename="../src/MainWindow.cpp" line="1412"/>
         <source>You don&apos;t seem to have specified your
 OpenStreetMap username and password.
 Do you want to do this now?</source>
@@ -2329,431 +2391,458 @@ Do you want to do this now?</source>
 いま指定しますか？</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1494"/>
-        <location filename="../src/MainWindow.cpp" line="1508"/>
-        <location filename="../src/MainWindow.cpp" line="1532"/>
+        <location filename="../src/MainWindow.cpp" line="1434"/>
+        <location filename="../src/MainWindow.cpp" line="1448"/>
+        <location filename="../src/MainWindow.cpp" line="1472"/>
         <source>Error downloading</source>
         <translation>ダウンロードエラー</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1494"/>
-        <location filename="../src/MainWindow.cpp" line="1508"/>
-        <location filename="../src/MainWindow.cpp" line="1532"/>
+        <location filename="../src/MainWindow.cpp" line="1434"/>
+        <location filename="../src/MainWindow.cpp" line="1448"/>
+        <location filename="../src/MainWindow.cpp" line="1472"/>
         <source>The map could not be downloaded</source>
         <translation>地図をダウンロードできません。</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1521"/>
+        <location filename="../src/MainWindow.cpp" line="1461"/>
         <source>Error downloading OpenStreetBugs</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1521"/>
+        <location filename="../src/MainWindow.cpp" line="1461"/>
         <source>The OpenStreetBugs could not be downloaded</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1892"/>
+        <location filename="../src/MainWindow.cpp" line="1842"/>
         <source>Join Roads</source>
         <translation>道路の結合</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1906"/>
+        <location filename="../src/MainWindow.cpp" line="1856"/>
         <source>Split Roads</source>
         <translation>道路の分割</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1920"/>
+        <location filename="../src/MainWindow.cpp" line="1870"/>
         <source>Break Roads</source>
         <translation>道路分割</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1934"/>
+        <location filename="../src/MainWindow.cpp" line="1884"/>
         <source>Simplify Roads</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2005"/>
+        <location filename="../src/MainWindow.cpp" line="1955"/>
         <source>Network timeout</source>
-        <translation type="unfinished"></translation>
+        <translation>ネットワークタイムアウト</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2005"/>
+        <location filename="../src/MainWindow.cpp" line="1955"/>
         <source>Cannot contact OpenStreetBugs.</source>
-        <translation type="unfinished"></translation>
+        <translation>OpenStreetBugsに接続できません。</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2015"/>
+        <location filename="../src/MainWindow.cpp" line="1965"/>
         <source>Error closing bug</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2015"/>
+        <location filename="../src/MainWindow.cpp" line="1965"/>
         <source>Cannot delete bug. Server message is:
 %1</source>
-        <translation type="unfinished"></translation>
+        <translation>バグを削除できません。サーバーメッセージは:
+%1</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2022"/>
+        <location filename="../src/MainWindow.cpp" line="1972"/>
         <source>Create Junction</source>
         <translation>交差点を作成する</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2044"/>
+        <location filename="../src/MainWindow.cpp" line="1994"/>
         <source>Add Street Numbers</source>
         <translation>街路番号を追加する</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2062"/>
+        <location filename="../src/MainWindow.cpp" line="2011"/>
+        <location filename="../src/MainWindow.cpp" line="2016"/>
         <source>Number of segments to divide into</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2065"/>
+        <location filename="../src/MainWindow.cpp" line="2011"/>
+        <source>Specify the number of segments</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/MainWindow.cpp" line="2020"/>
         <source>Subdivide road into %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2086"/>
+        <location filename="../src/MainWindow.cpp" line="2043"/>
         <source>Axis Align</source>
-        <translation type="unfinished"></translation>
+        <translation>軸合わせ</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2087"/>
+        <location filename="../src/MainWindow.cpp" line="2044"/>
         <source>Specify the number of regular axes to align edges on (e.g. 4 for rectangular)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2094"/>
+        <location filename="../src/MainWindow.cpp" line="2051"/>
         <source>triangular</source>
-        <translation type="unfinished"></translation>
+        <translation>3角形</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2095"/>
+        <location filename="../src/MainWindow.cpp" line="2052"/>
         <source>rectangular</source>
-        <translation type="unfinished"></translation>
+        <translation>4角形</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2096"/>
+        <location filename="../src/MainWindow.cpp" line="2053"/>
         <source>pentagonal</source>
-        <translation type="unfinished"></translation>
+        <translation>5角形</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2097"/>
+        <location filename="../src/MainWindow.cpp" line="2054"/>
         <source>hexagonal</source>
-        <translation type="unfinished"></translation>
+        <translation>6角形</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2098"/>
+        <location filename="../src/MainWindow.cpp" line="2055"/>
         <source>heptagonal</source>
-        <translation type="unfinished"></translation>
+        <translation>7角形</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2099"/>
+        <location filename="../src/MainWindow.cpp" line="2056"/>
         <source>octagonal</source>
-        <translation type="unfinished"></translation>
+        <translation>8角形</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2103"/>
+        <location filename="../src/MainWindow.cpp" line="2060"/>
         <source>Align onto %1 axes</source>
-        <translation type="unfinished"></translation>
+        <translation>%1軸に合わせる</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2105"/>
+        <location filename="../src/MainWindow.cpp" line="2062"/>
         <source>Align onto %1 regular axes</source>
-        <translation type="unfinished"></translation>
+        <translation>%1等間隔軸に合わせる</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2112"/>
-        <location filename="../src/MainWindow.cpp" line="2115"/>
+        <location filename="../src/MainWindow.cpp" line="2069"/>
+        <location filename="../src/MainWindow.cpp" line="2072"/>
         <source>Unable to align to axes</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2113"/>
+        <location filename="../src/MainWindow.cpp" line="2070"/>
         <source>Align to axes operation failed. Please adjust any sharp corners and try again.</source>
-        <translation type="unfinished"></translation>
+        <translation>軸合わせ操作に失敗しました。鋭角の角を調整してもう一度試してください。</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2116"/>
+        <location filename="../src/MainWindow.cpp" line="2073"/>
         <source>Align to axes operation failed and did not converge on a solution.</source>
-        <translation type="unfinished"></translation>
+        <translation>軸合わせ操作に失敗し、解決法が収束しませんでした。</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2133"/>
+        <location filename="../src/MainWindow.cpp" line="2090"/>
         <source>Align Nodes</source>
         <translation>ノードの整列</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2147"/>
+        <location filename="../src/MainWindow.cpp" line="2104"/>
         <source>Spread Nodes</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2176"/>
+        <location filename="../src/MainWindow.cpp" line="2133"/>
         <source>Detach Node %1</source>
         <translation>ノード %1 の切り離し</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2190"/>
+        <location filename="../src/MainWindow.cpp" line="2147"/>
         <source>Add member to relation</source>
         <translation>関連にメンバーを追加</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2202"/>
+        <location filename="../src/MainWindow.cpp" line="2159"/>
         <source>Remove member from relation</source>
         <translation>関連からメンバーの削除</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2214"/>
+        <location filename="../src/MainWindow.cpp" line="2171"/>
         <source>Join areas</source>
-        <translation type="unfinished"></translation>
+        <translation>領域を結合</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2226"/>
+        <location filename="../src/MainWindow.cpp" line="2183"/>
         <source>Split area</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2241"/>
+        <location filename="../src/MainWindow.cpp" line="2198"/>
         <source>Terrace area into %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2271"/>
+        <location filename="../src/MainWindow.cpp" line="2228"/>
         <source>Create Relation %1</source>
         <translation>関連%1の作成</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2321"/>
+        <location filename="../src/MainWindow.cpp" line="2280"/>
         <source>Save map style</source>
         <translation>マップスタイルの保存</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2321"/>
+        <location filename="../src/MainWindow.cpp" line="2280"/>
         <source>Merkaartor map style (*.mas)</source>
         <translation>Merkaartorマップスタイル(*.mas)</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2332"/>
+        <location filename="../src/MainWindow.cpp" line="2298"/>
         <source>Load map style</source>
         <translation>マップスタイルのロード</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2333"/>
+        <location filename="../src/MainWindow.cpp" line="2299"/>
         <source>Supported formats</source>
         <translation>サポートされたフォーマット</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2334"/>
+        <location filename="../src/MainWindow.cpp" line="2300"/>
         <source>Merkaartor map style (*.mas)
 </source>
-        <translation type="unfinished"></translation>
+        <translation>Merkaartor地図スタイル (*.mas)
+</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2335"/>
+        <location filename="../src/MainWindow.cpp" line="2301"/>
         <source>MapCSS stylesheet (*.css)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2539"/>
+        <location filename="../src/MainWindow.cpp" line="2504"/>
         <source>Save Merkaartor document</source>
         <translation>Merkaartor文書を保存</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2539"/>
-        <location filename="../src/MainWindow.cpp" line="2551"/>
-        <location filename="../src/MainWindow.cpp" line="2731"/>
+        <location filename="../src/MainWindow.cpp" line="2504"/>
+        <location filename="../src/MainWindow.cpp" line="2528"/>
+        <location filename="../src/MainWindow.cpp" line="2718"/>
+        <location filename="../src/MainWindow.cpp" line="2729"/>
+        <location filename="../src/MainWindow.cpp" line="2762"/>
+        <location filename="../src/MainWindow.cpp" line="2793"/>
+        <location filename="../src/MainWindow.cpp" line="2829"/>
+        <location filename="../src/MainWindow.cpp" line="2864"/>
+        <location filename="../src/MainWindow.cpp" line="3578"/>
         <source>untitled</source>
         <translation>タイトルなし</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2539"/>
-        <location filename="../src/MainWindow.cpp" line="2551"/>
+        <location filename="../src/MainWindow.cpp" line="2504"/>
+        <location filename="../src/MainWindow.cpp" line="2528"/>
         <source>Merkaartor documents Files (*.mdc)</source>
         <translation>Merkaartor文書ファイル (*.mdc)</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2551"/>
-        <source>Save Merkaartor template document</source>
-        <translation type="unfinished"></translation>
+        <location filename="../src/MainWindow.cpp" line="2504"/>
+        <location filename="../src/MainWindow.cpp" line="2528"/>
+        <location filename="../src/MainWindow.cpp" line="2729"/>
+        <location filename="../src/MainWindow.cpp" line="2762"/>
+        <location filename="../src/MainWindow.cpp" line="2793"/>
+        <location filename="../src/MainWindow.cpp" line="2829"/>
+        <location filename="../src/MainWindow.cpp" line="2864"/>
+        <location filename="../src/MainWindow.cpp" line="3578"/>
+        <source>All Files (*)</source>
+        <translation>全てのファイル(*)</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2608"/>
+        <location filename="../src/MainWindow.cpp" line="2528"/>
+        <source>Save Merkaartor template document</source>
+        <translation>Merkaartorテンプレート文書を保存</translation>
+    </message>
+    <message>
+        <location filename="../src/MainWindow.cpp" line="2595"/>
         <source>Unable to open save file</source>
         <translation>保存ファイルを開くことができません。</translation>
     </message>
     <message>
+        <location filename="../src/MainWindow.cpp" line="2595"/>
         <location filename="../src/MainWindow.cpp" line="2608"/>
-        <location filename="../src/MainWindow.cpp" line="2621"/>
         <source>%1 could not be opened for writing.</source>
         <translation>%1 を書き込み用に開けません。</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2621"/>
+        <location filename="../src/MainWindow.cpp" line="2608"/>
         <source>Unable to open save template document</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2636"/>
-        <location filename="../src/MainWindow.cpp" line="2644"/>
-        <location filename="../src/MainWindow.cpp" line="2692"/>
+        <location filename="../src/MainWindow.cpp" line="2623"/>
+        <location filename="../src/MainWindow.cpp" line="2631"/>
+        <location filename="../src/MainWindow.cpp" line="2679"/>
         <source>Invalid file</source>
         <translation>不正なファイル</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2636"/>
+        <location filename="../src/MainWindow.cpp" line="2623"/>
         <source>%1 is not a valid XML file.
 %2 at line %3, col %4</source>
-        <translation type="unfinished"></translation>
+        <translation>%1は妥当なXMLファイルではありません。
+%3行%4文字目の%2</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2644"/>
+        <location filename="../src/MainWindow.cpp" line="2631"/>
         <source>%1 is not a valid Merkaartor document.</source>
         <translation>%1 は、ただしい Merkaartor データファイルではありません。</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2742"/>
+        <location filename="../src/MainWindow.cpp" line="2729"/>
         <source>Export OSM</source>
         <translation>OSMのエキスポート</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2742"/>
+        <location filename="../src/MainWindow.cpp" line="2729"/>
         <source>OSM Files (*.osm)</source>
         <translation>OSM ファイル (*.osm)</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2765"/>
+        <location filename="../src/MainWindow.cpp" line="2762"/>
         <source>Export Binary OSM</source>
         <translation>バイナリーのOSM形式でエキスポート</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2765"/>
+        <location filename="../src/MainWindow.cpp" line="2762"/>
         <source>OSM Binary Files (*.osb)</source>
         <translation>OSM バイナリーファイル (*.osb)</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2786"/>
+        <location filename="../src/MainWindow.cpp" line="2793"/>
         <source>Export osmChange</source>
-        <translation type="unfinished"></translation>
+        <translation>osmChangeをエクスポート</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2786"/>
+        <location filename="../src/MainWindow.cpp" line="2793"/>
         <source>osmChange Files (*.osc)</source>
-        <translation type="unfinished"></translation>
+        <translation>osmChangeファイル(*.osc)</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2812"/>
+        <location filename="../src/MainWindow.cpp" line="2829"/>
         <source>Export GPX</source>
         <translation>GPXのエキスポート</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2812"/>
+        <location filename="../src/MainWindow.cpp" line="2829"/>
         <source>GPX Files (*.gpx)</source>
         <translation>GPXファイル (*.gpx)</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2837"/>
+        <location filename="../src/MainWindow.cpp" line="2864"/>
         <source>Export KML</source>
         <translation>KMLのエキスポート</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2837"/>
+        <location filename="../src/MainWindow.cpp" line="2864"/>
         <source>KML Files (*.kml)</source>
         <translation>KMLファイル(*.kml)</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="3104"/>
+        <location filename="../src/MainWindow.cpp" line="3141"/>
         <source>%1 (int)</source>
         <translation>%1 (int)</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="3156"/>
+        <location filename="../src/MainWindow.cpp" line="3193"/>
         <source>Add Bookmark</source>
         <translation>ブックマークに追加</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="3157"/>
+        <location filename="../src/MainWindow.cpp" line="3194"/>
         <source>Specify the name of the bookmark.</source>
         <translation>ブックマークの名前を指定</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="3160"/>
+        <location filename="../src/MainWindow.cpp" line="3197"/>
         <source>Invalid bookmark name</source>
         <translation>不正なブックマーク名</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="3161"/>
+        <location filename="../src/MainWindow.cpp" line="3198"/>
         <source>Bookmark cannot be blank.</source>
         <translation>ブックマークは空白にできません。</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="3165"/>
+        <location filename="../src/MainWindow.cpp" line="3202"/>
         <source>Warning: Bookmark name already exists</source>
         <translation>警告!ブックマークの名前がすでに存在しています。</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="3166"/>
+        <location filename="../src/MainWindow.cpp" line="3203"/>
         <source>Enter a new one, keep the same to overwrite or cancel.</source>
         <translation>新しいのを入れてください。上書きするなら現在の値と同じにするか、キャンセルしてください。</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="3204"/>
+        <location filename="../src/MainWindow.cpp" line="3241"/>
         <source>Remove Bookmark</source>
         <translation>ブックマークの削除</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="3205"/>
+        <location filename="../src/MainWindow.cpp" line="3242"/>
         <source>Select the bookmark to remove.</source>
         <translation>削除するブックマークを選択</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="3265"/>
-        <location filename="../src/MainWindow.cpp" line="3274"/>
+        <location filename="../src/MainWindow.cpp" line="3302"/>
+        <location filename="../src/MainWindow.cpp" line="3311"/>
         <source>Invalid projection</source>
         <translation>不正な投影法</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="3265"/>
-        <location filename="../src/MainWindow.cpp" line="3274"/>
+        <location filename="../src/MainWindow.cpp" line="3302"/>
+        <location filename="../src/MainWindow.cpp" line="3311"/>
         <source>Unable to set projection &quot;%1&quot;.</source>
         <translation>投影法を&quot;%1&quot;に設定できませんでした。</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="3414"/>
+        <location filename="../src/MainWindow.cpp" line="3451"/>
         <source>GPS error</source>
         <translation>GPSエラー</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="3415"/>
+        <location filename="../src/MainWindow.cpp" line="3452"/>
         <source>Unable to open GPS port.</source>
         <translation>GPSポートを開けません。</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="3424"/>
+        <location filename="../src/MainWindow.cpp" line="3461"/>
         <source>Open NMEA log file</source>
         <translation>NMEAログファイルを開く</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="3540"/>
+        <location filename="../src/MainWindow.cpp" line="3578"/>
         <source>Save Tag Templates</source>
         <translation>タグテンプレートの保存</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="3540"/>
+        <location filename="../src/MainWindow.cpp" line="3578"/>
         <source>Merkaartor tag templates (*.mat)</source>
         <translation>Merkaartorタグテンプレート(*.mat)</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="3552"/>
-        <location filename="../src/MainWindow.cpp" line="3566"/>
+        <location filename="../src/MainWindow.cpp" line="3597"/>
+        <location filename="../src/MainWindow.cpp" line="3611"/>
         <source>Open Tag Templates</source>
         <translation>タグテンプレートを開く</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="3640"/>
+        <location filename="../src/MainWindow.cpp" line="3685"/>
         <source>Warning! Could not load the Merkaartor translations for the &quot;%1&quot; language. Switching to default English.</source>
-        <translation type="unfinished"></translation>
+        <translation>警告! &quot;%1&quot;言語用のMerkaartor翻訳ファイルを読み込めません。デフォルトの英語に切り替えます。</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.ui" line="14"/>
@@ -2859,10 +2948,10 @@ Do you want to do this now?</source>
         <translation>フィーチャ(&amp;t)</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="517"/>
+        <location filename="../src/MainWindow.cpp" line="518"/>
         <location filename="../src/MainWindow.ui" line="246"/>
         <source>OpenStreetBugs</source>
-        <translation type="unfinished"></translation>
+        <translation>OpenStreetBugs</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.ui" line="259"/>
@@ -2967,7 +3056,7 @@ Do you want to do this now?</source>
         <location filename="../src/MainWindow.ui" line="471"/>
         <location filename="../src/MainWindow.ui" line="474"/>
         <source>Curved link</source>
-        <translation type="unfinished"></translation>
+        <translation>曲がったリンク</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.ui" line="486"/>
@@ -3434,7 +3523,7 @@ Do you want to do this now?</source>
     <message>
         <location filename="../src/MainWindow.ui" line="997"/>
         <source>Align and spread selected nodes equally.</source>
-        <translation type="unfinished"></translation>
+        <translation>選択されたノードを均等割り付け</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.ui" line="1008"/>
@@ -3536,47 +3625,47 @@ Do you want to do this now?</source>
     <message>
         <location filename="../src/MainWindow.ui" line="1709"/>
         <source>Align edges to regular axes</source>
-        <translation type="unfinished"></translation>
+        <translation>等間隔の軸に端を合わせる</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.ui" line="1712"/>
         <source>Align edges to a certain number of regularly spaced axes.</source>
-        <translation type="unfinished"></translation>
+        <translation>等間隔に空いた軸に端を合わせる</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.ui" line="1717"/>
         <source>&amp;Print...</source>
-        <translation type="unfinished"></translation>
+        <translation>印刷(&amp;P)...</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.ui" line="1722"/>
         <source>Print preview...</source>
-        <translation type="unfinished"></translation>
+        <translation>印刷プレビュー...</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.ui" line="1735"/>
         <source>Highlight dirt&amp;y features</source>
-        <translation type="unfinished"></translation>
+        <translation>変更した地物をハイライトする(&amp;y)</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.ui" line="1740"/>
         <source>Add new Drawing layer</source>
-        <translation type="unfinished"></translation>
+        <translation>新しい描画レイヤを追加</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.ui" line="1749"/>
         <source>Cu&amp;t</source>
-        <translation type="unfinished"></translation>
+        <translation>切り取り(&amp;t)</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.ui" line="1752"/>
         <source>Ctrl+X</source>
-        <translation type="unfinished"></translation>
+        <translation>Ctrl+X</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.ui" line="1757"/>
         <source>Add new Filter layer</source>
-        <translation type="unfinished"></translation>
+        <translation>新しいフィルタレイヤーを追加</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.ui" line="1765"/>
@@ -3585,28 +3674,33 @@ Do you want to do this now?</source>
     </message>
     <message>
         <location filename="../src/MainWindow.ui" line="1768"/>
-        <source>Alt+X</source>
+        <source>Extrude interaction for ways (JOSM style)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1773"/>
+        <location filename="../src/MainWindow.ui" line="1771"/>
+        <source>Alt+X</source>
+        <translation>Alt+X</translation>
+    </message>
+    <message>
+        <location filename="../src/MainWindow.ui" line="1776"/>
         <source>Select toggle</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1778"/>
+        <location filename="../src/MainWindow.ui" line="1781"/>
         <source>Include children in selection</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1790"/>
+        <location filename="../src/MainWindow.ui" line="1793"/>
         <source>Scale</source>
         <translation>スケール</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1795"/>
+        <location filename="../src/MainWindow.ui" line="1798"/>
         <source>Save as Template Document...</source>
-        <translation type="unfinished"></translation>
+        <translation>テンプレート文書として保存...</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.ui" line="1097"/>
@@ -3641,7 +3735,7 @@ Do you want to do this now?</source>
     <message>
         <location filename="../src/MainWindow.ui" line="1124"/>
         <source>Commit feature to the dirty layer</source>
-        <translation type="unfinished"></translation>
+        <translation>地物を変更レイヤーにコミットする</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.ui" line="1127"/>
@@ -3694,12 +3788,12 @@ Do you want to do this now?</source>
     <message>
         <location filename="../src/MainWindow.ui" line="1475"/>
         <source>&amp;WMS Servers Editor...</source>
-        <translation type="unfinished"></translation>
+        <translation>WMSサーバの編集(&amp;W)...</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.ui" line="1480"/>
         <source>&amp;TMS Servers Editor...</source>
-        <translation type="unfinished"></translation>
+        <translation>TMSサーバの編集(&amp;T)...</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.ui" line="1560"/>
@@ -3729,22 +3823,22 @@ Do you want to do this now?</source>
     <message>
         <location filename="../src/MainWindow.ui" line="1634"/>
         <source>Simplify way by removing unnecessary child nodes</source>
-        <translation type="unfinished"></translation>
+        <translation>不要な子ノードを削除することで道路を単純化します</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.ui" line="1639"/>
         <source>&amp;Filters Editor...</source>
-        <translation type="unfinished"></translation>
+        <translation>(&amp;F)フィルタエディタ...</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.ui" line="1647"/>
         <source>&amp;None</source>
-        <translation type="unfinished"></translation>
+        <translation>なし(&amp;N)</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.ui" line="1656"/>
         <source>&amp;Join Areas</source>
-        <translation type="unfinished"></translation>
+        <translation>(&amp;J)領域を結合</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.ui" line="1659"/>
@@ -3759,7 +3853,7 @@ Do you want to do this now?</source>
     <message>
         <location filename="../src/MainWindow.ui" line="1671"/>
         <source>&amp;Split Area</source>
-        <translation type="unfinished"></translation>
+        <translation>領域を分割する(&amp;S)</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.ui" line="1674"/>
@@ -3784,22 +3878,22 @@ Do you want to do this now?</source>
     <message>
         <location filename="../src/MainWindow.ui" line="1697"/>
         <source>Toolbar Editor...</source>
-        <translation type="unfinished"></translation>
+        <translation>ツールバーの編集...</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.ui" line="1180"/>
         <source>&amp;Raster/SVG</source>
-        <translation type="unfinished"></translation>
+        <translation>ラスタ/SVG(&amp;R)</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.ui" line="186"/>
         <source>Ta&amp;g templates</source>
-        <translation type="unfinished"></translation>
+        <translation>タグテンプレート(&amp;g)</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.ui" line="337"/>
         <source>Main toolbar</source>
-        <translation type="unfinished"></translation>
+        <translation>メインツールバー</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.ui" line="1191"/>
@@ -4053,17 +4147,17 @@ Do you want to do this now?</source>
     <message>
         <location filename="../src/MainWindow.ui" line="1582"/>
         <source>Show lat/lon &amp;grid</source>
-        <translation type="unfinished"></translation>
+        <translation>緯度/経度グリッドを表示(&amp;g)</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.ui" line="1590"/>
         <source>&amp;Lock zoom to tiled background</source>
-        <translation type="unfinished"></translation>
+        <translation>背景タイルのズームを固定する(&amp;L)</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.ui" line="1595"/>
         <source>&amp;Projections Editor...</source>
-        <translation type="unfinished"></translation>
+        <translation>投影法エディタ(&amp;P)...</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.ui" line="1603"/>
@@ -4078,12 +4172,12 @@ Do you want to do this now?</source>
     <message>
         <location filename="../src/MainWindow.ui" line="1613"/>
         <source>Force Delete</source>
-        <translation type="unfinished"></translation>
+        <translation>強制的に削除する</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.ui" line="1618"/>
         <source>Download OpenStreet&amp;Bugs</source>
-        <translation type="unfinished"></translation>
+        <translation>OpenStreet&amp;Bugsをダウンロード</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.ui" line="1623"/>
@@ -4162,7 +4256,7 @@ Do you want to do this now?</source>
     <message>
         <location filename="../src/Interactions/CreatePolygonInteraction.cpp" line="36"/>
         <source>Create Polygon Interaction</source>
-        <translation type="unfinished"></translation>
+        <translation>多角形作成の説明</translation>
     </message>
     <message>
         <location filename="../src/Interactions/CreatePolygonInteraction.cpp" line="85"/>
@@ -4231,17 +4325,17 @@ Do you want to do this now?</source>
         <translation>ズームの説明</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1847"/>
+        <location filename="../src/MainWindow.cpp" line="1797"/>
         <source>Create Polygon</source>
         <translation>多角形を作成する</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1847"/>
+        <location filename="../src/MainWindow.cpp" line="1797"/>
         <source>Specify the number of sides</source>
         <translation>辺の数を指定してください</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1980"/>
+        <location filename="../src/MainWindow.cpp" line="1930"/>
         <source>Force Feature upload</source>
         <translation>地物を強制的にアップロードする</translation>
     </message>
@@ -4253,12 +4347,12 @@ Do you want to do this now?</source>
     <message>
         <location filename="../src/MainWindow.ui" line="1188"/>
         <source>Show &amp;nodes</source>
-        <translation type="unfinished"></translation>
+        <translation>ノードを表示(&amp;n)</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.ui" line="1199"/>
         <source>Show na&amp;mes</source>
-        <translation type="unfinished"></translation>
+        <translation>名前を表示(&amp;m)</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.ui" line="1520"/>
@@ -4286,17 +4380,17 @@ Do you want to do this now?</source>
         <translation>新しいイメージレイヤーを追加する</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1451"/>
+        <location filename="../src/MainWindow.cpp" line="1391"/>
         <source>Open files</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2026"/>
+        <location filename="../src/MainWindow.cpp" line="1976"/>
         <source>Multiple intersection.</source>
         <translation>複数交差</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2027"/>
+        <location filename="../src/MainWindow.cpp" line="1977"/>
         <source>Those roads have multiple intersections.
 Do you still want to create a junction for each one (Unwanted junctions can still be deleted afterhand)?</source>
         <translation>これらの道路には複数の交差があります。
@@ -4320,7 +4414,7 @@ Do you still want to create a junction for each one (Unwanted junctions can stil
     <message>
         <location filename="../src/Docks/PropertiesDock.cpp" line="703"/>
         <source>Clear %1 tags on %2</source>
-        <translation type="unfinished"></translation>
+        <translation>%2の%1タグをクリア</translation>
     </message>
     <message>
         <location filename="../src/Docks/PropertiesDock.cpp" line="836"/>
@@ -4351,43 +4445,43 @@ Do you still want to create a junction for each one (Unwanted junctions can stil
     <message>
         <location filename="../src/Docks/PropertiesDock.cpp" line="736"/>
         <source>Set &quot;source&quot; tag on %1</source>
-        <translation type="unfinished"></translation>
+        <translation>%1に&quot;source&quot;タグを設定</translation>
     </message>
 </context>
 <context>
     <name>MapFeature</name>
     <message>
-        <location filename="../src/Features/Feature.cpp" line="1056"/>
+        <location filename="../src/Features/Feature.cpp" line="1060"/>
         <source>&lt;i&gt;V: &lt;/i&gt;&lt;b&gt;%1&lt;/b&gt; </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Features/Feature.cpp" line="1058"/>
+        <location filename="../src/Features/Feature.cpp" line="1062"/>
         <source>&lt;i&gt;last: &lt;/i&gt;&lt;b&gt;%1&lt;/b&gt; by &lt;b&gt;%2&lt;/b&gt;</source>
         <translation>&lt;i&gt;last: &lt;/i&gt;&lt;b&gt;%1&lt;/b&gt; by &lt;b&gt;%2&lt;/b&gt;</translation>
     </message>
     <message>
-        <location filename="../src/Features/Feature.cpp" line="1060"/>
+        <location filename="../src/Features/Feature.cpp" line="1064"/>
         <source>&lt;i&gt;last: &lt;/i&gt;&lt;b&gt;%1&lt;/b&gt;</source>
         <translation>&lt;i&gt;last: &lt;/i&gt;&lt;b&gt;%1&lt;/b&gt;</translation>
     </message>
     <message>
-        <location filename="../src/Features/Feature.cpp" line="1063"/>
+        <location filename="../src/Features/Feature.cpp" line="1067"/>
         <source>&lt;br/&gt;&lt;i&gt;layer: &lt;/i&gt;&lt;b&gt;%1&lt;/b&gt; </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Features/Feature.cpp" line="1087"/>
+        <location filename="../src/Features/Feature.cpp" line="1091"/>
         <source>History</source>
         <translation>履歴</translation>
     </message>
     <message>
-        <location filename="../src/Features/Feature.cpp" line="1090"/>
+        <location filename="../src/Features/Feature.cpp" line="1094"/>
         <source>Referenced by ways</source>
         <translation>ウエイから参照</translation>
     </message>
     <message>
-        <location filename="../src/Features/Feature.cpp" line="1093"/>
+        <location filename="../src/Features/Feature.cpp" line="1097"/>
         <source>Referenced by relation</source>
         <translation>関連から参照</translation>
     </message>
@@ -4399,17 +4493,17 @@ Do you still want to create a junction for each one (Unwanted junctions can stil
     <message>
         <location filename="../src/Features/Relation.cpp" line="579"/>
         <source>members</source>
-        <translation type="unfinished"></translation>
+        <translation>メンバー</translation>
     </message>
     <message>
         <location filename="../src/Features/Relation.cpp" line="582"/>
-        <location filename="../src/Features/Way.cpp" line="1034"/>
+        <location filename="../src/Features/Way.cpp" line="1037"/>
         <source>Topleft</source>
         <translation>左上</translation>
     </message>
     <message>
         <location filename="../src/Features/Relation.cpp" line="584"/>
-        <location filename="../src/Features/Way.cpp" line="1036"/>
+        <location filename="../src/Features/Way.cpp" line="1039"/>
         <source>Botright</source>
         <translation>右下</translation>
     </message>
@@ -4429,67 +4523,67 @@ Do you still want to create a junction for each one (Unwanted junctions can stil
         <translation>メンバー</translation>
     </message>
     <message>
-        <location filename="../src/Features/Way.cpp" line="1026"/>
+        <location filename="../src/Features/Way.cpp" line="1029"/>
         <source>Closed way</source>
-        <translation type="unfinished"></translation>
+        <translation>閉じたウェイ</translation>
     </message>
     <message>
-        <location filename="../src/Features/Way.cpp" line="1029"/>
+        <location filename="../src/Features/Way.cpp" line="1032"/>
         <source>Length</source>
         <translation>距離</translation>
     </message>
     <message>
-        <location filename="../src/Features/Way.cpp" line="1031"/>
+        <location filename="../src/Features/Way.cpp" line="1034"/>
         <source>Size</source>
         <translation>サイズ</translation>
     </message>
     <message>
-        <location filename="../src/Features/Way.cpp" line="1031"/>
+        <location filename="../src/Features/Way.cpp" line="1034"/>
         <source>%1 nodes</source>
         <translation>%1 ノード</translation>
     </message>
     <message>
-        <location filename="../src/Features/Way.cpp" line="1038"/>
+        <location filename="../src/Features/Way.cpp" line="1041"/>
         <source>Way</source>
         <translation>ウエイ</translation>
     </message>
     <message>
-        <location filename="../src/Features/Way.cpp" line="1038"/>
+        <location filename="../src/Features/Way.cpp" line="1041"/>
         <source>Area</source>
         <translation>エリア</translation>
     </message>
     <message>
-        <location filename="../src/Features/Node.cpp" line="594"/>
+        <location filename="../src/Features/Node.cpp" line="595"/>
         <source>coord</source>
         <translation>coord</translation>
     </message>
     <message>
-        <location filename="../src/Features/Node.cpp" line="597"/>
+        <location filename="../src/Features/Node.cpp" line="598"/>
         <source>elevation</source>
         <translation>高度</translation>
     </message>
     <message>
-        <location filename="../src/Features/Node.cpp" line="599"/>
+        <location filename="../src/Features/Node.cpp" line="600"/>
         <source>speed</source>
         <translation>速度</translation>
     </message>
     <message>
-        <location filename="../src/Features/Node.cpp" line="601"/>
+        <location filename="../src/Features/Node.cpp" line="602"/>
         <source>description</source>
         <translation>記述</translation>
     </message>
     <message>
-        <location filename="../src/Features/Node.cpp" line="603"/>
+        <location filename="../src/Features/Node.cpp" line="604"/>
         <source>comment</source>
         <translation>コメント</translation>
     </message>
     <message>
-        <location filename="../src/Features/Node.cpp" line="593"/>
+        <location filename="../src/Features/Node.cpp" line="594"/>
         <source>Waypoint</source>
         <translation>ウエイポイント</translation>
     </message>
     <message>
-        <location filename="../src/Features/Node.cpp" line="605"/>
+        <location filename="../src/Features/Node.cpp" line="606"/>
         <source>Node</source>
         <translation>ノード</translation>
     </message>
@@ -4497,74 +4591,74 @@ Do you still want to create a junction for each one (Unwanted junctions can stil
 <context>
     <name>MapView</name>
     <message>
-        <location filename="../src/MapView.cpp" line="303"/>
+        <location filename="../src/MapView.cpp" line="302"/>
         <source>%1 m</source>
         <translation>%1 m</translation>
     </message>
     <message>
-        <location filename="../src/MapView.cpp" line="305"/>
+        <location filename="../src/MapView.cpp" line="304"/>
         <source>%1 km</source>
         <translation>%1 km</translation>
     </message>
     <message>
-        <location filename="../src/MapView.cpp" line="839"/>
+        <location filename="../src/MapView.cpp" line="840"/>
         <source>Feature</source>
         <translation>フィーチャ</translation>
     </message>
     <message>
-        <location filename="../src/MapView.cpp" line="848"/>
+        <location filename="../src/MapView.cpp" line="849"/>
         <source>Node</source>
         <translation>ノード</translation>
     </message>
     <message>
-        <location filename="../src/MapView.cpp" line="856"/>
+        <location filename="../src/MapView.cpp" line="857"/>
         <source>Road</source>
         <translation>道路</translation>
     </message>
     <message>
-        <location filename="../src/MapView.cpp" line="864"/>
+        <location filename="../src/MapView.cpp" line="865"/>
         <source>Relation</source>
         <translation>関連</translation>
     </message>
     <message>
-        <location filename="../src/MapView.cpp" line="989"/>
+        <location filename="../src/MapView.cpp" line="990"/>
         <source>Load image</source>
-        <translation type="unfinished"></translation>
+        <translation>画像を読み込む</translation>
     </message>
     <message>
-        <location filename="../src/MapView.cpp" line="991"/>
+        <location filename="../src/MapView.cpp" line="992"/>
         <source>Add node position to image</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/MapView.cpp" line="993"/>
+        <location filename="../src/MapView.cpp" line="994"/>
         <source>Geotag image with this position</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/MapView.cpp" line="995"/>
+        <location filename="../src/MapView.cpp" line="996"/>
         <source>Cancel</source>
         <translation>キャンセル</translation>
     </message>
     <message>
-        <location filename="../src/MapView.cpp" line="1533"/>
+        <location filename="../src/MapView.cpp" line="1530"/>
         <source>View</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/MapView.cpp" line="1534"/>
+        <location filename="../src/MapView.cpp" line="1531"/>
         <source>Bounding Box</source>
-        <translation type="unfinished"></translation>
+        <translation>境界</translation>
     </message>
     <message>
-        <location filename="../src/MapView.cpp" line="1546"/>
+        <location filename="../src/MapView.cpp" line="1543"/>
         <source>Projection</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/MapView.cpp" line="271"/>
+        <location filename="../src/MapView.cpp" line="270"/>
         <source>%1ms;ppm:%2</source>
-        <translation type="unfinished"></translation>
+        <translation>%1ms;ppm:%2</translation>
     </message>
 </context>
 <context>
@@ -4680,24 +4774,38 @@ Do you still want to create a junction for each one (Unwanted junctions can stil
 <context>
     <name>NativeRenderDialog</name>
     <message>
-        <location filename="../src/Render/NativeRenderDialog.cpp" line="157"/>
-        <location filename="../src/Render/NativeRenderDialog.cpp" line="169"/>
-        <location filename="../src/Render/NativeRenderDialog.cpp" line="193"/>
+        <location filename="../src/Render/NativeRenderDialog.cpp" line="161"/>
+        <location filename="../src/Render/NativeRenderDialog.cpp" line="194"/>
+        <location filename="../src/Render/NativeRenderDialog.cpp" line="231"/>
         <source>Output filename</source>
         <translation>出力ファイル名</translation>
     </message>
     <message>
-        <location filename="../src/Render/NativeRenderDialog.cpp" line="157"/>
+        <location filename="../src/Render/NativeRenderDialog.cpp" line="161"/>
         <source>PDF files (*.pdf)</source>
-        <translation type="unfinished"></translation>
+        <translation>PDFファイル(*.pdf)</translation>
     </message>
     <message>
-        <location filename="../src/Render/NativeRenderDialog.cpp" line="169"/>
+        <location filename="../src/Render/NativeRenderDialog.cpp" line="161"/>
+        <location filename="../src/Render/NativeRenderDialog.cpp" line="194"/>
+        <location filename="../src/Render/NativeRenderDialog.cpp" line="231"/>
+        <source>untitled</source>
+        <translation>タイトルなし</translation>
+    </message>
+    <message>
+        <location filename="../src/Render/NativeRenderDialog.cpp" line="161"/>
+        <location filename="../src/Render/NativeRenderDialog.cpp" line="194"/>
+        <location filename="../src/Render/NativeRenderDialog.cpp" line="231"/>
+        <source>All Files (*)</source>
+        <translation>全てのファイル(*)</translation>
+    </message>
+    <message>
+        <location filename="../src/Render/NativeRenderDialog.cpp" line="194"/>
         <source>Image files (*.png *.jpg)</source>
         <translation>画像ファイル (*.png *.jpg)</translation>
     </message>
     <message>
-        <location filename="../src/Render/NativeRenderDialog.cpp" line="193"/>
+        <location filename="../src/Render/NativeRenderDialog.cpp" line="231"/>
         <source>SVG files (*.svg)</source>
         <translation>SVGファイル (*.svg)</translation>
     </message>
@@ -4707,7 +4815,7 @@ Do you still want to create a junction for each one (Unwanted junctions can stil
     <message>
         <location filename="../src/Render/NativeRenderDialog.ui" line="14"/>
         <source>Raster/SVG export</source>
-        <translation type="unfinished"></translation>
+        <translation>ラスタ/SVGのエクスポート</translation>
     </message>
     <message>
         <location filename="../src/Render/NativeRenderDialog.ui" line="26"/>
@@ -4727,12 +4835,12 @@ Do you still want to create a junction for each one (Unwanted junctions can stil
     <message>
         <location filename="../src/Render/NativeRenderDialog.ui" line="174"/>
         <source>Show Nodes</source>
-        <translation type="unfinished"></translation>
+        <translation>ノードを表示</translation>
     </message>
     <message>
         <location filename="../src/Render/NativeRenderDialog.ui" line="181"/>
         <source>Show Relations</source>
-        <translation type="unfinished"></translation>
+        <translation>関連を表示</translation>
     </message>
     <message>
         <location filename="../src/Render/NativeRenderDialog.ui" line="191"/>
@@ -4742,47 +4850,52 @@ Do you still want to create a junction for each one (Unwanted junctions can stil
     <message>
         <location filename="../src/Render/NativeRenderDialog.ui" line="204"/>
         <source>Show Lat/Lon Grid</source>
-        <translation type="unfinished"></translation>
+        <translation>緯度/経度グリッドを表示</translation>
     </message>
     <message>
-        <location filename="../src/Render/NativeRenderDialog.ui" line="225"/>
-        <source>Export to PDF...</source>
+        <location filename="../src/Render/NativeRenderDialog.ui" line="214"/>
+        <source>Show unstyled features</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../src/Render/NativeRenderDialog.ui" line="232"/>
-        <source>Export to SVG...</source>
-        <translation type="unfinished"></translation>
+        <source>Export to PDF...</source>
+        <translation>PDFとしてエクスポート...</translation>
     </message>
     <message>
         <location filename="../src/Render/NativeRenderDialog.ui" line="239"/>
+        <source>Export to SVG...</source>
+        <translation>SVGとしてエクスポート...</translation>
+    </message>
+    <message>
+        <location filename="../src/Render/NativeRenderDialog.ui" line="246"/>
         <source>Export to Raster...</source>
-        <translation type="unfinished"></translation>
+        <translation>ラスタデータとしてエクスポート...</translation>
     </message>
 </context>
 <context>
     <name>OsbLayer</name>
     <message>
-        <location filename="../src/Layers/Layer.cpp" line="1575"/>
+        <location filename="../src/Layers/OsbLayer.cpp" line="466"/>
         <source># of loaded Regions</source>
-        <translation type="unfinished"></translation>
+        <translation>ロードした領域の #</translation>
     </message>
     <message>
-        <location filename="../src/Layers/Layer.cpp" line="1575"/>
-        <location filename="../src/Layers/Layer.cpp" line="1576"/>
+        <location filename="../src/Layers/OsbLayer.cpp" line="466"/>
+        <location filename="../src/Layers/OsbLayer.cpp" line="467"/>
         <source>%1</source>
-        <translation type="unfinished"></translation>
+        <translation>%1</translation>
     </message>
     <message>
-        <location filename="../src/Layers/Layer.cpp" line="1576"/>
+        <location filename="../src/Layers/OsbLayer.cpp" line="467"/>
         <source># of loaded Tiles</source>
-        <translation type="unfinished"></translation>
+        <translation>ロードしたタイル #</translation>
     </message>
 </context>
 <context>
     <name>OsbLayerWidget</name>
     <message>
-        <location filename="../src/Layers/LayerWidget.cpp" line="627"/>
+        <location filename="../src/Layers/LayerWidget.cpp" line="629"/>
         <source>Close</source>
         <translation>閉じる</translation>
     </message>
@@ -4797,7 +4910,7 @@ Do you still want to create a junction for each one (Unwanted junctions can stil
     <message>
         <location filename="../src/Preferences/OsmServerWidget.ui" line="25"/>
         <source>URL:</source>
-        <translation type="unfinished"></translation>
+        <translation>URL:</translation>
     </message>
     <message>
         <location filename="../src/Preferences/OsmServerWidget.ui" line="35"/>
@@ -4825,15 +4938,15 @@ Do you still want to create a junction for each one (Unwanted junctions can stil
         <translation>常に</translation>
     </message>
     <message>
-        <location filename="../src/PaintStyle/PaintStyleEditor.cpp" line="281"/>
-        <location filename="../src/PaintStyle/PaintStyleEditor.cpp" line="312"/>
-        <location filename="../src/PaintStyle/PaintStyleEditor.cpp" line="362"/>
-        <location filename="../src/PaintStyle/PaintStyleEditor.cpp" line="438"/>
-        <location filename="../src/PaintStyle/PaintStyleEditor.cpp" line="514"/>
-        <location filename="../src/PaintStyle/PaintStyleEditor.cpp" line="620"/>
-        <location filename="../src/PaintStyle/PaintStyleEditor.cpp" line="667"/>
+        <location filename="../src/PaintStyle/PaintStyleEditor.cpp" line="282"/>
+        <location filename="../src/PaintStyle/PaintStyleEditor.cpp" line="313"/>
+        <location filename="../src/PaintStyle/PaintStyleEditor.cpp" line="363"/>
+        <location filename="../src/PaintStyle/PaintStyleEditor.cpp" line="451"/>
+        <location filename="../src/PaintStyle/PaintStyleEditor.cpp" line="527"/>
+        <location filename="../src/PaintStyle/PaintStyleEditor.cpp" line="633"/>
+        <location filename="../src/PaintStyle/PaintStyleEditor.cpp" line="680"/>
         <source>Select Color</source>
-        <translation type="unfinished"></translation>
+        <translation>色の選択</translation>
     </message>
     <message>
         <location filename="../src/PaintStyle/PaintStyleEditor.ui" line="14"/>
@@ -4858,17 +4971,17 @@ Do you still want to create a junction for each one (Unwanted junctions can stil
         <location filename="../src/PaintStyle/PaintStyleEditor.ui" line="215"/>
         <location filename="../src/PaintStyle/PaintStyleEditor.ui" line="361"/>
         <location filename="../src/PaintStyle/PaintStyleEditor.ui" line="556"/>
-        <location filename="../src/PaintStyle/PaintStyleEditor.ui" line="630"/>
-        <location filename="../src/PaintStyle/PaintStyleEditor.ui" line="783"/>
-        <location filename="../src/PaintStyle/PaintStyleEditor.ui" line="1109"/>
-        <location filename="../src/PaintStyle/PaintStyleEditor.ui" line="1354"/>
+        <location filename="../src/PaintStyle/PaintStyleEditor.ui" line="666"/>
+        <location filename="../src/PaintStyle/PaintStyleEditor.ui" line="819"/>
+        <location filename="../src/PaintStyle/PaintStyleEditor.ui" line="1145"/>
+        <location filename="../src/PaintStyle/PaintStyleEditor.ui" line="1390"/>
         <source>...</source>
         <translation>...</translation>
     </message>
     <message>
         <location filename="../src/PaintStyle/PaintStyleEditor.ui" line="81"/>
         <source>Filter</source>
-        <translation type="unfinished"></translation>
+        <translation>フィルタ</translation>
     </message>
     <message>
         <location filename="../src/PaintStyle/PaintStyleEditor.ui" line="105"/>
@@ -4908,38 +5021,38 @@ Do you still want to create a junction for each one (Unwanted junctions can stil
     </message>
     <message>
         <location filename="../src/PaintStyle/PaintStyleEditor.ui" line="345"/>
-        <location filename="../src/PaintStyle/PaintStyleEditor.ui" line="614"/>
-        <location filename="../src/PaintStyle/PaintStyleEditor.ui" line="1093"/>
+        <location filename="../src/PaintStyle/PaintStyleEditor.ui" line="650"/>
+        <location filename="../src/PaintStyle/PaintStyleEditor.ui" line="1129"/>
         <source>Draw with color</source>
         <translation>カラーで表示</translation>
     </message>
     <message>
         <location filename="../src/PaintStyle/PaintStyleEditor.ui" line="407"/>
-        <location filename="../src/PaintStyle/PaintStyleEditor.ui" line="676"/>
-        <location filename="../src/PaintStyle/PaintStyleEditor.ui" line="829"/>
-        <location filename="../src/PaintStyle/PaintStyleEditor.ui" line="1002"/>
-        <location filename="../src/PaintStyle/PaintStyleEditor.ui" line="1203"/>
+        <location filename="../src/PaintStyle/PaintStyleEditor.ui" line="712"/>
+        <location filename="../src/PaintStyle/PaintStyleEditor.ui" line="865"/>
+        <location filename="../src/PaintStyle/PaintStyleEditor.ui" line="1038"/>
+        <location filename="../src/PaintStyle/PaintStyleEditor.ui" line="1239"/>
         <source>Proportional thickness</source>
         <translation>比例幅</translation>
     </message>
     <message>
         <location filename="../src/PaintStyle/PaintStyleEditor.ui" line="427"/>
-        <location filename="../src/PaintStyle/PaintStyleEditor.ui" line="696"/>
-        <location filename="../src/PaintStyle/PaintStyleEditor.ui" line="849"/>
-        <location filename="../src/PaintStyle/PaintStyleEditor.ui" line="1022"/>
-        <location filename="../src/PaintStyle/PaintStyleEditor.ui" line="1223"/>
+        <location filename="../src/PaintStyle/PaintStyleEditor.ui" line="732"/>
+        <location filename="../src/PaintStyle/PaintStyleEditor.ui" line="885"/>
+        <location filename="../src/PaintStyle/PaintStyleEditor.ui" line="1058"/>
+        <location filename="../src/PaintStyle/PaintStyleEditor.ui" line="1259"/>
         <source>Fixed thickness</source>
         <translation>固定幅</translation>
     </message>
     <message>
         <location filename="../src/PaintStyle/PaintStyleEditor.ui" line="489"/>
-        <location filename="../src/PaintStyle/PaintStyleEditor.ui" line="911"/>
+        <location filename="../src/PaintStyle/PaintStyleEditor.ui" line="947"/>
         <source>Dashed</source>
         <translation>点線</translation>
     </message>
     <message>
         <location filename="../src/PaintStyle/PaintStyleEditor.ui" line="503"/>
-        <location filename="../src/PaintStyle/PaintStyleEditor.ui" line="925"/>
+        <location filename="../src/PaintStyle/PaintStyleEditor.ui" line="961"/>
         <source>off</source>
         <translation>オフ</translation>
     </message>
@@ -4949,57 +5062,62 @@ Do you still want to create a junction for each one (Unwanted junctions can stil
         <translation>領域を埋める</translation>
     </message>
     <message>
-        <location filename="../src/PaintStyle/PaintStyleEditor.ui" line="600"/>
+        <location filename="../src/PaintStyle/PaintStyleEditor.ui" line="605"/>
+        <source>Fill with Touchup icon</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/PaintStyle/PaintStyleEditor.ui" line="636"/>
         <source>Boundary</source>
         <translation>境界</translation>
     </message>
     <message>
-        <location filename="../src/PaintStyle/PaintStyleEditor.ui" line="753"/>
+        <location filename="../src/PaintStyle/PaintStyleEditor.ui" line="789"/>
         <source>Touchup</source>
         <translation>Touchup</translation>
     </message>
     <message>
-        <location filename="../src/PaintStyle/PaintStyleEditor.ui" line="767"/>
+        <location filename="../src/PaintStyle/PaintStyleEditor.ui" line="803"/>
         <source>Draw steps</source>
         <translation>階段を表示</translation>
     </message>
     <message>
-        <location filename="../src/PaintStyle/PaintStyleEditor.ui" line="962"/>
+        <location filename="../src/PaintStyle/PaintStyleEditor.ui" line="998"/>
         <source>Draw icon</source>
         <translation>アイコンを表示</translation>
     </message>
     <message>
-        <location filename="../src/PaintStyle/PaintStyleEditor.ui" line="1079"/>
+        <location filename="../src/PaintStyle/PaintStyleEditor.ui" line="1115"/>
         <source>Label</source>
         <translation>ラベル</translation>
     </message>
     <message>
-        <location filename="../src/PaintStyle/PaintStyleEditor.ui" line="1116"/>
+        <location filename="../src/PaintStyle/PaintStyleEditor.ui" line="1152"/>
         <source>Font</source>
         <translation>フォント</translation>
     </message>
     <message>
-        <location filename="../src/PaintStyle/PaintStyleEditor.ui" line="1163"/>
+        <location filename="../src/PaintStyle/PaintStyleEditor.ui" line="1199"/>
         <source>Label tag</source>
         <translation>ラベルタグ</translation>
     </message>
     <message>
-        <location filename="../src/PaintStyle/PaintStyleEditor.ui" line="1279"/>
+        <location filename="../src/PaintStyle/PaintStyleEditor.ui" line="1315"/>
         <source>Halo</source>
         <translation>ハロ</translation>
     </message>
     <message>
-        <location filename="../src/PaintStyle/PaintStyleEditor.ui" line="1289"/>
+        <location filename="../src/PaintStyle/PaintStyleEditor.ui" line="1325"/>
         <source>Area</source>
         <translation>エリア</translation>
     </message>
     <message>
-        <location filename="../src/PaintStyle/PaintStyleEditor.ui" line="1338"/>
+        <location filename="../src/PaintStyle/PaintStyleEditor.ui" line="1374"/>
         <source>Draw with background color</source>
         <translation>背景色を表示</translation>
     </message>
     <message>
-        <location filename="../src/PaintStyle/PaintStyleEditor.ui" line="1394"/>
+        <location filename="../src/PaintStyle/PaintStyleEditor.ui" line="1430"/>
         <source>Label with background tag</source>
         <translation>背景タグのラベル</translation>
     </message>
@@ -5030,39 +5148,51 @@ What do you want to do next?</source>
     <message>
         <location filename="../src/Docks/PhotoLoadErrorDialog.ui" line="63"/>
         <source>Load without associated node</source>
-        <translation type="unfinished"></translation>
+        <translation>関連するノードなしで読み込む</translation>
     </message>
     <message>
         <location filename="../src/Docks/PhotoLoadErrorDialog.ui" line="73"/>
         <source>Extract info from barcode (Walking Papers)</source>
-        <translation type="unfinished"></translation>
+        <translation>情報をバーコードから抽出 (Walking Papers)</translation>
     </message>
     <message>
         <location filename="../src/Docks/PhotoLoadErrorDialog.ui" line="89"/>
         <source>Ignore it</source>
-        <translation type="unfinished"></translation>
+        <translation>無視</translation>
     </message>
     <message>
         <location filename="../src/Docks/PhotoLoadErrorDialog.ui" line="99"/>
         <source>Do this for all current photos.</source>
-        <translation type="unfinished"></translation>
+        <translation>これを現在の写真全てに対して行う。</translation>
     </message>
 </context>
 <context>
     <name>PictureViewerDialog</name>
     <message>
-        <location filename="../src/Utils/PictureViewerDialog.cpp" line="39"/>
-        <location filename="../src/Utils/PictureViewerDialog.cpp" line="45"/>
+        <location filename="../src/Utils/PictureViewerDialog.cpp" line="40"/>
+        <location filename="../src/Utils/PictureViewerDialog.cpp" line="56"/>
         <source>Output filename</source>
         <translation>出力ファイル名</translation>
     </message>
     <message>
-        <location filename="../src/Utils/PictureViewerDialog.cpp" line="39"/>
+        <location filename="../src/Utils/PictureViewerDialog.cpp" line="40"/>
         <source>SVG files (*.svg)</source>
         <translation>SVGファイル (*.svg)</translation>
     </message>
     <message>
-        <location filename="../src/Utils/PictureViewerDialog.cpp" line="45"/>
+        <location filename="../src/Utils/PictureViewerDialog.cpp" line="40"/>
+        <location filename="../src/Utils/PictureViewerDialog.cpp" line="56"/>
+        <source>untitled</source>
+        <translation>タイトルなし</translation>
+    </message>
+    <message>
+        <location filename="../src/Utils/PictureViewerDialog.cpp" line="40"/>
+        <location filename="../src/Utils/PictureViewerDialog.cpp" line="56"/>
+        <source>All Files (*)</source>
+        <translation>全てのファイル(*)</translation>
+    </message>
+    <message>
+        <location filename="../src/Utils/PictureViewerDialog.cpp" line="56"/>
         <source>Image files (*.png *.jpg)</source>
         <translation>画像ファイル (*.png *.jpg)</translation>
     </message>
@@ -5075,137 +5205,137 @@ What do you want to do next?</source>
 <context>
     <name>PreferencesDialog</name>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.cpp" line="169"/>
+        <location filename="../src/Preferences/PreferencesDialog.cpp" line="162"/>
         <source>English</source>
         <translation>英語</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.cpp" line="170"/>
+        <location filename="../src/Preferences/PreferencesDialog.cpp" line="163"/>
         <source>Arabic</source>
         <translation>アラビア数字</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.cpp" line="171"/>
+        <location filename="../src/Preferences/PreferencesDialog.cpp" line="164"/>
         <source>Czech</source>
         <translation>Czech</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.cpp" line="173"/>
+        <location filename="../src/Preferences/PreferencesDialog.cpp" line="166"/>
         <source>German</source>
         <translation>German</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.cpp" line="174"/>
+        <location filename="../src/Preferences/PreferencesDialog.cpp" line="167"/>
         <source>French</source>
         <translation>フランス語</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.cpp" line="175"/>
+        <location filename="../src/Preferences/PreferencesDialog.cpp" line="168"/>
         <source>Hungarian</source>
-        <translation type="unfinished"></translation>
+        <translation>ハンガリー語</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.cpp" line="176"/>
+        <location filename="../src/Preferences/PreferencesDialog.cpp" line="169"/>
         <source>Italian</source>
         <translation>Italian</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.cpp" line="177"/>
+        <location filename="../src/Preferences/PreferencesDialog.cpp" line="170"/>
         <source>Japanese</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.cpp" line="178"/>
+        <location filename="../src/Preferences/PreferencesDialog.cpp" line="171"/>
         <source>Polish</source>
         <translation>Polish</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.cpp" line="180"/>
+        <location filename="../src/Preferences/PreferencesDialog.cpp" line="173"/>
         <source>Brazilian Portuguese</source>
-        <translation type="unfinished"></translation>
+        <translation>ポルトガル語（ブラジル）</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.cpp" line="181"/>
+        <location filename="../src/Preferences/PreferencesDialog.cpp" line="174"/>
         <source>Russian</source>
         <translation>Russian</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.cpp" line="500"/>
+        <location filename="../src/Preferences/PreferencesDialog.cpp" line="493"/>
         <location filename="../src/Preferences/PreferencesDialog.ui" line="647"/>
         <source>Custom styles directory</source>
         <translation>カスタムスタイルディレクトリ</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.cpp" line="509"/>
+        <location filename="../src/Preferences/PreferencesDialog.cpp" line="502"/>
         <location filename="../src/Preferences/PreferencesDialog.ui" line="733"/>
         <source>Tag Template</source>
         <translation>タグのテンプレート</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.cpp" line="509"/>
+        <location filename="../src/Preferences/PreferencesDialog.cpp" line="502"/>
         <source>Merkaartor tag template (*.mat)</source>
         <translation>Merkaartorタグテンプレート(*.mat)</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.cpp" line="518"/>
-        <location filename="../src/Preferences/PreferencesDialog.cpp" line="531"/>
-        <location filename="../src/Preferences/PreferencesDialog.cpp" line="544"/>
-        <location filename="../src/Preferences/PreferencesDialog.cpp" line="557"/>
-        <location filename="../src/Preferences/PreferencesDialog.cpp" line="570"/>
-        <location filename="../src/Preferences/PreferencesDialog.cpp" line="583"/>
-        <location filename="../src/Preferences/PreferencesDialog.cpp" line="595"/>
+        <location filename="../src/Preferences/PreferencesDialog.cpp" line="511"/>
+        <location filename="../src/Preferences/PreferencesDialog.cpp" line="524"/>
+        <location filename="../src/Preferences/PreferencesDialog.cpp" line="537"/>
+        <location filename="../src/Preferences/PreferencesDialog.cpp" line="550"/>
+        <location filename="../src/Preferences/PreferencesDialog.cpp" line="563"/>
+        <location filename="../src/Preferences/PreferencesDialog.cpp" line="576"/>
+        <location filename="../src/Preferences/PreferencesDialog.cpp" line="588"/>
         <source>Select Color</source>
-        <translation type="unfinished"></translation>
+        <translation>色の選択</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.cpp" line="610"/>
+        <location filename="../src/Preferences/PreferencesDialog.cpp" line="603"/>
         <source>Tool already exists</source>
         <translation>ツールがすでに存在します</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.cpp" line="611"/>
+        <location filename="../src/Preferences/PreferencesDialog.cpp" line="604"/>
         <source>A tool of this name already exists.
 Please select another name or click the &lt;Apply&gt; button if you want to modify the existing one</source>
         <translation>この名前のツールはすでに存在しています。
 他の名前を選択するか、既存の名前を変更して&lt;適用&gt;ボタンをおしてください。</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.cpp" line="630"/>
+        <location filename="../src/Preferences/PreferencesDialog.cpp" line="623"/>
         <source>Cannot delete preset tool</source>
         <translation>プリセットツールを削除できません</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.cpp" line="631"/>
+        <location filename="../src/Preferences/PreferencesDialog.cpp" line="624"/>
         <source>Cannot delete preset tool &quot;%1&quot;</source>
         <translation>プリセットツール&quot;%1&quot;を削除できません</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.cpp" line="649"/>
+        <location filename="../src/Preferences/PreferencesDialog.cpp" line="642"/>
         <source>Cannot modify preset tool name</source>
         <translation>プリセットツールの名前を変更できません</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.cpp" line="650"/>
+        <location filename="../src/Preferences/PreferencesDialog.cpp" line="643"/>
         <source>Cannot modify preset tool &quot;%1&quot;&apos;s name</source>
         <translation>プリセットツールの&quot;%1&quot;の名前を変更できません。</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.cpp" line="675"/>
+        <location filename="../src/Preferences/PreferencesDialog.cpp" line="668"/>
         <source>Select tool executable</source>
         <translation>ツールの実行ファイルを選択</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.cpp" line="683"/>
+        <location filename="../src/Preferences/PreferencesDialog.cpp" line="676"/>
         <source>Select template document</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.cpp" line="683"/>
+        <location filename="../src/Preferences/PreferencesDialog.cpp" line="676"/>
         <source>Merkaartor document (*.mdc)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.cpp" line="691"/>
+        <location filename="../src/Preferences/PreferencesDialog.cpp" line="684"/>
         <source>Select Log directory</source>
         <translation>ログディレクトリを選択</translation>
     </message>
@@ -5368,7 +5498,7 @@ Please select another name or click the &lt;Apply&gt; button if you want to modi
     <message>
         <location filename="../src/Preferences/PreferencesDialog.ui" line="903"/>
         <source>Autoload template document</source>
-        <translation type="unfinished"></translation>
+        <translation>テンプレート文書を自動的に読み込む</translation>
     </message>
     <message>
         <location filename="../src/Preferences/PreferencesDialog.ui" line="1185"/>
@@ -5383,28 +5513,28 @@ Please select another name or click the &lt;Apply&gt; button if you want to modi
     <message>
         <location filename="../src/Preferences/PreferencesDialog.ui" line="111"/>
         <source>Allow node/way creation in select mode</source>
-        <translation type="unfinished"></translation>
+        <translation>選択モードでノード/ウェイ作成を可能にする</translation>
     </message>
     <message>
         <location filename="../src/Preferences/PreferencesDialog.ui" line="551"/>
         <source>Dirty</source>
-        <translation type="unfinished"></translation>
+        <translation>変更</translation>
     </message>
     <message>
         <location filename="../src/Preferences/PreferencesDialog.ui" line="826"/>
         <source>OSM API (URL is, e.g., &quot;http://www.openstreetmap.org/api/0.6&quot;</source>
-        <translation type="unfinished"></translation>
+        <translation>OSM API (URL の例: &quot;http://www.openstreetmap.org/api/0.6&quot;</translation>
     </message>
     <message>
         <location filename="../src/Preferences/PreferencesDialog.ui" line="840"/>
         <source>XAPI</source>
-        <translation type="unfinished"></translation>
+        <translation>XAPI</translation>
     </message>
     <message>
         <location filename="../src/Preferences/PreferencesDialog.ui" line="848"/>
         <location filename="../src/Preferences/PreferencesDialog.ui" line="880"/>
         <source>URL:</source>
-        <translation type="unfinished"></translation>
+        <translation>URL:</translation>
     </message>
     <message>
         <location filename="../src/Preferences/PreferencesDialog.ui" line="869"/>
@@ -5484,7 +5614,7 @@ Please select another name or click the &lt;Apply&gt; button if you want to modi
     <message>
         <location filename="../src/Preferences/PreferencesDialog.ui" line="1271"/>
         <source>Enable JOSM-compatible local server on port 8111</source>
-        <translation type="unfinished"></translation>
+        <translation>JOSM互換のローカルサーバーをポート8111で有効にする</translation>
     </message>
     <message>
         <location filename="../src/Preferences/PreferencesDialog.ui" line="1292"/>
@@ -5514,7 +5644,7 @@ Please select another name or click the &lt;Apply&gt; button if you want to modi
     <message>
         <location filename="../src/Preferences/PreferencesDialog.ui" line="1339"/>
         <source>Automatically add &quot;source&quot; tag when creating features over a background map</source>
-        <translation type="unfinished"></translation>
+        <translation>背景地図の上に地物を作成するときに自動的に&quot;source&quot;タグを追加する</translation>
     </message>
     <message>
         <location filename="../src/Preferences/PreferencesDialog.ui" line="1346"/>
@@ -5598,39 +5728,39 @@ Please select another name or click the &lt;Apply&gt; button if you want to modi
         <translation>仮想ノードを使用する(新しいセッションが必要)</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.cpp" line="172"/>
+        <location filename="../src/Preferences/PreferencesDialog.cpp" line="165"/>
         <source>Dutch</source>
         <translation>オランダ語</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.cpp" line="179"/>
+        <location filename="../src/Preferences/PreferencesDialog.cpp" line="172"/>
         <source>Portuguese</source>
         <translation>ポルトガル語</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.cpp" line="182"/>
+        <location filename="../src/Preferences/PreferencesDialog.cpp" line="175"/>
         <source>Slovak</source>
         <translation>スロバキア語</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.cpp" line="183"/>
+        <location filename="../src/Preferences/PreferencesDialog.cpp" line="176"/>
         <source>Spanish</source>
         <translation>スペイン語</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.cpp" line="184"/>
+        <location filename="../src/Preferences/PreferencesDialog.cpp" line="177"/>
         <source>Swedish</source>
         <translation>スウェーデン語</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.cpp" line="185"/>
+        <location filename="../src/Preferences/PreferencesDialog.cpp" line="178"/>
         <source>Ukrainian</source>
         <translation>ウクライナ語</translation>
     </message>
     <message>
         <location filename="../src/Preferences/PreferencesDialog.ui" line="132"/>
         <source>Relations selectable while hidden</source>
-        <translation type="unfinished"></translation>
+        <translation>隠れている関連を選択可能にする</translation>
     </message>
     <message>
         <location filename="../src/Preferences/PreferencesDialog.ui" line="287"/>
@@ -5684,32 +5814,32 @@ Please select another name or click the &lt;Apply&gt; button if you want to modi
 <context>
     <name>Projection</name>
     <message>
-        <location filename="../src/Maps/Projection.cpp" line="498"/>
+        <location filename="../src/Maps/Projection.cpp" line="511"/>
         <source>Document</source>
-        <translation type="unfinished"></translation>
+        <translation>文書</translation>
     </message>
 </context>
 <context>
     <name>ProjectionChooser</name>
     <message>
-        <location filename="../src/Utils/ProjectionChooser.ui" line="14"/>
+        <location filename="../src/Utils/ProjectionChooser.ui" line="26"/>
         <source>Dialog</source>
         <translation>ダイアログ</translation>
     </message>
     <message>
-        <location filename="../src/Utils/ProjectionChooser.ui" line="22"/>
+        <location filename="../src/Utils/ProjectionChooser.ui" line="34"/>
         <source>Predefined</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Utils/ProjectionChooser.ui" line="29"/>
+        <location filename="../src/Utils/ProjectionChooser.ui" line="41"/>
         <source>Standard (EPSG:...)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Utils/ProjectionChooser.ui" line="36"/>
+        <location filename="../src/Utils/ProjectionChooser.ui" line="48"/>
         <source>Custom PROJ4(+proj=...)</source>
-        <translation type="unfinished"></translation>
+        <translation>カスタムPROJ4(+proj=...)</translation>
     </message>
 </context>
 <context>
@@ -5785,6 +5915,25 @@ Please select another name or click the &lt;Apply&gt; button if you want to modi
     </message>
 </context>
 <context>
+    <name>QApplication</name>
+    <message>
+        <location filename="../src/ImportExport/ExportGPX.cpp" line="43"/>
+        <source>Exporting GPX...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/ImportExport/ExportGPX.cpp" line="43"/>
+        <location filename="../src/ImportExport/ImportExportGdal.cpp" line="263"/>
+        <source>Cancel</source>
+        <translation>キャンセル</translation>
+    </message>
+    <message>
+        <location filename="../src/ImportExport/ImportExportGdal.cpp" line="263"/>
+        <source>Importing...</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>QGPS</name>
     <message>
         <location filename="../src/GPS/qgps.cpp" line="91"/>
@@ -5845,12 +5994,12 @@ Please select another name or click the &lt;Apply&gt; button if you want to modi
 <context>
     <name>QGPSComDevice</name>
     <message>
-        <location filename="../src/GPS/qgpsdevice.cpp" line="684"/>
+        <location filename="../src/GPS/qgpsdevice.cpp" line="689"/>
         <source>GPS log error</source>
         <translation>GPSログエラー</translation>
     </message>
     <message>
-        <location filename="../src/GPS/qgpsdevice.cpp" line="685"/>
+        <location filename="../src/GPS/qgpsdevice.cpp" line="690"/>
         <source>Unable to create GPS log file: %1.</source>
         <translation>GPSログファイル %1を作成できません。</translation>
     </message>
@@ -5858,17 +6007,17 @@ Please select another name or click the &lt;Apply&gt; button if you want to modi
 <context>
     <name>QGPSDDevice</name>
     <message>
-        <location filename="../src/GPS/qgpsdevice.cpp" line="962"/>
+        <location filename="../src/GPS/qgpsdevice.cpp" line="971"/>
         <source>Unable to connect to %1:%2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/GPS/qgpsdevice.cpp" line="1062"/>
+        <location filename="../src/GPS/qgpsdevice.cpp" line="1090"/>
         <source>GPS log error</source>
         <translation>GPSログエラー</translation>
     </message>
     <message>
-        <location filename="../src/GPS/qgpsdevice.cpp" line="1063"/>
+        <location filename="../src/GPS/qgpsdevice.cpp" line="1091"/>
         <source>Unable to create GPS log file: %1.</source>
         <translation>GPSログファイル %1を作成できません。</translation>
     </message>
@@ -5956,12 +6105,12 @@ Please select another name or click the &lt;Apply&gt; button if you want to modi
     <message>
         <location filename="../3rdparty/qttoolbardialog-2.2_1-opensource/src/qttoolbardialog.cpp" line="1798"/>
         <source>&lt; S E P A R A T O R &gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt; S E P A R A T O R &gt;</translation>
     </message>
     <message>
         <location filename="../3rdparty/qttoolbardialog-2.2_1-opensource/src/qttoolbardialog.ui" line="16"/>
         <source>Customize Toolbars</source>
-        <translation type="unfinished"></translation>
+        <translation>ツールバーをカスタマイズ</translation>
     </message>
     <message>
         <location filename="../3rdparty/qttoolbardialog-2.2_1-opensource/src/qttoolbardialog.ui" line="31"/>
@@ -5971,7 +6120,7 @@ Please select another name or click the &lt;Apply&gt; button if you want to modi
     <message>
         <location filename="../3rdparty/qttoolbardialog-2.2_1-opensource/src/qttoolbardialog.ui" line="46"/>
         <source>Toolbars</source>
-        <translation type="unfinished"></translation>
+        <translation>ツールバー</translation>
     </message>
     <message>
         <location filename="../3rdparty/qttoolbardialog-2.2_1-opensource/src/qttoolbardialog.ui" line="53"/>
@@ -5986,7 +6135,7 @@ Please select another name or click the &lt;Apply&gt; button if you want to modi
     <message>
         <location filename="../3rdparty/qttoolbardialog-2.2_1-opensource/src/qttoolbardialog.ui" line="67"/>
         <source>Rename</source>
-        <translation type="unfinished"></translation>
+        <translation>名前の変更</translation>
     </message>
     <message>
         <location filename="../3rdparty/qttoolbardialog-2.2_1-opensource/src/qttoolbardialog.ui" line="84"/>
@@ -6016,12 +6165,12 @@ Please select another name or click the &lt;Apply&gt; button if you want to modi
     <message>
         <location filename="../3rdparty/qttoolbardialog-2.2_1-opensource/src/qttoolbardialog.ui" line="158"/>
         <source>&lt;-</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;-</translation>
     </message>
     <message>
         <location filename="../3rdparty/qttoolbardialog-2.2_1-opensource/src/qttoolbardialog.ui" line="173"/>
         <source>-&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>-&gt;</translation>
     </message>
     <message>
         <location filename="../3rdparty/qttoolbardialog-2.2_1-opensource/src/qttoolbardialog.ui" line="188"/>
@@ -6031,7 +6180,7 @@ Please select another name or click the &lt;Apply&gt; button if you want to modi
     <message>
         <location filename="../3rdparty/qttoolbardialog-2.2_1-opensource/src/qttoolbardialog.ui" line="213"/>
         <source>Current Toolbar Actions</source>
-        <translation type="unfinished"></translation>
+        <translation>現在のツールバーアクション</translation>
     </message>
 </context>
 <context>
@@ -6039,7 +6188,7 @@ Please select another name or click the &lt;Apply&gt; button if you want to modi
     <message>
         <location filename="../3rdparty/qttoolbardialog-2.2_1-opensource/src/qttoolbardialog.cpp" line="1247"/>
         <source>Custom Toolbar</source>
-        <translation type="unfinished"></translation>
+        <translation>カスタムツールバー</translation>
     </message>
 </context>
 <context>
@@ -6075,7 +6224,7 @@ Please select another name or click the &lt;Apply&gt; button if you want to modi
     <message>
         <location filename="../src/Docks/MinimumRelationProperties.ui" line="148"/>
         <source>Add &quot;source&quot; tag</source>
-        <translation type="unfinished"></translation>
+        <translation>&quot;source&quot;タグを追加</translation>
     </message>
     <message>
         <location filename="../src/Docks/MinimumRelationProperties.ui" line="151"/>
@@ -6113,7 +6262,7 @@ Please select another name or click the &lt;Apply&gt; button if you want to modi
     <message>
         <location filename="../src/Docks/MinimumRoadProperties.ui" line="87"/>
         <source>Add &quot;source&quot; tag</source>
-        <translation type="unfinished"></translation>
+        <translation>&quot;source&quot;タグを追加</translation>
     </message>
     <message>
         <location filename="../src/Docks/MinimumRoadProperties.ui" line="90"/>
@@ -6264,7 +6413,7 @@ Please select another name or click the &lt;Apply&gt; button if you want to modi
     <message>
         <location filename="../src/Preferences/TMSPreferencesDialog.ui" line="111"/>
         <source>Get Services</source>
-        <translation type="unfinished"></translation>
+        <translation>Servicesを取得</translation>
     </message>
     <message>
         <location filename="../src/Preferences/TMSPreferencesDialog.ui" line="133"/>
@@ -6278,7 +6427,11 @@ Please select another name or click the &lt;Apply&gt; button if you want to modi
 p, li { white-space: pre-wrap; }
 &lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;MS Shell Dlg 2&apos;; font-size:8.25pt; font-weight:400; font-style:normal;&quot;&gt;
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:8pt; font-weight:600;&quot;&gt;This is a &amp;quot;standard&amp;quot; &lt;a href=&quot;http://wiki.osgeo.org/wiki/Tile_Map_Service_Specification&quot;&gt;TMS&lt;/a&gt; server&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
+p, li { white-space: pre-wrap; }
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;MS Shell Dlg 2&apos;; font-size:8.25pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:8pt; font-weight:600;&quot;&gt;This is a &amp;quot;standard&amp;quot; &lt;a href=&quot;http://wiki.osgeo.org/wiki/Tile_Map_Service_Specification&quot;&gt;TMS&lt;/a&gt; server&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
         <location filename="../src/Preferences/TMSPreferencesDialog.ui" line="168"/>
@@ -6293,17 +6446,17 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="../src/Preferences/TMSPreferencesDialog.ui" line="221"/>
         <source>Min zoom:</source>
-        <translation type="unfinished"></translation>
+        <translation>最小ズーム:</translation>
     </message>
     <message>
         <location filename="../src/Preferences/TMSPreferencesDialog.ui" line="231"/>
         <source>Max zoom:</source>
-        <translation type="unfinished"></translation>
+        <translation>最大ズーム:</translation>
     </message>
     <message>
         <location filename="../src/Preferences/TMSPreferencesDialog.ui" line="248"/>
         <source>&quot;source&quot; tag value:</source>
-        <translation type="unfinished"></translation>
+        <translation>&quot;source&quot;タグの値:</translation>
     </message>
     <message>
         <location filename="../src/Preferences/TMSPreferencesDialog.ui" line="262"/>
@@ -6318,12 +6471,12 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="../src/Preferences/TMSPreferencesDialog.ui" line="181"/>
         <source>Lat/Lon (EPSG:4326)</source>
-        <translation type="unfinished"></translation>
+        <translation>緯度/経度(EPSG:4326)</translation>
     </message>
     <message>
         <location filename="../src/Preferences/TMSPreferencesDialog.ui" line="191"/>
         <source>Origin is bottom-left</source>
-        <translation type="unfinished"></translation>
+        <translation>原点は左下</translation>
     </message>
     <message>
         <location filename="../src/Preferences/TMSPreferencesDialog.ui" line="289"/>
@@ -6397,7 +6550,7 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="../src/Utils/TagSelectorWidget.ui" line="44"/>
         <source>AND</source>
-        <translation type="unfinished"></translation>
+        <translation>かつ</translation>
     </message>
     <message>
         <location filename="../src/Utils/TagSelectorWidget.ui" line="54"/>
@@ -6439,95 +6592,95 @@ p, li { white-space: pre-wrap; }
 <context>
     <name>TerraceDialog</name>
     <message>
-        <location filename="../src/TerraceDialog.ui" line="14"/>
+        <location filename="../src/TerraceDialog.ui" line="6"/>
         <source>Terrace</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/TerraceDialog.ui" line="20"/>
+        <location filename="../src/TerraceDialog.ui" line="15"/>
         <source>No House Numbering</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/TerraceDialog.ui" line="32"/>
+        <location filename="../src/TerraceDialog.ui" line="27"/>
         <source>Number of houses</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/TerraceDialog.ui" line="51"/>
+        <location filename="../src/TerraceDialog.ui" line="46"/>
         <source>Add House Numbering (Karlsruhe scheme)</source>
-        <translation type="unfinished"></translation>
+        <translation>住居番号を追加(Karlsruhe scheme)</translation>
     </message>
     <message>
-        <location filename="../src/TerraceDialog.ui" line="73"/>
+        <location filename="../src/TerraceDialog.ui" line="68"/>
         <source>Ranges</source>
-        <translation type="unfinished"></translation>
+        <translation>範囲</translation>
     </message>
     <message>
-        <location filename="../src/TerraceDialog.ui" line="86"/>
+        <location filename="../src/TerraceDialog.ui" line="81"/>
         <source>For example &quot;1-9;15-17;19,19A&quot;</source>
-        <translation type="unfinished"></translation>
+        <translation>例: &quot;1-9;15-17;19,19A&quot;</translation>
     </message>
     <message>
-        <location filename="../src/TerraceDialog.ui" line="93"/>
+        <location filename="../src/TerraceDialog.ui" line="88"/>
         <source>Pattern</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/TerraceDialog.ui" line="104"/>
+        <location filename="../src/TerraceDialog.ui" line="99"/>
         <source>All numbers</source>
-        <translation type="unfinished"></translation>
+        <translation>全ての番号</translation>
     </message>
     <message>
-        <location filename="../src/TerraceDialog.ui" line="109"/>
+        <location filename="../src/TerraceDialog.ui" line="104"/>
         <source>Odd numbers</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/TerraceDialog.ui" line="114"/>
+        <location filename="../src/TerraceDialog.ui" line="109"/>
         <source>Even numbers</source>
-        <translation type="unfinished"></translation>
+        <translation>偶数</translation>
     </message>
     <message>
-        <location filename="../src/TerraceDialog.ui" line="122"/>
-        <source>Select a node in the area as well to indicate the end with the first house number</source>
+        <location filename="../src/TerraceDialog.ui" line="123"/>
+        <source>Optionally you can also select a node in the area and house numbering will start at that end.</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>TrackLayer</name>
     <message>
-        <location filename="../src/Layers/Layer.cpp" line="944"/>
+        <location filename="../src/Layers/Layer.cpp" line="942"/>
         <source># of track segments</source>
         <translation>トラックセグメント数</translation>
     </message>
     <message>
-        <location filename="../src/Layers/Layer.cpp" line="944"/>
+        <location filename="../src/Layers/Layer.cpp" line="942"/>
         <source>%1</source>
-        <translation type="unfinished"></translation>
+        <translation>%1</translation>
     </message>
     <message>
-        <location filename="../src/Layers/Layer.cpp" line="945"/>
+        <location filename="../src/Layers/Layer.cpp" line="943"/>
         <source>Total distance</source>
         <translation>合計距離</translation>
     </message>
     <message>
-        <location filename="../src/Layers/Layer.cpp" line="945"/>
+        <location filename="../src/Layers/Layer.cpp" line="943"/>
         <source>%1 km</source>
         <translation>%1 km</translation>
     </message>
     <message>
-        <location filename="../src/Layers/Layer.cpp" line="946"/>
+        <location filename="../src/Layers/Layer.cpp" line="944"/>
         <source>Total duration</source>
         <translation>合計時間</translation>
     </message>
     <message>
-        <location filename="../src/Layers/Layer.cpp" line="946"/>
+        <location filename="../src/Layers/Layer.cpp" line="944"/>
         <source>%1h %2m</source>
         <translation>%1時間 %2分</translation>
     </message>
     <message>
-        <location filename="../src/Layers/Layer.cpp" line="853"/>
+        <location filename="../src/Layers/Layer.cpp" line="851"/>
         <source>Extract - %1</source>
         <translation>展開中 - %1</translation>
     </message>
@@ -6535,17 +6688,17 @@ p, li { white-space: pre-wrap; }
 <context>
     <name>TrackLayerWidget</name>
     <message>
-        <location filename="../src/Layers/LayerWidget.cpp" line="536"/>
+        <location filename="../src/Layers/LayerWidget.cpp" line="538"/>
         <source>Extract Drawing layer</source>
         <translation>描画レイヤーに展開する</translation>
     </message>
     <message>
-        <location filename="../src/Layers/LayerWidget.cpp" line="541"/>
+        <location filename="../src/Layers/LayerWidget.cpp" line="543"/>
         <source>Zoom</source>
         <translation>ズーム</translation>
     </message>
     <message>
-        <location filename="../src/Layers/LayerWidget.cpp" line="549"/>
+        <location filename="../src/Layers/LayerWidget.cpp" line="551"/>
         <source>Close</source>
         <translation>閉じる</translation>
     </message>
@@ -6585,7 +6738,7 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="../src/Docks/MinimumTrackPointProperties.ui" line="107"/>
         <source>Add &quot;source&quot; tag</source>
-        <translation type="unfinished"></translation>
+        <translation>&quot;source&quot;タグを追加</translation>
     </message>
     <message>
         <location filename="../src/Docks/MinimumTrackPointProperties.ui" line="110"/>
@@ -6644,12 +6797,12 @@ p, li { white-space: pre-wrap; }
 <context>
     <name>UploadedLayerWidget</name>
     <message>
-        <location filename="../src/Layers/LayerWidget.cpp" line="600"/>
+        <location filename="../src/Layers/LayerWidget.cpp" line="602"/>
         <source>Zoom</source>
         <translation>ズーム</translation>
     </message>
     <message>
-        <location filename="../src/Layers/LayerWidget.cpp" line="605"/>
+        <location filename="../src/Layers/LayerWidget.cpp" line="607"/>
         <source>Clear</source>
         <translation>クリア</translation>
     </message>
@@ -6657,24 +6810,29 @@ p, li { white-space: pre-wrap; }
 <context>
     <name>WMSPreferencesDialog</name>
     <message>
-        <location filename="../src/Preferences/WMSPreferencesDialog.cpp" line="317"/>
-        <location filename="../src/Preferences/WMSPreferencesDialog.cpp" line="375"/>
-        <location filename="../src/Preferences/WMSPreferencesDialog.cpp" line="400"/>
+        <location filename="../src/Preferences/WMSPreferencesDialog.cpp" line="346"/>
+        <location filename="../src/Preferences/WMSPreferencesDialog.cpp" line="392"/>
+        <location filename="../src/Preferences/WMSPreferencesDialog.cpp" line="406"/>
         <source>Merkaartor: GetCapabilities</source>
         <translation>Merkaartor: GetCapabilities</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/WMSPreferencesDialog.cpp" line="317"/>
+        <location filename="../src/Preferences/WMSPreferencesDialog.cpp" line="346"/>
         <source>Address and Path cannot be blank.</source>
         <translation>アドレスやパスは空白にできません</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/WMSPreferencesDialog.cpp" line="376"/>
+        <location filename="../src/Preferences/WMSPreferencesDialog.cpp" line="407"/>
         <source>Download failed: %1.</source>
         <translation>ダウンロード失敗： %1</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/WMSPreferencesDialog.cpp" line="400"/>
+        <location filename="../src/Preferences/WMSPreferencesDialog.cpp" line="555"/>
+        <source>Unnamed</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/Preferences/WMSPreferencesDialog.cpp" line="392"/>
         <source>Error reading capabilities.
 </source>
         <translation>capabilitiesの読み込みでエラーが発生しました。
@@ -6701,7 +6859,7 @@ p, li { white-space: pre-wrap; }
         <translation>名前：</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/WMSPreferencesDialog.ui" line="120"/>
+        <location filename="../src/Preferences/WMSPreferencesDialog.ui" line="113"/>
         <source>Layers:</source>
         <translation>レイヤー:</translation>
     </message>
@@ -6713,17 +6871,12 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="../src/Preferences/WMSPreferencesDialog.ui" line="240"/>
         <source>Image format:</source>
-        <translation type="unfinished"></translation>
+        <translation>画像形式:</translation>
     </message>
     <message>
         <location filename="../src/Preferences/WMSPreferencesDialog.ui" line="264"/>
         <source>Styles:</source>
         <translation>スタイル:</translation>
-    </message>
-    <message>
-        <location filename="../src/Preferences/WMSPreferencesDialog.ui" line="111"/>
-        <source>Get Capabilities</source>
-        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../src/Preferences/WMSPreferencesDialog.ui" line="144"/>
@@ -6732,7 +6885,11 @@ p, li { white-space: pre-wrap; }
 p, li { white-space: pre-wrap; }
 &lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;MS Shell Dlg 2&apos;; font-size:8.25pt; font-weight:400; font-style:normal;&quot;&gt;
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;This is a caching WMS (&lt;/span&gt;&lt;a href=&quot;http://wiki.openstreetmap.org/wiki/Merkaartor/Documentation#WMS-C_Servers&quot;&gt;&lt;span style=&quot; font-weight:600; text-decoration: underline; color:#0000ff;&quot;&gt;WMS-C)&lt;/span&gt;&lt;/a&gt;&lt;span style=&quot; font-weight:600;&quot;&gt; server&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
+p, li { white-space: pre-wrap; }
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;MS Shell Dlg 2&apos;; font-size:8.25pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;This is a caching WMS (&lt;/span&gt;&lt;a href=&quot;http://wiki.openstreetmap.org/wiki/Merkaartor/Documentation#WMS-C_Servers&quot;&gt;&lt;span style=&quot; font-weight:600; text-decoration: underline; color:#0000ff;&quot;&gt;WMS-C)&lt;/span&gt;&lt;/a&gt;&lt;span style=&quot; font-weight:600;&quot;&gt; server&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
         <location filename="../src/Preferences/WMSPreferencesDialog.ui" line="194"/>
@@ -6742,30 +6899,30 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="../src/Preferences/WMSPreferencesDialog.ui" line="214"/>
         <source>Zoom levels</source>
-        <translation type="unfinished"></translation>
+        <translation>ズームレベル</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/WMSPreferencesDialog.ui" line="281"/>
+        <location filename="../src/Preferences/WMSPreferencesDialog.ui" line="294"/>
         <source>&quot;source&quot; tag value:</source>
-        <translation type="unfinished"></translation>
+        <translation>&quot;source&quot;タグの値:</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/WMSPreferencesDialog.ui" line="295"/>
+        <location filename="../src/Preferences/WMSPreferencesDialog.ui" line="308"/>
         <source>License URL:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Preferences/WMSPreferencesDialog.ui" line="322"/>
+        <location filename="../src/Preferences/WMSPreferencesDialog.ui" line="335"/>
         <source>Apply</source>
         <translation>適用</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/WMSPreferencesDialog.ui" line="329"/>
+        <location filename="../src/Preferences/WMSPreferencesDialog.ui" line="342"/>
         <source>Add</source>
         <translation>追加</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/WMSPreferencesDialog.ui" line="336"/>
+        <location filename="../src/Preferences/WMSPreferencesDialog.ui" line="349"/>
         <source>Remove</source>
         <translation>削除</translation>
     </message>

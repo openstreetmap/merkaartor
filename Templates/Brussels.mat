@@ -10,6 +10,7 @@
    <description locale="es" >Nombre</description>
    <description locale="et" >Nimi</description>
    <description locale="fr" >Nom</description>
+   <description locale="hr" >Naziv</description>
    <description locale="hu" >Név</description>
    <description locale="it" >Nome</description>
    <description locale="ja" >名前</description>
@@ -34,6 +35,7 @@
    <description locale="es" >Nombre (francés)</description>
    <description locale="et" >Nimi (prantsuse)</description>
    <description locale="fr" >Nom (français)</description>
+   <description locale="hr" >Naziv (francuski)</description>
    <description locale="hu" >Név (vallon)</description>
    <description locale="it" >Nome (francese)</description>
    <description locale="ja" >名前（フランス語)</description>
@@ -55,9 +57,10 @@
    <description locale="es" >Nombre (alemán)</description>
    <description locale="et" >Nimi (hollandi)</description>
    <description locale="fr" >Nom (néérlandais)</description>
+   <description locale="hr" >Naziv (nizozemski)</description>
    <description locale="hu" >Név (flamand)</description>
    <description locale="it" >Nome (olandese)</description>
-   <description locale="ja" >名前（ドイツ語）</description>
+   <description locale="ja" >名前（オランダ語）</description>
    <description locale="nb" >Navn (nederlansk)</description>
    <description locale="nl" >Naam (Nederlands)</description>
    <description locale="nn" >Namn (nederlansk)</description>
@@ -76,6 +79,7 @@
   <description locale="fr" >Rues de Bruxelles</description>
   <description locale="hu" >Brüsszeli utak</description>
   <description locale="it" >Strade di Bruxelles</description>
+  <description locale="ja" >ブリュッセル道路</description>
   <description locale="nl" >Brusselse straten</description>
   <description locale="pl" >Drogi Brukselskie</description>
   <description locale="ru" >Брюссельские линии</description>
