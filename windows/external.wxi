@@ -14,6 +14,9 @@
             <File Id="libgdal" Name="libgdal.dll"
                Source="$(var.DllPath)\libgdal.dll" DiskId="1">
             </File>
+            <File Id="libexpat1.dll" Name="libexpat-1.dll"
+               Source="$(var.MingwPath)\bin\libexpat-1.dll" DiskId="1">
+            </File>
             <File Id="libxerces" Name="libxerces-c2_8_0.dll"
                Source="$(var.DllPath)\libxerces-c2_8_0.dll" DiskId="1">
             </File>
@@ -22,9 +25,6 @@
             </File>
             <File Id="libzbar0" Name="libzbar-0.dll"
                Source="$(var.DllPath)\libzbar-0.dll" DiskId="1">
-            </File>
-            <File Id="Qgpsmm" Name="Qgpsmm.dll"
-               Source="$(var.DllPath)\Qgpsmm.dll" DiskId="1">
             </File>
             <File Id="zlib1.dll2" Name="zlib1.dll"
                Source="$(var.DllPath)\zlib1.dll" DiskId="1">

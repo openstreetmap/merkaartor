@@ -88,6 +88,9 @@
             <File Id="MerkaartorExe" Name="Merkaartor.exe"
                Source="$(var.BinPath)\Merkaartor.exe" DiskId="1">
             </File>         
+            <File Id="Qgpsmm" Name="Qgpsmm.dll"
+               Source="$(var.DllPath)\Qgpsmm.dll" DiskId="1">
+            </File>
             <File Id="merkaartor.cmd" Name="merkaartor.cmd"
                Source="merkaartor.cmd" DiskId="1">
                <Shortcut Id="myshort" Directory="ProgramMenuFolder"
@@ -96,9 +99,6 @@
             </File>
             <File Id="gdb.exe" Name="gdb.exe"
                Source="$(var.MingwPath)\bin\gdb.exe" DiskId="1">
-            </File>
-            <File Id="libexpat1.dll" Name="libexpat-1.dll"
-               Source="$(var.MingwPath)\bin\libexpat-1.dll" DiskId="1">
             </File>
          </Component>
       </DirectoryRef>

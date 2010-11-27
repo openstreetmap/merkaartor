@@ -88,6 +88,9 @@
                      Name="Merkaartor $(var.VERSION)$(var.REVISION)" WorkingDirectory="INSTALLLOCATION"
 					 Icon="MainIcon.exe" />
             </File>         
+            <File Id="Qgpsmm" Name="Qgpsmm.dll"
+               Source="$(var.DllPath)\Qgpsmm19.dll" DiskId="1">
+            </File>
          </Component>
       </DirectoryRef>
  
