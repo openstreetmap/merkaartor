@@ -1152,10 +1152,14 @@ FeatureIterator::FeatureIterator(Document *aDoc)
 : theDocument(aDoc), curLayerIdx(0), curFeatureIdx(0), isAtEnd(false)
 {
     docSize = theDocument->layerSize();
-    curLayerSize = theDocument->getLayer(curLayerIdx)->size();
+    if (!docSize)
+        isAtEnd = true;
+    else  {
+        curLayerSize = theDocument->getLayer(curLayerIdx)->size();
 
-    if(!check() && !isAtEnd)
-        ++(*this);
+        if(!check() && !isAtEnd)
+            ++(*this);
+    }
 }
 
 FeatureIterator::~FeatureIterator()
