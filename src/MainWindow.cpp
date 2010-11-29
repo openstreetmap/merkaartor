@@ -465,9 +465,9 @@ void MainWindow::readLocalConnection()
         QString ln = socket->readLine();
         QStringList tokens = ln.split( QRegExp("[ \r\n][ \r\n]*"), QString::SkipEmptyParts );
         if ( tokens[0] == "GET" ) {
+            socket->close();
             QUrl u = QUrl(tokens[1]);
             loadUrl(u);
-            socket->close();
         }
     }
 }
