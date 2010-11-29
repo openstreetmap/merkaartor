@@ -98,7 +98,7 @@ void ExtrudeInteraction::snapMousePressEvent(QMouseEvent* anEvent, Feature* last
         Creating = true;
         QLineF l = theRoad->getSegment(theRoad->bestSegment());
         BestSegment = theRoad->bestSegment();
-        OrigSegment = QLineF(COORD_TO_XY(l.p1()), COORD_TO_XY(l.p2()));
+        OrigSegment = QLineF(COORD_TO_XY(Coord::fromQPointF(l.p1())), COORD_TO_XY(Coord::fromQPointF(l.p2())));
         LastCursor = anEvent->pos();
     }
 }
@@ -109,7 +109,7 @@ void ExtrudeInteraction::snapMouseReleaseEvent(QMouseEvent* anEvent, Feature* la
     Q_UNUSED(lastSnap)
 
     if (Creating) {
-        QLineF l(OrigSegment.p1(), QPointF(anEvent->posF()));
+        QLineF l(OrigSegment.p1(), anEvent->posF());
         qreal a = OrigSegment.angleTo(l);
         qreal largeur = sin(angToRad(a))*l.length();
 
