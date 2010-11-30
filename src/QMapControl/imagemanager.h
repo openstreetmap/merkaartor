@@ -21,7 +21,7 @@
 #define IMAGEMANAGER_H
 
 #include <QObject>
-#include <QPixmapCache>
+#include <QBuffer>
 #include <QDebug>
 #include <QMutex>
 #include <QFileInfo>
@@ -52,15 +52,13 @@ class ImageManager : public QObject, public IImageManager
          * @param path the path to the image
          * @return the pixmap of the asked image
          */
-        //QPixmap getImage(const QString& host, const QString& path);
-        QPixmap getPixmap(IMapAdapter* anAdapter, int x, int y, int z);
-        QPixmap getPixmap(IMapAdapter* anAdapter, QString url);
+        QImage getImage(IMapAdapter* anAdapter, QString url);
         QByteArray getData(IMapAdapter* anAdapter, QString url);
 
         //QPixmap prefetchImage(const QString& host, const QString& path);
-        QPixmap prefetchPixmap(IMapAdapter* anAdapter, int x, int y, int z);
+        QImage prefetchImage(IMapAdapter* anAdapter, int x, int y, int z);
 
-        void receivedData(const QByteArray& ba, const QString& url);
+        void receivedData(const QByteArray& ba, const QHash<QString, QString>& headers, const QString& url);
 
         /*!
          * This method is called by MapNetwork, after all images in its queue were loaded.
@@ -87,7 +85,7 @@ class ImageManager : public QObject, public IImageManager
 
         static ImageManager* m_ImageManagerInstance;
 
-        QCache<QString, QByteArray> m_dataCache;
+        QCache<QString, QBuffer> m_dataCache;
 
     signals:
         void dataRequested();

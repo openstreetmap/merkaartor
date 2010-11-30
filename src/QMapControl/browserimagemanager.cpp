@@ -161,19 +161,13 @@ BrowserImageManager::~BrowserImageManager()
 
 QByteArray BrowserImageManager::getData(IMapAdapter* anAdapter, QString url)
 {
-    QPixmap pm = getPixmap(anAdapter, url);
+    QImage pm = getImage(anAdapter, url);
     QBuffer buf;
     pm.save(&buf);
     return buf.buffer();
 }
 
-QPixmap BrowserImageManager::getPixmap(IMapAdapter* anAdapter, int x, int y, int z)
-{
-    QString url = anAdapter->getQuery(x, y, z);
-    return getPixmap(anAdapter, url);
-}
-
-QPixmap BrowserImageManager::getPixmap(IMapAdapter* anAdapter, QString url)
+QImage BrowserImageManager::getImage(IMapAdapter* anAdapter, QString url)
 {
 //	QPixmap pm(emptyPixmap);
     QPixmap pm;
@@ -190,22 +184,22 @@ QPixmap BrowserImageManager::getPixmap(IMapAdapter* anAdapter, QString url)
     // is image in picture cache
     if (QPixmapCache::find(hash, pm)) {
         qDebug() << "BrowserImageManager::QPixmapCache hit!";
-        return pm;
+        return pm.toImage();
     }
 
     // disk cache?
     if (anAdapter->isTiled() && useDiskCache(hash + ".png")) {
         if (pm.load(cacheDir.absolutePath() + "/" + hash + ".png")) {
             QPixmapCache::insert(hash, pm);
-            return pm;
+            return pm.toImage();
         }
     }
     if (M_PREFS->getOfflineMode())
-        return pm;
+        return pm.toImage();
 
     LoadingRequest LR(hash, host, url);
     if (loadingRequests.contains(LR))
-        return pm;
+        return pm.toImage();
 
     loadingRequests.enqueue(LR);
     emit(dataRequested());
@@ -215,7 +209,7 @@ QPixmap BrowserImageManager::getPixmap(IMapAdapter* anAdapter, QString url)
         launchRequest();
 #endif
 
-    return pm;
+    return pm.toImage();
 }
 
 void BrowserImageManager::launchRequest()
@@ -277,7 +271,9 @@ void BrowserImageManager::pageLoadFinished(bool ok)
         }
 
         QByteArray ba;
-        receivedData(ba, R.hash);
+        QHash<QString, QString> headers;
+
+        receivedData(ba, headers, R.hash);
     } else {
         loadingRequests.enqueue(R);
         qDebug() << "BrowserImageManager::pageLoadFinished - Error: " << " Hash: " << R.hash;
@@ -300,7 +296,7 @@ void BrowserImageManager::slotLoadProgress(int p)
 }
 
 //QPixmap BrowserImageManager::prefetchImage(const QString& host, const QString& url)
-QPixmap BrowserImageManager::prefetchPixmap(IMapAdapter* anAdapter, int x, int y, int z)
+QImage BrowserImageManager::prefetchImage(IMapAdapter* anAdapter, int x, int y, int z)
 {
     QString host = anAdapter->getHost();
     QString url = anAdapter->getQuery(x, y, z);
@@ -308,10 +304,10 @@ QPixmap BrowserImageManager::prefetchPixmap(IMapAdapter* anAdapter, int x, int y
     QString hash = QString(strHash.toAscii().toBase64());
 
     prefetch.append(hash);
-    return getPixmap(anAdapter, x, y, z);
+    return getImage(anAdapter, anAdapter->getQuery(x, y, z));
 }
 
-void BrowserImageManager::receivedData(const QByteArray& ba, const QString& hash)
+void BrowserImageManager::receivedData(const QByteArray& ba, const QHash<QString, QString>& headers, const QString& hash)
 {
     if (prefetch.contains(hash))
     {

@@ -746,7 +746,7 @@ QRect ImageMapLayer::drawFull(MapView& theView, QRect& rect)
             QString url (p->theMapAdapter->getQuery(wgs84vp, vp, rect));
             if (!url.isEmpty()) {
                 qDebug() << "ImageMapLayer::drawFull: getting: " << url;
-                QPixmap pm = p->theMapAdapter->getImageManager()->getPixmap(p->theMapAdapter,url);
+                QPixmap pm = QPixmap::fromImage(p->theMapAdapter->getImageManager()->getImage(p->theMapAdapter,url));
                 if (!pm.isNull())
                     p->pm = pm.scaled(rect.size(), Qt::IgnoreAspectRatio);
                 else
@@ -872,9 +872,13 @@ QRect ImageMapLayer::drawTiled(MapView& theView, QRect& rect)
     int n=0; // Arbitrarily limit the number of tiles to 100
     for (QList<Tile>::const_iterator tile = tiles.begin(); tile != tiles.end() && n<100; ++tile)
     {
-        QPixmap pm = p->theMapAdapter->getImageManager()->getPixmap(p->theMapAdapter, tile->i, tile->j, p->theMapAdapter->getZoom());
+        QImage pm = p->theMapAdapter->getImageManager()->getImage(p->theMapAdapter, p->theMapAdapter->getQuery(tile->i, tile->j, p->theMapAdapter->getZoom()));
+        foreach(QString k, pm.textKeys()) {
+            qDebug() << k << " : " << pm.text(k);
+        }
+
         if (!pm.isNull())
-            painter.drawPixmap(((tile->i-mapmiddle_tile_x)*tilesizeW)+pmSize.width()/2 -cross_scr_x,
+            painter.drawImage(((tile->i-mapmiddle_tile_x)*tilesizeW)+pmSize.width()/2 -cross_scr_x,
                                ((tile->j-mapmiddle_tile_y)*tilesizeH)+pmSize.height()/2-cross_scr_y,
                                pm);
 

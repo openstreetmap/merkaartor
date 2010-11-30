@@ -126,10 +126,15 @@ void MapNetwork::requestFinished(QNetworkReply* reply)
                 QString hash = R->hash;
                 // 		qDebug() << "request finished for id: " << id;
                 QByteArray ax;
+                QHash<QString, QString> headers;
 
                 if (reply->bytesAvailable() > 0) {
                     ax = reply->readAll();
-                    parent->receivedData(ax, hash);
+                    foreach (QByteArray k, reply->rawHeaderList()) {
+                        headers[QString(k)] = QString(reply->rawHeader(k));
+                    }
+
+                    parent->receivedData(ax, headers, hash);
                 }
                 break;
         }

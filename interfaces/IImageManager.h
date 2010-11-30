@@ -62,15 +62,13 @@ class IImageManager
          * @param path the path to the image
          * @return the pixmap of the asked image
          */
-        //QPixmap getImage(const QString& host, const QString& path);
-        virtual QPixmap getPixmap(IMapAdapter* anAdapter, int x, int y, int z) = 0;
-        virtual QPixmap getPixmap(IMapAdapter* anAdapter, QString url) = 0;
+        virtual QImage getImage(IMapAdapter* anAdapter, QString url) = 0;
         virtual  QByteArray getData(IMapAdapter* anAdapter, QString url) = 0;
 
         //QPixmap prefetchImage(const QString& host, const QString& path);
-        virtual QPixmap prefetchPixmap(IMapAdapter* anAdapter, int x, int y, int z) = 0;
+        virtual QImage prefetchImage(IMapAdapter* anAdapter, int x, int y, int z) = 0;
 
-        virtual void receivedData(const QByteArray& ba, const QString& url) = 0;
+        virtual void receivedData(const QByteArray& ba, const QHash<QString, QString>& headers, const QString& url) = 0;
 
         /*!
          * This method is called by MapNetwork, after all images in its queue were loaded.
