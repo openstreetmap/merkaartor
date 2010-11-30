@@ -84,6 +84,7 @@ public:
      * @return the source tag
      */
     virtual QString	getSourceTag		() const = 0;
+    virtual void setSourceTag (const QString& value) = 0;
 
     //! returns the Url of the usage license
     /*!
@@ -132,6 +133,6 @@ signals:
 };
 
 Q_DECLARE_INTERFACE ( IMapAdapter,
-                      "com.cbsoft.Merkaartor.IMapAdapter/1.9" )
+                      "com.cbsoft.Merkaartor.IMapAdapter/1.10" )
 
 #endif

@@ -61,11 +61,6 @@ class IPaintStyle;
 #define M_PREFS MerkaartorPreferences::instance()
 #define M_STYLE MerkaartorPreferences::styleinstance()
 
-#define NONE_ADAPTER_UUID QUuid("{8F5D3625-F987-45c5-A50B-17D88384F97D}")
-#define SHAPE_ADAPTER_UUID QUuid("{AFB0324E-34D0-4267-BB8A-CF56CD2D7012}")
-#define WMS_ADAPTER_UUID QUuid("{E238750A-AC27-429e-995C-A60C17B9A1E0}")
-#define TMS_ADAPTER_UUID QUuid("{CA8A07EC-A466-462b-929F-3805BC9DEC95}")
-
 #define HOMEDIR (g_Merk_Portable ? qApp->applicationDirPath() : QDir::homePath() + "/.merkaartor")
 #define SHAREDIR (g_Merk_Portable ? qApp->applicationDirPath() : STRINGIFY(SHARE_DIR))
 #define TEMPLATE_DOCUMENT (HOMEDIR + "/Startup.mdc")

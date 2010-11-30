@@ -147,14 +147,6 @@ const Painter* Document::getPainter(int i)
 void Document::addDefaultLayers()
 {
     /*ImageMapLayer*l = */addImageLayer();
-//    l->setMapAdapter(M_PREFS->getBackgroundPlugin(), M_PREFS->getSelectedServer());
-//    if (M_PREFS->getBackgroundPlugin() != NONE_ADAPTER_UUID) {
-//        l->setVisible(M_PREFS->getBgVisible());
-//        // Sync the menu entry label & visible checkbox to the layer
-//        QMenu *lMenu = l->getWidget()->getAssociatedMenu();
-//        lMenu->menuAction()->menu()->actions().at(0)->setChecked(M_PREFS->getBgVisible());
-//        lMenu->setTitle(l->name());
-//    }
 
     if (g_Merk_Frisius) {
         DrawingLayer* aLayer = addDrawingLayer();

@@ -24,6 +24,7 @@ QString	MsBingMapAdapterFactory::getName() const
 
 MsBingMapAdapter::MsBingMapAdapter()
     : MapAdapter(QString("ecn.t%1.tiles.virtualearth.net"), QString("/tiles/a%1.jpeg?g=587&mkt=en-gb&n=z"), QString("EPSG:3857"), 0, 19)
+    , theSource("Bing")
 {
 }
 
@@ -200,7 +201,12 @@ int MsBingMapAdapter::getTileSizeH() const
 
 QString MsBingMapAdapter::getSourceTag() const
 {
-    return "Bing";
+    return theSource;
+}
+
+virtual void MsBingMapAdapter::setSourceTag (const QString& value)
+{
+    theSource = value;
 }
 
 QString MsBingMapAdapter::getLicenseUrl() const

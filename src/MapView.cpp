@@ -7,6 +7,7 @@
 #include "Document.h"
 #include "Layer.h"
 #include "ImageMapLayer.h"
+#include "IMapAdapter.h"
 #include "Feature.h"
 #include "Relation.h"
 #include "Interaction.h"
@@ -231,9 +232,14 @@ void MapView::paintEvent(QPaintEvent * anEvent)
 
     P.drawPixmap(p->theVectorPanDelta, *StaticBackground);
     P.save();
-    for (LayerIterator<ImageMapLayer*> ImgIt(theDocument); !ImgIt.isEnd(); ++ImgIt)
-        if (ImgIt.get()->isVisible())
+    ImageMapLayer* BingLayer = NULL;
+    for (LayerIterator<ImageMapLayer*> ImgIt(theDocument); !ImgIt.isEnd(); ++ImgIt) {
+        if (ImgIt.get()->isVisible()) {
             ImgIt.get()->drawImage(&P);
+            if (ImgIt.get()->getMapAdapter()->getId() == BING_ADAPTER_UUID)
+                BingLayer = ImgIt.get();
+        }
+    }
     P.restore();
 
     if (!p->invalidRects.isEmpty())
@@ -246,6 +252,10 @@ void MapView::paintEvent(QPaintEvent * anEvent)
     drawLatLonGrid(P);
     drawDownloadAreas(P);
     drawScale(P);
+
+    if (BingLayer) {
+        // Draw clickable logo
+    }
 
     if (theInteraction) {
         P.setRenderHint(QPainter::Antialiasing);

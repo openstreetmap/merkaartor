@@ -98,6 +98,7 @@ public:
      * @return the source tag
      */
     virtual QString	getSourceTag		() const { return ""; }
+    virtual void setSourceTag (const QString& ) {};
 
     //! returns the Url of the usage license
     /*!

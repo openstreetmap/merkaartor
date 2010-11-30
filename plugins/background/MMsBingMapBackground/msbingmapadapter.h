@@ -58,6 +58,7 @@ class MsBingMapAdapter : public MapAdapter
          * @return the source tag
          */
         virtual QString	getSourceTag() const;
+        virtual void setSourceTag (const QString& value);
 
         //! returns the Url of the usage license
         /*!
@@ -94,6 +95,7 @@ class MsBingMapAdapter : public MapAdapter
         double getMercatorYCoord(double lati) const;
 
         int srvNum;
+        QString theSource;
 };
 
 class MsBingMapAdapterFactory : public QObject, public IMapAdapterFactory
