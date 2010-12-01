@@ -204,7 +204,7 @@ QString MsBingMapAdapter::getSourceTag() const
     return theSource;
 }
 
-virtual void MsBingMapAdapter::setSourceTag (const QString& value)
+void MsBingMapAdapter::setSourceTag (const QString& value)
 {
     theSource = value;
 }
@@ -215,3 +215,8 @@ QString MsBingMapAdapter::getLicenseUrl() const
 }
 
 Q_EXPORT_PLUGIN2(MMsBingMapBackgroundPlugin, MsBingMapAdapterFactory)
+
+QPixmap MsBingMapAdapter::getWatermark(const QRectF &bbox, const QRect &screen)
+{
+    return theWatermark;
+}

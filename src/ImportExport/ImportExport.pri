@@ -55,5 +55,5 @@ SOURCES += \
     fileformat.pb.cc \
     osmformat.pb.cc
 
-LIBS += -lz -lbz2 -lprotoc
+LIBS += -lz -lbz2 -lprotobuf
 }

@@ -12,7 +12,7 @@ QT_VER_MIN = $$member(QT_VERSION, 1)
         # MNavitBackground \
         MYahooTiledBackground \
         MYahooBackground \
-        # MMsBingMapBackground \
+        MMsBingMapBackground \
         MWalkingPapersBackground
 
     greaterThan(QT_VER_MAJ, 3) : greaterThan(QT_VER_MIN, 5) {

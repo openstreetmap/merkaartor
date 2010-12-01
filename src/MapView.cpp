@@ -8,6 +8,7 @@
 #include "Layer.h"
 #include "ImageMapLayer.h"
 #include "IMapAdapter.h"
+#include "IMapWatermark.h"
 #include "Feature.h"
 #include "Relation.h"
 #include "Interaction.h"
@@ -253,6 +254,13 @@ void MapView::paintEvent(QPaintEvent * anEvent)
     drawDownloadAreas(P);
     drawScale(P);
 
+    for (LayerIterator<ImageMapLayer*> ImgIt(theDocument); !ImgIt.isEnd(); ++ImgIt) {
+        if (ImgIt.get()->isVisible()) {
+            IMapWatermark* mapW = qobject_cast<IMapWatermark*>(ImgIt.get()->getMapAdapter());
+            if (mapW)
+                P.drawPixmap(0, 0, mapW->getWatermark(p->Viewport.toQRectF(), rect()));
+        }
+    }
     if (BingLayer) {
         // Draw clickable logo
     }
