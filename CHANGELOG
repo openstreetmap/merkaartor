@@ -1,4 +1,5 @@
 v0.17
+    * FIX : Revert to custom icon for move interaction on MAC (fixes #3170)
     * FIX : GeoTIFF + GDAL backgrounds: Allow to specify an automatic "source" tag via the plugin menu
     * ADD : Bing Maps plugin
     * FIX : GDAL + GeoTIFF : if a ESRI World File (.tfw, *.wld) is present, override file geotransform

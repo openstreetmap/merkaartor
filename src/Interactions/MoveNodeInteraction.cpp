@@ -61,9 +61,12 @@ QString MoveNodeInteraction::toHtml()
 #ifndef Q_OS_SYMBIAN
 QCursor MoveNodeInteraction::cursor() const
 {
-//    QPixmap pm(":/Icons/move.xpm");
-//    return QCursor(pm);
+#ifdef Q_OS_MAC
+    QPixmap pm(":/Icons/move.xpm");
+    return QCursor(pm);
+#else
     return QCursor(Qt::SizeAllCursor);
+#endif
 }
 #endif
 
