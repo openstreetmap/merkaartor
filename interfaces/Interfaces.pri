@@ -4,4 +4,5 @@ HEADERS += \
     IImageManager.h \
     IMapAdapter.h \
     IRenderer.h \
-    IMapAdapterFactory.h
+    IMapAdapterFactory.h \
+    IMapWatermark.h

@@ -19,7 +19,7 @@ symbian:MOBILE=1
 # LIBPROXY=1          - use the libproxy library to find the system proxy
 # PORTABLE=1          - build merkaartor as a portable app (all files in app dir)
 
-isEmpty(VERSION): VERSION="0.17"
+isEmpty(VERSION): VERSION="0.18"
 
 contains(RELEASE,1) {
     DEFINES += RELEASE

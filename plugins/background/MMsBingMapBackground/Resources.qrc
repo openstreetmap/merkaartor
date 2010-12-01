@@ -1,0 +1,5 @@
+<RCC>
+    <qresource prefix="/images">
+        <file alias="bing_logo.png">images/logo_powered_by.png</file>
+    </qresource>
+</RCC>

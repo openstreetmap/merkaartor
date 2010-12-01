@@ -1,4 +1,9 @@
 #include <QtPlugin>
+#include <QEventLoop>
+#include <QNetworkAccessManager>
+#include <QNetworkRequest>
+#include <QNetworkReply>
+#include <QTimer>
 
 #include "msbingmapadapter.h"
 
@@ -25,7 +30,53 @@ QString	MsBingMapAdapterFactory::getName() const
 MsBingMapAdapter::MsBingMapAdapter()
     : MapAdapter(QString("ecn.t%1.tiles.virtualearth.net"), QString("/tiles/a%1.jpeg?g=587&mkt=en-gb&n=z"), QString("EPSG:3857"), 0, 19)
     , theSource("Bing")
+    , isLoaded(false)
 {
+    QNetworkAccessManager manager;
+    QEventLoop q;
+    QTimer tT;
+
+    tT.setSingleShot(true);
+    connect(&tT, SIGNAL(timeout()), &q, SLOT(quit()));
+    connect(&manager, SIGNAL(finished(QNetworkReply*)),
+            &q, SLOT(quit()));
+
+    QNetworkReply *netReply = manager.get(QNetworkRequest(QUrl("http://dev.virtualearth.net/REST/v1/Imagery/Metadata/Aerial/0,0?zl=1&mapVersion=v1&key=AlRQe0E4ha3yKkz2MuNI-G1AIk-CIym4zTeqaTgKVWz_LBsnQuPksHrHCOT0381M&include=ImageryProviders&output=xml")));
+
+    tT.start(30000);
+    q.exec();
+    if(tT.isActive()) {
+        // download complete
+        tT.stop();
+
+        QDomDocument theDoc;
+        theDoc.setContent(netReply->readAll());
+
+        QString curProvider;
+        QDomNodeList providers = theDoc.elementsByTagName("ImageryProvider");
+        for (int i=0; i<providers.size(); ++i) {
+            QDomNode nd = providers.at(i);
+            QDomElement provider = nd.firstChildElement("Attribution");
+            if (!provider.isNull())
+                curProvider = provider.text();
+            QDomNodeList coverages = nd.toElement().elementsByTagName("CoverageArea");
+            for (int j=0; j<coverages.size(); ++j) {
+                QDomNode cover = coverages.at(j);
+                BingProvider prov;
+                prov.name = curProvider;
+                prov.zoomMin = cover.firstChildElement("ZoomMin").text().toInt();
+                prov.zoomMax = cover.firstChildElement("ZoomMax").text().toInt();
+                QDomElement bbox = cover.firstChildElement("BoundingBox");
+                prov.bbox.setBottom(bbox.firstChildElement("SouthLatitude").text().toDouble());
+                prov.bbox.setLeft(bbox.firstChildElement("WestLongitude").text().toDouble());
+                prov.bbox.setTop(bbox.firstChildElement("NorthLatitude").text().toDouble());
+                prov.bbox.setRight(bbox.firstChildElement("EastLongitude").text().toDouble());
+
+                theProviders << prov;
+            }
+        }
+        isLoaded = true;
+    }
 }
 
 MsBingMapAdapter::~MsBingMapAdapter()
@@ -216,7 +267,21 @@ QString MsBingMapAdapter::getLicenseUrl() const
 
 Q_EXPORT_PLUGIN2(MMsBingMapBackgroundPlugin, MsBingMapAdapterFactory)
 
-QPixmap MsBingMapAdapter::getWatermark(const QRectF &bbox, const QRect &screen)
+QString MsBingMapAdapter::getAttributionsHtml(const QRectF &bbox, const QRect &screen)
 {
-    return theWatermark;
+    QStringList providers;
+    int zoom = qRound(log2(360. / bbox.width()));
+    qDebug() << "Bing Zoom: " << zoom;
+    foreach (BingProvider prov, theProviders) {
+        if (prov.bbox.intersects(bbox))
+            if (zoom >= prov.zoomMin && zoom <= prov.zoomMax)
+                providers << prov.name;
+    }
+
+    return QString("<div style=\"color:silver; font-size:9px\">%1</div>").arg(providers.join(" "));
+}
+
+QString MsBingMapAdapter::getLogoHtml()
+{
+    return QString("<center><a href=\"http://www.bing.com/maps/\"><img src=\":/images/bing_logo.png\"/></a><br/><a href=\"http://opengeodata.org/microsoft-imagery-details\" style=\"color:silver; font-size:9px\">%1</a></center>").arg(tr("Terms of Use"));
 }

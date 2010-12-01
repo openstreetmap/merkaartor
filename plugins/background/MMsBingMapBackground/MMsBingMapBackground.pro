@@ -14,4 +14,5 @@ SOURCES += \
     mapadapter.cpp \
     msbingmapadapter.cpp
 
-
+RESOURCES += \
+    Resources.qrc

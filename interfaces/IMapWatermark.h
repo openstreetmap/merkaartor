@@ -2,11 +2,14 @@
 #define IMAPWATERMARK_H
 
 #include <QPixmap>
+#include <QUrl>
+#include <QStringList>
 
 class IMapWatermark
 {
 public:
-    virtual QPixmap getWatermark(const QRectF& bbox, const QRect& screen) = 0;
+    virtual QString getLogoHtml() = 0;
+    virtual QString getAttributionsHtml(const QRectF& bbox, const QRect& screen) = 0;
 };
 
 Q_DECLARE_INTERFACE ( IMapWatermark,
