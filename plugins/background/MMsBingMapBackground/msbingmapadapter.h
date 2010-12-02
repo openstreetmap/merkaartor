@@ -3,14 +3,26 @@
 
 #include "mapadapter.h"
 #include "IMapAdapterFactory.h"
+#include "IMapWatermark.h"
+
+struct BingProvider
+{
+    QString name;
+    int zoomMin;
+    int zoomMax;
+    QRectF bbox;
+};
 
 //! MapAdapter for Ms Bing Maps
 /*!
  * This is a conveniece class, which extends and configures a TileMapAdapter
  *	@author Kai Winter <kaiwinter@gmx.de>
 */
-class MsBingMapAdapter : public MapAdapter
+class MsBingMapAdapter : public MapAdapter, public IMapWatermark
 {
+    Q_OBJECT
+    Q_INTERFACES(IMapAdapter IMapWatermark)
+
     public:
         //! constructor
         /*!
@@ -58,6 +70,7 @@ class MsBingMapAdapter : public MapAdapter
          * @return the source tag
          */
         virtual QString	getSourceTag() const;
+        virtual void setSourceTag (const QString& value);
 
         //! returns the Url of the usage license
         /*!
@@ -80,6 +93,10 @@ class MsBingMapAdapter : public MapAdapter
 
         virtual void setSettings(QSettings* /*aSet*/) {}
 
+        //IMapWatermark
+        virtual QString getAttributionsHtml(const QRectF& bbox, const QRect& screen);
+        virtual QString getLogoHtml();
+
     protected:
         virtual void zoom_in();
         virtual void zoom_out();
@@ -94,6 +111,9 @@ class MsBingMapAdapter : public MapAdapter
         double getMercatorYCoord(double lati) const;
 
         int srvNum;
+        QString theSource;
+        bool isLoaded;
+        QList<BingProvider> theProviders;
 };
 
 class MsBingMapAdapterFactory : public QObject, public IMapAdapterFactory

@@ -7,6 +7,8 @@
 #include "Document.h"
 #include "Layer.h"
 #include "ImageMapLayer.h"
+#include "IMapAdapter.h"
+#include "IMapWatermark.h"
 #include "Feature.h"
 #include "Relation.h"
 #include "Interaction.h"
@@ -67,6 +69,8 @@ public:
     MapRenderer renderer;
     RendererOptions ROptions;
 
+    QLabel *TL, *TR, *BL, *BR;
+
     MapViewPrivate()
       : PixelPerM(0.0), Viewport(WORLD_COORDBOX), theVectorRotation(0.0)
     {}
@@ -101,6 +105,34 @@ MapView::MapView(QWidget* parent) :
     ZoomOutShortcut = new QShortcut(QKeySequence(Qt::Key_PageDown), this);
     ZoomOutShortcut->setContext(Qt::WidgetShortcut);
     connect(ZoomOutShortcut, SIGNAL(activated()), this, SLOT(on_ZoomOut_activated()));
+
+    QVBoxLayout* vlay = new QVBoxLayout(this);
+
+    QHBoxLayout* hlay1 = new QHBoxLayout();
+    p->TL = new QLabel(this);
+    hlay1->addWidget(p->TL);
+    QSpacerItem* horizontalSpacer = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
+    hlay1->addItem(horizontalSpacer);
+    p->TR = new QLabel(this);
+    hlay1->addWidget(p->TR);
+    vlay->addLayout(hlay1);
+
+    QSpacerItem* verticalSpacer = new QSpacerItem(20, 40, QSizePolicy::Minimum, QSizePolicy::Expanding);
+    vlay->addItem(verticalSpacer);
+
+    QHBoxLayout* hlay2 = new QHBoxLayout();
+    p->BL = new QLabel(this);
+    hlay2->addWidget(p->BL);
+    QSpacerItem* horizontalSpacer2 = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
+    hlay2->addItem(horizontalSpacer2);
+    p->BR = new QLabel(this);
+    hlay2->addWidget(p->BR);
+    vlay->addLayout(hlay2);
+
+    p->TL->setVisible(false);
+    p->TR->setVisible(false);
+    p->BL->setVisible(false);
+    p->BR->setVisible(false);
 }
 
 MapView::~MapView()
@@ -154,8 +186,31 @@ void MapView::invalidate(bool updateStaticBuffer, bool updateMap)
         StaticBufferUpToDate = false;
     }
     if (theDocument && updateMap) {
-        for (LayerIterator<ImageMapLayer*> ImgIt(theDocument); !ImgIt.isEnd(); ++ImgIt)
+        IMapWatermark* WatermarkAdapter = NULL;
+        for (LayerIterator<ImageMapLayer*> ImgIt(theDocument); !ImgIt.isEnd(); ++ImgIt) {
             ImgIt.get()->forceRedraw(*this, rect());
+            WatermarkAdapter = qobject_cast<IMapWatermark*>(ImgIt.get()->getMapAdapter());
+        }
+
+        if (WatermarkAdapter) {
+            p->TL->setAttribute(Qt::WA_NoMousePropagation);
+            p->TL->setOpenExternalLinks(true);
+            p->TL->setText(WatermarkAdapter->getLogoHtml());
+    //        p->lblLogo->move(10, 10);
+            p->TL->show();
+
+            p->BR->setAttribute(Qt::WA_NoMousePropagation);
+            p->BR->setOpenExternalLinks(true);
+            p->BR->setWordWrap(true);
+            p->BR->setText(WatermarkAdapter->getAttributionsHtml(p->Viewport.toQRectF(), rect()));
+            p->BR->setMinimumWidth(150);
+            p->BR->setMaximumWidth(200);
+            p->BR->setMaximumHeight(50);
+            p->BR->show();
+        } else {
+            p->TL->setVisible(false);
+            p->BR->setVisible(false);
+        }
     }
     update();
 }
@@ -231,9 +286,11 @@ void MapView::paintEvent(QPaintEvent * anEvent)
 
     P.drawPixmap(p->theVectorPanDelta, *StaticBackground);
     P.save();
-    for (LayerIterator<ImageMapLayer*> ImgIt(theDocument); !ImgIt.isEnd(); ++ImgIt)
-        if (ImgIt.get()->isVisible())
+    for (LayerIterator<ImageMapLayer*> ImgIt(theDocument); !ImgIt.isEnd(); ++ImgIt) {
+        if (ImgIt.get()->isVisible()) {
             ImgIt.get()->drawImage(&P);
+        }
+    }
     P.restore();
 
     if (!p->invalidRects.isEmpty())

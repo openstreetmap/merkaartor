@@ -52,9 +52,6 @@ class MapAdapter : public IMapAdapter
     //friend class BrowserImageManager;
     //friend class Layer;
 
-    Q_OBJECT
-    Q_INTERFACES(IMapAdapter)
-
 public:
     virtual ~MapAdapter();
 
