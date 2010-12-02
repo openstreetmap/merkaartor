@@ -246,9 +246,19 @@ void CreateSingleWayInteraction::snapMouseReleaseEvent(QMouseEvent* anEvent, Fea
                 Node* From = 0;
                 theRoad = new Way;
                 if (FirstNode) {
-                    From = FirstNode;
-                    if (!From->isDirty() && !From->hasOSMId() && From->isUploadable())
-                        L->add(new AddFeatureCommand(Main->document()->getDirtyOrOriginLayer(),From,true));
+                    if (FirstNode->isVirtual()) {
+                        Way* aRoad = CAST_WAY(FirstNode->getParent(0));
+                        int SnapIdx = aRoad->findVirtual(FirstNode)+1;
+                        From = new Node(*FirstNode);
+                        From->setVirtual(false);
+                        From->setPosition(FirstNode->position());
+                        L->add(new AddFeatureCommand(Main->document()->getDirtyOrOriginLayer(aRoad->layer()),From,true));
+                        L->add(new WayAddNodeCommand(aRoad,From,SnapIdx,main()->document()->getDirtyOrOriginLayer(aRoad->layer())));
+                    } else {
+                        From = FirstNode;
+                        if (!From->isDirty() && !From->hasOSMId() && From->isUploadable())
+                            L->add(new AddFeatureCommand(Main->document()->getDirtyOrOriginLayer(),From,true));
+                    }
                 }
                 else
                 {
