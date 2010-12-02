@@ -189,7 +189,8 @@ void MapView::invalidate(bool updateStaticBuffer, bool updateMap)
         IMapWatermark* WatermarkAdapter = NULL;
         for (LayerIterator<ImageMapLayer*> ImgIt(theDocument); !ImgIt.isEnd(); ++ImgIt) {
             ImgIt.get()->forceRedraw(*this, rect());
-            WatermarkAdapter = qobject_cast<IMapWatermark*>(ImgIt.get()->getMapAdapter());
+            if (ImgIt.get()->isVisible())
+                WatermarkAdapter = qobject_cast<IMapWatermark*>(ImgIt.get()->getMapAdapter());
         }
 
         if (WatermarkAdapter) {

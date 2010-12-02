@@ -95,9 +95,9 @@ void CreateAreaInteraction::snapMouseMoveEvent(QMouseEvent* ev, Feature* aFeatur
 
 void CreateAreaInteraction::startNewRoad(QMouseEvent* anEvent, Feature* aFeature)
 {
-    if (Node* Pt = dynamic_cast<Node*>(aFeature))
+    if (Node* Pt = CAST_NODE(aFeature))
         FirstNode = Pt;
-    else if (Way* aRoad = dynamic_cast<Way*>(aFeature))
+    else if (Way* aRoad = CAST_WAY(aFeature))
     {
         Coord P(XY_TO_COORD(anEvent->pos()));
         CommandList* theList  = new CommandList(MainWindow::tr("Create Area %1").arg(aRoad->description()), aRoad);
