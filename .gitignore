@@ -13,3 +13,4 @@ ui*.h
 Makefile*
 Makefile*.*
 *.pro.user
+*.po
