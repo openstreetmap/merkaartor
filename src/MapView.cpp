@@ -68,14 +68,11 @@ public:
     QList<Node*> theVirtualNodes;
     MapRenderer renderer;
     RendererOptions ROptions;
-    QLabel* lblLogo;
-    QLabel* lblAttrib;
 
-    QWidget *TL, *TR, *BL, *BR;
+    QLabel *TL, *TR, *BL, *BR;
 
     MapViewPrivate()
       : PixelPerM(0.0), Viewport(WORLD_COORDBOX), theVectorRotation(0.0)
-      , lblLogo(0), lblAttrib(0)
     {}
 };
 
@@ -112,11 +109,11 @@ MapView::MapView(QWidget* parent) :
     QVBoxLayout* vlay = new QVBoxLayout(this);
 
     QHBoxLayout* hlay1 = new QHBoxLayout();
-    p->TL = new QWidget(this);
+    p->TL = new QLabel(this);
     hlay1->addWidget(p->TL);
     QSpacerItem* horizontalSpacer = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
     hlay1->addItem(horizontalSpacer);
-    p->TR = new QWidget(this);
+    p->TR = new QLabel(this);
     hlay1->addWidget(p->TR);
     vlay->addLayout(hlay1);
 
@@ -124,13 +121,18 @@ MapView::MapView(QWidget* parent) :
     vlay->addItem(verticalSpacer);
 
     QHBoxLayout* hlay2 = new QHBoxLayout();
-    p->BL = new QWidget(this);
+    p->BL = new QLabel(this);
     hlay2->addWidget(p->BL);
     QSpacerItem* horizontalSpacer2 = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
     hlay2->addItem(horizontalSpacer2);
-    p->BR = new QWidget(this);
+    p->BR = new QLabel(this);
     hlay2->addWidget(p->BR);
     vlay->addLayout(hlay2);
+
+    p->TL->setVisible(false);
+    p->TR->setVisible(false);
+    p->BL->setVisible(false);
+    p->BR->setVisible(false);
 }
 
 MapView::~MapView()
@@ -184,8 +186,31 @@ void MapView::invalidate(bool updateStaticBuffer, bool updateMap)
         StaticBufferUpToDate = false;
     }
     if (theDocument && updateMap) {
-        for (LayerIterator<ImageMapLayer*> ImgIt(theDocument); !ImgIt.isEnd(); ++ImgIt)
+        IMapWatermark* WatermarkAdapter = NULL;
+        for (LayerIterator<ImageMapLayer*> ImgIt(theDocument); !ImgIt.isEnd(); ++ImgIt) {
             ImgIt.get()->forceRedraw(*this, rect());
+            WatermarkAdapter = qobject_cast<IMapWatermark*>(ImgIt.get()->getMapAdapter());
+        }
+
+        if (WatermarkAdapter) {
+            p->TL->setAttribute(Qt::WA_NoMousePropagation);
+            p->TL->setOpenExternalLinks(true);
+            p->TL->setText(WatermarkAdapter->getLogoHtml());
+    //        p->lblLogo->move(10, 10);
+            p->TL->show();
+
+            p->BR->setAttribute(Qt::WA_NoMousePropagation);
+            p->BR->setOpenExternalLinks(true);
+            p->BR->setWordWrap(true);
+            p->BR->setText(WatermarkAdapter->getAttributionsHtml(p->Viewport.toQRectF(), rect()));
+            p->BR->setMinimumWidth(150);
+            p->BR->setMaximumWidth(200);
+            p->BR->setMaximumHeight(50);
+            p->BR->show();
+        } else {
+            p->TL->setVisible(false);
+            p->BR->setVisible(false);
+        }
     }
     update();
 }
@@ -261,11 +286,9 @@ void MapView::paintEvent(QPaintEvent * anEvent)
 
     P.drawPixmap(p->theVectorPanDelta, *StaticBackground);
     P.save();
-    IMapWatermark* WatermarkAdapter = NULL;
     for (LayerIterator<ImageMapLayer*> ImgIt(theDocument); !ImgIt.isEnd(); ++ImgIt) {
         if (ImgIt.get()->isVisible()) {
             ImgIt.get()->drawImage(&P);
-            WatermarkAdapter = qobject_cast<IMapWatermark*>(ImgIt.get()->getMapAdapter());
         }
     }
     P.restore();
@@ -280,32 +303,6 @@ void MapView::paintEvent(QPaintEvent * anEvent)
     drawLatLonGrid(P);
     drawDownloadAreas(P);
     drawScale(P);
-
-    if (WatermarkAdapter) {
-        if (!p->lblLogo)
-            p->lblLogo = new QLabel(p->TL);
-        p->lblLogo->setAttribute(Qt::WA_NoMousePropagation);
-        p->lblLogo->setOpenExternalLinks(true);
-        p->lblLogo->setText(WatermarkAdapter->getLogoHtml());
-//        p->lblLogo->move(10, 10);
-        p->lblLogo->show();
-
-        if (!p->lblAttrib)
-            p->lblAttrib = new QLabel(this);
-        p->lblAttrib->setAttribute(Qt::WA_NoMousePropagation);
-        p->lblAttrib->setOpenExternalLinks(true);
-        p->lblAttrib->setWordWrap(true);
-//        p->lblAttrib->setText(WatermarkAdapter->getAttributionsHtml(p->Viewport.toQRectF(), rect()));
-//        p->lblAttrib->setMaximumWidth(200);
-//        p->lblAttrib->setMaximumHeight(50);
-//        p->lblAttrib->adjustSize();
-//        p->lblAttrib->move(rect().right() - 210, rect().bottom() - 30);
-//        p->lblAttrib->move(rect().right() - 10 - p->lblAttrib->width(), rect().bottom() - 10 - p->lblAttrib->height());
-//        p->lblAttrib->show();
-    } else {
-        SAFE_DELETE(p->lblLogo);
-        SAFE_DELETE(p->lblAttrib);
-    }
 
     if (theInteraction) {
         P.setRenderHint(QPainter::Antialiasing);

@@ -52,6 +52,12 @@ MsBingMapAdapter::MsBingMapAdapter()
         QDomDocument theDoc;
         theDoc.setContent(netReply->readAll());
 
+        QDomNodeList hostEl = theDoc.elementsByTagName("ImageUrl");
+        if (hostEl.size()) {
+            QUrl u(hostEl.at(0).toElement().text());
+            host = u.host();
+        }
+
         QString curProvider;
         QDomNodeList providers = theDoc.elementsByTagName("ImageryProvider");
         for (int i=0; i<providers.size(); ++i) {
@@ -101,8 +107,11 @@ IMapAdapter::Type MsBingMapAdapter::getType() const
 
 QString MsBingMapAdapter::getHost() const
 {
-    int random = qrand() % 6;
-    return host.arg(random);
+    if (!isLoaded) {
+        int random = qrand() % 6;
+        return host.arg(random);
+    } else
+        return host;
 }
 
 QPoint MsBingMapAdapter::coordinateToDisplay(const QPointF& coordinate) const
