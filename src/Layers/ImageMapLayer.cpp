@@ -514,8 +514,8 @@ void ImageMapLayer::setCurrentZoom(MapView& theView, const CoordBox& viewport, c
         p->theMapAdapter->zoom_out();
     }
 
-    tileWidth = p->theMapAdapter->getBoundingbox().width() / p->theMapAdapter->getTilesWE(p->theMapAdapter->getAdaptedZoom());
-    tileHeight = p->theMapAdapter->getBoundingbox().height() / p->theMapAdapter->getTilesNS(p->theMapAdapter->getAdaptedZoom());
+    tileWidth = p->theMapAdapter->getBoundingbox().width() / p->theMapAdapter->getTilesWE(p->theMapAdapter->getZoom());
+    tileHeight = p->theMapAdapter->getBoundingbox().height() / p->theMapAdapter->getTilesNS(p->theMapAdapter->getZoom());
     qreal w = ((qreal)rect.width() / tilesizeW) * tileWidth;
     qreal h = ((qreal)rect.height() / tilesizeH) * tileHeight;
     QPointF upperLeft = QPointF(mapmiddle_px.x() - w/2, mapmiddle_px.y() + h/2);
@@ -525,8 +525,8 @@ void ImageMapLayer::setCurrentZoom(MapView& theView, const CoordBox& viewport, c
     while ((!vp.contains(vlm)) && (p->theMapAdapter->getAdaptedZoom() < maxZoom)) {
         p->theMapAdapter->zoom_in();
 
-        tileWidth = p->theMapAdapter->getBoundingbox().width() / p->theMapAdapter->getTilesWE(p->theMapAdapter->getAdaptedZoom());
-        tileHeight = p->theMapAdapter->getBoundingbox().height() / p->theMapAdapter->getTilesNS(p->theMapAdapter->getAdaptedZoom());
+        tileWidth = p->theMapAdapter->getBoundingbox().width() / p->theMapAdapter->getTilesWE(p->theMapAdapter->getZoom());
+        tileHeight = p->theMapAdapter->getBoundingbox().height() / p->theMapAdapter->getTilesNS(p->theMapAdapter->getZoom());
         w = ((qreal)rect.width() / tilesizeW) * tileWidth;
         h = ((qreal)rect.height() / tilesizeH) * tileHeight;
         upperLeft = QPointF(mapmiddle_px.x() - w/2, mapmiddle_px.y() + h/2);
@@ -537,13 +537,12 @@ void ImageMapLayer::setCurrentZoom(MapView& theView, const CoordBox& viewport, c
         p->theMapAdapter->zoom_out();
 }
 
-#define EQUATORIAL_CIRCUMFERENCE 40074982.83566
-qreal ImageMapLayer::pixelPerM()
+qreal ImageMapLayer::pixelPerCoord()
 {
     if (!isTiled())
         return -1.;
 
-    return (p->theMapAdapter->getTileSizeW() * p->theMapAdapter->getTilesWE(p->theMapAdapter->getAdaptedZoom())) / EQUATORIAL_CIRCUMFERENCE;
+    return (p->theMapAdapter->getTileSizeW() * p->theMapAdapter->getTilesWE(p->theMapAdapter->getZoom())) / 360.;
 }
 
 void ImageMapLayer::forceRedraw(MapView& theView, QRect Screen)

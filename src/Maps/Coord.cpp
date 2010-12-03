@@ -67,6 +67,7 @@ CoordBox CoordBox::fromXML(QDomElement e)
     return CoordBox(tr, bl);
 }
 
+#define EQUATORIALRADIUSKM 6378.137
 double Coord::distanceFrom(const Coord& other) const
 {
     double dlon = other.lon() - lon();
@@ -85,8 +86,7 @@ double Coord::distanceFrom(const Coord& other) const
     const double t3 = slat1 * slat2 + clat1 * clat2 * cdlon;
     const double dist = atan2(sqrt(t1*t1 + t2*t2), t3);
 
-    const double earthRadius = 6372.795;
-    return dist * earthRadius;
+    return dist * EQUATORIALRADIUSKM;
 }
 
 bool Coord::toXML(QString elName, QDomElement& xParent) const
