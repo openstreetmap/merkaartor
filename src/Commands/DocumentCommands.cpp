@@ -91,6 +91,8 @@ AddFeatureCommand * AddFeatureCommand::fromXML(Document* d, QDomElement e)
         a->oldLayer = d->getLayer(e.attribute("oldlayer"));
     else
         a->oldLayer = NULL;
+    if (!a->theLayer)
+        return NULL;
 
     Feature* F;
     if (!(F = d->getFeature(IFeature::FId(IFeature::All, e.attribute("feature").toLongLong()))))
@@ -250,6 +252,8 @@ RemoveFeatureCommand * RemoveFeatureCommand::fromXML(Document* d, QDomElement e)
         a->theLayer = d->getLayer(e.attribute("newlayer"));
     else
         a->theLayer = d->getDirtyOrOriginLayer();
+    if (!a->theLayer)
+        return NULL;
 
     Feature* F;
     if (!(F = d->getFeature(IFeature::FId(IFeature::All, e.attribute("feature").toLongLong()))))

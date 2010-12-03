@@ -102,6 +102,9 @@ WayAddNodeCommand * WayAddNodeCommand::fromXML(Document * d, QDomElement e)
         a->oldLayer = d->getLayer(e.attribute("oldlayer"));
     else
         a->oldLayer = NULL;
+    if (!a->theLayer)
+        return NULL;
+
     a->theRoad = Feature::getWayOrCreatePlaceHolder(d, a->theLayer, IFeature::FId(IFeature::LineString, e.attribute("road").toLongLong()));
     a->theTrackPoint = Feature::getTrackPointOrCreatePlaceHolder(d, a->theLayer, IFeature::FId(IFeature::Point, e.attribute("trackpoint").toLongLong()));
     a->Position = e.attribute("pos").toUInt();
@@ -222,6 +225,9 @@ WayRemoveNodeCommand * WayRemoveNodeCommand::fromXML(Document * d, QDomElement e
         a->oldLayer = d->getLayer(e.attribute("oldlayer"));
     else
         a->oldLayer = NULL;
+    if (!a->theLayer)
+        return NULL;
+
     a->wasClosed = (e.hasAttribute("closed") && e.attribute("closed") == "true");
     a->theRoad = Feature::getWayOrCreatePlaceHolder(d, a->theLayer, IFeature::FId(IFeature::LineString, e.attribute("road").toLongLong()));
     a->theNode = Feature::getTrackPointOrCreatePlaceHolder(d, a->theLayer, IFeature::FId(IFeature::Point, e.attribute("trackpoint").toLongLong()));

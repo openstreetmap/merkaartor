@@ -103,6 +103,9 @@ RelationAddFeatureCommand * RelationAddFeatureCommand::fromXML(Document * d, QDo
         a->oldLayer = d->getLayer(e.attribute("oldlayer"));
     else
         a->oldLayer = NULL;
+    if (!a->theLayer)
+        return NULL;
+
     a->theRelation = Feature::getRelationOrCreatePlaceHolder(d, a->theLayer, IFeature::FId(IFeature::OsmRelation, e.attribute("relation").toLongLong()));
     Feature* F;
     if (e.attribute("featureclass") == "TrackPoint") {
@@ -229,6 +232,9 @@ RelationRemoveFeatureCommand * RelationRemoveFeatureCommand::fromXML(Document * 
         a->oldLayer = d->getLayer(e.attribute("oldlayer"));
     else
         a->oldLayer = NULL;
+    if (!a->theLayer)
+        return NULL;
+
     a->theRelation = Feature::getRelationOrCreatePlaceHolder(d, a->theLayer, IFeature::FId(IFeature::OsmRelation, e.attribute("relation").toLongLong()));
     Feature* F = NULL;
     if (e.attribute("featureclass") == "Node") {
