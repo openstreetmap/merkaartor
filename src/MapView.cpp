@@ -1424,7 +1424,8 @@ void MapView::setViewport(const CoordBox & TargetMap)
         }
         if (l && l->isTiled()) {
             l->setCurrentZoom(*this, p->Viewport, rect());
-            qreal z = l->pixelPerM() / p->PixelPerM;
+            qreal pixpercoord = width() / p->Viewport.lonDiff();
+            qreal z = l->pixelPerCoord() / pixpercoord;
             zoom(z, rect().center(), rect());
         }
     }
@@ -1455,7 +1456,8 @@ void MapView::setViewport(const CoordBox & TargetMap,
         }
         if (l && l->isTiled()) {
             l->setCurrentZoom(*this, p->Viewport, rect());
-            qreal z = l->pixelPerM() / p->PixelPerM;
+            qreal pixpercoord = width() / p->Viewport.lonDiff();
+            qreal z = l->pixelPerCoord() / pixpercoord;
             zoom(z, Screen.center(), Screen);
         }
     }
@@ -1483,7 +1485,8 @@ void MapView::zoom(double d, const QPoint & Around)
             } else {
                 l->zoom_out();
             }
-            z = l->pixelPerM() / p->PixelPerM;
+            qreal pixpercoord = width() / p->Viewport.lonDiff();
+            z = l->pixelPerCoord() / pixpercoord;
         }
     }
 
@@ -1499,7 +1502,8 @@ void MapView::adjustZoomToBoris()
             break;
         }
         if (l && l->isTiled()) {
-            qreal z = l->pixelPerM() / p->PixelPerM;
+            qreal pixpercoord = width() / p->Viewport.lonDiff();
+            qreal z = l->pixelPerCoord() / pixpercoord;
             zoom(z, rect().center(), rect());
         }
     }
