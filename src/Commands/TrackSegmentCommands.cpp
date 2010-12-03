@@ -87,6 +87,9 @@ TrackSegmentAddNodeCommand * TrackSegmentAddNodeCommand::fromXML(Document * d, Q
         a->oldLayer = d->getLayer(e.attribute("oldlayer"));
     else
         a->oldLayer = NULL;
+    if (!a->theLayer)
+        return NULL;
+
     a->theTrackSegment = dynamic_cast<TrackSegment*>(d->getFeature(IFeature::FId(IFeature::GpxSegment, e.attribute("tracksegment").toLongLong())));
     a->theNode = Feature::getTrackPointOrCreatePlaceHolder(d, a->theLayer, IFeature::FId(IFeature::Point, e.attribute("trackpoint").toLongLong()));
     a->Position = e.attribute("pos").toUInt();
@@ -178,6 +181,9 @@ TrackSegmentRemoveNodeCommand * TrackSegmentRemoveNodeCommand::fromXML(Document 
         a->oldLayer = d->getLayer(e.attribute("oldlayer"));
     else
         a->oldLayer = NULL;
+    if (!a->theLayer)
+        return NULL;
+
     a->theTrackSegment = dynamic_cast<TrackSegment*>(d->getFeature(IFeature::FId(IFeature::GpxSegment, e.attribute("tracksegment").toLongLong())));
     a->theTrackPoint = Feature::getTrackPointOrCreatePlaceHolder(d, a->theLayer, IFeature::FId(IFeature::Point, e.attribute("trackpoint").toLongLong()));
     a->Idx = e.attribute("index").toUInt();

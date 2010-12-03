@@ -910,7 +910,7 @@ void Feature::toXML(QDomElement& e, bool strict)
         e.setAttribute("actor", (int)lastUpdated());
         if (isDeleted())
             e.setAttribute("deleted","true");
-        if (getDirtyLevel() > 0)
+        if (getDirtyLevel())
             e.setAttribute("dirtylevel", getDirtyLevel());
         if (isUploaded())
             e.setAttribute("uploaded","true");
@@ -989,6 +989,8 @@ Node* Feature::getTrackPointOrCreatePlaceHolder(Document *theDocument, Layer *th
         Part = new Node(Coord(0,0));
         Part->setId(Id);
         Part->setLastUpdated(Feature::NotYetDownloaded);
+        if (!theLayer)
+            theLayer = theDocument->getDirtyOrOriginLayer();
         theLayer->add(Part);
     }
     return Part;
@@ -1002,7 +1004,10 @@ Way* Feature::getWayOrCreatePlaceHolder(Document *theDocument, Layer *theLayer, 
         Part = new Way;
         Part->setId(Id);
         Part->setLastUpdated(Feature::NotYetDownloaded);
+        if (!theLayer)
+            theLayer = theDocument->getDirtyOrOriginLayer();
         theLayer->add(Part);
+
     }
     return Part;
 }
@@ -1015,6 +1020,8 @@ Relation* Feature::getRelationOrCreatePlaceHolder(Document *theDocument, Layer *
         Part = new Relation;
         Part->setId(Id);
         Part->setLastUpdated(Feature::NotYetDownloaded);
+        if (!theLayer)
+            theLayer = theDocument->getDirtyOrOriginLayer();
         theLayer->add(Part);
     }
     return Part;

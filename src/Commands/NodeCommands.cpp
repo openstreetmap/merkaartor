@@ -105,8 +105,10 @@ MoveNodeCommand * MoveNodeCommand::fromXML(Document * d, QDomElement e)
         a->oldLayer = d->getLayer(e.attribute("oldlayer"));
     else
         a->oldLayer = NULL;
-    a->thePoint = Feature::getTrackPointOrCreatePlaceHolder(d, a->theLayer, IFeature::FId(IFeature::Point, e.attribute("trackpoint").toLongLong()));
+    if (!a->theLayer)
+        return NULL;
 
+    a->thePoint = Feature::getTrackPointOrCreatePlaceHolder(d, a->theLayer, IFeature::FId(IFeature::Point, e.attribute("trackpoint").toLongLong()));
     a->description = MainWindow::tr("Move node %1").arg(a->thePoint->description());
 
     Command::fromXML(d, e, a);

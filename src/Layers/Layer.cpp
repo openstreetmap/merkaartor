@@ -675,6 +675,8 @@ bool Layer::toXML(QDomElement& e, bool asTemplate, QProgressDialog * progress)
     e.setAttribute("enabled", QString((p->Enabled ? "true" : "false")));
     e.setAttribute("readonly", QString((p->Readonly ? "true" : "false")));
     e.setAttribute("uploadable", QString((p->Uploadable ? "true" : "false")));
+    if (getDirtyLevel())
+        e.setAttribute("dirtylevel", getDirtyLevel());
 
     return true;
 }
@@ -688,6 +690,7 @@ Layer * Layer::fromXML(Layer* l, Document* /*d*/, const QDomElement e, QProgress
     l->setEnabled((e.attribute("enabled") == "false" ? false : true));
     l->setReadonly((e.attribute("readonly") == "true" ? true : false));
     l->setUploadable((e.attribute("uploadable") == "false" ? false : true));
+    l->setDirtyLevel((e.hasAttribute("dirtylevel") ? e.attribute("dirtylevel").toInt() : 0));
 
     return l;
 }
