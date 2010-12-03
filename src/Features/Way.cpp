@@ -32,7 +32,7 @@ class WayPrivate
     public:
         WayPrivate(Way* aWay)
         : theWay(aWay), SmoothedUpToDate(false), BBoxUpToDate(false)
-            , IsCoastline(false), Area(0), Distance(0)
+            , Area(0), Distance(0)
             , wasPathComplete(false), VirtualsUptodate(false)
             , ProjectionRevision(0)
             , BestSegment(-1)
@@ -49,7 +49,6 @@ class WayPrivate
         mutable CoordBox BBox;
         bool BBoxUpToDate;
 
-        bool IsCoastline;
         double Area;
         double Distance;
         bool NotEverythingDownloaded;
@@ -460,11 +459,6 @@ double Way::distance()
     return p->Distance;
 }
 
-bool Way::isCoastline()
-{
-    return p->IsCoastline;
-}
-
 bool Way::isClosed() const
 {
     // minimal closed way is a triangle, with 4 nodes (3 distinct)
@@ -795,24 +789,12 @@ void Way::setTag(const QString& key, const QString& value)
 {
     Feature::setTag(key, value);
     MetaUpToDate = false;
-    if (key == "natural") {
-        if (value == "coastline")
-            p->IsCoastline = true;
-        else
-            p->IsCoastline = false;
-    }
 }
 
 void Way::setTag(int index, const QString& key, const QString& value)
 {
     Feature::setTag(index, key, value);
     MetaUpToDate = false;
-    if (key == "natural") {
-        if (value == "coastline")
-            p->IsCoastline = true;
-        else
-            p->IsCoastline = false;
-    }
 }
 
 void Way::clearTags()

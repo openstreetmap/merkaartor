@@ -94,7 +94,6 @@ class Way : public Feature
         virtual void partChanged(Feature* F, int ChangeId);
         virtual void setLayer(Layer* aLayer);
 
-        bool isCoastline();
         double area();
         bool isClosed() const;
         double distance();

@@ -19,7 +19,8 @@ Painter::Painter()
   ForegroundFill(false), ForegroundFillUseIcon(false), DrawTrafficDirectionMarks(false),
   DrawIcon(false), IconScale(0), IconOffset(0),
   DrawLabel(false), LabelScale(0), LabelOffset(0),
-  DrawLabelBackground(false), LabelHalo(false), LabelArea(false)
+  DrawLabelBackground(false), LabelHalo(false), LabelArea(false),
+  BackgroundInterior(false), BackgroundExterior(false)
 {
 }
 
@@ -40,6 +41,7 @@ Painter::Painter(const Painter& f)
   DrawLabel(f.DrawLabel), LabelTag(f.LabelTag), LabelColor(f.LabelColor), LabelScale(f.LabelScale), LabelOffset(f.LabelOffset),
   DrawLabelBackground(f.DrawLabelBackground), LabelBackgroundColor(f.LabelBackgroundColor), LabelBackgroundTag(f.LabelBackgroundTag),
   LabelFont(f.LabelFont), LabelHalo(f.LabelHalo), LabelArea(f.LabelArea),
+  BackgroundInterior(f.BackgroundInterior), BackgroundExterior(f.BackgroundExterior),
   theSelector(f.theSelector)
 {
 }
@@ -89,6 +91,8 @@ Painter& Painter::operator=(const Painter& f)
     LabelHalo = f.LabelHalo;
     LabelArea = f.LabelArea;
     theSelector = f.theSelector;
+    BackgroundInterior = f.BackgroundInterior;
+    BackgroundExterior = f.BackgroundExterior;
 
     return *this;
 }
@@ -147,6 +151,10 @@ QString Painter::toXML(QString filename) const
         r += " zoomUnder=\""+QString::number(ZoomUnder)+"\" zoomUpper=\""+QString::number(ZoomUpper)+"\"\n";
     if (DrawBackground)
         r += " " + boundaryAsXML("background",BackgroundColor, BackgroundScale, BackgroundOffset);
+    if (BackgroundInterior)
+        r += " interior=\"yes\"";
+    if (BackgroundExterior)
+        r += " exterior=\"yes\"";
     if (DrawForeground)
         r += " " + boundaryAsXML("foreground",ForegroundColor, ForegroundScale, ForegroundOffset);
     if (ForegroundDashSet && DrawForeground)
@@ -213,6 +221,10 @@ Painter Painter::fromXML(const QDomElement& e, QString filename)
     if (e.hasAttribute("backgroundColor"))
         FP.background(
             toColor(e.attribute("backgroundColor")),e.attribute("backgroundScale").toDouble(),e.attribute("backgroundOffset").toDouble());
+    if (e.attribute("interior") == "yes")
+        FP.BackgroundInterior = true;
+    if (e.attribute("exterior") == "yes")
+        FP.BackgroundExterior = true;
     if (e.hasAttribute("touchupColor"))
     {
         FP.touchup(
@@ -527,6 +539,16 @@ QString Painter::getLabelBackgroundTag() const
     return LabelBackgroundTag;
 }
 
+bool Painter::getBackgroundInterior() const
+{
+    return BackgroundInterior;
+}
+
+bool Painter::getBackgroundExterior() const
+{
+    return BackgroundExterior;
+}
+
 LineParameters Painter::foregroundBoundary() const
 {
     LineParameters P;
@@ -682,4 +704,3 @@ QColor GlobalPainter::getBackgroundColor() const
 {
     return BackgroundColor;
 }
-

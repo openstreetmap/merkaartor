@@ -269,7 +269,7 @@ void OsbLayer::get(const CoordBox& hz, QList<Feature*>& theFeatures)
     }
 }
 
-void OsbLayer::getFeatureSet(QMap<RenderPriority, QSet <Feature*> >& theFeatures, QSet<Way*>& theCoastlines, Document* theDocument,
+void OsbLayer::getFeatureSet(QMap<RenderPriority, QSet <Feature*> >& theFeatures, Document* theDocument,
                    QList<CoordBox>& invalidRects, QRectF& clipRect, Projection& theProjection, QTransform& theTransform)
 {
     if (!isVisible())
@@ -341,7 +341,7 @@ void OsbLayer::getFeatureSet(QMap<RenderPriority, QSet <Feature*> >& theFeatures
     blockIndexing(false);
 
     if (coordToAng(pp->theVP.lonDiff()) > M_PREFS->getRegionTo0Threshold()) {
-        Layer::getFeatureSet(theFeatures, theCoastlines, theDocument,
+        Layer::getFeatureSet(theFeatures, theDocument,
                    invalidRects, clipRect, theProjection, theTransform);
     } else {
         OsbFeatureIterator oit(this);
@@ -356,8 +356,6 @@ void OsbLayer::getFeatureSet(QMap<RenderPriority, QSet <Feature*> >& theFeatures
                     if (Way * R = CAST_WAY(F)) {
                         R->buildPath(theProjection, theTransform, clipRect);
                         theFeatures[F->renderPriority()].insert(F);
-                        if (R->isCoastline())
-                            theCoastlines.insert(R);
                     } else
                     if (Relation * RR = CAST_RELATION(F)) {
                         RR->buildPath(theProjection, theTransform, clipRect);

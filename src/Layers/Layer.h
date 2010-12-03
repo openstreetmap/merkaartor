@@ -88,7 +88,7 @@ public:
     void notifyIdUpdate(const IFeature::FId& id, Feature* aFeature);
 
     virtual void get(const CoordBox& hz, QList<Feature*>& theFeatures);
-    virtual void getFeatureSet(QMap<RenderPriority, QSet <Feature*> >& theFeatures, QSet<Way*>& theCoastlines, Document* theDocument,
+    virtual void getFeatureSet(QMap<RenderPriority, QSet <Feature*> >& theFeatures, Document* theDocument,
                        QList<CoordBox>& invalidRects, QRectF& clipRect, Projection& theProjection, QTransform& theTransform);
 
     void setDocument(Document* aDocument);

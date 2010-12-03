@@ -208,17 +208,58 @@ void FeaturePainter::drawBackground(Way* R, QPainter* thePainter, MapView* theVi
     if (!DrawBackground && !ForegroundFill && !ForegroundFillUseIcon) return;
 
     thePainter->setPen(Qt::NoPen);
+    if (M_PREFS->getAreaOpacity() != 100 && ForegroundFill) {
+        thePainter->setOpacity(qreal(M_PREFS->getAreaOpacity()) / 100);
+    }
     if (DrawBackground)
     {
         double PixelPerM = theView->pixelPerM();
         double WW = PixelPerM*R->widthOf()*BackgroundScale+BackgroundOffset;
         if (WW >= 0)
         {
-            QPen thePen(BackgroundColor,WW);
-            thePen.setCapStyle(CAPSTYLE);
-            thePen.setJoinStyle(JOINSTYLE);
-            ////thePainter->strokePath(R->getPath(),thePen);
-            thePainter->setPen(thePen);
+            if (BackgroundExterior || BackgroundInterior) {
+                QPen thePen(BackgroundColor,WW);
+                thePen.setCapStyle(CAPSTYLE);
+                thePen.setJoinStyle(Qt::BevelJoin);
+                thePainter->setPen(thePen);
+
+                QPainterPath thePath = theView->transform().map(R->getPath());
+                QPainterPath aPath;
+
+                for (int j=1; j < thePath.elementCount(); j++) {
+                    QLineF l(QPointF(thePath.elementAt(j)), QPointF(thePath.elementAt(j-1)));
+                    QLineF l1 = l.normalVector();
+                    if (BackgroundInterior)
+                        l1.setAngle(l1.angle() + 180.);
+                    l1.setLength(WW / 2.0);
+                    if (j == 1) {
+                        QLineF l3(l1);
+                        l3.translate(l.p2() - l.p1());
+                        aPath.moveTo(l3.p2());
+                    }
+                    if (j < thePath.elementCount() - 1) {
+                        QLineF l4(QPointF(thePath.elementAt(j)), QPointF(thePath.elementAt(j+1)));
+                        double theAngle = (l4.angle() - l.angle()) / 2.0;
+                        if (BackgroundInterior) {
+                            if (theAngle > 0.0) theAngle -= 180.0;
+                            l1.setLength(-1/sin(angToRad(theAngle))*l1.length());
+                        } else {
+                            if (theAngle < 0.0) theAngle += 180.0;
+                            l1.setLength(1/sin(angToRad(theAngle))*l1.length());
+                        }
+                        l1.setAngle(l.angle() + theAngle);
+                    }
+                    aPath.lineTo(l1.p2());
+                }
+                thePainter->drawPath(aPath);
+                thePainter->setPen(Qt::NoPen);
+            } else {
+                QPen thePen(BackgroundColor,WW);
+                thePen.setCapStyle(CAPSTYLE);
+                thePen.setJoinStyle(JOINSTYLE);
+                ////thePainter->strokePath(R->getPath(),thePen);
+                thePainter->setPen(thePen);
+            }
         }
     }
 
@@ -239,9 +280,6 @@ void FeaturePainter::drawBackground(Way* R, QPainter* thePainter, MapView* theVi
         }
     }
 
-    if (M_PREFS->getAreaOpacity() != 100 && ForegroundFill) {
-        thePainter->setOpacity(qreal(M_PREFS->getAreaOpacity()) / 100);
-    }
     thePainter->drawPath(theView->transform().map(R->getPath()));
 }
 
@@ -250,17 +288,58 @@ void FeaturePainter::drawBackground(Relation* R, QPainter* thePainter, MapView* 
     if (!DrawBackground && !ForegroundFill && !ForegroundFillUseIcon) return;
 
     thePainter->setPen(Qt::NoPen);
+    if (M_PREFS->getAreaOpacity() != 100 && ForegroundFill) {
+        thePainter->setOpacity(qreal(M_PREFS->getAreaOpacity()) / 100);
+    }
     if (DrawBackground)
     {
         double PixelPerM = theView->pixelPerM();
         double WW = PixelPerM*R->widthOf()*BackgroundScale+BackgroundOffset;
         if (WW >= 0)
         {
-            QPen thePen(BackgroundColor,WW);
-            thePen.setCapStyle(CAPSTYLE);
-            thePen.setJoinStyle(JOINSTYLE);
-            ////thePainter->strokePath(R->getPath(),thePen);
-            thePainter->setPen(thePen);
+            if (BackgroundExterior || BackgroundInterior) {
+                QPen thePen(BackgroundColor,WW);
+                thePen.setCapStyle(CAPSTYLE);
+                thePen.setJoinStyle(Qt::BevelJoin);
+                thePainter->setPen(thePen);
+
+                QPainterPath thePath = theView->transform().map(R->getPath());
+                QPainterPath aPath;
+
+                for (int j=1; j < thePath.elementCount(); j++) {
+                    QLineF l(QPointF(thePath.elementAt(j)), QPointF(thePath.elementAt(j-1)));
+                    QLineF l1 = l.normalVector();
+                    if (BackgroundInterior)
+                        l1.setAngle(l1.angle() + 180.);
+                    l1.setLength(WW / 2.0);
+                    if (j == 1) {
+                        QLineF l3(l1);
+                        l3.translate(l.p2() - l.p1());
+                        aPath.moveTo(l3.p2());
+                    }
+                    if (j < thePath.elementCount() - 1) {
+                        QLineF l4(QPointF(thePath.elementAt(j)), QPointF(thePath.elementAt(j+1)));
+                        double theAngle = (l4.angle() - l.angle()) / 2.0;
+                        if (BackgroundInterior) {
+                            if (theAngle > 0.0) theAngle -= 180.0;
+                            l1.setLength(-1/sin(angToRad(theAngle))*l1.length());
+                        } else {
+                            if (theAngle < 0.0) theAngle += 180.0;
+                            l1.setLength(1/sin(angToRad(theAngle))*l1.length());
+                        }
+                        l1.setAngle(l.angle() + theAngle);
+                    }
+                    aPath.lineTo(l1.p2());
+                }
+                thePainter->drawPath(aPath);
+                thePainter->setPen(Qt::NoPen);
+            } else {
+                QPen thePen(BackgroundColor,WW);
+                thePen.setCapStyle(CAPSTYLE);
+                thePen.setJoinStyle(JOINSTYLE);
+                ////thePainter->strokePath(R->getPath(),thePen);
+                thePainter->setPen(thePen);
+            }
         }
     }
 
@@ -281,9 +360,6 @@ void FeaturePainter::drawBackground(Relation* R, QPainter* thePainter, MapView* 
         }
     }
 
-    if (M_PREFS->getAreaOpacity() != 100 && ForegroundFill) {
-        thePainter->setOpacity(qreal(M_PREFS->getAreaOpacity()) / 100);
-    }
     thePainter->drawPath(theView->transform().map(R->getPath()));
 }
 

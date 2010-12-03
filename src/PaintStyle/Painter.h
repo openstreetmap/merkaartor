@@ -89,6 +89,8 @@ public:
     QString getLabelBackgroundTag() const;
     bool getLabelHalo() const;
     bool getLabelArea() const;
+    bool getBackgroundInterior() const;
+    bool getBackgroundExterior() const;
 
     QString toXML(QString filename) const;
     static Painter fromXML(const QDomElement& e, QString filename);
@@ -100,6 +102,7 @@ public:
     QColor BackgroundColor;
     double BackgroundScale;
     double BackgroundOffset;
+    bool BackgroundInterior, BackgroundExterior;
     bool DrawForeground;
     QColor ForegroundColor;
     double ForegroundScale;

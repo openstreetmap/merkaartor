@@ -34,12 +34,10 @@ void BackgroundStyleLayer::draw(Way* R)
         r->thePainter->setBrush(Qt::NoBrush);
         if (dynamic_cast<ImageMapLayer*>(R->layer()) && M_PREFS->getUseShapefileForBackground()) {
             thePen = QPen(QColor(0xc0,0xc0,0xc0),1);
-            if (!R->isCoastline()) {
-                if (M_PREFS->getBackgroundOverwriteStyle() || !M_STYLE->getGlobalPainter().getDrawBackground())
-                    r->thePainter->setBrush(M_PREFS->getBgColor());
-                else
-                    r->thePainter->setBrush(QBrush(M_STYLE->getGlobalPainter().getBackgroundColor()));
-            }
+            if (M_PREFS->getBackgroundOverwriteStyle() || !M_STYLE->getGlobalPainter().getDrawBackground())
+                r->thePainter->setBrush(M_PREFS->getBgColor());
+            else
+                r->thePainter->setBrush(QBrush(M_STYLE->getGlobalPainter().getBackgroundColor()));
         } else {
             if (r->theView->pixelPerM() < M_PREFS->getRegionalZoom())
                 thePen = QPen(QColor(0x77,0x77,0x77),1);

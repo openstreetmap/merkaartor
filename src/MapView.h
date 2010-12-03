@@ -37,7 +37,6 @@ class MapView :	public QWidget
         Interaction* interaction();
 
         void buildFeatureSet();
-        void drawCoastlines(QPainter & painter);
         void drawFeatures(QPainter & painter);
         void printFeatures(QPainter & painter);
         void drawLatLonGrid(QPainter & painter);

@@ -91,7 +91,6 @@ Layer::~Layer()
 struct IndexFindContext {
     QMap<RenderPriority, QSet <Feature*> >* theFeatures;
     QRectF* clipRect;
-    QSet<Way*>* theCoastlines;
     Projection* theProjection;
     QTransform* theTransform;
     bool arePointsDrawable;
@@ -117,9 +116,6 @@ bool __cdecl indexFindCallback(Feature* F, void* ctxt)
         Way * R = STATIC_CAST_WAY(F);
         R->buildPath(*(pCtxt->theProjection), *(pCtxt->theTransform), *(pCtxt->clipRect));
         (*(pCtxt->theFeatures))[F->renderPriority()].insert(F);
-
-        if (R->isCoastline())
-            pCtxt->theCoastlines->insert(R);
     } else
     if (CHECK_RELATION(F)) {
         Relation * RR = STATIC_CAST_RELATION(F);
@@ -152,8 +148,6 @@ bool getFeatureSetCallback(MapFeaturePtr /*data*/, void* /*ctxt*/)
 //        R->buildPath(theProjection, theTransform, clipRect);
 //        theFeatures[(*it)->renderPriority()].insert(*it);
 //
-//        if (R->isCoastline())
-//            theCoastlines.insert(R);
 //    } else
 //    if (Relation * RR = CAST_RELATION(*it)) {
 //        RR->buildPath(theProjection, theTransform, clipRect);
@@ -168,7 +162,7 @@ bool getFeatureSetCallback(MapFeaturePtr /*data*/, void* /*ctxt*/)
     return true;
 }
 
-void Layer::getFeatureSet(QMap<RenderPriority, QSet <Feature*> >& theFeatures, QSet<Way*>& theCoastlines, Document* /* theDocument */,
+void Layer::getFeatureSet(QMap<RenderPriority, QSet <Feature*> >& theFeatures, Document* /* theDocument */,
                    QList<CoordBox>& invalidRects, QRectF& clipRect, Projection& theProjection, QTransform& theTransform)
 {
     if (!size())
@@ -177,7 +171,6 @@ void Layer::getFeatureSet(QMap<RenderPriority, QSet <Feature*> >& theFeatures, Q
     IndexFindContext ctxt;
     ctxt.theFeatures = &theFeatures;
     ctxt.clipRect = &clipRect;
-    ctxt.theCoastlines = &theCoastlines;
     ctxt.theProjection = &theProjection;
     ctxt.theTransform = &theTransform;
     ctxt.arePointsDrawable = arePointsDrawable();

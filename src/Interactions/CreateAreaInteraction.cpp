@@ -156,8 +156,6 @@ void CreateAreaInteraction::finishRoad(CommandList* L)
         theRelation->add("inner",theRoad);
         LastRoad = 0;
     }
-    else
-        LastRoad = theRoad;
     HaveFirst = false;
     LastRoad = theRoad;
     theRoad = 0;

@@ -193,6 +193,8 @@ void PaintStyleEditor::on_PaintList_itemSelectionChanged()
     ProportionalBackground->setValue(FP.backgroundBoundary().Proportional);
     FixedBackground->setValue(FP.backgroundBoundary().Fixed);
     makeBoundaryIcon(BackgroundColor, FP.backgroundBoundary().Color);
+    BackgroundInterior->setChecked(FP.getBackgroundInterior());
+    BackgroundExterior->setChecked(FP.getBackgroundExterior());
     DrawForeground->setChecked(FP.foregroundBoundary().Draw);
     ProportionalForeground->setValue(FP.foregroundBoundary().Proportional);
     FixedForeground->setValue(FP.foregroundBoundary().Fixed);
@@ -363,6 +365,39 @@ void PaintStyleEditor::on_DrawForeground_clicked(bool b)
     updatePagesIcons();
 }
 
+void PaintStyleEditor::on_BackgroundInterior_clicked(bool b)
+{
+    QListWidgetItem* it = PaintList->currentItem();
+    int idx = it->data(Qt::UserRole).toInt();
+
+    if (idx >= thePainters.size())
+        return;
+    thePainters[idx].BackgroundInterior = b;
+
+    if (b) {
+        BackgroundExterior->blockSignals(true);
+        BackgroundExterior->setChecked(false);
+        thePainters[idx].BackgroundExterior = false;
+        BackgroundExterior->blockSignals(false);
+    }
+}
+
+void PaintStyleEditor::on_BackgroundExterior_clicked(bool b)
+{
+    QListWidgetItem* it = PaintList->currentItem();
+    int idx = it->data(Qt::UserRole).toInt();
+
+    if (idx >= thePainters.size())
+        return;
+    thePainters[idx].BackgroundExterior = b;
+
+    if (b) {
+        BackgroundInterior->blockSignals(true);
+        BackgroundInterior->setChecked(false);
+        thePainters[idx].BackgroundInterior = false;
+        BackgroundInterior->blockSignals(false);
+    }
+}
 
 void PaintStyleEditor::on_ForegroundColor_clicked()
 {

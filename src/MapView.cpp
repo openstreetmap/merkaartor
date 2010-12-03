@@ -64,7 +64,6 @@ public:
     QPoint theVectorPanDelta;
     qreal theVectorRotation;
     QMap<RenderPriority, QSet <Feature*> > theFeatures;
-    QSet<Way*> theCoastlines;
     QList<Node*> theVirtualNodes;
     MapRenderer renderer;
     RendererOptions ROptions;
@@ -382,9 +381,8 @@ void MapView::buildFeatureSet()
 {
     QRectF clipRect = p->theInvertedTransform.mapRect(QRectF(rect().adjusted(-200, -200, 200, 200)));
 
-    p->theCoastlines.clear();
     for (int i=0; i<theDocument->layerSize(); ++i)
-        theDocument->getLayer(i)->getFeatureSet(p->theFeatures, p->theCoastlines, theDocument, p->invalidRects, clipRect, theProjection, p->theTransform);
+        theDocument->getLayer(i)->getFeatureSet(p->theFeatures, theDocument, p->invalidRects, clipRect, theProjection, p->theTransform);
 }
 
 bool testColor(const QImage& theImage, const QPoint& P, const QRgb& targetColor)
@@ -427,52 +425,6 @@ void floodFill(QImage& theImage, const QPoint& P, const QRgb& targetColor, const
                 theStack.push(E + QPoint(0, -1));
         }
         theP.drawLine(W, E);
-    }
-}
-
-void MapView::drawCoastlines(QPainter & theP)
-{
-    double WW = p->PixelPerM*30.0 + 2.0;
-
-    QPen thePen(M_PREFS->getWaterColor(), WW);
-    thePen.setCapStyle(Qt::RoundCap);
-    thePen.setJoinStyle(Qt::RoundJoin);
-    theP.setPen(thePen);
-    theP.setBrush(Qt::NoBrush);
-    theP.setRenderHint(QPainter::Antialiasing);
-
-    QList<QPainterPath*> theCoasts;
-    QSet<Way*>::const_iterator it = p->theCoastlines.constBegin();
-    for (;it != p->theCoastlines.constEnd(); ++it) {
-        if ((*it)->getPath().elementCount() < 2) continue;
-
-        QPainterPath* aPath = new QPainterPath;
-        for (int j=1; j < (*it)->getPath().elementCount(); j++) {
-
-            QLineF l(QPointF((*it)->getPath().elementAt(j)), QPointF((*it)->getPath().elementAt(j-1)));
-            QLineF l1 = l.normalVector().unitVector();
-            l1.setLength(WW / 2.0);
-            if (j == 1) {
-                QLineF l3(l1);
-                l3.translate(l.p2() - l.p1());
-                aPath->moveTo(l3.p2());
-            } else
-                if (j < (*it)->getPath().elementCount() - 1) {
-                    QLineF l4(QPointF((*it)->getPath().elementAt(j)), QPointF((*it)->getPath().elementAt(j+1)));
-                    double theAngle = (l4.angle() - l.angle()) / 2.0;
-                    if (theAngle < 0.0) theAngle += 180.0;
-                    l1.setAngle(l.angle() + theAngle);
-                }
-            //theP.drawEllipse(l2.p2(), 5, 5);
-            aPath->lineTo(l1.p2());
-
-        }
-        theCoasts.append(aPath);
-    }
-
-    for (int i=0; i < theCoasts.size(); i++) {
-        theP.drawPath(p->theTransform.map(*theCoasts[i]));
-        delete theCoasts[i];
     }
 }
 
@@ -664,7 +616,6 @@ void MapView::updateStaticBuffer()
 //        P.setRenderHint(QPainter::Antialiasing);
 //        P.setClipping(true);
 //        P.setClipRegion(QRegion(rect()));
-        drawCoastlines(P);
         drawFeatures(P);
         P.end();
     }

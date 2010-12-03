@@ -25,7 +25,7 @@ public:
 
     virtual void preload();
     virtual void get(const CoordBox& hz, QList<Feature*>& theFeatures);
-    virtual void getFeatureSet(QMap<RenderPriority, QSet <Feature*> >& theFeatures, QSet<Way*>& theCoastlines, Document* theDocument,
+    virtual void getFeatureSet(QMap<RenderPriority, QSet <Feature*> >& theFeatures, Document* theDocument,
                                QList<CoordBox>& invalidRects, QRectF& clipRect, Projection& theProjection, QTransform& theTransform);
 
     virtual bool toXML(QDomElement& xParent, bool asTemplate, QProgressDialog * progress);

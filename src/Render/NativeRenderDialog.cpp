@@ -147,7 +147,6 @@ void NativeRenderDialog::render(QPainter& P, QRect theR, RendererOptions opt)
     mapview->setRenderOptions(opt);
     mapview->invalidate(true, false);
     mapview->buildFeatureSet();
-    mapview->drawCoastlines(P);
     mapview->printFeatures(P);
     if (opt.options & RendererOptions::ScaleVisible)
         mapview->drawScale(P);
