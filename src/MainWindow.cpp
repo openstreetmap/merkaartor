@@ -901,10 +901,10 @@ void MainWindow::on_editPasteOverwriteAction_triggered()
     for(int i=0; i < sel.size(); ++i) {
         theList->add(new ClearTagsCommand(sel[i], theDocument->getDirtyOrOriginLayer(sel[i]->layer())));
         for (FeatureIterator k(doc); !k.isEnd(); ++k) {
-            // TODO Restricts tag copy to same class. Yes or Not
-            // For now, restrict interclass from way to relation
-            if (k.get()->getClass() == sel[i]->getClass() || ((k.get()->getClass() == "Way") && (sel[i]->getClass() == "Relation")))
-                Feature::mergeTags(theDocument, theList, sel[i], k.get());
+            // Allow any<->any pasting but only takes top level feature into account
+            if (k.get()->sizeParents())
+                continue;
+            Feature::mergeTags(theDocument, theList, sel[i], k.get());
         }
     }
 
@@ -934,10 +934,10 @@ void MainWindow::on_editPasteMergeAction_triggered()
 
     for(int i=0; i < sel.size(); ++i) {
         for (FeatureIterator k(doc); !k.isEnd(); ++k) {
-            // TODO Restricts tag copy to same class. Yes or Not
-            // For now, restrict interclass from way to relation
-            if (k.get()->getClass() == sel[i]->getClass() || ((k.get()->getClass() == "Way") && (sel[i]->getClass() == "Relation")))
-                Feature::mergeTags(theDocument, theList, sel[i], k.get());
+            // Allow any<->any pasting but only takes top level feature into account
+            if (k.get()->sizeParents())
+                continue;
+            Feature::mergeTags(theDocument, theList, sel[i], k.get());
         }
     }
 
