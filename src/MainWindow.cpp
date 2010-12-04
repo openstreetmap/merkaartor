@@ -2284,7 +2284,7 @@ void MainWindow::on_mapStyleSaveAction_triggered()
 
     if (dlg.exec()) {
         if (dlg.selectedFiles().size())
-            fileName = dlg.selectedFiles()[0];
+            f = dlg.selectedFiles()[0];
     }
 //    f = QFileDialog::getSaveFileName(this, tr("Save map style"), M_PREFS->getCustomStyle(), tr("Merkaartor map style (*.mas)"));
     if (!f.isNull()) {
