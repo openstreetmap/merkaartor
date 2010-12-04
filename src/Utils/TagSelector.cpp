@@ -454,6 +454,7 @@ TagSelectorMatchResult TagSelectorOperator::evaluateVal(const QString& val) cons
                 break;
             }
     }
+    return TagSelect_NoMatch;
 }
 
 TagSelectorMatchResult TagSelectorOperator::matches(const IFeature* F, double PixelPerM) const
