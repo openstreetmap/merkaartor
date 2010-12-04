@@ -1544,22 +1544,22 @@ Is it really what you meant?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Layers/ImageMapLayer.cpp" line="1052"/>
+        <location filename="../src/Layers/ImageMapLayer.cpp" line="1051"/>
         <source>Server</source>
         <translation>Server</translation>
     </message>
     <message>
-        <location filename="../src/Layers/ImageMapLayer.cpp" line="1055"/>
+        <location filename="../src/Layers/ImageMapLayer.cpp" line="1054"/>
         <source>Tile size</source>
         <translation>Tegelgrootte</translation>
     </message>
     <message>
-        <location filename="../src/Layers/ImageMapLayer.cpp" line="1057"/>
+        <location filename="../src/Layers/ImageMapLayer.cpp" line="1056"/>
         <source>Min/Max zoom</source>
         <translation>Min/Max zoomniveau</translation>
     </message>
     <message>
-        <location filename="../src/Layers/ImageMapLayer.cpp" line="1061"/>
+        <location filename="../src/Layers/ImageMapLayer.cpp" line="1060"/>
         <source>Projection</source>
         <translation>Projectie</translation>
     </message>
@@ -1999,7 +1999,7 @@ Initialisatie wordt uitgevoerd...</translation>
         <translation>Importeer osmChange</translation>
     </message>
     <message>
-        <location filename="../src/Commands/DocumentCommands.cpp" line="124"/>
+        <location filename="../src/Commands/DocumentCommands.cpp" line="126"/>
         <source>Cascaded cleanup</source>
         <translation>Cascade opschonen</translation>
     </message>
@@ -2020,7 +2020,7 @@ Initialisatie wordt uitgevoerd...</translation>
     <message>
         <location filename="../src/Commands/NodeCommands.cpp" line="17"/>
         <location filename="../src/Commands/NodeCommands.cpp" line="25"/>
-        <location filename="../src/Commands/NodeCommands.cpp" line="110"/>
+        <location filename="../src/Commands/NodeCommands.cpp" line="112"/>
         <source>Move node %1</source>
         <translation>Verplaats knooppunt %1</translation>
     </message>
@@ -2092,7 +2092,7 @@ Initialisatie wordt uitgevoerd...</translation>
     </message>
     <message>
         <location filename="../src/Interactions/CreateNodeInteraction.cpp" line="102"/>
-        <location filename="../src/Interactions/MoveNodeInteraction.cpp" line="251"/>
+        <location filename="../src/Interactions/MoveNodeInteraction.cpp" line="254"/>
         <source>Create node in Road: %1</source>
         <translation>Maak node in Weg: %1</translation>
     </message>
@@ -2134,28 +2134,28 @@ Initialisatie wordt uitgevoerd...</translation>
     </message>
     <message>
         <location filename="../src/Interactions/CreateSingleWayInteraction.cpp" line="233"/>
-        <location filename="../src/Interactions/CreateSingleWayInteraction.cpp" line="283"/>
-        <location filename="../src/Interactions/CreateSingleWayInteraction.cpp" line="294"/>
+        <location filename="../src/Interactions/CreateSingleWayInteraction.cpp" line="293"/>
+        <location filename="../src/Interactions/CreateSingleWayInteraction.cpp" line="304"/>
         <source>Create Node %1 in Road %2</source>
         <translation>Maak Node %1 in Weg %2</translation>
     </message>
     <message>
-        <location filename="../src/Interactions/CreateSingleWayInteraction.cpp" line="267"/>
+        <location filename="../src/Interactions/CreateSingleWayInteraction.cpp" line="277"/>
         <source>Create Road: %1</source>
         <translation>Maak Weg: %1</translation>
     </message>
     <message>
-        <location filename="../src/Interactions/CreateSingleWayInteraction.cpp" line="275"/>
+        <location filename="../src/Interactions/CreateSingleWayInteraction.cpp" line="285"/>
         <source>Create Node: %1</source>
         <translation>Maak Node: %1</translation>
     </message>
     <message>
-        <location filename="../src/Interactions/CreateSingleWayInteraction.cpp" line="297"/>
+        <location filename="../src/Interactions/CreateSingleWayInteraction.cpp" line="307"/>
         <source>Add Node %1 to Road %2</source>
         <translation>Voeg knoop %1 toe aan weg %2</translation>
     </message>
     <message>
-        <location filename="../src/Interactions/CreateSingleWayInteraction.cpp" line="335"/>
+        <location filename="../src/Interactions/CreateSingleWayInteraction.cpp" line="345"/>
         <source>Close Road %1</source>
         <translation>Weg %1 sluiten</translation>
     </message>
@@ -2192,27 +2192,27 @@ Houd er rekening mee dat knooppunten buiten het afgehaalde gebied behouden zulle
         <translation>%1 wegen omkeren</translation>
     </message>
     <message>
-        <location filename="../src/Interactions/MoveNodeInteraction.cpp" line="147"/>
+        <location filename="../src/Interactions/MoveNodeInteraction.cpp" line="150"/>
         <source>Move Nodes</source>
         <translation>Knooppunten verplaatsen</translation>
     </message>
     <message>
-        <location filename="../src/Interactions/MoveNodeInteraction.cpp" line="151"/>
+        <location filename="../src/Interactions/MoveNodeInteraction.cpp" line="154"/>
         <source>Move Node %1</source>
         <translation>Verplaats knooppunt %1</translation>
     </message>
     <message>
-        <location filename="../src/Interactions/MoveNodeInteraction.cpp" line="204"/>
+        <location filename="../src/Interactions/MoveNodeInteraction.cpp" line="207"/>
         <source>Nodes at the same position found.</source>
         <translation>Knooppunten gevonden op dezelfde positie</translation>
     </message>
     <message>
-        <location filename="../src/Interactions/MoveNodeInteraction.cpp" line="205"/>
+        <location filename="../src/Interactions/MoveNodeInteraction.cpp" line="208"/>
         <source>Do you want to merge all nodes at the drop position?</source>
         <translation>Wil je alle nodes op de doelpositie samenvoegen?</translation>
     </message>
     <message>
-        <location filename="../src/Interactions/MoveNodeInteraction.cpp" line="214"/>
+        <location filename="../src/Interactions/MoveNodeInteraction.cpp" line="217"/>
         <location filename="../src/MainWindow.cpp" line="2118"/>
         <source>Merge Nodes into %1</source>
         <translation>Nodes samengevoegd in %1</translation>
@@ -2385,7 +2385,7 @@ Houd er rekening mee dat knooppunten buiten het afgehaalde gebied behouden zulle
         <location filename="../src/MainWindow.cpp" line="851"/>
         <location filename="../src/MainWindow.cpp" line="885"/>
         <source>Clipboard do not contain valid data.</source>
-        <translation type="unfinished"></translation>
+        <translation>Klembord bevat geen geldige data.</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.cpp" line="1051"/>
@@ -4454,37 +4454,37 @@ Wenst u nog steeds een kruispunt voor elk ervan aan te maken (ongewenste kruispu
 <context>
     <name>MapFeature</name>
     <message>
-        <location filename="../src/Features/Feature.cpp" line="1060"/>
+        <location filename="../src/Features/Feature.cpp" line="1067"/>
         <source>&lt;i&gt;V: &lt;/i&gt;&lt;b&gt;%1&lt;/b&gt; </source>
         <translation>&lt;i&gt;V: &lt;/i&gt;&lt;b&gt;%1&lt;/b&amp;gt; </translation>
     </message>
     <message>
-        <location filename="../src/Features/Feature.cpp" line="1062"/>
+        <location filename="../src/Features/Feature.cpp" line="1069"/>
         <source>&lt;i&gt;last: &lt;/i&gt;&lt;b&gt;%1&lt;/b&gt; by &lt;b&gt;%2&lt;/b&gt;</source>
         <translation>&lt;i&gt;laatste: &lt;/i&gt;&lt;b&gt;%1&lt;/b&amp;gt; door &lt;b&gt;%2&lt;/b&amp;gt;</translation>
     </message>
     <message>
-        <location filename="../src/Features/Feature.cpp" line="1064"/>
+        <location filename="../src/Features/Feature.cpp" line="1071"/>
         <source>&lt;i&gt;last: &lt;/i&gt;&lt;b&gt;%1&lt;/b&gt;</source>
         <translation>&lt;i&gt;laatste: &lt;/i&gt;&lt;b&gt;%1&lt;/b&amp;gt;</translation>
     </message>
     <message>
-        <location filename="../src/Features/Feature.cpp" line="1067"/>
+        <location filename="../src/Features/Feature.cpp" line="1074"/>
         <source>&lt;br/&gt;&lt;i&gt;layer: &lt;/i&gt;&lt;b&gt;%1&lt;/b&gt; </source>
         <translation>&lt;br/&gt;&lt;i&gt;laag: &lt;/i&gt;&lt;b&gt;%1&lt;/b&amp;gt; </translation>
     </message>
     <message>
-        <location filename="../src/Features/Feature.cpp" line="1091"/>
+        <location filename="../src/Features/Feature.cpp" line="1098"/>
         <source>History</source>
         <translation>Geschiedenis</translation>
     </message>
     <message>
-        <location filename="../src/Features/Feature.cpp" line="1094"/>
+        <location filename="../src/Features/Feature.cpp" line="1101"/>
         <source>Referenced by ways</source>
         <translation>Gerefereerd door wegen</translation>
     </message>
     <message>
-        <location filename="../src/Features/Feature.cpp" line="1097"/>
+        <location filename="../src/Features/Feature.cpp" line="1104"/>
         <source>Referenced by relation</source>
         <translation>Gerefereerd door relatie</translation>
     </message>
@@ -4594,72 +4594,72 @@ Wenst u nog steeds een kruispunt voor elk ervan aan te maken (ongewenste kruispu
 <context>
     <name>MapView</name>
     <message>
-        <location filename="../src/MapView.cpp" line="302"/>
+        <location filename="../src/MapView.cpp" line="360"/>
         <source>%1 m</source>
         <translation>%1 m</translation>
     </message>
     <message>
-        <location filename="../src/MapView.cpp" line="304"/>
+        <location filename="../src/MapView.cpp" line="362"/>
         <source>%1 km</source>
         <translation>%1 km</translation>
     </message>
     <message>
-        <location filename="../src/MapView.cpp" line="840"/>
+        <location filename="../src/MapView.cpp" line="898"/>
         <source>Feature</source>
         <translation>Onderdeel</translation>
     </message>
     <message>
-        <location filename="../src/MapView.cpp" line="849"/>
+        <location filename="../src/MapView.cpp" line="907"/>
         <source>Node</source>
         <translation>Knooppunt</translation>
     </message>
     <message>
-        <location filename="../src/MapView.cpp" line="857"/>
+        <location filename="../src/MapView.cpp" line="915"/>
         <source>Road</source>
         <translation>Weg</translation>
     </message>
     <message>
-        <location filename="../src/MapView.cpp" line="865"/>
+        <location filename="../src/MapView.cpp" line="923"/>
         <source>Relation</source>
         <translation>Relatie</translation>
     </message>
     <message>
-        <location filename="../src/MapView.cpp" line="990"/>
+        <location filename="../src/MapView.cpp" line="1048"/>
         <source>Load image</source>
         <translation>Laad afbeelding</translation>
     </message>
     <message>
-        <location filename="../src/MapView.cpp" line="992"/>
+        <location filename="../src/MapView.cpp" line="1050"/>
         <source>Add node position to image</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/MapView.cpp" line="994"/>
+        <location filename="../src/MapView.cpp" line="1052"/>
         <source>Geotag image with this position</source>
         <translation>Sla geografische coördinaten op in foto</translation>
     </message>
     <message>
-        <location filename="../src/MapView.cpp" line="996"/>
+        <location filename="../src/MapView.cpp" line="1054"/>
         <source>Cancel</source>
         <translation>Annuleren</translation>
     </message>
     <message>
-        <location filename="../src/MapView.cpp" line="1530"/>
+        <location filename="../src/MapView.cpp" line="1592"/>
         <source>View</source>
         <translation>Zicht</translation>
     </message>
     <message>
-        <location filename="../src/MapView.cpp" line="1531"/>
+        <location filename="../src/MapView.cpp" line="1593"/>
         <source>Bounding Box</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/MapView.cpp" line="1543"/>
+        <location filename="../src/MapView.cpp" line="1605"/>
         <source>Projection</source>
         <translation>Projectie</translation>
     </message>
     <message>
-        <location filename="../src/MapView.cpp" line="270"/>
+        <location filename="../src/MapView.cpp" line="328"/>
         <source>%1ms;ppm:%2</source>
         <translation>%1ms;ppm:%2</translation>
     </message>
@@ -6653,37 +6653,37 @@ p, li { white-space: pre-wrap; }
 <context>
     <name>TrackLayer</name>
     <message>
-        <location filename="../src/Layers/Layer.cpp" line="942"/>
+        <location filename="../src/Layers/Layer.cpp" line="945"/>
         <source># of track segments</source>
         <translation># weggedeeltes</translation>
     </message>
     <message>
-        <location filename="../src/Layers/Layer.cpp" line="942"/>
+        <location filename="../src/Layers/Layer.cpp" line="945"/>
         <source>%1</source>
         <translation>%1</translation>
     </message>
     <message>
-        <location filename="../src/Layers/Layer.cpp" line="943"/>
+        <location filename="../src/Layers/Layer.cpp" line="946"/>
         <source>Total distance</source>
         <translation>Totale afstand</translation>
     </message>
     <message>
-        <location filename="../src/Layers/Layer.cpp" line="943"/>
+        <location filename="../src/Layers/Layer.cpp" line="946"/>
         <source>%1 km</source>
         <translation>%1 km</translation>
     </message>
     <message>
-        <location filename="../src/Layers/Layer.cpp" line="944"/>
+        <location filename="../src/Layers/Layer.cpp" line="947"/>
         <source>Total duration</source>
         <translation>Totale duur</translation>
     </message>
     <message>
-        <location filename="../src/Layers/Layer.cpp" line="944"/>
+        <location filename="../src/Layers/Layer.cpp" line="947"/>
         <source>%1h %2m</source>
         <translation>%1h %2m</translation>
     </message>
     <message>
-        <location filename="../src/Layers/Layer.cpp" line="851"/>
+        <location filename="../src/Layers/Layer.cpp" line="854"/>
         <source>Extract - %1</source>
         <translation>Extraheer - %1</translation>
     </message>

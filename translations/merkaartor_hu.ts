@@ -1514,22 +1514,22 @@ Is it really what you meant?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Layers/ImageMapLayer.cpp" line="1052"/>
+        <location filename="../src/Layers/ImageMapLayer.cpp" line="1051"/>
         <source>Server</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Layers/ImageMapLayer.cpp" line="1055"/>
+        <location filename="../src/Layers/ImageMapLayer.cpp" line="1054"/>
         <source>Tile size</source>
         <translation type="unfinished">Csempeméret</translation>
     </message>
     <message>
-        <location filename="../src/Layers/ImageMapLayer.cpp" line="1057"/>
+        <location filename="../src/Layers/ImageMapLayer.cpp" line="1056"/>
         <source>Min/Max zoom</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Layers/ImageMapLayer.cpp" line="1061"/>
+        <location filename="../src/Layers/ImageMapLayer.cpp" line="1060"/>
         <source>Projection</source>
         <translation type="unfinished">Leképezés</translation>
     </message>
@@ -2802,7 +2802,7 @@ További tudnivalók: http://wiki.openstreetmap.org/index.php/Problem_uploading_
         <translation>Alt+A</translation>
     </message>
     <message>
-        <location filename="../src/Commands/DocumentCommands.cpp" line="124"/>
+        <location filename="../src/Commands/DocumentCommands.cpp" line="126"/>
         <source>Cascaded cleanup</source>
         <translation>Zuhatagosan takarít</translation>
     </message>
@@ -2863,7 +2863,7 @@ További tudnivalók: http://wiki.openstreetmap.org/index.php/Problem_uploading_
     </message>
     <message>
         <location filename="../src/Interactions/CreateNodeInteraction.cpp" line="102"/>
-        <location filename="../src/Interactions/MoveNodeInteraction.cpp" line="251"/>
+        <location filename="../src/Interactions/MoveNodeInteraction.cpp" line="254"/>
         <source>Create node in Road: %1</source>
         <translation>Pontot készít %1 útra</translation>
     </message>
@@ -2879,18 +2879,18 @@ További tudnivalók: http://wiki.openstreetmap.org/index.php/Problem_uploading_
     </message>
     <message>
         <location filename="../src/Interactions/CreateSingleWayInteraction.cpp" line="233"/>
-        <location filename="../src/Interactions/CreateSingleWayInteraction.cpp" line="283"/>
-        <location filename="../src/Interactions/CreateSingleWayInteraction.cpp" line="294"/>
+        <location filename="../src/Interactions/CreateSingleWayInteraction.cpp" line="293"/>
+        <location filename="../src/Interactions/CreateSingleWayInteraction.cpp" line="304"/>
         <source>Create Node %1 in Road %2</source>
         <translation>%1 pontot készíti %2 úton</translation>
     </message>
     <message>
-        <location filename="../src/Interactions/CreateSingleWayInteraction.cpp" line="267"/>
+        <location filename="../src/Interactions/CreateSingleWayInteraction.cpp" line="277"/>
         <source>Create Road: %1</source>
         <translation>Utat készít: %1</translation>
     </message>
     <message>
-        <location filename="../src/Interactions/CreateSingleWayInteraction.cpp" line="335"/>
+        <location filename="../src/Interactions/CreateSingleWayInteraction.cpp" line="345"/>
         <source>Close Road %1</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2953,7 +2953,7 @@ Note that OSM nodes outside the downloaded area will be kept.</source>
         <translation>Pontokat igazít</translation>
     </message>
     <message>
-        <location filename="../src/Interactions/MoveNodeInteraction.cpp" line="214"/>
+        <location filename="../src/Interactions/MoveNodeInteraction.cpp" line="217"/>
         <location filename="../src/MainWindow.cpp" line="2118"/>
         <source>Merge Nodes into %1</source>
         <translation>Pontokat %1 dologba rak</translation>
@@ -3117,12 +3117,12 @@ Meg akarja ezt tenni most?</translation>
         <translation>Címkézi: %1</translation>
     </message>
     <message>
-        <location filename="../src/Interactions/CreateSingleWayInteraction.cpp" line="275"/>
+        <location filename="../src/Interactions/CreateSingleWayInteraction.cpp" line="285"/>
         <source>Create Node: %1</source>
         <translation>Pontot készít: %1</translation>
     </message>
     <message>
-        <location filename="../src/Interactions/CreateSingleWayInteraction.cpp" line="297"/>
+        <location filename="../src/Interactions/CreateSingleWayInteraction.cpp" line="307"/>
         <source>Add Node %1 to Road %2</source>
         <translation>%1 pontot adja %2 úthoz</translation>
     </message>
@@ -3562,12 +3562,12 @@ Meg akarja ezt tenni most?</translation>
         <translation>SVG</translation>
     </message>
     <message>
-        <location filename="../src/Interactions/MoveNodeInteraction.cpp" line="204"/>
+        <location filename="../src/Interactions/MoveNodeInteraction.cpp" line="207"/>
         <source>Nodes at the same position found.</source>
         <translation>Pontokat találtam ugyanitt.</translation>
     </message>
     <message>
-        <location filename="../src/Interactions/MoveNodeInteraction.cpp" line="205"/>
+        <location filename="../src/Interactions/MoveNodeInteraction.cpp" line="208"/>
         <source>Do you want to merge all nodes at the drop position?</source>
         <translation>Össze akar rakni minden pontot egyetlen egybe a beejtés helyén?</translation>
     </message>
@@ -3836,7 +3836,7 @@ Meg akarja ezt tenni most?</translation>
     <message>
         <location filename="../src/Commands/NodeCommands.cpp" line="17"/>
         <location filename="../src/Commands/NodeCommands.cpp" line="25"/>
-        <location filename="../src/Commands/NodeCommands.cpp" line="110"/>
+        <location filename="../src/Commands/NodeCommands.cpp" line="112"/>
         <source>Move node %1</source>
         <translation>Mozgatja %1 pontot</translation>
     </message>
@@ -4125,12 +4125,12 @@ Teljesen biztos ön abban, hogy e KML-t van joga bevinni OSM-be?</translation>
         <translation>Szerkesztés</translation>
     </message>
     <message>
-        <location filename="../src/Interactions/MoveNodeInteraction.cpp" line="147"/>
+        <location filename="../src/Interactions/MoveNodeInteraction.cpp" line="150"/>
         <source>Move Nodes</source>
         <translation>Pontokat mozgat</translation>
     </message>
     <message>
-        <location filename="../src/Interactions/MoveNodeInteraction.cpp" line="151"/>
+        <location filename="../src/Interactions/MoveNodeInteraction.cpp" line="154"/>
         <source>Move Node %1</source>
         <translation>%1 pontot mozgatja</translation>
     </message>
@@ -4429,32 +4429,32 @@ Do you still want to create a junction for each one (Unwanted junctions can stil
 <context>
     <name>MapFeature</name>
     <message>
-        <location filename="../src/Features/Feature.cpp" line="1062"/>
+        <location filename="../src/Features/Feature.cpp" line="1069"/>
         <source>&lt;i&gt;last: &lt;/i&gt;&lt;b&gt;%1&lt;/b&gt; by &lt;b&gt;%2&lt;/b&gt;</source>
         <translation>&lt;i&gt;utoljára: &lt;/i&gt;&lt;b&gt;%1&lt;/b&gt; &lt;b&gt;%2&lt;/b&gt; által</translation>
     </message>
     <message>
-        <location filename="../src/Features/Feature.cpp" line="1064"/>
+        <location filename="../src/Features/Feature.cpp" line="1071"/>
         <source>&lt;i&gt;last: &lt;/i&gt;&lt;b&gt;%1&lt;/b&gt;</source>
         <translation>&lt;i&gt;utoljára: &lt;/i&gt;&lt;b&gt;%1&lt;/b&gt;</translation>
     </message>
     <message>
-        <location filename="../src/Features/Feature.cpp" line="1067"/>
+        <location filename="../src/Features/Feature.cpp" line="1074"/>
         <source>&lt;br/&gt;&lt;i&gt;layer: &lt;/i&gt;&lt;b&gt;%1&lt;/b&gt; </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Features/Feature.cpp" line="1091"/>
+        <location filename="../src/Features/Feature.cpp" line="1098"/>
         <source>History</source>
         <translation>Történelem</translation>
     </message>
     <message>
-        <location filename="../src/Features/Feature.cpp" line="1094"/>
+        <location filename="../src/Features/Feature.cpp" line="1101"/>
         <source>Referenced by ways</source>
         <translation>Rá hivatkozó utak</translation>
     </message>
     <message>
-        <location filename="../src/Features/Feature.cpp" line="1097"/>
+        <location filename="../src/Features/Feature.cpp" line="1104"/>
         <source>Referenced by relation</source>
         <translation>Rá hivatkozó kapcsolat</translation>
     </message>
@@ -4561,7 +4561,7 @@ Do you still want to create a junction for each one (Unwanted junctions can stil
         <translation></translation>
     </message>
     <message>
-        <location filename="../src/Features/Feature.cpp" line="1060"/>
+        <location filename="../src/Features/Feature.cpp" line="1067"/>
         <source>&lt;i&gt;V: &lt;/i&gt;&lt;b&gt;%1&lt;/b&gt; </source>
         <translation>&lt;i&gt;V: &lt;/i&gt;&lt;b&gt;%1&lt;/b&gt; </translation>
     </message>
@@ -4569,72 +4569,72 @@ Do you still want to create a junction for each one (Unwanted junctions can stil
 <context>
     <name>MapView</name>
     <message>
-        <location filename="../src/MapView.cpp" line="302"/>
+        <location filename="../src/MapView.cpp" line="360"/>
         <source>%1 m</source>
         <translation>%1 m</translation>
     </message>
     <message>
-        <location filename="../src/MapView.cpp" line="304"/>
+        <location filename="../src/MapView.cpp" line="362"/>
         <source>%1 km</source>
         <translation>%1 km</translation>
     </message>
     <message>
-        <location filename="../src/MapView.cpp" line="840"/>
+        <location filename="../src/MapView.cpp" line="898"/>
         <source>Feature</source>
         <translation>Dolog</translation>
     </message>
     <message>
-        <location filename="../src/MapView.cpp" line="857"/>
+        <location filename="../src/MapView.cpp" line="915"/>
         <source>Road</source>
         <translation>Út</translation>
     </message>
     <message>
-        <location filename="../src/MapView.cpp" line="1530"/>
+        <location filename="../src/MapView.cpp" line="1592"/>
         <source>View</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/MapView.cpp" line="1531"/>
+        <location filename="../src/MapView.cpp" line="1593"/>
         <source>Bounding Box</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/MapView.cpp" line="1543"/>
+        <location filename="../src/MapView.cpp" line="1605"/>
         <source>Projection</source>
         <translation type="unfinished">Leképezés</translation>
     </message>
     <message>
-        <location filename="../src/MapView.cpp" line="849"/>
+        <location filename="../src/MapView.cpp" line="907"/>
         <source>Node</source>
         <translation>Pont</translation>
     </message>
     <message>
-        <location filename="../src/MapView.cpp" line="865"/>
+        <location filename="../src/MapView.cpp" line="923"/>
         <source>Relation</source>
         <translation>Kapcsolat</translation>
     </message>
     <message>
-        <location filename="../src/MapView.cpp" line="996"/>
+        <location filename="../src/MapView.cpp" line="1054"/>
         <source>Cancel</source>
         <translation>Mégsem</translation>
     </message>
     <message>
-        <location filename="../src/MapView.cpp" line="270"/>
+        <location filename="../src/MapView.cpp" line="328"/>
         <source>%1ms;ppm:%2</source>
         <translation>%1ms;ppm:%2</translation>
     </message>
     <message>
-        <location filename="../src/MapView.cpp" line="990"/>
+        <location filename="../src/MapView.cpp" line="1048"/>
         <source>Load image</source>
         <translation>Képet betölt</translation>
     </message>
     <message>
-        <location filename="../src/MapView.cpp" line="992"/>
+        <location filename="../src/MapView.cpp" line="1050"/>
         <source>Add node position to image</source>
         <translation>Pont helyzetét képhez adja</translation>
     </message>
     <message>
-        <location filename="../src/MapView.cpp" line="994"/>
+        <location filename="../src/MapView.cpp" line="1052"/>
         <source>Geotag image with this position</source>
         <translation>Képet földcímkéz e helyzettel</translation>
     </message>
@@ -6629,37 +6629,37 @@ p, li { white-space: pre-wrap; }
 <context>
     <name>TrackLayer</name>
     <message>
-        <location filename="../src/Layers/Layer.cpp" line="851"/>
+        <location filename="../src/Layers/Layer.cpp" line="854"/>
         <source>Extract - %1</source>
         <translation>Kivonat – %1</translation>
     </message>
     <message>
-        <location filename="../src/Layers/Layer.cpp" line="942"/>
+        <location filename="../src/Layers/Layer.cpp" line="945"/>
         <source># of track segments</source>
         <translation>nyomvonal szakaszok száma</translation>
     </message>
     <message>
-        <location filename="../src/Layers/Layer.cpp" line="942"/>
+        <location filename="../src/Layers/Layer.cpp" line="945"/>
         <source>%1</source>
         <translation>%1</translation>
     </message>
     <message>
-        <location filename="../src/Layers/Layer.cpp" line="943"/>
+        <location filename="../src/Layers/Layer.cpp" line="946"/>
         <source>Total distance</source>
         <translation>Teljes távolság</translation>
     </message>
     <message>
-        <location filename="../src/Layers/Layer.cpp" line="943"/>
+        <location filename="../src/Layers/Layer.cpp" line="946"/>
         <source>%1 km</source>
         <translation>%1 km</translation>
     </message>
     <message>
-        <location filename="../src/Layers/Layer.cpp" line="944"/>
+        <location filename="../src/Layers/Layer.cpp" line="947"/>
         <source>Total duration</source>
         <translation>Teljes időtartam</translation>
     </message>
     <message>
-        <location filename="../src/Layers/Layer.cpp" line="944"/>
+        <location filename="../src/Layers/Layer.cpp" line="947"/>
         <source>%1h %2m</source>
         <translation>%1h %2m</translation>
     </message>
