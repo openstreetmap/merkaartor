@@ -58,6 +58,9 @@ PaintStyleEditor::PaintStyleEditor(QWidget *aParent, const GlobalPainter& aGloba
 void PaintStyleEditor::updatePaintList()
 {
     QListWidgetItem* it;
+    QString curName;
+    if (PaintList->currentItem())
+        curName = PaintList->currentItem()->text();
     PaintList->clear();
     for (int i = 0; i < thePainters.size(); ++i) {
         it = new QListWidgetItem(thePainters[i].userName());
@@ -70,15 +73,20 @@ void PaintStyleEditor::updatePaintList()
             it->setData(Qt::UserRole, i);
             PaintList->addItem(it);
         }
+        if (!curName.isEmpty() && thePainters[i].userName().contains(curName, Qt::CaseInsensitive))
+            PaintList->setCurrentItem(it);
     }
-    PaintList->setCurrentRow(0);
+    if (curName.isEmpty())
+        PaintList->setCurrentRow(0);
 }
 
 void PaintStyleEditor::on_AddButton_clicked()
 {
     thePainters.push_back(FeaturePainter());
-    PaintList->addItem(thePainters[thePainters.size()-1].userName());
-    PaintList->setCurrentRow(thePainters.size() - 1);
+    QListWidgetItem* it = new QListWidgetItem(thePainters[thePainters.size()-1].userName());
+    it->setData(Qt::UserRole, thePainters.size()-1);
+    PaintList->addItem(it);
+    PaintList->setCurrentItem(it);
     on_PaintList_itemSelectionChanged();
 }
 
@@ -92,8 +100,10 @@ void PaintStyleEditor::on_DuplicateButton_clicked()
     //QList<FeaturePainter>::iterator theIterator = thePainters.begin();
     thePainters.insert(thePainters.begin() + idx, Painter(thePainters[idx]));
     idx++;
-    PaintList->insertItem(idx, thePainters[idx].userName());
-    PaintList->setCurrentRow(idx);
+    it = new QListWidgetItem(thePainters[idx].userName());
+    it->setData(Qt::UserRole, idx);
+    PaintList->insertItem(PaintList->currentRow()+1, it);
+    PaintList->setCurrentItem(it);
     on_PaintList_itemSelectionChanged();
 }
 
@@ -115,30 +125,34 @@ void PaintStyleEditor::on_RemoveButton_clicked()
 
 void PaintStyleEditor::on_btUp_clicked()
 {
-    int idx = static_cast<int>(PaintList->currentRow());
-    if (idx <= 0)
+    if (PaintList->currentRow() <= 0)
         return;
-    Painter fp = thePainters[idx-1];
-    thePainters[idx-1] = thePainters[idx];
+
+    int idx = PaintList->item(PaintList->currentRow())->data(Qt::UserRole).toInt();
+    int idxup = PaintList->item(PaintList->currentRow()-1)->data(Qt::UserRole).toInt();
+
+    Painter fp = thePainters[idxup];
+    thePainters[idxup] = thePainters[idx];
     thePainters[idx] = fp;
-    PaintList->item(idx-1)->setText(thePainters[idx-1].userName());
-    PaintList->item(idx)->setText(thePainters[idx].userName());
-    PaintList->setCurrentRow(idx-1);
+    PaintList->item(PaintList->currentRow()-1)->setText(thePainters[idxup].userName());
+    PaintList->item(PaintList->currentRow())->setText(thePainters[idx].userName());
+    PaintList->setCurrentRow(PaintList->currentRow()-1);
 }
 
 void PaintStyleEditor::on_btDown_clicked()
 {
-    QListWidgetItem* it = PaintList->currentItem();
-    int idx = it->data(Qt::UserRole).toInt();
-
-    if (idx >= thePainters.size()-1)
+    if (PaintList->currentRow() >= PaintList->count()-1)
         return;
-    Painter fp = thePainters[idx+1];
-    thePainters[idx+1] = thePainters[idx];
+
+    int idx = PaintList->item(PaintList->currentRow())->data(Qt::UserRole).toInt();
+    int idxdn = PaintList->item(PaintList->currentRow()+1)->data(Qt::UserRole).toInt();
+
+    Painter fp = thePainters[idxdn];
+    thePainters[idxdn] = thePainters[idx];
     thePainters[idx] = fp;
-    PaintList->item(idx+1)->setText(thePainters[idx+1].userName());
-    PaintList->item(idx)->setText(thePainters[idx].userName());
-    PaintList->setCurrentRow(idx+1);
+    PaintList->item(PaintList->currentRow()+1)->setText(thePainters[idxdn].userName());
+    PaintList->item(PaintList->currentRow())->setText(thePainters[idx].userName());
+    PaintList->setCurrentRow(PaintList->currentRow()+1);
 }
 
 void PaintStyleEditor::on_PaintList_itemSelectionChanged()
