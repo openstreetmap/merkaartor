@@ -1742,7 +1742,8 @@ void MainWindow::on_fileNewAction_triggered()
 
     if (!theDocument || !theDocument->hasUnsavedChanges() || mayDiscardUnsavedChanges(this)) {
         p->theFeats->invalidate();
-        SAFE_DELETE(theDocument)
+        SAFE_DELETE(theDocument);
+        theView->setDocument(NULL);
 
         if (M_PREFS->getHasAutoLoadDocument())
             loadTemplateDocument(M_PREFS->getAutoLoadDocumentFilename());

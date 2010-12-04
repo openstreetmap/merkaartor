@@ -161,12 +161,14 @@ PropertiesDock *MapView::properties()
 void MapView::setDocument(Document* aDoc)
 {
     theDocument = aDoc;
-    connect(aDoc, SIGNAL(imageRequested(ImageMapLayer*)),
-        this, SLOT(on_imageRequested(ImageMapLayer*)), Qt::QueuedConnection);
-    connect(aDoc, SIGNAL(imageReceived(ImageMapLayer*)),
-        this, SLOT(on_imageReceived(ImageMapLayer*)), Qt::QueuedConnection);
-    connect(aDoc, SIGNAL(loadingFinished(ImageMapLayer*)),
-        this, SLOT(on_loadingFinished(ImageMapLayer*)), Qt::QueuedConnection);
+    if (theDocument) {
+        connect(aDoc, SIGNAL(imageRequested(ImageMapLayer*)),
+                this, SLOT(on_imageRequested(ImageMapLayer*)), Qt::QueuedConnection);
+        connect(aDoc, SIGNAL(imageReceived(ImageMapLayer*)),
+                this, SLOT(on_imageReceived(ImageMapLayer*)), Qt::QueuedConnection);
+        connect(aDoc, SIGNAL(loadingFinished(ImageMapLayer*)),
+                this, SLOT(on_loadingFinished(ImageMapLayer*)), Qt::QueuedConnection);
+    }
 
     setViewport(viewport(), rect());
 }
