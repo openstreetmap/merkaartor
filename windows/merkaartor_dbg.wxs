@@ -71,6 +71,8 @@
 		    Source="$(var.BinPath)\plugins\background\MSpatialiteBackgroundPlugind0.dll" DiskId="1" />
             <File Id="MGdalBackgroundPlugind0.dll" Name="MGdalBackgroundPlugind0.dll"
 		    Source="$(var.BinPath)\plugins\background\MGdalBackgroundPlugind0.dll" DiskId="1" />
+            <File Id="MMsBingMapBackgroundPlugind0.dll" Name="MMsBingMapBackgroundPlugind0.dll"
+		    Source="$(var.BinPath)\plugins\background\MMsBingMapBackgroundPlugind0.dll" DiskId="1" />
          </Component>
       </DirectoryRef>
       
