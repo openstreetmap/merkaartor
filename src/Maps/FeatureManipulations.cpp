@@ -1036,8 +1036,8 @@ static bool splitArea(Document* theDocument, CommandList* theList,
     // Extract nodes between nodes[0] and nodes[1] into a separate area
     // and remove the nodes from the original area
     Way* newArea = new Way;
-    copyTags(newArea, theArea);
     theList->add(new AddFeatureCommand(theDocument->getDirtyOrOriginLayer(theArea), newArea, true));
+    copyTags(newArea, theArea);
     theList->add(new WayAddNodeCommand(newArea, theNodes[0], theDocument->getDirtyOrOriginLayer(theArea)));
     for (unsigned int i = nodes[0]+1; i < nodes[1]; ++i) {
         theList->add(new WayAddNodeCommand(newArea, theArea->getNode(nodes[0]+1),
