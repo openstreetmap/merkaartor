@@ -79,7 +79,7 @@ void MapNetwork::launchRequest(QUrl url, LoadingRequest* R)
 
     QTimer* timeoutTimer = new QTimer();
     connect(timeoutTimer, SIGNAL(timeout()), this, SLOT(timeout()));
-    timeoutTimer->setInterval(5000);
+    timeoutTimer->setInterval(M_PREFS->getNetworkTimeout());
     timeoutTimer->setSingleShot(true);
 
     timeoutMap[timeoutTimer] = rply;

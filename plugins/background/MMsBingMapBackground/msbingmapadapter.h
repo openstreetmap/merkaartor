@@ -91,7 +91,7 @@ class MsBingMapAdapter : public MapAdapter, public IMapWatermark
         virtual void fromXML(const QDomElement /*xParent*/) {}
         virtual QString toPropertiesHtml() {return "";}
 
-        virtual void setSettings(QSettings* /*aSet*/) {}
+        virtual void setSettings(QSettings* aSet) {theSets = aSet;}
 
         //IMapWatermark
         virtual QString getAttributionsHtml(const QRectF& bbox, const QRect& screen);
@@ -114,6 +114,7 @@ class MsBingMapAdapter : public MapAdapter, public IMapWatermark
         QString theSource;
         bool isLoaded;
         QList<BingProvider> theProviders;
+        QSettings* theSets;
 };
 
 class MsBingMapAdapterFactory : public QObject, public IMapAdapterFactory

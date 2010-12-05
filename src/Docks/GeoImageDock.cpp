@@ -41,7 +41,7 @@ bool GeoImageDock::getWalkingPapersDetails(const QUrl& reqUrl, double &lat, doub
             &q, SLOT(quit()));
     QNetworkReply *reply = manager.get(QNetworkRequest(reqUrl));
 
-    tT.start(10000); // 10s timeout
+    tT.start(M_PREFS->getNetworkTimeout());
     q.exec();
     if(tT.isActive()) {
         // download complete

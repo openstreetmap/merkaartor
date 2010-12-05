@@ -43,7 +43,9 @@ MsBingMapAdapter::MsBingMapAdapter()
 
     QNetworkReply *netReply = manager.get(QNetworkRequest(QUrl("http://dev.virtualearth.net/REST/v1/Imagery/Metadata/Aerial/0,0?zl=1&mapVersion=v1&key=AlRQe0E4ha3yKkz2MuNI-G1AIk-CIym4zTeqaTgKVWz_LBsnQuPksHrHCOT0381M&include=ImageryProviders&output=xml")));
 
-    tT.start(30000);
+    // Cannot use prefs in constructor
+//    tT.start(theSets->value("Network/NetworkTimeout", 5000).toInt());
+    tT.start(10000);
     q.exec();
     if(tT.isActive()) {
         // download complete
