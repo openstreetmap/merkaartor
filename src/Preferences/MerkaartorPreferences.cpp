@@ -1281,6 +1281,7 @@ M_PARAM_IMPLEMENT_STRING(MerkaartorStyleString, visual, "skulpture")
 /* Network */
 M_PARAM_IMPLEMENT_BOOL(OfflineMode, Network, false)
 M_PARAM_IMPLEMENT_BOOL(LocalServer, Network, false)
+M_PARAM_IMPLEMENT_INT(NetworkTimeout, Network, 10000)
 
 /* Proxy */
 

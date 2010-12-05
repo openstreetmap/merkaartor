@@ -359,6 +359,7 @@ public:
     /* Network */
     M_PARAM_DECLARE_BOOL(OfflineMode)
     M_PARAM_DECLARE_BOOL(LocalServer)
+    M_PARAM_DECLARE_INT(NetworkTimeout)
 
     /* Proxy */
     QNetworkProxy getProxy(const QUrl & requestUrl);

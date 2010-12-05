@@ -21,7 +21,7 @@
       <enum>QTabWidget::North</enum>
      </property>
      <property name="currentIndex">
-      <number>5</number>
+      <number>7</number>
      </property>
      <widget class="QWidget" name="tab_4">
       <attribute name="title">
@@ -1264,6 +1264,43 @@
           </item>
          </layout>
         </widget>
+       </item>
+       <item>
+        <layout class="QHBoxLayout" name="horizontalLayout_12">
+         <item>
+          <widget class="QLabel" name="label_12">
+           <property name="text">
+            <string>Network Timeout (ms)</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QSpinBox" name="sbNetworkTimeout">
+           <property name="minimum">
+            <number>3000</number>
+           </property>
+           <property name="maximum">
+            <number>999999</number>
+           </property>
+           <property name="singleStep">
+            <number>1000</number>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <spacer name="horizontalSpacer_7">
+           <property name="orientation">
+            <enum>Qt::Horizontal</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>40</width>
+             <height>20</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+        </layout>
        </item>
        <item>
         <widget class="QCheckBox" name="cbLocalServer">

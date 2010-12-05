@@ -141,7 +141,7 @@ bool WalkingPapersAdapter::getWalkingPapersDetails(const QUrl& reqUrl, QRectF& b
             &q, SLOT(quit()));
     QNetworkReply *reply = manager.get(QNetworkRequest(reqUrl));
 
-    tT.start(10000); // 10s timeout
+    tT.start(theSets->value("Network/NetworkTimeout", 5000).toInt());
     q.exec();
     if(tT.isActive()) {
         // download complete

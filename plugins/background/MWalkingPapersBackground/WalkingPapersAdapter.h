@@ -129,7 +129,7 @@ public:
     virtual void fromXML(const QDomElement xParent);
     virtual QString toPropertiesHtml();
 
-    virtual void setSettings(QSettings* /*aSet*/) {}
+    virtual void setSettings(QSettings* aSet) {theSets = aSet;}
 
 public slots:
     void onLoadImage();
@@ -145,6 +145,7 @@ private:
 
     QRectF theCoordBbox;
     QList<WalkingPapersImage> theImages;
+    QSettings* theSets;
 };
 
 

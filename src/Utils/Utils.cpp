@@ -11,6 +11,7 @@
 //******************************************************************
 
 #include "Utils.h"
+#include "MerkaartorPreferences.h"
 
 #include <QNetworkAccessManager>
 #include <QNetworkReply>
@@ -97,7 +98,7 @@ bool Utils::sendBlockingNetRequest(const QUrl& theUrl, QString& reply)
 
     QNetworkReply *netReply = manager.get(QNetworkRequest(theUrl));
 
-    tT.start(10000); // 10s timeout
+    tT.start(M_PREFS->getNetworkTimeout());
     q.exec();
     if(tT.isActive()) {
         // download complete

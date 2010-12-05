@@ -1,4 +1,5 @@
 v0.17
+    * ADD : Network timeout preference
     * CHG : Paste Tags : Allow any<->any pasting but only takes top level features into account (fixes #3174)
     * FIX : When loading history from MDC, do not import the command if the layer is not found + save layers dirty level in MDC (fixes #3176)
     * FIX : Locked zoom was bugged since passage to real pixel per Meter (fixes #3175)
