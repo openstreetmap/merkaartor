@@ -48,6 +48,7 @@ Node::Node(const Node& other)
     , Speed(other.Speed)
     , p(new NodePrivate)
 {
+    p->Projected = other.p->Projected;
     p->ProjectionRevision = other.projectionRevision();
     setRenderPriority(RenderPriority(RenderPriority::IsSingular,0., 0));
 //    qDebug() << "Node size: " << sizeof(Node) << sizeof(NodePrivate);

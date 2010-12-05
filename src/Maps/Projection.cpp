@@ -161,7 +161,7 @@ QPointF Projection::project(const QPointF & Map) const
 #ifndef _MOBILE
 QPointF Projection::project(Node* aNode) const
 {
-    if (aNode && aNode->projectionRevision() == p->ProjectionRevision)
+    if (aNode && !aNode->projection().isNull() && aNode->projectionRevision() == p->ProjectionRevision)
         return aNode->projection();
 
     QPointF pt;
