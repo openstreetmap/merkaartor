@@ -147,6 +147,7 @@ static double distanceFrom(QLineF ab, const Coord& c)
     Coord dc(dp);
     return dc.distanceFrom(c);
 }
+
 void simplifyWay(Document *doc, Layer *layer, CommandList *theList, Way *w, int start, int end, double threshold)
 {
     // Douglas-Peucker reduction of uninteresting points in way, subject to maximum error in metres
@@ -485,8 +486,8 @@ static void breakRoad(Document* theDocument, CommandList* theList, Way* R, Node*
         if (R->get(i) == Pt)
         {
             Node* New = new Node(*Pt);
-            copyTags(New,Pt);
             theList->add(new AddFeatureCommand(theDocument->getDirtyOrOriginLayer(R->layer()),New,true));
+            copyTags(New,Pt);
             theList->add(new WayRemoveNodeCommand(R,i,theDocument->getDirtyOrOriginLayer(R->layer())));
             theList->add(new WayAddNodeCommand(R,New,i,theDocument->getDirtyOrOriginLayer(R->layer())));
         }
