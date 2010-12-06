@@ -150,22 +150,22 @@ int YahooTiledMapAdapter::getTileSizeH() const
     return tilesize;
 }
 
-int YahooTiledMapAdapter::getMinZoom() const
+int YahooTiledMapAdapter::getMinZoom(const QRectF &) const
 {
     return min_zoom;
 }
 
-int YahooTiledMapAdapter::getMaxZoom() const
+int YahooTiledMapAdapter::getMaxZoom(const QRectF &) const
 {
     return max_zoom;
 }
 
-int YahooTiledMapAdapter::getAdaptedMinZoom() const
+int YahooTiledMapAdapter::getAdaptedMinZoom(const QRectF &) const
 {
     return 0;
 }
 
-int YahooTiledMapAdapter::getAdaptedMaxZoom() const
+int YahooTiledMapAdapter::getAdaptedMaxZoom(const QRectF &) const
 {
     return max_zoom - min_zoom;
 }

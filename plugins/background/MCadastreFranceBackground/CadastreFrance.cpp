@@ -357,22 +357,22 @@ void CadastreFranceAdapter::zoom_out()
     current_zoom = current_zoom > min_zoom ? current_zoom-1 : min_zoom;
 }
 
-int CadastreFranceAdapter::getMinZoom() const
+int CadastreFranceAdapter::getMinZoom(const QRectF &) const
 {
     return min_zoom;
 }
 
-int CadastreFranceAdapter::getMaxZoom() const
+int CadastreFranceAdapter::getMaxZoom(const QRectF &) const
 {
     return max_zoom;
 }
 
-int CadastreFranceAdapter::getAdaptedMinZoom() const
+int CadastreFranceAdapter::getAdaptedMinZoom(const QRectF &) const
 {
     return 0;
 }
 
-int CadastreFranceAdapter::getAdaptedMaxZoom() const
+int CadastreFranceAdapter::getAdaptedMaxZoom(const QRectF &) const
 {
     return max_zoom > min_zoom ? max_zoom - min_zoom : min_zoom - max_zoom;
 }

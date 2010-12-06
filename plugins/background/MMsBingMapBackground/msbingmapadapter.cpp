@@ -28,7 +28,7 @@ QString	MsBingMapAdapterFactory::getName() const
 /**************/
 
 MsBingMapAdapter::MsBingMapAdapter()
-    : MapAdapter(QString("ecn.t%1.tiles.virtualearth.net"), QString("/tiles/a%1.jpeg?g=587&mkt=en-gb&n=z"), QString("EPSG:3857"), 0, 19)
+    : MapAdapter(QString("ecn.t%1.tiles.virtualearth.net"), QString("/tiles/a%1.jpeg?g=587&mkt=en-gb&n=z"), QString("EPSG:3857"), 0, 20)
     , theSource("Bing")
     , isLoaded(false)
 {
@@ -296,3 +296,34 @@ QString MsBingMapAdapter::getLogoHtml()
 {
     return QString("<center><a href=\"http://www.bing.com/maps/\"><img src=\":/images/bing_logo.png\"/></a><br/><a href=\"http://opengeodata.org/microsoft-imagery-details\" style=\"color:silver; font-size:9px\">%1</a></center>").arg(tr("Terms of Use"));
 }
+
+int MsBingMapAdapter::getMinZoom(const QRectF &bbox) const
+{
+    return min_zoom;
+}
+
+int MsBingMapAdapter::getMaxZoom(const QRectF &bbox) const
+{
+    return max_zoom;
+}
+
+int MsBingMapAdapter::getAdaptedMinZoom(const QRectF &bbox) const
+{
+    return 0;
+}
+
+int MsBingMapAdapter::getAdaptedMaxZoom(const QRectF &bbox) const
+{
+    return max_zoom > min_zoom ? max_zoom - min_zoom : min_zoom - max_zoom;
+}
+
+int MsBingMapAdapter::getZoom() const
+{
+    return current_zoom;
+}
+
+int MsBingMapAdapter::getAdaptedZoom() const
+{
+    return max_zoom < min_zoom ? min_zoom - current_zoom : current_zoom - min_zoom;
+}
+

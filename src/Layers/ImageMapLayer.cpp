@@ -227,7 +227,9 @@ void ImageMapLayer::setMapAdapter(const QUuid& theAdapterUid, const QString& ser
             setVisible(true);
     } else
     {
-        p->theMapAdapter = M_PREFS->getBackgroundPlugin(p->bgType)->CreateInstance();
+        IMapAdapterFactory* fac = M_PREFS->getBackgroundPlugin(p->bgType);
+        if (fac)
+            p->theMapAdapter = fac->CreateInstance();
         if (p->theMapAdapter) {
             setName(tr("Map - %1").arg(p->theMapAdapter->getName()));
             p->theMapAdapter->setSettings(M_PREFS->getQSettings());
@@ -504,7 +506,7 @@ void ImageMapLayer::setCurrentZoom(MapView& theView, const CoordBox& viewport, c
         vp = p->theProjection.getProjectedViewport(viewport, rect);
 
     qreal tileWidth, tileHeight;
-    int maxZoom = p->theMapAdapter->getAdaptedMaxZoom();
+    int maxZoom = p->theMapAdapter->getAdaptedMaxZoom(viewport.toQRectF());
     int tilesizeW = p->theMapAdapter->getTileSizeW();
     int tilesizeH = p->theMapAdapter->getTileSizeH();
     QPointF mapmiddle_px = vp.center();
@@ -778,7 +780,7 @@ QRect ImageMapLayer::drawTiled(MapView& theView, QRect& rect)
         vp = p->theProjection.getProjectedViewport(p->Viewport, rect);
 
     qreal tileWidth, tileHeight;
-    int maxZoom = p->theMapAdapter->getAdaptedMaxZoom();
+    int maxZoom = p->theMapAdapter->getAdaptedMaxZoom(p->Viewport.toQRectF());
     int tilesizeW = p->theMapAdapter->getTileSizeW();
     int tilesizeH = p->theMapAdapter->getTileSizeH();
     QPointF vp0Center = QPointF(vp.width()/2, -vp.height()/2);
@@ -1066,7 +1068,7 @@ QString ImageMapLayer::toPropertiesHtml()
             if (p->theMapAdapter->isTiled()) {
                 h += "<i>" + tr("Tile size") + ": </i>" + QString("%1x%2").arg(p->theMapAdapter->getTileSizeW()).arg(p->theMapAdapter->getTileSizeH());
                 h += "<br/>";
-                h += "<i>" + tr("Min/Max zoom") + ": </i>" + QString("%1/%2").arg(p->theMapAdapter->getMinZoom()).arg(p->theMapAdapter->getMaxZoom());
+                h += "<i>" + tr("Min/Max zoom") + ": </i>" + QString("%1/%2").arg(p->theMapAdapter->getMinZoom(p->Viewport.toQRectF())).arg(p->theMapAdapter->getMaxZoom(p->Viewport.toQRectF()));
                 h += "<br/>";
             }
         }

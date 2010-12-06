@@ -45,22 +45,22 @@ QString MapAdapter::projection() const
     return Projection;
 }
 
-int MapAdapter::getMinZoom() const
+int MapAdapter::getMinZoom(const QRectF &) const
 {
     return min_zoom;
 }
 
-int MapAdapter::getMaxZoom() const
+int MapAdapter::getMaxZoom(const QRectF &) const
 {
     return max_zoom;
 }
 
-int MapAdapter::getAdaptedMinZoom() const
+int MapAdapter::getAdaptedMinZoom(const QRectF &) const
 {
     return 0;
 }
 
-int MapAdapter::getAdaptedMaxZoom() const
+int MapAdapter::getAdaptedMaxZoom(const QRectF &) const
 {
     return max_zoom > min_zoom ? max_zoom - min_zoom : min_zoom - max_zoom;
 }

@@ -79,13 +79,13 @@ public:
     /*!
      * @return the min zoom value
      */
-    virtual int 		getMinZoom	() const { return -1; }
+    virtual int 		getMinZoom	(const QRectF &) const { return -1; }
 
     //! returns the max zoom value
     /*!
      * @return the max zoom value
      */
-    virtual int		getMaxZoom	() const { return -1; }
+    virtual int		getMaxZoom	(const QRectF &) const { return -1; }
 
     //! returns the current zoom
     /*!
@@ -108,8 +108,8 @@ public:
 
 
     virtual int		getAdaptedZoom() const { return -1; }
-    virtual int 	getAdaptedMinZoom() const { return -1; }
-    virtual int		getAdaptedMaxZoom() const { return -1; }
+    virtual int 	getAdaptedMinZoom(const QRectF &) const { return -1; }
+    virtual int		getAdaptedMaxZoom(const QRectF &) const { return -1; }
 
     virtual void	zoom_in() {}
     virtual void	zoom_out() {}

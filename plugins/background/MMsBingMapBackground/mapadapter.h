@@ -73,28 +73,6 @@ public:
      */
     virtual QString projection() const;
 
-    //! returns the min zoom value
-    /*!
-     * @return the min zoom value
-     */
-    virtual int 		getMinZoom	() const;
-
-    //! returns the max zoom value
-    /*!
-     * @return the max zoom value
-     */
-    virtual int		getMaxZoom	() const;
-
-    //! returns the current zoom
-    /*!
-     * @return the current zoom
-     */
-    virtual int 		getZoom		() const;
-
-    virtual int		getAdaptedZoom()const;
-    virtual int 	getAdaptedMinZoom	() const;
-    virtual int		getAdaptedMaxZoom	() const;
-
     virtual QMenu* getMenu() const { return NULL; }
 
     virtual IImageManager* getImageManager();

@@ -65,13 +65,13 @@ public:
     /*!
      * @return the min zoom value
      */
-    virtual int 		getMinZoom	() const = 0;
+    virtual int 		getMinZoom	(const QRectF &) const = 0;
 
     //! returns the max zoom value
     /*!
      * @return the max zoom value
      */
-    virtual int		getMaxZoom	() const = 0;
+    virtual int		getMaxZoom	(const QRectF &) const = 0;
 
     //! returns the current zoom
     /*!
@@ -93,8 +93,8 @@ public:
     virtual QString	getLicenseUrl() const = 0;
 
     virtual int		getAdaptedZoom()   const = 0;
-    virtual int 	getAdaptedMinZoom	() const = 0;
-    virtual int		getAdaptedMaxZoom	() const = 0;
+    virtual int 	getAdaptedMinZoom	(const QRectF &) const = 0;
+    virtual int		getAdaptedMaxZoom	(const QRectF &) const = 0;
 
     virtual void	zoom_in() = 0;
     virtual void	zoom_out() = 0;
@@ -133,6 +133,6 @@ signals:
 };
 
 Q_DECLARE_INTERFACE ( IMapAdapter,
-                      "com.cbsoft.Merkaartor.IMapAdapter/1.10" )
+                      "com.cbsoft.Merkaartor.IMapAdapter/1.11" )
 
 #endif

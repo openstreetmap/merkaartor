@@ -81,13 +81,13 @@ public:
     /*!
      * @return the min zoom value
      */
-    virtual int 		getMinZoom	() const;
+    virtual int 		getMinZoom	(const QRectF &) const;
 
     //! returns the max zoom value
     /*!
      * @return the max zoom value
      */
-    virtual int		getMaxZoom	() const;
+    virtual int		getMaxZoom	(const QRectF &) const;
 
     //! returns the current zoom
     /*!
@@ -96,8 +96,8 @@ public:
     virtual int 		getZoom		() const;
 
     virtual int		getAdaptedZoom()const;
-    virtual int 	getAdaptedMinZoom	() const;
-    virtual int		getAdaptedMaxZoom	() const;
+    virtual int 	getAdaptedMinZoom	(const QRectF &) const;
+    virtual int		getAdaptedMaxZoom	(const QRectF &) const;
 
     virtual QMenu* getMenu() const { return NULL; }
 
