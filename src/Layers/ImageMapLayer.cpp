@@ -32,7 +32,8 @@ public:
     QUuid bgType;
     IMapAdapter* theMapAdapter;
 
-    QPixmap pm;
+    QPixmap curPix;
+    QPixmap newPix;
     Projection theProjection;
     QString selServer;
 
@@ -161,7 +162,7 @@ void ImageMapLayer::setMapAdapter(const QUuid& theAdapterUid, const QString& ser
     on_loadingFinished();
     if (p->theMapAdapter)
         SAFE_DELETE(p->theMapAdapter);
-    p->pm = QPixmap();
+    p->curPix = QPixmap();
 
     QString id = theAdapterUid.toString();
     p->bgType = theAdapterUid;
@@ -273,7 +274,7 @@ void ImageMapLayer::setMapAdapter(const QUuid& theAdapterUid, const QString& ser
                         SAFE_DELETE(p->theImageManager)
                                 on_loadingFinished();
                         p->theMapAdapter = NULL;
-                        p->pm = QPixmap();
+                        p->curPix = QPixmap();
 
                         p->bgType = NONE_ADAPTER_UUID;
                         setName(tr("Map - None"));
@@ -418,12 +419,9 @@ void ImageMapLayer::drawImage(QPainter* P)
 {
     if (!p->theMapAdapter)
         return;
-    // Do not draw if saved pixmap is null as a copy of a null pixmap seems to crash on Mac (fixes #2262)
-    if (p->pm.isNull())
-        return;
 
     P->setOpacity(getAlpha());
-    P->drawPixmap(0, 0, p->pm);
+    P->drawPixmap(0, 0, p->curPix);
 }
 
 using namespace ggl;
@@ -432,24 +430,26 @@ void ImageMapLayer::zoom(double zoom, const QPoint& pos, const QRect& rect)
 {
     if (!p->theMapAdapter)
         return;
-
     if (p->theMapAdapter->getImageManager())
         p->theMapAdapter->getImageManager()->abortLoading();
+    if (p->curPix.isNull())
+        return;
 
-    QPixmap tpm = p->pm.scaled(rect.size() * zoom, Qt::KeepAspectRatio);
-    p->pm.fill(Qt::transparent);
-    QPainter P(&p->pm);
-    P.drawPixmap(pos - (pos * zoom), tpm);
+    QPixmap tpm = p->curPix.scaled(rect.size() * zoom, Qt::KeepAspectRatio);
+    p->curPix.fill(Qt::transparent);
+    QPainter P(&p->curPix);
+    QPointF fPos(pos);
+    P.drawPixmap(fPos - (fPos * zoom), tpm);
 }
 
 void ImageMapLayer::pan(QPoint delta)
 {
     if (!p->theMapAdapter)
         return;
-    if (p->pm.isNull())
-        return;
     if (p->theMapAdapter->getImageManager())
         p->theMapAdapter->getImageManager()->abortLoading();
+    if (p->curPix.isNull())
+        return;
 
 #if QT_VERSION < 0x040600
         QPixmap savPix;
@@ -459,11 +459,11 @@ void ImageMapLayer::pan(QPoint delta)
         P.drawPixmap(delta, savPix);
 #else
         QRegion exposed;
-        p->pm.scroll(delta.x(), delta.y(), p->pm.rect(), &exposed);
-        QPainter P(&p->pm);
+        p->curPix.scroll(delta.x(), delta.y(), p->curPix.rect(), &exposed);
+        QPainter P(&p->curPix);
         P.setClipping(true);
         P.setClipRegion(exposed);
-        P.eraseRect(p->pm.rect());
+        P.eraseRect(p->curPix.rect());
 #endif
 //        on_imageReceived();
 }
@@ -550,9 +550,9 @@ void ImageMapLayer::forceRedraw(MapView& theView, QRect Screen)
     if (!p->theMapAdapter)
         return;
 
-    if (p->pm.size() != Screen.size()) {
-        p->pm = QPixmap(Screen.size());
-        p->pm.fill(Qt::transparent);
+    if (!p->Viewport.intersects(theView.viewport())) {
+        p->curPix = QPixmap(Screen.size());
+        p->curPix.fill(Qt::transparent);
     }
 
 //    QRectF fScreen(Screen);
@@ -578,32 +578,37 @@ void ImageMapLayer::draw(MapView& theView, QRect& rect)
     else
         p->pr = drawFull(theView, rect);
 
-    if (p->pm.isNull())
+    if (p->curPix.size() != rect.size()) {
+        p->curPix = QPixmap(rect.size());
+        p->curPix.fill(Qt::transparent);
+    }
+
+    if (p->newPix.isNull())
         return;
 
     const QSize ps = p->pr.size();
-    const QSize pmSize = p->pm.size();
+    const QSize pmSize = p->newPix.size();
     const qreal ratio = qMax<const qreal>((qreal)pmSize.width()/ps.width()*1.0, (qreal)pmSize.height()/ps.height()*1.0);
     qDebug() << "Bg image ratio " << ratio;
     QPixmap pms;
     if (ratio >= 1.0) {
-        qDebug() << "Bg image scale 1 " << ps << " : " << p->pm.size();
-        pms = p->pm.scaled(ps);
+        qDebug() << "Bg image scale 1 " << ps << " : " << p->newPix.size();
+        pms = p->newPix.scaled(ps);
     } else {
         const QSizeF drawingSize = pmSize * ratio;
         const QSizeF originSize = pmSize/2 - drawingSize/2;
         const QPointF drawingOrigin = QPointF(originSize.width(), originSize.height());
         const QRect drawingRect = QRect(drawingOrigin.toPoint(), drawingSize.toSize());
 
-        qDebug() << "Bg image scale 2 " << ps << " : " << p->pm.size();
+        qDebug() << "Bg image scale 2 " << ps << " : " << p->newPix.size();
         if (ps*ratio != drawingRect.size())
-            pms = p->pm.copy(drawingRect).scaled(ps*ratio);
+            pms = p->newPix.copy(drawingRect).scaled(ps*ratio);
         else
-            pms = p->pm.copy(drawingRect);
+            pms = p->newPix.copy(drawingRect);
     }
 
-    p->pm.fill(Qt::transparent);
-    QPainter P(&p->pm);
+    p->newPix.fill(Qt::transparent);
+    QPainter P(&p->curPix);
     P.drawPixmap((pmSize.width()-pms.width())/2, (pmSize.height()-pms.height())/2, pms);
     //    if (p->theMapAdapter->isTiled())
     //        P.drawPixmap((pmSize.width()-pms.width())/2, (pmSize.height()-pms.height())/2, pms);
@@ -642,10 +647,14 @@ QRect ImageMapLayer::drawFull(MapView& theView, QRect& rect)
         // Act depending on adapter type
         if (p->theMapAdapter->getType() == IMapAdapter::DirectBackground) {
             QPixmap pm = p->theMapAdapter->getPixmap(wgs84vp, vp, rect);
-            if (!pm.isNull() && pm.rect() != rect)
-                p->pm = pm.scaled(rect.size(), Qt::IgnoreAspectRatio);
-            else
-                p->pm = pm;
+            if (!pm.isNull()) {
+                p->curPix = QPixmap();
+                if (pm.rect() != rect)
+                    p->newPix = pm.scaled(rect.size(), Qt::IgnoreAspectRatio);
+                else
+                    p->newPix = pm;
+            } else
+                return rect;
         } else if (p->theMapAdapter->getType() == IMapAdapter::VectorBackground) {
             const QList<IFeature*>* theFeatures = p->theMapAdapter->getPaths(wgs84vp, NULL);
             if (theFeatures) {
@@ -677,9 +686,8 @@ QRect ImageMapLayer::drawFull(MapView& theView, QRect& rect)
                     }
                 }
             }
-            QPixmap pm(rect.size());
-            pm.fill(Qt::transparent);
-            p->pm = pm;
+            p->newPix = QPixmap(rect.size());
+            p->newPix.fill(Qt::transparent);
         } else if (p->theMapAdapter->getType() == IMapAdapter::NetworkDataBackground) {
 //            QString url (p->theMapAdapter->getQuery(wgs84vp, vp, rect));
 //            if (!url.isEmpty()) {
@@ -737,19 +745,21 @@ QRect ImageMapLayer::drawFull(MapView& theView, QRect& rect)
 //                delete doc;
 //                delete theXmlDoc;
 //            }
-            QPixmap pm(rect.size());
-            pm.fill(Qt::transparent);
-            p->pm = pm;
+            p->newPix = QPixmap();
+            return rect;
 
-        } else {
+        } else if (p->theMapAdapter->getType() == IMapAdapter::NetworkBackground) {
             QString url (p->theMapAdapter->getQuery(wgs84vp, vp, rect));
             if (!url.isEmpty()) {
                 qDebug() << "ImageMapLayer::drawFull: getting: " << url;
                 QPixmap pm = QPixmap::fromImage(p->theMapAdapter->getImageManager()->getImage(p->theMapAdapter,url));
-                if (!pm.isNull())
-                    p->pm = pm.scaled(rect.size(), Qt::IgnoreAspectRatio);
-                else
+                if (!pm.isNull()) {
+                    p->curPix = QPixmap();
+                    p->newPix = pm.scaled(rect.size(), Qt::IgnoreAspectRatio);
+                } else {
+                    p->newPix = QPixmap();
                     return rect;
+                }
             }
         }
     }
@@ -805,8 +815,21 @@ QRect ImageMapLayer::drawTiled(MapView& theView, QRect& rect)
             p->theMapAdapter->zoom_out();
             tileWidth = p->theMapAdapter->getBoundingbox().width() / p->theMapAdapter->getTilesWE(p->theMapAdapter->getZoom());
             tileHeight = p->theMapAdapter->getBoundingbox().height() / p->theMapAdapter->getTilesNS(p->theMapAdapter->getZoom());
+            w = ((qreal)rect.width() / tilesizeW) * tileWidth;
+            h = ((qreal)rect.height() / tilesizeH) * tileHeight;
+            upperLeft = QPointF(vpCenter.x() - w/2, vpCenter.y() + h/2);
+            lowerRight = QPointF(vpCenter.x() + w/2, vpCenter.y() - h/2);
+            vlm = QRectF(upperLeft, lowerRight);
         }
     }
+
+    Coord ulCoord, lrCoord;
+    ulCoord = p->theProjection.inverse2Coord(vlm.topLeft());
+    lrCoord = p->theProjection.inverse2Coord(vlm.bottomRight());
+
+    const QPointF tl = theView.transform().map(theView.projection().project(ulCoord));
+    const QPointF br = theView.transform().map(theView.projection().project(lrCoord));
+    QRect retRect = QRectF(tl, br).toRect();
 
     // Actual drawing
     int i, j;
@@ -845,9 +868,11 @@ QRect ImageMapLayer::drawTiled(MapView& theView, QRect& rect)
 
     QSize pmSize = rect.size();
 //    QSize pmSize((tiles_right+tiles_left+1)*tilesizeW, (tiles_bottom+tiles_above+1)*tilesizeH);
-    p->pm = QPixmap(pmSize);
-    p->pm.fill(Qt::transparent);
-    QPainter painter(&p->pm);
+//    QPixmap tmpPm = p->pm.scaled(retRect.size(), Qt::IgnoreAspectRatio);
+    p->newPix = QPixmap(pmSize);
+    p->newPix.fill(Qt::transparent);
+    QPainter painter(&p->newPix);
+//    painter.drawPixmap(0, 0, tmpPm);
 
     qDebug() << "Tiles: " << tiles_right+tiles_left+1 << "x" << tiles_bottom+tiles_above+1;
     for (i=-tiles_left+mapmiddle_tile_x; i<=tiles_right+mapmiddle_tile_x; i++)
@@ -886,22 +911,10 @@ QRect ImageMapLayer::drawTiled(MapView& theView, QRect& rect)
     }
     painter.end();
 
-    w = ((qreal)pmSize.width() / tilesizeW) * tileWidth;
-    h = ((qreal)pmSize.height() / tilesizeH) * tileHeight;
-    upperLeft = QPointF(vpCenter.x() - w/2, vpCenter.y() + h/2);
-    lowerRight = QPointF(vpCenter.x() + w/2, vpCenter.y() - h/2);
-    vlm = QRectF(upperLeft, lowerRight);
-
-    Coord ulCoord, lrCoord;
-    ulCoord = p->theProjection.inverse2Coord(vlm.topLeft());
-    lrCoord = p->theProjection.inverse2Coord(vlm.bottomRight());
-
-    const QPointF tl = theView.transform().map(theView.projection().project(ulCoord));
-    const QPointF br = theView.transform().map(theView.projection().project(lrCoord));
     qDebug() << "tl: " << tl << "; br: " << br;
     qDebug() << "vp: " << vp;
     qDebug() << "vlm: " << vlm;
-    return QRectF(tl, br).toRect();
+    return retRect;
 }
 
 //QRect ImageMapLayer::drawTiled(MapView& theView, QRect& rect) const
