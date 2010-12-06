@@ -2174,6 +2174,18 @@ void MainWindow::on_relationRemoveMemberAction_triggered()
     }
 }
 
+void MainWindow::on_relationAddToMultipolygonAction_triggered()
+{
+    CommandList* theList = new CommandList(MainWindow::tr("Add to Multipolygon"), NULL);
+    addToMultipolygon(theDocument, theList, p->theProperties);
+    if (theList->empty())
+        delete theList;
+    else {
+        theDocument->addHistory(theList);
+        invalidateView();
+    }
+}
+
 void MainWindow::on_areaJoinAction_triggered()
 {
     CommandList* theList = new CommandList(MainWindow::tr("Join areas"), NULL);

@@ -282,6 +282,7 @@
     </property>
     <addaction name="relationAddMemberAction"/>
     <addaction name="relationRemoveMemberAction"/>
+    <addaction name="relationAddToMultipolygonAction"/>
    </widget>
    <widget class="QMenu" name="menu_Show">
     <property name="title">
@@ -1796,6 +1797,16 @@
   <action name="fileSaveAsTemplateAction">
    <property name="text">
     <string>Save as Template Document...</string>
+   </property>
+  </action>
+  <action name="actionCreate_Multipolygon">
+   <property name="text">
+    <string>Create Multipolygon</string>
+   </property>
+  </action>
+  <action name="relationAddToMultipolygonAction">
+   <property name="text">
+    <string>Add to Multi&amp;polygon</string>
    </property>
   </action>
  </widget>

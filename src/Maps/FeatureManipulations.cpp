@@ -926,6 +926,58 @@ void removeRelationMember(Document* theDocument, CommandList* theList, Propertie
     }
 }
 
+void addToMultipolygon(Document* theDocument, CommandList* theList, PropertiesDock* theDock)
+{
+    Relation* theRelation = NULL;
+    QList<Way*> theWays;
+    for (int i=0; i<theDock->size(); ++i) {
+        if (!theRelation && CHECK_RELATION(theDock->selection(i)) && theDock->selection(i)->tagValue("type", "") == "multipolygon")
+            theRelation = STATIC_CAST_RELATION(theDock->selection(i));
+        if (CHECK_WAY(theDock->selection(i)))
+            theWays << STATIC_CAST_WAY(theDock->selection(i));
+    }
+
+    if (!theWays.size())
+        return;
+
+    if (theRelation) {
+        for (int i=0; i<theRelation->size(); ++i) {
+            if (CHECK_WAY(theRelation->get(i)) && !theWays.contains(STATIC_CAST_WAY(theRelation->get(i)))) {
+                theWays << STATIC_CAST_WAY(theRelation->get(i));
+            }
+        }
+    }
+
+    Way* outer = theWays[0];
+    for (int i=1; i<theWays.size(); ++i) {
+        if (outer->boundingBox().contains(theWays[i]->boundingBox()))
+            continue;
+        if (theWays[i]->boundingBox().contains(outer->boundingBox()))
+            outer = theWays[i];
+        else
+            if (theWays[i]->boundingBox().intersects(outer->boundingBox()))
+                outer = NULL;
+    }
+    if (outer) {
+        if (!theRelation) {
+            theRelation = new Relation();
+            theList->add(new AddFeatureCommand(theDocument->getDirtyOrOriginLayer(),theRelation,true));
+        } else {
+            for (int i=0; i<theRelation->size(); ++i)
+                theList->add(new RelationRemoveFeatureCommand(theRelation, 0));
+        }
+        theRelation->setTag("type", "multipolygon");
+    } else
+        return;
+
+    theList->add(new RelationAddFeatureCommand(theRelation, "outer", outer));
+    for (int i=0; i<theWays.size(); ++i) {
+        if (theWays[i] != outer) {
+            theList->add(new RelationAddFeatureCommand(theRelation, "inner", theWays[i]));
+        }
+    }
+}
+
 /* Subdivide theRoad between index and index+1 into divisions segments.
  * divisions-1 new nodes are created starting at index index+1.
  */

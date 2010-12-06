@@ -28,6 +28,7 @@ bool canBreakRoads(PropertiesDock* theDock);
 bool canDetachNodes(PropertiesDock* theDock);
 void addRelationMember(Document* theDocument, CommandList* theList, PropertiesDock* theDock);
 void removeRelationMember(Document* theDocument, CommandList* theList, PropertiesDock* theDock);
+void addToMultipolygon(Document* theDocument, CommandList* theList, PropertiesDock* theDock);
 bool canSubdivideRoad(PropertiesDock* theDock, Way** theRoad = 0, unsigned int* edge = 0);
 void subdivideRoad(Document* theDocument, CommandList* theList, PropertiesDock* theDock, unsigned int divisions);
 void joinAreas(Document* theDocument, CommandList* theList, PropertiesDock* theDock);
