@@ -22,6 +22,7 @@
 #include <QPainter>
 #include <QSettings>
 #include <QUrl>
+#include <QMessageBox>
 
 #include "CadastreFrance.h"
 
@@ -200,6 +201,12 @@ void CadastreFranceAdapter::resultsAvailable(QMap<QString, QString> results)
     }
 
     disconnect(CadastreWrapper::instance(), SIGNAL(resultsAvailable(QMap<QString,QString>)), this, SLOT(resultsAvailable(QMap<QString,QString>)));
+
+    if (!results.size()) {
+        QMessageBox::critical(0, tr("The city cannot be loaded"), tr("Only vectorized cities can be handled by this plugin and the selected one is still in \"Image\" format."));
+        return;
+    }
+
     m_city = CadastreWrapper::instance()->requestCity(m_code);
     updateMenu();
 //    if (!CadastreWrapper::instance()->downloadTiles(m_city))
@@ -210,8 +217,8 @@ void CadastreFranceAdapter::resultsAvailable(QMap<QString, QString> results)
     if (theImageManager)
         theImageManager->setCacheDir(dir);
 
-    emit(forceProjection());
     emit(forceZoom());
+    emit(forceProjection());
     emit(forceRefresh());
 }
 
