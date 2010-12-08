@@ -1802,14 +1802,18 @@ void MainWindow::on_createRoundaboutAction_triggered()
 
 void MainWindow::on_createPolygonAction_triggered()
 {
-    int Sides = QInputDialog::getInteger(this, MainWindow::tr("Create Polygon"), MainWindow::tr("Specify the number of sides"), 3, 3);
-    theView->launch(new CreatePolygonInteraction(this, theView, Sides));
+    QList< QPair <QString, QString> > tags;
+    int Sides = QInputDialog::getInteger(this, MainWindow::tr("Create Polygon"), MainWindow::tr("Specify the number of sides"), M_PREFS->getPolygonSides(), 3);
+    M_PREFS->setPolygonSides(Sides);
+    theView->launch(new CreatePolygonInteraction(this, theView, Sides, tags));
     theInfo->setHtml(theView->interaction()->toHtml());
 }
 
 void MainWindow::on_createRectangleAction_triggered()
 {
-    theView->launch(new CreatePolygonInteraction(this, theView, 4));
+    QList< QPair <QString, QString> > tags;
+    tags << qMakePair(QString("building"), QString("yes"));
+    theView->launch(new CreatePolygonInteraction(this, theView, 4, tags));
     theInfo->setHtml(theView->interaction()->toHtml());
 }
 

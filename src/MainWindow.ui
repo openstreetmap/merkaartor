@@ -679,7 +679,7 @@
   </action>
   <action name="createRoundaboutAction">
    <property name="text">
-    <string>&amp;Roundabout</string>
+    <string>R&amp;oundabout</string>
    </property>
    <property name="toolTip">
     <string>Create Roundabout</string>
@@ -1526,12 +1526,12 @@
   </action>
   <action name="createPolygonAction">
    <property name="text">
-    <string>Polygon</string>
+    <string>&amp;Polygon</string>
    </property>
   </action>
   <action name="createRectangleAction">
    <property name="text">
-    <string>Rectangle</string>
+    <string>Rectangular &amp;building</string>
    </property>
   </action>
   <action name="layersNewImageAction">

@@ -14,8 +14,8 @@
 
 #include <math.h>
 
-CreatePolygonInteraction::CreatePolygonInteraction(MainWindow* aMain, MapView* aView, int sides)
-    : Interaction(aView), Main(aMain), Origin(0,0), Sides(sides), HaveOrigin(false), bAngle(0.0), bScale(QPointF(1., 1.))
+CreatePolygonInteraction::CreatePolygonInteraction(MainWindow* aMain, MapView* aView, int sides, const QList< QPair <QString, QString> >& tags)
+    : Interaction(aView), Main(aMain), Origin(0,0), Sides(sides), HaveOrigin(false), bAngle(0.0), bScale(QPointF(1., 1.)), theTags(tags)
 {
     aView->setCursor(cursor());
 }
@@ -97,6 +97,10 @@ void CreatePolygonInteraction::mousePressEvent(QMouseEvent * event)
                 QStringList sl = Main->document()->getCurrentSourceTags();
                 if (sl.size())
                     R->setTag("source", sl.join(";"));
+            }
+            QPair <QString, QString> tag;
+            foreach (tag, theTags) {
+                R->setTag(tag.first, tag.second);
             }
             for (FeatureIterator it(document()); !it.isEnd(); ++it)
             {

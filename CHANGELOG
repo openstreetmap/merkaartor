@@ -1,4 +1,6 @@
 v0.17
+    * CHG : Rename "Create rectangle" to "Create rectangular building" and automatically add "building=yes"
+    * ADD : Remember "Create polygon" last number of sides
     * ADD : "Relation->Add to Multipolygon"; allows to create or add to a multipolygon relation (closes 2889)
     * ADD : Network timeout preference
     * CHG : Paste Tags : Allow any<->any pasting but only takes top level features into account (fixes #3174)

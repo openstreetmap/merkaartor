@@ -1181,6 +1181,8 @@ void MerkaartorPreferences::setShortcuts(const QStringList & theValue)
         Sets->setValue("Tools/shortcuts", theValue);
 }
 
+M_PARAM_IMPLEMENT_INT(PolygonSides, Tools, 3)
+
 /* Styles */
 M_PARAM_IMPLEMENT_STRING(DefaultStyle, style, ":/Styles/Mapnik.mas")
 M_PARAM_IMPLEMENT_STRING(CustomStyle, style, "")

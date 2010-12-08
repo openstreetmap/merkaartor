@@ -267,6 +267,8 @@ public:
     QStringList getShortcuts() const;
     void setShortcuts(const QStringList & theValue);
 
+    M_PARAM_DECLARE_INT(PolygonSides)
+
     /* Recent */
     void setRecentOpen(const QStringList & theValue);
     QStringList getRecentOpen() const;
