@@ -1200,7 +1200,7 @@ findNextJoin:
                 continue;
             // Go through parents of the node that are areas in our set
             for (int p1 = 0; p1 < node->sizeParents(); ++p1) {
-                if (node->getParent(p1)->getType() != IFeature::Polygon)
+                if (!(node->getParent(p1)->getType() & IFeature::Polygon))
                     continue;
                 Way* otherArea = CAST_WAY(node->getParent(p1));
                 if (otherArea == area || !areas.contains(otherArea))
