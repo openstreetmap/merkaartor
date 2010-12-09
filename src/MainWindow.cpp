@@ -2226,7 +2226,7 @@ void MainWindow::on_createRelationAction_triggered()
 void MainWindow::on_editMapStyleAction_triggered()
 {
     PaintStyleEditor* dlg = new PaintStyleEditor(this, M_STYLE->getGlobalPainter(), M_STYLE->getPainters());
-    connect(dlg, SIGNAL(stylesApplied(QList<Painter>* )), this, SLOT(applyStyles(QList<Painter>* )));
+    connect(dlg, SIGNAL(stylesApplied(QList<Painter>* )), this, SLOT(applyPainters(QList<Painter>* )));
     GlobalPainter saveGlobalPainter = M_STYLE->getGlobalPainter();
     QList<Painter> savePainters = M_STYLE->getPainters();
     if (dlg->exec() == QDialog::Accepted) {
@@ -2244,12 +2244,27 @@ void MainWindow::on_editMapStyleAction_triggered()
     delete dlg;
 }
 
-void MainWindow::applyStyles(QList<Painter>* thePainters)
+void MainWindow::applyStyles(QString NewStyle)
+{
+    if (NewStyle != M_PREFS->getDefaultStyle())
+    {
+        M_PREFS->setDefaultStyle(NewStyle);
+        M_STYLE->loadPainters(M_PREFS->getDefaultStyle());
+        document()->setPainters(M_STYLE->getPainters());
+        for (FeatureIterator it(document()); !it.isEnd(); ++it)
+        {
+            it.get()->invalidatePainter();
+        }
+        invalidateView(false);
+    }
+}
+
+void MainWindow::applyPainters(QList<Painter>* thePainters)
 {
     theDocument->setPainters(*thePainters);
     for (VisibleFeatureIterator i(theDocument); !i.isEnd(); ++i)
         i.get()->invalidatePainter();
-    invalidateView();
+    invalidateView(false);
 }
 
 //MapLayer* MainWindow::activeLayer()
@@ -2434,12 +2449,12 @@ void MainWindow::toolsPreferencesAction_triggered(bool focusData)
         Pref->tabPref->setCurrentWidget(Pref->tabData);
     else
         Pref->tabPref->setCurrentIndex(p->lastPrefTabIndex);
-    connect (Pref, SIGNAL(preferencesChanged()), this, SLOT(preferencesChanged()));
+    connect (Pref, SIGNAL(preferencesChanged(PreferencesDialog*)), this, SLOT(preferencesChanged(PreferencesDialog*)));
     Pref->exec();
     p->lastPrefTabIndex = Pref->tabPref->currentIndex();
 }
 
-void MainWindow::preferencesChanged(void)
+void MainWindow::preferencesChanged(PreferencesDialog* prefs)
 {
     QString qVer = QString(qVersion()).replace(".", "");
     int iQVer = qVer.toInt();
@@ -2481,9 +2496,10 @@ void MainWindow::preferencesChanged(void)
             p->theListeningServer = NULL;
         }
     }
-    if (M_PREFS->getProxyUse())
 
+    applyStyles(prefs->cbStyles->itemData(prefs->cbStyles->currentIndex()).toString());
     updateStyleMenu();
+
     updateMenu();
     theView->launch(new EditInteraction(theView));
     invalidateView(false);
@@ -3312,19 +3328,8 @@ void MainWindow::styleTriggered(QAction* anAction)
         return;
 
     QString NewStyle = anAction->data().toString();
-    if (NewStyle != M_PREFS->getDefaultStyle())
-    {
-        M_PREFS->setDefaultStyle(NewStyle);
-        M_STYLE->loadPainters(M_PREFS->getDefaultStyle());
-        document()->setPainters(M_STYLE->getPainters());
-        for (FeatureIterator it(document()); !it.isEnd(); ++it)
-        {
-            it.get()->invalidatePainter();
-        }
-    }
     p->theStyle->setCurrent(anAction);
-
-    invalidateView(false);
+    applyStyles(NewStyle);
 }
 
 void MainWindow::on_windowPropertiesAction_triggered()

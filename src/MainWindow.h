@@ -28,6 +28,7 @@ class TrackLayer;
 class TrackSegment;
 class Interaction;
 class QtToolBarManager;
+class PreferencesDialog;
 
 #ifdef GEOIMAGE
 class GeoImageDock;
@@ -182,7 +183,7 @@ public slots:
     virtual void on_gpsPauseAction_triggered();
     virtual void on_gpsDisconnectAction_triggered();
     virtual void on_gpsCenterAction_triggered();
-    virtual void preferencesChanged();
+    virtual void preferencesChanged(PreferencesDialog* prefs);
     virtual void clipboardChanged();
 
     virtual void on_toolTemplatesSaveAction_triggered();
@@ -232,7 +233,8 @@ public slots:
 #endif
     void styleTriggered(QAction* anAction);
     void updateGpsPosition(float latitude, float longitude, QDateTime time, float altitude, float speed, float heading);
-    void applyStyles(QList<Painter>* thePainters);
+    void applyStyles(QString NewStyle);
+    void applyPainters(QList<Painter>* thePainters);
 
 public:
     bool importFiles(Document * mapDocument, const QStringList & filesNames, QStringList * importedFileNames = NULL);

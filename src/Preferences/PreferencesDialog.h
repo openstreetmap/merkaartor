@@ -90,7 +90,7 @@ private:
     QColor GpxTrackColor;
 
 signals:
-    void preferencesChanged();
+    void preferencesChanged(PreferencesDialog* prefs);
 };
 
 #endif
