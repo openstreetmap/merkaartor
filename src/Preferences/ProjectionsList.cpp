@@ -9,6 +9,7 @@
 // Copyright: See COPYING file that comes with this distribution
 //
 //
+#include "Global.h"
 
 #include "ProjectionsList.h"
 #include "MerkaartorPreferences.h"
