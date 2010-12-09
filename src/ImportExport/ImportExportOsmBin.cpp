@@ -10,6 +10,8 @@
 //
 //
 
+#include "Global.h"
+
 #include <QtGui>
 
 #include "../ImportExport/ImportExportOsmBin.h"
@@ -449,7 +451,7 @@ bool ImportExportOsmBin::writeTagLists(QDataStream& ds)
     }
 
     tagKeysPos = Device->pos();
-    ds << (qint32) theDoc->getTagKeys().size();
+    ds << (qint32) g_getTagKeys().size();
 
     QMapIterator<qint32, QString> ki(popularityKey);
     ki.toBack();
@@ -467,7 +469,7 @@ bool ImportExportOsmBin::writeTagLists(QDataStream& ds)
     }
 
     tagValuesPos = Device->pos();
-    ds << (qint32) theDoc->getTagValues().size();
+    ds << (qint32) g_getTagValues().size();
 
     QMapIterator<qint32, QString> vi(popularityValue);
     vi.toBack();

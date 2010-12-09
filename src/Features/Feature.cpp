@@ -1,3 +1,5 @@
+#include "Global.h"
+
 #include "Features.h"
 #include "Command.h"
 #include "DocumentCommands.h"
@@ -446,11 +448,7 @@ void Feature::setTag(int index, const QString& key, const QString& value)
     if (key.toLower() == "created_by")
         return;
 
-    Q_ASSERT(p->parentLayer);
-    Document* theDoc = p->parentLayer->getDocument();
-    Q_ASSERT(theDoc);
-
-    QPair<quint32, quint32> pi = theDoc->addToTagList(key, value);
+    QPair<quint32, quint32> pi = g_addToTagList(key, value);
 
     int i = 0;
     for (; i<p->Tags.size(); ++i)
@@ -458,7 +456,7 @@ void Feature::setTag(int index, const QString& key, const QString& value)
         {
             if (p->Tags[i].second == pi.second)
                 return;
-            theDoc->removeFromTagList(p->Tags[i].first, p->Tags[i].second);
+            g_removeFromTagList(p->Tags[i].first, p->Tags[i].second);
             p->Tags[i].second = pi.second;
             break;
         }
@@ -474,11 +472,7 @@ void Feature::setTag(const QString& key, const QString& value)
     if (key.toLower() == "created_by")
         return;
 
-    Q_ASSERT(p->parentLayer);
-    Document* theDoc = p->parentLayer->getDocument();
-    Q_ASSERT(theDoc);
-
-    QPair<quint32, quint32> pi = theDoc->addToTagList(key, value);
+    QPair<quint32, quint32> pi = g_addToTagList(key, value);
 
     int i = 0;
     for (; i<p->Tags.size(); ++i)
@@ -486,7 +480,7 @@ void Feature::setTag(const QString& key, const QString& value)
         {
             if (p->Tags[i].second == pi.second)
                 return;
-            theDoc->removeFromTagList(p->Tags[i].first, p->Tags[i].second);
+            g_removeFromTagList(p->Tags[i].first, p->Tags[i].second);
             p->Tags[i].second = pi.second;
             break;
         }
@@ -499,12 +493,8 @@ void Feature::setTag(const QString& key, const QString& value)
 
 void Feature::clearTags()
 {
-    Q_ASSERT(p->parentLayer);
-    Document* theDoc = p->parentLayer->getDocument();
-    Q_ASSERT(theDoc);
-
     while (p->Tags.size()) {
-        theDoc->removeFromTagList(p->Tags[0].first, p->Tags[0].second);
+        g_removeFromTagList(p->Tags[0].first, p->Tags[0].second);
         p->Tags.erase(p->Tags.begin());
     }
     invalidateMeta();
@@ -513,16 +503,12 @@ void Feature::clearTags()
 
 void Feature::clearTag(const QString& k)
 {
-    Q_ASSERT(p->parentLayer);
-    Document* theDoc = p->parentLayer->getDocument();
-    Q_ASSERT(theDoc);
-
-    quint32 ik = theDoc->getTagKeyIndex(k);
+    quint32 ik = g_getTagKeyIndex(k);
 
     for (int i=0; i<p->Tags.size(); ++i)
         if (p->Tags[i].first == ik)
         {
-            theDoc->removeFromTagList(p->Tags[i].first, p->Tags[i].second);
+            g_removeFromTagList(p->Tags[i].first, p->Tags[i].second);
             p->Tags.erase(p->Tags.begin()+i);
             break;
         }
@@ -532,11 +518,7 @@ void Feature::clearTag(const QString& k)
 
 void Feature::removeTag(int idx)
 {
-    Q_ASSERT(p->parentLayer);
-    Document* theDoc = p->parentLayer->getDocument();
-    Q_ASSERT(theDoc);
-
-    theDoc->removeFromTagList(p->Tags[idx].first, p->Tags[idx].second);
+    g_removeFromTagList(p->Tags[idx].first, p->Tags[idx].second);
     p->Tags.erase(p->Tags.begin()+idx);
     invalidateMeta();
     invalidatePainter();
@@ -549,20 +531,12 @@ int Feature::tagSize() const
 
 QString Feature::tagValue(int i) const
 {
-    Q_ASSERT(p->parentLayer);
-    Document* theDoc = p->parentLayer->getDocument();
-    Q_ASSERT(theDoc);
-
-    return theDoc->getTagValue(p->Tags[i].second);
+    return g_getTagValue(p->Tags[i].second);
 }
 
 QString Feature::tagKey(int i) const
 {
-    Q_ASSERT(p->parentLayer);
-    Document* theDoc = p->parentLayer->getDocument();
-    Q_ASSERT(theDoc);
-
-    return theDoc->getTagKey(p->Tags[i].first);
+    return g_getTagKey(p->Tags[i].first);
 }
 
 int Feature::findKey(const QString &k) const

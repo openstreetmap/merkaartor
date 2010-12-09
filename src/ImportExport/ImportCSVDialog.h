@@ -57,6 +57,10 @@ protected slots:
     void on_rbTabDelim_clicked();
     void on_edCustomDelim_textEdited();
 
+    void on_rbStringNone_clicked();
+    void on_rbStringSingle_clicked();
+    void on_rbStringDouble_clicked();
+
     void on_lvFields_itemSelectionChanged();
     void on_edFieldName_textEdited();
     void on_cbFieldType_currentIndexChanged (int index);
@@ -79,7 +83,8 @@ private:
     Ui::ImportCSVDialog *ui;
 
     QIODevice* m_dev;
-    QString delim;
+    QString m_delim;
+    QString m_quote;
     int m_selField;
 
 public:

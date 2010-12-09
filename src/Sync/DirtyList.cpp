@@ -1,3 +1,5 @@
+#include "Global.h"
+
 #include "DirtyList.h"
 #include "Command.h"
 #include "Maps/Coord.h"

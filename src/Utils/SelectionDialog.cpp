@@ -9,6 +9,8 @@
 // Copyright: See COPYING file that comes with this distribution
 //
 //
+#include "Global.h"
+
 #include "SelectionDialog.h"
 #include "MainWindow.h"
 #include "Document.h"
@@ -28,9 +30,7 @@ SelectionDialog::SelectionDialog(QWidget *parent, bool showMaxResult)
     cbKey->setInsertPolicy(QComboBox::InsertAlphabetically);
     cbValue->setInsertPolicy(QComboBox::InsertAlphabetically);
 
-    MainWindow* mw = (MainWindow *)(this->parent());
-
-    QStringList ksl = mw->document()->getTagKeyList();
+    QStringList ksl = g_getTagKeyList();
     QCompleter* completer = new QCompleter(ksl, (QObject *)this);
 
     cbKey->insertItems(-1, ksl);
@@ -50,7 +50,7 @@ SelectionDialog::SelectionDialog(QWidget *parent, bool showMaxResult)
     cbKey->setEditable(true);
 
 
-    cbValue->insertItems(-1, mw->document()->getTagValueList("*"));
+    cbValue->insertItems(-1, g_getTagValueList("*"));
     //special values
     cbValue->insertItem(-1, "_NULL_");
 
@@ -71,11 +71,9 @@ void SelectionDialog::on_cbKey_editTextChanged(const QString & text)
 {
     cbValue->clear();
 
-    MainWindow* mw = (MainWindow *)(this->parent());
-
-    QStringList sl = mw->document()->getTagValueList(text);
+    QStringList sl = g_getTagValueList(text);
     QCompleter* completer = new QCompleter(sl, (QObject *)this);
-    cbValue->insertItems(-1, mw->document()->getTagValueList(text));
+    cbValue->insertItems(-1, g_getTagValueList(text));
     cbValue->insertItem(-1, "_NULL_");
     completer->setCompletionMode(QCompleter::InlineCompletion);
     completer->setModelSorting(QCompleter::CaseInsensitivelySortedModel);

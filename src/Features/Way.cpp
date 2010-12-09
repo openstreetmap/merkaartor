@@ -1,3 +1,5 @@
+#include "Global.h"
+
 #include "Way.h"
 #include "Node.h"
 

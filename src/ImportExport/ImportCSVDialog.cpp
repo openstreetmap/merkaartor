@@ -72,24 +72,24 @@ void ImportCSVDialog::analyze()
     QStringList slc = l.split(",");
     int best = slc.size();
     ui->rbColonDelim->setChecked(true);
-    delim = ",";
+    m_delim = ",";
 
     QStringList sls = l.split(";");
     if (sls.size() > best) {
         best = sls.size();
         ui->rbSemiDelim->setChecked(true);
-        delim = ";";
+        m_delim = ";";
     }
 
     QStringList slt = l.split("\t");
     if (slt.size() > best) {
         best = slt.size();
         ui->rbTabDelim->setChecked(true);
-        delim = "\t";
+        m_delim = "\t";
     }
 
     ui->cbHasHeader->setChecked(true);
-    QStringList sl = l.split(delim);
+    QStringList sl = l.split(m_delim);
     for (int i=0; i<sl.size(); ++i) {
         sl[i].toDouble(&ok);
         if (ok) {
@@ -98,33 +98,67 @@ void ImportCSVDialog::analyze()
         }
     }
 
+    QRegExp rx(QString("%1\\s*\".*\"\\s*%1").arg(m_delim));
+    if (rx.indexIn(l)) {
+        m_quote = "\"";
+        ui->rbStringDouble->setChecked(true);
+    } else {
+        rx = QRegExp(QString("%1\\s*'.*'\\s*%1").arg(m_delim));
+        if (rx.indexIn(l)) {
+            m_quote = "'";
+            ui->rbStringSingle->setChecked(true);
+        } else {
+            m_quote = "";
+            ui->rbStringNone->setChecked(true);
+        }
+
+    }
     m_dev->seek(0);
     if (ui->cbHasHeader->isChecked()) {
         l = m_dev->readLine();
-        hdr = l.split(delim);
+        hdr = l.split(m_delim);
     }
     l = m_dev->readLine();
-    QStringList fld = l.split(delim);
+    QStringList flds = l.split(m_delim);
 
     Fields.clear();
-    for (int i=0; i<fld.size(); ++i) {
+    int hdrIdx = 0;
+    for (int i=0; i<flds.size(); ++i) {
         CSVField f;
-        if (ui->cbHasHeader->isChecked())
-            f.name = hdr[i].simplified();
-        else
+        QString fld = flds[i];
+        if (!m_quote.isEmpty()) {
+            if (flds[i].trimmed().startsWith(m_quote)) {
+                while (i<flds.size()-1 && !flds[i].trimmed().endsWith(m_quote)) {
+                    ++i;
+                    fld += m_delim + flds[i];
+                }
+                fld.remove(0, 1);
+                fld.chop(1);
+            }
+        }
+        if (ui->cbHasHeader->isChecked()) {
+            if (hdrIdx<hdr.size())
+                f.name = hdr[hdrIdx].simplified();
+        } else
             f.name = "field_" + QString::number(i);
-//        int t1 = fld[i].toInt(&ok);
-        if (ok)
-            f.type = CSVInt;
-        else {
-//            double t2 = fld[i].toDouble(&ok);
-            if (ok)
+        flds[i].toDouble(&ok);
+        if (ok) {
+            if (f.name.startsWith("lat", Qt::CaseInsensitive)) {
+                f.type = CSVLatitude;
+            } else if (f.name.startsWith("lon", Qt::CaseInsensitive)) {
+                f.type = CSVLongitude;
+            } else
                 f.type = CSVFloat;
+        } else {
+            flds[i].toInt(&ok);
+            if (ok)
+                f.type = CSVInt;
             else
                 f.type = CSVString;
         }
         f.import = true;
         Fields << f;
+        hdrIdx++;
     }
 
     ui->lvFields->clear();
@@ -143,11 +177,12 @@ Feature* ImportCSVDialog::generateOSM(QString line)
     double t;
     bool hasLat = false, hasLon = false;
 
-    QStringList sl = line.split(delim);
-    if (sl.size() < 2)
+    QStringList flds = line.split(m_delim);
+    if (flds.size() < 2)
         return NULL;
 
     Node *N = new Node(Coord(0, 0));
+    int lidx=0;
     for (int i=0; i<Fields.size(); ++i) {
         CSVField f = Fields[i];
         if (!f.import)
@@ -155,23 +190,40 @@ Feature* ImportCSVDialog::generateOSM(QString line)
 
         switch (f.type) {
         case CSVLatitude:
-            t = sl[i].toDouble(&ok);
+            t = flds[lidx].toDouble(&ok);
             if (ok) {
                 p.setY(t);
                 hasLat = true;
             }
             break;
         case CSVLongitude:
-            t = sl[i].toDouble(&ok);
+            t = flds[lidx].toDouble(&ok);
             if (ok) {
                 p.setX(t);
                 hasLon = true;
             }
             break;
-        default:
-            N->setTag(f.name, sl[i].simplified());
+        case CSVString: {
+            QString fld = flds[lidx];
+            if (!m_quote.isEmpty()) {
+                if (flds[lidx].trimmed().startsWith(m_quote)) {
+                    while (lidx<flds.size()-1 && !flds[lidx].trimmed().endsWith(m_quote)) {
+                        ++lidx;
+                        fld += m_delim + flds[lidx];
+                    }
+                    fld.remove(0, 1);
+                    fld.chop(1);
+                }
+            }
+            N->setTag(f.name, fld);
             break;
         }
+
+        default:
+            N->setTag(f.name, flds[lidx].trimmed());
+            break;
+        }
+        ++lidx;
     }
     if (!hasLat || !hasLon) {
         delete N;
@@ -195,7 +247,7 @@ void ImportCSVDialog::generatePreview(int /*sel*/)
 
     int l=0;
     while (l<4 && !m_dev->atEnd()) {
-        line = m_dev->readLine();
+        line = m_dev->readLine().trimmed();
         Feature* F = generateOSM(line);
         if (F) {
             previewText += F->toXML(2);
@@ -238,29 +290,43 @@ void ImportCSVDialog::on_lvFields_itemSelectionChanged()
 
 void ImportCSVDialog::on_rbColonDelim_clicked()
 {
-    delim = ",";
-
+    m_delim = ",";
     generatePreview();
 }
 
 void ImportCSVDialog::on_rbSemiDelim_clicked()
 {
-    delim = ";";
-
+    m_delim = ";";
     generatePreview();
 }
 
 void ImportCSVDialog::on_rbTabDelim_clicked()
 {
-    delim = "\t";
-
+    m_delim = "\t";
     generatePreview();
 }
 
 void ImportCSVDialog::on_edCustomDelim_textEdited()
 {
-    delim = ui->edCustomDelim->text();
+    m_delim = ui->edCustomDelim->text();
+    generatePreview();
+}
 
+void ImportCSVDialog::on_rbStringNone_clicked()
+{
+    m_quote = "";
+    generatePreview();
+}
+
+void ImportCSVDialog::on_rbStringSingle_clicked()
+{
+    m_quote = "'";
+    generatePreview();
+}
+
+void ImportCSVDialog::on_rbStringDouble_clicked()
+{
+    m_quote = "\"";
     generatePreview();
 }
 
@@ -347,7 +413,7 @@ bool ImportCSVDialog::import(Layer *aLayer)
     }
 
     while ((l < ui->sbTo->value() || ui->sbTo->value() == 0) && !m_dev->atEnd()) {
-        line = m_dev->readLine();
+        line = m_dev->readLine().trimmed();
         Feature* F = generateOSM(line);
         if (F)
             aLayer->add(F);
@@ -382,17 +448,17 @@ void ImportCSVDialog::on_btLoad_clicked()
         return;
     }
 
-    delim = docElem.attribute("delimiter");
-    if (delim == ",")
+    m_delim = docElem.attribute("delimiter");
+    if (m_delim == ",")
         ui->rbColonDelim->setChecked(true);
-    else if (delim == ";")
+    else if (m_delim == ";")
         ui->rbSemiDelim->setChecked(true);
-    else if (delim == "tab") {
-        delim = "\t";
+    else if (m_delim == "tab") {
+        m_delim = "\t";
         ui->rbTabDelim->setChecked(true);
     } else {
         ui->rbCustomDelim->setChecked(true);
-        ui->edCustomDelim->setText(delim);
+        ui->edCustomDelim->setText(m_delim);
     }
 
     ui->cbHasHeader->setChecked(docElem.attribute("header") == "true" ? true : false);
@@ -444,7 +510,7 @@ void ImportCSVDialog::on_btSave_clicked()
     theXmlDoc.appendChild(root);
     root.setAttribute("creator", QString("%1 v%2%3").arg(qApp->applicationName()).arg(STRINGIFY(VERSION)).arg(STRINGIFY(REVISION)));
 
-    QString tDelim = delim;
+    QString tDelim = m_delim;
     if (tDelim == "\t")
         tDelim = "tab";
     root.setAttribute("delimiter", tDelim);

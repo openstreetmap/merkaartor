@@ -1,3 +1,5 @@
+#include "Global.h"
+
 #include "TagSelectorWidget.h"
 #include "ui_TagSelectorWidget.h"
 
@@ -16,7 +18,7 @@ TagSelectorWidget::TagSelectorWidget(MainWindow* mw, QWidget *parent) :
     ui->cbKey->setInsertPolicy(QComboBox::InsertAlphabetically);
     ui->cbValue->setInsertPolicy(QComboBox::InsertAlphabetically);
 
-    QStringList ksl = main->document()->getTagKeyList();
+    QStringList ksl = g_getTagKeyList();
     QCompleter* completer = new QCompleter(ksl, (QObject *)this);
     ui->cbKey->insertItems(-1, ksl);
     completer->setCompletionMode(QCompleter::InlineCompletion);
@@ -24,7 +26,7 @@ TagSelectorWidget::TagSelectorWidget(MainWindow* mw, QWidget *parent) :
     ui->cbKey->setCompleter(completer);
     ui->cbKey->setEditable(true);
 
-    ui->cbValue->insertItems(-1, main->document()->getTagValueList("*"));
+    ui->cbValue->insertItems(-1, g_getTagValueList("*"));
     ui->cbValue->setEditable(true);
 
     connect(ui->btAnd, SIGNAL(clicked()), this, SIGNAL(sigAnd()));
@@ -51,9 +53,9 @@ void TagSelectorWidget::on_cbKey_editTextChanged(const QString & text)
 {
     ui->cbValue->clear();
 
-    QStringList sl = main->document()->getTagValueList(text);
+    QStringList sl = g_getTagValueList(text);
     QCompleter* completer = new QCompleter(sl, (QObject *)this);
-    ui->cbValue->insertItems(-1, main->document()->getTagValueList(text));
+    ui->cbValue->insertItems(-1, g_getTagValueList(text));
     completer->setCompletionMode(QCompleter::InlineCompletion);
     completer->setModelSorting(QCompleter::CaseInsensitivelySortedModel);
     if (ui->cbValue->completer())

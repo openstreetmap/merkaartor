@@ -1,4 +1,6 @@
+#include "Global.h"
 #include "EditInteraction.h"
+
 #include "MainWindow.h"
 #include "ui_MainWindow.h"
 #include "MapView.h"

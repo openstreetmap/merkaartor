@@ -1,3 +1,5 @@
+#include "Global.h"
+
 #include <errno.h>
 
 #include "MapView.h"

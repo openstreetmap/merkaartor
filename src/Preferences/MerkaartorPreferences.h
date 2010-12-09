@@ -111,16 +111,6 @@ class IPaintStyle;
     @author cbro <cbro@semperpax.com>
 */
 
-extern bool g_Merk_Portable;
-extern bool g_Merk_Frisius;
-extern bool g_Merk_NoGuardedTagsImport;
-extern bool g_Merk_Segment_Mode;
-extern bool g_Merk_Ignore_Preferences;
-extern bool g_Merk_Reset_Preferences;
-extern bool g_Merk_IgnoreStartupTemplate;
-
-extern MainWindow* g_Merk_MainWindow;
-
 typedef QString FilterType;
 
 enum ExportType {

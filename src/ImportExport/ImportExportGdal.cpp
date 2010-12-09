@@ -10,6 +10,8 @@
 //
 //
 
+#include "Global.h"
+
 #include <QtGui>
 
 #include "../ImportExport/ImportExportGdal.h"

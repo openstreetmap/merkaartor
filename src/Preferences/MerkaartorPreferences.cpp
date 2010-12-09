@@ -10,6 +10,7 @@
 //
 //
 
+#include "Global.h"
 #include "MerkaartorPreferences.h"
 
 #include <QApplication>
@@ -24,20 +25,6 @@
 #include "IMapAdapterFactory.h"
 #include "PaintStyle/IPaintStyle.h"
 #include "PaintStyle/MasPaintStyle.h"
-
-#ifdef PORTABLE_BUILD
-    bool g_Merk_Portable = true;
-#else
-    bool g_Merk_Portable = false;
-#endif
-    bool g_Merk_Frisius = true;
-    bool g_Merk_NoGuardedTagsImport = false;
-    bool g_Merk_Segment_Mode = false;
-    bool g_Merk_Ignore_Preferences = false;
-    bool g_Merk_Reset_Preferences = false;
-    bool g_Merk_IgnoreStartupTemplate = false;
-
-    MainWindow* g_Merk_MainWindow = NULL;
 
 
 #define M_PARAM_IMPLEMENT_BOOL(Param, Category, Default) \

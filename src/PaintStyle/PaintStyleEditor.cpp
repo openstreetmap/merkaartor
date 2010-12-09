@@ -1,3 +1,5 @@
+#include "Global.h"
+
 #include "PaintStyle/PaintStyleEditor.h"
 #include "PaintStyle/Painter.h"
 #include "MainWindow.h"

@@ -1,3 +1,5 @@
+#include "Global.h"
+
 #include "Command.h"
 
 #include "Feature.h"
@@ -71,9 +73,6 @@ public:
     QDateTime lastDownloadTimestamp;
     QHash<Layer*, CoordBox>	downloadBoxes;
 
-    QStringList tagKeys;
-    QStringList tagValues;
-    QHash< quint32, QList<quint32> >		tagList;
     TagSelector* tagFilter;
     int FilterRevision;
     QString title;
@@ -385,85 +384,6 @@ FilterLayer* Document::addFilterLayer(FilterLayer *aLayer)
     }
 
     return theLayer;
-}
-
-QPair<quint32, quint32> Document::addToTagList(QString k, QString v)
-{
-    qint32 ik, iv;
-
-    ik = p->tagKeys.indexOf(k);
-    if (ik == -1) {
-        p->tagKeys.append(k);
-        ik = p->tagKeys.size()-1;
-    }
-    iv = p->tagValues.indexOf(v);
-    if (iv == -1) {
-        p->tagValues.append(v);
-        iv = p->tagValues.size()-1;
-    }
-
-    if (!k.isEmpty() && !v.isEmpty())
-        p->tagList[ik].append(iv);
-
-    return qMakePair((quint32)ik, (quint32)iv);
-}
-
-void Document::removeFromTagList(quint32 k, quint32 v)
-{
-    p->tagList[k].removeOne(v);
-    if (p->tagList[k].isEmpty())
-        p->tagList.remove(k);
-}
-
-QList<QString> Document::getTagKeys()
-{
-    return p->tagKeys;
-}
-
-QList<QString> Document::getTagValues()
-{
-    return p->tagValues;
-}
-
-QStringList Document::getTagValueList(QString k)
-{
-    QSet<quint32> retList;
-    if (k == "*") {
-        foreach (QList<quint32> list, p->tagList)
-            retList.unite(list.toSet());
-    } else
-        retList = p->tagList[p->tagKeys.indexOf(k)].toSet();
-
-    QStringList res;
-    foreach (quint32 i, retList)
-        res << getTagValue(i);
-
-    return res;
-}
-
-const QString& Document::getTagKey(int idx) const
-{
-    return p->tagKeys.at(idx);
-}
-
-quint32 Document::getTagKeyIndex(const QString& s)
-{
-    return p->tagKeys.indexOf(s);
-}
-
-QStringList Document::getTagKeyList()
-{
-    return p->tagKeys.toSet().toList();
-}
-
-QString Document::getTagValue(int idx)
-{
-    return p->tagValues.at(idx);
-}
-
-quint32 Document::getTagValueIndex(const QString& s)
-{
-    return p->tagValues.indexOf(s);
 }
 
 void Document::remove(Layer* aLayer)
