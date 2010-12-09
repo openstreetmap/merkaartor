@@ -183,7 +183,7 @@ void WMSPreferencesDialog::on_btAddWmsServer_clicked(void)
             , edLicenseUrl->text()
             , cbWmsProj->currentText(), cbWmsStyle->currentText(), cbWmsImgFormat->currentText()));
     lvWmsServers->setCurrentRow(lvWmsServers->count() - 1);
-    on_lvWmsServers_itemSelectionChanged();
+//    on_lvWmsServers_itemSelectionChanged();
 }
 
 void WMSPreferencesDialog::on_btDelWmsServer_clicked(void)
@@ -350,6 +350,10 @@ void WMSPreferencesDialog::showCapabilities(void)
         theUrl.addQueryItem("VERSION", "1.1.1");
     if (!theUrl.hasQueryItem("SERVICE"))
         theUrl.addQueryItem("SERVICE", "WMS");
+    theUrl.removeAllQueryItems("LAYERS");
+    theUrl.removeAllQueryItems("SRS");
+    theUrl.removeAllQueryItems("FORMAT");
+    theUrl.removeAllQueryItems("STYLES");
     theUrl.addQueryItem("REQUEST", "GetCapabilities");
 //    QUrl url(edWmsUrl->text() + "VERSION=1.1.1&SERVICE=WMS&request=GetCapabilities");
 
@@ -389,7 +393,8 @@ void WMSPreferencesDialog::httpRequestFinished(QNetworkReply * reply)
 
     int statusCode = reply->attribute(QNetworkRequest::HttpStatusCodeAttribute).toInt();
     if (reply->error() != QNetworkReply::NoError) {
-        QMessageBox::critical(this, tr("Merkaartor: GetCapabilities"), tr("Error reading capabilities.\n") + reply->errorString(), QMessageBox::Ok);
+        if (reply->error() != QNetworkReply::OperationCanceledError)
+            QMessageBox::critical(this, tr("Merkaartor: GetCapabilities"), tr("Error reading capabilities.\n") + reply->errorString(), QMessageBox::Ok);
     } else {
         switch (statusCode) {
             case 200:

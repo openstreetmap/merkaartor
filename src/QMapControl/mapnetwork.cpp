@@ -104,7 +104,8 @@ void MapNetwork::requestFinished(QNetworkReply* reply)
     int statusCode = reply->attribute(QNetworkRequest::HttpStatusCodeAttribute).toInt();
 
     if (reply->error() != QNetworkReply::NoError) {
-        qDebug() << "network error: " << statusCode << " " << reply->errorString();
+        if (reply->error() != QNetworkReply::OperationCanceledError)
+            qDebug() << "network error: " << statusCode << " " << reply->errorString();
     } else
         switch (statusCode) {
             case 301:
