@@ -148,11 +148,11 @@ void PreferencesDialog::on_buttonBox_clicked(QAbstractButton * button)
 {
     if ((button == buttonBox->button(QDialogButtonBox::Apply))) {
         savePrefs();
-        emit(preferencesChanged());
+        emit(preferencesChanged(this));
     } else
         if ((button == buttonBox->button(QDialogButtonBox::Ok))) {
             savePrefs();
-            emit(preferencesChanged());
+            emit(preferencesChanged(this));
             this->accept();
         }
 }
@@ -401,16 +401,8 @@ void PreferencesDialog::savePrefs()
     M_PREFS->setCacheSize(sbCacheSize->value());
 
     M_PREFS->setCustomStyle(CustomStylesDir->text());
-    QString NewStyle;
-    NewStyle = cbStyles->itemData(cbStyles->currentIndex()).toString();
 
     bool PainterToInvalidate = false;
-    if (NewStyle != M_PREFS->getDefaultStyle())
-    {
-        M_PREFS->setDefaultStyle(NewStyle);
-        M_STYLE->loadPainters(M_PREFS->getDefaultStyle());
-        PainterToInvalidate = true;
-    }
     if (cbDisableStyleForTracks->isChecked() != M_PREFS->getDisableStyleForTracks()) {
         M_PREFS->setDisableStyleForTracks(cbDisableStyleForTracks->isChecked());
         PainterToInvalidate = true;
