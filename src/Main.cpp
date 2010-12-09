@@ -1,3 +1,5 @@
+#include "Global.h"
+
 #include <QtGui/QApplication>
 #include <QtGui/QMessageBox>
 

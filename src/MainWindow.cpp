@@ -1,3 +1,4 @@
+#include "Global.h"
 #include "MainWindow.h"
 
 #include "LayerDock.h"
@@ -795,13 +796,6 @@ void MainWindow::on_editPasteFeatureAction_triggered()
         if (theDocument->getFeature(F->id()))
             F->resetId();
 
-        // get tags
-        QList<QPair<QString, QString> > Tags;
-        for (int j=0; j<F->tagSize(); ++j) {
-            Tags << qMakePair(F->tagKey(j), F->tagValue(j));
-        }
-        F->clearTags();
-
         // Re-link null features to the ones in the current document
         for (int j=0; j<F->size(); ++j) {
             Feature* C = F->get(j);
@@ -822,11 +816,6 @@ void MainWindow::on_editPasteFeatureAction_triggered()
         }
         F->layer()->remove(F);
         theList->add(new AddFeatureCommand(theDocument->getDirtyOrOriginLayer(), F, true));
-
-        //Put tags
-        for (int j=0; j<Tags.size(); ++j) {
-            F->setTag(Tags[j].first, Tags[j].second);
-        }
     }
 
     if (theList->size())

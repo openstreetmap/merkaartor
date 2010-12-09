@@ -1,5 +1,6 @@
 # Header files
-HEADERS += ./IProgressWindow.h \
+HEADERS += Global.h \
+    ./IProgressWindow.h \
     ./MainWindow.h \
     ./Maps/Coord.h \
     ./Document.h \
@@ -15,7 +16,8 @@ HEADERS += ./IProgressWindow.h \
     ../interfaces/IMapAdapter.h
 
 # Source files
-SOURCES += ./Maps/Coord.cpp \
+SOURCES += Global.cpp \
+    ./Maps/Coord.cpp \
     ./Document.cpp \
     ./Maps/Painting.cpp \
     ./Maps/Projection.cpp \

@@ -1,3 +1,5 @@
+#include "Global.h"
+
 #include "LayerWidget.h"
 #include "LayerDock.h"
 

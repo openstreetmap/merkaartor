@@ -1,3 +1,4 @@
+#include "Global.h"
 #include "CreateNodeInteraction.h"
 
 #include "MainWindow.h"

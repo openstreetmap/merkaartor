@@ -1,3 +1,5 @@
+#include "Global.h"
+
 #include "MapView.h"
 #include "ImageMapLayer.h"
 

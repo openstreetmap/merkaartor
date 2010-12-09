@@ -9,6 +9,8 @@
 // Copyright: See COPYING file that comes with this distribution
 //
 //
+#include "Global.h"
+
 #include "Preferences/FilterPreferencesDialog.h"
 #include "Utils/TagSelector.h"
 #include "MainWindow.h"

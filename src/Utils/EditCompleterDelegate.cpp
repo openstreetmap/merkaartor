@@ -9,6 +9,8 @@
 // Copyright: See COPYING file that comes with this distribution
 //
 //
+#include "Global.h"
+
 #include "Utils/EditCompleterDelegate.h"
 #include "MainWindow.h"
 #include "Document.h"
@@ -31,11 +33,10 @@ QWidget* EditCompleterDelegate::createEditor(QWidget* parent, const QStyleOption
     QCompleter* completer = NULL;
 
     QWidget* edit;
-    MainWindow* mw = (MainWindow *)(this->parent());
 
     if (index.column() == 0) {
 
-        QStringList tagKeys = mw->document()->getTagKeyList();
+        QStringList tagKeys = g_getTagKeyList();
 
         // Exclude any tags already defined in the current model
         for (int i=0; i<index.model()->rowCount(); i++) {
@@ -65,7 +66,7 @@ QWidget* EditCompleterDelegate::createEditor(QWidget* parent, const QStyleOption
         if (
                 (k != "name")
             ) {
-            QStringList sl = mw->document()->getTagValueList(k);
+            QStringList sl = g_getTagValueList(k);
             sl.sort();
             completer = new QCompleter(sl, (QObject *)this);
 

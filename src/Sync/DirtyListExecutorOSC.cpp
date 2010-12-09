@@ -10,6 +10,7 @@
 //
 //******************************************************************
 
+#include "Global.h"
 #include "DirtyListExecutorOSC.h"
 
 #include "Features.h"
