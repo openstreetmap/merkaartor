@@ -29,17 +29,23 @@ LayerWidget::LayerWidget(Layer* aLayer, QWidget* aParent)
     ui.setupUi(this);
 
     setCheckable(true);
-//    setFlat(true);
+#ifdef Q_OS_MAC
+    setFlat(true);
+#endif
     setFocusPolicy(Qt::NoFocus);
     setContextMenuPolicy(Qt::NoContextMenu);
 
     ui.cbVisible->blockSignals(true);
     ui.cbVisible->setChecked(theLayer->isVisible());
     ui.cbVisible->blockSignals(false);
+#ifdef Q_OS_MAC
+		ui.cbVisible->setMinimumWidth(30);
+#endif
 
     ui.edName->setText(theLayer->name());
     ui.edName->setReadOnly(true);
     ui.edName->setAttribute(Qt::WA_TransparentForMouseEvents);
+
     ui.edName->setFrame(false);
     ui.edName->setCursorPosition(0);
     ui.edName->setStyleSheet(" background: transparent; ");
