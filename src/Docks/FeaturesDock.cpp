@@ -39,6 +39,10 @@ FeaturesDock::FeaturesDock(MainWindow* aParent)
 
     ui.setupUi(getWidget());
 
+#ifdef Q_OS_MAC
+	ui.cbWithin->setMinimumWidth(30);
+#endif
+
     ui.cbWithin->setChecked(M_PREFS->getFeaturesWithin());
     ui.FeaturesList->sortItems();
 
