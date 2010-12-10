@@ -228,7 +228,9 @@ void ImageMapLayer::setMapAdapter(const QUuid& theAdapterUid, const QString& ser
             setVisible(true);
     } else
     {
-        p->theMapAdapter = M_PREFS->getBackgroundPlugin(p->bgType)->CreateInstance();
+        IMapAdapterFactory* fac = M_PREFS->getBackgroundPlugin(p->bgType);
+        if (fac)
+            p->theMapAdapter = fac->CreateInstance();
         if (p->theMapAdapter) {
             setName(tr("Map - %1").arg(p->theMapAdapter->getName()));
             p->theMapAdapter->setSettings(M_PREFS->getQSettings());
