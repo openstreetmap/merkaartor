@@ -3362,7 +3362,10 @@ void MainWindow::on_windowFeatsAction_triggered()
 
 void MainWindow::on_windowToolbarAction_triggered()
 {
-    ui->toolBar->setVisible(!ui->toolBar->isVisible());
+    foreach (QObject* child, children()) {
+        if (QToolBar* tb = qobject_cast<QToolBar*>(child))
+            tb->setVisible(!tb->isVisible());
+    }
 }
 
 void MainWindow::on_windowGPSAction_triggered()
