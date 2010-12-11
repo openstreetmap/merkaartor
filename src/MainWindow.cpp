@@ -394,8 +394,6 @@ MainWindow::MainWindow(QWidget *parent)
 
 void MainWindow::delayedInit()
 {
-    createToolBarManager();
-
     updateWindowMenu();
 
     if (M_PREFS->getLocalServer()) {
