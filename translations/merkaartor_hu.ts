@@ -5324,65 +5324,65 @@ What do you want to do next?</source>
         <translation>Tiltja a stílusokat nyom rétegekben</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.cpp" line="503"/>
-        <location filename="../src/Preferences/PreferencesDialog.cpp" line="516"/>
-        <location filename="../src/Preferences/PreferencesDialog.cpp" line="529"/>
-        <location filename="../src/Preferences/PreferencesDialog.cpp" line="542"/>
-        <location filename="../src/Preferences/PreferencesDialog.cpp" line="555"/>
-        <location filename="../src/Preferences/PreferencesDialog.cpp" line="568"/>
-        <location filename="../src/Preferences/PreferencesDialog.cpp" line="580"/>
+        <location filename="../src/Preferences/PreferencesDialog.cpp" line="504"/>
+        <location filename="../src/Preferences/PreferencesDialog.cpp" line="517"/>
+        <location filename="../src/Preferences/PreferencesDialog.cpp" line="530"/>
+        <location filename="../src/Preferences/PreferencesDialog.cpp" line="543"/>
+        <location filename="../src/Preferences/PreferencesDialog.cpp" line="556"/>
+        <location filename="../src/Preferences/PreferencesDialog.cpp" line="569"/>
+        <location filename="../src/Preferences/PreferencesDialog.cpp" line="581"/>
         <source>Select Color</source>
         <translation>Színt választ</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.cpp" line="595"/>
+        <location filename="../src/Preferences/PreferencesDialog.cpp" line="596"/>
         <source>Tool already exists</source>
         <translation>Meglévő eszköz</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.cpp" line="596"/>
+        <location filename="../src/Preferences/PreferencesDialog.cpp" line="597"/>
         <source>A tool of this name already exists.
 Please select another name or click the &lt;Apply&gt; button if you want to modify the existing one</source>
         <translation>Ilyen nevű eszköz már van.
 Kérem válasszon más nevet, vagy kattintson az &lt;Alkalmaz&gt; gombra, ha a meglévőt akarja megváltoztatni</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.cpp" line="615"/>
+        <location filename="../src/Preferences/PreferencesDialog.cpp" line="616"/>
         <source>Cannot delete preset tool</source>
         <translation>Nem törölhet előre beállított eszközt</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.cpp" line="616"/>
+        <location filename="../src/Preferences/PreferencesDialog.cpp" line="617"/>
         <source>Cannot delete preset tool &quot;%1&quot;</source>
         <translation>Nem törölheti „%1” előre beállított eszközt</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.cpp" line="634"/>
+        <location filename="../src/Preferences/PreferencesDialog.cpp" line="635"/>
         <source>Cannot modify preset tool name</source>
         <translation>Nem változtathat előre beállított eszköz nevén</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.cpp" line="635"/>
+        <location filename="../src/Preferences/PreferencesDialog.cpp" line="636"/>
         <source>Cannot modify preset tool &quot;%1&quot;&apos;s name</source>
         <translation>Nem változtathatja meg „%1” előre beállított eszköz nevét</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.cpp" line="660"/>
+        <location filename="../src/Preferences/PreferencesDialog.cpp" line="661"/>
         <source>Select tool executable</source>
         <translation>Eszközprogramot választ</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.cpp" line="668"/>
+        <location filename="../src/Preferences/PreferencesDialog.cpp" line="669"/>
         <source>Select template document</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.cpp" line="668"/>
+        <location filename="../src/Preferences/PreferencesDialog.cpp" line="669"/>
         <source>Merkaartor document (*.mdc)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.cpp" line="676"/>
+        <location filename="../src/Preferences/PreferencesDialog.cpp" line="677"/>
         <source>Select Log directory</source>
         <translation>Naplómappát választ</translation>
     </message>
@@ -5569,7 +5569,7 @@ Kérem válasszon más nevet, vagy kattintson az &lt;Alkalmaz&gt; gombra, ha a m
         <translation>Sablon</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.cpp" line="494"/>
+        <location filename="../src/Preferences/PreferencesDialog.cpp" line="495"/>
         <location filename="../src/Preferences/PreferencesDialog.ui" line="733"/>
         <source>Tag Template</source>
         <translation>Címkesablon</translation>
@@ -5585,7 +5585,7 @@ Kérem válasszon más nevet, vagy kattintson az &lt;Alkalmaz&gt; gombra, ha a m
         <translation>Csempe gyorstárazás (nem működik Yahoo! esetében jogi korlátozások miatt)</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.cpp" line="494"/>
+        <location filename="../src/Preferences/PreferencesDialog.cpp" line="495"/>
         <source>Merkaartor tag template (*.mat)</source>
         <translation>Merkaartor címkesablon (*.mat)</translation>
     </message>
@@ -5595,7 +5595,7 @@ Kérem válasszon más nevet, vagy kattintson az &lt;Alkalmaz&gt; gombra, ha a m
         <translation>Nyomrétegek alapesetben csak olvashatók</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.cpp" line="485"/>
+        <location filename="../src/Preferences/PreferencesDialog.cpp" line="486"/>
         <location filename="../src/Preferences/PreferencesDialog.ui" line="647"/>
         <source>Custom styles directory</source>
         <translation>Egyedi stílus mappa</translation>
@@ -5617,41 +5617,46 @@ Kérem válasszon más nevet, vagy kattintson az &lt;Alkalmaz&gt; gombra, ha a m
     </message>
     <message>
         <location filename="../src/Preferences/PreferencesDialog.cpp" line="164"/>
+        <source>Croatian</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/Preferences/PreferencesDialog.cpp" line="165"/>
         <source>Czech</source>
         <translation>Cseh</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.cpp" line="166"/>
+        <location filename="../src/Preferences/PreferencesDialog.cpp" line="167"/>
         <source>German</source>
         <translation>Német</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.cpp" line="167"/>
+        <location filename="../src/Preferences/PreferencesDialog.cpp" line="168"/>
         <source>French</source>
         <translation>Francia</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.cpp" line="168"/>
+        <location filename="../src/Preferences/PreferencesDialog.cpp" line="169"/>
         <source>Hungarian</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.cpp" line="169"/>
+        <location filename="../src/Preferences/PreferencesDialog.cpp" line="170"/>
         <source>Italian</source>
         <translation>Olasz</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.cpp" line="170"/>
+        <location filename="../src/Preferences/PreferencesDialog.cpp" line="171"/>
         <source>Japanese</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.cpp" line="171"/>
+        <location filename="../src/Preferences/PreferencesDialog.cpp" line="172"/>
         <source>Polish</source>
         <translation>Lengyel</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.cpp" line="174"/>
+        <location filename="../src/Preferences/PreferencesDialog.cpp" line="175"/>
         <source>Russian</source>
         <translation>Orosz</translation>
     </message>
@@ -5712,32 +5717,32 @@ Kérem válasszon más nevet, vagy kattintson az &lt;Alkalmaz&gt; gombra, ha a m
         <translation>Látszó pontokat használ (új munkamenet kell)</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.cpp" line="165"/>
+        <location filename="../src/Preferences/PreferencesDialog.cpp" line="166"/>
         <source>Dutch</source>
         <translation>Holland</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.cpp" line="172"/>
+        <location filename="../src/Preferences/PreferencesDialog.cpp" line="173"/>
         <source>Portuguese</source>
         <translation>Portugál</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.cpp" line="175"/>
+        <location filename="../src/Preferences/PreferencesDialog.cpp" line="176"/>
         <source>Slovak</source>
         <translation>Szlovák</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.cpp" line="176"/>
+        <location filename="../src/Preferences/PreferencesDialog.cpp" line="177"/>
         <source>Spanish</source>
         <translation>Spanyol</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.cpp" line="177"/>
+        <location filename="../src/Preferences/PreferencesDialog.cpp" line="178"/>
         <source>Swedish</source>
         <translation>Svéd</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.cpp" line="178"/>
+        <location filename="../src/Preferences/PreferencesDialog.cpp" line="179"/>
         <source>Ukrainian</source>
         <translation>Ukrán</translation>
     </message>
@@ -5757,7 +5762,7 @@ Kérem válasszon más nevet, vagy kattintson az &lt;Alkalmaz&gt; gombra, ha a m
         <translation>Megengedi a JOSM-kompatíbilis helyi szolgálót a 8111 kapun</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.cpp" line="173"/>
+        <location filename="../src/Preferences/PreferencesDialog.cpp" line="174"/>
         <source>Brazilian Portuguese</source>
         <translation>Brazíliai portugál</translation>
     </message>

@@ -24,6 +24,9 @@
             <File Id="merkaartor_hr.qm" Name="merkaartor_hr.qm"
                Source="..\translations\merkaartor_hr.qm" DiskId="1">
             </File>
+            <File Id="merkaartor_hu.qm" Name="merkaartor_hu.qm"
+               Source="..\translations\merkaartor_hu.qm" DiskId="1">
+            </File>
             <File Id="merkaartor_it.qm" Name="merkaartor_it.qm"
                Source="..\translations\merkaartor_it.qm" DiskId="1">
             </File>

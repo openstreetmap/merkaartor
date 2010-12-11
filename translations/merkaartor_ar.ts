@@ -5198,82 +5198,82 @@ What do you want to do next?</source>
 <context>
     <name>PreferencesDialog</name>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.cpp" line="485"/>
+        <location filename="../src/Preferences/PreferencesDialog.cpp" line="486"/>
         <location filename="../src/Preferences/PreferencesDialog.ui" line="647"/>
         <source>Custom styles directory</source>
         <translation>دليل الأزياء المعتادة</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.cpp" line="494"/>
+        <location filename="../src/Preferences/PreferencesDialog.cpp" line="495"/>
         <location filename="../src/Preferences/PreferencesDialog.ui" line="733"/>
         <source>Tag Template</source>
         <translation>قالب تسمية</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.cpp" line="494"/>
+        <location filename="../src/Preferences/PreferencesDialog.cpp" line="495"/>
         <source>Merkaartor tag template (*.mat)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.cpp" line="503"/>
-        <location filename="../src/Preferences/PreferencesDialog.cpp" line="516"/>
-        <location filename="../src/Preferences/PreferencesDialog.cpp" line="529"/>
-        <location filename="../src/Preferences/PreferencesDialog.cpp" line="542"/>
-        <location filename="../src/Preferences/PreferencesDialog.cpp" line="555"/>
-        <location filename="../src/Preferences/PreferencesDialog.cpp" line="568"/>
-        <location filename="../src/Preferences/PreferencesDialog.cpp" line="580"/>
+        <location filename="../src/Preferences/PreferencesDialog.cpp" line="504"/>
+        <location filename="../src/Preferences/PreferencesDialog.cpp" line="517"/>
+        <location filename="../src/Preferences/PreferencesDialog.cpp" line="530"/>
+        <location filename="../src/Preferences/PreferencesDialog.cpp" line="543"/>
+        <location filename="../src/Preferences/PreferencesDialog.cpp" line="556"/>
+        <location filename="../src/Preferences/PreferencesDialog.cpp" line="569"/>
+        <location filename="../src/Preferences/PreferencesDialog.cpp" line="581"/>
         <source>Select Color</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.cpp" line="595"/>
+        <location filename="../src/Preferences/PreferencesDialog.cpp" line="596"/>
         <source>Tool already exists</source>
         <translation>الأدات موجودة مسبقاً</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.cpp" line="596"/>
+        <location filename="../src/Preferences/PreferencesDialog.cpp" line="597"/>
         <source>A tool of this name already exists.
 Please select another name or click the &lt;Apply&gt; button if you want to modify the existing one</source>
         <translation>يوجد أداة بهذا الإسم مسبقاً.
 الرجاء إختيار إسم آخر أو الضغط على الزرّ &lt;طبّق&gt; إذا كنت تريد تغيير الموجود حالياً</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.cpp" line="615"/>
+        <location filename="../src/Preferences/PreferencesDialog.cpp" line="616"/>
         <source>Cannot delete preset tool</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.cpp" line="616"/>
+        <location filename="../src/Preferences/PreferencesDialog.cpp" line="617"/>
         <source>Cannot delete preset tool &quot;%1&quot;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.cpp" line="634"/>
+        <location filename="../src/Preferences/PreferencesDialog.cpp" line="635"/>
         <source>Cannot modify preset tool name</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.cpp" line="635"/>
+        <location filename="../src/Preferences/PreferencesDialog.cpp" line="636"/>
         <source>Cannot modify preset tool &quot;%1&quot;&apos;s name</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.cpp" line="660"/>
+        <location filename="../src/Preferences/PreferencesDialog.cpp" line="661"/>
         <source>Select tool executable</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.cpp" line="668"/>
+        <location filename="../src/Preferences/PreferencesDialog.cpp" line="669"/>
         <source>Select template document</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.cpp" line="668"/>
+        <location filename="../src/Preferences/PreferencesDialog.cpp" line="669"/>
         <source>Merkaartor document (*.mdc)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.cpp" line="676"/>
+        <location filename="../src/Preferences/PreferencesDialog.cpp" line="677"/>
         <source>Select Log directory</source>
         <translation>إختر مجلد السجلّ</translation>
     </message>
@@ -5621,46 +5621,51 @@ Please select another name or click the &lt;Apply&gt; button if you want to modi
     </message>
     <message>
         <location filename="../src/Preferences/PreferencesDialog.cpp" line="164"/>
+        <source>Croatian</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/Preferences/PreferencesDialog.cpp" line="165"/>
         <source>Czech</source>
         <translation>التشيكية</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.cpp" line="166"/>
+        <location filename="../src/Preferences/PreferencesDialog.cpp" line="167"/>
         <source>German</source>
         <translation>الألمانية</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.cpp" line="167"/>
+        <location filename="../src/Preferences/PreferencesDialog.cpp" line="168"/>
         <source>French</source>
         <translation>الفرنسية</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.cpp" line="168"/>
+        <location filename="../src/Preferences/PreferencesDialog.cpp" line="169"/>
         <source>Hungarian</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.cpp" line="169"/>
+        <location filename="../src/Preferences/PreferencesDialog.cpp" line="170"/>
         <source>Italian</source>
         <translation>الإيطالية</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.cpp" line="170"/>
+        <location filename="../src/Preferences/PreferencesDialog.cpp" line="171"/>
         <source>Japanese</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.cpp" line="171"/>
+        <location filename="../src/Preferences/PreferencesDialog.cpp" line="172"/>
         <source>Polish</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.cpp" line="173"/>
+        <location filename="../src/Preferences/PreferencesDialog.cpp" line="174"/>
         <source>Brazilian Portuguese</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.cpp" line="174"/>
+        <location filename="../src/Preferences/PreferencesDialog.cpp" line="175"/>
         <source>Russian</source>
         <translation>روسي</translation>
     </message>
@@ -5721,32 +5726,32 @@ Please select another name or click the &lt;Apply&gt; button if you want to modi
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.cpp" line="165"/>
+        <location filename="../src/Preferences/PreferencesDialog.cpp" line="166"/>
         <source>Dutch</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.cpp" line="172"/>
+        <location filename="../src/Preferences/PreferencesDialog.cpp" line="173"/>
         <source>Portuguese</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.cpp" line="175"/>
+        <location filename="../src/Preferences/PreferencesDialog.cpp" line="176"/>
         <source>Slovak</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.cpp" line="176"/>
+        <location filename="../src/Preferences/PreferencesDialog.cpp" line="177"/>
         <source>Spanish</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.cpp" line="177"/>
+        <location filename="../src/Preferences/PreferencesDialog.cpp" line="178"/>
         <source>Swedish</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.cpp" line="178"/>
+        <location filename="../src/Preferences/PreferencesDialog.cpp" line="179"/>
         <source>Ukrainian</source>
         <translation type="unfinished"></translation>
     </message>
