@@ -14,8 +14,12 @@
 #include "Utils/ShortcutOverrideFilter.h"
 
 #include <QWidget>
+#include <QLineEdit>
+#include <QComboBox>
 #include <QEvent>
 #include <QKeyEvent>
+
+#include "TagTemplate.h"
 
 
 ShortcutOverrideFilter::ShortcutOverrideFilter() {
@@ -24,33 +28,42 @@ ShortcutOverrideFilter::ShortcutOverrideFilter() {
 ShortcutOverrideFilter::~ShortcutOverrideFilter() {}
 
 void ShortcutOverrideFilter::addOverride(const QString &key) {
-	overrides.append(QKeySequence(key));
+    overrides.append(QKeySequence(key));
 }
 
 void ShortcutOverrideFilter::addOverride(int key) {
-	overrides.append(QKeySequence(key));
+    overrides.append(QKeySequence(key));
 }
 
 bool ShortcutOverrideFilter::eventFilter(QObject* object, QEvent* event) {
-	QWidget* widget = qobject_cast<QWidget*>(object);
-	int i;
-	if (!widget)
-		return false;
+    QWidget* widget = qobject_cast<QWidget*>(object);
+    int i;
+    if (!widget)
+        return false;
 
-	// If a key sequence is bound to a shortcut, Qt dispatches a ShortcutOverride
-	// event event instead of a KeyPress, if it is handled, then the normal keypress
-	// event will follow, otherwise the shortcut is activated
-	if (event->type() == QEvent::ShortcutOverride) {
-		QKeyEvent *keyEvent = static_cast<QKeyEvent*>(event);
-		QKeySequence pressed(keyEvent->key() + keyEvent->modifiers());
+    // If a key sequence is bound to a shortcut, Qt dispatches a ShortcutOverride
+    // event event instead of a KeyPress, if it is handled, then the normal keypress
+    // event will follow, otherwise the shortcut is activated
+    if (event->type() == QEvent::ShortcutOverride) {
+        QKeyEvent *keyEvent = static_cast<QKeyEvent*>(event);
+        QKeySequence pressed(keyEvent->key() + keyEvent->modifiers());
 
-		for (i=0; i<overrides.size(); i++) {
-			if (pressed == overrides.at(i)) {
-				event->accept();
-				return true;
-			}
-		}
-	}
-	return false;
+        if (keyEvent->key() == Qt::Key_Escape) {
+            if (widget->hasFocus()) {
+                if (qobject_cast<QLineEdit*>(object) || qobject_cast<QComboBox*>(object)) {
+                    event->accept();
+                    return true;
+                }
+            }
+        } else {
+            for (i=0; i<overrides.size(); i++) {
+                if (pressed == overrides.at(i)) {
+                    event->accept();
+                    return true;
+                }
+            }
+        }
+    }
+    return false;
 }
 

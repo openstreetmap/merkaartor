@@ -307,6 +307,7 @@ bool DirtyListDescriber::showChanges(QWidget* aParent)
 
     glbChangeSetComment = bboxComment + " " + statComment;
     Ui.edChangesetComment->setText(glbChangeSetComment);
+    Ui.edChangesetComment->selectAll();
 
     bool ok = (dlg->exec() == QDialog::Accepted);
 

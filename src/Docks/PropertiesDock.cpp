@@ -51,7 +51,6 @@ PropertiesDock::PropertiesDock(MainWindow* aParent)
     shortcutFilter->addOverride(Qt::Key_Right);
     shortcutFilter->addOverride(Qt::Key_F2);
     shortcutFilter->addOverride(Qt::Key_Delete);
-    shortcutFilter->addOverride(Qt::Key_Escape);
 
     centerAction = new QAction(NULL, this);
     connect(centerAction, SIGNAL(triggered()), this, SLOT(on_centerAction_triggered()));
