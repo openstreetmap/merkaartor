@@ -925,12 +925,6 @@ QPair<bool,CoordBox> Document::boundingBox()
     return qMakePair(true,BBox);
 }
 
-bool Document::hasUnsavedChanges()
-{
-//	return aDoc.history().index();
-    return (getDirtySize() > 0);
-}
-
 bool Document::setFilterType(FilterType aFilter)
 {
     p->FilterRevision++;

@@ -43,7 +43,6 @@ class MainWindow : public QMainWindow, public IProgressWindow
 
 public:
     MainWindow(QWidget *parent = 0);
-public:
     virtual ~MainWindow();
 
 public slots:
@@ -254,6 +253,8 @@ public:
 
     void updateLanguage();
 
+    bool hasUnsavedChanges();
+    void syncOSM(const QString &aWeb, const QString &aUser, const QString &aPwd);
 
 protected:
     MapView* theView;
