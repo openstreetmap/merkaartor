@@ -103,7 +103,6 @@ public:
     const QList<CoordBox> getDownloadBoxes(Layer* l) const;
     bool isDownloadedSafe(const CoordBox& bb) const;
 
-    bool hasUnsavedChanges();
     QPair<bool, CoordBox> boundingBox();
 
     bool setFilterType(FilterType aFilter);

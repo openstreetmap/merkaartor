@@ -41,8 +41,9 @@
 #include "MasPaintStyle.h"
 #include "MapCSSPaintstyle.h"
 #include "PaintStyleEditor.h"
-#include "Sync/SyncOSM.h"
 #include "Utils/Utils.h"
+#include "DirtyList.h"
+#include "DirtyListExecutorOSC.h"
 
 #include <ui_MainWindow.h>
 #include <ui_AboutDialog.h>
@@ -123,6 +124,7 @@ class MainWindowPrivate
             : lastPrefTabIndex(0)
             , projActgrp(0)
             , theListeningServer(0)
+            , latSaveDirtyLevel(0)
         {
             title = QString("Merkaartor v%1%2(%3)").arg(STRINGIFY(VERSION)).arg(STRINGIFY(REVISION)).arg(STRINGIFY(SVNREV));
         }
@@ -135,6 +137,7 @@ class MainWindowPrivate
         QTcpServer* theListeningServer;
         PropertiesDock* theProperties;
         RendererOptions renderOptions;
+        int latSaveDirtyLevel;
 };
 
 MainWindow::MainWindow(QWidget *parent)
@@ -1370,7 +1373,7 @@ void MainWindow::loadUrl(const QUrl& u)
 
 void MainWindow::on_fileOpenAction_triggered()
 {
-    if (theDocument->hasUnsavedChanges() && !mayDiscardUnsavedChanges(this))
+    if (hasUnsavedChanges() && !mayDiscardUnsavedChanges(this))
         return;
 
     QStringList fileNames = QFileDialog::getOpenFileNames(
@@ -1404,7 +1407,7 @@ void MainWindow::on_fileUploadAction_triggered()
             return;
     }
     on_editPropertiesAction_triggered();
-    syncOSM(this, M_PREFS->getOsmWebsite(), M_PREFS->getOsmUser(), M_PREFS->getOsmPassword());
+    syncOSM(M_PREFS->getOsmWebsite(), M_PREFS->getOsmUser(), M_PREFS->getOsmPassword());
 
     theDocument->history().updateActions();
     theDirty->updateList();
@@ -1720,10 +1723,11 @@ void MainWindow::on_fileNewAction_triggered()
     if (theDocument)
         saveTemplateDocument(TEMPLATE_DOCUMENT);
 
-    if (!theDocument || !theDocument->hasUnsavedChanges() || mayDiscardUnsavedChanges(this)) {
+    if (!theDocument || !hasUnsavedChanges() || mayDiscardUnsavedChanges(this)) {
         p->theFeats->invalidate();
         SAFE_DELETE(theDocument);
         theView->setDocument(NULL);
+        p->latSaveDirtyLevel = 0;
 
         if (M_PREFS->getHasAutoLoadDocument())
             loadTemplateDocument(M_PREFS->getAutoLoadDocumentFilename());
@@ -2603,6 +2607,8 @@ void MainWindow::saveDocument(const QString& fn)
 
     doSaveDocument(&file);
     file.close();
+
+    p->latSaveDirtyLevel = theDocument->getDirtySize();
 }
 
 void MainWindow::saveTemplateDocument(const QString& fn)
@@ -2700,6 +2706,7 @@ void MainWindow::loadDocument(QString fn)
         theDirty->updateList();
         fileName = fn;
         setWindowTitle(QString("%1 - %2").arg(theDocument->title()).arg(p->title));
+        p->latSaveDirtyLevel = theDocument->getDirtySize();
     }
 
     M_PREFS->addRecentOpen(fn);
@@ -3026,7 +3033,7 @@ void MainWindow::on_editSelectAction_triggered()
 
 void MainWindow::closeEvent(QCloseEvent * event)
 {
-    if (theDocument->hasUnsavedChanges() && !mayDiscardUnsavedChanges(this)) {
+    if (hasUnsavedChanges() && !mayDiscardUnsavedChanges(this)) {
         event->ignore();
         return;
     }
@@ -3271,7 +3278,7 @@ void MainWindow::bookmarkTriggered(QAction* anAction)
 
 void MainWindow::recentOpenTriggered(QAction* anAction)
 {
-    if (theDocument->hasUnsavedChanges() && !mayDiscardUnsavedChanges(this))
+    if (hasUnsavedChanges() && !mayDiscardUnsavedChanges(this))
         return;
 
     QStringList fileNames(anAction->text());
@@ -3737,4 +3744,54 @@ void MainWindow::on_layersNewFilterAction_triggered()
 {
     if (theDocument)
         theDocument->addFilterLayer();
+}
+
+bool MainWindow::hasUnsavedChanges()
+{
+    if (!theDocument)
+        return false;
+
+    if (theDocument->getDirtySize() == p->latSaveDirtyLevel)
+        return false;
+
+    return true;
+}
+
+void MainWindow::syncOSM(const QString& aWeb, const QString& aUser, const QString& aPwd)
+{
+    if (checkForConflicts(theDocument))
+    {
+        QMessageBox::warning(this,tr("Unresolved conflicts"), tr("Please resolve existing conflicts first"));
+        return;
+    }
+
+    bool ok;
+    DirtyListBuild Future;
+    theDocument->history().buildDirtyList(Future);
+    DirtyListDescriber Describer(theDocument,Future);
+    if (Describer.showChanges(this) && Describer.tasks())
+    {
+        Future.resetUpdates();
+        DirtyListExecutorOSC Exec(theDocument,Future,aWeb,aUser,aPwd,Describer.tasks());
+        ok = Exec.executeChanges(this);
+        if (ok) {
+            if (M_PREFS->getAutoHistoryCleanup() && !theDocument->getDirtyOrOriginLayer()->getDirtySize())
+                theDocument->history().cleanup();
+
+            p->latSaveDirtyLevel = theDocument->getDirtySize();
+
+            if (!fileName.isEmpty()) {
+                if (M_PREFS->getAutoSaveDoc()) {
+                    saveDocument(fileName);
+                } else {
+                    if (QMessageBox::warning(this,tr("Unsaved changes"),
+                                             tr("It is strongly recommended to save the changes to your document after an upload.\nDo you want to do this now?"),
+                                             QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes) == QMessageBox::Yes) {
+                        saveDocument(fileName);
+
+                    }
+                }
+            }
+        }
+    }
 }
