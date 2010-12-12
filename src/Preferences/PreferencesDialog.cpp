@@ -245,7 +245,7 @@ void PreferencesDialog::loadPrefs()
     edProxyPassword->setText(M_PREFS->getProxyPassword());
 
     cbLocalServer->setChecked(M_PREFS->getLocalServer());
-    sbNetworkTimeout->setValue(M_PREFS->getNetworkTimeout());
+    sbNetworkTimeout->setValue(int(M_PREFS->getNetworkTimeout()/1000));
 
     edCacheDir->setText(M_PREFS->getCacheDir());
     sbCacheSize->setValue(M_PREFS->getCacheSize());
@@ -396,7 +396,7 @@ void PreferencesDialog::savePrefs()
     QNetworkProxy::setApplicationProxy(M_PREFS->getProxy(QUrl("http://merkaartor.be")));
 
     M_PREFS->setLocalServer(cbLocalServer->isChecked());
-    M_PREFS->setNetworkTimeout(sbNetworkTimeout->value());
+    M_PREFS->setNetworkTimeout(sbNetworkTimeout->value()*1000);
 
     M_PREFS->setCacheDir(edCacheDir->text());
     M_PREFS->setCacheSize(sbCacheSize->value());
