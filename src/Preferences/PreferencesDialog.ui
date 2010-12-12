@@ -1270,20 +1270,23 @@
          <item>
           <widget class="QLabel" name="label_12">
            <property name="text">
-            <string>Network Timeout (ms)</string>
+            <string>Network Timeout (sec)</string>
            </property>
           </widget>
          </item>
          <item>
           <widget class="QSpinBox" name="sbNetworkTimeout">
            <property name="minimum">
-            <number>3000</number>
+            <number>3</number>
            </property>
            <property name="maximum">
-            <number>999999</number>
+            <number>999</number>
            </property>
            <property name="singleStep">
-            <number>1000</number>
+            <number>1</number>
+           </property>
+           <property name="value">
+            <number>10</number>
            </property>
           </widget>
          </item>
