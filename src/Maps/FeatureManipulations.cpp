@@ -351,7 +351,7 @@ static bool handleWaysplitSpecialRestriction(Document* theDocument, CommandList*
                     theList->add(new RelationRemoveFeatureCommand(theRel, idx, theDocument->getDirtyOrOriginLayer(FirstPart->layer())));
                 }
             }
-            else if ((theRel->get(k))->getType() == IFeature::LineString || (theRel->get(k))->getType() == IFeature::Polygon)
+            else if ((theRel->get(k))->getType() & IFeature::LineString)
             {
                 // this is a way, check the nodes
                 Way* W = CAST_WAY(theRel->get(k));

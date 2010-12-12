@@ -732,7 +732,7 @@ void MapView::mouseDoubleClickEvent(QMouseEvent* anEvent)
             }
             EditInteraction* EI = dynamic_cast<EditInteraction*>(theInteraction);
             if ((EI && EI->isIdle()) || (MI && MI->isIdle())) {
-                if ((theInteraction->lastSnap() && theInteraction->lastSnap()->getType() == IFeature::LineString) || !theInteraction->lastSnap())
+                if ((theInteraction->lastSnap() && theInteraction->lastSnap()->getType() & IFeature::LineString) || !theInteraction->lastSnap())
                     CreateNodeInteraction::createNode(fromView(anEvent->pos()), theInteraction->lastSnap());
                 else if (theInteraction->lastSnap() && theInteraction->lastSnap()->getType() == IFeature::Point) {
                     Node* N = CAST_NODE(theInteraction->lastSnap());

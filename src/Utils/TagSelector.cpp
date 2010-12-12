@@ -836,15 +836,15 @@ TagSelectorMatchResult TagSelectorTypeIs::matches(const IFeature* F, double /*Pi
 {
     QString t = Type.toLower();
     if (t == "node")
-        return (F->getType() == IFeature::Point) ? TagSelect_Match : TagSelect_NoMatch;
+        return (F->getType() & IFeature::Point) ? TagSelect_Match : TagSelect_NoMatch;
     else if (t == "way")
-        return (F->getType() == IFeature::LineString || F->getType() == IFeature::Polygon) ? TagSelect_Match : TagSelect_NoMatch;
+        return (F->getType() & IFeature::LineString && !(F->getType() & IFeature::Polygon)) ? TagSelect_Match : TagSelect_NoMatch;
     else if (t == "area")
-        return (F->getType() == IFeature::Polygon) ? TagSelect_Match : TagSelect_NoMatch;
+        return (F->getType() & IFeature::Polygon) ? TagSelect_Match : TagSelect_NoMatch;
     else if (t == "relation")
-        return (F->getType() == IFeature::OsmRelation) ? TagSelect_Match : TagSelect_NoMatch;
+        return (F->getType() & IFeature::OsmRelation) ? TagSelect_Match : TagSelect_NoMatch;
     else if (t == "tracksegment")
-        return (F->getType() == IFeature::GpxSegment) ? TagSelect_Match : TagSelect_NoMatch;
+        return (F->getType() & IFeature::GpxSegment) ? TagSelect_Match : TagSelect_NoMatch;
 
     return TagSelect_NoMatch;
 }
