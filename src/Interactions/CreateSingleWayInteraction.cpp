@@ -325,7 +325,7 @@ void CreateSingleWayInteraction::snapMouseDoubleClickEvent(QMouseEvent* anEvent,
     theRoad = NULL;
     Creating = false;
 
-    if ((lastSnap() && lastSnap()->getType() == IFeature::LineString) || !lastSnap())
+    if ((lastSnap() && lastSnap()->getType() & IFeature::LineString) || !lastSnap())
         CreateNodeInteraction::createNode(XY_TO_COORD(anEvent->pos()), lastSnap());
 }
 
