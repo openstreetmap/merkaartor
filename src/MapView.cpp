@@ -71,10 +71,14 @@ public:
     MapRenderer renderer;
     RendererOptions ROptions;
 
+    bool BackgroundOnlyPanZoom;
+    QTransform BackgroundOnlyVpTransform;
+
     QLabel *TL, *TR, *BL, *BR;
 
     MapViewPrivate()
       : PixelPerM(0.0), Viewport(WORLD_COORDBOX), theVectorRotation(0.0)
+      , BackgroundOnlyPanZoom(false)
     {}
 };
 
@@ -192,7 +196,8 @@ void MapView::invalidate(bool updateStaticBuffer, bool updateMap)
     if (theDocument && updateMap) {
         IMapWatermark* WatermarkAdapter = NULL;
         for (LayerIterator<ImageMapLayer*> ImgIt(theDocument); !ImgIt.isEnd(); ++ImgIt) {
-            ImgIt.get()->forceRedraw(*this, rect());
+            ImgIt.get()->forceRedraw(*this, p->BackgroundOnlyVpTransform, rect());
+            p->BackgroundOnlyVpTransform = QTransform();
             if (ImgIt.get()->isVisible())
                 WatermarkAdapter = qobject_cast<IMapWatermark*>(ImgIt.get()->getMapAdapter());
         }
@@ -222,37 +227,40 @@ void MapView::invalidate(bool updateStaticBuffer, bool updateMap)
 
 void MapView::panScreen(QPoint delta)
 {
-    p->theVectorPanDelta += delta;
+    Coord cDelta = fromView(delta) - fromView(QPoint(0, 0));
 
-    CoordBox r1, r2;
+    if (p->BackgroundOnlyPanZoom)
+        p->BackgroundOnlyVpTransform.translate(-cDelta.lon(), -cDelta.lat());
+    else {
+        p->theVectorPanDelta += delta;
 
-    Coord cDelta = theProjection.inverse2Coord(p->theInvertedTransform.map(QPointF(delta)))  - theProjection.inverse2Coord(p->theInvertedTransform.map(QPointF(0, 0)));
+        CoordBox r1, r2;
+        if (delta.x()) {
+            if (delta.x() < 0)
+                r1 = CoordBox(p->Viewport.bottomRight(), Coord(p->Viewport.topRight().lat(), p->Viewport.topRight().lon() - cDelta.lon())); // OK
+            else
+                r1 = CoordBox(Coord(p->Viewport.bottomLeft().lat(), p->Viewport.bottomLeft().lon() - cDelta.lon()), p->Viewport.topLeft()); // OK
+            p->invalidRects.push_back(r1);
+        }
+        if (delta.y()) {
+            if (delta.y() < 0)
+                r2 = CoordBox(Coord(p->Viewport.bottomLeft().lat() - cDelta.lat(), p->Viewport.bottomLeft().lon()), p->Viewport.bottomRight()); // OK
+            else
+                r2 = CoordBox(p->Viewport.topLeft(), Coord(p->Viewport.topRight().lat() - cDelta.lat(), p->Viewport.bottomRight().lon())); //NOK
+            p->invalidRects.push_back(r2);
+        }
 
-    if (delta.x()) {
-        if (delta.x() < 0)
-            r1 = CoordBox(p->Viewport.bottomRight(), Coord(p->Viewport.topRight().lat(), p->Viewport.topRight().lon() - cDelta.lon())); // OK
-        else
-            r1 = CoordBox(Coord(p->Viewport.bottomLeft().lat(), p->Viewport.bottomLeft().lon() - cDelta.lon()), p->Viewport.topLeft()); // OK
-        p->invalidRects.push_back(r1);
+
+        //qDebug() << "Inv rects size: " << p->invalidRects.size();
+        //    qDebug() << "delta: " << delta;
+        //qDebug() << "r1 : " << p->theTransform.map(theProjection.project(r1.topLeft())) << ", " << p->theTransform.map(theProjection.project(r1.bottomRight()));
+        //qDebug() << "r2 : " << p->theTransform.map(theProjection.project(r2.topLeft())) << ", " << p->theTransform.map(theProjection.project(r2.bottomRight()));
+
+        p->theTransform.translate(qreal(delta.x())/p->theTransform.m11(), qreal(delta.y())/p->theTransform.m22());
+        p->theInvertedTransform = p->theTransform.inverted();
+        viewportRecalc(rect());
+        StaticBufferUpToDate = false;
     }
-    if (delta.y()) {
-        if (delta.y() < 0)
-            r2 = CoordBox(Coord(p->Viewport.bottomLeft().lat() - cDelta.lat(), p->Viewport.bottomLeft().lon()), p->Viewport.bottomRight()); // OK
-        else
-            r2 = CoordBox(p->Viewport.topLeft(), Coord(p->Viewport.topRight().lat() - cDelta.lat(), p->Viewport.bottomRight().lon())); //NOK
-        p->invalidRects.push_back(r2);
-    }
-
-
-    //qDebug() << "Inv rects size: " << p->invalidRects.size();
-//    qDebug() << "delta: " << delta;
-    //qDebug() << "r1 : " << p->theTransform.map(theProjection.project(r1.topLeft())) << ", " << p->theTransform.map(theProjection.project(r1.bottomRight()));
-    //qDebug() << "r2 : " << p->theTransform.map(theProjection.project(r2.topLeft())) << ", " << p->theTransform.map(theProjection.project(r2.bottomRight()));
-
-    p->theTransform.translate(qreal(delta.x())/p->theTransform.m11(), qreal(delta.y())/p->theTransform.m22());
-    p->theInvertedTransform = p->theTransform.inverted();
-    viewportRecalc(rect());
-    StaticBufferUpToDate = false;
 
     for (LayerIterator<ImageMapLayer*> ImgIt(theDocument); !ImgIt.isEnd(); ++ImgIt)
         ImgIt.get()->pan(delta);
@@ -963,7 +971,8 @@ void MapView::on_imageReceived(ImageMapLayer* aLayer)
         if (Main->pbImages->value() < Main->pbImages->maximum())
             Main->pbImages->setValue(Main->pbImages->value()+1);
     }
-    aLayer->forceRedraw(*this, rect());
+    aLayer->forceRedraw(*this, p->BackgroundOnlyVpTransform, rect());
+    p->BackgroundOnlyVpTransform = QTransform();
     update();
 }
 
@@ -1168,6 +1177,11 @@ bool MapView::event(QEvent *event)
     case QEvent::KeyPress: {
             QKeyEvent *ke = static_cast< QKeyEvent* >( event );
             switch ( ke->key() ) {
+            case Qt::Key_Space:
+                ke->accept();
+                p->BackgroundOnlyPanZoom = true;
+                return true;
+
             case Qt::Key_Tab:
                 setFocus();
                 ke->accept();
@@ -1269,6 +1283,11 @@ bool MapView::event(QEvent *event)
     case QEvent::KeyRelease: {
             QKeyEvent *ke = static_cast< QKeyEvent* >( event );
             switch ( ke->key() ) {
+            case Qt::Key_Space:
+                ke->accept();
+                p->BackgroundOnlyPanZoom = false;
+                return true;
+
             case Qt::Key_O:
             case Qt::Key_H:
                 {

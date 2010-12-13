@@ -46,7 +46,7 @@ public:
     virtual const LayerGroups classGroups() const {return(Layer::Map);}
 
     virtual void drawImage(QPainter* P);
-    virtual void forceRedraw(MapView& theView, QRect rect);
+    virtual void forceRedraw(MapView& theView, QTransform& aTransform, QRect rect);
     virtual void draw(MapView& theView, QRect& rect);
 
     virtual void pan(QPoint delta);
@@ -61,6 +61,7 @@ public:
 
     IImageManager* getImageManger();
     virtual void setEnabled(bool b);
+    void resetAlign();
 
 private:
     QRect drawTiled(MapView& theView, QRect& rect);

@@ -294,6 +294,11 @@ class CoordBox
             return QRectF(BottomLeft.lon(), TopRight.lat(), lonDiff(), BottomLeft.lat()-TopRight.lat());
         }
 
+        static CoordBox fromQRectF(const QRectF& r)
+        {
+            return CoordBox(Coord(r.topLeft().y(), r.topLeft().x()), Coord(r.bottomRight().y(), r.bottomRight().x()));
+        }
+
         void resize(double f);
 
         static bool visibleLine(const CoordBox & viewport, Coord & last, Coord & here);
