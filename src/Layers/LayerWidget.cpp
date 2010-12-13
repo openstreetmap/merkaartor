@@ -39,7 +39,7 @@ LayerWidget::LayerWidget(Layer* aLayer, QWidget* aParent)
     ui.cbVisible->setChecked(theLayer->isVisible());
     ui.cbVisible->blockSignals(false);
 #ifdef Q_OS_MAC
-		ui.cbVisible->setMinimumWidth(30);
+        ui.cbVisible->setMinimumWidth(30);
 #endif
 
     ui.edName->setText(theLayer->name());
@@ -382,6 +382,12 @@ void ImageLayerWidget::setProjection()
     }
 }
 
+void ImageLayerWidget::resetAlign()
+{
+    ((ImageMapLayer *)theLayer.data())->resetAlign();
+    emit (layerChanged(this, true));
+}
+
 void ImageLayerWidget::initActions()
 {
     //if (actgrWms)
@@ -402,6 +408,11 @@ void ImageLayerWidget::initActions()
     connect(actProjection, SIGNAL(triggered()), this, SLOT(setProjection()));
     ctxMenu->addAction(actProjection);
     associatedMenu->addAction(actProjection);
+
+    actResetAlign = new QAction(tr("Reset alignment adjustment"), this);
+    connect(actResetAlign, SIGNAL(triggered()), this, SLOT(resetAlign()));
+    ctxMenu->addAction(actResetAlign);
+    associatedMenu->addAction(actResetAlign);
 
     closeAction = new QAction(tr("Close"), this);
     connect(closeAction, SIGNAL(triggered()), this, SLOT(close()));
@@ -692,3 +703,4 @@ void FilterLayerWidget::on_filterHelperClicked()
         ui->edFilter->setText(Sel->edTagQuery->text());
     }
 }
+

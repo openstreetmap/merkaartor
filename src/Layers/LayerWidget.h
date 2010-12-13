@@ -123,6 +123,7 @@ class ImageLayerWidget : public LayerWidget
         QAction* actShape;
         QAction* actNone;
         QAction* actProjection;
+        QAction* actResetAlign;
         QMenu* wmsMenu;
         QMenu* tmsMenu;
         QMenu* pluginsMenu;
@@ -133,6 +134,7 @@ class ImageLayerWidget : public LayerWidget
         void setPlugin(QAction*);
 
         void setProjection();
+        void resetAlign();
 
     protected:
         virtual void showContextMenu(QContextMenuEvent* anEvent);
