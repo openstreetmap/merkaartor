@@ -18,6 +18,10 @@ class PaintStyleEditor : public QDialog, public Ui::PaintStyleEditor
     public slots:
         void on_DrawGlobalBackground_clicked(bool b);
         void on_GlobalBackgroundColor_clicked();
+        void on_DrawGlobalNodes_clicked(bool b);
+        void on_GlobalNodesColor_clicked();
+        void on_GlobalNodesProportional_valueChanged();
+        void on_GlobalNodesFixed_valueChanged();
 
         void on_PaintList_itemSelectionChanged();
         void on_TagSelection_editingFinished();
@@ -80,7 +84,7 @@ class PaintStyleEditor : public QDialog, public Ui::PaintStyleEditor
         void updatePagesIcons();
 
     signals:
-        void stylesApplied(QList<Painter>* thePainters);
+        void stylesApplied(GlobalPainter* theGlobalPainter, QList<Painter>* thePainters);
     private:
         bool FreezeUpdate;
 };

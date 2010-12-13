@@ -103,6 +103,7 @@ public:
     MapView* theView;
     QPainter* thePainter;
     RendererOptions theOptions;
+    GlobalPainter theGlobalPainter;
 
 protected:
     BackgroundStyleLayer bglayer;

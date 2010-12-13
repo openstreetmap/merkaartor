@@ -2284,7 +2284,7 @@ void MainWindow::applyStyles(QString NewStyle)
     }
 }
 
-void MainWindow::applyPainters(QList<Painter>* thePainters)
+void MainWindow::applyPainters(GlobalPainter* theGlobalPainter, QList<Painter>* thePainters)
 {
     theDocument->setPainters(*thePainters);
     for (VisibleFeatureIterator i(theDocument); !i.isEnd(); ++i)

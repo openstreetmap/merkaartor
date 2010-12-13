@@ -148,9 +148,13 @@ public:
 
     GlobalPainter& backgroundActive(bool b);
     GlobalPainter& background(QColor Color);
-
     bool getDrawBackground() const;
     QColor getBackgroundColor() const;
+
+    GlobalPainter& nodesActive(bool b);
+    GlobalPainter& nodes(QColor Color);
+    bool getDrawNodes() const;
+    QColor getNodesColor() const;
 
     QString toXML() const;
     static GlobalPainter fromXML(const QDomElement& e);
@@ -158,6 +162,11 @@ public:
 public:
     bool DrawBackground;
     QColor BackgroundColor;
+
+    bool DrawNodes;
+    QColor NodesColor;
+    double NodesProportional;
+    double NodesFixed;
 };
 
 #endif

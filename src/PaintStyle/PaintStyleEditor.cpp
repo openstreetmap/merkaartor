@@ -42,6 +42,7 @@ PaintStyleEditor::PaintStyleEditor(QWidget *aParent, const GlobalPainter& aGloba
     LabelColor->setIconSize(QSize(36, 18));
     LabelBackgroundlColor->setIconSize(QSize(36, 18));
     GlobalBackgroundColor->setIconSize(QSize(36, 18));
+    GlobalNodesColor->setIconSize(QSize(36, 18));
 
     updatePaintList();
 
@@ -51,6 +52,13 @@ PaintStyleEditor::PaintStyleEditor(QWidget *aParent, const GlobalPainter& aGloba
     DrawGlobalBackground->setChecked(theGlobalPainter.getDrawBackground());
     makeBoundaryIcon(GlobalBackgroundColor, theGlobalPainter.getBackgroundColor());
     on_PaintList_itemSelectionChanged();
+
+    DrawGlobalNodes->setChecked(theGlobalPainter.getDrawNodes());
+    makeBoundaryIcon(GlobalNodesColor, theGlobalPainter.getNodesColor());
+    GlobalNodesProportional->setEnabled(theGlobalPainter.getDrawNodes());
+    GlobalNodesFixed->setEnabled(theGlobalPainter.getDrawNodes());
+    GlobalNodesProportional->setValue(theGlobalPainter.NodesProportional);
+    GlobalNodesFixed->setValue(theGlobalPainter.NodesFixed);
 
     FreezeUpdate = false;
 
@@ -304,6 +312,34 @@ void PaintStyleEditor::on_GlobalBackgroundColor_clicked()
         makeBoundaryIcon(GlobalBackgroundColor, rgb);
         theGlobalPainter.background(rgb);
     }
+}
+
+void PaintStyleEditor::on_DrawGlobalNodes_clicked(bool b)
+{
+    theGlobalPainter.nodesActive(b);
+}
+
+void PaintStyleEditor::on_GlobalNodesColor_clicked()
+{
+    QColor rgb = QColorDialog::getColor(theGlobalPainter.getNodesColor(), this
+#if (QT_VERSION >= QT_VERSION_CHECK(4, 5, 0))
+                                        , tr("Select Color"), QColorDialog::ShowAlphaChannel
+#endif
+                                        );
+    if (rgb.isValid()) {
+        makeBoundaryIcon(GlobalNodesColor, rgb);
+        theGlobalPainter.nodes(rgb);
+    }
+}
+
+void PaintStyleEditor::on_GlobalNodesProportional_valueChanged()
+{
+    theGlobalPainter.NodesProportional = GlobalNodesProportional->value();
+}
+
+void PaintStyleEditor::on_GlobalNodesFixed_valueChanged()
+{
+    theGlobalPainter.NodesFixed = GlobalNodesFixed->value();
 }
 
 void PaintStyleEditor::on_DrawBackground_clicked(bool b)
@@ -761,7 +797,7 @@ void PaintStyleEditor::refreshPainter()
 void PaintStyleEditor::on_buttonBox_clicked(QAbstractButton * button)
 {
     if (buttonBox->buttonRole(button) == QDialogButtonBox::ApplyRole) {
-        emit(stylesApplied(&thePainters));
+        emit(stylesApplied(&theGlobalPainter, &thePainters));
     }
 }
 

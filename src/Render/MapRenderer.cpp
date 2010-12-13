@@ -161,8 +161,13 @@ void TouchupStyleLayer::draw(Node* Pt)
         if (! ((Pt->isReadonly() || !Pt->isSelectable(r->theView)) && (!Pt->isPOI() && !Pt->isWaypoint())))
 //        if (!Pt->isReadonly() && Pt->isSelectable(r->theView))
         {
-            QPointF P(r->theView->toView(Pt));
+            QColor theColor = QColor(0,0,0,128);
             double WW = r->theView->nodeWidth();
+            if (r->theGlobalPainter.DrawNodes) {
+                theColor = r->theGlobalPainter.NodesColor;
+                WW = r->theView->pixelPerM()*r->theGlobalPainter.NodesProportional+r->theGlobalPainter.NodesFixed;
+            }
+            QPointF P(r->theView->toView(Pt));
             if (WW >= 1) {
                 if (Pt->isWaypoint()) {
                     QRect R2(P.x()-(WW+4)/2, P.y()-(WW+4)/2, WW+4, WW+4);
@@ -170,7 +175,7 @@ void TouchupStyleLayer::draw(Node* Pt)
                 }
 
                 QRect R(P.x()-WW/2, P.y()-WW/2, WW, WW);
-                r->thePainter->fillRect(R,QColor(0,0,0,128));
+                r->thePainter->fillRect(R,theColor);
             }
         }
     }
@@ -349,6 +354,7 @@ void MapRenderer::render(
 
     theView = aView;
     theOptions = options;
+    theGlobalPainter = M_STYLE->getGlobalPainter();
 
     bool bgLayerVisible = TEST_RFLAGS(RendererOptions::BackgroundVisible);
     bool fgLayerVisible = TEST_RFLAGS(RendererOptions::ForegroundVisible);

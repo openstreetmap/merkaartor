@@ -637,12 +637,13 @@ bool Painter::matchesZoom(double PixelPerM) const
 /* GlobalPainter */
 
 GlobalPainter::GlobalPainter()
-: DrawBackground(false)
+    : DrawBackground(false), DrawNodes(false)
 {
 }
 
 GlobalPainter::GlobalPainter(const GlobalPainter& f)
-: DrawBackground(f.DrawBackground), BackgroundColor(f.BackgroundColor)
+    : DrawBackground(f.DrawBackground), BackgroundColor(f.BackgroundColor)
+    , DrawNodes(f.DrawNodes), NodesColor(f.NodesColor), NodesProportional(f.NodesProportional), NodesFixed(f.NodesFixed)
 {
 }
 
@@ -652,6 +653,11 @@ GlobalPainter& GlobalPainter::operator=(const GlobalPainter& f)
 
     DrawBackground = f.DrawBackground;
     BackgroundColor = f.BackgroundColor;
+
+    DrawNodes = f.DrawNodes;
+    NodesColor = f.NodesColor;
+    NodesProportional = f.NodesProportional;
+    NodesFixed = f.NodesFixed;
 
     return *this;
 }
@@ -666,6 +672,8 @@ QString GlobalPainter::toXML() const
     r += "<global\n";
     if (DrawBackground)
         r += " " + colorAsXML("background",BackgroundColor);
+    if (DrawNodes)
+        r += " " + boundaryAsXML("nodes",NodesColor, NodesProportional, NodesFixed);
     r += "/>\n";
     return r;
 }
@@ -677,6 +685,12 @@ GlobalPainter GlobalPainter::fromXML(const QDomElement& e)
     if (e.hasAttribute("backgroundColor")) {
         FP.backgroundActive(true);
         FP.background(toColor(e.attribute("backgroundColor")));
+    }
+    if (e.hasAttribute("nodesColor")) {
+        FP.nodesActive(true);
+        FP.NodesColor = toColor(e.attribute("nodesColor"));
+        FP.NodesProportional = e.attribute("nodesScale").toDouble();
+        FP.NodesFixed = e.attribute("nodesOffset").toDouble();
     }
 
     return FP;
@@ -703,4 +717,27 @@ GlobalPainter& GlobalPainter::background(QColor Color)
 QColor GlobalPainter::getBackgroundColor() const
 {
     return BackgroundColor;
+}
+
+GlobalPainter & GlobalPainter::nodesActive(bool b)
+{
+    DrawNodes = b;
+    return *this;
+}
+
+GlobalPainter & GlobalPainter::nodes(QColor Color)
+{
+    DrawNodes = true;
+    NodesColor = Color;
+    return *this;
+}
+
+bool GlobalPainter::getDrawNodes() const
+{
+    return DrawNodes;
+}
+
+QColor GlobalPainter::getNodesColor() const
+{
+    return NodesColor;
 }

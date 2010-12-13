@@ -23,6 +23,7 @@ class InfoDock;
 class DirtyDock;
 class FeaturesDock;
 class QGPS;
+class GlobalPainter;
 class Painter;
 class TrackLayer;
 class TrackSegment;
@@ -234,7 +235,7 @@ public slots:
     void styleTriggered(QAction* anAction);
     void updateGpsPosition(float latitude, float longitude, QDateTime time, float altitude, float speed, float heading);
     void applyStyles(QString NewStyle);
-    void applyPainters(QList<Painter>* thePainters);
+    void applyPainters(GlobalPainter* theGlobalPainter, QList<Painter>* thePainters);
 
 public:
     bool importFiles(Document * mapDocument, const QStringList & filesNames, QStringList * importedFileNames = NULL);
