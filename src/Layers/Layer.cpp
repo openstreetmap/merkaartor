@@ -127,7 +127,7 @@ bool __cdecl indexFindCallback(Feature* F, void* ctxt)
         (*(pCtxt->theFeatures))[F->renderPriority()].insert(F);
     } else
     if (F->getType() == IFeature::Point) {
-        if (pCtxt->arePointsDrawable && M_PREFS->getTrackPointsVisible())
+        if (pCtxt->arePointsDrawable)
             if (!(F->isVirtual() && !M_PREFS->getVirtualNodesVisible()))
                 (*(pCtxt->theFeatures))[F->renderPriority()].insert(F);
     } else
