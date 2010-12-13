@@ -542,7 +542,7 @@ void FeaturePainter::drawTouchup(Way* R, QPainter* thePainter, MapView* theView)
                 if ( theView->renderOptions().arrowOptions == RendererOptions::ArrowsAlways )
                     thePainter->setPen(QPen(QColor(255,0,0), 2));
                 else
-                    thePainter->setPen(QPen(QColor(0,0,255), 2));
+                    thePainter->setPen(QPen(TrafficDirectionMarksColor, 2));
 
 
                 for (int i=1; i<R->size(); ++i)

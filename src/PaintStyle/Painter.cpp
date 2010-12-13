@@ -16,7 +16,8 @@ Painter::Painter()
   ForegroundDashSet(false),
   DrawTouchup(false), TouchupScale(0), TouchupOffset(1),
   TouchupDashSet(false),
-  ForegroundFill(false), ForegroundFillUseIcon(false), DrawTrafficDirectionMarks(false),
+  ForegroundFill(false), ForegroundFillUseIcon(false),
+  DrawTrafficDirectionMarks(false),
   DrawIcon(false), IconScale(0), IconOffset(0),
   DrawLabel(false), LabelScale(0), LabelOffset(0),
   DrawLabelBackground(false), LabelHalo(false), LabelArea(false),
@@ -36,7 +37,7 @@ Painter::Painter(const Painter& f)
   TouchupDashSet(f.TouchupDashSet),
   TouchupDash(f.TouchupDash), TouchupWhite(f.TouchupWhite),
   ForegroundFill(f.ForegroundFill), ForegroundFillFillColor(f.ForegroundFillFillColor), ForegroundFillUseIcon(f.ForegroundFillUseIcon),
-  DrawTrafficDirectionMarks(f.DrawTrafficDirectionMarks),
+  DrawTrafficDirectionMarks(f.DrawTrafficDirectionMarks), TrafficDirectionMarksColor(f.TrafficDirectionMarksColor),
   DrawIcon(f.DrawIcon), IconName(f.IconName), IconScale(f.IconScale), IconOffset(f.IconOffset),
   DrawLabel(f.DrawLabel), LabelTag(f.LabelTag), LabelColor(f.LabelColor), LabelScale(f.LabelScale), LabelOffset(f.LabelOffset),
   DrawLabelBackground(f.DrawLabelBackground), LabelBackgroundColor(f.LabelBackgroundColor), LabelBackgroundTag(f.LabelBackgroundTag),
@@ -75,6 +76,7 @@ Painter& Painter::operator=(const Painter& f)
     ForegroundFillFillColor = f.ForegroundFillFillColor;
     ForegroundFillUseIcon = f.ForegroundFillUseIcon;
     DrawTrafficDirectionMarks = f.DrawTrafficDirectionMarks;
+    TrafficDirectionMarksColor = f.TrafficDirectionMarksColor;
     DrawIcon = f.DrawIcon;
     IconName = f.IconName;
     IconScale = f.IconScale;
@@ -178,9 +180,7 @@ QString Painter::toXML(QString filename) const
         r += " " + iconAsXML("icon",iconFilename, IconScale, IconOffset);
     }
     if (DrawTrafficDirectionMarks)
-        r += " drawTrafficDirectionMarks=\"yes\"";
-    else
-        r += " drawTrafficDirectionMarks=\"no\"";
+        r += " drawTrafficDirectionMarks=\"yes\" trafficDirectionMarksColor=\"" + ::asXML(TrafficDirectionMarksColor) +"\"\n";
     if (DrawLabel) {
         r += " " + boundaryAsXML("label",LabelColor, LabelScale, LabelOffset);
         r += " labelFont=\"" + LabelFont.toString() + "\"";
@@ -242,7 +242,9 @@ Painter Painter::fromXML(const QDomElement& e, QString filename)
         FP.setIcon(iconFilename,e.attribute("iconScale", "0.0").toDouble(),e.attribute("iconOffset", "0.0").toDouble());
     }
     if (e.attribute("drawTrafficDirectionMarks") == "yes")
-        FP.drawTrafficDirectionMarks();
+        FP.drawTrafficDirectionMarks(true);
+    if (e.hasAttribute("trafficDirectionMarksColor"))
+        FP.TrafficDirectionMarksColor = toColor((e.attribute("trafficDirectionMarksColor")));
     if (e.hasAttribute("labelColor"))
     {
         FP.label(
@@ -332,7 +334,7 @@ bool Painter::isFilled() const
     return ForegroundFill;
 }
 
-Painter& Painter::drawTrafficDirectionMarks()
+Painter& Painter::drawTrafficDirectionMarks(bool b)
 {
     DrawTrafficDirectionMarks = true;
     return *this;

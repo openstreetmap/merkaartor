@@ -2251,7 +2251,7 @@ void MainWindow::on_createRelationAction_triggered()
 void MainWindow::on_editMapStyleAction_triggered()
 {
     PaintStyleEditor* dlg = new PaintStyleEditor(this, M_STYLE->getGlobalPainter(), M_STYLE->getPainters());
-    connect(dlg, SIGNAL(stylesApplied(QList<Painter>* )), this, SLOT(applyPainters(QList<Painter>* )));
+    connect(dlg, SIGNAL(stylesApplied(GlobalPainter*, QList<Painter>* )), this, SLOT(applyPainters(GlobalPainter*, QList<Painter>* )));
     GlobalPainter saveGlobalPainter = M_STYLE->getGlobalPainter();
     QList<Painter> savePainters = M_STYLE->getPainters();
     if (dlg->exec() == QDialog::Accepted) {
@@ -2286,6 +2286,9 @@ void MainWindow::applyStyles(QString NewStyle)
 
 void MainWindow::applyPainters(GlobalPainter* theGlobalPainter, QList<Painter>* thePainters)
 {
+    M_STYLE->setGlobalPainter(*theGlobalPainter);
+    M_STYLE->setPainters(*thePainters);
+
     theDocument->setPainters(*thePainters);
     for (VisibleFeatureIterator i(theDocument); !i.isEnd(); ++i)
         i.get()->invalidatePainter();

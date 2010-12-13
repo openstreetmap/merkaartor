@@ -58,7 +58,7 @@ public:
     Painter& touchupDash(double Dash, double White);
     Painter& foregroundFill(QColor FillColor);
     Painter& zoomBoundary(double anUnder, double anUpper);
-    Painter& drawTrafficDirectionMarks();
+    Painter& drawTrafficDirectionMarks(bool b);
     Painter& trackPointIcon(const QString& Filename);
     Painter& fillActive(bool b);
     Painter& iconActive(bool b);
@@ -119,6 +119,7 @@ public:
     QColor ForegroundFillFillColor;
     bool ForegroundFillUseIcon;
     bool DrawTrafficDirectionMarks;
+    QColor TrafficDirectionMarksColor;
     bool DrawIcon;
     QString IconName;
     double IconScale;

@@ -38,6 +38,7 @@ PaintStyleEditor::PaintStyleEditor(QWidget *aParent, const GlobalPainter& aGloba
     BackgroundColor->setIconSize(QSize(36, 18));
     ForegroundColor->setIconSize(QSize(36, 18));
     TouchupColor->setIconSize(QSize(36, 18));
+    TrafficDirectionMarksColor->setIconSize(QSize(36, 18));;
     FillColor->setIconSize(QSize(36, 18));
     LabelColor->setIconSize(QSize(36, 18));
     LabelBackgroundlColor->setIconSize(QSize(36, 18));
@@ -219,6 +220,8 @@ void PaintStyleEditor::on_PaintList_itemSelectionChanged()
     TouchupDashed->setChecked(FP.touchupBoundary().Dashed);
     TouchupDashOn->setValue(FP.touchupBoundary().DashOn);
     TouchupDashOff->setValue(FP.touchupBoundary().DashOff);
+    DrawTrafficDirectionMarks->setChecked(FP.DrawTrafficDirectionMarks);
+    makeBoundaryIcon(TrafficDirectionMarksColor, FP.TrafficDirectionMarksColor);
     DrawFill->setChecked(FP.fillColor().isValid());
     makeBoundaryIcon(FillColor, FP.fillColor());
     DrawFillIcon->setChecked(FP.ForegroundFillUseIcon);;
@@ -541,6 +544,37 @@ void PaintStyleEditor::on_TouchupColor_clicked()
     if (rgb.isValid()) {
         makeBoundaryIcon(TouchupColor, rgb);
         FP.touchup(rgb, ProportionalTouchup->value(), FixedTouchup->value());
+    }
+}
+
+void PaintStyleEditor::on_DrawTrafficDirectionMarks_clicked(bool b)
+{
+    QListWidgetItem* it = PaintList->currentItem();
+    int idx = it->data(Qt::UserRole).toInt();
+
+    if (idx >= thePainters.size())
+        return;
+    thePainters[idx].drawTrafficDirectionMarks(b);
+
+    updatePagesIcons();
+}
+
+void PaintStyleEditor::on_TrafficDirectionMarksColor_clicked()
+{
+    QListWidgetItem* it = PaintList->currentItem();
+    int idx = it->data(Qt::UserRole).toInt();
+
+    if (idx >= thePainters.size())
+        return;
+    Painter& FP(thePainters[idx]);
+    QColor rgb = QColorDialog::getColor(FP.TrafficDirectionMarksColor, this
+#if (QT_VERSION >= QT_VERSION_CHECK(4, 5, 0))
+                                        , tr("Select Color"), QColorDialog::ShowAlphaChannel
+#endif
+                                        );
+    if (rgb.isValid()) {
+        makeBoundaryIcon(TrafficDirectionMarksColor, rgb);
+        FP.TrafficDirectionMarksColor = rgb;
     }
 }
 

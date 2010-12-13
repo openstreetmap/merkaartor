@@ -41,6 +41,8 @@ class PaintStyleEditor : public QDialog, public Ui::PaintStyleEditor
         void on_ForegroundDashed_clicked();
         void on_ForegroundDashOn_valueChanged();
         void on_ForegroundDashOff_valueChanged();
+        void on_DrawTrafficDirectionMarks_clicked(bool b);
+        void on_TrafficDirectionMarksColor_clicked();
         void on_DrawTouchup_clicked(bool b);
         void on_TouchupColor_clicked();
         void on_ProportionalTouchup_valueChanged();
