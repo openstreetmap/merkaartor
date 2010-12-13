@@ -58,8 +58,14 @@ void BackgroundStyleLayer::draw(Relation* R)
 }
 
 
-void BackgroundStyleLayer::draw(Node*)
+void BackgroundStyleLayer::draw(Node* N)
 {
+    if ((N->isReadonly() || !N->isSelectable(r->theView)) && (!N->isPOI() && !N->isWaypoint()))
+        return;
+
+    const FeaturePainter* paintsel = N->getPainter(r->theView->pixelPerM());
+    if (paintsel)
+        paintsel->drawBackground(N,r->thePainter,r->theView);
 }
 
 void ForegroundStyleLayer::draw(Way* R)
@@ -76,8 +82,14 @@ void ForegroundStyleLayer::draw(Relation* R)
         paintsel->drawForeground(R,r->thePainter,r->theView);
 }
 
-void ForegroundStyleLayer::draw(Node*)
+void ForegroundStyleLayer::draw(Node* N)
 {
+    if ((N->isReadonly() || !N->isSelectable(r->theView)) && (!N->isPOI() && !N->isWaypoint()))
+        return;
+
+    const FeaturePainter* paintsel = N->getPainter(r->theView->pixelPerM());
+    if (paintsel)
+        paintsel->drawForeground(N,r->thePainter,r->theView);
 }
 
 void TouchupStyleLayer::draw(Way* R)
@@ -151,15 +163,15 @@ void TouchupStyleLayer::draw(Node* Pt)
         if (! ((Pt->isReadonly() || !Pt->isSelectable(r->theView)) && (!Pt->isPOI() && !Pt->isWaypoint())))
 //        if (!Pt->isReadonly() && Pt->isSelectable(r->theView))
         {
-            QPoint P = r->theView->toView(Pt);
-            double theWidth = r->theView->nodeWidth();
-            if (theWidth >= 1) {
+            QPointF P(r->theView->toView(Pt));
+            double WW = r->theView->nodeWidth();
+            if (WW >= 1) {
                 if (Pt->isWaypoint()) {
-                    QRect R2(P-QPoint(theWidth*4/3/2,theWidth*4/3/2),QSize(theWidth*4/3,theWidth*4/3));
+                    QRect R2(P.x()-(WW+4)/2, P.y()-(WW+4)/2, WW+4, WW+4);
                     r->thePainter->fillRect(R2,QColor(255,0,0,128));
                 }
 
-                QRect R(P-QPoint(theWidth/2,theWidth/2),QSize(theWidth,theWidth));
+                QRect R(P.x()-WW/2, P.y()-WW/2, WW, WW);
                 r->thePainter->fillRect(R,QColor(0,0,0,128));
             }
         }

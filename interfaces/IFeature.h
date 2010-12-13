@@ -6,6 +6,7 @@
 #include <QPair>
 #include <QMetaType>
 
+#define TECHNICAL_TAGS "created_by#source"
 class QPainterPath;
 
 class IFeature

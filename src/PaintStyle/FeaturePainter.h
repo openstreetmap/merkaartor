@@ -41,8 +41,10 @@ public:
     QString toXML(QString filename) const;
     static FeaturePainter fromXML(const QDomElement& e, QString filename);
 
+    void drawBackground(Node *N, QPainter *thePainter, MapView *theView) const;
     void drawBackground(Way* R, QPainter* thePainter, MapView* theView) const;
     void drawBackground(Relation* R, QPainter* thePainter, MapView* theView) const;
+    void drawForeground(Node *N, QPainter *thePainter, MapView *theView) const;
     void drawForeground(Way* R, QPainter* thePainter, MapView* theView) const;
     void drawForeground(Relation* R, QPainter* thePainter, MapView* theView) const;
     void drawTouchup(Way* R, QPainter* thePainter, MapView* theView) const;

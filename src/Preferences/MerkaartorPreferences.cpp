@@ -11,6 +11,7 @@
 //
 
 #include "Global.h"
+#include "IFeature.h"
 #include "MerkaartorPreferences.h"
 
 #include <QApplication>
@@ -50,7 +51,7 @@
 
 #define M_PARAM_IMPLEMENT_STRING(Param, Category, Default) \
     bool mb_##Param = false; \
-    void MerkaartorPreferences::set##Param(QString theValue) \
+    void MerkaartorPreferences::set##Param(const QString& theValue) \
     { \
         m_##Param = theValue; \
         if (!g_Merk_Ignore_Preferences) { \
@@ -65,6 +66,27 @@
                 m_##Param = Default; \
             else \
                 m_##Param = Sets->value(#Category"/"#Param, Default).toString(); \
+        } \
+        return  m_##Param; \
+    }
+
+#define M_PARAM_IMPLEMENT_STRINGLIST(Param, Category, Default) \
+    bool mb_##Param = false; \
+    void MerkaartorPreferences::set##Param(const QStringList& theValue) \
+    { \
+        m_##Param = theValue; \
+        if (!g_Merk_Ignore_Preferences) { \
+            Sets->setValue(#Category"/"#Param, theValue); \
+        } \
+    } \
+    QStringList& MerkaartorPreferences::get##Param() \
+    { \
+        if (!::mb_##Param) { \
+            ::mb_##Param = true; \
+            if (g_Merk_Ignore_Preferences || g_Merk_Reset_Preferences) \
+                m_##Param = QString(Default).split("#"); \
+            else \
+                m_##Param = Sets->value(#Category"/"#Param, QVariant(QString(Default).split("#"))).toStringList(); \
         } \
         return  m_##Param; \
     }
@@ -136,7 +158,7 @@
 
 #define M_PARAM_IMPLEMENT_COLOR(Param, Category, Default) \
     bool mb_##Param = false; \
-    void MerkaartorPreferences::set##Param(QColor theValue) \
+    void MerkaartorPreferences::set##Param(const QColor& theValue) \
     { \
         m_##Param = theValue; \
         if (!g_Merk_Ignore_Preferences) { \
@@ -1172,6 +1194,7 @@ void MerkaartorPreferences::setShortcuts(const QStringList & theValue)
 M_PARAM_IMPLEMENT_STRING(DefaultStyle, style, ":/Styles/Mapnik.mas")
 M_PARAM_IMPLEMENT_STRING(CustomStyle, style, "")
 M_PARAM_IMPLEMENT_BOOL(DisableStyleForTracks, style, true)
+M_PARAM_IMPLEMENT_STRINGLIST(TechnicalTags, style, TECHNICAL_TAGS)
 
 /* Zoom */
 M_PARAM_IMPLEMENT_INT(ZoomIn, zoom, 133)

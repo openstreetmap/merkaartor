@@ -203,6 +203,22 @@ void buildPathFromRelation(Relation *R, const Projection &theProjection, QPainte
 }
 
 */
+
+void FeaturePainter::drawBackground(Node* N, QPainter* thePainter, MapView* theView) const
+{
+    if (!DrawBackground)
+        return;
+
+    double PixelPerM = theView->pixelPerM();
+    double WW = PixelPerM*BackgroundScale+BackgroundOffset;
+    if (WW >= 0)
+    {
+        QPointF P(theView->toView(N));
+        QRect R(P.x()-WW/2, P.y()-WW/2, WW, WW);
+        thePainter->fillRect(R,BackgroundColor);
+    }
+}
+
 void FeaturePainter::drawBackground(Way* R, QPainter* thePainter, MapView* theView) const
 {
     if (!DrawBackground && !ForegroundFill && !ForegroundFillUseIcon) return;
@@ -287,6 +303,21 @@ void FeaturePainter::drawBackground(Relation* R, QPainter* thePainter, MapView* 
     thePainter->drawPath(theView->transform().map(R->getPath()));
 }
 
+void FeaturePainter::drawForeground(Node* N, QPainter* thePainter, MapView* theView) const
+{
+    if (!DrawForeground)
+        return;
+
+    double PixelPerM = theView->pixelPerM();
+    double WW = PixelPerM*ForegroundScale+ForegroundOffset;
+    if (WW >= 0)
+    {
+        QPointF P(theView->toView(N));
+        QRect R(P.x()-WW/2, P.y()-WW/2, WW, WW);
+        thePainter->fillRect(R,ForegroundColor);
+    }
+}
+
 void FeaturePainter::drawForeground(Way* R, QPainter* thePainter, MapView* theView) const
 {
     if (!DrawForeground) return;
@@ -364,24 +395,27 @@ void FeaturePainter::drawTouchup(Node* Pt, QPainter* thePainter, MapView* theVie
                 thePainter->drawPixmap( int(C.x()-pm->width()/2), int(C.y()-pm->height()/2) , *pm);
             }
         }
-    }
-    if (!IconOK)
-    {
-        QColor theColor = QColor(0,0,0,128);
-        if (DrawForeground)
-            theColor = ForegroundColor;
-        else
-            if (DrawBackground)
-                theColor = BackgroundColor;
+        if (!IconOK)
+        {
+            QColor theColor = QColor(0,0,0,128);
+            if (DrawForeground)
+                theColor = ForegroundColor;
+            else
+                if (DrawBackground)
+                    theColor = BackgroundColor;
 
-        QPointF P(theView->toView(Pt));
-        if (Pt->isWaypoint()) {
-            QRectF R(P-QPointF(4,4),QSize(8,8));
-            thePainter->fillRect(R,QColor(255,0,0,128));
+            QPointF P(theView->toView(Pt));
+            double WW = theView->nodeWidth();
+            if (WW >= 1) {
+                if (Pt->isWaypoint()) {
+                    QRect R2(P.x()-WW*4/3/2, P.y()-WW*4/3/2, WW*4/3, WW*4/3);
+                    thePainter->fillRect(R2,QColor(255,0,0,128));
+                }
+
+                QRect R(P.x()-WW/2, P.y()-WW/2, WW, WW);
+                thePainter->fillRect(R,theColor);
+            }
         }
-
-        QRectF R(P-QPointF(2,2),QSize(4,4));
-        thePainter->fillRect(R,theColor);
     }
 }
 

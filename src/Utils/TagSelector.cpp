@@ -859,6 +859,7 @@ QString TagSelectorTypeIs::asExpression(bool) const
 
 TagSelectorHasTags::TagSelectorHasTags()
 {
+    TechnicalTags = QString(TECHNICAL_TAGS).split("#");
 }
 
 TagSelector* TagSelectorHasTags::copy() const
@@ -868,7 +869,12 @@ TagSelector* TagSelectorHasTags::copy() const
 
 TagSelectorMatchResult TagSelectorHasTags::matches(const IFeature* F, double /*PixelPerM*/) const
 {
-    return (F->tagSize()==0) ? TagSelect_NoMatch : TagSelect_Match;
+    for (int i=0; i<F->tagSize(); ++i) {
+        if (!TechnicalTags.contains(F->tagKey(i))) {
+            return TagSelect_Match;
+        }
+    }
+    return TagSelect_NoMatch;
 }
 
 QString TagSelectorHasTags::asExpression(bool) const

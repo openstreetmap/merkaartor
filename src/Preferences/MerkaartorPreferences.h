@@ -80,8 +80,14 @@ class IPaintStyle;
     private: \
         QString m_##Param; \
     public: \
-        void set##Param(QString theValue); \
+        void set##Param(const QString& theValue); \
         QString get##Param();
+#define M_PARAM_DECLARE_STRINGList(Param) \
+    private: \
+        QStringList m_##Param; \
+    public: \
+        void set##Param(const QStringList& theValue); \
+        QStringList& get##Param();
 #define M_PARAM_DECLARE_INT(Param) \
     private: \
         int m_##Param; \
@@ -105,7 +111,7 @@ class IPaintStyle;
     private: \
         QColor m_##Param; \
     public: \
-        void set##Param(QColor theValue); \
+        void set##Param(const QColor& theValue); \
         QColor get##Param();
 
 #define SAFE_DELETE(x) {delete (x); x = NULL;}
@@ -275,6 +281,7 @@ public:
     M_PARAM_DECLARE_STRING(DefaultStyle)
     M_PARAM_DECLARE_STRING(CustomStyle)
     M_PARAM_DECLARE_BOOL(DisableStyleForTracks)
+    M_PARAM_DECLARE_STRINGList(TechnicalTags)
 
     /* Visual */
     M_PARAM_DECLARE_INT(ZoomIn)
