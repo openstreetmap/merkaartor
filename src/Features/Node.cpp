@@ -22,6 +22,7 @@ class NodePrivate
         }
 
         bool IsWaypoint;
+        bool IsPOI;
 #ifndef _MOBILE
         int ProjectionRevision;
         QPointF Projected;
@@ -110,7 +111,10 @@ bool Node::isInteresting() const
 
 bool Node::isPOI()
 {
-    return (tagSize()>0);
+    if (!MetaUpToDate)
+        updateMeta();
+
+    return p->IsPOI;
 }
 
 bool Node::isWaypoint()
@@ -382,8 +386,15 @@ void Node::updateMeta()
     MetaUpToDate = true;
 
     p->IsWaypoint = (findKey("_waypoint_") != -1);
+    p->IsPOI = false;
+    for (int i=0; i<tagSize(); ++i) {
+        if (!M_PREFS->getTechnicalTags().contains(tagKey(i))) {
+            p->IsPOI = true;
+            break;
+        }
+    }
 
-    if (!isPOI()) {
+    if (!p->IsPOI && !p->IsWaypoint) {
         int i=0;
         int prtReadonly=0, prtWritable=0;
         for (; i<sizeParents(); ++i) {

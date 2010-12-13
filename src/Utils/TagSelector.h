@@ -6,6 +6,7 @@ class IFeature;
 #include <QtCore/QString>
 #include <QRegExp>
 #include <QList>
+#include <QStringList>
 
 #include <QDateTime>
 
@@ -117,6 +118,9 @@ class TagSelectorHasTags : public TagSelector
         virtual TagSelector* copy() const;
         virtual TagSelectorMatchResult matches(const IFeature* F, double PixelPerM) const;
         virtual QString asExpression(bool Precedence) const;
+
+    private:
+        QStringList TechnicalTags;
 };
 
 class TagSelectorOr : public TagSelector
