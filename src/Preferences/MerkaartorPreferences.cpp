@@ -610,8 +610,6 @@ void MerkaartorPreferences::initialize()
             setProxyPort(p);
         }
     }
-    // Set global proxy
-    QNetworkProxy::setApplicationProxy(getProxy(QUrl("http://merkaartor.be")));
 
     parentDashes << 1 << 5;
 
