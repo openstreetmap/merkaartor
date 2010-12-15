@@ -1037,3 +1037,15 @@ QString ImageMapLayer::toPropertiesHtml()
     return h;
 }
 
+QTransform ImageMapLayer::getCurrentAlignmentTransform()
+{
+    if (p->theMapAdapter) {
+        if (p->theMapAdapter->isTiled()) {
+            return p->AlignementTransformList.at(p->theMapAdapter->getAdaptedZoom());
+        } else {
+            return p->AlignementTransformList.at(0);
+        }
+    } else
+        return QTransform();
+}
+

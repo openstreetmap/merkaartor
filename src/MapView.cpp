@@ -196,11 +196,12 @@ void MapView::invalidate(bool updateStaticBuffer, bool updateMap)
     if (theDocument && updateMap) {
         IMapWatermark* WatermarkAdapter = NULL;
         for (LayerIterator<ImageMapLayer*> ImgIt(theDocument); !ImgIt.isEnd(); ++ImgIt) {
-            ImgIt.get()->forceRedraw(*this, p->BackgroundOnlyVpTransform, rect());
-            p->BackgroundOnlyVpTransform = QTransform();
-            if (ImgIt.get()->isVisible())
+            if (ImgIt.get()->isVisible()) {
+                ImgIt.get()->forceRedraw(*this, p->BackgroundOnlyVpTransform, rect());
                 WatermarkAdapter = qobject_cast<IMapWatermark*>(ImgIt.get()->getMapAdapter());
+            }
         }
+        p->BackgroundOnlyVpTransform = QTransform();
 
         if (WatermarkAdapter) {
             p->TL->setAttribute(Qt::WA_NoMousePropagation);
@@ -299,9 +300,11 @@ void MapView::paintEvent(QPaintEvent * anEvent)
 
     P.drawPixmap(p->theVectorPanDelta, *StaticBackground);
     P.save();
+    QTransform AlignTransform;
     for (LayerIterator<ImageMapLayer*> ImgIt(theDocument); !ImgIt.isEnd(); ++ImgIt) {
         if (ImgIt.get()->isVisible()) {
             ImgIt.get()->drawImage(&P);
+            AlignTransform = ImgIt.get()->getCurrentAlignmentTransform();
         }
     }
     P.restore();
@@ -335,9 +338,19 @@ void MapView::paintEvent(QPaintEvent * anEvent)
                                            .arg(QString::number(coordToAng(viewport().topRight().lat()),'f',4))
                                            );
 
+        Main->MeterPerPixelLabel->setText(tr("%1 m/pixel").arg(1/p->PixelPerM, 0, 'f', 2));
+        if (!AlignTransform.isIdentity()) {
+            QLineF l(0, 0, AlignTransform.dx(), AlignTransform.dy());
+            l.translate(viewport().center().toQPointF());
+            Main->AdjusmentMeterLabel->setVisible(true);
+            double distance = Coord(l.p2()).distanceFrom(Coord(l.p1()))*1000;
+            Main->AdjusmentMeterLabel->setText(tr("Align: %1m @ %2").arg(distance, 0, 'f', 2).arg(l.angle(), 0, 'f', 2) + QString::fromUtf8("°"));
+        } else {
+            Main->AdjusmentMeterLabel->setVisible(false);
+        }
 #ifndef NDEBUG
         QTime Stop(QTime::currentTime());
-        Main->PaintTimeLabel->setText(tr("%1ms;ppm:%2").arg(Start.msecsTo(Stop)).arg(p->PixelPerM));
+        Main->PaintTimeLabel->setText(tr("%1ms").arg(Start.msecsTo(Stop)));
 #endif
     }
 }
