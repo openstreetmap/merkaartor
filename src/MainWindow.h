@@ -220,6 +220,8 @@ public:
     QString StatusMessage;
     QLabel* ViewportStatusLabel;
     QLabel* PaintTimeLabel;
+    QLabel* MeterPerPixelLabel;
+    QLabel* AdjusmentMeterLabel;
 
 public slots:
     void handleMessage(const QString& msg);

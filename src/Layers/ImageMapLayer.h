@@ -62,6 +62,7 @@ public:
     virtual int getCurrentZoom();
     virtual void setCurrentZoom(MapView& theView, const CoordBox& viewport, const QRect& rect);
     virtual qreal pixelPerCoord();
+    virtual QTransform getCurrentAlignmentTransform();
 
     bool isTiled();
 

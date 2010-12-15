@@ -212,9 +212,14 @@ MainWindow::MainWindow(QWidget *parent)
     blockSignals(true);
 
     ViewportStatusLabel = new QLabel(this);
+    MeterPerPixelLabel = new QLabel(this);
+    AdjusmentMeterLabel = new QLabel(this);
+
     pbImages = new QProgressBar(this);
     statusBar()->addPermanentWidget(ViewportStatusLabel);
     statusBar()->addPermanentWidget(pbImages);
+    statusBar()->addPermanentWidget(MeterPerPixelLabel);
+    statusBar()->addPermanentWidget(AdjusmentMeterLabel);
 #ifndef NDEBUG
     PaintTimeLabel = new QLabel(this);
     PaintTimeLabel->setMinimumWidth(23);
