@@ -185,22 +185,24 @@ Feature* ImportCSVDialog::generateOSM(QString line)
     int lidx=0;
     for (int i=0; i<Fields.size(); ++i) {
         CSVField f = Fields[i];
-        if (!f.import)
-            continue;
 
         switch (f.type) {
         case CSVLatitude:
-            t = flds[lidx].toDouble(&ok);
-            if (ok) {
-                p.setY(t);
-                hasLat = true;
+            if (f.import) {
+                t = flds[lidx].toDouble(&ok);
+                if (ok) {
+                    p.setY(t);
+                    hasLat = true;
+                }
             }
             break;
         case CSVLongitude:
-            t = flds[lidx].toDouble(&ok);
-            if (ok) {
-                p.setX(t);
-                hasLon = true;
+            if (f.import) {
+                t = flds[lidx].toDouble(&ok);
+                if (ok) {
+                    p.setX(t);
+                    hasLon = true;
+                }
             }
             break;
         case CSVString: {
@@ -215,12 +217,14 @@ Feature* ImportCSVDialog::generateOSM(QString line)
                     fld.chop(1);
                 }
             }
-            N->setTag(f.name, fld);
+            if (f.import)
+                N->setTag(f.name, fld);
             break;
         }
 
         default:
-            N->setTag(f.name, flds[lidx].trimmed());
+            if (f.import)
+                N->setTag(f.name, flds[lidx].trimmed());
             break;
         }
         ++lidx;
