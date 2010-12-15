@@ -392,9 +392,6 @@ void PreferencesDialog::savePrefs()
     M_PREFS->setProxyUser(edProxyUser->text());
     M_PREFS->setProxyPassword(edProxyPassword->text());
 
-    // Set global proxy
-    QNetworkProxy::setApplicationProxy(M_PREFS->getProxy(QUrl("http://merkaartor.be")));
-
     M_PREFS->setLocalServer(cbLocalServer->isChecked());
     M_PREFS->setNetworkTimeout(sbNetworkTimeout->value()*1000);
 
