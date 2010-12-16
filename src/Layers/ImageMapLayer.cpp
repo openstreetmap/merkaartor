@@ -529,9 +529,9 @@ void ImageMapLayer::pan(QPoint delta)
 
 #if QT_VERSION < 0x040600
         QPixmap savPix;
-        savPix = p->pm.copy();
-        p->pm.fill(Qt::transparent);
-        QPainter P(&p->pm);
+        savPix = p->curPix.copy();
+        p->curPix.fill(Qt::transparent);
+        QPainter P(&p->curPix);
         P.drawPixmap(delta, savPix);
 #else
         QRegion exposed;
