@@ -421,11 +421,12 @@ bool ImageMapLayer::toXML(QDomElement& xParent, bool asTemplate, QProgressDialog
         e.appendChild(c);
 
         c.setAttribute("name", p->selServer);
-    } else if (p->bgType != NONE_ADAPTER_UUID && !asTemplate) {
+    } else if (p->bgType != NONE_ADAPTER_UUID) {
         c = e.ownerDocument().createElement("Data");
         e.appendChild(c);
 
-        p->theMapAdapter->toXML(c);
+        if (!asTemplate)
+            p->theMapAdapter->toXML(c);
     }
     if (!asTemplate) {
         QDomElement atListEl = e.ownerDocument().createElement("AdjustmentList");
@@ -474,7 +475,7 @@ ImageMapLayer * ImageMapLayer::fromXML(Document* d, const QDomElement& e, QProgr
         } else if (c.tagName() == "TmsServer") {
             server = c.attribute("name");
             l->setMapAdapter(bgtype, server);
-        } else {
+        } else if (c.tagName() == "Data") {
             l->setMapAdapter(bgtype, server);
             if (l->getMapAdapter())
                 l->getMapAdapter()->fromXML(c);
