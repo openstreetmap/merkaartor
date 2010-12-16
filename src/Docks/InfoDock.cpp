@@ -60,7 +60,6 @@ QString InfoDock::getHtml()
 
 void InfoDock::on_anchorClicked(const QUrl & link)
 {
-    QHttp http;
     QString data;
 
     QString osmWebsite = M_PREFS->getOsmWebsite();

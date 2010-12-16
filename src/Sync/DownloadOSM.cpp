@@ -172,6 +172,7 @@ bool Downloader::go(const QUrl& url)
 {
     if (Error) return false;
 
+    Request.setProxy(M_PREFS->getProxy(url));
     Request.setHost(url.host(),url.port(80));
 
     if (AnimationTimer)
@@ -186,7 +187,6 @@ bool Downloader::go(const QUrl& url)
     Header.setValue("Host",url.host()+':'+QString::number(url.port(80)));
     Header.setValue("User-Agent", USER_AGENT);
     Content.clear();
-    Request.setProxy(M_PREFS->getProxy(url));
     Id = Request.request(Header,QByteArray(), &ResponseBuffer);
 
     if (Loop.exec() == QDialog::Rejected)
@@ -243,6 +243,7 @@ bool Downloader::request(const QString& Method, const QUrl& url, const QString& 
 {
     if (Error) return false;
 
+    Request.setProxy(M_PREFS->getProxy(url));
     Request.setHost(url.host(),url.port(80));
     qDebug() << "Downloader::request: " << url;
 
@@ -259,7 +260,6 @@ bool Downloader::request(const QString& Method, const QUrl& url, const QString& 
     Header.setValue("Authorization", QString("Basic %1").arg(QString(ba_auth)));
 
     Content.clear();
-    Request.setProxy(M_PREFS->getProxy(url));
     Id = Request.request(Header,ba);
 
     if (FireForget)

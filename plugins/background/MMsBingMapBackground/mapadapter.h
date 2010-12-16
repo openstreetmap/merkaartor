@@ -75,9 +75,6 @@ public:
 
     virtual QMenu* getMenu() const { return NULL; }
 
-    virtual IImageManager* getImageManager();
-    virtual void setImageManager(IImageManager* anImageManager);
-
 protected:
     QString name;
     MapAdapter(const QString& host, const QString& serverPath, const QString& projection, int minZoom = 0, int maxZoom = 0);
@@ -95,8 +92,6 @@ protected:
     int current_zoom;
 
     QLocale loc;
-
-    IImageManager* theImageManager;
 };
 
 #endif

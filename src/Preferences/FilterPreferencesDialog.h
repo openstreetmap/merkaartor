@@ -13,7 +13,6 @@
 #define FilterPreferencesDialog_H
 
 #include <QWidget>
-#include <QHttp>
 #include <QBuffer>
 
 

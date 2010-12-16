@@ -220,6 +220,7 @@ void TMSPreferencesDialog::on_btGetServices_clicked()
     services.clear();
 
     http = new QHttp(this);
+    http->setProxy(M_PREFS->getProxy(theUrl));
     connect (http, SIGNAL(requestFinished(int, bool)), this, SLOT(httpRequestFinished(int, bool)));
     connect(http, SIGNAL(responseHeaderReceived(const QHttpResponseHeader &)),
         this, SLOT(readResponseHeader(const QHttpResponseHeader &)));

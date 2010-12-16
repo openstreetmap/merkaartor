@@ -13,7 +13,6 @@
 #define ProjPreferencesDialog_H
 
 #include <QWidget>
-#include <QHttp>
 #include <QBuffer>
 
 

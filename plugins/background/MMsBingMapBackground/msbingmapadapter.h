@@ -115,6 +115,9 @@ class MsBingMapAdapter : public MapAdapter, public IMapWatermark
 
         virtual void setSettings(QSettings* aSet) {theSets = aSet;}
 
+        virtual IImageManager* getImageManager();
+        virtual void setImageManager(IImageManager* anImageManager);
+
         //IMapWatermark
         virtual QString getAttributionsHtml(const QRectF& bbox, const QRect& screen);
         virtual QString getLogoHtml();
@@ -132,6 +135,7 @@ class MsBingMapAdapter : public MapAdapter, public IMapWatermark
         double getMercatorLatitude(double YCoord) const;
         double getMercatorYCoord(double lati) const;
 
+        IImageManager* theImageManager;
         int srvNum;
         QString theSource;
         bool isLoaded;

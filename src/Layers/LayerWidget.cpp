@@ -496,8 +496,6 @@ void ImageLayerWidget::initActions()
         ctxMenu->addAction(actShape);
         associatedMenu->addAction(actShape);
     }
-
-    connect(ctxMenu, SIGNAL(triggered(QAction*)), this, SLOT(setPlugin(QAction*)));
 }
 
 void ImageLayerWidget::showContextMenu(QContextMenuEvent* anEvent)

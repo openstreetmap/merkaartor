@@ -526,6 +526,21 @@ void MerkaartorPreferences::initialize()
 //	Use06Api = Sets->value("osm/use06api", "true").toBool();
     Use06Api = true;
 
+    // PRoxy upgrade
+    if (!g_Merk_Ignore_Preferences && !g_Merk_Reset_Preferences) {
+        if (Sets->contains("proxy/Use")) {
+            bool b = Sets->value("proxy/Use").toBool();
+            QString h = Sets->value("proxy/Host").toString();
+            int p = Sets->value("proxy/Port").toInt();
+
+            Sets->remove("proxy");
+
+            setProxyUse(b);
+            setProxyHost(h);
+            setProxyPort(p);
+        }
+    }
+
     loadProjections();
     loadFilters();
     loadWMSes();
@@ -593,21 +608,6 @@ void MerkaartorPreferences::initialize()
             }
             save();
             Sets->remove("TMS/servers");
-        }
-    }
-
-    // PRoxy upgrade
-    if (!g_Merk_Ignore_Preferences && !g_Merk_Reset_Preferences) {
-        if (Sets->contains("proxy/Use")) {
-            bool b = Sets->value("proxy/Use").toBool();
-            QString h = Sets->value("proxy/Host").toString();
-            int p = Sets->value("proxy/Port").toInt();
-
-            Sets->remove("proxy");
-
-            setProxyUse(b);
-            setProxyHost(h);
-            setProxyPort(p);
         }
     }
 
@@ -1301,11 +1301,7 @@ QNetworkProxy MerkaartorPreferences::getProxy(const QUrl & requestUrl)
 
     if ( getProxyUse() )
     {
-        theProxy.setType(QNetworkProxy::HttpProxy);
-        theProxy.setHostName(getProxyHost());
-        theProxy.setPort(getProxyPort());
-        theProxy.setUser(getProxyUser());
-        theProxy.setPassword(getProxyPassword());
+        return QNetworkProxy(QNetworkProxy::HttpProxy, getProxyHost(), getProxyPort(), getProxyUser(), getProxyPassword());
     }
     else
     {
