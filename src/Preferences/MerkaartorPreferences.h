@@ -151,7 +151,7 @@ typedef QListIterator<OsmServer> OsmServerIterator;
 
 // Outside of merkaartorpreferences, because initializing it will need translations
 // Classic chicken & egg problem.
-QString getDefaultLanguage();
+QString getDefaultLanguage(bool returnDefault=true);
 void setDefaultLanguage(const QString& L);
 
 class MerkaartorPreferences : public QObject

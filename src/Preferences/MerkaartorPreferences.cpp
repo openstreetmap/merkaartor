@@ -1712,16 +1712,21 @@ void MerkaartorPreferences::saveOsmServers()
 
 /* */
 
-QString getDefaultLanguage()
+QString getDefaultLanguage(bool returnDefault)
 {
     if (!g_Merk_Ignore_Preferences && !g_Merk_Reset_Preferences) {
         QSettings Sets;
         QString lang = Sets.value("locale/language").toString();
         if (lang == "")
-            lang = QLocale::system().name().split("_")[0];
+            if (returnDefault)
+                lang = QLocale::system().name().split("_")[0];
         return lang;
-    } else
-        return QLocale::system().name().split("_")[0];
+    } else {
+        if (returnDefault)
+            return QLocale::system().name().split("_")[0];
+        else
+            return "";
+    }
 }
 
 void setDefaultLanguage(const QString& theValue)
