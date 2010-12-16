@@ -181,6 +181,7 @@ void CreatePolygonInteraction::mouseReleaseEvent(QMouseEvent* event)
         HaveOrigin = false;
         view()->update();
     }
+    Interaction::mouseReleaseEvent(event);
 }
 
 

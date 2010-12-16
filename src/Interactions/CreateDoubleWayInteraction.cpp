@@ -122,6 +122,7 @@ void CreateDoubleWayInteraction::mouseReleaseEvent(QMouseEvent* anEvent)
         HaveFirst = false;
         view()->update();
     }
+    Interaction::mouseReleaseEvent(anEvent);
 }
 
 void CreateDoubleWayInteraction::mousePressEvent(QMouseEvent* anEvent)
