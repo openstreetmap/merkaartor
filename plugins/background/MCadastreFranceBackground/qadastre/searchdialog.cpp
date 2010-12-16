@@ -32,7 +32,7 @@ SearchDialog::SearchDialog(QWidget *parent) :
         ui->department->addItem(QString::number(i));
     }
     ui->buttonBox->button(QDialogButtonBox::Ok)->setEnabled(false);
-    cadastre = new CadastreWrapper(this);
+    cadastre = CadastreWrapper::instance();
     connect(cadastre, SIGNAL(resultsAvailable(QMap<QString,QString>)), this, SLOT(resultsAvailable(QMap<QString,QString>)));
 }
 
@@ -98,5 +98,5 @@ QString SearchDialog::cityCode()
 
 QString SearchDialog::cityName()
 {
-    return QString("%1 (%2)").arg(ui->results->currentText()).arg(ui->department->currentText());
+    return QString("%1 (%2)").arg(ui->results->currentText()).arg(ui->department->currentText(), 3, '0');
 }

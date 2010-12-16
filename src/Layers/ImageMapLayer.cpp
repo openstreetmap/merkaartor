@@ -312,7 +312,8 @@ void ImageMapLayer::setMapAdapter(const QUuid& theAdapterUid, const QString& ser
             case IMapAdapter::VectorBackground:
                 if (!p->theNetworkImageManager)
                     p->theNetworkImageManager = new ImageManager();
-                p->theMapAdapter->setImageManager(p->theNetworkImageManager);
+                p->theImageManager = p->theNetworkImageManager;
+                p->theMapAdapter->setImageManager(p->theImageManager);
                 break;
             case IMapAdapter::BrowserBackground :
 #ifdef USE_WEBKIT
@@ -331,6 +332,7 @@ void ImageMapLayer::setMapAdapter(const QUuid& theAdapterUid, const QString& ser
                     m->start();
                 #endif // BROWSERIMAGEMANAGER_IS_THREADED
                 p->theImageManager = p->theBrowserImageManager;
+                p->theMapAdapter->setImageManager(p->theImageManager);
 #endif
                 break;
             case IMapAdapter::NetworkBackground :
