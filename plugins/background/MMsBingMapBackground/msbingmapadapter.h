@@ -65,6 +65,28 @@ class MsBingMapAdapter : public MapAdapter, public IMapWatermark
         virtual int		getTileSizeW	() const;
         virtual int		getTileSizeH	() const;
 
+        //! returns the min zoom value
+        /*!
+         * @return the min zoom value
+         */
+        virtual int 		getMinZoom	() const;
+
+        //! returns the max zoom value
+        /*!
+         * @return the max zoom value
+         */
+        virtual int		getMaxZoom	() const;
+
+        //! returns the current zoom
+        /*!
+         * @return the current zoom
+         */
+        virtual int 		getZoom		() const;
+
+        virtual int		getAdaptedZoom()const;
+        virtual int 	getAdaptedMinZoom	() const;
+        virtual int		getAdaptedMaxZoom	() const;
+
         //! returns the source tag to be applied when drawing over this map
         /*!
          * @return the source tag
@@ -93,6 +115,9 @@ class MsBingMapAdapter : public MapAdapter, public IMapWatermark
 
         virtual void setSettings(QSettings* aSet) {theSets = aSet;}
 
+        virtual IImageManager* getImageManager();
+        virtual void setImageManager(IImageManager* anImageManager);
+
         //IMapWatermark
         virtual QString getAttributionsHtml(const QRectF& bbox, const QRect& screen);
         virtual QString getLogoHtml();
@@ -110,6 +135,7 @@ class MsBingMapAdapter : public MapAdapter, public IMapWatermark
         double getMercatorLatitude(double YCoord) const;
         double getMercatorYCoord(double lati) const;
 
+        IImageManager* theImageManager;
         int srvNum;
         QString theSource;
         bool isLoaded;

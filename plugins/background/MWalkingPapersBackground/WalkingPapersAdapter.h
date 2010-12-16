@@ -15,6 +15,7 @@
 
 #include "IMapAdapterFactory.h"
 #include "IMapAdapter.h"
+#include "IImageManager.h"
 
 #include <QLocale>
 
@@ -142,6 +143,7 @@ protected:
 private:
     QMenu* theMenu;
 
+    IImageManager* theImageManager;
     QRectF theCoordBbox;
     QList<WalkingPapersImage> theImages;
     QSettings* theSets;

@@ -75,6 +75,7 @@ QPointF mercatorProject(const QPointF& c)
 }
 
 WalkingPapersAdapter::WalkingPapersAdapter()
+    : theImageManager(0)
 {
     QAction* loadImage = new QAction(tr("Load image..."), this);
     loadImage->setData(theUid.toString());
@@ -128,7 +129,7 @@ void make_grayscale(QImage& in)
 
 bool WalkingPapersAdapter::getWalkingPapersDetails(const QUrl& reqUrl, QRectF& bbox) const
 {
-    QNetworkAccessManager manager;
+    QNetworkAccessManager* manager = theImageManager->getNetworkManager();
     QEventLoop q;
     QTimer tT;
 
@@ -137,9 +138,9 @@ bool WalkingPapersAdapter::getWalkingPapersDetails(const QUrl& reqUrl, QRectF& b
 
     tT.setSingleShot(true);
     connect(&tT, SIGNAL(timeout()), &q, SLOT(quit()));
-    connect(&manager, SIGNAL(finished(QNetworkReply*)),
+    connect(manager, SIGNAL(finished(QNetworkReply*)),
             &q, SLOT(quit()));
-    QNetworkReply *reply = manager.get(QNetworkRequest(reqUrl));
+    QNetworkReply *reply = manager->get(QNetworkRequest(reqUrl));
 
     tT.start(theSets->value("Network/NetworkTimeout", 5000).toInt());
     q.exec();
@@ -274,7 +275,9 @@ void WalkingPapersAdapter::onLoadImage()
     if (!fileOk) {
         QMessageBox::critical(0,QCoreApplication::translate("WalkingPapersBackground","No valid file"),QCoreApplication::translate("WalkingPapersBackground","Cannot load file."));
     } else {
+        emit forceProjection();
         emit forceZoom();
+        emit forceRefresh();
     }
 
     return;
@@ -353,11 +356,12 @@ QPixmap WalkingPapersAdapter::getPixmap(const QRectF& wgs84Bbox, const QRectF& /
 
 IImageManager* WalkingPapersAdapter::getImageManager()
 {
-    return NULL;
+    return theImageManager;
 }
 
-void WalkingPapersAdapter::setImageManager(IImageManager* /*anImageManager*/)
+void WalkingPapersAdapter::setImageManager(IImageManager* anImageManager)
 {
+    theImageManager = anImageManager;
 }
 
 void WalkingPapersAdapter::cleanup()

@@ -377,9 +377,6 @@ void WMSPreferencesDialog::requestCapabilities(QUrl url)
 
     m_networkManager.setProxy(M_PREFS->getProxy(url));
     QNetworkRequest req(url);
-
-    QHttpRequestHeader header("GET", url.path() + "?" + url.encodedQuery());
-
     req.setRawHeader("Host", url.host().toLatin1());
     req.setRawHeader("User-Agent", USER_AGENT.toLatin1());
 

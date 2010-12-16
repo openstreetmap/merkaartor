@@ -15,7 +15,6 @@
 #include <QtGui/QListWidget>
 #include <QtGui/QMessageBox>
 #include <QtGui/QProgressDialog>
-#include <QtNetwork/QHttp>
 #include <QtNetwork/QTcpSocket>
 #include <QInputDialog>
 

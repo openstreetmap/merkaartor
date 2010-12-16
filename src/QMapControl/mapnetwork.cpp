@@ -30,6 +30,7 @@ MapNetwork::MapNetwork(IImageManager* parent)
         : parent(parent)
 {
     m_networkManager = parent->getNetworkManager();
+    m_networkManager->setProxy(M_PREFS->getProxy(QUrl("http://merkaartor.be")));
     connect(m_networkManager, SIGNAL(finished(QNetworkReply*)),
             this, SLOT(requestFinished(QNetworkReply*)));
 }
@@ -67,7 +68,6 @@ void MapNetwork::launchRequest()
 
 void MapNetwork::launchRequest(QUrl url, LoadingRequest* R)
 {
-    m_networkManager->setProxy(M_PREFS->getProxy(url));
     QNetworkRequest req(url);
 
     req.setRawHeader("Host", url.host().toLatin1());

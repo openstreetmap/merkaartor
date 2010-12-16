@@ -20,7 +20,7 @@
 #include "mapadapter.h"
 
 MapAdapter::MapAdapter(const QString& host, const QString& serverPath, const QString& theProjection, int minZoom, int maxZoom)
-    :host(host), serverPath(serverPath), Projection(theProjection), min_zoom(minZoom), max_zoom(maxZoom), theImageManager(0)
+    :host(host), serverPath(serverPath), Projection(theProjection), min_zoom(minZoom), max_zoom(maxZoom)
 {
     current_zoom = min_zoom;
     loc = QLocale(QLocale::English);
@@ -44,44 +44,3 @@ QString MapAdapter::projection() const
 {
     return Projection;
 }
-
-int MapAdapter::getMinZoom() const
-{
-    return min_zoom;
-}
-
-int MapAdapter::getMaxZoom() const
-{
-    return max_zoom;
-}
-
-int MapAdapter::getAdaptedMinZoom() const
-{
-    return 0;
-}
-
-int MapAdapter::getAdaptedMaxZoom() const
-{
-    return max_zoom > min_zoom ? max_zoom - min_zoom : min_zoom - max_zoom;
-}
-
-int MapAdapter::getZoom() const
-{
-    return current_zoom;
-}
-
-int MapAdapter::getAdaptedZoom() const
-{
-    return max_zoom < min_zoom ? min_zoom - current_zoom : current_zoom - min_zoom;
-}
-
-IImageManager* MapAdapter::getImageManager()
-{
-    return theImageManager;
-}
-
-void MapAdapter::setImageManager(IImageManager* anImageManager)
-{
-    theImageManager = anImageManager;
-}
-

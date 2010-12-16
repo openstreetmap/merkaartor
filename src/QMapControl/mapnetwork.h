@@ -22,7 +22,6 @@
 
 #include <QObject>
 #include <QDebug>
-#include <QHttp>
 #include <QList>
 #include <QQueue>
 #include <QPixmap>

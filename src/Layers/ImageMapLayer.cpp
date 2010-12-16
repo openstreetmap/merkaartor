@@ -310,6 +310,9 @@ void ImageMapLayer::setMapAdapter(const QUuid& theAdapterUid, const QString& ser
         switch (p->theMapAdapter->getType()) {
             case IMapAdapter::DirectBackground:
             case IMapAdapter::VectorBackground:
+                if (!p->theNetworkImageManager)
+                    p->theNetworkImageManager = new ImageManager();
+                p->theMapAdapter->setImageManager(p->theNetworkImageManager);
                 break;
             case IMapAdapter::BrowserBackground :
 #ifdef USE_WEBKIT
@@ -328,7 +331,6 @@ void ImageMapLayer::setMapAdapter(const QUuid& theAdapterUid, const QString& ser
                     m->start();
                 #endif // BROWSERIMAGEMANAGER_IS_THREADED
                 p->theImageManager = p->theBrowserImageManager;
-                p->theMapAdapter->setImageManager(p->theImageManager);
 #endif
                 break;
             case IMapAdapter::NetworkBackground :
@@ -1039,7 +1041,7 @@ QString ImageMapLayer::toPropertiesHtml()
 
 QTransform ImageMapLayer::getCurrentAlignmentTransform()
 {
-    if (p->theMapAdapter) {
+    if (p->theMapAdapter && p->AlignementTransformList.size()) {
         if (p->theMapAdapter->isTiled()) {
             return p->AlignementTransformList.at(p->theMapAdapter->getAdaptedZoom());
         } else {
