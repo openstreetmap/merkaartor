@@ -130,6 +130,7 @@ void CreateRoundaboutInteraction::mouseReleaseEvent(QMouseEvent* anEvent)
         HaveCenter = false;
         view()->update();
     }
+    Interaction::mouseReleaseEvent(anEvent);
 }
 
 void CreateRoundaboutInteraction::paintEvent(QPaintEvent* , QPainter& thePainter)
