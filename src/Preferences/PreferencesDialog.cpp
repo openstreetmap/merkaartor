@@ -182,7 +182,7 @@ void PreferencesDialog::initLanguages(QComboBox* aBox)
 void PreferencesDialog::loadPrefs()
 {
     initLanguages(Language);
-    QString CurrentLanguage(getDefaultLanguage());
+    QString CurrentLanguage(getDefaultLanguage(false));
     int l;
     for (l = 0; l < Language->count(); ++l)
         if (CurrentLanguage == Language->itemData(l))
@@ -686,7 +686,7 @@ void PreferencesDialog::changeEvent(QEvent * event)
         retranslateUi(this);
         Language->clear();
         initLanguages(Language);
-        QString CurrentLanguage(getDefaultLanguage());
+        QString CurrentLanguage(getDefaultLanguage(false));
         int l;
         for (l = 0; l < Language->count(); ++l)
             if (CurrentLanguage == Language->itemData(l))
