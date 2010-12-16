@@ -170,6 +170,7 @@ void CadastreFranceAdapter::onGrabCity()
         if (!name.isEmpty())
             initializeCity(name);
     }
+    delete dial;
 }
 
 void CadastreFranceAdapter::cityTriggered(QAction *act)
@@ -189,7 +190,7 @@ void CadastreFranceAdapter::initializeCity(QString name)
     qDebug() << "Initializing " << name;
     connect(CadastreWrapper::instance(), SIGNAL(resultsAvailable(QMap<QString,QString>)), this, SLOT(resultsAvailable(QMap<QString,QString>)));
     QString ville = name.left(name.lastIndexOf('(')-1);
-    m_department = QString("%1").arg(name.mid(name.lastIndexOf('(')+1, 2).toInt(), 3, 10, QChar('0'));
+    m_department = QString("%1").arg(name.mid(name.lastIndexOf('(')+1, name.lastIndexOf(')')-name.lastIndexOf('(')-1).toInt(), 3, 10, QChar('0'));
     CadastreWrapper::instance()->searchVille(ville, m_department);
 }
 

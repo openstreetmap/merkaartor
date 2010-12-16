@@ -45,9 +45,6 @@ CadastreWrapper *CadastreWrapper::instance()
 CadastreWrapper::CadastreWrapper(QObject *parent) :
     QObject(parent), m_gotCookie(false)
 {
-    m_networkManager = new QNetworkAccessManager(this);
-    connect(m_networkManager, SIGNAL(finished(QNetworkReply*)), this, SLOT(networkFinished(QNetworkReply*)));
-    m_networkManager->get(QNetworkRequest(QUrl("http://www.cadastre.gouv.fr/scpc/accueil.do")));
     setRootCacheDir(QDesktopServices::storageLocation(QDesktopServices::DataLocation));
 }
 
@@ -324,7 +321,7 @@ void CadastreWrapper::networkFinished(QNetworkReply *reply)
         QSettings settings(cache.absoluteFilePath("cache.ini"), QSettings::IniFormat);
         settings.setValue("name", name);
         settings.setValue("geometry", geometry);
-        settings.setValue("department", name.mid(name.lastIndexOf('(')+1, 2));
+        settings.setValue("department", name.mid(name.lastIndexOf('(')+1, name.lastIndexOf(')')-name.lastIndexOf('(')-1));
         settings.setValue("projection", projection);
         settings.sync();
     }
