@@ -129,6 +129,7 @@ class ImageLayerWidget : public LayerWidget
         QMenu* pluginsMenu;
 
     private slots:
+        void setNone();
         void setWms(QAction*);
         void setTms(QAction*);
         void setPlugin(QAction*);
