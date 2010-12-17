@@ -28,8 +28,11 @@ SearchDialog::SearchDialog(QWidget *parent) :
     ui(new Ui::SearchDialog)
 {
     ui->setupUi(this);
-    for (int i = 1 ; i < 96 ; i++) {
-        ui->department->addItem(QString::number(i));
+    for (quint16 i = 1 ; i < 96 ; i++) {
+        ui->department->addItem(QString("%1").arg(i, 2, 10, QChar('0')));
+    }
+    for (quint16 i = 971 ; i < 975 ; i++) {
+        ui->department->addItem(QString("%1").arg(i, 2, 10, QChar('0')));
     }
     ui->buttonBox->button(QDialogButtonBox::Ok)->setEnabled(false);
     cadastre = CadastreWrapper::instance();
@@ -59,7 +62,7 @@ void SearchDialog::on_searchButton_clicked()
         return;
     if (ui->name->text().isEmpty())
         return;
-    QString department = QString("%1").arg(ui->department->currentIndex() + 1, 3, 10, QChar('0'));
+    QString department = QString("%1").arg(ui->department->currentText().toInt(), 3, 10, QChar('0'));
     cadastre->searchVille(ui->name->text(), department);
     ui->results->clear();
     m_results.clear();
@@ -98,5 +101,5 @@ QString SearchDialog::cityCode()
 
 QString SearchDialog::cityName()
 {
-    return QString("%1 (%2)").arg(ui->results->currentText()).arg(ui->department->currentText(), 3, '0');
+    return QString("%1 (%2)").arg(ui->results->currentText()).arg(ui->department->currentText());
 }
