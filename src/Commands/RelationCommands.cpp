@@ -38,9 +38,9 @@ void RelationAddFeatureCommand::undo()
     theRelation->remove(Position);
     if (theLayer && oldLayer && (theLayer != oldLayer)) {
         theLayer->remove(theRelation);
-        decDirtyLevel(oldLayer, theRelation);
+        oldLayer->add(theRelation);
     }
-    oldLayer->add(theRelation);
+    decDirtyLevel(oldLayer, theRelation);
 }
 
 void RelationAddFeatureCommand::redo()
@@ -129,7 +129,7 @@ RelationAddFeatureCommand * RelationAddFeatureCommand::fromXML(Document * d, QDo
     return a;
 }
 
-/* ROADREMOVEMapFeatureCOMMAND */
+/* RelationRemoveFeatureCommand */
 
 RelationRemoveFeatureCommand::RelationRemoveFeatureCommand(Relation* R)
 : Command(R), theLayer(0), oldLayer(0), Idx(0), theRelation(R), theMapFeature(0)
