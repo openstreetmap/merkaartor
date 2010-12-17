@@ -362,6 +362,7 @@ ProjProjection Projection::getProjection(QString projString)
         par = ggl::projection::init(std::string(QString("%1 +over").arg(projString).toLatin1().data()));
         theProj = fac.create_new(par);
     } catch (...) {
+        theProj = NULL;
     }
 #endif
     return theProj;
@@ -392,6 +393,7 @@ bool Projection::setProjectionType(QString aProjectionType)
 
     // Hardcode "Google " projection
     if (
+            p->projType.isEmpty() ||
             p->projType.toUpper().contains("OSGEO:41001") ||
             p->projType.toUpper().contains("EPSG:3785") ||
             p->projType.toUpper().contains("EPSG:900913") ||
