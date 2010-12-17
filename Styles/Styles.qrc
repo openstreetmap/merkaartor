@@ -1,0 +1,13 @@
+<RCC>
+    <qresource prefix="/Styles">
+        <file alias="None.mas">None.mas</file>
+        <file alias="Classic.mas">Classic.mas</file>
+        <file alias="Mobile.mas">Mobile.mas</file>
+        <file alias="Mapnik.mas">Mapnik.mas</file>
+        <file alias="MapnikPlus.mas">MapnikPlus.mas</file>
+        <file alias="Maxspeed.mas">Maxspeed.mas</file>
+        <file alias="Lighting.mas">Lighting.mas</file>
+        <file alias="Bicycle.mas">Bicycle.mas</file>
+        <file alias="Validation.mas">Validation.mas</file>
+    </qresource>
+</RCC>

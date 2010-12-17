@@ -3,12 +3,6 @@
 />
 <painter
  zoomUnder="0.01" zoomUpper="1e+07"
- backgroundColor="#ff0000fc" backgroundScale="1.5" backgroundOffset="0"
- drawTrafficDirectionMarks="yes">
-  <selector expr="[note] is FIXME*"/>
-</painter>
-<painter
- zoomUnder="0.01" zoomUpper="1e+07"
  backgroundColor="#bdbdbdff" backgroundScale="0.1" backgroundOffset="0.1"
  fillColor="#edededfc"
  drawTrafficDirectionMarks="no" labelColor="#333333fc" labelScale="5" labelOffset="5"
@@ -287,13 +281,6 @@
  labelFont="DejaVu Sans Condensed,12,-1,5,50,0,0,0,0,0" labelTag="" labelBackgroundColor="#00000000" labelBackgroundTag="name"
 >
   <selector expr="[natural] is water"/>
-</painter>
-<painter
- zoomUnder="0" zoomUpper="1e+07"
- backgroundColor="#b5d0d0ff" backgroundScale="7" backgroundOffset="5"
- exterior="yes" foregroundColor="#55aaffff" foregroundScale="0" foregroundOffset="2"
- drawTrafficDirectionMarks="no">
-  <selector expr="[natural] is coastline"/>
 </painter>
 <painter
  zoomUnder="0.2" zoomUpper="1e+07"
@@ -722,11 +709,5 @@
  drawTrafficDirectionMarks="no" labelColor="#333333ff" labelScale="1.5" labelOffset="8"
  labelFont="DejaVu Sans Condensed,12,-1,5,50,0,0,0,0,0" labelTag="addr:housenumber">
   <selector expr=" not [addr:housenumber] is _NULL_"/>
-</painter>
-<painter
- zoomUnder="0" zoomUpper="1e+07"
- icon=":/MapIcons/map-icons/square.small/unknown.png" iconScale="0" iconOffset="0"
- drawTrafficDirectionMarks="no">
-  <selector expr="Type is Node and  not HasTags"/>
 </painter>
 </mapStyle>

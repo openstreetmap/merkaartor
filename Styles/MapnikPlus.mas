@@ -3,12 +3,6 @@
 />
 <painter
  zoomUnder="0.01" zoomUpper="1e+07"
- backgroundColor="#ff0000fc" backgroundScale="1.5" backgroundOffset="0"
- drawTrafficDirectionMarks="yes">
-  <selector expr="[note] is FIXME*"/>
-</painter>
-<painter
- zoomUnder="0.01" zoomUpper="1e+07"
  backgroundColor="#bdbdbdff" backgroundScale="0.1" backgroundOffset="0.1"
  fillColor="#edededfc"
  drawTrafficDirectionMarks="no" labelColor="#333333fc" labelScale="5" labelOffset="5"
@@ -349,13 +343,6 @@
  drawTrafficDirectionMarks="no" labelColor="#6699ccfc" labelScale="7" labelOffset="6"
  labelFont="DejaVu Sans Condensed,12,-1,5,50,0,0,0,0,0" labelTag="name" labelHalo="yes" labelArea="yes">
   <selector expr="[natural] is water"/>
-</painter>
-<painter
- zoomUnder="0" zoomUpper="1e+07"
- backgroundColor="#b5d0d0ff" backgroundScale="7" backgroundOffset="5"
- exterior="yes" foregroundColor="#55aaffff" foregroundScale="0" foregroundOffset="2"
- drawTrafficDirectionMarks="no">
-  <selector expr="[natural] is coastline"/>
 </painter>
 <painter
  fillColor="#b5d0d0cd"
@@ -861,7 +848,7 @@
  icon=":/MapIcons/map-icons/square.small/money/bank.png" iconScale="0" iconOffset="0"
  drawTrafficDirectionMarks="no" labelColor="#333333ff" labelScale="3.5" labelOffset="3"
  labelFont="DejaVu Sans Condensed,12,-1,5,50,0,0,0,0,0" labelTag="name" labelHalo="yes">
-  <selector expr="[amenity] isoneof (bank , bank;atm)"/>
+  <selector expr="[amenity] isoneof (bank , atm, bank;atm)"/>
 </painter>
 <painter
  zoomUnder="0.2" zoomUpper="1e+07"
@@ -1005,12 +992,6 @@
  icon=":/MapIcons/map-icons/square.small/misc/information.png" iconScale="0" iconOffset="0"
  drawTrafficDirectionMarks="no" labelColor="#333333ff" labelScale="3.5" labelOffset="3"
  labelFont="DejaVu Sans Condensed,12,-1,5,50,0,0,0,0,0" labelTag="name" labelHalo="yes">
-  <selector expr=" [Default] Type is Node and HasTags and not parent()"/>
-</painter>
-<painter
- zoomUnder="0" zoomUpper="1e+07"
- icon=":/MapIcons/map-icons/square.small/unknown.png" iconScale="0" iconOffset="0"
- drawTrafficDirectionMarks="no">
-  <selector expr="Type is Node and  not HasTags"/>
+  <selector expr=" [Default] Type is Node and HasTags"/>
 </painter>
 </mapStyle>

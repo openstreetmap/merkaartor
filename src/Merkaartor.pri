@@ -42,5 +42,6 @@ FORMS += ./AboutDialog.ui \
 
 # Resource file(s)
 RESOURCES += ../Icons/AllIcons.qrc \
-    ../share/share.qrc
+    ../share/share.qrc \
+    ../Styles/Styles.qrc
 OTHER_FILES += ../CHANGELOG

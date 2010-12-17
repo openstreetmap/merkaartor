@@ -1,0 +1,41 @@
+<mapStyle>
+<global
+ nodesColor="#b9b9b9ff" nodesScale="2" nodesOffset="2"
+/>
+<painter
+ zoomUnder="0.01" zoomUpper="1e+07"
+ backgroundColor="#ff0000fc" backgroundScale="1.5" backgroundOffset="0"
+ drawTrafficDirectionMarks="yes" trafficDirectionMarksColor="#000000ff"
+>
+  <selector expr="[note] is FIXME*"/>
+</painter>
+<painter
+ zoomUnder="0" zoomUpper="1e+07"
+ icon=":/MapIcons/map-icons/square.small/unknown.png" iconScale="0" iconOffset="0"
+>
+  <selector expr="Type is Node and  not HasTags"/>
+</painter>
+<painter
+ backgroundColor="#ff9955ff" backgroundScale="1.2" backgroundOffset="2.5"
+ foregroundColor="#dcdcdcff" foregroundScale="0.5" foregroundOffset="1"
+>
+  <selector expr="Type is Way and not [highway] is _NULL_ and [name] is _NULL_"/>
+</painter>
+<painter
+ foregroundColor="#b9b9b9ff" foregroundScale="0" foregroundOffset="2"
+>
+  <selector expr="[default] Type is Area"/>
+</painter>
+<painter
+ foregroundColor="#b9b9b9ff" foregroundScale="0" foregroundOffset="2"
+ drawTrafficDirectionMarks="yes" trafficDirectionMarksColor="#b9b9b9ff"
+>
+  <selector expr="[default] Type is Way"/>
+</painter>
+<painter
+ backgroundColor="#0055ffff" backgroundScale="1.5" backgroundOffset="4"
+ foregroundColor="#aaaaffff" foregroundScale="2" foregroundOffset="3"
+>
+  <selector expr="[default] Type is Node"/>
+</painter>
+</mapStyle>
