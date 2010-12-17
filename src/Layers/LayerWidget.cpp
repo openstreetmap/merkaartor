@@ -320,6 +320,7 @@ ImageLayerWidget::ImageLayerWidget(ImageMapLayer* aLayer, QWidget* aParent)
     //actNone->setCheckable(true);
     actNone->setChecked((M_PREFS->getBackgroundPlugin() == NONE_ADAPTER_UUID));
     actNone->setData(QVariant::fromValue(NONE_ADAPTER_UUID));
+    connect(actNone, SIGNAL(triggered()), this, SLOT(setNone()));
 
     if (M_PREFS->getUseShapefileForBackground()) {
         actShape = new QAction(tr("Shape adapter"), this);
@@ -333,6 +334,14 @@ ImageLayerWidget::ImageLayerWidget(ImageMapLayer* aLayer, QWidget* aParent)
 
 ImageLayerWidget::~ImageLayerWidget()
 {
+}
+
+void ImageLayerWidget::setNone()
+{
+    ((ImageMapLayer *)theLayer.data())->setMapAdapter(NONE_ADAPTER_UUID);
+
+    this->update(rect());
+    emit (layerChanged(this, true));
 }
 
 void ImageLayerWidget::setWms(QAction* act)
