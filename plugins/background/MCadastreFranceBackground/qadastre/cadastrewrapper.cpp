@@ -43,13 +43,17 @@ CadastreWrapper *CadastreWrapper::instance()
 }
 
 CadastreWrapper::CadastreWrapper(QObject *parent) :
-    QObject(parent), m_gotCookie(false)
+    QObject(parent)
+    , m_networkManager(0)
+    , m_gotCookie(false)
 {
     setRootCacheDir(QDesktopServices::storageLocation(QDesktopServices::DataLocation));
 }
 
 void CadastreWrapper::setNetworkManager(QNetworkAccessManager *aManager)
 {
+    if (m_networkManager)
+        disconnect(m_networkManager, 0, this, 0);
     m_networkManager = aManager;
     connect(m_networkManager, SIGNAL(finished(QNetworkReply*)), this, SLOT(networkFinished(QNetworkReply*)));
     m_networkManager->get(QNetworkRequest(QUrl("http://www.cadastre.gouv.fr/scpc/accueil.do")));
