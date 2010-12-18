@@ -27,6 +27,7 @@
 /* EDITPAINTSTYLE */
 
 MasPaintStyle::MasPaintStyle()
+    : m_isDirty(false)
 {
 }
 
@@ -49,6 +50,7 @@ void MasPaintStyle::savePainters(const QString& filename)
         }
         out << "</mapStyle>\n";
     }
+    m_isDirty = false;
 }
 
 void MasPaintStyle::loadPainters(const QString& filename)
@@ -82,6 +84,8 @@ void MasPaintStyle::loadPainters(const QString& filename)
         }
         n = n.nextSibling();
     }
+    m_isDirty = false;
+    m_filename = filename;
 }
 
 int MasPaintStyle::painterSize()
@@ -112,6 +116,17 @@ QList<Painter> MasPaintStyle::getPainters() const
 void MasPaintStyle::setPainters(QList<Painter> aPainters)
 {
     Painters = aPainters;
+    m_isDirty = true;
+}
+
+bool MasPaintStyle::isDirty()
+{
+    return m_isDirty;
+}
+
+QString MasPaintStyle::getFilename()
+{
+    return m_filename;
 }
 
 

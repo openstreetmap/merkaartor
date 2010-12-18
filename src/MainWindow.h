@@ -143,6 +143,7 @@ public slots:
     virtual void on_areaTerraceAction_triggered();
 
     virtual void on_mapStyleSaveAction_triggered();
+    virtual void on_mapStyleSaveAsAction_triggered();
     virtual void on_mapStyleLoadAction_triggered();
     virtual void on_exportOSMAction_triggered();
     virtual void on_exportOSMBinAction_triggered();

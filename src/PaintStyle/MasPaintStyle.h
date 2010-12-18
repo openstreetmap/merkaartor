@@ -10,23 +10,27 @@ class MapView;
 
 class MasPaintStyle : public IPaintStyle
 {
-    public:
-        MasPaintStyle();
-        virtual ~MasPaintStyle();
+public:
+    MasPaintStyle();
+    virtual ~MasPaintStyle();
 
-        int painterSize();
-        const GlobalPainter& getGlobalPainter() const;
-        void setGlobalPainter(GlobalPainter aGlobalPainter);
-        const Painter* getPainter(int i) const;
-        QList<Painter> getPainters() const;
-        void setPainters(QList<Painter> aPainters);
+    int painterSize();
+    const GlobalPainter& getGlobalPainter() const;
+    void setGlobalPainter(GlobalPainter aGlobalPainter);
+    const Painter* getPainter(int i) const;
+    QList<Painter> getPainters() const;
+    void setPainters(QList<Painter> aPainters);
+    bool isDirty();
 
-        void savePainters(const QString& filename);
-        void loadPainters(const QString& filename);
+    QString getFilename();
+    void savePainters(const QString& filename);
+    void loadPainters(const QString& filename);
 
-    private:
-        QList<Painter> Painters;
-        GlobalPainter globalPainter;
+private:
+    bool m_isDirty;
+    QString m_filename;
+    QList<Painter> Painters;
+    GlobalPainter globalPainter;
 };
 
 #endif

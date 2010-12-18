@@ -24,7 +24,7 @@
      <x>0</x>
      <y>0</y>
      <width>1100</width>
-     <height>25</height>
+     <height>21</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuHelp">
@@ -178,6 +178,7 @@
      <addaction name="editMapStyleAction"/>
      <addaction name="separator"/>
      <addaction name="mapStyleSaveAction"/>
+     <addaction name="mapStyleSaveAsAction"/>
      <addaction name="mapStyleLoadAction"/>
      <addaction name="separator"/>
     </widget>
@@ -773,9 +774,9 @@
     <string>&amp;Edit...</string>
    </property>
   </action>
-  <action name="mapStyleSaveAction">
+  <action name="mapStyleSaveAsAction">
    <property name="text">
-    <string>&amp;Save...</string>
+    <string>Save. &amp;As..</string>
    </property>
   </action>
   <action name="mapStyleLoadAction">
@@ -1807,6 +1808,11 @@
   <action name="relationAddToMultipolygonAction">
    <property name="text">
     <string>Add to Multi&amp;polygon</string>
+   </property>
+  </action>
+  <action name="mapStyleSaveAction">
+   <property name="text">
+    <string>&amp;Save</string>
    </property>
   </action>
  </widget>

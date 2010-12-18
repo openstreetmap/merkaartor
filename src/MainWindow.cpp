@@ -1080,6 +1080,14 @@ static bool mayDiscardUnsavedChanges(QWidget* aWidget)
                                  QMessageBox::Discard | QMessageBox::Cancel, QMessageBox::Cancel) == QMessageBox::Discard;
 }
 
+static bool mayDiscardStyleChanges(QWidget* aWidget)
+{
+    return QMessageBox::question(aWidget, MainWindow::tr("Unsaved Style changes"),
+                                 MainWindow::tr("You have modified the current style.\n"
+                                                "Do you want to save your changes?"),
+                                 QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes) == QMessageBox::No;
+}
+
 bool MainWindow::importFiles(Document * mapDocument, const QStringList & fileNames, QStringList * importedFileNames )
 {
     createProgressDialog();
@@ -2285,6 +2293,9 @@ void MainWindow::applyStyles(QString NewStyle)
 {
     if (NewStyle != M_PREFS->getDefaultStyle())
     {
+        if (M_STYLE->isDirty() && !mayDiscardStyleChanges(this)) {
+            on_mapStyleSaveAction_triggered();
+        }
         M_PREFS->setDefaultStyle(NewStyle);
         M_STYLE->loadPainters(M_PREFS->getDefaultStyle());
         document()->setPainters(M_STYLE->getPainters());
@@ -2321,6 +2332,16 @@ MapView* MainWindow::view()
 
 void MainWindow::on_mapStyleSaveAction_triggered()
 {
+    QString f = M_STYLE->getFilename();
+    if (f.isEmpty() || f.startsWith(":") || f.startsWith("qrc:")) {
+        on_mapStyleSaveAsAction_triggered();
+        return;
+    }
+    M_STYLE->savePainters(f);
+}
+
+void MainWindow::on_mapStyleSaveAsAction_triggered()
+{
     QString f;
     QFileDialog dlg(this, tr("Save map style"), M_PREFS->getCustomStyle(), tr("Merkaartor map style (*.mas)"));
     dlg.setFileMode(QFileDialog::AnyFile);
@@ -2340,6 +2361,10 @@ void MainWindow::on_mapStyleSaveAction_triggered()
 
 void MainWindow::on_mapStyleLoadAction_triggered()
 {
+    if (M_STYLE->isDirty() && !mayDiscardStyleChanges(this)) {
+        on_mapStyleSaveAction_triggered();
+    }
+
     QString f = QFileDialog::getOpenFileName(this, tr("Load map style"), QString(),
                                              tr("Supported formats")+" (*.mas *.css)\n" \
                                              + tr("Merkaartor map style (*.mas)\n")
@@ -3074,6 +3099,10 @@ void MainWindow::closeEvent(QCloseEvent * event)
     if (hasUnsavedChanges() && !mayDiscardUnsavedChanges(this)) {
         event->ignore();
         return;
+    }
+
+    if (M_STYLE->isDirty() && !mayDiscardStyleChanges(this)) {
+        on_mapStyleSaveAction_triggered();
     }
 
     M_PREFS->saveMainWindowState( this );
