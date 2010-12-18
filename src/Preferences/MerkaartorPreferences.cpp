@@ -769,7 +769,7 @@ M_PARAM_IMPLEMENT_STRING(CacheDir, backgroundImage, HOMEDIR + "/BackgroundCache"
 M_PARAM_IMPLEMENT_INT(CacheSize, backgroundImage, 0);
 
 /* Search */
-M_PARAM_IMPLEMENT_INT(LastMaxSearchResults, search, 100);
+M_PARAM_IMPLEMENT_INT(LastMaxSearchResults, search, 999);
 M_PARAM_IMPLEMENT_STRING(LastSearchName, search, "");
 M_PARAM_IMPLEMENT_STRING(LastSearchKey, search, "");
 M_PARAM_IMPLEMENT_STRING(LastSearchValue, search, "");
