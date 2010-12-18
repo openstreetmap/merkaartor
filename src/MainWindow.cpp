@@ -230,6 +230,13 @@ MainWindow::MainWindow(QWidget *parent)
     for (int i=0; i<actions.size(); i++) {
         shortcutsDefault[actions[i]->objectName()] = actions[i]->shortcut().toString();
     }
+    QStringList shortcuts = M_PREFS->getShortcuts();
+    for (int i=0; i<shortcuts.size(); i+=2) {
+        QAction* act = findChild<QAction*>(shortcuts[i]);
+        if (act)
+            act->setShortcut(QKeySequence(shortcuts[i+1]));
+    }
+
     updateLanguage();
 
     ViewportStatusLabel->setTextInteractionFlags(Qt::TextSelectableByMouse);
@@ -3719,12 +3726,6 @@ void MainWindow::updateLanguage()
             statusBar()->showMessage(tr("Warning! Could not load the Merkaartor translations for the \"%1\" language. Switching to default English.").arg(DefaultLanguage), 15000);
     }
     ui->retranslateUi(this);
-
-    QStringList shortcuts = M_PREFS->getShortcuts();
-    for (int i=0; i<shortcuts.size(); i+=2) {
-        QAction* act = findChild<QAction*>(shortcuts[i]);
-        act->setShortcut(QKeySequence(shortcuts[i+1]));
-    }
 }
 
 void MainWindow::mapView_interactionChanged(Interaction* anInteraction)
