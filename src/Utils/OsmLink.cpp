@@ -140,7 +140,7 @@ void OsmLink::parseShortUrl(QString code)
         if (lat < -90.) lat += 180;
         if (lat > 90.) lat -= 180;
 
-    setLatLonZoom(lon, lat, zoom);
+    setLatLonZoom(lat, lon, zoom);
 }
 
 void OsmLink::setLatLonZoom(double lat, double lon, int zoom)
