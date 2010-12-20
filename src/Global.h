@@ -24,6 +24,7 @@ extern bool g_Merk_Segment_Mode;
 extern bool g_Merk_Ignore_Preferences;
 extern bool g_Merk_Reset_Preferences;
 extern bool g_Merk_IgnoreStartupTemplate;
+extern bool g_Merk_SelfClip;
 
 extern MainWindow* g_Merk_MainWindow;
 
