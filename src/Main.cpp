@@ -137,7 +137,7 @@ int main(int argc, char** argv)
         } else if (argsIn[i] == "--ignore-startup-template") {
             g_Merk_IgnoreStartupTemplate = true;
         } else if (argsIn[i] == "--selfclip") {
-            g_Merk_IgnoreStartupTemplate = true;
+            g_Merk_SelfClip = true;
         } else
             argsOut << argsIn[i];
     }
