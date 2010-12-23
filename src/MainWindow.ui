@@ -386,10 +386,16 @@
    <property name="text">
     <string>&amp;Quit</string>
    </property>
+   <property name="menuRole">
+    <enum>QAction::QuitRole</enum>
+   </property>
   </action>
   <action name="helpAboutAction">
    <property name="text">
     <string>&amp;About</string>
+   </property>
+   <property name="menuRole">
+    <enum>QAction::AboutRole</enum>
    </property>
   </action>
   <action name="fileOpenAction">
@@ -683,6 +689,9 @@
    <property name="toolTip">
     <string>Create Roundabout</string>
    </property>
+   <property name="menuRole">
+    <enum>QAction::NoRole</enum>
+   </property>
   </action>
   <action name="fileNewAction">
    <property name="icon">
@@ -794,6 +803,9 @@
    </property>
    <property name="text">
     <string>&amp;Preferences...</string>
+   </property>
+   <property name="menuRole">
+    <enum>QAction::PreferencesRole</enum>
    </property>
   </action>
   <action name="exportOSMAllAction">
