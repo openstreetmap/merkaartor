@@ -4,119 +4,119 @@
 <context>
     <name></name>
     <message>
-        <location filename="../src/MainWindow.cpp" line="990"/>
         <location filename="../src/MainWindow.cpp" line="1005"/>
-        <location filename="../src/MainWindow.cpp" line="1021"/>
+        <location filename="../src/MainWindow.cpp" line="1020"/>
+        <location filename="../src/MainWindow.cpp" line="1036"/>
         <source>Supported formats</source>
         <translation>Поддерживаемые форматы</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="991"/>
         <location filename="../src/MainWindow.cpp" line="1006"/>
+        <location filename="../src/MainWindow.cpp" line="1021"/>
         <source>Merkaartor document (*.mdc)
 </source>
         <translation>Документ Merkaartor (*.mdc)
 </translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="992"/>
         <location filename="../src/MainWindow.cpp" line="1007"/>
         <location filename="../src/MainWindow.cpp" line="1022"/>
+        <location filename="../src/MainWindow.cpp" line="1037"/>
         <source>GPS Exchange format (*.gpx)
 </source>
         <translation>Формат обмена GPS (*.gpx)
 </translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="993"/>
         <location filename="../src/MainWindow.cpp" line="1008"/>
         <location filename="../src/MainWindow.cpp" line="1023"/>
+        <location filename="../src/MainWindow.cpp" line="1038"/>
         <source>OpenStreetMap format (*.osm)
 </source>
         <translation>Формат OpenStreetMap (*.osm)
 </translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="994"/>
         <location filename="../src/MainWindow.cpp" line="1009"/>
         <location filename="../src/MainWindow.cpp" line="1024"/>
+        <location filename="../src/MainWindow.cpp" line="1039"/>
         <source>OpenStreetMap binary format (*.osb)
 </source>
         <translation>Двоичный формат OpenStreetMap (*.osb)
 </translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="996"/>
         <location filename="../src/MainWindow.cpp" line="1011"/>
         <location filename="../src/MainWindow.cpp" line="1026"/>
+        <location filename="../src/MainWindow.cpp" line="1041"/>
         <source>Noni GPSPlot format (*.ngt)
 </source>
         <translation>Не формат GPSPlot (*.ngt)
 </translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="997"/>
         <location filename="../src/MainWindow.cpp" line="1012"/>
         <location filename="../src/MainWindow.cpp" line="1027"/>
+        <location filename="../src/MainWindow.cpp" line="1042"/>
         <source>NMEA GPS log format (*.nmea *.nma)
 </source>
         <translation>Формат журнала NMEA GPS (*.nmea *.nma)
 </translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="998"/>
         <location filename="../src/MainWindow.cpp" line="1013"/>
         <location filename="../src/MainWindow.cpp" line="1028"/>
+        <location filename="../src/MainWindow.cpp" line="1043"/>
         <source>KML file (*.kml)
 </source>
         <translation>файл KML (*.kml)
 </translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1002"/>
-        <location filename="../src/MainWindow.cpp" line="1018"/>
-        <location filename="../src/MainWindow.cpp" line="1032"/>
+        <location filename="../src/MainWindow.cpp" line="1017"/>
+        <location filename="../src/MainWindow.cpp" line="1033"/>
+        <location filename="../src/MainWindow.cpp" line="1047"/>
         <source>All Files (*)</source>
         <translation>Все файлы (*)</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1017"/>
+        <location filename="../src/MainWindow.cpp" line="1032"/>
         <source>Geotagged images (*.jpg)
 </source>
         <translation>Изображения с геотегами (*.jpg)
 </translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="999"/>
         <location filename="../src/MainWindow.cpp" line="1014"/>
         <location filename="../src/MainWindow.cpp" line="1029"/>
+        <location filename="../src/MainWindow.cpp" line="1044"/>
         <source>ESRI Shapefile (*.shp)
 </source>
         <translation>Шейпфайл ESRI (*.shp)
 </translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="995"/>
         <location filename="../src/MainWindow.cpp" line="1010"/>
         <location filename="../src/MainWindow.cpp" line="1025"/>
+        <location filename="../src/MainWindow.cpp" line="1040"/>
         <source>OpenStreetMap change format (*.osc)
 </source>
         <translation>Формат обмена OpenStreetMap (*.osc)
 </translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1001"/>
         <location filename="../src/MainWindow.cpp" line="1016"/>
         <location filename="../src/MainWindow.cpp" line="1031"/>
+        <location filename="../src/MainWindow.cpp" line="1046"/>
         <source>Comma delimited format (*.csv)
 </source>
         <translation>Формат с разделением запятаей (*.csv)
 </translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1000"/>
         <location filename="../src/MainWindow.cpp" line="1015"/>
         <location filename="../src/MainWindow.cpp" line="1030"/>
+        <location filename="../src/MainWindow.cpp" line="1045"/>
         <source>Geography Markup Language (*.gml)
 </source>
         <translation type="unfinished"></translation>
@@ -405,7 +405,7 @@ p, li { white-space: pre-wrap; }
 <context>
     <name>DirtyLayerWidget</name>
     <message>
-        <location filename="../src/Layers/LayerWidget.cpp" line="590"/>
+        <location filename="../src/Layers/LayerWidget.cpp" line="608"/>
         <source>Zoom</source>
         <translation>Масштаб</translation>
     </message>
@@ -655,7 +655,7 @@ Please redownload the problematic feature to handle the conflict.</source>
         <translation>Экспорт OSM...</translation>
     </message>
     <message>
-        <location filename="../src/Document.cpp" line="961"/>
+        <location filename="../src/Document.cpp" line="955"/>
         <source>Document</source>
         <translation>Документ</translation>
     </message>
@@ -711,7 +711,7 @@ Please redownload the problematic feature to handle the conflict.</source>
 <context>
     <name>Downloader</name>
     <message>
-        <location filename="../src/Docks/InfoDock.cpp" line="82"/>
+        <location filename="../src/Docks/InfoDock.cpp" line="81"/>
         <location filename="../src/Sync/DownloadOSM.cpp" line="491"/>
         <location filename="../src/Sync/DownloadOSM.cpp" line="497"/>
         <location filename="../src/Sync/DownloadOSM.cpp" line="503"/>
@@ -719,7 +719,7 @@ Please redownload the problematic feature to handle the conflict.</source>
         <translation>Ошибка скачивания</translation>
     </message>
     <message>
-        <location filename="../src/Docks/InfoDock.cpp" line="82"/>
+        <location filename="../src/Docks/InfoDock.cpp" line="81"/>
         <source>Unexpected http status code (%1)</source>
         <translation>Непредвиденный код статуса http (%1)</translation>
     </message>
@@ -1082,7 +1082,7 @@ Delete what can be?</source>
 <context>
     <name>FilterLayerWidget</name>
     <message>
-        <location filename="../src/Layers/LayerWidget.cpp" line="659"/>
+        <location filename="../src/Layers/LayerWidget.cpp" line="677"/>
         <source>Close</source>
         <translation>Закрыть</translation>
     </message>
@@ -1449,37 +1449,42 @@ Do you still want to use it?</source>
         <translation>Нет</translation>
     </message>
     <message>
-        <location filename="../src/Layers/LayerWidget.cpp" line="325"/>
+        <location filename="../src/Layers/LayerWidget.cpp" line="326"/>
         <source>Shape adapter</source>
         <translation>Адаптер форм</translation>
     </message>
     <message>
-        <location filename="../src/Layers/LayerWidget.cpp" line="394"/>
+        <location filename="../src/Layers/LayerWidget.cpp" line="409"/>
         <source>Zoom</source>
         <translation>Масштаб</translation>
     </message>
     <message>
-        <location filename="../src/Layers/LayerWidget.cpp" line="401"/>
+        <location filename="../src/Layers/LayerWidget.cpp" line="416"/>
         <source>Set view projection to layer&apos;s</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Layers/LayerWidget.cpp" line="406"/>
+        <location filename="../src/Layers/LayerWidget.cpp" line="421"/>
+        <source>Reset alignment adjustment</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/Layers/LayerWidget.cpp" line="426"/>
         <source>Close</source>
         <translation>Закрыть</translation>
     </message>
     <message>
-        <location filename="../src/Layers/LayerWidget.cpp" line="414"/>
+        <location filename="../src/Layers/LayerWidget.cpp" line="434"/>
         <source>WMS adapter</source>
         <translation>адаптер WMS</translation>
     </message>
     <message>
-        <location filename="../src/Layers/LayerWidget.cpp" line="430"/>
+        <location filename="../src/Layers/LayerWidget.cpp" line="450"/>
         <source>TMS adapter</source>
         <translation>адаптер TMS</translation>
     </message>
     <message>
-        <location filename="../src/Layers/LayerWidget.cpp" line="446"/>
+        <location filename="../src/Layers/LayerWidget.cpp" line="466"/>
         <source>Plugins</source>
         <translation>Плагины</translation>
     </message>
@@ -1487,77 +1492,77 @@ Do you still want to use it?</source>
 <context>
     <name>ImageMapLayer</name>
     <message>
-        <location filename="../src/Layers/ImageMapLayer.cpp" line="77"/>
-        <location filename="../src/Layers/ImageMapLayer.cpp" line="172"/>
-        <location filename="../src/Layers/ImageMapLayer.cpp" line="211"/>
-        <location filename="../src/Layers/ImageMapLayer.cpp" line="283"/>
+        <location filename="../src/Layers/ImageMapLayer.cpp" line="80"/>
+        <location filename="../src/Layers/ImageMapLayer.cpp" line="188"/>
+        <location filename="../src/Layers/ImageMapLayer.cpp" line="227"/>
+        <location filename="../src/Layers/ImageMapLayer.cpp" line="299"/>
         <source>Map - None</source>
         <translation>Карта - &lt;отсутствует&gt;</translation>
     </message>
     <message>
-        <location filename="../src/Layers/ImageMapLayer.cpp" line="183"/>
+        <location filename="../src/Layers/ImageMapLayer.cpp" line="199"/>
         <source>Map - WMS - %1</source>
         <translation>Карта - WMS - %1</translation>
     </message>
     <message>
-        <location filename="../src/Layers/ImageMapLayer.cpp" line="188"/>
+        <location filename="../src/Layers/ImageMapLayer.cpp" line="204"/>
         <source>Map - WMS-C - %1</source>
         <translation>Карта - WMS-C - %1</translation>
     </message>
     <message>
-        <location filename="../src/Layers/ImageMapLayer.cpp" line="193"/>
+        <location filename="../src/Layers/ImageMapLayer.cpp" line="209"/>
         <source>Map - WMS-Tiled - %1</source>
         <translation>Карта - квадраты WMS- %1</translation>
     </message>
     <message>
-        <location filename="../src/Layers/ImageMapLayer.cpp" line="205"/>
+        <location filename="../src/Layers/ImageMapLayer.cpp" line="221"/>
         <source>Map - TMS - %1</source>
         <translation>Карта - TMS - %1</translation>
     </message>
     <message>
-        <location filename="../src/Layers/ImageMapLayer.cpp" line="227"/>
+        <location filename="../src/Layers/ImageMapLayer.cpp" line="243"/>
         <source>Map - OSB Background</source>
         <translation>Карта - подложка OSB</translation>
     </message>
     <message>
-        <location filename="../src/Layers/ImageMapLayer.cpp" line="235"/>
+        <location filename="../src/Layers/ImageMapLayer.cpp" line="251"/>
         <source>Map - %1</source>
         <translation>Map - %1</translation>
     </message>
     <message>
-        <location filename="../src/Layers/ImageMapLayer.cpp" line="257"/>
+        <location filename="../src/Layers/ImageMapLayer.cpp" line="273"/>
         <source>Licensing Terms: %1</source>
         <translation>Условия лицензии: %1</translation>
     </message>
     <message>
-        <location filename="../src/Layers/ImageMapLayer.cpp" line="264"/>
+        <location filename="../src/Layers/ImageMapLayer.cpp" line="280"/>
         <source>License Terms not accepted</source>
         <translation>Условия лицензии не приняты</translation>
     </message>
     <message>
-        <location filename="../src/Layers/ImageMapLayer.cpp" line="264"/>
+        <location filename="../src/Layers/ImageMapLayer.cpp" line="280"/>
         <source>You have not ticked the checkbox expressing your agreement with the licensing terms.
 As such, you won&apos;t be able to use this source as a map layer.
 Is it really what you meant?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Layers/ImageMapLayer.cpp" line="1055"/>
+        <location filename="../src/Layers/ImageMapLayer.cpp" line="1027"/>
         <source>Server</source>
         <translation>Сервер</translation>
     </message>
     <message>
-        <location filename="../src/Layers/ImageMapLayer.cpp" line="1058"/>
+        <location filename="../src/Layers/ImageMapLayer.cpp" line="1030"/>
         <source>Tile size</source>
         <translation>Размер квадрата</translation>
     </message>
     <message>
-        <location filename="../src/Layers/ImageMapLayer.cpp" line="1060"/>
+        <location filename="../src/Layers/ImageMapLayer.cpp" line="1032"/>
         <source>Min/Max zoom</source>
         <translation>Мин/Макс масштаб</translation>
     </message>
     <message>
-        <location filename="../src/Layers/ImageMapLayer.cpp" line="1064"/>
+        <location filename="../src/Layers/ImageMapLayer.cpp" line="1036"/>
         <source>Projection</source>
         <translation>Проекция</translation>
     </message>
@@ -1590,76 +1595,76 @@ Is it really what you meant?</source>
         <translation>Широта</translation>
     </message>
     <message>
-        <location filename="../src/ImportExport/ImportCSVDialog.cpp" line="371"/>
+        <location filename="../src/ImportExport/ImportCSVDialog.cpp" line="375"/>
         <source>Invalid projection</source>
         <translation>Неправильная проекция</translation>
     </message>
     <message>
-        <location filename="../src/ImportExport/ImportCSVDialog.cpp" line="371"/>
+        <location filename="../src/ImportExport/ImportCSVDialog.cpp" line="375"/>
         <source>Unable to set projection.</source>
         <translation>Невозможно задать проекцию.</translation>
     </message>
     <message>
-        <location filename="../src/ImportExport/ImportCSVDialog.cpp" line="390"/>
+        <location filename="../src/ImportExport/ImportCSVDialog.cpp" line="394"/>
         <source>No coordinates</source>
         <translation>Нет координат</translation>
     </message>
     <message>
-        <location filename="../src/ImportExport/ImportCSVDialog.cpp" line="391"/>
+        <location filename="../src/ImportExport/ImportCSVDialog.cpp" line="395"/>
         <source>Latitude or Longitude field missing. It will be impossible to import the file.
 Do you really want to exit?</source>
         <translation>Отсутствует поле широты или долготы. Невозможно импортировать файл.
 Вы действительно хотите выйти?</translation>
     </message>
     <message>
-        <location filename="../src/ImportExport/ImportCSVDialog.cpp" line="428"/>
+        <location filename="../src/ImportExport/ImportCSVDialog.cpp" line="432"/>
         <source>Load CSV import settings</source>
         <translation>Загрузить настройки импорта CSV</translation>
     </message>
     <message>
-        <location filename="../src/ImportExport/ImportCSVDialog.cpp" line="428"/>
-        <location filename="../src/ImportExport/ImportCSVDialog.cpp" line="539"/>
+        <location filename="../src/ImportExport/ImportCSVDialog.cpp" line="432"/>
+        <location filename="../src/ImportExport/ImportCSVDialog.cpp" line="543"/>
         <source>Merkaartor import settings (*.mis)</source>
         <translation>Настройки импорта Merkaartor (*.mis)</translation>
     </message>
     <message>
-        <location filename="../src/ImportExport/ImportCSVDialog.cpp" line="434"/>
-        <location filename="../src/ImportExport/ImportCSVDialog.cpp" line="447"/>
+        <location filename="../src/ImportExport/ImportCSVDialog.cpp" line="438"/>
+        <location filename="../src/ImportExport/ImportCSVDialog.cpp" line="451"/>
         <source>Invalid file</source>
         <translation>Неверный файл</translation>
     </message>
     <message>
-        <location filename="../src/ImportExport/ImportCSVDialog.cpp" line="434"/>
+        <location filename="../src/ImportExport/ImportCSVDialog.cpp" line="438"/>
         <source>%1 could not be opened.</source>
         <translation>%1 не может быть открыт.</translation>
     </message>
     <message>
-        <location filename="../src/ImportExport/ImportCSVDialog.cpp" line="447"/>
+        <location filename="../src/ImportExport/ImportCSVDialog.cpp" line="451"/>
         <source>%1 is not a CSV import settings file</source>
         <translation>%1 не является файлом настроек импорта CSV</translation>
     </message>
     <message>
-        <location filename="../src/ImportExport/ImportCSVDialog.cpp" line="539"/>
+        <location filename="../src/ImportExport/ImportCSVDialog.cpp" line="543"/>
         <source>Save CSV import settings</source>
         <translation>Сохранить настройки импорта CSV</translation>
     </message>
     <message>
-        <location filename="../src/ImportExport/ImportCSVDialog.cpp" line="539"/>
+        <location filename="../src/ImportExport/ImportCSVDialog.cpp" line="543"/>
         <source>untitled</source>
         <translation>документ Merkaartor</translation>
     </message>
     <message>
-        <location filename="../src/ImportExport/ImportCSVDialog.cpp" line="539"/>
+        <location filename="../src/ImportExport/ImportCSVDialog.cpp" line="543"/>
         <source>All Files (*)</source>
         <translation>Все файлы (*)</translation>
     </message>
     <message>
-        <location filename="../src/ImportExport/ImportCSVDialog.cpp" line="555"/>
+        <location filename="../src/ImportExport/ImportCSVDialog.cpp" line="559"/>
         <source>Unable to open save import settings</source>
         <translation>Невозможно открыть сохранённые настройки импорта</translation>
     </message>
     <message>
-        <location filename="../src/ImportExport/ImportCSVDialog.cpp" line="555"/>
+        <location filename="../src/ImportExport/ImportCSVDialog.cpp" line="559"/>
         <source>%1 could not be opened for writing.</source>
         <translation>%1 не может быть открыт для записи.</translation>
     </message>
@@ -1816,7 +1821,7 @@ p, li { white-space: pre-wrap; }
     <name>InfoDock</name>
     <message>
         <location filename="../src/Docks/InfoDock.cpp" line="24"/>
-        <location filename="../src/Docks/InfoDock.cpp" line="95"/>
+        <location filename="../src/Docks/InfoDock.cpp" line="94"/>
         <source>Info</source>
         <translation>Информация</translation>
     </message>
@@ -1991,14 +1996,14 @@ Are you sure you want to close it? (no Undo possible)</source>
 <context>
     <name>Main</name>
     <message>
-        <location filename="../src/Main.cpp" line="215"/>
+        <location filename="../src/Main.cpp" line="217"/>
         <source>%1 v%2%3(%4)
 Loading plugins...</source>
         <translation>%1 v%2%3(%4)
 Загрузка плагинов...</translation>
     </message>
     <message>
-        <location filename="../src/Main.cpp" line="244"/>
+        <location filename="../src/Main.cpp" line="246"/>
         <source>%1 v%2%3(%4)
 Initializing...</source>
         <translation>%1 v%2%3(%4)
@@ -2013,52 +2018,52 @@ Initializing...</source>
         <translation>Импорт osmChange</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1038"/>
+        <location filename="../src/MainWindow.cpp" line="1053"/>
         <source>Open track file</source>
         <translation>Открыть трек файл</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1064"/>
-        <location filename="../src/Sync/SyncOSM.cpp" line="38"/>
+        <location filename="../src/MainWindow.cpp" line="1079"/>
+        <location filename="../src/MainWindow.cpp" line="3793"/>
         <source>Unsaved changes</source>
         <translation>Несохранённые изменения</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1065"/>
+        <location filename="../src/MainWindow.cpp" line="1080"/>
         <source>The current map contains unsaved changes that will be lost when starting a new one.
 Do you want to cancel starting a new map or continue and discard the old changes?</source>
         <translation>Текущая карта содержит несохранённые ихменения, которые будут потеряны, если начать редактирование новой карты. Хотите отменить начало создания новой карты или продолжить и потерять все изменения?</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1228"/>
+        <location filename="../src/MainWindow.cpp" line="1243"/>
         <source>No valid file</source>
         <translation>Неверный файл</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1228"/>
-        <location filename="../src/MainWindow.cpp" line="2683"/>
+        <location filename="../src/MainWindow.cpp" line="1243"/>
+        <location filename="../src/MainWindow.cpp" line="2701"/>
         <source>%1 could not be opened.</source>
         <translation>%1 не может быть открыт.</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1390"/>
+        <location filename="../src/MainWindow.cpp" line="1405"/>
         <source>Old Qt version detected</source>
         <translation>Обнаружена старая версия Qt</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1391"/>
+        <location filename="../src/MainWindow.cpp" line="1406"/>
         <source>Your setup uses Qt %1, which contains various known errors in uploading data to OpenStreetMap leading to 401 server response codes. Are you sure you want to continue (which is not recommended).
 For more information see http://wiki.openstreetmap.org/index.php/Problem_uploading_with_Merkaartor</source>
         <translation>У вас установлена Qt версии %1, в которой проявляются различные известные ошибки при передаче данных на сервер OpenStreetMap, начинающиеся с кода ответа сервера 401. Вы уверены, что хотите продолжить работу? (Правда это не рекомендуется).
 Для получения дополнительной информации, смотрите http://wiki.openstreetmap.org/index.php/Problem_uploading_with_Merkaartor</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1399"/>
+        <location filename="../src/MainWindow.cpp" line="1414"/>
         <source>Upload OSM</source>
         <translation>Передача данных на сервер OSM</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1399"/>
+        <location filename="../src/MainWindow.cpp" line="1414"/>
         <source>You don&apos;t seem to have specified your
 OpenStreetMap username and password.
 Do you want to do this now?</source>
@@ -2067,309 +2072,309 @@ Do you want to do this now?</source>
 Желаете это сделать сейчас?</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1421"/>
-        <location filename="../src/MainWindow.cpp" line="1435"/>
-        <location filename="../src/MainWindow.cpp" line="1459"/>
+        <location filename="../src/MainWindow.cpp" line="1436"/>
+        <location filename="../src/MainWindow.cpp" line="1450"/>
+        <location filename="../src/MainWindow.cpp" line="1474"/>
         <source>Error downloading</source>
         <translation>Ошибка скачивания</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1421"/>
-        <location filename="../src/MainWindow.cpp" line="1435"/>
-        <location filename="../src/MainWindow.cpp" line="1459"/>
+        <location filename="../src/MainWindow.cpp" line="1436"/>
+        <location filename="../src/MainWindow.cpp" line="1450"/>
+        <location filename="../src/MainWindow.cpp" line="1474"/>
         <source>The map could not be downloaded</source>
         <translation>Карта не может быть скачана</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1448"/>
+        <location filename="../src/MainWindow.cpp" line="1463"/>
         <source>Error downloading OpenStreetBugs</source>
         <translation>Ошибка скачивания OpenStreetBugs</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1448"/>
+        <location filename="../src/MainWindow.cpp" line="1463"/>
         <source>The OpenStreetBugs could not be downloaded</source>
         <translation>Невозможно скачать OpenStreetBugs</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1872"/>
+        <location filename="../src/MainWindow.cpp" line="1888"/>
         <source>Simplify Roads</source>
         <translation>Упростить дороги</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1943"/>
+        <location filename="../src/MainWindow.cpp" line="1959"/>
         <source>Network timeout</source>
         <translation>Ожидание сети</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1943"/>
+        <location filename="../src/MainWindow.cpp" line="1959"/>
         <source>Cannot contact OpenStreetBugs.</source>
         <translation>Невозможно связаться с OpenStreetBugs.</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1953"/>
+        <location filename="../src/MainWindow.cpp" line="1969"/>
         <source>Error closing bug</source>
         <translation>Ошибка закрытия дефекта</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1953"/>
+        <location filename="../src/MainWindow.cpp" line="1969"/>
         <source>Cannot delete bug. Server message is:
 %1</source>
         <translation>Невозможно удалить дефект. Сообщение сервера:%1</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1982"/>
+        <location filename="../src/MainWindow.cpp" line="1998"/>
         <source>Add Street Numbers</source>
         <translation>Добавить номер улицы</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1999"/>
-        <location filename="../src/MainWindow.cpp" line="2004"/>
+        <location filename="../src/MainWindow.cpp" line="2015"/>
+        <location filename="../src/MainWindow.cpp" line="2020"/>
         <source>Number of segments to divide into</source>
         <translation>Количество сегментов, на которое разделить</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1999"/>
+        <location filename="../src/MainWindow.cpp" line="2015"/>
         <source>Specify the number of segments</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2008"/>
+        <location filename="../src/MainWindow.cpp" line="2024"/>
         <source>Subdivide road into %1</source>
         <translation>Разделить дорогу на %1</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2031"/>
+        <location filename="../src/MainWindow.cpp" line="2047"/>
         <source>Axis Align</source>
         <translation>Осевое Выравнивание</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2032"/>
+        <location filename="../src/MainWindow.cpp" line="2048"/>
         <source>Specify the number of regular axes to align edges on (e.g. 4 for rectangular)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2039"/>
+        <location filename="../src/MainWindow.cpp" line="2055"/>
         <source>triangular</source>
         <translation>треугольный</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2040"/>
+        <location filename="../src/MainWindow.cpp" line="2056"/>
         <source>rectangular</source>
         <translation>прямоугольный</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2041"/>
+        <location filename="../src/MainWindow.cpp" line="2057"/>
         <source>pentagonal</source>
         <translation>пятиугольный</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2042"/>
+        <location filename="../src/MainWindow.cpp" line="2058"/>
         <source>hexagonal</source>
         <translation>шестиугольный</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2043"/>
+        <location filename="../src/MainWindow.cpp" line="2059"/>
         <source>heptagonal</source>
         <translation>семиугольный</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2044"/>
+        <location filename="../src/MainWindow.cpp" line="2060"/>
         <source>octagonal</source>
         <translation>восьмиугольный</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2048"/>
+        <location filename="../src/MainWindow.cpp" line="2064"/>
         <source>Align onto %1 axes</source>
         <translation>Выравнять по %1 осям</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2050"/>
+        <location filename="../src/MainWindow.cpp" line="2066"/>
         <source>Align onto %1 regular axes</source>
         <translation>Выравнять по %1 регулярным осям</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2057"/>
-        <location filename="../src/MainWindow.cpp" line="2060"/>
+        <location filename="../src/MainWindow.cpp" line="2073"/>
+        <location filename="../src/MainWindow.cpp" line="2076"/>
         <source>Unable to align to axes</source>
         <translation>Невозможно выравнять по осям</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2058"/>
+        <location filename="../src/MainWindow.cpp" line="2074"/>
         <source>Align to axes operation failed. Please adjust any sharp corners and try again.</source>
         <translation>Операция выравнивание по осям не выполнена. Пожалуйста, исправьте все острые углы и попробуйте еще раз.</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2061"/>
+        <location filename="../src/MainWindow.cpp" line="2077"/>
         <source>Align to axes operation failed and did not converge on a solution.</source>
         <translation>Операция выравнивание по осям не выполнена и не возможно найти решение.</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2092"/>
+        <location filename="../src/MainWindow.cpp" line="2108"/>
         <source>Spread Nodes</source>
         <translation>,Распределить точки</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2159"/>
+        <location filename="../src/MainWindow.cpp" line="2175"/>
         <source>Join areas</source>
         <translation>Объединить области</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2171"/>
+        <location filename="../src/MainWindow.cpp" line="2187"/>
         <source>Split area</source>
         <translation>Разделить полигон</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2186"/>
+        <location filename="../src/MainWindow.cpp" line="2202"/>
         <source>Terrace area into %1</source>
         <translation>Пронумеровать %1 внутри полигона</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2283"/>
+        <location filename="../src/MainWindow.cpp" line="2299"/>
         <source>Save map style</source>
         <translation>Сохранить стиль карты</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2283"/>
+        <location filename="../src/MainWindow.cpp" line="2299"/>
         <source>Merkaartor map style (*.mas)</source>
         <translation>Стиль карты Merkaartor (*.mas)</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2301"/>
+        <location filename="../src/MainWindow.cpp" line="2317"/>
         <source>Load map style</source>
         <translation>Открыть стиль карты</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2302"/>
+        <location filename="../src/MainWindow.cpp" line="2318"/>
         <source>Supported formats</source>
         <translation>Поддерживаемые форматы</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2303"/>
+        <location filename="../src/MainWindow.cpp" line="2319"/>
         <source>Merkaartor map style (*.mas)
 </source>
         <translation>Merkaartor стиль карты (*.mas)
 </translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2304"/>
+        <location filename="../src/MainWindow.cpp" line="2320"/>
         <source>MapCSS stylesheet (*.css)</source>
         <translation>MapCSS таблица стилей (*.css)</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2508"/>
+        <location filename="../src/MainWindow.cpp" line="2524"/>
         <source>Save Merkaartor document</source>
         <translation>Сохранить документ Merkaartor</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2508"/>
-        <location filename="../src/MainWindow.cpp" line="2532"/>
-        <location filename="../src/MainWindow.cpp" line="2722"/>
-        <location filename="../src/MainWindow.cpp" line="2733"/>
-        <location filename="../src/MainWindow.cpp" line="2766"/>
-        <location filename="../src/MainWindow.cpp" line="2797"/>
-        <location filename="../src/MainWindow.cpp" line="2833"/>
-        <location filename="../src/MainWindow.cpp" line="2868"/>
-        <location filename="../src/MainWindow.cpp" line="3574"/>
+        <location filename="../src/MainWindow.cpp" line="2524"/>
+        <location filename="../src/MainWindow.cpp" line="2548"/>
+        <location filename="../src/MainWindow.cpp" line="2741"/>
+        <location filename="../src/MainWindow.cpp" line="2752"/>
+        <location filename="../src/MainWindow.cpp" line="2785"/>
+        <location filename="../src/MainWindow.cpp" line="2816"/>
+        <location filename="../src/MainWindow.cpp" line="2852"/>
+        <location filename="../src/MainWindow.cpp" line="2887"/>
+        <location filename="../src/MainWindow.cpp" line="3593"/>
         <source>untitled</source>
         <translation>документ Merkaartor</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2508"/>
-        <location filename="../src/MainWindow.cpp" line="2532"/>
+        <location filename="../src/MainWindow.cpp" line="2524"/>
+        <location filename="../src/MainWindow.cpp" line="2548"/>
         <source>Merkaartor documents Files (*.mdc)</source>
         <translation>Документы Merkaartor  (*.mdc)</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2508"/>
-        <location filename="../src/MainWindow.cpp" line="2532"/>
-        <location filename="../src/MainWindow.cpp" line="2733"/>
-        <location filename="../src/MainWindow.cpp" line="2766"/>
-        <location filename="../src/MainWindow.cpp" line="2797"/>
-        <location filename="../src/MainWindow.cpp" line="2833"/>
-        <location filename="../src/MainWindow.cpp" line="2868"/>
-        <location filename="../src/MainWindow.cpp" line="3574"/>
+        <location filename="../src/MainWindow.cpp" line="2524"/>
+        <location filename="../src/MainWindow.cpp" line="2548"/>
+        <location filename="../src/MainWindow.cpp" line="2752"/>
+        <location filename="../src/MainWindow.cpp" line="2785"/>
+        <location filename="../src/MainWindow.cpp" line="2816"/>
+        <location filename="../src/MainWindow.cpp" line="2852"/>
+        <location filename="../src/MainWindow.cpp" line="2887"/>
+        <location filename="../src/MainWindow.cpp" line="3593"/>
         <source>All Files (*)</source>
         <translation>Все файлы (*)</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2532"/>
+        <location filename="../src/MainWindow.cpp" line="2548"/>
         <source>Save Merkaartor template document</source>
         <translation>Сохранить шаблон документа Merkaartor</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2612"/>
+        <location filename="../src/MainWindow.cpp" line="2630"/>
         <source>Unable to open save template document</source>
         <translation>Невозможно открыть сохранение шаблона документа</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2627"/>
+        <location filename="../src/MainWindow.cpp" line="2645"/>
         <source>%1 is not a valid XML file.
 %2 at line %3, col %4</source>
         <translation>%1 не верный XML файл.
 %2 строка %3, столбец%4</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2733"/>
+        <location filename="../src/MainWindow.cpp" line="2752"/>
         <source>Export OSM</source>
         <translation>Экспорт OSM</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2733"/>
+        <location filename="../src/MainWindow.cpp" line="2752"/>
         <source>OSM Files (*.osm)</source>
         <translation>Файлы OSM (*.osm)</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2797"/>
+        <location filename="../src/MainWindow.cpp" line="2816"/>
         <source>Export osmChange</source>
         <translation>Экспорт osmChange</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2797"/>
+        <location filename="../src/MainWindow.cpp" line="2816"/>
         <source>osmChange Files (*.osc)</source>
         <translation>Файлы osmChange (*.osc)</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="3197"/>
+        <location filename="../src/MainWindow.cpp" line="3216"/>
         <source>Add Bookmark</source>
         <translation>Добавить закладку</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="3198"/>
+        <location filename="../src/MainWindow.cpp" line="3217"/>
         <source>Specify the name of the bookmark.</source>
         <translation>Укажите имя закладки.</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="3201"/>
+        <location filename="../src/MainWindow.cpp" line="3220"/>
         <source>Invalid bookmark name</source>
         <translation>Неверное имя закладки</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="3202"/>
+        <location filename="../src/MainWindow.cpp" line="3221"/>
         <source>Bookmark cannot be blank.</source>
         <translation>Закладка не может быть пустой.</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="3206"/>
+        <location filename="../src/MainWindow.cpp" line="3225"/>
         <source>Warning: Bookmark name already exists</source>
         <translation>Внимание: такое имя закладки уже существует</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="3207"/>
+        <location filename="../src/MainWindow.cpp" line="3226"/>
         <source>Enter a new one, keep the same to overwrite or cancel.</source>
         <translation>Введите новое значение, оставте тоже самое, что бы перезаписать или нажмите отмена, что бы не добавлять.</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="3245"/>
+        <location filename="../src/MainWindow.cpp" line="3264"/>
         <source>Remove Bookmark</source>
         <translation>Удалить закладку</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="3246"/>
+        <location filename="../src/MainWindow.cpp" line="3265"/>
         <source>Select the bookmark to remove.</source>
         <translation>Выберите закладку для удалени.</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="3681"/>
+        <location filename="../src/MainWindow.cpp" line="3700"/>
         <source>Warning! Could not load the Merkaartor translations for the &quot;%1&quot; language. Switching to default English.</source>
         <translation>Внимание! Не возможно загрузить перевод Merkaartor для &quot;%1&quot; языка. Переключение на Английский.</translation>
     </message>
@@ -2390,7 +2395,7 @@ Do you want to do this now?</source>
     </message>
     <message>
         <location filename="../src/MainWindow.ui" line="51"/>
-        <location filename="../src/MainWindow.ui" line="617"/>
+        <location filename="../src/MainWindow.ui" line="623"/>
         <source>&amp;Road</source>
         <translation>Линия</translation>
     </message>
@@ -2426,7 +2431,7 @@ Do you want to do this now?</source>
     </message>
     <message>
         <location filename="../src/MainWindow.ui" line="210"/>
-        <location filename="../src/MainWindow.ui" line="635"/>
+        <location filename="../src/MainWindow.ui" line="641"/>
         <source>&amp;Node</source>
         <translation>Точка</translation>
     </message>
@@ -2437,12 +2442,12 @@ Do you want to do this now?</source>
     </message>
     <message>
         <location filename="../src/MainWindow.ui" line="223"/>
-        <location filename="../src/MainWindow.ui" line="913"/>
+        <location filename="../src/MainWindow.ui" line="925"/>
         <source>&amp;Docks</source>
         <translation>Панели</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="517"/>
+        <location filename="../src/MainWindow.cpp" line="532"/>
         <location filename="../src/MainWindow.ui" line="246"/>
         <source>OpenStreetBugs</source>
         <translation>OpenStreetBugs</translation>
@@ -2458,651 +2463,651 @@ Do you want to do this now?</source>
         <translation>Выход</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="392"/>
+        <location filename="../src/MainWindow.ui" line="395"/>
         <source>&amp;About</source>
         <translation>О программе &amp;Merkaartor</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="401"/>
+        <location filename="../src/MainWindow.ui" line="407"/>
         <source>&amp;Open</source>
         <translation>Открыть</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="404"/>
+        <location filename="../src/MainWindow.ui" line="410"/>
         <source>Create a new document and import a file</source>
         <translation>Создать новый документ и импортировать файл</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="407"/>
+        <location filename="../src/MainWindow.ui" line="413"/>
         <source>Ctrl+O</source>
         <translation>Ctrl+O</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="416"/>
+        <location filename="../src/MainWindow.ui" line="422"/>
         <source>Zoom &amp;all</source>
         <translation>Показать всё</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="419"/>
+        <location filename="../src/MainWindow.ui" line="425"/>
         <source>F2</source>
         <translation>F2</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="424"/>
+        <location filename="../src/MainWindow.ui" line="430"/>
         <source>Zoom &amp;window</source>
         <translation>Произвольный масштаб</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="427"/>
-        <location filename="../src/MainWindow.ui" line="430"/>
+        <location filename="../src/MainWindow.ui" line="433"/>
+        <location filename="../src/MainWindow.ui" line="436"/>
         <source>Zoom window</source>
         <translation>Произвольный масштаб</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="433"/>
+        <location filename="../src/MainWindow.ui" line="439"/>
         <source>F3</source>
         <translation>F3</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="442"/>
+        <location filename="../src/MainWindow.ui" line="448"/>
         <source>Zoom &amp;out</source>
         <translation>Отдалить</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="445"/>
+        <location filename="../src/MainWindow.ui" line="451"/>
         <source>-</source>
         <translation>-</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="454"/>
+        <location filename="../src/MainWindow.ui" line="460"/>
         <source>Zoom &amp;in</source>
         <translation>Приблизить</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="457"/>
-        <location filename="../src/MainWindow.ui" line="460"/>
+        <location filename="../src/MainWindow.ui" line="463"/>
+        <location filename="../src/MainWindow.ui" line="466"/>
         <source>Zoom in</source>
         <translation>Приблизить</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="463"/>
+        <location filename="../src/MainWindow.ui" line="469"/>
         <source>+</source>
         <translation>+</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="468"/>
-        <location filename="../src/MainWindow.ui" line="471"/>
         <location filename="../src/MainWindow.ui" line="474"/>
+        <location filename="../src/MainWindow.ui" line="477"/>
+        <location filename="../src/MainWindow.ui" line="480"/>
         <source>Curved link</source>
         <translation>Плавное соединение</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="486"/>
-        <location filename="../src/MainWindow.ui" line="1005"/>
+        <location filename="../src/MainWindow.ui" line="492"/>
+        <location filename="../src/MainWindow.ui" line="1017"/>
         <source>&amp;Undo</source>
         <translation>Отменить</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="489"/>
+        <location filename="../src/MainWindow.ui" line="495"/>
         <source>Ctrl+Z</source>
         <translation>Ctrl+Z</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="498"/>
+        <location filename="../src/MainWindow.ui" line="504"/>
         <source>&amp;Redo</source>
         <translation>Вернуть</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="501"/>
+        <location filename="../src/MainWindow.ui" line="507"/>
         <source>Ctrl+Y</source>
         <translation>Ctrl+Y</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="516"/>
+        <location filename="../src/MainWindow.ui" line="522"/>
         <source>Ctrl+M</source>
         <translation>Ctrl+M</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="525"/>
+        <location filename="../src/MainWindow.ui" line="531"/>
         <source>&amp;Import</source>
         <translation>Импорт</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="528"/>
+        <location filename="../src/MainWindow.ui" line="534"/>
         <source>Import a file into the current document</source>
         <translation>Импортировать файл в существующий документ</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="543"/>
+        <location filename="../src/MainWindow.ui" line="549"/>
         <source>Ctrl+D</source>
         <translation>Ctrl+D</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="548"/>
+        <location filename="../src/MainWindow.ui" line="554"/>
         <source>Link</source>
         <translation>Связь</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="551"/>
-        <location filename="../src/MainWindow.ui" line="554"/>
+        <location filename="../src/MainWindow.ui" line="557"/>
+        <location filename="../src/MainWindow.ui" line="560"/>
         <source>Create link</source>
         <translation>Создать связь</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="557"/>
+        <location filename="../src/MainWindow.ui" line="563"/>
         <source>L</source>
         <translation>L</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="572"/>
+        <location filename="../src/MainWindow.ui" line="578"/>
         <source>Esc</source>
         <translation>Esc</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="587"/>
+        <location filename="../src/MainWindow.ui" line="593"/>
         <source>Ctrl+U</source>
         <translation>Ctrl+U</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="599"/>
+        <location filename="../src/MainWindow.ui" line="605"/>
         <source>R&amp;emove</source>
         <translation>Удалить</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="605"/>
+        <location filename="../src/MainWindow.ui" line="611"/>
         <source>Del</source>
         <translation>Del</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="623"/>
+        <location filename="../src/MainWindow.ui" line="629"/>
         <source>Ctrl+R</source>
         <translation>Ctrl+R</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="641"/>
+        <location filename="../src/MainWindow.ui" line="647"/>
         <source>Ctrl+N</source>
         <translation>Ctrl+N</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="653"/>
+        <location filename="../src/MainWindow.ui" line="659"/>
         <source>&amp;Reverse</source>
         <translation>Поменять направление</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="673"/>
+        <location filename="../src/MainWindow.ui" line="679"/>
         <source>&amp;Double carriage way</source>
         <translation>Двойная дорога</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="681"/>
+        <location filename="../src/MainWindow.ui" line="687"/>
         <source>&amp;Roundabout</source>
         <translation>Круговая развязка</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="693"/>
+        <location filename="../src/MainWindow.ui" line="702"/>
         <source>&amp;New</source>
         <translation>Новый</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="696"/>
+        <location filename="../src/MainWindow.ui" line="705"/>
         <source>Create a new document</source>
         <translation>Создать новый документ</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="705"/>
+        <location filename="../src/MainWindow.ui" line="714"/>
         <source>&amp;Split</source>
         <translation>Разделить</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="711"/>
+        <location filename="../src/MainWindow.ui" line="720"/>
         <source>Alt+S</source>
         <translation>Alt+S</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="720"/>
+        <location filename="../src/MainWindow.ui" line="729"/>
         <source>&amp;Join</source>
         <translation>Объединить</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="726"/>
+        <location filename="../src/MainWindow.ui" line="735"/>
         <source>Alt+J</source>
         <translation>Alt+J</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="735"/>
+        <location filename="../src/MainWindow.ui" line="744"/>
         <source>&amp;Break apart</source>
         <translation>Разбить</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="744"/>
+        <location filename="../src/MainWindow.ui" line="753"/>
         <source>Alt+B</source>
         <translation>Alt+B</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="749"/>
+        <location filename="../src/MainWindow.ui" line="758"/>
         <source>Re&amp;lation</source>
         <translation>Отношение</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="764"/>
+        <location filename="../src/MainWindow.ui" line="773"/>
         <source>&amp;Area</source>
         <translation>Мультиполигон</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="881"/>
+        <location filename="../src/MainWindow.ui" line="893"/>
         <source>&amp;Save</source>
         <translation>Сохранить</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="991"/>
+        <location filename="../src/MainWindow.ui" line="1003"/>
         <source>&amp;Spread</source>
         <translation>Распределить</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="994"/>
+        <location filename="../src/MainWindow.ui" line="1006"/>
         <source>Spread nodes</source>
         <translation>Распределить точки</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="997"/>
+        <location filename="../src/MainWindow.ui" line="1009"/>
         <source>Align and spread selected nodes equally.</source>
         <translation>Выровнять и распределить выделенные точки одинаково.</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1180"/>
+        <location filename="../src/MainWindow.ui" line="1192"/>
         <source>&amp;Raster/SVG</source>
         <translation>Растр/SVG</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1188"/>
+        <location filename="../src/MainWindow.ui" line="1200"/>
         <source>Show &amp;nodes</source>
         <translation>Показать точки</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1199"/>
+        <location filename="../src/MainWindow.ui" line="1211"/>
         <source>Show na&amp;mes</source>
         <translation>Показать названия</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1475"/>
+        <location filename="../src/MainWindow.ui" line="1487"/>
         <source>&amp;WMS Servers Editor...</source>
         <translation>Редактор серверов WMS...</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1480"/>
+        <location filename="../src/MainWindow.ui" line="1492"/>
         <source>&amp;TMS Servers Editor...</source>
         <translation>Редактор серверов TMS...</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1551"/>
+        <location filename="../src/MainWindow.ui" line="1563"/>
         <source>Add street &amp;numbers (Karlsruhe scheme)</source>
         <translation>Добавить номера улицы (Схема Karlsruhe)</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1560"/>
+        <location filename="../src/MainWindow.ui" line="1572"/>
         <source>&amp;Subdivide</source>
         <translation>Подраздел</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1563"/>
+        <location filename="../src/MainWindow.ui" line="1575"/>
         <source>Subdivide segment equally</source>
         <translation>Разделить сегмент на равные части</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1566"/>
+        <location filename="../src/MainWindow.ui" line="1578"/>
         <source>Subdivide a selected way segment (the way and two adjacent nodes) into segments of equal length.</source>
         <translation>Разделить выделенный сегмент линии (линию и две смежных точки) на сегменты одинаковой длины</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1582"/>
+        <location filename="../src/MainWindow.ui" line="1594"/>
         <source>Show lat/lon &amp;grid</source>
         <translation>Показать сетку шир/дол</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1590"/>
+        <location filename="../src/MainWindow.ui" line="1602"/>
         <source>&amp;Lock zoom to tiled background</source>
         <translation>Зафиксировать масштаб на уровне фона разбитого на квадраты</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1595"/>
+        <location filename="../src/MainWindow.ui" line="1607"/>
         <source>&amp;Projections Editor...</source>
         <translation>Редактор проекций...</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1603"/>
+        <location filename="../src/MainWindow.ui" line="1615"/>
         <source>Show &amp;Photos on map</source>
         <translation>Показать фортографии на карте</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1608"/>
+        <location filename="../src/MainWindow.ui" line="1620"/>
         <source>OsmChange (OSC)</source>
         <translation>OsmChange (OSC)</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1613"/>
+        <location filename="../src/MainWindow.ui" line="1625"/>
         <source>Force Delete</source>
         <translation>Принудительно удалить</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1618"/>
+        <location filename="../src/MainWindow.ui" line="1630"/>
         <source>Download OpenStreet&amp;Bugs</source>
         <translation>Скачать OpenStreetBugs</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1623"/>
+        <location filename="../src/MainWindow.ui" line="1635"/>
         <source>Close</source>
         <translation>Закрыть</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1628"/>
+        <location filename="../src/MainWindow.ui" line="1640"/>
         <source>S&amp;implify</source>
         <translation>Упростить</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1631"/>
+        <location filename="../src/MainWindow.ui" line="1643"/>
         <source>Simplify road(s)</source>
         <translation>Упростить дороги</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1634"/>
+        <location filename="../src/MainWindow.ui" line="1646"/>
         <source>Simplify way by removing unnecessary child nodes</source>
         <translation>Упростить линию, удалив ненужные дочерние точки</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1639"/>
+        <location filename="../src/MainWindow.ui" line="1651"/>
         <source>&amp;Filters Editor...</source>
         <translation>&amp;Редактор фильтров</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1647"/>
+        <location filename="../src/MainWindow.ui" line="1659"/>
         <source>&amp;None</source>
         <translation>Отсутствует</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1656"/>
+        <location filename="../src/MainWindow.ui" line="1668"/>
         <source>&amp;Join Areas</source>
         <translation>&amp;Объединить Области</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1659"/>
+        <location filename="../src/MainWindow.ui" line="1671"/>
         <source>Join touching areas</source>
         <translation>Объединить соприкасающиеся области</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1662"/>
+        <location filename="../src/MainWindow.ui" line="1674"/>
         <source>Join areas which are touching.</source>
         <translation>Объединить соприкасающиеся области</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1671"/>
+        <location filename="../src/MainWindow.ui" line="1683"/>
         <source>&amp;Split Area</source>
         <translation>Область разделения</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1674"/>
+        <location filename="../src/MainWindow.ui" line="1686"/>
         <source>Split area between two nodes</source>
         <translation>Разделить полигон между двумя точками</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1677"/>
+        <location filename="../src/MainWindow.ui" line="1689"/>
         <source>Split a selected area between two selected nodes into two separate areas.</source>
         <translation>Разбить выбранную область между двумя выбранными точками на две части.</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1686"/>
+        <location filename="../src/MainWindow.ui" line="1698"/>
         <source>&amp;Terrace</source>
         <translation>Нумеровать дома вдоль улицы</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1689"/>
+        <location filename="../src/MainWindow.ui" line="1701"/>
         <source>Terrace area into residences</source>
         <translation>Пронумеровать дома внутри полигона</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1692"/>
+        <location filename="../src/MainWindow.ui" line="1704"/>
         <source>Split a selected area into terraced residences.</source>
         <translation>Разделить выбранный полигон на зоны с нумерованными рядами домов.</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1697"/>
+        <location filename="../src/MainWindow.ui" line="1709"/>
         <source>Toolbar Editor...</source>
         <translation>Редактор панели инструментов...</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1706"/>
+        <location filename="../src/MainWindow.ui" line="1718"/>
         <source>A&amp;xis Align</source>
         <translation>О&amp;севое Выравнивание</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1709"/>
+        <location filename="../src/MainWindow.ui" line="1721"/>
         <source>Align edges to regular axes</source>
         <translation>Выравнять края по регулярным осям.</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1712"/>
+        <location filename="../src/MainWindow.ui" line="1724"/>
         <source>Align edges to a certain number of regularly spaced axes.</source>
         <translation>Выровнять края на определенную величину равных расстояний осей.</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1717"/>
+        <location filename="../src/MainWindow.ui" line="1729"/>
         <source>&amp;Print...</source>
         <translation>&amp;Печать...</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1722"/>
+        <location filename="../src/MainWindow.ui" line="1734"/>
         <source>Print preview...</source>
         <translation>Предварительный просмотр...</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1735"/>
+        <location filename="../src/MainWindow.ui" line="1747"/>
         <source>Highlight dirt&amp;y features</source>
         <translation>Выделить неверны&amp;е свойства</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1740"/>
+        <location filename="../src/MainWindow.ui" line="1752"/>
         <source>Add new Drawing layer</source>
         <translation>Добавить новый слой для рисования</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1749"/>
+        <location filename="../src/MainWindow.ui" line="1761"/>
         <source>Cu&amp;t</source>
         <translation>Вы&amp;резать</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1752"/>
+        <location filename="../src/MainWindow.ui" line="1764"/>
         <source>Ctrl+X</source>
         <translation>Ctrl+X</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1757"/>
+        <location filename="../src/MainWindow.ui" line="1769"/>
         <source>Add new Filter layer</source>
         <translation>Добавить новый слой с фильтром</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1765"/>
+        <location filename="../src/MainWindow.ui" line="1777"/>
         <source>E&amp;xtrude</source>
         <translation>В&amp;ыдавить</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1768"/>
+        <location filename="../src/MainWindow.ui" line="1780"/>
         <source>Extrude interaction for ways (JOSM style)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1771"/>
+        <location filename="../src/MainWindow.ui" line="1783"/>
         <source>Alt+X</source>
         <translation>Alt+X</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1776"/>
+        <location filename="../src/MainWindow.ui" line="1788"/>
         <source>Select toggle</source>
         <translation>Выбрать переключатель</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1781"/>
+        <location filename="../src/MainWindow.ui" line="1793"/>
         <source>Include children in selection</source>
         <translation>Добавить к выбранному дочерние элементы</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1793"/>
+        <location filename="../src/MainWindow.ui" line="1805"/>
         <source>Scale</source>
         <translation>Масштаб</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1798"/>
+        <location filename="../src/MainWindow.ui" line="1810"/>
         <source>Save as Template Document...</source>
         <translation>Сохранить как шаблон документа...</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="787"/>
+        <location filename="../src/MainWindow.ui" line="796"/>
         <source>&amp;Curved road</source>
         <translation>Изогнутая линия</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="796"/>
+        <location filename="../src/MainWindow.ui" line="805"/>
         <source>&amp;Preferences...</source>
         <translation>Параметры...</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="801"/>
-        <location filename="../src/MainWindow.ui" line="809"/>
+        <location filename="../src/MainWindow.ui" line="813"/>
+        <location filename="../src/MainWindow.ui" line="821"/>
         <source>&amp;All...</source>
         <translation>Все...</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="804"/>
-        <location filename="../src/MainWindow.ui" line="812"/>
+        <location filename="../src/MainWindow.ui" line="816"/>
+        <location filename="../src/MainWindow.ui" line="824"/>
         <source>Export all visible layers to a file</source>
         <translation>Экспортировать все видимые слои в файл</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="821"/>
+        <location filename="../src/MainWindow.ui" line="833"/>
         <source>&amp;Find...</source>
         <translation>Найти...</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="827"/>
+        <location filename="../src/MainWindow.ui" line="839"/>
         <source>Find and select items</source>
         <translation>Найти и выбрать объекты</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="832"/>
-        <location filename="../src/MainWindow.ui" line="840"/>
+        <location filename="../src/MainWindow.ui" line="844"/>
+        <location filename="../src/MainWindow.ui" line="852"/>
         <source>&amp;Viewport...</source>
         <translation>Содержимое экрана...</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="835"/>
-        <location filename="../src/MainWindow.ui" line="843"/>
+        <location filename="../src/MainWindow.ui" line="847"/>
+        <location filename="../src/MainWindow.ui" line="855"/>
         <source>Export the features in the viewport to a file</source>
         <translation>Экспортировать особые объекты из окна просмотра в файл</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="848"/>
+        <location filename="../src/MainWindow.ui" line="860"/>
         <source>&amp;Add...</source>
         <translation>Добавить...</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="853"/>
+        <location filename="../src/MainWindow.ui" line="865"/>
         <source>&amp;Remove...</source>
         <translation>Удалить...</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="858"/>
+        <location filename="../src/MainWindow.ui" line="870"/>
         <source>&amp;Merge</source>
         <translation>Объединить</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="864"/>
+        <location filename="../src/MainWindow.ui" line="876"/>
         <source>Merge the selected nodes (first selected will remain)</source>
         <translation>Объединить выбранные точки (сохраняется первая выбранная)</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="867"/>
+        <location filename="../src/MainWindow.ui" line="879"/>
         <source>Alt+M</source>
         <translation>Alt+M</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="872"/>
+        <location filename="../src/MainWindow.ui" line="884"/>
         <source>Save &amp;As...</source>
         <translation>Сохранить как...</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="887"/>
+        <location filename="../src/MainWindow.ui" line="899"/>
         <source>Ctrl+S</source>
         <translation>Ctrl+S</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="896"/>
+        <location filename="../src/MainWindow.ui" line="908"/>
         <source>Download more</source>
         <translation>Скачать ещё</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="902"/>
-        <location filename="../src/MainWindow.ui" line="905"/>
+        <location filename="../src/MainWindow.ui" line="914"/>
+        <location filename="../src/MainWindow.ui" line="917"/>
         <source>Download the current view to the previous download layer</source>
         <translation>Скачать область текущего просмотра в ранее загруженный слой</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="908"/>
+        <location filename="../src/MainWindow.ui" line="920"/>
         <source>Ctrl+Shift+D</source>
         <translation>Ctrl+Shift+D</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="924"/>
-        <location filename="../src/MainWindow.ui" line="927"/>
+        <location filename="../src/MainWindow.ui" line="936"/>
+        <location filename="../src/MainWindow.ui" line="939"/>
         <source>Hide/Show the Properties dock</source>
         <translation>Скрыть/Показать панель свойств</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="930"/>
+        <location filename="../src/MainWindow.ui" line="942"/>
         <source>Ctrl+P</source>
         <translation>Ctrl+P</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="941"/>
-        <location filename="../src/MainWindow.ui" line="944"/>
+        <location filename="../src/MainWindow.ui" line="953"/>
+        <location filename="../src/MainWindow.ui" line="956"/>
         <source>Hide/Show the Layers dock</source>
         <translation>Скрыть/Показать панель слоёв</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="947"/>
+        <location filename="../src/MainWindow.ui" line="959"/>
         <source>Ctrl+L</source>
         <translation>Ctrl+L</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="958"/>
-        <location filename="../src/MainWindow.ui" line="961"/>
+        <location filename="../src/MainWindow.ui" line="970"/>
+        <location filename="../src/MainWindow.ui" line="973"/>
         <source>Hide/Show the Info dock</source>
         <translation>Скрыть/Показать панель информации</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="964"/>
+        <location filename="../src/MainWindow.ui" line="976"/>
         <source>Ctrl+I</source>
         <translation>Ctrl+I</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="973"/>
+        <location filename="../src/MainWindow.ui" line="985"/>
         <source>&amp;Align</source>
         <translation>Выровнять</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="979"/>
+        <location filename="../src/MainWindow.ui" line="991"/>
         <source>Align selected nodes. First two selected give the line.</source>
         <translation>Выровнять выбранные точки. Первые две выбранных точки образуют линию.</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="982"/>
+        <location filename="../src/MainWindow.ui" line="994"/>
         <source>Alt+A</source>
         <translation>Alt+A</translation>
     </message>
     <message>
-        <location filename="../src/Sync/SyncOSM.cpp" line="17"/>
+        <location filename="../src/MainWindow.cpp" line="3770"/>
         <source>Unresolved conflicts</source>
         <translation>Неразрешаемые конфликты</translation>
     </message>
     <message>
-        <location filename="../src/Sync/SyncOSM.cpp" line="17"/>
+        <location filename="../src/MainWindow.cpp" line="3770"/>
         <source>Please resolve existing conflicts first</source>
         <translation>Пожалуйста, разрешите вначале имеющиеся конфликты</translation>
     </message>
@@ -3121,7 +3126,7 @@ Do you want to do this now?</source>
     <message>
         <location filename="../src/Commands/FeatureCommands.cpp" line="308"/>
         <location filename="../src/Commands/FeatureCommands.cpp" line="396"/>
-        <location filename="../src/Docks/PropertiesDock.cpp" line="695"/>
+        <location filename="../src/Docks/PropertiesDock.cpp" line="694"/>
         <source>Clear Tag &apos;%1&apos; on %2</source>
         <translation>Очищен тег &apos;%1&apos; для %2</translation>
     </message>
@@ -3157,12 +3162,12 @@ Do you want to do this now?</source>
         <translation>Закрыть Область %1</translation>
     </message>
     <message>
-        <location filename="../src/Interactions/CreateDoubleWayInteraction.cpp" line="167"/>
+        <location filename="../src/Interactions/CreateDoubleWayInteraction.cpp" line="168"/>
         <source>Add nodes to double-way Road %1</source>
         <translation>Добавлены точки к двойной дороге %1</translation>
     </message>
     <message>
-        <location filename="../src/Interactions/CreateDoubleWayInteraction.cpp" line="218"/>
+        <location filename="../src/Interactions/CreateDoubleWayInteraction.cpp" line="219"/>
         <source>Create double-way Road %1</source>
         <translation>Создана Двойная линия %1</translation>
     </message>
@@ -3232,177 +3237,177 @@ Note that OSM nodes outside the downloaded area will be kept.</source>
         <translation>Перевернуть %1 линии</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="780"/>
-        <location filename="../src/MainWindow.cpp" line="838"/>
-        <location filename="../src/MainWindow.cpp" line="872"/>
+        <location filename="../src/MainWindow.cpp" line="795"/>
+        <location filename="../src/MainWindow.cpp" line="853"/>
+        <location filename="../src/MainWindow.cpp" line="887"/>
         <source>Clipboard invalid</source>
         <translation>Конверт неисправен</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="780"/>
-        <location filename="../src/MainWindow.cpp" line="838"/>
-        <location filename="../src/MainWindow.cpp" line="872"/>
+        <location filename="../src/MainWindow.cpp" line="795"/>
+        <location filename="../src/MainWindow.cpp" line="853"/>
+        <location filename="../src/MainWindow.cpp" line="887"/>
         <source>Clipboard do not contain valid data.</source>
         <translation>В конверте нет правильных данных.</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1830"/>
+        <location filename="../src/MainWindow.cpp" line="1846"/>
         <source>Join Roads</source>
         <translation>Объединить линии</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1844"/>
+        <location filename="../src/MainWindow.cpp" line="1860"/>
         <source>Split Roads</source>
         <translation>Разделить линии</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1858"/>
+        <location filename="../src/MainWindow.cpp" line="1874"/>
         <source>Break Roads</source>
         <translation>Разрезать линии</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2216"/>
+        <location filename="../src/MainWindow.cpp" line="2232"/>
         <source>Create Relation %1</source>
         <translation>Создано отношение %1</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2627"/>
-        <location filename="../src/MainWindow.cpp" line="2635"/>
-        <location filename="../src/MainWindow.cpp" line="2683"/>
+        <location filename="../src/MainWindow.cpp" line="2645"/>
+        <location filename="../src/MainWindow.cpp" line="2653"/>
+        <location filename="../src/MainWindow.cpp" line="2701"/>
         <source>Invalid file</source>
         <translation>Неверный файл</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2635"/>
+        <location filename="../src/MainWindow.cpp" line="2653"/>
         <source>%1 is not a valid Merkaartor document.</source>
         <translation>%1 - не документ Merkaartor.</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2766"/>
+        <location filename="../src/MainWindow.cpp" line="2785"/>
         <source>Export Binary OSM</source>
         <translation>Бинарный экспорт OSM</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2766"/>
+        <location filename="../src/MainWindow.cpp" line="2785"/>
         <source>OSM Binary Files (*.osb)</source>
         <translation>Бинарные файлы OSM (*.osb)</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2833"/>
+        <location filename="../src/MainWindow.cpp" line="2852"/>
         <source>Export GPX</source>
         <translation>Экспорт GPX</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2833"/>
+        <location filename="../src/MainWindow.cpp" line="2852"/>
         <source>GPX Files (*.gpx)</source>
         <translation>Файлы GPX (*.gpx)</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2868"/>
+        <location filename="../src/MainWindow.cpp" line="2887"/>
         <source>Export KML</source>
         <translation>Экспорт KML</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2868"/>
+        <location filename="../src/MainWindow.cpp" line="2887"/>
         <source>KML Files (*.kml)</source>
         <translation>Файлы KML (*.kml)</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2078"/>
+        <location filename="../src/MainWindow.cpp" line="2094"/>
         <source>Align Nodes</source>
         <translation>Выровнять точки</translation>
     </message>
     <message>
         <location filename="../src/Interactions/MoveNodeInteraction.cpp" line="218"/>
-        <location filename="../src/MainWindow.cpp" line="2106"/>
+        <location filename="../src/MainWindow.cpp" line="2122"/>
         <source>Merge Nodes into %1</source>
         <translation>Объеденить точки в %1</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1008"/>
-        <location filename="../src/MainWindow.ui" line="1011"/>
+        <location filename="../src/MainWindow.ui" line="1020"/>
+        <location filename="../src/MainWindow.ui" line="1023"/>
         <source>Hide/Show the Undo dock</source>
         <translation>Скрыть/Показать панель отмены изменений</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1014"/>
+        <location filename="../src/MainWindow.ui" line="1026"/>
         <source>Ctrl+T</source>
         <translation>Ctrl+T</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1025"/>
+        <location filename="../src/MainWindow.ui" line="1037"/>
         <source>Ctrl+Alt+A</source>
         <translation>Ctrl+Alt+A</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1040"/>
+        <location filename="../src/MainWindow.ui" line="1052"/>
         <source>Copy the selected feature&apos;s tags to the clipboard; if the feature is a trackpoint, copy the coordinates, too.</source>
         <translation>Скопировать выделенные теги особых объектов в буфер обмена; если свойство это точка трека, то скопируйте и координаты.</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1043"/>
+        <location filename="../src/MainWindow.ui" line="1055"/>
         <source>Ctrl+C</source>
         <translation>Ctrl+C</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1051"/>
+        <location filename="../src/MainWindow.ui" line="1063"/>
         <source>Paste (and overwrite) the tags in the clipboard to the selected feature.</source>
         <translation>Вставить (и заменить) теги из буфера обмена в выбранный особый объект.</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1054"/>
+        <location filename="../src/MainWindow.ui" line="1066"/>
         <source>Ctrl+V, O</source>
         <translation>Ctrl+V, O</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1072"/>
+        <location filename="../src/MainWindow.ui" line="1084"/>
         <source>Merge the tags in the clipboard with the ones of the selected feature.</source>
         <translation>Объединить теги из буфера обмена с тегами выделенного особого объекта.</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1075"/>
+        <location filename="../src/MainWindow.ui" line="1087"/>
         <source>Ctrl+V, M</source>
         <translation>Ctrl+V, M</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1080"/>
-        <location filename="../src/MainWindow.ui" line="1085"/>
+        <location filename="../src/MainWindow.ui" line="1092"/>
+        <location filename="../src/MainWindow.ui" line="1097"/>
         <source>Selected...</source>
         <translation>Выбранное...</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1103"/>
+        <location filename="../src/MainWindow.ui" line="1115"/>
         <source>Paste the features in the clipboard; If the features&apos;id are already in the document, overwrite them.</source>
         <translation>Вставить особые объекты в буфер обмена; если id особых объектов уже в документе, переписать их.</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1106"/>
+        <location filename="../src/MainWindow.ui" line="1118"/>
         <source>Ctrl+V, F</source>
         <translation>Ctrl+V, F</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1111"/>
+        <location filename="../src/MainWindow.ui" line="1123"/>
         <source>OSM (XML)</source>
         <translation>OSM (XML)</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1116"/>
+        <location filename="../src/MainWindow.ui" line="1128"/>
         <source>OSM (Binary)</source>
         <translation>OSM (бинарный)</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1127"/>
-        <location filename="../src/MainWindow.ui" line="1130"/>
+        <location filename="../src/MainWindow.ui" line="1139"/>
+        <location filename="../src/MainWindow.ui" line="1142"/>
         <source>Commit the selected feature from a non-uploadable layer (e.g.Track or Extract) to the dirty layer, ready for upload</source>
         <translation>Занести выбранные особые объекты из непередаваемого слоя (например трек или Extract) в слой черновика, подготовив для передачи на сервер</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1135"/>
+        <location filename="../src/MainWindow.ui" line="1147"/>
         <source>GPX</source>
         <translation>GPX</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1140"/>
+        <location filename="../src/MainWindow.ui" line="1152"/>
         <source>KML</source>
         <translation>KML</translation>
     </message>
@@ -3417,7 +3422,7 @@ Note that OSM nodes outside the downloaded area will be kept.</source>
         <translation>Изменено отношение %1</translation>
     </message>
     <message>
-        <location filename="../src/Sync/SyncOSM.cpp" line="39"/>
+        <location filename="../src/MainWindow.cpp" line="3794"/>
         <source>It is strongly recommended to save the changes to your document after an upload.
 Do you want to do this now?</source>
         <translation>Мы рекомендуем сохранить изменения в документе после передачи их на сервер.
@@ -3440,113 +3445,113 @@ Do you want to do this now?</source>
         <translation>Добавлена точка %1 к дороге %2</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="186"/>
+        <location filename="../src/MainWindow.cpp" line="201"/>
         <source>tile %v / %m</source>
         <translation>квадрат карты %v / %m</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="340"/>
-        <location filename="../src/MainWindow.ui" line="1727"/>
+        <location filename="../src/MainWindow.cpp" line="355"/>
+        <location filename="../src/MainWindow.ui" line="1739"/>
         <source>Properties...</source>
         <translation>Свойства...</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="481"/>
+        <location filename="../src/MainWindow.cpp" line="496"/>
         <source>File</source>
         <translation>Файл</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="485"/>
+        <location filename="../src/MainWindow.cpp" line="500"/>
         <source>Edit</source>
         <translation>Правка</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="489"/>
+        <location filename="../src/MainWindow.cpp" line="504"/>
         <source>View</source>
         <translation>Вид</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="493"/>
+        <location filename="../src/MainWindow.cpp" line="508"/>
         <source>Show</source>
         <translation>Показать</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="497"/>
+        <location filename="../src/MainWindow.cpp" line="512"/>
         <source>Directional Arrows</source>
         <translation>Стрелки-указатели</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="501"/>
+        <location filename="../src/MainWindow.cpp" line="516"/>
         <source>GPS</source>
         <translation>GPS</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="505"/>
+        <location filename="../src/MainWindow.cpp" line="520"/>
         <source>Layers</source>
         <translation>Слои</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="509"/>
+        <location filename="../src/MainWindow.cpp" line="524"/>
         <source>Create</source>
         <translation>Создать</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="513"/>
+        <location filename="../src/MainWindow.cpp" line="528"/>
         <source>Feature</source>
         <translation>Особый объект</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="521"/>
+        <location filename="../src/MainWindow.cpp" line="536"/>
         <source>Node</source>
         <translation>Точка</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="525"/>
+        <location filename="../src/MainWindow.cpp" line="540"/>
         <source>Way</source>
         <translation>Линия</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="529"/>
+        <location filename="../src/MainWindow.cpp" line="544"/>
         <source>Relation</source>
         <translation>Отношение</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="533"/>
+        <location filename="../src/MainWindow.cpp" line="548"/>
         <source>Tools</source>
         <translation>Инструменты</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="537"/>
+        <location filename="../src/MainWindow.cpp" line="552"/>
         <source>Windows</source>
         <translation>Окна</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="541"/>
+        <location filename="../src/MainWindow.cpp" line="556"/>
         <source>Help</source>
         <translation>Справка</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="683"/>
+        <location filename="../src/MainWindow.cpp" line="698"/>
         <source>Cut Features</source>
         <translation>Вырезать Свойства</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1093"/>
+        <location filename="../src/MainWindow.cpp" line="1108"/>
         <source>Waypoints</source>
         <translation>Путевые точки</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1113"/>
+        <location filename="../src/MainWindow.cpp" line="1128"/>
         <source>Track %1</source>
         <translation>Трек %1</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1164"/>
+        <location filename="../src/MainWindow.cpp" line="1179"/>
         <source>Big Fat Copyright Warning</source>
         <translation>Big Fat Copyright Warning</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1165"/>
+        <location filename="../src/MainWindow.cpp" line="1180"/>
         <source>You are trying to import a KML file. Please be aware that:
 
  - You cannot import to OSM a KML file created from Google Earth. While you might
@@ -3575,39 +3580,39 @@ Are you absolutely sure this KML can legally be imported in OSM?</source>
 Итак, вы абсолютно уверены, что этот KML может быть легально импортирован в OSM?</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1378"/>
+        <location filename="../src/MainWindow.cpp" line="1393"/>
         <source>Open files</source>
         <translation>Открыть файлы</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2599"/>
+        <location filename="../src/MainWindow.cpp" line="2615"/>
         <source>Unable to open save file</source>
         <translation>Невозможно открыть сохранённый файл</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2599"/>
-        <location filename="../src/MainWindow.cpp" line="2612"/>
+        <location filename="../src/MainWindow.cpp" line="2615"/>
+        <location filename="../src/MainWindow.cpp" line="2630"/>
         <source>%1 could not be opened for writing.</source>
         <translation>%1 не может быть открыт для записи.</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="3447"/>
+        <location filename="../src/MainWindow.cpp" line="3466"/>
         <source>GPS error</source>
         <translation>ошибка GPS</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="3448"/>
+        <location filename="../src/MainWindow.cpp" line="3467"/>
         <source>Unable to open GPS port.</source>
         <translation>Невозможно открыть порт GPS.</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="3457"/>
+        <location filename="../src/MainWindow.cpp" line="3476"/>
         <source>Open NMEA log file</source>
         <translation>Открыть файл журнала NMEA</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.ui" line="259"/>
-        <location filename="../src/MainWindow.ui" line="938"/>
+        <location filename="../src/MainWindow.ui" line="950"/>
         <source>&amp;Layers</source>
         <translation>Слои</translation>
     </message>
@@ -3617,280 +3622,280 @@ Are you absolutely sure this KML can legally be imported in OSM?</source>
         <translation>Главная панель инструментов</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="581"/>
+        <location filename="../src/MainWindow.ui" line="587"/>
         <source>&amp;Upload</source>
         <translation>Передать на сервер</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="665"/>
+        <location filename="../src/MainWindow.ui" line="671"/>
         <source>&amp;Go To...</source>
         <translation>Перейти к...</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="668"/>
+        <location filename="../src/MainWindow.ui" line="674"/>
         <source>Ctrl+G</source>
         <translation>Ctrl+G</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="676"/>
+        <location filename="../src/MainWindow.ui" line="682"/>
         <source>Create Double carriage way</source>
         <translation>Создать Двойную дорогу</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="684"/>
+        <location filename="../src/MainWindow.ui" line="690"/>
         <source>Create Roundabout</source>
         <translation>Создать кольцевую развязку</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="752"/>
+        <location filename="../src/MainWindow.ui" line="761"/>
         <source>Create Relation</source>
         <translation>Создано отношение</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="824"/>
+        <location filename="../src/MainWindow.ui" line="836"/>
         <source>Find</source>
         <translation>Поиск</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="861"/>
+        <location filename="../src/MainWindow.ui" line="873"/>
         <source>Node Merge</source>
         <translation>Объединить точки</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1022"/>
+        <location filename="../src/MainWindow.ui" line="1034"/>
         <source>Show &amp;downloaded areas</source>
         <translation>Показать скачанные области</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1124"/>
+        <location filename="../src/MainWindow.ui" line="1136"/>
         <source>Commit feature to the dirty layer</source>
         <translation>Занести особые объекты в слой черновика</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1145"/>
+        <location filename="../src/MainWindow.ui" line="1157"/>
         <source>Toggle Toolbar</source>
         <translation>Панель инструментов</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1148"/>
-        <location filename="../src/MainWindow.ui" line="1151"/>
+        <location filename="../src/MainWindow.ui" line="1160"/>
+        <location filename="../src/MainWindow.ui" line="1163"/>
         <source>Hide/Show the Toolbar</source>
         <translation>Скрыть/Показать панель инструментов</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1156"/>
+        <location filename="../src/MainWindow.ui" line="1168"/>
         <source>Hide All</source>
         <translation>Скрыть всё</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1159"/>
-        <location filename="../src/MainWindow.ui" line="1167"/>
+        <location filename="../src/MainWindow.ui" line="1171"/>
+        <location filename="../src/MainWindow.ui" line="1179"/>
         <source>Ctrl+F</source>
         <translation>Ctrl+F</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1164"/>
+        <location filename="../src/MainWindow.ui" line="1176"/>
         <source>Show All</source>
         <translation>Показать всё</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1175"/>
+        <location filename="../src/MainWindow.ui" line="1187"/>
         <source>&amp;Image layer</source>
         <translation>Слой изображения</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1191"/>
+        <location filename="../src/MainWindow.ui" line="1203"/>
         <source>Ctrl+Alt+P</source>
         <translation>Ctrl+Alt+P</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1202"/>
+        <location filename="../src/MainWindow.ui" line="1214"/>
         <source>Ctrl+Alt+N</source>
         <translation>Ctrl+Alt+N</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1207"/>
+        <location filename="../src/MainWindow.ui" line="1219"/>
         <source>&amp;Start</source>
         <translation>Начать</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1210"/>
+        <location filename="../src/MainWindow.ui" line="1222"/>
         <source>Start GPS</source>
         <translation>Старт GPS</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1215"/>
+        <location filename="../src/MainWindow.ui" line="1227"/>
         <source>&amp;Replay...</source>
         <translation>Повтор...</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1218"/>
+        <location filename="../src/MainWindow.ui" line="1230"/>
         <source>Replay GPS</source>
         <translation>Воспроизвести заново GPS</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1229"/>
-        <location filename="../src/MainWindow.ui" line="1232"/>
+        <location filename="../src/MainWindow.ui" line="1241"/>
+        <location filename="../src/MainWindow.ui" line="1244"/>
         <source>Hide/Show the GPS dock</source>
         <translation>Скрыть/Показать панель GPS</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1235"/>
+        <location filename="../src/MainWindow.ui" line="1247"/>
         <source>Ctrl+W</source>
         <translation>Ctrl+W</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1243"/>
+        <location filename="../src/MainWindow.ui" line="1255"/>
         <source>S&amp;top</source>
         <translation>Стоп</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1246"/>
+        <location filename="../src/MainWindow.ui" line="1258"/>
         <source>Stop GPS</source>
         <translation>Выключить GPS</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1254"/>
+        <location filename="../src/MainWindow.ui" line="1266"/>
         <source>&amp;Center on GPS</source>
         <translation>Центрировать по GPS</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1262"/>
+        <location filename="../src/MainWindow.ui" line="1274"/>
         <source>Show track &amp;segments</source>
         <translation>Показать отрезки трека</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1265"/>
+        <location filename="../src/MainWindow.ui" line="1277"/>
         <source>Ctrl+Alt+T</source>
         <translation>Ctrl+Alt+T</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1273"/>
+        <location filename="../src/MainWindow.ui" line="1285"/>
         <source>Show &amp;scale</source>
         <translation>Показать масштаб</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1276"/>
+        <location filename="../src/MainWindow.ui" line="1288"/>
         <source>Ctrl+Alt+S</source>
         <translation>Ctrl+Alt+S</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1284"/>
+        <location filename="../src/MainWindow.ui" line="1296"/>
         <source>Show &amp;relations</source>
         <translation>Показать отношения</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1287"/>
+        <location filename="../src/MainWindow.ui" line="1299"/>
         <source>Ctrl+Alt+R</source>
         <translation>Ctrl+Alt+R</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1295"/>
+        <location filename="../src/MainWindow.ui" line="1307"/>
         <source>Show roads background</source>
         <translation>Показать фон линий</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1303"/>
+        <location filename="../src/MainWindow.ui" line="1315"/>
         <source>Show roads boundary</source>
         <translation>Показать границы линий</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1311"/>
+        <location filename="../src/MainWindow.ui" line="1323"/>
         <source>Show touchup</source>
         <translation>Показать последние правки</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1322"/>
-        <location filename="../src/MainWindow.ui" line="1325"/>
+        <location filename="../src/MainWindow.ui" line="1334"/>
+        <location filename="../src/MainWindow.ui" line="1337"/>
         <source>Record</source>
         <translation>Запись</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1328"/>
+        <location filename="../src/MainWindow.ui" line="1340"/>
         <source>Record GPS</source>
         <translation>Записать GPS</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1339"/>
+        <location filename="../src/MainWindow.ui" line="1351"/>
         <source>Pause</source>
         <translation>Пауза</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1342"/>
+        <location filename="../src/MainWindow.ui" line="1354"/>
         <source>Pause GPS</source>
         <translation>Пауза в работе GPS</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1353"/>
-        <location filename="../src/MainWindow.ui" line="1356"/>
+        <location filename="../src/MainWindow.ui" line="1365"/>
+        <location filename="../src/MainWindow.ui" line="1368"/>
         <source>Hide/Show the GeoImage dock</source>
         <translation>Скрыть/Показать панель GeoImage</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1359"/>
+        <location filename="../src/MainWindow.ui" line="1371"/>
         <source>Ctrl+E</source>
         <translation>Ctrl+E</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1364"/>
+        <location filename="../src/MainWindow.ui" line="1376"/>
         <source>World OSB manager...</source>
         <translation>Менеджер World OSB...</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1372"/>
+        <location filename="../src/MainWindow.ui" line="1384"/>
         <source>&amp;Shortcut Editor...</source>
         <translation>Комбинации клавиш...</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="537"/>
+        <location filename="../src/MainWindow.ui" line="543"/>
         <source>&amp;Download</source>
         <translation>Скачать</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="3574"/>
+        <location filename="../src/MainWindow.cpp" line="3593"/>
         <source>Save Tag Templates</source>
         <translation>Сохранить шаблоны тегов</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="3574"/>
+        <location filename="../src/MainWindow.cpp" line="3593"/>
         <source>Merkaartor tag templates (*.mat)</source>
         <translation>Шаблоны тегов Merkaartor (*.mat)</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="3593"/>
-        <location filename="../src/MainWindow.cpp" line="3607"/>
+        <location filename="../src/MainWindow.cpp" line="3612"/>
+        <location filename="../src/MainWindow.cpp" line="3626"/>
         <source>Open Tag Templates</source>
         <translation>Открыть шаблоны тегов</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="772"/>
+        <location filename="../src/MainWindow.ui" line="781"/>
         <source>&amp;Edit...</source>
         <translation>Правка...</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="777"/>
-        <location filename="../src/MainWindow.ui" line="1387"/>
+        <location filename="../src/MainWindow.ui" line="786"/>
+        <location filename="../src/MainWindow.ui" line="1399"/>
         <source>&amp;Save...</source>
         <translation>Сохранить...</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="782"/>
-        <location filename="../src/MainWindow.ui" line="1377"/>
+        <location filename="../src/MainWindow.ui" line="791"/>
+        <location filename="../src/MainWindow.ui" line="1389"/>
         <source>&amp;Load...</source>
         <translation>Загрузить...</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1382"/>
+        <location filename="../src/MainWindow.ui" line="1394"/>
         <source>&amp;Merge...</source>
         <translation>Объединить...</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2135"/>
+        <location filename="../src/MainWindow.cpp" line="2151"/>
         <source>Add member to relation</source>
         <translation>Добавлен элемент в отношение</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2147"/>
+        <location filename="../src/MainWindow.cpp" line="2163"/>
         <source>Remove member from relation</source>
         <translation>Удалить элемент из отношения</translation>
     </message>
@@ -3910,27 +3915,27 @@ Are you absolutely sure this KML can legally be imported in OSM?</source>
         <translation>Связь</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1392"/>
+        <location filename="../src/MainWindow.ui" line="1404"/>
         <source>&amp;Add member</source>
         <translation>Добавить участника</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1397"/>
+        <location filename="../src/MainWindow.ui" line="1409"/>
         <source>&amp;Remove member</source>
         <translation>Удалить участника</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1405"/>
+        <location filename="../src/MainWindow.ui" line="1417"/>
         <source>&amp;Never</source>
         <translation>Никогда</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1413"/>
+        <location filename="../src/MainWindow.ui" line="1425"/>
         <source>for &amp;Oneway roads</source>
         <translation>для дорог с односторонним движением</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1421"/>
+        <location filename="../src/MainWindow.ui" line="1433"/>
         <source>&amp;Always</source>
         <translation>Всегда</translation>
     </message>
@@ -3952,22 +3957,22 @@ Are you absolutely sure this KML can legally be imported in OSM?</source>
         <translation>Вы хотите слить все близко расположенные точки</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="370"/>
+        <location filename="../src/MainWindow.cpp" line="385"/>
         <source>Low</source>
         <translation>слабо</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="370"/>
+        <location filename="../src/MainWindow.cpp" line="385"/>
         <source>High</source>
         <translation>сильно</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="370"/>
+        <location filename="../src/MainWindow.cpp" line="385"/>
         <source>Opaque</source>
         <translation>непрозрачный</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2121"/>
+        <location filename="../src/MainWindow.cpp" line="2137"/>
         <source>Detach Node %1</source>
         <translation>Отделить точку %1</translation>
     </message>
@@ -4007,188 +4012,188 @@ Are you absolutely sure this KML can legally be imported in OSM?</source>
         <translation>Особенность</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="513"/>
+        <location filename="../src/MainWindow.ui" line="519"/>
         <source>&amp;Move</source>
         <translation>Переместить</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="540"/>
+        <location filename="../src/MainWindow.ui" line="546"/>
         <source>Download map data for a new area</source>
         <translation>Скачать данные карты для новой области</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="569"/>
+        <location filename="../src/MainWindow.ui" line="575"/>
         <source>&amp;Select</source>
         <translation>Выбрать</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="584"/>
+        <location filename="../src/MainWindow.ui" line="590"/>
         <source>Upload changes to the server</source>
         <translation>Передать изменения на сервер</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="602"/>
+        <location filename="../src/MainWindow.ui" line="608"/>
         <source>Remove selected features</source>
         <translation>Удалить выделенные особые объекты</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="620"/>
+        <location filename="../src/MainWindow.ui" line="626"/>
         <source>Create new road</source>
         <translation>Создана новая линия</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="638"/>
+        <location filename="../src/MainWindow.ui" line="644"/>
         <source>Create new node</source>
         <translation>Создать новую точку</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="656"/>
+        <location filename="../src/MainWindow.ui" line="662"/>
         <source>Reverse road direction</source>
         <translation>Сменить направление линии</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="708"/>
+        <location filename="../src/MainWindow.ui" line="717"/>
         <source>Split road into separate (connected) roads</source>
         <translation>Разделить линию на отдельные (но соединённые друг сдругом) линии</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="723"/>
+        <location filename="../src/MainWindow.ui" line="732"/>
         <source>Join connected roads to a single road</source>
         <translation>Объединить соединённые линии в одну</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="738"/>
+        <location filename="../src/MainWindow.ui" line="747"/>
         <source>Break</source>
         <translation>Разрыв</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="741"/>
+        <location filename="../src/MainWindow.ui" line="750"/>
         <source>Break apart connected roads</source>
         <translation>Разорвать соединённые линии</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="767"/>
+        <location filename="../src/MainWindow.ui" line="776"/>
         <source>Create new area</source>
         <translation>Создать полигон или мультиполигон</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="884"/>
+        <location filename="../src/MainWindow.ui" line="896"/>
         <source>Save to file</source>
         <translation>Сохранить в файл</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="899"/>
+        <location filename="../src/MainWindow.ui" line="911"/>
         <source>Download more map data for the current area</source>
         <translation>Скачать больше данных карты для данной области</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="921"/>
+        <location filename="../src/MainWindow.ui" line="933"/>
         <source>&amp;Properties</source>
         <translation>Свойства</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="955"/>
+        <location filename="../src/MainWindow.ui" line="967"/>
         <source>&amp;Info</source>
         <translation>Информация</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="976"/>
+        <location filename="../src/MainWindow.ui" line="988"/>
         <source>Align nodes</source>
         <translation>Выровнять точки</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1034"/>
+        <location filename="../src/MainWindow.ui" line="1046"/>
         <source>&amp;Copy</source>
         <translation>Копировать</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1037"/>
+        <location filename="../src/MainWindow.ui" line="1049"/>
         <source>Copy selected features and tags to the clipboard</source>
         <translation>Скопировать выделенные оcобые объекты и теги в конверт</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1048"/>
+        <location filename="../src/MainWindow.ui" line="1060"/>
         <source>Paste Tags (&amp;Overwrite)</source>
         <translation>Вставить теги (Перезаписать)</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1063"/>
+        <location filename="../src/MainWindow.ui" line="1075"/>
         <source>Paste Tags (&amp;Merge)</source>
         <translation>Вставить теги (Объединить)</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1066"/>
+        <location filename="../src/MainWindow.ui" line="1078"/>
         <source>Paste tags</source>
         <translation>Вставить теги</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1069"/>
+        <location filename="../src/MainWindow.ui" line="1081"/>
         <source>Paste tags from the clipboard (Merge with existing tags)</source>
         <translation>Вставить теги из буфера обмена (Объединить с существующими тегами)</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1097"/>
+        <location filename="../src/MainWindow.ui" line="1109"/>
         <source>Paste</source>
         <translation>Вставить</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1100"/>
+        <location filename="../src/MainWindow.ui" line="1112"/>
         <source>Paste features from the clipboard</source>
         <translation>Вставить особые объекты из буфера обмена</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1226"/>
+        <location filename="../src/MainWindow.ui" line="1238"/>
         <source>&amp;GPS</source>
         <translation>&amp;GPS</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1350"/>
+        <location filename="../src/MainWindow.ui" line="1362"/>
         <source>G&amp;eoImage</source>
         <translation>Геоизображение</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1430"/>
+        <location filename="../src/MainWindow.ui" line="1442"/>
         <source>&amp;Detach</source>
         <translation>Отделить</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1433"/>
+        <location filename="../src/MainWindow.ui" line="1445"/>
         <source>Detach node from a road</source>
         <translation>Отделить точку от линии</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1436"/>
+        <location filename="../src/MainWindow.ui" line="1448"/>
         <source>Detach a node from a Road</source>
         <translation>Отделить точку от линии</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1448"/>
+        <location filename="../src/MainWindow.ui" line="1460"/>
         <source>&amp;Work Offline</source>
         <translation>Работать автономно</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1453"/>
+        <location filename="../src/MainWindow.ui" line="1465"/>
         <source>SVG</source>
         <translation>SVG</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1461"/>
+        <location filename="../src/MainWindow.ui" line="1473"/>
         <source>&amp;Styles</source>
         <translation>Стили</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1464"/>
-        <location filename="../src/MainWindow.ui" line="1467"/>
+        <location filename="../src/MainWindow.ui" line="1476"/>
+        <location filename="../src/MainWindow.ui" line="1479"/>
         <source>Hide/Show the Styles dock</source>
         <translation>Спрятать/Показать окно выбора стилей</translation>
     </message>
     <message>
-        <location filename="../src/Docks/PropertiesDock.cpp" line="759"/>
+        <location filename="../src/Docks/PropertiesDock.cpp" line="758"/>
         <source>Remove member &apos;%1&apos; on %2</source>
         <translation>Удалить участника &apos;%1&apos; в %2</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="3145"/>
+        <location filename="../src/MainWindow.cpp" line="3164"/>
         <source>%1 (int)</source>
         <translation>%1 (int)</translation>
     </message>
@@ -4203,54 +4208,54 @@ Are you absolutely sure this KML can legally be imported in OSM?</source>
         <translation>Желаете вложить полигон в этот полигон?</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="363"/>
+        <location filename="../src/MainWindow.cpp" line="378"/>
         <source>Cannot load Projections file</source>
         <translation>Не могу загрузить файл проэкций</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="363"/>
+        <location filename="../src/MainWindow.cpp" line="378"/>
         <source>&quot;Projections.xml&quot; could not be opened anywhere. Aborting.</source>
         <translation>&quot;Projections.xml&quot; не может быть нигде открыт. Отказ.</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1960"/>
+        <location filename="../src/MainWindow.cpp" line="1976"/>
         <source>Create Junction</source>
         <translation>Создать соединение</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="3306"/>
-        <location filename="../src/MainWindow.cpp" line="3315"/>
+        <location filename="../src/MainWindow.cpp" line="3325"/>
+        <location filename="../src/MainWindow.cpp" line="3334"/>
         <source>Invalid projection</source>
         <translation>Неправильная проекция</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="3306"/>
-        <location filename="../src/MainWindow.cpp" line="3315"/>
+        <location filename="../src/MainWindow.cpp" line="3325"/>
+        <location filename="../src/MainWindow.cpp" line="3334"/>
         <source>Unable to set projection &quot;%1&quot;.</source>
         <translation>Невозможно задать проекцию &quot;%1&quot;.</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1470"/>
+        <location filename="../src/MainWindow.ui" line="1482"/>
         <source>Ctrl+B</source>
         <translation>Ctrl+B</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1485"/>
+        <location filename="../src/MainWindow.ui" line="1497"/>
         <source>&amp;Reset Discardable dialogs status</source>
         <translation>Сбросить отменяемый статус диалогов</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1494"/>
+        <location filename="../src/MainWindow.ui" line="1506"/>
         <source>GPS Menu</source>
         <translation>Меню GPS</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1503"/>
+        <location filename="../src/MainWindow.ui" line="1515"/>
         <source>Camera</source>
         <translation>Камера</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1508"/>
+        <location filename="../src/MainWindow.ui" line="1520"/>
         <source>Create &amp;Junction</source>
         <translation>Создать соединение</translation>
     </message>
@@ -4357,85 +4362,85 @@ Are you absolutely sure this KML can legally be imported in OSM?</source>
         <translation>Приближение</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1785"/>
+        <location filename="../src/MainWindow.cpp" line="1801"/>
         <source>Create Polygon</source>
         <translation>Создать многоугольник</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1785"/>
+        <location filename="../src/MainWindow.cpp" line="1801"/>
         <source>Specify the number of sides</source>
         <translation>Задать количество сторон</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1918"/>
+        <location filename="../src/MainWindow.cpp" line="1934"/>
         <source>Force Feature upload</source>
         <translation>Принудительно передать особый объект на сервер</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1121"/>
+        <location filename="../src/MainWindow.ui" line="1133"/>
         <source>&amp;Force Upload</source>
         <translation>Форсировать передачу данных на сервер</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1520"/>
+        <location filename="../src/MainWindow.ui" line="1532"/>
         <source>Rotate</source>
         <translation>Вращать</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1523"/>
+        <location filename="../src/MainWindow.ui" line="1535"/>
         <source>Ctrl+A</source>
         <translation>Ctrl+A</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1528"/>
+        <location filename="../src/MainWindow.ui" line="1540"/>
         <source>Polygon</source>
         <translation>Многоугольник</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1533"/>
+        <location filename="../src/MainWindow.ui" line="1545"/>
         <source>Rectangle</source>
         <translation>Прямоугольник</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1538"/>
+        <location filename="../src/MainWindow.ui" line="1550"/>
         <source>Add new Image layer</source>
         <translation>Добавить новый слой</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1964"/>
+        <location filename="../src/MainWindow.cpp" line="1980"/>
         <source>Multiple intersection.</source>
         <translation>Многократное пересечение.</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1965"/>
+        <location filename="../src/MainWindow.cpp" line="1981"/>
         <source>Those roads have multiple intersections.
 Do you still want to create a junction for each one (Unwanted junctions can still be deleted afterhand)?</source>
         <translation>Эти линии имеют несколько пересечений.
 Вы всё ещё хотите создать соединения для каждой из них? (Нежелательные пересечения можно позже удалить вручную)</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1094"/>
+        <location filename="../src/MainWindow.ui" line="1106"/>
         <source>Paste Feature(s)</source>
         <translation>Вставить особый объект(ы)</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1546"/>
+        <location filename="../src/MainWindow.ui" line="1558"/>
         <source>Features</source>
         <translation>Особые объекты</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1574"/>
+        <location filename="../src/MainWindow.ui" line="1586"/>
         <source>Show &amp;virtual nodes</source>
         <translation>Показать виртуальные точки</translation>
     </message>
     <message>
-        <location filename="../src/Docks/PropertiesDock.cpp" line="703"/>
+        <location filename="../src/Docks/PropertiesDock.cpp" line="702"/>
         <source>Clear %1 tags on %2</source>
         <translation>Стереть %1 тегов на %2</translation>
     </message>
     <message>
-        <location filename="../src/Docks/PropertiesDock.cpp" line="836"/>
-        <location filename="../src/Docks/PropertiesDock.cpp" line="881"/>
+        <location filename="../src/Docks/PropertiesDock.cpp" line="835"/>
+        <location filename="../src/Docks/PropertiesDock.cpp" line="880"/>
         <source>Reorder members in relation %1</source>
         <translation>Упорядочить участников отношения %1</translation>
     </message>
@@ -4460,7 +4465,7 @@ Do you still want to create a junction for each one (Unwanted junctions can stil
         <translation>Свойства Масштаба</translation>
     </message>
     <message>
-        <location filename="../src/Docks/PropertiesDock.cpp" line="736"/>
+        <location filename="../src/Docks/PropertiesDock.cpp" line="735"/>
         <source>Set &quot;source&quot; tag on %1</source>
         <translation type="unfinished"></translation>
     </message>
@@ -4514,13 +4519,13 @@ Do you still want to create a junction for each one (Unwanted junctions can stil
     </message>
     <message>
         <location filename="../src/Features/Relation.cpp" line="582"/>
-        <location filename="../src/Features/Way.cpp" line="1039"/>
+        <location filename="../src/Features/Way.cpp" line="1035"/>
         <source>Topleft</source>
         <translation>Верхний левый угол</translation>
     </message>
     <message>
         <location filename="../src/Features/Relation.cpp" line="584"/>
-        <location filename="../src/Features/Way.cpp" line="1041"/>
+        <location filename="../src/Features/Way.cpp" line="1037"/>
         <source>Botright</source>
         <translation>Правый нижний угол</translation>
     </message>
@@ -4540,67 +4545,67 @@ Do you still want to create a junction for each one (Unwanted junctions can stil
         <translation>Член</translation>
     </message>
     <message>
-        <location filename="../src/Features/Way.cpp" line="1031"/>
+        <location filename="../src/Features/Way.cpp" line="1027"/>
         <source>Closed way</source>
         <translation>Закрытая линия</translation>
     </message>
     <message>
-        <location filename="../src/Features/Way.cpp" line="1036"/>
+        <location filename="../src/Features/Way.cpp" line="1032"/>
         <source>%1 nodes</source>
         <translation>точек: %1</translation>
     </message>
     <message>
-        <location filename="../src/Features/Way.cpp" line="1043"/>
+        <location filename="../src/Features/Way.cpp" line="1039"/>
         <source>Way</source>
         <translation>Линия</translation>
     </message>
     <message>
-        <location filename="../src/Features/Way.cpp" line="1043"/>
+        <location filename="../src/Features/Way.cpp" line="1039"/>
         <source>Area</source>
         <translation>Мультиполигон</translation>
     </message>
     <message>
-        <location filename="../src/Features/Node.cpp" line="596"/>
+        <location filename="../src/Features/Node.cpp" line="607"/>
         <source>coord</source>
         <translation>коорд</translation>
     </message>
     <message>
-        <location filename="../src/Features/Node.cpp" line="607"/>
+        <location filename="../src/Features/Node.cpp" line="618"/>
         <source>Node</source>
         <translation>Точка</translation>
     </message>
     <message>
-        <location filename="../src/Features/Way.cpp" line="1034"/>
+        <location filename="../src/Features/Way.cpp" line="1030"/>
         <source>Length</source>
         <translation>Длина</translation>
     </message>
     <message>
-        <location filename="../src/Features/Way.cpp" line="1036"/>
+        <location filename="../src/Features/Way.cpp" line="1032"/>
         <source>Size</source>
         <translation>Размер</translation>
     </message>
     <message>
-        <location filename="../src/Features/Node.cpp" line="599"/>
+        <location filename="../src/Features/Node.cpp" line="610"/>
         <source>elevation</source>
         <translation>высота</translation>
     </message>
     <message>
-        <location filename="../src/Features/Node.cpp" line="601"/>
+        <location filename="../src/Features/Node.cpp" line="612"/>
         <source>speed</source>
         <translation>скорость</translation>
     </message>
     <message>
-        <location filename="../src/Features/Node.cpp" line="595"/>
+        <location filename="../src/Features/Node.cpp" line="606"/>
         <source>Waypoint</source>
         <translation>Путевая точка</translation>
     </message>
     <message>
-        <location filename="../src/Features/Node.cpp" line="603"/>
+        <location filename="../src/Features/Node.cpp" line="614"/>
         <source>description</source>
         <translation>описание</translation>
     </message>
     <message>
-        <location filename="../src/Features/Node.cpp" line="605"/>
+        <location filename="../src/Features/Node.cpp" line="616"/>
         <source>comment</source>
         <translation>комментарий</translation>
     </message>
@@ -4608,74 +4613,84 @@ Do you still want to create a junction for each one (Unwanted junctions can stil
 <context>
     <name>MapView</name>
     <message>
-        <location filename="../src/MapView.cpp" line="364"/>
+        <location filename="../src/MapView.cpp" line="385"/>
         <source>%1 m</source>
         <translation>%1 м</translation>
     </message>
     <message>
-        <location filename="../src/MapView.cpp" line="366"/>
+        <location filename="../src/MapView.cpp" line="387"/>
         <source>%1 km</source>
         <translation>%1 км</translation>
     </message>
     <message>
-        <location filename="../src/MapView.cpp" line="902"/>
+        <location filename="../src/MapView.cpp" line="923"/>
         <source>Feature</source>
         <translation>Особый объект</translation>
     </message>
     <message>
-        <location filename="../src/MapView.cpp" line="919"/>
+        <location filename="../src/MapView.cpp" line="940"/>
         <source>Road</source>
         <translation>Линия</translation>
     </message>
     <message>
-        <location filename="../src/MapView.cpp" line="1052"/>
+        <location filename="../src/MapView.cpp" line="1074"/>
         <source>Load image</source>
         <translation>Загрузить изображение</translation>
     </message>
     <message>
-        <location filename="../src/MapView.cpp" line="1054"/>
+        <location filename="../src/MapView.cpp" line="1076"/>
         <source>Add node position to image</source>
         <translation>Добавить точку положения на изображение</translation>
     </message>
     <message>
-        <location filename="../src/MapView.cpp" line="1056"/>
+        <location filename="../src/MapView.cpp" line="1078"/>
         <source>Geotag image with this position</source>
         <translation>Геотегированное изображение этого положения</translation>
     </message>
     <message>
-        <location filename="../src/MapView.cpp" line="1596"/>
+        <location filename="../src/MapView.cpp" line="1628"/>
         <source>View</source>
         <translation>Вид</translation>
     </message>
     <message>
-        <location filename="../src/MapView.cpp" line="1597"/>
+        <location filename="../src/MapView.cpp" line="1629"/>
         <source>Bounding Box</source>
         <translation>Ограничивающий Прямоугольник</translation>
     </message>
     <message>
-        <location filename="../src/MapView.cpp" line="1609"/>
+        <location filename="../src/MapView.cpp" line="1641"/>
         <source>Projection</source>
         <translation>Проекция</translation>
     </message>
     <message>
-        <location filename="../src/MapView.cpp" line="911"/>
+        <location filename="../src/MapView.cpp" line="932"/>
         <source>Node</source>
         <translation>Точка</translation>
     </message>
     <message>
-        <location filename="../src/MapView.cpp" line="927"/>
+        <location filename="../src/MapView.cpp" line="341"/>
+        <source>%1 m/pixel</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/MapView.cpp" line="347"/>
+        <source>Align: %1m @ %2</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/MapView.cpp" line="353"/>
+        <source>%1ms</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/MapView.cpp" line="948"/>
         <source>Relation</source>
         <translation>Отношение</translation>
     </message>
     <message>
-        <location filename="../src/MapView.cpp" line="1058"/>
+        <location filename="../src/MapView.cpp" line="1080"/>
         <source>Cancel</source>
         <translation>Отмена</translation>
-    </message>
-    <message>
-        <location filename="../src/MapView.cpp" line="332"/>
-        <source>%1ms;ppm:%2</source>
-        <translation>%1мс;ppm:%2</translation>
     </message>
 </context>
 <context>
@@ -4689,18 +4704,18 @@ Do you still want to create a junction for each one (Unwanted junctions can stil
         <translation>Новый сервер</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/MerkaartorPreferences.cpp" line="491"/>
-        <location filename="../src/Preferences/MerkaartorPreferences.cpp" line="494"/>
+        <location filename="../src/Preferences/MerkaartorPreferences.cpp" line="513"/>
+        <location filename="../src/Preferences/MerkaartorPreferences.cpp" line="516"/>
         <source>Preferences upload failed</source>
         <translation>Передача параметров на сервер не удалась</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/MerkaartorPreferences.cpp" line="491"/>
+        <location filename="../src/Preferences/MerkaartorPreferences.cpp" line="513"/>
         <source>Duplicate key</source>
         <translation>Дублировать ключ</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/MerkaartorPreferences.cpp" line="494"/>
+        <location filename="../src/Preferences/MerkaartorPreferences.cpp" line="516"/>
         <source>More than 150 preferences</source>
         <translation>Более чем 150 параметров</translation>
     </message>
@@ -4912,7 +4927,7 @@ Do you still want to create a junction for each one (Unwanted junctions can stil
 <context>
     <name>OsbLayerWidget</name>
     <message>
-        <location filename="../src/Layers/LayerWidget.cpp" line="637"/>
+        <location filename="../src/Layers/LayerWidget.cpp" line="655"/>
         <source>Close</source>
         <translation>Закрыть</translation>
     </message>
@@ -5293,22 +5308,22 @@ What do you want to do next?</source>
         <translation>Порт:</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="1292"/>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="1332"/>
         <source>Background Image</source>
         <translation>Фоновое изображение</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="1304"/>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="1344"/>
         <source>Cache directory</source>
         <translation>Директория кеша</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="1314"/>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="1354"/>
         <source>Cache size (in Mb; 0 to disable)</source>
         <translation>Размер кеша (в МБ; 0 для отключения)</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="1333"/>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="1373"/>
         <source>Map Adapter</source>
         <translation>Адаптер карты</translation>
     </message>
@@ -5348,65 +5363,65 @@ What do you want to do next?</source>
         <translation>Автоматически извлекать треки при открытии</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.cpp" line="504"/>
-        <location filename="../src/Preferences/PreferencesDialog.cpp" line="517"/>
-        <location filename="../src/Preferences/PreferencesDialog.cpp" line="530"/>
-        <location filename="../src/Preferences/PreferencesDialog.cpp" line="543"/>
-        <location filename="../src/Preferences/PreferencesDialog.cpp" line="556"/>
-        <location filename="../src/Preferences/PreferencesDialog.cpp" line="569"/>
-        <location filename="../src/Preferences/PreferencesDialog.cpp" line="581"/>
+        <location filename="../src/Preferences/PreferencesDialog.cpp" line="503"/>
+        <location filename="../src/Preferences/PreferencesDialog.cpp" line="516"/>
+        <location filename="../src/Preferences/PreferencesDialog.cpp" line="529"/>
+        <location filename="../src/Preferences/PreferencesDialog.cpp" line="542"/>
+        <location filename="../src/Preferences/PreferencesDialog.cpp" line="555"/>
+        <location filename="../src/Preferences/PreferencesDialog.cpp" line="568"/>
+        <location filename="../src/Preferences/PreferencesDialog.cpp" line="580"/>
         <source>Select Color</source>
         <translation>Выбрать цвет</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.cpp" line="596"/>
+        <location filename="../src/Preferences/PreferencesDialog.cpp" line="595"/>
         <source>Tool already exists</source>
         <translation>Инструмент уже присутствует</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.cpp" line="597"/>
+        <location filename="../src/Preferences/PreferencesDialog.cpp" line="596"/>
         <source>A tool of this name already exists.
 Please select another name or click the &lt;Apply&gt; button if you want to modify the existing one</source>
         <translation>Инструмент с таким именем уже существует.
 Выберите другое имя, либо нажмите &lt;Apply&gt;, если хотите изменить существующее</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.cpp" line="616"/>
+        <location filename="../src/Preferences/PreferencesDialog.cpp" line="615"/>
         <source>Cannot delete preset tool</source>
         <translation>Невозможно удалить инструмент заготовки</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.cpp" line="617"/>
+        <location filename="../src/Preferences/PreferencesDialog.cpp" line="616"/>
         <source>Cannot delete preset tool &quot;%1&quot;</source>
         <translation>Невозможно удалить инструмент заготовки &quot;%1&quot;</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.cpp" line="635"/>
+        <location filename="../src/Preferences/PreferencesDialog.cpp" line="634"/>
         <source>Cannot modify preset tool name</source>
         <translation>Невозможно изменить имя инструмента заготовки</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.cpp" line="636"/>
+        <location filename="../src/Preferences/PreferencesDialog.cpp" line="635"/>
         <source>Cannot modify preset tool &quot;%1&quot;&apos;s name</source>
         <translation>Невозможно изменить имя инструмента заготовки &quot;%1&quot;&apos;</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.cpp" line="661"/>
+        <location filename="../src/Preferences/PreferencesDialog.cpp" line="660"/>
         <source>Select tool executable</source>
         <translation>Выберите исполняемый файл инструмента</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.cpp" line="669"/>
+        <location filename="../src/Preferences/PreferencesDialog.cpp" line="668"/>
         <source>Select template document</source>
         <translation>Выбрать шаблон документа</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.cpp" line="669"/>
+        <location filename="../src/Preferences/PreferencesDialog.cpp" line="668"/>
         <source>Merkaartor document (*.mdc)</source>
         <translation>Merkaartor документ (*.mdc)</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.cpp" line="677"/>
+        <location filename="../src/Preferences/PreferencesDialog.cpp" line="676"/>
         <source>Select Log directory</source>
         <translation>Выберите директорию для журналов</translation>
     </message>
@@ -5452,7 +5467,7 @@ Please select another name or click the &lt;Apply&gt; button if you want to modi
         <location filename="../src/Preferences/PreferencesDialog.ui" line="788"/>
         <location filename="../src/Preferences/PreferencesDialog.ui" line="919"/>
         <location filename="../src/Preferences/PreferencesDialog.ui" line="1127"/>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="1430"/>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="1470"/>
         <source>...</source>
         <translation>...</translation>
     </message>
@@ -5533,53 +5548,58 @@ Please select another name or click the &lt;Apply&gt; button if you want to modi
         <translation>Установить системное время по GPS</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="1271"/>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="1273"/>
+        <source>Network Timeout (sec)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="1311"/>
         <source>Enable JOSM-compatible local server on port 8111</source>
         <translation>Разрешить локальный JOSM-совместимый сервер на порт 8111</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="1339"/>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="1379"/>
         <source>Automatically add &quot;source&quot; tag when creating features over a background map</source>
         <translation>Автоматически добавлять &quot;исходный&quot; тег, когда создается фоновая карта</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="1375"/>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="1415"/>
         <source>Tools</source>
         <translation>Инструменты</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="1393"/>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="1433"/>
         <source>Name:</source>
         <translation>Имя:</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="1403"/>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="1443"/>
         <source>Path:</source>
         <translation>Путь:</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="1452"/>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="1492"/>
         <source>Apply</source>
         <translation>Применить</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="1459"/>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="1499"/>
         <source>Add</source>
         <translation>Добавить</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="1466"/>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="1506"/>
         <source>Remove</source>
         <translation>Удалить</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.cpp" line="495"/>
+        <location filename="../src/Preferences/PreferencesDialog.cpp" line="494"/>
         <location filename="../src/Preferences/PreferencesDialog.ui" line="733"/>
         <source>Tag Template</source>
         <translation>Шаблон тега</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.cpp" line="495"/>
+        <location filename="../src/Preferences/PreferencesDialog.cpp" line="494"/>
         <source>Merkaartor tag template (*.mat)</source>
         <translation>Шаблон тега Merkaartor (*.mat)</translation>
     </message>
@@ -5594,7 +5614,7 @@ Please select another name or click the &lt;Apply&gt; button if you want to modi
         <translation>Шаблон</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="1298"/>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="1338"/>
         <source>Tiles Caching (not active for Yahoo! due to legal restrictions)</source>
         <translation>Кеширование квадратов (не активно для Yahoo! из-за правовых ограничений)</translation>
     </message>
@@ -5604,7 +5624,7 @@ Please select another name or click the &lt;Apply&gt; button if you want to modi
         <translation>Перезаписать стиль</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.cpp" line="486"/>
+        <location filename="../src/Preferences/PreferencesDialog.cpp" line="485"/>
         <location filename="../src/Preferences/PreferencesDialog.ui" line="647"/>
         <source>Custom styles directory</source>
         <translation>Каталог назначения стилей</translation>
@@ -5700,7 +5720,7 @@ Please select another name or click the &lt;Apply&gt; button if you want to modi
         <translation>Пользователь:</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="1346"/>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="1386"/>
         <source>Enable use of OSB background (needs new document)</source>
         <translation>Разрешить использование фона OSB (понадобится новый документ)</translation>
     </message>
@@ -5837,7 +5857,7 @@ Please select another name or click the &lt;Apply&gt; button if you want to modi
 <context>
     <name>Projection</name>
     <message>
-        <location filename="../src/Maps/Projection.cpp" line="511"/>
+        <location filename="../src/Maps/Projection.cpp" line="513"/>
         <source>Document</source>
         <translation>Документ</translation>
     </message>
@@ -5876,63 +5896,63 @@ Please select another name or click the &lt;Apply&gt; button if you want to modi
 <context>
     <name>PropertiesDock</name>
     <message>
-        <location filename="../src/Docks/PropertiesDock.cpp" line="482"/>
-        <location filename="../src/Docks/PropertiesDock.cpp" line="1140"/>
+        <location filename="../src/Docks/PropertiesDock.cpp" line="481"/>
+        <location filename="../src/Docks/PropertiesDock.cpp" line="1139"/>
         <source>Properties</source>
         <translation>Свойства</translation>
     </message>
     <message>
-        <location filename="../src/Docks/PropertiesDock.cpp" line="1031"/>
+        <location filename="../src/Docks/PropertiesDock.cpp" line="1030"/>
         <source>Error reading template file</source>
         <translation>Ошибка при чтении файла шаблона</translation>
     </message>
     <message>
-        <location filename="../src/Docks/PropertiesDock.cpp" line="1141"/>
+        <location filename="../src/Docks/PropertiesDock.cpp" line="1140"/>
         <source>Center map</source>
         <translation>Центр карты</translation>
     </message>
     <message>
-        <location filename="../src/Docks/PropertiesDock.cpp" line="1142"/>
+        <location filename="../src/Docks/PropertiesDock.cpp" line="1141"/>
         <source>Center &amp;&amp; Zoom map</source>
         <translation>Центрировать и масштабировать карту</translation>
     </message>
     <message>
-        <location filename="../src/Docks/PropertiesDock.cpp" line="322"/>
+        <location filename="../src/Docks/PropertiesDock.cpp" line="321"/>
         <source>%1/%1 selected item(s)</source>
         <translation>выбрано элементов %1/%1</translation>
     </message>
     <message>
-        <location filename="../src/Docks/PropertiesDock.cpp" line="345"/>
+        <location filename="../src/Docks/PropertiesDock.cpp" line="344"/>
         <source>%1/%2 selected item(s)</source>
         <translation>выбрано элементов %1/%2</translation>
     </message>
     <message>
-        <location filename="../src/Docks/PropertiesDock.cpp" line="408"/>
+        <location filename="../src/Docks/PropertiesDock.cpp" line="407"/>
         <source>Selected items</source>
         <translation>Выбранные объекты</translation>
     </message>
     <message>
-        <location filename="../src/Docks/PropertiesDock.cpp" line="417"/>
+        <location filename="../src/Docks/PropertiesDock.cpp" line="416"/>
         <source>Properties - Multiple elements</source>
         <translation>Свойства - Разные элементы</translation>
     </message>
     <message>
-        <location filename="../src/Docks/PropertiesDock.cpp" line="470"/>
+        <location filename="../src/Docks/PropertiesDock.cpp" line="469"/>
         <source>Properties - Relation</source>
         <translation>Свойства - Отношение</translation>
     </message>
     <message>
-        <location filename="../src/Docks/PropertiesDock.cpp" line="449"/>
+        <location filename="../src/Docks/PropertiesDock.cpp" line="448"/>
         <source>Properties - Road</source>
         <translation>Свойства - Линия</translation>
     </message>
     <message>
-        <location filename="../src/Docks/PropertiesDock.cpp" line="1143"/>
+        <location filename="../src/Docks/PropertiesDock.cpp" line="1142"/>
         <source>Select member</source>
         <translation>Выделить участника</translation>
     </message>
     <message>
-        <location filename="../src/Docks/PropertiesDock.cpp" line="434"/>
+        <location filename="../src/Docks/PropertiesDock.cpp" line="433"/>
         <source>Properties - Node</source>
         <translation>Свойства - Точка</translation>
     </message>
@@ -6518,8 +6538,8 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <location filename="../src/Preferences/TMSPreferencesDialog.cpp" line="216"/>
-        <location filename="../src/Preferences/TMSPreferencesDialog.cpp" line="268"/>
-        <location filename="../src/Preferences/TMSPreferencesDialog.cpp" line="278"/>
+        <location filename="../src/Preferences/TMSPreferencesDialog.cpp" line="269"/>
+        <location filename="../src/Preferences/TMSPreferencesDialog.cpp" line="279"/>
         <source>Merkaartor: GetServices</source>
         <translation>Merkaartor: GetServices</translation>
     </message>
@@ -6529,12 +6549,12 @@ p, li { white-space: pre-wrap; }
         <translation>Адрес и путь не могуть быть пустыми.</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/TMSPreferencesDialog.cpp" line="269"/>
+        <location filename="../src/Preferences/TMSPreferencesDialog.cpp" line="270"/>
         <source>Download failed: %1.</source>
         <translation>Ошибка скачивания: %1.</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/TMSPreferencesDialog.cpp" line="278"/>
+        <location filename="../src/Preferences/TMSPreferencesDialog.cpp" line="279"/>
         <source>Error reading services.
 </source>
         <translation>Ошибка сервисов чтения.
@@ -6712,17 +6732,17 @@ p, li { white-space: pre-wrap; }
 <context>
     <name>TrackLayerWidget</name>
     <message>
-        <location filename="../src/Layers/LayerWidget.cpp" line="546"/>
+        <location filename="../src/Layers/LayerWidget.cpp" line="564"/>
         <source>Extract Drawing layer</source>
         <translation>Извлечь редактируемый слой</translation>
     </message>
     <message>
-        <location filename="../src/Layers/LayerWidget.cpp" line="551"/>
+        <location filename="../src/Layers/LayerWidget.cpp" line="569"/>
         <source>Zoom</source>
         <translation>Масштаб</translation>
     </message>
     <message>
-        <location filename="../src/Layers/LayerWidget.cpp" line="559"/>
+        <location filename="../src/Layers/LayerWidget.cpp" line="577"/>
         <source>Close</source>
         <translation>Закрыть</translation>
     </message>
@@ -6821,12 +6841,12 @@ p, li { white-space: pre-wrap; }
 <context>
     <name>UploadedLayerWidget</name>
     <message>
-        <location filename="../src/Layers/LayerWidget.cpp" line="610"/>
+        <location filename="../src/Layers/LayerWidget.cpp" line="628"/>
         <source>Zoom</source>
         <translation>Масштаб</translation>
     </message>
     <message>
-        <location filename="../src/Layers/LayerWidget.cpp" line="615"/>
+        <location filename="../src/Layers/LayerWidget.cpp" line="633"/>
         <source>Clear</source>
         <translation>Очистить</translation>
     </message>
@@ -6835,8 +6855,8 @@ p, li { white-space: pre-wrap; }
     <name>WMSPreferencesDialog</name>
     <message>
         <location filename="../src/Preferences/WMSPreferencesDialog.cpp" line="346"/>
-        <location filename="../src/Preferences/WMSPreferencesDialog.cpp" line="397"/>
-        <location filename="../src/Preferences/WMSPreferencesDialog.cpp" line="411"/>
+        <location filename="../src/Preferences/WMSPreferencesDialog.cpp" line="394"/>
+        <location filename="../src/Preferences/WMSPreferencesDialog.cpp" line="408"/>
         <source>Merkaartor: GetCapabilities</source>
         <translation>Merkaartor: ПолучитьВозможности</translation>
     </message>
@@ -6846,17 +6866,17 @@ p, li { white-space: pre-wrap; }
         <translation>Адрес и путь не могуть быть пустыми.</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/WMSPreferencesDialog.cpp" line="412"/>
+        <location filename="../src/Preferences/WMSPreferencesDialog.cpp" line="409"/>
         <source>Download failed: %1.</source>
         <translation>Ошибка скачивания: %1.</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/WMSPreferencesDialog.cpp" line="560"/>
+        <location filename="../src/Preferences/WMSPreferencesDialog.cpp" line="557"/>
         <source>Unnamed</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Preferences/WMSPreferencesDialog.cpp" line="397"/>
+        <location filename="../src/Preferences/WMSPreferencesDialog.cpp" line="394"/>
         <source>Error reading capabilities.
 </source>
         <translation>Ошибка чтения возможностей.
