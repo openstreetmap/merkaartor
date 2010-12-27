@@ -13,16 +13,7 @@
 #define EQUATORIALMETERPERDEGREE    222638.981555556
 
 #ifndef _MOBILE
-
 #include "Node.h"
-
-#ifndef USE_PROJ
-#include <ggl/extensions/gis/projections/parameters.hpp>
-#include <ggl/extensions/gis/projections/factory.hpp>
-#include "ggl/extensions/gis/projections/impl/pj_transform.hpp"
-
-using namespace ggl;
-#endif
 #endif
 
 
@@ -91,14 +82,12 @@ public:
 Projection::Projection(void)
 : p(new ProjectionPrivate)
 {
-#ifdef USE_PROJ
 #ifdef Q_OS_WIN
     QString pdir(QDir::toNativeSeparators(qApp->applicationDirPath() + "/" STRINGIFY(SHARE_DIR) "/proj"));
     const char* proj_dir = pdir.toUtf8().constData();
 //    const char* proj_dir = "E:\\cbro\\src\\merkaartor-devel\\binaries\\bin\\share\\proj";
     pj_set_searchpath(1, &proj_dir);
 #endif // Q_OS_WIN
-#endif // USE_PROJ
 
 #ifndef _MOBILE
     theProj = NULL;
@@ -110,11 +99,7 @@ Projection::Projection(void)
 Projection::~Projection(void)
 {
 #ifndef _MOBILE
-#ifdef USE_PROJ
     pj_free(theProj);
-#else
-    SAFE_DELETE(theProj)
-#endif
 #endif // _MOBILE
     delete p;
 }
@@ -213,29 +198,17 @@ void Projection::projTransform(ProjProjection srcdefn,
                            ProjProjection dstdefn,
                            long point_count, int point_offset, double *x, double *y, double *z )
 {
-#ifdef USE_PROJ
     pj_transform(srcdefn, dstdefn, point_count, point_offset, x, y, z);
-#else
-    ggl::projection::detail::pj_transform(srcdefn, dstdefn, point_count, point_offset, x, y, z);
-#endif
 }
 
 void Projection::projTransformFromWGS84(long point_count, int point_offset, double *x, double *y, double *z ) const
 {
-#ifdef USE_PROJ
     pj_transform(p->theWGS84Proj, theProj, point_count, point_offset, x, y, z);
-#else
-    ggl::projection::detail::pj_transform(p->theWGS84Proj, theProj, point_count, point_offset, x, y, z);
-#endif
 }
 
 void Projection::projTransformToWGS84(long point_count, int point_offset, double *x, double *y, double *z ) const
 {
-#ifdef USE_PROJ
     pj_transform(theProj, p->theWGS84Proj, point_count, point_offset, x, y, z);
-#else
-    ggl::projection::detail::pj_transform(theProj, p->theWGS84Proj, point_count, point_offset, x, y, z);
-#endif
 }
 
 QPointF Projection::projProject(const Coord & Map) const
@@ -245,7 +218,6 @@ QPointF Projection::projProject(const Coord & Map) const
 
 QPointF Projection::projProject(const QPointF & Map) const
 {
-#ifdef USE_PROJ
 //    projUV in;
 
 //    in.u = angToRad(Map.x());
@@ -260,23 +232,10 @@ QPointF Projection::projProject(const QPointF & Map) const
     projTransformFromWGS84(1, 0, &x, &y, NULL);
 
     return QPointF(x, y);
-#else
-    try {
-        point_ll_deg in(longitude<>(Map.x()), latitude<>(Map.y()));
-        point_2d out;
-
-        theProj->forward(in, out);
-
-        return QPointF(out.x(), out.y());
-    } catch (...) {
-        return QPointF(0., 0.);
-    }
-#endif
 }
 
 Coord Projection::projInverse(const QPointF & pProj) const
 {
-#ifdef USE_PROJ
 //    projUV in;
 //    in.u = pProj.x();
 //    in.v = pProj.y();
@@ -291,18 +250,6 @@ Coord Projection::projInverse(const QPointF & pProj) const
     projTransformToWGS84(1, 0, &x, &y, NULL);
 
     return Coord(radToCoord(y), radToCoord(x));
-#else
-    try {
-        point_2d in(pProj.x(), pProj.y());
-        point_ll_deg out;
-
-        theProj->inverse(in, out);
-
-        return Coord(angToCoord(out.lat()), angToCoord(out.lon()));
-    } catch (...) {
-        return Coord(0, 0);
-    }
-#endif
 }
 
 QRectF Projection::getProjectedViewport(const CoordBox& Viewport, const QRect& screen) const
@@ -351,20 +298,7 @@ bool Projection::projIsLatLong() const
 #ifndef _MOBILE
 ProjProjection Projection::getProjection(QString projString)
 {
-#ifdef USE_PROJ
     ProjProjection theProj = pj_init_plus(QString("%1 +over").arg(projString).toLatin1());
-#else
-    ggl::projection::factory<ggl::point_ll_deg, ggl::point_2d> fac;
-    ggl::projection::parameters par;
-    ProjProjection theProj;
-
-    try {
-        par = ggl::projection::init(std::string(QString("%1 +over").arg(projString).toLatin1().data()));
-        theProj = fac.create_new(par);
-    } catch (...) {
-        theProj = NULL;
-    }
-#endif
     return theProj;
 }
 #endif // _MOBILE
@@ -375,14 +309,10 @@ bool Projection::setProjectionType(QString aProjectionType)
         return true;
 
 #ifndef _MOBILE
-#ifdef USE_PROJ
     if (theProj) {
         pj_free(theProj);
         theProj = NULL;
     }
-#else
-    SAFE_DELETE(theProj)
-#endif
 #endif // _MOBILE
 
     p->ProjectionRevision++;
@@ -424,11 +354,7 @@ bool Projection::setProjectionType(QString aProjectionType)
             return false;
         }
 //        else {
-//#ifdef USE_PROJ
 //            if (pj_is_latlong(theProj))
-//#else
-//            if (theProj->params().is_latlong)
-//#endif
 //                p->projType = "EPSG:4326";
 //                p->IsLatLong = true;
 //        }
@@ -454,11 +380,7 @@ QString Projection::getProjectionProj4() const
     else if (p->IsMercator)
         return "+init=EPSG:3857";
     else
-#ifdef USE_PROJ
         return QString(pj_get_def(theProj, 0));
-#else
-        return p->projProj4;
-#endif
 }
 
 int Projection::projectionRevision() const

@@ -111,12 +111,8 @@
 #include <locale.h>
 
 //For About
-#ifdef USE_PROJ
 #include "proj_api.h"
-#endif
-#ifdef USE_GDAL
 #include "gdal_version.h"
-#endif
 
 SlippyMapCache* SlippyMapWidget::theSlippyCache = 0;
 
@@ -166,9 +162,7 @@ MainWindow::MainWindow(QWidget *parent)
 #ifdef GEOIMAGE
     supported_import_formats += " *.jpg";
 #endif
-#ifdef USE_GDAL
     supported_import_formats += " *.shp *.gml";
-#endif
 #ifdef USE_PROTOBUF
     supported_import_formats += " *.pbf";
 #endif
@@ -184,9 +178,7 @@ MainWindow::MainWindow(QWidget *parent)
 #ifdef GEOIMAGE
     supported_import_formats_desc += tr("Geotagged images (*.jpg)\n");
 #endif
-#ifdef USE_GDAL
     supported_import_formats_desc += tr("ESRI Shapefile (*.shp)\n") + tr("Geography Markup Language (*.gml)\n");
-#endif
 #ifdef USE_PROTOBUF
     supported_import_formats_desc += tr("Protobuf Binary Format (*.pbf)\n");
 #endif
@@ -1224,7 +1216,6 @@ bool MainWindow::importFiles(Document * mapDocument, const QStringList & fileNam
             importOK = mapDocument->importPBF(baseFileName, (DrawingLayer*)newLayer);
         }
 #endif
-#ifdef USE_GDAL
         else { // Fallback to GDAL
             qDebug() << "Trying GDAL";
             newLayer = new DrawingLayer( baseFileName );
@@ -1232,8 +1223,6 @@ bool MainWindow::importFiles(Document * mapDocument, const QStringList & fileNam
             mapDocument->add(newLayer);
             importOK = mapDocument->importGDAL(baseFileName, (DrawingLayer*)newLayer);
         }
-#endif
-
 
         if (!importOK && newLayer)
             mapDocument->remove(newLayer);
@@ -1534,17 +1523,10 @@ void MainWindow::on_helpAboutAction_triggered()
     int boostMajVer = BOOST_VERSION / 100000;
     int boostMinVer = BOOST_VERSION / 100 % 1000;
     About.BoostVersion->setText(About.BoostVersion->text().arg(QString::number(boostMajVer)+"."+QString::number(boostMinVer)));
-#ifdef USE_PROJ
     QString projVer = QString(STRINGIFY(PJ_VERSION));
     About.Proj4Version->setText(About.Proj4Version->text().arg(QString("%1.%2.%3").arg(projVer.left(1)).arg(projVer.mid(1, 1)).arg(projVer.right(1))));
-#else
-    About.Proj4Version->setVisible(false);
-#endif
-#ifdef USE_GDAL
     About.GdalVersion->setText(About.GdalVersion->text().arg(GDAL_RELEASE_NAME));
-#else
-    About.GdalVersion->setVisible(false);
-#endif
+
     QFile ct(":/Utils/CHANGELOG");
     ct.open(QIODevice::ReadOnly);
     QTextStream cl(&ct);

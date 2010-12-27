@@ -7,19 +7,11 @@
 #include <QPointF>
 
 #ifndef _MOBILE
-
 #include "Preferences/MerkaartorPreferences.h"
 
-#ifdef USE_PROJ
 #include <proj_api.h>
 typedef projPJ ProjProjection;
-#else
-#include <ggl/geometries/cartesian2d.hpp>
-#include <ggl/extensions/gis/latlong/latlong.hpp>
-#include <ggl/extensions/gis/projections/projection.hpp>
 
-typedef ggl::projection::projection<ggl::point_ll_deg, ggl::point_2d>* ProjProjection;
-#endif // USE_PROJ
 #endif // _MOBILE
 
 class QRect;

@@ -786,7 +786,6 @@ bool Document::importGDAL(const QString& filename, DrawingLayer* NewLayer)
     Q_UNUSED(filename)
     Q_UNUSED(NewLayer)
 
-#ifdef USE_GDAL
     ImportExportGdal imp(this);
     if (!imp.loadFile(filename))
         return false;
@@ -796,9 +795,6 @@ bool Document::importGDAL(const QString& filename, DrawingLayer* NewLayer)
         return true;
     else
         return false;
-#else
-    return false;
-#endif
 }
 
 bool Document::importCSV(const QString& filename, DrawingLayer* NewLayer)

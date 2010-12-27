@@ -36,12 +36,10 @@ FORMS += \
     ExportDialog.ui \
     ImportExport/ImportCSVDialog.ui
 
-contains (GDAL, 1) {
 HEADERS += \
     ImportExportGdal.h
 SOURCES += \
     ImportExportGdal.cpp
-}
 
 contains (PROTOBUF, 1) {
 #PBF

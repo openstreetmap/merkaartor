@@ -19,10 +19,9 @@ QT_VER_MIN = $$member(QT_VERSION, 1)
         SUBDIRS += MCadastreFranceBackground
     }
 
-    contains (GDAL, 1) {
-        SUBDIRS += MGeoTiffBackground \
-                   MGdalBackground
-    }
+    SUBDIRS += MGeoTiffBackground \
+               MGdalBackground
+
     contains (SPATIALITE, 1) {
         SUBDIRS += MSpatialiteBackground
     }

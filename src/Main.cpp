@@ -10,12 +10,8 @@
 #include "MainWindow.h"
 #include "Preferences/MerkaartorPreferences.h"
 #include "revision.h"
-#ifdef USE_PROJ
 #include "proj_api.h"
-#endif
-#ifdef USE_GDAL
 #include "gdal_version.h"
-#endif
 
 #include "IMapAdapterFactory.h"
 
@@ -177,13 +173,9 @@ int main(int argc, char** argv)
 
     qDebug() << "**** " << QDateTime::currentDateTime().toString(Qt::ISODate) << " -- Starting " << USER_AGENT;
     qDebug() <<	"-------" << QString("using QT version %1 (built with %2)").arg(qVersion()).arg(QT_VERSION_STR);
-#ifdef USE_PROJ
     QString projVer = QString(STRINGIFY(PJ_VERSION));
     qDebug() <<	"-------" << QString("using PROJ4 version %1.%2.%3").arg(projVer.left(1)).arg(projVer.mid(1, 1)).arg(projVer.right(1));
-#endif
-#ifdef USE_GDAL
     qDebug() <<	"-------" << QString("using GDAL version %1").arg(GDAL_RELEASE_NAME);
-#endif
     qDebug() << "-------" << "with arguments: " << QCoreApplication::arguments();
 
 #ifdef _MOBILE

@@ -1,23 +1,4 @@
-# external supported variables:
-# passed on commandline like "qmake NOWEBKIT=1"
-# TRANSDIR_MERKAARTOR - translations directory for merkaartor
-# TRANSDIR_SYSTEM     - translations directory for Qt itself
-# OUTPUT_DIR          - base directory for local output files
-# PREFIX              - base prefix for installation (default: /usr/local)
-# LIBDIR              - base directory for plugins (default: $$PREFIX/lib)
-# NODEBUG             - no debug target
-# PROJ=1              - use PROJ4 library for projections (requires proj4)
-# GDAL    	          - enable GDAL
-# MOBILE    	      - enable MOBILE
-# GEOIMAGE            - enable geotagged images (needs exiv2)
-# NVIDIA_HACK         - used to solve nvidia specific slowdown
-# USE_BUILTIN_BOOST   - use the Boost version (1.38) from Merkaartor rather than the system one (ony on Linux)
-# GPSDLIB             - use gpsd libgps or libQgpsmm for access to a gpsd server
-# ZBAR                - use the ZBAR library to extract coordinates from barcode
-# LIBPROXY            - use libproxy to find the system proxy
-# PORTABLE=1          - build merkaartor as a portable app (all files in app dir)
-# SPATIALITE=1        - enable use of the spatialite linray
-# PROTOBUF=1          - enable google protobuf for PBF import
+# see http://merkaartor.be/wiki/merkaartor/Compiling
 
 #Static config
 include (Config.pri)
@@ -226,23 +207,17 @@ lists.files = \
     $$PWD/../share/TmsServersList.xml
 INSTALLS += lists
 
-contains (GDAL, 1) {
-    DEFINES += USE_GDAL
-    win32 {
-        win32-msvc*:LIBS += -lgdal_i
-        win32-g++:LIBS += -lgdal
-    }
-    unix {
-        LIBS += $$system(gdal-config --libs)
-        QMAKE_CXXFLAGS += $$system(gdal-config --cflags)
-        QMAKE_CFLAGS += $$system(gdal-config --cflags)
-    }
+win32 {
+    win32-msvc*:LIBS += -lgdal_i
+    win32-g++:LIBS += -lgdal
+}
+unix {
+    LIBS += $$system(gdal-config --libs)
+    QMAKE_CXXFLAGS += $$system(gdal-config --cflags)
+    QMAKE_CFLAGS += $$system(gdal-config --cflags)
 }
 
-contains (PROJ, 1) {
-    DEFINES += USE_PROJ
-    LIBS += -lproj
-}
+LIBS += -lproj
 
 contains (PROTOBUF, 1) {
     DEFINES += USE_PROTOBUF
