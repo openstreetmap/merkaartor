@@ -48,7 +48,7 @@ protected:
 
     Feature* parseGeometry(Layer* aLayer, OGRGeometry *poGeometry);
 
-    Node *nodeFor(OGRPoint point);
+    Node *nodeFor(Layer* aLayer, OGRPoint point);
     Way *readWay(Layer* aLayer, OGRLineString *poRing);
 
 private:

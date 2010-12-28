@@ -75,23 +75,26 @@ static uint qHash(const OGRPoint o)
 }
 
 
-Node *ImportExportGdal::nodeFor(const OGRPoint p)
+Node *ImportExportGdal::nodeFor(Layer* aLayer, const OGRPoint p)
 {
     if (pointHash.contains(p)) {
         return pointHash[p];
     }
 
     if (toWGS84)
-        return pointHash[p] = new Node(Coord(angToCoord(p.getY()), angToCoord(p.getX())));
+        pointHash[p] = new Node(Coord(angToCoord(p.getY()), angToCoord(p.getX())));
     else {
         Coord c = theProjection->inverse2Coord(QPointF(p.getX(), p.getY()));
-        return pointHash[p] = new Node(c);
+        pointHash[p] = new Node(c);
     }
+    aLayer->add(pointHash[p]);
+    return pointHash[p];
 }
 
 // IMPORT
 
-Way *ImportExportGdal::readWay(Layer* aLayer, OGRLineString *poRing) {
+Way *ImportExportGdal::readWay(Layer* aLayer, OGRLineString *poRing)
+{
     int numNode = poRing->getNumPoints();
 
     if (!numNode) return NULL;
@@ -101,11 +104,10 @@ Way *ImportExportGdal::readWay(Layer* aLayer, OGRLineString *poRing) {
     Way* w = new Way();
     for(int i = 0;  i < numNode;  i++) {
         poRing->getPoint(i, &p);
-        Node *n = nodeFor(p);
-        if (!aLayer->exists(n))
-            aLayer->add(n);
+        Node *n = nodeFor(aLayer, p);
         w->add(n);
     }
+    aLayer->add(w);
     return w;
 }
 
@@ -117,9 +119,9 @@ Feature* ImportExportGdal::parseGeometry(Layer* aLayer, OGRGeometry *poGeometry)
     case wkbPoint: {
         OGRPoint *p = (OGRPoint*)(poGeometry);
         if (p->getDimension() > 2)
-            return nodeFor(OGRPoint(p->getX(), p->getY(), p->getZ()));
+            return nodeFor(aLayer, OGRPoint(p->getX(), p->getY(), p->getZ()));
         else
-            return nodeFor(OGRPoint(p->getX(), p->getY()));
+            return nodeFor(aLayer, OGRPoint(p->getX(), p->getY()));
     }
 
     case wkbPolygon: {
@@ -128,8 +130,6 @@ Feature* ImportExportGdal::parseGeometry(Layer* aLayer, OGRGeometry *poGeometry)
         Way *outer = readWay(aLayer, poRing);
         if (outer) {
             if (int numHoles = poPoly->getNumInteriorRings()) {
-                if (!aLayer->exists(outer))
-                    aLayer->add(outer);
                 Relation* rel = new Relation;
                 aLayer->add(rel);
                 rel->setTag("type", "multipolygon");
@@ -138,8 +138,6 @@ Feature* ImportExportGdal::parseGeometry(Layer* aLayer, OGRGeometry *poGeometry)
                     poRing = poPoly->getInteriorRing(i);
                     Way *inner = readWay(aLayer, poRing);
                     if (inner) {
-                        if (!aLayer->exists(inner))
-                            aLayer->add(inner);
                         rel->add("inner", inner);
                     }
                 }
@@ -161,11 +159,10 @@ Feature* ImportExportGdal::parseGeometry(Layer* aLayer, OGRGeometry *poGeometry)
         OGRGeometryCollection  *poCol = (OGRGeometryCollection*) poGeometry;
         if(int numCol = poCol->getNumGeometries()) {
             Relation* R = new Relation;
+            aLayer->add(R);
             for(int i=0; i<numCol; i++) {
                 Feature* F = parseGeometry(aLayer, poCol->getGeometryRef(i));
                 if (F ) {
-                    if (!aLayer->exists(F))
-                        aLayer->add(F);
                     R->add("", F);
                 }
             }
@@ -285,8 +282,6 @@ bool ImportExportGdal::import(Layer* aLayer)
 
             Feature* F = parseGeometry(aLayer, poGeometry);
             if (F) {
-                if (!aLayer->exists(F))
-                    aLayer->add(F);
                 for (int i=0; i<poFeature->GetFieldCount(); ++i) {
                     OGRFieldDefn  *fd = poFeature->GetFieldDefnRef(i);
                     QString k(fd->GetNameRef());
