@@ -33,23 +33,28 @@ bool g_Merk_SelfClip = false;
 MainWindow* g_Merk_MainWindow = NULL;
 
 QStringList tagKeys;
+QHash<QString, quint32> tagKeysHash;
 QStringList tagValues;
+QHash<QString, quint32> tagValuesHash;
 QHash< quint32, QList<quint32> > tagList;
 
 QPair<quint32, quint32> g_addToTagList(QString k, QString v)
 {
     qint32 ik, iv;
 
-    ik = tagKeys.indexOf(k);
-    if (ik == -1) {
+    if (!tagKeysHash.contains(k)) {
         tagKeys.append(k);
         ik = tagKeys.size()-1;
-    }
-    iv = tagValues.indexOf(v);
-    if (iv == -1) {
+        tagKeysHash[k] = ik;
+    } else
+        ik = tagKeysHash.value(k);
+
+    if (!tagValuesHash.contains(v)) {
         tagValues.append(v);
         iv = tagValues.size()-1;
-    }
+        tagValuesHash[v] = iv;
+    } else
+        iv = tagValuesHash.value(v);
 
     if (!k.isEmpty() && !v.isEmpty())
         tagList[ik].append(iv);
