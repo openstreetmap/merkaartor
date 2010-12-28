@@ -207,7 +207,6 @@ bool DirtyListExecutorOSC::stop()
     OscStream.writeEndDocument();
     OscBuffer.close();
     QString URL = theDownloader->getURLToUploadDiff(ChangeSetId);
-    qDebug() << QString(OscBuffer.buffer());
     switch (sendRequest("POST", URL, QString(OscBuffer.buffer()), DataOut)) {
     case 200: {
         QDomDocument resDoc;

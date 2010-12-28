@@ -78,7 +78,7 @@ void OSMHandler::parseNode(const QXmlAttributes& atts)
         }
         else if (userPt->lastUpdated() != Feature::UserResolved)
         {
-            if (Pt->time() > userPt->time() || Pt->versionNumber() != userPt->versionNumber()) {
+            if (userPt->lastUpdated() == Feature::NotYetDownloaded || (Pt->time() > userPt->time() || Pt->versionNumber() != userPt->versionNumber())) {
                 delete Pt;
                 Pt = userPt;
                 Pt->layer()->remove(Pt);
@@ -156,7 +156,7 @@ void OSMHandler::parseWay(const QXmlAttributes& atts)
         }
         else if (R->lastUpdated() != Feature::UserResolved)
         {
-            if (R->time() > userRd->time() || R->versionNumber() != userRd->versionNumber()) {
+            if (userRd->lastUpdated() == Feature::NotYetDownloaded || (R->time() > userRd->time() || R->versionNumber() != userRd->versionNumber())) {
                 delete R;
                 R = userRd;
                 R->layer()->remove(R);
@@ -240,7 +240,7 @@ void OSMHandler::parseRelation(const QXmlAttributes& atts)
         }
         else if (R->lastUpdated() != Feature::UserResolved)
         {
-            if (R->time() > userR->time() || R->versionNumber() != userR->versionNumber()) {
+            if (userR->lastUpdated() == Feature::NotYetDownloaded || (R->time() > userR->time() || R->versionNumber() != userR->versionNumber())) {
                 delete R;
                 R = userR;
                 R->layer()->remove(R);

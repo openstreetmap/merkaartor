@@ -1,4 +1,5 @@
 v0.17
+    * FIX : Problem importing OSM comprising new features
     * ADD : Move "validation" style rules to a new "Validation.mas" style
     * ADD : Allow to align background image with <SPACE>+pan
     * CHG : Rename "Create rectangle" to "Create rectangular building" and automatically add "building=yes"
