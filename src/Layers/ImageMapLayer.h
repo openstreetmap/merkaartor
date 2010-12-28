@@ -44,7 +44,7 @@ public:
     CoordBox boundingBox();
     virtual int size() const;
 
-    virtual bool toXML(QDomElement& xParent, bool asTemplate, QProgressDialog * progress);
+    virtual bool toXML(QXmlStreamWriter& stream, bool asTemplate, QProgressDialog * progress);
     virtual QString toPropertiesHtml();
     static ImageMapLayer* fromXML(Document* d, const QDomElement& e, QProgressDialog * progress);
 

@@ -106,18 +106,24 @@ QString DirtyListExecutorOSC::getChanges()
     Progress->setMaximum(Tasks+2);
     Progress->show();
 
-    OscDoc.appendChild(OscDoc.createProcessingInstruction("xml", "version=\"1.0\" encoding=\"UTF-8\""));
+    OscBuffer.buffer().clear();
+    OscBuffer.open(QIODevice::WriteOnly);
 
-    OscRoot = OscDoc.createElement("osmChange ");
-    OscDoc.appendChild(OscRoot);
-    OscRoot.setAttribute("version", "0.3");
-    OscRoot.setAttribute("generator", QString("Merkaartor %1").arg(STRINGIFY(VERSION)));
+    OscStream.setDevice(&OscBuffer);
+    OscStream.writeStartDocument();
+
+    OscStream.writeStartElement("osmChange ");
+    OscStream.writeAttribute("version", "0.3");
+    OscStream.writeAttribute("generator", QString("Merkaartor %1").arg(STRINGIFY(VERSION)));
 
     runVisit();
 
     SAFE_DELETE(Progress)
 
-    return OscDoc.toString();
+    OscStream.writeEndDocument();
+    OscBuffer.close();
+
+    return QString(OscBuffer.buffer());
 }
 
 bool DirtyListExecutorOSC::executeChanges(QWidget* aParent)
@@ -146,11 +152,14 @@ bool DirtyListExecutorOSC::executeChanges(QWidget* aParent)
 
     if ((ok = start()))
     {
-        OscDoc.appendChild(OscDoc.createProcessingInstruction("xml", "version=\"1.0\" encoding=\"UTF-8\""));
-        OscRoot = OscDoc.createElement("osmChange ");
-        OscDoc.appendChild(OscRoot);
-        OscRoot.setAttribute("version", "0.3");
-        OscRoot.setAttribute("generator", QString("Merkaartor %1").arg(STRINGIFY(VERSION)));
+        OscBuffer.buffer().clear();
+        OscBuffer.open(QIODevice::WriteOnly);
+        OscStream.setDevice(&OscBuffer);
+        OscStream.writeStartDocument();
+
+        OscStream.writeStartElement("osmChange ");
+        OscStream.writeAttribute("version", "0.3");
+        OscStream.writeAttribute("generator", QString("Merkaartor %1").arg(STRINGIFY(VERSION)));
 
         Lbl->setText(QApplication::translate("Downloader","Preparing changes"));
         if ((ok = runVisit())) {
@@ -195,8 +204,11 @@ bool DirtyListExecutorOSC::stop()
     QString DataIn, DataOut;
     QString errFeat;
 
+    OscStream.writeEndDocument();
+    OscBuffer.close();
     QString URL = theDownloader->getURLToUploadDiff(ChangeSetId);
-    switch (sendRequest("POST", URL, OscDoc.toString(), DataOut)) {
+    qDebug() << QString(OscBuffer.buffer());
+    switch (sendRequest("POST", URL, QString(OscBuffer.buffer()), DataOut)) {
     case 200: {
         QDomDocument resDoc;
         if (resDoc.setContent(DataOut)) {
@@ -296,38 +308,38 @@ bool DirtyListExecutorOSC::stop()
 
 void DirtyListExecutorOSC::OscCreate(Feature* F)
 {
-    if (OscCurElem.tagName() != "create") {
-        OscCurElem = OscDoc.createElement("create");
-        OscRoot.appendChild(OscCurElem);
+    if (LastAction != "create") {
+        if (!LastAction.isEmpty())
+            OscStream.writeEndElement();
+        OscStream.writeStartElement("create");
+        LastAction = "create";
     }
 
-    F->toXML(OscCurElem, Progress, true);
-    if (!ChangeSetId.isEmpty())
-        OscCurElem.lastChildElement().setAttribute("changeset", ChangeSetId);
+    F->toXML(OscStream, Progress, true, ChangeSetId);
 }
 
 void DirtyListExecutorOSC::OscModify(Feature* F)
 {
-    if (OscCurElem.tagName() != "modify") {
-        OscCurElem = OscDoc.createElement("modify");
-        OscRoot.appendChild(OscCurElem);
+    if (LastAction != "modify") {
+        if (!LastAction.isEmpty())
+            OscStream.writeEndElement();
+        OscStream.writeStartElement("create");
+        LastAction = "modify";
     }
 
-    F->toXML(OscCurElem, Progress, true);
-    if (!ChangeSetId.isEmpty())
-        OscCurElem.lastChildElement().setAttribute("changeset", ChangeSetId);
+    F->toXML(OscStream, Progress, true, ChangeSetId);
 }
 
 void DirtyListExecutorOSC::OscDelete(Feature* F)
 {
-    if (OscCurElem.tagName() != "delete") {
-        OscCurElem = OscDoc.createElement("delete");
-        OscRoot.appendChild(OscCurElem);
+    if (LastAction != "delete") {
+        if (!LastAction.isEmpty())
+            OscStream.writeEndElement();
+        OscStream.writeStartElement("delete");
+        LastAction = "modify";
     }
 
-    F->toXML(OscCurElem, Progress, true);
-    if (!ChangeSetId.isEmpty())
-        OscCurElem.lastChildElement().setAttribute("changeset", ChangeSetId);
+    F->toXML(OscStream, Progress, true, ChangeSetId);
 }
 
 

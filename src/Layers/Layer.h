@@ -115,7 +115,7 @@ public:
     virtual QString toHtml();
     virtual QString toPropertiesHtml();
 
-    virtual bool toXML(QDomElement& e, bool asTemplate, QProgressDialog * progress);
+    virtual bool toXML(QXmlStreamWriter& stream, bool asTemplate, QProgressDialog * progress);
     static Layer* fromXML(Layer* l, Document* d, const QDomElement e, QProgressDialog * progress);
 
     virtual CoordBox boundingBox();
@@ -160,7 +160,7 @@ public:
 
     virtual LayerWidget* newWidget(void);
 
-    virtual bool toXML(QDomElement& xParent, bool asTemplate, QProgressDialog * progress);
+    virtual bool toXML(QXmlStreamWriter& stream, bool asTemplate, QProgressDialog * progress);
     static DrawingLayer* fromXML(Document* d, const QDomElement& e, QProgressDialog * progress);
     static DrawingLayer* doFromXML(DrawingLayer* l, Document* d, const QDomElement e, QProgressDialog * progress);
 
@@ -181,7 +181,7 @@ public:
     virtual const QString getFilename();
 
     virtual QString toHtml();
-    virtual bool toXML(QDomElement& xParent, bool asTemplate, QProgressDialog * progress);
+    virtual bool toXML(QXmlStreamWriter& stream, bool asTemplate, QProgressDialog * progress);
     static TrackLayer* fromXML(Document* d, const QDomElement& e, QProgressDialog * progress);
 
     virtual /* const */ LayerType classType() const {return Layer::TrackLayerType;}
@@ -236,7 +236,7 @@ public:
     DeletedLayer(const QString& aName);
     virtual ~DeletedLayer();
 
-    virtual bool toXML(QDomElement& xParent, bool asTemplate, QProgressDialog * progress);
+    virtual bool toXML(QXmlStreamWriter& stream, bool asTemplate, QProgressDialog * progress);
     static DeletedLayer* fromXML(Document* d, const QDomElement& e, QProgressDialog * progress);
 
     virtual /* const */ LayerType classType() const {return Layer::DeletedLayerType;}
@@ -254,7 +254,7 @@ public:
     FilterLayer(const QString& aId, const QString& aName, const QString& aFilter);
     virtual ~FilterLayer();
 
-    bool toXML(QDomElement& e, bool asTemplate, QProgressDialog * progress);
+    bool toXML(QXmlStreamWriter& stream, bool asTemplate, QProgressDialog * progress);
     static FilterLayer* fromXML(Document* d, const QDomElement e, QProgressDialog * progress);
 
     virtual /* const */ LayerType classType() const {return Layer::FilterLayerType;}

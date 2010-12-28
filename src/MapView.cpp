@@ -1044,19 +1044,14 @@ void MapView::dropEvent(QDropEvent *event)
 }
 #endif // GEOIMAGE
 
-bool MapView::toXML(QDomElement xParent)
+bool MapView::toXML(QXmlStreamWriter& stream)
 {
     bool OK = true;
 
-    QDomElement e = xParent.namedItem("MapView").toElement();
-    if (!e.isNull()) {
-        xParent.removeChild(e);
-    }
-    e = xParent.ownerDocument().createElement("MapView");
-    xParent.appendChild(e);
-
-    viewport().toXML("Viewport", e);
-    theProjection.toXML(e);
+    stream.writeStartElement("MapView");
+    viewport().toXML("Viewport", stream);
+    theProjection.toXML(stream);
+    stream.writeEndElement();
 
     return OK;
 }

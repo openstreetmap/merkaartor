@@ -46,6 +46,18 @@ CoordBox CoordBox::zoomed(double f) const
     return CoordBox(Coord(C.lat()-DLat,C.lon()-DLon), Coord(C.lat()+DLat,C.lon()+DLon) );
 }
 
+bool CoordBox::toXML(QString elName, QXmlStreamWriter& stream) const
+{
+    bool OK = true;
+
+    stream.writeStartElement(elName);
+    TopRight.toXML("topright", stream);
+    BottomLeft.toXML("bottomleft", stream);
+    stream.writeEndElement();
+
+    return OK;
+}
+
 bool CoordBox::toXML(QString elName, QDomElement& xParent) const
 {
     bool OK = true;
@@ -87,6 +99,18 @@ double Coord::distanceFrom(const Coord& other) const
     const double dist = atan2(sqrt(t1*t1 + t2*t2), t3);
 
     return dist * EQUATORIALRADIUSKM;
+}
+
+bool Coord::toXML(QString elName, QXmlStreamWriter& stream) const
+{
+    bool OK = true;
+
+    stream.writeStartElement(elName);
+    stream.writeAttribute("lon",COORD2STRING(coordToAng(Lon)));
+    stream.writeAttribute("lat", COORD2STRING(coordToAng(Lat)));
+    stream.writeEndElement();
+
+    return OK;
 }
 
 bool Coord::toXML(QString elName, QDomElement& xParent) const

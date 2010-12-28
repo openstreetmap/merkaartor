@@ -28,7 +28,7 @@ public:
     virtual void getFeatureSet(QMap<RenderPriority, QSet <Feature*> >& theFeatures, Document* theDocument,
                                QList<CoordBox>& invalidRects, QRectF& clipRect, Projection& theProjection, QTransform& theTransform);
 
-    virtual bool toXML(QDomElement& xParent, bool asTemplate, QProgressDialog * progress);
+    virtual bool toXML(QXmlStreamWriter& stream, bool asTemplate, QProgressDialog * progress);
     static OsbLayer* fromXML(Document* d, const QDomElement& e, QProgressDialog * progress);
 
     virtual QString toHtml();

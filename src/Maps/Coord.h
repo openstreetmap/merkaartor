@@ -101,6 +101,7 @@ class Coord
 
         double distanceFrom(const Coord& other) const;
 
+        bool toXML(QString elName, QXmlStreamWriter& stream) const;
         bool toXML(QString elName, QDomElement& xParent) const;
         static Coord fromXML(QDomElement e);
 
@@ -305,6 +306,7 @@ class CoordBox
 
         static bool visibleLine(const CoordBox & viewport, Coord & last, Coord & here);
 
+        bool toXML(QString elName, QXmlStreamWriter& stream) const;
         bool toXML(QString elName, QDomElement& xParent) const;
         static CoordBox fromXML(QDomElement e);
 

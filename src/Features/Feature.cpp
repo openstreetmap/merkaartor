@@ -831,15 +831,17 @@ void Feature::drawHighlight(QPainter& thePainter, MapView* theView)
 
 QString Feature::toXML(int lvl, QProgressDialog * progress)
 {
-    QDomDocument doc;
-    QDomElement root = doc.createElement("root");
-    doc.appendChild(root);
-    if (toXML(root, progress)) {
-        QString ret;
-        QTextStream ts(&ret);
-        root.firstChild().save(ts, lvl);
-        return ret;
-//        return theXmlDoc.toString(lvl);
+    QString xml;
+    QXmlStreamWriter stream(&xml);
+    stream.setAutoFormatting(true);
+    stream.setAutoFormattingIndent(lvl*2);
+
+    stream.writeStartDocument();
+    stream.writeStartElement("root");
+    if (toXML(stream, progress)) {
+        stream.writeEndElement();
+        stream.writeEndDocument();
+        return xml;
     } else
         return "";
 }
@@ -874,29 +876,31 @@ void Feature::fromXML(const QDomElement& e, Feature* F)
 //        g_Merk_MainWindow->properties()->addSelection(F);
 }
 
-void Feature::toXML(QDomElement& e, bool strict)
+void Feature::toXML(QXmlStreamWriter& stream, bool strict, QString changetsetid)
 {
-    e.setAttribute("id", xmlId());
-    e.setAttribute("timestamp", time().toString(Qt::ISODate)+"Z");
-    e.setAttribute("version", versionNumber());
-    e.setAttribute("user", user());
+    stream.writeAttribute("id", xmlId());
+    stream.writeAttribute("timestamp", time().toString(Qt::ISODate)+"Z");
+    stream.writeAttribute("version", QString::number(versionNumber()));
+    stream.writeAttribute("user", user());
     if (!strict) {
-        e.setAttribute("actor", (int)lastUpdated());
+        stream.writeAttribute("actor", QString::number((int)lastUpdated()));
         if (isDeleted())
-            e.setAttribute("deleted","true");
+            stream.writeAttribute("deleted","true");
         if (getDirtyLevel())
-            e.setAttribute("dirtylevel", getDirtyLevel());
+            stream.writeAttribute("dirtylevel", QString::number(getDirtyLevel()));
         if (isUploaded())
-            e.setAttribute("uploaded","true");
+            stream.writeAttribute("uploaded","true");
         if (isSpecial())
-            e.setAttribute("special","true");
+            stream.writeAttribute("special","true");
         // TODO Manage selection at document level
         if (g_Merk_MainWindow->properties()->isSelected(this))
-            e.setAttribute("selected","true");
+            stream.writeAttribute("selected","true");
     }
+    if (!changetsetid.isEmpty())
+        stream.writeAttribute("changeset", changetsetid);
 }
 
-bool Feature::tagsToXML(QDomElement xParent, bool strict)
+bool Feature::tagsToXML(QXmlStreamWriter& stream, bool strict)
 {
     bool OK = true;
 
@@ -907,11 +911,10 @@ bool Feature::tagsToXML(QDomElement xParent, bool strict)
                 continue;
         }
 
-        QDomElement e = xParent.ownerDocument().createElement("tag");
-        xParent.appendChild(e);
-
-        e.setAttribute("k", tagKey(i));
-        e.setAttribute("v", tagValue(i));
+        stream.writeStartElement("tag");
+        stream.writeAttribute("k", tagKey(i));
+        stream.writeAttribute("v", tagValue(i));
+        stream.writeEndElement();
     }
 
     return OK;

@@ -466,14 +466,13 @@ void Relation::updateMeta()
     }
 }
 
-bool Relation::toXML(QDomElement xParent, QProgressDialog * progress, bool strict)
+bool Relation::toXML(QXmlStreamWriter& stream, QProgressDialog * progress, bool strict, QString changetsetid)
 {
     bool OK = true;
 
-    QDomElement e = xParent.ownerDocument().createElement("relation");
-    xParent.appendChild(e);
+    stream.writeStartElement("relation");
 
-    Feature::toXML(e, strict);
+    Feature::toXML(stream, strict, changetsetid);
 
     for (int i=0; i<size(); ++i) {
         QString Type("node");
@@ -482,15 +481,15 @@ bool Relation::toXML(QDomElement xParent, QProgressDialog * progress, bool stric
         else if (dynamic_cast<const Relation*>(get(i)))
             Type="relation";
 
-        QDomElement n = xParent.ownerDocument().createElement("member");
-        e.appendChild(n);
-
-        n.setAttribute("type", Type);
-        n.setAttribute("ref", get(i)->xmlId());
-        n.setAttribute("role", getRole(i));
+        stream.writeStartElement("member");
+        stream.writeAttribute("type", Type);
+        stream.writeAttribute("ref", get(i)->xmlId());
+        stream.writeAttribute("role", getRole(i));
+        stream.writeEndElement();
     }
 
-    tagsToXML(e, strict);
+    tagsToXML(stream, strict);
+    stream.writeEndElement();
 
     if (progress)
         progress->setValue(progress->value()+1);

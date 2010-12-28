@@ -370,23 +370,22 @@ void WalkingPapersAdapter::cleanup()
     theCoordBbox = QRectF();
 }
 
-bool WalkingPapersAdapter::toXML(QDomElement xParent)
+bool WalkingPapersAdapter::toXML(QXmlStreamWriter& stream)
 {
     bool OK = true;
 
-    QDomElement fs = xParent.ownerDocument().createElement("Images");
-    xParent.appendChild(fs);
-
+    stream.writeStartElement("Images");
     for (int i=0; i<theImages.size(); ++i) {
-        QDomElement f = xParent.ownerDocument().createElement("Image");
-        fs.appendChild(f);
-        f.setAttribute("filename", theImages[i].theFilename);
-        f.setAttribute("top", theImages[i].theBBox.top());
-        f.setAttribute("left", theImages[i].theBBox.left());
-        f.setAttribute("width", theImages[i].theBBox.width());
-        f.setAttribute("height", theImages[i].theBBox.height());
-        f.setAttribute("rotation", theImages[i].rotation);
+        stream.writeStartElement("Image");
+        stream.writeAttribute("filename", theImages[i].theFilename);
+        stream.writeAttribute("top", QString::number(theImages[i].theBBox.top()));
+        stream.writeAttribute("left", QString::number(theImages[i].theBBox.left()));
+        stream.writeAttribute("width", QString::number(theImages[i].theBBox.width()));
+        stream.writeAttribute("height", QString::number(theImages[i].theBBox.height()));
+        stream.writeAttribute("rotation", QString::number(theImages[i].rotation));
+        stream.writeEndElement();
     }
+    stream.writeEndElement();
 
     return OK;
 }

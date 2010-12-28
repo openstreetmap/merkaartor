@@ -106,8 +106,8 @@ class Way : public Feature
         const QPainterPath& getPath() const;
         void buildPath(Projection const &theProjection, const QTransform& thensform, const QRectF& clipRect);
 
-        virtual bool toGPX(QDomElement xParent, QProgressDialog * progress, bool forExport=false);
-        virtual bool toXML(QDomElement xParent, QProgressDialog * progress, bool strict=false);
+        virtual bool toGPX(QXmlStreamWriter& stream, QProgressDialog * progress, bool forExport=false);
+        virtual bool toXML(QXmlStreamWriter& stream, QProgressDialog * progress, bool strict=false, QString changetsetid="");
         static Way* fromXML(Document* d, Layer* L, const QDomElement e);
 
         virtual QString toHtml();

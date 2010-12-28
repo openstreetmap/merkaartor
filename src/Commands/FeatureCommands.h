@@ -42,7 +42,7 @@ class SetTagCommand : public TagCommand
         virtual void redo();
         virtual bool buildDirtyList(DirtyList& theList);
 
-        virtual bool toXML(QDomElement& xParent) const;
+        virtual bool toXML(QXmlStreamWriter& stream) const;
         static SetTagCommand* fromXML(Document* d,QDomElement e);
 
     private:
@@ -61,7 +61,7 @@ class ClearTagsCommand : public TagCommand
         virtual void undo();
         virtual void redo();
 
-        virtual bool toXML(QDomElement& xParent) const;
+        virtual bool toXML(QXmlStreamWriter& stream) const;
         static ClearTagsCommand* fromXML(Document* d,QDomElement e);
 };
 
@@ -75,7 +75,7 @@ class ClearTagCommand : public TagCommand
         virtual void redo();
         virtual bool buildDirtyList(DirtyList& theList);
 
-        virtual bool toXML(QDomElement& xParent) const;
+        virtual bool toXML(QXmlStreamWriter& stream) const;
         static ClearTagCommand* fromXML(Document* d,QDomElement e);
 
     private:

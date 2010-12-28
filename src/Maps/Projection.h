@@ -50,7 +50,7 @@ class Projection : public IProjection
 
         int projectionRevision() const;
 #endif
-        bool toXML(QDomElement xParent);
+        bool toXML(QXmlStreamWriter& stream);
         void fromXML(const QDomElement e);
 
     protected:

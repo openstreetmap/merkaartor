@@ -437,14 +437,14 @@ void SpatialiteAdapter::cleanup()
 {
 }
 
-bool SpatialiteAdapter::toXML(QDomElement xParent)
+bool SpatialiteAdapter::toXML(QXmlStreamWriter& stream)
 {
     bool OK = true;
 
-    QDomElement fs = xParent.ownerDocument().createElement("Database");
-    xParent.appendChild(fs);
+    stream.writeStartElement("Database");
     if (m_loaded)
-        fs.setAttribute("filename", m_dbName);
+        stream.writeAttribute("filename", m_dbName);
+    stream.writeEndElement();
 
     return OK;
 }

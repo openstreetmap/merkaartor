@@ -584,21 +584,22 @@ void GdalAdapter::cleanup()
     theProjection = QString();
 }
 
-bool GdalAdapter::toXML(QDomElement xParent)
+bool GdalAdapter::toXML(QXmlStreamWriter& stream)
 {
     bool OK = true;
 
-    QDomElement fs = xParent.ownerDocument().createElement("Images");
-    xParent.appendChild(fs);
+    stream.writeStartDocument("Images");
 
-    fs.setAttribute("projection", theProjection);
+    stream.writeAttribute("projection", theProjection);
     if (!theSourceTag.isEmpty())
-        fs.setAttribute("source", theSourceTag);
+        stream.writeAttribute("source", theSourceTag);
     for (int i=0; i<theImages.size(); ++i) {
-        QDomElement f = xParent.ownerDocument().createElement("Image");
-        fs.appendChild(f);
-        f.setAttribute("filename", theImages[i].theFilename);
+        stream.writeStartElement("Image");
+        stream.writeAttribute("filename", theImages[i].theFilename);
+        stream.writeEndElement();
     }
+
+    stream.writeEndElement();
 
     return OK;
 }

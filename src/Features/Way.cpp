@@ -815,41 +815,32 @@ void Way::clearTag(const QString& k)
     MetaUpToDate = false;
 }
 
-bool Way::toGPX(QDomElement xParent, QProgressDialog * progress, bool forExport)
+bool Way::toGPX(QXmlStreamWriter& stream, QProgressDialog * progress, bool forExport)
 {
     bool OK = true;
 
-    QDomElement e = xParent.ownerDocument().createElement("rte");
-    xParent.appendChild(e);
+    stream.writeStartElement("rte");
 
     if (!forExport)
-        e.setAttribute("xml:id", xmlId());
+        stream.writeAttribute("xml:id", xmlId());
     QString s = tagValue("name","");
     if (!s.isEmpty()) {
-        QDomElement c = xParent.ownerDocument().createElement("name");
-        e.appendChild(c);
-        QDomText v = c.ownerDocument().createTextNode(s);
-        c.appendChild(v);
+        stream.writeTextElement("name", s);
     }
     s = tagValue("_comment_","");
     if (!s.isEmpty()) {
-        QDomElement c = xParent.ownerDocument().createElement("cmt");
-        e.appendChild(c);
-        QDomText v = c.ownerDocument().createTextNode(s);
-        c.appendChild(v);
+        stream.writeTextElement("cmt", s);
     }
     s = tagValue("_description_","");
     if (!s.isEmpty()) {
-        QDomElement c = xParent.ownerDocument().createElement("desc");
-        e.appendChild(c);
-        QDomText v = c.ownerDocument().createTextNode(s);
-        c.appendChild(v);
+        stream.writeTextElement("desc", s);
     }
 
     for (int i=0; i<size(); ++i) {
         if (!getNode(i)->isVirtual())
-            getNode(i)->toGPX(e, progress, forExport);
+            getNode(i)->toGPX(stream, progress, "rtept", forExport);
     }
+    stream.writeEndElement();
 
     if (progress)
         progress->setValue(progress->value()+1);
@@ -857,32 +848,31 @@ bool Way::toGPX(QDomElement xParent, QProgressDialog * progress, bool forExport)
     return OK;
 }
 
-bool Way::toXML(QDomElement xParent, QProgressDialog * progress, bool strict)
+bool Way::toXML(QXmlStreamWriter& stream, QProgressDialog * progress, bool strict, QString changetsetid)
 {
     bool OK = true;
 
-    QDomElement e = xParent.ownerDocument().createElement("way");
-    xParent.appendChild(e);
+    stream.writeStartElement("way");
 
-    Feature::toXML(e, strict);
+    Feature::toXML(stream, strict, changetsetid);
 
     if (size()) {
-        QDomElement n = xParent.ownerDocument().createElement("nd");
-        e.appendChild(n);
-        n.setAttribute("ref", get(0)->xmlId());
+        stream.writeStartElement("nd");
+        stream.writeAttribute("ref", get(0)->xmlId());
+        stream.writeEndElement();
 
         for (int i=1; i<size(); ++i) {
             if (!getNode(i)->isVirtual())
                 if (get(i)->xmlId() != get(i-1)->xmlId()) {
-                    QDomElement n = xParent.ownerDocument().createElement("nd");
-                    e.appendChild(n);
-
-                    n.setAttribute("ref", get(i)->xmlId());
+                    stream.writeStartElement("nd");
+                    stream.writeAttribute("ref", get(i)->xmlId());
+                    stream.writeEndElement();
                 }
         }
     }
 
-    tagsToXML(e, strict);
+    tagsToXML(stream, strict);
+    stream.writeEndElement();
 
     if (progress)
         progress->setValue(progress->value()+1);

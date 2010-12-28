@@ -83,7 +83,7 @@ public:
     QString exportOSM(QMainWindow* main, const CoordBox& aCoordBox = WORLD_COORDBOX, bool renderBounds=false);
     QString exportOSM(QMainWindow* main, QList<Feature*> aFeatures, bool forCopyPaste=false);
     QList<Feature*> exportCoreOSM(QList<Feature*> aFeatures, bool forCopyPaste=false);
-    bool toXML(QDomElement xParent, bool asTemplate, QProgressDialog * progress);
+    bool toXML(QXmlStreamWriter& stream, bool asTemplate, QProgressDialog * progress);
     static Document* fromXML(QString title, const QDomElement e, double version, LayerDock* aDock, QProgressDialog * progress);
 
     bool importNMEA(const QString& filename, TrackLayer* NewLayer);

@@ -95,7 +95,7 @@ public:
 
     virtual void cleanup() {}
 
-    virtual bool toXML(QDomElement /*xParent*/) { return true; }
+    virtual bool toXML(QXmlStreamWriter& /*stream*/) { return true; }
     virtual void fromXML(const QDomElement /*xParent*/) {}
     virtual QString toPropertiesHtml() {return "";}
 

@@ -105,19 +105,18 @@ void Command::redo()
     }
 }
 
-bool Command::toXML(QDomElement& xParent) const
+bool Command::toXML(QXmlStreamWriter& stream) const
 {
     bool OK = true;
 
     if (mainFeature) {
-        QDomElement e = xParent.ownerDocument().createElement("Command");
-        xParent.appendChild(e);
-
-        e.setAttribute("xml:id", id());
-        e.setAttribute("feature", mainFeature->xmlId());
-        e.setAttribute("oldCreated", oldCreated);
+        stream.writeStartElement("Command");
+        stream.writeAttribute("xml:id", id());
+        stream.writeAttribute("feature", mainFeature->xmlId());
+        stream.writeAttribute("oldCreated", oldCreated);
         if (isUndone)
-            e.setAttribute("undone", "true");
+            stream.writeAttribute("undone", "true");
+        stream.writeEndElement();
     }
 
     return OK;
@@ -224,25 +223,24 @@ bool CommandList::buildDirtyList(DirtyList& theList)
     return Size == 0;
 }
 
-bool CommandList::toXML(QDomElement& xParent) const
+bool CommandList::toXML(QXmlStreamWriter& stream) const
 {
     bool OK = true;
 
-    QDomElement e = xParent.ownerDocument().createElement("CommandList");
-    xParent.appendChild(e);
-
-    e.setAttribute("xml:id", id());
+    stream.writeStartElement("CommandList");
+    stream.writeAttribute("xml:id", id());
     if (isReversed)
-        e.setAttribute("reversed", "true");
-    e.setAttribute("description", description);
+        stream.writeAttribute("reversed", "true");
+    stream.writeAttribute("description", description);
     if (mainFeature) {
-        e.setAttribute("feature", mainFeature->id().numId);
-        e.setAttribute("featureclass", mainFeature->getClass());
+        stream.writeAttribute("feature",QString::number(mainFeature->id().numId));
+        stream.writeAttribute("featureclass", mainFeature->getClass());
     }
 
     for (int i=0; i<Size; ++i) {
-        OK = Subs[i]->toXML(e);
+        OK = Subs[i]->toXML(stream);
     }
+    stream.writeEndElement();
 
     return OK;
 }
@@ -453,23 +451,18 @@ int CommandHistory::buildUndoList(QListWidget* theList)
     return Index;
 }
 
-bool CommandHistory::toXML(QDomElement& xParent, QProgressDialog * /*progress*/) const
+bool CommandHistory::toXML(QXmlStreamWriter& stream, QProgressDialog * /*progress*/) const
 {
     bool OK = true;
 
-    QDomElement e = xParent.namedItem("CommandHistory").toElement();
-    if (!e.isNull()) {
-        xParent.removeChild(e);
-    }
+    stream.writeStartElement("CommandHistory");
 
-    e = xParent.ownerDocument().createElement("CommandHistory");
-    xParent.appendChild(e);
-
-    e.setAttribute("index", QString::number(Index));
+    stream.writeAttribute("index", QString::number(Index));
 
     for (int i=0; i<Size; ++i) {
-        OK = Subs[i]->toXML(e);
+        OK = Subs[i]->toXML(stream);
     }
+    stream.writeEndElement();
 
     return OK;
 }

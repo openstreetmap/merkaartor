@@ -363,17 +363,17 @@ bool ImageMapLayer::isTiled()
     return (p->theMapAdapter->isTiled());
 }
 
-void QTransformToXml(QDomElement& parent, const QTransform& theTransform)
+void QTransformToXml(QXmlStreamWriter& stream, const QTransform& theTransform)
 {
-    parent.setAttribute("m11", theTransform.m11());
-    parent.setAttribute("m12", theTransform.m12());
-    parent.setAttribute("m13", theTransform.m13());
-    parent.setAttribute("m21", theTransform.m21());
-    parent.setAttribute("m22", theTransform.m22());
-    parent.setAttribute("m23", theTransform.m23());
-    parent.setAttribute("m31", theTransform.m31());
-    parent.setAttribute("m32", theTransform.m32());
-    parent.setAttribute("m33", theTransform.m33());
+    stream.writeAttribute("m11", QString::number(theTransform.m11()));
+    stream.writeAttribute("m12", QString::number(theTransform.m12()));
+    stream.writeAttribute("m13", QString::number(theTransform.m13()));
+    stream.writeAttribute("m21", QString::number(theTransform.m21()));
+    stream.writeAttribute("m22", QString::number(theTransform.m22()));
+    stream.writeAttribute("m23", QString::number(theTransform.m23()));
+    stream.writeAttribute("m31", QString::number(theTransform.m31()));
+    stream.writeAttribute("m32", QString::number(theTransform.m32()));
+    stream.writeAttribute("m33", QString::number(theTransform.m33()));
 }
 
 QTransform QTransformFomXml(const QDomElement& parent)
@@ -391,55 +391,51 @@ QTransform QTransformFomXml(const QDomElement& parent)
     return QTransform(m11, m12, m13, m21, m22, m23, m31, m32, m33);
 }
 
-bool ImageMapLayer::toXML(QDomElement& xParent, bool asTemplate, QProgressDialog * /* progress */)
+bool ImageMapLayer::toXML(QXmlStreamWriter& stream, bool asTemplate, QProgressDialog * /* progress */)
 {
     bool OK = true;
 
-    QDomElement e = xParent.ownerDocument().createElement(metaObject()->className());
-    xParent.appendChild(e);
+    stream.writeStartElement(metaObject()->className());
 
-    e.setAttribute("xml:id", id());
-    e.setAttribute("name", name());
-    e.setAttribute("alpha", QString::number(getAlpha(),'f',2));
-    e.setAttribute("visible", QString((isVisible() ? "true" : "false")));
-    e.setAttribute("selected", QString((isSelected() ? "true" : "false")));
-    e.setAttribute("enabled", QString((isEnabled() ? "true" : "false")));
+    stream.writeAttribute("xml:id", id());
+    stream.writeAttribute("name", name());
+    stream.writeAttribute("alpha", QString::number(getAlpha(),'f',2));
+    stream.writeAttribute("visible", QString((isVisible() ? "true" : "false")));
+    stream.writeAttribute("selected", QString((isSelected() ? "true" : "false")));
+    stream.writeAttribute("enabled", QString((isEnabled() ? "true" : "false")));
 
-    e.setAttribute("bgtype", p->bgType.toString());
+    stream.writeAttribute("bgtype", p->bgType.toString());
 
-    QDomElement c;
     WmsServer ws;
     TmsServer ts;
 
     if (p->bgType == WMS_ADAPTER_UUID) {
-        c = e.ownerDocument().createElement("WmsServer");
-        e.appendChild(c);
-
-        c.setAttribute("name", p->selServer);
+        stream.writeStartElement("WmsServer");
+        stream.writeAttribute("name", p->selServer);
+        stream.writeEndElement();
     } else if (p->bgType == TMS_ADAPTER_UUID) {
-        c = e.ownerDocument().createElement("TmsServer");
-        e.appendChild(c);
-
-        c.setAttribute("name", p->selServer);
+        stream.writeStartElement("TmsServer");
+        stream.writeAttribute("name", p->selServer);
+        stream.writeEndElement();
     } else if (p->bgType != NONE_ADAPTER_UUID) {
-        c = e.ownerDocument().createElement("Data");
-        e.appendChild(c);
-
+        stream.writeStartElement("Data");
         if (!asTemplate)
-            p->theMapAdapter->toXML(c);
+            p->theMapAdapter->toXML(stream);
+        stream.writeEndElement();
     }
     if (!asTemplate) {
-        QDomElement atListEl = e.ownerDocument().createElement("AdjustmentList");
-        e.appendChild(atListEl);
+        stream.writeStartElement("AdjustmentList");
         for (int i=0; i<p->AlignementTransformList.size(); ++i) {
             if (!p->AlignementTransformList.at(i).isIdentity()) {
-                QDomElement atEl = e.ownerDocument().createElement("Adjustment");
-                atListEl.appendChild(atEl);
-                atEl.setAttribute("zoom", i);
-                QTransformToXml(atEl, p->AlignementTransformList.at(i));
+                stream.writeStartElement("Adjustment");
+                stream.writeAttribute("zoom", QString::number(i));
+                QTransformToXml(stream, p->AlignementTransformList.at(i));
+                stream.writeEndElement();
             }
         }
+        stream.writeEndElement();
     }
+    stream.writeEndElement();
 
     return OK;
 }

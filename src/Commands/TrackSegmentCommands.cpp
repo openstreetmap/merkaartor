@@ -56,22 +56,22 @@ bool TrackSegmentAddNodeCommand::buildDirtyList(DirtyList& /* theList */)
     return false;
 }
 
-bool TrackSegmentAddNodeCommand::toXML(QDomElement& xParent) const
+bool TrackSegmentAddNodeCommand::toXML(QXmlStreamWriter& stream) const
 {
     bool OK = true;
 
-    QDomElement e = xParent.ownerDocument().createElement("TrackSegmentAddTrackPointCommand");
-    xParent.appendChild(e);
+    stream.writeStartElement("TrackSegmentAddTrackPointCommand");
 
-    e.setAttribute("xml:id", id());
-    e.setAttribute("tracksegment", theTrackSegment->xmlId());
-    e.setAttribute("trackpoint", theNode->xmlId());
-    e.setAttribute("pos", QString::number(Position));
+    stream.writeAttribute("xml:id", id());
+    stream.writeAttribute("tracksegment", theTrackSegment->xmlId());
+    stream.writeAttribute("trackpoint", theNode->xmlId());
+    stream.writeAttribute("pos", QString::number(Position));
     if (theLayer)
-        e.setAttribute("layer", theLayer->id());
+        stream.writeAttribute("layer", theLayer->id());
     if (oldLayer)
-        e.setAttribute("oldlayer", oldLayer->id());
+        stream.writeAttribute("oldlayer", oldLayer->id());
 
+    stream.writeEndElement();
     return OK;
 }
 
@@ -150,22 +150,22 @@ bool TrackSegmentRemoveNodeCommand::buildDirtyList(DirtyList& /* theList */)
     return false;
 }
 
-bool TrackSegmentRemoveNodeCommand::toXML(QDomElement& xParent) const
+bool TrackSegmentRemoveNodeCommand::toXML(QXmlStreamWriter& stream) const
 {
     bool OK = true;
 
-    QDomElement e = xParent.ownerDocument().createElement("TrackSegmentRemoveTrackPointCommand");
-    xParent.appendChild(e);
+    stream.writeStartElement("TrackSegmentRemoveTrackPointCommand");
 
-    e.setAttribute("xml:id", id());
-    e.setAttribute("tracksegment", theTrackSegment->xmlId());
-    e.setAttribute("trackpoint", theTrackPoint->xmlId());
-    e.setAttribute("index", QString::number(Idx));
+    stream.writeAttribute("xml:id", id());
+    stream.writeAttribute("tracksegment", theTrackSegment->xmlId());
+    stream.writeAttribute("trackpoint", theTrackPoint->xmlId());
+    stream.writeAttribute("index", QString::number(Idx));
     if (theLayer)
-        e.setAttribute("layer", theLayer->id());
+        stream.writeAttribute("layer", theLayer->id());
     if (oldLayer)
-        e.setAttribute("oldlayer", oldLayer->id());
+        stream.writeAttribute("oldlayer", oldLayer->id());
 
+    stream.writeEndElement();
     return OK;
 }
 

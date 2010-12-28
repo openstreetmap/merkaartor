@@ -7,6 +7,7 @@
 #include <QPointF>
 #include <QUuid>
 #include <QMenu>
+#include <QXmlStreamWriter>
 #include <QDomElement>
 #include <QSettings>
 
@@ -119,7 +120,7 @@ public:
 
     virtual void cleanup() = 0;
 
-    virtual bool toXML(QDomElement xParent) = 0;
+    virtual bool toXML(QXmlStreamWriter& ) = 0;
     virtual void fromXML(const QDomElement xParent) = 0;
     virtual QString toPropertiesHtml() = 0;
 
@@ -133,6 +134,6 @@ signals:
 };
 
 Q_DECLARE_INTERFACE ( IMapAdapter,
-                      "com.cbsoft.Merkaartor.IMapAdapter/1.11" )
+                      "com.cbsoft.Merkaartor.IMapAdapter/1.12" )
 
 #endif

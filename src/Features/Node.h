@@ -85,8 +85,8 @@ class Node : public Feature
 
         virtual void partChanged(Feature* F, int ChangeId);
 
-        virtual bool toXML(QDomElement xParent, QProgressDialog * progress, bool strict=false);
-        virtual bool toGPX(QDomElement xParent, QProgressDialog * progress, bool forExport=false);
+        virtual bool toXML(QXmlStreamWriter& stream, QProgressDialog * progress, bool strict=false, QString changetsetid="");
+        virtual bool toGPX(QXmlStreamWriter& stream, QProgressDialog * progress, QString element, bool forExport=false);
         static Node* fromXML(Document* d, Layer* L, const QDomElement e);
         static Node* fromGPX(Document* d, Layer* L, const QDomElement e);
 

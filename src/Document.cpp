@@ -170,23 +170,18 @@ void Document::addFilterLayers()
     }
 }
 
-bool Document::toXML(QDomElement xParent, bool asTemplate, QProgressDialog * progress)
+bool Document::toXML(QXmlStreamWriter& stream, bool asTemplate, QProgressDialog * progress)
 {
     bool OK = true;
 
-    QDomElement mapDoc = xParent.namedItem("MapDocument").toElement();
-    if (!mapDoc.isNull()) {
-        xParent.removeChild(mapDoc);
-    }
-    mapDoc = xParent.ownerDocument().createElement("MapDocument");
-    xParent.appendChild(mapDoc);
+    stream.writeStartElement("MapDocument");
 
-    mapDoc.setAttribute("xml:id", id());
+    stream.writeAttribute("xml:id", id());
     if (!asTemplate)
-        mapDoc.setAttribute("layernum", p->layerNum);
+        stream.writeAttribute("layernum", QString::number(p->layerNum));
     if (p->lastDownloadLayer) {
-        mapDoc.setAttribute("lastdownloadlayer", p->lastDownloadLayer->id());
-        mapDoc.setAttribute("lastdownloadtimestamp", p->lastDownloadTimestamp.toUTC().toString(Qt::ISODate)+"Z");
+        stream.writeAttribute("lastdownloadlayer", p->lastDownloadLayer->id());
+        stream.writeAttribute("lastdownloadtimestamp", p->lastDownloadTimestamp.toUTC().toString(Qt::ISODate)+"Z");
     }
 
     for (int i=0; i<p->Layers.size(); ++i) {
@@ -197,13 +192,14 @@ bool Document::toXML(QDomElement xParent, bool asTemplate, QProgressDialog * pro
         if (p->Layers[i]->isEnabled()) {
             if (asTemplate && p->Layers[i]->classType() == Layer::DrawingLayerType)
                 continue;
-            p->Layers[i]->toXML(mapDoc, asTemplate, progress);
+            p->Layers[i]->toXML(stream, asTemplate, progress);
         }
     }
 
     if (!asTemplate) {
-        OK = history().toXML(mapDoc, progress);
+        OK = history().toXML(stream, progress);
     }
+    stream.writeEndElement();
 
     return OK;
 }
@@ -597,38 +593,41 @@ QString Document::exportOSM(QMainWindow* main, const CoordBox& aCoordBox, bool r
     if (dlg)
         dlg->show();
 
-    QDomDocument theXmlDoc;
-    theXmlDoc.appendChild(theXmlDoc.createProcessingInstruction("xml", "version=\"1.0\""));
+    QString xml;
+    QXmlStreamWriter stream(&xml);
+    stream.setAutoFormatting(true);
+    stream.setAutoFormattingIndent(2);
+    stream.writeStartDocument();
 
-    QDomElement o = theXmlDoc.createElement("osm");
-    theXmlDoc.appendChild(o);
-    o.setAttribute("version", "0.6");
-    o.setAttribute("generator", QString("%1 %2").arg(qApp->applicationName()).arg(STRINGIFY(VERSION)));
+    stream.writeStartElement("osm");
+    stream.writeAttribute("version", "0.6");
+    stream.writeAttribute("generator", QString("%1 %2").arg(qApp->applicationName()).arg(STRINGIFY(VERSION)));
 
-    QDomElement bb = theXmlDoc.createElement("bound");
-    o.appendChild(bb);
+    stream.writeStartElement("bound");
     QString S = QString().number(coordToAng(aCoordBox.bottomLeft().lat()),'f',6) + ",";
     S += QString().number(coordToAng(aCoordBox.bottomLeft().lon()),'f',6) + ",";
     S += QString().number(coordToAng(aCoordBox.topRight().lat()),'f',6) + ",";
     S += QString().number(coordToAng(aCoordBox.topRight().lon()),'f',6);
-    bb.setAttribute("box", S);
-    bb.setAttribute("origin", QString("http://www.openstreetmap.org/api/%1").arg(M_PREFS->apiVersion()));
+    stream.writeAttribute("box", S);
+    stream.writeAttribute("origin", QString("http://www.openstreetmap.org/api/%1").arg(M_PREFS->apiVersion()));
+    stream.writeEndElement();
 
     if (renderBounds) {
-        QDomElement bnds = theXmlDoc.createElement("bounds");
-        o.appendChild(bnds);
-
-        bnds.setAttribute("minlat", COORD2STRING(coordToAng(aCoordBox.bottomLeft().lat())));
-        bnds.setAttribute("minlon", COORD2STRING(coordToAng(aCoordBox.bottomLeft().lon())));
-        bnds.setAttribute("maxlat", COORD2STRING(coordToAng(aCoordBox.topRight().lat())));
-        bnds.setAttribute("maxlon", COORD2STRING(coordToAng(aCoordBox.topRight().lon())));
+        stream.writeStartElement("bounds");
+        stream.writeAttribute("minlat", COORD2STRING(coordToAng(aCoordBox.bottomLeft().lat())));
+        stream.writeAttribute("minlon", COORD2STRING(coordToAng(aCoordBox.bottomLeft().lon())));
+        stream.writeAttribute("maxlat", COORD2STRING(coordToAng(aCoordBox.topRight().lat())));
+        stream.writeAttribute("maxlon", COORD2STRING(coordToAng(aCoordBox.topRight().lon())));
+        stream.writeEndElement();
     }
 
     for (int i=0; i < exportedFeatures.size(); i++) {
-        exportedFeatures[i]->toXML(o, dlg);
+        exportedFeatures[i]->toXML(stream, dlg);
     }
+    stream.writeEndElement();
+    stream.writeEndDocument();
 
-    return theXmlDoc.toString(2);
+    return xml;
 }
 
 QString Document::exportOSM(QMainWindow* main, QList<Feature*> aFeatures, bool forCopyPaste)
@@ -657,33 +656,37 @@ QString Document::exportOSM(QMainWindow* main, QList<Feature*> aFeatures, bool f
     if (dlg)
         dlg->show();
 
-    QDomDocument theXmlDoc;
-    theXmlDoc.appendChild(theXmlDoc.createProcessingInstruction("xml", "version=\"1.0\""));
+    QString xml;
+    QXmlStreamWriter stream(&xml);
+    stream.setAutoFormatting(true);
+    stream.setAutoFormattingIndent(2);
+    stream.writeStartDocument();
 
-    QDomElement o = theXmlDoc.createElement("osm");
-    theXmlDoc.appendChild(o);
-    o.setAttribute("version", "0.6");
-    o.setAttribute("generator", QString("%1 %2").arg(qApp->applicationName()).arg(STRINGIFY(VERSION)));
+    stream.writeStartElement("osm");
+    stream.writeAttribute("version", "0.6");
+    stream.writeAttribute("generator", QString("%1 %2").arg(qApp->applicationName()).arg(STRINGIFY(VERSION)));
 
     if (exportedFeatures.size()) {
         aCoordBox = exportedFeatures[0]->boundingBox(true);
-        exportedFeatures[0]->toXML(o, dlg);
+        exportedFeatures[0]->toXML(stream, dlg);
         for (int i=1; i < exportedFeatures.size(); i++) {
             aCoordBox.merge(exportedFeatures[i]->boundingBox(true));
-            exportedFeatures[i]->toXML(o, dlg);
+            exportedFeatures[i]->toXML(stream, dlg);
         }
     }
 
-    QDomElement bb = theXmlDoc.createElement("bound");
-    o.appendChild(bb);
+    stream.writeStartElement("bound");
     QString S = QString().number(coordToAng(aCoordBox.bottomLeft().lat()),'f',6) + ",";
     S += QString().number(coordToAng(aCoordBox.bottomLeft().lon()),'f',6) + ",";
     S += QString().number(coordToAng(aCoordBox.topRight().lat()),'f',6) + ",";
     S += QString().number(coordToAng(aCoordBox.topRight().lon()),'f',6);
-    bb.setAttribute("box", S);
-    bb.setAttribute("origin", QString("http://www.openstreetmap.org/api/%1").arg(M_PREFS->apiVersion()));
+    stream.writeAttribute("box", S);
+    stream.writeAttribute("origin", QString("http://www.openstreetmap.org/api/%1").arg(M_PREFS->apiVersion()));
+    stream.writeEndElement();
 
-    return theXmlDoc.toString(2);
+    stream.writeEndElement();
+    stream.writeEndDocument();
+    return xml;
 }
 
 QList<Feature*> Document::exportCoreOSM(QList<Feature*> aFeatures, bool forCopyPaste)

@@ -30,7 +30,7 @@ class Command
 
         void setId(const QString& id);
         const QString& id() const;
-        virtual bool toXML(QDomElement& xParent) const;
+        virtual bool toXML(QXmlStreamWriter& stream) const;
         static void fromXML(Document* d, const QDomElement& e, Command* C);
 
         virtual QString getDescription();
@@ -67,7 +67,7 @@ class CommandList : public Command
         virtual bool buildDirtyList(DirtyList& theList);
         void setReversed(bool val);
 
-        virtual bool toXML(QDomElement& xParent) const;
+        virtual bool toXML(QXmlStreamWriter& stream) const;
         static CommandList* fromXML(Document* d, const QDomElement& e);
 
     private:
@@ -92,7 +92,7 @@ class CommandHistory
         int buildUndoList(QListWidget* theList);
         int index() const;
 
-        virtual bool toXML(QDomElement& xParent, QProgressDialog * progress) const;
+        virtual bool toXML(QXmlStreamWriter& stream, QProgressDialog * progress) const;
         static CommandHistory* fromXML(Document* d, QDomElement& e, QProgressDialog * progress);
 
     private:

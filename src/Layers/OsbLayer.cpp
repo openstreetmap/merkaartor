@@ -375,7 +375,7 @@ void OsbLayer::getFeatureSet(QMap<RenderPriority, QSet <Feature*> >& theFeatures
 //	return pp->theImp->getFeature(d, this, ref);
 //}
 
-bool OsbLayer::toXML(QDomElement& xParent, bool asTemplate, QProgressDialog * progress)
+bool OsbLayer::toXML(QXmlStreamWriter& stream, bool asTemplate, QProgressDialog * progress)
 {
     Q_UNUSED(progress);
 
@@ -384,49 +384,12 @@ bool OsbLayer::toXML(QDomElement& xParent, bool asTemplate, QProgressDialog * pr
     if (pp->IsWorld)
         return OK;
 
-    QDomElement e = xParent.ownerDocument().createElement(metaObject()->className());
-    xParent.appendChild(e);
-    Layer::toXML(e, asTemplate, progress);
-    e.setAttribute("filename", pp->theImp->getFilename());
+    stream.writeStartElement(metaObject()->className());
+    Layer::toXML(stream, asTemplate, progress);
+    stream.writeAttribute("filename", pp->theImp->getFilename());
+    stream.writeEndElement();
 
     return OK;
-
-//	bool OK = true;
-//
-//	QDomElement e = xParent.ownerDocument().createElement(metaObject()->className());
-//	xParent.appendChild(e);
-//
-//	e.setAttribute("xml:id", id());
-//	e.setAttribute("name", p->Name);
-//	e.setAttribute("alpha", QString::number(p->alpha,'f',2));
-//	e.setAttribute("visible", QString((p->Visible ? "true" : "false")));
-//	e.setAttribute("selected", QString((p->selected ? "true" : "false")));
-//	e.setAttribute("enabled", QString((p->Enabled ? "true" : "false")));
-//	e.setAttribute("readonly", QString((p->Readonly ? "true" : "false")));
-//
-//	QDomElement o = xParent.ownerDocument().createElement("osm");
-//	e.appendChild(o);
-//	o.setAttribute("version", "0.5");
-//	o.setAttribute("generator", "Merkaartor");
-//
-//	if (p->Features.size()) {
-//		QDomElement bb = xParent.ownerDocument().createElement("bound");
-//		o.appendChild(bb);
-//		CoordBox layBB = boundingBox();
-//		QString S = QString().number(coordToAng(layBB.bottomLeft().lat()),'f',6) + ",";
-//		S += QString().number(coordToAng(layBB.bottomLeft().lon()),'f',6) + ",";
-//		S += QString().number(coordToAng(layBB.topRight().lat()),'f',6) + ",";
-//		S += QString().number(coordToAng(layBB.topRight().lon()),'f',6);
-//		bb.setAttribute("box", S);
-//		bb.setAttribute("origin", QString("http://www.openstreetmap.org/api/%1").arg(M_PREFS->apiVersion()));
-//	}
-//
-//	QList<MapFeaturePtr>::iterator it;
-//	for(it = p->Features.begin(); it != p->Features.end(); it++)
-//		(*it)->toXML(o, progress);
-//
-//	return OK;
-
 }
 
 OsbLayer * OsbLayer::fromXML(Document* d, const QDomElement& e, QProgressDialog * progress)

@@ -87,7 +87,7 @@ class MapView :	public QWidget
         void setCenter(Coord& Center, const QRect& Screen);
         void resize(QSize oldS, QSize newS);
 
-        bool toXML(QDomElement xParent);
+        bool toXML(QXmlStreamWriter& stream);
         void fromXML(const QDomElement e);
 
         RendererOptions renderOptions();

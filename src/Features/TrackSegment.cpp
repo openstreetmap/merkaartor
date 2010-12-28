@@ -344,19 +344,19 @@ int TrackSegment::duration() const
 }
 
 
-bool TrackSegment::toGPX(QDomElement xParent, QProgressDialog * progress, bool forExport)
+bool TrackSegment::toGPX(QXmlStreamWriter& stream, QProgressDialog * progress, bool forExport)
 {
     bool OK = true;
 
-    QDomElement e = xParent.ownerDocument().createElement("trkseg");
-    xParent.appendChild(e);
+    stream.writeStartElement("trkseg");
 
     if (!forExport)
-        e.setAttribute("xml:id", xmlId());
+        stream.writeAttribute("xml:id", xmlId());
 
     for (int i=0; i<size(); ++i) {
-        dynamic_cast <Node*> (get(i))->toGPX(e, progress, forExport);
+        dynamic_cast <Node*> (get(i))->toGPX(stream, progress, "trkpt", forExport);
     }
+    stream.writeEndElement();
 
     if (progress)
         progress->setValue(progress->value()+1);
@@ -364,9 +364,9 @@ bool TrackSegment::toGPX(QDomElement xParent, QProgressDialog * progress, bool f
     return OK;
 }
 
-bool TrackSegment::toXML(QDomElement xParent, QProgressDialog * progress, bool)
+bool TrackSegment::toXML(QXmlStreamWriter& stream, QProgressDialog * progress, bool, QString)
 {
-    return toGPX(xParent, progress, false);
+    return toGPX(stream, progress, false);
 }
 
 TrackSegment* TrackSegment::fromGPX(Document* d, Layer* L, const QDomElement e, QProgressDialog * progress)

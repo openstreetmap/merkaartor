@@ -62,21 +62,21 @@ bool AddFeatureCommand::buildDirtyList(DirtyList& theList)
     return false;
 }
 
-bool AddFeatureCommand::toXML(QDomElement& xParent) const
+bool AddFeatureCommand::toXML(QXmlStreamWriter& stream) const
 {
     bool OK = true;
 
-    QDomElement e = xParent.ownerDocument().createElement("AddFeatureCommand");
-    xParent.appendChild(e);
+    stream.writeStartElement("AddFeatureCommand");
 
-    e.setAttribute("xml:id", id());
-    e.setAttribute("layer", theLayer->id());
+    stream.writeAttribute("xml:id", id());
+    stream.writeAttribute("layer", theLayer->id());
     if (oldLayer)
-        e.setAttribute("oldlayer", oldLayer->id());
-    e.setAttribute("feature", theFeature->xmlId());
-    e.setAttribute("useradded", QString(UserAdded ? "true" : "false"));
+        stream.writeAttribute("oldlayer", oldLayer->id());
+    stream.writeAttribute("feature", theFeature->xmlId());
+    stream.writeAttribute("useradded", QString(UserAdded ? "true" : "false"));
 
-    Command::toXML(e);
+    Command::toXML(stream);
+    stream.writeEndElement();
 
     return OK;
 }
@@ -205,24 +205,22 @@ bool RemoveFeatureCommand::buildDirtyList(DirtyList &theList)
     return RemoveExecuted && CascadedResult;
 }
 
-bool RemoveFeatureCommand::toXML(QDomElement& xParent) const
+bool RemoveFeatureCommand::toXML(QXmlStreamWriter& stream) const
 {
     bool OK = true;
 
-    QDomElement e = xParent.ownerDocument().createElement("RemoveFeatureCommand");
-    xParent.appendChild(e);
+    stream.writeStartElement("RemoveFeatureCommand");
 
-    e.setAttribute("xml:id", id());
-    e.setAttribute("layer", oldLayer->id());
-    e.setAttribute("newlayer", theLayer->id());
-    e.setAttribute("feature", theFeature->xmlId());
-    e.setAttribute("index", QString::number(Idx));
+    stream.writeAttribute("xml:id", id());
+    stream.writeAttribute("layer", oldLayer->id());
+    stream.writeAttribute("newlayer", theLayer->id());
+    stream.writeAttribute("feature", theFeature->xmlId());
+    stream.writeAttribute("index", QString::number(Idx));
 
     if (CascadedCleanUp) {
-        QDomElement casc = xParent.ownerDocument().createElement("Cascaded");
-        e.appendChild(casc);
-
-        CascadedCleanUp->toXML(casc);
+        stream.writeStartElement("Cascaded");
+        CascadedCleanUp->toXML(stream);
+        stream.writeEndElement();
     }
 // 	if (theAlternatives.size() > 0) {
 // 		QList<MapFeature*>::const_iterator myFeatIter;
@@ -237,7 +235,8 @@ bool RemoveFeatureCommand::toXML(QDomElement& xParent) const
 // 		}
 // 	}
 
-    Command::toXML(e);
+    Command::toXML(stream);
+    stream.writeEndElement();
 
     return OK;
 }

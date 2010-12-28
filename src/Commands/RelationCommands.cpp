@@ -69,24 +69,24 @@ bool RelationAddFeatureCommand::buildDirtyList(DirtyList& theList)
     return theList.noop(theRelation);
 }
 
-bool RelationAddFeatureCommand::toXML(QDomElement& xParent) const
+bool RelationAddFeatureCommand::toXML(QXmlStreamWriter& stream) const
 {
     bool OK = true;
 
-    QDomElement e = xParent.ownerDocument().createElement("RelationAddFeatureCommand");
-    xParent.appendChild(e);
+    stream.writeStartElement("RelationAddFeatureCommand");
 
-    e.setAttribute("xml:id", id());
-    e.setAttribute("relation", theRelation->xmlId());
-    e.setAttribute("role", Role);
-    e.setAttribute("feature", theMapFeature->xmlId());
-    e.setAttribute("pos", QString::number(Position));
+    stream.writeAttribute("xml:id", id());
+    stream.writeAttribute("relation", theRelation->xmlId());
+    stream.writeAttribute("role", Role);
+    stream.writeAttribute("feature", theMapFeature->xmlId());
+    stream.writeAttribute("pos", QString::number(Position));
     if (theLayer)
-        e.setAttribute("layer", theLayer->id());
+        stream.writeAttribute("layer", theLayer->id());
     if (oldLayer)
-        e.setAttribute("oldlayer", oldLayer->id());
+        stream.writeAttribute("oldlayer", oldLayer->id());
 
-    Command::toXML(e);
+    Command::toXML(stream);
+    stream.writeEndElement();
 
     return OK;
 }
@@ -196,25 +196,25 @@ bool RelationRemoveFeatureCommand::buildDirtyList(DirtyList& theList)
     return theList.noop(theRelation);
 }
 
-bool RelationRemoveFeatureCommand::toXML(QDomElement& xParent) const
+bool RelationRemoveFeatureCommand::toXML(QXmlStreamWriter& stream) const
 {
     bool OK = true;
 
-    QDomElement e = xParent.ownerDocument().createElement("RelationRemoveFeatureCommand");
-    xParent.appendChild(e);
+    stream.writeStartElement("RelationRemoveFeatureCommand");
 
-    e.setAttribute("xml:id", id());
-    e.setAttribute("relation", theRelation->xmlId());
-    e.setAttribute("feature", theMapFeature->xmlId());
-    e.setAttribute("featureclass", theMapFeature->getClass());
-    e.setAttribute("index", QString::number(Idx));
-    e.setAttribute("role", Role);
+    stream.writeAttribute("xml:id", id());
+    stream.writeAttribute("relation", theRelation->xmlId());
+    stream.writeAttribute("feature", theMapFeature->xmlId());
+    stream.writeAttribute("featureclass", theMapFeature->getClass());
+    stream.writeAttribute("index", QString::number(Idx));
+    stream.writeAttribute("role", Role);
     if (theLayer)
-        e.setAttribute("layer", theLayer->id());
+        stream.writeAttribute("layer", theLayer->id());
     if (oldLayer)
-        e.setAttribute("oldlayer", oldLayer->id());
+        stream.writeAttribute("oldlayer", oldLayer->id());
 
-    Command::toXML(e);
+    Command::toXML(stream);
+    stream.writeEndElement();
 
     return OK;
 }

@@ -311,9 +311,9 @@ void CadastreFranceAdapter::cleanup()
 {
 }
 
-bool CadastreFranceAdapter::toXML(QDomElement xParent)
+bool CadastreFranceAdapter::toXML(QXmlStreamWriter& stream)
 {
-    Q_UNUSED(xParent)
+    Q_UNUSED(stream)
 
     return true;
 }

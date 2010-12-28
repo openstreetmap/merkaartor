@@ -137,7 +137,7 @@ public:
 
     virtual void cleanup();
 
-    virtual bool toXML(QDomElement xParent);
+    virtual bool toXML(QXmlStreamWriter& stream);
     virtual void fromXML(const QDomElement xParent);
     virtual QString toPropertiesHtml();
 

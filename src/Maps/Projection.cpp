@@ -404,21 +404,16 @@ double Projection::lonAnglePerM(double Lat) const
     return 1 / LengthOfOneDegreeLon;
 }
 
-bool Projection::toXML(QDomElement xParent)
+bool Projection::toXML(QXmlStreamWriter& stream)
 {
     bool OK = true;
 
-    QDomElement e = xParent.namedItem("Projection").toElement();
-    if (!e.isNull()) {
-        xParent.removeChild(e);
-    }
-    e = xParent.ownerDocument().createElement("Projection");
-    xParent.appendChild(e);
-
-    e.setAttribute("type", p->projType);
+    stream.writeStartElement("Projection");
+    stream.writeAttribute("type", p->projType);
     if (!p->IsLatLong && !p->IsMercator && !p->projProj4.isEmpty()) {
-        e.appendChild(xParent.ownerDocument().createTextNode(p->projProj4));
+        stream.writeCharacters(p->projProj4);
     }
+    stream.writeEndElement();
 
 
     return OK;

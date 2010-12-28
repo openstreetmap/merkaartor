@@ -746,12 +746,17 @@ void MainWindow::on_editCutAction_triggered()
         return;
     }
 
-    QDomDocument doc;
-    QDomElement root = doc.createElement("MerkaartorUndo");
-    root.setAttribute("documentid", theDocument->id());
-    doc.appendChild(root);
-    theList->toXML(root);
-    md->setData("application/x-merkaartor-undo+xml", doc.toString(2).toUtf8());
+    QString xml;
+    QXmlStreamWriter stream(&xml);
+    stream.setAutoFormatting(true);
+    stream.setAutoFormattingIndent(2);
+    stream.writeStartDocument();
+    stream.writeStartElement("MerkaartorUndo");
+    stream.writeAttribute("documentid", theDocument->id());
+    theList->toXML(stream);
+    stream.writeEndElement();
+    stream.writeEndDocument();
+    md->setData("application/x-merkaartor-undo+xml", xml.toUtf8());
 //    qDebug() << doc.toString(2);
 
     clipboard->setMimeData(md);
@@ -2601,25 +2606,22 @@ void MainWindow::doSaveDocument(QFile* file, bool asTemplate)
     QApplication::setOverrideCursor(Qt::BusyCursor);
 #endif
 
-    QDomElement root;
-    QDomDocument* theXmlDoc;
 
-    theXmlDoc = new QDomDocument();
-    theXmlDoc->appendChild(theXmlDoc->createProcessingInstruction("xml", "version=\"1.0\""));
-    root = theXmlDoc->createElement("MerkaartorDocument");
-    root.setAttribute("version", "1.1");
-    root.setAttribute("creator", QString("%1").arg(p->title));
-
-    theXmlDoc->appendChild(root);
+    QXmlStreamWriter stream(file);
+    stream.setAutoFormatting(true);
+    stream.setAutoFormattingIndent(2);
+    stream.writeStartDocument();
+    stream.writeStartElement("MerkaartorDocument");
+    stream.writeAttribute("version", "1.1");
+    stream.writeAttribute("creator", QString("%1").arg(p->title));
 
     QProgressDialog progress("Saving document...", "Cancel", 0, 0);
     progress.setWindowModality(Qt::WindowModal);
 
-    theDocument->toXML(root, asTemplate, &progress);
-    theView->toXML(root);
+    theDocument->toXML(stream, asTemplate, &progress);
+    theView->toXML(stream);
 
-    file->write(theXmlDoc->toString().toUtf8());
-    delete theXmlDoc;
+    stream.writeEndDocument();
 
     progress.setValue(progress.maximum());
 

@@ -305,10 +305,10 @@ class Feature : public IFeature
         void notifyParents(int Id);
 
         static void fromXML(const QDomElement& e, Feature* F);
-        virtual void toXML(QDomElement& e, bool strict);
+        virtual void toXML(QXmlStreamWriter& stream, bool strict, QString changetsetid="");
 
         virtual QString toXML(int lvl=0, QProgressDialog * progress=NULL);
-        virtual bool toXML(QDomElement xParent, QProgressDialog * progress=NULL, bool strict=false) = 0;
+        virtual bool toXML(QXmlStreamWriter& stream, QProgressDialog * progress=NULL, bool strict=false, QString changetsetid="") = 0;
 
         virtual QString toMainHtml(QString type, QString systemtype);
         virtual QString toHtml() = 0;
@@ -339,7 +339,7 @@ class Feature : public IFeature
         bool MetaUpToDate;
         IFeature::FId newId(IFeature::FeatureType type, Document* d=NULL) const;
 
-        bool tagsToXML(QDomElement xParent, bool strict);
+        bool tagsToXML(QXmlStreamWriter& stream, bool strict);
         static void tagsFromXML(Document* d, Feature* f, QDomElement e);
 
         long    m_references;

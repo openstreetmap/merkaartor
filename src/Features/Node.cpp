@@ -410,21 +410,21 @@ void Node::updateMeta()
     }
 }
 
-bool Node::toXML(QDomElement xParent, QProgressDialog * progress, bool strict)
+bool Node::toXML(QXmlStreamWriter& stream, QProgressDialog * progress, bool strict, QString changesetid)
 {
     bool OK = true;
 
     if (isVirtual())
         return OK;
 
-    QDomElement e = xParent.ownerDocument().createElement("node");
-    xParent.appendChild(e);
+    stream.writeStartElement("node");
 
-    Feature::toXML(e, strict);
-    e.setAttribute("lon",COORD2STRING(coordToAng(Position.topRight().lon())));
-    e.setAttribute("lat", COORD2STRING(coordToAng(Position.topRight().lat())));
+    Feature::toXML(stream, strict, changesetid);
+    stream.writeAttribute("lon",COORD2STRING(coordToAng(Position.topRight().lon())));
+    stream.writeAttribute("lat", COORD2STRING(coordToAng(Position.topRight().lat())));
 
-    tagsToXML(e, strict);
+    tagsToXML(stream, strict);
+    stream.writeEndElement();
 
     if (progress)
         progress->setValue(progress->value()+1);
@@ -432,72 +432,48 @@ bool Node::toXML(QDomElement xParent, QProgressDialog * progress, bool strict)
     return OK;
 }
 
-bool Node::toGPX(QDomElement xParent, QProgressDialog * progress, bool forExport)
+bool Node::toGPX(QXmlStreamWriter& stream, QProgressDialog * progress, QString element, bool forExport)
 {
     bool OK = true;
 
     if (isVirtual())
         return OK;
 
-    QDomElement e;
     if (!tagValue("_waypoint_","").isEmpty() ||!sizeParents())
-        e = xParent.ownerDocument().createElement("wpt");
+        stream.writeStartElement("wpt");
     else
-        if (xParent.tagName() == "trkseg")
-            e = xParent.ownerDocument().createElement("trkpt");
-        else
-            if (xParent.tagName() == "rte")
-                e = xParent.ownerDocument().createElement("rtept");
-    xParent.appendChild(e);
+        stream.writeStartElement(element);
 
     if (!forExport)
-        e.setAttribute("xml:id", xmlId());
-    e.setAttribute("lon",COORD2STRING(coordToAng(Position.topRight().lon())));
-    e.setAttribute("lat", COORD2STRING(coordToAng(Position.topRight().lat())));
+        stream.writeAttribute("xml:id", xmlId());
+    stream.writeAttribute("lon",COORD2STRING(coordToAng(Position.topRight().lon())));
+    stream.writeAttribute("lat", COORD2STRING(coordToAng(Position.topRight().lat())));
 
-    QDomElement c = xParent.ownerDocument().createElement("time");
-    e.appendChild(c);
-    QDomText v = c.ownerDocument().createTextNode(time().toString(Qt::ISODate)+"Z");
-    c.appendChild(v);
+    stream.writeTextElement("time", time().toString(Qt::ISODate)+"Z");
 
     QString s = tagValue("name","");
     if (!s.isEmpty()) {
-        QDomElement c = xParent.ownerDocument().createElement("name");
-        e.appendChild(c);
-        QDomText v = c.ownerDocument().createTextNode(s);
-        c.appendChild(v);
+        stream.writeTextElement("name", s);
     }
     if (elevation()) {
-        QDomElement c = xParent.ownerDocument().createElement("ele");
-        e.appendChild(c);
-        QDomText v = c.ownerDocument().createTextNode(QString::number(elevation(),'f',6));
-        c.appendChild(v);
+        stream.writeTextElement("ele", QString::number(elevation(),'f',6));
     }
     s = tagValue("_comment_","");
     if (!s.isEmpty()) {
-        QDomElement c = xParent.ownerDocument().createElement("cmt");
-        e.appendChild(c);
-        QDomText v = c.ownerDocument().createTextNode(s);
-        c.appendChild(v);
+        stream.writeTextElement("cmt", s);
     }
     s = tagValue("_description_","");
     if (!s.isEmpty()) {
-        QDomElement c = xParent.ownerDocument().createElement("desc");
-        e.appendChild(c);
-        QDomText v = c.ownerDocument().createTextNode(s);
-        c.appendChild(v);
+        stream.writeTextElement("desc", s);
     }
 
     // OpenStreetBug
     s = tagValue("_special_","");
     if (!s.isEmpty() && id().type & IFeature::Special) {
-        QDomElement c = xParent.ownerDocument().createElement("extensions");
-        e.appendChild(c);
-        QDomElement osbId = xParent.ownerDocument().createElement("id");
-        c.appendChild(osbId);
+        stream.writeStartElement("extensions");
         QString sid = stripToOSMId(id());
-        QDomText v = c.ownerDocument().createTextNode(sid);
-        osbId.appendChild(v);
+        stream.writeTextElement("id", sid);
+        stream.writeEndElement();
     }
 
     if (progress)

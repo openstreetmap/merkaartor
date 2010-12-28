@@ -15,7 +15,8 @@
 
 #include "DirtyList.h"
 
-#include <QDomDocument>
+#include <QXmlStreamWriter>
+#include <QBuffer>
 
 class Downloader;
 
@@ -50,9 +51,8 @@ public:
 private:
     int sendRequest(const QString& Method, const QString& URL, const QString& Out, QString& Rcv);
 
-    QDomDocument OscDoc;
-    QDomElement OscRoot;
-    QDomElement OscCurElem;
+    QXmlStreamWriter OscStream;
+    QBuffer OscBuffer;
 
     Ui::SyncListDialog Ui;
     int Tasks, Done;
@@ -60,6 +60,7 @@ private:
     QString Web,User,Pwd;
     Downloader* theDownloader;
     QString ChangeSetId;
+    QString LastAction;
 };
 
 

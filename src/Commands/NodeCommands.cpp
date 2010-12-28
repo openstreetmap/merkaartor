@@ -70,23 +70,23 @@ bool MoveNodeCommand::buildDirtyList(DirtyList &theList)
     return theList.noop(thePoint);
 }
 
-bool MoveNodeCommand::toXML(QDomElement& xParent) const
+bool MoveNodeCommand::toXML(QXmlStreamWriter& stream) const
 {
     bool OK = true;
 
-    QDomElement e = xParent.ownerDocument().createElement("MoveTrackPointCommand");
-    xParent.appendChild(e);
+    stream.writeStartElement("MoveTrackPointCommand");
 
-    e.setAttribute("xml:id", id());
-    e.setAttribute("trackpoint", thePoint->xmlId());
-    OldPos.toXML("oldpos", e);
-    NewPos.toXML("newpos", e);
+    stream.writeAttribute("xml:id", id());
+    stream.writeAttribute("trackpoint", thePoint->xmlId());
+    OldPos.toXML("oldpos", stream);
+    NewPos.toXML("newpos", stream);
     if (theLayer)
-        e.setAttribute("layer", theLayer->id());
+        stream.writeAttribute("layer", theLayer->id());
     if (oldLayer)
-        e.setAttribute("oldlayer", oldLayer->id());
+        stream.writeAttribute("oldlayer", oldLayer->id());
 
-    Command::toXML(e);
+    Command::toXML(stream);
+    stream.writeEndElement();
 
     return OK;
 }

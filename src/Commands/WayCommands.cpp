@@ -69,23 +69,23 @@ bool WayAddNodeCommand::buildDirtyList(DirtyList& theList)
     return theList.noop(theRoad);
 }
 
-bool WayAddNodeCommand::toXML(QDomElement& xParent) const
+bool WayAddNodeCommand::toXML(QXmlStreamWriter& stream) const
 {
     bool OK = true;
 
-    QDomElement e = xParent.ownerDocument().createElement("RoadAddTrackPointCommand");
-    xParent.appendChild(e);
+    stream.writeStartElement("RoadAddTrackPointCommand");
 
-    e.setAttribute("xml:id", id());
-    e.setAttribute("road", theRoad->xmlId());
-    e.setAttribute("trackpoint", theTrackPoint->xmlId());
-    e.setAttribute("pos", QString::number(Position));
+    stream.writeAttribute("xml:id", id());
+    stream.writeAttribute("road", theRoad->xmlId());
+    stream.writeAttribute("trackpoint", theTrackPoint->xmlId());
+    stream.writeAttribute("pos", QString::number(Position));
     if (theLayer)
-        e.setAttribute("layer", theLayer->id());
+        stream.writeAttribute("layer", theLayer->id());
     if (oldLayer)
-        e.setAttribute("oldlayer", oldLayer->id());
+        stream.writeAttribute("oldlayer", oldLayer->id());
 
-    Command::toXML(e);
+    Command::toXML(stream);
+    stream.writeEndElement();
 
     return OK;
 }
@@ -190,25 +190,25 @@ bool WayRemoveNodeCommand::buildDirtyList(DirtyList& theList)
     return theList.noop(theRoad);
 }
 
-bool WayRemoveNodeCommand::toXML(QDomElement& xParent) const
+bool WayRemoveNodeCommand::toXML(QXmlStreamWriter& stream) const
 {
     bool OK = true;
 
-    QDomElement e = xParent.ownerDocument().createElement("RoadRemoveTrackPointCommand");
-    xParent.appendChild(e);
+    stream.writeStartElement("RoadRemoveTrackPointCommand");
 
-    e.setAttribute("xml:id", id());
-    e.setAttribute("road", theRoad->xmlId());
-    e.setAttribute("trackpoint", theNode->xmlId());
-    e.setAttribute("index", QString::number(Idx));
+    stream.writeAttribute("xml:id", id());
+    stream.writeAttribute("road", theRoad->xmlId());
+    stream.writeAttribute("trackpoint", theNode->xmlId());
+    stream.writeAttribute("index", QString::number(Idx));
     if (wasClosed)
-        e.setAttribute("closed", "true");
+        stream.writeAttribute("closed", "true");
     if (theLayer)
-        e.setAttribute("layer", theLayer->id());
+        stream.writeAttribute("layer", theLayer->id());
     if (oldLayer)
-        e.setAttribute("oldlayer", oldLayer->id());
+        stream.writeAttribute("oldlayer", oldLayer->id());
 
-    Command::toXML(e);
+    Command::toXML(stream);
+    stream.writeEndElement();
 
     return OK;
 }

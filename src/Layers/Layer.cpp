@@ -596,21 +596,21 @@ QString Layer::toPropertiesHtml()
     return h;
 }
 
-bool Layer::toXML(QDomElement& e, bool asTemplate, QProgressDialog * progress)
+bool Layer::toXML(QXmlStreamWriter& stream, bool asTemplate, QProgressDialog * progress)
 {
     Q_UNUSED(asTemplate);
     Q_UNUSED(progress);
 
-    e.setAttribute("xml:id", id());
-    e.setAttribute("name", p->Name);
-    e.setAttribute("alpha", QString::number(p->alpha,'f',2));
-    e.setAttribute("visible", QString((p->Visible ? "true" : "false")));
-    e.setAttribute("selected", QString((p->selected ? "true" : "false")));
-    e.setAttribute("enabled", QString((p->Enabled ? "true" : "false")));
-    e.setAttribute("readonly", QString((p->Readonly ? "true" : "false")));
-    e.setAttribute("uploadable", QString((p->Uploadable ? "true" : "false")));
+    stream.writeAttribute("xml:id", id());
+    stream.writeAttribute("name", p->Name);
+    stream.writeAttribute("alpha", QString::number(p->alpha,'f',2));
+    stream.writeAttribute("visible", QString((p->Visible ? "true" : "false")));
+    stream.writeAttribute("selected", QString((p->selected ? "true" : "false")));
+    stream.writeAttribute("enabled", QString((p->Enabled ? "true" : "false")));
+    stream.writeAttribute("readonly", QString((p->Readonly ? "true" : "false")));
+    stream.writeAttribute("uploadable", QString((p->Uploadable ? "true" : "false")));
     if (getDirtyLevel())
-        e.setAttribute("dirtylevel", getDirtyLevel());
+        stream.writeAttribute("dirtylevel", QString::number(getDirtyLevel()));
 
     return true;
 }
@@ -649,47 +649,46 @@ LayerWidget* DrawingLayer::newWidget(void)
 }
 
 
-bool DrawingLayer::toXML(QDomElement& xParent, bool asTemplate, QProgressDialog * progress)
+bool DrawingLayer::toXML(QXmlStreamWriter& stream, bool asTemplate, QProgressDialog * progress)
 {
     bool OK = true;
 
-    QDomElement e = xParent.ownerDocument().createElement(metaObject()->className());
-    xParent.appendChild(e);
-    Layer::toXML(e, asTemplate, progress);
+    stream.writeStartElement(metaObject()->className());
+    Layer::toXML(stream, asTemplate, progress);
 
     if (!asTemplate) {
-        QDomElement o = xParent.ownerDocument().createElement("osm");
-        e.appendChild(o);
-        o.setAttribute("version", "0.6");
-        o.setAttribute("generator", QString("Merkaartor %1").arg(STRINGIFY(VERSION)));
+        stream.writeStartElement("osm");
+        stream.writeAttribute("version", "0.6");
+        stream.writeAttribute("generator", QString("Merkaartor %1").arg(STRINGIFY(VERSION)));
 
         if (p->Features.size()) {
-            QDomElement bb = xParent.ownerDocument().createElement("bound");
-            o.appendChild(bb);
+            stream.writeStartElement("bound");
             CoordBox layBB = boundingBox();
             QString S = QString().number(coordToAng(layBB.bottomLeft().lat()),'f',6) + ",";
             S += QString().number(coordToAng(layBB.bottomLeft().lon()),'f',6) + ",";
             S += QString().number(coordToAng(layBB.topRight().lat()),'f',6) + ",";
             S += QString().number(coordToAng(layBB.topRight().lon()),'f',6);
-            bb.setAttribute("box", S);
-            bb.setAttribute("origin", QString("http://www.openstreetmap.org/api/%1").arg(M_PREFS->apiVersion()));
+            stream.writeAttribute("box", S);
+            stream.writeAttribute("origin", QString("http://www.openstreetmap.org/api/%1").arg(M_PREFS->apiVersion()));
+            stream.writeEndElement();
         }
 
         QList<MapFeaturePtr>::iterator it;
         for(it = p->Features.begin(); it != p->Features.end(); it++)
-            (*it)->toXML(o, progress);
+            (*it)->toXML(stream, progress);
 
         QList<CoordBox> downloadBoxes = p->theDocument->getDownloadBoxes(this);
         if (downloadBoxes.size() && p->theDocument->getLastDownloadLayerTime().secsTo(QDateTime::currentDateTime()) < 12*3600) { // Do not export downloaded areas if older than 12h
-            QDomElement downloaded = xParent.ownerDocument().createElement("DownloadedAreas");
-            e.appendChild(downloaded);
-
+            stream.writeStartElement("DownloadedAreas");
             QListIterator<CoordBox>it(downloadBoxes);
             while(it.hasNext()) {
-                it.next().toXML("DownloadedBoundingBox", downloaded);
+                it.next().toXML("DownloadedBoundingBox", stream);
             }
+            stream.writeEndElement();
         }
+        stream.writeEndElement();
     }
+    stream.writeEndElement();
 
     return OK;
 }
@@ -880,21 +879,19 @@ QString TrackLayer::toHtml()
     return toMainHtml().arg(S);
 }
 
-bool TrackLayer::toXML(QDomElement& xParent, bool asTemplate, QProgressDialog * progress)
+bool TrackLayer::toXML(QXmlStreamWriter& stream, bool asTemplate, QProgressDialog * progress)
 {
     bool OK = true;
     if (asTemplate)
         return OK;
 
-    QDomElement e = xParent.ownerDocument().createElement(metaObject()->className());
-    xParent.appendChild(e);
-    Layer::toXML(e, asTemplate, progress);
+    stream.writeStartElement(metaObject()->className());
+    Layer::toXML(stream, asTemplate, progress);
 
-    QDomElement o = xParent.ownerDocument().createElement("gpx");
-    e.appendChild(o);
-    o.setAttribute("version", "1.1");
-    o.setAttribute("creator", "Merkaartor");
-    o.setAttribute("xmlns", "http://www.topografix.com/GPX/1/1");
+    stream.writeStartElement("gpx");
+    stream.writeAttribute("version", "1.1");
+    stream.writeAttribute("creator", "Merkaartor");
+    stream.writeAttribute("xmlns", "http://www.topografix.com/GPX/1/1");
 
     QList<Node*>	waypoints;
     QList<TrackSegment*>	segments;
@@ -908,14 +905,16 @@ bool TrackLayer::toXML(QDomElement& xParent, bool asTemplate, QProgressDialog * 
     }
 
     for (int i=0; i < waypoints.size(); ++i) {
-        waypoints[i]->toGPX(o, progress);
+        waypoints[i]->toGPX(stream, progress, "wpt");
     }
 
-    QDomElement t = o.ownerDocument().createElement("trk");
-    o.appendChild(t);
-
+    stream.writeStartElement("trk");
     for (int i=0; i < segments.size(); ++i)
-        segments[i]->toXML(t, progress);
+        segments[i]->toXML(stream, progress);
+    stream.writeEndElement();
+
+    stream.writeEndElement(); //gpx
+    stream.writeEndElement();
 
     return OK;
 }
@@ -1027,7 +1026,7 @@ DeletedLayer::~ DeletedLayer()
 {
 }
 
-bool DeletedLayer::toXML(QDomElement& , bool, QProgressDialog * )
+bool DeletedLayer::toXML(QXmlStreamWriter& , bool, QProgressDialog * )
 {
     return true;
 }
@@ -1072,12 +1071,12 @@ void FilterLayer::setFilter(const QString& aFilter)
     }
 }
 
-bool FilterLayer::toXML(QDomElement& xParent, bool asTemplate, QProgressDialog * progress)
+bool FilterLayer::toXML(QXmlStreamWriter& stream, bool asTemplate, QProgressDialog * progress)
 {
-    QDomElement e = xParent.ownerDocument().createElement(metaObject()->className());
-    xParent.appendChild(e);
-    Layer::toXML(e, asTemplate, progress);
-    e.setAttribute("filter", theSelectorString);
+    stream.writeStartElement(metaObject()->className());
+    Layer::toXML(stream, asTemplate, progress);
+    stream.writeAttribute("filter", theSelectorString);
+    stream.writeEndElement();
 
     return true;
 }

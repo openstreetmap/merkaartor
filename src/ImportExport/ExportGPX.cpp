@@ -37,18 +37,19 @@ bool ExportGPX::export_(const QList<Feature *>& featList)
 
     bool OK = true;
 
-    QDomDocument theXmlDoc;
-    theXmlDoc.appendChild(theXmlDoc.createProcessingInstruction("xml", "version=\"1.0\""));
+    QXmlStreamWriter stream(Device);
+    stream.setAutoFormatting(true);
+    stream.setAutoFormattingIndent(2);
+    stream.writeStartDocument();
 
     QProgressDialog progress(QApplication::tr("Exporting GPX..."), QApplication::tr("Cancel"), 0, 0);
     progress.setWindowModality(Qt::WindowModal);
     progress.setMaximum(progress.maximum() + featList.count());
 
-    QDomElement o = theXmlDoc.createElement("gpx");
-    theXmlDoc.appendChild(o);
-    o.setAttribute("version", "1.1");
-    o.setAttribute("creator", QString("Merkaartor v%1%2").arg(STRINGIFY(VERSION)).arg(STRINGIFY(REVISION)));
-    o.setAttribute("xmlns", "http://www.topografix.com/GPX/1/1");
+    stream.writeStartElement("gpx");
+    stream.writeAttribute("version", "1.1");
+    stream.writeAttribute("creator", QString("Merkaartor v%1%2").arg(STRINGIFY(VERSION)).arg(STRINGIFY(REVISION)));
+    stream.writeAttribute("xmlns", "http://www.topografix.com/GPX/1/1");
 
     for (int i=0; i<theFeatures.size(); ++i) {
         if (TrackSegment* S = dynamic_cast<TrackSegment*>(theFeatures[i])) {
@@ -69,32 +70,29 @@ bool ExportGPX::export_(const QList<Feature *>& featList)
     }
 
     for (int i=0; i < waypoints.size(); ++i) {
-        waypoints[i]->toGPX(o, &progress, true);
+        waypoints[i]->toGPX(stream, &progress, "wpt", true);
     }
 
     for (int i=0; i < routes.size(); ++i) {
-        routes[i]->toGPX(o, &progress, true);
+        routes[i]->toGPX(stream, &progress, true);
     }
 
     for (int i=0; i<tracks.size(); ++i) {
-        QDomElement t = o.ownerDocument().createElement("trk");
-        o.appendChild(t);
-
-        QDomElement n = o.ownerDocument().createElement("name");
-        t.appendChild(n);
-        QDomText v = o.ownerDocument().createTextNode(tracks[i]->name());
-        n.appendChild(v);
+        stream.writeStartElement("trk");
+        stream.writeTextElement("name", tracks[i]->name());
 
         for (int j=0; j < segments.size(); ++j)
             if (tracks[i]->exists(segments[j]))
-                segments[j]->toGPX(t, &progress, true);
+                segments[j]->toGPX(stream, &progress, true);
+        stream.writeEndElement();
     }
+    stream.writeEndElement();
+    stream.writeEndDocument();
 
     progress.setValue(progress.maximum());
     if (progress.wasCanceled())
         return false;
 
-    Device->write(theXmlDoc.toString().toUtf8());
     return OK;
 }
 

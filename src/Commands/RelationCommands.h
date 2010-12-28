@@ -11,50 +11,50 @@ class Layer;
 
 class RelationAddFeatureCommand : public Command
 {
-	public:
-		RelationAddFeatureCommand(Relation* R = NULL);
-		RelationAddFeatureCommand(Relation* R, const QString& Role, Feature* W, Layer* aLayer=NULL);
-		RelationAddFeatureCommand(Relation* R, const QString& Role, Feature* W, int Position, Layer* aLayer=NULL);
-		~RelationAddFeatureCommand(void);
+    public:
+        RelationAddFeatureCommand(Relation* R = NULL);
+        RelationAddFeatureCommand(Relation* R, const QString& Role, Feature* W, Layer* aLayer=NULL);
+        RelationAddFeatureCommand(Relation* R, const QString& Role, Feature* W, int Position, Layer* aLayer=NULL);
+        ~RelationAddFeatureCommand(void);
 
-		virtual void undo();
-		virtual void redo();
-		virtual bool buildDirtyList(DirtyList& theList);
+        virtual void undo();
+        virtual void redo();
+        virtual bool buildDirtyList(DirtyList& theList);
 
-		virtual bool toXML(QDomElement& xParent) const;
-		static RelationAddFeatureCommand* fromXML(Document* d,QDomElement e);
+        virtual bool toXML(QXmlStreamWriter& stream) const;
+        static RelationAddFeatureCommand* fromXML(Document* d,QDomElement e);
 
-	private:
-		Layer* theLayer;
-		Layer* oldLayer;
-		Relation* theRelation;
-		QString Role;
-		Feature* theMapFeature;
-		int Position;
+    private:
+        Layer* theLayer;
+        Layer* oldLayer;
+        Relation* theRelation;
+        QString Role;
+        Feature* theMapFeature;
+        int Position;
 };
 
 class RelationRemoveFeatureCommand : public Command
 {
-	public:
-		RelationRemoveFeatureCommand(Relation* R = NULL);
-		RelationRemoveFeatureCommand(Relation* R, Feature* W, Layer* aLayer=NULL);
-		RelationRemoveFeatureCommand(Relation* R, int anIdx, Layer* aLayer=NULL);
-		~RelationRemoveFeatureCommand(void);
+    public:
+        RelationRemoveFeatureCommand(Relation* R = NULL);
+        RelationRemoveFeatureCommand(Relation* R, Feature* W, Layer* aLayer=NULL);
+        RelationRemoveFeatureCommand(Relation* R, int anIdx, Layer* aLayer=NULL);
+        ~RelationRemoveFeatureCommand(void);
 
-		virtual void undo();
-		virtual void redo();
-		virtual bool buildDirtyList(DirtyList& theList);
+        virtual void undo();
+        virtual void redo();
+        virtual bool buildDirtyList(DirtyList& theList);
 
-		virtual bool toXML(QDomElement& xParent) const;
-		static RelationRemoveFeatureCommand* fromXML(Document* d,QDomElement e);
+        virtual bool toXML(QXmlStreamWriter& stream) const;
+        static RelationRemoveFeatureCommand* fromXML(Document* d,QDomElement e);
 
-	private:
-		Layer* theLayer;
-		Layer* oldLayer;
-		int Idx;
-		Relation* theRelation;
-		QString Role;
-		Feature* theMapFeature;
+    private:
+        Layer* theLayer;
+        Layer* oldLayer;
+        int Idx;
+        Relation* theRelation;
+        QString Role;
+        Feature* theMapFeature;
 };
 
 

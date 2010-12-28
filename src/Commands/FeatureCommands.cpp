@@ -135,26 +135,25 @@ bool SetTagCommand::buildDirtyList(DirtyList& theList)
     return theList.update(theFeature);
 }
 
-bool SetTagCommand::toXML(QDomElement& xParent) const
+bool SetTagCommand::toXML(QXmlStreamWriter& stream) const
 {
     bool OK = true;
 
-    QDomElement e = xParent.ownerDocument().createElement("SetTagCommand");
-    xParent.appendChild(e);
-
-    e.setAttribute("oldkey", oldK);
-    e.setAttribute("xml:id", id());
-    e.setAttribute("feature", theFeature->xmlId());
-    e.setAttribute("idx", QString::number(theIdx));
-    e.setAttribute("key", theK);
-    e.setAttribute("value", theV);
-    e.setAttribute("oldvalue", oldV);
+    stream.writeStartElement("SetTagCommand");
+    stream.writeAttribute("oldkey", oldK);
+    stream.writeAttribute("xml:id", id());
+    stream.writeAttribute("feature", theFeature->xmlId());
+    stream.writeAttribute("idx", QString::number(theIdx));
+    stream.writeAttribute("key", theK);
+    stream.writeAttribute("value", theV);
+    stream.writeAttribute("oldvalue", oldV);
     if (theLayer)
-        e.setAttribute("layer", theLayer->id());
+        stream.writeAttribute("layer", theLayer->id());
     if (oldLayer)
-        e.setAttribute("oldlayer", oldLayer->id());
+        stream.writeAttribute("oldlayer", oldLayer->id());
 
-    Command::toXML(e);
+    Command::toXML(stream);
+    stream.writeEndElement();
 
     return OK;
 }
@@ -235,30 +234,29 @@ void ClearTagsCommand::redo()
     Command::redo();
 }
 
-bool ClearTagsCommand::toXML(QDomElement& xParent) const
+bool ClearTagsCommand::toXML(QXmlStreamWriter& stream) const
 {
     bool OK = true;
 
-    QDomElement e = xParent.ownerDocument().createElement("ClearTagsCommand");
-    xParent.appendChild(e);
+    stream.writeStartElement("ClearTagsCommand");
 
-    e.setAttribute("xml:id", id());
-    e.setAttribute("feature", theFeature->xmlId());
+    stream.writeAttribute("xml:id", id());
+    stream.writeAttribute("feature", theFeature->xmlId());
     if (theLayer)
-        e.setAttribute("layer", theLayer->id());
+        stream.writeAttribute("layer", theLayer->id());
     if (oldLayer)
-        e.setAttribute("oldlayer", oldLayer->id());
+        stream.writeAttribute("oldlayer", oldLayer->id());
 
     for (int i=0; i<Before.size(); ++i)
     {
-        QDomElement c = e.ownerDocument().createElement("tag");
-        e.appendChild(c);
-
-        c.setAttribute("k", Before[i].first);
-        c.setAttribute("v", Before[i].second);
+        stream.writeStartElement("tag");
+        stream.writeAttribute("k", Before[i].first);
+        stream.writeAttribute("v", Before[i].second);
+        stream.writeEndElement();
     }
 
-    Command::toXML(e);
+    Command::toXML(stream);
+    stream.writeEndElement();
 
     return OK;
 }
@@ -350,24 +348,24 @@ bool ClearTagCommand::buildDirtyList(DirtyList& theList)
     return theList.update(theFeature);
 }
 
-bool ClearTagCommand::toXML(QDomElement& xParent) const
+bool ClearTagCommand::toXML(QXmlStreamWriter& stream) const
 {
     bool OK = true;
 
-    QDomElement e = xParent.ownerDocument().createElement("ClearTagCommand");
-    xParent.appendChild(e);
+    stream.writeStartElement("ClearTagCommand");
 
-    e.setAttribute("xml:id", id());
-    e.setAttribute("feature", theFeature->xmlId());
-    e.setAttribute("idx", QString::number(theIdx));
-    e.setAttribute("key", theK);
-    e.setAttribute("value", theV);
+    stream.writeAttribute("xml:id", id());
+    stream.writeAttribute("feature", theFeature->xmlId());
+    stream.writeAttribute("idx", QString::number(theIdx));
+    stream.writeAttribute("key", theK);
+    stream.writeAttribute("value", theV);
     if (theLayer)
-        e.setAttribute("layer", theLayer->id());
+        stream.writeAttribute("layer", theLayer->id());
     if (oldLayer)
-        e.setAttribute("oldlayer", oldLayer->id());
+        stream.writeAttribute("oldlayer", oldLayer->id());
 
-    Command::toXML(e);
+    Command::toXML(stream);
+    stream.writeEndElement();
 
     return OK;
 }
