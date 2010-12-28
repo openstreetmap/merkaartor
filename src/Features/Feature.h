@@ -9,8 +9,6 @@
 #include <QtCore/QString>
 #include <QList>
 
-#include <boost/intrusive_ptr.hpp>
-
 #define CAST_FEATURE(x) (dynamic_cast<Feature*>(x))
 #define CAST_NODE(x) (dynamic_cast<Node*>(x))
 #define CAST_WAY(x) (dynamic_cast<Way*>(x))

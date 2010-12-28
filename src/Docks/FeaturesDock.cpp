@@ -40,7 +40,7 @@ FeaturesDock::FeaturesDock(MainWindow* aParent)
     ui.setupUi(getWidget());
 
 #ifdef Q_OS_MAC
-	ui.cbWithin->setMinimumWidth(30);
+    ui.cbWithin->setMinimumWidth(30);
 #endif
 
     ui.cbWithin->setChecked(M_PREFS->getFeaturesWithin());
@@ -371,7 +371,7 @@ void FeaturesDock::updateList()
     if (findMode) {
         foreach (MapFeaturePtr F, Found) {
             if (ui.cbWithin->isChecked()) {
-                if (ggl::within(F->boundingBox(), Main->view()->viewport()))
+                if (Main->view()->viewport().contains(F->boundingBox()))
                     addItem(F);
             } else
                 addItem(F);
@@ -392,7 +392,7 @@ void FeaturesDock::updateList()
                     continue;
 
                 if (ui.cbWithin->isChecked()) {
-                    if (ggl::within(F->boundingBox(), Main->view()->viewport()))
+                    if (Main->view()->viewport().contains(F->boundingBox()))
                         addItem(F);
                 } else
                     addItem(F);

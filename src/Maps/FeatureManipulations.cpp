@@ -14,12 +14,6 @@
 
 #include <algorithm>
 
-#ifndef _MOBILE
-#include <ggl/ggl.hpp>
-#include <ggl/geometries/cartesian2d.hpp>
-#include <ggl/algorithms/intersection.hpp>
-#endif
-
 static void mergeNodes(Document* theDocument, CommandList* theList, Node *node1, Node *node2);
 
 static bool isNear(Node* a, Node* b)
@@ -538,7 +532,6 @@ bool canCreateJunction(PropertiesDock* theDock)
 int createJunction(Document* theDocument, CommandList* theList, PropertiesDock* theDock, bool doIt)
 {
     //TODO test that the junction do not already exists!
-    typedef ggl::point_2d P;
 
     QList<Way*> Roads, Result;
     for (int i=0; i<theDock->size(); ++i)

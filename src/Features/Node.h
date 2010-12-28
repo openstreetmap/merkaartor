@@ -13,8 +13,10 @@
 #include <QtXml>
 
 #ifndef _MOBILE
+#if QT_VERSION < 0x040700
 #include <ggl/ggl.hpp>
 #include <ggl/geometries/register/point.hpp>
+#endif
 #endif
 
 class NodePrivate;
@@ -106,6 +108,7 @@ class Node : public Feature
 Q_DECLARE_METATYPE( Node * );
 
 #ifndef _MOBILE
+#if QT_VERSION < 0x040700
 // Register this point as being a recognizable point by the GGL
 //GEOMETRY_REGISTER_POINT_2D_CONST(TrackPoint, qreal, cs::cartesian, projection().x(), projection().y())
 
@@ -144,6 +147,7 @@ struct access<NodePtr>
 
 }} // namespace ggl::traits
 
+#endif
 #endif
 
 

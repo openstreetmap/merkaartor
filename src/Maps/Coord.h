@@ -128,11 +128,13 @@ uint qHash(const Coord &c);
 
 
 #ifndef _MOBILE
+#if QT_VERSION < 0x040700
 #include <ggl/ggl.hpp>
 #include <ggl/geometries/register/point.hpp>
 
 GEOMETRY_REGISTER_POINT_2D_GET_SET(Coord, double, cs::cartesian, lat, lon, setLat, setLon)
 
+#endif
 #endif
 
 inline Coord operator-(const Coord& A, const Coord& B)
@@ -313,9 +315,11 @@ class CoordBox
 Q_DECLARE_METATYPE( CoordBox );
 
 #ifndef _MOBILE
+#if QT_VERSION < 0x040700
 #include <ggl/geometries/register/box.hpp>
 
 GEOMETRY_REGISTER_BOX(CoordBox, Coord, BottomLeft, TopRight)
+#endif
 #endif
 
 #endif

@@ -21,10 +21,12 @@
 #include <QList>
 
 #ifndef _MOBILE
+#if QT_VERSION < 0x040700
 #include <ggl/ggl.hpp>
 #include <ggl/geometries/cartesian2d.hpp>
 #include <ggl/geometries/adapted/std_as_linestring.hpp>
 #include <ggl/algorithms/intersects.hpp>
+#endif
 #endif
 
 #define TEST_RFLAGS(x) theView->renderOptions().options.testFlag(x)
@@ -646,7 +648,9 @@ const QPainterPath& Way::getPath() const
 
 void Way::buildPath(const Projection &theProjection, const QTransform& theTransform, const QRectF& cr)
 {
+#if QT_VERSION < 0x040700
     using namespace ggl;
+#endif
 
     Q_UNUSED(theTransform);
     Q_UNUSED(cr);
@@ -668,6 +672,9 @@ void Way::buildPath(const Projection &theProjection, const QTransform& theTransf
         QPointF ptr = theProjection.project(p->BBox.topRight());
         p->roadRect = QRectF(pbl, ptr);
     }
+#if QT_VERSION >= 0x040700
+    p->thePath = p->theFullPath;
+#else
     if (!g_Merk_SelfClip) {
         p->thePath = p->theFullPath;
     } else {
@@ -754,6 +761,7 @@ void Way::buildPath(const Projection &theProjection, const QTransform& theTransf
             }
         }
     }
+#endif
 }
 
 bool Way::deleteChildren(Document* theDocument, CommandList* theList)
@@ -1178,27 +1186,16 @@ int Way::createJunction(Document* theDocument, CommandList* theList, Way* R1, Wa
     int numInter = 0;
 
     //TODO test that the junction do not already exists!
-    typedef ggl::point_2d P;
-
     for (int i=0; i<R1->size()-1; ++i) {
-        P a(R1->getNode(i)->position().lon(), R1->getNode(i)->position().lat());
-        P b(R1->getNode(i+1)->position().lon(), R1->getNode(i+1)->position().lat());
-        ggl::segment<P> s1(a, b);
+        QLineF S1(R1->getNode(i)->position().toQPointF(), R1->getNode(i+1)->position().toQPointF());
 
         for (int j=0; j<R2->size()-1; ++j) {
-            P c(R2->getNode(j)->position().lon(), R2->getNode(j)->position().lat());
-            P d(R2->getNode(j+1)->position().lon(), R2->getNode(j+1)->position().lat());
-            ggl::segment<P> s2(c, d);
-
-            std::vector<ggl::point_2d> intersected;
-//			ggl::intersection < ggl::point_2d, ggl::segment, ggl::segment, std::back_insert_iterator< std::vector<ggl::point_2d> > >
-//				(s1, s2, std::back_inserter(intersected));
-            ggl::intersection<ggl::point_2d>(s1, s2, std::back_inserter(intersected));
-
-            if (intersected.size()) {
+            QLineF S2(R2->getNode(j)->position().toQPointF(), R2->getNode(j+1)->position().toQPointF());
+            QPointF intPoint;
+            if (S1.intersect(S2, &intPoint) == QLineF::BoundedIntersection) {
                 numInter++;
                 if (doIt) {
-                    Node* pt = new Node(Coord(intersected[0].y(), intersected[0].x()));
+                    Node* pt = new Node(Coord::fromQPointF(intPoint));
                     theList->add(new AddFeatureCommand(theDocument->getDirtyOrOriginLayer(R1->layer()),pt,true));
                     theList->add(new WayAddNodeCommand(R1,pt,i+1,theDocument->getDirtyOrOriginLayer(R1->layer())));
                     theList->add(new WayAddNodeCommand(R2,pt,j+1,theDocument->getDirtyOrOriginLayer(R2->layer())));

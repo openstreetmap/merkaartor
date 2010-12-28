@@ -42,7 +42,7 @@ public:
     {
         if (!isAtEnd)
             if (*itF)
-                return (*itF).get();
+                return (*itF).data();
             else
                 return NULL;
         else

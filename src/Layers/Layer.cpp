@@ -19,6 +19,7 @@
 #include <QList>
 #include <QMenu>
 
+#include <algorithm>
 #include <RTree.h>
 
 /* Layer */

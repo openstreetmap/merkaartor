@@ -500,8 +500,6 @@ void ImageMapLayer::drawImage(QPainter* P)
     P->drawPixmap(0, 0, p->curPix);
 }
 
-using namespace ggl;
-
 void ImageMapLayer::zoom(double zoom, const QPoint& pos, const QRect& rect)
 {
     if (!p->theMapAdapter)

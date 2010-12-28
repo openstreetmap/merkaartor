@@ -21,7 +21,7 @@
 #define REGION_WIDTH (COORD_MAX/NUM_REGIONS)
 #define TILETOREGION_THRESHOLD 9
 
-typedef boost::intrusive_ptr<Feature> Feature_ptr;
+typedef QSharedPointer<Feature> Feature_ptr;
 
 class ImportExportOsmBin;
 
