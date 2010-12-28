@@ -633,8 +633,6 @@ bool downloadFeatures(MainWindow* Main, const QList<IFeature::FId>& idList , Doc
         } else
             theLayer = (Layer*)theDocument->getLastDownloadLayer();
     }
-    theLayer->blockIndexing(true);
-
     QString osmWebsite, osmUser, osmPwd;
 
     osmWebsite = M_PREFS->getOsmWebsite();
@@ -658,8 +656,6 @@ bool downloadFeatures(MainWindow* Main, const QList<IFeature::FId>& idList , Doc
         Main->view()->setUpdatesEnabled(true);
     if (OK)
     {
-        theLayer->blockIndexing(false);
-        theLayer->reIndex();
         if (Main)
             Main->invalidateView();
     } else
@@ -688,8 +684,6 @@ bool downloadOpenstreetbugs(MainWindow* Main, const CoordBox& aBox, Document* th
     trackLayer->setUploadable(false);
     theDocument->add(trackLayer);
     theTracklayers << trackLayer;
-
-    trackLayer->blockIndexing(true);
 
     IProgressWindow* aProgressWindow = dynamic_cast<IProgressWindow*>(Main);
     if (!aProgressWindow)
@@ -726,8 +720,6 @@ bool downloadOpenstreetbugs(MainWindow* Main, const CoordBox& aBox, Document* th
     if (Main)
         Main->view()->setUpdatesEnabled(true);
     if (OK) {
-        trackLayer->blockIndexing(false);
-        trackLayer->reIndex();
         if (Main)
             Main->invalidateView();
     }
@@ -742,7 +734,6 @@ bool downloadMoreOSM(MainWindow* Main, const CoordBox& aBox , Document* theDocum
         theDocument->add(theLayer);
     } else
         theLayer = (Layer*)theDocument->getLastDownloadLayer();
-    theLayer->blockIndexing(true);
 
     QString osmWebsite, osmUser, osmPwd;
 
@@ -757,8 +748,6 @@ bool downloadMoreOSM(MainWindow* Main, const CoordBox& aBox , Document* theDocum
     Main->view()->setUpdatesEnabled(true);
     if (OK)
     {
-        theLayer->blockIndexing(false);
-        theLayer->reIndex();
         theDocument->setLastDownloadLayer(theLayer);
         theDocument->addDownloadBox(theLayer, aBox);
         // Don't jump around on Download More
@@ -852,7 +841,6 @@ bool downloadOSM(MainWindow* Main, const CoordBox& aBox , Document* theDocument)
             Main->view()->setUpdatesEnabled(false);
             Layer* theLayer = new DrawingLayer(QApplication::translate("Downloader","%1 download").arg(QDateTime::currentDateTime().toString(Qt::ISODate)));
             theDocument->add(theLayer);
-            theLayer->blockIndexing(true);
             M_PREFS->setResolveRelations(ui.ResolveRelations->isChecked());
             if (directAPI) {
                 if (ui.FromXapi->isChecked())
@@ -869,8 +857,6 @@ bool downloadOSM(MainWindow* Main, const CoordBox& aBox , Document* theDocument)
             Main->view()->setUpdatesEnabled(true);
             if (OK)
             {
-                theLayer->blockIndexing(false);
-                theLayer->reIndex();
                 theDocument->setLastDownloadLayer(theLayer);
                 theDocument->addDownloadBox(theLayer, Clip);
                 if (directAPI)

@@ -37,7 +37,6 @@ public:
         Readonly = false;
         Uploadable = true;
 
-        IndexingBlocked = false;
         VirtualsUpdatesBlocked = false;
     }
     ~LayerPrivate()
@@ -56,7 +55,6 @@ public:
     bool Enabled;
     bool Readonly;
     bool Uploadable;
-    bool IndexingBlocked;
     bool VirtualsUpdatesBlocked;
     qreal alpha;
     int dirtyLevel;
@@ -346,7 +344,6 @@ void Layer::clear()
         notifyIdUpdate(p->Features[0]->id(),0);
         p->Features.removeAt(0);
     }
-    reIndex();
 }
 
 bool Layer::exists(Feature* F) const
@@ -454,36 +451,22 @@ const QString& Layer::id() const
     return Id;
 }
 
-void Layer::blockIndexing(bool val)
-{
-    p->IndexingBlocked = val;
-}
-
-bool Layer::isIndexingBlocked()
-{
-    return p->IndexingBlocked;
-}
-
 void Layer::indexAdd(const CoordBox& bb, const MapFeaturePtr aFeat)
 {
     if (bb.isNull())
         return;
-    if (!p->IndexingBlocked) {
-        double min[] = {bb.bottomLeft().lon(), bb.bottomLeft().lat()};
-        double max[] = {bb.topRight().lon(), bb.topRight().lat()};
-        p->theRTree.Insert(min, max, aFeat);
-    }
+    double min[] = {bb.bottomLeft().lon(), bb.bottomLeft().lat()};
+    double max[] = {bb.topRight().lon(), bb.topRight().lat()};
+    p->theRTree.Insert(min, max, aFeat);
 }
 
 void Layer::indexRemove(const CoordBox& bb, const MapFeaturePtr aFeat)
 {
     if (bb.isNull())
         return;
-    if (!p->IndexingBlocked) {
-        double min[] = {bb.bottomLeft().lon(), bb.bottomLeft().lat()};
-        double max[] = {bb.topRight().lon(), bb.topRight().lat()};
-        p->theRTree.Remove(min, max, aFeat);
-    }
+    double min[] = {bb.bottomLeft().lon(), bb.bottomLeft().lat()};
+    double max[] = {bb.topRight().lon(), bb.topRight().lat()};
+    p->theRTree.Remove(min, max, aFeat);
 }
 
 const QList<MapFeaturePtr>& Layer::indexFind(const CoordBox& bb)
@@ -501,49 +484,6 @@ void Layer::indexFind(const CoordBox& bb, const IndexFindContext& ctxt)
     double min[] = {bb.bottomLeft().lon(), bb.bottomLeft().lat()};
     double max[] = {bb.topRight().lon(), bb.topRight().lat()};
     p->theRTree.Search(min, max, &indexFindCallback, (void*)&ctxt);
-}
-
-void Layer::reIndex()
-{
-    qDebug() << "Reindexing...";
-
-    p->theRTree.RemoveAll();
-
-    for (int i=0; i<p->Features.size(); ++i) {
-        if (p->Features.at(i)->isDeleted() || p->Features.at(i)->isVirtual())
-            continue;
-        Feature* f = p->Features.at(i);
-        CoordBox bb = f->boundingBox();
-        if (!bb.isNull()) {
-            double min[] = {bb.bottomLeft().lon(), bb.bottomLeft().lat()};
-            double max[] = {bb.topRight().lon(), bb.topRight().lat()};
-            p->theRTree.Insert(min, max, f);
-        }
-    }
-}
-
-void Layer::reIndex(QProgressDialog * progress)
-{
-    qDebug() << "Reindexing...";
-
-    p->theRTree.RemoveAll();
-
-    progress->setLabelText("Indexing...");
-    progress->setValue(0);
-    progress->setMaximum(p->Features.size());
-    for (int i=0; i<p->Features.size(); ++i) {
-        if (!p->Features.at(i)->isDeleted() &&  !p->Features.at(i)->isVirtual()) {
-            Feature* f = p->Features.at(i);
-            CoordBox bb = f->boundingBox();
-            if (!bb.isNull()) {
-                double min[] = {bb.bottomLeft().lon(), bb.bottomLeft().lat()};
-                double max[] = {bb.topRight().lon(), bb.topRight().lat()};
-                p->theRTree.Insert(min, max, f);
-            }
-        }
-        progress->setValue(i);
-        qApp->processEvents();
-    }
 }
 
 CoordBox Layer::boundingBox()
@@ -769,8 +709,6 @@ DrawingLayer * DrawingLayer::fromXML(Document* d, const QDomElement& e, QProgres
 
 DrawingLayer * DrawingLayer::doFromXML(DrawingLayer* l, Document* d, const QDomElement e, QProgressDialog * progress)
 {
-    l->blockIndexing(true);
-
     QDomElement c = e.firstChildElement();
     while (!c.isNull()) {
         if (c.tagName() == "osm") {
@@ -820,7 +758,6 @@ DrawingLayer * DrawingLayer::doFromXML(DrawingLayer* l, Document* d, const QDomE
         }
         c =c.nextSiblingElement();
     }
-    l->blockIndexing(false);
     return l;
 }
 
@@ -989,8 +926,6 @@ TrackLayer * TrackLayer::fromXML(Document* d, const QDomElement& e, QProgressDia
     Layer::fromXML(l, d, e, progress);
     d->add(l);
 
-    l->blockIndexing(true);
-
     QDomElement c = e.firstChildElement();
     if (c.tagName() != "gpx")
         return NULL;
@@ -1019,8 +954,6 @@ TrackLayer * TrackLayer::fromXML(Document* d, const QDomElement& e, QProgressDia
 
         c = c.nextSiblingElement();
     }
-
-    l->blockIndexing(false);
 
     return l;
 }

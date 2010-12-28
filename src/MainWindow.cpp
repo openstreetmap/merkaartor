@@ -1108,7 +1108,6 @@ bool MainWindow::importFiles(Document * mapDocument, const QStringList & fileNam
             TrackLayer* newLayer = new TrackLayer( baseFileName + " - " + tr("Waypoints"), baseFileName);
             mapDocument->add(newLayer);
             theTracklayers.append(newLayer);
-            newLayer->blockIndexing(true);
             importOK = importGPX(this, baseFileName, mapDocument, theTracklayers);
             if (!importOK) {
                 for (int i=0; i<theTracklayers.size(); i++) {
@@ -1119,9 +1118,6 @@ bool MainWindow::importFiles(Document * mapDocument, const QStringList & fileNam
                 if (!newLayer->size()) {
                     mapDocument->remove(newLayer);
                     delete newLayer;
-                } else {
-                    newLayer->blockIndexing(false);
-                    newLayer->reIndex();
                 }
                 for (int i=1; i<theTracklayers.size(); i++) {
                     if (theTracklayers[i]->name().isEmpty())
@@ -1134,31 +1130,26 @@ bool MainWindow::importFiles(Document * mapDocument, const QStringList & fileNam
         }
         else if (fn.toLower().endsWith(".osm")) {
             newLayer = new DrawingLayer( baseFileName );
-            newLayer->blockIndexing(true);
             mapDocument->add(newLayer);
             importOK = importOSM(this, baseFileName, mapDocument, newLayer);
         }
         else if (fn.toLower().endsWith(".osc")) {
             if (g_Merk_Frisius) {
                 newLayer = new DrawingLayer( baseFileName );
-                newLayer->blockIndexing(true);
                 mapDocument->add(newLayer);
             } else {
                 newLayer = mapDocument->getDirtyOrOriginLayer();
-                newLayer->blockIndexing(true);
             }
             importOK = mapDocument->importOSC(fn, (DrawingLayer*)newLayer);
         }
         else if (fn.toLower().endsWith(".osb")) {
             newLayer = new OsbLayer( baseFileName, fn );
-            newLayer->blockIndexing(true);
             mapDocument->add(newLayer);
             importOK = mapDocument->importOSB(fn, (DrawingLayer *)newLayer);
         }
         else if (fn.toLower().endsWith(".ngt")) {
             newLayer = new TrackLayer( baseFileName );
             newLayer->setUploadable(false);
-            newLayer->blockIndexing(true);
             mapDocument->add(newLayer);
             importOK = importNGT(this, baseFileName, mapDocument, newLayer);
             if (importOK && M_PREFS->getAutoExtractTracks()) {
@@ -1168,7 +1159,6 @@ bool MainWindow::importFiles(Document * mapDocument, const QStringList & fileNam
         else if (fn.toLower().endsWith(".nmea") || (fn.toLower().endsWith(".nma"))) {
             newLayer = new TrackLayer( baseFileName );
             newLayer->setUploadable(false);
-            newLayer->blockIndexing(true);
             mapDocument->add(newLayer);
             importOK = mapDocument->importNMEA(baseFileName, (TrackLayer *)newLayer);
             if (importOK && M_PREFS->getAutoExtractTracks()) {
@@ -1194,7 +1184,6 @@ bool MainWindow::importFiles(Document * mapDocument, const QStringList & fileNam
                      QMessageBox::Yes | QMessageBox::No, QMessageBox::No) == QMessageBox::Yes)
             {
                 newLayer = new DrawingLayer( baseFileName );
-                newLayer->blockIndexing(true);
                 newLayer->setUploadable(false);
                 mapDocument->add(newLayer);
                 importOK = mapDocument->importKML(baseFileName, (TrackLayer *)newLayer);
@@ -1213,7 +1202,6 @@ bool MainWindow::importFiles(Document * mapDocument, const QStringList & fileNam
 #ifdef USE_PROTOBUF
         else if (fn.toLower().endsWith(".pbf")) {
             newLayer = new DrawingLayer( baseFileName );
-            newLayer->blockIndexing(true);
             mapDocument->add(newLayer);
             importOK = mapDocument->importPBF(baseFileName, (DrawingLayer*)newLayer);
         }
@@ -1236,10 +1224,6 @@ bool MainWindow::importFiles(Document * mapDocument, const QStringList & fileNam
             if (importedFileNames)
                 importedFileNames->append(fn);
 
-            if (newLayer) {
-                newLayer->blockIndexing(false);
-                newLayer->reIndex();
-            }
             emit content_changed();
         }
         else

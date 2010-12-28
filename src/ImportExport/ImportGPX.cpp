@@ -222,14 +222,11 @@ static void importGPX(const QDomElement& Root, Document* theDocument, QList<Trac
         {
             TrackLayer* newLayer = new TrackLayer();
             theDocument->add(newLayer);
-            newLayer->blockIndexing(true);
             importTrk(t,theDocument, newLayer, MakeSegment, progress);
             if (!newLayer->size()) {
                 theDocument->remove(newLayer);
                 delete newLayer;
             } else {
-                newLayer->blockIndexing(false);
-                newLayer->reIndex();
                 theTracklayers.append(newLayer);
             }
         }
@@ -237,14 +234,11 @@ static void importGPX(const QDomElement& Root, Document* theDocument, QList<Trac
         {
             TrackLayer* newLayer = new TrackLayer();
             theDocument->add(newLayer);
-            newLayer->blockIndexing(true);
             importRte(t,theDocument, newLayer, MakeSegment, progress);
             if (!newLayer->size()) {
                 theDocument->remove(newLayer);
                 delete newLayer;
             } else {
-                newLayer->blockIndexing(false);
-                newLayer->reIndex();
                 theTracklayers.append(newLayer);
             }
         }

@@ -135,16 +135,11 @@ public:
     virtual bool isTrack() const {return false;}
     virtual bool arePointsDrawable() {return true;}
 
-    virtual void blockIndexing(bool val);
-    virtual bool isIndexingBlocked();
-
     virtual void indexAdd(const CoordBox& bb, const MapFeaturePtr aFeat);
     virtual void indexRemove(const CoordBox& bb, const MapFeaturePtr aFeat);
 //    bool __cdecl indexFindCallback(MapFeaturePtr data, void* ctxt);
     virtual const QList<MapFeaturePtr>& indexFind(const CoordBox& vp);
     virtual void indexFind(const CoordBox& bb, const IndexFindContext& findResult);
-    virtual void reIndex();
-    virtual void reIndex(QProgressDialog * progress);
 
 protected:
     LayerPrivate* p;

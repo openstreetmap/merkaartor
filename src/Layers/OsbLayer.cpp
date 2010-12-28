@@ -301,8 +301,6 @@ void OsbLayer::getFeatureSet(QMap<RenderPriority, QSet <Feature*> >& theFeatures
 
     pp->loadRegion(theDocument, 0);
 
-    blockIndexing(true);
-
     if (coordToAng(pp->theVP.lonDiff()) <= M_PREFS->getRegionTo0Threshold()) {
         for (int j=yr1; j <= yr2; ++j)
             for (int i=xr1; i <= xr2; ++i) {
@@ -337,8 +335,6 @@ void OsbLayer::getFeatureSet(QMap<RenderPriority, QSet <Feature*> >& theFeatures
         else
             ++pp->rl;
     }
-
-    blockIndexing(false);
 
     if (coordToAng(pp->theVP.lonDiff()) > M_PREFS->getRegionTo0Threshold()) {
         Layer::getFeatureSet(theFeatures, theDocument,

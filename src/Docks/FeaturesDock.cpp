@@ -378,9 +378,7 @@ void FeaturesDock::updateList()
         }
     } else {
         for (int j=0; j<Main->document()->layerSize(); ++j) {
-            if (!Main->document()->getLayer(j)->size()
-                || Main->document()->getLayer(j)->isIndexingBlocked()
-                )
+            if (!Main->document()->getLayer(j)->size())
                 continue;
 
             if (dynamic_cast<ImageMapLayer*>(Main->document()->getLayer(j)))

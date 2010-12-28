@@ -447,13 +447,9 @@ bool ImageMapLayer::toXML(QDomElement& xParent, bool asTemplate, QProgressDialog
 ImageMapLayer * ImageMapLayer::fromXML(Document* d, const QDomElement& e, QProgressDialog * /*progress*/)
 {
     ImageMapLayer* l = new ImageMapLayer(e.attribute("name"));
-    l->blockIndexing(true);
     l->setId(e.attribute("xml:id"));
 
-    l->blockIndexing(false);
-
     d->addImageLayer(l);
-    l->reIndex();
 
     QString server;
     QUuid bgtype = QUuid(e.attribute("bgtype"));

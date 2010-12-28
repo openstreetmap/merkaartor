@@ -60,7 +60,6 @@ public:
         for (int i=0; i<Layers.size(); ++i) {
             if (theDock)
                 theDock->deleteLayer(Layers[i]);
-            Layers[i]->blockIndexing(true);
             delete Layers[i];
         }
     }
@@ -271,10 +270,6 @@ Document* Document::fromXML(QString title, const QDomElement e, double version, 
     if (NewDoc) {
         if (h)
             NewDoc->setHistory(h);
-
-        for (int i=0; i<NewDoc->layerSize(); ++i) {
-            NewDoc->getLayer(i)->reIndex(progress);
-        }
     }
 
     return NewDoc;
