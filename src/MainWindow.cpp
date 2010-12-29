@@ -706,13 +706,17 @@ void MainWindow::on_editCutAction_triggered()
     QClipboard *clipboard = QApplication::clipboard();
     QMimeData* md = new QMimeData();
 
-    QString osm = theDocument->exportOSM(this, p->theProperties->selection());
-    md->setText(osm);
-    md->setData("application/x-openstreetmap+xml", osm.toUtf8());
+    QBuffer osmBuf;
+    osmBuf.open(QIODevice::WriteOnly);
+
+    QList<Feature*> exportedFeatures = document()->exportCoreOSM(p->theProperties->selection());
+    theDocument->exportOSM(this, &osmBuf, exportedFeatures);
+    md->setText(QString(osmBuf.data()));
+    md->setData("application/x-openstreetmap+xml", osmBuf.data());
 
     ImportExportKML kmlexp(theDocument);
     QBuffer kmlBuf;
-    kmlBuf.open(QIODevice::WriteOnly | QIODevice::Truncate);
+    kmlBuf.open(QIODevice::WriteOnly);
     if (kmlexp.setDevice(&kmlBuf)) {
         kmlexp.export_(p->theProperties->selection());
         md->setData("application/vnd.google-earth.kml+xml", kmlBuf.data());
@@ -720,7 +724,7 @@ void MainWindow::on_editCutAction_triggered()
 
     ExportGPX gpxexp(theDocument);
     QBuffer gpxBuf;
-    gpxBuf.open(QIODevice::WriteOnly | QIODevice::Truncate);
+    gpxBuf.open(QIODevice::WriteOnly);
     if (gpxexp.setDevice(&gpxBuf)) {
         gpxexp.export_(p->theProperties->selection());
         md->setData("application/gpx+xml", gpxBuf.data());
@@ -771,13 +775,17 @@ void MainWindow::on_editCopyAction_triggered()
     QClipboard *clipboard = QApplication::clipboard();
     QMimeData* md = new QMimeData();
 
-    QString osm = theDocument->exportOSM(this, p->theProperties->selection(), true);
-    md->setText(osm);
-    md->setData("application/x-openstreetmap+xml", osm.toUtf8());
+    QBuffer osmBuf;
+    osmBuf.open(QIODevice::WriteOnly);
+
+    QList<Feature*> exportedFeatures = document()->exportCoreOSM(p->theProperties->selection(), true);
+    theDocument->exportOSM(this, &osmBuf, exportedFeatures);
+    md->setText(QString(osmBuf.data()));
+    md->setData("application/x-openstreetmap+xml", osmBuf.data());
 
     ImportExportKML kmlexp(theDocument);
     QBuffer kmlBuf;
-    kmlBuf.open(QIODevice::WriteOnly | QIODevice::Truncate);
+    kmlBuf.open(QIODevice::WriteOnly);
     if (kmlexp.setDevice(&kmlBuf)) {
         kmlexp.export_(p->theProperties->selection());
         md->setData("application/vnd.google-earth.kml+xml", kmlBuf.data());
@@ -785,7 +793,7 @@ void MainWindow::on_editCopyAction_triggered()
 
     ExportGPX gpxexp(theDocument);
     QBuffer gpxBuf;
-    gpxBuf.open(QIODevice::WriteOnly | QIODevice::Truncate);
+    gpxBuf.open(QIODevice::WriteOnly);
     if (gpxexp.setDevice(&gpxBuf)) {
         gpxexp.export_(p->theProperties->selection());
         md->setData("application/gpx+xml", gpxBuf.data());
@@ -2770,6 +2778,8 @@ void MainWindow::loadTemplateDocument(QString fn)
 void MainWindow::on_exportOSMAction_triggered()
 {
     QList<Feature*> theFeatures;
+
+    createProgressDialog();
     if (!selectExportedFeatures(theFeatures))
         return;
 
@@ -2787,22 +2797,23 @@ void MainWindow::on_exportOSMAction_triggered()
 //        tr("Export OSM"), M_PREFS->getworkingdir() + "/untitled.osm", tr("OSM Files (*.osm)"));
 
     if (fileName != "") {
-        createProgressDialog();
 
         QFile file(fileName);
         if (!file.open(QIODevice::WriteOnly | QIODevice::Text))
             return;
 
-        file.write(theDocument->exportOSM(this, theFeatures).toUtf8());
+        theDocument->exportOSM(this, &file, theFeatures);
         file.close();
 
-        deleteProgressDialog();
     }
+    deleteProgressDialog();
 }
 
 void MainWindow::on_exportOSMBinAction_triggered()
 {
     QList<Feature*> theFeatures;
+
+    createProgressDialog();
     if (!selectExportedFeatures(theFeatures))
         return;
 
@@ -2833,6 +2844,7 @@ void MainWindow::on_exportOSMBinAction_triggered()
         QApplication::restoreOverrideCursor();
 #endif
     }
+    deleteProgressDialog();
 }
 
 void MainWindow::on_exportOSCAction_triggered()
@@ -2870,6 +2882,8 @@ void MainWindow::on_exportOSCAction_triggered()
 void MainWindow::on_exportGPXAction_triggered()
 {
     QList<Feature*> theFeatures;
+
+    createProgressDialog();
     if (!selectExportedFeatures(theFeatures))
         return;
 
@@ -2900,11 +2914,14 @@ void MainWindow::on_exportGPXAction_triggered()
         QApplication::restoreOverrideCursor();
 #endif
     }
+    deleteProgressDialog();
 }
 
 void MainWindow::on_exportKMLAction_triggered()
 {
     QList<Feature*> theFeatures;
+
+    createProgressDialog();
     if (!selectExportedFeatures(theFeatures))
         return;
 
@@ -2935,6 +2952,7 @@ void MainWindow::on_exportKMLAction_triggered()
         QApplication::restoreOverrideCursor();
 #endif
     }
+    deleteProgressDialog();
 }
 
 bool MainWindow::selectExportedFeatures(QList<Feature*>& theFeatures)
@@ -3010,13 +3028,31 @@ bool MainWindow::selectExportedFeatures(QList<Feature*>& theFeatures)
                         }
             }
             M_PREFS->setExportType(Export_Viewport);
-            return true;
         }
         else if (dlgExport.rbSelected->isChecked()) {
             theFeatures = p->theProperties->selection();
             M_PREFS->setExportType(Export_Selected);
-            return true;
         }
+
+        QProgressDialog* dlg = getProgressDialog();
+        if (dlg)
+            dlg->setWindowTitle(tr("Feature extraction"));
+
+        QProgressBar* Bar = getProgressBar();
+        if (Bar) {
+            Bar->setTextVisible(false);
+            Bar->setMaximum(theFeatures.size());
+        }
+
+        QLabel* Lbl = getProgressLabel();
+        if (Lbl)
+            Lbl->setText(tr("Extracting features..."));
+
+        if (dlg)
+            dlg->show();
+
+        theFeatures = document()->exportCoreOSM(theFeatures, false, dlg);
+        return true;
     }
     return false;
 }

@@ -534,110 +534,14 @@ UploadedLayer* Document::getUploadedLayer() const
     return p->uploadedLayer;
 }
 
-QString Document::exportOSM(QMainWindow* main, const CoordBox& aCoordBox, bool renderBounds)
+void Document::exportOSM(QMainWindow* main, QIODevice* device, QList<Feature*> aFeatures)
 {
-    QList<Feature*> theFeatures;
-
-    for (VisibleFeatureIterator i(this); !i.isEnd(); ++i) {
-        if (Node* P = dynamic_cast<Node*>(i.get())) {
-            if (aCoordBox.contains(P->position())) {
-                theFeatures.append(P);
-            }
-        } else
-            if (Way* G = dynamic_cast<Way*>(i.get())) {
-                if (aCoordBox.intersects(G->boundingBox())) {
-                    for (int j=0; j < G->size(); j++) {
-                        if (Node* P = dynamic_cast<Node*>(G->get(j)))
-                            if (!aCoordBox.contains(P->position()))
-                                theFeatures.append(P);
-                    }
-                    theFeatures.append(G);
-                }
-            } else
-                //FIXME Not working for relation (not made of point?)
-                if (Relation* G = dynamic_cast<Relation*>(i.get())) {
-                    if (aCoordBox.intersects(G->boundingBox())) {
-                        for (int j=0; j < G->size(); j++) {
-                            if (Way* R = dynamic_cast<Way*>(G->get(j))) {
-                                if (!aCoordBox.contains(R->boundingBox())) {
-                                    for (int k=0; k < R->size(); k++) {
-                                        if (Node* P = dynamic_cast<Node*>(R->get(k)))
-                                            if (!aCoordBox.contains(P->position()))
-                                                theFeatures.append(P);
-                                    }
-                                    theFeatures.append(R);
-                                }
-                            }
-                        }
-                        theFeatures.append(G);
-                    }
-                }
-    }
-
-    QList<Feature*> exportedFeatures = exportCoreOSM(theFeatures);
+    if (aFeatures.isEmpty())
+        return;
 
     IProgressWindow* aProgressWindow = dynamic_cast<IProgressWindow*>(main);
     if (!aProgressWindow)
-        return "";
-
-    QProgressDialog* dlg = aProgressWindow->getProgressDialog();
-    dlg->setWindowTitle(tr("OSM Export"));
-
-    QProgressBar* Bar = aProgressWindow->getProgressBar();
-    Bar->setTextVisible(false);
-    Bar->setMaximum(exportedFeatures.size());
-
-    QLabel* Lbl = aProgressWindow->getProgressLabel();
-    Lbl->setText(tr("Exporting OSM..."));
-
-    if (dlg)
-        dlg->show();
-
-    QString xml;
-    QXmlStreamWriter stream(&xml);
-    stream.setAutoFormatting(true);
-    stream.setAutoFormattingIndent(2);
-    stream.writeStartDocument();
-
-    stream.writeStartElement("osm");
-    stream.writeAttribute("version", "0.6");
-    stream.writeAttribute("generator", QString("%1 %2").arg(qApp->applicationName()).arg(STRINGIFY(VERSION)));
-
-    stream.writeStartElement("bound");
-    QString S = QString().number(coordToAng(aCoordBox.bottomLeft().lat()),'f',6) + ",";
-    S += QString().number(coordToAng(aCoordBox.bottomLeft().lon()),'f',6) + ",";
-    S += QString().number(coordToAng(aCoordBox.topRight().lat()),'f',6) + ",";
-    S += QString().number(coordToAng(aCoordBox.topRight().lon()),'f',6);
-    stream.writeAttribute("box", S);
-    stream.writeAttribute("origin", QString("http://www.openstreetmap.org/api/%1").arg(M_PREFS->apiVersion()));
-    stream.writeEndElement();
-
-    if (renderBounds) {
-        stream.writeStartElement("bounds");
-        stream.writeAttribute("minlat", COORD2STRING(coordToAng(aCoordBox.bottomLeft().lat())));
-        stream.writeAttribute("minlon", COORD2STRING(coordToAng(aCoordBox.bottomLeft().lon())));
-        stream.writeAttribute("maxlat", COORD2STRING(coordToAng(aCoordBox.topRight().lat())));
-        stream.writeAttribute("maxlon", COORD2STRING(coordToAng(aCoordBox.topRight().lon())));
-        stream.writeEndElement();
-    }
-
-    for (int i=0; i < exportedFeatures.size(); i++) {
-        exportedFeatures[i]->toXML(stream, dlg);
-    }
-    stream.writeEndElement();
-    stream.writeEndDocument();
-
-    return xml;
-}
-
-QString Document::exportOSM(QMainWindow* main, QList<Feature*> aFeatures, bool forCopyPaste)
-{
-    QList<Feature*> exportedFeatures = exportCoreOSM(aFeatures, forCopyPaste);
-    CoordBox aCoordBox;
-
-    IProgressWindow* aProgressWindow = dynamic_cast<IProgressWindow*>(main);
-    if (!aProgressWindow)
-        return "";
+        return;
 
     QProgressDialog* dlg = aProgressWindow->getProgressDialog();
     if (dlg)
@@ -646,7 +550,7 @@ QString Document::exportOSM(QMainWindow* main, QList<Feature*> aFeatures, bool f
     QProgressBar* Bar = aProgressWindow->getProgressBar();
     if (Bar) {
         Bar->setTextVisible(false);
-        Bar->setMaximum(exportedFeatures.size());
+        Bar->setMaximum(aFeatures.size());
     }
 
     QLabel* Lbl = aProgressWindow->getProgressLabel();
@@ -656,8 +560,7 @@ QString Document::exportOSM(QMainWindow* main, QList<Feature*> aFeatures, bool f
     if (dlg)
         dlg->show();
 
-    QString xml;
-    QXmlStreamWriter stream(&xml);
+    QXmlStreamWriter stream(device);
     stream.setAutoFormatting(true);
     stream.setAutoFormattingIndent(2);
     stream.writeStartDocument();
@@ -666,13 +569,11 @@ QString Document::exportOSM(QMainWindow* main, QList<Feature*> aFeatures, bool f
     stream.writeAttribute("version", "0.6");
     stream.writeAttribute("generator", QString("%1 %2").arg(qApp->applicationName()).arg(STRINGIFY(VERSION)));
 
-    if (exportedFeatures.size()) {
-        aCoordBox = exportedFeatures[0]->boundingBox(true);
-        exportedFeatures[0]->toXML(stream, dlg);
-        for (int i=1; i < exportedFeatures.size(); i++) {
-            aCoordBox.merge(exportedFeatures[i]->boundingBox(true));
-            exportedFeatures[i]->toXML(stream, dlg);
-        }
+    CoordBox aCoordBox = aFeatures[0]->boundingBox(true);
+    aFeatures[0]->toXML(stream, dlg);
+    for (int i=1; i < aFeatures.size(); i++) {
+        aCoordBox.merge(aFeatures[i]->boundingBox(true));
+        aFeatures[i]->toXML(stream, dlg);
     }
 
     stream.writeStartElement("bound");
@@ -686,10 +587,9 @@ QString Document::exportOSM(QMainWindow* main, QList<Feature*> aFeatures, bool f
 
     stream.writeEndElement();
     stream.writeEndDocument();
-    return xml;
 }
 
-QList<Feature*> Document::exportCoreOSM(QList<Feature*> aFeatures, bool forCopyPaste)
+QList<Feature*> Document::exportCoreOSM(QList<Feature*> aFeatures, bool forCopyPaste, QProgressDialog * progress)
 {
     QList<Feature*> exportedFeatures;
     QList<Feature*>::Iterator i;
@@ -735,6 +635,12 @@ QList<Feature*> Document::exportCoreOSM(QList<Feature*> aFeatures, bool forCopyP
                 }
             }
         }
+        if (progress)
+            if (progress->wasCanceled()) {
+                exportedFeatures.clear();
+                return exportedFeatures;
+            }
+            progress->setValue(progress->value()+1);
     }
 
     return exportedFeatures;
