@@ -1,3 +1,6 @@
+v0.18
+    * FIX : Import all GDAL layers
+    * ADD : Import PBF
 v0.17
     * FIX : Problem importing OSM comprising new features
     * ADD : Move "validation" style rules to a new "Validation.mas" style

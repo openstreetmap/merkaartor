@@ -198,10 +198,8 @@ bool ImportExportGdal::import(Layer* aLayer)
         return false;
     }
 
-    OGRLayer  *poLayer;
-    // TODO: iterate over all layers?
     qDebug() << "Layers #" << poDS->GetLayerCount();
-    poLayer = poDS->GetLayer( 0 );
+    OGRLayer  *poLayer = poDS->GetLayer(0);
 
     OGRSpatialReference * theSrs = poLayer->GetSpatialRef();
     toWGS84 = NULL;
@@ -257,50 +255,58 @@ bool ImportExportGdal::import(Layer* aLayer)
         }
     }
 
-    OGRFeature *poFeature;
-
-    int sz = poLayer->GetFeatureCount();
     QProgressDialog progress(QApplication::tr("Importing..."), QApplication::tr("Cancel"), 0, 0);
     progress.setWindowModality(Qt::WindowModal);
-    if (sz != -1)
-        progress.setMaximum(sz);
-    else {
-        progress.setRange(0, 0);
-        progress.exec();
-    }
+    progress.setRange(0, 0);
+    progress.show();
 
-    poLayer->ResetReading();
-    while( (poFeature = poLayer->GetNextFeature()) != NULL && !progress.wasCanceled())
-    {
-        OGRGeometry *poGeometry;
+    int totimported = 0;
+    OGRFeature *poFeature;
+    for (int l=0; l<poDS->GetLayerCount() && !progress.wasCanceled(); ++l) {
+        poLayer = poDS->GetLayer(l);
 
-        poGeometry = poFeature->GetGeometryRef();
-        if( poGeometry != NULL) {
-            // qDebug( "GeometryType : %d,", poGeometry->getGeometryType() );
+//        int sz = poLayer->GetFeatureCount();
+//        if (sz != -1)
+//            progress.setMaximum(progress.maximum()+sz);
 
-            if (toWGS84)
-                poGeometry->transform(toWGS84);
+        int curImported = 0;
+//        poLayer->ResetReading();
+        while( (poFeature = poLayer->GetNextFeature()) != NULL && !progress.wasCanceled())
+        {
+            OGRGeometry *poGeometry;
 
-            Feature* F = parseGeometry(aLayer, poGeometry);
-            if (F) {
-                for (int i=0; i<poFeature->GetFieldCount(); ++i) {
-                    OGRFieldDefn  *fd = poFeature->GetFieldDefnRef(i);
-                    QString k(fd->GetNameRef());
-                    if (!g_Merk_NoGuardedTagsImport) {
-                        k.prepend("_");
-                        k.append("_");
+            poGeometry = poFeature->GetGeometryRef();
+            if( poGeometry != NULL) {
+                // qDebug( "GeometryType : %d,", poGeometry->getGeometryType() );
+
+                if (toWGS84)
+                    poGeometry->transform(toWGS84);
+
+                Feature* F = parseGeometry(aLayer, poGeometry);
+                if (F) {
+                    for (int i=0; i<poFeature->GetFieldCount(); ++i) {
+                        OGRFieldDefn  *fd = poFeature->GetFieldDefnRef(i);
+                        QString k(fd->GetNameRef());
+                        if (!g_Merk_NoGuardedTagsImport) {
+                            k.prepend("_");
+                            k.append("_");
+                        }
+                        F->setTag(k, poFeature->GetFieldAsString(i));
+                        ++curImported;
+                        ++totimported;
+                        progress.setLabelText(QApplication::tr("Imported: %1").arg(totimported));
+                        qApp->processEvents();
                     }
-                    F->setTag(k, poFeature->GetFieldAsString(i));
                 }
             }
+            else
+            {
+                qDebug( "no geometry\n" );
+            }
+//            if (progress.maximum() != 0)
+//                progress.setValue(progress.value()+1);
         }
-        else
-        {
-            qDebug( "no geometry\n" );
-        }
-        if (sz != -1)
-            progress.setValue(progress.value()+1);
-        qApp->processEvents();
+        qDebug() << "Layer #" << l << " Features#: " << curImported;
     }
 
     pointHash.clear();
