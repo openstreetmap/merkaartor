@@ -392,20 +392,20 @@ bool OsbLayer::toXML(QXmlStreamWriter& stream, bool asTemplate, QProgressDialog 
     return OK;
 }
 
-OsbLayer * OsbLayer::fromXML(Document* d, const QDomElement& e, QProgressDialog * progress)
+OsbLayer * OsbLayer::fromXML(Document* d, QXmlStreamReader& stream, QProgressDialog * progress)
 {
     Q_UNUSED(progress);
 
-    OsbLayer* l = new OsbLayer(e.attribute("name"));
+    OsbLayer* l = new OsbLayer(stream.attributes().value("name").toString());
 
-    l->setId(e.attribute("xml:id"));
-    l->setAlpha(e.attribute("alpha").toDouble());
-    l->setVisible((e.attribute("visible") == "true" ? true : false));
-    l->setSelected((e.attribute("selected") == "true" ? true : false));
-    l->setEnabled((e.attribute("enabled") == "false" ? false : true));
-    l->setReadonly((e.attribute("readonly") == "true" ? true : false));
+    l->setId(stream.attributes().value("xml:id").toString());
+    l->setAlpha(stream.attributes().value("alpha").toString().toDouble());
+    l->setVisible((stream.attributes().value("visible") == "true" ? true : false));
+    l->setSelected((stream.attributes().value("selected") == "true" ? true : false));
+    l->setEnabled((stream.attributes().value("enabled") == "false" ? false : true));
+    l->setReadonly((stream.attributes().value("readonly") == "true" ? true : false));
 
-    if (l->pp->theImp->loadFile(e.attribute("filename")))
+    if (l->pp->theImp->loadFile(stream.attributes().value("filename").toString()))
         l->pp->theImp->import(l);
     else {
         delete l;

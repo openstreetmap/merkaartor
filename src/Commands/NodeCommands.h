@@ -20,7 +20,7 @@ class MoveNodeCommand : public Command
         bool buildDirtyList(DirtyList& theList);
 
         virtual bool toXML(QXmlStreamWriter& stream) const;
-        static MoveNodeCommand* fromXML(Document* d,QDomElement e);
+        static MoveNodeCommand* fromXML(Document* d,QXmlStreamReader& stream);
 
     private:
         Layer* theLayer;

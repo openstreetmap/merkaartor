@@ -83,7 +83,7 @@ public:
     void exportOSM(QMainWindow* main, QIODevice* device, QList<Feature*> aFeatures);
     QList<Feature*> exportCoreOSM(QList<Feature*> aFeatures, bool forCopyPaste=false, QProgressDialog * progress=NULL);
     bool toXML(QXmlStreamWriter& stream, bool asTemplate, QProgressDialog * progress);
-    static Document* fromXML(QString title, const QDomElement e, double version, LayerDock* aDock, QProgressDialog * progress);
+    static Document* fromXML(QString title, QXmlStreamReader& stream, double version, LayerDock* aDock, QProgressDialog * progress);
 
     bool importNMEA(const QString& filename, TrackLayer* NewLayer);
     bool importOSB(const QString& filename, DrawingLayer* NewLayer);

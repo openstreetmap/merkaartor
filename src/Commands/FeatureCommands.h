@@ -43,7 +43,7 @@ class SetTagCommand : public TagCommand
         virtual bool buildDirtyList(DirtyList& theList);
 
         virtual bool toXML(QXmlStreamWriter& stream) const;
-        static SetTagCommand* fromXML(Document* d,QDomElement e);
+        static SetTagCommand* fromXML(Document* d, QXmlStreamReader& stream);
 
     private:
         int theIdx;
@@ -62,7 +62,7 @@ class ClearTagsCommand : public TagCommand
         virtual void redo();
 
         virtual bool toXML(QXmlStreamWriter& stream) const;
-        static ClearTagsCommand* fromXML(Document* d,QDomElement e);
+        static ClearTagsCommand* fromXML(Document* d, QXmlStreamReader& stream);
 };
 
 class ClearTagCommand : public TagCommand
@@ -76,7 +76,7 @@ class ClearTagCommand : public TagCommand
         virtual bool buildDirtyList(DirtyList& theList);
 
         virtual bool toXML(QXmlStreamWriter& stream) const;
-        static ClearTagCommand* fromXML(Document* d,QDomElement e);
+        static ClearTagCommand* fromXML(Document* d, QXmlStreamReader& stream);
 
     private:
         int theIdx;

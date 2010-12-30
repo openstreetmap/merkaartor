@@ -48,21 +48,11 @@ bool ImportExportOSC::export_(const QList<Feature *>&)
 // import the  input
 bool ImportExportOSC::import(Layer* aLayer)
 {
-    QDomDocument* theXmlDoc = new QDomDocument();
-    if (!theXmlDoc->setContent(Device)) {
-//        QMessageBox::critical(this, tr("Invalid file"), tr("%1 is not a valid XML file.").arg(fn));
-        Device->close();
-        delete theXmlDoc;
-        theXmlDoc = NULL;
-        return false;
-    }
-    Device->close();
+    QXmlStreamReader stream(Device);
 
-    QDomNodeList nl = theXmlDoc->elementsByTagName("osmChange");
-    if (!nl.size()) {
+    stream.readNext();
+    if (stream.name() != "osmChange") {
 //        QMessageBox::critical(this, tr("Invalid file"), tr("%1 is not a valid osmChange file.").arg(fn));
-        delete theXmlDoc;
-        theXmlDoc = NULL;
         return false;
     }
 
@@ -76,20 +66,19 @@ bool ImportExportOSC::import(Layer* aLayer)
 
     QList<IFeature::FId> featIdList;
     Feature* F;
-    QDomElement c = nl.at(0).toElement().firstChildElement();
-    while (!c.isNull()) {
-        if (c.tagName() == "create") {
-            QDomElement f = c.firstChildElement();
-            while (!f.isNull()) {
-//                QString id = (f.hasAttribute("id") ? f.attribute("id") : f.attribute("xml:id"));
-                if (f.tagName() == "node") {
-                    F = Node::fromXML(theDoc, aLayer, f);
+    stream.readNext();
+    while(!stream.atEnd() && !stream.isEndElement()) {
+        if (stream.name() == "create") {
+            stream.readNext();
+            while(!stream.atEnd() && !stream.isEndElement()) {
+                if (stream.name() == "node") {
+                    F = Node::fromXML(theDoc, aLayer, stream);
                     theList->add(new AddFeatureCommand(aLayer, F, true));
-                } else if (f.tagName() == "way") {
-                    F = Way::fromXML(theDoc, aLayer, f);
+                } else if (stream.name() == "way") {
+                    F = Way::fromXML(theDoc, aLayer, stream);
                     theList->add(new AddFeatureCommand(aLayer, F, true));
-                } else if (f.tagName() == "relation") {
-                    F = Relation::fromXML(theDoc, aLayer, f);
+                } else if (stream.name() == "relation") {
+                    F = Relation::fromXML(theDoc, aLayer, stream);
                     theList->add(new AddFeatureCommand(aLayer, F, true));
                 }
                 for (int i=0; i<F->size(); ++i) {
@@ -97,61 +86,58 @@ bool ImportExportOSC::import(Layer* aLayer)
                         featIdList << F->get(i)->id();
                 }
 
-                f = f.nextSiblingElement();
+                stream.readNext();
             }
-        } else if (c.tagName() == "modify") {
-            QDomElement f = c.firstChildElement();
-            while (!f.isNull()) {
-                QString sid = (f.hasAttribute("id") ? f.attribute("id") : f.attribute("xml:id"));
-                if (f.tagName() == "node") {
+        } else if (stream.name() == "modify") {
+            stream.readNext();
+            while(!stream.atEnd() && !stream.isEndElement()) {
+                QString sid = (stream.attributes().hasAttribute("id") ? stream.attributes().value("id").toString() : stream.attributes().value("xml:id").toString());
+                if (stream.name() == "node") {
                     IFeature::FId id(Feature::Point, sid.toLongLong());
                     F = theDoc->getFeature(id);
                     if (!F || F->notEverythingDownloaded())
                         downloadFeature(0, id, theDoc, dLayer);
-                    F = Node::fromXML(theDoc, aLayer, f);
+                    F = Node::fromXML(theDoc, aLayer, stream);
                     theList->add(new AddFeatureCommand(aLayer, F, true));
-                } else if (f.tagName() == "way") {
+                } else if (stream.name() == "way") {
                     IFeature::FId id(Feature::LineString, sid.toLongLong());
                     F = theDoc->getFeature(id);
                     if (!F || F->notEverythingDownloaded())
                         downloadFeature(0, id, theDoc, dLayer);
-                    F = Way::fromXML(theDoc, aLayer, f);
+                    F = Way::fromXML(theDoc, aLayer, stream);
                     theList->add(new AddFeatureCommand(aLayer, F, true));
-                } else if (f.tagName() == "relation") {
+                } else if (stream.name() == "relation") {
                     IFeature::FId id(Feature::OsmRelation, sid.toLongLong());
                     F = theDoc->getFeature(id);
                     if (!F || F->notEverythingDownloaded())
                         downloadFeature(0, id, theDoc, dLayer);
-                    F = Relation::fromXML(theDoc, aLayer, f);
+                    F = Relation::fromXML(theDoc, aLayer, stream);
                     theList->add(new AddFeatureCommand(aLayer, F, true));
                 }
                 for (int i=0; i<F->size(); ++i) {
                     if (F->get(i)->notEverythingDownloaded())
                         featIdList << F->get(i)->id();
                 }
-
-                f = f.nextSiblingElement();
+                stream.readNext();
             }
-        } else if (c.tagName() == "delete") {
-            QDomElement f = c.firstChildElement();
-            while (!f.isNull()) {
-//                QString id = (f.hasAttribute("id") ? f.attribute("id") : f.attribute("xml:id"));
-                if (f.tagName() == "node") {
-                    Node* N = Node::fromXML(theDoc, aLayer, f);
+        } else if (stream.name() == "delete") {
+            stream.readNext();
+            while(!stream.atEnd() && !stream.isEndElement()) {
+                if (stream.name() == "node") {
+                    Node* N = Node::fromXML(theDoc, aLayer, stream);
                     theList->add(new RemoveFeatureCommand(theDoc, N));
-                } else if (f.tagName() == "way") {
-                    Way* W = Way::fromXML(theDoc, aLayer, f);
+                } else if (stream.name() == "way") {
+                    Way* W = Way::fromXML(theDoc, aLayer, stream);
                     theList->add(new RemoveFeatureCommand(theDoc, W));
-                } else if (f.tagName() == "relation") {
-                    Relation* R = Relation::fromXML(theDoc, aLayer, f);
+                } else if (stream.name() == "relation") {
+                    Relation* R = Relation::fromXML(theDoc, aLayer, stream);
                     theList->add(new RemoveFeatureCommand(theDoc, R));
                 }
-
-                f = f.nextSiblingElement();
+                stream.readNext();
             }
         }
 
-        c = c.nextSiblingElement();
+        stream.readNext();
     }
     downloadFeatures(0, featIdList, theDoc, dLayer);
 

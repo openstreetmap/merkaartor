@@ -419,16 +419,20 @@ bool Projection::toXML(QXmlStreamWriter& stream)
     return OK;
 }
 
-void Projection::fromXML(const QDomElement e)
+void Projection::fromXML(QXmlStreamReader& stream)
 {
-    if (e.tagName() == "Projection") {
-        if (e.hasChildNodes()) {
-            setProjectionType(e.firstChild().toText().nodeValue());
-            if (e.hasAttribute("type"))
-                p->projType = e.attribute("type");
-            else
-                p->projType = QCoreApplication::translate("Projection", "Document");
+    if (stream.name() == "Projection") {
+        QString proj;
+        if (stream.attributes().hasAttribute("type"))
+            proj = stream.attributes().value("type").toString();
+        else
+            proj = QCoreApplication::translate("Projection", "Document");
+        stream.readNext();
+        if (stream.tokenType() == QXmlStreamReader::Characters) {
+            setProjectionType(stream.text().toString());
+            p->projType = proj;
+            stream.readNext();
         } else
-            setProjectionType(e.attribute("type"));
+            setProjectionType(proj);
     }
 }

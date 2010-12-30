@@ -79,6 +79,23 @@ CoordBox CoordBox::fromXML(QDomElement e)
     return CoordBox(tr, bl);
 }
 
+CoordBox CoordBox::fromXML(QXmlStreamReader& stream)
+{
+    Coord tr, bl;
+
+    stream.readNext();
+    while(!stream.atEnd() && !stream.isEndElement()) {
+        if (stream.name() == "topright")
+            tr = Coord::fromXML(stream);
+        else if (stream.name() == "bottomleft")
+            bl = Coord::fromXML(stream);
+
+        stream.readNext();
+    }
+
+    return CoordBox(tr, bl);
+}
+
 #define EQUATORIALRADIUSKM 6378.137
 double Coord::distanceFrom(const Coord& other) const
 {
@@ -130,6 +147,15 @@ Coord Coord::fromXML(QDomElement e)
 {
     double lat = angToCoord(e.attribute("lat").toDouble());
     double lon = angToCoord(e.attribute("lon").toDouble());
+
+    return Coord(lat, lon);
+}
+
+Coord Coord::fromXML(QXmlStreamReader& stream)
+{
+    double lat = angToCoord(stream.attributes().value("lat").toString().toDouble());
+    double lon = angToCoord(stream.attributes().value("lon").toString().toDouble());
+    stream.readNext();
 
     return Coord(lat, lon);
 }

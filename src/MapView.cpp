@@ -1056,19 +1056,17 @@ bool MapView::toXML(QXmlStreamWriter& stream)
     return OK;
 }
 
-void MapView::fromXML(const QDomElement p)
+void MapView::fromXML(QXmlStreamReader& stream)
 {
     CoordBox cb;
-    QDomElement e = p.firstChildElement();
-    while(!e.isNull()) {
-        if (e.tagName() == "Viewport") {
-            cb = CoordBox::fromXML(e);
+    stream.readNext();
+    while(!stream.atEnd() && !stream.isEndElement()) {
+        if (stream.name() == "Viewport") {
+            cb = CoordBox::fromXML(stream);
+        } else if (stream.name() == "Projection") {
+            theProjection.fromXML(stream);
         }
-        else if (e.tagName() == "Projection") {
-            theProjection.fromXML(e);
-        }
-
-        e = e.nextSiblingElement();
+        stream.readNext();
     }
 
     if (!cb.isNull())

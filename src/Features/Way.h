@@ -108,7 +108,7 @@ class Way : public Feature
 
         virtual bool toGPX(QXmlStreamWriter& stream, QProgressDialog * progress, bool forExport=false);
         virtual bool toXML(QXmlStreamWriter& stream, QProgressDialog * progress, bool strict=false, QString changetsetid="");
-        static Way* fromXML(Document* d, Layer* L, const QDomElement e);
+        static Way* fromXML(Document* d, Layer* L, QXmlStreamReader& stream);
 
         virtual QString toHtml();
 

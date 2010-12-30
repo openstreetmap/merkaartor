@@ -127,7 +127,7 @@ public:
     virtual void cleanup();
 
     virtual bool toXML(QXmlStreamWriter& stream);
-    virtual void fromXML(const QDomElement xParent);
+    virtual void fromXML(QXmlStreamReader& stream);
     virtual QString toPropertiesHtml();
 
     virtual void setSettings(QSettings* aSet) {theSets = aSet;}

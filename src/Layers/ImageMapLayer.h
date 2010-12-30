@@ -46,7 +46,7 @@ public:
 
     virtual bool toXML(QXmlStreamWriter& stream, bool asTemplate, QProgressDialog * progress);
     virtual QString toPropertiesHtml();
-    static ImageMapLayer* fromXML(Document* d, const QDomElement& e, QProgressDialog * progress);
+    static ImageMapLayer* fromXML(Document* d, QXmlStreamReader& stream, QProgressDialog * progress);
 
     virtual /* const */ LayerType classType() const {return Layer::ImageLayerType;}
     virtual const LayerGroups classGroups() const {return(Layer::Map);}

@@ -51,7 +51,7 @@ class Projection : public IProjection
         int projectionRevision() const;
 #endif
         bool toXML(QXmlStreamWriter& stream);
-        void fromXML(const QDomElement e);
+        void fromXML(QXmlStreamReader& stream);
 
     protected:
 #ifndef _MOBILE

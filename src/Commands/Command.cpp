@@ -122,23 +122,24 @@ bool Command::toXML(QXmlStreamWriter& stream) const
     return OK;
 }
 
-void Command::fromXML(Document* d, const QDomElement& e, Command* C)
+void Command::fromXML(Document* d, QXmlStreamReader& stream, Command* C)
 {
-    QDomElement c = e.firstChildElement();
-    while(!c.isNull()) {
-        if (c.tagName() == "Command") {
+    stream.readNext();
+    while(!stream.atEnd() && !stream.isEndElement()) {
+        if (stream.name() == "Command") {
             Feature* F;
-            if (!(F = d->getFeature(IFeature::FId(IFeature::All, c.attribute("feature").toLongLong()))))
+            if (!(F = d->getFeature(IFeature::FId(IFeature::All, stream.attributes().value("feature").toString().toLongLong()))))
                 return;
 
-            C->setId(c.attribute("xml:id"));
-            if (c.hasAttribute("oldCreated"))
-                C->oldCreated = c.attribute("oldCreated");
-            if (c.hasAttribute("undone"))
-                C->isUndone = (c.attribute("undone") == "true" ? true : false);
+            C->setId(stream.attributes().value("xml:id").toString());
+            if (stream.attributes().hasAttribute("oldCreated"))
+                C->oldCreated = stream.attributes().value("oldCreated").toString();
+            if (stream.attributes().hasAttribute("undone"))
+                C->isUndone = (stream.attributes().value("undone") == "true" ? true : false);
             C->mainFeature = F;
+            stream.readNext();
         }
-        c = c.nextSiblingElement();
+        stream.readNext();
     }
 }
 
@@ -245,92 +246,82 @@ bool CommandList::toXML(QXmlStreamWriter& stream) const
     return OK;
 }
 
-CommandList* CommandList::fromXML(Document* d, const QDomElement& e)
+CommandList* CommandList::fromXML(Document* d, QXmlStreamReader& stream)
 {
     CommandList* l = new CommandList();
-    l->setId(e.attribute("xml:id"));
-    l->isReversed = (e.attribute("reversed") == "true");
-    if (e.hasAttribute("description"))
-        l->description = e.attribute("description");
-    if (e.hasAttribute("feature")) {
-        if (e.attribute("featureclass") == "Node") {
-            l->mainFeature = (Feature*) Feature::getTrackPointOrCreatePlaceHolder(d, (Layer *) d->getDirtyOrOriginLayer(), IFeature::FId(IFeature::Point, e.attribute("feature").toLongLong()));
+    l->setId(stream.attributes().value("xml:id").toString());
+    l->isReversed = (stream.attributes().value("reversed") == "true");
+    if (stream.attributes().hasAttribute("description"))
+        l->description = stream.attributes().value("description").toString();
+    if (stream.attributes().hasAttribute("feature")) {
+        if (stream.attributes().value("featureclass") == "Node") {
+            l->mainFeature = (Feature*) Feature::getTrackPointOrCreatePlaceHolder(d, (Layer *) d->getDirtyOrOriginLayer(), IFeature::FId(IFeature::Point, stream.attributes().value("feature").toString().toLongLong()));
         } else
-        if (e.attribute("featureclass") == "Way") {
-            l->mainFeature = (Feature*) Feature::getWayOrCreatePlaceHolder(d, (Layer *) d->getDirtyOrOriginLayer(), IFeature::FId(IFeature::LineString, e.attribute("feature").toLongLong()));
+        if (stream.attributes().value("featureclass") == "Way") {
+            l->mainFeature = (Feature*) Feature::getWayOrCreatePlaceHolder(d, (Layer *) d->getDirtyOrOriginLayer(), IFeature::FId(IFeature::LineString, stream.attributes().value("feature").toString().toLongLong()));
         } else
-        if (e.attribute("featureclass") == "Relation") {
-            l->mainFeature = (Feature*) Feature::getRelationOrCreatePlaceHolder(d, (Layer *) d->getDirtyOrOriginLayer(), IFeature::FId(IFeature::OsmRelation, e.attribute("feature").toLongLong()));
+        if (stream.attributes().value("featureclass") == "Relation") {
+            l->mainFeature = (Feature*) Feature::getRelationOrCreatePlaceHolder(d, (Layer *) d->getDirtyOrOriginLayer(), IFeature::FId(IFeature::OsmRelation, stream.attributes().value("feature").toString().toLongLong()));
         }
     }
 
-    QDomElement c = e.firstChildElement();
-    while(!c.isNull()) {
-        if (c.tagName() == "AddFeatureCommand") {
-            AddFeatureCommand* C = AddFeatureCommand::fromXML(d, c);
+    stream.readNext();
+    while(!stream.atEnd() && !stream.isEndElement()) {
+        if (stream.name() == "AddFeatureCommand") {
+            AddFeatureCommand* C = AddFeatureCommand::fromXML(d, stream);
             if (C)
                 l->add(C);
-        } else
-        if (c.tagName() == "MoveTrackPointCommand") {
-            MoveNodeCommand* C = MoveNodeCommand::fromXML(d, c);
+        } else if (stream.name() == "MoveTrackPointCommand") {
+            MoveNodeCommand* C = MoveNodeCommand::fromXML(d, stream);
             if (C)
                 l->add(C);
-        } else
-        if (c.tagName() == "RelationAddFeatureCommand") {
-            RelationAddFeatureCommand* C = RelationAddFeatureCommand::fromXML(d, c);
+        } else if (stream.name() == "RelationAddFeatureCommand") {
+            RelationAddFeatureCommand* C = RelationAddFeatureCommand::fromXML(d, stream);
             if (C)
                 l->add(C);
-        } else
-        if (c.tagName() == "RelationRemoveFeatureCommand") {
-            RelationRemoveFeatureCommand* C = RelationRemoveFeatureCommand::fromXML(d, c);
+        } else if (stream.name() == "RelationRemoveFeatureCommand") {
+            RelationRemoveFeatureCommand* C = RelationRemoveFeatureCommand::fromXML(d, stream);
             if (C)
                 l->add(C);
-        } else
-        if (c.tagName() == "RemoveFeatureCommand") {
-            RemoveFeatureCommand* C = RemoveFeatureCommand::fromXML(d, c);
+        } else if (stream.name() == "RemoveFeatureCommand") {
+            RemoveFeatureCommand* C = RemoveFeatureCommand::fromXML(d, stream);
             if (C)
                 l->add(C);
-        } else
-        if (c.tagName() == "RoadAddTrackPointCommand") {
-            WayAddNodeCommand* C = WayAddNodeCommand::fromXML(d, c);
+        } else if (stream.name() == "RoadAddTrackPointCommand") {
+            WayAddNodeCommand* C = WayAddNodeCommand::fromXML(d, stream);
             if (C)
                 l->add(C);
-        } else
-        if (c.tagName() == "RoadRemoveTrackPointCommand") {
-            WayRemoveNodeCommand* C = WayRemoveNodeCommand::fromXML(d, c);
+        } else if (stream.name() == "RoadRemoveTrackPointCommand") {
+            WayRemoveNodeCommand* C = WayRemoveNodeCommand::fromXML(d, stream);
             if (C)
                 l->add(C);
-        } else
-        if (c.tagName() == "TrackSegmentAddTrackPointCommand") {
-            TrackSegmentAddNodeCommand* C = TrackSegmentAddNodeCommand::fromXML(d, c);
+        } else if (stream.name() == "TrackSegmentAddTrackPointCommand") {
+            TrackSegmentAddNodeCommand* C = TrackSegmentAddNodeCommand::fromXML(d, stream);
             if (C)
                 l->add(C);
-        } else
-        if (c.tagName() == "TrackSegmentRemoveTrackPointCommand") {
-            TrackSegmentRemoveNodeCommand* C = TrackSegmentRemoveNodeCommand::fromXML(d, c);
+        } else if (stream.name() == "TrackSegmentRemoveTrackPointCommand") {
+            TrackSegmentRemoveNodeCommand* C = TrackSegmentRemoveNodeCommand::fromXML(d, stream);
             if (C)
                 l->add(C);
-        } else
-        if (c.tagName() == "ClearTagCommand") {
-            ClearTagCommand* C = ClearTagCommand::fromXML(d, c);
+        } else if (stream.name() == "ClearTagCommand") {
+            ClearTagCommand* C = ClearTagCommand::fromXML(d, stream);
             if (C)
                 l->add(C);
-        } else
-        if (c.tagName() == "ClearTagsCommand") {
-            ClearTagsCommand* C = ClearTagsCommand::fromXML(d, c);
+        } else if (stream.name() == "ClearTagsCommand") {
+            ClearTagsCommand* C = ClearTagsCommand::fromXML(d, stream);
             if (C)
                 l->add(C);
-        } else
-        if (c.tagName() == "SetTagCommand") {
-            SetTagCommand* C = SetTagCommand::fromXML(d, c);
+        } else if (stream.name() == "SetTagCommand") {
+            SetTagCommand* C = SetTagCommand::fromXML(d, stream);
             if (C)
                 l->add(C);
-        } else
-        if (c.tagName() == "CommandList") {
-            l->add(CommandList::fromXML(d, c));
+        } else if (stream.name() == "CommandList") {
+            l->add(CommandList::fromXML(d, stream));
+        } else if (!stream.isWhitespace()) {
+                qDebug() << "CList: logic error: " << stream.name() << " : " << stream.tokenType() << " (" << stream.lineNumber() << ")";
+                QString el = stream.readElementText(QXmlStreamReader::IncludeChildElements);
         }
-
-        c = c.nextSiblingElement();
+        stream.readNext();
     }
 
     if (l->Size == 0) {
@@ -467,51 +458,48 @@ bool CommandHistory::toXML(QXmlStreamWriter& stream, QProgressDialog * /*progres
     return OK;
 }
 
-CommandHistory* CommandHistory::fromXML(Document* d, QDomElement& e, QProgressDialog * progress)
+CommandHistory* CommandHistory::fromXML(Document* d, QXmlStreamReader& stream, QProgressDialog * progress)
 {
     bool OK = true;
     CommandHistory* h = new CommandHistory();
+    int index = stream.attributes().value("index").toString().toUInt();
 
-    QDomElement c = e.firstChildElement();
-    while(!c.isNull()) {
-        if (c.tagName() == "CommandList") {
-            CommandList* l = CommandList::fromXML(d, c);
+    stream.readNext();
+    while(!stream.atEnd() && !stream.isEndElement()) {
+        if (stream.name() == "CommandList") {
+            CommandList* l = CommandList::fromXML(d, stream);
             if (l)
                 h->add(l);
             else
                 OK = false;
-        } else
-        if (c.tagName() == "SetTagCommand") {
-            SetTagCommand* C = SetTagCommand::fromXML(d, c);
+        } else if (stream.name() == "SetTagCommand") {
+            SetTagCommand* C = SetTagCommand::fromXML(d, stream);
             if (C)
                 h->add(C);
             else
                 OK = false;
-        } else
-        if (c.tagName() == "ClearTagCommand") {
-            ClearTagCommand* C = ClearTagCommand::fromXML(d, c);
+        } else if (stream.name() == "ClearTagCommand") {
+            ClearTagCommand* C = ClearTagCommand::fromXML(d, stream);
             if (C)
                 h->add(C);
             else
                 OK = false;
-        } else
-        if (c.tagName() == "MoveTrackPointCommand") {
-            MoveNodeCommand* C = MoveNodeCommand::fromXML(d, c);
+        } else if (stream.name() == "MoveTrackPointCommand") {
+            MoveNodeCommand* C = MoveNodeCommand::fromXML(d, stream);
             if (C)
                 h->add(C);
             else
                 OK = false;
-        } else {
-            qDebug() << "!!! Error: Undefined tag in CommandHistory::fromXML: " << c.tagName();
-            OK = false;
+        } else if (!stream.isWhitespace()) {
+                qDebug() << "CHist: logic error: " << stream.name() << " : " << stream.tokenType() << " (" << stream.lineNumber() << ")";
+                QString el = stream.readElementText(QXmlStreamReader::IncludeChildElements);
         }
 
         if (progress && progress->wasCanceled())
             break;
 
-        c = c.nextSiblingElement();
+        stream.readNext();
     }
-    h->Index = e.attribute("index").toUInt();
 
     if (!OK) {
         qDebug() << "!! File history is corrupted. Reseting...";
@@ -519,7 +507,8 @@ CommandHistory* CommandHistory::fromXML(Document* d, QDomElement& e, QProgressDi
         qDebug() << "-- Index: " << h->Index;
         delete h;
         h = new CommandHistory();
-    }
+    } else
+        h->Index = index;
 
     return h;
 }

@@ -496,9 +496,9 @@ bool Relation::toXML(QXmlStreamWriter& stream, QProgressDialog * progress, bool 
     return OK;
 }
 
-Relation * Relation::fromXML(Document * d, Layer * L, const QDomElement e)
+Relation * Relation::fromXML(Document * d, Layer * L, QXmlStreamReader& stream)
 {
-    QString sid = (e.hasAttribute("id") ? e.attribute("id") : e.attribute("xml:id"));
+    QString sid = (stream.attributes().hasAttribute("id") ? stream.attributes().value("id").toString() : stream.attributes().value("xml:id").toString());
     IFeature::FId id;
     id.type = IFeature::OsmRelation;
     id.numId = sid.toLongLong();
@@ -507,21 +507,22 @@ Relation * Relation::fromXML(Document * d, Layer * L, const QDomElement e)
     if (!R) {
         R = new Relation;
         R->setId(id);
-        Feature::fromXML(e, R);
+        Feature::fromXML(stream, R);
     } else {
-        Feature::fromXML(e, R);
+        Feature::fromXML(stream, R);
         R->layer()->remove(R);
         while (R->p->Members.size())
             R->remove(0);
     }
+    QString role = stream.attributes().value("role").toString();
 
-    QDomElement c = e.firstChildElement();
-    while(!c.isNull()) {
-        if (c.tagName() == "member") {
-            QString Type = c.attribute("type");
+    stream.readNext();
+    while(!stream.atEnd() && !stream.isEndElement()) {
+        if (stream.name() == "member") {
+            QString Type = stream.attributes().value("type").toString();
+            QString sId = stream.attributes().value("ref").toString();
             Feature* F = 0;
             if (Type == "node") {
-                QString sId = c.attribute("ref");
                 IFeature::FId nId(IFeature::Point, sId.toLongLong());
                 Node* Part = CAST_NODE(d->getFeature(nId));
                 if (!Part)
@@ -533,7 +534,6 @@ Relation * Relation::fromXML(Document * d, Layer * L, const QDomElement e)
                 }
                 F = Part;
             } else if (Type == "way") {
-                QString sId = c.attribute("ref");
                 IFeature::FId rId(IFeature::LineString, sId.toLongLong());
                 Way* Part = CAST_WAY(d->getFeature(rId));
                 if (!Part)
@@ -545,7 +545,6 @@ Relation * Relation::fromXML(Document * d, Layer * L, const QDomElement e)
                 }
                 F = Part;
             } else if (Type == "relation") {
-                QString sId = c.attribute("ref");
                 IFeature::FId RId(IFeature::OsmRelation, sId.toLongLong());
                 Relation* Part = dynamic_cast<Relation*>(d->getFeature(RId));
                 if (!Part)
@@ -558,15 +557,16 @@ Relation * Relation::fromXML(Document * d, Layer * L, const QDomElement e)
                 F = Part;
             }
             if (F)
-            {
-                R->add(c.attribute("role"),F);
-            }
+                R->add(role, F);
+            stream.readNext();
+        } else if (stream.name() == "tag") {
+            R->setTag(stream.attributes().value("k").toString(), stream.attributes().value("v").toString());
+            stream.readNext();
         }
-        c = c.nextSiblingElement();
+        stream.readNext();
     }
 
     L->add(R);
-    Feature::tagsFromXML(d, R, e);
 
     return R;
 }

@@ -107,6 +107,7 @@
 #include <QStyleFactory>
 #include <QMenu>
 #include <QTcpServer>
+#include <QXmlStreamReader>
 
 #include "qttoolbardialog.h"
 
@@ -827,7 +828,12 @@ void MainWindow::on_editPasteFeatureAction_triggered()
                         nl.at(i).toElement().setAttribute("layer", l->id());
                     }
 
-                    CommandList* theList = CommandList::fromXML(theDocument, root.firstChildElement("CommandList"));
+                    QString xml;
+                    QTextStream tstr(&xml, QIODevice::ReadOnly);
+                    root.firstChildElement("CommandList").save(tstr, 2);
+                    QXmlStreamReader stream(xml);
+
+                    CommandList* theList = CommandList::fromXML(theDocument, stream);
                     theList->setReversed(true);
                     theList->redo();
                     theList->setDescription("Paste Features");
@@ -2670,53 +2676,40 @@ void MainWindow::saveTemplateDocument(const QString& fn)
 
 Document* MainWindow::doLoadDocument(QFile* file)
 {
-    QDomDocument* theXmlDoc = new QDomDocument();
-    QString errorMsg;
-    int errorLine;
-    int errorColumn;
-    if (!theXmlDoc->setContent(file, false, &errorMsg, &errorLine, &errorColumn)) {
-        QMessageBox::critical(this, tr("Invalid file"), tr("%1 is not a valid XML file.\n%2 at line %3, col %4").arg(file->fileName()).arg(errorMsg).arg(errorLine).arg(errorColumn));
-        delete theXmlDoc;
-        theXmlDoc = NULL;
-        return NULL;
-    }
-
-    QDomElement docElem = theXmlDoc->documentElement();
-    if (docElem.tagName() != "MerkaartorDocument") {
-        QMessageBox::critical(this, tr("Invalid file"), tr("%1 is not a valid Merkaartor document.").arg(file->fileName()));
-        return NULL;
-    }
-    double version = docElem.attribute("version").toDouble();
-
     QProgressDialog progress("Loading document...", "Cancel", 0, 0, this);
     progress.setWindowModality(Qt::WindowModal);
 
-    progress.setMaximum(progress.maximum() + theXmlDoc->elementsByTagName("relation").count());
-    progress.setMaximum(progress.maximum() + theXmlDoc->elementsByTagName("way").count());
-    progress.setMaximum(progress.maximum() + theXmlDoc->elementsByTagName("node").count());
-    progress.setMaximum(progress.maximum() + theXmlDoc->elementsByTagName("trkpt").count());
-    progress.setMaximum(progress.maximum() + theXmlDoc->elementsByTagName("wpt").count());
+    QXmlStreamReader stream(file);
+    while (stream.readNext() && stream.tokenType() != QXmlStreamReader::Invalid && stream.tokenType() != QXmlStreamReader::StartElement);
+    if (stream.tokenType() != QXmlStreamReader::StartElement || stream.name() != "MerkaartorDocument") {
+        QMessageBox::critical(this, tr("Invalid file"), tr("%1 is not a valid Merkaartor document.").arg(file->fileName()));
+        return NULL;
+    }
+    double version = stream.attributes().value("version").toString().toDouble();
+
+    progress.setMaximum(file->size());
 
     Document* newDoc = NULL;
-    QDomElement e = docElem.firstChildElement();
-    while(!e.isNull()) {
-        if (e.tagName() == "MapDocument") {
-            newDoc = Document::fromXML(QFileInfo(*file).fileName(), e, version, theLayers, &progress);
+    stream.readNext();
+    while(!stream.atEnd() && !stream.isEndElement()) {
+        if (stream.name() == "MapDocument") {
+            newDoc = Document::fromXML(QFileInfo(*file).fileName(), stream, version, theLayers, &progress);
 
             if (progress.wasCanceled())
                 break;
-        } else
-        if (e.tagName() == "MapView") {
-            view()->fromXML(e);
+        } else if (stream.name() == "MapView") {
+            view()->fromXML(stream);
+        } else if (!stream.isWhitespace()) {
+            qDebug() << "Main: logic error: " << stream.name() << " : " << stream.tokenType() << " (" << stream.lineNumber() << ")";
+            stream.skipCurrentElement();
         }
 
         if (progress.wasCanceled())
             break;
 
-        e = e.nextSiblingElement();
+        stream.readNext();
     }
     progress.reset();
-    delete theXmlDoc;
 
     updateProjectionMenu();
 

@@ -318,9 +318,9 @@ bool CadastreFranceAdapter::toXML(QXmlStreamWriter& stream)
     return true;
 }
 
-void CadastreFranceAdapter::fromXML(const QDomElement xParent)
+void CadastreFranceAdapter::fromXML(QXmlStreamReader& stream)
 {
-    Q_UNUSED(xParent)
+    Q_UNUSED(stream)
 }
 
 QString CadastreFranceAdapter::toPropertiesHtml()

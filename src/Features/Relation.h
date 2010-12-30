@@ -54,7 +54,7 @@ class Relation : public Feature
         void buildPath(Projection const &theProjection, const QTransform& theTransform, const QRectF& clipRect);
 
         virtual bool toXML(QXmlStreamWriter& stream, QProgressDialog * progress, bool strict=false, QString changetsetid="");
-        static Relation* fromXML(Document* d, Layer* L, const QDomElement e);
+        static Relation* fromXML(Document* d, Layer* L, QXmlStreamReader& stream);
 
         virtual QString toHtml();
 

@@ -20,7 +20,7 @@ class WayAddNodeCommand : public Command
         virtual bool buildDirtyList(DirtyList& theList);
 
         virtual bool toXML(QXmlStreamWriter& stream) const;
-        static WayAddNodeCommand* fromXML(Document* d,QDomElement e);
+        static WayAddNodeCommand* fromXML(Document* d, QXmlStreamReader& stream);
 
     private:
         Layer* theLayer;
@@ -43,7 +43,7 @@ class WayRemoveNodeCommand : public Command
         virtual bool buildDirtyList(DirtyList& theList);
 
         virtual bool toXML(QXmlStreamWriter& stream) const;
-        static WayRemoveNodeCommand* fromXML(Document* d,QDomElement e);
+        static WayRemoveNodeCommand* fromXML(Document* d, QXmlStreamReader& stream);
 
     private:
         Layer* theLayer;

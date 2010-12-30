@@ -200,6 +200,7 @@ bool ImportExportGdal::import(Layer* aLayer)
 
     OGRLayer  *poLayer;
     // TODO: iterate over all layers?
+    qDebug() << "Layers #" << poDS->GetLayerCount();
     poLayer = poDS->GetLayer( 0 );
 
     OGRSpatialReference * theSrs = poLayer->GetSpatialRef();

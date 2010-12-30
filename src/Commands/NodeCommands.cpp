@@ -91,27 +91,36 @@ bool MoveNodeCommand::toXML(QXmlStreamWriter& stream) const
     return OK;
 }
 
-MoveNodeCommand * MoveNodeCommand::fromXML(Document * d, QDomElement e)
+MoveNodeCommand * MoveNodeCommand::fromXML(Document * d, QXmlStreamReader& stream)
 {
     MoveNodeCommand* a = new MoveNodeCommand();
-    a->setId(e.attribute("xml:id"));
-    a->OldPos = Coord::fromXML(e.firstChildElement("oldpos"));
-    a->NewPos = Coord::fromXML(e.firstChildElement("newpos"));
-    if (e.hasAttribute("layer"))
-        a->theLayer = d->getLayer(e.attribute("layer"));
+    a->setId(stream.attributes().value("xml:id").toString());
+
+    if (stream.attributes().hasAttribute("layer"))
+        a->theLayer = d->getLayer(stream.attributes().value("layer").toString());
     else
         a->theLayer = NULL;
-    if (e.hasAttribute("oldlayer"))
-        a->oldLayer = d->getLayer(e.attribute("oldlayer"));
+    if (stream.attributes().hasAttribute("oldlayer"))
+        a->oldLayer = d->getLayer(stream.attributes().value("oldlayer").toString());
     else
         a->oldLayer = NULL;
     if (!a->theLayer)
         return NULL;
 
-    a->thePoint = Feature::getTrackPointOrCreatePlaceHolder(d, a->theLayer, IFeature::FId(IFeature::Point, e.attribute("trackpoint").toLongLong()));
+    a->thePoint = Feature::getTrackPointOrCreatePlaceHolder(d, a->theLayer, IFeature::FId(IFeature::Point, stream.attributes().value("trackpoint").toString().toLongLong()));
     a->description = MainWindow::tr("Move node %1").arg(a->thePoint->description());
 
-    Command::fromXML(d, e, a);
+    stream.readNext();
+    while(!stream.atEnd() && !stream.isEndElement()) {
+        if (stream.name() == "oldpos") {
+            a->OldPos = Coord::fromXML(stream);
+        } else if (stream.name() == "newpos") {
+            a->NewPos = Coord::fromXML(stream);
+        }
+        stream.readNext();
+    }
+
+    Command::fromXML(d, stream, a);
 
     return a;
 }

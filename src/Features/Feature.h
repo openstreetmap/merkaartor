@@ -304,7 +304,7 @@ class Feature : public IFeature
         void notifyChanges();
         void notifyParents(int Id);
 
-        static void fromXML(const QDomElement& e, Feature* F);
+        static void fromXML(QXmlStreamReader& stream, Feature* F);
         virtual void toXML(QXmlStreamWriter& stream, bool strict, QString changetsetid="");
 
         virtual QString toXML(int lvl=0, QProgressDialog * progress=NULL);
@@ -340,7 +340,7 @@ class Feature : public IFeature
         IFeature::FId newId(IFeature::FeatureType type, Document* d=NULL) const;
 
         bool tagsToXML(QXmlStreamWriter& stream, bool strict);
-        static void tagsFromXML(Document* d, Feature* f, QDomElement e);
+        static void tagsFromXML(Document* d, Feature* f, QXmlStreamReader& stream);
 
         long    m_references;
         friend void ::boost::intrusive_ptr_add_ref(Feature * p);

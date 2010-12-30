@@ -369,31 +369,31 @@ bool TrackSegment::toXML(QXmlStreamWriter& stream, QProgressDialog * progress, b
     return toGPX(stream, progress, false);
 }
 
-TrackSegment* TrackSegment::fromGPX(Document* d, Layer* L, const QDomElement e, QProgressDialog * progress)
+TrackSegment* TrackSegment::fromGPX(Document* d, Layer* L, QXmlStreamReader& stream, QProgressDialog * progress)
 {
     TrackSegment* l = new TrackSegment();
 
-    if (e.hasAttribute("xml:id"))
-        l->setId(IFeature::FId(IFeature::GpxSegment, e.attribute("xml:id").toLongLong()));
+    if (stream.attributes().hasAttribute("xml:id"))
+        l->setId(IFeature::FId(IFeature::GpxSegment, stream.attributes().value("xml:id").toString().toLongLong()));
 
-    QDomElement c = e.firstChildElement();
-    while(!c.isNull()) {
-        if (c.tagName() == "trkpt") {
-            Node* N = Node::fromGPX(d, L, c);
+    stream.readNext();
+    while(!stream.atEnd() && !stream.isEndElement()) {
+        if (stream.name() == "trkpt") {
+            Node* N = Node::fromGPX(d, L, stream);
             l->add(N);
-            progress->setValue(progress->value()+1);
+            progress->setValue(stream.characterOffset());
         }
 
         if (progress->wasCanceled())
             break;
 
-        c = c.nextSiblingElement();
+        stream.readNext();
     }
 
     return l;
 }
 
-TrackSegment* TrackSegment::fromXML(Document* d, Layer* L, const QDomElement e, QProgressDialog * progress)
+TrackSegment* TrackSegment::fromXML(Document* d, Layer* L, QXmlStreamReader& stream, QProgressDialog * progress)
 {
-    return TrackSegment::fromGPX(d, L, e, progress);
+    return TrackSegment::fromGPX(d, L, stream, progress);
 }

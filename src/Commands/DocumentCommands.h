@@ -21,7 +21,7 @@ class AddFeatureCommand : public Command
         bool buildDirtyList(DirtyList& theList);
 
         virtual bool toXML(QXmlStreamWriter& stream) const;
-        static AddFeatureCommand* fromXML(Document* d,QDomElement e);
+        static AddFeatureCommand* fromXML(Document* d, QXmlStreamReader& stream);
 
     private:
         Layer* theLayer;
@@ -43,7 +43,7 @@ class RemoveFeatureCommand : public Command
         bool buildDirtyList(DirtyList& theList);
 
         virtual bool toXML(QXmlStreamWriter& stream) const;
-        static RemoveFeatureCommand* fromXML(Document* d,QDomElement e);
+        static RemoveFeatureCommand* fromXML(Document* d, QXmlStreamReader& stream);
 
     private:
         Layer* theLayer;

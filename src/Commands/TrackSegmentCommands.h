@@ -20,7 +20,7 @@ class TrackSegmentAddNodeCommand : public Command
         virtual bool buildDirtyList(DirtyList& theList);
 
         virtual bool toXML(QXmlStreamWriter& stream) const;
-        static TrackSegmentAddNodeCommand* fromXML(Document* d,QDomElement e);
+        static TrackSegmentAddNodeCommand* fromXML(Document* d, QXmlStreamReader& stream);
 
     private:
         Layer* theLayer;
@@ -43,7 +43,7 @@ class TrackSegmentRemoveNodeCommand : public Command
         virtual bool buildDirtyList(DirtyList& theList);
 
         virtual bool toXML(QXmlStreamWriter& stream) const;
-        static TrackSegmentRemoveNodeCommand* fromXML(Document* d,QDomElement e);
+        static TrackSegmentRemoveNodeCommand* fromXML(Document* d, QXmlStreamReader& stream);
 
     private:
         Layer* theLayer;

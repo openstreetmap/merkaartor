@@ -158,36 +158,36 @@ bool SetTagCommand::toXML(QXmlStreamWriter& stream) const
     return OK;
 }
 
-SetTagCommand * SetTagCommand::fromXML(Document * d, QDomElement e)
+SetTagCommand * SetTagCommand::fromXML(Document * d, QXmlStreamReader& stream)
 {
     Feature* F;
-    if (!(F = d->getFeature(IFeature::FId(IFeature::All, e.attribute("feature").toLongLong())))) {
-        qDebug() << "SetTagCommand::fromXML: Undefined feature: " << e.attribute("feature");
+    if (!(F = d->getFeature(IFeature::FId(IFeature::All, stream.attributes().value("feature").toString().toLongLong())))) {
+        qDebug() << "SetTagCommand::fromXML: Undefined feature: " << stream.attributes().value("feature").toString();
         return NULL;
     }
 
     SetTagCommand* a = new SetTagCommand(F);
-    a->setId(e.attribute("xml:id"));
-    if (e.hasAttribute("oldkey"))
-        a->oldK = e.attribute("oldkey");
+    a->setId(stream.attributes().value("xml:id").toString());
+    if (stream.attributes().hasAttribute("oldkey"))
+        a->oldK = stream.attributes().value("oldkey").toString();
     a->theFeature = F;
-    a->theIdx = e.attribute("idx").toInt();
-    a->theK = e.attribute("key");
-    a->theV = e.attribute("value");
-    if (e.hasAttribute("oldvalue"))
-        a->oldV = e.attribute("oldvalue");
-    if (e.hasAttribute("layer"))
-        a->theLayer = d->getLayer(e.attribute("layer"));
+    a->theIdx = stream.attributes().value("idx").toString().toInt();
+    a->theK = stream.attributes().value("key").toString();
+    a->theV = stream.attributes().value("value").toString();
+    if (stream.attributes().hasAttribute("oldvalue"))
+        a->oldV = stream.attributes().value("oldvalue").toString();
+    if (stream.attributes().hasAttribute("layer"))
+        a->theLayer = d->getLayer(stream.attributes().value("layer").toString());
     else
         a->theLayer = NULL;
-    if (e.hasAttribute("oldlayer"))
-        a->oldLayer = d->getLayer(e.attribute("oldlayer"));
+    if (stream.attributes().hasAttribute("oldlayer"))
+        a->oldLayer = d->getLayer(stream.attributes().value("oldlayer").toString());
     else
         a->oldLayer = NULL;
 
     a->description = MainWindow::tr("Set Tag '%1=%2' on %3").arg(a->theK).arg(a->theV).arg(a->theFeature->description());
 
-    Command::fromXML(d, e, a);
+    Command::fromXML(d, stream, a);
 
     return a;
 }
@@ -261,33 +261,33 @@ bool ClearTagsCommand::toXML(QXmlStreamWriter& stream) const
     return OK;
 }
 
-ClearTagsCommand * ClearTagsCommand::fromXML(Document * d, QDomElement e)
+ClearTagsCommand * ClearTagsCommand::fromXML(Document * d, QXmlStreamReader& stream)
 {
     Feature* F;
-    if (!(F = d->getFeature(IFeature::FId(IFeature::All, e.attribute("feature").toLongLong()))))
+    if (!(F = d->getFeature(IFeature::FId(IFeature::All, stream.attributes().value("feature").toString().toLongLong()))))
         return NULL;
 
     ClearTagsCommand* a = new ClearTagsCommand(F);
-    a->setId(e.attribute("xml:id"));
+    a->setId(stream.attributes().value("xml:id").toString());
     a->theFeature = F;
-    if (e.hasAttribute("layer"))
-        a->theLayer = d->getLayer(e.attribute("layer"));
+    if (stream.attributes().hasAttribute("layer"))
+        a->theLayer = d->getLayer(stream.attributes().value("layer").toString());
     else
         a->theLayer = NULL;
-    if (e.hasAttribute("oldlayer"))
-        a->oldLayer = d->getLayer(e.attribute("oldlayer"));
+    if (stream.attributes().hasAttribute("oldlayer"))
+        a->oldLayer = d->getLayer(stream.attributes().value("oldlayer").toString());
     else
         a->oldLayer = NULL;
 
-    QDomElement c = e.firstChildElement();
-    while(!c.isNull()) {
-        if (c.tagName() == "tag") {
-            a->Before.push_back(qMakePair(c.attribute("k"),c.attribute("v")));
+    stream.readNext();
+    while(!stream.atEnd() && !stream.isEndElement()) {
+        if (stream.name() == "tag") {
+            a->Before.push_back(qMakePair(stream.attributes().value("k").toString(),stream.attributes().value("v").toString()));
         }
-        c = c.nextSiblingElement();
+        stream.readNext();
     }
 
-    Command::fromXML(d, e, a);
+    Command::fromXML(d, stream, a);
 
     return a;
 }
@@ -370,30 +370,30 @@ bool ClearTagCommand::toXML(QXmlStreamWriter& stream) const
     return OK;
 }
 
-ClearTagCommand * ClearTagCommand::fromXML(Document * d, QDomElement e)
+ClearTagCommand * ClearTagCommand::fromXML(Document * d, QXmlStreamReader& stream)
 {
     Feature* F;
-    if (!(F = d->getFeature(IFeature::FId(IFeature::All, e.attribute("feature").toLongLong()))))
+    if (!(F = d->getFeature(IFeature::FId(IFeature::All, stream.attributes().value("feature").toString().toLongLong()))))
         return NULL;
 
     ClearTagCommand* a = new ClearTagCommand(F);
-    a->setId(e.attribute("xml:id"));
+    a->setId(stream.attributes().value("xml:id").toString());
     a->theFeature = F;
-    a->theIdx = e.attribute("idx").toInt();
-    a->theK = e.attribute("key");
-    a->theV = e.attribute("value");
-    if (e.hasAttribute("layer"))
-        a->theLayer = d->getLayer(e.attribute("layer"));
+    a->theIdx = stream.attributes().value("idx").toString().toInt();
+    a->theK = stream.attributes().value("key").toString();
+    a->theV = stream.attributes().value("value").toString();
+    if (stream.attributes().hasAttribute("layer"))
+        a->theLayer = d->getLayer(stream.attributes().value("layer").toString());
     else
         a->theLayer = NULL;
-    if (e.hasAttribute("oldlayer"))
-        a->oldLayer = d->getLayer(e.attribute("oldlayer"));
+    if (stream.attributes().hasAttribute("oldlayer"))
+        a->oldLayer = d->getLayer(stream.attributes().value("oldlayer").toString());
     else
         a->oldLayer = NULL;
 
     a->description = MainWindow::tr("Clear Tag '%1' on %2").arg(a->theK).arg(a->theFeature->description());
 
-    Command::fromXML(d, e, a);
+    Command::fromXML(d, stream, a);
 
     return a;
 }

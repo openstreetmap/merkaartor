@@ -846,21 +846,21 @@ QString Feature::toXML(int lvl, QProgressDialog * progress)
         return "";
 }
 
-void Feature::fromXML(const QDomElement& e, Feature* F)
+void Feature::fromXML(QXmlStreamReader& stream, Feature* F)
 {
-    bool Deleted = (e.attribute("deleted") == "true");
-    int Dirty = (e.hasAttribute("dirtylevel") ? e.attribute("dirtylevel").toInt() : 0);
-    bool Uploaded = (e.attribute("uploaded") == "true");
-    bool Special = (e.attribute("special") == "true");
-    bool Selected = (e.attribute("selected") == "true");
+    bool Deleted = (stream.attributes().value("deleted") == "true");
+    int Dirty = (stream.attributes().hasAttribute("dirtylevel") ? stream.attributes().value("dirtylevel").toString().toInt() : 0);
+    bool Uploaded = (stream.attributes().value("uploaded") == "true");
+    bool Special = (stream.attributes().value("special") == "true");
+    bool Selected = (stream.attributes().value("selected") == "true");
 
     QDateTime time;
-    time = QDateTime::fromString(e.attribute("timestamp").left(19), Qt::ISODate);
-    QString user = e.attribute("user");
-    int Version = e.attribute("version").toInt();
+    time = QDateTime::fromString(stream.attributes().value("timestamp").toString().left(19), Qt::ISODate);
+    QString user = stream.attributes().value("user").toString();
+    int Version = stream.attributes().value("version").toString().toInt();
     if (Version < 1)
         Version = 0;
-    Feature::ActorType A = (Feature::ActorType)(e.attribute("actor", "2").toInt());
+    Feature::ActorType A = (Feature::ActorType)(stream.attributes().hasAttribute("actor") ? stream.attributes().value("actor").toString().toInt() : 2);
 
     F->setLastUpdated(A);
     F->setDeleted(Deleted);
@@ -920,15 +920,15 @@ bool Feature::tagsToXML(QXmlStreamWriter& stream, bool strict)
     return OK;
 }
 
-void Feature::tagsFromXML(Document* d, Feature * f, QDomElement e)
+void Feature::tagsFromXML(Document* d, Feature * f, QXmlStreamReader& stream)
 {
     Q_UNUSED(d)
-    QDomElement c = e.firstChildElement();
-    while(!c.isNull()) {
-        if (c.tagName() == "tag") {
-            f->setTag(c.attribute("k"),c.attribute("v"));
+    while(!stream.atEnd() && !stream.isEndElement()) {
+        if (stream.name() == "tag") {
+            f->setTag(stream.attributes().value("k").toString(), stream.attributes().value("v").toString());
+            stream.readNext();
         }
-        c = c.nextSiblingElement();
+        stream.readNext();
     }
 }
 

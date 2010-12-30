@@ -104,6 +104,7 @@ class Coord
         bool toXML(QString elName, QXmlStreamWriter& stream) const;
         bool toXML(QString elName, QDomElement& xParent) const;
         static Coord fromXML(QDomElement e);
+        static Coord fromXML(QXmlStreamReader& stream);
 
         QPointF toPointF() const
         {
@@ -309,6 +310,7 @@ class CoordBox
         bool toXML(QString elName, QXmlStreamWriter& stream) const;
         bool toXML(QString elName, QDomElement& xParent) const;
         static CoordBox fromXML(QDomElement e);
+        static CoordBox fromXML(QXmlStreamReader& stream);
 
     //private:
         Coord BottomLeft, TopRight;

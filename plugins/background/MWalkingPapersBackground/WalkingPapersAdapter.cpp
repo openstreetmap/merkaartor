@@ -390,33 +390,39 @@ bool WalkingPapersAdapter::toXML(QXmlStreamWriter& stream)
     return OK;
 }
 
-void WalkingPapersAdapter::fromXML(const QDomElement xParent)
+void WalkingPapersAdapter::fromXML(QXmlStreamReader& stream)
 {
     theCoordBbox = QRectF();
     theImages.clear();
 
-    QDomElement fs = xParent.firstChildElement();
-    while(!fs.isNull()) {
-        if (fs.tagName() == "Images") {
-            QDomElement f = fs.firstChildElement();
-            while(!f.isNull()) {
-                if (f.tagName() == "Image") {
-                    QString fn = f.attribute("filename");
+    stream.readNext();
+    while(!stream.atEnd() && !stream.isEndElement()) {
+        if (stream.name() == "Images") {
+            stream.readNext();
+            while(!stream.atEnd() && !stream.isEndElement()) {
+                if (stream.name() == "Image") {
+                    QString fn = stream.attributes().value("filename").toString();
                     if (!fn.isEmpty()) {
-                        double x = f.attribute("left").toDouble();
-                        double y = f.attribute("top").toDouble();
-                        double w = f.attribute("width").toDouble();
-                        double h = f.attribute("height").toDouble();
-                        int r = f.attribute("rotation").toInt();
+                        double x = stream.attributes().value("left").toString().toDouble();
+                        double y = stream.attributes().value("top").toString().toDouble();
+                        double w = stream.attributes().value("width").toString().toDouble();
+                        double h = stream.attributes().value("height").toString().toDouble();
+                        int r = stream.attributes().value("rotation").toString().toInt();
                         QRectF bbox(x, y, w, h);
                         loadImage(fn, bbox, r);
                     }
+                    stream.readNext();
+                } else if (!stream.isWhitespace()) {
+                    qDebug() << "wp: logic error: " << stream.name() << " : " << stream.tokenType() << " (" << stream.lineNumber() << ")";
+                    stream.skipCurrentElement();
                 }
-                f = f.nextSiblingElement();
+                stream.readNext();
             }
+        } else if (!stream.isWhitespace()) {
+            qDebug() << "wp: logic error: " << stream.name() << " : " << stream.tokenType() << " (" << stream.lineNumber() << ")";
+            stream.skipCurrentElement();
         }
-
-        fs = fs.nextSiblingElement();
+        stream.readNext();
     }
 }
 

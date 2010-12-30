@@ -81,27 +81,27 @@ bool AddFeatureCommand::toXML(QXmlStreamWriter& stream) const
     return OK;
 }
 
-AddFeatureCommand * AddFeatureCommand::fromXML(Document* d, QDomElement e)
+AddFeatureCommand * AddFeatureCommand::fromXML(Document* d, QXmlStreamReader& stream)
 {
     AddFeatureCommand* a = new AddFeatureCommand();
 
-    a->setId(e.attribute("xml:id"));
-    a->theLayer = d->getLayer(e.attribute("layer"));
-    if (e.hasAttribute("oldlayer"))
-        a->oldLayer = d->getLayer(e.attribute("oldlayer"));
+    a->setId(stream.attributes().value("xml:id").toString());
+    a->theLayer = d->getLayer(stream.attributes().value("layer").toString());
+    if (stream.attributes().hasAttribute("oldlayer"))
+        a->oldLayer = d->getLayer(stream.attributes().value("oldlayer").toString());
     else
         a->oldLayer = NULL;
     if (!a->theLayer)
         return NULL;
 
     Feature* F;
-    if (!(F = d->getFeature(IFeature::FId(IFeature::All, e.attribute("feature").toLongLong()))))
+    if (!(F = d->getFeature(IFeature::FId(IFeature::All, stream.attributes().value("feature").toString().toLongLong()))))
         return NULL;
 
     a->theFeature = F;
-    a->UserAdded = (e.attribute("useradded") == "true" ? true : false);
+    a->UserAdded = (stream.attributes().value("useradded") == "true" ? true : false);
 
-    Command::fromXML(d, e, a);
+    Command::fromXML(d, stream, a);
 
     return a;
 }
@@ -241,34 +241,34 @@ bool RemoveFeatureCommand::toXML(QXmlStreamWriter& stream) const
     return OK;
 }
 
-RemoveFeatureCommand * RemoveFeatureCommand::fromXML(Document* d, QDomElement e)
+RemoveFeatureCommand * RemoveFeatureCommand::fromXML(Document* d, QXmlStreamReader& stream)
 {
     RemoveFeatureCommand* a = new RemoveFeatureCommand();
 
-    a->setId(e.attribute("xml:id"));
-    a->oldLayer = d->getLayer(e.attribute("layer"));
-    if (e.hasAttribute("newlayer"))
-        a->theLayer = d->getLayer(e.attribute("newlayer"));
+    a->setId(stream.attributes().value("xml:id").toString());
+    a->oldLayer = d->getLayer(stream.attributes().value("layer").toString());
+    if (stream.attributes().hasAttribute("newlayer"))
+        a->theLayer = d->getLayer(stream.attributes().value("newlayer").toString());
     else
         a->theLayer = d->getDirtyOrOriginLayer();
     if (!a->theLayer)
         return NULL;
 
     Feature* F;
-    if (!(F = d->getFeature(IFeature::FId(IFeature::All, e.attribute("feature").toLongLong()))))
+    if (!(F = d->getFeature(IFeature::FId(IFeature::All, stream.attributes().value("feature").toString().toLongLong()))))
         return NULL;
     a->theFeature = F;
-    a->Idx = e.attribute("index").toInt();
+    a->Idx = stream.attributes().value("index").toString().toInt();
 
-    QDomElement c = e.firstChildElement();
-    while(!c.isNull()) {
-        if (c.tagName() == "Cascaded") {
-            a->CascadedCleanUp = CommandList::fromXML(d, c.firstChildElement());
+    stream.readNext();
+    while(!stream.atEnd() && !stream.isEndElement()) {
+        if (stream.name() == "Cascaded") {
+            a->CascadedCleanUp = CommandList::fromXML(d, stream);
         }
-        c = c.nextSiblingElement();
+        stream.readNext();
     }
 
-    Command::fromXML(d, e, a);
+    Command::fromXML(d, stream, a);
 
     return a;
 }

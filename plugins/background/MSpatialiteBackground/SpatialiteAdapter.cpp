@@ -449,17 +449,16 @@ bool SpatialiteAdapter::toXML(QXmlStreamWriter& stream)
     return OK;
 }
 
-void SpatialiteAdapter::fromXML(const QDomElement xParent)
+void SpatialiteAdapter::fromXML(QXmlStreamReader& stream)
 {
-    QDomElement fs = xParent.firstChildElement();
-    while(!fs.isNull()) {
-        if (fs.tagName() == "Database") {
-            QString fn = fs.attribute("filename");
+    stream.readNext();
+    while(!stream.atEnd() && !stream.isEndElement()) {
+        if (stream.name() == "Database") {
+            QString fn = stream.attributes().value("filename").toString();
             if (!fn.isEmpty())
                 setFile(fn);
         }
-
-        fs = fs.nextSiblingElement();
+        stream.readNext();
     }
 }
 

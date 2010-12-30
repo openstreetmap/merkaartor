@@ -204,59 +204,58 @@ bool Document::toXML(QXmlStreamWriter& stream, bool asTemplate, QProgressDialog 
     return OK;
 }
 
-Document* Document::fromXML(QString title, const QDomElement e, double version, LayerDock* aDock, QProgressDialog * progress)
+Document* Document::fromXML(QString title, QXmlStreamReader& stream, double version, LayerDock* aDock, QProgressDialog * progress)
 {
     Document* NewDoc = new Document(aDock);
     NewDoc->p->title = title;
 
     CommandHistory* h = 0;
 
-    if (e.hasAttribute("xml:id"))
-        NewDoc->p->Id = e.attribute("xml:id");
-    if (e.hasAttribute("layernum"))
-        NewDoc->p->layerNum = e.attribute("layernum").toInt();
+    if (stream.attributes().hasAttribute("xml:id"))
+        NewDoc->p->Id = stream.attributes().value("xml:id").toString();
+    if (stream.attributes().hasAttribute("layernum"))
+        NewDoc->p->layerNum = stream.attributes().value("layernum").string()->toInt();
     else
         NewDoc->p->layerNum = 1;
-    if (e.hasAttribute("lastdownloadlayer")) {
-        NewDoc->p->lastDownloadTimestamp = QDateTime::fromString(e.attribute("lastdownloadtimestamp").left(19), Qt::ISODate);
+    if (stream.attributes().hasAttribute("lastdownloadlayer")) {
+        NewDoc->p->lastDownloadTimestamp = QDateTime::fromString(stream.attributes().value("lastdownloadtimestamp").toString().left(19), Qt::ISODate);
         NewDoc->p->lastDownloadTimestamp.setTimeSpec(Qt::UTC);
+        NewDoc->p->lastDownloadLayer = NewDoc->getLayer(stream.attributes().value("lastdownloadlayer").toString());
     }
 
-    QDomElement c = e.firstChildElement();
-    while(!c.isNull()) {
-        if (c.tagName() == "ImageMapLayer") {
-            /*ImageMapLayer* l =*/ ImageMapLayer::fromXML(NewDoc, c, progress);
-        } else if (c.tagName() == "DeletedMapLayer") {
-            /*DeletedMapLayer* l =*/ DeletedLayer::fromXML(NewDoc, c, progress);
-        } else if (c.tagName() == "DirtyLayer" || c.tagName() == "DirtyMapLayer") {
-            /*DirtyMapLayer* l =*/ DirtyLayer::fromXML(NewDoc, c, progress);
-        } else if (c.tagName() == "UploadedLayer" || c.tagName() == "UploadedMapLayer") {
-            /*UploadedMapLayer* l =*/ UploadedLayer::fromXML(NewDoc, c, progress);
-        } else if (c.tagName() == "DrawingLayer" || c.tagName() == "DrawingMapLayer") {
-            /*DrawingMapLayer* l =*/ DrawingLayer::fromXML(NewDoc, c, progress);
-        } else if (c.tagName() == "TrackLayer" || c.tagName() == "TrackMapLayer") {
-            /*TrackMapLayer* l =*/ TrackLayer::fromXML(NewDoc, c, progress);
-        } else if (c.tagName() == "ExtractedLayer") {
-            /*DrawingMapLayer* l =*/ DrawingLayer::fromXML(NewDoc, c, progress);
-        } else if (c.tagName() == "OsbLayer" || c.tagName() == "OsbMapLayer") {
-            /*OsbMapLayer* l =*/ OsbLayer::fromXML(NewDoc, c, progress);
-        } else if (c.tagName() == "FilterLayer") {
-            /*OsbMapLayer* l =*/ FilterLayer::fromXML(NewDoc, c, progress);
-        } else if (c.tagName() == "CommandHistory") {
+    stream.readNext();
+    while(!stream.atEnd() && !stream.isEndElement()) {
+        if (stream.name() == "ImageMapLayer") {
+            /*ImageMapLayer* l =*/ ImageMapLayer::fromXML(NewDoc, stream, progress);
+        } else if (stream.name() == "DeletedMapLayer") {
+            /*DeletedMapLayer* l =*/ DeletedLayer::fromXML(NewDoc, stream, progress);
+        } else if (stream.name() == "DirtyLayer" || stream.name() == "DirtyMapLayer") {
+            /*DirtyMapLayer* l =*/ DirtyLayer::fromXML(NewDoc, stream, progress);
+        } else if (stream.name() == "UploadedLayer" || stream.name() == "UploadedMapLayer") {
+            /*UploadedMapLayer* l =*/ UploadedLayer::fromXML(NewDoc, stream, progress);
+        } else if (stream.name() == "DrawingLayer" || stream.name() == "DrawingMapLayer") {
+            /*DrawingMapLayer* l =*/ DrawingLayer::fromXML(NewDoc, stream, progress);
+        } else if (stream.name() == "TrackLayer" || stream.name() == "TrackMapLayer") {
+            /*TrackMapLayer* l =*/ TrackLayer::fromXML(NewDoc, stream, progress);
+        } else if (stream.name() == "ExtractedLayer") {
+            /*DrawingMapLayer* l =*/ DrawingLayer::fromXML(NewDoc, stream, progress);
+        } else if (stream.name() == "OsbLayer" || stream.name() == "OsbMapLayer") {
+            /*OsbMapLayer* l =*/ OsbLayer::fromXML(NewDoc, stream, progress);
+        } else if (stream.name() == "FilterLayer") {
+            /*OsbMapLayer* l =*/ FilterLayer::fromXML(NewDoc, stream, progress);
+        } else if (stream.name() == "CommandHistory") {
             if (version > 1.0)
-                h = CommandHistory::fromXML(NewDoc, c, progress);
+                h = CommandHistory::fromXML(NewDoc, stream, progress);
+        } else if (!stream.isWhitespace()) {
+            qDebug() << "Doc: logic error: " << stream.name() << " : " << stream.tokenType() << " (" << stream.lineNumber() << ")";
+            stream.skipCurrentElement();
         }
 
         if (progress->wasCanceled())
             break;
 
-        c = c.nextSiblingElement();
+        stream.readNext();
     }
-
-    if (e.hasAttribute("lastdownloadlayer")) {
-        NewDoc->p->lastDownloadLayer = NewDoc->getLayer(e.attribute("lastdownloadlayer"));
-    }
-
 
     if (progress->wasCanceled()) {
         delete NewDoc;
@@ -897,25 +896,34 @@ Document* Document::getDocumentFromXml(QDomDocument* theXmlDoc)
 //        return NULL;
 
     if (c.tagName() == "osm") {
+        QString xml;
+        QTextStream tstr(&xml, QIODevice::ReadOnly);
+        c.save(tstr, 2);
+
+        QXmlStreamReader stream(xml);
+
         Document* NewDoc = new Document(NULL);
         DrawingLayer* l = new DrawingLayer("Dummy");
         NewDoc->add(l);
 
-        c = c.firstChildElement();
-        while(!c.isNull()) {
-            if (c.tagName() == "bound") {
-            } else
-            if (c.tagName() == "way") {
-                Way::fromXML(NewDoc, l, c);
-            } else
-            if (c.tagName() == "relation") {
-                Relation::fromXML(NewDoc, l, c);
-            } else
-            if (c.tagName() == "node") {
-                Node::fromXML(NewDoc, l, c);
+        stream.readNext();
+        while(!stream.atEnd() && !stream.isEndElement()) {
+            if (stream.name() == "osm") {
+                stream.readNext();
+                while(!stream.atEnd() && !stream.isEndElement()) {
+                    if (c.tagName() == "way") {
+                        Way::fromXML(NewDoc, l, stream);
+                    } else if (c.tagName() == "relation") {
+                        Relation::fromXML(NewDoc, l, stream);
+                    } else if (c.tagName() == "node") {
+                        Node::fromXML(NewDoc, l, stream);
+                    } else
+                        stream.readElementText(QXmlStreamReader::IncludeChildElements);
+                    stream.readNext();
+                }
             }
 
-            c = c.nextSiblingElement();
+            stream.readNext();
         }
 
         delete theXmlDoc;

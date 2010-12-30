@@ -615,16 +615,16 @@ bool Layer::toXML(QXmlStreamWriter& stream, bool asTemplate, QProgressDialog * p
     return true;
 }
 
-Layer * Layer::fromXML(Layer* l, Document* /*d*/, const QDomElement e, QProgressDialog * /*progress*/)
+Layer * Layer::fromXML(Layer* l, Document* /*d*/, QXmlStreamReader& stream, QProgressDialog * /*progress*/)
 {
-    l->setId(e.attribute("xml:id"));
-    l->setAlpha(e.attribute("alpha").toDouble());
-    l->setVisible((e.attribute("visible") == "true" ? true : false));
-    l->setSelected((e.attribute("selected") == "true" ? true : false));
-    l->setEnabled((e.attribute("enabled") == "false" ? false : true));
-    l->setReadonly((e.attribute("readonly") == "true" ? true : false));
-    l->setUploadable((e.attribute("uploadable") == "false" ? false : true));
-    l->setDirtyLevel((e.hasAttribute("dirtylevel") ? e.attribute("dirtylevel").toInt() : 0));
+    l->setId(stream.attributes().value("xml:id").toString());
+    l->setAlpha(stream.attributes().value("alpha").toString().toDouble());
+    l->setVisible((stream.attributes().value("visible") == "true" ? true : false));
+    l->setSelected((stream.attributes().value("selected") == "true" ? true : false));
+    l->setEnabled((stream.attributes().value("enabled") == "false" ? false : true));
+    l->setReadonly((stream.attributes().value("readonly") == "true" ? true : false));
+    l->setUploadable((stream.attributes().value("uploadable") == "false" ? false : true));
+    l->setDirtyLevel((stream.attributes().hasAttribute("dirtylevel") ? stream.attributes().value("dirtylevel").toString().toInt() : 0));
 
     return l;
 }
@@ -693,12 +693,12 @@ bool DrawingLayer::toXML(QXmlStreamWriter& stream, bool asTemplate, QProgressDia
     return OK;
 }
 
-DrawingLayer * DrawingLayer::fromXML(Document* d, const QDomElement& e, QProgressDialog * progress)
+DrawingLayer * DrawingLayer::fromXML(Document* d, QXmlStreamReader& stream, QProgressDialog * progress)
 {
-    DrawingLayer* l = new DrawingLayer(e.attribute("name"));
-    Layer::fromXML(l, d, e, progress);
+    DrawingLayer* l = new DrawingLayer(stream.attributes().value("name").toString());
+    Layer::fromXML(l, d, stream, progress);
     d->add(l);
-    if (!DrawingLayer::doFromXML(l, d, e, progress)) {
+    if (!DrawingLayer::doFromXML(l, d, stream, progress)) {
         d->remove(l);
         delete l;
         return NULL;
@@ -706,56 +706,58 @@ DrawingLayer * DrawingLayer::fromXML(Document* d, const QDomElement& e, QProgres
     return l;
 }
 
-DrawingLayer * DrawingLayer::doFromXML(DrawingLayer* l, Document* d, const QDomElement e, QProgressDialog * progress)
+DrawingLayer * DrawingLayer::doFromXML(DrawingLayer* l, Document* d, QXmlStreamReader& stream, QProgressDialog * progress)
 {
-    QDomElement c = e.firstChildElement();
-    while (!c.isNull()) {
-        if (c.tagName() == "osm") {
+    stream.readNext();
+    while(!stream.atEnd() && !stream.isEndElement()) {
+        if (stream.name() == "osm") {
             QSet<Way*> addedWays;
-            int i=0;
-            QDomElement o = c.firstChildElement();
-            while(!o.isNull()) {
-                if (o.tagName() == "bound") {
-                } else  if (o.tagName() == "way") {
-                    Way* R = Way::fromXML(d, l, o);
+            stream.readNext();
+            while(!stream.atEnd() && !stream.isEndElement()) {
+                if (stream.name() == "way") {
+                    Way* R = Way::fromXML(d, l, stream);
                     if (R)
                         addedWays << R;
-                    i++;
-                } else if (o.tagName() == "relation") {
-                    /* Relation* r = */ Relation::fromXML(d, l, o);
-                    i++;
-                } else  if (o.tagName() == "node") {
-                    /* Node* N = */ Node::fromXML(d, l, o);
-                    i++;
-                } else if (o.tagName() == "trkseg") {
-                    TrackSegment* T = TrackSegment::fromXML(d, l, o, progress);
+                } else if (stream.name() == "relation") {
+                    /* Relation* r = */ Relation::fromXML(d, l, stream);
+                } else  if (stream.name() == "node") {
+                    /* Node* N = */ Node::fromXML(d, l, stream);
+                } else if (stream.name() == "trkseg") {
+                    TrackSegment* T = TrackSegment::fromXML(d, l, stream, progress);
                     l->add(T);
-                    i++;
+                } else if (stream.name() == "bound") {
+                    stream.skipCurrentElement();
+                } else if (!stream.isWhitespace()) {
+                    qDebug() << "osm: logic error: " << stream.name() << " : " << stream.tokenType() << " (" << stream.lineNumber() << ")";
+                    QString el = stream.readElementText(QXmlStreamReader::IncludeChildElements);
                 }
 
-                if (i >= progress->maximum()/100) {
-                    progress->setValue(progress->value()+i);
-                    i=0;
-                }
+                progress->setValue(stream.characterOffset());
 
                 if (progress->wasCanceled())
                     break;
 
-                o = o.nextSiblingElement();
+                stream.readNext();
+                qApp->processEvents();
             }
-
-            if (i > 0) progress->setValue(progress->value()+i);
-            qApp->processEvents();
-        } else if (c.tagName() == "DownloadedAreas") {
+        } else if (stream.name() == "DownloadedAreas") {
             if (d->getLastDownloadLayerTime().secsTo(QDateTime::currentDateTime()) < 12*3600) {    // Do not import downloaded areas if older than 12h
-                QDomElement bb = c.firstChildElement();
-                while(!bb.isNull()) {
-                    d->addDownloadBox(l, CoordBox::fromXML(bb));
-                    bb = bb.nextSiblingElement();
+                stream.readNext();
+                while(!stream.atEnd() && !stream.isEndElement()) {
+                    if (stream.name() == "DownloadedBoundingBox") {
+                        d->addDownloadBox(l, CoordBox::fromXML(stream));
+                        stream.readNext();
+                    }
+                    stream.readNext();
                 }
-            }
+            } else
+                stream.skipCurrentElement();
+        } else if (!stream.isWhitespace()) {
+            qDebug() << "DrLayer: logic error: " << stream.name() << " : " << stream.tokenType() << " (" << stream.lineNumber() << ")";
+            stream.skipCurrentElement();
         }
-        c =c.nextSiblingElement();
+
+        stream.readNext();
     }
     return l;
 }
@@ -919,40 +921,43 @@ bool TrackLayer::toXML(QXmlStreamWriter& stream, bool asTemplate, QProgressDialo
     return OK;
 }
 
-TrackLayer * TrackLayer::fromXML(Document* d, const QDomElement& e, QProgressDialog * progress)
+TrackLayer * TrackLayer::fromXML(Document* d, QXmlStreamReader& stream, QProgressDialog * progress)
 {
-    TrackLayer* l = new TrackLayer(e.attribute("name"));
-    Layer::fromXML(l, d, e, progress);
+    TrackLayer* l = new TrackLayer(stream.attributes().value("name").toString());
+    Layer::fromXML(l, d, stream, progress);
     d->add(l);
 
-    QDomElement c = e.firstChildElement();
-    if (c.tagName() != "gpx")
+    stream.readNext();
+    if (stream.name() != "gpx")
         return NULL;
 
-    c = c.firstChildElement();
-    while(!c.isNull()) {
-        if (c.tagName() == "trk") {
-            QDomElement t = c.firstChildElement();
-            while(!t.isNull()) {
-                if (t.tagName() == "trkseg") {
-                    TrackSegment* N = TrackSegment::fromXML(d, l, t, progress);
+    stream.readNext();
+    while(!stream.atEnd() && !stream.isEndElement()) {
+        if (stream.isWhitespace()) {
+        } else if (stream.name() == "trk") {
+            stream.readNext();
+            while(!stream.atEnd() && !stream.isEndElement()) {
+                if (stream.name() == "trkseg") {
+                    TrackSegment* N = TrackSegment::fromXML(d, l, stream, progress);
                     l->add(N);
                 }
 
-                t = t.nextSiblingElement();
+                stream.readNext();
             }
-        }
-        if (c.tagName() == "wpt") {
-            /* Node* N = */ Node::fromGPX(d, l, c);
+        } else if (stream.name() == "wpt") {
+            /* Node* N = */ Node::fromGPX(d, l, stream);
             //l->add(N);
             progress->setValue(progress->value()+1);
+        } else {
+            stream.skipCurrentElement();
         }
 
         if (progress->wasCanceled())
             break;
 
-        c = c.nextSiblingElement();
+        stream.readNext();
     }
+    stream.readNext();
 
     return l;
 }
@@ -969,13 +974,13 @@ DirtyLayer::~ DirtyLayer()
 {
 }
 
-DirtyLayer* DirtyLayer::fromXML(Document* d, const QDomElement e, QProgressDialog * progress)
+DirtyLayer* DirtyLayer::fromXML(Document* d, QXmlStreamReader& stream, QProgressDialog * progress)
 {
-    DirtyLayer* l = new DirtyLayer(e.attribute("name"));
-    Layer::fromXML(l, d, e, progress);
+    DirtyLayer* l = new DirtyLayer(stream.attributes().value("name").toString());
+    Layer::fromXML(l, d, stream, progress);
     d->add(l);
     d->setDirtyLayer(l);
-    DrawingLayer::doFromXML(l, d, e, progress);
+    DrawingLayer::doFromXML(l, d, stream, progress);
     return l;
 }
 
@@ -997,13 +1002,13 @@ UploadedLayer::~ UploadedLayer()
 {
 }
 
-UploadedLayer* UploadedLayer::fromXML(Document* d, const QDomElement e, QProgressDialog * progress)
+UploadedLayer* UploadedLayer::fromXML(Document* d, QXmlStreamReader& stream, QProgressDialog * progress)
 {
-    UploadedLayer* l = new UploadedLayer(e.attribute("name"));
-    Layer::fromXML(l, d, e, progress);
+    UploadedLayer* l = new UploadedLayer(stream.attributes().value("name").toString());
+    Layer::fromXML(l, d, stream, progress);
     d->add(l);
     d->setUploadedLayer(l);
-    DrawingLayer::doFromXML(l, d, e, progress);
+    DrawingLayer::doFromXML(l, d, stream, progress);
     return l;
 }
 
@@ -1031,11 +1036,11 @@ bool DeletedLayer::toXML(QXmlStreamWriter& , bool, QProgressDialog * )
     return true;
 }
 
-DeletedLayer* DeletedLayer::fromXML(Document* d, const QDomElement& e, QProgressDialog * progress)
+DeletedLayer* DeletedLayer::fromXML(Document* d, QXmlStreamReader& stream, QProgressDialog * progress)
 {
     /* Only keep DeletedLayer for backward compatibility with MDC */
-    Layer::fromXML(dynamic_cast<DrawingLayer*>(d->getDirtyOrOriginLayer()), d, e, progress);
-    DrawingLayer::doFromXML(dynamic_cast<DrawingLayer*>(d->getDirtyOrOriginLayer()), d, e, progress);
+    Layer::fromXML(dynamic_cast<DrawingLayer*>(d->getDirtyOrOriginLayer()), d, stream, progress);
+    DrawingLayer::doFromXML(dynamic_cast<DrawingLayer*>(d->getDirtyOrOriginLayer()), d, stream, progress);
     return NULL;
 }
 
@@ -1081,15 +1086,15 @@ bool FilterLayer::toXML(QXmlStreamWriter& stream, bool asTemplate, QProgressDial
     return true;
 }
 
-FilterLayer* FilterLayer::fromXML(Document* d, const QDomElement e, QProgressDialog * progress)
+FilterLayer* FilterLayer::fromXML(Document* d, QXmlStreamReader& stream, QProgressDialog * progress)
 {
     QString id;
-    if (e.hasAttribute("xml:id"))
-        id = e.attribute("xml:id");
+    if (stream.attributes().hasAttribute("xml:id"))
+        id = stream.attributes().value("xml:id").toString();
     else
         id = QUuid::createUuid().toString();
-    FilterLayer* l = new FilterLayer(id, e.attribute("name"), e.attribute("filter"));
-    Layer::fromXML(l, d, e, progress);
+    FilterLayer* l = new FilterLayer(id, stream.attributes().value("name").toString(), stream.attributes().value("filter").toString());
+    Layer::fromXML(l, d, stream, progress);
     d->add(l);
     return l;
 }

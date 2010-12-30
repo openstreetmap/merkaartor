@@ -482,21 +482,21 @@ bool Node::toGPX(QXmlStreamWriter& stream, QProgressDialog * progress, QString e
     return OK;
 }
 
-Node * Node::fromXML(Document* d, Layer* L, const QDomElement e)
+Node * Node::fromXML(Document* d, Layer* L, QXmlStreamReader& stream)
 {
-    double Lat = e.attribute("lat").toDouble();
-    double Lon = e.attribute("lon").toDouble();
+    double Lat = stream.attributes().value("lat").toString().toDouble();
+    double Lon = stream.attributes().value("lon").toString().toDouble();
 
-    QString sid = (e.hasAttribute("id") ? e.attribute("id") : e.attribute("xml:id"));
+    QString sid = (stream.attributes().hasAttribute("id") ? stream.attributes().value("id").toString() : stream.attributes().value("xml:id").toString());
     IFeature::FId id(IFeature::Point, sid.toLongLong());
     Node* Pt = CAST_NODE(d->getFeature(id));
     if (!Pt) {
         Pt = new Node(Coord(angToCoord(Lat),angToCoord(Lon)));
         Pt->setId(id);
-        Feature::fromXML(e, Pt);
+        Feature::fromXML(stream, Pt);
         L->add(Pt);
     } else {
-        Feature::fromXML(e, Pt);
+        Feature::fromXML(stream, Pt);
         if (Pt->layer() != L) {
             Pt->layer()->remove(Pt);
             L->add(Pt);
@@ -504,17 +504,25 @@ Node * Node::fromXML(Document* d, Layer* L, const QDomElement e)
         Pt->setPosition(Coord(angToCoord(Lat), angToCoord(Lon)));
     }
 
-    Feature::tagsFromXML(d, Pt, e);
+    stream.readNext();
+    while(!stream.atEnd() && !stream.isEndElement()) {
+        if (stream.name() == "tag") {
+            Pt->setTag(stream.attributes().value("k").toString(), stream.attributes().value("v").toString());
+            stream.readNext();
+        }
+
+       stream.readNext();
+    }
 
     return Pt;
 }
 
-Node * Node::fromGPX(Document* d, Layer* L, const QDomElement e)
+Node * Node::fromGPX(Document* d, Layer* L, QXmlStreamReader& stream)
 {
-    double Lat = e.attribute("lat").toDouble();
-    double Lon = e.attribute("lon").toDouble();
+    double Lat = stream.attributes().value("lat").toString().toDouble();
+    double Lon = stream.attributes().value("lon").toString().toDouble();
 
-    QString sid = (e.hasAttribute("id") ? e.attribute("id") : e.attribute("xml:id"));
+    QString sid = (stream.attributes().hasAttribute("id") ? stream.attributes().value("id").toString() : stream.attributes().value("xml:id").toString());
     IFeature::FId id(IFeature::Point, sid.toLongLong());
     Node* Pt = CAST_NODE(d->getFeature(id));
     if (!Pt) {
@@ -528,35 +536,47 @@ Node * Node::fromGPX(Document* d, Layer* L, const QDomElement e)
             Pt->setLastUpdated(Feature::OSMServer);
     }
 
-    if (e.tagName() == "wpt")
+    if (stream.name() == "wpt")
         Pt->setTag("_waypoint_", "yes");
 
     QDateTime time = QDateTime::currentDateTime();
-    QDomElement c = e.firstChildElement();
-    while(!c.isNull()) {
-        if (c.tagName() == "time") {
-            QString dtm = c.text();
+    stream.readNext();
+    while(!stream.atEnd() && !stream.isEndElement()) {
+        if (stream.name() == "time") {
+            stream.readNext();
+            QString dtm = stream.text().toString();
             time = QDateTime::fromString(dtm.left(19), Qt::ISODate);
-        } else
-        if (c.tagName() == "ele") {
-            Pt->setElevation(c.text().toFloat());
-        } else
-        if (c.tagName() == "name") {
-            Pt->setTag("name", c.text());
-        } else
-        if (c.tagName() == "cmt") {
-            Pt->setTag("_comment_", c.text());
-        } else
-        if (c.tagName() == "desc") {
-            Pt->setTag("_description_", c.text());
+            stream.readNext();
+        } else if (stream.name() == "ele") {
+            stream.readNext();
+            Pt->setElevation(stream.text().toString().toFloat());
+            stream.readNext();
+        } else if (stream.name() == "name") {
+            stream.readNext();
+            Pt->setTag("name", stream.text().toString());
+            stream.readNext();
+        } else if (stream.name() == "cmt") {
+            stream.readNext();
+            Pt->setTag("_comment_", stream.text().toString());
+            stream.readNext();
+        } else if (stream.name() == "desc") {
+            stream.readNext();
+            Pt->setTag("_description_", stream.text().toString());
+            stream.readNext();
         }
-        else if (c.tagName() == "cmt")
+        else if (stream.name() == "cmt")
         {
-            Pt->setTag("_comment_", c.text());
+            stream.readNext();
+            Pt->setTag("_comment_", stream.text().toString());
+            stream.readNext();
         }
-        else if (c.tagName() == "extensions") // for OpenStreetBugs
+        else if (stream.name() == "extensions") // for OpenStreetBugs
         {
-            QDomNodeList li = c.elementsByTagName("id");
+            QString str = stream.readElementText(QXmlStreamReader::IncludeChildElements);
+            QDomDocument doc;
+            doc.setContent(str);
+
+            QDomNodeList li = doc.elementsByTagName("id");
             if (li.size()) {
                 QString id = li.at(0).toElement().text();
                 Pt->setId(IFeature::FId(IFeature::Point | IFeature::Special, id.toLongLong()));
@@ -565,7 +585,7 @@ Node * Node::fromGPX(Document* d, Layer* L, const QDomElement e)
             }
         }
 
-        c = c.nextSiblingElement();
+        stream.readNext();
     }
     Pt->setTime(time);
 

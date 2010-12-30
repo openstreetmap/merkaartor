@@ -75,24 +75,24 @@ bool TrackSegmentAddNodeCommand::toXML(QXmlStreamWriter& stream) const
     return OK;
 }
 
-TrackSegmentAddNodeCommand * TrackSegmentAddNodeCommand::fromXML(Document * d, QDomElement e)
+TrackSegmentAddNodeCommand * TrackSegmentAddNodeCommand::fromXML(Document * d, QXmlStreamReader& stream)
 {
     TrackSegmentAddNodeCommand* a = new TrackSegmentAddNodeCommand();
-    a->setId(e.attribute("xml:id"));
-    if (e.hasAttribute("layer"))
-        a->theLayer = d->getLayer(e.attribute("layer"));
+    a->setId(stream.attributes().value("xml:id").toString());
+    if (stream.attributes().hasAttribute("layer"))
+        a->theLayer = d->getLayer(stream.attributes().value("layer").toString());
     else
         a->theLayer = NULL;
-    if (e.hasAttribute("oldlayer"))
-        a->oldLayer = d->getLayer(e.attribute("oldlayer"));
+    if (stream.attributes().hasAttribute("oldlayer"))
+        a->oldLayer = d->getLayer(stream.attributes().value("oldlayer").toString());
     else
         a->oldLayer = NULL;
     if (!a->theLayer)
         return NULL;
 
-    a->theTrackSegment = dynamic_cast<TrackSegment*>(d->getFeature(IFeature::FId(IFeature::GpxSegment, e.attribute("tracksegment").toLongLong())));
-    a->theNode = Feature::getTrackPointOrCreatePlaceHolder(d, a->theLayer, IFeature::FId(IFeature::Point, e.attribute("trackpoint").toLongLong()));
-    a->Position = e.attribute("pos").toUInt();
+    a->theTrackSegment = dynamic_cast<TrackSegment*>(d->getFeature(IFeature::FId(IFeature::GpxSegment, stream.attributes().value("tracksegment").toString().toLongLong())));
+    a->theNode = Feature::getTrackPointOrCreatePlaceHolder(d, a->theLayer, IFeature::FId(IFeature::Point, stream.attributes().value("trackpoint").toString().toLongLong()));
+    a->Position = stream.attributes().value("pos").toString().toUInt();
 
     return a;
 }
@@ -169,24 +169,24 @@ bool TrackSegmentRemoveNodeCommand::toXML(QXmlStreamWriter& stream) const
     return OK;
 }
 
-TrackSegmentRemoveNodeCommand * TrackSegmentRemoveNodeCommand::fromXML(Document * d, QDomElement e)
+TrackSegmentRemoveNodeCommand * TrackSegmentRemoveNodeCommand::fromXML(Document * d, QXmlStreamReader& stream)
 {
     TrackSegmentRemoveNodeCommand* a = new TrackSegmentRemoveNodeCommand();
-    a->setId(e.attribute("xml:id"));
-    if (e.hasAttribute("layer"))
-        a->theLayer = d->getLayer(e.attribute("layer"));
+    a->setId(stream.attributes().value("xml:id").toString());
+    if (stream.attributes().hasAttribute("layer"))
+        a->theLayer = d->getLayer(stream.attributes().value("layer").toString());
     else
         a->theLayer = NULL;
-    if (e.hasAttribute("oldlayer"))
-        a->oldLayer = d->getLayer(e.attribute("oldlayer"));
+    if (stream.attributes().hasAttribute("oldlayer"))
+        a->oldLayer = d->getLayer(stream.attributes().value("oldlayer").toString());
     else
         a->oldLayer = NULL;
     if (!a->theLayer)
         return NULL;
 
-    a->theTrackSegment = dynamic_cast<TrackSegment*>(d->getFeature(IFeature::FId(IFeature::GpxSegment, e.attribute("tracksegment").toLongLong())));
-    a->theTrackPoint = Feature::getTrackPointOrCreatePlaceHolder(d, a->theLayer, IFeature::FId(IFeature::Point, e.attribute("trackpoint").toLongLong()));
-    a->Idx = e.attribute("index").toUInt();
+    a->theTrackSegment = dynamic_cast<TrackSegment*>(d->getFeature(IFeature::FId(IFeature::GpxSegment, stream.attributes().value("tracksegment").toString().toLongLong())));
+    a->theTrackPoint = Feature::getTrackPointOrCreatePlaceHolder(d, a->theLayer, IFeature::FId(IFeature::Point, stream.attributes().value("trackpoint").toString().toLongLong()));
+    a->Idx = stream.attributes().value("index").toString().toUInt();
 
     return a;
 }

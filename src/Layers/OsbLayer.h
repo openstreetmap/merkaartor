@@ -29,7 +29,7 @@ public:
                                QList<CoordBox>& invalidRects, QRectF& clipRect, Projection& theProjection, QTransform& theTransform);
 
     virtual bool toXML(QXmlStreamWriter& stream, bool asTemplate, QProgressDialog * progress);
-    static OsbLayer* fromXML(Document* d, const QDomElement& e, QProgressDialog * progress);
+    static OsbLayer* fromXML(Document* d, QXmlStreamReader& stream, QProgressDialog * progress);
 
     virtual QString toHtml();
 

@@ -377,30 +377,36 @@ bool GeoTiffAdapter::toXML(QXmlStreamWriter& stream)
     return OK;
 }
 
-void GeoTiffAdapter::fromXML(const QDomElement xParent)
+void GeoTiffAdapter::fromXML(QXmlStreamReader& stream)
 {
     theBbox = QRectF();
     theImages.clear();
 
-    QDomElement fs = xParent.firstChildElement();
-    while(!fs.isNull()) {
-        if (fs.tagName() == "Images") {
-            if (fs.hasAttribute("projection"))
-                theProjection = fs.attribute("projection");
-            if (fs.hasAttribute("source"))
-                theSourceTag = fs.attribute("source");
-            QDomElement f = fs.firstChildElement();
-            while(!f.isNull()) {
-                if (f.tagName() == "Image") {
-                    QString fn = f.attribute("filename");
+    while(!stream.atEnd() && !stream.isEndElement()) {
+        if (stream.name() == "Images") {
+            if (stream.attributes().hasAttribute("projection"))
+                theProjection = stream.attributes().value("projection").toString();
+            if (stream.attributes().hasAttribute("source"))
+                theSourceTag = stream.attributes().value("source").toString();
+            stream.readNext();
+            while(!stream.atEnd() && !stream.isEndElement()) {
+                if (stream.name() == "Image") {
+                    QString fn = stream.attributes().value("filename").toString();
                     if (!fn.isEmpty())
                         loadImage(fn);
+                    stream.readNext();
+                } else if (!stream.isWhitespace()) {
+                    qDebug() << "gdalimage: logic error: " << stream.name() << " : " << stream.tokenType() << " (" << stream.lineNumber() << ")";
+                    stream.skipCurrentElement();
                 }
-                f = f.nextSiblingElement();
+                stream.readNext();
             }
+        } else if (!stream.isWhitespace()) {
+            qDebug() << "gdalmain: logic error: " << stream.name() << " : " << stream.tokenType() << " (" << stream.lineNumber() << ")";
+            stream.skipCurrentElement();
         }
 
-        fs = fs.nextSiblingElement();
+        stream.readNext();
     }
 }
 

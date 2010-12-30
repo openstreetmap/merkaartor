@@ -22,7 +22,7 @@ class RelationAddFeatureCommand : public Command
         virtual bool buildDirtyList(DirtyList& theList);
 
         virtual bool toXML(QXmlStreamWriter& stream) const;
-        static RelationAddFeatureCommand* fromXML(Document* d,QDomElement e);
+        static RelationAddFeatureCommand* fromXML(Document* d, QXmlStreamReader& stream);
 
     private:
         Layer* theLayer;
@@ -46,7 +46,7 @@ class RelationRemoveFeatureCommand : public Command
         virtual bool buildDirtyList(DirtyList& theList);
 
         virtual bool toXML(QXmlStreamWriter& stream) const;
-        static RelationRemoveFeatureCommand* fromXML(Document* d,QDomElement e);
+        static RelationRemoveFeatureCommand* fromXML(Document* d, QXmlStreamReader& stream);
 
     private:
         Layer* theLayer;

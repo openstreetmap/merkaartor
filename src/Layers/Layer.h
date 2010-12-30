@@ -116,7 +116,7 @@ public:
     virtual QString toPropertiesHtml();
 
     virtual bool toXML(QXmlStreamWriter& stream, bool asTemplate, QProgressDialog * progress);
-    static Layer* fromXML(Layer* l, Document* d, const QDomElement e, QProgressDialog * progress);
+    static Layer* fromXML(Layer* l, Document* d, QXmlStreamReader& stream, QProgressDialog * progress);
 
     virtual CoordBox boundingBox();
 
@@ -161,8 +161,8 @@ public:
     virtual LayerWidget* newWidget(void);
 
     virtual bool toXML(QXmlStreamWriter& stream, bool asTemplate, QProgressDialog * progress);
-    static DrawingLayer* fromXML(Document* d, const QDomElement& e, QProgressDialog * progress);
-    static DrawingLayer* doFromXML(DrawingLayer* l, Document* d, const QDomElement e, QProgressDialog * progress);
+    static DrawingLayer* fromXML(Document* d, QXmlStreamReader& stream, QProgressDialog * progress);
+    static DrawingLayer* doFromXML(DrawingLayer* l, Document* d, QXmlStreamReader& stream, QProgressDialog * progress);
 
     virtual /* const */ LayerType classType() const {return Layer::DrawingLayerType;}
     virtual const LayerGroups classGroups() const {return (Layer::Draw);}
@@ -182,7 +182,7 @@ public:
 
     virtual QString toHtml();
     virtual bool toXML(QXmlStreamWriter& stream, bool asTemplate, QProgressDialog * progress);
-    static TrackLayer* fromXML(Document* d, const QDomElement& e, QProgressDialog * progress);
+    static TrackLayer* fromXML(Document* d, QXmlStreamReader& stream, QProgressDialog * progress);
 
     virtual /* const */ LayerType classType() const {return Layer::TrackLayerType;}
     virtual const LayerGroups classGroups() const {return(Layer::Tracks);}
@@ -201,7 +201,7 @@ public:
     DirtyLayer(const QString& aName);
     virtual ~DirtyLayer();
 
-    static DirtyLayer* fromXML(Document* d, const QDomElement e, QProgressDialog * progress);
+    static DirtyLayer* fromXML(Document* d, QXmlStreamReader& stream, QProgressDialog * progress);
 
     virtual /* const */ LayerType classType() const {return Layer::DirtyLayerType;}
     virtual const LayerGroups classGroups() const {return(Layer::Map|Layer::Draw);}
@@ -219,7 +219,7 @@ public:
     UploadedLayer(const QString& aName);
     virtual ~UploadedLayer();
 
-    static UploadedLayer* fromXML(Document* d, const QDomElement e, QProgressDialog * progress);
+    static UploadedLayer* fromXML(Document* d, QXmlStreamReader& stream, QProgressDialog * progress);
 
     virtual /* const */ LayerType classType() const {return Layer::UploadedLayerType;}
     virtual const LayerGroups classGroups() const {return(Layer::Map|Layer::Draw);}
@@ -237,7 +237,7 @@ public:
     virtual ~DeletedLayer();
 
     virtual bool toXML(QXmlStreamWriter& stream, bool asTemplate, QProgressDialog * progress);
-    static DeletedLayer* fromXML(Document* d, const QDomElement& e, QProgressDialog * progress);
+    static DeletedLayer* fromXML(Document* d, QXmlStreamReader& stream, QProgressDialog * progress);
 
     virtual /* const */ LayerType classType() const {return Layer::DeletedLayerType;}
     virtual const LayerGroups classGroups() const {return(Layer::None);}
@@ -255,7 +255,7 @@ public:
     virtual ~FilterLayer();
 
     bool toXML(QXmlStreamWriter& stream, bool asTemplate, QProgressDialog * progress);
-    static FilterLayer* fromXML(Document* d, const QDomElement e, QProgressDialog * progress);
+    static FilterLayer* fromXML(Document* d, QXmlStreamReader& stream, QProgressDialog * progress);
 
     virtual /* const */ LayerType classType() const {return Layer::FilterLayerType;}
     virtual const LayerGroups classGroups() const {return(Layer::Filters);}

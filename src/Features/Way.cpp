@@ -880,19 +880,19 @@ bool Way::toXML(QXmlStreamWriter& stream, QProgressDialog * progress, bool stric
     return OK;
 }
 
-Way * Way::fromXML(Document* d, Layer * L, const QDomElement e)
+Way * Way::fromXML(Document* d, Layer * L, QXmlStreamReader& stream)
 {
-    QString sid = (e.hasAttribute("id") ? e.attribute("id") : e.attribute("xml:id"));
+    QString sid = (stream.attributes().hasAttribute("id") ? stream.attributes().value("id").toString() : stream.attributes().value("xml:id").toString());
     IFeature::FId id(IFeature::LineString, sid.toLongLong());
     Way* R = CAST_WAY(d->getFeature(id));
 
     if (!R) {
         R = new Way();
         R->setId(id);
-        Feature::fromXML(e, R);
+        Feature::fromXML(stream, R);
         L->add(R);
     } else {
-        Feature::fromXML(e, R);
+        Feature::fromXML(stream, R);
         if (R->layer() != L) {
             R->layer()->remove(R);
             L->add(R);
@@ -901,10 +901,10 @@ Way * Way::fromXML(Document* d, Layer * L, const QDomElement e)
             R->remove(0);
     }
 
-    QDomElement c = e.firstChildElement();
-    while(!c.isNull()) {
-        if (c.tagName() == "nd") {
-            QString sId = c.attribute("ref");
+    stream.readNext();
+    while(!stream.atEnd() && !stream.isEndElement()) {
+        if (stream.name() == "nd") {
+            QString sId = stream.attributes().value("ref").toString();
             IFeature::FId nId(IFeature::Point, sId.toLongLong());
             Node* Part = CAST_NODE(d->getFeature(nId));
             if (!Part)
@@ -915,11 +915,14 @@ Way * Way::fromXML(Document* d, Layer * L, const QDomElement e)
                 L->add(Part);
             }
             R->add(Part);
+            stream.readNext();
+        } else if (stream.name() == "tag") {
+            R->setTag(stream.attributes().value("k").toString(), stream.attributes().value("v").toString());
+            stream.readNext();
         }
-        c = c.nextSiblingElement();
-    }
 
-    Feature::tagsFromXML(d, R, e);
+       stream.readNext();
+    }
 
     return R;
 }

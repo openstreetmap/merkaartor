@@ -376,17 +376,17 @@ void QTransformToXml(QXmlStreamWriter& stream, const QTransform& theTransform)
     stream.writeAttribute("m33", QString::number(theTransform.m33()));
 }
 
-QTransform QTransformFomXml(const QDomElement& parent)
+QTransform QTransformFomXml(QXmlStreamReader& stream)
 {
-    qreal m11 = parent.attribute("m11").toDouble();
-    qreal m12 = parent.attribute("m12").toDouble();
-    qreal m13 = parent.attribute("m13").toDouble();
-    qreal m21 = parent.attribute("m21").toDouble();
-    qreal m22 = parent.attribute("m11").toDouble();
-    qreal m23 = parent.attribute("m23").toDouble();
-    qreal m31 = parent.attribute("m31").toDouble();
-    qreal m32 = parent.attribute("m32").toDouble();
-    qreal m33 = parent.attribute("m33").toDouble();
+    qreal m11 = stream.attributes().value("m11").toString().toDouble();
+    qreal m12 = stream.attributes().value("m12").toString().toDouble();
+    qreal m13 = stream.attributes().value("m13").toString().toDouble();
+    qreal m21 = stream.attributes().value("m21").toString().toDouble();
+    qreal m22 = stream.attributes().value("m11").toString().toDouble();
+    qreal m23 = stream.attributes().value("m23").toString().toDouble();
+    qreal m31 = stream.attributes().value("m31").toString().toDouble();
+    qreal m32 = stream.attributes().value("m32").toString().toDouble();
+    qreal m33 = stream.attributes().value("m33").toString().toDouble();
 
     return QTransform(m11, m12, m13, m21, m22, m23, m31, m32, m33);
 }
@@ -440,45 +440,61 @@ bool ImageMapLayer::toXML(QXmlStreamWriter& stream, bool asTemplate, QProgressDi
     return OK;
 }
 
-ImageMapLayer * ImageMapLayer::fromXML(Document* d, const QDomElement& e, QProgressDialog * /*progress*/)
+ImageMapLayer * ImageMapLayer::fromXML(Document* d, QXmlStreamReader& stream, QProgressDialog * /*progress*/)
 {
-    ImageMapLayer* l = new ImageMapLayer(e.attribute("name"));
-    l->setId(e.attribute("xml:id"));
-
+    ImageMapLayer* l = new ImageMapLayer(stream.attributes().value("name").toString());
+    l->setId(stream.attributes().value("xml:id").toString());
     d->addImageLayer(l);
 
     QString server;
-    QUuid bgtype = QUuid(e.attribute("bgtype"));
+    QUuid bgtype = QUuid(stream.attributes().value("bgtype").toString());
 
-    QDomElement c = e.firstChildElement();
-    while(!c.isNull()) {
-        if (c.tagName() == "AdjustmentList") {
-            QDomNodeList atListEl = c.elementsByTagName("Adjustment");
-            for (int i=0; i<atListEl.size(); ++i) {
-                QDomElement el = atListEl.at(i).toElement();
-                int z = el.attribute("zoom").toInt();
-                if (l->p->AlignementTransformList.size() < z+1)
-                    l->p->AlignementTransformList.resize(z+1);
-                l->p->AlignementTransformList[z] = QTransformFomXml(el);
+    double alpha = stream.attributes().value("alpha").toString().toDouble();
+    bool visible = (stream.attributes().value("visible") == "true" ? true : false);
+    bool selected = (stream.attributes().value("selected") == "true" ? true : false);
+    bool enabled = (stream.attributes().value("enabled") == "false" ? false : true);
+
+    stream.readNext();
+    while(!stream.atEnd() && !stream.isEndElement()) {
+        if (stream.name() == "AdjustmentList") {
+            stream.readNext();
+            while(!stream.atEnd() && !stream.isEndElement()) {
+                if (stream.name() == "Adjustment") {
+                    int z = stream.attributes().value("zoom").toString().toInt();
+                    if (l->p->AlignementTransformList.size() < z+1)
+                        l->p->AlignementTransformList.resize(z+1);
+                    l->p->AlignementTransformList[z] = QTransformFomXml(stream);
+                    stream.readNext();
+                } else if (!stream.isWhitespace()) {
+                    qDebug() << "ImgLay: logic error: " << stream.name() << " : " << stream.tokenType() << " (" << stream.lineNumber() << ")";
+                    stream.skipCurrentElement();
+                }
+                stream.readNext();
             }
-        } else if (c.tagName() == "WmsServer") {
-            server = c.attribute("name");
+        } else if (stream.name() == "WmsServer") {
+            server = stream.attributes().value("name").toString();
             l->setMapAdapter(bgtype, server);
-        } else if (c.tagName() == "TmsServer") {
-            server = c.attribute("name");
+            stream.readNext();
+        } else if (stream.name() == "TmsServer") {
+            server = stream.attributes().value("name").toString();
             l->setMapAdapter(bgtype, server);
-        } else if (c.tagName() == "Data") {
+            stream.readNext();
+        } else if (stream.name() == "Data") {
             l->setMapAdapter(bgtype, server);
+            stream.readNext();
             if (l->getMapAdapter())
-                l->getMapAdapter()->fromXML(c);
+                l->getMapAdapter()->fromXML(stream);
+        } else if (!stream.isWhitespace()) {
+            qDebug() << "ImgLay: logic error: " << stream.name() << " : " << stream.tokenType() << " (" << stream.lineNumber() << ")";
+            stream.skipCurrentElement();
         }
-        c = c.nextSiblingElement();
+        stream.readNext();
     }
 
-    l->setAlpha(e.attribute("alpha").toDouble());
-    l->setVisible((e.attribute("visible") == "true" ? true : false));
-    l->setSelected((e.attribute("selected") == "true" ? true : false));
-    l->setEnabled((e.attribute("enabled") == "false" ? false : true));
+    l->setAlpha(alpha);
+    l->setVisible(visible);
+    l->setSelected(selected);
+    l->setEnabled(enabled);
 
     return l;
 }
