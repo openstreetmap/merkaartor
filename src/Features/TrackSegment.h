@@ -58,8 +58,6 @@ class TrackSegment : public Feature
 
         virtual QString toHtml() {return "";}
 
-        virtual void toBinary(QDataStream& /* ds */, QHash <QString, quint64>& /*theIndex*/) { return; }
-
 private:
         TrackSegmentPrivate* p;
 };

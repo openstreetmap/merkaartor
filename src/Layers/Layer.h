@@ -19,7 +19,6 @@ class LayerWidget;
 class WMSMapAdapter;
 class TileMapAdapter;
 class TrackSegment;
-class OsbLayerPrivate;
 class IMapAdapter;
 class Document;
 
@@ -44,7 +43,6 @@ public:
         DrawingLayerType,
         ExtractedLayerType,
         ImageLayerType,
-        OsbLayerType,
         TrackLayerType,
         UploadedLayerType,
         FilterLayerType

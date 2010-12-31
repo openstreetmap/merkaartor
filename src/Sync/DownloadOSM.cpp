@@ -11,7 +11,6 @@
 #include "TrackSegment.h"
 #include "Utils/SlippyMapWidget.h"
 #include "Preferences/MerkaartorPreferences.h"
-#include "ImportExport/ImportExportOsmBin.h"
 #include "Utils/OsmLink.h"
 
 #include "IProgressWindow.h"
@@ -523,25 +522,6 @@ bool downloadOSM(QWidget* aParent, const QString& aWeb, const QString& aUser, co
     return downloadOSM(aParent, theUrl, aUser, aPassword, theDocument, theLayer);
 }
 
-bool downloadOSM(QWidget* Main, const QString& aUser, const QString& aPassword, const quint32 region , Document* theDocument, Layer* theLayer)
-{
-    Q_UNUSED(aUser)
-    Q_UNUSED(aPassword)
-    int y = int(region / NUM_REGIONS); //2565024
-    int x = (region % NUM_REGIONS);
-    CoordBox Clip = CoordBox(
-        Coord (y * REGION_WIDTH - COORD_MAX, x * REGION_WIDTH - COORD_MAX  ),
-        Coord ((y+1) * REGION_WIDTH - COORD_MAX, (x+1) * REGION_WIDTH - COORD_MAX )
-        );
-
-    QString osmWebsite, osmUser, osmPwd;
-    osmWebsite = M_PREFS->getOsmWebsite();
-    osmUser = M_PREFS->getOsmUser();
-    osmPwd = M_PREFS->getOsmPassword();
-
-    return downloadOSM(Main,osmWebsite,osmUser,osmPwd,Clip,theDocument,theLayer);
-}
-
 bool downloadTracksFromOSM(QWidget* Main, const QString& aWeb, const QString& aUser, const QString& aPassword, const CoordBox& aBox , Document* theDocument)
 {
     Downloader theDownloader(aUser, aPassword);
@@ -793,7 +773,7 @@ bool downloadOSM(MainWindow* Main, const CoordBox& aBox , Document* theDocument)
     ui.edXapiUrl->setText(QString("*[bbox=%1,%2,%3,%4]").arg(coordToAng(aBox.bottomLeft().lon()), 0, 'f').arg(coordToAng(aBox.bottomLeft().lat()), 0, 'f').arg(coordToAng(aBox.topRight().lon()), 0, 'f').arg(coordToAng(aBox.topRight().lat()), 0, 'f'));
     ui.IncludeTracks->setChecked(DownloadRaw);
     ui.ResolveRelations->setChecked(M_PREFS->getResolveRelations());
-    bool OK = true, retry = true, directAPI = false, Regional=false;
+    bool OK = true, retry = true, directAPI = false;
     QString directUrl;
     while (retry) {
         retry = false;
@@ -818,13 +798,10 @@ bool downloadOSM(MainWindow* Main, const CoordBox& aBox , Document* theDocument)
                     directAPI=true;
                     directUrl = link;
                 } else {
-                    link.toUInt(&Regional);
-                    if (!Regional) {
-                        OsmLink ol(link);
-                        Clip = ol.getCoordBox();
-                        if (Clip.isNull() || Clip.isEmpty())
-                            retry = true;
-                    }
+                    OsmLink ol(link);
+                    Clip = ol.getCoordBox();
+                    if (Clip.isNull() || Clip.isEmpty())
+                        retry = true;
                 }
             }
             else if (ui.FromXapi->isChecked())
@@ -847,9 +824,6 @@ bool downloadOSM(MainWindow* Main, const CoordBox& aBox , Document* theDocument)
                     theLayer->setUploadable(false);
                 OK = downloadOSM(Main,QUrl(QUrl::fromEncoded(directUrl.toAscii())),osmUser,osmPwd,theDocument,theLayer);
             }
-            else
-            if (Regional)
-                OK = downloadOSM(Main,osmUser,osmPwd,ui.Link->text().toUInt(),theDocument,theLayer);
             else
                 OK = downloadOSM(Main,osmWebsite,osmUser,osmPwd,Clip,theDocument,theLayer);
             if (OK && ui.IncludeTracks->isChecked())

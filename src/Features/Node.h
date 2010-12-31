@@ -7,7 +7,6 @@
 #include "Feature.h"
 #include "Document.h"
 #include "Layer.h"
-#include "OsbLayer.h"
 
 #include <QtCore/QDateTime>
 #include <QtXml>
@@ -91,9 +90,6 @@ class Node : public Feature
         static Node* fromGPX(Document* d, Layer* L, QXmlStreamReader& stream);
 
         virtual QString toHtml();
-
-        virtual void toBinary(QDataStream& ds, QHash <QString, quint64>& theIndex);
-        static Node* fromBinary(Document* d, OsbLayer* L, QDataStream& ds, qint8 c, qint64 id);
 
     private:
         CoordBox Position;

@@ -6,7 +6,6 @@
 #include "Document.h"
 #include "Feature.h"
 #include "Layer.h"
-#include "OsbLayer.h"
 
 #ifndef _MOBILE
 #if QT_VERSION < 0x040700
@@ -111,9 +110,6 @@ class Way : public Feature
         static Way* fromXML(Document* d, Layer* L, QXmlStreamReader& stream);
 
         virtual QString toHtml();
-
-        virtual void toBinary(QDataStream& ds, QHash <QString, quint64>& theIndex);
-        static Way* fromBinary(Document* d, OsbLayer* L, QDataStream& ds, qint8 c, qint64 id);
 
         bool isExtrimity(Node* node);
         static Way * GetSingleParentRoad(Feature * mapFeature);

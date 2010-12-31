@@ -2,7 +2,6 @@
 #define MERKATOR_LAYERWIDGET_H_
 
 #include "Layer.h"
-#include "OsbLayer.h"
 #include "ImageMapLayer.h"
 
 #include <QActionGroup>
@@ -160,18 +159,6 @@ class UploadedLayerWidget : public LayerWidget
     public:
         UploadedLayerWidget(UploadedLayer* aLayer, QWidget* aParent = 0);
         virtual ~UploadedLayerWidget() {};
-
-    public:
-        virtual void initActions();
-};
-
-class OsbLayerWidget : public LayerWidget
-{
-    Q_OBJECT
-
-    public:
-        OsbLayerWidget(OsbLayer* aLayer, QWidget* aParent = 0);
-        virtual ~OsbLayerWidget() {};
 
     public:
         virtual void initActions();

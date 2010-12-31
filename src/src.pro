@@ -223,15 +223,6 @@ contains (PROTOBUF, 1) {
     DEFINES += USE_PROTOBUF
 }
 
-world_shp.path = $${SHARE_DIR}
-world_shp.files = $$PWD/../share/world_background.osb
-macx {
-    DEFINES += WORLD_SHP=world_background.osb
-} else {
-    DEFINES += WORLD_SHP=$$world_shp.path/world_background.osb
-}
-INSTALLS += world_shp
-
 desktop.path = $${PREFIX}/share/applications
 desktop.files = merkaartor.desktop
 desktopicons.path = $${PREFIX}/share/icons/hicolor/48x48/apps/

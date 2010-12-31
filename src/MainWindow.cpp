@@ -11,7 +11,6 @@
 #include "Command.h"
 #include "DocumentCommands.h"
 #include "FeatureCommands.h"
-#include "ImportExportOsmBin.h"
 #include "ImportExportOSC.h"
 #include "ExportGPX.h"
 #include "ImportExportKML.h"
@@ -70,7 +69,6 @@
 #endif
 #include "QMapControl/mapadapter.h"
 #include "QMapControl/wmsmapadapter.h"
-#include "Tools/WorldOsbManager.h"
 #include "Tools/ActionsDialog.h"
 #include "GotoDialog.h"
 #include "TerraceDialog.h"
@@ -117,6 +115,7 @@
 #include "proj_api.h"
 #include "gdal_version.h"
 
+#include "Utils/SlippyMapWidget.h"
 SlippyMapCache* SlippyMapWidget::theSlippyCache = 0;
 
 class MainWindowPrivate
@@ -161,7 +160,7 @@ MainWindow::MainWindow(QWidget *parent)
 
     p = new MainWindowPrivate;
 
-    QString supported_import_formats("*.gpx *.osm *.osb *.osc *.ngt *.nmea *.nma *.kml *.csv");
+    QString supported_import_formats("*.gpx *.osm *.osc *.ngt *.nmea *.nma *.kml *.csv");
 #ifdef GEOIMAGE
     supported_import_formats += " *.jpg";
 #endif
@@ -1161,11 +1160,6 @@ bool MainWindow::importFiles(Document * mapDocument, const QStringList & fileNam
             }
             importOK = mapDocument->importOSC(fn, (DrawingLayer*)newLayer);
         }
-        else if (fn.toLower().endsWith(".osb")) {
-            newLayer = new OsbLayer( baseFileName, fn );
-            mapDocument->add(newLayer);
-            importOK = mapDocument->importOSB(fn, (DrawingLayer *)newLayer);
-        }
         else if (fn.toLower().endsWith(".ngt")) {
             newLayer = new TrackLayer( baseFileName );
             newLayer->setUploadable(false);
@@ -1755,16 +1749,6 @@ void MainWindow::on_fileNewAction_triggered()
         if (!theDocument) {
             theDocument = new Document(theLayers);
             theDocument->addDefaultLayers();
-            if (M_PREFS->getWorldOsbAutoload() && !M_PREFS->getWorldOsbUri().isEmpty()) {
-                Layer* newLayer = new OsbLayer( "World", M_PREFS->getWorldOsbUri() + "/world.osb" );
-                if (M_PREFS->getWorldOsbAutoshow())
-                    newLayer->setVisible(true);
-                else
-                    newLayer->setVisible(false);
-                newLayer->setReadonly(true);
-
-                theDocument->add(newLayer);
-            }
             theView->projection().setProjectionType(M_PREFS->getProjectionType());
             theView->setViewport(WORLD_COORDBOX, theView->rect());
         }
@@ -2373,13 +2357,6 @@ void MainWindow::on_mapStyleLoadAction_triggered()
     }
 }
 
-void MainWindow::on_toolsWorldOsbAction_triggered()
-{
-    WorldOsbManager osbMgr(this);
-    osbMgr.setViewport(theView->viewport().toRectF());
-    osbMgr.exec();
-}
-
 void MainWindow::on_toolsWMSServersAction_triggered()
 {
     WMSPreferencesDialog* WMSPref;
@@ -2798,44 +2775,6 @@ void MainWindow::on_exportOSMAction_triggered()
         theDocument->exportOSM(this, &file, theFeatures);
         file.close();
 
-    }
-    deleteProgressDialog();
-}
-
-void MainWindow::on_exportOSMBinAction_triggered()
-{
-    QList<Feature*> theFeatures;
-
-    createProgressDialog();
-    if (!selectExportedFeatures(theFeatures))
-        return;
-
-    QString fileName;
-    QFileDialog dlg(this, tr("Export Binary OSM"), QString("%1/%2.osb").arg(M_PREFS->getworkingdir()).arg(tr("untitled")), tr("OSM Binary Files (*.osb)") + "\n" + tr("All Files (*)"));
-    dlg.setFileMode(QFileDialog::AnyFile);
-    dlg.setDefaultSuffix("osb");
-    dlg.setAcceptMode(QFileDialog::AcceptSave);
-
-    if (dlg.exec()) {
-        if (dlg.selectedFiles().size())
-            fileName = dlg.selectedFiles()[0];
-    }
-//    QString fileName = QFileDialog::getSaveFileName(this,
-//        tr("Export Binary OSM"), M_PREFS->getworkingdir() + "/untitled.osb", tr("OSM Binary Files (*.osb)"));
-
-    if (fileName != "") {
-#ifndef Q_OS_SYMBIAN
-        QApplication::setOverrideCursor(Qt::BusyCursor);
-#endif
-
-        ImportExportOsmBin osb(document());
-        if (osb.saveFile(fileName)) {
-            osb.export_(theFeatures);
-        }
-
-#ifndef Q_OS_SYMBIAN
-        QApplication::restoreOverrideCursor();
-#endif
     }
     deleteProgressDialog();
 }

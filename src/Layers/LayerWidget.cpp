@@ -21,8 +21,6 @@
 
 #define LINEHEIGHT 25
 
-class OsbLayer;
-
 LayerWidget::LayerWidget(Layer* aLayer, QWidget* aParent)
 : QPushButton(aParent), theLayer(aLayer), ctxMenu(0), closeAction(0), actZoom(0), associatedMenu(0)
 {
@@ -632,28 +630,6 @@ void UploadedLayerWidget::initActions()
 
     closeAction = new QAction(tr("Clear"), this);
     connect(closeAction, SIGNAL(triggered()), this, SLOT(clear()));
-    ctxMenu->addAction(closeAction);
-    associatedMenu->addAction(closeAction);
-    closeAction->setEnabled(theLayer->canDelete());
-}
-
-// OsbLayerWidget
-
-OsbLayerWidget::OsbLayerWidget(OsbLayer* aLayer, QWidget* aParent)
-    : LayerWidget(aLayer, aParent)
-{
-    initActions();
-}
-
-void OsbLayerWidget::initActions()
-{
-    LayerWidget::initActions();
-
-    ctxMenu->addSeparator();
-    associatedMenu->addSeparator();
-
-    closeAction = new QAction(tr("Close"), this);
-    connect(closeAction, SIGNAL(triggered()), this, SLOT(close()));
     ctxMenu->addAction(closeAction);
     associatedMenu->addAction(closeAction);
     closeAction->setEnabled(theLayer->canDelete());

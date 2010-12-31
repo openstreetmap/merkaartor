@@ -313,8 +313,6 @@ class Feature : public IFeature
         virtual QString toMainHtml(QString type, QString systemtype);
         virtual QString toHtml() = 0;
 
-        virtual void toBinary(QDataStream& ds, QHash <QString, quint64>& theIndex) = 0;
-
         virtual QString getClass() const = 0;
         virtual char getType() const = 0;
         virtual void updateMeta();

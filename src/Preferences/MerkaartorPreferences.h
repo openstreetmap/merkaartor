@@ -332,14 +332,6 @@ public:
     M_PARAM_DECLARE_BOOL(InfoOnHover)
     M_PARAM_DECLARE_BOOL(ShowParents)
 
-    /* World OSB manager */
-    M_PARAM_DECLARE_DOUBLE(TileToRegionThreshold)
-    M_PARAM_DECLARE_DOUBLE(RegionTo0Threshold)
-
-    M_PARAM_DECLARE_STRING(WorldOsbUri)
-    M_PARAM_DECLARE_BOOL(WorldOsbAutoload)
-    M_PARAM_DECLARE_BOOL(WorldOsbAutoshow)
-
     /* Background */
     M_PARAM_DECLARE_BOOL(AutoSourceTag)
 

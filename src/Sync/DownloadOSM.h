@@ -77,7 +77,6 @@ class Downloader : public QObject
 
 bool downloadOSM(MainWindow* Main, const CoordBox& aBox , Document* theDocument);
 bool downloadMoreOSM(MainWindow* Main, const CoordBox& aBox , Document* theDocument);
-bool downloadOSM(QWidget* Main, const QString& aUser, const QString& aPassword, const quint32 region , Document* theDocument, Layer* theLayer);
 bool downloadFeatures(MainWindow* Main, const QList<Feature*>& aDownloadList , Document* theDocument);
 bool downloadFeature(MainWindow* Main, const IFeature::FId& id, Document* theDocument, Layer* theLayer=NULL);
 bool downloadFeatures(MainWindow* Main, const QList<IFeature::FId>& aDownloadList, Document* theDocument, Layer* theLayer=NULL);

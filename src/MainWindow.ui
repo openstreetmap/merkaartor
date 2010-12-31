@@ -128,7 +128,6 @@
       <string>&amp;Export</string>
      </property>
      <addaction name="exportOSMAction"/>
-     <addaction name="exportOSMBinAction"/>
      <addaction name="exportOSCAction"/>
      <addaction name="exportGPXAction"/>
      <addaction name="exportKMLAction"/>

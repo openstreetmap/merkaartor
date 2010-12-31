@@ -86,7 +86,6 @@ public:
     static Document* fromXML(QString title, QXmlStreamReader& stream, double version, LayerDock* aDock, QProgressDialog * progress);
 
     bool importNMEA(const QString& filename, TrackLayer* NewLayer);
-    bool importOSB(const QString& filename, DrawingLayer* NewLayer);
     bool importKML(const QString& filename, TrackLayer* NewLayer);
     bool importCSV(const QString& filename, DrawingLayer* NewLayer);
     bool importOSC(const QString& filename, DrawingLayer* NewLayer);

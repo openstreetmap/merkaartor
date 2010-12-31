@@ -146,7 +146,6 @@ public slots:
     virtual void on_mapStyleSaveAsAction_triggered();
     virtual void on_mapStyleLoadAction_triggered();
     virtual void on_exportOSMAction_triggered();
-    virtual void on_exportOSMBinAction_triggered();
     virtual void on_exportOSCAction_triggered();
     virtual void on_exportGPXAction_triggered();
     virtual void on_exportKMLAction_triggered();
@@ -155,7 +154,6 @@ public slots:
     virtual void on_bookmarkRemoveAction_triggered();
 
     virtual void on_toolsPreferencesAction_triggered() {toolsPreferencesAction_triggered();}
-    virtual void on_toolsWorldOsbAction_triggered();
     virtual void on_toolsShortcutsAction_triggered();
     virtual void on_toolsToolbarsAction_triggered();
     virtual void on_toolsWMSServersAction_triggered();

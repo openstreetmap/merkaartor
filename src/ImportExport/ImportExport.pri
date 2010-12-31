@@ -14,7 +14,6 @@ HEADERS += \
     ImportExportKML.h \
     ImportExportOSC.h \
     ImportExportCSV.h \
-    ImportExportOsmBin.h \
     ImportExport/ImportCSVDialog.h
 
 #Source files
@@ -29,7 +28,6 @@ SOURCES += \
     ImportExportKML.cpp \
     ImportExportOSC.cpp \
     ImportExportCSV.cpp \
-    ImportExportOsmBin.cpp \
     ImportExport/ImportCSVDialog.cpp
 
 FORMS += \

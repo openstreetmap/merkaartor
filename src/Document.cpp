@@ -4,11 +4,9 @@
 
 #include "Feature.h"
 #include "Document.h"
-#include "OsbLayer.h"
 #include "ImageMapLayer.h"
 
 #include "ImportNMEA.h"
-#include "ImportExportOsmBin.h"
 #include "ImportExportKML.h"
 #include "ImportExportCSV.h"
 #include "ImportExportOSC.h"
@@ -239,10 +237,8 @@ Document* Document::fromXML(QString title, QXmlStreamReader& stream, double vers
             /*TrackMapLayer* l =*/ TrackLayer::fromXML(NewDoc, stream, progress);
         } else if (stream.name() == "ExtractedLayer") {
             /*DrawingMapLayer* l =*/ DrawingLayer::fromXML(NewDoc, stream, progress);
-        } else if (stream.name() == "OsbLayer" || stream.name() == "OsbMapLayer") {
-            /*OsbMapLayer* l =*/ OsbLayer::fromXML(NewDoc, stream, progress);
         } else if (stream.name() == "FilterLayer") {
-            /*OsbMapLayer* l =*/ FilterLayer::fromXML(NewDoc, stream, progress);
+            /*FilterLayer* l =*/ FilterLayer::fromXML(NewDoc, stream, progress);
         } else if (stream.name() == "CommandHistory") {
             if (version > 1.0)
                 h = CommandHistory::fromXML(NewDoc, stream, progress);
@@ -727,22 +723,6 @@ bool Document::importPBF(const QString& filename, DrawingLayer* NewLayer)
         return false;
 }
 #endif
-
-bool Document::importOSB(const QString& filename, DrawingLayer* NewLayer)
-{
-    Q_UNUSED(filename)
-    Q_UNUSED(NewLayer)
-    //ImportExportOsmBin imp(this);
-    //if (!imp.loadFile(filename))
-    //	return false;
-    //imp.import(NewLayer);
-
-    //if (NewLayer->size())
-    //	return true;
-    //else
-    //	return false;
-    return true;
-}
 
 void Document::addDownloadBox(Layer* l, CoordBox aBox)
 {
