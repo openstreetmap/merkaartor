@@ -103,7 +103,7 @@ bool ImportExportKML::export_(const QList<Feature *>& featList)
             QString s;
             for (int j=0; j<R->size(); ++j) {
                 Node* N = dynamic_cast<Node*>(R->get(j));
-                s += QString(" %1,%2").arg(COORD2STRING(coordToAng(N->position().lon()))).arg(COORD2STRING(coordToAng(N->position().lat())));
+                s += QString(" %1,%2").arg(COORD2STRING(N->position().x())).arg(COORD2STRING(N->position().y()));
             }
 
             QDomText v = theXmlDoc.createTextNode(s);
@@ -158,7 +158,7 @@ bool ImportExportKML::export_(const QList<Feature *>& featList)
             l.appendChild(c);
 
             QString s;
-            s += QString(" %1,%2").arg(COORD2STRING(coordToAng(N->position().lon()))).arg(COORD2STRING(coordToAng(N->position().lat())));
+            s += QString(" %1,%2").arg(COORD2STRING(N->position().x())).arg(COORD2STRING(N->position().y()));
 
             QDomText v = theXmlDoc.createTextNode(s);
             c.appendChild(v);
@@ -186,7 +186,7 @@ Feature* parsePoint(QDomElement& e, Layer* aLayer)
             QStringList tokens = s.split(",");
             double lon = tokens[0].toDouble();
             double lat = tokens[1].toDouble();
-            Coord p(angToCoord(lat), angToCoord(lon));
+            Coord p(lon,lat);
 
             P = new Node(p);
             aLayer->add(P);

@@ -104,21 +104,21 @@ void NativeRenderDialog::setOptions(RendererOptions aOpt)
 CoordBox NativeRenderDialog::boundingBox()
 {
     CoordBox VP(Coord(
-                    angToCoord(ui.sbMinLat->value()),
-                    angToCoord(ui.sbMinLon->value())
+                    ui.sbMinLon->value(),
+                    ui.sbMinLat->value()
             ), Coord(
-                    angToCoord(ui.sbMaxLat->value()),
-                    angToCoord(ui.sbMaxLon->value())
+                    ui.sbMaxLon->value(),
+                    ui.sbMaxLat->value()
                     ));
     return VP;
 }
 
 void NativeRenderDialog::setBoundingBox(CoordBox aBBox)
 {
-    ui.sbMinLat->setValue(coordToAng(aBBox.bottomLeft().lat()));
-    ui.sbMaxLat->setValue(coordToAng(aBBox.topLeft().lat()));
-    ui.sbMinLon->setValue(coordToAng(aBBox.topLeft().lon()));
-    ui.sbMaxLon->setValue(coordToAng(aBBox.topRight().lon()));
+    ui.sbMinLat->setValue(aBBox.bottomLeft().y());
+    ui.sbMaxLat->setValue(aBBox.topLeft().y());
+    ui.sbMinLon->setValue(aBBox.topLeft().x());
+    ui.sbMaxLon->setValue(aBBox.topRight().x());
 
     prtW->updatePreview();
 }

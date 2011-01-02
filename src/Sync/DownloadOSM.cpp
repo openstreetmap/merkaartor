@@ -516,7 +516,7 @@ bool downloadOSM(QWidget* aParent, const QString& aWeb, const QString& aUser, co
     }
     Downloader Rcv(aUser, aPassword);
     QString URL = Rcv.getURLToMap();
-    URL = URL.arg(coordToAng(aBox.bottomLeft().lon()), 0, 'f').arg(coordToAng(aBox.bottomLeft().lat()), 0, 'f').arg(coordToAng(aBox.topRight().lon()), 0, 'f').arg(coordToAng(aBox.topRight().lat()), 0, 'f');
+    URL = URL.arg(aBox.bottomLeft().x(), 0, 'f').arg(aBox.bottomLeft().y(), 0, 'f').arg(aBox.topRight().x(), 0, 'f').arg(aBox.topRight().y(), 0, 'f');
 
     QUrl theUrl(aWeb+URL);
     return downloadOSM(aParent, theUrl, aUser, aPassword, theDocument, theLayer);
@@ -551,10 +551,10 @@ bool downloadTracksFromOSM(QWidget* Main, const QString& aWeb, const QString& aU
     {
         Lbl->setText(QApplication::translate("Downloader","Downloading trackpoints %1-%2").arg(Page*5000+1).arg(Page*5000+5000));
         QString URL = theDownloader.getURLToTrackPoints();
-        URL = URL.arg(coordToAng(aBox.bottomLeft().lon())).
-                arg(coordToAng(aBox.bottomLeft().lat())).
-                arg(coordToAng(aBox.topRight().lon())).
-                arg(coordToAng(aBox.topRight().lat())).
+        URL = URL.arg(aBox.bottomLeft().x()).
+                arg(aBox.bottomLeft().y()).
+                arg(aBox.topRight().x()).
+                arg(aBox.topRight().y()).
                 arg(Page);
         QUrl theUrl(aWeb+URL);
         if (!theDownloader.go(theUrl))
@@ -684,10 +684,10 @@ bool downloadOpenstreetbugs(MainWindow* Main, const CoordBox& aBox, Document* th
 
     theDownloader.setAnimator(dlg,Lbl,Bar,true);
     Lbl->setText(QApplication::translate("Downloader","Downloading points"));
-    osbUrl.addQueryItem("t", COORD2STRING(coordToAng(aBox.topRight().lat())));
-    osbUrl.addQueryItem("l", COORD2STRING(coordToAng(aBox.bottomLeft().lon())));
-    osbUrl.addQueryItem("b", COORD2STRING(coordToAng(aBox.bottomLeft().lat())));
-    osbUrl.addQueryItem("r", COORD2STRING(coordToAng(aBox.topRight().lon())));
+    osbUrl.addQueryItem("t", COORD2STRING(aBox.topRight().y()));
+    osbUrl.addQueryItem("l", COORD2STRING(aBox.bottomLeft().x()));
+    osbUrl.addQueryItem("b", COORD2STRING(aBox.bottomLeft().y()));
+    osbUrl.addQueryItem("r", COORD2STRING(aBox.topRight().x()));
     osbUrl.addQueryItem("open", "yes");
 
     if (!theDownloader.go(osbUrl))
@@ -761,7 +761,7 @@ bool downloadOSM(MainWindow* Main, const CoordBox& aBox , Document* theDocument)
     SlippyMap->setMinimumHeight(256);
 #endif
     CoordBox Clip(aBox);
-    SlippyMap->setViewportArea(Clip.toRectF());
+    SlippyMap->setViewportArea(Clip);
     ui.verticalLayout->addWidget(SlippyMap);
     QObject::connect(SlippyMap, SIGNAL(redraw()), ui.FromMap, SLOT(toggle()));
     BookmarkListIterator i(*(M_PREFS->getBookmarks()));
@@ -770,7 +770,7 @@ bool downloadOSM(MainWindow* Main, const CoordBox& aBox , Document* theDocument)
         if (i.value().deleted == false)
             ui.Bookmarks->addItem(i.key());
     }
-    ui.edXapiUrl->setText(QString("*[bbox=%1,%2,%3,%4]").arg(coordToAng(aBox.bottomLeft().lon()), 0, 'f').arg(coordToAng(aBox.bottomLeft().lat()), 0, 'f').arg(coordToAng(aBox.topRight().lon()), 0, 'f').arg(coordToAng(aBox.topRight().lat()), 0, 'f'));
+    ui.edXapiUrl->setText(QString("*[bbox=%1,%2,%3,%4]").arg(aBox.bottomLeft().x(), 0, 'f').arg(aBox.bottomLeft().y(), 0, 'f').arg(aBox.topRight().x(), 0, 'f').arg(aBox.topRight().y(), 0, 'f'));
     ui.IncludeTracks->setChecked(DownloadRaw);
     ui.ResolveRelations->setChecked(M_PREFS->getResolveRelations());
     bool OK = true, retry = true, directAPI = false;
@@ -812,7 +812,7 @@ bool downloadOSM(MainWindow* Main, const CoordBox& aBox , Document* theDocument)
             else if (ui.FromMap->isChecked())
             {
                 QRectF R(SlippyMap->viewArea());
-                Clip = CoordBox(Coord(R.y(), R.x()), Coord(R.y()+R.height(), R.x()+R.width()));
+                Clip = CoordBox(Coord(R.x(), R.y()), Coord(R.x()+R.width(), R.y()+R.height()));
             }
             if (retry) continue;
             Main->view()->setUpdatesEnabled(false);

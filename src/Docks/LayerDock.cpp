@@ -303,7 +303,7 @@ void LayerDock::layerCleared(Layer* l)
 void LayerDock::layerZoom(Layer * l)
 {
     CoordBox bb = l->boundingBox();
-    qDebug() << "layerZoom: " << bb.topLeft().lat() << ";" << bb.topLeft().lon() << ";" << bb.bottomRight().lat() << ";" << bb.bottomRight().lon();
+    qDebug() << "layerZoom: " << bb.topLeft().y() << ";" << bb.topLeft().x() << ";" << bb.bottomRight().y() << ";" << bb.bottomRight().x();
     if (bb.isNull())
         return;
 

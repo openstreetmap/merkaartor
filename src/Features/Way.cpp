@@ -58,7 +58,6 @@ class WayPrivate
         bool NotEverythingDownloaded;
         bool wasPathComplete;
         bool VirtualsUptodate;
-        QRectF roadRect;
         QPainterPath theFullPath;
         QPainterPath thePath;
 #ifndef _MOBILE
@@ -150,9 +149,9 @@ void WayPrivate::removeVirtuals()
 void WayPrivate::addVirtuals()
 {
     for (unsigned int i=1; i<Nodes.size(); ++i) {
-        QLineF l(toQt(Nodes[i-1]->position()), toQt(Nodes[i]->position()));
+        QLineF l(Nodes[i-1]->position(), Nodes[i]->position());
         l.setLength(l.length()/2);
-        Node* v = new Node(toCoord(l.p2()));
+        Node* v = new Node(l.p2());
         v->setVirtual(true);
         v->setParentFeature(theWay);
         theWay->layer()->add(v);
@@ -433,8 +432,6 @@ void Way::updateMeta()
             const Coord & next = p->Nodes[i+1]->position();
 
             p->Distance += next.distanceFrom(here);
-            //if (isArea)
-                //p->Area += here.lat() * next.lon() - next.lat() * here.lon();
         }
     }
 
@@ -667,10 +664,6 @@ void Way::buildPath(const Projection &theProjection, const QTransform& theTransf
         }
         p->ProjectionRevision = theProjection.projectionRevision();
         p->wasPathComplete = true;
-
-        QPointF pbl = theProjection.project(p->BBox.bottomLeft());
-        QPointF ptr = theProjection.project(p->BBox.topRight());
-        p->roadRect = QRectF(pbl, ptr);
     }
 #if QT_VERSION >= 0x040700
     p->thePath = p->theFullPath;
@@ -678,7 +671,7 @@ void Way::buildPath(const Projection &theProjection, const QTransform& theTransf
     if (!g_Merk_SelfClip) {
         p->thePath = p->theFullPath;
     } else {
-        bool toClip = !cr.contains(p->roadRect);
+        bool toClip = !cr.contains(p->theFullPath.boundingRect());
     //    bool toClip = false;
         if (!toClip) {
             p->thePath = p->theFullPath;
@@ -956,11 +949,11 @@ int findSnapPointIndex(const Way* R, Coord& P)
     {
         BezierF L(R->smoothed()[0],R->smoothed()[1],R->smoothed()[2],R->smoothed()[3]);
         int BestIdx = 3;
-        double BestDistance = L.distance(toQt(P));
+        double BestDistance = L.distance(P);
         for (int i=3; i<R->smoothed().size(); i+=3)
         {
             BezierF L(R->smoothed()[i-3],R->smoothed()[i-2],R->smoothed()[i-1],R->smoothed()[i]);
-            double Distance = L.distance(toQt(P));
+            double Distance = L.distance(P);
             if (Distance < BestDistance)
             {
                 BestIdx = i;
@@ -968,7 +961,7 @@ int findSnapPointIndex(const Way* R, Coord& P)
             }
         }
         BezierF B(R->smoothed()[BestIdx-3],R->smoothed()[BestIdx-2],R->smoothed()[BestIdx-1],R->smoothed()[BestIdx]);
-        P = toCoord(B.project(toQt(P)));
+        P = B.project(P);
         return BestIdx/3;
     }
     LineF L(R->getNode(0)->position(),R->getNode(1)->position());
@@ -985,7 +978,7 @@ int findSnapPointIndex(const Way* R, Coord& P)
         }
     }
     LineF F(R->getNode(BestIdx-1)->position(),R->getNode(BestIdx)->position());
-    P = F.project(Coord(P));
+    P = F.project(P);
     return BestIdx;
 }
 
@@ -1015,9 +1008,9 @@ QString Way::toHtml()
     D += "<i>"+QApplication::translate("MapFeature", "Size")+": </i>" + QApplication::translate("MapFeature", "%1 nodes").arg(size());
     CoordBox bb = boundingBox();
     D += "<br/>";
-    D += "<i>"+QApplication::translate("MapFeature", "Topleft")+": </i>" + COORD2STRING(coordToAng(bb.topLeft().lat())) + " / " + COORD2STRING(coordToAng(bb.topLeft().lon()));
+    D += "<i>"+QApplication::translate("MapFeature", "Topleft")+": </i>" + COORD2STRING(bb.topLeft().y()) + " / " + COORD2STRING(bb.topLeft().x());
     D += "<br/>";
-    D += "<i>"+QApplication::translate("MapFeature", "Botright")+": </i>" + COORD2STRING(coordToAng(bb.bottomRight().lat())) + " / " + COORD2STRING(coordToAng(bb.bottomRight().lon()));
+    D += "<i>"+QApplication::translate("MapFeature", "Botright")+": </i>" + COORD2STRING(bb.bottomRight().y()) + " / " + COORD2STRING(bb.bottomRight().x());
 
     QString type = isClosed() ? QApplication::translate("MapFeature", "Area") : QApplication::translate("MapFeature", "Way");
 
@@ -1089,15 +1082,15 @@ int Way::createJunction(Document* theDocument, CommandList* theList, Way* R1, Wa
 
     //TODO test that the junction do not already exists!
     for (int i=0; i<R1->size()-1; ++i) {
-        QLineF S1(R1->getNode(i)->position().toQPointF(), R1->getNode(i+1)->position().toQPointF());
+        QLineF S1(R1->getNode(i)->position(), R1->getNode(i+1)->position());
 
         for (int j=0; j<R2->size()-1; ++j) {
-            QLineF S2(R2->getNode(j)->position().toQPointF(), R2->getNode(j+1)->position().toQPointF());
+            QLineF S2(R2->getNode(j)->position(), R2->getNode(j+1)->position());
             QPointF intPoint;
             if (S1.intersect(S2, &intPoint) == QLineF::BoundedIntersection) {
                 numInter++;
                 if (doIt) {
-                    Node* pt = new Node(Coord::fromQPointF(intPoint));
+                    Node* pt = new Node(intPoint);
                     theList->add(new AddFeatureCommand(theDocument->getDirtyOrOriginLayer(R1->layer()),pt,true));
                     theList->add(new WayAddNodeCommand(R1,pt,i+1,theDocument->getDirtyOrOriginLayer(R1->layer())));
                     theList->add(new WayAddNodeCommand(R2,pt,j+1,theDocument->getDirtyOrOriginLayer(R2->layer())));
@@ -1117,7 +1110,7 @@ int Way::segmentCount()
 
 QLineF Way::getSegment(int i)
 {
-    return QLineF(p->Nodes[i]->position().toQPointF(), p->Nodes[i+1]->position().toQPointF());
+    return QLineF(p->Nodes[i]->position(), p->Nodes[i+1]->position());
 }
 
 int Way::bestSegment()

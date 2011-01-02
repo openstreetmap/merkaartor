@@ -98,7 +98,7 @@ void ExtrudeInteraction::snapMousePressEvent(QMouseEvent* anEvent, Feature* last
         Creating = true;
         QLineF l = theRoad->getSegment(theRoad->bestSegment());
         BestSegment = theRoad->bestSegment();
-        OrigSegment = QLineF(COORD_TO_XY(Coord::fromQPointF(l.p1())), COORD_TO_XY(Coord::fromQPointF(l.p2())));
+        OrigSegment = QLineF(COORD_TO_XY(Coord(l.p1())), COORD_TO_XY(Coord(l.p2())));
         LastCursor = anEvent->pos();
     }
 }

@@ -297,10 +297,10 @@ bool DirtyListDescriber::showChanges(QWidget* aParent)
 
     CoordBox bbox = theDocument->getDirtyOrOriginLayer()->boundingBox();
     QString bboxComment = QString("BBOX:%1,%2,%3,%4")
-            .arg(QString::number(coordToAng(bbox.bottomLeft().lon()), 'f', 2))
-            .arg(QString::number(coordToAng(bbox.bottomLeft().lat()), 'f', 2))
-            .arg(QString::number(coordToAng(bbox.topRight().lon()), 'f', 2))
-            .arg(QString::number(coordToAng(bbox.topRight().lat()), 'f', 2));
+            .arg(QString::number(bbox.bottomLeft().x(), 'f', 2))
+            .arg(QString::number(bbox.bottomLeft().y(), 'f', 2))
+            .arg(QString::number(bbox.topRight().x(), 'f', 2))
+            .arg(QString::number(bbox.topRight().y(), 'f', 2));
 
     QString statComment = QString("ADD:%1 UPD:%2 DEL:%3").arg(glbAdded).arg(glbUpdated).arg(glbDeleted);
 

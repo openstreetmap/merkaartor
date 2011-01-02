@@ -133,8 +133,8 @@ bool __cdecl indexFindCallback(Feature* F, void* ctxt)
 
 void Layer::get(const CoordBox& bb, QList<Feature*>& theFeatures)
 {
-    double min[] = {bb.bottomLeft().lon(), bb.bottomLeft().lat()};
-    double max[] = {bb.topRight().lon(), bb.topRight().lat()};
+    double min[] = {bb.bottomLeft().x(), bb.bottomLeft().y()};
+    double max[] = {bb.topRight().x(), bb.topRight().y()};
     p->theRTree.Search(min, max, &indexFindCallback, (void*)(&theFeatures));
 }
 
@@ -455,8 +455,8 @@ void Layer::indexAdd(const CoordBox& bb, const MapFeaturePtr aFeat)
 {
     if (bb.isNull())
         return;
-    double min[] = {bb.bottomLeft().lon(), bb.bottomLeft().lat()};
-    double max[] = {bb.topRight().lon(), bb.topRight().lat()};
+    double min[] = {bb.bottomLeft().x(), bb.bottomLeft().y()};
+    double max[] = {bb.topRight().x(), bb.topRight().y()};
     p->theRTree.Insert(min, max, aFeat);
 }
 
@@ -464,15 +464,15 @@ void Layer::indexRemove(const CoordBox& bb, const MapFeaturePtr aFeat)
 {
     if (bb.isNull())
         return;
-    double min[] = {bb.bottomLeft().lon(), bb.bottomLeft().lat()};
-    double max[] = {bb.topRight().lon(), bb.topRight().lat()};
+    double min[] = {bb.bottomLeft().x(), bb.bottomLeft().y()};
+    double max[] = {bb.topRight().x(), bb.topRight().y()};
     p->theRTree.Remove(min, max, aFeat);
 }
 
 const QList<MapFeaturePtr>& Layer::indexFind(const CoordBox& bb)
 {
-    double min[] = {bb.bottomLeft().lon(), bb.bottomLeft().lat()};
-    double max[] = {bb.topRight().lon(), bb.topRight().lat()};
+    double min[] = {bb.bottomLeft().x(), bb.bottomLeft().y()};
+    double max[] = {bb.topRight().x(), bb.topRight().y()};
     findResult.clear();
     p->theRTree.Search(min, max, &indexFindCallbackList, (void*)&findResult);
 
@@ -481,8 +481,8 @@ const QList<MapFeaturePtr>& Layer::indexFind(const CoordBox& bb)
 
 void Layer::indexFind(const CoordBox& bb, const IndexFindContext& ctxt)
 {
-    double min[] = {bb.bottomLeft().lon(), bb.bottomLeft().lat()};
-    double max[] = {bb.topRight().lon(), bb.topRight().lat()};
+    double min[] = {bb.bottomLeft().x(), bb.bottomLeft().y()};
+    double max[] = {bb.topRight().x(), bb.topRight().y()};
     p->theRTree.Search(min, max, &indexFindCallback, (void*)&ctxt);
 }
 
@@ -664,10 +664,10 @@ bool DrawingLayer::toXML(QXmlStreamWriter& stream, bool asTemplate, QProgressDia
         if (p->Features.size()) {
             stream.writeStartElement("bound");
             CoordBox layBB = boundingBox();
-            QString S = QString().number(coordToAng(layBB.bottomLeft().lat()),'f',6) + ",";
-            S += QString().number(coordToAng(layBB.bottomLeft().lon()),'f',6) + ",";
-            S += QString().number(coordToAng(layBB.topRight().lat()),'f',6) + ",";
-            S += QString().number(coordToAng(layBB.topRight().lon()),'f',6);
+            QString S = QString().number(layBB.bottomLeft().y(),'f',6) + ",";
+            S += QString().number(layBB.bottomLeft().x(),'f',6) + ",";
+            S += QString().number(layBB.topRight().y(),'f',6) + ",";
+            S += QString().number(layBB.topRight().x(),'f',6);
             stream.writeAttribute("box", S);
             stream.writeAttribute("origin", QString("http://www.openstreetmap.org/api/%1").arg(M_PREFS->apiVersion()));
             stream.writeEndElement();
@@ -828,9 +828,9 @@ void TrackLayer::extractLayer()
                 PL.append(P);
                 endP = PL.size()-1;
 
-                LineF l(toQt(PL[startP]->position()), toQt(PL[endP]->position()));
+                LineF l(PL[startP]->position(), PL[endP]->position());
                 for (int k=startP+1; k < endP; k++) {
-                    double d = l.distance(toQt(PL[k]->position()));
+                    double d = l.distance(PL[k]->position());
                     if (d < konstant) {
                         Node* P = PL[k];
                         PL.removeAt(k);

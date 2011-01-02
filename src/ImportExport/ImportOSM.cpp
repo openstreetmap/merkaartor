@@ -56,7 +56,7 @@ void OSMHandler::parseNode(const QXmlAttributes& atts)
     if (Pt)
     {
         Node* userPt = Pt;
-        Pt = new Node(Coord(angToCoord(Lat),angToCoord(Lon)));
+        Pt = new Node(Coord(Lon,Lat));
         Pt->setId(IFeature::FId(IFeature::Point | IFeature::Conflict, id.toLongLong()));
         Pt->setLastUpdated(Feature::OSMServerConflict);
         parseStandardAttributes(atts,Pt);
@@ -83,7 +83,7 @@ void OSMHandler::parseNode(const QXmlAttributes& atts)
                 Pt = userPt;
                 Pt->layer()->remove(Pt);
                 theLayer->add(Pt);
-                Pt->setPosition(Coord(angToCoord(Lat),angToCoord(Lon)));
+                Pt->setPosition(Coord(Lon,Lat));
                 Pt->clearTags();
                 NewFeature = true;
                 if (Pt->lastUpdated() == Feature::NotYetDownloaded)
@@ -97,7 +97,7 @@ void OSMHandler::parseNode(const QXmlAttributes& atts)
     }
     else
     {
-        Pt = new Node(Coord(angToCoord(Lat),angToCoord(Lon)));
+        Pt = new Node(Coord(Lon,Lat));
         Pt->setId(IFeature::FId(IFeature::Point, id.toLongLong()));
         Pt->setLastUpdated(Feature::OSMServer);
         theLayer->add(Pt);

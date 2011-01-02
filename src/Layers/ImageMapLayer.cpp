@@ -570,7 +570,7 @@ void ImageMapLayer::setCurrentZoom(MapView& theView, const CoordBox& viewport, c
         projVp = p->theProjection.getProjectedViewport(viewport, rect);
 
     qreal tileWidth, tileHeight;
-    int maxZoom = p->theMapAdapter->getAdaptedMaxZoom(viewport.toQRectF());
+    int maxZoom = p->theMapAdapter->getAdaptedMaxZoom(viewport);
     int tilesizeW = p->theMapAdapter->getTileSizeW();
     int tilesizeH = p->theMapAdapter->getTileSizeH();
 
@@ -614,12 +614,12 @@ void ImageMapLayer::forceRedraw(MapView& theView, QTransform& aTransform, QRect 
     if (!p->theMapAdapter)
         return;
 
-    if (!p->Viewport.intersects(theView.viewport().toQRectF())) {
+    if (!p->Viewport.intersects(theView.viewport())) {
         p->curPix = QPixmap(Screen.size());
         p->curPix.fill(Qt::transparent);
     }
     p->AlignementTransform = aTransform;
-    p->Viewport = theView.viewport().toQRectF();
+    p->Viewport = theView.viewport();
 
     draw(theView, Screen);
 }
@@ -682,31 +682,31 @@ QRect ImageMapLayer::drawFull(MapView& theView, QRect& rect)
     p->AlignementTransform = QTransform();
     QRectF alignedViewport = p->AlignementTransformList.at(0).mapRect(p->Viewport);
 
-    MapView::transformCalc(p->theTransform, p->theProjection, 0.0, CoordBox::fromQRectF(alignedViewport), rect);
+    MapView::transformCalc(p->theTransform, p->theProjection, 0.0, CoordBox(alignedViewport), rect);
 
     CoordBox cViewport(p->theProjection.inverse2Coord(p->theTransform.inverted().map(fRect.bottomLeft())),
                      p->theProjection.inverse2Coord(p->theTransform.inverted().map(fRect.topRight())));
-    CoordBox Viewport = CoordBox::fromQRectF(p->AlignementTransformList.at(0).mapRect(cViewport.toQRectF()));
+    CoordBox Viewport = CoordBox(p->AlignementTransformList.at(0).mapRect(cViewport));
     QPointF bl = theView.toView(Viewport.bottomLeft());
     QPointF tr = theView.toView(Viewport.topRight());
 
     if (
-            Viewport.bottomLeft().lat() >= -90. && Viewport.bottomLeft().lat() <= 90.
-            && Viewport.bottomLeft().lon() >= -180. && Viewport.bottomLeft().lon() <= 180.
-            && Viewport.topRight().lat() >= -90. && Viewport.topRight().lat() <= 90.
-            && Viewport.topRight().lon() >= -180. && Viewport.topRight().lon() <= 180.
+            Viewport.bottomLeft().y() >= -90. && Viewport.bottomLeft().y() <= 90.
+            && Viewport.bottomLeft().x() >= -180. && Viewport.bottomLeft().x() <= 180.
+            && Viewport.topRight().y() >= -90. && Viewport.topRight().y() <= 90.
+            && Viewport.topRight().x() >= -180. && Viewport.topRight().x() <= 180.
             ) {
         QRectF vp;
-        if (p->theProjection.getProjectionProj4() == theView.projection().getProjectionProj4()  && alignedViewport == theView.viewport().toQRectF()) {
+        if (p->theProjection.getProjectionProj4() == theView.projection().getProjectionProj4()  && alignedViewport == theView.viewport()) {
             bl = QPointF(rect.bottomLeft());
             tr = QPointF(rect.topRight());
             vp.setTopLeft(theView.invertedTransform().map(fRect.topLeft()));
             vp.setBottomRight(theView.invertedTransform().map(fRect.bottomRight()));
         } else
-            vp = p->theProjection.getProjectedViewport(CoordBox::fromQRectF(alignedViewport), rect);
+            vp = p->theProjection.getProjectedViewport(CoordBox(alignedViewport), rect);
 
-        QRectF wgs84vp = QRectF(QPointF(coordToAng(Viewport.bottomLeft().lon()), coordToAng(Viewport.bottomLeft().lat()))
-                                , QPointF(coordToAng(Viewport.topRight().lon()), coordToAng(Viewport.topRight().lat())));
+        QRectF wgs84vp = QRectF(QPointF(Viewport.bottomLeft().x(), Viewport.bottomLeft().y())
+                                , QPointF(Viewport.topRight().x(), Viewport.topRight().y()));
 
         // Act depending on adapter type
         if (p->theMapAdapter->getType() == IMapAdapter::DirectBackground) {
@@ -728,7 +728,7 @@ QRect ImageMapLayer::drawFull(MapView& theView, QRect& rect)
                         IFeature::FId id(IFeature::Point, -(f->id().numId));
                         if (get(id))
                             continue;
-                        Node* N = new Node(Coord::fromQPointF((QPointF)thePath.elementAt(0)));
+                        Node* N = new Node(Coord((QPointF)thePath.elementAt(0)));
                         N->setId(id);
                         add(N);
                         for (int i=0; i<f->tagSize(); ++i)
@@ -740,7 +740,7 @@ QRect ImageMapLayer::drawFull(MapView& theView, QRect& rect)
                         Way* W = new Way();
                         W->setId(id);
                         for (int i=0; i<thePath.elementCount(); ++i) {
-                            Node* N = new Node(Coord::fromQPointF((QPointF)thePath.elementAt(i)));
+                            Node* N = new Node(Coord((QPointF)thePath.elementAt(i)));
                             add(N);
                             W->add(N);
                         }
@@ -840,7 +840,7 @@ QRect ImageMapLayer::drawTiled(MapView& theView, QRect& rect)
         projVp.setTopLeft(theView.invertedTransform().map(fRect.topLeft()));
         projVp.setBottomRight(theView.invertedTransform().map(fRect.bottomRight()));
     } else
-        projVp = p->theProjection.getProjectedViewport(CoordBox::fromQRectF(p->Viewport), rect);
+        projVp = p->theProjection.getProjectedViewport(CoordBox(p->Viewport), rect);
 
     qreal tileWidth, tileHeight;
     int maxZoom = p->theMapAdapter->getAdaptedMaxZoom(p->Viewport);
@@ -883,11 +883,11 @@ QRect ImageMapLayer::drawTiled(MapView& theView, QRect& rect)
     QRectF alignedViewport = p->AlignementTransformList.at(p->theMapAdapter->getAdaptedZoom()).mapRect(p->Viewport);
 
     if (alignedViewport != p->Viewport) {
-        if (p->theProjection.getProjectionProj4() == theView.projection().getProjectionProj4() && alignedViewport == theView.viewport().toQRectF()) {
+        if (p->theProjection.getProjectionProj4() == theView.projection().getProjectionProj4() && alignedViewport == theView.viewport()) {
             projVp.setTopLeft(theView.invertedTransform().map(fRect.topLeft()));
             projVp.setBottomRight(theView.invertedTransform().map(fRect.bottomRight()));
         } else
-            projVp = p->theProjection.getProjectedViewport(CoordBox::fromQRectF(alignedViewport), rect);
+            projVp = p->theProjection.getProjectedViewport(CoordBox(alignedViewport), rect);
     }
 
     QPointF vpCenter = projVp.center();

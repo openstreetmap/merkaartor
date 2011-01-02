@@ -172,6 +172,6 @@ void OsmLink::setMinMax(double bottom, double left, double top, double right)
         top = (top + bottom + minwidth) / 2.0;
         bottom = top - minwidth;
     }
-    m_Box = CoordBox(Coord(angToCoord(bottom), angToCoord(left)), Coord(angToCoord(top), angToCoord(right)));
+    m_Box = CoordBox(Coord(left, bottom), Coord(right, top));
     m_IsValid = true;
 }

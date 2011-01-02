@@ -28,7 +28,6 @@ class Projection : public IProjection
         double lonAnglePerM(double Lat) const;
         QLineF project(const QLineF & Map) const;
         QPointF project(const QPointF& Map) const;
-        QPointF project(const Coord& Map) const;
         Coord inverse2Coord(const QPointF& Screen) const;
         QPointF inverse2Point(const QPointF& Map) const;
 
@@ -46,7 +45,7 @@ class Projection : public IProjection
                            long point_count, int point_offset, double *x, double *y, double *z );
         void projTransformToWGS84(long point_count, int point_offset, double *x, double *y, double *z ) const;
         void projTransformFromWGS84(long point_count, int point_offset, double *x, double *y, double *z ) const;
-        QRectF getProjectedViewport(const CoordBox& Viewport, const QRect& screen) const;
+        QRectF getProjectedViewport(const QRectF& Viewport, const QRect& screen) const;
 
         int projectionRevision() const;
 #endif
@@ -56,7 +55,6 @@ class Projection : public IProjection
     protected:
 #ifndef _MOBILE
         ProjProjection theProj;
-        QPointF projProject(const Coord& Map) const;
         QPointF projProject(const QPointF& Map) const;
         Coord projInverse(const QPointF& Screen) const;
 #endif

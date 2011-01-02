@@ -27,7 +27,7 @@ GotoDialog::GotoDialog(const MapView& aView, QWidget *parent)
 
     CoordBox B = aView.viewport();
     theCenter = B.center();
-    int OsmZoom = int((log((360.0 / coordToAng(B.latDiff()))) / log(2.0)) + 1);
+    int OsmZoom = int((log((360.0 / B.latDiff())) / log(2.0)) + 1);
     OsmZoom = qMin(OsmZoom, 18);
     OsmZoom = qMax(OsmZoom, 1);
 
@@ -59,34 +59,34 @@ GotoDialog::GotoDialog(const MapView& aView, QWidget *parent)
     verticalLayout_4->addWidget(searchWidget);
 
     coordLink->setText( QString("http://www.openstreetmap.org/?lat=%1&lon=%2&zoom=%3")
-        .arg(COORD2STRING(coordToAng(B.center().lat())))
-        .arg(COORD2STRING(coordToAng(B.center().lon())))
+        .arg(COORD2STRING(B.center().y()))
+        .arg(COORD2STRING(B.center().x()))
         .arg(QString::number(OsmZoom))
         );
     coordOsmApi->setText( QString("http://www.openstreetmap.org/api/%1/map?bbox=%2,%3,%4,%5")
         .arg(M_PREFS->apiVersion())
-        .arg(COORD2STRING(coordToAng(B.bottomLeft().lon())))
-        .arg(COORD2STRING(coordToAng(B.bottomLeft().lat())))
-        .arg(COORD2STRING(coordToAng(B.topRight().lon())))
-        .arg(COORD2STRING(coordToAng(B.topRight().lat())))
+        .arg(COORD2STRING(B.bottomLeft().x()))
+        .arg(COORD2STRING(B.bottomLeft().y()))
+        .arg(COORD2STRING(B.topRight().x()))
+        .arg(COORD2STRING(B.topRight().y()))
         );
     coordOsmXApi->setText( QString("http://xapi.openstreetmap.org/api/0.5/*[bbox=%1,%2,%3,%4]")
-        .arg(COORD2STRING(coordToAng(B.bottomLeft().lon())))
-        .arg(COORD2STRING(coordToAng(B.bottomLeft().lat())))
-        .arg(COORD2STRING(coordToAng(B.topRight().lon())))
-        .arg(COORD2STRING(coordToAng(B.topRight().lat())))
+        .arg(COORD2STRING(B.bottomLeft().x()))
+        .arg(COORD2STRING(B.bottomLeft().y()))
+        .arg(COORD2STRING(B.topRight().x()))
+        .arg(COORD2STRING(B.topRight().y()))
         );
     coordCoord->setText( QString("%1, %2, %3, %4")
-        .arg(COORD2STRING(coordToAng(B.bottomLeft().lon())))
-        .arg(COORD2STRING(coordToAng(B.bottomLeft().lat())))
-        .arg(COORD2STRING(coordToAng(B.topRight().lon())))
-        .arg(COORD2STRING(coordToAng(B.topRight().lat())))
+        .arg(COORD2STRING(B.bottomLeft().x()))
+        .arg(COORD2STRING(B.bottomLeft().y()))
+        .arg(COORD2STRING(B.topRight().x()))
+        .arg(COORD2STRING(B.topRight().y()))
         );
     coordSpan->setText( QString("%1, %2, %3, %4")
-        .arg(COORD2STRING(coordToAng(B.center().lat())))
-        .arg(COORD2STRING(coordToAng(B.center().lon())))
-        .arg(COORD2STRING(coordToAng(B.latDiff())))
-        .arg(COORD2STRING(coordToAng(B.lonDiff())))
+        .arg(COORD2STRING(B.center().y()))
+        .arg(COORD2STRING(B.center().x()))
+        .arg(COORD2STRING(B.latDiff()))
+        .arg(COORD2STRING(B.lonDiff()))
         );
 
     resize(1,1);
@@ -114,7 +114,7 @@ void GotoDialog::on_buttonBox_clicked(QAbstractButton * button)
                     QApplication::translate("GotoDialog", "Coordinates must be: '<left lon>, <bottom lat>, <right lon>, <top lat>'"));
                 return;
             }
-            theNewViewport = CoordBox(Coord(angToCoord(tokens[1].toDouble()), angToCoord(tokens[0].toDouble())), Coord(angToCoord(tokens[3].toDouble()), angToCoord(tokens[2].toDouble())));
+            theNewViewport = CoordBox(Coord(tokens[0].toDouble(), tokens[1].toDouble()), Coord(tokens[2].toDouble(), tokens[3].toDouble()));
         } else
         if (rbSpan->isChecked()) {
             QStringList tokens = coordSpan->text().split(",");
@@ -125,11 +125,11 @@ void GotoDialog::on_buttonBox_clicked(QAbstractButton * button)
             }
             theNewViewport = CoordBox(
                                 Coord(
-                                    angToCoord(tokens[0].toDouble() - tokens[2].toDouble() / 2),
-                                    angToCoord(tokens[1].toDouble() - tokens[3].toDouble() / 2)),
+                                    tokens[1].toDouble() - tokens[3].toDouble() / 2,
+                                    tokens[0].toDouble() - tokens[2].toDouble() / 2),
                                 Coord(
-                                    angToCoord(tokens[0].toDouble() + tokens[2].toDouble() / 2),
-                                    angToCoord(tokens[1].toDouble() + tokens[3].toDouble() / 2))
+                                    tokens[1].toDouble() + tokens[3].toDouble() / 2,
+                                    tokens[0].toDouble() + tokens[2].toDouble() / 2)
                                 );
         }
         accept();
@@ -173,7 +173,7 @@ void GotoDialog::on_NameFinderEdit_textChanged(const QString & text)
 void GotoDialog::on_searchButton_clicked()
 {
         QString searchString = NameFinderEdit->text();
-        QPointF C = theCenter.toQPointF();
+        QPointF C = theCenter;
 
         searchWidget->search(searchString, C);
         searchButton->setEnabled(false);

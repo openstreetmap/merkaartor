@@ -212,7 +212,7 @@ void MapView::invalidate(bool updateStaticBuffer, bool updateMap)
             p->BR->setAttribute(Qt::WA_NoMousePropagation);
             p->BR->setOpenExternalLinks(true);
             p->BR->setWordWrap(true);
-            p->BR->setText(WatermarkAdapter->getAttributionsHtml(p->Viewport.toQRectF(), rect()));
+            p->BR->setText(WatermarkAdapter->getAttributionsHtml(p->Viewport, rect()));
             p->BR->setMinimumWidth(150);
             p->BR->setMaximumWidth(200);
             p->BR->setMaximumHeight(50);
@@ -230,23 +230,23 @@ void MapView::panScreen(QPoint delta)
     Coord cDelta = fromView(delta) - fromView(QPoint(0, 0));
 
     if (p->BackgroundOnlyPanZoom)
-        p->BackgroundOnlyVpTransform.translate(-cDelta.lon(), -cDelta.lat());
+        p->BackgroundOnlyVpTransform.translate(-cDelta.x(), -cDelta.y());
     else {
         p->theVectorPanDelta += delta;
 
         CoordBox r1, r2;
         if (delta.x()) {
             if (delta.x() < 0)
-                r1 = CoordBox(p->Viewport.bottomRight(), Coord(p->Viewport.topRight().lat(), p->Viewport.topRight().lon() - cDelta.lon())); // OK
+                r1 = CoordBox(p->Viewport.bottomRight(), Coord(p->Viewport.topRight().x() - cDelta.x(), p->Viewport.topRight().y())); // OK
             else
-                r1 = CoordBox(Coord(p->Viewport.bottomLeft().lat(), p->Viewport.bottomLeft().lon() - cDelta.lon()), p->Viewport.topLeft()); // OK
+                r1 = CoordBox(Coord(p->Viewport.bottomLeft().x() - cDelta.x(), p->Viewport.bottomLeft().y()), p->Viewport.topLeft()); // OK
             p->invalidRects.push_back(r1);
         }
         if (delta.y()) {
             if (delta.y() < 0)
-                r2 = CoordBox(Coord(p->Viewport.bottomLeft().lat() - cDelta.lat(), p->Viewport.bottomLeft().lon()), p->Viewport.bottomRight()); // OK
+                r2 = CoordBox(Coord(p->Viewport.bottomLeft().x(), p->Viewport.bottomLeft().y() - cDelta.y()), p->Viewport.bottomRight()); // OK
             else
-                r2 = CoordBox(p->Viewport.topLeft(), Coord(p->Viewport.topRight().lat() - cDelta.lat(), p->Viewport.bottomRight().lon())); //NOK
+                r2 = CoordBox(p->Viewport.topLeft(), Coord( p->Viewport.bottomRight().x(), p->Viewport.topRight().y() - cDelta.y())); //NOK
             p->invalidRects.push_back(r2);
         }
 
@@ -331,16 +331,16 @@ void MapView::paintEvent(QPaintEvent * anEvent)
 
     if (Main) {
         Main->ViewportStatusLabel->setText(QString("%1,%2,%3,%4")
-                                           .arg(QString::number(coordToAng(viewport().bottomLeft().lon()),'f',4))
-                                           .arg(QString::number(coordToAng(viewport().bottomLeft().lat()),'f',4))
-                                           .arg(QString::number(coordToAng(viewport().topRight().lon()),'f',4))
-                                           .arg(QString::number(coordToAng(viewport().topRight().lat()),'f',4))
+                                           .arg(viewport().bottomLeft().x(),0,'f',4)
+                                           .arg(viewport().bottomLeft().y(),0, 'f',4)
+                                           .arg(viewport().topRight().x(),0, 'f',4)
+                                           .arg(viewport().topRight().y(),0,'f',4)
                                            );
 
         Main->MeterPerPixelLabel->setText(tr("%1 m/pixel").arg(1/p->PixelPerM, 0, 'f', 2));
         if (!AlignTransform.isIdentity()) {
             QLineF l(0, 0, AlignTransform.dx(), AlignTransform.dy());
-            l.translate(viewport().center().toQPointF());
+            l.translate(viewport().center());
             Main->AdjusmentMeterLabel->setVisible(true);
             double distance = Coord(l.p2()).distanceFrom(Coord(l.p1()))*1000;
             Main->AdjusmentMeterLabel->setText(tr("Align: %1m @ %2").arg(distance, 0, 'f', 2).arg(l.angle(), 0, 'f', 2) + QString::fromUtf8("°"));
@@ -392,7 +392,7 @@ void MapView::drawGPS(QPainter & P)
 {
     if (Main->gps()->getGpsDevice()) {
         if (Main->gps()->getGpsDevice()->fixStatus() == QGPSDevice::StatusActive) {
-            Coord vp(angToCoord(Main->gps()->getGpsDevice()->latitude()), angToCoord(Main->gps()->getGpsDevice()->longitude()));
+            Coord vp(Main->gps()->getGpsDevice()->longitude(), Main->gps()->getGpsDevice()->latitude());
             QPoint g = toView(vp);
             QPixmap* pm = getPixmapFromFile(":/Gps/Gps_Marker.svg", 32);
             P.drawPixmap(g - QPoint(16, 16), *pm);
@@ -459,32 +459,32 @@ void MapView::drawLatLonGrid(QPainter & P)
     if (!TEST_RFLAGS(RendererOptions::LatLonGridVisible))
         return;
 
-    double lonInterval = coordToAng(p->Viewport.lonDiff()) / 4;
-    double latInterval = coordToAng(p->Viewport.latDiff()) / 4;
+    double lonInterval = p->Viewport.lonDiff() / 4;
+    double latInterval = p->Viewport.latDiff() / 4;
     int prec = log10(lonInterval);
     if (!lonInterval || !latInterval) return; // avoid divide-by-zero
-    double lonStart = qMax(int(p->Viewport.bottomLeft().lon() / lonInterval) * lonInterval, -COORD_MAX);
+    double lonStart = qMax(int(p->Viewport.bottomLeft().x() / lonInterval) * lonInterval, -COORD_MAX);
     if (lonStart<1 && lonStart != -COORD_MAX)
         lonStart -= lonInterval;
-    double latStart = qMax(int(p->Viewport.bottomLeft().lat() / latInterval) * latInterval, -COORD_MAX/2);
+    double latStart = qMax(int(p->Viewport.bottomLeft().y() / latInterval) * latInterval, -COORD_MAX/2);
     if (latStart<1 && latStart != -COORD_MAX/2)
         latStart -= lonInterval;
 
     QList<QPolygonF> medianLines;
     QList<QPolygonF> parallelLines;
 
-    for (double y=latStart; y<=p->Viewport.topLeft().lat()+latInterval; y+=latInterval) {
+    for (double y=latStart; y<=p->Viewport.topLeft().y()+latInterval; y+=latInterval) {
         QPolygonF l;
-        for (double x=lonStart; x<=p->Viewport.bottomRight().lon()+lonInterval; x+=lonInterval) {
-            QPointF pt = theProjection.project(Coord(qMin(y, COORD_MAX/2), qMin(x, COORD_MAX)));
+        for (double x=lonStart; x<=p->Viewport.bottomRight().x()+lonInterval; x+=lonInterval) {
+            QPointF pt = theProjection.project(Coord(qMin(x, COORD_MAX), qMin(y, COORD_MAX/2)));
             l << pt;
         }
         parallelLines << l;
     }
-    for (double x=lonStart; x<=p->Viewport.bottomRight().lon()+lonInterval; x+=lonInterval) {
+    for (double x=lonStart; x<=p->Viewport.bottomRight().x()+lonInterval; x+=lonInterval) {
         QPolygonF l;
-        for (double y=latStart; y<=p->Viewport.topLeft().lat()+latInterval; y+=latInterval) {
-            QPointF pt = theProjection.project(Coord(qMin(y, COORD_MAX/2), qMin(x, COORD_MAX)));
+        for (double y=latStart; y<=p->Viewport.topLeft().y()+latInterval; y+=latInterval) {
+            QPointF pt = theProjection.project(Coord(qMin(x, COORD_MAX), qMin(y, COORD_MAX/2)));
             l << pt;
         }
         medianLines << l;
@@ -514,7 +514,7 @@ void MapView::drawLatLonGrid(QPainter & P)
             continue;
 //        QPoint pt = QPoint(0, p->theTransform.map(parallelLines.at(i).at(0)).y());
         QPoint ptt = pt.toPoint() + QPoint(5, -5);
-        P.drawText(ptt, QString("%1").arg(coordToAng(theProjection.inverse2Coord(parallelLines.at(i).at(0)).lat()), 0, 'f', 2-prec));
+        P.drawText(ptt, QString("%1").arg(theProjection.inverse2Coord(parallelLines.at(i).at(0)).y(), 0, 'f', 2-prec));
     }
     for (int i=0; i<medianLines.size(); ++i) {
 
@@ -534,7 +534,7 @@ void MapView::drawLatLonGrid(QPainter & P)
             continue;
 //        QPoint pt = QPoint(p->theTransform.map(medianLines.at(i).at(0)).x(), 0);
         QPoint ptt = pt.toPoint() + QPoint(5, 10);
-        P.drawText(ptt, QString("%1").arg(coordToAng(theProjection.inverse2Coord(medianLines.at(i).at(0)).lon()), 0, 'f', 2-prec));
+        P.drawText(ptt, QString("%1").arg(theProjection.inverse2Coord(medianLines.at(i).at(0)).x(), 0, 'f', 2-prec));
     }
 
     P.restore();
@@ -1334,11 +1334,11 @@ void MapView::viewportRecalc(const QRect & Screen)
     Coord tr = fromView(Screen.topRight());
     Coord tl = fromView(Screen.topLeft());
 //    qDebug() << bl.toQPointF() << br.toQPointF() << tr.toQPointF() << tl.toQPointF();
-    double t = qMax(tr.lat(), tl.lat());
-    double b = qMin(br.lat(), bl.lat());
-    double l = qMin(tl.lon(), bl.lon());
-    double r = qMax(tr.lon(), br.lon());
-    p->Viewport = CoordBox(Coord(b, l), Coord(t, r));
+    double t = qMax(tr.y(), tl.y());
+    double b = qMin(br.y(), bl.y());
+    double l = qMin(tl.x(), bl.x());
+    double r = qMax(tr.x(), br.x());
+    p->Viewport = CoordBox(Coord(l, b), Coord(r, t));
 
     // measure geographical distance between mid left and mid right of the screen
     int mid = (Screen.topLeft().y() + Screen.bottomLeft().y()) / 2;
@@ -1349,27 +1349,25 @@ void MapView::viewportRecalc(const QRect & Screen)
     emit viewportChanged();
 }
 
-void MapView::transformCalc(QTransform& theTransform, const Projection& theProjection, const qreal& theRotation, const CoordBox& TargetMap, const QRect& Screen)
+void MapView::transformCalc(QTransform& theTransform, const Projection& theProjection, const qreal& theRotation, const CoordBox& TargetMap, const QRect& screen)
 {
-    QPointF bl = theProjection.project(TargetMap.bottomLeft());
-    QPointF tr = theProjection.project(TargetMap.topRight());
-    QRectF pViewport = QRectF(bl, QSizeF(tr.x() - bl.x(), tr.y() - bl.y()));
+    QRectF pViewport = theProjection.getProjectedViewport(TargetMap, screen);
 //    QPointF pCenter(pViewport.center());
 
-    double Aspect = (double)Screen.width() / Screen.height();
-    double pAspect = pViewport.width() / pViewport.height();
+    double Aspect = (double)screen.width() / screen.height();
+    double pAspect = fabs(pViewport.width() / pViewport.height());
 
     double wv, hv;
     if (pAspect > Aspect) {
-        wv = pViewport.width();
-        hv = pViewport.height() * pAspect / Aspect;
+        wv = fabs(pViewport.width());
+        hv = fabs(pViewport.height() * pAspect / Aspect);
     } else {
-        wv = pViewport.width() * Aspect / pAspect;
-        hv = pViewport.height();
+        wv = fabs(pViewport.width() * Aspect / pAspect);
+        hv = fabs(pViewport.height());
     }
 
-    double ScaleLon = Screen.width() / wv;
-    double ScaleLat = Screen.height() / hv;
+    double ScaleLon = screen.width() / wv;
+    double ScaleLat = screen.height() / hv;
 
 //    double PLon = pCenter.x() /* * ScaleLon*/;
 //    double PLat = pCenter.y() /* * ScaleLat*/;
@@ -1380,7 +1378,7 @@ void MapView::transformCalc(QTransform& theTransform, const Projection& theProje
     theTransform.reset();
     theTransform.scale(ScaleLon, -ScaleLat);
 //    theTransform.rotate(theRotation, Qt::ZAxis);
-    theTransform.translate(-bl.x(), -tr.y());
+    theTransform.translate(-pViewport.topLeft().x(), -pViewport.topLeft().y());
 //    theTransform.translate(-pCenter.x(), -pCenter.y());
 //    QLineF l(QPointF(0, 0), pCenter);
 //    l.setAngle(l.angle()+theRotation);
@@ -1572,14 +1570,14 @@ QString MapView::toPropertiesHtml()
     h += "<big><strong>" + tr("View") + "</strong></big><hr/>";
     h += "<u>" + tr("Bounding Box") + "</u><br/>";
     h += QString("%1, %2, %3, %4 (%5, %6, %7, %8)")
-         .arg(QString::number(coordToAng(viewport().bottomLeft().lon()),'f',4))
-         .arg(QString::number(coordToAng(viewport().bottomLeft().lat()),'f',4))
-         .arg(QString::number(coordToAng(viewport().topRight().lon()),'f',4))
-         .arg(QString::number(coordToAng(viewport().topRight().lat()),'f',4))
-         .arg(Coord2Sexa(viewport().bottomLeft().lon()))
-         .arg(Coord2Sexa(viewport().bottomLeft().lat()))
-         .arg(Coord2Sexa(viewport().topRight().lon()))
-         .arg(Coord2Sexa(viewport().topRight().lat()))
+         .arg(QString::number(viewport().bottomLeft().x()),'f',4)
+         .arg(QString::number(viewport().bottomLeft().y()),'f',4)
+         .arg(QString::number(viewport().topRight().x()),'f',4)
+         .arg(QString::number(viewport().topRight().y()),'f',4)
+         .arg(Coord2Sexa(viewport().bottomLeft().x()))
+         .arg(Coord2Sexa(viewport().bottomLeft().y()))
+         .arg(Coord2Sexa(viewport().topRight().x()))
+         .arg(Coord2Sexa(viewport().topRight().y()))
          ;
     h += "<br/>";
     h += "<u>" + tr("Projection") + "</u><br/>";

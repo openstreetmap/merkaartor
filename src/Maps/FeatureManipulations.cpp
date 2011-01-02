@@ -130,7 +130,7 @@ static double distanceFrom(QLineF ab, const Coord& c)
     qreal ab_len2 = ab.dx() * ab.dx() + ab.dy() * ab.dy();
     QPointF dp;
     if (ab_len2) {
-        QLineF ac(ab.p1(), c.toPointF());
+        QLineF ac(ab.p1(), c);
         float u = (ac.dx() * ab.dx() + ac.dy() * ab.dy()) / ab_len2;
         if (u < 0.0) u = 0.0;
         else if (u > 1.0) u = 1.0;
@@ -151,7 +151,7 @@ void simplifyWay(Document *doc, Layer *layer, CommandList *theList, Way *w, int 
         // no removable nodes
         return;
 
-    QLineF segment(w->getNode(start)->position().toPointF(), w->getNode(end)->position().toPointF());
+    QLineF segment(w->getNode(start)->position(), w->getNode(end)->position());
     qreal maxdist = -1;
     int maxpos = 0;
     for (int i = start+1;  i < end;  i++) {
@@ -564,18 +564,18 @@ void createStreetNumbers(Document* theDocument, CommandList* theList, Way* theRo
 
     for (int j=0; j < theRoad->size(); j++) {
         if (j == 0) {
-            l2 = QLineF(theRoad->getNode(j)->position().toPointF(), theRoad->getNode(j+1)->position().toPointF());
+            l2 = QLineF(theRoad->getNode(j)->position(), theRoad->getNode(j+1)->position());
             l = l2;
             l.setAngle(l2.angle() + 180.);
             prevPoint = l.p2();
         } else
         if (j == theRoad->size()-1) {
-            l = QLineF(theRoad->getNode(j)->position().toPointF(), theRoad->getNode(j-1)->position().toPointF());
+            l = QLineF(theRoad->getNode(j)->position(), theRoad->getNode(j-1)->position());
             l2 = l;
             l2.setAngle(l.angle() + 180.);
         } else {
-            l = QLineF(theRoad->getNode(j)->position().toPointF(), theRoad->getNode(j-1)->position().toPointF());
-            l2 = QLineF(theRoad->getNode(j)->position().toPointF(), theRoad->getNode(j+1)->position().toPointF());
+            l = QLineF(theRoad->getNode(j)->position(), theRoad->getNode(j-1)->position());
+            l2 = QLineF(theRoad->getNode(j)->position(), theRoad->getNode(j+1)->position());
         }
         nv = l.normalVector().unitVector();
 
@@ -598,7 +598,7 @@ void createStreetNumbers(Document* theDocument, CommandList* theList, Way* theRo
                 continue;
 
             for (int m=0; m < I->size()-1; ++m) {
-                QLineF l3 = QLineF(I->getNode(m)->position().toPointF(), I->getNode(m+1)->position().toPointF());
+                QLineF l3 = QLineF(I->getNode(m)->position(), I->getNode(m+1)->position());
                 QPointF theIntersection;
                 if (lto.intersect(l3, &theIntersection) == QLineF::BoundedIntersection) {
                     intersectedTo = true;
@@ -621,7 +621,7 @@ void createStreetNumbers(Document* theDocument, CommandList* theList, Way* theRo
                     continue;
 
                 for (int m=0; m < I->size()-1; ++m) {
-                    QLineF l3 = QLineF(I->getNode(m)->position().toPointF(), I->getNode(m+1)->position().toPointF());
+                    QLineF l3 = QLineF(I->getNode(m)->position(), I->getNode(m+1)->position());
                     QPointF theIntersection;
                     if (lfrom.intersect(l3, &theIntersection) == QLineF::BoundedIntersection) {
                         intersectedFrom = true;
@@ -721,7 +721,7 @@ void alignNodes(Document* theDocument, CommandList* theList, PropertiesDock* the
     for (int i=2; i<Nodes.size(); ++i) {
         pos=Nodes[i]->position()-p1;
         rotate(pos,-slope);
-        pos.setLat(0);
+        pos.setY(0);
         rotate(pos,slope);
         pos=pos+p1;
         theList->add(new MoveNodeCommand( Nodes[i], pos, theDocument->getDirtyOrOriginLayer(Nodes[i]->layer()) ));
@@ -753,10 +753,10 @@ void spreadNodes(Document* theDocument, CommandList* theList, PropertiesDock* th
                 if (delta.isNull())
                     return;
                 Nodes.push_back(N);
-                Metrics.push_back(delta.lon()*delta.lon() + delta.lat()*delta.lat());
+                Metrics.push_back(delta.x()*delta.x() + delta.y()*delta.y());
             } else {
                 pos = pos - p;
-                float metric = pos.lon()*delta.lon() + pos.lat()*delta.lat();
+                float metric = pos.x()*delta.x() + pos.y()*delta.y();
                 // This could be done more efficiently with a binary search
                 for (int j = 0; j < Metrics.size(); ++j) {
                     if (metric < Metrics[j]) {

@@ -63,7 +63,7 @@ class Node : public Feature
          */
         virtual bool isSelectable(MapView* view);
 
-        const Coord& position() const;
+        Coord position() const;
         void setPosition(const Coord& aCoord);
         const QPointF& projection() const;
         void setProjection(const QPointF& aProjection);

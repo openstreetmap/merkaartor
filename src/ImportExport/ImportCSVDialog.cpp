@@ -234,7 +234,7 @@ Feature* ImportCSVDialog::generateOSM(QString line)
         return NULL;
     }
     if (CSVProjection.projIsLatLong())
-        N->setPosition(Coord(p.y(), p.x()));
+        N->setPosition(p);
     else
         N->setPosition(CSVProjection.inverse2Coord(p));
     return N;

@@ -227,13 +227,13 @@ void Interaction::updateSnap(QMouseEvent* event)
                     if (HotZoneSnap.contains(R->boundingBox()))
                         SnapList.push_back(F);
                     else {
-                        QPointF lastPoint = R->getNode(0)->position().toQPointF();
+                        QPointF lastPoint = R->getNode(0)->position();
                         QPointF aP;
                         for (int j=1; j<R->size(); ++j) {
-                            aP = R->getNode(j)->position().toQPointF();
+                            aP = R->getNode(j)->position();
                             QLineF l(lastPoint, aP);
                             QPointF a, b;
-                            if (Utils::QRectInterstects(HotZoneSnap.toQRectF(), l, a, b)) {
+                            if (Utils::QRectInterstects(HotZoneSnap, l, a, b)) {
                                 SnapList.push_back(F);
                                 break;
                             }

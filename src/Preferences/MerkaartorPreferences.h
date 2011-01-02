@@ -53,8 +53,7 @@ class IPaintStyle;
 #endif
 #define USER_AGENT (QString("%1/%2%3 (%4;%5)").arg(qApp->applicationName()).arg(STRINGIFY(VERSION)).arg(STRINGIFY(REVISION)).arg(PLATFORM).arg(STRINGIFY(SVNREV)))
 
-//#define WORLD_COORDBOX CoordBox(Coord(1.3, -1.3), Coord(-1.3, 1.3))
-#define WORLD_COORDBOX CoordBox(Coord(COORD_MAX*.80/2, -COORD_MAX*.80), Coord(-COORD_MAX*.80/2, COORD_MAX*.80))
+#define WORLD_COORDBOX CoordBox(Coord(-COORD_MAX*.80, COORD_MAX*.80/2), Coord(COORD_MAX*.80, -COORD_MAX*.80/2))
 #define BUILTIN_STYLES_DIR ":/Styles"
 #define BUILTIN_TEMPLATES_DIR ":/Templates"
 

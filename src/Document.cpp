@@ -572,10 +572,10 @@ void Document::exportOSM(QMainWindow* main, QIODevice* device, QList<Feature*> a
     }
 
     stream.writeStartElement("bound");
-    QString S = QString().number(coordToAng(aCoordBox.bottomLeft().lat()),'f',6) + ",";
-    S += QString().number(coordToAng(aCoordBox.bottomLeft().lon()),'f',6) + ",";
-    S += QString().number(coordToAng(aCoordBox.topRight().lat()),'f',6) + ",";
-    S += QString().number(coordToAng(aCoordBox.topRight().lon()),'f',6);
+    QString S = QString().number(aCoordBox.bottom(),'f',6) + ",";
+    S += QString().number(aCoordBox.left(),'f',6) + ",";
+    S += QString().number(aCoordBox.top(),'f',6) + ",";
+    S += QString().number(aCoordBox.right(),'f',6);
     stream.writeAttribute("box", S);
     stream.writeAttribute("origin", QString("http://www.openstreetmap.org/api/%1").arg(M_PREFS->apiVersion()));
     stream.writeEndElement();
@@ -630,12 +630,13 @@ QList<Feature*> Document::exportCoreOSM(QList<Feature*> aFeatures, bool forCopyP
                 }
             }
         }
-        if (progress)
+        if (progress) {
             if (progress->wasCanceled()) {
                 exportedFeatures.clear();
                 return exportedFeatures;
             }
             progress->setValue(progress->value()+1);
+        }
     }
 
     return exportedFeatures;

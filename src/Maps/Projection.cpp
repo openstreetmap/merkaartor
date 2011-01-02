@@ -40,40 +40,30 @@ public:
     {
     }
 
-    QPointF mercatorProject(const Coord& c) const
-    {
-        return mercatorProject(QPointF(coordToAng(c.lon()), coordToAng(c.lat())));
-    }
-
     QPointF mercatorProject(const QPointF& c) const
     {
-        double x = coordToAng(c.x()) / 180. * EQUATORIALMETERHALFCIRCUMFERENCE;
-        double y = log(tan(coordToRad(c.y())) + 1/cos(coordToRad(c.y()))) / M_PI * (EQUATORIALMETERHALFCIRCUMFERENCE);
+        double x = c.x() / 180. * EQUATORIALMETERHALFCIRCUMFERENCE;
+        double y = log(tan(angToRad(c.y())) + 1/cos(angToRad(c.y()))) / M_PI * (EQUATORIALMETERHALFCIRCUMFERENCE);
 
         return QPointF(x, y);
     }
 
     Coord mercatorInverse(const QPointF& point) const
     {
-        double longitude = angToCoord(point.x()*180.0/EQUATORIALMETERHALFCIRCUMFERENCE);
-        double latitude = radToCoord(atan(sinh(point.y()/EQUATORIALMETERHALFCIRCUMFERENCE*M_PI)));
+        double longitude = point.x()*180.0/EQUATORIALMETERHALFCIRCUMFERENCE;
+        double latitude = radToAng(atan(sinh(point.y()/EQUATORIALMETERHALFCIRCUMFERENCE*M_PI)));
 
-        return Coord(latitude, longitude);
-    }
-
-    inline QPointF latlonProject(const Coord& c) const
-    {
-        return latlonProject(QPointF(coordToAng(c.lon()), coordToAng(c.lat())));
+        return Coord(longitude, latitude);
     }
 
     inline QPointF latlonProject(const QPointF& c) const
     {
-        return QPointF(coordToAng(c.x())/**EQUATORIALMETERPERDEGREE*/, coordToAng(c.y())/**EQUATORIALMETERPERDEGREE*/);
+        return QPointF(c.x()/**EQUATORIALMETERPERDEGREE*/, c.y()/**EQUATORIALMETERPERDEGREE*/);
     }
 
     inline Coord latlonInverse(const QPointF& point) const
     {
-        return Coord(angToCoord(point.y()/*/EQUATORIALMETERPERDEGREE*/), angToCoord(point.x()/*/EQUATORIALMETERPERDEGREE*/));
+        return Coord(point.x()/*/EQUATORIALMETERPERDEGREE*/, point.y()/*/EQUATORIALMETERPERDEGREE*/);
     }
 };
 
@@ -104,29 +94,16 @@ Projection::~Projection(void)
     delete p;
 }
 
-QPointF Projection::project(const Coord & Map) const
-{
-    if (p->IsMercator)
-        return p->mercatorProject(Map);
-    else
-    if (p->IsLatLong)
-        return p->latlonProject(Map);
-#ifndef _MOBILE
-    else
-        return projProject(Map);
-#endif
-}
-
 QPointF Projection::inverse2Point(const QPointF & Map) const
 {
     if (p->IsLatLong)
-        return p->latlonInverse(Map).toQPointF();
+        return p->latlonInverse(Map);
     else
     if (p->IsMercator)
-        return p->mercatorInverse(Map).toQPointF();
+        return p->mercatorInverse(Map);
 #ifndef _MOBILE
     else
-        return projInverse(Map).toQPointF();
+        return projInverse(Map);
 #endif
 }
 
@@ -211,21 +188,8 @@ void Projection::projTransformToWGS84(long point_count, int point_offset, double
     pj_transform(theProj, p->theWGS84Proj, point_count, point_offset, x, y, z);
 }
 
-QPointF Projection::projProject(const Coord & Map) const
-{
-    return projProject(QPointF(coordToAng(Map.lon()), coordToAng(Map.lat())));
-}
-
 QPointF Projection::projProject(const QPointF & Map) const
 {
-//    projUV in;
-
-//    in.u = angToRad(Map.x());
-//    in.v = angToRad(Map.y());
-
-//    projUV out = pj_fwd(in, theProj);
-
-//    return QPointF(out.u, out.v);
     double x = angToRad(Map.x());
     double y = angToRad(Map.y());
 
@@ -236,30 +200,22 @@ QPointF Projection::projProject(const QPointF & Map) const
 
 Coord Projection::projInverse(const QPointF & pProj) const
 {
-//    projUV in;
-//    in.u = pProj.x();
-//    in.v = pProj.y();
-
-//    projUV out = pj_inv(in, theProj);
-
-//    return Coord(radToCoord(out.v), radToCoord(out.u));
-
     double x = pProj.x();
     double y = pProj.y();
 
     projTransformToWGS84(1, 0, &x, &y, NULL);
 
-    return Coord(radToCoord(y), radToCoord(x));
+    return Coord(radToAng(x), radToAng(y));
 }
 
-QRectF Projection::getProjectedViewport(const CoordBox& Viewport, const QRect& screen) const
+QRectF Projection::getProjectedViewport(const QRectF& Viewport, const QRect& screen) const
 {
-    QPointF bl, tr;
+    QPointF tl, br;
     QRectF pViewport;
 
-    tr = project(Viewport.topRight());
-    bl = project(Viewport.bottomLeft());
-    pViewport = QRectF(bl.x(), tr.y(), tr.x() - bl.x(), bl.y() - tr.y());
+    tl = project(Viewport.topLeft());
+    br = project(Viewport.bottomRight());
+    pViewport = QRectF(tl, br);
 
     QPointF pCenter(pViewport.center());
 

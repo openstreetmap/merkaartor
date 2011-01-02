@@ -323,11 +323,11 @@ void TMSPreferencesDialog::httpRequestFinished(int /*id*/, bool error)
             } else if (c.nodeName() == "SRS") {
                 srs = c.firstChild().toText().nodeValue();
             } else if (c.nodeName() == "BoundingBox") {
-                Coord bl(angToCoord(c.attribute("miny").toDouble()), angToCoord(c.attribute("minx").toDouble()));
-                Coord tr(angToCoord(c.attribute("maxy").toDouble()), angToCoord(c.attribute("maxx").toDouble()));
+                Coord bl(c.attribute("minx").toDouble(), c.attribute("miny").toDouble());
+                Coord tr(c.attribute("maxx").toDouble(), c.attribute("maxy").toDouble());
                 bbox = CoordBox(bl, tr);
             } else if (c.nodeName() == "Origin") {
-                Coord pt(angToCoord(c.attribute("y").toDouble()), angToCoord(c.attribute("x").toDouble()));
+                Coord pt(c.attribute("x").toDouble(), c.attribute("y").toDouble());
                 origin = pt;
             } else if (c.nodeName() == "TileFormat") {
                 tilesize.setWidth(c.attribute("width").toInt());
@@ -354,7 +354,7 @@ void TMSPreferencesDialog::httpRequestFinished(int /*id*/, bool error)
         ts.BBox = bbox;
         ts.Format = tileformat;
         Coord center = bbox.center();
-        if (origin.lat() < center.lat())
+        if (origin.y() < center.y())
             ts.Origin = true;
         else
             ts.Origin = false;

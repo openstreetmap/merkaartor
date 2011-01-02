@@ -15,27 +15,22 @@ double angle(Coord p1)
 {
     if (p1.length() == 0)
         return 0;
-    double adjacent = (double)p1.lon() / p1.length();
-    if (p1.lat() > 0)
+    double adjacent = (double)p1.x() / p1.length();
+    if (p1.y() > 0)
         return acos(adjacent);
     return -acos(adjacent);
 }
 
 void rotate(Coord & p1,double angle)
 {
-    Coord p1p(sin(angle)*p1.lon()+cos(angle)*p1.lat(),cos(angle)*p1.lon()-sin(angle)*p1.lat());
+    Coord p1p(cos(angle)*p1.x()-sin(angle)*p1.y(), sin(angle)*p1.x()+cos(angle)*p1.y());
     p1=p1p;
 }
 
-CoordBox::CoordBox(const CoordBox &cb)
-: BottomLeft(cb.bottomLeft()), TopRight(cb.topRight())
-{
-}
-
 CoordBox::CoordBox(const Coord &C1, const Coord &C2)
-: BottomLeft(C1.lat()<C2.lat()?C1.lat():C2.lat() , C1.lon()<C2.lon()?C1.lon():C2.lon()),
-TopRight(C1.lat()>C2.lat()?C1.lat():C2.lat() , C1.lon()>C2.lon()?C1.lon():C2.lon())
 {
+    setBottomLeft(QPointF(C1.x()<C2.x()?C1.x():C2.x(), C1.y()<C2.y()?C1.y():C2.y()));
+    setTopRight(QPointF(C1.x()>C2.x()?C1.x():C2.x(), C1.y()>C2.y()?C1.y():C2.y()));
 }
 
 CoordBox CoordBox::zoomed(double f) const
@@ -43,7 +38,7 @@ CoordBox CoordBox::zoomed(double f) const
     Coord C(center());
     double DLat = latDiff()/2*f;
     double DLon = lonDiff()/2*f;
-    return CoordBox(Coord(C.lat()-DLat,C.lon()-DLon), Coord(C.lat()+DLat,C.lon()+DLon) );
+    return CoordBox(Coord(C.x()-DLon, C.y()-DLat), Coord(C.x()+DLon, C.y()+DLat) );
 }
 
 bool CoordBox::toXML(QString elName, QXmlStreamWriter& stream) const
@@ -51,8 +46,8 @@ bool CoordBox::toXML(QString elName, QXmlStreamWriter& stream) const
     bool OK = true;
 
     stream.writeStartElement(elName);
-    TopRight.toXML("topright", stream);
-    BottomLeft.toXML("bottomleft", stream);
+    Coord(topRight()).toXML("topright", stream);
+    Coord(bottomLeft()).toXML("bottomleft", stream);
     stream.writeEndElement();
 
     return OK;
@@ -65,8 +60,8 @@ bool CoordBox::toXML(QString elName, QDomElement& xParent) const
     QDomElement e = xParent.ownerDocument().createElement(elName);
     xParent.appendChild(e);
 
-    TopRight.toXML("topright", e);
-    BottomLeft.toXML("bottomleft", e);
+    Coord(topRight()).toXML("topright", e);
+    Coord(bottomLeft()).toXML("bottomleft", e);
 
     return OK;
 }
@@ -76,7 +71,7 @@ CoordBox CoordBox::fromXML(QDomElement e)
     Coord tr = Coord::fromXML(e.firstChildElement("topright"));
     Coord bl = Coord::fromXML(e.firstChildElement("bottomleft"));
 
-    return CoordBox(tr, bl);
+    return CoordBox(Coord(bl.x(), tr.y()), Coord(tr.x(), bl.y()));
 }
 
 CoordBox CoordBox::fromXML(QXmlStreamReader& stream)
@@ -93,22 +88,22 @@ CoordBox CoordBox::fromXML(QXmlStreamReader& stream)
         stream.readNext();
     }
 
-    return CoordBox(tr, bl);
+    return CoordBox(Coord(bl.x(), tr.y()), Coord(tr.x(), bl.y()));
 }
 
 #define EQUATORIALRADIUSKM 6378.137
 double Coord::distanceFrom(const Coord& other) const
 {
-    double dlon = other.lon() - lon();
+    double dlon = other.x() - x();
 
-    const double slat1 = sin(coordToRad(lat()));
-    const double clat1 = cos(coordToRad(lat()));
+    const double slat1 = sin(angToRad(y()));
+    const double clat1 = cos(angToRad(y()));
 
-    const double slat2 = sin(coordToRad(other.lat()));
-    const double clat2 = cos(coordToRad(other.lat()));
+    const double slat2 = sin(angToRad(other.y()));
+    const double clat2 = cos(angToRad(other.y()));
 
-    const double sdlon = sin(coordToRad(dlon));
-    const double cdlon = cos(coordToRad(dlon));
+    const double sdlon = sin(angToRad(dlon));
+    const double cdlon = cos(angToRad(dlon));
 
     const double t1 = clat2 * sdlon;
     const double t2 = clat1 * slat2 - slat1 * clat2 * cdlon;
@@ -123,8 +118,8 @@ bool Coord::toXML(QString elName, QXmlStreamWriter& stream) const
     bool OK = true;
 
     stream.writeStartElement(elName);
-    stream.writeAttribute("lon",COORD2STRING(coordToAng(Lon)));
-    stream.writeAttribute("lat", COORD2STRING(coordToAng(Lat)));
+    stream.writeAttribute("lon",COORD2STRING(x()));
+    stream.writeAttribute("lat", COORD2STRING(y()));
     stream.writeEndElement();
 
     return OK;
@@ -137,37 +132,37 @@ bool Coord::toXML(QString elName, QDomElement& xParent) const
     QDomElement e = xParent.ownerDocument().createElement(elName);
     xParent.appendChild(e);
 
-    e.setAttribute("lon",COORD2STRING(coordToAng(Lon)));
-    e.setAttribute("lat", COORD2STRING(coordToAng(Lat)));
+    e.setAttribute("lon",COORD2STRING(x()));
+    e.setAttribute("lat", COORD2STRING(y()));
 
     return OK;
 }
 
 Coord Coord::fromXML(QDomElement e)
 {
-    double lat = angToCoord(e.attribute("lat").toDouble());
-    double lon = angToCoord(e.attribute("lon").toDouble());
+    double lat = e.attribute("lat").toDouble();
+    double lon = e.attribute("lon").toDouble();
 
-    return Coord(lat, lon);
+    return Coord(lon, lat);
 }
 
 Coord Coord::fromXML(QXmlStreamReader& stream)
 {
-    double lat = angToCoord(stream.attributes().value("lat").toString().toDouble());
-    double lon = angToCoord(stream.attributes().value("lon").toString().toDouble());
+    double lat = stream.attributes().value("lat").toString().toDouble();
+    double lon = stream.attributes().value("lon").toString().toDouble();
     stream.readNext();
 
-    return Coord(lat, lon);
+    return Coord(lon, lat);
 }
 
 void CoordBox::resize(double d)
 {
-    double dlat = (TopRight.lat()-BottomLeft.lat())*(d-1)/2;
-    double dlon = (TopRight.lon()-BottomLeft.lon())*(d-1)/2;
-    BottomLeft.setLat(BottomLeft.lat()-dlat);
-    BottomLeft.setLon(BottomLeft.lon()-dlon);
-    TopRight.setLat(TopRight.lat()+dlat);
-    TopRight.setLon(TopRight.lon()+dlon);
+    double dlat = (topRight().y()-bottomLeft().y())*(d-1)/2;
+    double dlon = (topRight().x()-bottomLeft().x())*(d-1)/2;
+    setBottom(bottom()-dlat);
+    setLeft(left()-dlon);
+    setTop(top()+dlat);
+    setRight(right()+dlon);
 }
 
 bool CoordBox::visibleLine(const CoordBox & viewport, Coord & last, Coord & here)
@@ -197,5 +192,5 @@ bool CoordBox::visibleLine(const CoordBox & viewport, Coord & last, Coord & here
 
 uint qHash(const Coord &c)
 {
-    return (uint)(c.lat() + 65537 * c.lon());
+    return (uint)(c.y() + 65537 * c.x());
 }

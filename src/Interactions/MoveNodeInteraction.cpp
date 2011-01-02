@@ -282,7 +282,7 @@ Coord MoveNodeInteraction::calculateNewPosition(QMouseEvent *event, Feature *aLa
         return Pt->position();
     else if (Way* R = dynamic_cast<Way*>(aLast))
     {
-        QPointF Target = TargetC.toPointF();
+        QPointF Target = TargetC;
         LineF L1(R->getNode(0)->position(),R->getNode(1)->position());
         double Dist = L1.capDistance(TargetC);
         QPointF BestTarget = L1.project(Target);
@@ -301,7 +301,7 @@ Coord MoveNodeInteraction::calculateNewPosition(QMouseEvent *event, Feature *aLa
         if (theList && (Moving.size() == 1))
             theList->add(new
                 WayAddNodeCommand(R,Moving[0],BestIdx,document()->getDirtyOrOriginLayer(R->layer())));
-        return Coord(BestTarget.x(),BestTarget.y());
+        return Coord(BestTarget);
     }
     return TargetC;
 }

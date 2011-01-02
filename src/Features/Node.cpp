@@ -148,9 +148,9 @@ bool Node::isSelectable(MapView* theView)
 }
 
 
-const Coord& Node::position() const
+Coord Node::position() const
 {
-    return Position.topRight();
+    return Position.topLeft();
 }
 
 void Node::setPosition(const Coord& aCoord)
@@ -420,8 +420,8 @@ bool Node::toXML(QXmlStreamWriter& stream, QProgressDialog * progress, bool stri
     stream.writeStartElement("node");
 
     Feature::toXML(stream, strict, changesetid);
-    stream.writeAttribute("lon",COORD2STRING(coordToAng(Position.topRight().lon())));
-    stream.writeAttribute("lat", COORD2STRING(coordToAng(Position.topRight().lat())));
+    stream.writeAttribute("lon",COORD2STRING(Position.topRight().x()));
+    stream.writeAttribute("lat", COORD2STRING(Position.topRight().y()));
 
     tagsToXML(stream, strict);
     stream.writeEndElement();
@@ -446,8 +446,8 @@ bool Node::toGPX(QXmlStreamWriter& stream, QProgressDialog * progress, QString e
 
     if (!forExport)
         stream.writeAttribute("xml:id", xmlId());
-    stream.writeAttribute("lon",COORD2STRING(coordToAng(Position.topRight().lon())));
-    stream.writeAttribute("lat", COORD2STRING(coordToAng(Position.topRight().lat())));
+    stream.writeAttribute("lon",COORD2STRING(Position.topRight().x()));
+    stream.writeAttribute("lat", COORD2STRING(Position.topRight().y()));
 
     stream.writeTextElement("time", time().toString(Qt::ISODate)+"Z");
 
@@ -491,7 +491,7 @@ Node * Node::fromXML(Document* d, Layer* L, QXmlStreamReader& stream)
     IFeature::FId id(IFeature::Point, sid.toLongLong());
     Node* Pt = CAST_NODE(d->getFeature(id));
     if (!Pt) {
-        Pt = new Node(Coord(angToCoord(Lat),angToCoord(Lon)));
+        Pt = new Node(Coord(Lon,Lat));
         Pt->setId(id);
         Feature::fromXML(stream, Pt);
         L->add(Pt);
@@ -501,7 +501,7 @@ Node * Node::fromXML(Document* d, Layer* L, QXmlStreamReader& stream)
             Pt->layer()->remove(Pt);
             L->add(Pt);
         }
-        Pt->setPosition(Coord(angToCoord(Lat), angToCoord(Lon)));
+        Pt->setPosition(Coord(Lon, Lat));
     }
 
     stream.readNext();
@@ -526,12 +526,12 @@ Node * Node::fromGPX(Document* d, Layer* L, QXmlStreamReader& stream)
     IFeature::FId id(IFeature::Point, sid.toLongLong());
     Node* Pt = CAST_NODE(d->getFeature(id));
     if (!Pt) {
-        Pt = new Node(Coord(angToCoord(Lat),angToCoord(Lon)));
+        Pt = new Node(Coord(Lon,Lat));
         Pt->setId(id);
         Pt->setLastUpdated(Feature::Log);
         L->add(Pt);
     } else {
-        Pt->setPosition(Coord(angToCoord(Lat), angToCoord(Lon)));
+        Pt->setPosition(Coord(Lon,Lat));
         if (Pt->lastUpdated() == Feature::NotYetDownloaded)
             Pt->setLastUpdated(Feature::OSMServer);
     }
@@ -600,7 +600,7 @@ QString Node::toHtml()
 
     if ((i = findKey("_waypoint_")) != -1)
         D += "<p><b>"+QApplication::translate("MapFeature", "Waypoint")+"</b><br/>";
-    D += "<i>"+QApplication::translate("MapFeature", "coord")+": </i>" + COORD2STRING(coordToAng(position().lat())) + " (" + Coord2Sexa(position().lat()) + ") / " + COORD2STRING(coordToAng(position().lon())) + " (" + Coord2Sexa(position().lon()) + ")";
+    D += "<i>"+QApplication::translate("MapFeature", "coord")+": </i>" + COORD2STRING(position().y()) + " (" + Coord2Sexa(position().y()) + ") / " + COORD2STRING(position().x()) + " (" + Coord2Sexa(position().x()) + ")";
 
     if (elevation())
         D += "<br/><i>"+QApplication::translate("MapFeature", "elevation")+": </i>" + QString::number(elevation(), 'f', 4);

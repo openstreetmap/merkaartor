@@ -214,7 +214,7 @@ Node* ImportNMEA::importRMC (QString line)
         date = date.addYears(100);
     //date.setTimeSpec(Qt::UTC);
 
-    Node* Pt = new Node(Coord(angToCoord(lat),angToCoord(lon)));
+    Node* Pt = new Node(Coord(lon,lat));
     theLayer->add(Pt);
     Pt->setLastUpdated(Feature::Log);
     Pt->setElevation(curAltitude);

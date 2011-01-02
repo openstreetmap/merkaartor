@@ -555,8 +555,8 @@ void MerkaartorPreferences::initialize()
         sl = Sets->value("downloadosm/bookmarks").toStringList();
         if (sl.size()) {
             for (int i=0; i<sl.size(); i+=5) {
-                Bookmark B(sl[i], CoordBox(Coord(angToCoord(sl[i+1].toDouble()),angToCoord(sl[i+2].toDouble())),
-                                           Coord(angToCoord(sl[i+3].toDouble()),angToCoord(sl[i+4].toDouble()))));
+                Bookmark B(sl[i], CoordBox(Coord(sl[i+2].toDouble(),sl[i+1].toDouble()),
+                                           Coord(sl[i+4].toDouble(),sl[i+3].toDouble())));
                 theBookmarkList.addBookmark(B);
             }
             save();
@@ -825,10 +825,10 @@ void MerkaartorPreferences::setInitialPosition(MapView* vw)
     if (!g_Merk_Ignore_Preferences) {
         QStringList ip;
         CoordBox cb = vw->viewport();
-        ip.append(QString::number(cb.bottomLeft().lat(), 'f', 8));
-        ip.append(QString::number(cb.bottomLeft().lon(), 'f', 8));
-        ip.append(QString::number(cb.topRight().lat(), 'f', 8));
-        ip.append(QString::number(cb.topRight().lon(), 'f', 8));
+        ip.append(QString::number(cb.bottomLeft().y(), 'f', 8));
+        ip.append(QString::number(cb.bottomLeft().x(), 'f', 8));
+        ip.append(QString::number(cb.topRight().y(), 'f', 8));
+        ip.append(QString::number(cb.topRight().x(), 'f', 8));
 
         Sets->setValue("MainWindow/InitialPosition", ip);
         //    Sets->setValue("MainWindow/ViewRect", vw->rect());
