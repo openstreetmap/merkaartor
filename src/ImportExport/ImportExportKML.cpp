@@ -13,6 +13,7 @@
 #include <QtGui>
 
 #include "../ImportExport/ImportExportKML.h"
+#include "Global.h"
 
 bool parseContainer(QDomElement& e, Layer* aLayer);
 
@@ -188,7 +189,7 @@ Feature* parsePoint(QDomElement& e, Layer* aLayer)
             double lat = tokens[1].toDouble();
             Coord p(lon,lat);
 
-            P = new Node(p);
+            P = g_backend.allocNode(p);
             aLayer->add(P);
             P->setTag("%kml:guid", kmlId);
         }

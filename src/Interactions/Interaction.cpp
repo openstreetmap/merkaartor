@@ -6,6 +6,7 @@
 #include "Node.h"
 #include "PropertiesDock.h"
 #include "Utils/Utils.h"
+#include "Global.h"
 
 #include <QtGui/QMouseEvent>
 #include <QtGui/QPainter>
@@ -209,57 +210,55 @@ void Interaction::updateSnap(QMouseEvent* event)
 
     Way* R;
     Node* N;
-    for (int j=0; j<document()->layerSize(); ++j) {
-        QList < MapFeaturePtr > ret = document()->getLayer(j)->indexFind(HotZone);
-        foreach(MapFeaturePtr F, ret) {
-            if (F)
-            {
-                if (F->isHidden())
+    QList < Feature* > ret = g_backend.indexFind(HotZone);
+    foreach(Feature* F, ret) {
+        if (F)
+        {
+            if (F->isHidden())
+                continue;
+            if (std::find(NoSnap.begin(),NoSnap.end(),F) != NoSnap.end())
+                continue;
+            if (F->notEverythingDownloaded())
+                continue;
+            if ((R = CAST_WAY(F))) {
+                if ( NoRoads || NoSelectRoads)
                     continue;
-                if (std::find(NoSnap.begin(),NoSnap.end(),F) != NoSnap.end())
-                    continue;
-                if (F->notEverythingDownloaded())
-                    continue;
-                if ((R = CAST_WAY(F))) {
-                    if ( NoRoads || NoSelectRoads)
-                        continue;
 
-                    if (HotZoneSnap.contains(R->boundingBox()))
-                        SnapList.push_back(F);
-                    else {
-                        QPointF lastPoint = R->getNode(0)->position();
-                        QPointF aP;
-                        for (int j=1; j<R->size(); ++j) {
-                            aP = R->getNode(j)->position();
-                            QLineF l(lastPoint, aP);
-                            QPointF a, b;
-                            if (Utils::QRectInterstects(HotZoneSnap, l, a, b)) {
-                                SnapList.push_back(F);
-                                break;
-                            }
-                            lastPoint = aP;
+                if (HotZoneSnap.contains(R->boundingBox()))
+                    SnapList.push_back(F);
+                else {
+                    QPointF lastPoint = R->getNode(0)->position();
+                    QPointF aP;
+                    for (int j=1; j<R->size(); ++j) {
+                        aP = R->getNode(j)->position();
+                        QLineF l(lastPoint, aP);
+                        QPointF a, b;
+                        if (Utils::QRectInterstects(HotZoneSnap, l, a, b)) {
+                            SnapList.push_back(F);
+                            break;
                         }
+                        lastPoint = aP;
                     }
                 }
-                if ((N = CAST_NODE(F))) {
-                    if (NoSelectPoints)
-                        continue;
-                    if (!N->isSelectable(theView))
-                        continue;
-                    if (HotZoneSnap.contains(N->boundingBox()))
-                        SnapList.push_back(F);
-                }
+            }
+            if ((N = CAST_NODE(F))) {
+                if (NoSelectPoints)
+                    continue;
+                if (!N->isSelectable(theView))
+                    continue;
+                if (HotZoneSnap.contains(N->boundingBox()))
+                    SnapList.push_back(F);
+            }
 
-                double Distance = F->pixelDistance(event->pos(), 5.01, areNodesSelectable, view());
-                if (Distance < BestDistance && !F->isReadonly())
-                {
-                    BestDistance = Distance;
-                    LastSnap = F;
-                } else if (Distance < BestReadonlyDistance && F->isReadonly())
-                {
-                    BestReadonlyDistance = Distance;
-                    ReadOnlySnap = F;
-                }
+            double Distance = F->pixelDistance(event->pos(), 5.01, areNodesSelectable, view());
+            if (Distance < BestDistance && !F->isReadonly())
+            {
+                BestDistance = Distance;
+                LastSnap = F;
+            } else if (Distance < BestReadonlyDistance && F->isReadonly())
+            {
+                BestReadonlyDistance = Distance;
+                ReadOnlySnap = F;
             }
         }
     }

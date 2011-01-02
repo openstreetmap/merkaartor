@@ -5,4 +5,6 @@ HEADERS += \
     IMapAdapter.h \
     IRenderer.h \
     IMapAdapterFactory.h \
-    IMapWatermark.h
+    IMapWatermark.h \
+    ../../../interfaces/IBackend.h \
+    ../../../interfaces/ILayer.h

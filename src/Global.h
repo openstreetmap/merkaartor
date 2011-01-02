@@ -15,7 +15,10 @@
 #include <QList>
 #include <QPair>
 
+#include "Backend/MemoryBackend.h"
+
 class MainWindow;
+class IBackend;
 
 extern bool g_Merk_Portable;
 extern bool g_Merk_Frisius;
@@ -38,6 +41,8 @@ extern QStringList g_getTagKeyList();
 extern QString g_getTagValue(int idx);
 extern quint32 g_getTagValueIndex(const QString& s);
 extern QStringList g_getTagValueList(QString k) ;
+
+extern MemoryBackend g_backend;
 
 #endif
 

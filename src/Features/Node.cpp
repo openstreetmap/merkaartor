@@ -2,6 +2,7 @@
 
 #include "MapView.h"
 #include "Utils/LineF.h"
+#include "Global.h"
 
 #include <QApplication>
 #include <QtGui/QPainter>
@@ -39,7 +40,7 @@ Node::Node(const Coord& aCoord)
     , p(new NodePrivate)
 {
     setRenderPriority(RenderPriority(RenderPriority::IsSingular,0., 0));
-//    qDebug() << "Node size: " << sizeof(Node) << sizeof(NodePrivate);
+    g_backend.indexAdd(Position, this);
 }
 
 Node::Node(const Node& other)
@@ -52,7 +53,7 @@ Node::Node(const Node& other)
     p->Projected = other.p->Projected;
     p->ProjectionRevision = other.projectionRevision();
     setRenderPriority(RenderPriority(RenderPriority::IsSingular,0., 0));
-//    qDebug() << "Node size: " << sizeof(Node) << sizeof(NodePrivate);
+    g_backend.indexAdd(Position, this);
 }
 
 Node::~Node(void)
@@ -155,12 +156,11 @@ Coord Node::position() const
 
 void Node::setPosition(const Coord& aCoord)
 {
-    if (layer())
-        layer()->indexRemove(Position, this);
+    g_backend.indexRemove(Position, this);
     Position = CoordBox(aCoord, aCoord);
     p->ProjectionRevision = 0;
-    if (layer() && !isDeleted()) {
-        layer()->indexAdd(Position, this);
+    if (!isDeleted()) {
+        g_backend.indexAdd(Position, this);
     }
     notifyChanges();
 }

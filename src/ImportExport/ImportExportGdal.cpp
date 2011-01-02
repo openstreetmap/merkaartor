@@ -18,6 +18,7 @@
 #include "Maps/Projection.h"
 #include "Features.h"
 #include "Utils/ProjectionChooser.h"
+#include "Global.h"
 
 
 #include "ogrsf_frmts.h"
@@ -82,10 +83,10 @@ Node *ImportExportGdal::nodeFor(Layer* aLayer, const OGRPoint p)
     }
 
     if (toWGS84)
-        pointHash[p] = new Node(Coord(p.getX(), p.getY()));
+        pointHash[p] = g_backend.allocNode(Coord(p.getX(), p.getY()));
     else {
         Coord c = theProjection->inverse2Coord(QPointF(p.getX(), p.getY()));
-        pointHash[p] = new Node(c);
+        pointHash[p] = g_backend.allocNode(c);
     }
     aLayer->add(pointHash[p]);
     return pointHash[p];
@@ -101,7 +102,7 @@ Way *ImportExportGdal::readWay(Layer* aLayer, OGRLineString *poRing)
 
     OGRPoint p;
 
-    Way* w = new Way();
+    Way* w = g_backend.allocWay();
     for(int i = 0;  i < numNode;  i++) {
         poRing->getPoint(i, &p);
         Node *n = nodeFor(aLayer, p);
@@ -130,7 +131,7 @@ Feature* ImportExportGdal::parseGeometry(Layer* aLayer, OGRGeometry *poGeometry)
         Way *outer = readWay(aLayer, poRing);
         if (outer) {
             if (int numHoles = poPoly->getNumInteriorRings()) {
-                Relation* rel = new Relation;
+                Relation* rel = g_backend.allocRelation();
                 aLayer->add(rel);
                 rel->setTag("type", "multipolygon");
                 rel->add("outer", outer);
@@ -158,7 +159,7 @@ Feature* ImportExportGdal::parseGeometry(Layer* aLayer, OGRGeometry *poGeometry)
     {
         OGRGeometryCollection  *poCol = (OGRGeometryCollection*) poGeometry;
         if(int numCol = poCol->getNumGeometries()) {
-            Relation* R = new Relation;
+            Relation* R = g_backend.allocRelation();
             aLayer->add(R);
             for(int i=0; i<numCol; i++) {
                 Feature* F = parseGeometry(aLayer, poCol->getGeometryRef(i));

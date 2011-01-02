@@ -13,6 +13,7 @@
 #include <QtGui>
 
 #include "../ImportExport/ImportNMEA.h"
+#include "Global.h"
 
 
 ImportNMEA::ImportNMEA(Document* doc)
@@ -43,7 +44,7 @@ bool ImportNMEA::import(Layer* aLayer)
     theLayer = dynamic_cast <TrackLayer *> (aLayer);
     theList = new CommandList(MainWindow::tr("Import NMEA"), NULL);
 
-    TrackSegment* TS = new TrackSegment;
+    TrackSegment* TS = g_backend.allocSegment();
 
     while (!in.atEnd()) {
         QString line = in.readLine();
@@ -59,8 +60,8 @@ bool ImportNMEA::import(Layer* aLayer)
                 if (TS->size())
                     theLayer->add(TS);
                 else
-                    delete TS;
-                TS = new TrackSegment;
+                    g_backend.deallocFeature(TS);
+                TS = g_backend.allocSegment();
             }
         } else
         if (command == "GSV") {
@@ -74,8 +75,8 @@ bool ImportNMEA::import(Layer* aLayer)
                 if (TS->size())
                     theLayer->add(TS);
                 else
-                    delete TS;
-                TS = new TrackSegment;
+                    g_backend.deallocFeature(TS);
+                TS = g_backend.allocSegment();
             }
         } else
         if (command == "GLL") {
@@ -85,8 +86,8 @@ bool ImportNMEA::import(Layer* aLayer)
                 if (TS->size())
                     theLayer->add(TS);
                 else
-                    delete TS;
-                TS = new TrackSegment;
+                    g_backend.deallocFeature(TS);
+                TS = g_backend.allocSegment();
             }
         } else
         if (command == "RMC") {
@@ -102,7 +103,7 @@ bool ImportNMEA::import(Layer* aLayer)
     if (TS->size())
         theLayer->add(TS);
     else
-        delete TS;
+        g_backend.deallocFeature(TS);
 
     delete theList;
     return true;
@@ -214,7 +215,7 @@ Node* ImportNMEA::importRMC (QString line)
         date = date.addYears(100);
     //date.setTimeSpec(Qt::UTC);
 
-    Node* Pt = new Node(Coord(lon,lat));
+    Node* Pt = g_backend.allocNode(Coord(lon,lat));
     theLayer->add(Pt);
     Pt->setLastUpdated(Feature::Log);
     Pt->setElevation(curAltitude);

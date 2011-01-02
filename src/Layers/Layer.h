@@ -7,6 +7,8 @@
 
 #include <QProgressDialog>
 
+#include "ILayer.h"
+
 class QString;
 class QprogressDialog;
 
@@ -24,7 +26,7 @@ class Document;
 
 struct IndexFindContext;
 
-class Layer : public QObject
+class Layer : public QObject, public ILayer
 {
     Q_OBJECT
 
@@ -71,7 +73,6 @@ public:
     bool isEnabled() const;
 
     virtual void add(Feature* aFeature);
-    virtual void add(Feature* aFeature, int Idx);
     virtual void remove(Feature* aFeature);
     virtual void deleteFeature(Feature* aFeature);
     virtual void clear();
@@ -82,12 +83,8 @@ public:
     QList<Feature *> get();
     Feature* get(int i);
     const Feature* get(int i) const;
-    Feature* get(const IFeature::FId& id);
+    virtual Feature* get(const IFeature::FId& id);
     void notifyIdUpdate(const IFeature::FId& id, Feature* aFeature);
-
-    virtual void get(const CoordBox& hz, QList<Feature*>& theFeatures);
-    virtual void getFeatureSet(QMap<RenderPriority, QSet <Feature*> >& theFeatures, Document* theDocument,
-                       QList<CoordBox>& invalidRects, QRectF& clipRect, Projection& theProjection, QTransform& theTransform);
 
     void setDocument(Document* aDocument);
     Document* getDocument();
@@ -131,19 +128,11 @@ public:
     virtual bool isUploadable() const;
     virtual bool isReadonly() const;
     virtual bool isTrack() const {return false;}
-    virtual bool arePointsDrawable() {return true;}
-
-    virtual void indexAdd(const CoordBox& bb, const MapFeaturePtr aFeat);
-    virtual void indexRemove(const CoordBox& bb, const MapFeaturePtr aFeat);
-//    bool __cdecl indexFindCallback(MapFeaturePtr data, void* ctxt);
-    virtual const QList<MapFeaturePtr>& indexFind(const CoordBox& vp);
-    virtual void indexFind(const CoordBox& bb, const IndexFindContext& findResult);
 
 protected:
     LayerPrivate* p;
     LayerWidget* theWidget;
     mutable QString Id;
-    QList<MapFeaturePtr> findResult;
 };
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(Layer::LayerGroups)
@@ -153,6 +142,7 @@ class DrawingLayer : public Layer
     Q_OBJECT
 
 public:
+    DrawingLayer();
     DrawingLayer(const QString& aName);
     virtual ~DrawingLayer();
 

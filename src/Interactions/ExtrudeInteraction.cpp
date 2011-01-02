@@ -9,6 +9,7 @@
 #include "Utils/LineF.h"
 #include "MainWindow.h"
 #include "PropertiesDock.h"
+#include "Global.h"
 
 #include <QtGui/QPainter>
 
@@ -123,19 +124,19 @@ void ExtrudeInteraction::snapMouseReleaseEvent(QMouseEvent* anEvent, Feature* la
         CommandList* theList  = new CommandList(MainWindow::tr("Extrude Road %1").arg(theRoad->description()), theRoad);
         if (theRoad->segmentCount() == 1) {
             int pos = 0;
-            Node* N = new Node(XY_TO_COORD(s2.p1().toPoint()));
+            Node* N = g_backend.allocNode(XY_TO_COORD(s2.p1().toPoint()));
             theList->add(new AddFeatureCommand(theRoad->layer(), N, true));
             theList->add(new WayAddNodeCommand(theRoad, N, ++pos));
-            N = new Node(XY_TO_COORD(s2.p2().toPoint()));
+            N = g_backend.allocNode(XY_TO_COORD(s2.p2().toPoint()));
             theList->add(new AddFeatureCommand(theRoad->layer(), N, true));
             theList->add(new WayAddNodeCommand(theRoad, N, ++pos));
             theList->add(new WayAddNodeCommand(theRoad, theRoad->getNode(0)));
         } else {
             int pos = BestSegment;
-            Node* N = new Node(XY_TO_COORD(s2.p1().toPoint()));
+            Node* N = g_backend.allocNode(XY_TO_COORD(s2.p1().toPoint()));
             theList->add(new AddFeatureCommand(theRoad->layer(), N, true));
             theList->add(new WayAddNodeCommand(theRoad, N, ++pos));
-            N = new Node(XY_TO_COORD(s2.p2().toPoint()));
+            N = g_backend.allocNode(XY_TO_COORD(s2.p2().toPoint()));
             theList->add(new AddFeatureCommand(theRoad->layer(), N, true));
             theList->add(new WayAddNodeCommand(theRoad, N, ++pos));
         }

@@ -5,6 +5,7 @@
 #include "Document.h"
 #include "Node.h"
 #include "TrackSegment.h"
+#include "Global.h"
 
 #include <QtCore/QBuffer>
 #include <QtCore/QDateTime>
@@ -19,7 +20,7 @@ static Node* importTrkPt(const QDomElement& Root, Document* /* theDocument */, L
     double Lat = Root.attribute("lat").toDouble();
     double Lon = Root.attribute("lon").toDouble();
 
-    Node* Pt = new Node(Coord(Lon,Lat));
+    Node* Pt = g_backend.allocNode(Coord(Lon,Lat));
     Pt->setLastUpdated(Feature::Log);
     if (Root.hasAttribute("xml:id"))
         Pt->setId(IFeature::FId(IFeature::Point, Root.attribute("xml:id").toLongLong()));
@@ -90,7 +91,7 @@ static Node* importTrkPt(const QDomElement& Root, Document* /* theDocument */, L
 
 static void importTrkSeg(const QDomElement& Root, Document* theDocument, Layer* theLayer, bool MakeSegment, QProgressDialog & progress)
 {
-    TrackSegment* S = new TrackSegment;
+    TrackSegment* S = g_backend.allocSegment();
 
     if (Root.hasAttribute("xml:id"))
         S->setId(IFeature::FId(IFeature::GpxSegment, Root.attribute("xml:id").toLongLong()));
@@ -121,9 +122,9 @@ static void importTrkSeg(const QDomElement& Root, Document* theDocument, Layer* 
                 if (S->size())
                     theLayer->add(S);
                 else
-                    delete S;
+                    g_backend.deallocFeature(S);
 
-                S = new TrackSegment;
+                S = g_backend.allocSegment();
             }
         }
 
@@ -134,12 +135,12 @@ static void importTrkSeg(const QDomElement& Root, Document* theDocument, Layer* 
     if (S->size())
         theLayer->add(S);
     else
-        delete S;
+        g_backend.deallocFeature(S);
 }
 
 static void importRte(const QDomElement& Root, Document* theDocument, Layer* theLayer, bool MakeSegment, QProgressDialog & progress)
 {
-    TrackSegment* S = new TrackSegment;
+    TrackSegment* S = g_backend.allocSegment();
 
     if (Root.hasAttribute("xml:id"))
         S->setId(IFeature::FId(IFeature::GpxSegment, Root.attribute("xml:id").toLongLong()));
@@ -175,9 +176,9 @@ static void importRte(const QDomElement& Root, Document* theDocument, Layer* the
                     if (S->size())
                         theLayer->add(S);
                     else
-                        delete S;
+                        g_backend.deallocFeature(S);
 
-                    S = new TrackSegment;
+                    S = g_backend.allocSegment();
                 }
             }
             S->add(Pt);
@@ -188,7 +189,7 @@ static void importRte(const QDomElement& Root, Document* theDocument, Layer* the
     if (S->size())
         theLayer->add(S);
     else
-        delete S;
+        g_backend.deallocFeature(S);
 }
 
 static void importTrk(const QDomElement& Root, Document* theDocument, Layer* theLayer, bool MakeSegment, QProgressDialog & progress)

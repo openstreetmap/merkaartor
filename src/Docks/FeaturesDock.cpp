@@ -16,6 +16,7 @@
 #include "Document.h"
 #include "ImageMapLayer.h"
 #include "PropertiesDock.h"
+#include "Global.h"
 
 #include "Features.h"
 
@@ -377,24 +378,16 @@ void FeaturesDock::updateList()
                 addItem(F);
         }
     } else {
-        for (int j=0; j<Main->document()->layerSize(); ++j) {
-            if (!Main->document()->getLayer(j)->size())
+        QList < Feature* > ret = g_backend.indexFind(theViewport);
+        foreach (Feature* F, ret) {
+            if (F->isHidden())
                 continue;
 
-            if (dynamic_cast<ImageMapLayer*>(Main->document()->getLayer(j)))
-                continue;
-
-            QList < MapFeaturePtr > ret = Main->document()->getLayer(j)->indexFind(theViewport);
-            foreach (MapFeaturePtr F, ret) {
-                if (F->isHidden())
-                    continue;
-
-                if (ui.cbWithin->isChecked()) {
-                    if (Main->view()->viewport().contains(F->boundingBox()))
-                        addItem(F);
-                } else
+            if (ui.cbWithin->isChecked()) {
+                if (Main->view()->viewport().contains(F->boundingBox()))
                     addItem(F);
-            }
+            } else
+                addItem(F);
         }
     }
     ui.FeaturesList->sortItems();

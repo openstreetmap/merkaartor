@@ -3,7 +3,8 @@ DEPENDPATH += Layers
 HEADERS += Layer.h \
     ImageMapLayer.h \
     LayerIterator.h \
-    LayerWidget.h
+    LayerWidget.h \
+    Layers/LayerPrivate.h
 SOURCES += Layer.cpp \
     ImageMapLayer.cpp \
     LayerWidget.cpp

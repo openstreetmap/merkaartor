@@ -12,10 +12,12 @@
 //
 //
 
+#include <QApplication>
 #include <QMessageBox>
 #include <QDateTime>
 
 #include "ImportExportPBF.h"
+#include "Global.h"
 
 #include "zlib.h"
 #include "bzlib.h"
@@ -263,7 +265,7 @@ void ImportExportPBF::parseNode( Layer* aLayer )
 
     Node* N = STATIC_CAST_NODE(theDoc->getFeature(IFeature::FId(IFeature::Point, inputNode.id())));
     if (!N) {
-        N = new Node(Coord(
+        N = g_backend.allocNode(Coord(
                 ( ( double ) inputNode.lon() * m_primitiveBlock.granularity() + m_primitiveBlock.lon_offset() ) / NANO,
                 ( ( double ) inputNode.lat() * m_primitiveBlock.granularity() + m_primitiveBlock.lat_offset() ) / NANO
                 ));
@@ -310,7 +312,7 @@ void ImportExportPBF::parseWay( Layer* aLayer )
 
     Way* W = STATIC_CAST_WAY(theDoc->getFeature(IFeature::FId(IFeature::LineString, inputWay.id())));
     if (!W) {
-        W = new Way();
+        W = g_backend.allocWay();
         W->setId(IFeature::FId(IFeature::LineString, inputWay.id()));
         aLayer->add(W);
     } else {
@@ -339,7 +341,7 @@ void ImportExportPBF::parseWay( Layer* aLayer )
 
         Node* N = STATIC_CAST_NODE(theDoc->getFeature(IFeature::FId(IFeature::Point, lastRef)));
         if (!N) {
-            N = new Node(Coord(0, 0));
+            N = g_backend.allocNode(Coord(0, 0));
             N->setId(IFeature::FId(IFeature::Point, lastRef));
             N->setLastUpdated(Feature::NotYetDownloaded);
             aLayer->add(N);
@@ -364,7 +366,7 @@ void ImportExportPBF::parseRelation( Layer* aLayer )
 
     Relation* R = STATIC_CAST_RELATION(theDoc->getFeature(IFeature::FId(IFeature::OsmRelation, inputRelation.id())));
     if (!R) {
-        R = new Relation();
+        R = g_backend.allocRelation();
         R->setId(IFeature::FId(IFeature::OsmRelation, inputRelation.id()));
         aLayer->add(R);
     } else {
@@ -396,7 +398,7 @@ void ImportExportPBF::parseRelation( Layer* aLayer )
         case OSMPBF::Relation::NODE: {
             Node* N = STATIC_CAST_NODE(theDoc->getFeature(IFeature::FId(IFeature::Point, lastRef)));
             if (!N) {
-                N = new Node(Coord(0, 0));
+                N = g_backend.allocNode(Coord(0, 0));
                 N->setId(IFeature::FId(IFeature::Point, lastRef));
                 N->setLastUpdated(Feature::NotYetDownloaded);
                 aLayer->add(N);
@@ -407,7 +409,7 @@ void ImportExportPBF::parseRelation( Layer* aLayer )
         case OSMPBF::Relation::WAY: {
             Way* W = STATIC_CAST_WAY(theDoc->getFeature(IFeature::FId(IFeature::LineString, lastRef)));
             if (!W) {
-                W = new Way();
+                W = g_backend.allocWay();
                 W->setId(IFeature::FId(IFeature::LineString, lastRef));
                 W->setLastUpdated(Feature::NotYetDownloaded);
                 aLayer->add(W);
@@ -418,7 +420,7 @@ void ImportExportPBF::parseRelation( Layer* aLayer )
         case OSMPBF::Relation::RELATION: {
             Relation* Rl = STATIC_CAST_RELATION(theDoc->getFeature(IFeature::FId(IFeature::OsmRelation, lastRef)));
             if (!Rl) {
-                Rl = new Relation();
+                Rl = g_backend.allocRelation();
                 Rl->setId(IFeature::FId(IFeature::OsmRelation, lastRef));
                 Rl->setLastUpdated(Feature::NotYetDownloaded);
                 aLayer->add(Rl);
@@ -450,7 +452,7 @@ void ImportExportPBF::parseDense( Layer* aLayer )
 
     Node* N = STATIC_CAST_NODE(theDoc->getFeature(IFeature::FId(IFeature::Point, m_lastDenseID)));
     if (!N) {
-        N = new Node(Coord(
+        N = g_backend.allocNode(Coord(
                 ( ( double ) m_lastDenseLongitude * m_primitiveBlock.granularity() + m_primitiveBlock.lon_offset() ) / NANO,
                 ( ( double ) m_lastDenseLatitude * m_primitiveBlock.granularity() + m_primitiveBlock.lat_offset() ) / NANO
                 ));
@@ -554,6 +556,11 @@ bool ImportExportPBF::loadFile(QString filename)
 // import the  input
 bool ImportExportPBF::import(Layer* aLayer)
 {
+    QProgressDialog progress(QApplication::tr("Importing..."), QApplication::tr("Cancel"), 0, 0);
+    progress.setWindowModality(Qt::WindowModal);
+    progress.setRange(0, Device->size());
+    progress.show();
+
     while (true) {
         if ( m_loadBlock ) {
             if ( !readNextBlock() )
@@ -577,6 +584,7 @@ bool ImportExportPBF::import(Layer* aLayer)
             continue;
         }
     }
+    progress.setValue(Device->pos());
 
     return true;
 }

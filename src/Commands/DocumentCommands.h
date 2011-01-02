@@ -48,7 +48,6 @@ class RemoveFeatureCommand : public Command
     private:
         Layer* theLayer;
         Layer* oldLayer;
-        int Idx;
         Feature* theFeature;
         CommandList* CascadedCleanUp;
         bool RemoveExecuted;

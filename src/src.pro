@@ -123,6 +123,7 @@ BINTRANSLATIONS += \
 
 #Include file(s)
 include(Merkaartor.pri)
+include(Backend/Backend.pri)
 include(../interfaces/Interfaces.pri)
 include(PaintStyle/PaintStyle.pri)
 include(PaintStyle/PaintStyleEditor.pri)
@@ -218,6 +219,7 @@ unix {
 }
 
 LIBS += -lproj
+LIBS += -lspatialite
 
 contains (PROTOBUF, 1) {
     DEFINES += USE_PROTOBUF

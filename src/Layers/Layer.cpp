@@ -11,6 +11,8 @@
 
 #include "Utils/LineF.h"
 
+#include "Global.h"
+
 #include <QApplication>
 #include <QMultiMap>
 #include <QProgressDialog>
@@ -20,47 +22,11 @@
 #include <QMenu>
 
 #include <algorithm>
-#include <RTree.h>
+#include "LayerPrivate.h"
+
+#include "Backend/SpatialiteBackend.h"
 
 /* Layer */
-
-typedef RTree<MapFeaturePtr, double, 2, double> MyRTree;
-
-class LayerPrivate
-{
-public:
-    LayerPrivate()
-    {
-        theDocument = NULL;
-        selected = false;
-        Enabled = true;
-        Readonly = false;
-        Uploadable = true;
-
-        VirtualsUpdatesBlocked = false;
-    }
-    ~LayerPrivate()
-    {
-        foreach (MapFeaturePtr f, Features)
-            delete f;
-    }
-    QList<MapFeaturePtr> Features;
-    MyRTree theRTree;
-
-    QHash<qint64, MapFeaturePtr> IdMap;
-    QString Name;
-    QString Description;
-    bool Visible;
-    bool selected;
-    bool Enabled;
-    bool Readonly;
-    bool Uploadable;
-    bool VirtualsUpdatesBlocked;
-    qreal alpha;
-    int dirtyLevel;
-
-    Document* theDocument;
-};
 
 Layer::Layer()
 :  p(new LayerPrivate), theWidget(0)
@@ -86,99 +52,6 @@ Layer::~Layer()
 {
     SAFE_DELETE(p);
 }
-
-struct IndexFindContext {
-    QMap<RenderPriority, QSet <Feature*> >* theFeatures;
-    QRectF* clipRect;
-    Projection* theProjection;
-    QTransform* theTransform;
-    bool arePointsDrawable;
-};
-
-bool __cdecl indexFindCallbackList(MapFeaturePtr F, void* ctxt)
-{
-    ((QList<MapFeaturePtr>*)(ctxt))->append(F);
-    return true;
-}
-
-bool __cdecl indexFindCallback(Feature* F, void* ctxt)
-{
-    if (F->isHidden())
-        return true;
-
-    IndexFindContext* pCtxt = (IndexFindContext*)ctxt;
-
-    if (pCtxt->theFeatures->value(F->renderPriority()).contains(F))
-        return true;
-
-    if (CHECK_WAY(F)) {
-        Way * R = STATIC_CAST_WAY(F);
-        R->buildPath(*(pCtxt->theProjection), *(pCtxt->theTransform), *(pCtxt->clipRect));
-        (*(pCtxt->theFeatures))[F->renderPriority()].insert(F);
-    } else
-    if (CHECK_RELATION(F)) {
-        Relation * RR = STATIC_CAST_RELATION(F);
-        RR->buildPath(*(pCtxt->theProjection), *(pCtxt->theTransform), *(pCtxt->clipRect));
-        (*(pCtxt->theFeatures))[F->renderPriority()].insert(F);
-    } else
-    if (F->getType() == IFeature::Point) {
-        if (pCtxt->arePointsDrawable)
-            if (!(F->isVirtual() && !M_PREFS->getVirtualNodesVisible()))
-                (*(pCtxt->theFeatures))[F->renderPriority()].insert(F);
-    } else
-        (*(pCtxt->theFeatures))[F->renderPriority()].insert(F);
-
-    return true;
-}
-
-void Layer::get(const CoordBox& bb, QList<Feature*>& theFeatures)
-{
-    double min[] = {bb.bottomLeft().x(), bb.bottomLeft().y()};
-    double max[] = {bb.topRight().x(), bb.topRight().y()};
-    p->theRTree.Search(min, max, &indexFindCallback, (void*)(&theFeatures));
-}
-
-bool getFeatureSetCallback(MapFeaturePtr /*data*/, void* /*ctxt*/)
-{
-//    if (theFeatures[(*it)->renderPriority()].contains(*it))
-//        continue;
-//
-//    if (Way * R = CAST_WAY(*it)) {
-//        R->buildPath(theProjection, theTransform, clipRect);
-//        theFeatures[(*it)->renderPriority()].insert(*it);
-//
-//    } else
-//    if (Relation * RR = CAST_RELATION(*it)) {
-//        RR->buildPath(theProjection, theTransform, clipRect);
-//        theFeatures[(*it)->renderPriority()].insert(*it);
-//    } else
-//    if (Node * pt = CAST_NODE(*it)) {
-//        if (arePointsDrawable())
-//            theFeatures[(*it)->renderPriority()].insert(*it);
-//    } else
-//        theFeatures[(*it)->renderPriority()].insert(*it);
-//
-    return true;
-}
-
-void Layer::getFeatureSet(QMap<RenderPriority, QSet <Feature*> >& theFeatures, Document* /* theDocument */,
-                   QList<CoordBox>& invalidRects, QRectF& clipRect, Projection& theProjection, QTransform& theTransform)
-{
-    if (!size())
-        return;
-
-    IndexFindContext ctxt;
-    ctxt.theFeatures = &theFeatures;
-    ctxt.clipRect = &clipRect;
-    ctxt.theProjection = &theProjection;
-    ctxt.theTransform = &theTransform;
-    ctxt.arePointsDrawable = arePointsDrawable();
-
-    for (int i=0; i < invalidRects.size(); ++i) {
-        indexFind(invalidRects[i], ctxt);
-    }
-}
-
 
 void Layer::setName(const QString& s)
 {
@@ -280,17 +153,39 @@ bool Layer::isUploadable() const
 void Layer::add(Feature* aFeature)
 {
     aFeature->setLayer(this);
-    if (!aFeature->isDeleted() && !aFeature->isVirtual())
-        indexAdd(aFeature->boundingBox(), aFeature);
     p->Features.push_back(aFeature);
     aFeature->invalidateMeta();
     notifyIdUpdate(aFeature->id(),aFeature);
 }
 
-void Layer::add(Feature* aFeature, int Idx)
+void Layer::remove(Feature* aFeature)
 {
-    add(aFeature);
-    std::rotate(p->Features.begin()+Idx,p->Features.end()-1,p->Features.end());
+    if (p->Features.removeOne(aFeature))
+    {
+        aFeature->setLayer(0);
+        notifyIdUpdate(aFeature->id(),0);
+    }
+}
+
+void Layer::deleteFeature(Feature* aFeature)
+{
+    if (p->Features.removeOne(aFeature))
+    {
+        aFeature->setLayer(0);
+        notifyIdUpdate(aFeature->id(),0);
+    }
+
+    delete aFeature;
+}
+
+void Layer::clear()
+{
+    while (p->Features.count())
+    {
+        p->Features[0]->setLayer(0);
+        notifyIdUpdate(p->Features[0]->id(),0);
+        p->Features.removeAt(0);
+    }
 }
 
 void Layer::notifyIdUpdate(const IFeature::FId& id, Feature* aFeature)
@@ -309,40 +204,6 @@ void Layer::notifyIdUpdate(const IFeature::FId& id, Feature* aFeature)
     else {
         if (!aFeature->isVirtual())
             p->IdMap.insertMulti(id.numId, aFeature);
-    }
-}
-
-void Layer::remove(Feature* aFeature)
-{
-    if (p->Features.removeOne(aFeature))
-    {
-        aFeature->setLayer(0);
-        if (!aFeature->isDeleted() && !aFeature->isVirtual())
-            indexRemove(aFeature->boundingBox(), aFeature);
-        notifyIdUpdate(aFeature->id(),0);
-    }
-}
-
-void Layer::deleteFeature(Feature* aFeature)
-{
-    if (p->Features.removeOne(aFeature))
-    {
-        aFeature->setLayer(0);
-        if (!aFeature->isDeleted() && !aFeature->isVirtual())
-            indexRemove(aFeature->boundingBox(), aFeature);
-        notifyIdUpdate(aFeature->id(),0);
-    }
-
-    delete aFeature;
-}
-
-void Layer::clear()
-{
-    while (p->Features.count())
-    {
-        p->Features[0]->setLayer(0);
-        notifyIdUpdate(p->Features[0]->id(),0);
-        p->Features.removeAt(0);
     }
 }
 
@@ -449,41 +310,6 @@ const QString& Layer::id() const
     if (Id.isEmpty())
         Id = QUuid::createUuid().toString();
     return Id;
-}
-
-void Layer::indexAdd(const CoordBox& bb, const MapFeaturePtr aFeat)
-{
-    if (bb.isNull())
-        return;
-    double min[] = {bb.bottomLeft().x(), bb.bottomLeft().y()};
-    double max[] = {bb.topRight().x(), bb.topRight().y()};
-    p->theRTree.Insert(min, max, aFeat);
-}
-
-void Layer::indexRemove(const CoordBox& bb, const MapFeaturePtr aFeat)
-{
-    if (bb.isNull())
-        return;
-    double min[] = {bb.bottomLeft().x(), bb.bottomLeft().y()};
-    double max[] = {bb.topRight().x(), bb.topRight().y()};
-    p->theRTree.Remove(min, max, aFeat);
-}
-
-const QList<MapFeaturePtr>& Layer::indexFind(const CoordBox& bb)
-{
-    double min[] = {bb.bottomLeft().x(), bb.bottomLeft().y()};
-    double max[] = {bb.topRight().x(), bb.topRight().y()};
-    findResult.clear();
-    p->theRTree.Search(min, max, &indexFindCallbackList, (void*)&findResult);
-
-    return findResult;
-}
-
-void Layer::indexFind(const CoordBox& bb, const IndexFindContext& ctxt)
-{
-    double min[] = {bb.bottomLeft().x(), bb.bottomLeft().y()};
-    double max[] = {bb.topRight().x(), bb.topRight().y()};
-    p->theRTree.Search(min, max, &indexFindCallback, (void*)&ctxt);
 }
 
 CoordBox Layer::boundingBox()
@@ -630,6 +456,12 @@ Layer * Layer::fromXML(Layer* l, Document* /*d*/, QXmlStreamReader& stream, QPro
 }
 
 // DrawingLayer
+
+DrawingLayer::DrawingLayer()
+    : Layer()
+{
+    p->Visible = true;
+}
 
 DrawingLayer::DrawingLayer(const QString & aName)
     : Layer(aName)
@@ -806,14 +638,14 @@ void TrackLayer::extractLayer()
 
             PL.clear();
 
-            P = new Node( S->getNode(0)->position() );
+            P = g_backend.allocNode( S->getNode(0)->position() );
             P->setTime(S->getNode(0)->time());
             P->setElevation(S->getNode(0)->elevation());
             P->setSpeed(S->getNode(0)->speed());
             PL.append(P);
             int startP = 0;
 
-            P = new Node( S->getNode(1)->position() );
+            P = g_backend.allocNode( S->getNode(1)->position() );
             P->setTime(S->getNode(1)->time());
             P->setElevation(S->getNode(1)->elevation());
             P->setSpeed(S->getNode(1)->speed());
@@ -821,7 +653,7 @@ void TrackLayer::extractLayer()
             int endP = 1;
 
             for (int j=2; j < S->size(); j++) {
-                P = new Node( S->getNode(j)->position() );
+                P = g_backend.allocNode( S->getNode(j)->position() );
                 P->setTime(S->getNode(j)->time());
                 P->setElevation(S->getNode(j)->elevation());
                 P->setSpeed(S->getNode(j)->speed());
@@ -834,14 +666,14 @@ void TrackLayer::extractLayer()
                     if (d < konstant) {
                         Node* P = PL[k];
                         PL.removeAt(k);
-                        delete P;
+                        g_backend.deallocFeature(P);
                         endP--;
                     } else
                         startP = k;
                 }
             }
 
-            Way* R = new Way();
+            Way* R = g_backend.allocWay();
             R->setLastUpdated(Feature::OSMServer);
             extL->add(R);
             for (int i=0; i < PL.size(); i++) {

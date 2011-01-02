@@ -62,7 +62,7 @@ public:
     double ZoomLevel;
 //    int AbstractZoomLevel;
     CoordBox Viewport;
-    QList<CoordBox> invalidRects;
+    QList<QRectF> invalidRects;
     QPoint theVectorPanDelta;
     qreal theVectorRotation;
     QMap<RenderPriority, QSet <Feature*> > theFeatures;
@@ -404,8 +404,9 @@ void MapView::buildFeatureSet()
 {
     QRectF clipRect = p->theInvertedTransform.mapRect(QRectF(rect().adjusted(-200, -200, 200, 200)));
 
-    for (int i=0; i<theDocument->layerSize(); ++i)
-        theDocument->getLayer(i)->getFeatureSet(p->theFeatures, theDocument, p->invalidRects, clipRect, theProjection, p->theTransform);
+//    for (int i=0; i<theDocument->layerSize(); ++i)
+//        theDocument->getLayer(i)->getFeatureSet(p->theFeatures, theDocument, p->invalidRects, clipRect, theProjection, p->theTransform);
+    g_backend.getFeatureSet(p->theFeatures, p->invalidRects, clipRect, theProjection, p->theTransform);
 }
 
 bool testColor(const QImage& theImage, const QPoint& P, const QRgb& targetColor)

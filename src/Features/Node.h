@@ -23,81 +23,84 @@ class QProgressDialog;
 
 class Node : public Feature
 {
-    public:
-        Node(const Coord& aCoord);
-        Node(const Node& other);
-        virtual ~Node();
+    friend class MemoryBackend;
 
-        virtual QString getClass() const {return "Node";}
-        virtual char getType() const {return IFeature::Point;}
-        virtual void updateMeta();
+protected:
+    Node(const Coord& aCoord);
+    Node(const Node& other);
+    virtual ~Node();
 
-        virtual const CoordBox& boundingBox(bool update=true) const;
-        virtual void draw(QPainter& P, MapView* theView);
-        virtual void drawSpecial(QPainter& P, QPen& Pen, MapView* theView);
-        virtual void drawParentsSpecial(QPainter& P, QPen& Pen, MapView* theView);
-        virtual void drawChildrenSpecial(QPainter& P, QPen& Pen, MapView* theView, int depth);
+public:
+    virtual QString getClass() const {return "Node";}
+    virtual char getType() const {return IFeature::Point;}
+    virtual void updateMeta();
+
+    virtual const CoordBox& boundingBox(bool update=true) const;
+    virtual void draw(QPainter& P, MapView* theView);
+    virtual void drawSpecial(QPainter& P, QPen& Pen, MapView* theView);
+    virtual void drawParentsSpecial(QPainter& P, QPen& Pen, MapView* theView);
+    virtual void drawChildrenSpecial(QPainter& P, QPen& Pen, MapView* theView, int depth);
 
 #ifdef GEOIMAGE
-        virtual void drawHover(QPainter& P, MapView* theView);
+    virtual void drawHover(QPainter& P, MapView* theView);
 #endif
 
-        virtual double pixelDistance(const QPointF& Target, double ClearEndDistance, bool selectNodes, MapView* theView) const;
-        virtual void cascadedRemoveIfUsing(Document* theDocument, Feature* aFeature, CommandList* theList, const QList<Feature*>& Alternatives);
-        virtual bool notEverythingDownloaded();
-        virtual QString description() const;
+    virtual double pixelDistance(const QPointF& Target, double ClearEndDistance, bool selectNodes, MapView* theView) const;
+    virtual void cascadedRemoveIfUsing(Document* theDocument, Feature* aFeature, CommandList* theList, const QList<Feature*>& Alternatives);
+    virtual bool notEverythingDownloaded();
+    virtual QString description() const;
 
-        virtual int find(Feature* Pt) const;
-        virtual void remove(int idx);
-        virtual void remove(Feature* F);
-        virtual int size() const;
-        virtual Feature* get(int idx);
-        virtual const Feature* get(int Idx) const;
-        virtual bool isNull() const;
-        virtual bool isInteresting() const;
-        virtual bool isPOI();
-        virtual bool isWaypoint();
+    virtual int find(Feature* Pt) const;
+    virtual void remove(int idx);
+    virtual void remove(Feature* F);
+    virtual int size() const;
+    virtual Feature* get(int idx);
+    virtual const Feature* get(int Idx) const;
+    virtual bool isNull() const;
+    virtual bool isInteresting() const;
+    virtual bool isPOI();
+    virtual bool isWaypoint();
 
-        /** check if the feature is drawable
+    /** check if the feature is drawable
          * @return true if to be drawn
          */
-        virtual bool isSelectable(MapView* view);
+    virtual bool isSelectable(MapView* view);
 
-        Coord position() const;
-        void setPosition(const Coord& aCoord);
-        const QPointF& projection() const;
-        void setProjection(const QPointF& aProjection);
+    Coord position() const;
+    void setPosition(const Coord& aCoord);
+    const QPointF& projection() const;
+    void setProjection(const QPointF& aProjection);
 #ifndef _MOBILE
-        int projectionRevision() const;
-        void setProjectionRevision(int aProjectionRevision);
+    int projectionRevision() const;
+    void setProjectionRevision(int aProjectionRevision);
 #endif
 
-        double speed() const;
-        void setSpeed(double aSpeed);
+    double speed() const;
+    void setSpeed(double aSpeed);
 
-        double elevation() const;
-        void setElevation(double aElevation);
+    double elevation() const;
+    void setElevation(double aElevation);
 
-        bool hasPhoto() const;
-        QPixmap photo() const;
-        void setPhoto(QPixmap thePhoto);
+    bool hasPhoto() const;
+    QPixmap photo() const;
+    void setPhoto(QPixmap thePhoto);
 
-        virtual void partChanged(Feature* F, int ChangeId);
+    virtual void partChanged(Feature* F, int ChangeId);
 
-        virtual bool toXML(QXmlStreamWriter& stream, QProgressDialog * progress, bool strict=false, QString changetsetid="");
-        virtual bool toGPX(QXmlStreamWriter& stream, QProgressDialog * progress, QString element, bool forExport=false);
-        static Node* fromXML(Document* d, Layer* L, QXmlStreamReader& stream);
-        static Node* fromGPX(Document* d, Layer* L, QXmlStreamReader& stream);
+    virtual bool toXML(QXmlStreamWriter& stream, QProgressDialog * progress, bool strict=false, QString changetsetid="");
+    virtual bool toGPX(QXmlStreamWriter& stream, QProgressDialog * progress, QString element, bool forExport=false);
+    static Node* fromXML(Document* d, Layer* L, QXmlStreamReader& stream);
+    static Node* fromGPX(Document* d, Layer* L, QXmlStreamReader& stream);
 
-        virtual QString toHtml();
+    virtual QString toHtml();
 
-    private:
-        CoordBox Position;
-        double Elevation;
-        double Speed;
+private:
+    CoordBox Position;
+    double Elevation;
+    double Speed;
 
-    private:
-        NodePrivate* p;
+private:
+    NodePrivate* p;
 
 };
 
@@ -120,7 +123,7 @@ template<> struct coordinate_system<NodePtr>
 { typedef cs::cartesian type; };
 
 template<> struct dimension<NodePtr>
-    : boost::mpl::int_<2> {};
+        : boost::mpl::int_<2> {};
 
 template<>
 struct access<NodePtr>
@@ -131,13 +134,13 @@ struct access<NodePtr>
         return I == 0 ? p->projection().x() : p->projection().y();
     }
 
-//    template <std::size_t I>
-//    static inline void set(TrackPointPtr& p, const qreal& value)
-//    {
-//        // Or (better) implement an accessor with specializations
-//        if (I == 0) p->position().setLon(value);
-//        else if (I == 1) p->position().setLat(value);
-//    }
+    //    template <std::size_t I>
+    //    static inline void set(TrackPointPtr& p, const qreal& value)
+    //    {
+    //        // Or (better) implement an accessor with specializations
+    //        if (I == 0) p->position().setLon(value);
+    //        else if (I == 1) p->position().setLat(value);
+    //    }
 
 };
 

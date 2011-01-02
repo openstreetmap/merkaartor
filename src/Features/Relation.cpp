@@ -5,6 +5,7 @@
 #include "RelationCommands.h"
 #include "Document.h"
 #include "Utils/LineF.h"
+#include "Global.h"
 
 #include <QApplication>
 #include <QAbstractTableModel>
@@ -134,8 +135,12 @@ void Relation::partChanged(Feature*, int ChangeId)
     if (isDeleted())
         return;
 
+    g_backend.indexRemove(p->BBox, this);
+
     p->BBoxUpToDate = false;
     MetaUpToDate = false;
+
+    g_backend.indexAdd(boundingBox(), this);
     notifyParents(ChangeId);
 }
 
@@ -307,15 +312,14 @@ bool Relation::notEverythingDownloaded()
 
 void Relation::add(const QString& Role, Feature* F)
 {
-    if (layer())
-        layer()->indexRemove(p->BBox, this);
+    g_backend.indexRemove(p->BBox, this);
     p->Members.push_back(qMakePair(Role,F));
     F->setParentFeature(this);
     p->BBoxUpToDate = false;
     MetaUpToDate = false;
-    if (layer() && !isDeleted()) {
+    if (!isDeleted()) {
         CoordBox bb = boundingBox();
-        layer()->indexAdd(boundingBox(), this);
+        g_backend.indexAdd(bb, this);
     }
 
     notifyChanges();
@@ -323,16 +327,15 @@ void Relation::add(const QString& Role, Feature* F)
 
 void Relation::add(const QString& Role, Feature* F, int Idx)
 {
-    if (layer())
-        layer()->indexRemove(p->BBox, this);
+    g_backend.indexRemove(p->BBox, this);
     p->Members.push_back(qMakePair(Role,F));
     std::rotate(p->Members.begin()+Idx,p->Members.end()-1,p->Members.end());
     F->setParentFeature(this);
     p->BBoxUpToDate = false;
     MetaUpToDate = false;
-    if (layer() && !isDeleted()) {
+    if (!isDeleted()) {
         CoordBox bb = boundingBox();
-        layer()->indexAdd(bb, this);
+        g_backend.indexAdd(bb, this);
     }
 
     notifyChanges();
@@ -340,8 +343,7 @@ void Relation::add(const QString& Role, Feature* F, int Idx)
 
 void Relation::remove(int Idx)
 {
-    if (layer())
-        layer()->indexRemove(p->BBox, this);
+    g_backend.indexRemove(p->BBox, this);
     Feature* F = p->Members[Idx].second;
     // only remove as parent if the feature is only a member once
     p->Members.erase(p->Members.begin()+Idx);
@@ -349,9 +351,9 @@ void Relation::remove(int Idx)
         F->unsetParentFeature(this);
     p->BBoxUpToDate = false;
     MetaUpToDate = false;
-    if (layer() && !isDeleted()) {
+    if (!isDeleted()) {
         CoordBox bb = boundingBox();
-        layer()->indexAdd(bb, this);
+        g_backend.indexAdd(bb, this);
     }
 
     notifyChanges();
@@ -527,7 +529,7 @@ Relation * Relation::fromXML(Document * d, Layer * L, QXmlStreamReader& stream)
                 Node* Part = CAST_NODE(d->getFeature(nId));
                 if (!Part)
                 {
-                    Part = new Node(Coord(0,0));
+                    Part = g_backend.allocNode(Coord(0,0));
                     Part->setId(nId);
                     Part->setLastUpdated(Feature::NotYetDownloaded);
                     L->add(Part);
@@ -538,7 +540,7 @@ Relation * Relation::fromXML(Document * d, Layer * L, QXmlStreamReader& stream)
                 Way* Part = CAST_WAY(d->getFeature(rId));
                 if (!Part)
                 {
-                    Part = new Way;
+                    Part = g_backend.allocWay();
                     Part->setId(rId);
                     Part->setLastUpdated(Feature::NotYetDownloaded);
                     L->add(Part);

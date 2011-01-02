@@ -427,6 +427,7 @@ bool ImageMapLayer::toXML(QXmlStreamWriter& stream, bool asTemplate, QProgressDi
 ImageMapLayer * ImageMapLayer::fromXML(Document* d, QXmlStreamReader& stream, QProgressDialog * /*progress*/)
 {
     ImageMapLayer* l = new ImageMapLayer(stream.attributes().value("name").toString());
+
     l->setId(stream.attributes().value("xml:id").toString());
     d->addImageLayer(l);
 
@@ -728,7 +729,7 @@ QRect ImageMapLayer::drawFull(MapView& theView, QRect& rect)
                         IFeature::FId id(IFeature::Point, -(f->id().numId));
                         if (get(id))
                             continue;
-                        Node* N = new Node(Coord((QPointF)thePath.elementAt(0)));
+                        Node* N = g_backend.allocNode(Coord((QPointF)thePath.elementAt(0)));
                         N->setId(id);
                         add(N);
                         for (int i=0; i<f->tagSize(); ++i)
@@ -737,10 +738,10 @@ QRect ImageMapLayer::drawFull(MapView& theView, QRect& rect)
                         IFeature::FId id(IFeature::LineString, -(f->id().numId));
                         if (get(id))
                             continue;
-                        Way* W = new Way();
+                        Way* W = g_backend.allocWay();
                         W->setId(id);
                         for (int i=0; i<thePath.elementCount(); ++i) {
-                            Node* N = new Node(Coord((QPointF)thePath.elementAt(i)));
+                            Node* N = g_backend.allocNode(Coord((QPointF)thePath.elementAt(i)));
                             add(N);
                             W->add(N);
                         }

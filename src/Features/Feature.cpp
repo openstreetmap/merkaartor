@@ -383,12 +383,10 @@ void Feature::setDeleted(bool delState)
     if (delState == p->Deleted)
         return;
 
-    if (layer()) {
-        if (delState)
-            layer()->indexRemove(boundingBox(false), this);
-        else
-            layer()->indexAdd(boundingBox(), this);
-    }
+    if (delState)
+        g_backend.indexRemove(boundingBox(false), this);
+    else
+        g_backend.indexAdd(boundingBox(), this);
     p->Deleted = delState;
 }
 
@@ -424,8 +422,12 @@ void Feature::setVirtual(bool val)
         return;
 
     p->Virtual = val;
-    if (!p->Virtual)
+    if (!p->Virtual) {
         resetId();
+        g_backend.indexAdd(boundingBox(), this);
+    } else {
+        g_backend.indexRemove(boundingBox(), this);
+    }
 }
 
 bool Feature::isVirtual() const
@@ -673,10 +675,8 @@ void Feature::updateIndex()
     if (isDeleted())
         return;
 
-    if (layer()) {
-        layer()->indexRemove(boundingBox(false), this);
-        layer()->indexAdd(boundingBox(true), this);
-    }
+    g_backend.indexRemove(boundingBox(false), this);
+    g_backend.indexAdd(boundingBox(true), this);
 }
 
 void Feature::updateFilters()
@@ -963,7 +963,7 @@ Node* Feature::getTrackPointOrCreatePlaceHolder(Document *theDocument, Layer *th
     Node* Part = CAST_NODE(theDocument->getFeature(Id));
     if (!Part)
     {
-        Part = new Node(Coord(0,0));
+        Part = g_backend.allocNode(Coord(0,0));
         Part->setId(Id);
         Part->setLastUpdated(Feature::NotYetDownloaded);
         if (!theLayer)
@@ -978,7 +978,7 @@ Way* Feature::getWayOrCreatePlaceHolder(Document *theDocument, Layer *theLayer, 
     Way* Part = CAST_WAY(theDocument->getFeature(Id));
     if (!Part)
     {
-        Part = new Way;
+        Part = g_backend.allocWay();
         Part->setId(Id);
         Part->setLastUpdated(Feature::NotYetDownloaded);
         if (!theLayer)
@@ -994,7 +994,7 @@ Relation* Feature::getRelationOrCreatePlaceHolder(Document *theDocument, Layer *
     Relation* Part = CAST_RELATION(theDocument->getFeature(Id));
     if (!Part)
     {
-        Part = new Relation;
+        Part = g_backend.allocRelation();
         Part->setId(Id);
         Part->setLastUpdated(Feature::NotYetDownloaded);
         if (!theLayer)

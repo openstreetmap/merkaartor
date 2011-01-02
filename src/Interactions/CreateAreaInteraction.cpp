@@ -11,6 +11,7 @@
 #include "MainWindow.h"
 #include "PropertiesDock.h"
 #include "Utils/MDiscardableDialog.h"
+#include "Global.h"
 
 #include <QtGui/QDockWidget>
 #include <QtGui/QMessageBox>
@@ -102,7 +103,7 @@ void CreateAreaInteraction::startNewRoad(QMouseEvent* anEvent, Feature* aFeature
         Coord P(XY_TO_COORD(anEvent->pos()));
         CommandList* theList  = new CommandList(MainWindow::tr("Create Area %1").arg(aRoad->description()), aRoad);
         int SnapIdx = findSnapPointIndex(aRoad, P);
-        Node* N = new Node(P);
+        Node* N = g_backend.allocNode(P);
         theList->add(new AddFeatureCommand(main()->document()->getDirtyOrOriginLayer(),N,true));
         theList->add(new WayAddNodeCommand(aRoad,N,SnapIdx));
         document()->addHistory(theList);
@@ -114,7 +115,7 @@ void CreateAreaInteraction::startNewRoad(QMouseEvent* anEvent, Feature* aFeature
 void CreateAreaInteraction::createNewRoad(CommandList* L)
 {
     Node* From = 0;
-    theRoad = new Way;
+    theRoad = g_backend.allocWay();
     if (FirstNode)
     {
         From = FirstNode;
@@ -124,7 +125,7 @@ void CreateAreaInteraction::createNewRoad(CommandList* L)
     }
     else
     {
-        From = new Node(FirstPoint);
+        From = g_backend.allocNode(FirstPoint);
         L->add(new AddFeatureCommand(Main->document()->getDirtyOrOriginLayer(),From,true));
     }
     L->add(new AddFeatureCommand(Main->document()->getDirtyOrOriginLayer(),theRoad,true));
@@ -144,7 +145,7 @@ void CreateAreaInteraction::finishRoad(CommandList* L)
         L->add(new RelationAddFeatureCommand(theRelation,"inner",theRoad));
     else if (LastRoad)
     {
-        theRelation = new Relation;
+        theRelation = g_backend.allocRelation();
         L->add(new AddFeatureCommand(Main->document()->getDirtyOrOriginLayer(),theRelation,true));
         if (M_PREFS->getAutoSourceTag()) {
             QStringList sl = Main->document()->getCurrentSourceTags();
@@ -180,7 +181,7 @@ void CreateAreaInteraction::addToRoad(QMouseEvent* anEvent, Feature* Snap, Comma
     {
         Coord P(XY_TO_COORD(anEvent->pos()));
         int SnapIdx = findSnapPointIndex(aRoad, P);
-        Node* N = new Node(P);
+        Node* N = g_backend.allocNode(P);
         CommandList* theList  = new CommandList(MainWindow::tr("Area: Add node %1 to Road %2").arg(N->description()).arg(theRoad->description()), N);
         theList->add(new AddFeatureCommand(main()->document()->getDirtyOrOriginLayer(),N,true));
         theList->add(new WayAddNodeCommand(aRoad,N,SnapIdx));
@@ -190,7 +191,7 @@ void CreateAreaInteraction::addToRoad(QMouseEvent* anEvent, Feature* Snap, Comma
     }
     if (!To)
     {
-        To = new Node(XY_TO_COORD(anEvent->pos()));
+        To = g_backend.allocNode(XY_TO_COORD(anEvent->pos()));
         L->add(new AddFeatureCommand(Main->document()->getDirtyOrOriginLayer(),To,true));
         L->setDescription(MainWindow::tr("Area: Add node %1 to Road %2").arg(To->description()).arg(theRoad->description()));
         L->setFeature(To);

@@ -87,23 +87,8 @@
 #include "qgps.h"
 #include "qgpsdevice.h"
 
-#include <QtCore/QDir>
-#include <QtCore/QFileInfo>
-#include <QtCore/QtGlobal>
-#include <QtCore/QTimer>
-#include <QtGui/QDialog>
-#include <QtGui/QFileDialog>
-#include <QtGui/QMessageBox>
-#include <QtGui/QMouseEvent>
-#include <QInputDialog>
-#include <QClipboard>
-#include <QProgressDialog>
-#include <QMenuBar>
-#include <QTranslator>
-#include <QLocale>
-#include <QMessageBox>
-#include <QStyleFactory>
-#include <QMenu>
+#include <QtCore>
+#include <QtGui>
 #include <QTcpServer>
 #include <QXmlStreamReader>
 
@@ -2232,7 +2217,7 @@ void MainWindow::on_areaTerraceAction_triggered()
 
 void MainWindow::on_createRelationAction_triggered()
 {
-    Relation* R = new Relation;
+    Relation* R = g_backend.allocRelation();
     for (int i = 0; i < p->theProperties->size(); ++i)
         R->add("", p->theProperties->selection(i));
     CommandList* theList = new CommandList(MainWindow::tr("Create Relation %1").arg(R->description()), R);
@@ -3526,7 +3511,7 @@ void MainWindow::updateGpsPosition(float latitude, float longitude, QDateTime ti
         }
 
         if (ui->gpsRecordAction->isChecked() && !ui->gpsPauseAction->isChecked()) {
-            Node* pt = new Node(gpsCoord);
+            Node* pt = g_backend.allocNode(gpsCoord);
             pt->setTime(time);
             pt->setElevation(altitude);
             pt->setSpeed(speed);
@@ -3561,7 +3546,7 @@ void MainWindow::on_gpsRecordAction_triggered()
             gpsRecLayer->setName(fn);
             theDocument->add(gpsRecLayer);
 
-            curGpsTrackSegment = new TrackSegment();
+            curGpsTrackSegment = g_backend.allocSegment();
             gpsRecLayer->add(curGpsTrackSegment);
         } else {
             ui->gpsRecordAction->setChecked(false);
@@ -3578,7 +3563,7 @@ void MainWindow::on_gpsPauseAction_triggered()
         }
     } else {
         if (theDocument && ui->gpsRecordAction->isChecked()) {
-            curGpsTrackSegment = new TrackSegment();
+            curGpsTrackSegment = g_backend.allocSegment();
             gpsRecLayer->add(curGpsTrackSegment);
         }
     }

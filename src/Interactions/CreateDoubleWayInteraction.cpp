@@ -8,6 +8,7 @@
 #include "Utils/LineF.h"
 #include "MainWindow.h"
 #include "Preferences/MerkaartorPreferences.h"
+#include "Global.h"
 
 #include <QtGui/QDockWidget>
 #include <QtGui/QPainter>
@@ -172,9 +173,9 @@ void CreateDoubleWayInteraction::mousePressEvent(QMouseEvent* anEvent)
                     P1.intersectionWith(N1).toPoint())));
                 L->add(new MoveNodeCommand(A2,XY_TO_COORD(
                     P2.intersectionWith(N2).toPoint())));
-                Node* B1 = new Node(XY_TO_COORD(
+                Node* B1 = g_backend.allocNode(XY_TO_COORD(
                     FB1.project(LastCursor).toPoint()));
-                Node* B2 = new Node(XY_TO_COORD(
+                Node* B2 = g_backend.allocNode(XY_TO_COORD(
                     FB2.project(LastCursor).toPoint()));
 
                 L->add(new AddFeatureCommand(Main->document()->getDirtyOrOriginLayer(),B1,true));
@@ -205,16 +206,16 @@ void CreateDoubleWayInteraction::mousePressEvent(QMouseEvent* anEvent)
                 FB1.slide(rB*Modifier);
                 FB2.slide(-rB*Modifier);
 
-                Node* A1 = new Node(XY_TO_COORD(
+                Node* A1 = g_backend.allocNode(XY_TO_COORD(
                     FA1.project(COORD_TO_XY(PreviousPoint)).toPoint()));
-                Node* A2 = new Node(XY_TO_COORD(
+                Node* A2 = g_backend.allocNode(XY_TO_COORD(
                     FA2.project(COORD_TO_XY(PreviousPoint)).toPoint()));
-                Node* B1 = new Node(XY_TO_COORD(
+                Node* B1 = g_backend.allocNode(XY_TO_COORD(
                     FB1.project(LastCursor).toPoint()));
-                Node* B2 = new Node(XY_TO_COORD(
+                Node* B2 = g_backend.allocNode(XY_TO_COORD(
                     FB2.project(LastCursor).toPoint()));
-                R1 = new Way;
-                R2 = new Way;
+                R1 = g_backend.allocWay();
+                R2 = g_backend.allocWay();
 
                 CommandList* L  = new CommandList(MainWindow::tr("Create double-way Road %1").arg(R1->id().numId), R1);
                 L->add(new AddFeatureCommand(Main->document()->getDirtyOrOriginLayer(),A1,true));

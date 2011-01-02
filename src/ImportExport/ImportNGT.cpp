@@ -3,6 +3,7 @@
 #include "Document.h"
 #include "Node.h"
 #include "TrackSegment.h"
+#include "Global.h"
 
 #include <QtCore/QFile>
 #include <QtCore/QStringList>
@@ -17,14 +18,14 @@ bool importNGT(QWidget* /* aParent */, const QString& aFilename, Document* theDo
     {
         QTextStream s(&f);
         CommandList* theList  = new CommandList(MainWindow::tr("Import NGT"), NULL);
-        TrackSegment* theSegment = new TrackSegment;
+        TrackSegment* theSegment = g_backend.allocSegment();
         while (!f.atEnd())
         {
             QString Line(f.readLine());
             QStringList Items(Line.split('|'));
             if (Items.count() >= 5)
             {
-                Node* Pt = new Node(Coord(Items[3].toDouble()*COORD_MAX, Items[4].toDouble()*COORD_MAX));
+                Node* Pt = g_backend.allocNode(Coord(Items[3].toDouble()*COORD_MAX, Items[4].toDouble()*COORD_MAX));
                 Pt->setLastUpdated(Feature::Log);
                 theList->add(new AddFeatureCommand(theLayer,Pt, true));
                 theSegment->add(Pt);
@@ -33,7 +34,7 @@ bool importNGT(QWidget* /* aParent */, const QString& aFilename, Document* theDo
         if (theList->empty())
         {
             delete theList;
-            delete theSegment;
+            g_backend.deallocFeature(theSegment);
         }
         else
         {

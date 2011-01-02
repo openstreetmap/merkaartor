@@ -613,6 +613,7 @@ bool downloadFeatures(MainWindow* Main, const QList<IFeature::FId>& idList , Doc
         } else
             theLayer = (Layer*)theDocument->getLastDownloadLayer();
     }
+
     QString osmWebsite, osmUser, osmPwd;
 
     osmWebsite = M_PREFS->getOsmWebsite();

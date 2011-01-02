@@ -11,56 +11,59 @@ class QProgressDialog;
 
 class Relation : public Feature
 {
-    public:
-        Relation(void);
-        Relation(const Relation&);
-        virtual ~Relation(void);
+    friend class MemoryBackend;
 
-        virtual QString getClass() const {return "Relation";}
-        virtual char getType() const {return IFeature::OsmRelation;}
-        virtual void updateMeta();
+protected:
+    Relation(void);
+    Relation(const Relation&);
+    virtual ~Relation(void);
 
-        virtual const CoordBox& boundingBox(bool update=true) const;
-        virtual void draw(QPainter& P, MapView* theView);
-        virtual void drawSpecial(QPainter& P, QPen& Pen, MapView* theView);
-        virtual void drawParentsSpecial(QPainter& P, QPen& Pen, MapView* theView);
-        virtual void drawChildrenSpecial(QPainter& P, QPen& Pen, MapView* theView, int depth);
+public:
+    virtual QString getClass() const {return "Relation";}
+    virtual char getType() const {return IFeature::OsmRelation;}
+    virtual void updateMeta();
 
-        virtual double pixelDistance(const QPointF& Target, double ClearEndDistance, bool selectNodes, MapView* theView) const;
-        virtual void cascadedRemoveIfUsing(Document* theDocument, Feature* aFeature, CommandList* theList, const QList<Feature*>& Alternatives);
-        virtual bool notEverythingDownloaded();
-        virtual const RenderPriority& renderPriority();
+    virtual const CoordBox& boundingBox(bool update=true) const;
+    virtual void draw(QPainter& P, MapView* theView);
+    virtual void drawSpecial(QPainter& P, QPen& Pen, MapView* theView);
+    virtual void drawParentsSpecial(QPainter& P, QPen& Pen, MapView* theView);
+    virtual void drawChildrenSpecial(QPainter& P, QPen& Pen, MapView* theView, int depth);
 
-        void add(const QString& Role, Feature* Pt);
-        void add(const QString& Role, Feature* Pt, int Idx);
-        virtual void remove(int Idx);
-        virtual void remove(Feature* F);
-        virtual int size() const;
-        virtual int find(Feature* Pt) const;
-        virtual Feature* get(int idx);
-        virtual const Feature* get(int Idx) const;
-        virtual bool isNull() const;
+    virtual double pixelDistance(const QPointF& Target, double ClearEndDistance, bool selectNodes, MapView* theView) const;
+    virtual void cascadedRemoveIfUsing(Document* theDocument, Feature* aFeature, CommandList* theList, const QList<Feature*>& Alternatives);
+    virtual bool notEverythingDownloaded();
+    virtual const RenderPriority& renderPriority();
 
-        const QString& getRole(int Idx) const;
-        QAbstractTableModel* referenceMemberModel(MainWindow* aMain);
-        void releaseMemberModel();
-        QString description() const;
+    void add(const QString& Role, Feature* Pt);
+    void add(const QString& Role, Feature* Pt, int Idx);
+    virtual void remove(int Idx);
+    virtual void remove(Feature* F);
+    virtual int size() const;
+    virtual int find(Feature* Pt) const;
+    virtual Feature* get(int idx);
+    virtual const Feature* get(int Idx) const;
+    virtual bool isNull() const;
 
-        virtual void setLayer(Layer* aLayer);
-        virtual void partChanged(Feature* F, int ChangeId);
+    const QString& getRole(int Idx) const;
+    QAbstractTableModel* referenceMemberModel(MainWindow* aMain);
+    void releaseMemberModel();
+    QString description() const;
 
-        const QPainterPath& getPath() const;
-        void buildPath(Projection const &theProjection, const QTransform& theTransform, const QRectF& clipRect);
+    virtual void setLayer(Layer* aLayer);
+    virtual void partChanged(Feature* F, int ChangeId);
 
-        virtual bool toXML(QXmlStreamWriter& stream, QProgressDialog * progress, bool strict=false, QString changetsetid="");
-        static Relation* fromXML(Document* d, Layer* L, QXmlStreamReader& stream);
+    const QPainterPath& getPath() const;
+    void buildPath(Projection const &theProjection, const QTransform& theTransform, const QRectF& clipRect);
 
-        virtual QString toHtml();
+    virtual bool toXML(QXmlStreamWriter& stream, QProgressDialog * progress, bool strict=false, QString changetsetid="");
+    static Relation* fromXML(Document* d, Layer* L, QXmlStreamReader& stream);
 
-        double widthOf();
+    virtual QString toHtml();
 
-    private:
-        RelationPrivate* p;
+    double widthOf();
+
+private:
+    RelationPrivate* p;
 };
 
 Q_DECLARE_METATYPE( Relation * );

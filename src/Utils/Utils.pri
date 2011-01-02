@@ -39,4 +39,3 @@ FORMS += \
 
 RESOURCES += \
     Utils/Utils.qrc
-

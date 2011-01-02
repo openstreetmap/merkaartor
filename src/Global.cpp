@@ -31,6 +31,7 @@ bool g_Merk_SelfClip = false;
 #endif
 
 MainWindow* g_Merk_MainWindow = NULL;
+MemoryBackend g_backend;
 
 QStringList tagKeys;
 QHash<QString, quint32> tagKeysHash;

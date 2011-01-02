@@ -5,6 +5,7 @@
 #include "DocumentCommands.h"
 #include "LayerWidget.h"
 #include "PropertiesDock.h"
+#include "Global.h"
 
 #ifdef USE_ZBAR
 #include <zbar.h>
@@ -231,7 +232,7 @@ void GeoImageDock::removeImages(void)
         }
         if (usedTrackPoints.at(i).inserted) {
             Pt->layer()->remove(Pt);
-            delete Pt;
+            g_backend.deallocFeature(Pt);
         }
         else
             Pt->clearTag("Picture");
@@ -382,9 +383,9 @@ void GeoImageDock::loadImage(QString file, Coord pos)
         else
             Pt = 0;
     if (!Pt) {
-        Pt = new Node(pos);
+        Pt = g_backend.allocNode(pos);
         theLayer->add(Pt);
-        theLayer->indexAdd(Pt->boundingBox(), Pt);
+        g_backend.indexAdd(Pt->boundingBox(), Pt);
     }
 
     QDateTime time = QFileInfo(file).created();
@@ -636,9 +637,9 @@ void GeoImageDock::loadImages(QStringList fileNames)
                     Pt = 0;
             }
             if (!Pt) {
-                Pt = new Node(newPos);
+                Pt = g_backend.allocNode(newPos);
                 theLayer->add(Pt);
-                theLayer->indexAdd(Pt->boundingBox(), Pt);
+                g_backend.indexAdd(Pt->boundingBox(), Pt);
             }
 
             //Pt->setTag("_waypoint_", "true");

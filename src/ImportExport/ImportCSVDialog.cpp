@@ -14,6 +14,7 @@
 #include "ui_ImportCSVDialog.h"
 #include "Features.h"
 #include "Layer.h"
+#include "Global.h"
 
 #include <QTimer>
 #include <QMessageBox>
@@ -181,7 +182,7 @@ Feature* ImportCSVDialog::generateOSM(QString line)
     if (flds.size() < 2)
         return NULL;
 
-    Node *N = new Node(Coord(0, 0));
+    Node *N = g_backend.allocNode(Coord(0, 0));
     int lidx=0;
     for (int i=0; i<Fields.size(); ++i) {
         CSVField f = Fields[i];
@@ -230,7 +231,7 @@ Feature* ImportCSVDialog::generateOSM(QString line)
         ++lidx;
     }
     if (!hasLat || !hasLon) {
-        delete N;
+        g_backend.deallocFeature(N);
         return NULL;
     }
     if (CSVProjection.projIsLatLong())

@@ -255,7 +255,7 @@ void MoveNodeInteraction::snapMouseMoveEvent(QMouseEvent* event, Feature* Closer
                 theList->setDescription(MainWindow::tr("Create node in Road: %1").arg(aRoad->id().numId));
                 theList->setFeature(aRoad);
                 int SnapIdx = aRoad->findVirtual(v)+1;
-                Node* N = new Node(*v);
+                Node* N = g_backend.allocNode(*v);
                 N->setVirtual(false);
                 N->setPosition(OriginalPosition[i]+Diff);
 

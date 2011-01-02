@@ -151,7 +151,7 @@ void WayPrivate::addVirtuals()
     for (unsigned int i=1; i<Nodes.size(); ++i) {
         QLineF l(Nodes[i-1]->position(), Nodes[i]->position());
         l.setLength(l.length()/2);
-        Node* v = new Node(l.p2());
+        Node* v = g_backend.allocNode(l.p2());
         v->setVirtual(true);
         v->setParentFeature(theWay);
         theWay->layer()->add(v);
@@ -241,6 +241,8 @@ void Way::partChanged(Feature* /*F*/, int ChangeId)
     if (isDeleted())
         return;
 
+    g_backend.indexRemove(p->BBox, this);
+
     p->BBoxUpToDate = false;
     p->wasPathComplete = false;
     MetaUpToDate = false;
@@ -248,6 +250,7 @@ void Way::partChanged(Feature* /*F*/, int ChangeId)
     p->wasPathComplete = false;
     p->VirtualsUptodate = false;
 
+    g_backend.indexAdd(boundingBox(), this);
     notifyParents(ChangeId);
 }
 
@@ -266,8 +269,7 @@ void Way::add(Node* Pt)
 
 void Way::add(Node* Pt, int Idx)
 {
-    if (layer())
-        layer()->indexRemove(p->BBox, this);
+    g_backend.indexRemove(p->BBox, this);
     p->Nodes.insert(p->Nodes.begin() + Idx, Pt);
 //	p->Nodes.push_back(Pt);
 //	std::rotate(p->Nodes.begin()+Idx,p->Nodes.end()-1,p->Nodes.end());
@@ -278,9 +280,9 @@ void Way::add(Node* Pt, int Idx)
     p->SmoothedUpToDate = false;
     p->wasPathComplete = false;
     p->VirtualsUptodate = false;
-    if (layer() && !isDeleted()) {
+    if (!isDeleted()) {
         CoordBox bb = boundingBox();
-        layer()->indexAdd(bb, this);
+        g_backend.indexAdd(bb, this);
     }
 
     notifyChanges();
@@ -304,8 +306,7 @@ int Way::findVirtual(Feature* Pt) const
 
 void Way::remove(int idx)
 {
-    if (layer())
-        layer()->indexRemove(p->BBox, this);
+    g_backend.indexRemove(p->BBox, this);
 
     Node* Pt = p->Nodes[idx];
     // only remove as parent if the node is only included once
@@ -318,9 +319,9 @@ void Way::remove(int idx)
     p->SmoothedUpToDate = false;
     p->wasPathComplete = false;
     p->VirtualsUptodate = false;
-    if (layer() && !isDeleted()) {
+    if (!isDeleted()) {
         CoordBox bb = boundingBox();
-        layer()->indexAdd(bb, this);
+        g_backend.indexAdd(bb, this);
     }
 
     notifyChanges();
@@ -902,7 +903,7 @@ Way * Way::fromXML(Document* d, Layer * L, QXmlStreamReader& stream)
             Node* Part = CAST_NODE(d->getFeature(nId));
             if (!Part)
             {
-                Part = new Node(Coord(0,0));
+                Part = g_backend.allocNode(Coord(0,0));
                 Part->setId(nId);
                 Part->setLastUpdated(Feature::NotYetDownloaded);
                 L->add(Part);
@@ -1090,7 +1091,7 @@ int Way::createJunction(Document* theDocument, CommandList* theList, Way* R1, Wa
             if (S1.intersect(S2, &intPoint) == QLineF::BoundedIntersection) {
                 numInter++;
                 if (doIt) {
-                    Node* pt = new Node(intPoint);
+                    Node* pt = g_backend.allocNode(intPoint);
                     theList->add(new AddFeatureCommand(theDocument->getDirtyOrOriginLayer(R1->layer()),pt,true));
                     theList->add(new WayAddNodeCommand(R1,pt,i+1,theDocument->getDirtyOrOriginLayer(R1->layer())));
                     theList->add(new WayAddNodeCommand(R2,pt,j+1,theDocument->getDirtyOrOriginLayer(R2->layer())));

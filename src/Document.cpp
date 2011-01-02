@@ -24,16 +24,17 @@
 #include "LayerIterator.h"
 #include "IMapAdapter.h"
 
-#include <QtCore/QString>
+
+#include <QString>
 #include <QMultiMap>
 #include <QProgressDialog>
 #include <QClipboard>
-
 #include <QMap>
 #include <QList>
 #include <QMenu>
-
 #include <QSet>
+
+#include "Backend/SpatialiteBackend.h"
 
 /* MAPDOCUMENT */
 
@@ -78,11 +79,14 @@ public:
 
     QList<FeaturePainter> theFeaturePainters;
 
+    SpatialiteBackend* theBackend;
 };
 
 Document::Document()
     : p(new MapDocumentPrivate)
 {
+    p->theBackend = new SpatialiteBackend(this);
+
     setFilterType(M_PREFS->getCurrentFilter());
     p->title = tr("untitled");
 
@@ -94,6 +98,8 @@ Document::Document()
 Document::Document(LayerDock* aDock)
     : p(new MapDocumentPrivate)
 {
+    p->theBackend = new SpatialiteBackend(this);
+
     p->theDock = aDock;
     setFilterType(M_PREFS->getCurrentFilter());
     p->title = tr("untitled");
@@ -1061,13 +1067,11 @@ bool VisibleFeatureIterator::check()
         return false;
     else if (theDocument->getLayer(curLayerIdx)->get(curFeatureIdx)->isHidden())
         return false;
-    else if (CAST_NODE(theDocument->getLayer(curLayerIdx)->get(curFeatureIdx))
-            && !(theDocument->getLayer(curLayerIdx)->arePointsDrawable()))
+    else if (CAST_NODE(theDocument->getLayer(curLayerIdx)->get(curFeatureIdx)))
                 return false;
 
     return true;
 }
-
 
 /* RELATED */
 

@@ -109,19 +109,19 @@ AddFeatureCommand * AddFeatureCommand::fromXML(Document* d, QXmlStreamReader& st
 /* REMOVEFEATURECOMMAND */
 
 RemoveFeatureCommand::RemoveFeatureCommand(Feature *aFeature)
-: Command(aFeature), theLayer(0), Idx(0), theFeature(aFeature), CascadedCleanUp(0), RemoveExecuted(false)
+: Command(aFeature), theLayer(0), theFeature(aFeature), CascadedCleanUp(0), RemoveExecuted(false)
 {
 }
 
 RemoveFeatureCommand::RemoveFeatureCommand(Document *theDocument, Feature *aFeature)
-: Command(aFeature), theLayer(0), Idx(0), theFeature(aFeature), CascadedCleanUp(0), RemoveExecuted(false)
+: Command(aFeature), theLayer(0), theFeature(aFeature), CascadedCleanUp(0), RemoveExecuted(false)
 {
     theLayer = theDocument->getDirtyOrOriginLayer(aFeature->layer());
     redo();
 }
 
 RemoveFeatureCommand::RemoveFeatureCommand(Document *theDocument, Feature *aFeature, const QList<Feature*>& Alternatives)
-: Command(aFeature), theLayer(0), Idx(0), theFeature(aFeature), CascadedCleanUp(0), RemoveExecuted(false), theAlternatives(Alternatives)
+: Command(aFeature), theLayer(0), theFeature(aFeature), CascadedCleanUp(0), RemoveExecuted(false), theAlternatives(Alternatives)
 {
     CascadedCleanUp  = new CommandList(MainWindow::tr("Cascaded cleanup"), NULL);
     for (int i=0; i<aFeature->sizeParents(); ++i) {
@@ -158,7 +158,6 @@ void RemoveFeatureCommand::redo()
     if (CascadedCleanUp)
         CascadedCleanUp->redo();
     oldLayer = theFeature->layer();
-    Idx = theFeature->layer()->get(theFeature);
     oldLayer->remove(theFeature);
     theFeature->setDeleted(true);
     theLayer->add(theFeature);
@@ -172,9 +171,7 @@ void RemoveFeatureCommand::undo()
         return;
     Command::undo();
     theLayer->remove(theFeature);
-    if (oldLayer->size() < Idx)
-        Idx = oldLayer->size();
-    oldLayer->add(theFeature,Idx);
+    oldLayer->add(theFeature);
     theFeature->setDeleted(false);
     decDirtyLevel(oldLayer, theFeature);
     if (CascadedCleanUp)
@@ -215,7 +212,6 @@ bool RemoveFeatureCommand::toXML(QXmlStreamWriter& stream) const
     stream.writeAttribute("layer", oldLayer->id());
     stream.writeAttribute("newlayer", theLayer->id());
     stream.writeAttribute("feature", theFeature->xmlId());
-    stream.writeAttribute("index", QString::number(Idx));
 
     if (CascadedCleanUp) {
         stream.writeStartElement("Cascaded");
@@ -258,7 +254,6 @@ RemoveFeatureCommand * RemoveFeatureCommand::fromXML(Document* d, QXmlStreamRead
     if (!(F = d->getFeature(IFeature::FId(IFeature::All, stream.attributes().value("feature").toString().toLongLong()))))
         return NULL;
     a->theFeature = F;
-    a->Idx = stream.attributes().value("index").toString().toInt();
 
     stream.readNext();
     while(!stream.atEnd() && !stream.isEndElement()) {
