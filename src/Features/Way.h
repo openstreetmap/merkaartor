@@ -38,7 +38,7 @@ public:
     virtual void drawChildrenSpecial(QPainter& P, QPen& Pen, MapView* theView, int depth);
 
     virtual double pixelDistance(const QPointF& Target, double ClearEndDistance, bool selectNodes, MapView* theView) const;
-    Node* pixelDistanceVirtual(const QPointF& Target, double ClearEndDistance, MapView* theView) const;
+    Node* pixelDistanceNode(const QPointF& Target, double ClearEndDistance, MapView* theView, bool NoSelectVirtuals) const;
     virtual void cascadedRemoveIfUsing(Document* theDocument, Feature* aFeature, CommandList* theList, const QList<Feature*>& Alternatives);
     virtual bool notEverythingDownloaded();
     virtual QString description() const;

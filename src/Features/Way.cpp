@@ -485,6 +485,7 @@ double Way::widthOf()
 
 void Way::draw(QPainter& P, MapView* theView)
 {
+
     if (isDirty() && isUploadable() && M_PREFS->getDirtyVisible()) {
         QPen thePen(M_PREFS->getDirtyColor(),M_PREFS->getDirtyWidth());
         P.setPen(thePen);
@@ -553,16 +554,16 @@ double Way::pixelDistance(const QPointF& Target, double ClearEndDistance, bool s
     double Best = 1000000;
     p->BestSegment = -1;
 
-    if (selectNodes) {
-        for (unsigned int i=0; i<p->Nodes.size(); ++i)
-        {
-            if (p->Nodes.at(i)) {
-                double x = ::distance(Target, theView->toView(p->Nodes.at(i)));
-                if (x<ClearEndDistance)
-                    return Best;
-            }
-        }
-    }
+//    if (selectNodes) {
+//        for (unsigned int i=0; i<p->Nodes.size(); ++i)
+//        {
+//            if (p->Nodes.at(i)) {
+//                double x = ::distance(Target, theView->toView(p->Nodes.at(i)));
+//                if (x<ClearEndDistance)
+//                    return Best;
+//            }
+//        }
+//    }
     if (smoothed().size())
         for (int i=3; i <p->Smoothed.size(); i += 3)
         {
@@ -591,17 +592,34 @@ double Way::pixelDistance(const QPointF& Target, double ClearEndDistance, bool s
     return Best;
 }
 
-Node* Way::pixelDistanceVirtual(const QPointF& Target, double ClearEndDistance, MapView* theView) const
+Node* Way::pixelDistanceNode(const QPointF& Target, double ClearEndDistance, MapView* theView, bool NoSelectVirtuals) const
 {
-    for (unsigned int i=0; i<p->virtualNodes.size(); ++i)
+    double Best = 1000000;
+    Node* ret = NULL;
+
+    for (unsigned int i=0; i<p->Nodes.size(); ++i)
     {
-        if (p->virtualNodes.at(i)) {
-            double x = ::distance(Target,theView->toView(p->virtualNodes.at(i)));
-            if (x<ClearEndDistance)
-                return p->virtualNodes.at(i);
+        if (p->Nodes.at(i)) {
+            double D = ::distance(Target,theView->toView(p->Nodes.at(i)));
+            if (D < ClearEndDistance && D < Best) {
+                Best = D;
+                ret = p->Nodes.at(i);
+            }
         }
     }
-    return NULL;
+    if (!NoSelectVirtuals && M_PREFS->getVirtualNodesVisible()) {
+        for (unsigned int i=0; i<p->virtualNodes.size(); ++i)
+        {
+            if (p->virtualNodes.at(i)) {
+                double D = ::distance(Target,theView->toView(p->virtualNodes.at(i)));
+                if (D < ClearEndDistance && D < Best) {
+                    Best = D;
+                    return p->virtualNodes.at(i);
+                }
+            }
+        }
+    }
+    return ret;
 }
 
 void Way::cascadedRemoveIfUsing(Document* theDocument, Feature* aFeature, CommandList* theList, const QList<Feature*>& Proposals)

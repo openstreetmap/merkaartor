@@ -262,10 +262,10 @@ void Interaction::updateSnap(QMouseEvent* event)
             }
         }
     }
-    if (!NoSelectVirtuals && areNodesSelectable && M_PREFS->getVirtualNodesVisible()) {
+    if (areNodesSelectable) {
         R = CAST_WAY(LastSnap);
         if (R) {
-            Node* N = R->pixelDistanceVirtual(event->pos(), 5.01, view());
+            Node* N = R->pixelDistanceNode(event->pos(), 5.01, view(), NoSelectVirtuals);
             if (N)
                 LastSnap = N;
         }
@@ -330,6 +330,7 @@ void FeatureSnapInteraction::paintEvent(QPaintEvent* anEvent, QPainter& thePaint
             main()->properties()->highlighted(i)->drawHighlight(thePainter, view());
 
 #ifndef _MOBILE
+    //FIXME document()->exists necessary?
     if (LastSnap && document()->exists(LastSnap)) {
         LastSnap->drawHover(thePainter, view());
         view()->setToolTip(LastSnap->toHtml());

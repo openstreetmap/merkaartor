@@ -463,6 +463,20 @@ void MapRenderer::render(
             }
         }
     }
+
+    for (itm = theFeatures.constBegin() ;itm != theFeatures.constEnd(); ++itm)
+    {
+        for (it = itm.value().constBegin() ;it != itm.value().constEnd(); ++it)
+        {
+            double alpha = (*it)->getAlpha();
+            if ((*it)->isReadonly() && !TEST_RFLAGS(RendererOptions::ForPrinting))
+                alpha /= 2.0;
+            if (alpha != 1.)
+                P->setOpacity(alpha);
+
+            (*it)->draw(*P, aView);
+        }
+    }
     if (lblLayerVisible)
     {
         for (itm = theFeatures.constBegin() ;itm != theFeatures.constEnd(); ++itm) {
@@ -488,19 +502,6 @@ void MapRenderer::render(
         }
     }
 
-    for (itm = theFeatures.constBegin() ;itm != theFeatures.constEnd(); ++itm)
-    {
-        for (it = itm.value().constBegin() ;it != itm.value().constEnd(); ++it)
-        {
-            double alpha = (*it)->getAlpha();
-            if ((*it)->isReadonly() && !TEST_RFLAGS(RendererOptions::ForPrinting))
-                alpha /= 2.0;
-            if (alpha != 1.)
-                P->setOpacity(alpha);
-
-            (*it)->draw(*P, aView);
-        }
-    }
 //    #ifndef NDEBUG
 //        QTime Stop(QTime::currentTime());
 //        qDebug() << Start.msecsTo(Stop) << "ms";
