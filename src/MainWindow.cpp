@@ -17,6 +17,7 @@
 #ifdef USE_PROTOBUF
 #include "ImportExportPBF.h"
 #endif
+#include "ImportExportGdal.h"
 #include "CreateAreaInteraction.h"
 #include "CreateDoubleWayInteraction.h"
 #include "CreateNodeInteraction.h"
@@ -2831,6 +2832,28 @@ void MainWindow::on_exportGPXAction_triggered()
         QApplication::restoreOverrideCursor();
 #endif
     }
+    deleteProgressDialog();
+}
+
+void MainWindow::on_exportGDALAction_triggered()
+{
+    QList<Feature*> theFeatures;
+
+    createProgressDialog();
+    if (!selectExportedFeatures(theFeatures))
+        return;
+
+#ifndef Q_OS_SYMBIAN
+    QApplication::setOverrideCursor(Qt::BusyCursor);
+#endif
+
+    ImportExportGdal gdal(document());
+    gdal.export_(theFeatures);
+
+#ifndef Q_OS_SYMBIAN
+    QApplication::restoreOverrideCursor();
+#endif
+
     deleteProgressDialog();
 }
 

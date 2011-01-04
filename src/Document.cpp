@@ -1067,8 +1067,6 @@ bool VisibleFeatureIterator::check()
         return false;
     else if (theDocument->getLayer(curLayerIdx)->get(curFeatureIdx)->isHidden())
         return false;
-    else if (CAST_NODE(theDocument->getLayer(curLayerIdx)->get(curFeatureIdx)))
-                return false;
 
     return true;
 }

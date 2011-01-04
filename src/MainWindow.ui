@@ -131,6 +131,7 @@
      <addaction name="exportOSCAction"/>
      <addaction name="exportGPXAction"/>
      <addaction name="exportKMLAction"/>
+     <addaction name="exportGDALAction"/>
     </widget>
     <widget class="QMenu" name="menuRecentOpen">
      <property name="title">
@@ -1824,6 +1825,11 @@
   <action name="mapStyleSaveAction">
    <property name="text">
     <string>&amp;Save</string>
+   </property>
+  </action>
+  <action name="exportGDALAction">
+   <property name="text">
+    <string>GDAL</string>
    </property>
   </action>
  </widget>

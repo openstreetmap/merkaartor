@@ -149,6 +149,7 @@ public slots:
     virtual void on_exportOSCAction_triggered();
     virtual void on_exportGPXAction_triggered();
     virtual void on_exportKMLAction_triggered();
+    virtual void on_exportGDALAction_triggered();
     virtual void on_editSelectAction_triggered();
     virtual void on_bookmarkAddAction_triggered();
     virtual void on_bookmarkRemoveAction_triggered();

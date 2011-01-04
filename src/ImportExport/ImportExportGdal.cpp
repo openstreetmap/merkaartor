@@ -54,10 +54,98 @@ bool ImportExportGdal::saveFile(QString)
 // export
 bool ImportExportGdal::export_(const QList<Feature *>& featList)
 {
-    Q_UNUSED(featList);
+    const char *pszDriverName = "SQLite";
+    OGRSFDriver *poDriver;
 
-    return false;
+    OGRRegisterAll();
+
+    poDriver = OGRSFDriverRegistrar::GetRegistrar()->GetDriverByName(pszDriverName);
+    if( poDriver == NULL )
+    {
+        qDebug( "%s driver not available.", pszDriverName );
+        return false;
+    }
+
+    OGRDataSource *poDS;
+
+    QFile::remove(QString(HOMEDIR + "/test.sqlite"));
+    poDS = poDriver->CreateDataSource( QString(HOMEDIR + "/test.sqlite").toUtf8().constData(), NULL );
+    if( poDS == NULL )
+    {
+        qDebug( "Creation of output file failed." );
+        return false;
+    }
+    poDS->ExecuteSQL("PRAGMA synchronous = OFF", NULL, NULL);
+
+    OGRSpatialReference *poSRS;
+    poSRS = new OGRSpatialReference();
+    poSRS->importFromEPSG(4326);
+
+    char **papszOptions = NULL;
+    papszOptions = CSLSetNameValue( papszOptions, "SPATIALITE", "YES" );
+    papszOptions = CSLSetNameValue( papszOptions, "FORMAT", "SPATIALITE" );
+    papszOptions = CSLSetNameValue( papszOptions, "SPATIAL_INDEX", "YES" );
+
+    OGRLayer *poLayer;
+    poLayer = poDS->CreateLayer( "osm", poSRS, wkbUnknown, papszOptions);
+    CSLDestroy( papszOptions );
+
+    if( poLayer == NULL )
+    {
+        qDebug( "Layer creation failed." );
+        return false;
+    }
+
+    OGRFieldDefn oField("id", OFTReal);
+    if( poLayer->CreateField( &oField ) != OGRERR_NONE )
+    {
+        qDebug( "Creating field failed." );
+        return false;
+    }
+    oField.Set("version", OFTInteger );
+    if( poLayer->CreateField( &oField ) != OGRERR_NONE )
+    {
+        qDebug( "Creating field failed." );
+        return false;
+    }
+
+    OGRFeature *poFeature;
+    foreach (Feature* F, featList) {
+        poFeature = OGRFeature::CreateFeature( poLayer->GetLayerDefn() );
+        poFeature->SetField( "id", (qreal)(F->id().numId));
+        poFeature->SetField( "version", F->versionNumber());
+
+        if (CHECK_NODE(F)) {
+            Node* N = STATIC_CAST_NODE(F);
+
+            OGRPoint pt;
+            pt.setX(N->position().x());
+            pt.setY(N->position().y());
+
+            poFeature->SetGeometry( &pt );
+        } else if (CHECK_WAY(F)) {
+            Way* W = STATIC_CAST_WAY(F);
+
+            OGRLineString ls;
+            ls.setNumPoints(W->size());
+            for (int i=0; i<W->size(); ++i) {
+                ls.setPoint(i, W->getNode(i)->position().x(), W->getNode(i)->position().y(), 0);
+            }
+            poFeature->SetGeometry( &ls );
+        }
+
+        if( poLayer->CreateFeature( poFeature ) != OGRERR_NONE )
+        {
+           qDebug( "Failed to create feature in output." );
+           return false;
+        }
+        OGRFeature::DestroyFeature( poFeature );
+    }
+    OGRDataSource::DestroyDataSource( poDS );
+    return true;
 }
+
+/***************/
 
 // Make OGRPoint usable in a QHash<>
 static bool operator==(const OGRPoint a, const OGRPoint b)
