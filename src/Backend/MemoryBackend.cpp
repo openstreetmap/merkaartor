@@ -6,6 +6,7 @@ typedef RTree<Feature*, double, 2, double> CoordTree;
 class MemoryBackendPrivate
 {
 public:
+    QSet<Feature*> AllocFeatures;
     CoordTree theRTree;
     QList<Feature*> findResult;
 };
@@ -107,11 +108,16 @@ MemoryBackend::MemoryBackend()
 
 MemoryBackend::~MemoryBackend()
 {
-    CoordTree::Iterator it;
-    p->theRTree.GetFirst(it);
-    while (!p->theRTree.IsNull(it)) {
-        delete *it;
-        p->theRTree.GetNext(it);
+//    CoordTree::Iterator it;
+//    p->theRTree.GetFirst(it);
+//    while (!p->theRTree.IsNull(it)) {
+//        delete *it;
+//        p->theRTree.GetNext(it);
+//    }
+
+    QSet<Feature *>::const_iterator i = p->AllocFeatures.constBegin();
+    while (i != p->AllocFeatures.constEnd()) {
+        delete *i;
     }
 
     delete p;
@@ -120,48 +126,55 @@ MemoryBackend::~MemoryBackend()
 Node * MemoryBackend::allocNode(const Node& other)
 {
     Node* f = new Node(other);
+    p->AllocFeatures.insert(f);
     return f;
 }
 
 Node * MemoryBackend::allocNode(const QPointF& aCoord)
 {
     Node* f = new Node(aCoord);
+    p->AllocFeatures.insert(f);
     return f;
 }
 
 Way * MemoryBackend::allocWay()
 {
     Way* f = new Way();
+    p->AllocFeatures.insert(f);
     return f;
 }
 
 Way * MemoryBackend::allocWay(const Way& other)
 {
     Way* f = new Way(other);
+    p->AllocFeatures.insert(f);
     return f;
 }
 
 Relation * MemoryBackend::allocRelation()
 {
     Relation* f = new Relation();
+    p->AllocFeatures.insert(f);
     return f;
 }
 
 Relation * MemoryBackend::allocRelation(const Relation& other)
 {
     Relation* f = new Relation(other);
+    p->AllocFeatures.insert(f);
     return f;
 }
 
 TrackSegment * MemoryBackend::allocSegment()
 {
     TrackSegment* f = new TrackSegment();
+    p->AllocFeatures.insert(f);
     return f;
 }
 
 void MemoryBackend::deallocFeature(Feature *f)
 {
-    delete f;
+    indexRemove(f->boundingBox(), f);
 }
 
 void MemoryBackend::sync(Feature *f)

@@ -50,6 +50,7 @@ Layer::Layer(const Layer&)
 
 Layer::~Layer()
 {
+    clear();
     SAFE_DELETE(p);
 }
 
@@ -175,7 +176,7 @@ void Layer::deleteFeature(Feature* aFeature)
         notifyIdUpdate(aFeature->id(),0);
     }
 
-    delete aFeature;
+    g_backend.deallocFeature(aFeature);
 }
 
 void Layer::clear()
@@ -184,6 +185,7 @@ void Layer::clear()
     {
         p->Features[0]->setLayer(0);
         notifyIdUpdate(p->Features[0]->id(),0);
+        g_backend.deallocFeature(p->Features[0]);
         p->Features.removeAt(0);
     }
 }
