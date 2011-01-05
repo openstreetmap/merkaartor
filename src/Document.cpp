@@ -78,15 +78,11 @@ public:
     mutable QString Id;
 
     QList<FeaturePainter> theFeaturePainters;
-
-    SpatialiteBackend* theBackend;
 };
 
 Document::Document()
     : p(new MapDocumentPrivate)
 {
-    p->theBackend = new SpatialiteBackend(this);
-
     setFilterType(M_PREFS->getCurrentFilter());
     p->title = tr("untitled");
 
@@ -98,8 +94,6 @@ Document::Document()
 Document::Document(LayerDock* aDock)
     : p(new MapDocumentPrivate)
 {
-    p->theBackend = new SpatialiteBackend(this);
-
     p->theDock = aDock;
     setFilterType(M_PREFS->getCurrentFilter());
     p->title = tr("untitled");

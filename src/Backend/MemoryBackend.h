@@ -37,13 +37,15 @@ public:
 
     virtual void sync(Feature* f);
 
-    virtual void indexAdd(const QRectF& bb, Feature* aFeat);
-    virtual void indexRemove(const QRectF& bb, Feature* aFeat);
     virtual const QList<Feature*>& indexFind(const QRectF& vp);
     virtual void indexFind(const QRectF& bb, const IndexFindContext& findResult);
     virtual void get(const QRectF& bb, QList<Feature*>& theFeatures);
     virtual void getFeatureSet(QMap<RenderPriority, QSet <Feature*> >& theFeatures,
                        QList<QRectF>& invalidRects, QRectF& clipRect, Projection& theProjection, QTransform& theTransform);
+
+private:
+    virtual void indexAdd(const QRectF& bb, Feature* aFeat);
+    virtual void indexRemove(const QRectF& bb, Feature* aFeat);
 
 };
 

@@ -40,311 +40,317 @@ class MapFeaturePrivate;
 
 class RenderPriority
 {
-    public:
-        typedef enum { IsArea, IsLinear, IsSingular } Class;
-        RenderPriority()
-            : theClass(IsLinear), InClassPriority(0.0), theLayer(0) { }
-        RenderPriority(Class C, double IC, int L)
-            : theClass(C), InClassPriority(IC), theLayer(L) { }
-        RenderPriority(const RenderPriority& other)
-            : theClass(other.theClass), InClassPriority(other.InClassPriority), theLayer(other.theLayer) { }
-        bool operator<(const RenderPriority& R) const
-        {
-            return (theClass < R.theClass) ||
+public:
+    typedef enum { IsArea, IsLinear, IsSingular } Class;
+    RenderPriority()
+        : theClass(IsLinear), InClassPriority(0.0), theLayer(0) { }
+    RenderPriority(Class C, double IC, int L)
+        : theClass(C), InClassPriority(IC), theLayer(L) { }
+    RenderPriority(const RenderPriority& other)
+        : theClass(other.theClass), InClassPriority(other.InClassPriority), theLayer(other.theLayer) { }
+    bool operator<(const RenderPriority& R) const
+    {
+        return (theClass < R.theClass) ||
                 ( (theClass == R.theClass) && (InClassPriority < R.InClassPriority) );
+    }
+    bool operator==(const RenderPriority& R) const
+    {
+        return ((theClass == R.theClass) && (InClassPriority == R.InClassPriority));
+    }
+    RenderPriority &operator=(const RenderPriority &other)
+    {
+        if (this != &other) {
+            theClass = other.theClass;
+            InClassPriority = other.InClassPriority;
+            theLayer = other.theLayer;
         }
-        bool operator==(const RenderPriority& R) const
-        {
-            return ((theClass == R.theClass) && (InClassPriority == R.InClassPriority));
-        }
-        RenderPriority &operator=(const RenderPriority &other)
-        {
-            if (this != &other) {
-                theClass = other.theClass;
-                InClassPriority = other.InClassPriority;
-                theLayer = other.theLayer;
-            }
-            return *this;
-        }
-        int layer() const
-        {
-            return theLayer;
-        }
+        return *this;
+    }
+    int layer() const
+    {
+        return theLayer;
+    }
 
-    private:
-        Class theClass;
-        double InClassPriority;
-        int theLayer;
+private:
+    Class theClass;
+    double InClassPriority;
+    int theLayer;
 };
 
 namespace boost
 {
-    void intrusive_ptr_add_ref(Feature * p);
-    void intrusive_ptr_release(Feature * p);
+void intrusive_ptr_add_ref(Feature * p);
+void intrusive_ptr_release(Feature * p);
 }
 
 /// Used to store objects of the map
 class Feature : public IFeature
 {
-    public:
-        typedef enum { User, UserResolved, OSMServer, OSMServerConflict, NotYetDownloaded, Log } ActorType;
-        typedef enum { UnknownDirection, BothWays, OneWay, OtherWay } TrafficDirectionType;
-    public:
-        /// Constructor for an empty map feature
-        Feature();
-        /// Copy constructor
-        /// @param other the MapFeature
-        Feature(const Feature& other);
-        /// Destructor
-        virtual ~Feature() = 0;
+    friend class MemoryBackend;
+    friend class SpatialiteBackend;
 
-        /** Return the smalest box contening all the MapFeature
+public:
+    typedef enum { User, UserResolved, OSMServer, OSMServerConflict, NotYetDownloaded, Log } ActorType;
+    typedef enum { UnknownDirection, BothWays, OneWay, OtherWay } TrafficDirectionType;
+public:
+    /// Constructor for an empty map feature
+    Feature();
+    /// Copy constructor
+    /// @param other the MapFeature
+    Feature(const Feature& other);
+    /// Destructor
+    virtual ~Feature() = 0;
+
+    /** Return the smalest box contening all the MapFeature
          * @return A coord box
          */
-        virtual const CoordBox& boundingBox(bool update=true) const = 0;
+    virtual const CoordBox& boundingBox(bool update=true) const = 0;
 
-        /** Draw the feature using the given QPainter an Projection
+    /** Draw the feature using the given QPainter an Projection
          * @param P The QPainter used to draw
          * @param theProjection the Projection used to convert real coordinates to screen coordinates
          */
-        virtual void draw(QPainter& P, MapView* theView) = 0;
+    virtual void draw(QPainter& P, MapView* theView) = 0;
 
-        virtual void drawSpecial(QPainter& P, QPen& Pen, MapView* theView) = 0;
-        virtual void drawParentsSpecial(QPainter& P, QPen& Pen, MapView* theView) = 0;
-        virtual void drawChildrenSpecial(QPainter & P, QPen& Pen, MapView *theView, int depth) = 0;
+    virtual void drawSpecial(QPainter& P, QPen& Pen, MapView* theView) = 0;
+    virtual void drawParentsSpecial(QPainter& P, QPen& Pen, MapView* theView) = 0;
+    virtual void drawChildrenSpecial(QPainter & P, QPen& Pen, MapView *theView, int depth) = 0;
 
-        virtual void drawHover(QPainter& P, MapView* theView);
-        virtual void drawHighlight(QPainter& P, MapView* theView);
-        virtual void drawFocus(QPainter& P, MapView* theView);
+    virtual void drawHover(QPainter& P, MapView* theView);
+    virtual void drawHighlight(QPainter& P, MapView* theView);
+    virtual void drawFocus(QPainter& P, MapView* theView);
 
-        virtual double pixelDistance(const QPointF& Target, double ClearEndDistance, bool selectNodes, MapView* theView) const = 0;
-        virtual void cascadedRemoveIfUsing(Document* theDocument, Feature* aFeature, CommandList* theList, const QList<Feature*>& Alternatives) = 0;
-        virtual bool notEverythingDownloaded() = 0;
+    virtual double pixelDistance(const QPointF& Target, double ClearEndDistance, bool selectNodes, MapView* theView) const = 0;
+    virtual void cascadedRemoveIfUsing(Document* theDocument, Feature* aFeature, CommandList* theList, const QList<Feature*>& Alternatives) = 0;
+    virtual bool notEverythingDownloaded() = 0;
 
-        /** Set the id for the current feature.
+    /** Set the id for the current feature.
          */
-        void setId(const IFeature::FId& id);
+    void setId(const IFeature::FId& id);
 
-        /** Reset the id for the current feature to a random one.
+    /** Reset the id for the current feature to a random one.
          */
-        const IFeature::FId& resetId() const;
+    const IFeature::FId& resetId() const;
 
-        /** Give the id of the feature.
+    /** Give the id of the feature.
          *  If the feature has no id, a random id is generated
          * @return the id of the current feature
          */
-        const IFeature::FId& id() const;
+    const IFeature::FId& id() const;
 
-        QString xmlId() const;
-        bool hasOSMId() const;
-        ActorType lastUpdated() const;
-        void setLastUpdated(ActorType A);
-        const QDateTime& time() const;
-        void setTime(const QDateTime& aTime);
-        const QString& user() const;
-        void setUser(const QString& aUser);
-        virtual void setLayer(Layer* aLayer);
-        virtual Layer* layer() const;
-        int versionNumber() const;
-        void setVersionNumber(int vn);
-        virtual QString description() const = 0;
-        virtual const RenderPriority& renderPriority();
-        virtual void setRenderPriority(const RenderPriority& aPriority);
+    QString xmlId() const;
+    bool hasOSMId() const;
+    ActorType lastUpdated() const;
+    void setLastUpdated(ActorType A);
+    const QDateTime& time() const;
+    void setTime(const QDateTime& aTime);
+    const QString& user() const;
+    void setUser(const QString& aUser);
+    virtual void setLayer(Layer* aLayer);
+    virtual Layer* layer() const;
+    int versionNumber() const;
+    void setVersionNumber(int vn);
+    virtual QString description() const = 0;
+    virtual const RenderPriority& renderPriority();
+    virtual void setRenderPriority(const RenderPriority& aPriority);
 
-        /** Set the tag "key=value" to the current object
+    /** Set the tag "key=value" to the current object
          * If a tag with the same key exist, it is replaced
          * Otherwise the tag is added at the end
          * @param key the key of the tag
          * @param value the value corresponding to the key
          */
-        virtual void setTag(const QString& key, const QString& value);
+    virtual void setTag(const QString& key, const QString& value);
 
-        /** Set the tag "key=value" at the position index
+    /** Set the tag "key=value" at the position index
          * If a tag with the same key exist, it is replaced
          * Otherwise the tag is added at the index position
          * @param index the place for the given tag. Start at 0.
          * @param key the key of the tag
          * @param value the value corresponding to the key
         */
-        virtual void setTag(int index, const QString& key, const QString& value);
+    virtual void setTag(int index, const QString& key, const QString& value);
 
-        /** remove all the tags for the curent feature
+    /** remove all the tags for the curent feature
          */
-        virtual void clearTags();
+    virtual void clearTags();
 
-        /** remove the tag with the key "k".
+    /** remove the tag with the key "k".
          * if no corresponding tag, don't do anything
          */
-        virtual void clearTag(const QString& k);
+    virtual void clearTag(const QString& k);
 
-        /** @return the number of tags for the current object
+    /** @return the number of tags for the current object
          */
-        virtual int tagSize() const;
+    virtual int tagSize() const;
 
-        /** if a tag with the key "k" exists, return its index.
+    /** if a tag with the key "k" exists, return its index.
          * if the key doesn't exist, return the number of tags
          * @return index of tag
          */
-        virtual int findKey(const QString& k) const;
+    virtual int findKey(const QString& k) const;
 
-        /** return the value of the tag at the position "i".
+    /** return the value of the tag at the position "i".
          * position start at 0.
          * Be carefull: no verification is made on i.
          * @return the value
          */
-        virtual QString tagValue(int i) const;
+    virtual QString tagValue(int i) const;
 
-        /** return the value of the tag with the key "k".
+    /** return the value of the tag with the key "k".
          * if such a tag doesn't exists, return Default.
          * @return value or Default
          */
-        virtual QString tagValue(const QString& k, const QString& Default) const;
+    virtual QString tagValue(const QString& k, const QString& Default) const;
 
-        /** return the value of the tag at the position "i".
+    /** return the value of the tag at the position "i".
          * position start at 0.
          * Be carefull: no verification is made on i.
          * @return the value
         */
-        virtual QString tagKey(int i) const;
+    virtual QString tagKey(int i) const;
 
-        /** remove the tag at the position "i".
+    /** remove the tag at the position "i".
          * position start at 0.
          * Be carefull: no verification is made on i.
          */
-        virtual void removeTag(int i);
+    virtual void removeTag(int i);
 
-        /** check if the dirty status of the feature
+    /** check if the dirty status of the feature
          * @return true if the feature is dirty
          */
-        virtual bool isDirty() const;
+    virtual bool isDirty() const;
 
-        virtual int incDirtyLevel(int inc=1);
-        virtual int decDirtyLevel(int inc=1);
-        virtual int getDirtyLevel() const;
-        virtual int setDirtyLevel(int newLevel);
+    virtual int incDirtyLevel(int inc=1);
+    virtual int decDirtyLevel(int inc=1);
+    virtual int getDirtyLevel() const;
+    virtual int setDirtyLevel(int newLevel);
 
-        /** check if the feature is on an uploadable layer
+    /** check if the feature is on an uploadable layer
          * @return true if on an uploadable layer
          */
-        virtual bool isUploadable() const;
+    virtual bool isUploadable() const;
 
-        /** check if the feature is read-only
+    /** check if the feature is read-only
          * @return true if is read-only
          */
-        virtual bool isReadonly();
-        virtual void setReadonly(bool val);
+    virtual bool isReadonly();
+    virtual void setReadonly(bool val);
 
-        /** set the logical delete state of the feature
+    /** set the logical delete state of the feature
          */
-        virtual void setDeleted(bool delState);
+    virtual void setDeleted(bool delState);
 
-        /** check if the feature is logically deleted
+    /** check if the feature is logically deleted
          * @return true if logically deleted
          */
-        virtual bool isDeleted() const;
+    virtual bool isDeleted() const;
 
-        /** set the visibility state of the feature
+    /** set the visibility state of the feature
          */
-        virtual void setVisible(bool val);
+    virtual void setVisible(bool val);
 
-        /** check if the feature is visible
+    /** check if the feature is visible
          * @return true if visible
          */
-        virtual bool isVisible();
+    virtual bool isVisible();
 
-        /** check if the feature is hidden
+    /** check if the feature is hidden
          * @return true if hidden
          */
-        virtual bool isHidden();
+    virtual bool isHidden();
 
-        /** check if the feature has been uploaded
+    /** check if the feature has been uploaded
          * @return true if uploaded
          */
-        virtual bool isUploaded() const;
-        virtual void setUploaded(bool state);
+    virtual bool isUploaded() const;
+    virtual void setUploaded(bool state);
 
-        /** check if the feature is virtual
+    /** check if the feature is virtual
          * @return true if virtual
          */
-        virtual bool isVirtual() const;
-        virtual void setVirtual(bool val);
+    virtual bool isVirtual() const;
+    virtual void setVirtual(bool val);
 
-        /** check if the feature is a special one (cannot be uploaded)
+    /** check if the feature is a special one (cannot be uploaded)
          * @return true if special
          */
-        virtual bool isSpecial() const;
-        virtual void setSpecial(bool val);
+    virtual bool isSpecial() const;
+    virtual void setSpecial(bool val);
 
-        virtual const QPainterPath& getPath() const;
+    virtual const QPainterPath& getPath() const;
 
-        const FeaturePainter* getPainter(double PixelPerM) const;
-        const FeaturePainter* getCurrentPainter() const;
-        bool hasPainter() const;
-        bool hasPainter(double PixelPerM) const;
-        void invalidatePainter();
-        QVector<qreal> getParentDashes() const;
+    const FeaturePainter* getPainter(double PixelPerM) const;
+    const FeaturePainter* getCurrentPainter() const;
+    bool hasPainter() const;
+    bool hasPainter(double PixelPerM) const;
+    void invalidatePainter();
+    QVector<qreal> getParentDashes() const;
 
-        virtual qreal getAlpha();
+    virtual qreal getAlpha();
 
-        virtual void remove(int Idx) = 0;
-        virtual void remove(Feature* F) = 0;
-        virtual int size() const = 0;
-        virtual int find(Feature* Pt) const = 0;
-        virtual Feature* get(int idx) = 0;
-        virtual const Feature* get(int Idx) const = 0;
-        virtual bool isNull() const = 0;
+    virtual void remove(int Idx) = 0;
+    virtual void remove(Feature* F) = 0;
+    virtual int size() const = 0;
+    virtual int find(Feature* Pt) const = 0;
+    virtual Feature* get(int idx) = 0;
+    virtual const Feature* get(int Idx) const = 0;
+    virtual bool isNull() const = 0;
 
-        int sizeParents() const;
-        IFeature* getParent(int i);
-        const IFeature* getParent(int i) const;
+    int sizeParents() const;
+    IFeature* getParent(int i);
+    const IFeature* getParent(int i) const;
 
-        void setParentFeature(Feature* F);
-        void unsetParentFeature(Feature* F);
-        virtual void partChanged(Feature* F, int ChangeId) = 0;
-        void notifyChanges();
-        void notifyParents(int Id);
+    void setParentFeature(Feature* F);
+    void unsetParentFeature(Feature* F);
+    virtual void partChanged(Feature* F, int ChangeId) = 0;
+    void notifyChanges();
+    void notifyParents(int Id);
 
-        static void fromXML(QXmlStreamReader& stream, Feature* F);
-        virtual void toXML(QXmlStreamWriter& stream, bool strict, QString changetsetid="");
+    static void fromXML(QXmlStreamReader& stream, Feature* F);
+    virtual void toXML(QXmlStreamWriter& stream, bool strict, QString changetsetid="");
 
-        virtual QString toXML(int lvl=0, QProgressDialog * progress=NULL);
-        virtual bool toXML(QXmlStreamWriter& stream, QProgressDialog * progress=NULL, bool strict=false, QString changetsetid="") = 0;
+    virtual QString toXML(int lvl=0, QProgressDialog * progress=NULL);
+    virtual bool toXML(QXmlStreamWriter& stream, QProgressDialog * progress=NULL, bool strict=false, QString changetsetid="") = 0;
 
-        virtual QString toMainHtml(QString type, QString systemtype);
-        virtual QString toHtml() = 0;
+    virtual QString toMainHtml(QString type, QString systemtype);
+    virtual QString toHtml() = 0;
 
-        virtual QString getClass() const = 0;
-        virtual char getType() const = 0;
-        virtual void updateMeta();
-        virtual void updateIndex();
-        virtual void updateFilters();
-        virtual void invalidateMeta();
+    virtual QString getClass() const = 0;
+    virtual char getType() const = 0;
+    virtual void updateMeta();
+    virtual void updateFilters();
+    virtual void invalidateMeta();
 
-        virtual bool deleteChildren(Document* , CommandList* ) { return true; }
+    virtual bool deleteChildren(Document* , CommandList* ) { return true; }
 
-        static Relation * GetSingleParentRelation(Feature * mapFeature);
-        static Node* getTrackPointOrCreatePlaceHolder(Document *theDocument, Layer *theLayer, const IFeature::FId& Id);
-        static Way* getWayOrCreatePlaceHolder(Document *theDocument, Layer *theLayer, const IFeature::FId& Id);
-        static Relation* getRelationOrCreatePlaceHolder(Document *theDocument, Layer *theLayer, const IFeature::FId& Id);
-        static void mergeTags(Document* theDocument, CommandList* L, Feature* Dest, Feature* Src);
+    static Relation * GetSingleParentRelation(Feature * mapFeature);
+    static Node* getTrackPointOrCreatePlaceHolder(Document *theDocument, Layer *theLayer, const IFeature::FId& Id);
+    static Way* getWayOrCreatePlaceHolder(Document *theDocument, Layer *theLayer, const IFeature::FId& Id);
+    static Relation* getRelationOrCreatePlaceHolder(Document *theDocument, Layer *theLayer, const IFeature::FId& Id);
+    static void mergeTags(Document* theDocument, CommandList* L, Feature* Dest, Feature* Src);
 
-        static QString stripToOSMId(const IFeature::FId& id);
+    static QString stripToOSMId(const IFeature::FId& id);
 
-    private:
-        MapFeaturePrivate* p;
+public:
+    quint32 internal_id;
 
-    protected:
-        bool MetaUpToDate;
-        IFeature::FId newId(IFeature::FeatureType type, Document* d=NULL) const;
+private:
+    MapFeaturePrivate* p;
 
-        bool tagsToXML(QXmlStreamWriter& stream, bool strict);
-        static void tagsFromXML(Document* d, Feature* f, QXmlStreamReader& stream);
+protected:
+    mutable CoordBox BBox;
+    bool MetaUpToDate;
+    IFeature::FId newId(IFeature::FeatureType type, Document* d=NULL) const;
 
-        long    m_references;
-        friend void ::boost::intrusive_ptr_add_ref(Feature * p);
-        friend void ::boost::intrusive_ptr_release(Feature * p);
+    bool tagsToXML(QXmlStreamWriter& stream, bool strict);
+    static void tagsFromXML(Document* d, Feature* f, QXmlStreamReader& stream);
 
-        QPainterPath thePath;
+    long    m_references;
+    friend void ::boost::intrusive_ptr_add_ref(Feature * p);
+    friend void ::boost::intrusive_ptr_release(Feature * p);
+
+    QPainterPath thePath;
 };
 
 Q_DECLARE_METATYPE( Feature * );

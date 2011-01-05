@@ -96,24 +96,23 @@ bool ImportExportGdal::export_(const QList<Feature *>& featList)
         return false;
     }
 
-    OGRFieldDefn oField("id", OFTReal);
+    OGRFieldDefn oField("osm_id", OFTReal);
     if( poLayer->CreateField( &oField ) != OGRERR_NONE )
     {
         qDebug( "Creating field failed." );
         return false;
     }
-    oField.Set("version", OFTInteger );
-    if( poLayer->CreateField( &oField ) != OGRERR_NONE )
-    {
-        qDebug( "Creating field failed." );
-        return false;
-    }
+    oField.Set("osm_version", OFTInteger );
+    poLayer->CreateField( &oField );
+    oField.Set("osm_timestamp", OFTInteger );
+    poLayer->CreateField( &oField );
 
     OGRFeature *poFeature;
     foreach (Feature* F, featList) {
         poFeature = OGRFeature::CreateFeature( poLayer->GetLayerDefn() );
-        poFeature->SetField( "id", (qreal)(F->id().numId));
-        poFeature->SetField( "version", F->versionNumber());
+        poFeature->SetField( "osm_id", (qreal)(F->id().numId));
+        poFeature->SetField( "osm_version", F->versionNumber());
+        poFeature->SetField( "osm_timestamp", (int)F->time().toTime_t());
 
         if (CHECK_NODE(F)) {
             Node* N = STATIC_CAST_NODE(F);
@@ -376,11 +375,19 @@ bool ImportExportGdal::import(Layer* aLayer)
                     for (int i=0; i<poFeature->GetFieldCount(); ++i) {
                         OGRFieldDefn  *fd = poFeature->GetFieldDefnRef(i);
                         QString k(fd->GetNameRef());
-                        if (!g_Merk_NoGuardedTagsImport) {
-                            k.prepend("_");
-                            k.append("_");
+                        if (k == "osm_id") {
+                            F->setId(IFeature::FId(F->getType(), (qint64)poFeature->GetFieldAsDouble(i)));
+                        } else if (k == "osm_version") {
+                           F->setVersionNumber(poFeature->GetFieldAsInteger(i));
+                        } else if (k == "osm_timestamp") {
+                            F->setTime(QDateTime::fromTime_t(poFeature->GetFieldAsInteger(i)));
+                        } else {
+                            if (!g_Merk_NoGuardedTagsImport) {
+                                k.prepend("_");
+                                k.append("_");
+                            }
+                            F->setTag(k, poFeature->GetFieldAsString(i));
                         }
-                        F->setTag(k, poFeature->GetFieldAsString(i));
                         ++curImported;
                         ++totimported;
                         progress.setLabelText(QApplication::tr("Imported: %1").arg(totimported));

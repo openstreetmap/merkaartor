@@ -382,12 +382,8 @@ void Feature::setDeleted(bool delState)
 {
     if (delState == p->Deleted)
         return;
-
-    if (delState)
-        g_backend.indexRemove(boundingBox(false), this);
-    else
-        g_backend.indexAdd(boundingBox(), this);
     p->Deleted = delState;
+    g_backend.sync(this);
 }
 
 bool Feature::isDeleted() const
@@ -420,14 +416,11 @@ void Feature::setVirtual(bool val)
 {
     if (val == p->Virtual)
         return;
-
     p->Virtual = val;
     if (!p->Virtual) {
         resetId();
-        g_backend.indexAdd(boundingBox(), this);
-    } else {
-        g_backend.indexRemove(boundingBox(), this);
     }
+    g_backend.sync(this);
 }
 
 bool Feature::isVirtual() const
@@ -668,15 +661,6 @@ void Feature::unsetParentFeature(Feature* F)
             p->Parents.erase(p->Parents.begin()+i);
             return;
         }
-}
-
-void Feature::updateIndex()
-{
-    if (isDeleted())
-        return;
-
-    g_backend.indexRemove(boundingBox(false), this);
-    g_backend.indexAdd(boundingBox(true), this);
 }
 
 void Feature::updateFilters()

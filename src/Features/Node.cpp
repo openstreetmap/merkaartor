@@ -34,26 +34,24 @@ class NodePrivate
 };
 
 Node::Node(const Coord& aCoord)
-    : Position(CoordBox(aCoord, aCoord))
-    , Elevation(0.0)
+    : Elevation(0.0)
     , Speed(0.0)
     , p(new NodePrivate)
 {
+    BBox = CoordBox(aCoord, aCoord);
     setRenderPriority(RenderPriority(RenderPriority::IsSingular,0., 0));
-    g_backend.indexAdd(Position, this);
 }
 
 Node::Node(const Node& other)
     : Feature(other)
-    , Position(other.Position)
     , Elevation(other.Elevation)
     , Speed(other.Speed)
     , p(new NodePrivate)
 {
+    BBox = other.BBox;
     p->Projected = other.p->Projected;
     p->ProjectionRevision = other.projectionRevision();
     setRenderPriority(RenderPriority(RenderPriority::IsSingular,0., 0));
-    g_backend.indexAdd(Position, this);
 }
 
 Node::~Node(void)
@@ -92,7 +90,7 @@ const Feature* Node::get(int ) const
 
 bool Node::isNull() const
 {
-    return Position.isNull();
+    return BBox.isNull();
 }
 
 bool Node::isInteresting() const
@@ -151,17 +149,15 @@ bool Node::isSelectable(MapView* theView)
 
 Coord Node::position() const
 {
-    return Position.topLeft();
+    return BBox.topLeft();
 }
 
 void Node::setPosition(const Coord& aCoord)
 {
-    g_backend.indexRemove(Position, this);
-    Position = CoordBox(aCoord, aCoord);
+    BBox = CoordBox(aCoord, aCoord);
     p->ProjectionRevision = 0;
-    if (!isDeleted()) {
-        g_backend.indexAdd(Position, this);
-    }
+    g_backend.sync(this);
+
     notifyChanges();
 }
 
@@ -233,7 +229,7 @@ bool Node::notEverythingDownloaded()
 
 const CoordBox& Node::boundingBox(bool) const
 {
-    return Position;
+    return BBox;
 }
 
 void Node::draw(QPainter& thePainter , MapView* theView)
@@ -420,8 +416,8 @@ bool Node::toXML(QXmlStreamWriter& stream, QProgressDialog * progress, bool stri
     stream.writeStartElement("node");
 
     Feature::toXML(stream, strict, changesetid);
-    stream.writeAttribute("lon",COORD2STRING(Position.topRight().x()));
-    stream.writeAttribute("lat", COORD2STRING(Position.topRight().y()));
+    stream.writeAttribute("lon",COORD2STRING(BBox.topRight().x()));
+    stream.writeAttribute("lat", COORD2STRING(BBox.topRight().y()));
 
     tagsToXML(stream, strict);
     stream.writeEndElement();
@@ -446,8 +442,8 @@ bool Node::toGPX(QXmlStreamWriter& stream, QProgressDialog * progress, QString e
 
     if (!forExport)
         stream.writeAttribute("xml:id", xmlId());
-    stream.writeAttribute("lon",COORD2STRING(Position.topRight().x()));
-    stream.writeAttribute("lat", COORD2STRING(Position.topRight().y()));
+    stream.writeAttribute("lon",COORD2STRING(BBox.topRight().x()));
+    stream.writeAttribute("lat", COORD2STRING(BBox.topRight().y()));
 
     stream.writeTextElement("time", time().toString(Qt::ISODate)+"Z");
 
@@ -491,7 +487,7 @@ Node * Node::fromXML(Document* d, Layer* L, QXmlStreamReader& stream)
     IFeature::FId id(IFeature::Point, sid.toLongLong());
     Node* Pt = CAST_NODE(d->getFeature(id));
     if (!Pt) {
-        Pt = new Node(Coord(Lon,Lat));
+        Pt = g_backend.allocNode(Coord(Lon,Lat));
         Pt->setId(id);
         Feature::fromXML(stream, Pt);
         L->add(Pt);
@@ -526,7 +522,7 @@ Node * Node::fromGPX(Document* d, Layer* L, QXmlStreamReader& stream)
     IFeature::FId id(IFeature::Point, sid.toLongLong());
     Node* Pt = CAST_NODE(d->getFeature(id));
     if (!Pt) {
-        Pt = new Node(Coord(Lon,Lat));
+        Pt = g_backend.allocNode(Coord(Lon,Lat));
         Pt->setId(id);
         Pt->setLastUpdated(Feature::Log);
         L->add(Pt);

@@ -32,6 +32,7 @@ public:
     sqlite3 * open(const QString &aNom, const int aFlags);
     bool exec(const QString &aSql);
     bool execFile(const QString &aPath);
+    qint64 lastRowId();
 
 protected:
     QString m_dbName;
@@ -64,7 +65,6 @@ public:
     sqlite3_stmt* statement();
     bool step();
     void reset();
-
 
 protected:
     SpatialiteBase* theBackend;

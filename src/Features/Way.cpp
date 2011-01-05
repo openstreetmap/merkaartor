@@ -50,7 +50,6 @@ class WayPrivate
         QList<Coord> Smoothed;
         bool SmoothedUpToDate;
 
-        mutable CoordBox BBox;
         bool BBoxUpToDate;
 
         double Area;
@@ -241,16 +240,14 @@ void Way::partChanged(Feature* /*F*/, int ChangeId)
     if (isDeleted())
         return;
 
-    g_backend.indexRemove(p->BBox, this);
-
     p->BBoxUpToDate = false;
     p->wasPathComplete = false;
     MetaUpToDate = false;
     p->SmoothedUpToDate = false;
     p->wasPathComplete = false;
     p->VirtualsUptodate = false;
+    g_backend.sync(this);
 
-    g_backend.indexAdd(boundingBox(), this);
     notifyParents(ChangeId);
 }
 
@@ -269,7 +266,6 @@ void Way::add(Node* Pt)
 
 void Way::add(Node* Pt, int Idx)
 {
-    g_backend.indexRemove(p->BBox, this);
     p->Nodes.insert(p->Nodes.begin() + Idx, Pt);
 //	p->Nodes.push_back(Pt);
 //	std::rotate(p->Nodes.begin()+Idx,p->Nodes.end()-1,p->Nodes.end());
@@ -280,10 +276,7 @@ void Way::add(Node* Pt, int Idx)
     p->SmoothedUpToDate = false;
     p->wasPathComplete = false;
     p->VirtualsUptodate = false;
-    if (!isDeleted()) {
-        CoordBox bb = boundingBox();
-        g_backend.indexAdd(bb, this);
-    }
+    g_backend.sync(this);
 
     notifyChanges();
 }
@@ -306,8 +299,6 @@ int Way::findVirtual(Feature* Pt) const
 
 void Way::remove(int idx)
 {
-    g_backend.indexRemove(p->BBox, this);
-
     Node* Pt = p->Nodes[idx];
     // only remove as parent if the node is only included once
     p->Nodes.erase(p->Nodes.begin()+idx);
@@ -319,10 +310,7 @@ void Way::remove(int idx)
     p->SmoothedUpToDate = false;
     p->wasPathComplete = false;
     p->VirtualsUptodate = false;
-    if (!isDeleted()) {
-        CoordBox bb = boundingBox();
-        g_backend.indexAdd(bb, this);
-    }
+    g_backend.sync(this);
 
     notifyChanges();
 }
@@ -389,15 +377,15 @@ const CoordBox& Way::boundingBox(bool update) const
     {
         if (p->Nodes.size())
         {
-            p->BBox = CoordBox(p->Nodes[0]->position(),p->Nodes[0]->position());
+            BBox = CoordBox(p->Nodes[0]->position(),p->Nodes[0]->position());
             for (unsigned int i=1; i<p->Nodes.size(); ++i)
-                p->BBox.merge(p->Nodes[i]->position());
+                BBox.merge(p->Nodes[i]->position());
         }
         else
-            p->BBox = CoordBox(Coord(0,0),Coord(0,0));
+            BBox = CoordBox(Coord(0,0),Coord(0,0));
         p->BBoxUpToDate = true;
     }
-    return p->BBox;
+    return BBox;
 }
 
 void Way::updateMeta()
@@ -899,7 +887,7 @@ Way * Way::fromXML(Document* d, Layer * L, QXmlStreamReader& stream)
     Way* R = CAST_WAY(d->getFeature(id));
 
     if (!R) {
-        R = new Way();
+        R = g_backend.allocWay();
         R->setId(id);
         Feature::fromXML(stream, R);
         L->add(R);

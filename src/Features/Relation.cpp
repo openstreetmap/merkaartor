@@ -55,7 +55,6 @@ class RelationPrivate
         QPainterPath thePath;
         QPainterPath theBoundingPath;
 
-        mutable CoordBox BBox;
         bool BBoxUpToDate;
 
         RenderPriority theRenderPriority;
@@ -135,12 +134,10 @@ void Relation::partChanged(Feature*, int ChangeId)
     if (isDeleted())
         return;
 
-    g_backend.indexRemove(p->BBox, this);
-
     p->BBoxUpToDate = false;
     MetaUpToDate = false;
+    g_backend.sync(this);
 
-    g_backend.indexAdd(boundingBox(), this);
     notifyParents(ChangeId);
 }
 
@@ -163,7 +160,7 @@ const CoordBox& Relation::boundingBox(bool update) const
     if (!p->BBoxUpToDate && update)
     {
         if (p->Members.size() == 0)
-            p->BBox = CoordBox(Coord(0,0),Coord(0,0));
+            BBox = CoordBox(Coord(0,0),Coord(0,0));
         else
         {
             CoordBox Clip;
@@ -176,11 +173,11 @@ const CoordBox& Relation::boundingBox(bool update) const
                     } else
                         Clip.merge(p->Members[i].second->boundingBox());
                 }
-            p->BBox = Clip;
+            BBox = Clip;
             p->BBoxUpToDate = true;
         }
     }
-    return p->BBox;
+    return BBox;
 }
 
 void Relation::draw(QPainter& P, MapView* theView)
@@ -312,38 +309,29 @@ bool Relation::notEverythingDownloaded()
 
 void Relation::add(const QString& Role, Feature* F)
 {
-    g_backend.indexRemove(p->BBox, this);
     p->Members.push_back(qMakePair(Role,F));
     F->setParentFeature(this);
     p->BBoxUpToDate = false;
     MetaUpToDate = false;
-    if (!isDeleted()) {
-        CoordBox bb = boundingBox();
-        g_backend.indexAdd(bb, this);
-    }
+    g_backend.sync(this);
 
     notifyChanges();
 }
 
 void Relation::add(const QString& Role, Feature* F, int Idx)
 {
-    g_backend.indexRemove(p->BBox, this);
     p->Members.push_back(qMakePair(Role,F));
     std::rotate(p->Members.begin()+Idx,p->Members.end()-1,p->Members.end());
     F->setParentFeature(this);
     p->BBoxUpToDate = false;
     MetaUpToDate = false;
-    if (!isDeleted()) {
-        CoordBox bb = boundingBox();
-        g_backend.indexAdd(bb, this);
-    }
+    g_backend.sync(this);
 
     notifyChanges();
 }
 
 void Relation::remove(int Idx)
 {
-    g_backend.indexRemove(p->BBox, this);
     Feature* F = p->Members[Idx].second;
     // only remove as parent if the feature is only a member once
     p->Members.erase(p->Members.begin()+Idx);
@@ -351,10 +339,7 @@ void Relation::remove(int Idx)
         F->unsetParentFeature(this);
     p->BBoxUpToDate = false;
     MetaUpToDate = false;
-    if (!isDeleted()) {
-        CoordBox bb = boundingBox();
-        g_backend.indexAdd(bb, this);
-    }
+    g_backend.sync(this);
 
     notifyChanges();
 }
@@ -507,7 +492,7 @@ Relation * Relation::fromXML(Document * d, Layer * L, QXmlStreamReader& stream)
 
     Relation* R = CAST_RELATION(d->getFeature(id));
     if (!R) {
-        R = new Relation;
+        R = g_backend.allocRelation();
         R->setId(id);
         Feature::fromXML(stream, R);
     } else {
@@ -551,7 +536,7 @@ Relation * Relation::fromXML(Document * d, Layer * L, QXmlStreamReader& stream)
                 Relation* Part = dynamic_cast<Relation*>(d->getFeature(RId));
                 if (!Part)
                 {
-                    Part = new Relation;
+                    Part = g_backend.allocRelation();
                     Part->setId(RId);
                     Part->setLastUpdated(Feature::NotYetDownloaded);
                     L->add(Part);

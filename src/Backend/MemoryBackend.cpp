@@ -6,7 +6,7 @@ typedef RTree<Feature*, double, 2, double> CoordTree;
 class MemoryBackendPrivate
 {
 public:
-    QSet<Feature*> AllocFeatures;
+    QHash<Feature*, CoordBox> AllocFeatures;
     CoordTree theRTree;
     QList<Feature*> findResult;
 };
@@ -115,9 +115,10 @@ MemoryBackend::~MemoryBackend()
 //        p->theRTree.GetNext(it);
 //    }
 
-    QSet<Feature *>::const_iterator i = p->AllocFeatures.constBegin();
+    QHash<Feature *, CoordBox>::const_iterator i = p->AllocFeatures.constBegin();
     while (i != p->AllocFeatures.constEnd()) {
-        delete *i;
+        delete i.key();
+        ++i;
     }
 
     delete p;
@@ -126,65 +127,75 @@ MemoryBackend::~MemoryBackend()
 Node * MemoryBackend::allocNode(const Node& other)
 {
     Node* f = new Node(other);
-    p->AllocFeatures.insert(f);
+    p->AllocFeatures[f] = f->BBox;
+    if (!f->BBox.isNull()) {
+        indexAdd(f->BBox, f);
+    }
     return f;
 }
 
 Node * MemoryBackend::allocNode(const QPointF& aCoord)
 {
     Node* f = new Node(aCoord);
-    p->AllocFeatures.insert(f);
+    p->AllocFeatures[f] = f->BBox;
+    if (!f->BBox.isNull()) {
+        indexAdd(f->BBox, f);
+    }
     return f;
 }
 
 Way * MemoryBackend::allocWay()
 {
     Way* f = new Way();
-    p->AllocFeatures.insert(f);
+    p->AllocFeatures[f] = CoordBox();
     return f;
 }
 
 Way * MemoryBackend::allocWay(const Way& other)
 {
     Way* f = new Way(other);
-    p->AllocFeatures.insert(f);
+    p->AllocFeatures[f] = CoordBox();
     return f;
 }
 
 Relation * MemoryBackend::allocRelation()
 {
     Relation* f = new Relation();
-    p->AllocFeatures.insert(f);
+    p->AllocFeatures[f] = CoordBox();
     return f;
 }
 
 Relation * MemoryBackend::allocRelation(const Relation& other)
 {
     Relation* f = new Relation(other);
-    p->AllocFeatures.insert(f);
+    p->AllocFeatures[f] = CoordBox();
     return f;
 }
 
 TrackSegment * MemoryBackend::allocSegment()
 {
     TrackSegment* f = new TrackSegment();
-    p->AllocFeatures.insert(f);
+    p->AllocFeatures[f] = CoordBox();
     return f;
 }
 
 void MemoryBackend::deallocFeature(Feature *f)
 {
-    indexRemove(f->boundingBox(), f);
+    if (p->AllocFeatures.contains(f))
+        indexRemove(p->AllocFeatures[f], f);
 }
 
 void MemoryBackend::sync(Feature *f)
 {
-//    CoordBox bb = f->boundingBox();
-//    if (!bb.isNull()) {
-//        double min[] = {bb.bottomLeft().x(), bb.bottomLeft().y()};
-//        double max[] = {bb.topRight().x(), bb.topRight().y()};
-//        p->theRTree.Insert(min, max, f);
-//    }
+    if (!p->AllocFeatures[f].isNull())
+        indexRemove(p->AllocFeatures[f], f);
+    if (!f->isDeleted() && !f->isVirtual()) {
+        CoordBox bb = f->boundingBox();
+        p->AllocFeatures[f] = bb;
+        if (!bb.isNull()) {
+            indexAdd(bb, f);
+        }
+    }
 }
 
 

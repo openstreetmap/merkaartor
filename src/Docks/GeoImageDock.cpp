@@ -385,7 +385,7 @@ void GeoImageDock::loadImage(QString file, Coord pos)
     if (!Pt) {
         Pt = g_backend.allocNode(pos);
         theLayer->add(Pt);
-        g_backend.indexAdd(Pt->boundingBox(), Pt);
+        g_backend.sync(Pt);
     }
 
     QDateTime time = QFileInfo(file).created();
@@ -639,7 +639,7 @@ void GeoImageDock::loadImages(QStringList fileNames)
             if (!Pt) {
                 Pt = g_backend.allocNode(newPos);
                 theLayer->add(Pt);
-                g_backend.indexAdd(Pt->boundingBox(), Pt);
+                g_backend.sync(Pt);
             }
 
             //Pt->setTag("_waypoint_", "true");

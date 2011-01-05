@@ -17,8 +17,15 @@
 #include "Features.h"
 #include "MerkaartorPreferences.h"
 
-SpatialiteBackend::SpatialiteBackend(QObject* parent)
-    : QObject(parent)
+class SpatialBackendPrivate
+{
+public:
+    QHash<Feature*, qint64> AllocFeatures;
+    QList<Feature*> findResult;
+};
+
+SpatialiteBackend::SpatialiteBackend()
+    : SpatialiteBase(), p(new SpatialBackendPrivate)
 {
     /*
     VERY IMPORTANT:
@@ -38,8 +45,8 @@ SpatialiteBackend::SpatialiteBackend(QObject* parent)
     InitializeNew();
 }
 
-SpatialiteBackend::SpatialiteBackend(const QString& filename, QObject* parent)
-    : QObject(parent)
+SpatialiteBackend::SpatialiteBackend(const QString& filename)
+    : SpatialiteBase(), p(new SpatialBackendPrivate)
 {
     /*
     VERY IMPORTANT:
@@ -70,11 +77,27 @@ void SpatialiteBackend::InitializeNew()
     execFile(":/Utils/Spatialite/init_spatialite-2.3.sql");
 
     //
-    // Table pour stocker les users (pour tous les éléments).
+    // Tables pour gérer les features.
     //
-    exec("CREATE TABLE IF NOT EXISTS user ("
-         "id INTEGER PRIMARY KEY,"
-         "name TEXT)");
+    exec(
+         "CREATE TABLE IF NOT EXISTS feature ("
+         "   type UNSIGNED CHAR,"
+         "   id INTEGER,"
+         "   version INTEGER,"
+         "   timestamp TIMESTAMP,"
+         "   user TEXT DEFAULT NULL,"
+
+         "   PRIMARY KEY (type, id)"
+         "       );"
+
+         "SELECT AddGeometryColumn('feature', 'GEOMETRY', 4326, 'GEOMETRY', 2);"
+         "SELECT CreateSpatialIndex('feature','GEOMETRY');"
+
+         "CREATE TABLE IF NOT EXISTS feature_tags ("
+         "   id_feature INTEGER NOT NULL REFERENCES feature,"
+         "   id_tag INTEGER NOT NULL REFERENCES tag,"
+         "   PRIMARY KEY (id_feature, id_tag))"
+                );
 
     //
     // Table pour stocker les tags (pour tous les éléments).
@@ -84,56 +107,6 @@ void SpatialiteBackend::InitializeNew()
          "key TEXT,"
          "value TEXT,"
          "UNIQUE (key, value))");
-
-    //
-    // Tables pour gérer les changesets.
-    //
-//    exec("CREATE TABLE IF NOT EXISTS changeset ("
-//         "   id INTEGER PRIMARY KEY,"
-//         "   user TEXT DEFAULT NULL,"
-//         "   uid INTEGER REFERENCES user,"
-//         "   created_at TEXT NOT NULL,"
-//         "   num_changes INTEGER NOT NULL,"
-//         "   closed_at TEXT DEFAULT NULL,"
-//         "   open INTEGER(1) NOT NULL);"
-
-//         "SELECT AddGeometryColumn('changeset','cbbox',4326,'POLYGON',2,1);"
-
-//         "CREATE TABLE IF NOT EXISTS changeset_tags ("
-//         "    id_changeset INTEGER REFERENCES changeset,"
-//         "    id_tag INTEGER NOT NULL REFERENCES tag,"
-//         "    PRIMARY KEY (id_changeset, id_tag))");
-
-    //
-    // Tables pour gérer les features.
-    //
-    exec(
-         "CREATE TABLE IF NOT EXISTS feature ("
-         "   type UNSIGNED CHAR,"
-         "   id INTEGER,"
-         "   version INTEGER,"
-//         "   changeset INTEGER REFERENCES changeset,"
-         "   uid INTEGER REFERENCES user,"
-         "   actor INTEGER,"
-//         "   visible INTEGER(1) DEFAULT 1 NOT NULL,"
-//         "   virtual INTEGER(1) DEFAULT 0 NOT NULL,"
-//         "   deleted INTEGER(1) DEFAULT 0 NOT NULL,"
-         "   special INTEGER(1) DEFAULT 0 NOT NULL,"
-//         "   uploaded INTEGER(1) DEFAULT 0 NOT NULL,"
-//         "   dirtylevel INTEGER DEFAULT 0 NOT NULL,"
-         "   timestamp TEXT NOT NULL,"
-
-         "   PRIMARY KEY (type, id)"
-         "       );"
-
-         "SELECT AddGeometryColumn('feature', 'bbox', 4326, 'POLYGON', 2);"
-         "SELECT CreateSpatialIndex('feature','bbox');"
-
-         "CREATE TABLE IF NOT EXISTS feature_tags ("
-         "   id_feature INTEGER NOT NULL REFERENCES feature,"
-         "   id_tag INTEGER NOT NULL REFERENCES tag,"
-         "   PRIMARY KEY (id_feature, id_tag))"
-                );
 
     //
     // Tables pour gérer les way.
@@ -162,20 +135,16 @@ void SpatialiteBackend::InitializeNew()
     fSelectFeatureBbox = SpatialStatement(this, "SELECT * from feature where ROWID IN "
                                        "(Select rowid from idx_feature_Geometry WHERE xmax > ? and ymax > ? and xmin < ? and ymin < ?);");
 
-    fSelectUser = SpatialStatement(this, "SELECT id, name FROM user WHERE id=?");
-    fInsertUser = SpatialStatement(this, "INSERT INTO user (id, name) VALUES (?,?)");
     fSelectTag = SpatialStatement(this, "SELECT id FROM tag WHERE (key=? AND value=?)");
     fInsertTag = SpatialStatement(this, "INSERT INTO tag (key, value) VALUES (?,?)");
-//    fInsertChangeset = SpatialStatement(this, "INSERT INTO changeset (id, user, uid, created_at, num_changes, closed_at, open, mbr) VALUES (?,?,?,?,?,?,?,?)");
-//    fInsertChangesetTags = SpatialStatement(this, "INSERT INTO changeset_tags (id_changeset, id_tag) VALUES (?,?)");
-    fInsertFeature = SpatialStatement(this, "INSERT INTO feature (type,id,version,uid,actor,virtual,deleted,special,uploaded,dirtylevel,timestamp,bbox) VALUES (?,?,?,?,?,?,?,?,?,?,?,?)");
+    fCreateFeature = SpatialStatement(this, "INSERT INTO feature (type) VALUES (?)");
     fUpdateFeature = SpatialStatement(this, "UPDATE feature set version=?,uid=?,actor=?,virtual=?,deleted=?,special=?,uploaded=?,dirtylevel=?,timestamp=?,bbox=?) WHERE ROWID=?");
     fInsertFeatureTags = SpatialStatement(this, "INSERT INTO feature_tags (id_feature, id_tag) VALUES (?,?)");
     fInsertWayNodes = SpatialStatement(this, "INSERT INTO way_nodes (id_way, id_node, rang) VALUES (?,?,?)");
     fInsertRelationMembers = SpatialStatement(this, "INSERT INTO relation_members (id_relation, type, id_member, role, rang) VALUES (?,?,?,?,?)");
 
     exec("PRAGMA cache_size = 10000");
-//    exec("PRAGMA synchronous = OFF");
+    exec("PRAGMA synchronous = OFF");
 //    exec("PRAGMA journal_mode = OFF");
     exec("PRAGMA temp_store =  MEMORY");
     exec("PRAGMA locking_mode = EXCLUSIVE");
@@ -195,3 +164,111 @@ void SpatialiteBackend::updateFeature(Feature *F)
 void SpatialiteBackend::deleteFeature(Feature *F)
 {
 }
+
+/*******/
+
+Node * SpatialiteBackend::allocNode(const Node& other)
+{
+    fCreateFeature.bind_int(1, 'N');
+    if (fCreateFeature.step()) {
+        Node* f = new Node(other);
+        f->internal_id = lastRowId();
+        p->AllocFeatures[f] = f->internal_id;
+        return f;
+    }
+    return NULL;
+}
+
+Node * SpatialiteBackend::allocNode(const QPointF& aCoord)
+{
+    fCreateFeature.bind_int(1, 'N');
+    if (fCreateFeature.step()) {
+        Node* f = new Node(aCoord);
+        f->internal_id = lastRowId();
+        p->AllocFeatures[f] = f->internal_id;
+        return f;
+    }
+    return NULL;
+}
+
+Way * SpatialiteBackend::allocWay()
+{
+    fCreateFeature.bind_int(1, 'W');
+    if (fCreateFeature.step()) {
+        Way* f = new Way();
+        f->internal_id = lastRowId();
+        p->AllocFeatures[f] = f->internal_id;
+        return f;
+    }
+    return NULL;
+}
+
+Way * SpatialiteBackend::allocWay(const Way& other)
+{
+    fCreateFeature.bind_int(1, 'W');
+    if (fCreateFeature.step()) {
+        Way* f = new Way(other);
+        f->internal_id = lastRowId();
+        p->AllocFeatures[f] = f->internal_id;
+        return f;
+    }
+    return NULL;
+}
+
+Relation * SpatialiteBackend::allocRelation()
+{
+    fCreateFeature.bind_int(1, 'R');
+    if (fCreateFeature.step()) {
+        Relation* f = new Relation();
+        f->internal_id = lastRowId();
+        p->AllocFeatures[f] = f->internal_id;
+        return f;
+    }
+    return NULL;
+}
+
+Relation * SpatialiteBackend::allocRelation(const Relation& other)
+{
+    fCreateFeature.bind_int(1, 'R');
+    if (fCreateFeature.step()) {
+        Relation* f = new Relation(other);
+        f->internal_id = lastRowId();
+        p->AllocFeatures[f] = f->internal_id;
+        return f;
+    }
+    return NULL;
+}
+
+TrackSegment * SpatialiteBackend::allocSegment()
+{
+    TrackSegment* f = new TrackSegment();
+    p->AllocFeatures[f] = -1;
+    return f;
+}
+
+void SpatialiteBackend::deallocFeature(Feature *f)
+{
+}
+
+void SpatialiteBackend::sync(Feature *f)
+{
+//    CoordBox bb = f->boundingBox();
+//    if (!bb.isNull()) {
+//        double min[] = {bb.bottomLeft().x(), bb.bottomLeft().y()};
+//        double max[] = {bb.topRight().x(), bb.topRight().y()};
+//        p->theRTree.Insert(min, max, f);
+    //    }
+}
+
+void SpatialiteBackend::getFeatureSet(QMap<RenderPriority, QSet<Feature *> > &theFeatures, QList<QRectF> &invalidRects, QRectF &clipRect, Projection &theProjection, QTransform &theTransform)
+{
+}
+
+const QList<Feature *> & SpatialiteBackend::indexFind(const QRectF &vp)
+{
+}
+
+void SpatialiteBackend::get(const QRectF &bb, QList<Feature *> &theFeatures)
+{
+}
+

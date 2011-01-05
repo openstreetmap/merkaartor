@@ -51,6 +51,11 @@ bool SpatialiteBase::execFile(const QString& aPath)
     return exec(s);
 }
 
+qint64 SpatialiteBase::lastRowId()
+{
+    return sqlite3_last_insert_rowid(m_handle);
+}
+
 /************************************/
 void SpatialStatement::bind_double(int idx, double val)
 {

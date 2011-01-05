@@ -24,6 +24,7 @@ class QProgressDialog;
 class Node : public Feature
 {
     friend class MemoryBackend;
+    friend class SpatialiteBackend;
 
 protected:
     Node(const Coord& aCoord);
@@ -95,7 +96,6 @@ public:
     virtual QString toHtml();
 
 private:
-    CoordBox Position;
     double Elevation;
     double Speed;
 

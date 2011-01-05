@@ -16,17 +16,40 @@
 #include <QtCore>
 
 #include "SpatialiteBase.h"
+#include "IBackend.h"
+#include "Features.h"
 
-class Feature;
-
-class SpatialiteBackend : public QObject, public SpatialiteBase
+class SpatialBackendPrivate;
+class SpatialiteBackend : public SpatialiteBase, public IBackend
 {
-    Q_OBJECT
+public:
+    SpatialiteBackend();
+    SpatialiteBackend(const QString& filename);
+    virtual ~SpatialiteBackend();
+
+private:
+    SpatialBackendPrivate* p;
 
 public:
-    SpatialiteBackend(QObject* parent=0);
-    SpatialiteBackend(const QString& filename, QObject* parent=0);
-    virtual ~SpatialiteBackend();
+    virtual Node* allocNode(const Node& other);
+    virtual Node* allocNode(const QPointF& aCoord);
+
+    virtual Way* allocWay();
+    virtual Way* allocWay(const Way& other);
+
+    virtual Relation* allocRelation();
+    virtual Relation* allocRelation(const Relation& other);
+
+    virtual TrackSegment* allocSegment();
+
+    virtual void deallocFeature(Feature* f);
+
+    virtual void sync(Feature* f);
+
+    virtual const QList<Feature*>& indexFind(const QRectF& vp);
+    virtual void get(const QRectF& bb, QList<Feature*>& theFeatures);
+    virtual void getFeatureSet(QMap<RenderPriority, QSet <Feature*> >& theFeatures,
+                       QList<QRectF>& invalidRects, QRectF& clipRect, Projection& theProjection, QTransform& theTransform);
 
 protected:
     void InitializeNew();
@@ -34,13 +57,9 @@ protected:
     SpatialStatement fSelectFeature;
     SpatialStatement fSelectFeatureBbox;
 
-    SpatialStatement fSelectUser;
-    SpatialStatement fInsertUser;
     SpatialStatement fSelectTag;
     SpatialStatement fInsertTag;
-//    SpatialStatement fInsertChangeset;
-//    SpatialStatement fInsertChangesetTags;
-    SpatialStatement fInsertFeature;
+    SpatialStatement fCreateFeature;
     SpatialStatement fUpdateFeature;
     SpatialStatement fInsertFeatureTags;
     SpatialStatement fInsertWayTags;

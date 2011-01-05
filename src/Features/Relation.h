@@ -12,6 +12,7 @@ class QProgressDialog;
 class Relation : public Feature
 {
     friend class MemoryBackend;
+    friend class SpatialiteBackend;
 
 protected:
     Relation(void);

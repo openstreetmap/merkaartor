@@ -253,7 +253,7 @@ void EditInteraction::snapMouseDoubleClickEvent(QMouseEvent* anEvent, Feature* a
 //            view()->properties()->checkMenuStatus();
 //            view()->update();
 //        } else {
-//            Node* N = new Node(XY_TO_COORD(anEvent->pos()));
+//            Node* N = g_backend.allocNode(XY_TO_COORD(anEvent->pos()));
 //            CommandList* theList  = new CommandList(MainWindow::tr("Create point %1").arg(N->id()), N);
 //            theList->add(new AddFeatureCommand(main()->document()->getDirtyOrOriginLayer(),N,true));
 //            document()->addHistory(theList);
