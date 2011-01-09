@@ -40,7 +40,9 @@ public:
     QString selServer;
 
     IImageManager* theImageManager;
+#ifdef USE_WEBKIT
     BrowserImageManager* theBrowserImageManager;
+#endif
     ImageManager* theNetworkImageManager;
 
     TileMapAdapter* tmsa;
@@ -57,7 +59,9 @@ public:
     {
         theMapAdapter = NULL;
         theImageManager = NULL;
+#ifdef USE_WEBKIT
         theBrowserImageManager = NULL;
+#endif
         theNetworkImageManager = NULL;
         tmsa = NULL;
         wmsa = NULL;
