@@ -1,8 +1,9 @@
 <!--
+
 stylesheet by Markus Straub, code@ravage.at, 2010
 
-red: illegal value for cycleway
-cyan: usage of cycleway:left or cycleway:right
+error_red: illegal value for cycleway
+attention_cyan: usage of cycleway:left or cycleway:right
 
 black street: cycling is forbidden (motorways, trunk, bicycle=no)
 
@@ -19,39 +20,64 @@ dashed blue-red: pedestrian street/way where cycling is allowed
 -->
 
 <!DOCTYPE mapStyle [
-<!ENTITY drivableRoads "[highway] isoneof (primary, primary_link, secondary, secondary_link, tertiary, tertiary_link, residential, unclassified, construction, road, pedestrian, minor, service, living_street)">
+<!ENTITY drivableRoads "[highway] isoneof (primary, primary_link, secondary, secondary_link, tertiary, tertiary_link, unclassified, residential, living_street, pedestrian, minor, service, ford, road)">
+<!ENTITY error_red "#FF0000fc">
+<!ENTITY attention_cyan "#00FFFFfc">
+<!ENTITY forbidden_black "#333333fc">
+<!ENTITY pedestrian_red "#ff8888fc">
+<!ENTITY cycle_blue "#0000FFfc">
+<!ENTITY normal_road_white "#fffffffc">
+<!ENTITY open_oneway_pink "#FFEAF4fc">
+<!ENTITY closed_oneway_violet "#FF95CAfc">
+<!ENTITY lane_border_gray "#777777fc">
 ]>
 
 <mapStyle>
 
+<painter
+ backgroundColor="&lane_border_gray;" backgroundScale="0.1" backgroundOffset="0.1"
+ fillColor="#e0e0e0cd"
+ drawTrafficDirectionMarks="no" labelColor="#333333fc"
+>
+  <selector expr="[area] isoneof (yes , true)"/>
+</painter>
+
+<!-- //////////////////////// SPECIAL //////////////////////// -->
+
 <!-- invalid values for cycleway -->
 <painter
- backgroundColor="#FF0000fc" backgroundScale="2" backgroundOffset="3"
- foregroundColor="#FF0000fc" foregroundScale="1" foregroundOffset="2"
+ backgroundColor="&error_red;" backgroundScale="2" backgroundOffset="3"
+ foregroundColor="&error_red;" foregroundScale="1" foregroundOffset="2"
  zoomUnder="0.1" zoomUpper="1e+07"
- drawTrafficDirectionMarks="yes" labelColor="#ddddddff" labelScale="1.2" labelOffset="3"
- labelFont="DejaVu Sans Condensed,12,-1,5,50,0,0,0,0,0" labelTag="name" labelBackgroundColor="#ffffff7c" labelBackgroundTag=""
 >
   <selector expr="not [cycleway] is _NULL_ and not [cycleway] isoneof (lane, track, opposite, opposite_lane, opposite_track)"/>
 </painter>
 
 <!-- usage of cycleway:left of cycleway:right -->
 <painter
- backgroundColor="#00FFFFfc" backgroundScale="2" backgroundOffset="3"
- foregroundColor="#00FFFFfc" foregroundScale="1" foregroundOffset="2"
+ backgroundColor="&attention_cyan;" backgroundScale="2" backgroundOffset="3"
+ foregroundColor="&attention_cyan;" foregroundScale="1" foregroundOffset="2"
  zoomUnder="0.1" zoomUpper="1e+07"
  drawTrafficDirectionMarks="yes" labelColor="#ddddddff" labelScale="1.2" labelOffset="3"
  labelFont="DejaVu Sans Condensed,12,-1,5,50,0,0,0,0,0" labelTag="name" labelBackgroundColor="#ffffff7c" labelBackgroundTag=""
 >
-  <selector expr="not [cycleway:right] is _NULL_ or not [cycleway:right] is _NULL_"/>
+  <selector expr="not [cycleway:left] is _NULL_ or not [cycleway:right] is _NULL_"/>
 </painter>
 
 <!-- roads where bikes are not allowed: completely gray -->
 <painter
- backgroundColor="#333333fc" backgroundScale="1.2" backgroundOffset="3"
- foregroundColor="#333333fc" foregroundScale="1" foregroundOffset="2"
+ backgroundColor="&forbidden_black;" backgroundScale="1.2" backgroundOffset="3"
+ foregroundColor="&forbidden_black;" foregroundScale="1" foregroundOffset="2"
 >
-  <selector expr="[highway] isoneof (motorway, motorway_link, trunk, trunk_link) or [bicycle] is no"/>
+  <selector expr="[highway] isoneof (motorway, motorway_link, trunk, trunk_link) or [bicycle] isoneof (0, no)"/>
+</painter>
+
+<!-- in living streets cyclists can ignore oneways -->
+<painter
+ backgroundColor="&lane_border_gray;" backgroundScale="1.2" backgroundOffset="3"
+ foregroundColor="&open_oneway_pink;" foregroundScale="1" foregroundOffset="2"
+>
+  <selector expr="[highway] is living_street and [oneway] is yes"/>
 </painter>
 
 
@@ -59,8 +85,8 @@ dashed blue-red: pedestrian street/way where cycling is allowed
 
 <!-- drivable road & oneway & cycleway=opposite_track: slight violet with fat blue border -->
 <painter
- backgroundColor="#0000FFfc" backgroundScale="2.5" backgroundOffset="3"
- foregroundColor="#FFEAF4fc" foregroundScale="1" foregroundOffset="2"
+ backgroundColor="&cycle_blue;" backgroundScale="2.5" backgroundOffset="3"
+ foregroundColor="&open_oneway_pink;" foregroundScale="1" foregroundOffset="2"
  drawTrafficDirectionMarks="yes"
 >
   <selector expr="&drivableRoads; and [oneway] is yes and [cycleway] is opposite_track"/>
@@ -68,8 +94,8 @@ dashed blue-red: pedestrian street/way where cycling is allowed
 
 <!-- drivable road & oneway & cycleway=opposite_lane: slight violet with fat border -->
 <painter
- backgroundColor="#777777fc" backgroundScale="2.5" backgroundOffset="3"
- foregroundColor="#FFEAF4fc" foregroundScale="1" foregroundOffset="2"
+ backgroundColor="&lane_border_gray;" backgroundScale="1.2" backgroundOffset="3"
+ foregroundColor="&open_oneway_pink;" foregroundScale="1" foregroundOffset="2"
  drawTrafficDirectionMarks="yes"
 >
   <selector expr="&drivableRoads; and [oneway] is yes and [cycleway] is opposite_lane"/>
@@ -77,8 +103,8 @@ dashed blue-red: pedestrian street/way where cycling is allowed
 
 <!-- drivable road & oneway & cycleway=opposite: slight violet with gray border -->
 <painter
- backgroundColor="#777777fc" backgroundScale="1.2" backgroundOffset="3"
- foregroundColor="#FFEAF4fc" foregroundScale="1" foregroundOffset="2"
+ backgroundColor="&lane_border_gray;" backgroundScale="1.2" backgroundOffset="3"
+ foregroundColor="&open_oneway_pink;" foregroundScale="1" foregroundOffset="2"
  drawTrafficDirectionMarks="yes"
 >
   <selector expr="&drivableRoads; and [oneway] is yes and [cycleway] is opposite"/>
@@ -86,8 +112,8 @@ dashed blue-red: pedestrian street/way where cycling is allowed
 
 <!-- drivable road & oneway & cycleway=track: heavy violet with fat blue border -->
 <painter
- backgroundColor="#0000FFfc" backgroundScale="2.5" backgroundOffset="3"
- foregroundColor="#FF95CAfc" foregroundScale="1" foregroundOffset="2"
+ backgroundColor="&cycle_blue;" backgroundScale="2.5" backgroundOffset="3"
+ foregroundColor="&closed_oneway_violet;" foregroundScale="1" foregroundOffset="2"
  drawTrafficDirectionMarks="yes"
 >
   <selector expr="&drivableRoads; and [oneway] is yes and [cycleway] is track"/>
@@ -95,8 +121,8 @@ dashed blue-red: pedestrian street/way where cycling is allowed
 
 <!-- drivable road & oneway & cycleway=lane: heavy violet with fat gray border -->
 <painter
- backgroundColor="#777777fc" backgroundScale="2.5" backgroundOffset="3"
- foregroundColor="#FF95CAfc" foregroundScale="1" foregroundOffset="2"
+ backgroundColor="&lane_border_gray;" backgroundScale="2.5" backgroundOffset="3"
+ foregroundColor="&closed_oneway_violet;" foregroundScale="1" foregroundOffset="2"
  drawTrafficDirectionMarks="yes"
 >
   <selector expr="&drivableRoads; and [oneway] is yes and [cycleway] is lane"/>
@@ -104,8 +130,8 @@ dashed blue-red: pedestrian street/way where cycling is allowed
 
 <!-- drivable road & oneway: heavy violet with gray border -->
 <painter
- backgroundColor="#777777fc" backgroundScale="1.2" backgroundOffset="3"
- foregroundColor="#FF95CAfc" foregroundScale="1" foregroundOffset="2"
+ backgroundColor="&lane_border_gray;" backgroundScale="1.2" backgroundOffset="3"
+ foregroundColor="&closed_oneway_violet;" foregroundScale="1" foregroundOffset="2"
  drawTrafficDirectionMarks="yes"
 >
   <selector expr="&drivableRoads; and [oneway] is yes"/>
@@ -117,45 +143,45 @@ dashed blue-red: pedestrian street/way where cycling is allowed
 <!-- //////////////////////// DEDICATED CYCLEWAYS / FOOTWAYS //////////////////////// -->
 
 <painter
- backgroundColor="#0000fffc" backgroundScale="0.7" backgroundOffset="3"
- foregroundColor="#ff8888fc" foregroundScale="0.3" foregroundOffset="2"
+ backgroundColor="&cycle_blue;" backgroundScale="0.7" backgroundOffset="3"
+ foregroundColor="&pedestrian_red;" foregroundScale="0.3" foregroundOffset="2"
  foregroundDashDown="2" foregroundDashUp="2"
  drawTrafficDirectionMarks="yes"
 >
-  <selector expr="[highway] isoneof (pedestrian, footway, steps) and [bicycle] isoneof (1, yes, permissive, destination)"/>
+  <selector expr="[highway] isoneof (pedestrian, bridleway, path, footway, steps) and [bicycle] isoneof (1, yes, permissive, destination, official, designated)"/>
 </painter>
 
 <painter
- foregroundColor="#0000fffc" foregroundScale="0.7" foregroundOffset="2"
+ foregroundColor="&cycle_blue;" foregroundScale="0.7" foregroundOffset="2"
  foregroundDashDown="2" foregroundDashUp="2"
  drawTrafficDirectionMarks="yes"
 >
-  <selector expr="[highway] is cycleway"/>
+  <selector expr="[highway] isoneof (cycleway)"/>
 </painter>
 
 
 <!-- //////////////////////// NORMAL ROADS //////////////////////// -->
 
-<!-- drivable roads & track: white with fat gray border -->
+<!-- drivable roads & track: white with fat blue border -->
 <painter
- backgroundColor="#0000FFfc" backgroundScale="3" backgroundOffset="3"
- foregroundColor="#fffffffc" foregroundScale="1" foregroundOffset="2"
+ backgroundColor="&cycle_blue;" backgroundScale="3" backgroundOffset="3"
+ foregroundColor="&normal_road_white;" foregroundScale="1" foregroundOffset="2"
 >
   <selector expr="&drivableRoads; and [cycleway] is track"/>
 </painter>
 
 <!-- drivable roads & lane: white with fat gray border -->
 <painter
- backgroundColor="#777777fc" backgroundScale="3" backgroundOffset="3"
- foregroundColor="#fffffffc" foregroundScale="1" foregroundOffset="2"
+ backgroundColor="&lane_border_gray;" backgroundScale="3" backgroundOffset="3"
+ foregroundColor="&normal_road_white;" foregroundScale="1" foregroundOffset="2"
 >
   <selector expr="&drivableRoads; and [cycleway] is lane"/>
 </painter>
 
 <!-- drivable roads: white with gray border -->
 <painter
- backgroundColor="#777777fc" backgroundScale="1.2" backgroundOffset="3"
- foregroundColor="#fffffffc" foregroundScale="1" foregroundOffset="2"
+ backgroundColor="&lane_border_gray;" backgroundScale="1.2" backgroundOffset="3"
+ foregroundColor="&normal_road_white;" foregroundScale="1" foregroundOffset="2"
 >
   <selector expr="&drivableRoads;"/>
 </painter>
@@ -181,11 +207,11 @@ dashed blue-red: pedestrian street/way where cycling is allowed
  zoomUnder="0.2" zoomUpper="1e+07"
  icon=":/MapIcons/map-icons/square.small/vehicle/parking/garage.png" iconScale="0" iconOffset="0"
 >
-  <selector expr="[amenity] is bicycle_parking and [covered] is yes"/>
+  <selector expr="[amenity] is bicycle_parking and [coveerror_red] is yes"/>
 </painter>
 <painter
  zoomUnder="0.2" zoomUpper="1e+07"
- foregroundColor="#0000FFfc"
+ foregroundColor="&cycle_blue;"
 >
   <selector expr="[amenity] is bicycle_parking"/>
 </painter>
@@ -211,14 +237,13 @@ dashed blue-red: pedestrian street/way where cycling is allowed
 
 <painter
  fillColor="#EEEEEEcd"
- drawTrafficDirectionMarks="no" labelColor="#333333ff" labelScale="1.5" labelOffset="6"
- labelFont="DejaVu Sans Condensed,12,-1,5,50,0,0,0,0,0" labelTag="name"labelHalo="yes" labelArea="yes">
+ drawTrafficDirectionMarks="no">
   <selector expr="not [building] is _NULL_"/>
 </painter>
 <painter
  zoomUnder="0.02" zoomUpper="1e+07"
  fillColor="#b6fdb6cd"
- drawTrafficDirectionMarks="no" labelColor="#333333fc" labelScale="7" labelOffset="5.5"
+ drawTrafficDirectionMarks="no" labelColor="&forbidden_black;" labelScale="7" labelOffset="5.5"
  labelFont="DejaVu Sans Condensed,12,-1,5,50,0,0,0,0,0" labelTag="name" labelHalo="yes" labelArea="yes">
   <selector expr="[leisure] is park"/>
 </painter>
@@ -355,7 +380,7 @@ dashed blue-red: pedestrian street/way where cycling is allowed
   <selector expr="[sport] is multi"/>
 </painter>
 <painter
- backgroundColor="#0000fffc" backgroundScale="0" backgroundOffset="3"
+ backgroundColor="&cycle_blue;" backgroundScale="0" backgroundOffset="3"
  fillColor="#a0b6ffcd"
  drawTrafficDirectionMarks="yes">
   <selector expr="[sport] is swimming"/>
