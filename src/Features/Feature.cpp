@@ -257,8 +257,6 @@ void Feature::setId(const IFeature::FId& id)
     p->Id = id;
 
     // Make sure any new id is unique
-    if (id.numId < -12000)
-        qDebug("numid");
     if (id.numId < g_feat_rndId)
         g_feat_rndId = id.numId;
 }

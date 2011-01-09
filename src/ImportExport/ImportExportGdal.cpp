@@ -190,12 +190,12 @@ Way *ImportExportGdal::readWay(Layer* aLayer, OGRLineString *poRing)
     OGRPoint p;
 
     Way* w = g_backend.allocWay(aLayer);
+    aLayer->add(w);
     for(int i = 0;  i < numNode;  i++) {
         poRing->getPoint(i, &p);
         Node *n = nodeFor(aLayer, p);
         w->add(n);
     }
-    aLayer->add(w);
     return w;
 }
 
@@ -353,9 +353,9 @@ bool ImportExportGdal::import(Layer* aLayer)
     for (int l=0; l<poDS->GetLayerCount() && !progress.wasCanceled(); ++l) {
         poLayer = poDS->GetLayer(l);
 
-//        int sz = poLayer->GetFeatureCount();
-//        if (sz != -1)
-//            progress.setMaximum(progress.maximum()+sz);
+        int sz = poLayer->GetFeatureCount(FALSE);
+        if (sz != -1)
+            progress.setMaximum(progress.maximum()+sz);
 
         int curImported = 0;
 //        poLayer->ResetReading();
@@ -391,6 +391,8 @@ bool ImportExportGdal::import(Layer* aLayer)
                         ++curImported;
                         ++totimported;
                         progress.setLabelText(QApplication::tr("Imported: %1").arg(totimported));
+                        if (progress.maximum() > 0)
+                            progress.setValue(totimported);
                         qApp->processEvents();
                     }
                 }
