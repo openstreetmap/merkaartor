@@ -388,14 +388,14 @@ bool ImportExportGdal::import(Layer* aLayer)
                             }
                             F->setTag(k, poFeature->GetFieldAsString(i));
                         }
-                        ++curImported;
-                        ++totimported;
-                        progress.setLabelText(QApplication::tr("Imported: %1").arg(totimported));
-                        if (progress.maximum() > 0)
-                            progress.setValue(totimported);
-                        qApp->processEvents();
                     }
                 }
+                ++curImported;
+                ++totimported;
+                progress.setLabelText(QApplication::tr("Imported: %1").arg(totimported));
+                if (progress.maximum() > 0)
+                    progress.setValue(totimported);
+                qApp->processEvents();
             }
             else
             {
