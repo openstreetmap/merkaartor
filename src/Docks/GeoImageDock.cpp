@@ -232,7 +232,7 @@ void GeoImageDock::removeImages(void)
         }
         if (usedTrackPoints.at(i).inserted) {
             Pt->layer()->remove(Pt);
-            g_backend.deallocFeature(Pt);
+            g_backend.deallocFeature(Pt->layer(), Pt);
         }
         else
             Pt->clearTag("Picture");
@@ -383,7 +383,7 @@ void GeoImageDock::loadImage(QString file, Coord pos)
         else
             Pt = 0;
     if (!Pt) {
-        Pt = g_backend.allocNode(pos);
+        Pt = g_backend.allocNode(theLayer, pos);
         theLayer->add(Pt);
         g_backend.sync(Pt);
     }
@@ -637,7 +637,7 @@ void GeoImageDock::loadImages(QStringList fileNames)
                     Pt = 0;
             }
             if (!Pt) {
-                Pt = g_backend.allocNode(newPos);
+                Pt = g_backend.allocNode(theLayer, newPos);
                 theLayer->add(Pt);
                 g_backend.sync(Pt);
             }

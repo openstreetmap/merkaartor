@@ -2218,7 +2218,7 @@ void MainWindow::on_areaTerraceAction_triggered()
 
 void MainWindow::on_createRelationAction_triggered()
 {
-    Relation* R = g_backend.allocRelation();
+    Relation* R = g_backend.allocRelation(document()->getDirtyOrOriginLayer());
     for (int i = 0; i < p->theProperties->size(); ++i)
         R->add("", p->theProperties->selection(i));
     CommandList* theList = new CommandList(MainWindow::tr("Create Relation %1").arg(R->description()), R);
@@ -3534,7 +3534,7 @@ void MainWindow::updateGpsPosition(float latitude, float longitude, QDateTime ti
         }
 
         if (ui->gpsRecordAction->isChecked() && !ui->gpsPauseAction->isChecked()) {
-            Node* pt = g_backend.allocNode(gpsCoord);
+            Node* pt = g_backend.allocNode(gpsRecLayer, gpsCoord);
             pt->setTime(time);
             pt->setElevation(altitude);
             pt->setSpeed(speed);
@@ -3569,7 +3569,7 @@ void MainWindow::on_gpsRecordAction_triggered()
             gpsRecLayer->setName(fn);
             theDocument->add(gpsRecLayer);
 
-            curGpsTrackSegment = g_backend.allocSegment();
+            curGpsTrackSegment = g_backend.allocSegment(gpsRecLayer);
             gpsRecLayer->add(curGpsTrackSegment);
         } else {
             ui->gpsRecordAction->setChecked(false);
@@ -3586,7 +3586,7 @@ void MainWindow::on_gpsPauseAction_triggered()
         }
     } else {
         if (theDocument && ui->gpsRecordAction->isChecked()) {
-            curGpsTrackSegment = g_backend.allocSegment();
+            curGpsTrackSegment = g_backend.allocSegment(gpsRecLayer);
             gpsRecLayer->add(curGpsTrackSegment);
         }
     }

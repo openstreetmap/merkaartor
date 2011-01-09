@@ -57,7 +57,7 @@ void OSMHandler::parseNode(const QXmlAttributes& atts)
     if (Pt)
     {
         Node* userPt = Pt;
-        Pt = g_backend.allocNode(Coord(Lon,Lat));
+        Pt = g_backend.allocNode(theLayer, Coord(Lon,Lat));
         Pt->setId(IFeature::FId(IFeature::Point | IFeature::Conflict, id.toLongLong()));
         Pt->setLastUpdated(Feature::OSMServerConflict);
         parseStandardAttributes(atts,Pt);
@@ -72,7 +72,7 @@ void OSMHandler::parseNode(const QXmlAttributes& atts)
                 userPt->setVersionNumber(Pt->versionNumber());
                 NewFeature = true;
             } else {
-                g_backend.deallocFeature(Pt);
+                g_backend.deallocFeature(theLayer, Pt);
                 Pt = userPt;
                 NewFeature = false;
             }
@@ -80,17 +80,18 @@ void OSMHandler::parseNode(const QXmlAttributes& atts)
         else if (userPt->lastUpdated() != Feature::UserResolved)
         {
             if (userPt->lastUpdated() == Feature::NotYetDownloaded || (Pt->time() > userPt->time() || Pt->versionNumber() != userPt->versionNumber())) {
-                g_backend.deallocFeature(Pt);
+                g_backend.deallocFeature(theLayer, Pt);
                 Pt = userPt;
                 Pt->layer()->remove(Pt);
                 theLayer->add(Pt);
+                g_backend.move(Pt->layer(), theLayer, Pt);
                 Pt->setPosition(Coord(Lon,Lat));
                 Pt->clearTags();
                 NewFeature = true;
                 if (Pt->lastUpdated() == Feature::NotYetDownloaded)
                     Pt->setLastUpdated(Feature::OSMServer);
             } else {
-                g_backend.deallocFeature(Pt);
+                g_backend.deallocFeature(theLayer, Pt);
                 Pt = userPt;
                 NewFeature = false;
             }
@@ -98,7 +99,7 @@ void OSMHandler::parseNode(const QXmlAttributes& atts)
     }
     else
     {
-        Pt = g_backend.allocNode(Coord(Lon,Lat));
+        Pt = g_backend.allocNode(theLayer, Coord(Lon,Lat));
         Pt->setId(IFeature::FId(IFeature::Point, id.toLongLong()));
         Pt->setLastUpdated(Feature::OSMServer);
         theLayer->add(Pt);
@@ -134,7 +135,7 @@ void OSMHandler::parseWay(const QXmlAttributes& atts)
     if (R)
     {
         Way* userRd = R;
-        R = g_backend.allocWay();
+        R = g_backend.allocWay(theLayer);
         R->setId(IFeature::FId(IFeature::LineString | IFeature::Conflict, id.toLongLong()));
         R->setLastUpdated(Feature::OSMServerConflict);
         parseStandardAttributes(atts,R);
@@ -150,7 +151,7 @@ void OSMHandler::parseWay(const QXmlAttributes& atts)
                 userRd->setVersionNumber(R->versionNumber());
                 NewFeature = true;
             } else {
-                g_backend.deallocFeature(R);
+                g_backend.deallocFeature(theLayer, R);
                 R = userRd;
                 NewFeature = false;
             }
@@ -158,10 +159,11 @@ void OSMHandler::parseWay(const QXmlAttributes& atts)
         else if (R->lastUpdated() != Feature::UserResolved)
         {
             if (userRd->lastUpdated() == Feature::NotYetDownloaded || (R->time() > userRd->time() || R->versionNumber() != userRd->versionNumber())) {
-                g_backend.deallocFeature(R);
+                g_backend.deallocFeature(theLayer, R);
                 R = userRd;
                 R->layer()->remove(R);
                 theLayer->add(R);
+                g_backend.move(R->layer(), theLayer, R);
                 while (R->size())
                     R->remove((int)0);
                 R->clearTags();
@@ -169,7 +171,7 @@ void OSMHandler::parseWay(const QXmlAttributes& atts)
                 if (R->lastUpdated() == Feature::NotYetDownloaded)
                     R->setLastUpdated(Feature::OSMServer);
             } else {
-                g_backend.deallocFeature(R);
+                g_backend.deallocFeature(theLayer, R);
                 R = userRd;
                 NewFeature = false;
             }
@@ -177,7 +179,7 @@ void OSMHandler::parseWay(const QXmlAttributes& atts)
     }
     else
     {
-        R = g_backend.allocWay();
+        R = g_backend.allocWay(theLayer);
         R->setId(IFeature::FId(IFeature::LineString, id.toLongLong()));
         R->setLastUpdated(Feature::OSMServer);
         theLayer->add(R);
@@ -218,7 +220,7 @@ void OSMHandler::parseRelation(const QXmlAttributes& atts)
     if (R)
     {
         Relation* userR = R;
-        R = g_backend.allocRelation();
+        R = g_backend.allocRelation(theLayer);
         R->setId(IFeature::FId(IFeature::OsmRelation | IFeature::Conflict, id.toLongLong()));
         R->setLastUpdated(Feature::OSMServerConflict);
         parseStandardAttributes(atts,R);
@@ -234,7 +236,7 @@ void OSMHandler::parseRelation(const QXmlAttributes& atts)
                 userR->setVersionNumber(R->versionNumber());
                 NewFeature = true;
             } else {
-                g_backend.deallocFeature(R);
+                g_backend.deallocFeature(theLayer, R);
                 R = userR;
                 NewFeature = false;
             }
@@ -242,10 +244,11 @@ void OSMHandler::parseRelation(const QXmlAttributes& atts)
         else if (R->lastUpdated() != Feature::UserResolved)
         {
             if (userR->lastUpdated() == Feature::NotYetDownloaded || (R->time() > userR->time() || R->versionNumber() != userR->versionNumber())) {
-                g_backend.deallocFeature(R);
+                g_backend.deallocFeature(theLayer, R);
                 R = userR;
                 R->layer()->remove(R);
                 theLayer->add(R);
+                g_backend.move(R->layer(), theLayer, R);
                 while (R->size())
                     R->remove((int)0);
                 R->clearTags();
@@ -253,7 +256,7 @@ void OSMHandler::parseRelation(const QXmlAttributes& atts)
                 if (R->lastUpdated() == Feature::NotYetDownloaded)
                     R->setLastUpdated(Feature::OSMServer);
             } else {
-                g_backend.deallocFeature(R);
+                g_backend.deallocFeature(theLayer, R);
                 R = userR;
                 NewFeature = false;
             }
@@ -261,7 +264,7 @@ void OSMHandler::parseRelation(const QXmlAttributes& atts)
     }
     else
     {
-        R = g_backend.allocRelation();
+        R = g_backend.allocRelation(theLayer);
         R->setId(IFeature::FId(IFeature::OsmRelation, id.toLongLong()));
         R->setLastUpdated(Feature::OSMServer);
         NewFeature = true;

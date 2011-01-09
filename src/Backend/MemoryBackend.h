@@ -1,7 +1,6 @@
 #ifndef MEMORYBACKEND_H
 #define MEMORYBACKEND_H
 
-#include "IBackend.h"
 #include "Features.h"
 
 struct IndexFindContext {
@@ -12,7 +11,7 @@ struct IndexFindContext {
 };
 
 class MemoryBackendPrivate;
-class MemoryBackend : public IBackend
+class MemoryBackend
 {
 public:
     MemoryBackend();
@@ -22,30 +21,34 @@ private:
     MemoryBackendPrivate* p;
 
 public:
-    virtual Node* allocNode(const Node& other);
-    virtual Node* allocNode(const QPointF& aCoord);
+    virtual Node* allocNode(Layer* l, const Node& other);
+    virtual Node* allocNode(Layer* l, const QPointF& aCoord);
+    virtual Node* allocVirtualNode(const QPointF& aCoord);
 
-    virtual Way* allocWay();
-    virtual Way* allocWay(const Way& other);
+    virtual Way* allocWay(Layer* l);
+    virtual Way* allocWay(Layer* l, const Way& other);
 
-    virtual Relation* allocRelation();
-    virtual Relation* allocRelation(const Relation& other);
+    virtual Relation* allocRelation(Layer* l);
+    virtual Relation* allocRelation(Layer* l, const Relation& other);
 
-    virtual TrackSegment* allocSegment();
+    virtual TrackSegment* allocSegment(Layer* l);
 
-    virtual void deallocFeature(Feature* f);
+    virtual void clearLayer(Layer* l);
+    virtual void deallocFeature(Layer* l, Feature* f);
+    virtual void deallocVirtualNode(Feature* f);
 
+    virtual void move(Layer* oldL, Layer* newL, Feature* f);
     virtual void sync(Feature* f);
 
-    virtual const QList<Feature*>& indexFind(const QRectF& vp);
-    virtual void indexFind(const QRectF& bb, const IndexFindContext& findResult);
-    virtual void get(const QRectF& bb, QList<Feature*>& theFeatures);
-    virtual void getFeatureSet(QMap<RenderPriority, QSet <Feature*> >& theFeatures,
+    virtual const QList<Feature*>& indexFind(Layer* l, const QRectF& vp);
+    virtual void indexFind(Layer* l, const QRectF& bb, const IndexFindContext& findResult);
+    virtual void get(Layer* l, const QRectF& bb, QList<Feature*>& theFeatures);
+    virtual void getFeatureSet(Layer* l, QMap<RenderPriority, QSet <Feature*> >& theFeatures,
                        QList<QRectF>& invalidRects, QRectF& clipRect, Projection& theProjection, QTransform& theTransform);
 
 private:
-    virtual void indexAdd(const QRectF& bb, Feature* aFeat);
-    virtual void indexRemove(const QRectF& bb, Feature* aFeat);
+    virtual void indexAdd(Layer* l, const QRectF& bb, Feature* aFeat);
+    virtual void indexRemove(Layer* l, const QRectF& bb, Feature* aFeat);
 
 };
 

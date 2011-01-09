@@ -103,13 +103,13 @@ void CreateNodeInteraction::createNode(Coord P, Feature* aFeat)
         g_Merk_MainWindow->properties()->setSelection(0);
         theList  = new CommandList(MainWindow::tr("Create node in Road: %1").arg(aRoad->id().numId), aRoad);
         int SnapIdx = findSnapPointIndex(aRoad, P);
-        N = g_backend.allocNode(P);
+        N = g_backend.allocNode(g_Merk_MainWindow->document()->getDirtyOrOriginLayer(aRoad->layer()), P);
         theList->add(new AddFeatureCommand(g_Merk_MainWindow->document()->getDirtyOrOriginLayer(aRoad->layer()),N,true));
         theList->add(new WayAddNodeCommand(aRoad,N,SnapIdx,g_Merk_MainWindow->document()->getDirtyOrOriginLayer(aRoad->layer())));
     }
     else
     {
-        N = g_backend.allocNode(P);
+        N = g_backend.allocNode(g_Merk_MainWindow->document()->getDirtyOrOriginLayer(), P);
         theList  = new CommandList(MainWindow::tr("Create POI %1").arg(N->id().numId), N);
         theList->add(new AddFeatureCommand(g_Merk_MainWindow->document()->getDirtyOrOriginLayer(),N,true));
         if (M_PREFS->getAutoSourceTag()) {

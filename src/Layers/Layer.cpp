@@ -176,7 +176,7 @@ void Layer::deleteFeature(Feature* aFeature)
         notifyIdUpdate(aFeature->id(),0);
     }
 
-    g_backend.deallocFeature(aFeature);
+    g_backend.deallocFeature(this, aFeature);
 }
 
 void Layer::clear()
@@ -185,7 +185,7 @@ void Layer::clear()
     {
         p->Features[0]->setLayer(0);
         notifyIdUpdate(p->Features[0]->id(),0);
-        g_backend.deallocFeature(p->Features[0]);
+        g_backend.clearLayer(this);
         p->Features.removeAt(0);
     }
 }
@@ -510,6 +510,7 @@ bool DrawingLayer::toXML(QXmlStreamWriter& stream, bool asTemplate, QProgressDia
         QList<MapFeaturePtr>::iterator it;
         for(it = p->Features.begin(); it != p->Features.end(); it++)
             (*it)->toXML(stream, progress);
+        stream.writeEndElement();
 
         QList<CoordBox> downloadBoxes = p->theDocument->getDownloadBoxes(this);
         if (downloadBoxes.size() && p->theDocument->getLastDownloadLayerTime().secsTo(QDateTime::currentDateTime()) < 12*3600) { // Do not export downloaded areas if older than 12h
@@ -520,7 +521,6 @@ bool DrawingLayer::toXML(QXmlStreamWriter& stream, bool asTemplate, QProgressDia
             }
             stream.writeEndElement();
         }
-        stream.writeEndElement();
     }
     stream.writeEndElement();
 
@@ -558,7 +558,6 @@ DrawingLayer * DrawingLayer::doFromXML(DrawingLayer* l, Document* d, QXmlStreamR
                     /* Node* N = */ Node::fromXML(d, l, stream);
                 } else if (stream.name() == "trkseg") {
                     TrackSegment* T = TrackSegment::fromXML(d, l, stream, progress);
-                    l->add(T);
                 } else if (stream.name() == "bound") {
                     stream.skipCurrentElement();
                 } else if (!stream.isWhitespace()) {
@@ -640,14 +639,14 @@ void TrackLayer::extractLayer()
 
             PL.clear();
 
-            P = g_backend.allocNode( S->getNode(0)->position() );
+            P = g_backend.allocNode(extL, S->getNode(0)->position() );
             P->setTime(S->getNode(0)->time());
             P->setElevation(S->getNode(0)->elevation());
             P->setSpeed(S->getNode(0)->speed());
             PL.append(P);
             int startP = 0;
 
-            P = g_backend.allocNode( S->getNode(1)->position() );
+            P = g_backend.allocNode(extL, S->getNode(1)->position() );
             P->setTime(S->getNode(1)->time());
             P->setElevation(S->getNode(1)->elevation());
             P->setSpeed(S->getNode(1)->speed());
@@ -655,7 +654,7 @@ void TrackLayer::extractLayer()
             int endP = 1;
 
             for (int j=2; j < S->size(); j++) {
-                P = g_backend.allocNode( S->getNode(j)->position() );
+                P = g_backend.allocNode(extL, S->getNode(j)->position() );
                 P->setTime(S->getNode(j)->time());
                 P->setElevation(S->getNode(j)->elevation());
                 P->setSpeed(S->getNode(j)->speed());
@@ -668,14 +667,14 @@ void TrackLayer::extractLayer()
                     if (d < konstant) {
                         Node* P = PL[k];
                         PL.removeAt(k);
-                        g_backend.deallocFeature(P);
+                        g_backend.deallocFeature(extL, P);
                         endP--;
                     } else
                         startP = k;
                 }
             }
 
-            Way* R = g_backend.allocWay();
+            Way* R = g_backend.allocWay(extL);
             R->setLastUpdated(Feature::OSMServer);
             extL->add(R);
             for (int i=0; i < PL.size(); i++) {
@@ -762,37 +761,42 @@ TrackLayer * TrackLayer::fromXML(Document* d, QXmlStreamReader& stream, QProgres
     d->add(l);
 
     stream.readNext();
-    if (stream.name() != "gpx")
-        return NULL;
-
-    stream.readNext();
     while(!stream.atEnd() && !stream.isEndElement()) {
-        if (stream.isWhitespace()) {
-        } else if (stream.name() == "trk") {
+        if (stream.name() == "gpx") {
             stream.readNext();
             while(!stream.atEnd() && !stream.isEndElement()) {
-                if (stream.name() == "trkseg") {
-                    TrackSegment* N = TrackSegment::fromXML(d, l, stream, progress);
-                    l->add(N);
+                if (stream.name() == "trk") {
+                    stream.readNext();
+                    while(!stream.atEnd() && !stream.isEndElement()) {
+                        if (stream.name() == "trkseg") {
+                            TrackSegment::fromXML(d, l, stream, progress);
+                        }
+                        stream.readNext();
+                    }
+                } else if (stream.name() == "wpt") {
+                    /* Node* N = */ Node::fromGPX(d, l, stream);
+                    //l->add(N);
+                    progress->setValue(progress->value()+1);
+                } else if (!stream.isWhitespace()) {
+                    qDebug() << "gpx: logic error: " << stream.name() << " : " << stream.tokenType() << " (" << stream.lineNumber() << ")";
+                    stream.skipCurrentElement();
                 }
 
+                progress->setValue(stream.characterOffset());
+
+                if (progress->wasCanceled())
+                    break;
+
                 stream.readNext();
+                qApp->processEvents();
             }
-        } else if (stream.name() == "wpt") {
-            /* Node* N = */ Node::fromGPX(d, l, stream);
-            //l->add(N);
-            progress->setValue(progress->value()+1);
-        } else {
+        } else if (!stream.isWhitespace()) {
+            qDebug() << "TrLayer: logic error: " << stream.name() << " : " << stream.tokenType() << " (" << stream.lineNumber() << ")";
             stream.skipCurrentElement();
         }
 
-        if (progress->wasCanceled())
-            break;
-
         stream.readNext();
     }
-    stream.readNext();
-
     return l;
 }
 
@@ -929,6 +933,8 @@ FilterLayer* FilterLayer::fromXML(Document* d, QXmlStreamReader& stream, QProgre
         id = QUuid::createUuid().toString();
     FilterLayer* l = new FilterLayer(id, stream.attributes().value("name").toString(), stream.attributes().value("filter").toString());
     Layer::fromXML(l, d, stream, progress);
+    stream.readNext();
+
     d->add(l);
     return l;
 }

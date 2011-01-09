@@ -171,7 +171,7 @@ void ImportCSVDialog::analyze()
 
 }
 
-Feature* ImportCSVDialog::generateOSM(QString line)
+Feature* ImportCSVDialog::generateOSM(Layer* l, QString line)
 {
     bool ok;
     QPointF p;
@@ -182,7 +182,7 @@ Feature* ImportCSVDialog::generateOSM(QString line)
     if (flds.size() < 2)
         return NULL;
 
-    Node *N = g_backend.allocNode(Coord(0, 0));
+    Node *N = g_backend.allocNode(l, Coord(0, 0));
     int lidx=0;
     for (int i=0; i<Fields.size(); ++i) {
         CSVField f = Fields[i];
@@ -231,7 +231,7 @@ Feature* ImportCSVDialog::generateOSM(QString line)
         ++lidx;
     }
     if (!hasLat || !hasLon) {
-        g_backend.deallocFeature(N);
+        g_backend.deallocFeature(l, N);
         return NULL;
     }
     if (CSVProjection.projIsLatLong())
@@ -253,7 +253,7 @@ void ImportCSVDialog::generatePreview(int /*sel*/)
     int l=0;
     while (l<4 && !m_dev->atEnd()) {
         line = m_dev->readLine().trimmed();
-        Feature* F = generateOSM(line);
+        Feature* F = generateOSM(NULL, line);
         if (F) {
             previewText += F->toXML(2);
             delete F;
@@ -419,7 +419,7 @@ bool ImportCSVDialog::import(Layer *aLayer)
 
     while ((l < ui->sbTo->value() || ui->sbTo->value() == 0) && !m_dev->atEnd()) {
         line = m_dev->readLine().trimmed();
-        Feature* F = generateOSM(line);
+        Feature* F = generateOSM(aLayer, line);
         if (F)
             aLayer->add(F);
 

@@ -495,6 +495,7 @@ CommandHistory* CommandHistory::fromXML(Document* d, QXmlStreamReader& stream, Q
                 QString el = stream.readElementText(QXmlStreamReader::IncludeChildElements);
         }
 
+        progress->setValue(stream.characterOffset());
         if (progress && progress->wasCanceled())
             break;
 

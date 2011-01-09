@@ -169,6 +169,14 @@ class CoordBox : public QRectF
         }
         CoordBox zoomed(double f) const;
 
+        bool intersects(const CoordBox& B) const
+        {
+            if ((B.latDiff() == 0) && (B.lonDiff() == 0)) {
+                return contains(B.bottomLeft());
+            }
+            return QRectF::intersects(B);
+        }
+
         bool disjunctFrom(const CoordBox& B) const
         {
             return !intersects(B);

@@ -138,8 +138,9 @@ void WayPrivate::removeVirtuals()
 {
     while (virtualNodes.size()) {
         virtualNodes[0]->unsetParentFeature(theWay);
-        if (virtualNodes[0]->layer())
-            virtualNodes[0]->layer()->deleteFeature(virtualNodes[0]);
+        g_backend.deallocVirtualNode(virtualNodes[0]);
+//        if (virtualNodes[0]->layer())
+//            virtualNodes[0]->layer()->deleteFeature(virtualNodes[0]);
 //		delete p->virtualNodes[0];
         virtualNodes.erase(virtualNodes.begin());
     }
@@ -150,10 +151,10 @@ void WayPrivate::addVirtuals()
     for (unsigned int i=1; i<Nodes.size(); ++i) {
         QLineF l(Nodes[i-1]->position(), Nodes[i]->position());
         l.setLength(l.length()/2);
-        Node* v = g_backend.allocNode(l.p2());
+        Node* v = g_backend.allocVirtualNode(l.p2());
         v->setVirtual(true);
         v->setParentFeature(theWay);
-        theWay->layer()->add(v);
+//        theWay->layer()->add(v);
         virtualNodes.push_back(v);
     }
 }
@@ -887,10 +888,10 @@ Way * Way::fromXML(Document* d, Layer * L, QXmlStreamReader& stream)
     Way* R = CAST_WAY(d->getFeature(id));
 
     if (!R) {
-        R = g_backend.allocWay();
+        R = g_backend.allocWay(L);
         R->setId(id);
-        Feature::fromXML(stream, R);
         L->add(R);
+        Feature::fromXML(stream, R);
     } else {
         Feature::fromXML(stream, R);
         if (R->layer() != L) {
@@ -909,7 +910,7 @@ Way * Way::fromXML(Document* d, Layer * L, QXmlStreamReader& stream)
             Node* Part = CAST_NODE(d->getFeature(nId));
             if (!Part)
             {
-                Part = g_backend.allocNode(Coord(0,0));
+                Part = g_backend.allocNode(L, Coord(0,0));
                 Part->setId(nId);
                 Part->setLastUpdated(Feature::NotYetDownloaded);
                 L->add(Part);
@@ -1097,7 +1098,7 @@ int Way::createJunction(Document* theDocument, CommandList* theList, Way* R1, Wa
             if (S1.intersect(S2, &intPoint) == QLineF::BoundedIntersection) {
                 numInter++;
                 if (doIt) {
-                    Node* pt = g_backend.allocNode(intPoint);
+                    Node* pt = g_backend.allocNode(theDocument->getDirtyOrOriginLayer(R1->layer()), intPoint);
                     theList->add(new AddFeatureCommand(theDocument->getDirtyOrOriginLayer(R1->layer()),pt,true));
                     theList->add(new WayAddNodeCommand(R1,pt,i+1,theDocument->getDirtyOrOriginLayer(R1->layer())));
                     theList->add(new WayAddNodeCommand(R2,pt,j+1,theDocument->getDirtyOrOriginLayer(R2->layer())));

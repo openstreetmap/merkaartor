@@ -408,7 +408,7 @@ static void splitRoad(Document* theDocument, CommandList* theList, Way* In, cons
 
         if (Points.size() == 1) // Special case: For a 1 point area splitting, de-close the road, i.e. duplicate the selected node
         {
-            Node* N = g_backend.allocNode(*(In->getNode(pos)));
+            Node* N = g_backend.allocNode(theDocument->getDirtyOrOriginLayer(In->layer()), *(In->getNode(pos)));
             theList->add(new AddFeatureCommand(theDocument->getDirtyOrOriginLayer(In->layer()),N,true));
 
             Target.prepend(N);
@@ -434,7 +434,7 @@ static void splitRoad(Document* theDocument, CommandList* theList, Way* In, cons
     {
         if (std::find(Points.begin(),Points.end(),FirstPart->get(i)) != Points.end())
         {
-            Way* NextPart = g_backend.allocWay();
+            Way* NextPart = g_backend.allocWay(theDocument->getDirtyOrOriginLayer(In->layer()));
             theList->add(new AddFeatureCommand(theDocument->getDirtyOrOriginLayer(In->layer()),NextPart,true));
             copyTags(NextPart,FirstPart);
             theList->add(new WayAddNodeCommand(NextPart, FirstPart->getNode(i), theDocument->getDirtyOrOriginLayer(In->layer())));
@@ -481,7 +481,7 @@ static void breakRoad(Document* theDocument, CommandList* theList, Way* R, Node*
     for (int i=0; i<R->size(); ++i)
         if (R->get(i) == Pt)
         {
-            Node* New = g_backend.allocNode(*Pt);
+            Node* New = g_backend.allocNode(theDocument->getDirtyOrOriginLayer(R->layer()), *Pt);
             theList->add(new AddFeatureCommand(theDocument->getDirtyOrOriginLayer(R->layer()),New,true));
             copyTags(New,Pt);
             theList->add(new WayRemoveNodeCommand(R,i,theDocument->getDirtyOrOriginLayer(R->layer())));
@@ -558,7 +558,7 @@ void createStreetNumbers(Document* theDocument, CommandList* theList, Way* theRo
     QLineF l, l2, nv;
 
     Node* N;
-    Way* R = g_backend.allocWay();
+    Way* R = g_backend.allocWay(theDocument->getDirtyOrOriginLayer());
     theList->add(new AddFeatureCommand(theDocument->getDirtyOrOriginLayer(),R,true));
     theList->add(new SetTagCommand(R, "addr:interpolation", ""));
     theList->add(new SetTagCommand(R, "addr:street", streetName));
@@ -637,12 +637,12 @@ void createStreetNumbers(Document* theDocument, CommandList* theList, Way* theRo
                 lfrom.setLength(lfrom.length() - STREET_NUMBERS_LENGTH);
                 pfrom = lfrom.p2();
 
-                R = g_backend.allocWay();
+                R = g_backend.allocWay(theDocument->getDirtyOrOriginLayer());
                 theList->add(new AddFeatureCommand(theDocument->getDirtyOrOriginLayer(),R,true));
                 theList->add(new SetTagCommand(R, "addr:interpolation", ""));
                 theList->add(new SetTagCommand(R, "addr:street", streetName));
 
-                N = g_backend.allocNode(Coord(pfrom));
+                N = g_backend.allocNode(theDocument->getDirtyOrOriginLayer(), Coord(pfrom));
                 theList->add(new AddFeatureCommand(theDocument->getDirtyOrOriginLayer(),N,true));
                 theList->add(new WayAddNodeCommand(R, N, theDocument->getDirtyOrOriginLayer(R->layer())));
                 theList->add(new SetTagCommand(N, "addr:housenumber", ""));
@@ -656,14 +656,14 @@ void createStreetNumbers(Document* theDocument, CommandList* theList, Way* theRo
                 lto.setLength(lto.length() - STREET_NUMBERS_LENGTH);
                 pto = lto.p2();
 
-                N = g_backend.allocNode(Coord(pto));
+                N = g_backend.allocNode(theDocument->getDirtyOrOriginLayer(), Coord(pto));
                 theList->add(new AddFeatureCommand(theDocument->getDirtyOrOriginLayer(),N,true));
                 theList->add(new WayAddNodeCommand(R, N, theDocument->getDirtyOrOriginLayer(R->layer())));
                 theList->add(new SetTagCommand(N, "addr:housenumber", ""));
             }
         } else {
             if (theAngle < 85. || theAngle > 95. || j== 0 || j == theRoad->size()-1) {
-                N = g_backend.allocNode(Coord(nv.p2()));
+                N = g_backend.allocNode(theDocument->getDirtyOrOriginLayer(), Coord(nv.p2()));
                 theList->add(new AddFeatureCommand(theDocument->getDirtyOrOriginLayer(),N,true));
                 theList->add(new WayAddNodeCommand(R, N, theDocument->getDirtyOrOriginLayer(R->layer())));
                 theList->add(new SetTagCommand(N, "addr:housenumber", ""));
@@ -955,7 +955,7 @@ void addToMultipolygon(Document* theDocument, CommandList* theList, PropertiesDo
     }
     if (outer) {
         if (!theRelation) {
-            theRelation = g_backend.allocRelation();
+            theRelation = g_backend.allocRelation(theDocument->getDirtyOrOriginLayer());
             theList->add(new AddFeatureCommand(theDocument->getDirtyOrOriginLayer(),theRelation,true));
         } else {
             for (int i=0; i<theRelation->size(); ++i)
@@ -985,7 +985,7 @@ static void subdivideRoad(Document* theDocument, CommandList* theList,
     Coord nodeDelta = (N1->position() - nodeBase) / divisions;
     for (unsigned int i = 1; i < divisions; ++i) {
         nodeBase = nodeBase + nodeDelta;
-        Node* newNode = g_backend.allocNode(nodeBase);
+        Node* newNode = g_backend.allocNode(theDocument->getDirtyOrOriginLayer(theRoad), nodeBase);
         theList->add(new AddFeatureCommand(theDocument->getDirtyOrOriginLayer(theRoad), newNode, true));
         theList->add(new WayAddNodeCommand(theRoad, newNode, index + i, theDocument->getDirtyOrOriginLayer(theRoad)));
     }
@@ -1082,7 +1082,7 @@ static bool splitArea(Document* theDocument, CommandList* theList,
 
     // Extract nodes between nodes[0] and nodes[1] into a separate area
     // and remove the nodes from the original area
-    Way* newArea = g_backend.allocWay();
+    Way* newArea = g_backend.allocWay(theDocument->getDirtyOrOriginLayer(theArea));
     theList->add(new AddFeatureCommand(theDocument->getDirtyOrOriginLayer(theArea), newArea, true));
     copyTags(newArea, theArea);
     theList->add(new WayAddNodeCommand(newArea, theNodes[0], theDocument->getDirtyOrOriginLayer(theArea)));

@@ -492,8 +492,9 @@ Relation * Relation::fromXML(Document * d, Layer * L, QXmlStreamReader& stream)
 
     Relation* R = CAST_RELATION(d->getFeature(id));
     if (!R) {
-        R = g_backend.allocRelation();
+        R = g_backend.allocRelation(L);
         R->setId(id);
+        L->add(R);
         Feature::fromXML(stream, R);
     } else {
         Feature::fromXML(stream, R);
@@ -514,7 +515,7 @@ Relation * Relation::fromXML(Document * d, Layer * L, QXmlStreamReader& stream)
                 Node* Part = CAST_NODE(d->getFeature(nId));
                 if (!Part)
                 {
-                    Part = g_backend.allocNode(Coord(0,0));
+                    Part = g_backend.allocNode(L, Coord(0,0));
                     Part->setId(nId);
                     Part->setLastUpdated(Feature::NotYetDownloaded);
                     L->add(Part);
@@ -525,7 +526,7 @@ Relation * Relation::fromXML(Document * d, Layer * L, QXmlStreamReader& stream)
                 Way* Part = CAST_WAY(d->getFeature(rId));
                 if (!Part)
                 {
-                    Part = g_backend.allocWay();
+                    Part = g_backend.allocWay(L);
                     Part->setId(rId);
                     Part->setLastUpdated(Feature::NotYetDownloaded);
                     L->add(Part);
@@ -536,7 +537,7 @@ Relation * Relation::fromXML(Document * d, Layer * L, QXmlStreamReader& stream)
                 Relation* Part = dynamic_cast<Relation*>(d->getFeature(RId));
                 if (!Part)
                 {
-                    Part = g_backend.allocRelation();
+                    Part = g_backend.allocRelation(L);
                     Part->setId(RId);
                     Part->setLastUpdated(Feature::NotYetDownloaded);
                     L->add(Part);
@@ -552,8 +553,6 @@ Relation * Relation::fromXML(Document * d, Layer * L, QXmlStreamReader& stream)
         }
         stream.readNext();
     }
-
-    L->add(R);
 
     return R;
 }

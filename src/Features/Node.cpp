@@ -487,10 +487,10 @@ Node * Node::fromXML(Document* d, Layer* L, QXmlStreamReader& stream)
     IFeature::FId id(IFeature::Point, sid.toLongLong());
     Node* Pt = CAST_NODE(d->getFeature(id));
     if (!Pt) {
-        Pt = g_backend.allocNode(Coord(Lon,Lat));
+        Pt = g_backend.allocNode(L, Coord(Lon,Lat));
         Pt->setId(id);
-        Feature::fromXML(stream, Pt);
         L->add(Pt);
+        Feature::fromXML(stream, Pt);
     } else {
         Feature::fromXML(stream, Pt);
         if (Pt->layer() != L) {
@@ -522,7 +522,7 @@ Node * Node::fromGPX(Document* d, Layer* L, QXmlStreamReader& stream)
     IFeature::FId id(IFeature::Point, sid.toLongLong());
     Node* Pt = CAST_NODE(d->getFeature(id));
     if (!Pt) {
-        Pt = g_backend.allocNode(Coord(Lon,Lat));
+        Pt = g_backend.allocNode(L, Coord(Lon,Lat));
         Pt->setId(id);
         Pt->setLastUpdated(Feature::Log);
         L->add(Pt);

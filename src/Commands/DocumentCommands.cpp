@@ -159,8 +159,8 @@ void RemoveFeatureCommand::redo()
         CascadedCleanUp->redo();
     oldLayer = theFeature->layer();
     oldLayer->remove(theFeature);
-    theFeature->setDeleted(true);
     theLayer->add(theFeature);
+    theFeature->setDeleted(true);
     incDirtyLevel(oldLayer, theFeature);
     Command::redo();
 }

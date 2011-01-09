@@ -20,7 +20,7 @@ static Node* importTrkPt(const QDomElement& Root, Document* /* theDocument */, L
     double Lat = Root.attribute("lat").toDouble();
     double Lon = Root.attribute("lon").toDouble();
 
-    Node* Pt = g_backend.allocNode(Coord(Lon,Lat));
+    Node* Pt = g_backend.allocNode(theLayer, Coord(Lon,Lat));
     Pt->setLastUpdated(Feature::Log);
     if (Root.hasAttribute("xml:id"))
         Pt->setId(IFeature::FId(IFeature::Point, Root.attribute("xml:id").toLongLong()));
@@ -91,7 +91,7 @@ static Node* importTrkPt(const QDomElement& Root, Document* /* theDocument */, L
 
 static void importTrkSeg(const QDomElement& Root, Document* theDocument, Layer* theLayer, bool MakeSegment, QProgressDialog & progress)
 {
-    TrackSegment* S = g_backend.allocSegment();
+    TrackSegment* S = g_backend.allocSegment(theLayer);
 
     if (Root.hasAttribute("xml:id"))
         S->setId(IFeature::FId(IFeature::GpxSegment, Root.attribute("xml:id").toLongLong()));
@@ -122,9 +122,9 @@ static void importTrkSeg(const QDomElement& Root, Document* theDocument, Layer* 
                 if (S->size())
                     theLayer->add(S);
                 else
-                    g_backend.deallocFeature(S);
+                    g_backend.deallocFeature(theLayer, S);
 
-                S = g_backend.allocSegment();
+                S = g_backend.allocSegment(theLayer);
             }
         }
 
@@ -135,12 +135,12 @@ static void importTrkSeg(const QDomElement& Root, Document* theDocument, Layer* 
     if (S->size())
         theLayer->add(S);
     else
-        g_backend.deallocFeature(S);
+        g_backend.deallocFeature(theLayer, S);
 }
 
 static void importRte(const QDomElement& Root, Document* theDocument, Layer* theLayer, bool MakeSegment, QProgressDialog & progress)
 {
-    TrackSegment* S = g_backend.allocSegment();
+    TrackSegment* S = g_backend.allocSegment(theLayer);
 
     if (Root.hasAttribute("xml:id"))
         S->setId(IFeature::FId(IFeature::GpxSegment, Root.attribute("xml:id").toLongLong()));
@@ -176,9 +176,9 @@ static void importRte(const QDomElement& Root, Document* theDocument, Layer* the
                     if (S->size())
                         theLayer->add(S);
                     else
-                        g_backend.deallocFeature(S);
+                        g_backend.deallocFeature(theLayer, S);
 
-                    S = g_backend.allocSegment();
+                    S = g_backend.allocSegment(theLayer);
                 }
             }
             S->add(Pt);
@@ -189,7 +189,7 @@ static void importRte(const QDomElement& Root, Document* theDocument, Layer* the
     if (S->size())
         theLayer->add(S);
     else
-        g_backend.deallocFeature(S);
+        g_backend.deallocFeature(theLayer, S);
 }
 
 static void importTrk(const QDomElement& Root, Document* theDocument, Layer* theLayer, bool MakeSegment, QProgressDialog & progress)

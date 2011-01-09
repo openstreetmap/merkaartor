@@ -79,8 +79,8 @@ void CreateRoundaboutInteraction::mousePressEvent(QMouseEvent * event)
             QBrush SomeBrush(QColor(0xff,0x77,0x11,128));
             QPen TP(SomeBrush,view()->pixelPerM()*4+1);
             QPointF Prev(CenterF.x()+cos(Modifier*Angle/2)*Radius,CenterF.y()+sin(Modifier*Angle/2)*Radius);
-            Node* First = g_backend.allocNode(XY_TO_COORD(Prev.toPoint()));
-            Way* R = g_backend.allocWay();
+            Node* First = g_backend.allocNode(Main->document()->getDirtyOrOriginLayer(), XY_TO_COORD(Prev.toPoint()));
+            Way* R = g_backend.allocWay(Main->document()->getDirtyOrOriginLayer());
             CommandList* L  = new CommandList(MainWindow::tr("Create Roundabout %1").arg(R->id().numId), R);
             L->add(new AddFeatureCommand(Main->document()->getDirtyOrOriginLayer(),R,true));
             R->add(First);
@@ -96,7 +96,7 @@ void CreateRoundaboutInteraction::mousePressEvent(QMouseEvent * event)
             for (double a = Angle*3/2; a<2*M_PI; a+=Angle)
             {
                 QPointF Next(CenterF.x()+cos(Modifier*a)*Radius,CenterF.y()+sin(Modifier*a)*Radius);
-                Node* New = g_backend.allocNode(XY_TO_COORD(Next.toPoint()));
+                Node* New = g_backend.allocNode(Main->document()->getDirtyOrOriginLayer(), XY_TO_COORD(Next.toPoint()));
                 L->add(new AddFeatureCommand(Main->document()->getDirtyOrOriginLayer(),New,true));
                 R->add(New);
             }

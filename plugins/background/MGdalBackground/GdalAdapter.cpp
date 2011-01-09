@@ -588,7 +588,7 @@ bool GdalAdapter::toXML(QXmlStreamWriter& stream)
 {
     bool OK = true;
 
-    stream.writeStartDocument("Images");
+    stream.writeStartElement("Images");
 
     stream.writeAttribute("projection", theProjection);
     if (!theSourceTag.isEmpty())

@@ -77,7 +77,7 @@ protected:
 
     void analyze();
     void generatePreview(int sel=-1);
-    Feature* generateOSM(QString line);
+    Feature* generateOSM(Layer* l, QString line);
 
 private:
     Ui::ImportCSVDialog *ui;

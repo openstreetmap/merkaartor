@@ -1,4 +1,6 @@
 #include "TrackSegment.h"
+
+#include "Global.h"
 #include "DocumentCommands.h"
 #include "TrackSegmentCommands.h"
 #include "MapView.h"
@@ -73,12 +75,14 @@ void TrackSegment::add(Node* aPoint)
 {
     p->Nodes.push_back(aPoint);
     aPoint->setParentFeature(this);
+    g_backend.sync(this);
 }
 
 void TrackSegment::add(Node* Pt, int Idx)
 {
     p->Nodes.push_back(Pt);
     std::rotate(p->Nodes.begin()+Idx,p->Nodes.end()-1,p->Nodes.end());
+    g_backend.sync(this);
 }
 
 int TrackSegment::find(Feature* Pt) const
@@ -94,6 +98,7 @@ void TrackSegment::remove(int idx)
     Node* Pt = p->Nodes[idx];
     p->Nodes.erase(p->Nodes.begin()+idx);
     Pt->unsetParentFeature(this);
+    g_backend.sync(this);
 }
 
 void TrackSegment::remove(Feature* F)
@@ -371,16 +376,17 @@ bool TrackSegment::toXML(QXmlStreamWriter& stream, QProgressDialog * progress, b
 
 TrackSegment* TrackSegment::fromGPX(Document* d, Layer* L, QXmlStreamReader& stream, QProgressDialog * progress)
 {
-    TrackSegment* l = new TrackSegment();
+    TrackSegment* ts = g_backend.allocSegment(L);
+    L->add(ts);
 
     if (stream.attributes().hasAttribute("xml:id"))
-        l->setId(IFeature::FId(IFeature::GpxSegment, stream.attributes().value("xml:id").toString().toLongLong()));
+        ts->setId(IFeature::FId(IFeature::GpxSegment, stream.attributes().value("xml:id").toString().toLongLong()));
 
     stream.readNext();
     while(!stream.atEnd() && !stream.isEndElement()) {
         if (stream.name() == "trkpt") {
             Node* N = Node::fromGPX(d, L, stream);
-            l->add(N);
+            ts->add(N);
             progress->setValue(stream.characterOffset());
         }
 
@@ -390,7 +396,7 @@ TrackSegment* TrackSegment::fromGPX(Document* d, Layer* L, QXmlStreamReader& str
         stream.readNext();
     }
 
-    return l;
+    return ts;
 }
 
 TrackSegment* TrackSegment::fromXML(Document* d, Layer* L, QXmlStreamReader& stream, QProgressDialog * progress)

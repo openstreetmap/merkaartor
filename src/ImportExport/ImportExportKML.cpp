@@ -189,7 +189,7 @@ Feature* parsePoint(QDomElement& e, Layer* aLayer)
             double lat = tokens[1].toDouble();
             Coord p(lon,lat);
 
-            P = g_backend.allocNode(p);
+            P = g_backend.allocNode(aLayer, p);
             aLayer->add(P);
             P->setTag("%kml:guid", kmlId);
         }

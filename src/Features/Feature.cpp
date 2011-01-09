@@ -947,11 +947,11 @@ Node* Feature::getTrackPointOrCreatePlaceHolder(Document *theDocument, Layer *th
     Node* Part = CAST_NODE(theDocument->getFeature(Id));
     if (!Part)
     {
-        Part = g_backend.allocNode(Coord(0,0));
-        Part->setId(Id);
-        Part->setLastUpdated(Feature::NotYetDownloaded);
         if (!theLayer)
             theLayer = theDocument->getDirtyOrOriginLayer();
+        Part = g_backend.allocNode(theLayer, Coord(0,0));
+        Part->setId(Id);
+        Part->setLastUpdated(Feature::NotYetDownloaded);
         theLayer->add(Part);
     }
     return Part;
@@ -962,11 +962,11 @@ Way* Feature::getWayOrCreatePlaceHolder(Document *theDocument, Layer *theLayer, 
     Way* Part = CAST_WAY(theDocument->getFeature(Id));
     if (!Part)
     {
-        Part = g_backend.allocWay();
-        Part->setId(Id);
-        Part->setLastUpdated(Feature::NotYetDownloaded);
         if (!theLayer)
             theLayer = theDocument->getDirtyOrOriginLayer();
+        Part = g_backend.allocWay(theLayer);
+        Part->setId(Id);
+        Part->setLastUpdated(Feature::NotYetDownloaded);
         theLayer->add(Part);
 
     }
@@ -978,11 +978,11 @@ Relation* Feature::getRelationOrCreatePlaceHolder(Document *theDocument, Layer *
     Relation* Part = CAST_RELATION(theDocument->getFeature(Id));
     if (!Part)
     {
-        Part = g_backend.allocRelation();
-        Part->setId(Id);
-        Part->setLastUpdated(Feature::NotYetDownloaded);
         if (!theLayer)
             theLayer = theDocument->getDirtyOrOriginLayer();
+        Part = g_backend.allocRelation(theLayer);
+        Part->setId(Id);
+        Part->setLastUpdated(Feature::NotYetDownloaded);
         theLayer->add(Part);
     }
     return Part;

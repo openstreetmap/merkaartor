@@ -7,7 +7,7 @@ class MemoryBackendPrivate
 {
 public:
     QHash<Feature*, CoordBox> AllocFeatures;
-    CoordTree theRTree;
+    QHash<Layer*, CoordTree*> theRTree;
     QList<Feature*> findResult;
 };
 
@@ -37,7 +37,7 @@ bool __cdecl indexFindCallback(Feature* F, void* ctxt)
         RR->buildPath(*(pCtxt->theProjection), *(pCtxt->theTransform), *(pCtxt->clipRect));
         (*(pCtxt->theFeatures))[F->renderPriority()].insert(F);
     } else
-    if (F->getType() == IFeature::Point) {
+    if (CHECK_NODE(F)) {
         if (!(F->isVirtual() && !M_PREFS->getVirtualNodesVisible()))
             (*(pCtxt->theFeatures))[F->renderPriority()].insert(F);
     } else
@@ -46,46 +46,62 @@ bool __cdecl indexFindCallback(Feature* F, void* ctxt)
     return true;
 }
 
-void MemoryBackend::indexAdd(const QRectF& bb, Feature* aFeat)
+void MemoryBackend::indexAdd(Layer* l, const QRectF& bb, Feature* aFeat)
 {
+    if (!l)
+        return;
+    if (!p->theRTree.contains(l))
+        p->theRTree[l] = new CoordTree();
+
     double min[] = {bb.bottomLeft().x(), bb.bottomLeft().y()};
     double max[] = {bb.topRight().x(), bb.topRight().y()};
-    p->theRTree.Insert(min, max, aFeat);
+    p->theRTree[l]->Insert(min, max, aFeat);
 }
 
-void MemoryBackend::indexRemove(const QRectF& bb, Feature* aFeat)
+void MemoryBackend::indexRemove(Layer* l, const QRectF& bb, Feature* aFeat)
 {
+    if (!l)
+        return;
+    if (!p->theRTree.contains(l))
+        return;
+
     double min[] = {bb.bottomLeft().x(), bb.bottomLeft().y()};
     double max[] = {bb.topRight().x(), bb.topRight().y()};
-    p->theRTree.Remove(min, max, aFeat);
+    p->theRTree[l]->Remove(min, max, aFeat);
 }
 
-const QList<Feature*>& MemoryBackend::indexFind(const QRectF& bb)
+const QList<Feature*>& MemoryBackend::indexFind(Layer* l, const QRectF& bb)
 {
-    double min[] = {bb.bottomLeft().x(), bb.bottomLeft().y()};
-    double max[] = {bb.topRight().x(), bb.topRight().y()};
     p->findResult.clear();
-    p->theRTree.Search(min, max, &indexFindCallbackList, (void*)&p->findResult);
+    if (p->theRTree.contains(l)) {
+        double min[] = {bb.bottomLeft().x(), bb.bottomLeft().y()};
+        double max[] = {bb.topRight().x(), bb.topRight().y()};
+        p->theRTree[l]->Search(min, max, &indexFindCallbackList, (void*)&p->findResult);
+    }
 
     return p->findResult;
 }
 
-void MemoryBackend::indexFind(const QRectF& bb, const IndexFindContext& ctxt)
+void MemoryBackend::indexFind(Layer* l, const QRectF& bb, const IndexFindContext& ctxt)
 {
+    if (!p->theRTree.contains(l))
+        return;
     double min[] = {bb.bottomLeft().x(), bb.bottomLeft().y()};
     double max[] = {bb.topRight().x(), bb.topRight().y()};
-    p->theRTree.Search(min, max, &indexFindCallback, (void*)&ctxt);
+    p->theRTree[l]->Search(min, max, &indexFindCallback, (void*)&ctxt);
 }
 
 
-void MemoryBackend::get(const QRectF& bb, QList<Feature*>& theFeatures)
+void MemoryBackend::get(Layer* l, const QRectF& bb, QList<Feature*>& theFeatures)
 {
+    if (!p->theRTree.contains(l))
+        return;
     double min[] = {bb.bottomLeft().x(), bb.bottomLeft().y()};
     double max[] = {bb.topRight().x(), bb.topRight().y()};
-    p->theRTree.Search(min, max, &indexFindCallback, (void*)(&theFeatures));
+    p->theRTree[l]->Search(min, max, &indexFindCallback, (void*)(&theFeatures));
 }
 
-void MemoryBackend::getFeatureSet(QMap<RenderPriority, QSet <Feature*> >& theFeatures,
+void MemoryBackend::getFeatureSet(Layer* l, QMap<RenderPriority, QSet <Feature*> >& theFeatures,
                    QList<QRectF>& invalidRects, QRectF& clipRect, Projection& theProjection, QTransform& theTransform)
 {
     IndexFindContext ctxt;
@@ -95,7 +111,7 @@ void MemoryBackend::getFeatureSet(QMap<RenderPriority, QSet <Feature*> >& theFea
     ctxt.theTransform = &theTransform;
 
     for (int i=0; i < invalidRects.size(); ++i) {
-        indexFind(invalidRects[i], ctxt);
+        indexFind(l, invalidRects[i], ctxt);
     }
 }
 
@@ -124,76 +140,101 @@ MemoryBackend::~MemoryBackend()
     delete p;
 }
 
-Node * MemoryBackend::allocNode(const Node& other)
+Node * MemoryBackend::allocNode(Layer* l, const Node& other)
 {
     Node* f = new Node(other);
     p->AllocFeatures[f] = f->BBox;
     if (!f->BBox.isNull()) {
-        indexAdd(f->BBox, f);
+        indexAdd(l, f->BBox, f);
     }
     return f;
 }
 
-Node * MemoryBackend::allocNode(const QPointF& aCoord)
+Node * MemoryBackend::allocNode(Layer* l, const QPointF& aCoord)
 {
     Node* f = new Node(aCoord);
     p->AllocFeatures[f] = f->BBox;
     if (!f->BBox.isNull()) {
-        indexAdd(f->BBox, f);
+        indexAdd(l, f->BBox, f);
     }
     return f;
 }
 
-Way * MemoryBackend::allocWay()
+Node * MemoryBackend::allocVirtualNode(const QPointF& aCoord)
+{
+    Node* f = new Node(aCoord);
+    return f;
+}
+
+Way * MemoryBackend::allocWay(Layer* l)
 {
     Way* f = new Way();
     p->AllocFeatures[f] = CoordBox();
     return f;
 }
 
-Way * MemoryBackend::allocWay(const Way& other)
+Way * MemoryBackend::allocWay(Layer* l, const Way& other)
 {
     Way* f = new Way(other);
     p->AllocFeatures[f] = CoordBox();
     return f;
 }
 
-Relation * MemoryBackend::allocRelation()
+Relation * MemoryBackend::allocRelation(Layer* l)
 {
     Relation* f = new Relation();
     p->AllocFeatures[f] = CoordBox();
     return f;
 }
 
-Relation * MemoryBackend::allocRelation(const Relation& other)
+Relation * MemoryBackend::allocRelation(Layer* l, const Relation& other)
 {
     Relation* f = new Relation(other);
     p->AllocFeatures[f] = CoordBox();
     return f;
 }
 
-TrackSegment * MemoryBackend::allocSegment()
+TrackSegment * MemoryBackend::allocSegment(Layer* l)
 {
     TrackSegment* f = new TrackSegment();
     p->AllocFeatures[f] = CoordBox();
     return f;
 }
 
-void MemoryBackend::deallocFeature(Feature *f)
+void MemoryBackend::clearLayer(Layer *l)
+{
+    if (p->theRTree.contains(l))
+        p->theRTree.remove(l);
+}
+
+void MemoryBackend::deallocFeature(Layer* l, Feature *f)
 {
     if (p->AllocFeatures.contains(f))
-        indexRemove(p->AllocFeatures[f], f);
+        indexRemove(l, p->AllocFeatures[f], f);
+}
+
+void MemoryBackend::deallocVirtualNode(Feature *f)
+{
+    delete f;
+}
+
+void MemoryBackend::move(Layer *oldL, Layer *newL, Feature *f)
+{
+    if (oldL)
+        indexRemove(oldL, p->AllocFeatures[f], f);
+    if (newL)
+        indexAdd(newL, p->AllocFeatures[f], f);
 }
 
 void MemoryBackend::sync(Feature *f)
 {
     if (!p->AllocFeatures[f].isNull())
-        indexRemove(p->AllocFeatures[f], f);
-    if (!f->isDeleted() && !f->isVirtual()) {
+        indexRemove(f->layer(), p->AllocFeatures[f], f);
+    if (!f->isDeleted()) {
         CoordBox bb = f->boundingBox();
         p->AllocFeatures[f] = bb;
         if (!bb.isNull()) {
-            indexAdd(bb, f);
+            indexAdd(f->layer(), bb, f);
         }
     }
 }

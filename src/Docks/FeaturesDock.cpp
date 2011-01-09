@@ -378,16 +378,20 @@ void FeaturesDock::updateList()
                 addItem(F);
         }
     } else {
-        QList < Feature* > ret = g_backend.indexFind(theViewport);
-        foreach (Feature* F, ret) {
-            if (F->isHidden())
+        for (int j=0; j<Main->document()->layerSize(); ++j) {
+            if (!Main->document()->getLayer(j)->size())
                 continue;
+            QList < Feature* > ret = g_backend.indexFind(Main->document()->getLayer(j), theViewport);
+            foreach (Feature* F, ret) {
+                if (F->isHidden())
+                    continue;
 
-            if (ui.cbWithin->isChecked()) {
-                if (Main->view()->viewport().contains(F->boundingBox()))
+                if (ui.cbWithin->isChecked()) {
+                    if (Main->view()->viewport().contains(F->boundingBox()))
+                        addItem(F);
+                } else
                     addItem(F);
-            } else
-                addItem(F);
+            }
         }
     }
     ui.FeaturesList->sortItems();

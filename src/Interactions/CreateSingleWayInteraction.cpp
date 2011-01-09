@@ -136,49 +136,51 @@ void CreateSingleWayInteraction::snapMouseMoveEvent(QMouseEvent* ev, Feature* la
         double curAngle;
 
         Way* R;
-        QList < Feature* > ret = g_backend.indexFind(HotZone);
-        foreach(Feature* F, ret) {
-            if (!(R = CAST_WAY(F)))
-                continue;
+        for (int j=0; j<document()->layerSize(); ++j) {
+            QList < Feature* > ret = g_backend.indexFind(document()->getLayer(j), HotZone);
+            foreach(Feature* F, ret) {
+                if (!(R = CAST_WAY(F)))
+                    continue;
 
-            if (R->isHidden())
-                continue;
-            if (R->notEverythingDownloaded())
-                continue;
+                if (R->isHidden())
+                    continue;
+                if (R->notEverythingDownloaded())
+                    continue;
 
-            for (int i=0; i<R->size()-1; ++i)
-            {
-                LineF F(COORD_TO_XY(R->getNode(i)),COORD_TO_XY(R->getNode(i+1)));
-                double D = F.capDistance(ev->pos());
-                if (D < CLEAR_DISTANCE) {
-                    QLineF l(COORD_TO_XY(R->getNode(i)), COORD_TO_XY(R->getNode(i+1)));
-                    double a = l.angle();
-                    if ((a >= 0 && a < 90) || (a < -270 && a >= -360)) {
-                        BestDistance = &BestDistanceNE;
-                        BestAngle = &AngleNE;
-                        curAngle = a;
-                    } else if ((a >= 90 && a < 180) || (a < -180 && a >= -270)) {
-                        BestDistance = &BestDistanceNW;
-                        BestAngle = &AngleNW;
-                        curAngle = a;
-                    } else if ((a >= 180 && a < 270) || (a < -90 && a >= -180)) {
-                        BestDistance = &BestDistanceNE;
-                        BestAngle = &AngleNE;
-                        curAngle = a - 180;
-                    } else if ((a >= 270 && a < 360) || (a < 0 && a >= -90)) {
-                        BestDistance = &BestDistanceNW;
-                        BestAngle = &AngleNW;
-                        curAngle = a - 180;
-                    }
+                for (int i=0; i<R->size()-1; ++i)
+                {
+                    LineF F(COORD_TO_XY(R->getNode(i)),COORD_TO_XY(R->getNode(i+1)));
+                    double D = F.capDistance(ev->pos());
+                    if (D < CLEAR_DISTANCE) {
+                        QLineF l(COORD_TO_XY(R->getNode(i)), COORD_TO_XY(R->getNode(i+1)));
+                        double a = l.angle();
+                        if ((a >= 0 && a < 90) || (a < -270 && a >= -360)) {
+                            BestDistance = &BestDistanceNE;
+                            BestAngle = &AngleNE;
+                            curAngle = a;
+                        } else if ((a >= 90 && a < 180) || (a < -180 && a >= -270)) {
+                            BestDistance = &BestDistanceNW;
+                            BestAngle = &AngleNW;
+                            curAngle = a;
+                        } else if ((a >= 180 && a < 270) || (a < -90 && a >= -180)) {
+                            BestDistance = &BestDistanceNE;
+                            BestAngle = &AngleNE;
+                            curAngle = a - 180;
+                        } else if ((a >= 270 && a < 360) || (a < 0 && a >= -90)) {
+                            BestDistance = &BestDistanceNW;
+                            BestAngle = &AngleNW;
+                            curAngle = a - 180;
+                        }
 
-                    if (D < *BestDistance) {
-                        *BestDistance = D;
-                        *BestAngle = curAngle;
+                        if (D < *BestDistance) {
+                            *BestDistance = D;
+                            *BestAngle = curAngle;
+                        }
                     }
                 }
-            }
 
-            qDebug() << BestDistanceNE << BestDistanceNW << AngleNE << AngleNW;
+                qDebug() << BestDistanceNE << BestDistanceNW << AngleNE << AngleNW;
+            }
         }
 
         QLineF l(PreviousPoint, ev->pos());
@@ -228,7 +230,7 @@ void CreateSingleWayInteraction::snapMouseReleaseEvent(QMouseEvent* anEvent, Fea
             {
                 Coord P(XY_TO_COORD(LastCursor));
                 int SnapIdx = findSnapPointIndex(aRoad, P);
-                Node* N = g_backend.allocNode(P);
+                Node* N = g_backend.allocNode(Main->document()->getDirtyOrOriginLayer(), P);
                 CommandList* theList  = new CommandList(MainWindow::tr("Create Node %1 in Road %2").arg(N->description()).arg(aRoad->description()), N);
                 theList->add(new AddFeatureCommand(Main->document()->getDirtyOrOriginLayer(),N,true));
                 theList->add(new WayAddNodeCommand(aRoad,N,SnapIdx,Main->document()->getDirtyOrOriginLayer(aRoad)));
@@ -243,12 +245,13 @@ void CreateSingleWayInteraction::snapMouseReleaseEvent(QMouseEvent* anEvent, Fea
             if (!theRoad)
             {
                 Node* From = 0;
-                theRoad = g_backend.allocWay();
+                theRoad = g_backend.allocWay(Main->document()->getDirtyOrOriginLayer());
+                L->add(new AddFeatureCommand(Main->document()->getDirtyOrOriginLayer(),theRoad,true));
                 if (FirstNode) {
                     if (FirstNode->isVirtual()) {
                         Way* aRoad = CAST_WAY(FirstNode->getParent(0));
                         int SnapIdx = aRoad->findVirtual(FirstNode)+1;
-                        From = g_backend.allocNode(*FirstNode);
+                        From = g_backend.allocNode(Main->document()->getDirtyOrOriginLayer(aRoad->layer()), *FirstNode);
                         From->setVirtual(false);
                         From->setPosition(FirstNode->position());
                         L->add(new AddFeatureCommand(Main->document()->getDirtyOrOriginLayer(aRoad->layer()),From,true));
@@ -261,10 +264,9 @@ void CreateSingleWayInteraction::snapMouseReleaseEvent(QMouseEvent* anEvent, Fea
                 }
                 else
                 {
-                    From = g_backend.allocNode(FirstPoint);
+                    From = g_backend.allocNode(Main->document()->getDirtyOrOriginLayer(), FirstPoint);
                     L->add(new AddFeatureCommand(Main->document()->getDirtyOrOriginLayer(),From,true));
                 }
-                L->add(new AddFeatureCommand(Main->document()->getDirtyOrOriginLayer(),theRoad,true));
                 if (M_PREFS->getAutoSourceTag()) {
                     QStringList sl = Main->document()->getCurrentSourceTags();
                     if (sl.size())
@@ -288,7 +290,7 @@ void CreateSingleWayInteraction::snapMouseReleaseEvent(QMouseEvent* anEvent, Fea
             {
                 Coord P(XY_TO_COORD(LastCursor));
                 int SnapIdx = findSnapPointIndex(aRoad, P);
-                Node* N = g_backend.allocNode(P);
+                Node* N = g_backend.allocNode(Main->document()->getDirtyOrOriginLayer(), P);
                 CommandList* theList  = new CommandList(MainWindow::tr("Create Node %1 in Road %2").arg(N->description()).arg(aRoad->description()), N);
                 theList->add(new AddFeatureCommand(Main->document()->getDirtyOrOriginLayer(),N,true));
                 theList->add(new WayAddNodeCommand(aRoad,N,SnapIdx,Main->document()->getDirtyOrOriginLayer(aRoad)));
@@ -298,7 +300,7 @@ void CreateSingleWayInteraction::snapMouseReleaseEvent(QMouseEvent* anEvent, Fea
             }
             if (!To)
             {
-                To = g_backend.allocNode(XY_TO_COORD(LastCursor));
+                To = g_backend.allocNode(Main->document()->getDirtyOrOriginLayer(), XY_TO_COORD(LastCursor));
                 L->add(new AddFeatureCommand(Main->document()->getDirtyOrOriginLayer(),To,true));
                 L->setDescription(MainWindow::tr("Create Node %1 in Road %2").arg(To->description()).arg(theRoad->description()));
                 L->setFeature(To);
