@@ -1726,6 +1726,7 @@ void MainWindow::on_fileNewAction_triggered()
         SAFE_DELETE(theDocument);
         theView->setDocument(NULL);
         p->latSaveDirtyLevel = 0;
+        g_feat_rndId = 0;
 
         if (M_PREFS->getHasAutoLoadDocument())
             loadTemplateDocument(M_PREFS->getAutoLoadDocumentFilename());

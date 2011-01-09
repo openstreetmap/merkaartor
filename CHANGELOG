@@ -1,5 +1,5 @@
-<<<<<<< HEAD
 v0.18
+    * FIX : Make sure new id's are unique (fixes #3223)
     * FIX : Background image refresh issue when going to tiled from direct (e.g. GeoTIFF)
     * DEL : Remove unmaintained own OSM Binary format
     * FIX : Import all GDAL layers
