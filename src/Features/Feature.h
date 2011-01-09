@@ -339,7 +339,7 @@ class Feature : public IFeature
 
     protected:
         bool MetaUpToDate;
-        IFeature::FId newId(IFeature::FeatureType type, Document* d=NULL) const;
+        IFeature::FId newId(IFeature::FeatureType type) const;
 
         bool tagsToXML(QDomElement xParent, bool strict);
         static void tagsFromXML(Document* d, Feature* f, QDomElement e);
@@ -352,6 +352,8 @@ class Feature : public IFeature
 };
 
 Q_DECLARE_METATYPE( Feature * );
+
+extern qint64 g_feat_rndId;
 
 void copyTags(Feature* Dest, Feature* Src);
 bool hasOSMId(const Feature* aFeature);

@@ -24,14 +24,10 @@
 
 #include <algorithm>
 
-qint64 g_rndId = 0;
-IFeature::FId Feature::newId(IFeature::FeatureType type, Document* d) const
+qint64 g_feat_rndId = 0;
+IFeature::FId Feature::newId(IFeature::FeatureType type) const
 {
-    IFeature::FId id = IFeature::FId(type, --g_rndId);
-    if (d)
-        while (d->getFeature(id))
-            id = IFeature::FId(type, --g_rndId);
-
+    IFeature::FId id = IFeature::FId(type, --g_feat_rndId);
     return id;
 }
 
@@ -259,16 +255,17 @@ void Feature::setId(const IFeature::FId& id)
             p->parentLayer->notifyIdUpdate(id,this);
     }
     p->Id = id;
+
+    // Make sure any new id is unique
+    if (id.numId < -12000)
+        qDebug("numid");
+    if (id.numId < g_feat_rndId)
+        g_feat_rndId = id.numId;
 }
 
 const IFeature::FId& Feature::resetId() const
 {
-    Layer* L = p->parentLayer;
-    if (L) {
-        p->Id = newId((IFeature::FeatureType)getType(), L->getDocument());
-        L->notifyIdUpdate(p->Id,const_cast<Feature*>(this));
-    } else
-        p->Id = newId((IFeature::FeatureType)getType(), NULL);
+    p->Id = newId((IFeature::FeatureType)getType());
     return p->Id;
 }
 
