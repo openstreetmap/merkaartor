@@ -1,3 +1,5 @@
+v0.17.1
+    * FIX : Background image refresh issue when going to tiled from direct (e.g. GeoTIFF)
 v0.17
     * ADD : Allow to align background image with <SPACE>+pan
     * ADD : Network timeout preference

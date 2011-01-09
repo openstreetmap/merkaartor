@@ -310,8 +310,15 @@ void ImageMapLayer::setMapAdapter(const QUuid& theAdapterUid, const QString& ser
         switch (p->theMapAdapter->getType()) {
             case IMapAdapter::DirectBackground:
             case IMapAdapter::VectorBackground:
-                if (!p->theNetworkImageManager)
+                if (!p->theNetworkImageManager) {
                     p->theNetworkImageManager = new ImageManager();
+                    connect(p->theNetworkImageManager, SIGNAL(dataRequested()),
+                            this, SLOT(on_imageRequested()), Qt::QueuedConnection);
+                    connect(p->theNetworkImageManager, SIGNAL(dataReceived()),
+                            this, SLOT(on_imageReceived()), Qt::QueuedConnection);
+                    connect(p->theNetworkImageManager, SIGNAL(loadingFinished()),
+                            this, SLOT(on_loadingFinished()), Qt::QueuedConnection);
+                }
                 p->theImageManager = p->theNetworkImageManager;
                 p->theMapAdapter->setImageManager(p->theImageManager);
                 break;
