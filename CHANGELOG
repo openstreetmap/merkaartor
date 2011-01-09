@@ -1,4 +1,5 @@
 v0.17.1
+    * FIX : log2 not available on FreeBSD (fixes #3211)
     * FIX : Make sure new id's are unique (fixes #3223)
     * FIX : Background image refresh issue when going to tiled from direct (e.g. GeoTIFF)
 v0.17
