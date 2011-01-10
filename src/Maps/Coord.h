@@ -68,7 +68,7 @@ uint qHash(const Coord &c);
 #include <ggl/ggl.hpp>
 #include <ggl/geometries/register/point.hpp>
 
-GEOMETRY_REGISTER_POINT_2D_GET_SET(Coord, double, cs::cartesian, lat, lon, setLat, setLon)
+GEOMETRY_REGISTER_POINT_2D_GET_SET(Coord, double, cs::cartesian, x, y, setX, setY)
 
 #endif
 #endif
@@ -209,7 +209,7 @@ Q_DECLARE_METATYPE( CoordBox );
 #if QT_VERSION < 0x040700
 #include <ggl/geometries/register/box.hpp>
 
-GEOMETRY_REGISTER_BOX(CoordBox, Coord, BottomLeft, TopRight)
+GEOMETRY_REGISTER_BOX(CoordBox, Coord, bottomLeft, topRight)
 #endif
 #endif
 
