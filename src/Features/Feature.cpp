@@ -25,6 +25,8 @@
 #include <algorithm>
 
 qint64 g_feat_rndId = 0;
+QStringList TechnicalTags = QString(TECHNICAL_TAGS).split("#");
+
 IFeature::FId Feature::newId(IFeature::FeatureType type) const
 {
     IFeature::FId id = IFeature::FId(type, --g_feat_rndId);
@@ -567,6 +569,7 @@ void MapFeaturePrivate::updatePossiblePainters()
     if ( (theFeature->layer()->isTrack()) && M_PREFS->getDisableStyleForTracks() ) return blankPainters();
 
     if ( (theFeature->layer()->isTrack()) || theFeature->sizeParents() ) {
+        if (CHECK_NODE(theFeature) && !STATIC_CAST_NODE(theFeature)->isPOI()) return blankPainters();
         if (!theFeature->tagSize()) return blankPainters();
     }
 
