@@ -24,8 +24,6 @@
 #include <algorithm>
 #include "LayerPrivate.h"
 
-#include "Backend/SpatialiteBackend.h"
-
 /* Layer */
 
 Layer::Layer()
@@ -557,7 +555,7 @@ DrawingLayer * DrawingLayer::doFromXML(DrawingLayer* l, Document* d, QXmlStreamR
                 } else  if (stream.name() == "node") {
                     /* Node* N = */ Node::fromXML(d, l, stream);
                 } else if (stream.name() == "trkseg") {
-                    TrackSegment* T = TrackSegment::fromXML(d, l, stream, progress);
+                    /*TrackSegment* T = */ TrackSegment::fromXML(d, l, stream, progress);
                 } else if (stream.name() == "bound") {
                     stream.skipCurrentElement();
                 } else if (!stream.isWhitespace()) {
