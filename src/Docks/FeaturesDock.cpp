@@ -313,7 +313,7 @@ void FeaturesDock::addItem(MapFeaturePtr F)
     if (Highlighted.contains(F))
         return;
 
-    if (curFeatType == IFeature::OsmRelation)
+    if (curFeatType == IFeature::OsmRelation || curFeatType == Feature::All)
     {
         if (Relation* L = CAST_RELATION(F)) {
             QListWidgetItem* anItem = new QListWidgetItem(L->description(), ui.FeaturesList);
