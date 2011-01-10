@@ -11,6 +11,7 @@
 #include "Command.h"
 #include "DocumentCommands.h"
 #include "FeatureCommands.h"
+#include "RelationCommands.h"
 #include "ImportExportOSC.h"
 #include "ExportGPX.h"
 #include "ImportExportKML.h"
@@ -2220,11 +2221,11 @@ void MainWindow::on_areaTerraceAction_triggered()
 void MainWindow::on_createRelationAction_triggered()
 {
     Relation* R = g_backend.allocRelation(document()->getDirtyOrOriginLayer());
-    for (int i = 0; i < p->theProperties->size(); ++i)
-        R->add("", p->theProperties->selection(i));
     CommandList* theList = new CommandList(MainWindow::tr("Create Relation %1").arg(R->description()), R);
     theList->add(
         new AddFeatureCommand(document()->getDirtyOrOriginLayer(), R, true));
+    for (int i = 0; i < p->theProperties->size(); ++i)
+        theList->add(new RelationAddFeatureCommand(R, "", p->theProperties->selection(i)));
     theDocument->addHistory(theList);
     p->theProperties->setSelection(R);
     invalidateView();
