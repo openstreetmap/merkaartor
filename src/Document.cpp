@@ -34,8 +34,6 @@
 #include <QMenu>
 #include <QSet>
 
-#include "Backend/SpatialiteBackend.h"
-
 /* MAPDOCUMENT */
 
 class MapDocumentPrivate
