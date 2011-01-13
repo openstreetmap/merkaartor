@@ -219,8 +219,11 @@ unix {
 }
 
 LIBS += -lproj
-LIBS += -lspatialite
 
+contains (SPATIALITE, 1) {
+    DEFINES += USE_SPATIALITE
+    LIBS += -lspatialite
+}
 contains (PROTOBUF, 1) {
     DEFINES += USE_PROTOBUF
 }

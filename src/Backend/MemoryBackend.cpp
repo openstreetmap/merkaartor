@@ -228,7 +228,7 @@ void MemoryBackend::move(Layer *oldL, Layer *newL, Feature *f)
 
 void MemoryBackend::sync(Feature *f)
 {
-    if (!p->AllocFeatures[f].isNull())
+    if (p->AllocFeatures.contains(f) && !p->AllocFeatures[f].isNull())
         indexRemove(f->layer(), p->AllocFeatures[f], f);
     if (!f->isDeleted()) {
         CoordBox bb = f->boundingBox();
