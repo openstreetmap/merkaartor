@@ -206,6 +206,7 @@ bool DirtyListExecutorOSC::stop()
 
     OscStream.writeEndDocument();
     OscBuffer.close();
+    qDebug() << OscBuffer.buffer();
     QString URL = theDownloader->getURLToUploadDiff(ChangeSetId);
     switch (sendRequest("POST", URL, QString(OscBuffer.buffer()), DataOut)) {
     case 200: {
@@ -322,7 +323,7 @@ void DirtyListExecutorOSC::OscModify(Feature* F)
     if (LastAction != "modify") {
         if (!LastAction.isEmpty())
             OscStream.writeEndElement();
-        OscStream.writeStartElement("create");
+        OscStream.writeStartElement("modify");
         LastAction = "modify";
     }
 

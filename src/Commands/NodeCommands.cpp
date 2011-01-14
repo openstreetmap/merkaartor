@@ -78,12 +78,12 @@ bool MoveNodeCommand::toXML(QXmlStreamWriter& stream) const
 
     stream.writeAttribute("xml:id", id());
     stream.writeAttribute("trackpoint", thePoint->xmlId());
-    OldPos.toXML("oldpos", stream);
-    NewPos.toXML("newpos", stream);
     if (theLayer)
         stream.writeAttribute("layer", theLayer->id());
     if (oldLayer)
         stream.writeAttribute("oldlayer", oldLayer->id());
+    OldPos.toXML("oldpos", stream);
+    NewPos.toXML("newpos", stream);
 
     Command::toXML(stream);
     stream.writeEndElement();
