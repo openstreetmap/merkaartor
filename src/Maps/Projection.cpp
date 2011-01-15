@@ -208,7 +208,7 @@ Coord Projection::projInverse(const QPointF & pProj) const
     return Coord(radToAng(x), radToAng(y));
 }
 
-QRectF Projection::getProjectedViewport(const QRectF& Viewport, const QRect& screen) const
+QRectF Projection::toProjectedRectF(const QRectF& Viewport, const QRect& screen) const
 {
     QPointF tl, br;
     QRectF pViewport;
@@ -237,6 +237,18 @@ QRectF Projection::getProjectedViewport(const QRectF& Viewport, const QRect& scr
     pViewport = QRectF((pCenter.x() - wv/2), (pCenter.y() + hv/2), wv, -hv);
 
     return pViewport;
+}
+
+CoordBox Projection::fromProjectedRectF(const QRectF& Viewport) const
+{
+    Coord tl, br;
+    CoordBox bbox;
+
+    tl = inverse2Coord(Viewport.topLeft());
+    br = inverse2Coord(Viewport.bottomRight());
+    bbox = CoordBox(tl, br);
+
+    return bbox;
 }
 #endif // _MOBILE
 

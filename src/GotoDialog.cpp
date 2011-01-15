@@ -17,7 +17,7 @@
 #include "NameFinder/namefinderwidget.h"
 #include "Utils/OsmLink.h"
 
-GotoDialog::GotoDialog(const MapView& aView, QWidget *parent)
+GotoDialog::GotoDialog(MapView* aView, QWidget *parent)
     :QDialog(parent)
 {
     setupUi(this);
@@ -25,9 +25,12 @@ GotoDialog::GotoDialog(const MapView& aView, QWidget *parent)
     setWindowFlags(windowFlags() & ~Qt::WindowContextHelpButtonHint);
     setWindowFlags(windowFlags() | Qt::MSWindowsFixedSizeDialogHint);
 
-    CoordBox B = aView.viewport();
-    theCenter = B.center();
-    int OsmZoom = int((log((360.0 / B.latDiff())) / log(2.0)) + 1);
+    theViewport = aView->viewport();
+    theProjection = &aView->projection();
+    theRect = aView->rect();
+
+    theCenter = theViewport.center();
+    int OsmZoom = int((log((360.0 / theViewport.latDiff())) / log(2.0)) + 1);
     OsmZoom = qMin(OsmZoom, 18);
     OsmZoom = qMax(OsmZoom, 1);
 
@@ -43,7 +46,7 @@ GotoDialog::GotoDialog(const MapView& aView, QWidget *parent)
         if (i.value().deleted == false) {
             coordBookmark->addItem(i.key());
             CoordBox C = i.value().Coordinates;
-            if ((d = C.center().distanceFrom(B.center())) < dist) {
+            if ((d = C.center().distanceFrom(theViewport.center())) < dist) {
                 dist = d;
                 selIdx = idx;
             }
@@ -52,6 +55,8 @@ GotoDialog::GotoDialog(const MapView& aView, QWidget *parent)
     }
     coordBookmark->setCurrentIndex(selIdx);
 
+    connect(cbCoordShowProjected, SIGNAL(toggled(bool)), SLOT(fillCoordinates()));
+
     searchWidget = new NameFinder::NameFinderWidget(this);
     connect(searchWidget, SIGNAL(selectionChanged()), this, SLOT(searchWidget_selectionChanged()));
     connect(searchWidget, SIGNAL(doubleClicked()), this, SLOT(searchWidget_doubleClicked()));
@@ -59,37 +64,24 @@ GotoDialog::GotoDialog(const MapView& aView, QWidget *parent)
     verticalLayout_4->addWidget(searchWidget);
 
     coordLink->setText( QString("http://www.openstreetmap.org/?lat=%1&lon=%2&zoom=%3")
-        .arg(COORD2STRING(B.center().y()))
-        .arg(COORD2STRING(B.center().x()))
+        .arg(COORD2STRING(theViewport.center().y()))
+        .arg(COORD2STRING(theViewport.center().x()))
         .arg(QString::number(OsmZoom))
         );
     coordOsmApi->setText( QString("http://www.openstreetmap.org/api/%1/map?bbox=%2,%3,%4,%5")
         .arg(M_PREFS->apiVersion())
-        .arg(COORD2STRING(B.bottomLeft().x()))
-        .arg(COORD2STRING(B.bottomLeft().y()))
-        .arg(COORD2STRING(B.topRight().x()))
-        .arg(COORD2STRING(B.topRight().y()))
+        .arg(COORD2STRING(theViewport.bottomLeft().x()))
+        .arg(COORD2STRING(theViewport.bottomLeft().y()))
+        .arg(COORD2STRING(theViewport.topRight().x()))
+        .arg(COORD2STRING(theViewport.topRight().y()))
         );
     coordOsmXApi->setText( QString("http://xapi.openstreetmap.org/api/0.5/*[bbox=%1,%2,%3,%4]")
-        .arg(COORD2STRING(B.bottomLeft().x()))
-        .arg(COORD2STRING(B.bottomLeft().y()))
-        .arg(COORD2STRING(B.topRight().x()))
-        .arg(COORD2STRING(B.topRight().y()))
+        .arg(COORD2STRING(theViewport.bottomLeft().x()))
+        .arg(COORD2STRING(theViewport.bottomLeft().y()))
+        .arg(COORD2STRING(theViewport.topRight().x()))
+        .arg(COORD2STRING(theViewport.topRight().y()))
         );
-    coordCoord->setText( QString("%1, %2, %3, %4")
-        .arg(COORD2STRING(B.bottomLeft().x()))
-        .arg(COORD2STRING(B.bottomLeft().y()))
-        .arg(COORD2STRING(B.topRight().x()))
-        .arg(COORD2STRING(B.topRight().y()))
-        );
-    coordSpan->setText( QString("%1, %2, %3, %4")
-        .arg(COORD2STRING(B.center().y()))
-        .arg(COORD2STRING(B.center().x()))
-        .arg(COORD2STRING(B.latDiff()))
-        .arg(COORD2STRING(B.lonDiff()))
-        );
-
-    resize(1,1);
+    fillCoordinates();
 }
 
 void GotoDialog::on_buttonBox_clicked(QAbstractButton * button)
@@ -115,6 +107,8 @@ void GotoDialog::on_buttonBox_clicked(QAbstractButton * button)
                 return;
             }
             theNewViewport = CoordBox(Coord(tokens[0].toDouble(), tokens[1].toDouble()), Coord(tokens[2].toDouble(), tokens[3].toDouble()));
+            if (cbCoordShowProjected->isChecked())
+                theNewViewport = theProjection->fromProjectedRectF(theNewViewport);
         } else
         if (rbSpan->isChecked()) {
             QStringList tokens = coordSpan->text().split(",");
@@ -131,6 +125,8 @@ void GotoDialog::on_buttonBox_clicked(QAbstractButton * button)
                                     tokens[1].toDouble() + tokens[3].toDouble() / 2,
                                     tokens[0].toDouble() + tokens[2].toDouble() / 2)
                                 );
+            if (cbCoordShowProjected->isChecked())
+                theNewViewport = theProjection->fromProjectedRectF(theNewViewport);
         }
         accept();
     }
@@ -192,6 +188,26 @@ void GotoDialog::searchWidget_done()
 void GotoDialog::changeEvent(QEvent * event)
 {
         if (event->type() == QEvent::LanguageChange)
-                retranslateUi(this);
+            retranslateUi(this);
+}
+
+void GotoDialog::fillCoordinates()
+{
+    CoordBox bbox = theViewport;
+    if (cbCoordShowProjected->isChecked())
+        bbox = theProjection->toProjectedRectF(theViewport, theRect);
+
+    coordCoord->setText( QString("%1, %2, %3, %4")
+        .arg(COORD2STRING(bbox.bottomLeft().x()))
+        .arg(COORD2STRING(bbox.bottomLeft().y()))
+        .arg(COORD2STRING(bbox.topRight().x()))
+        .arg(COORD2STRING(bbox.topRight().y()))
+        );
+    coordSpan->setText( QString("%1, %2, %3, %4")
+        .arg(COORD2STRING(bbox.center().y()))
+        .arg(COORD2STRING(bbox.center().x()))
+        .arg(COORD2STRING(bbox.latDiff()))
+        .arg(COORD2STRING(bbox.lonDiff()))
+        );
 }
 

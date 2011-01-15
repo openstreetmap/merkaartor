@@ -1351,7 +1351,7 @@ void MapView::viewportRecalc(const QRect & Screen)
 
 void MapView::transformCalc(QTransform& theTransform, const Projection& theProjection, const qreal& theRotation, const CoordBox& TargetMap, const QRect& screen)
 {
-    QRectF pViewport = theProjection.getProjectedViewport(TargetMap, screen);
+    QRectF pViewport = theProjection.toProjectedRectF(TargetMap, screen);
 //    QPointF pCenter(pViewport.center());
 
     double Aspect = (double)screen.width() / screen.height();

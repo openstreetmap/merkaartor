@@ -45,7 +45,9 @@ class Projection : public IProjection
                            long point_count, int point_offset, double *x, double *y, double *z );
         void projTransformToWGS84(long point_count, int point_offset, double *x, double *y, double *z ) const;
         void projTransformFromWGS84(long point_count, int point_offset, double *x, double *y, double *z ) const;
-        QRectF getProjectedViewport(const QRectF& Viewport, const QRect& screen) const;
+
+        QRectF toProjectedRectF(const QRectF& Viewport, const QRect& screen) const;
+        CoordBox fromProjectedRectF(const QRectF& Viewport) const;
 
         int projectionRevision() const;
 #endif

@@ -579,7 +579,7 @@ void ImageMapLayer::setCurrentZoom(MapView& theView, const CoordBox& viewport, c
         projVp.setTopLeft(theView.invertedTransform().map(fRect.topLeft()));
         projVp.setBottomRight(theView.invertedTransform().map(fRect.bottomRight()));
     } else
-        projVp = p->theProjection.getProjectedViewport(viewport, rect);
+        projVp = p->theProjection.toProjectedRectF(viewport, rect);
 
     qreal tileWidth, tileHeight;
     int maxZoom = p->theMapAdapter->getAdaptedMaxZoom(viewport);
@@ -715,7 +715,7 @@ QRect ImageMapLayer::drawFull(MapView& theView, QRect& rect)
             vp.setTopLeft(theView.invertedTransform().map(fRect.topLeft()));
             vp.setBottomRight(theView.invertedTransform().map(fRect.bottomRight()));
         } else
-            vp = p->theProjection.getProjectedViewport(CoordBox(alignedViewport), rect);
+            vp = p->theProjection.toProjectedRectF(CoordBox(alignedViewport), rect);
 
         QRectF wgs84vp = QRectF(QPointF(Viewport.bottomLeft().x(), Viewport.bottomLeft().y())
                                 , QPointF(Viewport.topRight().x(), Viewport.topRight().y()));
@@ -852,7 +852,7 @@ QRect ImageMapLayer::drawTiled(MapView& theView, QRect& rect)
         projVp.setTopLeft(theView.invertedTransform().map(fRect.topLeft()));
         projVp.setBottomRight(theView.invertedTransform().map(fRect.bottomRight()));
     } else
-        projVp = p->theProjection.getProjectedViewport(CoordBox(p->Viewport), rect);
+        projVp = p->theProjection.toProjectedRectF(CoordBox(p->Viewport), rect);
 
     qreal tileWidth, tileHeight;
     int maxZoom = p->theMapAdapter->getAdaptedMaxZoom(p->Viewport);
@@ -899,7 +899,7 @@ QRect ImageMapLayer::drawTiled(MapView& theView, QRect& rect)
             projVp.setTopLeft(theView.invertedTransform().map(fRect.topLeft()));
             projVp.setBottomRight(theView.invertedTransform().map(fRect.bottomRight()));
         } else
-            projVp = p->theProjection.getProjectedViewport(CoordBox(alignedViewport), rect);
+            projVp = p->theProjection.toProjectedRectF(CoordBox(alignedViewport), rect);
     }
 
     QPointF vpCenter = projVp.center();

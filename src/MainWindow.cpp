@@ -1677,7 +1677,7 @@ void MainWindow::on_viewRelationsAction_triggered()
 
 void MainWindow::on_viewGotoAction_triggered()
 {
-    GotoDialog* Dlg = new GotoDialog(*theView, this);
+    GotoDialog* Dlg = new GotoDialog(theView, this);
     if (Dlg->exec() == QDialog::Accepted) {
         if (!Dlg->newViewport().isNull() && !Dlg->newViewport().isEmpty()) {
             theView->setViewport(Dlg->newViewport(), theView->rect());
