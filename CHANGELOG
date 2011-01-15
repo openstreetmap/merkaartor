@@ -1,4 +1,5 @@
 v0.17.1
+    * FIX : Handle UTF8 in GDAL fields
     * FIX : Only check styles for POI nodes
     * FIX : Feature dock: Relations not shown in "All' tab
     * FIX : log2 not available on FreeBSD (fixes #3211)

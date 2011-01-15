@@ -289,12 +289,12 @@ bool ImportExportGdal::import(Layer* aLayer)
                     aLayer->add(F);
                 for (int i=0; i<poFeature->GetFieldCount(); ++i) {
                     OGRFieldDefn  *fd = poFeature->GetFieldDefnRef(i);
-                    QString k(fd->GetNameRef());
+                    QString k = QString::fromUtf8(fd->GetNameRef());
                     if (!g_Merk_NoGuardedTagsImport) {
                         k.prepend("_");
                         k.append("_");
                     }
-                    F->setTag(k, poFeature->GetFieldAsString(i));
+                    F->setTag(k, QString::fromUtf8(poFeature->GetFieldAsString(i)));
                 }
             }
         }
