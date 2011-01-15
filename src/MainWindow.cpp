@@ -2844,7 +2844,6 @@ void MainWindow::on_exportGDALAction_triggered()
     createProgressDialog();
     if (!selectExportedFeatures(theFeatures))
         return;
-
 #ifndef Q_OS_SYMBIAN
     QApplication::setOverrideCursor(Qt::BusyCursor);
 #endif

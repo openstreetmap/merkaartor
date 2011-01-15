@@ -28,7 +28,7 @@
 bool parseContainer(QDomElement& e, Layer* aLayer);
 
 ImportExportGdal::ImportExportGdal(Document* doc)
- : IImportExport(doc), theProjection(0)
+ : IImportExport(doc)
 {
 }
 
@@ -169,12 +169,7 @@ Node *ImportExportGdal::nodeFor(Layer* aLayer, const OGRPoint p)
         return pointHash[p];
     }
 
-    if (toWGS84)
-        pointHash[p] = g_backend.allocNode(aLayer, Coord(p.getX(), p.getY()));
-    else {
-        Coord c = theProjection->inverse2Coord(QPointF(p.getX(), p.getY()));
-        pointHash[p] = g_backend.allocNode(aLayer, c);
-    }
+    pointHash[p] = g_backend.allocNode(aLayer, Coord(p.getX(), p.getY()));
     aLayer->add(pointHash[p]);
     return pointHash[p];
 }
@@ -291,7 +286,6 @@ bool ImportExportGdal::import(Layer* aLayer)
 
     OGRSpatialReference * theSrs = poLayer->GetSpatialRef();
     toWGS84 = NULL;
-    theProjection = NULL;
 
     if (theSrs) {
         // Workaround for OSGB - otherwise its datum is ignored (TODO: why?)
@@ -301,47 +295,54 @@ bool ImportExportGdal::import(Layer* aLayer)
             OGRSpatialReference * the27700Srs = new OGRSpatialReference();
             if ((ogrError = the27700Srs->importFromEPSG(27700)) != OGRERR_NONE) {
                 qDebug("SHP: couldn't initialise EPSG:27700: %d: %s", ogrError, CPLGetLastErrorMsg());
-                delete the27700Srs;
+                the27700Srs->Release();
             } else {
+                theSrs->Release();
                 theSrs = the27700Srs;
             }
         }
-        toWGS84 = OGRCreateCoordinateTransformation(theSrs, &wgs84srs);
     }
 
-    theProjection = new Projection();
+    QString sPrj;
+    QString projTitle;
+
     if (theSrs) {
-        if (!toWGS84) {
-            theSrs->morphFromESRI();
-            {
-                char* cTheProj4;
-                if (theSrs->exportToProj4(&cTheProj4) != OGRERR_NONE) {
-                    qDebug() << "SHP: to proj4 error: " << CPLGetLastErrorMsg();
-                    return false;
-                }
-                QString theProj4(cTheProj4);
-                // Hack because GDAL (as of 1.6.1) do not recognize "DATUM["D_OSGB_1936"" from the WKT
-                QString datum = theSrs->GetAttrValue("DATUM");
-                if (datum == "OSGB_1936" && !theProj4.contains("+datum"))
-                    theProj4 += " +datum=OSGB36";
-                qDebug() << "SHP: to proj4 : " << theProj4;
-                theProjection->setProjectionType(QString(theProj4));
+        theSrs->morphFromESRI();
+
+        char* cTheProj;
+        if (theSrs->exportToProj4(&cTheProj) == OGRERR_NONE) {
+            sPrj = QString(cTheProj);
+            OGRFree(cTheProj);
+        } else {
+            if (theSrs->exportToWkt(&cTheProj) == OGRERR_NONE) {
+                sPrj = QString(cTheProj);
+                OGRFree(cTheProj);
             }
         }
+        projTitle = QCoreApplication::translate("ImportExportGdal", "Confirm projection");
     } else {
-        QString sPrj;
-        sPrj = ProjectionChooser::getProjection(QCoreApplication::translate("ImportExportGdal", "Unable to set projection; please specify one"));
-        if (sPrj.isEmpty()) {
-            delete theProjection;
-            return false;
-        }
-
-        if (!theProjection->setProjectionType(sPrj)) {
-//            QMessageBox::critical(0,QCoreApplication::translate("ImportExportGdal","Cannot load file"),QCoreApplication::translate("ImportExportGdal","Unable to set projection."));
-            delete theProjection;
-            return false;
-        }
+        projTitle = QCoreApplication::translate("ImportExportGdal", "Unable to set projection; please specify one");
     }
+
+#ifndef Q_OS_SYMBIAN
+    QApplication::restoreOverrideCursor();
+#endif
+    sPrj = ProjectionChooser::getProjection(projTitle, true, sPrj);
+    qDebug() << sPrj;
+#ifndef Q_OS_SYMBIAN
+    QApplication::setOverrideCursor(Qt::BusyCursor);
+#endif
+
+    if (sPrj.isEmpty()) {
+        return false;
+    }
+
+    theSrs->Release();
+    theSrs = new OGRSpatialReference();
+    theSrs->importFromProj4(sPrj.toLatin1().data());
+    toWGS84 = OGRCreateCoordinateTransformation(theSrs, &wgs84srs);
+    if (!toWGS84)
+        return false;
 
     QProgressDialog progress(QApplication::tr("Importing..."), QApplication::tr("Cancel"), 0, 0);
     progress.setWindowModality(Qt::WindowModal);
@@ -367,8 +368,7 @@ bool ImportExportGdal::import(Layer* aLayer)
             if( poGeometry != NULL) {
                 // qDebug( "GeometryType : %d,", poGeometry->getGeometryType() );
 
-                if (toWGS84)
-                    poGeometry->transform(toWGS84);
+                poGeometry->transform(toWGS84);
 
                 Feature* F = parseGeometry(aLayer, poGeometry);
                 if (F) {

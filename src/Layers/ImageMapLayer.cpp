@@ -659,10 +659,10 @@ void ImageMapLayer::draw(MapView& theView, QRect& rect)
     const QSize ps = p->pr.size();
     const QSize pmSize = p->newPix.size();
     const qreal ratio = qMax<const qreal>((qreal)pmSize.width()/ps.width()*1.0, (qreal)pmSize.height()/ps.height()*1.0);
-    qDebug() << "Bg image ratio " << ratio;
+//    qDebug() << "Bg image ratio " << ratio;
     QPixmap pms;
     if (ratio >= 1.0) {
-        qDebug() << "Bg image scale 1 " << ps << " : " << p->newPix.size();
+//        qDebug() << "Bg image scale 1 " << ps << " : " << p->newPix.size();
         pms = p->newPix.scaled(ps);
     } else {
         const QSizeF drawingSize = pmSize * ratio;
@@ -670,7 +670,7 @@ void ImageMapLayer::draw(MapView& theView, QRect& rect)
         const QPointF drawingOrigin = QPointF(originSize.width(), originSize.height());
         const QRect drawingRect = QRect(drawingOrigin.toPoint(), drawingSize.toSize());
 
-        qDebug() << "Bg image scale 2 " << ps << " : " << p->newPix.size();
+//        qDebug() << "Bg image scale 2 " << ps << " : " << p->newPix.size();
         if (ps*ratio != drawingRect.size())
             pms = p->newPix.copy(drawingRect).scaled(ps*ratio);
         else
@@ -960,7 +960,7 @@ QRect ImageMapLayer::drawTiled(MapView& theView, QRect& rect)
     QPainter painter(&p->newPix);
 //    painter.drawPixmap(0, 0, tmpPm);
 
-    qDebug() << "Tiles: " << tiles_right+tiles_left+1 << "x" << tiles_bottom+tiles_above+1;
+//    qDebug() << "Tiles: " << tiles_right+tiles_left+1 << "x" << tiles_bottom+tiles_above+1;
     for (i=-tiles_left+mapmiddle_tile_x; i<=tiles_right+mapmiddle_tile_x; i++)
     {
         for (j=-tiles_above+mapmiddle_tile_y; j<=tiles_bottom+mapmiddle_tile_y; j++)
@@ -997,9 +997,9 @@ QRect ImageMapLayer::drawTiled(MapView& theView, QRect& rect)
     }
     painter.end();
 
-    qDebug() << "tl: " << tl << "; br: " << br;
-    qDebug() << "vp: " << projVp;
-    qDebug() << "vlm: " << vlm;
+//    qDebug() << "tl: " << tl << "; br: " << br;
+//    qDebug() << "vp: " << projVp;
+//    qDebug() << "vlm: " << vlm;
     return retRect;
 }
 

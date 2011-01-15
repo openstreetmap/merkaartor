@@ -21,7 +21,7 @@ ProjectionChooser::~ProjectionChooser()
     delete ui;
 }
 
-QString ProjectionChooser::getProjection(QString title, bool bShowPredefined, QWidget* parent)
+QString ProjectionChooser::getProjection(QString title, bool bShowPredefined, QString initialProj, QWidget* parent)
 {
     QString sPrj;
 
@@ -50,11 +50,21 @@ QString ProjectionChooser::getProjection(QString title, bool bShowPredefined, QW
     dlg->ui->cbPredefined->setVisible(false);
 #endif
 
+    if (!initialProj.isEmpty()) {
+        if (initialProj.startsWith("+proj")) {
+            dlg->ui->txtCustom->setText(initialProj);
+            dlg->ui->chkCustom->setChecked(true);
+        } else if (initialProj.startsWith("PROJCS")) {
+            dlg->ui->txWkt->setPlainText(initialProj);
+            dlg->ui->chkWkt->setChecked(true);
+        }
+    }
+
     dlg->adjustSize();
 
     if (dlg->exec() == QDialog::Accepted) {
         if (dlg->ui->chkPredefined->isChecked())
-            sPrj = dlg->ui->cbPredefined->itemText(dlg->ui->cbPredefined->currentIndex());
+            sPrj = dlg->ui->cbPredefined->itemData(dlg->ui->cbPredefined->currentIndex()).toString();
         else if (dlg->ui->chkStandard->isChecked()) {
             sPrj = dlg-> ui->txtStandard->text().trimmed();
             bool ok;

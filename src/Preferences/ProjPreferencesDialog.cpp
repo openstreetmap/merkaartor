@@ -45,7 +45,7 @@ void ProjPreferencesDialog::addProjection(const ProjectionItem & srv)
 
 void ProjPreferencesDialog::on_btSelectProj4_clicked()
 {
-    QString sPrj = ProjectionChooser::getProjection(tr("Please specify projection"), false, this);
+    QString sPrj = ProjectionChooser::getProjection(tr("Please specify projection"), false, edProj4String->text(), this);
     if (!sPrj.isEmpty())
         edProj4String->setText(sPrj);
 }

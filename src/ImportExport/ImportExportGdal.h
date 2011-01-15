@@ -44,7 +44,6 @@ public:
 
 protected:
     OGRCoordinateTransformation *toWGS84;
-    Projection* theProjection;
 
     Feature* parseGeometry(Layer* aLayer, OGRGeometry *poGeometry);
 
