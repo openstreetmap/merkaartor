@@ -1,4 +1,6 @@
 v0.18
+    * ADD : Allow to use projection chooser in projection editor
+    * ADD : Allow to enter WKT in projection chooser
     * ADD : Goto dialog: Allow to show/edit coordinates in projected units
     * FIX : Only check styles for POI nodes
     * FIX : Feature dock: Relations not shown in "All' tab

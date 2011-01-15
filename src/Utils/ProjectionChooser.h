@@ -13,7 +13,7 @@ public:
     ProjectionChooser(QWidget *parent = 0);
     ~ProjectionChooser();
 
-    static QString getProjection(QString title=QString(), QWidget* parent=0);
+    static QString getProjection(QString title=QString(), bool bShowPredefined=true, QWidget* parent=0);
 
 protected:
     void changeEvent(QEvent *e);

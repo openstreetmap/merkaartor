@@ -17,6 +17,8 @@
 #include <QTextEdit>
 #include <QComboBox>
 
+#include "Utils/ProjectionChooser.h"
+
 ProjPreferencesDialog::ProjPreferencesDialog(QWidget* parent)
     : QDialog(parent)
 {
@@ -39,6 +41,13 @@ void ProjPreferencesDialog::addProjection(const ProjectionItem & srv)
         item->setData(Qt::UserRole, (int) theItems.size()-1);
         lvProjections->addItem(item);
     }
+}
+
+void ProjPreferencesDialog::on_btSelectProj4_clicked()
+{
+    QString sPrj = ProjectionChooser::getProjection(tr("Please specify projection"), false, this);
+    if (!sPrj.isEmpty())
+        edProj4String->setText(sPrj);
 }
 
 void ProjPreferencesDialog::on_btApply_clicked(void)

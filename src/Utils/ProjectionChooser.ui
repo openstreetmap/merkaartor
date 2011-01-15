@@ -7,14 +7,8 @@
     <x>0</x>
     <y>0</y>
     <width>500</width>
-    <height>121</height>
+    <height>227</height>
    </rect>
-  </property>
-  <property name="sizePolicy">
-   <sizepolicy hsizetype="Preferred" vsizetype="MinimumExpanding">
-    <horstretch>0</horstretch>
-    <verstretch>0</verstretch>
-   </sizepolicy>
   </property>
   <property name="minimumSize">
    <size>
@@ -35,25 +29,15 @@
        </property>
       </widget>
      </item>
-     <item row="1" column="0">
+     <item row="2" column="0">
       <widget class="QRadioButton" name="chkStandard">
        <property name="text">
         <string>Standard (EPSG:...)</string>
        </property>
       </widget>
      </item>
-     <item row="2" column="0">
-      <widget class="QRadioButton" name="chkCustom">
-       <property name="text">
-        <string>Custom PROJ4(+proj=...)</string>
-       </property>
-      </widget>
-     </item>
-     <item row="1" column="1">
-      <widget class="QLineEdit" name="txtStandard"/>
-     </item>
      <item row="2" column="1">
-      <widget class="QLineEdit" name="txtCustom"/>
+      <widget class="QLineEdit" name="txtStandard"/>
      </item>
      <item row="0" column="1">
       <widget class="QComboBox" name="cbPredefined">
@@ -67,6 +51,39 @@
         <size>
          <width>500</width>
          <height>16777215</height>
+        </size>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="0">
+      <widget class="QRadioButton" name="chkCustom">
+       <property name="text">
+        <string>Custom PROJ4(+proj=...)</string>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="1">
+      <widget class="QLineEdit" name="txtCustom"/>
+     </item>
+     <item row="3" column="0">
+      <widget class="QRadioButton" name="chkWkt">
+       <property name="text">
+        <string>WKT</string>
+       </property>
+      </widget>
+     </item>
+     <item row="3" column="1">
+      <widget class="QTextEdit" name="txWkt">
+       <property name="minimumSize">
+        <size>
+         <width>0</width>
+         <height>100</height>
+        </size>
+       </property>
+       <property name="maximumSize">
+        <size>
+         <width>16777215</width>
+         <height>100</height>
         </size>
        </property>
       </widget>
@@ -94,8 +111,8 @@
    <slot>accept()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>257</x>
-     <y>142</y>
+     <x>266</x>
+     <y>217</y>
     </hint>
     <hint type="destinationlabel">
      <x>157</x>
@@ -110,8 +127,8 @@
    <slot>reject()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>325</x>
-     <y>142</y>
+     <x>334</x>
+     <y>217</y>
     </hint>
     <hint type="destinationlabel">
      <x>286</x>
@@ -142,12 +159,12 @@
    <slot>toggle()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>231</x>
-     <y>56</y>
+     <x>395</x>
+     <y>81</y>
     </hint>
     <hint type="destinationlabel">
-     <x>129</x>
-     <y>62</y>
+     <x>139</x>
+     <y>79</y>
     </hint>
    </hints>
   </connection>
@@ -158,12 +175,28 @@
    <slot>toggle()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>220</x>
-     <y>94</y>
+     <x>384</x>
+     <y>55</y>
     </hint>
     <hint type="destinationlabel">
-     <x>158</x>
-     <y>90</y>
+     <x>157</x>
+     <y>53</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>txWkt</sender>
+   <signal>textChanged()</signal>
+   <receiver>chkWkt</receiver>
+   <slot>toggle()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>259</x>
+     <y>129</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>60</x>
+     <y>135</y>
     </hint>
    </hints>
   </connection>

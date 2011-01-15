@@ -330,12 +330,22 @@ void MapView::paintEvent(QPaintEvent * anEvent)
     P.end();
 
     if (Main) {
-        Main->ViewportStatusLabel->setText(QString("%1,%2,%3,%4")
+        QString vpLabel = QString("%1,%2,%3,%4")
                                            .arg(viewport().bottomLeft().x(),0,'f',4)
                                            .arg(viewport().bottomLeft().y(),0, 'f',4)
                                            .arg(viewport().topRight().x(),0, 'f',4)
                                            .arg(viewport().topRight().y(),0,'f',4)
-                                           );
+                                           ;
+        if (!theProjection.projIsLatLong()) {
+            QRectF pVp = theProjection.toProjectedRectF(viewport(), rect());
+            vpLabel += " / " + QString("%1,%2,%3,%4")
+                    .arg(pVp.bottomLeft().x(),0,'f',4)
+                    .arg(pVp.bottomLeft().y(),0, 'f',4)
+                    .arg(pVp.topRight().x(),0, 'f',4)
+                    .arg(pVp.topRight().y(),0,'f',4)
+                    ;
+        }
+        Main->ViewportStatusLabel->setText(vpLabel);
 
         Main->MeterPerPixelLabel->setText(tr("%1 m/pixel").arg(1/p->PixelPerM, 0, 'f', 2));
         if (!AlignTransform.isIdentity()) {

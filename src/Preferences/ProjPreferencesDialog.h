@@ -37,6 +37,7 @@ public:
     void addProjection(const ProjectionItem & item);
 
 public slots:
+    void on_btSelectProj4_clicked();
     void on_btApply_clicked();
     void on_btAdd_clicked();
     void on_btDel_clicked();
