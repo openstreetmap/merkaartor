@@ -374,7 +374,7 @@ bool ImportExportGdal::import(Layer* aLayer)
                 if (F) {
                     for (int i=0; i<poFeature->GetFieldCount(); ++i) {
                         OGRFieldDefn  *fd = poFeature->GetFieldDefnRef(i);
-                        QString k(fd->GetNameRef());
+                        QString k = QString::fromUtf8(fd->GetNameRef());
                         if (k == "osm_id") {
                             F->setId(IFeature::FId(F->getType(), (qint64)poFeature->GetFieldAsDouble(i)));
                         } else if (k == "osm_version") {
@@ -386,7 +386,7 @@ bool ImportExportGdal::import(Layer* aLayer)
                                 k.prepend("_");
                                 k.append("_");
                             }
-                            F->setTag(k, poFeature->GetFieldAsString(i));
+                            F->setTag(k, QString::fromUtf8(poFeature->GetFieldAsString(i)));
                         }
                     }
                 }
