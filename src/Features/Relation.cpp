@@ -165,7 +165,7 @@ const CoordBox& Relation::boundingBox(bool update) const
         {
             CoordBox Clip;
             bool haveFirst = false;
-            for (int i=0; i<p->Members.size(); ++i)
+            for (int i=0; i<p->Members.size(); ++i) {
                 if (p->Members[i].second && !p->Members[i].second->notEverythingDownloaded()/* && !CAST_RELATION(p->Members[i].second)*/) {
                     if (!haveFirst) {
                         Clip = p->Members[i].second->boundingBox();
@@ -173,6 +173,7 @@ const CoordBox& Relation::boundingBox(bool update) const
                     } else
                         Clip.merge(p->Members[i].second->boundingBox());
                 }
+            }
             BBox = Clip;
             p->BBoxUpToDate = true;
         }

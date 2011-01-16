@@ -588,6 +588,9 @@ DrawingLayer * DrawingLayer::doFromXML(DrawingLayer* l, Document* d, QXmlStreamR
             stream.skipCurrentElement();
         }
 
+        if (progress->wasCanceled())
+            break;
+
         stream.readNext();
     }
     return l;
