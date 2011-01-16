@@ -413,7 +413,7 @@ void Way::updateMeta()
         return;
 
     bool isArea = false;
-    if (tagValue("junction", "") != "roundabout")
+    if (tagValue("highway", "") == "" || tagValue("area", "") != "")
         isArea = (p->Nodes[0] == p->Nodes[p->Nodes.size()-1]);
 
     for (unsigned int i=0; (i+1)<p->Nodes.size(); ++i)

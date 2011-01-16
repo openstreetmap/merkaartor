@@ -13,6 +13,8 @@
 
 #include <math.h>
 
+#define CLEAR_DISTANCE 7.01
+
 Interaction::Interaction(MapView* aView)
     : theView(aView), Panning(false)
     , LastSnap(0), SnapActive(true)
@@ -251,7 +253,7 @@ void Interaction::updateSnap(QMouseEvent* event)
                         SnapList.push_back(F);
                 }
 
-                double Distance = F->pixelDistance(event->pos(), 5.01, areNodesSelectable, view());
+                double Distance = F->pixelDistance(event->pos(), CLEAR_DISTANCE, areNodesSelectable, view());
                 if (Distance < BestDistance && !F->isReadonly())
                 {
                     BestDistance = Distance;
@@ -267,7 +269,7 @@ void Interaction::updateSnap(QMouseEvent* event)
     if (areNodesSelectable) {
         R = CAST_WAY(LastSnap);
         if (R) {
-            Node* N = R->pixelDistanceNode(event->pos(), 5.01, view(), NoSelectVirtuals);
+            Node* N = R->pixelDistanceNode(event->pos(), CLEAR_DISTANCE, view(), NoSelectVirtuals);
             if (N)
                 LastSnap = N;
         }
