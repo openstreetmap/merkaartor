@@ -2591,7 +2591,7 @@ void MainWindow::doSaveDocument(QFile* file, bool asTemplate)
     stream.setAutoFormattingIndent(2);
     stream.writeStartDocument();
     stream.writeStartElement("MerkaartorDocument");
-    stream.writeAttribute("version", "1.1");
+    stream.writeAttribute("version", "1.2");
     stream.writeAttribute("creator", QString("%1").arg(p->title));
 
     QProgressDialog progress("Saving document...", "Cancel", 0, 0);
@@ -2655,24 +2655,27 @@ Document* MainWindow::doLoadDocument(QFile* file)
     progress.setMaximum(file->size());
 
     Document* newDoc = NULL;
-    stream.readNext();
-    while(!stream.atEnd() && !stream.isEndElement()) {
-        if (stream.name() == "MapDocument") {
-            newDoc = Document::fromXML(QFileInfo(*file).fileName(), stream, version, theLayers, &progress);
+
+    if (version < 2.) {
+        stream.readNext();
+        while(!stream.atEnd() && !stream.isEndElement()) {
+            if (stream.name() == "MapDocument") {
+                newDoc = Document::fromXML(QFileInfo(*file).fileName(), stream, version, theLayers, &progress);
+
+                if (progress.wasCanceled())
+                    break;
+            } else if (stream.name() == "MapView") {
+                view()->fromXML(stream);
+            } else if (!stream.isWhitespace()) {
+                qDebug() << "Main: logic error: " << stream.name() << " : " << stream.tokenType() << " (" << stream.lineNumber() << ")";
+                stream.skipCurrentElement();
+            }
 
             if (progress.wasCanceled())
                 break;
-        } else if (stream.name() == "MapView") {
-            view()->fromXML(stream);
-        } else if (!stream.isWhitespace()) {
-            qDebug() << "Main: logic error: " << stream.name() << " : " << stream.tokenType() << " (" << stream.lineNumber() << ")";
-            stream.skipCurrentElement();
+
+            stream.readNext();
         }
-
-        if (progress.wasCanceled())
-            break;
-
-        stream.readNext();
     }
     progress.reset();
 

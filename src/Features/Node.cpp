@@ -34,7 +34,8 @@ class NodePrivate
 };
 
 Node::Node(const Coord& aCoord)
-    : Elevation(0.0)
+    : Feature()
+    , Elevation(0.0)
     , Speed(0.0)
     , p(new NodePrivate)
 {

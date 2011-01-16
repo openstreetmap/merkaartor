@@ -864,6 +864,8 @@ void Feature::toXML(QXmlStreamWriter& stream, bool strict, QString changetsetid)
     stream.writeAttribute("timestamp", time().toString(Qt::ISODate)+"Z");
     stream.writeAttribute("version", QString::number(versionNumber()));
     stream.writeAttribute("user", user());
+    if (!changetsetid.isEmpty())
+        stream.writeAttribute("changeset", changetsetid);
     if (!strict) {
         stream.writeAttribute("actor", QString::number((int)lastUpdated()));
         if (isDeleted())
@@ -878,8 +880,6 @@ void Feature::toXML(QXmlStreamWriter& stream, bool strict, QString changetsetid)
         if (g_Merk_MainWindow->properties()->isSelected(this))
             stream.writeAttribute("selected","true");
     }
-    if (!changetsetid.isEmpty())
-        stream.writeAttribute("changeset", changetsetid);
 }
 
 bool Feature::tagsToXML(QXmlStreamWriter& stream, bool strict)

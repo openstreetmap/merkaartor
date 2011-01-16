@@ -46,7 +46,6 @@ public:
     virtual void getFeatureSet(Layer* l, QMap<RenderPriority, QSet <Feature*> >& theFeatures,
                        QList<QRectF>& invalidRects, QRectF& clipRect, Projection& theProjection, QTransform& theTransform);
 
-private:
     virtual void indexAdd(Layer* l, const QRectF& bb, Feature* aFeat);
     virtual void indexRemove(Layer* l, const QRectF& bb, Feature* aFeat);
 

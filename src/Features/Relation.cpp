@@ -95,12 +95,13 @@ void RelationPrivate::CalculateWidth()
 
 
 Relation::Relation()
+    : Feature()
 {
     p = new RelationPrivate(this);
 }
 
 Relation::Relation(const Relation& other)
-: Feature(other)
+    : Feature(other)
 {
     p = new RelationPrivate(this);
 }
@@ -459,14 +460,17 @@ bool Relation::toXML(QXmlStreamWriter& stream, QProgressDialog * progress, bool 
     bool OK = true;
 
     stream.writeStartElement("relation");
-
     Feature::toXML(stream, strict, changetsetid);
+
+    // Has to be first to be picked up when reading back
+    if (!strict)
+        boundingBox().toXML("BoundingBox", stream);
 
     for (int i=0; i<size(); ++i) {
         QString Type("node");
-        if (dynamic_cast<const Way*>(get(i)))
+        if (CHECK_WAY(get(i)))
             Type="way";
-        else if (dynamic_cast<const Relation*>(get(i)))
+        else if (CHECK_RELATION(get(i)))
             Type="relation";
 
         stream.writeStartElement("member");
@@ -477,6 +481,7 @@ bool Relation::toXML(QXmlStreamWriter& stream, QProgressDialog * progress, bool 
     }
 
     tagsToXML(stream, strict);
+
     stream.writeEndElement();
 
     if (progress)
@@ -486,6 +491,8 @@ bool Relation::toXML(QXmlStreamWriter& stream, QProgressDialog * progress, bool 
 
 Relation * Relation::fromXML(Document * d, Layer * L, QXmlStreamReader& stream)
 {
+    bool hasBbox = false;
+
     QString sid = (stream.attributes().hasAttribute("id") ? stream.attributes().value("id").toString() : stream.attributes().value("xml:id").toString());
     IFeature::FId id;
     id.type = IFeature::OsmRelation;
@@ -499,7 +506,10 @@ Relation * Relation::fromXML(Document * d, Layer * L, QXmlStreamReader& stream)
         Feature::fromXML(stream, R);
     } else {
         Feature::fromXML(stream, R);
-        R->layer()->remove(R);
+        if (R->layer() != L) {
+            R->layer()->remove(R);
+            L->add(R);
+        }
         while (R->p->Members.size())
             R->remove(0);
     }
@@ -545,16 +555,32 @@ Relation * Relation::fromXML(Document * d, Layer * L, QXmlStreamReader& stream)
                 }
                 F = Part;
             }
-            if (F)
-                R->add(role, F);
+            if (F) {
+                if (!hasBbox) {
+                    R->add(role, F);
+                } else {
+                    R->p->Members.push_back(qMakePair(role,F));
+                    F->setParentFeature(R);
+                }
+            }
             stream.readNext();
         } else if (stream.name() == "tag") {
             R->setTag(stream.attributes().value("k").toString(), stream.attributes().value("v").toString());
             stream.readNext();
+        } else if (stream.name() == "BoundingBox") {
+            R->BBox = CoordBox::fromXML(stream);
+            R->p->BBoxUpToDate = true;
+            hasBbox = true;
+            stream.readNext();
+        } else if (!stream.isWhitespace()) {
+            qDebug() << "Relation: logic error: " << stream.name() << " : " << stream.tokenType() << " (" << stream.lineNumber() << ")";
+            stream.skipCurrentElement();
         }
         stream.readNext();
     }
 
+    if (hasBbox && !R->isDeleted())
+        g_backend.indexAdd(L, R->BBox, R);
     return R;
 }
 

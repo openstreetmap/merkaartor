@@ -176,12 +176,13 @@ void WayPrivate::doUpdateVirtuals()
 /**************************/
 
 Way::Way(void)
+    : Feature()
 {
     p = new WayPrivate(this);
 }
 
 Way::Way(const Way& other)
-: Feature(other)
+    : Feature(other)
 {
     p = new WayPrivate(this);
 }
@@ -854,8 +855,11 @@ bool Way::toXML(QXmlStreamWriter& stream, QProgressDialog * progress, bool stric
     bool OK = true;
 
     stream.writeStartElement("way");
-
     Feature::toXML(stream, strict, changetsetid);
+
+    // Has to be first to be picked up when reading back
+    if (!strict)
+        boundingBox().toXML("BoundingBox", stream);
 
     if (size()) {
         stream.writeStartElement("nd");
@@ -873,6 +877,7 @@ bool Way::toXML(QXmlStreamWriter& stream, QProgressDialog * progress, bool stric
     }
 
     tagsToXML(stream, strict);
+
     stream.writeEndElement();
 
     if (progress)
@@ -883,6 +888,8 @@ bool Way::toXML(QXmlStreamWriter& stream, QProgressDialog * progress, bool stric
 
 Way * Way::fromXML(Document* d, Layer * L, QXmlStreamReader& stream)
 {
+    bool hasBbox = false;
+
     QString sid = (stream.attributes().hasAttribute("id") ? stream.attributes().value("id").toString() : stream.attributes().value("xml:id").toString());
     IFeature::FId id(IFeature::LineString, sid.toLongLong());
     Way* R = CAST_WAY(d->getFeature(id));
@@ -915,16 +922,31 @@ Way * Way::fromXML(Document* d, Layer * L, QXmlStreamReader& stream)
                 Part->setLastUpdated(Feature::NotYetDownloaded);
                 L->add(Part);
             }
-            R->add(Part);
+            if (!hasBbox) {
+                R->add(Part);
+            } else {
+                R->p->Nodes.push_back(Part);
+                Part->setParentFeature(R);
+            }
             stream.readNext();
         } else if (stream.name() == "tag") {
             R->setTag(stream.attributes().value("k").toString(), stream.attributes().value("v").toString());
             stream.readNext();
+        } else if (stream.name() == "BoundingBox") {
+            R->BBox = CoordBox::fromXML(stream);
+            R->p->BBoxUpToDate = true;
+            hasBbox = true;
+            stream.readNext();
+        } else if (!stream.isWhitespace()) {
+            qDebug() << "Way: logic error: " << stream.name() << " : " << stream.tokenType() << " (" << stream.lineNumber() << ")";
+            stream.skipCurrentElement();
         }
 
        stream.readNext();
     }
 
+    if (hasBbox && !R->isDeleted())
+        g_backend.indexAdd(L, R->BBox, R);
     return R;
 }
 
