@@ -890,14 +890,16 @@ Document* Document::getDocumentFromXml(QDomDocument* theXmlDoc)
             if (stream.name() == "osm") {
                 stream.readNext();
                 while(!stream.atEnd() && !stream.isEndElement()) {
-                    if (c.tagName() == "way") {
+                    if (stream.name() == "way") {
                         Way::fromXML(NewDoc, l, stream);
-                    } else if (c.tagName() == "relation") {
+                    } else if (stream.name() == "relation") {
                         Relation::fromXML(NewDoc, l, stream);
-                    } else if (c.tagName() == "node") {
+                    } else if (stream.name() == "node") {
                         Node::fromXML(NewDoc, l, stream);
-                    } else
-                        stream.readElementText(QXmlStreamReader::IncludeChildElements);
+                    } else if (!stream.isWhitespace()) {
+                        qDebug() << "Doc::clipboard logic error: " << stream.name() << " : " << stream.tokenType() << " (" << stream.lineNumber() << ")";
+                        stream.skipCurrentElement();
+                    }
                     stream.readNext();
                 }
             }
