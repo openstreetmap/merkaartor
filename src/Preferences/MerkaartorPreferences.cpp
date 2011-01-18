@@ -1713,8 +1713,13 @@ void MerkaartorPreferences::saveOsmServers()
 QString getDefaultLanguage(bool returnDefault)
 {
     if (!g_Merk_Ignore_Preferences && !g_Merk_Reset_Preferences) {
-        QSettings Sets;
-        QString lang = Sets.value("locale/language").toString();
+        QSettings* Sets;
+        if (!g_Merk_Portable) {
+            Sets = new QSettings();
+        } else {
+            Sets = new QSettings(qApp->applicationDirPath() + "/merkaartor.ini", QSettings::IniFormat);
+        }
+        QString lang = Sets->value("locale/language").toString();
         if (lang == "")
             if (returnDefault)
                 lang = QLocale::system().name().split("_")[0];
@@ -1730,7 +1735,12 @@ QString getDefaultLanguage(bool returnDefault)
 void setDefaultLanguage(const QString& theValue)
 {
     if (!g_Merk_Ignore_Preferences) {
-        QSettings Sets;
-        Sets.setValue("locale/language", theValue);
+        QSettings* Sets;
+        if (!g_Merk_Portable) {
+            Sets = new QSettings();
+        } else {
+            Sets = new QSettings(qApp->applicationDirPath() + "/merkaartor.ini", QSettings::IniFormat);
+        }
+        Sets->setValue("locale/language", theValue);
     }
 }
