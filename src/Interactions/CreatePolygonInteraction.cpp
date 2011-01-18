@@ -82,8 +82,9 @@ void CreatePolygonInteraction::mousePressEvent(QMouseEvent * event)
             QPointF Prev(CenterF.x()+cos(-Angle/2)*Radius,CenterF.y()+sin(-Angle/2)*Radius);
             Node* First = g_backend.allocNode(Main->document()->getDirtyOrOriginLayer(), XY_TO_COORD(m.map(Prev).toPoint()));
             Way* R = g_backend.allocWay(Main->document()->getDirtyOrOriginLayer());
-            R->add(First);
             CommandList* L  = new CommandList(MainWindow::tr("Create Polygon %1").arg(R->id().numId), R);
+            L->add(new AddFeatureCommand(Main->document()->getDirtyOrOriginLayer(),R,true));
+            R->add(First);
             L->add(new AddFeatureCommand(Main->document()->getDirtyOrOriginLayer(),First,true));
             for (double a = 2*M_PI - Angle*3/2; a>0; a-=Angle)
             {
@@ -93,7 +94,6 @@ void CreatePolygonInteraction::mousePressEvent(QMouseEvent * event)
                 R->add(New);
             }
             R->add(First);
-            L->add(new AddFeatureCommand(Main->document()->getDirtyOrOriginLayer(),R,true));
             if (M_PREFS->getAutoSourceTag()) {
                 QStringList sl = Main->document()->getCurrentSourceTags();
                 if (sl.size())
