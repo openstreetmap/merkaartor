@@ -23,7 +23,7 @@
 #include <QDateTime>
 
 IImageManager::IImageManager()
-    : cacheSize(0), cacheMaxSize(0)
+    : cacheSize(0), cacheMaxSize(0), cachePermanent(false)
 
 {
     m_networkManager = new QNetworkAccessManager();
