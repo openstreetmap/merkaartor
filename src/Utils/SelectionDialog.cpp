@@ -81,26 +81,26 @@ void SelectionDialog::on_cbKey_editTextChanged(const QString & text)
         delete cbValue->completer();
     cbValue->setCompleter(completer);
 
-    edTagQuery->setText("[" + text + "] is " + cbValue->currentText());
+    edTagQuery->setText("[" + text + "] = " + cbValue->currentText());
 
 }
 
 void SelectionDialog::on_cbValue_editTextChanged(const QString & text)
 {
     if (!cbKey->currentText().isEmpty())
-        edTagQuery->setText("[" + cbKey->currentText() + "] is " + text);
+        edTagQuery->setText("[" + cbKey->currentText() + "] = " + text);
     else
-        edTagQuery->setText("[*] is " + text);
+        edTagQuery->setText("[*] = " + text);
 }
 
 void SelectionDialog::on_edName_textChanged(const QString &text)
 {
-    edTagQuery->setText("[name] is *" + text + "*");
+    edTagQuery->setText("[name] = *" + text + "*");
 }
 
 void SelectionDialog::on_edID_textChanged(const QString &text)
 {
-    edTagQuery->setText("[:id] is " + text);
+    edTagQuery->setText("[:id] = " + text);
 }
 
 void SelectionDialog::on_buttonBox_accepted()

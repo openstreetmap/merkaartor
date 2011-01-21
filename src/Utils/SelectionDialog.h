@@ -22,18 +22,21 @@ class SelectionDialog : public QDialog, public Ui::SelectionDialog
 {
     Q_OBJECT
 
-    public:
-        SelectionDialog(QWidget *parent = 0, bool showMaxResult=true);
-        ~SelectionDialog();
+public:
+    SelectionDialog(QWidget *parent = 0, bool showMaxResult=true);
+    ~SelectionDialog();
 
-    private slots:
-        void on_cbKey_editTextChanged(const QString & text);
-        void on_cbValue_editTextChanged(const QString & text);
+private slots:
+    void on_cbKey_editTextChanged(const QString & text);
+    void on_cbValue_editTextChanged(const QString & text);
 
-        void on_edName_textChanged(const QString& text);
-        void on_edID_textChanged(const QString& text);
+    void on_edName_textChanged(const QString& text);
+    void on_edID_textChanged(const QString& text);
 
-        void on_buttonBox_accepted();
+    void on_buttonBox_accepted();
+
+private:
+    QString getOp();
 };
 
 #endif

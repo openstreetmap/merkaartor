@@ -22,11 +22,35 @@ bool canParseSymbol(const QString& Expression, int& idx, char Symbol)
     return false;
 }
 
+bool canParseString(const QString& Expression, int& idx, QString& Key)
+{
+    Key = "";
+    skipWhite(Expression,idx);
+    if (Expression[idx] != '/' && Expression[idx] != '"')
+        return false;
+    Key += Expression[idx++];
+    while (idx < Expression.length())
+    {
+        if (Expression[idx] != '/' && Expression[idx] != '"')
+            Key += Expression[idx++];
+        else
+            break;
+    }
+    if (Expression[idx] == '/' || Expression[idx] == '"') {
+        Key += Expression[idx++];
+        return Key.length() > 0;
+    }
+    return false;
+}
+
+
 bool canParseValue(const QString& Expression, int& idx, QString& Key)
 {
     Key = "";
     skipWhite(Expression,idx);
     unsigned short opened =0;
+    if (Expression[idx] == '/' || Expression[idx] == '"')  //Constants
+        return false;
     while (idx < Expression.length())
     {
         if ( ((Expression[idx] == '_') || (Expression[idx].isLetterOrNumber()) /*|| (Expression[idx].isPunct())*/ || (Expression[idx] == '*') || (Expression[idx] == ':') || (Expression[idx] == '?'))
@@ -92,7 +116,7 @@ TagSelectorOperator* parseTagSelectorOperator(const QString& Expression, int& id
     if (Oper.isNull())
         return 0;
 
-    if (!canParseValue(Expression, idx, Value))
+    if (!canParseString(Expression, idx, Value) && !canParseValue(Expression, idx, Value))
         return 0;
     return new TagSelectorOperator(Key, Oper, Value);
 }
@@ -306,7 +330,7 @@ TagSelector::~TagSelector()
 /* TAGSELECTOROPERATOR */
 
 TagSelectorOperator::TagSelectorOperator(const QString& key, const QString& oper, const QString& value)
-    : Key(key), Oper(oper), Value(value), UseRegExp(false)
+    : Key(key), Oper(oper), Value(value), UseSimpleRegExp(false), UseFullRegExp(false)
     , specialKey(TagSelectKey_None)
     , specialValue(TagSelectValue_None)
 {
@@ -341,8 +365,14 @@ TagSelectorOperator::TagSelectorOperator(const QString& key, const QString& oper
     } else if (Value.toUpper() == "FALSE") {
         boolVal = true;
         valB = false;
+    } else if (value.startsWith("/") && value.endsWith("/")) {
+        UseFullRegExp = true;
+        QString r = value.mid(1);
+        r.chop(1);
+        rx = QRegExp(r, Qt::CaseInsensitive);
+        rx.setPatternSyntax(QRegExp::RegExp2);
     } else if (value.contains(QRegExp("[][*?]"))) {
-        UseRegExp = true;
+        UseSimpleRegExp = true;
         rx = QRegExp(value, Qt::CaseInsensitive);
         rx.setPatternSyntax(QRegExp::Wildcard);
     }
@@ -381,8 +411,24 @@ TagSelectorMatchResult TagSelectorOperator::evaluateVal(const QString& val) cons
         } else {
             if (val.toUpper() != emptyString) return TagSelect_Match;
         }
-    } else if (UseRegExp) {
-        if (rx.exactMatch(val)) return TagSelect_Match;
+    } else if (UseSimpleRegExp) {
+        if (rx.exactMatch(val))  {
+            if (theOp == EQ)
+                return TagSelect_Match;
+        } else {
+            if (theOp != EQ)
+                return TagSelect_Match;
+        }
+
+    } else if (UseFullRegExp) {
+        if (rx.indexIn(val) != -1)  {
+            if (theOp == EQ)
+                return TagSelect_Match;
+        } else {
+            if (theOp != EQ)
+                return TagSelect_Match;
+        }
+
     } else {
         bool okkey;
         double keyN = val.toDouble(&okkey);

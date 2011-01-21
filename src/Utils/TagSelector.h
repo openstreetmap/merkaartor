@@ -71,7 +71,8 @@ class TagSelectorOperator : public TagSelector
         Ops theOp;
         double numValue;
         QDateTime dtValue;
-        bool UseRegExp;
+        bool UseSimpleRegExp;
+        bool UseFullRegExp;
         TagSelectorSpecialKey specialKey;
         TagSelectorSpecialValue specialValue;
         bool boolVal, valB;
