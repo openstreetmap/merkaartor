@@ -619,6 +619,15 @@ void FeaturePainter::drawLabel(Way* R, QPainter* thePainter, MapView* theView) c
 
     QPainterPath tranformedRoadPath = theView->transform().map(R->getPath());
     QFont font = getLabelFont();
+#if QT_VERSION >= 0x040700
+    qreal pathSurface = tranformedRoadPath.controlPointRect().width() * tranformedRoadPath.controlPointRect().height();
+    if (pathSurface > theView->rect().width() * theView->rect().height() * 3) {
+        QPainterPath clipPath;
+        clipPath.addRect(theView->rect().adjusted(-500, -500, 500, 500));
+
+        tranformedRoadPath = clipPath.intersected(tranformedRoadPath);
+    }
+#endif
 
     if (!str.isEmpty()) {
         font.setPixelSize(int(WW));
