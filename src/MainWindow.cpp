@@ -479,7 +479,16 @@ void MainWindow::readLocalConnection()
         QString ln = socket->readLine();
         QStringList tokens = ln.split( QRegExp("[ \r\n][ \r\n]*"), QString::SkipEmptyParts );
         if ( tokens[0] == "GET" ) {
+            QTextStream resultStream(socket);
+            resultStream << "HTTP/1.1 200 OK\r\n";
+            resultStream << "Date: " << QDateTime::currentDateTime().toString(Qt::TextDate);
+            resultStream << "Server: Merkaartor RemoteControl\r\n";
+            resultStream << "Content-type: text/plain\r\n";
+            resultStream << "Access-Control-Allow-Origin: *\r\n";
+            resultStream << "Content-length: 4\r\n\r\n";
+            resultStream << "OK\r\n";
             socket->close();
+
             QUrl u = QUrl(tokens[1]);
             loadUrl(u);
         }
@@ -1343,6 +1352,8 @@ void MainWindow::loadFiles(const QStringList & fileList)
 
 void MainWindow::loadUrl(const QUrl& u)
 {
+    activateWindow();
+
     if (u.path() == "/load_and_zoom") {
         qreal t = u.queryItemValue("top").toDouble();
         qreal b = u.queryItemValue("bottom").toDouble();
@@ -1380,6 +1391,8 @@ void MainWindow::loadUrl(const QUrl& u)
                     properties()->addSelection(F);
             }
         }
+    } else {
+        QMessageBox::critical(this, tr("Incoming Remote control request"), tr("Unknow action url: %1").arg(u.toString()));
     }
 }
 
