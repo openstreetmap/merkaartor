@@ -1,4 +1,5 @@
 v0.17.1
+    * FIX : Use "=" rather than "is" in selection dialog (fixes #3218)
     * FIX : Background cache size not limited (fixes #3227)
     * FIX : do not save local to registry in portable mode
     * FIX : do not create  ~/.merkaartor in portable mode
