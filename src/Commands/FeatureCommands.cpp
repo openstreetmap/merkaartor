@@ -342,8 +342,6 @@ bool ClearTagCommand::buildDirtyList(DirtyList& theList)
         return false;
     if (theFeature->lastUpdated() == Feature::NotYetDownloaded)
         return theList.noop(theFeature);
-    if (theK.startsWith('_') && (theK.endsWith('_')))
-        return theList.noop(theFeature);
     if (!theFeature->isUploadable())
         return theList.noop(theFeature);
 
