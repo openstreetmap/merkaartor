@@ -95,7 +95,7 @@ int DirtyListExecutorOSC::sendRequest(const QString& Method, const QString& URL,
     return rCode;
 }
 
-QString DirtyListExecutorOSC::getChanges()
+QByteArray DirtyListExecutorOSC::getChanges()
 {
     Progress = new QProgressDialog(0);
     Progress->setWindowTitle(tr("Checking changes..."));
@@ -123,7 +123,7 @@ QString DirtyListExecutorOSC::getChanges()
     OscStream.writeEndDocument();
     OscBuffer.close();
 
-    return QString(OscBuffer.buffer());
+    return OscBuffer.buffer();
 }
 
 bool DirtyListExecutorOSC::executeChanges(QWidget* aParent)
@@ -208,7 +208,7 @@ bool DirtyListExecutorOSC::stop()
     OscBuffer.close();
     qDebug() << OscBuffer.buffer();
     QString URL = theDownloader->getURLToUploadDiff(ChangeSetId);
-    switch (sendRequest("POST", URL, QString(OscBuffer.buffer()), DataOut)) {
+    switch (sendRequest("POST", URL, QString::fromUtf8(OscBuffer.buffer().data()), DataOut)) {
     case 200: {
         QDomDocument resDoc;
         if (resDoc.setContent(DataOut)) {

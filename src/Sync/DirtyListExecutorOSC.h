@@ -46,7 +46,7 @@ public:
     virtual bool eraseRelation(Relation* R);
 
     bool executeChanges(QWidget* Parent);
-    QString getChanges();
+    QByteArray getChanges();
 
 private:
     int sendRequest(const QString& Method, const QString& URL, const QString& Out, QString& Rcv);

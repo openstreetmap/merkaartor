@@ -37,9 +37,9 @@ bool ImportExportOSC::export_(const QList<Feature *>&)
 
     Future.resetUpdates();
     DirtyListExecutorOSC Exec(theDoc, Future);
-    QString doc = Exec.getChanges();
+    QByteArray doc = Exec.getChanges();
 
-    return (Device->write(doc.toUtf8()) != -1);
+    return (Device->write(doc) != -1);
 }
 
 // IMPORT
