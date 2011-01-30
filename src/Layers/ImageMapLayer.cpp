@@ -171,6 +171,13 @@ IMapAdapter* ImageMapLayer::getMapAdapter()
     return p->theMapAdapter;
 }
 
+void ImageMapLayer::setNoneAdapter()
+{
+    p->bgType = NONE_ADAPTER_UUID;
+    setName(tr("Map - None"));
+    setVisible(false);
+}
+
 void ImageMapLayer::setMapAdapter(const QUuid& theAdapterUid, const QString& server)
 {
     WmsServerList* wsl;
@@ -189,47 +196,51 @@ void ImageMapLayer::setMapAdapter(const QUuid& theAdapterUid, const QString& ser
     p->bgType = theAdapterUid;
     M_PREFS->setBackgroundPlugin(theAdapterUid);
     if (p->bgType == NONE_ADAPTER_UUID) {
-        setName(tr("Map - None"));
-        setVisible(false);
+        setNoneAdapter();
     } else
     if (p->bgType == WMS_ADAPTER_UUID) {
         wsl = M_PREFS->getWmsServers();
-        p->selServer = server;
-        WmsServer theWmsServer(wsl->value(p->selServer));
-        switch (theWmsServer.WmsIsTiled) {
-        case 0:
-            p->wmsa = new WMSMapAdapter(theWmsServer);
-            p->theMapAdapter = p->wmsa;
-            setName(tr("Map - WMS - %1").arg(p->theMapAdapter->getName()));
-            break;
-        case 1:
-            p->wmsca = new WmscMapAdapter(theWmsServer);
-            p->theMapAdapter = p->wmsca;
-            setName(tr("Map - WMS-C - %1").arg(p->theMapAdapter->getName()));
-            break;
-        case 2:
-            p->wmsca = new WmscMapAdapter(theWmsServer);
-            p->theMapAdapter = p->wmsca;
-            setName(tr("Map - WMS-Tiled - %1").arg(p->theMapAdapter->getName()));
-            break;
+        if (!wsl->contains(server)) {  // WMS not locally found
+            setNoneAdapter();
+        } else {
+            p->selServer = server;
+            WmsServer theWmsServer(wsl->value(p->selServer));
+            switch (theWmsServer.WmsIsTiled) {
+            case 0:
+                p->wmsa = new WMSMapAdapter(theWmsServer);
+                p->theMapAdapter = p->wmsa;
+                setName(tr("Map - WMS - %1").arg(p->theMapAdapter->getName()));
+                break;
+            case 1:
+                p->wmsca = new WmscMapAdapter(theWmsServer);
+                p->theMapAdapter = p->wmsca;
+                setName(tr("Map - WMS-C - %1").arg(p->theMapAdapter->getName()));
+                break;
+            case 2:
+                p->wmsca = new WmscMapAdapter(theWmsServer);
+                p->theMapAdapter = p->wmsca;
+                setName(tr("Map - WMS-Tiled - %1").arg(p->theMapAdapter->getName()));
+                break;
+            }
+            id += p->theMapAdapter->getName();
         }
-        id += p->theMapAdapter->getName();
     } else
     if (p->bgType == TMS_ADAPTER_UUID) {
         tsl = M_PREFS->getTmsServers();
-        p->selServer = server;
-        TmsServer ts = tsl->value(p->selServer);
-        p->tmsa = new TileMapAdapter(ts);
-        p->theMapAdapter = p->tmsa;
+        if (!wsl->contains(server)) {  // TMS not locally found
+            setNoneAdapter();
+        } else {
+            p->selServer = server;
+            TmsServer ts = tsl->value(p->selServer);
+            p->tmsa = new TileMapAdapter(ts);
+            p->theMapAdapter = p->tmsa;
 
-        setName(tr("Map - TMS - %1").arg(p->theMapAdapter->getName()));
-        id += p->theMapAdapter->getName();
+            setName(tr("Map - TMS - %1").arg(p->theMapAdapter->getName()));
+            id += p->theMapAdapter->getName();
+        }
     } else
     if (p->bgType == SHAPE_ADAPTER_UUID) {
-//        if (!M_PREFS->getUseShapefileForBackground()) {
-            p->bgType = NONE_ADAPTER_UUID;
-            setName(tr("Map - None"));
-            setVisible(false);
+        setNoneAdapter();
     } else
     {
         IMapAdapterFactory* fac = M_PREFS->getBackgroundPlugin(p->bgType);
@@ -244,7 +255,7 @@ void ImageMapLayer::setMapAdapter(const QUuid& theAdapterUid, const QString& ser
             connect(p->theMapAdapter, SIGNAL(forceProjection()), theImageWidget, SLOT(setProjection()));
             connect(p->theMapAdapter, SIGNAL(forceRefresh()), g_Merk_MainWindow, SLOT(invalidateView()));
         } else
-            p->bgType = NONE_ADAPTER_UUID;
+            setNoneAdapter();
     }
     // Display License
     if (p->theMapAdapter) {
