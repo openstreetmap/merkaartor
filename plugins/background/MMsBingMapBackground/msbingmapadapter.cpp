@@ -287,18 +287,18 @@ void MsBingMapAdapter::setImageManager(IImageManager* anImageManager)
     QNetworkAccessManager* manager = theImageManager->getNetworkManager();
     connect(manager, SIGNAL(finished(QNetworkReply*)), SLOT(on_adapterDataFinished(QNetworkReply*)));
 
-    QNetworkReply *netReply = manager->get(QNetworkRequest(QUrl("http://dev.virtualearth.net/REST/v1/Imagery/Metadata/Aerial/0,0?zl=1&mapVersion=v1&key=AlRQe0E4ha3yKkz2MuNI-G1AIk-CIym4zTeqaTgKVWz_LBsnQuPksHrHCOT0381M&include=ImageryProviders&output=xml")));
+    manager->get(QNetworkRequest(QUrl("http://dev.virtualearth.net/REST/v1/Imagery/Metadata/Aerial/0,0?zl=1&mapVersion=v1&key=AlRQe0E4ha3yKkz2MuNI-G1AIk-CIym4zTeqaTgKVWz_LBsnQuPksHrHCOT0381M&include=ImageryProviders&output=xml")));
 }
 
 void MsBingMapAdapter::on_adapterDataFinished(QNetworkReply* reply)
 {
 //    int statusCode = reply->attribute(QNetworkRequest::HttpStatusCodeAttribute).toInt();
-    if (reply->error() != QNetworkReply::NoError) {
+    if (reply->error() != QNetworkReply::NoError)
         if (reply->error() != QNetworkReply::OperationCanceledError)
             return;
 
     QDomDocument theDoc;
-    theDoc.setContent(netReply->readAll());
+    theDoc.setContent(reply->readAll());
 
     QDomNodeList hostEl = theDoc.elementsByTagName("ImageUrl");
     if (hostEl.size()) {
