@@ -116,6 +116,7 @@ bool Command::toXML(QXmlStreamWriter& stream) const
         stream.writeAttribute("oldCreated", oldCreated);
         if (isUndone)
             stream.writeAttribute("undone", "true");
+        stream.writeAttribute("description", description);
         stream.writeEndElement();
     }
 
@@ -136,6 +137,8 @@ void Command::fromXML(Document* d, QXmlStreamReader& stream, Command* C)
                 C->oldCreated = stream.attributes().value("oldCreated").toString();
             if (stream.attributes().hasAttribute("undone"))
                 C->isUndone = (stream.attributes().value("undone") == "true" ? true : false);
+            if (stream.attributes().hasAttribute("description"))
+                C->description = stream.attributes().value("description").toString();
             C->mainFeature = F;
             stream.readNext();
         }
@@ -232,7 +235,6 @@ bool CommandList::toXML(QXmlStreamWriter& stream) const
     stream.writeAttribute("xml:id", id());
     if (isReversed)
         stream.writeAttribute("reversed", "true");
-    stream.writeAttribute("description", description);
     if (mainFeature) {
         stream.writeAttribute("feature",QString::number(mainFeature->id().numId));
         stream.writeAttribute("featureclass", mainFeature->getClass());
@@ -251,8 +253,6 @@ CommandList* CommandList::fromXML(Document* d, QXmlStreamReader& stream)
     CommandList* l = new CommandList();
     l->setId(stream.attributes().value("xml:id").toString());
     l->isReversed = (stream.attributes().value("reversed") == "true");
-    if (stream.attributes().hasAttribute("description"))
-        l->description = stream.attributes().value("description").toString();
     if (stream.attributes().hasAttribute("feature")) {
         if (stream.attributes().value("featureclass") == "Node") {
             l->mainFeature = (Feature*) Feature::getTrackPointOrCreatePlaceHolder(d, (Layer *) d->getDirtyOrOriginLayer(), IFeature::FId(IFeature::Point, stream.attributes().value("feature").toString().toLongLong()));
@@ -412,6 +412,11 @@ int CommandHistory::index() const
     return Index;
 }
 
+int CommandHistory::size() const
+{
+    return Size;
+}
+
 int CommandHistory::buildDirtyList(DirtyList& theList)
 {
     for (int i=0; i<Subs.size();)
@@ -472,14 +477,8 @@ CommandHistory* CommandHistory::fromXML(Document* d, QXmlStreamReader& stream, Q
                 h->add(l);
             else
                 OK = false;
-        } else if (stream.name() == "SetTagCommand") {
-            SetTagCommand* C = SetTagCommand::fromXML(d, stream);
-            if (C)
-                h->add(C);
-            else
-                OK = false;
-        } else if (stream.name() == "ClearTagCommand") {
-            ClearTagCommand* C = ClearTagCommand::fromXML(d, stream);
+        } else if (stream.name() == "AddFeatureCommand") {
+            AddFeatureCommand* C = AddFeatureCommand::fromXML(d, stream);
             if (C)
                 h->add(C);
             else
@@ -490,9 +489,69 @@ CommandHistory* CommandHistory::fromXML(Document* d, QXmlStreamReader& stream, Q
                 h->add(C);
             else
                 OK = false;
+        } else if (stream.name() == "RelationAddFeatureCommand") {
+            RelationAddFeatureCommand* C = RelationAddFeatureCommand::fromXML(d, stream);
+            if (C)
+                h->add(C);
+            else
+                OK = false;
+        } else if (stream.name() == "RelationRemoveFeatureCommand") {
+            RelationRemoveFeatureCommand* C = RelationRemoveFeatureCommand::fromXML(d, stream);
+            if (C)
+                h->add(C);
+            else
+                OK = false;
+        } else if (stream.name() == "RemoveFeatureCommand") {
+            RemoveFeatureCommand* C = RemoveFeatureCommand::fromXML(d, stream);
+            if (C)
+                h->add(C);
+            else
+                OK = false;
+        } else if (stream.name() == "RoadAddTrackPointCommand") {
+            WayAddNodeCommand* C = WayAddNodeCommand::fromXML(d, stream);
+            if (C)
+                h->add(C);
+            else
+                OK = false;
+        } else if (stream.name() == "RoadRemoveTrackPointCommand") {
+            WayRemoveNodeCommand* C = WayRemoveNodeCommand::fromXML(d, stream);
+            if (C)
+                h->add(C);
+            else
+                OK = false;
+        } else if (stream.name() == "TrackSegmentAddTrackPointCommand") {
+            TrackSegmentAddNodeCommand* C = TrackSegmentAddNodeCommand::fromXML(d, stream);
+            if (C)
+                h->add(C);
+            else
+                OK = false;
+        } else if (stream.name() == "TrackSegmentRemoveTrackPointCommand") {
+            TrackSegmentRemoveNodeCommand* C = TrackSegmentRemoveNodeCommand::fromXML(d, stream);
+            if (C)
+                h->add(C);
+            else
+                OK = false;
+        } else if (stream.name() == "ClearTagCommand") {
+            ClearTagCommand* C = ClearTagCommand::fromXML(d, stream);
+            if (C)
+                h->add(C);
+            else
+                OK = false;
+        } else if (stream.name() == "ClearTagsCommand") {
+            ClearTagsCommand* C = ClearTagsCommand::fromXML(d, stream);
+            if (C)
+                h->add(C);
+            else
+                OK = false;
+        } else if (stream.name() == "SetTagCommand") {
+            SetTagCommand* C = SetTagCommand::fromXML(d, stream);
+            if (C)
+                h->add(C);
+            else
+                OK = false;
         } else if (!stream.isWhitespace()) {
-                qDebug() << "CHist: logic error: " << stream.name() << " : " << stream.tokenType() << " (" << stream.lineNumber() << ")";
-                QString el = stream.readElementText(QXmlStreamReader::IncludeChildElements);
+            qDebug() << "CHist: logic error: " << stream.name() << " : " << stream.tokenType() << " (" << stream.lineNumber() << ")";
+            QString el = stream.readElementText(QXmlStreamReader::IncludeChildElements);
         }
 
         progress->setValue(stream.characterOffset());

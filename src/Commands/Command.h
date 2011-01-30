@@ -91,6 +91,7 @@ class CommandHistory
         int buildDirtyList(DirtyList& theList);
         int buildUndoList(QListWidget* theList);
         int index() const;
+        int size() const;
 
         virtual bool toXML(QXmlStreamWriter& stream, QProgressDialog * progress) const;
         static CommandHistory* fromXML(Document* d, QXmlStreamReader& stream, QProgressDialog * progress);
