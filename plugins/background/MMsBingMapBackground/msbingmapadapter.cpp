@@ -285,56 +285,49 @@ void MsBingMapAdapter::setImageManager(IImageManager* anImageManager)
     theImageManager = anImageManager;
 
     QNetworkAccessManager* manager = theImageManager->getNetworkManager();
-    QEventLoop q;
-    QTimer tT;
+    connect(manager, SIGNAL(finished(QNetworkReply*)), SLOT(on_adapterDataFinished(QNetworkReply*)));
 
-    tT.setSingleShot(true);
-    connect(&tT, SIGNAL(timeout()), &q, SLOT(quit()));
-    connect(manager, SIGNAL(finished(QNetworkReply*)),
-            &q, SLOT(quit()));
+    manager->get(QNetworkRequest(QUrl("http://dev.virtualearth.net/REST/v1/Imagery/Metadata/Aerial/0,0?zl=1&mapVersion=v1&key=AlRQe0E4ha3yKkz2MuNI-G1AIk-CIym4zTeqaTgKVWz_LBsnQuPksHrHCOT0381M&include=ImageryProviders&output=xml")));
+}
 
-    QNetworkReply *netReply = manager->get(QNetworkRequest(QUrl("http://dev.virtualearth.net/REST/v1/Imagery/Metadata/Aerial/0,0?zl=1&mapVersion=v1&key=AlRQe0E4ha3yKkz2MuNI-G1AIk-CIym4zTeqaTgKVWz_LBsnQuPksHrHCOT0381M&include=ImageryProviders&output=xml")));
+void MsBingMapAdapter::on_adapterDataFinished(QNetworkReply* reply)
+{
+//    int statusCode = reply->attribute(QNetworkRequest::HttpStatusCodeAttribute).toInt();
+    if (reply->error() != QNetworkReply::NoError)
+        if (reply->error() != QNetworkReply::OperationCanceledError)
+            return;
 
-    // Cannot use prefs in constructor
-//    tT.start(theSets->value("Network/NetworkTimeout", 5000).toInt());
-    tT.start(10000);
-    q.exec();
-    if(tT.isActive()) {
-        // download complete
-        tT.stop();
+    QDomDocument theDoc;
+    theDoc.setContent(reply->readAll());
 
-        QDomDocument theDoc;
-        theDoc.setContent(netReply->readAll());
-
-        QDomNodeList hostEl = theDoc.elementsByTagName("ImageUrl");
-        if (hostEl.size()) {
-            QUrl u(hostEl.at(0).toElement().text());
-            host = u.host();
-        }
-
-        QString curProvider;
-        QDomNodeList providers = theDoc.elementsByTagName("ImageryProvider");
-        for (int i=0; i<providers.size(); ++i) {
-            QDomNode nd = providers.at(i);
-            QDomElement provider = nd.firstChildElement("Attribution");
-            if (!provider.isNull())
-                curProvider = provider.text();
-            QDomNodeList coverages = nd.toElement().elementsByTagName("CoverageArea");
-            for (int j=0; j<coverages.size(); ++j) {
-                QDomNode cover = coverages.at(j);
-                BingProvider prov;
-                prov.name = curProvider;
-                prov.zoomMin = cover.firstChildElement("ZoomMin").text().toInt();
-                prov.zoomMax = cover.firstChildElement("ZoomMax").text().toInt();
-                QDomElement bbox = cover.firstChildElement("BoundingBox");
-                prov.bbox.setBottom(bbox.firstChildElement("SouthLatitude").text().toDouble());
-                prov.bbox.setLeft(bbox.firstChildElement("WestLongitude").text().toDouble());
-                prov.bbox.setTop(bbox.firstChildElement("NorthLatitude").text().toDouble());
-                prov.bbox.setRight(bbox.firstChildElement("EastLongitude").text().toDouble());
-
-                theProviders << prov;
-            }
-        }
-        isLoaded = true;
+    QDomNodeList hostEl = theDoc.elementsByTagName("ImageUrl");
+    if (hostEl.size()) {
+        QUrl u(hostEl.at(0).toElement().text());
+        host = u.host();
     }
+
+    QString curProvider;
+    QDomNodeList providers = theDoc.elementsByTagName("ImageryProvider");
+    for (int i=0; i<providers.size(); ++i) {
+        QDomNode nd = providers.at(i);
+        QDomElement provider = nd.firstChildElement("Attribution");
+        if (!provider.isNull())
+            curProvider = provider.text();
+        QDomNodeList coverages = nd.toElement().elementsByTagName("CoverageArea");
+        for (int j=0; j<coverages.size(); ++j) {
+            QDomNode cover = coverages.at(j);
+            BingProvider prov;
+            prov.name = curProvider;
+            prov.zoomMin = cover.firstChildElement("ZoomMin").text().toInt();
+            prov.zoomMax = cover.firstChildElement("ZoomMax").text().toInt();
+            QDomElement bbox = cover.firstChildElement("BoundingBox");
+            prov.bbox.setBottom(bbox.firstChildElement("SouthLatitude").text().toDouble());
+            prov.bbox.setLeft(bbox.firstChildElement("WestLongitude").text().toDouble());
+            prov.bbox.setTop(bbox.firstChildElement("NorthLatitude").text().toDouble());
+            prov.bbox.setRight(bbox.firstChildElement("EastLongitude").text().toDouble());
+
+            theProviders << prov;
+        }
+    }
+    isLoaded = true;
 }
