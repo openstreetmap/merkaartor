@@ -1,4 +1,5 @@
 v0.17.1
+    * FIX : Bing maps: Make initial providers request non-blocking to avoid NULL document (fixes #3241)
     * FIX : Use "=" rather than "is" in selection dialog (fixes #3218)
     * FIX : Background cache size not limited (fixes #3227)
     * FIX : do not save local to registry in portable mode
