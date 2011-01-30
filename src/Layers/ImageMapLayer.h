@@ -65,6 +65,7 @@ public:
     void resetAlign();
 
 private:
+    void setNoneAdapter();
     QRect drawTiled(MapView& theView, QRect& rect);
     QRect drawFull(MapView& theView, QRect& rect);
 
