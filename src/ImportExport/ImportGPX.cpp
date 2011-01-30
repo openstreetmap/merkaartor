@@ -92,6 +92,7 @@ static Node* importTrkPt(const QDomElement& Root, Document* /* theDocument */, L
 static void importTrkSeg(const QDomElement& Root, Document* theDocument, Layer* theLayer, bool MakeSegment, QProgressDialog & progress)
 {
     TrackSegment* S = g_backend.allocSegment(theLayer);
+    theLayer->add(S);
 
     if (Root.hasAttribute("xml:id"))
         S->setId(IFeature::FId(IFeature::GpxSegment, Root.attribute("xml:id").toLongLong()));
@@ -119,12 +120,11 @@ static void importTrkSeg(const QDomElement& Root, Document* theDocument, Layer* 
 
             if (M_PREFS->getMaxDistNodes() != 0.0 && kilometer > M_PREFS->getMaxDistNodes())
             {
-                if (S->size())
-                    theLayer->add(S);
-                else
+                if (!S->size())
                     g_backend.deallocFeature(theLayer, S);
 
                 S = g_backend.allocSegment(theLayer);
+                theLayer->add(S);
             }
         }
 
@@ -132,15 +132,14 @@ static void importTrkSeg(const QDomElement& Root, Document* theDocument, Layer* 
         lastPoint = Pt;
     }
 
-    if (S->size())
-        theLayer->add(S);
-    else
+    if (!S->size())
         g_backend.deallocFeature(theLayer, S);
 }
 
 static void importRte(const QDomElement& Root, Document* theDocument, Layer* theLayer, bool MakeSegment, QProgressDialog & progress)
 {
     TrackSegment* S = g_backend.allocSegment(theLayer);
+    theLayer->add(S);
 
     if (Root.hasAttribute("xml:id"))
         S->setId(IFeature::FId(IFeature::GpxSegment, Root.attribute("xml:id").toLongLong()));
@@ -173,9 +172,7 @@ static void importRte(const QDomElement& Root, Document* theDocument, Layer* the
 
                 if (M_PREFS->getMaxDistNodes() != 0.0 && kilometer > M_PREFS->getMaxDistNodes())
                 {
-                    if (S->size())
-                        theLayer->add(S);
-                    else
+                    if (!S->size())
                         g_backend.deallocFeature(theLayer, S);
 
                     S = g_backend.allocSegment(theLayer);
@@ -186,9 +183,7 @@ static void importRte(const QDomElement& Root, Document* theDocument, Layer* the
         }
     }
 
-    if (S->size())
-        theLayer->add(S);
-    else
+    if (!S->size())
         g_backend.deallocFeature(theLayer, S);
 }
 

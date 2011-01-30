@@ -472,6 +472,7 @@ bool Node::toGPX(QXmlStreamWriter& stream, QProgressDialog * progress, QString e
         stream.writeTextElement("id", sid);
         stream.writeEndElement();
     }
+    stream.writeEndElement();
 
     if (progress)
         progress->setValue(progress->value()+1);
