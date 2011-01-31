@@ -322,6 +322,8 @@ CoordBox Layer::boundingBox()
             continue;
         if (p->Features.at(i)->notEverythingDownloaded())
             continue;
+        if (p->Features.at(i)->boundingBox().isNull())
+            continue;
         if (haveFirst)
             Box.merge(p->Features.at(i)->boundingBox());
         else {

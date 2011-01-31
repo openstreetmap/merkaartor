@@ -894,7 +894,7 @@ QPair<bool,CoordBox> Document::boundingBox()
 {
     int First;
     for (First = 0; First < layerSize(); ++First)
-        if (getLayer(First)->size())
+        if (getLayer(First)->size() && !getLayer(First)->boundingBox().isNull())
             break;
     if (First == layerSize())
         return qMakePair(false,CoordBox(Coord(0,0),Coord(0,0)));
@@ -902,7 +902,7 @@ QPair<bool,CoordBox> Document::boundingBox()
     CoordBox BBox = aLayer->boundingBox();
     for (int i=First+1; i<layerSize(); ++i)
         aLayer = getLayer(i);
-        if (aLayer->size())
+        if (aLayer->size() && !aLayer->boundingBox().isNull())
             BBox.merge(aLayer->boundingBox());
     return qMakePair(true,BBox);
 }
