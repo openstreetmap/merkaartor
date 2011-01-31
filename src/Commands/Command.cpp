@@ -116,7 +116,7 @@ bool Command::toXML(QXmlStreamWriter& stream) const
         stream.writeAttribute("oldCreated", oldCreated);
         if (isUndone)
             stream.writeAttribute("undone", "true");
-        stream.writeAttribute("description", description);
+//        stream.writeAttribute("description", description);
         stream.writeEndElement();
     }
 
@@ -235,6 +235,7 @@ bool CommandList::toXML(QXmlStreamWriter& stream) const
     stream.writeAttribute("xml:id", id());
     if (isReversed)
         stream.writeAttribute("reversed", "true");
+    stream.writeAttribute("description", description);
     if (mainFeature) {
         stream.writeAttribute("feature",QString::number(mainFeature->id().numId));
         stream.writeAttribute("featureclass", mainFeature->getClass());
@@ -253,6 +254,8 @@ CommandList* CommandList::fromXML(Document* d, QXmlStreamReader& stream)
     CommandList* l = new CommandList();
     l->setId(stream.attributes().value("xml:id").toString());
     l->isReversed = (stream.attributes().value("reversed") == "true");
+    if (stream.attributes().hasAttribute("description"))
+        l->description = stream.attributes().value("description").toString();
     if (stream.attributes().hasAttribute("feature")) {
         if (stream.attributes().value("featureclass") == "Node") {
             l->mainFeature = (Feature*) Feature::getTrackPointOrCreatePlaceHolder(d, (Layer *) d->getDirtyOrOriginLayer(), IFeature::FId(IFeature::Point, stream.attributes().value("feature").toString().toLongLong()));

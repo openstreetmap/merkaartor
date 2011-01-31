@@ -318,49 +318,58 @@ Document* Document::fromXML(QString title, QXmlStreamReader& stream, double vers
 
             // Recreate history
             foreach (Node* N, newNode) {
+                CommandList* CL = new CommandList(tr("History rebuild: Create node %1").arg(N->description()), N);
                 Command* C = new AddFeatureCommand(N->layer(), N, true);
-                C->setDescription(tr("History rebuild: Create node %1").arg(N->description()));
-                h->add(C);
+                CL->add(C);
+                h->add(CL);
             }
             foreach (Node* N, updNode) {
+                CommandList* CL = new CommandList(tr("History rebuild: Update node %1").arg(N->description()), N);;
                 Command* C = new AddFeatureCommand(N->layer(), N, true);
-                C->setDescription(tr("History rebuild: Update node %1").arg(N->description()));;
-                h->add(C);
+                CL->add(C);
+                h->add(CL);
             }
             foreach (Node* N, delNode) {
+                CommandList* CL = new CommandList(tr("History rebuild: Delete node %1").arg(N->description()), N);
                 Command* C = new RemoveFeatureCommand(NewDoc, N);
-                C->setDescription(tr("History rebuild: Delete node %1").arg(N->description()));
-                h->add(C);
+                CL->add(C);
+                h->add(CL);
             }
             foreach (Way* W, newWay) {
+                CommandList* CL = new CommandList(tr("History rebuild: Create way %1").arg(W->description()), W);
                 Command* C = new AddFeatureCommand(W->layer(), W, true);
-                C->setDescription(tr("History rebuild: Create way %1").arg(W->description()));
-                h->add(C);
+                CL->add(C);
+                h->add(CL);
             }
             foreach (Way* W, updWay) {
+                CommandList* CL = new CommandList(tr("History rebuild: Update way %1").arg(W->description()), W);
                 Command* C = new AddFeatureCommand(W->layer(), W, true);
-                C->setDescription(tr("History rebuild: Update way %1").arg(W->description()));
-                h->add(C);
+                CL->add(C);
+                h->add(CL);
             }
             foreach (Way* W, delWay) {
+                CommandList* CL = new CommandList(tr("History rebuild: Delete way %1").arg(W->description()), W);
                 Command* C = new RemoveFeatureCommand(NewDoc, W);
-                C->setDescription(tr("History rebuild: Delete way %1").arg(W->description()));
-                h->add(C);
+                CL->add(C);
+                h->add(CL);
             }
             foreach (Relation* R, newRelation) {
+                CommandList* CL = new CommandList(tr("History rebuild: Create relation %1").arg(R->description()), R);
                 Command* C = new AddFeatureCommand(R->layer(), R, true);
-                C->setDescription(tr("History rebuild: Create relation %1").arg(R->description()));
-                h->add(C);
+                CL->add(C);
+                h->add(CL);
             }
             foreach (Relation* R, updRelation) {
+                CommandList* CL = new CommandList(tr("History rebuild: Update relation %1").arg(R->description()), R);
                 Command* C = new AddFeatureCommand(R->layer(), R, true);
-                C->setDescription(tr("History rebuild: Update relation %1").arg(R->description()));
-                h->add(C);
+                CL->add(C);
+                h->add(CL);
             }
             foreach (Relation* R, delRelation) {
+                CommandList* CL = new CommandList(tr("History rebuild: Delete relation %1").arg(R->description()), R);
                 Command* C = new RemoveFeatureCommand(NewDoc, R);
-                C->setDescription(tr("History rebuild: Delete relation %1").arg(R->description()));
-                h->add(C);
+                CL->add(C);
+                h->add(CL);
             }
         }
     }
