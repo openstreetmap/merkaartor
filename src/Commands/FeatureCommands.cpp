@@ -187,7 +187,13 @@ SetTagCommand * SetTagCommand::fromXML(Document * d, QXmlStreamReader& stream)
 
     a->description = MainWindow::tr("Set Tag '%1=%2' on %3").arg(a->theK).arg(a->theV).arg(a->theFeature->description());
 
-    Command::fromXML(d, stream, a);
+    stream.readNext();
+    while(!stream.atEnd() && !stream.isEndElement()) {
+        if (stream.name() == "Command") {
+            Command::fromXML(d, stream, a);
+        }
+        stream.readNext();
+    }
 
     return a;
 }
@@ -283,6 +289,8 @@ ClearTagsCommand * ClearTagsCommand::fromXML(Document * d, QXmlStreamReader& str
     while(!stream.atEnd() && !stream.isEndElement()) {
         if (stream.name() == "tag") {
             a->Before.push_back(qMakePair(stream.attributes().value("k").toString(),stream.attributes().value("v").toString()));
+        } else if (stream.name() == "Command") {
+            Command::fromXML(d, stream, a);
         }
         stream.readNext();
     }
@@ -391,7 +399,13 @@ ClearTagCommand * ClearTagCommand::fromXML(Document * d, QXmlStreamReader& strea
 
     a->description = MainWindow::tr("Clear Tag '%1' on %2").arg(a->theK).arg(a->theFeature->description());
 
-    Command::fromXML(d, stream, a);
+    stream.readNext();
+    while(!stream.atEnd() && !stream.isEndElement()) {
+        if (stream.name() == "Command") {
+            Command::fromXML(d, stream, a);
+        }
+        stream.readNext();
+    }
 
     return a;
 }

@@ -101,7 +101,13 @@ AddFeatureCommand * AddFeatureCommand::fromXML(Document* d, QXmlStreamReader& st
     a->theFeature = F;
     a->UserAdded = (stream.attributes().value("useradded") == "true" ? true : false);
 
-    Command::fromXML(d, stream, a);
+    stream.readNext();
+    while(!stream.atEnd() && !stream.isEndElement()) {
+        if (stream.name() == "Command") {
+            Command::fromXML(d, stream, a);
+        }
+        stream.readNext();
+    }
 
     return a;
 }
@@ -264,11 +270,11 @@ RemoveFeatureCommand * RemoveFeatureCommand::fromXML(Document* d, QXmlStreamRead
     while(!stream.atEnd() && !stream.isEndElement()) {
         if (stream.name() == "Cascaded") {
             a->CascadedCleanUp = CommandList::fromXML(d, stream);
+        } else if (stream.name() == "Command") {
+            Command::fromXML(d, stream, a);
         }
         stream.readNext();
     }
-
-    Command::fromXML(d, stream, a);
 
     return a;
 }

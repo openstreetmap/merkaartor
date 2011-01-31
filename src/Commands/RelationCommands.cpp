@@ -124,7 +124,13 @@ RelationAddFeatureCommand * RelationAddFeatureCommand::fromXML(Document * d, QXm
     a->theMapFeature = F;
     a->Position = stream.attributes().value("pos").toString().toUInt();
 
-    Command::fromXML(d, stream, a);
+    stream.readNext();
+    while(!stream.atEnd() && !stream.isEndElement()) {
+        if (stream.name() == "Command") {
+            Command::fromXML(d, stream, a);
+        }
+        stream.readNext();
+    }
 
     return a;
 }
@@ -253,7 +259,13 @@ RelationRemoveFeatureCommand * RelationRemoveFeatureCommand::fromXML(Document * 
     a->Idx = stream.attributes().value("index").toString().toInt();
     a->Role = stream.attributes().value("role").toString();
 
-    Command::fromXML(d, stream, a);
+    stream.readNext();
+    while(!stream.atEnd() && !stream.isEndElement()) {
+        if (stream.name() == "Command") {
+            Command::fromXML(d, stream, a);
+        }
+        stream.readNext();
+    }
 
     return a;
 }

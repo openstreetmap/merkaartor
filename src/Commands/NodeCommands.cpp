@@ -116,11 +116,11 @@ MoveNodeCommand * MoveNodeCommand::fromXML(Document * d, QXmlStreamReader& strea
             a->OldPos = Coord::fromXML(stream);
         } else if (stream.name() == "newpos") {
             a->NewPos = Coord::fromXML(stream);
+        } else if (stream.name() == "Command") {
+            Command::fromXML(d, stream, a);
         }
         stream.readNext();
     }
-
-    Command::fromXML(d, stream, a);
 
     return a;
 }

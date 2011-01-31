@@ -109,7 +109,13 @@ WayAddNodeCommand * WayAddNodeCommand::fromXML(Document * d, QXmlStreamReader& s
     a->theTrackPoint = Feature::getTrackPointOrCreatePlaceHolder(d, a->theLayer, IFeature::FId(IFeature::Point, stream.attributes().value("trackpoint").toString().toLongLong()));
     a->Position = stream.attributes().value("pos").toString().toUInt();
 
-    Command::fromXML(d, stream, a);
+    stream.readNext();
+    while(!stream.atEnd() && !stream.isEndElement()) {
+        if (stream.name() == "Command") {
+            Command::fromXML(d, stream, a);
+        }
+        stream.readNext();
+    }
 
     return a;
 }
@@ -233,7 +239,13 @@ WayRemoveNodeCommand * WayRemoveNodeCommand::fromXML(Document * d, QXmlStreamRea
     a->theNode = Feature::getTrackPointOrCreatePlaceHolder(d, a->theLayer, IFeature::FId(IFeature::Point, stream.attributes().value("trackpoint").toString().toLongLong()));
     a->Idx = stream.attributes().value("index").toString().toUInt();
 
-    Command::fromXML(d, stream, a);
+    stream.readNext();
+    while(!stream.atEnd() && !stream.isEndElement()) {
+        if (stream.name() == "Command") {
+            Command::fromXML(d, stream, a);
+        }
+        stream.readNext();
+    }
 
     return a;
 }

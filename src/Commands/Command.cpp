@@ -125,25 +125,19 @@ bool Command::toXML(QXmlStreamWriter& stream) const
 
 void Command::fromXML(Document* d, QXmlStreamReader& stream, Command* C)
 {
-    stream.readNext();
-    while(!stream.atEnd() && !stream.isEndElement()) {
-        if (stream.name() == "Command") {
-            Feature* F;
-            if (!(F = d->getFeature(IFeature::FId(IFeature::All, stream.attributes().value("feature").toString().toLongLong()))))
-                return;
+    Feature* F;
+    if (!(F = d->getFeature(IFeature::FId(IFeature::All, stream.attributes().value("feature").toString().toLongLong()))))
+        return;
 
-            C->setId(stream.attributes().value("xml:id").toString());
-            if (stream.attributes().hasAttribute("oldCreated"))
-                C->oldCreated = stream.attributes().value("oldCreated").toString();
-            if (stream.attributes().hasAttribute("undone"))
-                C->isUndone = (stream.attributes().value("undone") == "true" ? true : false);
-            if (stream.attributes().hasAttribute("description"))
-                C->description = stream.attributes().value("description").toString();
-            C->mainFeature = F;
-            stream.readNext();
-        }
-        stream.readNext();
-    }
+    C->setId(stream.attributes().value("xml:id").toString());
+    if (stream.attributes().hasAttribute("oldCreated"))
+        C->oldCreated = stream.attributes().value("oldCreated").toString();
+    if (stream.attributes().hasAttribute("undone"))
+        C->isUndone = (stream.attributes().value("undone") == "true" ? true : false);
+    if (stream.attributes().hasAttribute("description"))
+        C->description = stream.attributes().value("description").toString();
+    C->mainFeature = F;
+    stream.readNext();
 }
 
 // COMMANDLIST
