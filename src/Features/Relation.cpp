@@ -286,10 +286,12 @@ void Relation::cascadedRemoveIfUsing(Document* theDocument, Feature* aFeature, C
                 QString Role = p->Members[i].first;
                 theList->add(new RelationRemoveFeatureCommand(this, i, theDocument->getDirtyOrOriginLayer(layer())));
                 for (int j=0; j<Alternatives.size(); ++j)
-                    if (i < p->Members.size())
-                        if (p->Members[i+j].second != Alternatives[j])
-                            if (p->Members[i+j-1].second != Alternatives[j])
-                                theList->add(new RelationAddFeatureCommand(this, Role, Alternatives[j], i+j, theDocument->getDirtyOrOriginLayer(Alternatives[j]->layer())));
+                    if (p->Members[i+j].second != Alternatives[j]) {
+                        if ((i+j) == 0)
+                            theList->add(new RelationAddFeatureCommand(this, Role, Alternatives[j], 0, theDocument->getDirtyOrOriginLayer(Alternatives[j]->layer())));
+                        else if (p->Members[i+j-1].second != Alternatives[j])
+                            theList->add(new RelationAddFeatureCommand(this, Role, Alternatives[j], i+j, theDocument->getDirtyOrOriginLayer(Alternatives[j]->layer())));
+                    }
                 continue;
             }
         }
