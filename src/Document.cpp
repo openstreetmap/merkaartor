@@ -213,10 +213,11 @@ Document* Document::fromXML(QString title, QXmlStreamReader& stream, double vers
         NewDoc->p->layerNum = stream.attributes().value("layernum").string()->toInt();
     else
         NewDoc->p->layerNum = 1;
+    QString lastdownloadlayerId;
     if (stream.attributes().hasAttribute("lastdownloadlayer")) {
         NewDoc->p->lastDownloadTimestamp = QDateTime::fromString(stream.attributes().value("lastdownloadtimestamp").toString().left(19), Qt::ISODate);
         NewDoc->p->lastDownloadTimestamp.setTimeSpec(Qt::UTC);
-        NewDoc->p->lastDownloadLayer = NewDoc->getLayer(stream.attributes().value("lastdownloadlayer").toString());
+        lastdownloadlayerId = stream.attributes().value("lastdownloadlayer").toString();
     }
 
     stream.readNext();
@@ -257,6 +258,9 @@ Document* Document::fromXML(QString title, QXmlStreamReader& stream, double vers
     }
 
     if (NewDoc) {
+        if (!lastdownloadlayerId.isEmpty())
+            NewDoc->p->lastDownloadLayer = NewDoc->getLayer(lastdownloadlayerId);
+
         if (h)
             NewDoc->setHistory(h);
         else
