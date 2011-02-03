@@ -1,4 +1,5 @@
 v0.17.1
+    * FIX : Issue when creating nodes when active layer is closed (fixes #3244)
     * FIX : Bing maps: Make initial providers request non-blocking to avoid NULL document (fixes #3241)
     * FIX : Use "=" rather than "is" in selection dialog (fixes #3218)
     * FIX : Background cache size not limited (fixes #3227)

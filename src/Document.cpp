@@ -493,9 +493,13 @@ Layer* Document::getDirtyOrOriginLayer(Layer* aLayer)
     if (g_Merk_Frisius) {
         if (aLayer)
             return aLayer;
+        else if (p->lastDownloadLayer)
+            return p->lastDownloadLayer;
         else {
             DrawingLayer* firstDrLayer = NULL;
             for (int i=0; i<layerSize(); ++i) {
+                if (!getLayer(i)->isEnabled())
+                    continue;
                 if (getLayer(i)->classType() == Layer::DrawingLayerType) {
                     if (!firstDrLayer)
                         firstDrLayer = dynamic_cast<DrawingLayer*>(getLayer(i));
@@ -508,12 +512,12 @@ Layer* Document::getDirtyOrOriginLayer(Layer* aLayer)
             else
                 return addDrawingLayer();
         }
+    } else {
+        if (!aLayer || (aLayer && !aLayer->isUploadable()))
+            return p->dirtyLayer;
+        else
+            return aLayer;
     }
-
-    if (!aLayer || aLayer->isUploadable())
-        return p->dirtyLayer;
-    else
-        return aLayer;
 }
 
 Layer* Document::getDirtyOrOriginLayer(Feature* F)
