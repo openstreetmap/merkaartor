@@ -174,6 +174,8 @@ void simplifyWay(Document *doc, Layer *layer, CommandList *theList, Way *w, int 
     } else {
         for (int i = end - 1;  i > start;  i--) {
             Feature *n = w->get(i);
+            if (!doc->isDownloadedSafe(n->boundingBox()) && n->hasOSMId())
+                continue;
             theList->add(new WayRemoveNodeCommand(w, i, layer));
             theList->add(new RemoveFeatureCommand(doc, n));
         }
