@@ -1,4 +1,5 @@
 v0.18
+    * FIX : Do not simplify (i.e. remove) nodes outside the downloaded area (fixes #3246)
     * FIX : Issue when creating nodes when active layer is closed (fixes #3244)
     * ADD : Rebuild an uploadable history if it gets corrupted (refs #3233)
     * ADD : Allow full regexp in tag selector (enclosed with '/') (closes #3218)
