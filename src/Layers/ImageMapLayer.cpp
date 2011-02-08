@@ -227,7 +227,7 @@ void ImageMapLayer::setMapAdapter(const QUuid& theAdapterUid, const QString& ser
     } else
     if (p->bgType == TMS_ADAPTER_UUID) {
         tsl = M_PREFS->getTmsServers();
-        if (!wsl->contains(server)) {  // TMS not locally found
+        if (!tsl->contains(server)) {  // TMS not locally found
             setNoneAdapter();
         } else {
             p->selServer = server;
