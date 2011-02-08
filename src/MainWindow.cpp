@@ -414,7 +414,8 @@ void MainWindow::delayedInit()
     if (M_PREFS->getLocalServer()) {
         p->theListeningServer = new QTcpServer(this);
         connect(p->theListeningServer, SIGNAL(newConnection()), this, SLOT(incomingLocalConnection()));
-        p->theListeningServer->listen(QHostAddress::LocalHost, 8111);
+        if (!p->theListeningServer->listen(QHostAddress::LocalHost, 8111))
+            qDebug() << "Remote control: Unable to listen on 8111";
     }
 
 //    M_PREFS->initialPosition(theView);
@@ -487,7 +488,7 @@ void MainWindow::readLocalConnection()
             resultStream << "Access-Control-Allow-Origin: *\r\n";
             resultStream << "Content-length: 4\r\n\r\n";
             resultStream << "OK\r\n";
-            socket->close();
+            socket->disconnectFromHost();
 
             QUrl u = QUrl(tokens[1]);
             loadUrl(u);
@@ -2516,7 +2517,8 @@ void MainWindow::preferencesChanged(PreferencesDialog* prefs)
         if (!p->theListeningServer) {
             p->theListeningServer = new QTcpServer(this);
             connect(p->theListeningServer, SIGNAL(newConnection()), this, SLOT(incomingLocalConnection()));
-            p->theListeningServer->listen(QHostAddress::LocalHost, 8111);
+            if (!p->theListeningServer->listen(QHostAddress::LocalHost, 8111))
+                qDebug() << "Remote control: Unable to listen on 8111";
         }
     } else {
         if (p->theListeningServer) {
