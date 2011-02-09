@@ -27,6 +27,9 @@ FilterPreferencesDialog::FilterPreferencesDialog(QWidget* parent)
     : QDialog(parent)
 {
     setupUi(this);
+    btAdd->setEnabled(false);
+    btApply->setEnabled(false);
+    btDel->setEnabled(false);
 
     setWindowFlags(windowFlags() & ~Qt::WindowContextHelpButtonHint);
 
@@ -55,10 +58,13 @@ void FilterPreferencesDialog::on_btApply_clicked(void)
     int idx = static_cast<int>(lvFilters->currentItem()->data(Qt::UserRole).toInt());
     if (idx >= theItems.size())
         return;
+    TagSelector* t = TagSelector::parse(edFilterString->text());
+    if (!t)
+        return;
 
     FilterItem& item(theItems[idx]);
     item.name = edFilterName->text();
-    item.filter = edFilterString->text();
+    item.filter = t->asExpression(false);
 
     lvFilters->currentItem()->setText(item.name);
     selectedItem = item.name;
@@ -66,7 +72,11 @@ void FilterPreferencesDialog::on_btApply_clicked(void)
 
 void FilterPreferencesDialog::on_btAdd_clicked(void)
 {
-    addFilter(FilterItem(QUuid::createUuid(), edFilterName->text(), edFilterString->text()));
+    TagSelector* t = TagSelector::parse(edFilterString->text());
+    if (!t)
+        return;
+
+    addFilter(FilterItem(QUuid::createUuid(), edFilterName->text(), t->asExpression(false)));
     lvFilters->setCurrentRow(lvFilters->count() - 1);
     on_lvFilters_itemSelectionChanged();
 }
@@ -102,20 +112,46 @@ void FilterPreferencesDialog::on_lvFilters_itemSelectionChanged()
         selectedItem.clear();
         edFilterName->setText(selectedItem);
         edFilterString->setText(selectedItem);
+        btDel->setEnabled(false);
+        btApply->setEnabled(false);
         return;
     }
 
     QListWidgetItem* it = lvFilters->item(lvFilters->currentRow());
+    on_lvFilters_itemClicked(it);
+}
 
+void FilterPreferencesDialog::on_lvFilters_itemClicked(QListWidgetItem * it)
+{
     int idx = it->data(Qt::UserRole).toInt();
-    if (idx >= theItems.size())
-         return;
+    if (idx >= theItems.size()) {
+        btDel->setEnabled(false);
+        btApply->setEnabled(false);
+        return;
+    }
 
     FilterItem& item(theItems[idx]);
     edFilterName->setText(item.name);
     edFilterString->setText(item.filter);
 
     selectedItem = item.name;
+    btDel->setEnabled(true);
+    btApply->setEnabled(true);
+}
+
+void FilterPreferencesDialog::on_edFilterName_textChanged(const QString & text)
+{
+    btApply->setEnabled(false);
+    btDel->setEnabled(false);
+    if (text.isEmpty()) {
+        btAdd->setEnabled(false);
+    } else {
+        btAdd->setEnabled(true);
+    }
+}
+
+void FilterPreferencesDialog::on_edFilterString_textChanged(const QString & text)
+{
 }
 
 QString FilterPreferencesDialog::getSelectedItem()

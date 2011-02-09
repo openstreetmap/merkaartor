@@ -42,7 +42,12 @@ public slots:
     void on_btDel_clicked();
     void on_btFilterHelper_clicked();
     void on_lvFilters_itemSelectionChanged();
+    void on_lvFilters_itemClicked(QListWidgetItem * item);
+
     void on_buttonBox_clicked(QAbstractButton * button);
+
+    void on_edFilterName_textChanged(const QString & text);
+    void on_edFilterString_textChanged(const QString & text);
 
 private:
     void loadPrefs();

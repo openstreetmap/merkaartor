@@ -284,7 +284,7 @@ TagSelector* parseTagSelector(const QString& Expression, int& idx)
         return Terms[0];
     else if (Terms.size() > 1)
         return new TagSelectorOr(Terms);
-    return 0;
+    return new TagSelectorTrue();
 }
 
 TagSelector* TagSelector::parse(const QString& Expression)
