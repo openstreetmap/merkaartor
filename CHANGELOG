@@ -1,3 +1,6 @@
+v0.17.2
+    * FIX : Unblock indexing after an aborted doawnload, too (fixes #3248)
+    * FIX : Harden Filter Editor (fixes #3247)
 v0.17.1
     * FIX : Do not simplify (i.e. remove) nodes outside the downloaded area (fixes #3246)
     * FIX : Issue when creating nodes when active layer is closed (fixes #3244)

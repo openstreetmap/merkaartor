@@ -656,9 +656,9 @@ bool downloadFeatures(MainWindow* Main, const QList<IFeature::FId>& idList , Doc
 
     if (Main)
         Main->view()->setUpdatesEnabled(true);
+    theLayer->blockIndexing(false);
     if (OK)
     {
-        theLayer->blockIndexing(false);
         theLayer->reIndex();
         if (Main)
             Main->invalidateView();
@@ -725,12 +725,11 @@ bool downloadOpenstreetbugs(MainWindow* Main, const CoordBox& aBox, Document* th
 
     if (Main)
         Main->view()->setUpdatesEnabled(true);
-    if (OK) {
-        trackLayer->blockIndexing(false);
-        trackLayer->reIndex();
-        if (Main)
-            Main->invalidateView();
-    }
+    trackLayer->blockIndexing(false);
+    trackLayer->reIndex();
+    if (Main)
+        Main->invalidateView();
+
     return OK;
 }
 
@@ -755,9 +754,9 @@ bool downloadMoreOSM(MainWindow* Main, const CoordBox& aBox , Document* theDocum
     bool OK = true;
     OK = downloadOSM(Main,osmWebsite,osmUser,osmPwd,aBox,theDocument,theLayer);
     Main->view()->setUpdatesEnabled(true);
+    theLayer->blockIndexing(false);
     if (OK)
     {
-        theLayer->blockIndexing(false);
         theLayer->reIndex();
         theDocument->setLastDownloadLayer(theLayer);
         theDocument->addDownloadBox(theLayer, aBox);
@@ -867,9 +866,9 @@ bool downloadOSM(MainWindow* Main, const CoordBox& aBox , Document* theDocument)
             if (OK && ui.IncludeTracks->isChecked())
                 OK = downloadTracksFromOSM(Main,osmWebsite,osmUser,osmPwd, Clip,theDocument);
             Main->view()->setUpdatesEnabled(true);
+            theLayer->blockIndexing(false);
             if (OK)
             {
-                theLayer->blockIndexing(false);
                 theLayer->reIndex();
                 theDocument->setLastDownloadLayer(theLayer);
                 theDocument->addDownloadBox(theLayer, Clip);
