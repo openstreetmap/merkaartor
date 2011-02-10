@@ -1,5 +1,7 @@
 v0.17.2
-    * FIX : Unblock indexing after an aborted doawnload, too (fixes #3248)
+    * FIX : Crash when creating a tag template based upon an empty one (fixes #3250)
+    * FIX : crash with --ignore-preferences
+    * FIX : Unblock indexing after an aborted download, too (fixes #3248)
     * FIX : Harden Filter Editor (fixes #3247)
 v0.17.1
     * FIX : Do not simplify (i.e. remove) nodes outside the downloaded area (fixes #3246)

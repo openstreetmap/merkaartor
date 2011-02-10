@@ -667,13 +667,13 @@ TagTemplate::TagTemplate()
 TagTemplate::TagTemplate(QString aName)
     : theWidget(0), theSelector(0)
 {
-    Q_UNUSED(aName)
+    theDescriptions[getDefaultLanguage()] = aName;
 }
 
 TagTemplate::TagTemplate(QString aName, QString aSelector)
     : theWidget(0)
 {
-    Q_UNUSED(aName)
+    theDescriptions[getDefaultLanguage()] = aName;
     theSelector = TagSelector::parse(aSelector);
 }
 
@@ -966,8 +966,10 @@ void TagTemplates::on_combo_activated(int idx)
         TagTemplate* newTmpl = new TagTemplate(theCombo->currentText());
         items.append(newTmpl);
 
-        for (int i=0; i<curTemplate->theFields.count(); ++i) {
-            curTemplate->theFields[i]->getCurrentValue();
+        if (curTemplate) {
+            for (int i=0; i<curTemplate->theFields.count(); ++i) {
+                curTemplate->theFields[i]->getCurrentValue();
+            }
         }
     } else {
         forcedTemplate = theCombo->itemData(idx).value<TagTemplate*>();
