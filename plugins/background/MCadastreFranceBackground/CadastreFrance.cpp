@@ -75,7 +75,10 @@ QString	CadastreFranceAdapter::getName() const
 void CadastreFranceAdapter::setSettings(QSettings* aSet)
 {
     theSettings = aSet;
-    CadastreWrapper::instance()->setRootCacheDir(QDir(theSettings->value("backgroundImage/CacheDir").toString()));
+    if (theSettings)
+        CadastreWrapper::instance()->setRootCacheDir(QDir(theSettings->value("backgroundImage/CacheDir").toString()));
+    else
+        CadastreWrapper::instance()->setRootCacheDir(QDir(QDir::homePath() + "/.merkaartor/BackgroundCache"));
     updateMenu();
 }
 

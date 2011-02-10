@@ -614,7 +614,8 @@ void MerkaartorPreferences::initialize()
     parentDashes << 1 << 5;
 
     //Ensure we have a CacheDir value in QSettings
-    Sets->setValue("backgroundImage/CacheDir", Sets->value("backgroundImage/CacheDir", HOMEDIR + "/BackgroundCache"));
+    if (!g_Merk_Ignore_Preferences)
+        Sets->setValue("backgroundImage/CacheDir", Sets->value("backgroundImage/CacheDir", HOMEDIR + "/BackgroundCache"));
 }
 
 const QVector<qreal> MerkaartorPreferences::getParentDashes() const
