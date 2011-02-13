@@ -9,6 +9,7 @@ class Way;
 class Projection;
 
 #include <QList>
+#include "Coord.h"
 
 void joinRoads(Document* theDocument, CommandList* theList, PropertiesDock* theDock);
 void splitRoads(Document* theDocument, CommandList* theList, PropertiesDock* theDock);
@@ -19,6 +20,7 @@ void addStreetNumbers(Document* theDocument, CommandList* theList, PropertiesDoc
 void reversePoints(Document* theDocument, CommandList* theList, Way* R);
 void simplifyRoads(Document* theDocument, CommandList* theList, PropertiesDock* theDock, double threshold);
 void alignNodes(Document* theDocument, CommandList* theList, PropertiesDock* theDock);
+void bingExtract(Document* theDocument, CommandList* theList, PropertiesDock* theDock, CoordBox vp);
 void spreadNodes(Document* theDocument, CommandList* theList, PropertiesDock* theDock);
 void mergeNodes(Document* theDocument, CommandList* theList, PropertiesDock* theDock);
 void detachNode(Document* theDocument, CommandList* theList, PropertiesDock* theDock);

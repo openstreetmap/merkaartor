@@ -33,11 +33,9 @@ public:
 
     virtual TrackSegment* allocSegment(Layer* l);
 
-    virtual void clearLayer(Layer* l);
     virtual void deallocFeature(Layer* l, Feature* f);
     virtual void deallocVirtualNode(Feature* f);
 
-    virtual void move(Layer* oldL, Layer* newL, Feature* f);
     virtual void sync(Feature* f);
 
     virtual const QList<Feature*>& indexFind(Layer* l, const QRectF& vp);

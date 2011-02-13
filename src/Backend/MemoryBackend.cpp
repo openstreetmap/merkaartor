@@ -201,16 +201,12 @@ TrackSegment * MemoryBackend::allocSegment(Layer* l)
     return f;
 }
 
-void MemoryBackend::clearLayer(Layer *l)
-{
-    if (p->theRTree.contains(l))
-        p->theRTree.remove(l);
-}
-
 void MemoryBackend::deallocFeature(Layer* l, Feature *f)
 {
-    if (p->AllocFeatures.contains(f))
+    if (p->AllocFeatures.contains(f)) {
         indexRemove(l, p->AllocFeatures[f], f);
+        p->AllocFeatures.remove(f);
+    }
 }
 
 void MemoryBackend::deallocVirtualNode(Feature *f)
@@ -218,19 +214,11 @@ void MemoryBackend::deallocVirtualNode(Feature *f)
     delete f;
 }
 
-void MemoryBackend::move(Layer *oldL, Layer *newL, Feature *f)
-{
-    if (oldL)
-        indexRemove(oldL, p->AllocFeatures[f], f);
-    if (newL)
-        indexAdd(newL, p->AllocFeatures[f], f);
-}
-
 void MemoryBackend::sync(Feature *f)
 {
     if (p->AllocFeatures.contains(f) && !p->AllocFeatures[f].isNull())
         indexRemove(f->layer(), p->AllocFeatures[f], f);
-    if (!f->isDeleted()) {
+    if (!f->isDeleted() && f->layer()) {
         CoordBox bb = f->boundingBox();
         p->AllocFeatures[f] = bb;
         if (!bb.isNull()) {

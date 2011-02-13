@@ -24,7 +24,7 @@
      <x>0</x>
      <y>0</y>
      <width>1100</width>
-     <height>21</height>
+     <height>26</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuHelp">
@@ -62,6 +62,8 @@
     <addaction name="areaSplitAction"/>
     <addaction name="areaTerraceAction"/>
     <addaction name="roadAxisAlignAction"/>
+    <addaction name="separator"/>
+    <addaction name="roadBingExtractAction"/>
    </widget>
    <widget class="QMenu" name="menuEdit">
     <property name="title">
@@ -1830,6 +1832,11 @@
   <action name="exportGDALAction">
    <property name="text">
     <string>GDAL</string>
+   </property>
+  </action>
+  <action name="roadBingExtractAction">
+   <property name="text">
+    <string>Bing Road Detector</string>
    </property>
   </action>
  </widget>

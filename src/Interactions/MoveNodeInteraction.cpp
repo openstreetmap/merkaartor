@@ -231,11 +231,11 @@ void MoveNodeInteraction::snapMouseReleaseEvent(QMouseEvent * event, Feature* Cl
             }
         }
 
-        document()->addHistory(theList);
+        if (theList)
+            document()->addHistory(theList);
         view()->invalidate(true, false);
     } else
-        if (theList)
-            SAFE_DELETE(theList);
+        SAFE_DELETE(theList);
     Moving.clear();
     OriginalPosition.clear();
     clearNoSnap();

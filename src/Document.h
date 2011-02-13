@@ -61,6 +61,7 @@ public:
     Layer* getLayer(const QString& id);
     Layer* getLayer(int i);
     const Layer* getLayer(int i) const;
+    int size() const;
 
     Feature* getFeature(const IFeature::FId& id);
     QList<Feature*> getFeatures(Layer::LayerType layerType = Layer::UndefinedType);
@@ -125,6 +126,7 @@ public:
     static Document* getDocumentFromXml(QDomDocument* theXmlDoc);
     static Document* getDocumentFromClipboard();
 
+    QList<Feature*> mergeDocument(Document *otherDoc, Layer* layer, CommandList* theList=NULL);
 private:
     MapDocumentPrivate* p;
 

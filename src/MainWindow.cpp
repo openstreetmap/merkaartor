@@ -850,38 +850,7 @@ void MainWindow::on_editPasteFeatureAction_triggered()
 
     CommandList* theList = new CommandList();
     theList->setDescription("Paste Features");
-
-    QList<Feature*> theFeats;
-    for (int i=0; i<doc->layerSize(); ++i)
-        for (int j=0; j<doc->getLayer(i)->size(); ++j)
-            if (!doc->getLayer(i)->get(j)->isNull())
-                theFeats.push_back(doc->getLayer(i)->get(j));
-    for (int i=0; i<theFeats.size(); ++i) {
-        Feature*F = theFeats.at(i);
-        if (theDocument->getFeature(F->id()))
-            F->resetId();
-
-        // Re-link null features to the ones in the current document
-        for (int j=0; j<F->size(); ++j) {
-            Feature* C = F->get(j);
-            if (C->isNull()) {
-                if (Feature* CC = theDocument->getFeature(C->id())) {
-                    if (Relation* R = CAST_RELATION(F)) {
-                        QString role = R->getRole(j);
-                        R->remove(j);
-                        R->add(role, CC, j);
-                    } else if (Way* W = CAST_WAY(F)) {
-                        Node* N = CAST_NODE(CC);
-                        W->remove(j);
-                        W->add(N, j);
-                    }
-                } else
-                    theFeats.push_back(C);
-            }
-        }
-        F->layer()->remove(F);
-        theList->add(new AddFeatureCommand(theDocument->getDirtyOrOriginLayer(), F, true));
-    }
+    QList<Feature*> theFeats = theDocument->mergeDocument(doc, theDocument->getDirtyOrOriginLayer(), theList);
 
     if (theList->size())
         document()->addHistory(theList);
@@ -2082,6 +2051,20 @@ void MainWindow::on_roadExtrudeAction_triggered()
 {
     theView->launch(new ExtrudeInteraction(theView));
     theInfo->setHtml(theView->interaction()->toHtml());
+}
+
+void MainWindow::on_roadBingExtractAction_triggered()
+{
+    CommandList* theList = new CommandList(MainWindow::tr("Bing Extract"), NULL);
+    bingExtract(theDocument, theList, p->theProperties, theView->viewport());
+    if (theList->empty())
+        delete theList;
+    else
+    {
+        theDocument->addHistory(theList);
+    //	theView->properties()->setSelection(F);
+        invalidateView();
+    }
 }
 
 void MainWindow::on_nodeAlignAction_triggered()

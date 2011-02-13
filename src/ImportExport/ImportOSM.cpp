@@ -84,7 +84,6 @@ void OSMHandler::parseNode(const QXmlAttributes& atts)
                 Pt = userPt;
                 Pt->layer()->remove(Pt);
                 theLayer->add(Pt);
-                g_backend.move(Pt->layer(), theLayer, Pt);
                 Pt->setPosition(Coord(Lon,Lat));
                 Pt->clearTags();
                 NewFeature = true;
@@ -163,7 +162,6 @@ void OSMHandler::parseWay(const QXmlAttributes& atts)
                 R = userRd;
                 R->layer()->remove(R);
                 theLayer->add(R);
-                g_backend.move(R->layer(), theLayer, R);
                 while (R->size())
                     R->remove((int)0);
                 R->clearTags();
@@ -248,7 +246,6 @@ void OSMHandler::parseRelation(const QXmlAttributes& atts)
                 R = userR;
                 R->layer()->remove(R);
                 theLayer->add(R);
-                g_backend.move(R->layer(), theLayer, R);
                 while (R->size())
                     R->remove((int)0);
                 R->clearTags();

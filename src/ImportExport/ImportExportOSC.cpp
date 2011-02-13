@@ -50,8 +50,8 @@ bool ImportExportOSC::import(Layer* aLayer)
 {
     QXmlStreamReader stream(Device);
 
-    stream.readNext();
-    if (stream.name() != "osmChange") {
+    while (stream.readNext() && stream.tokenType() != QXmlStreamReader::Invalid && stream.tokenType() != QXmlStreamReader::StartElement);
+    if (stream.name() != "osmChange" && stream.name() != "osmchange") {
 //        QMessageBox::critical(this, tr("Invalid file"), tr("%1 is not a valid osmChange file.").arg(fn));
         return false;
     }
@@ -80,10 +80,15 @@ bool ImportExportOSC::import(Layer* aLayer)
                 } else if (stream.name() == "relation") {
                     F = Relation::fromXML(theDoc, aLayer, stream);
                     theList->add(new AddFeatureCommand(aLayer, F, true));
+                } else if (!stream.isWhitespace()) {
+                    qDebug() << "OSC: logic error: " << stream.name() << " : " << stream.tokenType() << " (" << stream.lineNumber() << ")";
+                    stream.skipCurrentElement();
                 }
-                for (int i=0; i<F->size(); ++i) {
-                    if (F->get(i)->notEverythingDownloaded())
-                        featIdList << F->get(i)->id();
+                if (F) {
+                    for (int i=0; i<F->size(); ++i) {
+                        if (F->get(i)->notEverythingDownloaded() && F->get(i)->hasOSMId())
+                            featIdList << F->get(i)->id();
+                    }
                 }
 
                 stream.readNext();
@@ -113,10 +118,15 @@ bool ImportExportOSC::import(Layer* aLayer)
                         downloadFeature(0, id, theDoc, dLayer);
                     F = Relation::fromXML(theDoc, aLayer, stream);
                     theList->add(new AddFeatureCommand(aLayer, F, true));
+                } else if (!stream.isWhitespace()) {
+                    qDebug() << "OSC: logic error: " << stream.name() << " : " << stream.tokenType() << " (" << stream.lineNumber() << ")";
+                    stream.skipCurrentElement();
                 }
-                for (int i=0; i<F->size(); ++i) {
-                    if (F->get(i)->notEverythingDownloaded())
-                        featIdList << F->get(i)->id();
+                if (F) {
+                    for (int i=0; i<F->size(); ++i) {
+                        if (F->get(i)->notEverythingDownloaded() && F->get(i)->hasOSMId())
+                            featIdList << F->get(i)->id();
+                    }
                 }
                 stream.readNext();
             }
@@ -132,6 +142,9 @@ bool ImportExportOSC::import(Layer* aLayer)
                 } else if (stream.name() == "relation") {
                     Relation* R = Relation::fromXML(theDoc, aLayer, stream);
                     theList->add(new RemoveFeatureCommand(theDoc, R));
+                } else if (!stream.isWhitespace()) {
+                    qDebug() << "OSC: logic error: " << stream.name() << " : " << stream.tokenType() << " (" << stream.lineNumber() << ")";
+                    stream.skipCurrentElement();
                 }
                 stream.readNext();
             }

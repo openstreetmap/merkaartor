@@ -11,8 +11,12 @@
 #include "Features.h"
 #include "PropertiesDock.h"
 #include "Projection.h"
+#include "ImportExportOSC.h"
+
+#include "Utils/Utils.h"
 
 #include <QtCore/QString>
+#include <QMessageBox>
 
 #include <algorithm>
 
@@ -730,6 +734,58 @@ void alignNodes(Document* theDocument, CommandList* theList, PropertiesDock* the
         pos=pos+p1;
         theList->add(new MoveNodeCommand( Nodes[i], pos, theDocument->getDirtyOrOriginLayer(Nodes[i]->layer()) ));
     }
+}
+
+void bingExtract(Document* theDocument, CommandList* theList, PropertiesDock* theDock, CoordBox vp)
+{
+    //We build a list of selected nodes
+    QList<Node*> Nodes;
+    for (int i=0; i<theDock->size(); ++i)
+        if (Node* N = CAST_NODE(theDock->selection(i)))
+            Nodes.push_back(N);
+
+    //we check that we have at least 2 nodes
+    if(Nodes.size() < 2)
+        return;
+    if(Nodes[0]->position() == Nodes[1]->position())
+        return;
+
+    //http://3667a17de9b94ccf8fd278f9de62dae4.cloudapp.net/
+    QString u("http://magicshop.cloudapp.net/DetectRoad.svc/detect/?");
+    u.append(QString("pt1=%1,%2").arg(COORD2STRING(Nodes[0]->position().y())).arg(COORD2STRING(Nodes[0]->position().x())));
+    u.append(QString("&pt2=%1,%2").arg(COORD2STRING(Nodes[1]->position().y())).arg(COORD2STRING(Nodes[1]->position().x())));
+    u.append(QString("&bbox=%1,%2,%3,%4")
+             .arg(COORD2STRING(vp.top()))
+             .arg(COORD2STRING(vp.left()))
+             .arg(COORD2STRING(vp.bottom()))
+             .arg(COORD2STRING(vp.right()))
+             );
+
+    QString sXml;
+    if (!Utils::sendBlockingNetRequest(QUrl(u), sXml)) {
+        QMessageBox::critical(g_Merk_MainWindow, QApplication::tr("Bing Road Detect"), QApplication::tr("Cannot get output."));
+        return;
+    }
+    qDebug() << sXml;
+
+    //Import the OSC
+    Document* newDoc;
+    QDomDocument xmlDoc;
+    xmlDoc.setContent(sXml);
+    if (!(newDoc = Document::getDocumentFromXml(&xmlDoc))) {
+        QMessageBox::critical(g_Merk_MainWindow, QApplication::tr("Bing Road Detect"), QApplication::tr("No valid data."));
+        return;
+    }
+
+    if (!newDoc->size()) {
+        QMessageBox::critical(g_Merk_MainWindow, QApplication::tr("Bing Road Detect"), QApplication::tr("Cannot parse output."));
+    } else {
+        DrawingLayer* newLayer = new DrawingLayer( "Bing Road Extract" );
+        newLayer->setUploadable(false);
+        theDocument->add(newLayer);
+        theDocument->mergeDocument(newDoc, newLayer, theList);
+    }
+    delete newDoc;
 }
 
 void spreadNodes(Document* theDocument, CommandList* theList, PropertiesDock* theDock)

@@ -91,6 +91,8 @@ bool Utils::sendBlockingNetRequest(const QUrl& theUrl, QString& reply)
     QEventLoop q;
     QTimer tT;
 
+    manager.setProxy(M_PREFS->getProxy(QUrl("http://merkaartor.be")));
+
     tT.setSingleShot(true);
     connect(&tT, SIGNAL(timeout()), &q, SLOT(quit()));
     connect(&manager, SIGNAL(finished(QNetworkReply*)),

@@ -125,6 +125,7 @@ public slots:
     virtual void on_roadSubdivideAction_triggered();
     virtual void on_roadAxisAlignAction_triggered();
     virtual void on_roadExtrudeAction_triggered();
+    virtual void on_roadBingExtractAction_triggered();
 
     virtual void on_featureSelectChildrenAction_triggered();
     virtual void on_featureDeleteAction_triggered();

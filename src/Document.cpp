@@ -637,6 +637,16 @@ int Document::getDirtySize() const
     return dirtyObjects;
 }
 
+int Document::size() const
+{
+    int sz = 0;
+    for (int i=0; i<layerSize(); ++i) {
+        sz += getLayer(i)->size();
+    }
+    return sz;
+}
+
+
 void Document::setUploadedLayer(UploadedLayer* aLayer)
 {
     p->uploadedLayer = aLayer;
@@ -1028,7 +1038,6 @@ Document* Document::getDocumentFromXml(QDomDocument* theXmlDoc)
             stream.readNext();
         }
 
-        delete theXmlDoc;
         return NewDoc;
     } else
     if (c.tagName() == "kml") {
@@ -1043,12 +1052,65 @@ Document* Document::getDocumentFromXml(QDomDocument* theXmlDoc)
         if (imp.setDevice(&kmlBuf))
             imp.import(l);
 
-        delete theXmlDoc;
         return NewDoc;
     } else
+        if (c.tagName() == "osmChange" || c.tagName() == "osmchange") {
+            Document* NewDoc = new Document(NULL);
+            DrawingLayer* l = new DrawingLayer("Dummy");
+            NewDoc->add(l);
+
+            ImportExportOSC imp(NewDoc);
+            QByteArray ba = theXmlDoc->toByteArray();
+            QBuffer buf(&ba);
+            buf.open(QIODevice::ReadOnly);
+            if (imp.setDevice(&buf))
+                imp.import(l);
+
+            return NewDoc;
+        } else
     if (c.tagName() == "gpx") {
     }
     return NULL;
+}
+
+QList<Feature*> Document::mergeDocument(Document* otherDoc, Layer* layer, CommandList* theList)
+{
+    QList<Feature*> theFeats;
+    for (int i=0; i<otherDoc->layerSize(); ++i)
+        for (int j=0; j<otherDoc->getLayer(i)->size(); ++j)
+            if (!otherDoc->getLayer(i)->get(j)->isNull())
+                theFeats.push_back(otherDoc->getLayer(i)->get(j));
+    for (int i=0; i<theFeats.size(); ++i) {
+        Feature*F = theFeats.at(i);
+        if (getFeature(F->id()))
+            F->resetId();
+
+        // Re-link null features to the ones in the current document
+        for (int j=0; j<F->size(); ++j) {
+            Feature* C = F->get(j);
+            if (C->isNull()) {
+                if (Feature* CC = getFeature(C->id())) {
+                    if (Relation* R = CAST_RELATION(F)) {
+                        QString role = R->getRole(j);
+                        R->remove(j);
+                        R->add(role, CC, j);
+                    } else if (Way* W = CAST_WAY(F)) {
+                        Node* N = CAST_NODE(CC);
+                        W->remove(j);
+                        W->add(N, j);
+                    }
+                } else
+                    theFeats.push_back(C);
+            }
+        }
+        F->layer()->remove(F);
+        if (theList)
+            theList->add(new AddFeatureCommand(layer, F, true));
+        else {
+            layer->add(F);
+        }
+    }
+    return theFeats;
 }
 
 Document* Document::getDocumentFromClipboard()
@@ -1077,7 +1139,10 @@ Document* Document::getDocumentFromClipboard()
         delete theXmlDoc;
         return NULL;
     }
-    return Document::getDocumentFromXml(theXmlDoc);
+    Document* doc = Document::getDocumentFromXml(theXmlDoc);
+    delete theXmlDoc;
+
+    return doc;
 }
 
 /* FEATUREITERATOR */

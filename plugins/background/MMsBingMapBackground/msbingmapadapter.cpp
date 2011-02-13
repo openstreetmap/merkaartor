@@ -57,11 +57,7 @@ IMapAdapter::Type MsBingMapAdapter::getType() const
 
 QString MsBingMapAdapter::getHost() const
 {
-    if (!isLoaded) {
-        int random = qrand() % 6;
-        return host.arg(random);
-    } else
-        return host;
+    return host;
 }
 
 QPoint MsBingMapAdapter::coordinateToDisplay(const QPointF& coordinate) const

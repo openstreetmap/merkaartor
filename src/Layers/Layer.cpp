@@ -153,6 +153,7 @@ void Layer::add(Feature* aFeature)
 {
     aFeature->setLayer(this);
     p->Features.push_back(aFeature);
+    g_backend.sync(aFeature);
     aFeature->invalidateMeta();
     notifyIdUpdate(aFeature->id(),aFeature);
 }
@@ -161,6 +162,7 @@ void Layer::remove(Feature* aFeature)
 {
     if (p->Features.removeOne(aFeature))
     {
+        g_backend.sync(aFeature);
         aFeature->setLayer(0);
         notifyIdUpdate(aFeature->id(),0);
     }
@@ -170,20 +172,19 @@ void Layer::deleteFeature(Feature* aFeature)
 {
     if (p->Features.removeOne(aFeature))
     {
+        g_backend.deallocFeature(this, aFeature);
         aFeature->setLayer(0);
         notifyIdUpdate(aFeature->id(),0);
     }
-
-    g_backend.deallocFeature(this, aFeature);
 }
 
 void Layer::clear()
 {
     while (p->Features.count())
     {
+        g_backend.sync(p->Features[0]);
         p->Features[0]->setLayer(0);
         notifyIdUpdate(p->Features[0]->id(),0);
-        g_backend.clearLayer(this);
         p->Features.removeAt(0);
     }
 }
