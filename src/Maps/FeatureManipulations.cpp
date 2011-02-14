@@ -14,6 +14,7 @@
 #include "ImportExportOSC.h"
 
 #include "Utils/Utils.h"
+#include "Utils/LineF.h"
 
 #include <QtCore/QString>
 #include <QMessageBox>
@@ -783,7 +784,32 @@ void bingExtract(Document* theDocument, CommandList* theList, PropertiesDock* th
         DrawingLayer* newLayer = new DrawingLayer( "Bing Road Extract" );
         newLayer->setUploadable(false);
         theDocument->add(newLayer);
-        theDocument->mergeDocument(newDoc, newLayer, theList);
+        QList<Feature*> theFeats = theDocument->mergeDocument(newDoc, newLayer, theList);
+
+        // Merge in initial nodes
+        Node * N0 = NULL;
+        Node * N1 = NULL;
+        qreal Best0 = 180., Best1 = 180.;
+
+        foreach (Feature* F, theFeats) {
+            if (CHECK_NODE(F)) {
+                Node* N = STATIC_CAST_NODE(F);
+                qreal B = distance(Nodes[0]->position(), N->position());
+                if (B < Best0) {
+                    N0 = N;
+                    Best0 = B;
+                }
+                B = distance(Nodes[1]->position(), N->position());
+                if (B < Best1) {
+                    N1 = N;
+                    Best1 = B;
+                }
+            }
+        }
+        if (N0)
+            mergeNodes(theDocument, theList, Nodes[0], N0);
+        if (N1)
+            mergeNodes(theDocument, theList, Nodes[1], N1);
     }
     delete newDoc;
 }
