@@ -28,8 +28,8 @@
         <File Id="qt_he.qm" Name="qt_he.qm"
            Source="$(var.QtPath)\translations\qt_he.qm" DiskId="1">
         </File>
-        <File Id="qt_ja_JP.qm" Name="qt_ja_JP.qm"
-           Source="$(var.QtPath)\translations\qt_ja_JP.qm" DiskId="1">
+        <File Id="qt_ja.qm" Name="qt_ja.qm"
+           Source="$(var.QtPath)\translations\qt_ja.qm" DiskId="1">
         </File>
         <File Id="qt_pl.qm" Name="qt_pl.qm"
            Source="$(var.QtPath)\translations\qt_pl.qm" DiskId="1">

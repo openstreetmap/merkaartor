@@ -7,7 +7,7 @@
   <?define SourcePath = ".."?>
 
   <!-- Specify here the paths to the elements of the package -->
-  <?define QtPath = "d:\Qt\4.6.3" ?>
+  <?define QtPath = "d:\Qt\4.7.1" ?>
   <?define MingwPath = "c:\mingw" ?>
   <?define TranslationsPath = "$(var.SourcePath)" ?>
   <?define BinPath = "$(var.SourcePath)\binaries\bin" ?>
