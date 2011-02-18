@@ -91,18 +91,32 @@ void RotateInteraction::snapMousePressEvent(QMouseEvent * anEvent, Feature* aLas
         return;
 
     StartDragPosition = XY_TO_COORD(anEvent->pos());
+    RotationNode = NULL;
+    NodeRotation  = false;
     CoordBox selBB = sel[0]->boundingBox();
     for (int j=0; j<sel.size(); j++) {
         selBB.merge(sel[j]->boundingBox());
-        if (Way* R = dynamic_cast<Way*>(sel[j])) {
+        if (CHECK_WAY(sel[j])) {
+            Way* R = STATIC_CAST_WAY(sel[j]);
             for (int i=0; i<R->size(); ++i)
                 if (std::find(Rotating.begin(),Rotating.end(),R->get(i)) == Rotating.end())
                     Rotating.push_back(R->getNode(i));
             addToNoSnap(R);
+        } else if (CHECK_NODE(sel[j])) {
+            if (!RotationNode && !NodeRotation) {
+                RotationNode = STATIC_CAST_NODE(sel[j]);
+                NodeRotation = true;
+            } else {
+                NodeRotation = false;
+            }
         }
     }
     if (Rotating.size() > 1) {
-        RotationCenter = COORD_TO_XY(selBB.center());
+        if (NodeRotation) {
+            RotationCenter = COORD_TO_XY(RotationNode->position());
+        } else {
+            RotationCenter = COORD_TO_XY(selBB.center());
+        }
         for (int i=0; i<Rotating.size(); ++i)
         {
             OriginalPosition.push_back(Rotating[i]->position());
@@ -122,6 +136,8 @@ void RotateInteraction::snapMouseReleaseEvent(QMouseEvent * anEvent, Feature* /*
         theList = new CommandList(MainWindow::tr("Rotate Feature").arg(Rotating[0]->id().numId), Rotating[0]);
         for (int i=0; i<Rotating.size(); ++i)
         {
+            if (NodeRotation && Rotating[i] == RotationNode)
+                continue;
             Rotating[i]->setPosition(OriginalPosition[i]);
             if (Rotating[i]->layer()->isTrack())
                 theList->add(new MoveNodeCommand(Rotating[i],rotatePosition(OriginalPosition[i], Angle), Rotating[i]->layer()));
@@ -144,8 +160,11 @@ void RotateInteraction::snapMouseMoveEvent(QMouseEvent* anEvent, Feature* /*Clos
     if (Rotating.size() && !panning())
     {
         Angle = calculateNewAngle(anEvent);
-        for (int i=0; i<Rotating.size(); ++i)
+        for (int i=0; i<Rotating.size(); ++i) {
+            if (NodeRotation && Rotating[i] == RotationNode)
+                continue;
             Rotating[i]->setPosition(rotatePosition(OriginalPosition[i], Angle));
+        }
         view()->invalidate(true, false);
     }
 }
