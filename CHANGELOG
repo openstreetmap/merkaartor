@@ -1,4 +1,5 @@
 v0.18
+    * ADD : Scale tool: If one and only one node is selected besides ways, scale around this node rather than around the geometrical center
     * ADD : Rotate tool: If one and only one node is selected besides ways, rotate around this node rather than around the geometrical center
     * ADD : Implement Bing Road Detect api (closes #3252)
     * FIX : Crash when creating a tag template based upon an empty one (fixes #3250)

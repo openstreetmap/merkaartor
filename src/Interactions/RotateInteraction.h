@@ -29,8 +29,8 @@ class RotateInteraction : public FeatureSnapInteraction
         QList<Node*> Rotating;
         QList<Coord> OriginalPosition;
         Coord StartDragPosition;
-        bool NodeRotation;
-        Node* RotationNode;
+        bool NodeOrigin;
+        Node* OriginNode;
         QPointF RotationCenter;
         double Angle;
 

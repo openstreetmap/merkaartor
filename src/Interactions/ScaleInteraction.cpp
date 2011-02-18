@@ -91,18 +91,32 @@ void ScaleInteraction::snapMousePressEvent(QMouseEvent * anEvent, Feature* aLast
         return;
 
     StartDragPosition = XY_TO_COORD(anEvent->pos());
+    OriginNode = NULL;
+    NodeOrigin  = false;
     CoordBox selBB = sel[0]->boundingBox();
     for (int j=0; j<sel.size(); j++) {
         selBB.merge(sel[j]->boundingBox());
-        if (Way* R = dynamic_cast<Way*>(sel[j])) {
+        if (CHECK_WAY(sel[j])) {
+            Way* R = STATIC_CAST_WAY(sel[j]);
             for (int i=0; i<R->size(); ++i)
                 if (std::find(Scaling.begin(),Scaling.end(),R->get(i)) == Scaling.end())
                     Scaling.push_back(R->getNode(i));
             addToNoSnap(R);
+        } else if (CHECK_NODE(sel[j])) {
+            if (!OriginNode && !NodeOrigin) {
+                OriginNode = STATIC_CAST_NODE(sel[j]);
+                NodeOrigin = true;
+            } else {
+                NodeOrigin = false;
+            }
         }
     }
     if (Scaling.size() > 1) {
-        ScaleCenter = COORD_TO_XY(selBB.center());
+        if (NodeOrigin) {
+            ScaleCenter = COORD_TO_XY(OriginNode->position());
+        } else {
+            ScaleCenter = COORD_TO_XY(selBB.center());
+        }
         for (int i=0; i<Scaling.size(); ++i)
         {
             OriginalPosition.push_back(Scaling[i]->position());
@@ -122,6 +136,8 @@ void ScaleInteraction::snapMouseReleaseEvent(QMouseEvent * anEvent, Feature* /*C
         theList = new CommandList(MainWindow::tr("Scale Feature").arg(Scaling[0]->id().numId), Scaling[0]);
         for (int i=0; i<Scaling.size(); ++i)
         {
+            if (NodeOrigin && Scaling[i] == OriginNode)
+                continue;
             Scaling[i]->setPosition(OriginalPosition[i]);
             if (Scaling[i]->layer()->isTrack())
                 theList->add(new MoveNodeCommand(Scaling[i],scalePosition(OriginalPosition[i], Radius), Scaling[i]->layer()));
@@ -144,8 +160,11 @@ void ScaleInteraction::snapMouseMoveEvent(QMouseEvent* anEvent, Feature* /*Close
     if (Scaling.size() && !panning())
     {
         Radius = distance(ScaleCenter,anEvent->pos()) / distance(ScaleCenter, COORD_TO_XY(StartDragPosition));
-        for (int i=0; i<Scaling.size(); ++i)
+        for (int i=0; i<Scaling.size(); ++i) {
+            if (NodeOrigin && Scaling[i] == OriginNode)
+                continue;
             Scaling[i]->setPosition(scalePosition(OriginalPosition[i], Radius));
+        }
         view()->invalidate(true, false);
     }
 }

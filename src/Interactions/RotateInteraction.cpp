@@ -91,8 +91,8 @@ void RotateInteraction::snapMousePressEvent(QMouseEvent * anEvent, Feature* aLas
         return;
 
     StartDragPosition = XY_TO_COORD(anEvent->pos());
-    RotationNode = NULL;
-    NodeRotation  = false;
+    OriginNode = NULL;
+    NodeOrigin  = false;
     CoordBox selBB = sel[0]->boundingBox();
     for (int j=0; j<sel.size(); j++) {
         selBB.merge(sel[j]->boundingBox());
@@ -103,17 +103,17 @@ void RotateInteraction::snapMousePressEvent(QMouseEvent * anEvent, Feature* aLas
                     Rotating.push_back(R->getNode(i));
             addToNoSnap(R);
         } else if (CHECK_NODE(sel[j])) {
-            if (!RotationNode && !NodeRotation) {
-                RotationNode = STATIC_CAST_NODE(sel[j]);
-                NodeRotation = true;
+            if (!OriginNode && !NodeOrigin) {
+                OriginNode = STATIC_CAST_NODE(sel[j]);
+                NodeOrigin = true;
             } else {
-                NodeRotation = false;
+                NodeOrigin = false;
             }
         }
     }
     if (Rotating.size() > 1) {
-        if (NodeRotation) {
-            RotationCenter = COORD_TO_XY(RotationNode->position());
+        if (NodeOrigin) {
+            RotationCenter = COORD_TO_XY(OriginNode->position());
         } else {
             RotationCenter = COORD_TO_XY(selBB.center());
         }
@@ -136,7 +136,7 @@ void RotateInteraction::snapMouseReleaseEvent(QMouseEvent * anEvent, Feature* /*
         theList = new CommandList(MainWindow::tr("Rotate Feature").arg(Rotating[0]->id().numId), Rotating[0]);
         for (int i=0; i<Rotating.size(); ++i)
         {
-            if (NodeRotation && Rotating[i] == RotationNode)
+            if (NodeOrigin && Rotating[i] == OriginNode)
                 continue;
             Rotating[i]->setPosition(OriginalPosition[i]);
             if (Rotating[i]->layer()->isTrack())
@@ -161,7 +161,7 @@ void RotateInteraction::snapMouseMoveEvent(QMouseEvent* anEvent, Feature* /*Clos
     {
         Angle = calculateNewAngle(anEvent);
         for (int i=0; i<Rotating.size(); ++i) {
-            if (NodeRotation && Rotating[i] == RotationNode)
+            if (NodeOrigin && Rotating[i] == OriginNode)
                 continue;
             Rotating[i]->setPosition(rotatePosition(OriginalPosition[i], Angle));
         }

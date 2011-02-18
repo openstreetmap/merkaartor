@@ -28,6 +28,8 @@ class ScaleInteraction : public FeatureSnapInteraction
         QList<Node*> Scaling;
         QList<Coord> OriginalPosition;
         Coord StartDragPosition;
+        bool NodeOrigin;
+        Node* OriginNode;
         QPointF ScaleCenter;
         double Radius;
 
