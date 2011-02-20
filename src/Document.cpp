@@ -269,112 +269,7 @@ Document* Document::fromXML(QString title, QXmlStreamReader& stream, double vers
         if (!h->size() && NewDoc->getDirtySize()) {
             progress->setLabelText("History was corrupted. Rebuilding it...");
             qDebug() << "History was corrupted. Rebuilding it...";
-
-            // Identify changes
-            QList<Node*> newNode;
-            QList<Node*> updNode;
-            QList<Node*> delNode;
-            QList<Way*> newWay;
-            QList<Way*> updWay;
-            QList<Way*> delWay;
-            QList<Relation*> newRelation;
-            QList<Relation*> updRelation;
-            QList<Relation*> delRelation;
-            for (FeatureIterator it(NewDoc); !it.isEnd(); ++it) {
-                if (!it.get()->isDirty())
-                    continue;
-
-                if (CHECK_NODE(it.get())) {
-                    Node* N = STATIC_CAST_NODE(it.get());
-                    if (N->hasOSMId()) {
-                        if (!N->isDeleted())
-                            updNode << N;
-                        else
-                            delNode << N;
-                    } else {
-                        if (!N->isDeleted())
-                            newNode << N;
-                    }
-                } else if (CHECK_WAY(it.get())) {
-                    Way* W = STATIC_CAST_WAY(it.get());
-                    if (W->hasOSMId()) {
-                        if (!W->isDeleted())
-                            updWay << W;
-                        else
-                            delWay << W;
-                    } else {
-                        if (!W->isDeleted())
-                            newWay << W;
-                    }
-                } else if (CHECK_RELATION(it.get())) {
-                    Relation* R = STATIC_CAST_RELATION(it.get());
-                    if (R->hasOSMId()) {
-                        if (!R->isDeleted())
-                            updRelation << R;
-                        else
-                            delRelation << R;
-                    } else {
-                        if (!R->isDeleted())
-                            newRelation << R;
-                    }
-                }
-            }
-
-            // Recreate history
-            foreach (Node* N, newNode) {
-                CommandList* CL = new CommandList(tr("History rebuild: Create node %1").arg(N->description()), N);
-                Command* C = new AddFeatureCommand(N->layer(), N, true);
-                CL->add(C);
-                h->add(CL);
-            }
-            foreach (Node* N, updNode) {
-                CommandList* CL = new CommandList(tr("History rebuild: Update node %1").arg(N->description()), N);;
-                Command* C = new AddFeatureCommand(N->layer(), N, true);
-                CL->add(C);
-                h->add(CL);
-            }
-            foreach (Node* N, delNode) {
-                CommandList* CL = new CommandList(tr("History rebuild: Delete node %1").arg(N->description()), N);
-                Command* C = new RemoveFeatureCommand(NewDoc, N);
-                CL->add(C);
-                h->add(CL);
-            }
-            foreach (Way* W, newWay) {
-                CommandList* CL = new CommandList(tr("History rebuild: Create way %1").arg(W->description()), W);
-                Command* C = new AddFeatureCommand(W->layer(), W, true);
-                CL->add(C);
-                h->add(CL);
-            }
-            foreach (Way* W, updWay) {
-                CommandList* CL = new CommandList(tr("History rebuild: Update way %1").arg(W->description()), W);
-                Command* C = new AddFeatureCommand(W->layer(), W, true);
-                CL->add(C);
-                h->add(CL);
-            }
-            foreach (Way* W, delWay) {
-                CommandList* CL = new CommandList(tr("History rebuild: Delete way %1").arg(W->description()), W);
-                Command* C = new RemoveFeatureCommand(NewDoc, W);
-                CL->add(C);
-                h->add(CL);
-            }
-            foreach (Relation* R, newRelation) {
-                CommandList* CL = new CommandList(tr("History rebuild: Create relation %1").arg(R->description()), R);
-                Command* C = new AddFeatureCommand(R->layer(), R, true);
-                CL->add(C);
-                h->add(CL);
-            }
-            foreach (Relation* R, updRelation) {
-                CommandList* CL = new CommandList(tr("History rebuild: Update relation %1").arg(R->description()), R);
-                Command* C = new AddFeatureCommand(R->layer(), R, true);
-                CL->add(C);
-                h->add(CL);
-            }
-            foreach (Relation* R, delRelation) {
-                CommandList* CL = new CommandList(tr("History rebuild: Delete relation %1").arg(R->description()), R);
-                Command* C = new RemoveFeatureCommand(NewDoc, R);
-                CL->add(C);
-                h->add(CL);
-            }
+            NewDoc->rebuildHistory();
         }
     }
 
@@ -1249,6 +1144,119 @@ bool VisibleFeatureIterator::check()
         return false;
 
     return true;
+}
+
+void Document::rebuildHistory()
+{
+    delete p->History;
+    p->History = new CommandHistory();
+    CommandHistory* h = p->History;
+
+    // Identify changes
+    QList<Node*> newNode;
+    QList<Node*> updNode;
+    QList<Node*> delNode;
+    QList<Way*> newWay;
+    QList<Way*> updWay;
+    QList<Way*> delWay;
+    QList<Relation*> newRelation;
+    QList<Relation*> updRelation;
+    QList<Relation*> delRelation;
+    for (FeatureIterator it(this); !it.isEnd(); ++it) {
+        if (!it.get()->isDirty())
+            continue;
+
+        if (CHECK_NODE(it.get())) {
+            Node* N = STATIC_CAST_NODE(it.get());
+            if (N->hasOSMId()) {
+                if (!N->isDeleted())
+                    updNode << N;
+                else
+                    delNode << N;
+            } else {
+                if (!N->isDeleted())
+                    newNode << N;
+            }
+        } else if (CHECK_WAY(it.get())) {
+            Way* W = STATIC_CAST_WAY(it.get());
+            if (W->hasOSMId()) {
+                if (!W->isDeleted())
+                    updWay << W;
+                else
+                    delWay << W;
+            } else {
+                if (!W->isDeleted())
+                    newWay << W;
+            }
+        } else if (CHECK_RELATION(it.get())) {
+            Relation* R = STATIC_CAST_RELATION(it.get());
+            if (R->hasOSMId()) {
+                if (!R->isDeleted())
+                    updRelation << R;
+                else
+                    delRelation << R;
+            } else {
+                if (!R->isDeleted())
+                    newRelation << R;
+            }
+        }
+    }
+
+    // Recreate history
+    foreach (Node* N, newNode) {
+        CommandList* CL = new CommandList(tr("History rebuild: Create node %1").arg(N->description()), N);
+        Command* C = new AddFeatureCommand(N->layer(), N, true);
+        CL->add(C);
+        h->add(CL);
+    }
+    foreach (Node* N, updNode) {
+        CommandList* CL = new CommandList(tr("History rebuild: Update node %1").arg(N->description()), N);;
+        Command* C = new AddFeatureCommand(N->layer(), N, true);
+        CL->add(C);
+        h->add(CL);
+    }
+    foreach (Node* N, delNode) {
+        CommandList* CL = new CommandList(tr("History rebuild: Delete node %1").arg(N->description()), N);
+        Command* C = new RemoveFeatureCommand(this, N);
+        CL->add(C);
+        h->add(CL);
+    }
+    foreach (Way* W, newWay) {
+        CommandList* CL = new CommandList(tr("History rebuild: Create way %1").arg(W->description()), W);
+        Command* C = new AddFeatureCommand(W->layer(), W, true);
+        CL->add(C);
+        h->add(CL);
+    }
+    foreach (Way* W, updWay) {
+        CommandList* CL = new CommandList(tr("History rebuild: Update way %1").arg(W->description()), W);
+        Command* C = new AddFeatureCommand(W->layer(), W, true);
+        CL->add(C);
+        h->add(CL);
+    }
+    foreach (Way* W, delWay) {
+        CommandList* CL = new CommandList(tr("History rebuild: Delete way %1").arg(W->description()), W);
+        Command* C = new RemoveFeatureCommand(this, W);
+        CL->add(C);
+        h->add(CL);
+    }
+    foreach (Relation* R, newRelation) {
+        CommandList* CL = new CommandList(tr("History rebuild: Create relation %1").arg(R->description()), R);
+        Command* C = new AddFeatureCommand(R->layer(), R, true);
+        CL->add(C);
+        h->add(CL);
+    }
+    foreach (Relation* R, updRelation) {
+        CommandList* CL = new CommandList(tr("History rebuild: Update relation %1").arg(R->description()), R);
+        Command* C = new AddFeatureCommand(R->layer(), R, true);
+        CL->add(C);
+        h->add(CL);
+    }
+    foreach (Relation* R, delRelation) {
+        CommandList* CL = new CommandList(tr("History rebuild: Delete relation %1").arg(R->description()), R);
+        Command* C = new RemoveFeatureCommand(this, R);
+        CL->add(C);
+        h->add(CL);
+    }
 }
 
 /* RELATED */

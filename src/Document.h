@@ -71,6 +71,7 @@ public:
     void addHistory(Command* aCommand);
     void redoHistory();
     void undoHistory();
+    void rebuildHistory();
     void clear();
 
     void setDirtyLayer(DirtyLayer* aLayer);

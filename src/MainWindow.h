@@ -164,6 +164,7 @@ public slots:
     virtual void on_toolsFiltersAction_triggered();
     virtual void toolsPreferencesAction_triggered(bool focusData=false);
     virtual void on_toolsResetDiscardableAction_triggered();
+    virtual void on_toolsRebuildHistoryAction_triggered();
 
     virtual void on_windowPropertiesAction_triggered();
     virtual void on_windowLayersAction_triggered();
