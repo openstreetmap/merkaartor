@@ -136,6 +136,7 @@ void LayerDock::addLayer(Layer* aLayer)
         //w->setChecked(aLayer->isSelected());
         w->setVisible(aLayer->isEnabled());
         w->setEnabled(aLayer->isEnabled());
+        w->setChecked(aLayer->isSelected());
         w->getAssociatedMenu()->menuAction()->setVisible(aLayer->isEnabled());
 
         update();
