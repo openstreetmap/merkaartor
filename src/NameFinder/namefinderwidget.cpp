@@ -26,7 +26,7 @@
 #include <QHeaderView>
 #include <QMessageBox>
 
-#include "Preferences/MerkaartorPreferences.h"
+#include "MerkaartorPreferences.h"
 
 namespace NameFinder
 {

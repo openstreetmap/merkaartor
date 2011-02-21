@@ -3,10 +3,10 @@
 #include "DocumentCommands.h"
 #include "WayCommands.h"
 #include "NodeCommands.h"
-#include "Maps/Painting.h"
+#include "Painting.h"
 #include "Way.h"
 #include "Node.h"
-#include "Utils/LineF.h"
+#include "LineF.h"
 #include "MainWindow.h"
 #include "PropertiesDock.h"
 #include "Global.h"
@@ -39,7 +39,7 @@ CreateSingleWayInteraction::~CreateSingleWayInteraction()
 {
 }
 
-void CreateSingleWayInteraction::setSnapAngle(double angle)
+void CreateSingleWayInteraction::setSnapAngle(qreal angle)
 {
     SnapAngle = angle;
 }
@@ -87,7 +87,7 @@ void CreateSingleWayInteraction::paintEvent(QPaintEvent* anEvent, QPainter& theP
         ::draw(thePainter,TP,Feature::UnknownDirection, PreviousPoint,LastCursor ,4 ,view()->projection());
 
         Coord NewPoint = XY_TO_COORD(LastCursor);
-        const double distance = FirstPoint.distanceFrom(NewPoint);
+        const qreal distance = FirstPoint.distanceFrom(NewPoint);
 
         QString distanceTag;
         if (distance < 1.0)
@@ -114,7 +114,7 @@ void CreateSingleWayInteraction::snapMouseMoveEvent(QMouseEvent* ev, Feature* la
     {
         QLineF l1(COORD_TO_XY(theRoad->getNode(theRoad->size()-1)), COORD_TO_XY(theRoad->getNode(theRoad->size()-2)));
         QLineF l2(COORD_TO_XY(theRoad->getNode(theRoad->size()-1)), ev->pos());
-        double a = l1.angleTo(l2);
+        qreal a = l1.angleTo(l2);
         a = qRound(a/SnapAngle) * SnapAngle;
         l2.setAngle(l1.angle() + a);
         LastCursor = l2.p2().toPoint();
@@ -129,11 +129,11 @@ void CreateSingleWayInteraction::snapMouseMoveEvent(QMouseEvent* ev, Feature* la
             PreviousPoint = COORD_TO_XY(FirstPoint);
 
         CoordBox HotZone(XY_TO_COORD(ev->pos()-QPoint(CLEAR_DISTANCE, CLEAR_DISTANCE)),XY_TO_COORD(ev->pos()+QPoint(CLEAR_DISTANCE, CLEAR_DISTANCE)));
-        double BestDistanceNW = 9999, AngleNW = 0;
-        double BestDistanceNE = 9999, AngleNE = 0;
-        double* BestDistance;
-        double* BestAngle;
-        double curAngle;
+        qreal BestDistanceNW = 9999, AngleNW = 0;
+        qreal BestDistanceNE = 9999, AngleNE = 0;
+        qreal* BestDistance;
+        qreal* BestAngle;
+        qreal curAngle;
 
         Way* R;
         for (int j=0; j<document()->layerSize(); ++j) {
@@ -150,10 +150,10 @@ void CreateSingleWayInteraction::snapMouseMoveEvent(QMouseEvent* ev, Feature* la
                 for (int i=0; i<R->size()-1; ++i)
                 {
                     LineF F(COORD_TO_XY(R->getNode(i)),COORD_TO_XY(R->getNode(i+1)));
-                    double D = F.capDistance(ev->pos());
+                    qreal D = F.capDistance(ev->pos());
                     if (D < CLEAR_DISTANCE) {
                         QLineF l(COORD_TO_XY(R->getNode(i)), COORD_TO_XY(R->getNode(i+1)));
-                        double a = l.angle();
+                        qreal a = l.angle();
                         if ((a >= 0 && a < 90) || (a < -270 && a >= -360)) {
                             BestDistance = &BestDistanceNE;
                             BestAngle = &AngleNE;
@@ -184,7 +184,7 @@ void CreateSingleWayInteraction::snapMouseMoveEvent(QMouseEvent* ev, Feature* la
         }
 
         QLineF l(PreviousPoint, ev->pos());
-        double a = l.angle();
+        qreal a = l.angle();
         if ((a >= 0 && a < 90) || (a < -270 && a >= -360)) {
             if (BestDistanceNE < 9999)
                 a = AngleNE;
@@ -330,7 +330,7 @@ void CreateSingleWayInteraction::snapMouseDoubleClickEvent(QMouseEvent* anEvent,
         CreateNodeInteraction::createNode(XY_TO_COORD(anEvent->pos()), lastSnap());
 }
 
-#ifndef Q_OS_SYMBIAN
+#ifndef _MOBILE
 QCursor CreateSingleWayInteraction::cursor() const
 {
     return QCursor(Qt::CrossCursor);

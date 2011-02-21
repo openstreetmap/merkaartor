@@ -13,7 +13,7 @@
 #include "PropertiesDock.h"
 #include "MainWindow.h"
 #include "MapView.h"
-#include "Preferences/MerkaartorPreferences.h"
+#include "MerkaartorPreferences.h"
 #include "Document.h"
 #include "Layer.h"
 #include "Feature.h"

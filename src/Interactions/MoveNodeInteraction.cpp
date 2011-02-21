@@ -5,12 +5,12 @@
 #include "DocumentCommands.h"
 #include "WayCommands.h"
 #include "NodeCommands.h"
-#include "Maps/Coord.h"
+#include "Coord.h"
 #include "Document.h"
-#include "Maps/Projection.h"
+#include "Projection.h"
 #include "Node.h"
-#include "Utils/LineF.h"
-#include "Utils/MDiscardableDialog.h"
+#include "LineF.h"
+#include "MDiscardableDialog.h"
 #include "PropertiesDock.h"
 
 #include <QtGui/QCursor>
@@ -59,7 +59,7 @@ QString MoveNodeInteraction::toHtml()
     return S;
 }
 
-#ifndef Q_OS_SYMBIAN
+#ifndef _MOBILE
 QCursor MoveNodeInteraction::cursor() const
 {
 #ifdef Q_OS_MAC
@@ -284,13 +284,13 @@ Coord MoveNodeInteraction::calculateNewPosition(QMouseEvent *event, Feature *aLa
     {
         QPointF Target = TargetC;
         LineF L1(R->getNode(0)->position(),R->getNode(1)->position());
-        double Dist = L1.capDistance(TargetC);
+        qreal Dist = L1.capDistance(TargetC);
         QPointF BestTarget = L1.project(Target);
         int BestIdx = 1;
         for (int i=2; i<R->size(); ++i)
         {
             LineF L2(R->getNode(i-1)->position(),R->getNode(i)->position());
-            double Dist2 = L2.capDistance(TargetC);
+            qreal Dist2 = L2.capDistance(TargetC);
             if (Dist2 < Dist)
             {
                 Dist = Dist2;

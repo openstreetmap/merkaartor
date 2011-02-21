@@ -9,7 +9,7 @@
 
 #include <math.h>
 
-#include "Preferences/MerkaartorPreferences.h"
+#include "MerkaartorPreferences.h"
 
 #define TILESIZE 256
 #define MINZOOMLEVEL 0
@@ -48,7 +48,7 @@ class SlippyMapWidgetPrivate
 
         SlippyMapWidget* theWidget;
         int Zoom, VpZoom;
-        double Lat,Lon, VpLat, VpLon;
+        qreal Lat,Lon, VpLat, VpLon;
         QPoint PreviousDrag;
         bool InDrag;
         QSettings* Sets;
@@ -92,24 +92,24 @@ SlippyMapWidget::~SlippyMapWidget(void)
 }
 
 /* http://wiki.openstreetmap.org/index.php/Slippy_map_tilenames#C.2FC.2B.2B */
-static double tile2lon(double x, int z)
+static qreal tile2lon(qreal x, int z)
 {
     return x / pow(2.0, z) * 360.0 - 180;
 }
 
 /* http://wiki.openstreetmap.org/index.php/Slippy_map_tilenames#C.2FC.2B.2B */
-static double tile2lat(double y, int z)
+static qreal tile2lat(qreal y, int z)
 {
-    double n = M_PI - 2.0 * M_PI * y / pow(2.0, z);
+    qreal n = M_PI - 2.0 * M_PI * y / pow(2.0, z);
     return 180.0 / M_PI * atan(0.5 * (exp(n) - exp(-n)));
 }
 
-static int long2tile(double lon, int z)
+static int long2tile(qreal lon, int z)
 {
     return (int)(floor((lon + 180.0) / 360.0 * pow(2.0, z)));
 }
 
-static int lat2tile(double lat, int z)
+static int lat2tile(qreal lat, int z)
 {
     return (int)(floor((1.0 - log( tan(lat * M_PI/180.0) + 1.0 / cos(lat * M_PI/180.0)) / M_PI) / 2.0 * pow(2.0, z)));
 }
@@ -117,23 +117,23 @@ static int lat2tile(double lat, int z)
 
 QRectF SlippyMapWidget::viewArea() const
 {
-    double X1 = p->Lat - (width()/2.0)/TILESIZE;
-    double Y1 = p->Lon - (height()/2.0)/TILESIZE;
-    double X2 = p->Lat + (width()/2.0)/TILESIZE;
-    double Y2 = p->Lon + (height()/2.0)/TILESIZE;
+    qreal X1 = p->Lat - (width()/2.0)/TILESIZE;
+    qreal Y1 = p->Lon - (height()/2.0)/TILESIZE;
+    qreal X2 = p->Lat + (width()/2.0)/TILESIZE;
+    qreal Y2 = p->Lon + (height()/2.0)/TILESIZE;
 
-    double Lon1 = tile2lon(X1, p->Zoom);
-    double Lat1 = tile2lat(Y1, p->Zoom);
+    qreal Lon1 = tile2lon(X1, p->Zoom);
+    qreal Lat1 = tile2lat(Y1, p->Zoom);
 
-    double Lon2 = tile2lon(X2, p->Zoom);
-    double Lat2 = tile2lat(Y2, p->Zoom);
+    qreal Lon2 = tile2lon(X2, p->Zoom);
+    qreal Lat2 = tile2lat(Y2, p->Zoom);
 
     return QRectF(Lon1, Lat2, Lon2-Lon1, Lat1-Lat2);
 }
 
 void SlippyMapWidget::setViewportArea(QRectF theRect)
 {
-    double zoom = 360.0 / theRect.width();
+    qreal zoom = 360.0 / theRect.width();
     zoom = log10(zoom)/log10(2.0);
     if (zoom < MINZOOMLEVEL)
         zoom = MINZOOMLEVEL;
@@ -194,8 +194,8 @@ void SlippyMapWidget::ZoomTo(const QPoint & NewCenter, int NewZoom)
     if ((int)p->Zoom == NewZoom)
         return;
 
-    double dx = (NewCenter.x()-width()/2)/(TILESIZE*1.0);
-    double dy = (NewCenter.y()-height()/2)/(TILESIZE*1.0);
+    qreal dx = (NewCenter.x()-width()/2)/(TILESIZE*1.0);
+    qreal dy = (NewCenter.y()-height()/2)/(TILESIZE*1.0);
 
     p->Lat = (p->Lat + dx) * (1 << NewZoom) / (1 << p->Zoom) - dx;
     p->Lon = (p->Lon + dy) * (1 << NewZoom) / (1 << p->Zoom) - dy;

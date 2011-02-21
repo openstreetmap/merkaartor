@@ -10,7 +10,7 @@
 #include <QPointF>
 
 #include <Painter.h>
-#include "Utils/TagSelector.h"
+#include "TagSelector.h"
 
 #include "math.h"
 
@@ -34,21 +34,21 @@ public:
 
     void setSelector(const QString& aName);
     void setSelector(TagSelector* aSelector);
-    TagSelectorMatchResult matchesTag(const IFeature* F, double PixelPerM) const;
+    TagSelectorMatchResult matchesTag(const IFeature* F, qreal PixelPerM) const;
 
-    void drawBackground(QPainterPath* R, QPainter* thePainter, double PixelPerM) const;
-    void drawForeground(QPainterPath* R, QPainter* thePainter, double PixelPerM) const;
-    void drawTouchup(QPainterPath* R, QPainter* thePainter, double PixelPerM) const;
-    void drawTouchup(QPointF* R, QPainter* thePainter, double PixelPerM) const;
-    void drawLabel(QPainterPath* R, QPainter* thePainter, double PixelPerM, QString str, QString strBg = QString()) const;
-    void drawPointLabel(QPointF C, QString str, QString strBG, QPainter* thePainter, double PixelPerM) const;
-    void drawLabel(QPointF* Pt, QPainter* thePainter, double PixelPerM, QString str, QString strBg = QString()) const;
+    void drawBackground(QPainterPath* R, QPainter* thePainter, qreal PixelPerM) const;
+    void drawForeground(QPainterPath* R, QPainter* thePainter, qreal PixelPerM) const;
+    void drawTouchup(QPainterPath* R, QPainter* thePainter, qreal PixelPerM) const;
+    void drawTouchup(QPointF* R, QPainter* thePainter, qreal PixelPerM) const;
+    void drawLabel(QPainterPath* R, QPainter* thePainter, qreal PixelPerM, QString str, QString strBg = QString()) const;
+    void drawPointLabel(QPointF C, QString str, QString strBG, QPainter* thePainter, qreal PixelPerM) const;
+    void drawLabel(QPointF* Pt, QPainter* thePainter, qreal PixelPerM, QString str, QString strBg = QString()) const;
 
 public:
     TagSelector* theTagSelector;
 
 private:
-    static inline double angToRad(double a)
+    static inline qreal angToRad(qreal a)
     {
         return a*M_PI/180.;
     }

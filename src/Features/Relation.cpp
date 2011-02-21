@@ -4,7 +4,7 @@
 #include "DocumentCommands.h"
 #include "RelationCommands.h"
 #include "Document.h"
-#include "Utils/LineF.h"
+#include "LineF.h"
 #include "Global.h"
 
 #include <QApplication>
@@ -59,7 +59,7 @@ class RelationPrivate
 
         RenderPriority theRenderPriority;
 
-        double Width;
+        qreal Width;
     };
 
 #define DEFAULTWIDTH 6
@@ -238,23 +238,23 @@ void Relation::drawChildrenSpecial(QPainter& thePainter, QPen& Pen, MapView *the
 }
 
 
-double Relation::pixelDistance(const QPointF& Target, double ClearEndDistance, bool, MapView* theView) const
+qreal Relation::pixelDistance(const QPointF& Target, qreal ClearEndDistance, bool, MapView* theView) const
 {
-    double Best = 1000000;
+    qreal Best = 1000000;
     if (!TEST_RFLAGS(RendererOptions::RelationsVisible) && !M_PREFS->getRelationsSelectableWhenHidden())
         return Best;
 
     //for (int i=0; i<p->Members.size(); ++i)
     //{
     //	if (p->Members[i].second) {
-    //		double Dist = p->Members[i].second->pixelDistance(Target, ClearEndDistance, theProjection);
+    //		qreal Dist = p->Members[i].second->pixelDistance(Target, ClearEndDistance, theProjection);
     //		if (Dist < Best)
     //			Best = Dist;
     //	}
     //}
 
 
-    double D;
+    qreal D;
     //QRectF bb = QRectF(theView->toView(boundingBox().bottomLeft()),theView->toView(boundingBox().topRight()));
     //bb.adjust(-10, -10, 10, 10);
 
@@ -600,7 +600,7 @@ QString Relation::toHtml()
     return Feature::toMainHtml(QApplication::translate("MapFeature", "Relation"),"relation").arg(D);
 }
 
-double Relation::widthOf()
+qreal Relation::widthOf()
 {
     if (MetaUpToDate == false)
         updateMeta();

@@ -29,6 +29,7 @@ class QPainter;
 
 #define XY_TO_COORD(x)  theView->fromView(x)
 #define COORD_TO_XY(x)  theView->toView(x)
+#define PROPERTIES(x) {if (view()->properties()) view()->properties()->x;}
 
 class Interaction : public QObject
 {
@@ -113,7 +114,7 @@ public:
     void setDontSelectRoads(bool b);
     void setDontSelectVirtual(bool b);
 
-#ifndef Q_OS_SYMBIAN
+#ifndef _MOBILE
     virtual QCursor cursor() const;
 #endif
 

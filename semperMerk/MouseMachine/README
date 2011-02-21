@@ -1,0 +1,9 @@
+MouseMachine is Qt class prinicpally allowing kinetic scrolling on any widget.
+
+It is largely inspired by the "flickcharm" class from Nokia. As an exercise, I wanted to reimplement it as a QStateMachine and with a signal/slot interface.
+
+The various interactions like tap, double-tap, tap-and-hold are all signals with a QPoint.
+
+The class requires (I think) Qt 4.6.x
+
+The code is LGPL licensed.

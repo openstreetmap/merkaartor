@@ -1,15 +1,18 @@
+INCLUDEPATH += $$MERKAARTOR_SRC_DIR/Backend
+DEPENDPATH += $$MERKAARTOR_SRC_DIR/Backend
+
 HEADERS += \
-    Backend/MemoryBackend.h
+    MemoryBackend.h
 
 SOURCES += \
-    Backend/MemoryBackend.cpp
+    MemoryBackend.cpp
 
 contains (SPATIALITE, 1) {
     HEADERS += \
-        Backend/SpatialiteBase.h \
-        Backend/SpatialiteBackend.h
+        SpatialiteBase.h \
+        SpatialiteBackend.h
 
     SOURCES += \
-        Backend/SpatialiteBase.cpp \
-        Backend/SpatialiteBackend.cpp
+        SpatialiteBase.cpp \
+        SpatialiteBackend.cpp
 }

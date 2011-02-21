@@ -9,7 +9,7 @@
 #include <QList>
 
 #include "MDockAncestor.h"
-#include "Utils/ShortcutOverrideFilter.h"
+#include "ShortcutOverrideFilter.h"
 
 class MainWindow;
 class Feature;

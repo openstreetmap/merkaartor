@@ -2,7 +2,7 @@
 #define MERKATOR_SCALEINTERACTION_H_
 
 #include "Interaction.h"
-#include "Maps/Coord.h"
+#include "Coord.h"
 
 #include <QList>
 
@@ -19,19 +19,19 @@ class ScaleInteraction : public FeatureSnapInteraction
         virtual void snapMouseReleaseEvent(QMouseEvent * event, Feature* aLast);
         virtual void snapMouseMoveEvent(QMouseEvent* event, Feature* aLast);
         virtual QString toHtml();
-#ifndef Q_OS_SYMBIAN
+#ifndef _MOBILE
         virtual QCursor cursor() const;
 #endif
 
     private:
-        Coord scalePosition(Coord position, double radius);
+        Coord scalePosition(Coord position, qreal radius);
         QList<Node*> Scaling;
         QList<Coord> OriginalPosition;
         Coord StartDragPosition;
         bool NodeOrigin;
         Node* OriginNode;
         QPointF ScaleCenter;
-        double Radius;
+        qreal Radius;
 
         QCursor rotateCursor;
 };

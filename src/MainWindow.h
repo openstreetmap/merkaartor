@@ -1,6 +1,7 @@
 #ifndef MERKATOR_MAINWINDOW_H_
 #define MERKATOR_MAINWINDOW_H_
 
+#include "IMerkMainWindow.h"
 #include "IProgressWindow.h"
 
 #include <QtGui/QMainWindow>
@@ -35,7 +36,7 @@ class PreferencesDialog;
 class GeoImageDock;
 #endif
 
-class MainWindow : public QMainWindow, public IProgressWindow
+class MainWindow : public QMainWindow, public IMerkMainWindow, public IProgressWindow
 {
     Q_OBJECT
 
@@ -237,7 +238,7 @@ public slots:
     void projectionTriggered(QAction* anAction);
 #endif
     void styleTriggered(QAction* anAction);
-    void updateGpsPosition(float latitude, float longitude, QDateTime time, float altitude, float speed, float heading);
+    void updateGpsPosition(qreal latitude, qreal longitude, QDateTime time, qreal altitude, qreal speed, qreal heading);
     void applyStyles(QString NewStyle);
     void applyPainters(GlobalPainter* theGlobalPainter, QList<Painter>* thePainters);
 

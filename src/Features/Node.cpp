@@ -1,7 +1,7 @@
 #include "Node.h"
 
 #include "MapView.h"
-#include "Utils/LineF.h"
+#include "LineF.h"
 #include "Global.h"
 
 #include <QApplication>
@@ -24,10 +24,8 @@ class NodePrivate
 
         bool IsWaypoint;
         bool IsPOI;
-#ifndef _MOBILE
         int ProjectionRevision;
         QPointF Projected;
-#endif
         bool HasPhoto;
         QPixmap* Photo;
         bool photoLocationBR;
@@ -172,7 +170,6 @@ void Node::setProjection(const QPointF& aProjection)
     p->Projected = aProjection;
 }
 
-#ifndef _MOBILE
 int Node::projectionRevision() const
 {
     return p->ProjectionRevision;
@@ -182,24 +179,23 @@ void Node::setProjectionRevision(const int aProjectionRevision)
 {
     p->ProjectionRevision = aProjectionRevision;
 }
-#endif
 
-double Node::speed() const
+qreal Node::speed() const
 {
     return Speed;
 }
 
-void Node::setSpeed(double aSpeed)
+void Node::setSpeed(qreal aSpeed)
 {
     Speed = aSpeed;
 }
 
-double Node::elevation() const
+qreal Node::elevation() const
 {
     return Elevation;
 }
 
-void Node::setElevation(double aElevation)
+void Node::setElevation(qreal aElevation)
 {
     Elevation = aElevation;
 }
@@ -249,7 +245,7 @@ void Node::draw(QPainter& thePainter , MapView* theView)
                  phPt = me + QPoint(10*rt, 10*rt);
              } else {
                  qreal rt = qBound(0.2, theView->pixelPerM(), 1.0);
-                 double phRt = 1. * p->Photo->width() / p->Photo->height();
+                 qreal phRt = 1. * p->Photo->width() / p->Photo->height();
                  phPt = me - QPoint(10*rt, 10*rt) - QPoint(M_PREFS->getMaxGeoPicWidth()*rt, M_PREFS->getMaxGeoPicWidth()*rt/phRt);
              }
              thePainter.drawPixmap(phPt, p->Photo->scaledToWidth(M_PREFS->getMaxGeoPicWidth()*rt));
@@ -258,7 +254,7 @@ void Node::draw(QPainter& thePainter , MapView* theView)
 #endif
     if (isDirty() && isUploadable() && M_PREFS->getDirtyVisible()) {
         QPoint P = theView->toView(this);
-        double theWidth = theView->nodeWidth();
+        qreal theWidth = theView->nodeWidth();
         if (theWidth >= 1) {
             QRect R(P-QPoint(theWidth/2,theWidth/2),QSize(theWidth,theWidth));
             thePainter.fillRect(R,M_PREFS->getDirtyColor());
@@ -279,7 +275,7 @@ void Node::drawHover(QPainter& thePainter, MapView* theView)
             QPoint me(theView->toView(this));
 
             qreal rt = qBound(0.2, theView->pixelPerM(), 1.0);
-            double phRt = 1. * p->Photo->width() / p->Photo->height();
+            qreal phRt = 1. * p->Photo->width() / p->Photo->height();
             QPoint phPt;
             if (p->photoLocationBR) {
                 phPt = me + QPoint(10*rt, 10*rt);
@@ -329,9 +325,9 @@ void Node::drawChildrenSpecial(QPainter& thePainter, QPen& Pen, MapView* theView
 }
 
 
-double Node::pixelDistance(const QPointF& Target, double, bool, MapView* theView) const
+qreal Node::pixelDistance(const QPointF& Target, qreal, bool, MapView* theView) const
 {
-    double Best = 1000000;
+    qreal Best = 1000000;
 
     QPoint me = theView->toView(const_cast<Node*>(this));
 
@@ -341,7 +337,7 @@ double Node::pixelDistance(const QPointF& Target, double, bool, MapView* theView
     if (p->HasPhoto) {
         if (TEST_RFLAGS(RendererOptions::PhotosVisible) && theView->pixelPerM() > M_PREFS->getRegionalZoom()) {
             qreal rt = qBound(0.2, theView->pixelPerM(), 1.0);
-            double phRt = 1. * p->Photo->width() / p->Photo->height();
+            qreal phRt = 1. * p->Photo->width() / p->Photo->height();
             QPoint phPt;
             if (p->photoLocationBR) {
                 phPt = me + QPoint(10*rt, 10*rt);
@@ -482,8 +478,8 @@ bool Node::toGPX(QXmlStreamWriter& stream, QProgressDialog * progress, QString e
 
 Node * Node::fromXML(Document* d, Layer* L, QXmlStreamReader& stream)
 {
-    double Lat = stream.attributes().value("lat").toString().toDouble();
-    double Lon = stream.attributes().value("lon").toString().toDouble();
+    qreal Lat = stream.attributes().value("lat").toString().toDouble();
+    qreal Lon = stream.attributes().value("lon").toString().toDouble();
 
     QString sid = (stream.attributes().hasAttribute("id") ? stream.attributes().value("id").toString() : stream.attributes().value("xml:id").toString());
     IFeature::FId id(IFeature::Point, sid.toLongLong());
@@ -517,8 +513,8 @@ Node * Node::fromXML(Document* d, Layer* L, QXmlStreamReader& stream)
 
 Node * Node::fromGPX(Document* d, Layer* L, QXmlStreamReader& stream)
 {
-    double Lat = stream.attributes().value("lat").toString().toDouble();
-    double Lon = stream.attributes().value("lon").toString().toDouble();
+    qreal Lat = stream.attributes().value("lat").toString().toDouble();
+    qreal Lon = stream.attributes().value("lon").toString().toDouble();
 
     QString sid = (stream.attributes().hasAttribute("id") ? stream.attributes().value("id").toString() : stream.attributes().value("xml:id").toString());
     IFeature::FId id(IFeature::Point, sid.toLongLong());

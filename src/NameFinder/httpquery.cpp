@@ -20,7 +20,7 @@
 #include "httpquery.h"
 #include <QtDebug>
 
-#include "Preferences/MerkaartorPreferences.h"
+#include "MerkaartorPreferences.h"
 
 namespace NameFinder
 {

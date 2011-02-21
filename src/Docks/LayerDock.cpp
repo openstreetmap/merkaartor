@@ -2,7 +2,9 @@
 #include "LayerWidget.h"
 
 #include "MainWindow.h"
+#ifndef _MOBILE
 #include "ui_MainWindow.h"
+#endif
 #include "MapView.h"
 #include "Document.h"
 #include "Layer.h"
@@ -131,7 +133,9 @@ void LayerDock::addLayer(Layer* aLayer)
         connect(w, SIGNAL(layerZoom(Layer*)), this, SLOT(layerZoom(Layer*)));
         connect(w, SIGNAL(layerProjection(const QString&)), this, SLOT(layerProjection(const QString&)));
 
+#ifndef _MOBILE
         p->Main->ui->menuLayers->addMenu(w->getAssociatedMenu());
+#endif
 
         //w->setChecked(aLayer->isSelected());
         w->setVisible(aLayer->isEnabled());
@@ -149,7 +153,9 @@ void LayerDock::deleteLayer(Layer* aLayer)
         if (!CHILD_WIDGET(i))
             continue;
         if (CHILD_LAYER(i) == aLayer) {
+#ifndef _MOBILE
             p->Main->ui->menuLayers->removeAction(CHILD_WIDGET(i)->getAssociatedMenu()->menuAction());
+#endif
             LayerWidget* curW = CHILD_WIDGET(i);
             curW->deleteLater();
             break;
@@ -284,7 +290,9 @@ void LayerDock::layerClosed(Layer* l)
     l->setVisible(false);
     l->getWidget()->setVisible(false);
     l->getWidget()->getAssociatedMenu()->setVisible(false);
+#ifndef _MOBILE
     p->Main->on_editPropertiesAction_triggered();
+#endif
     p->Main->document()->removeDownloadBox(l);
     if (p->Main->document()->getLastDownloadLayer() == l)
         p->Main->document()->setLastDownloadLayer(NULL);
@@ -296,7 +304,9 @@ void LayerDock::layerClosed(Layer* l)
 void LayerDock::layerCleared(Layer* l)
 {
     l->clear();
+#ifndef _MOBILE
     p->Main->on_editPropertiesAction_triggered();
+#endif
 
     emit layersCleared();
 }

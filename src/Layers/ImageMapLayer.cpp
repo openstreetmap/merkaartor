@@ -1,21 +1,22 @@
 #include "Global.h"
 
+#include "MainWindow.h"
 #include "MapView.h"
 #include "ImageMapLayer.h"
 
 #include "Document.h"
-#include "Preferences/MerkaartorPreferences.h"
-#include "Maps/Projection.h"
+#include "MerkaartorPreferences.h"
+#include "Projection.h"
 
 #include "IMapAdapterFactory.h"
 #include "IMapAdapter.h"
-#include "QMapControl/imagemanager.h"
+#include "imagemanager.h"
 #ifdef USE_WEBKIT
-#include "QMapControl/browserimagemanager.h"
+#include "browserimagemanager.h"
 #endif
-#include "QMapControl/tilemapadapter.h"
-#include "QMapControl/wmsmapadapter.h"
-#include "QMapControl/WmscMapAdapter.h"
+#include "tilemapadapter.h"
+#include "wmsmapadapter.h"
+#include "WmscMapAdapter.h"
 
 #include <QLocale>
 #include <QPainter>
@@ -253,7 +254,9 @@ void ImageMapLayer::setMapAdapter(const QUuid& theAdapterUid, const QString& ser
             Q_ASSERT(theImageWidget);
             connect(p->theMapAdapter, SIGNAL(forceZoom()), theImageWidget, SLOT(zoomLayer()));
             connect(p->theMapAdapter, SIGNAL(forceProjection()), theImageWidget, SLOT(setProjection()));
+#ifndef _MOBILE
             connect(p->theMapAdapter, SIGNAL(forceRefresh()), g_Merk_MainWindow, SLOT(invalidateView()));
+#endif
         } else
             setNoneAdapter();
     }
@@ -267,7 +270,7 @@ void ImageMapLayer::setMapAdapter(const QUuid& theAdapterUid, const QString& ser
                 QUrl u(s);
                 if (u.isValid()) {
                     Ui::LicenseDisplayDialog ui;
-                    QDialog dlg(g_Merk_MainWindow);
+                    QDialog dlg;
                     ui.setupUi(&dlg);
                     dlg.setWindowTitle(tr("Licensing Terms: %1").arg(name()));
                     ui.webView->load(u);
@@ -456,7 +459,7 @@ ImageMapLayer * ImageMapLayer::fromXML(Document* d, QXmlStreamReader& stream, QP
     QString server;
     QUuid bgtype = QUuid(stream.attributes().value("bgtype").toString());
 
-    double alpha = stream.attributes().value("alpha").toString().toDouble();
+    qreal alpha = stream.attributes().value("alpha").toString().toDouble();
     bool visible = (stream.attributes().value("visible") == "true" ? true : false);
     bool selected = (stream.attributes().value("selected") == "true" ? true : false);
     bool enabled = (stream.attributes().value("enabled") == "false" ? false : true);
@@ -515,7 +518,7 @@ void ImageMapLayer::drawImage(QPainter* P)
     P->drawPixmap(0, 0, p->curPix);
 }
 
-void ImageMapLayer::zoom(double zoom, const QPoint& pos, const QRect& rect)
+void ImageMapLayer::zoom(qreal zoom, const QPoint& pos, const QRect& rect)
 {
     if (!p->theMapAdapter)
         return;
@@ -528,7 +531,8 @@ void ImageMapLayer::zoom(double zoom, const QPoint& pos, const QRect& rect)
     p->curPix.fill(Qt::transparent);
     QPainter P(&p->curPix);
     QPointF fPos(pos);
-    P.drawPixmap(fPos - (fPos * zoom), tpm);
+    fPos -= fPos * zoom;
+    P.drawPixmap(fPos, tpm);
 }
 
 void ImageMapLayer::pan(QPoint delta)
@@ -979,9 +983,9 @@ QRect ImageMapLayer::drawTiled(MapView& theView, QRect& rect)
             if (p->theMapAdapter->isValid(i, j, p->theMapAdapter->getZoom()))
             {
 #ifdef Q_CC_MSVC
-                double priority = _hypot(i - mapmiddle_tile_x, j - mapmiddle_tile_y);
+                qreal priority = _hypot(i - mapmiddle_tile_x, j - mapmiddle_tile_y);
 #else
-                double priority = hypot(i - mapmiddle_tile_x, j - mapmiddle_tile_y);
+                qreal priority = hypot(i - mapmiddle_tile_x, j - mapmiddle_tile_y);
 #endif
                 tiles.append(Tile(i, j, priority));
             }

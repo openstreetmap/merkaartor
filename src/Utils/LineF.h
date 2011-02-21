@@ -1,7 +1,7 @@
 #ifndef MERKAARTOR_LINEF_
 #define MERKAARTOR_LINEF_
 
-#include "Maps/Coord.h"
+#include "Coord.h"
 
 #include <QtCore/QPointF>
 
@@ -13,22 +13,22 @@
 #define M_PI_2		1.57079632679489661923
 #endif
 
-inline double distance(const QPointF& A, const QPointF& B)
+inline qreal distance(const QPointF& A, const QPointF& B)
 {
-    double dx = A.x()-B.x();
-    double dy = A.y()-B.y();
+    qreal dx = A.x()-B.x();
+    qreal dy = A.y()-B.y();
     return sqrt( dx*dx+dy*dy );
 }
 
-inline double length(const QPointF& A)
+inline qreal length(const QPointF& A)
 {
     return sqrt(A.x()*A.x()+A.y()*A.y());
 }
 
-inline double angle(const QPointF& A, const QPointF& B)
+inline qreal angle(const QPointF& A, const QPointF& B)
 {
-    double d = A.x()*B.x()+A.y()*B.y();
-    double x = A.x()*B.y()-A.y()*B.x();
+    qreal d = A.x()*B.x()+A.y()*B.y();
+    qreal x = A.x()*B.y()-A.y()*B.x();
     // numerical stability : in extreme cases the argument of asin gets slightly larger than 1
     if (fabs(d) < 0.00001)
         return (x>0)?M_PI_2:-M_PI;
@@ -44,7 +44,7 @@ inline double angle(const QPointF& A, const QPointF& B)
 
 }
 
-inline double angle(const QPointF& A)
+inline qreal angle(const QPointF& A)
 {
     return atan2(A.y(),A.x());
 }
@@ -81,7 +81,7 @@ public:
         A = P2.y()-P1.y();
         B = -P2.x()+P1.x();
         C = -P1.y()*B-P1.x()*A;
-        double F = sqrt(A*A+B*B);
+        qreal F = sqrt(A*A+B*B);
         if (F<0.00000001)
             Valid=false;
         else
@@ -92,12 +92,12 @@ public:
         }
     }
 
-    void slide(double d)
+    void slide(qreal d)
     {
         C += d*sqrt(A*A+B*B);
     }
 
-    double distance(const QPointF& P) const
+    qreal distance(const QPointF& P) const
     {
         if (Valid)
             return fabs(A*P.x()+B*P.y()+C);
@@ -105,14 +105,14 @@ public:
             return sqrt( (P.x()-P1.x())*(P.x()-P1.x()) + (P.y()-P1.y())*(P.y()-P1.y()) );
     }
 
-    //double capDistance(const QPointF& P) const
+    //qreal capDistance(const QPointF& P) const
     //{
     //	if (Valid)
     //	{
-    //		double dx = P2.x()-P1.x();
-    //		double dy = P2.y()-P1.y();
-    //		double px = P.x()-P1.x();
-    //		double py = P.y()-P1.y();
+    //		qreal dx = P2.x()-P1.x();
+    //		qreal dy = P2.y()-P1.y();
+    //		qreal px = P.x()-P1.x();
+    //		qreal py = P.y()-P1.y();
     //		if ( (dx*px+dy*py) < 0)
     //			return ::distance(P,P1);
     //		px = P.x()-P2.x();
@@ -125,14 +125,14 @@ public:
     //		return sqrt( (P.x()-A)*(P.x()-A) + (P.y()-B)*(P.y()-B) );
     //}
 
-    double capDistance(const Coord& P)
+    qreal capDistance(const Coord& P)
     {
         if (Valid)
         {
-            double dx = P2.x()-P1.x();
-            double dy = P2.y()-P1.y();
-            double px = P.x()-P1.x();
-            double py = P.y()-P1.y();
+            qreal dx = P2.x()-P1.x();
+            qreal dy = P2.y()-P1.y();
+            qreal px = P.x()-P1.x();
+            qreal py = P.y()-P1.y();
             if ( (dx*px+dy*py) < 0)
                 return ::distance(P,P1);
             px = P.x()-P2.x();
@@ -149,7 +149,7 @@ public:
     {
         if (Valid)
         {
-            double SD = A*P.x()+B*P.y()+C;
+            qreal SD = A*P.x()+B*P.y()+C;
             return Coord(P.x()-A*SD,P.y()-B*SD);
         }
         return Coord(P1.x(),P1.y());
@@ -158,7 +158,7 @@ public:
     {
         if (Valid)
         {
-            double SD = A*P.x()+B*P.y()+C;
+            qreal SD = A*P.x()+B*P.y()+C;
             return QPointF(P.x()-A*SD,P.y()-B*SD);
         }
         return P1;
@@ -218,11 +218,11 @@ public:
 
     QPointF intersectionWith(const LineF& L)
     {
-        double D = A*L.B - L.A*B;
+        qreal D = A*L.B - L.A*B;
         if (fabs(D) < 0.00001)
             return P2;
-        double x = B*L.C - L.B*C;
-        double y = L.A*C - A*L.C;
+        qreal x = B*L.C - L.B*C;
+        qreal y = L.A*C - A*L.C;
         return QPointF(x/D,y/D);
     }
 
@@ -239,7 +239,7 @@ public:
 private:
     QPointF P1, P2;
     bool Valid;
-    double A,B,C;
+    qreal A,B,C;
 };
 
 class BezierF
@@ -259,13 +259,13 @@ class BezierF
         {
         }
 
-        double distance(const QPointF& T) const
+        qreal distance(const QPointF& T) const
         {
-            double LowestZ = ::distance(A,T);
+            qreal LowestZ = ::distance(A,T);
             for (qreal t=0;t<1.0125; t+=0.025)
             {
                 QPointF P = A*(1-t)*(1-t)*(1-t) + 3*B*(1-t)*(1-t)*t + 3*C*(1-t)*t*t + D*t*t*t;
-                double z = ::distance(P,T);
+                qreal z = ::distance(P,T);
                 if (z < LowestZ)
                     LowestZ = z;
             }
@@ -274,12 +274,12 @@ class BezierF
 
         QPointF project(const QPointF& T) const
         {
-            double LowestZ = ::distance(A,T);
+            qreal LowestZ = ::distance(A,T);
             QPointF ClosestP(A);
             for (qreal t=0;t<1.0125; t+=0.025)
             {
                 QPointF P = A*(1-t)*(1-t)*(1-t) + 3*B*(1-t)*(1-t)*t + 3*C*(1-t)*t*t + D*t*t*t;
-                double z = ::distance(P,T);
+                qreal z = ::distance(P,T);
                 if (z < LowestZ)
                 {
                     LowestZ = z;

@@ -175,7 +175,7 @@ Feature* ImportCSVDialog::generateOSM(Layer* l, QString line)
 {
     bool ok;
     QPointF p;
-    double t;
+    qreal t;
     bool hasLat = false, hasLon = false;
 
     QStringList flds = line.split(m_delim);

@@ -13,9 +13,9 @@
 #define FEATURESDOCK_H
 
 #include "MDockAncestor.h"
-#include "Maps/Coord.h"
+#include "Coord.h"
 #include "Feature.h"
-#include "Maps/MapTypedef.h"
+#include "MapTypedef.h"
 
 #include "ui_FeaturesDock.h"
 

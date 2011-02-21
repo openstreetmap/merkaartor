@@ -16,7 +16,7 @@
 #include <QDialog>
 #include <QIODevice>
 
-#include "Maps/Projection.h"
+#include "Projection.h"
 
 class Feature;
 class Layer;

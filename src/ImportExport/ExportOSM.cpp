@@ -1,9 +1,9 @@
 #include "ExportOSM.h"
-#include "Utils/Utils.h"
+#include "Utils.h"
 
 #include "Features.h"
 
-#include "Preferences/MerkaartorPreferences.h"
+#include "MerkaartorPreferences.h"
 
 static QString stripToOSMId(const IFeature::FId& id)
 {

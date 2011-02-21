@@ -1,5 +1,6 @@
-INCLUDEPATH += Docks
-DEPENDPATH += Docks
+INCLUDEPATH += $$MERKAARTOR_SRC_DIR/Docks
+DEPENDPATH += $$MERKAARTOR_SRC_DIR/Docks
+
 HEADERS += MDockAncestor.h \
     LayerDock.h \
     PropertiesDock.h \

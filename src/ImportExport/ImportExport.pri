@@ -1,5 +1,5 @@
-INCLUDEPATH += ImportExport
-DEPENDPATH += ImportExport
+INCLUDEPATH += $$MERKAARTOR_SRC_DIR/ImportExport
+DEPENDPATH += $$MERKAARTOR_SRC_DIR/ImportExport
 
 #Header files
 HEADERS += \
@@ -14,7 +14,7 @@ HEADERS += \
     ImportExportKML.h \
     ImportExportOSC.h \
     ImportExportCSV.h \
-    ImportExport/ImportCSVDialog.h
+    ImportCSVDialog.h
 
 #Source files
 SOURCES += \
@@ -28,16 +28,18 @@ SOURCES += \
     ImportExportKML.cpp \
     ImportExportOSC.cpp \
     ImportExportCSV.cpp \
-    ImportExport/ImportCSVDialog.cpp
+    ImportCSVDialog.cpp
 
 FORMS += \
     ExportDialog.ui \
-    ImportExport/ImportCSVDialog.ui
+    ImportCSVDialog.ui
 
-HEADERS += \
-    ImportExportGdal.h
-SOURCES += \
-    ImportExportGdal.cpp
+isEmpty(MOBILE) {
+  HEADERS += \
+      ImportExportGdal.h
+  SOURCES += \
+      ImportExportGdal.cpp
+}
 
 contains (PROTOBUF, 1) {
 #PBF

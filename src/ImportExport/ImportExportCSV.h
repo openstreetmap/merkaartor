@@ -12,7 +12,7 @@
 #ifndef ImportExportCSV_H
 #define ImportExportCSV_H
 
-#include <ImportExport/IImportExport.h>
+#include "IImportExport.h"
 
 class QDomDocument;
 /**

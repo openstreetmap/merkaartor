@@ -185,8 +185,8 @@ Feature* parsePoint(QDomElement& e, Layer* aLayer)
             QDomText t = c.firstChild().toText();
             QString s = t.nodeValue();
             QStringList tokens = s.split(",");
-            double lon = tokens[0].toDouble();
-            double lat = tokens[1].toDouble();
+            qreal lon = tokens[0].toDouble();
+            qreal lat = tokens[1].toDouble();
             Coord p(lon,lat);
 
             P = g_backend.allocNode(aLayer, p);

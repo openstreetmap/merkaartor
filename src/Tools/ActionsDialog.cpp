@@ -7,7 +7,7 @@
 #include <QMessageBox>
 
 #include "MainWindow.h"
-#include "Preferences/MerkaartorPreferences.h"
+#include "MerkaartorPreferences.h"
 #include "ActionsDialog.h"
 
 ActionsDialog::ActionsDialog(QList<QAction *>& actions, MainWindow *parent)

@@ -1,5 +1,6 @@
 #include "Global.h"
 
+#include "MainWindow.h"
 #include "Features.h"
 #include "Command.h"
 #include "DocumentCommands.h"
@@ -9,12 +10,12 @@
 #include "NodeCommands.h"
 #include "Document.h"
 #include "Layer.h"
-#include "PaintStyle/MasPaintStyle.h"
-#include "Utils/TagSelector.h"
+#include "MasPaintStyle.h"
+#include "TagSelector.h"
 #include "MapView.h"
 #include "PropertiesDock.h"
 
-#include "Utils/Utils.h"
+#include "Utils.h"
 
 #include <QApplication>
 #include <QUuid>
@@ -128,7 +129,7 @@ class MapFeaturePrivate
 
         void updatePossiblePainters();
         void blankPainters();
-        void updatePainters(double PixelPerM);
+        void updatePainters(qreal PixelPerM);
         void initVersionNumber();
 
         mutable IFeature::FId Id;
@@ -136,7 +137,7 @@ class MapFeaturePrivate
         Feature::ActorType LastActor;
         QList<const FeaturePainter*> PossiblePainters;
         bool PossiblePaintersUpToDate;
-        double PixelPerMForPainter;
+        qreal PixelPerMForPainter;
         const FeaturePainter* CurrentPainter;
         bool HasPainter;
         Feature* theFeature;
@@ -155,7 +156,7 @@ class MapFeaturePrivate
         bool Special;
         int DirtyLevel;
         QList<FilterLayer*> FilterLayers;
-        double Alpha;
+        qreal Alpha;
         Layer* parentLayer;
 };
 
@@ -595,7 +596,7 @@ void MapFeaturePrivate::updatePossiblePainters()
     HasPainter = (PossiblePainters.size() > 0);
 }
 
-void MapFeaturePrivate::updatePainters(double PixelPerM)
+void MapFeaturePrivate::updatePainters(qreal PixelPerM)
 {
     if (!PossiblePaintersUpToDate)
         updatePossiblePainters();
@@ -618,7 +619,7 @@ void MapFeaturePrivate::blankPainters()
     HasPainter = false;
 }
 
-const FeaturePainter* Feature::getPainter(double PixelPerM) const
+const FeaturePainter* Feature::getPainter(qreal PixelPerM) const
 {
     if (p->PixelPerMForPainter != PixelPerM)
         p->updatePainters(PixelPerM);
@@ -638,7 +639,7 @@ bool Feature::hasPainter() const
     return p->HasPainter;
 }
 
-bool Feature::hasPainter(double PixelPerM) const
+bool Feature::hasPainter(qreal PixelPerM) const
 {
     if (p->PixelPerMForPainter != PixelPerM)
         p->updatePainters(PixelPerM);
@@ -877,8 +878,10 @@ void Feature::toXML(QXmlStreamWriter& stream, bool strict, QString changetsetid)
         if (isSpecial())
             stream.writeAttribute("special","true");
         // TODO Manage selection at document level
+#ifndef _MOBILE
         if (g_Merk_MainWindow->properties()->isSelected(this))
             stream.writeAttribute("selected","true");
+#endif
     }
 }
 

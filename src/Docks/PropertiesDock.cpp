@@ -1,21 +1,23 @@
 #include "PropertiesDock.h"
 #include "InfoDock.h"
 #include "MainWindow.h"
+#ifndef _MOBILE
 #include "ui_MainWindow.h"
+#endif
 #include "MapView.h"
 #include "Interaction.h"
 #include "TagModel.h"
-#include "Utils/EditCompleterDelegate.h"
-#include "Utils/ShortcutOverrideFilter.h"
+#include "EditCompleterDelegate.h"
+#include "ShortcutOverrideFilter.h"
 #include "DocumentCommands.h"
 #include "FeatureCommands.h"
 #include "NodeCommands.h"
 #include "RelationCommands.h"
-#include "Maps/Coord.h"
+#include "Coord.h"
 #include "Document.h"
 #include "Features.h"
-#include "Maps/FeatureManipulations.h"
-#include "TagTemplate/TagTemplate.h"
+#include "FeatureManipulations.h"
+#include "TagTemplate.h"
 
 #ifdef GEOIMAGE
 #include "GeoImageDock.h"
@@ -28,6 +30,7 @@
 #include <QtGui/QTableView>
 #include <QClipboard>
 #include <QMessageBox>
+#include <QMenu>
 
 #include <algorithm>
 
@@ -170,6 +173,7 @@ void PropertiesDock::checkMenuStatus()
         if (!Selection[i]->isUploadable() && !Selection[i]->isSpecial())
             ++NumCommitableFeature;
     }
+#ifndef _MOBILE
     Main->ui->createRelationAction->setEnabled(Selection.size());
     Main->ui->editRemoveAction->setEnabled(Selection.size());
     Main->ui->editMoveAction->setEnabled(true);
@@ -199,6 +203,7 @@ void PropertiesDock::checkMenuStatus()
 
     Main->ui->editCopyAction->setEnabled(Selection.size());
     Main->clipboardChanged();
+#endif
 }
 
 int PropertiesDock::size() const

@@ -129,7 +129,7 @@ RemoveFeatureCommand::RemoveFeatureCommand(Document *theDocument, Feature *aFeat
 RemoveFeatureCommand::RemoveFeatureCommand(Document *theDocument, Feature *aFeature, const QList<Feature*>& Alternatives)
 : Command(aFeature), theLayer(0), theFeature(aFeature), CascadedCleanUp(0), RemoveExecuted(false), theAlternatives(Alternatives)
 {
-    CascadedCleanUp  = new CommandList(MainWindow::tr("Cascaded cleanup"), NULL);
+    CascadedCleanUp  = new CommandList(QApplication::tr("Cascaded cleanup"), NULL);
     for (int i=0; i<aFeature->sizeParents(); ++i) {
         Feature* f = CAST_FEATURE(aFeature->getParent(i));
         if (f)

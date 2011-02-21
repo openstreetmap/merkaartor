@@ -3,14 +3,14 @@
 #include "RelationCommands.h"
 #include "WayCommands.h"
 #include "NodeCommands.h"
-#include "Maps/Painting.h"
+#include "Painting.h"
 #include "Relation.h"
 #include "Way.h"
 #include "Node.h"
-#include "Utils/LineF.h"
+#include "LineF.h"
 #include "MainWindow.h"
 #include "PropertiesDock.h"
-#include "Utils/MDiscardableDialog.h"
+#include "MDiscardableDialog.h"
 #include "Global.h"
 
 #include <QtGui/QDockWidget>
@@ -65,7 +65,7 @@ void CreateAreaInteraction::paintEvent(QPaintEvent* anEvent, QPainter& thePainte
         ::draw(thePainter,TP,Feature::UnknownDirection, PreviousPoint,LastCursor ,4 ,view()->projection());
 
         Coord NewPoint = XY_TO_COORD(LastCursor);
-        const double distance = FirstPoint.distanceFrom(NewPoint);
+        const qreal distance = FirstPoint.distanceFrom(NewPoint);
 
         QString distanceTag;
         if (distance < 1.0)
@@ -246,7 +246,7 @@ void CreateAreaInteraction::snapMouseReleaseEvent(QMouseEvent* anEvent, Feature*
     }
 }
 
-#ifndef Q_OS_SYMBIAN
+#ifndef _MOBILE
 QCursor CreateAreaInteraction::cursor() const
 {
     return QCursor(Qt::CrossCursor);

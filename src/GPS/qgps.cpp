@@ -27,7 +27,7 @@
 #include "qgpssatellitetracker.h"
 #include "SatelliteStrengthView.h"
 
-//#include "Preferences/MerkaartorPreferences.h"
+//#include "MerkaartorPreferences.h"
 
 QGPS::QGPS(QWidget *parent)
     : MDockAncestor(parent), gpsDevice(0)
@@ -90,8 +90,8 @@ void QGPS::resetGpsStatus()
     txtNumSats->setText("");
     txtFixType->setText(tr("Invalid"));
 
-    lblFixStatus->setText(tr("No Position Fix"));
-    lblFixTime->setText(tr("No UTC Time"));
+    lblFixStatus->setText(tr("No Fix"));
+    lblFixTime->setText(tr("No Time"));
 
     satTracker->setSatellites(QList<Satellite>());
 }
@@ -159,15 +159,15 @@ void QGPS::updateGpsStatus()
 
     switch (gpsDevice->fixStatus()) {
         case QGPSDevice::StatusActive:
-            lblFixStatus->setText(tr("Position Fix available"));
+            lblFixStatus->setText(tr("Fix OK"));
             break;
         case QGPSDevice::StatusVoid:
-            lblFixStatus->setText(tr("No Position Fix"));
+            lblFixStatus->setText(tr("No Fix"));
             break;
     }
 
     if (!gpsDevice->dateTime().isValid())
-        lblFixTime->setText(tr("No UTC Time"));
+        lblFixTime->setText(tr("No Time"));
     else
         lblFixTime->setText(gpsDevice->dateTime().toString() + " UTC");
 
@@ -219,6 +219,23 @@ void QGPS::retranslateUi()
     Ui_QGPSMainWindowUI::retranslateUi(getWidget());
 
     setWindowTitle(tr("GPS"));
-    lblFixStatus->setText(tr("No Position Fix"));
-    lblFixTime->setText(tr("No UTC Time"));
+    lblFixStatus->setText(tr("No Fix"));
+    lblFixTime->setText(tr("No Time"));
+}
+
+void QGPS::resizeEvent(QResizeEvent */*anEvent*/)
+{
+    if (width() > height()) {
+        if (satLayoutH->indexOf(satTracker) == -1) {
+            satLayoutV->removeWidget(satTracker);
+            satLayoutH->insertWidget(0, satTracker);
+//            verticalSpacer->changeSize(20, 40, QSizePolicy::Minimum, QSizePolicy::Ignored);
+        }
+    } else {
+        if (satLayoutV->indexOf(satTracker) == -1) {
+            satLayoutH->removeWidget(satTracker);
+            satLayoutV->insertWidget(2, satTracker);
+//            verticalSpacer->changeSize(20, 40, QSizePolicy::Minimum, QSizePolicy::Ignored);
+        }
+    }
 }

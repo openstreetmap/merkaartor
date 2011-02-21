@@ -18,10 +18,10 @@ public:
     bool Draw;
     bool Dashed;
     QColor Color;
-    double Proportional;
-    double Fixed;
-    double DashOn;
-    double DashOff;
+    qreal Proportional;
+    qreal Fixed;
+    qreal DashOn;
+    qreal DashOff;
 };
 
 class IconParameters
@@ -29,8 +29,8 @@ class IconParameters
 public:
     bool Draw;
     QString Name;
-    double Proportional;
-    double Fixed;
+    qreal Proportional;
+    qreal Fixed;
 };
 
 class Painter
@@ -46,26 +46,26 @@ public:
     virtual void setSelector(const QString& aName);
 
     bool isFilled() const;
-    bool matchesZoom(double PixelPerM) const;
+    bool matchesZoom(qreal PixelPerM) const;
     Painter& backgroundActive(bool b);
-    Painter& background(QColor Color, double Scale, double Offset);
+    Painter& background(QColor Color, qreal Scale, qreal Offset);
     Painter& foregroundActive(bool b);
     Painter& foregroundUseIcon(bool b);
-    Painter& foreground(QColor Color, double Scale, double Offset);
-    Painter& foregroundDash(double Dash, double White);
+    Painter& foreground(QColor Color, qreal Scale, qreal Offset);
+    Painter& foregroundDash(qreal Dash, qreal White);
     Painter& touchupActive(bool b);
-    Painter& touchup(QColor Color, double Scale, double Offset);
-    Painter& touchupDash(double Dash, double White);
+    Painter& touchup(QColor Color, qreal Scale, qreal Offset);
+    Painter& touchupDash(qreal Dash, qreal White);
     Painter& foregroundFill(QColor FillColor);
-    Painter& zoomBoundary(double anUnder, double anUpper);
+    Painter& zoomBoundary(qreal anUnder, qreal anUpper);
     Painter& drawTrafficDirectionMarks(bool b);
     Painter& trackPointIcon(const QString& Filename);
     Painter& fillActive(bool b);
     Painter& iconActive(bool b);
-    Painter& setIcon(const QString& Name, double Scale, double Offset);
+    Painter& setIcon(const QString& Name, qreal Scale, qreal Offset);
     Painter& labelActive(bool b);
     Painter& labelTag(const QString& val);
-    Painter& label(QColor Color, double Scale, double Offset);
+    Painter& label(QColor Color, qreal Scale, qreal Offset);
     Painter& setLabelFont(const QString& descFont);
     Painter& labelBackgroundActive(bool b);
     Painter& labelBackground(QColor bgColor);
@@ -74,7 +74,7 @@ public:
     Painter& labelArea(bool b);
 
     QString userName() const;
-    QPair<double, double> zoomBoundaries() const;
+    QPair<qreal, qreal> zoomBoundaries() const;
     LineParameters backgroundBoundary() const;
     LineParameters foregroundBoundary() const;
     LineParameters labelBoundary() const;
@@ -97,24 +97,24 @@ public:
 
 public:
     bool ZoomLimitSet;
-    double ZoomUnder, ZoomUpper;
+    qreal ZoomUnder, ZoomUpper;
     bool DrawBackground;
     QColor BackgroundColor;
-    double BackgroundScale;
-    double BackgroundOffset;
+    qreal BackgroundScale;
+    qreal BackgroundOffset;
     bool BackgroundInterior, BackgroundExterior;
     bool DrawForeground;
     QColor ForegroundColor;
-    double ForegroundScale;
-    double ForegroundOffset;
+    qreal ForegroundScale;
+    qreal ForegroundOffset;
     bool ForegroundDashSet;
-    double ForegroundDash, ForegroundWhite;
+    qreal ForegroundDash, ForegroundWhite;
     bool DrawTouchup;
     QColor TouchupColor;
-    double TouchupScale;
-    double TouchupOffset;
+    qreal TouchupScale;
+    qreal TouchupOffset;
     bool TouchupDashSet;
-    double TouchupDash, TouchupWhite;
+    qreal TouchupDash, TouchupWhite;
     bool ForegroundFill;
     QColor ForegroundFillFillColor;
     bool ForegroundFillUseIcon;
@@ -122,13 +122,13 @@ public:
     QColor TrafficDirectionMarksColor;
     bool DrawIcon;
     QString IconName;
-    double IconScale;
-    double IconOffset;
+    qreal IconScale;
+    qreal IconOffset;
     bool DrawLabel;
     QString LabelTag;
     QColor LabelColor;
-    double LabelScale;
-    double LabelOffset;
+    qreal LabelScale;
+    qreal LabelOffset;
     bool DrawLabelBackground;
     QColor LabelBackgroundColor;
     QString LabelBackgroundTag;
@@ -166,8 +166,8 @@ public:
 
     bool DrawNodes;
     QColor NodesColor;
-    double NodesProportional;
-    double NodesFixed;
+    qreal NodesProportional;
+    qreal NodesFixed;
 };
 
 #endif

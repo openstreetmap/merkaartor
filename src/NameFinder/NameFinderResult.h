@@ -44,7 +44,7 @@ public:
         //! BBox of the feature
         QRectF bbox;
         //! Distance from coord to viewport center
-        double distance;
+        qreal distance;
 //        //! The description as returned by the service.
 //        QString description;
 //        //! QList holding places which are near the result.

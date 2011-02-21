@@ -17,7 +17,7 @@
 
 
 #include <ui_FilterPreferencesDialog.h>
-#include "Preferences/MerkaartorPreferences.h"
+#include "MerkaartorPreferences.h"
 #include "FilterList.h"
 
 #include <QList>

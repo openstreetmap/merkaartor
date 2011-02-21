@@ -1,13 +1,14 @@
-INCLUDEPATH += Layers
-DEPENDPATH += Layers
+INCLUDEPATH += $$MERKAARTOR_SRC_DIR/Layers
+DEPENDPATH += $$MERKAARTOR_SRC_DIR/Layers
+
 HEADERS += Layer.h \
     ImageMapLayer.h \
     LayerIterator.h \
     LayerWidget.h \
-    Layers/LayerPrivate.h
+    LayerPrivate.h
 SOURCES += Layer.cpp \
     ImageMapLayer.cpp \
     LayerWidget.cpp
 FORMS += LayerWidget.ui \
     FilterEditDialog.ui \
-    Layers/LicenseDisplayDialog.ui
+    LicenseDisplayDialog.ui

@@ -1,5 +1,5 @@
-INCLUDEPATH += Features
-DEPENDPATH += Features
+INCLUDEPATH += $$MERKAARTOR_SRC_DIR/Features
+DEPENDPATH += $$MERKAARTOR_SRC_DIR/Features
 
 HEADERS += \
     Feature.h \

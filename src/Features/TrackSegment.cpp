@@ -5,7 +5,7 @@
 #include "TrackSegmentCommands.h"
 #include "MapView.h"
 #include "Node.h"
-#include "Utils/LineF.h"
+#include "LineF.h"
 
 #include <QtGui/QPainter>
 #include <QProgressDialog>
@@ -24,7 +24,7 @@ class TrackSegmentPrivate
         }
 
         QList<Node*> Nodes;
-        double Distance;
+        qreal Distance;
         CoordBox BBox;
 };
 
@@ -139,9 +139,9 @@ void TrackSegment::drawDirectionMarkers(QPainter &P, QPen &pen, const QPointF & 
     if (::distance(FromF,ToF) <= 30.0)
         return;
 
-    const double DistFromCenter=10.0;
-    const double theWidth = !M_PREFS->getSimpleGpxTrack() ? 5.0 : 8.0;
-    const double A = angle(FromF-ToF);
+    const qreal DistFromCenter=10.0;
+    const qreal theWidth = !M_PREFS->getSimpleGpxTrack() ? 5.0 : 8.0;
+    const qreal A = angle(FromF-ToF);
 
     QPointF T(DistFromCenter*cos(A), DistFromCenter*sin(A));
     QPointF V1(theWidth*cos(A+M_PI/6),theWidth*sin(A+M_PI/6));
@@ -150,7 +150,8 @@ void TrackSegment::drawDirectionMarkers(QPainter &P, QPen &pen, const QPointF & 
     pen.setStyle(Qt::SolidLine);
     P.setPen(pen);
 
-    QPointF H((FromF+ToF) / 2.0);
+    QPointF H(FromF+ToF);
+    H /= 2.0;
     P.drawLine(H-T,H-T+V1);
     P.drawLine(H-T,H-T+V2);
 }
@@ -175,9 +176,9 @@ void TrackSegment::draw(QPainter &P, MapView* theView)
 
         if (!M_PREFS->getSimpleGpxTrack())
         {
-            double distance = here.distanceFrom(last);
-            double slope = (p->Nodes[i]->elevation() - p->Nodes[i-1]->elevation()) / (distance * 10.0);
-            double speed = p->Nodes[i]->speed();
+            qreal distance = here.distanceFrom(last);
+            qreal slope = (p->Nodes[i]->elevation() - p->Nodes[i-1]->elevation()) / (distance * 10.0);
+            qreal speed = p->Nodes[i]->speed();
 
             int width = M_PREFS->getGpxTrackWidth();
             // Dynamic track line width adaption to zoom level
@@ -187,7 +188,7 @@ void TrackSegment::draw(QPainter &P, MapView* theView)
                 width--;
 
             // Encode speed in width of path ...
-            double penWidth = 1.0;
+            qreal penWidth = 1.0;
             if (speed > 10.0)
                 penWidth = qMin(1.0+speed*0.02, 5.0);
 
@@ -199,12 +200,12 @@ void TrackSegment::draw(QPainter &P, MapView* theView)
 
             if (slope > 2.0)
             {
-                slope = qMin(slope, 20.0);
+                slope = qMin(slope, (qreal)20.0);
                 green = 48 + int(slope*79.0 / 20.0);
             }
             else if (slope < -2.0)
             {
-                slope = qMax(slope, - 20.0);
+                slope = qMax(slope, (qreal)-20.0);
                 red = 48 + int(-slope*79.0 / 20.0);
             }
 
@@ -264,7 +265,7 @@ const CoordBox& TrackSegment::boundingBox(bool) const
     return p->BBox;
 }
 
-double TrackSegment::pixelDistance(const QPointF& , double , bool , MapView*) const
+qreal TrackSegment::pixelDistance(const QPointF& , qreal , bool , MapView*) const
 {
     // unable to select that one
     return 1000000;
@@ -336,7 +337,7 @@ void TrackSegment::updateMeta()
     MetaUpToDate = true;
 }
 
-double TrackSegment::distance()
+qreal TrackSegment::distance()
 {
     if (MetaUpToDate == false)
         updateMeta();

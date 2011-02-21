@@ -1,16 +1,16 @@
-INCLUDEPATH += TagTemplate
-DEPENDPATH += TagTemplate
+INCLUDEPATH += $$MERKAARTOR_SRC_DIR/TagTemplate
+DEPENDPATH += $$MERKAARTOR_SRC_DIR/TagTemplate
 
 #Header files
 HEADERS += \
-	TagTemplate.h 
+    TagTemplate.h
 
 #Source files
 SOURCES += \
-	TagTemplate.cpp 
+    TagTemplate.cpp
 
 #Forms
-FORMS += 
-	
+FORMS +=
+
 #Resource file(s)
-RESOURCES +=../Templates/Templates.qrc 
+RESOURCES +=../Templates/Templates.qrc

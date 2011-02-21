@@ -18,7 +18,7 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 #include "imagemanager.h"
-#include "Preferences/MerkaartorPreferences.h"
+#include "MerkaartorPreferences.h"
 #include "IMapAdapter.h"
 
 #include <QDateTime>
@@ -34,7 +34,7 @@ ImageManager::ImageManager(QObject* parent)
 #ifndef _MOBILE
     m_dataCache.setMaxCost(20000000); // 20mb
 #else
-    m_dataCache.setMaxCost(2000000); // 2mb
+    m_dataCache.setMaxCost(5000000); // 5mb
 #endif
 }
 

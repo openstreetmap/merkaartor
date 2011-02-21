@@ -19,7 +19,7 @@
 #include <QUrl>
 #include <QVariant>
 
-#include "Utils/TagSelector.h"
+#include "TagSelector.h"
 
 class MapView;
 class Feature;

@@ -29,7 +29,7 @@
   <customwidget>
    <class>PixmapWidget</class>
    <extends>QWidget</extends>
-   <header location="global" >Utils/PixmapWidget.h</header>
+   <header location="global" >PixmapWidget.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

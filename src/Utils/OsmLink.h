@@ -3,7 +3,7 @@
 
 #include <QUrl>
 
-#include "Maps/Coord.h"
+#include "Coord.h"
 
 class OsmLink
 {
@@ -20,8 +20,8 @@ private:
 
     QString parseUrl(QUrl url);
     void parseShortUrl(QString code);
-    void setLatLonZoom(double lat, double lon, int zoom);
-    void setMinMax(double bottom, double left, double top, double right);
+    void setLatLonZoom(qreal lat, qreal lon, int zoom);
+    void setMinMax(qreal bottom, qreal left, qreal top, qreal right);
 };
 
 #endif // OSMLINK_H

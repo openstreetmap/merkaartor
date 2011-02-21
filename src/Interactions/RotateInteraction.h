@@ -2,7 +2,7 @@
 #define MERKATOR_ROTATEINTINTERACTION_H_
 
 #include "Interaction.h"
-#include "Maps/Coord.h"
+#include "Coord.h"
 
 #include <QList>
 
@@ -19,20 +19,20 @@ class RotateInteraction : public FeatureSnapInteraction
         virtual void snapMouseReleaseEvent(QMouseEvent * event, Feature* aLast);
         virtual void snapMouseMoveEvent(QMouseEvent* event, Feature* aLast);
         virtual QString toHtml();
-#ifndef Q_OS_SYMBIAN
+#ifndef _MOBILE
         virtual QCursor cursor() const;
 #endif
 
     private:
-        Coord rotatePosition(Coord position, double angle);
-        double calculateNewAngle(QMouseEvent* event);
+        Coord rotatePosition(Coord position, qreal angle);
+        qreal calculateNewAngle(QMouseEvent* event);
         QList<Node*> Rotating;
         QList<Coord> OriginalPosition;
         Coord StartDragPosition;
         bool NodeOrigin;
         Node* OriginNode;
         QPointF RotationCenter;
-        double Angle;
+        qreal Angle;
 
         QCursor rotateCursor;
 };

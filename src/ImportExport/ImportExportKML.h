@@ -1,7 +1,7 @@
 //
 // C++ Interface: ImportExportKML
 //
-// Description: 
+// Description:
 //
 //
 // Author: cbro <cbro@semperpax.com>, (C) 2008
@@ -12,11 +12,11 @@
 #ifndef ImportExportKML_H
 #define ImportExportKML_H
 
-#include <ImportExport/IImportExport.h>
+#include "IImportExport.h"
 
 class QDomDocument;
 /**
-	@author cbro <cbro@semperpax.com>
+    @author cbro <cbro@semperpax.com>
 */
 class ImportExportKML : public IImportExport
 {
@@ -25,11 +25,11 @@ public:
 
     ~ImportExportKML();
 
-	// import the  input
-	virtual bool import(Layer* aLayer);
+    // import the  input
+    virtual bool import(Layer* aLayer);
 
-	//export
-	virtual bool export_(const QList<Feature *>& featList);
+    //export
+    virtual bool export_(const QList<Feature *>& featList);
 };
 
 #endif

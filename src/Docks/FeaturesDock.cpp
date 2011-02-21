@@ -20,8 +20,8 @@
 
 #include "Features.h"
 
-#include "Utils/SelectionDialog.h"
-#include "Utils/TagSelector.h"
+#include "SelectionDialog.h"
+#include "TagSelector.h"
 
 #include <QAction>
 #include <QTimer>
@@ -158,7 +158,9 @@ void FeaturesDock::on_FeaturesList_delete()
     }
 
     Main->view()->blockSignals(false);
+#ifndef _MOBILE
     Main->on_editRemoveAction_triggered();
+#endif
 }
 
 void FeaturesDock::on_rbWithin_stateChanged ( int state )
@@ -224,6 +226,7 @@ void FeaturesDock::on_centerZoomAction_triggered()
 
 void FeaturesDock::on_downloadAction_triggered()
 {
+#ifndef _MOBILE
     Feature* F;
     QList<Feature*> toResolve;
     for (int i=0; i < ui.FeaturesList->selectedItems().count(); ++i) {
@@ -234,6 +237,7 @@ void FeaturesDock::on_downloadAction_triggered()
         }
     }
     Main->downloadFeatures(toResolve);
+#endif
 }
 
 void FeaturesDock::on_addSelectAction_triggered()

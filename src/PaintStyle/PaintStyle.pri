@@ -1,5 +1,5 @@
-INCLUDEPATH += PaintStyle
-DEPENDPATH += PaintStyle
+INCLUDEPATH += $$MERKAARTOR_SRC_DIR/PaintStyle
+DEPENDPATH += $$MERKAARTOR_SRC_DIR/PaintStyle
 
 # Header files
 HEADERS +=  \
@@ -7,7 +7,7 @@ HEADERS +=  \
     MapCSSPaintstyle.h \
     PrimitivePainter.h \
     Painter.h \
-    PaintStyle/IPaintStyle.h
+    IPaintStyle.h
 
 # Source files
 SOURCES +=  \

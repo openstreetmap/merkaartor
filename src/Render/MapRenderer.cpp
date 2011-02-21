@@ -14,9 +14,9 @@
 #include "Document.h"
 #include "Features.h"
 #include "MapView.h"
-#include "PaintStyle/MasPaintStyle.h"
+#include "MasPaintStyle.h"
 #include "ImageMapLayer.h"
-#include "Utils/LineF.h"
+#include "LineF.h"
 
 #define TEST_RFLAGS(x) theOptions.options.testFlag(x)
 #define TEST_RENDERER_RFLAGS(x) r->theOptions.options.testFlag(x)
@@ -101,10 +101,10 @@ void TouchupStyleLayer::draw(Way* R)
             Feature::TrafficDirectionType TT = trafficDirection(R);
             if ( (TT != Feature::UnknownDirection) || (r->theOptions.arrowOptions == RendererOptions::ArrowsAlways) )
             {
-                double theWidth = r->theView->pixelPerM()*R->widthOf()-4;
+                qreal theWidth = r->theView->pixelPerM()*R->widthOf()-4;
                 if (theWidth > 8)
                     theWidth = 8;
-                double DistFromCenter = 2*(theWidth+4);
+                qreal DistFromCenter = 2*(theWidth+4);
                 if (theWidth > 0)
                 {
                     for (int i=1; i<R->size(); ++i)
@@ -115,7 +115,7 @@ void TouchupStyleLayer::draw(Way* R)
                         {
                             QPointF H(FromF+ToF);
                             H *= 0.5;
-                            double A = angle(FromF-ToF);
+                            qreal A = angle(FromF-ToF);
                             QPointF T(DistFromCenter*cos(A),DistFromCenter*sin(A));
                             QPointF V1(theWidth*cos(A+M_PI/6),theWidth*sin(A+M_PI/6));
                             QPointF V2(theWidth*cos(A-M_PI/6),theWidth*sin(A-M_PI/6));
@@ -162,7 +162,7 @@ void TouchupStyleLayer::draw(Node* Pt)
 //        if (!Pt->isReadonly() && Pt->isSelectable(r->theView))
         {
             QColor theColor = QColor(0,0,0,128);
-            double WW = r->theView->nodeWidth();
+            qreal WW = r->theView->nodeWidth();
             if (r->theGlobalPainter.DrawNodes) {
                 theColor = r->theGlobalPainter.NodesColor;
                 WW = r->theView->pixelPerM()*r->theGlobalPainter.NodesProportional+r->theGlobalPainter.NodesFixed;
@@ -250,7 +250,7 @@ void MapRenderer::render(
         {
             for (it = itm.value().constBegin(); it != itm.value().constEnd(); ++it)
             {
-                double alpha = (*it)->getAlpha();
+                qreal alpha = (*it)->getAlpha();
                 thePainter->setOpacity(alpha);
 
                 R = NULL;
@@ -378,7 +378,7 @@ void MapRenderer::render(
             if (bgLayerVisible)
             {
                 for (it = itm.value().constBegin(); it != itm.value().constEnd(); ++it) {
-                    double alpha = (*it)->getAlpha();
+                    qreal alpha = (*it)->getAlpha();
                     if ((*it)->isReadonly() && !TEST_RFLAGS(RendererOptions::ForPrinting))
                         alpha /= 2.0;
                     if (alpha != 1.) {
@@ -409,7 +409,7 @@ void MapRenderer::render(
             if (fgLayerVisible)
             {
                 for (it = itm.value().constBegin(); it != itm.value().constEnd(); ++it) {
-                    double alpha = (*it)->getAlpha();
+                    qreal alpha = (*it)->getAlpha();
                     if ((*it)->isReadonly() && !TEST_RFLAGS(RendererOptions::ForPrinting))
                         alpha /= 2.0;
                     if (alpha != 1.) {
@@ -439,7 +439,7 @@ void MapRenderer::render(
     {
         for (itm = theFeatures.constBegin() ;itm != theFeatures.constEnd(); ++itm) {
             for (it = itm.value().constBegin(); it != itm.value().constEnd(); ++it) {
-                double alpha = (*it)->getAlpha();
+                qreal alpha = (*it)->getAlpha();
                 if ((*it)->isReadonly() && !TEST_RFLAGS(RendererOptions::ForPrinting))
                     alpha /= 2.0;
                 if (alpha != 1.) {
@@ -468,7 +468,7 @@ void MapRenderer::render(
     {
         for (it = itm.value().constBegin() ;it != itm.value().constEnd(); ++it)
         {
-            double alpha = (*it)->getAlpha();
+            qreal alpha = (*it)->getAlpha();
             if ((*it)->isReadonly() && !TEST_RFLAGS(RendererOptions::ForPrinting))
                 alpha /= 2.0;
             if (alpha != 1.)
@@ -482,7 +482,7 @@ void MapRenderer::render(
         for (itm = theFeatures.constBegin() ;itm != theFeatures.constEnd(); ++itm) {
             for (it = itm.value().constBegin(); it != itm.value().constEnd(); ++it) {
                 P->save();
-                double alpha = (*it)->getAlpha();
+                qreal alpha = (*it)->getAlpha();
                 if ((*it)->isReadonly() && !TEST_RFLAGS(RendererOptions::ForPrinting))
                     alpha /= 2.0;
                 P->setOpacity(alpha);

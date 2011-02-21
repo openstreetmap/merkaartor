@@ -9,7 +9,7 @@
 #include "FeatureCommands.h"
 #include "WayCommands.h"
 
-#include "Utils/LineF.h"
+#include "LineF.h"
 
 #include "Global.h"
 
@@ -626,7 +626,7 @@ void TrackLayer::extractLayer()
     Node* P;
     QList<Node*> PL;
 
-    const double coordPer10M = (double(COORD_MAX) * 2 / 40080000) * 2;
+    const qreal coordPer10M = (double(COORD_MAX) * 2 / 40080000) * 2;
 
     for (int i=0; i < size(); i++) {
         if (TrackSegment* S = dynamic_cast<TrackSegment*>(get(i))) {
@@ -635,8 +635,8 @@ void TrackLayer::extractLayer()
                 continue;
 
             // Cope with walking tracks
-            double konstant = coordPer10M;
-            double meanSpeed = S->distance() / S->duration() * 3600;
+            qreal konstant = coordPer10M;
+            qreal meanSpeed = S->distance() / S->duration() * 3600;
             if (meanSpeed < 10.)
                 konstant /= 3.;
 
@@ -667,7 +667,7 @@ void TrackLayer::extractLayer()
 
                 LineF l(PL[startP]->position(), PL[endP]->position());
                 for (int k=startP+1; k < endP; k++) {
-                    double d = l.distance(PL[k]->position());
+                    qreal d = l.distance(PL[k]->position());
                     if (d < konstant) {
                         Node* P = PL[k];
                         PL.removeAt(k);
@@ -702,7 +702,7 @@ QString TrackLayer::toHtml()
 
     int totSegment = 0;
     int totSec = 0;
-    double totDistance = 0;
+    qreal totDistance = 0;
     for (int i=0; i < size(); ++i) {
         if (TrackSegment* S = CAST_SEGMENT(get(i))) {
             totSegment++;

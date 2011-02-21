@@ -2,7 +2,7 @@
 #define INTERACTION_CREATEPOLYGONINTERACTION_H
 
 #include "Interaction.h"
-#include "Maps/Coord.h"
+#include "Coord.h"
 
 class CreatePolygonInteraction : public Interaction
 {
@@ -17,20 +17,19 @@ class CreatePolygonInteraction : public Interaction
         virtual void mouseReleaseEvent(QMouseEvent* event);
         virtual void paintEvent(QPaintEvent* anEvent, QPainter& thePainter);
         virtual QString toHtml();
-#ifndef Q_OS_SYMBIAN
+#ifndef _MOBILE
         virtual QCursor cursor() const;
 #endif
 
     private:
         MainWindow* Main;
-        QDockWidget* theDock;
         Coord Origin;
         QPointF OriginF;
         int Sides;
         QPointF LastCursor;
         bool HaveOrigin;
 
-        double bAngle;
+        qreal bAngle;
         QPointF bScale;
         QList< QPair <QString, QString> > theTags;
 };

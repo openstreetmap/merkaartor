@@ -18,7 +18,7 @@
 
 
 #include <ui_TMSPreferencesDialog.h>
-#include "Preferences/MerkaartorPreferences.h"
+#include "MerkaartorPreferences.h"
 
 #include <QList>
 

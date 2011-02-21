@@ -2,12 +2,12 @@
 #include "DocumentCommands.h"
 #include "WayCommands.h"
 #include "NodeCommands.h"
-#include "Maps/Painting.h"
+#include "Painting.h"
 #include "Way.h"
 #include "Node.h"
-#include "Utils/LineF.h"
+#include "LineF.h"
 #include "PropertiesDock.h"
-#include "Preferences/MerkaartorPreferences.h"
+#include "MerkaartorPreferences.h"
 #include "Global.h"
 
 #include <QtGui/QPainter>
@@ -18,7 +18,9 @@
 CreatePolygonInteraction::CreatePolygonInteraction(MainWindow* aMain, MapView* aView, int sides, const QList< QPair <QString, QString> >& tags)
     : Interaction(aView), Main(aMain), Origin(0,0), Sides(sides), HaveOrigin(false), bAngle(0.0), bScale(QPointF(1., 1.)), theTags(tags)
 {
+#ifndef _MOBILE
     aView->setCursor(cursor());
+#endif
 }
 
 CreatePolygonInteraction::~CreatePolygonInteraction()
@@ -67,10 +69,10 @@ void CreatePolygonInteraction::mousePressEvent(QMouseEvent * event)
         else
         {
             QPointF CenterF(0.5, 0.5);
-            double Radius = 0.5;
+            qreal Radius = 0.5;
             if (Sides == 4)
                 Radius = sqrt(2.)/2.;
-            double Angle = 2*M_PI/Sides;
+            qreal Angle = 2*M_PI/Sides;
             QBrush SomeBrush(QColor(0xff,0x77,0x11,128));
             QPen TP(SomeBrush,view()->pixelPerM()*4);
 
@@ -86,7 +88,7 @@ void CreatePolygonInteraction::mousePressEvent(QMouseEvent * event)
             L->add(new AddFeatureCommand(Main->document()->getDirtyOrOriginLayer(),R,true));
             R->add(First);
             L->add(new AddFeatureCommand(Main->document()->getDirtyOrOriginLayer(),First,true));
-            for (double a = 2*M_PI - Angle*3/2; a>0; a-=Angle)
+            for (qreal a = 2*M_PI - Angle*3/2; a>0; a-=Angle)
             {
                 QPointF Next(CenterF.x()+cos(a)*Radius,CenterF.y()+sin(a)*Radius);
                 Node* New = g_backend.allocNode(Main->document()->getDirtyOrOriginLayer(), XY_TO_COORD(m.map(Next).toPoint()));
@@ -124,7 +126,7 @@ void CreatePolygonInteraction::paintEvent(QPaintEvent* , QPainter& thePainter)
     if (HaveOrigin)
     {
         QPointF CenterF(0.5, 0.5);
-        double Radius = 0.5;
+        qreal Radius = 0.5;
         if (Sides == 4)
             Radius = sqrt(2.)/2.;
 
@@ -137,11 +139,11 @@ void CreatePolygonInteraction::paintEvent(QPaintEvent* , QPainter& thePainter)
         thePainter.setPen(QPen(QColor(0,0,255),1,Qt::DotLine));
         thePainter.drawPolygon(thePoly);
 
-        double Angle = 2*M_PI/Sides;
+        qreal Angle = 2*M_PI/Sides;
         QBrush SomeBrush(QColor(0xff,0x77,0x11,128));
         QPen TP(SomeBrush,view()->pixelPerM()*4+1);
         QPointF Prev(CenterF.x()+cos(-Angle/2)*Radius,CenterF.y()+sin(-Angle/2)*Radius);
-        for (double a = 2*M_PI - Angle*3/2; a>0; a-=Angle)
+        for (qreal a = 2*M_PI - Angle*3/2; a>0; a-=Angle)
         {
             QPointF Next(CenterF.x()+cos(a)*Radius,CenterF.y()+sin(a)*Radius);
             ::draw(thePainter,TP,Feature::UnknownDirection, m.map(Prev),m.map(Next),4,view()->projection());
@@ -186,7 +188,7 @@ void CreatePolygonInteraction::mouseReleaseEvent(QMouseEvent* event)
 }
 
 
-#ifndef Q_OS_SYMBIAN
+#ifndef _MOBILE
 QCursor CreatePolygonInteraction::cursor() const
 {
     return QCursor(Qt::CrossCursor);

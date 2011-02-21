@@ -266,15 +266,15 @@ void ImportExportPBF::parseNode( Layer* aLayer )
     Node* N = STATIC_CAST_NODE(theDoc->getFeature(IFeature::FId(IFeature::Point, inputNode.id())));
     if (!N) {
         N = g_backend.allocNode(aLayer, Coord(
-                ( ( double ) inputNode.lon() * m_primitiveBlock.granularity() + m_primitiveBlock.lon_offset() ) / NANO,
-                ( ( double ) inputNode.lat() * m_primitiveBlock.granularity() + m_primitiveBlock.lat_offset() ) / NANO
+                ( ( qreal ) inputNode.lon() * m_primitiveBlock.granularity() + m_primitiveBlock.lon_offset() ) / NANO,
+                ( ( qreal ) inputNode.lat() * m_primitiveBlock.granularity() + m_primitiveBlock.lat_offset() ) / NANO
                 ));
         N->setId(IFeature::FId(IFeature::Point, inputNode.id()));
         aLayer->add(N);
     } else {
         N->setPosition(Coord(
-                ( ( double ) inputNode.lon() * m_primitiveBlock.granularity() + m_primitiveBlock.lon_offset() ) / NANO,
-                ( ( double ) inputNode.lat() * m_primitiveBlock.granularity() + m_primitiveBlock.lat_offset() ) / NANO
+                ( ( qreal ) inputNode.lon() * m_primitiveBlock.granularity() + m_primitiveBlock.lon_offset() ) / NANO,
+                ( ( qreal ) inputNode.lat() * m_primitiveBlock.granularity() + m_primitiveBlock.lat_offset() ) / NANO
                 ));
         N->setLastUpdated(Feature::OSMServer);
     }
@@ -453,15 +453,15 @@ void ImportExportPBF::parseDense( Layer* aLayer )
     Node* N = STATIC_CAST_NODE(theDoc->getFeature(IFeature::FId(IFeature::Point, m_lastDenseID)));
     if (!N) {
         N = g_backend.allocNode(aLayer, Coord(
-                ( ( double ) m_lastDenseLongitude * m_primitiveBlock.granularity() + m_primitiveBlock.lon_offset() ) / NANO,
-                ( ( double ) m_lastDenseLatitude * m_primitiveBlock.granularity() + m_primitiveBlock.lat_offset() ) / NANO
+                ( ( qreal ) m_lastDenseLongitude * m_primitiveBlock.granularity() + m_primitiveBlock.lon_offset() ) / NANO,
+                ( ( qreal ) m_lastDenseLatitude * m_primitiveBlock.granularity() + m_primitiveBlock.lat_offset() ) / NANO
                 ));
         N->setId(IFeature::FId(IFeature::Point, m_lastDenseID));
         aLayer->add(N);
     } else {
         N->setPosition(Coord(
-                ( ( double ) m_lastDenseLongitude * m_primitiveBlock.granularity() + m_primitiveBlock.lon_offset() ) / NANO,
-                ( ( double ) m_lastDenseLatitude * m_primitiveBlock.granularity() + m_primitiveBlock.lat_offset() ) / NANO
+                ( ( qreal ) m_lastDenseLongitude * m_primitiveBlock.granularity() + m_primitiveBlock.lon_offset() ) / NANO,
+                ( ( qreal ) m_lastDenseLatitude * m_primitiveBlock.granularity() + m_primitiveBlock.lat_offset() ) / NANO
                 ));
         N->setLastUpdated(Feature::OSMServer);
     }

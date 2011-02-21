@@ -14,17 +14,18 @@
 #include "MainWindow.h"
 #include "Document.h"
 #include "MapView.h"
-#include "Maps/Projection.h"
+#include "Projection.h"
 #include "Layer.h"
 #include "Features.h"
-#include "Preferences/MerkaartorPreferences.h"
-#include "PaintStyle/MasPaintStyle.h"
-#include "Utils/PictureViewerDialog.h"
+#include "MerkaartorPreferences.h"
+#include "MasPaintStyle.h"
+#include "PictureViewerDialog.h"
 
 #include <QPrinter>
 #include <QPrintPreviewDialog>
 #include <QPrintPreviewWidget>
 
+#include <QMainWindow>
 #include <QProgressDialog>
 #include <QPainter>
 #include <QSvgGenerator>

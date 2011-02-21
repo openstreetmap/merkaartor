@@ -17,7 +17,7 @@
 
 
 #include <ui_ProjPreferencesDialog.h>
-#include "Preferences/MerkaartorPreferences.h"
+#include "MerkaartorPreferences.h"
 #include "ProjectionsList.h"
 
 #include <QList>

@@ -7,17 +7,11 @@
 #ifdef _MOBILE
 
 MDockAncestor::MDockAncestor(QWidget *parent)
-    : QDialog(parent)
+    : QWidget(parent), mainWidget(0)
 {
-//	setWindowState(Qt::WindowMaximized);
-    setWindowState(Qt::WindowFullScreen);
     theLayout = new QVBoxLayout(this);
     theLayout->setSpacing(4);
     theLayout->setMargin(4);
-
-    QDialogButtonBox* aBB = new QDialogButtonBox(QDialogButtonBox::Close);
-    theLayout->addWidget(aBB);
-    connect(aBB, SIGNAL(rejected()), this, SLOT(hide()));
 }
 
 void MDockAncestor::setWidget ( QWidget * widget )

@@ -431,7 +431,7 @@ TagSelectorMatchResult TagSelectorOperator::evaluateVal(const QString& val) cons
 
     } else {
         bool okkey;
-        double keyN = val.toDouble(&okkey);
+        qreal keyN = val.toDouble(&okkey);
         if (boolVal)
             switch (theOp) {
             case EQ:
@@ -503,7 +503,7 @@ TagSelectorMatchResult TagSelectorOperator::evaluateVal(const QString& val) cons
     return TagSelect_NoMatch;
 }
 
-TagSelectorMatchResult TagSelectorOperator::matches(const IFeature* F, double PixelPerM) const
+TagSelectorMatchResult TagSelectorOperator::matches(const IFeature* F, qreal PixelPerM) const
 {
     if (specialKey != TagSelectKey_None) {
         switch (specialKey) {
@@ -630,7 +630,7 @@ TagSelectorMatchResult TagSelectorOperator::matches(const IFeature* F, double Pi
             if (!PixelPerM)
                 return TagSelect_Match;
             bool okval;
-            double valN = Value.toDouble(&okval);
+            qreal valN = Value.toDouble(&okval);
             if (!okval)
                 return TagSelect_NoMatch;
             switch (theOp) {
@@ -796,7 +796,7 @@ TagSelector* TagSelectorIsOneOf::copy() const
     return new TagSelectorIsOneOf(Key,Values);
 }
 
-TagSelectorMatchResult TagSelectorIsOneOf::matches(const IFeature* F, double /*PixelPerM*/) const
+TagSelectorMatchResult TagSelectorIsOneOf::matches(const IFeature* F, qreal /*PixelPerM*/) const
 {
     if (specialKey != TagSelectKey_None) {
         foreach (QString Value, exactMatchv) {
@@ -878,7 +878,7 @@ TagSelector* TagSelectorTypeIs::copy() const
     return new TagSelectorTypeIs(Type);
 }
 
-TagSelectorMatchResult TagSelectorTypeIs::matches(const IFeature* F, double /*PixelPerM*/) const
+TagSelectorMatchResult TagSelectorTypeIs::matches(const IFeature* F, qreal /*PixelPerM*/) const
 {
     QString t = Type.toLower();
     if (t == "node")
@@ -915,7 +915,7 @@ TagSelector* TagSelectorHasTags::copy() const
     return new TagSelectorHasTags();
 }
 
-TagSelectorMatchResult TagSelectorHasTags::matches(const IFeature* F, double /*PixelPerM*/) const
+TagSelectorMatchResult TagSelectorHasTags::matches(const IFeature* F, qreal /*PixelPerM*/) const
 {
     for (int i=0; i<F->tagSize(); ++i) {
         if (!TechnicalTags.contains(F->tagKey(i))) {
@@ -953,7 +953,7 @@ TagSelector* TagSelectorOr::copy() const
     return new TagSelectorOr(Copied);
 }
 
-TagSelectorMatchResult TagSelectorOr::matches(const IFeature* F, double PixelPerM) const
+TagSelectorMatchResult TagSelectorOr::matches(const IFeature* F, qreal PixelPerM) const
 {
     for (int i=0; i<Terms.size(); ++i)
         if (Terms[i]->matches(F,PixelPerM) == TagSelect_Match)
@@ -999,7 +999,7 @@ TagSelector* TagSelectorAnd::copy() const
     return new TagSelectorAnd(Copied);
 }
 
-TagSelectorMatchResult TagSelectorAnd::matches(const IFeature* F, double PixelPerM) const
+TagSelectorMatchResult TagSelectorAnd::matches(const IFeature* F, qreal PixelPerM) const
 {
     for (int i=0; i<Terms.size(); ++i)
         if (Terms[i]->matches(F,PixelPerM) == TagSelect_NoMatch)
@@ -1038,7 +1038,7 @@ TagSelector* TagSelectorNot::copy() const
     return new TagSelectorNot(Term->copy());
 }
 
-TagSelectorMatchResult TagSelectorNot::matches(const IFeature* F, double PixelPerM) const
+TagSelectorMatchResult TagSelectorNot::matches(const IFeature* F, qreal PixelPerM) const
 {
     if (!Term)
         return TagSelect_NoMatch;
@@ -1075,7 +1075,7 @@ TagSelector* TagSelectorParent::copy() const
     return new TagSelectorParent(Term->copy());
 }
 
-TagSelectorMatchResult TagSelectorParent::matches(const IFeature* F, double PixelPerM) const
+TagSelectorMatchResult TagSelectorParent::matches(const IFeature* F, qreal PixelPerM) const
 {
     if (!Term)
         return TagSelect_NoMatch;
@@ -1112,7 +1112,7 @@ TagSelector* TagSelectorFalse::copy() const
     return new TagSelectorFalse();
 }
 
-TagSelectorMatchResult TagSelectorFalse::matches(const IFeature* /* F */, double /*PixelPerM*/) const
+TagSelectorMatchResult TagSelectorFalse::matches(const IFeature* /* F */, qreal /*PixelPerM*/) const
 {
     return TagSelect_NoMatch;
 }
@@ -1135,7 +1135,7 @@ TagSelector* TagSelectorTrue::copy() const
     return new TagSelectorFalse();
 }
 
-TagSelectorMatchResult TagSelectorTrue::matches(const IFeature* /* F */, double /*PixelPerM*/) const
+TagSelectorMatchResult TagSelectorTrue::matches(const IFeature* /* F */, qreal /*PixelPerM*/) const
 {
     return TagSelect_Match;
 }
@@ -1164,7 +1164,7 @@ TagSelector* TagSelectorDefault::copy() const
     return new TagSelectorDefault(Term->copy());
 }
 
-TagSelectorMatchResult TagSelectorDefault::matches(const IFeature* F, double PixelPerM) const
+TagSelectorMatchResult TagSelectorDefault::matches(const IFeature* F, qreal PixelPerM) const
 {
     //return (Term->matches(F) == TagSelect_Match) ? TagSelect_DefaultMatch : TagSelect_NoMatch;
     if (Term->matches(F,PixelPerM) == TagSelect_Match)

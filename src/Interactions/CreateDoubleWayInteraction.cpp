@@ -2,20 +2,21 @@
 #include "DocumentCommands.h"
 #include "WayCommands.h"
 #include "NodeCommands.h"
-#include "Maps/Painting.h"
+#include "Painting.h"
 #include "Way.h"
 #include "Node.h"
-#include "Utils/LineF.h"
+#include "LineF.h"
 #include "MainWindow.h"
-#include "Preferences/MerkaartorPreferences.h"
+#include "MerkaartorPreferences.h"
 #include "Global.h"
 
 #include <QtGui/QDockWidget>
 #include <QtGui/QPainter>
 
 CreateDoubleWayInteraction::CreateDoubleWayInteraction(MainWindow* aMain, MapView* aView)
-    : Interaction(aView), Main(aMain), R1(0), R2(0), FirstPoint(0,0), HaveFirst(false)
+    : Interaction(aView), Main(aMain), R1(0), R2(0), FirstPoint(0,0), HaveFirst(false), theDock(0)
 {
+#ifndef _MOBILE
     theDock = new QDockWidget(Main);
     QWidget* DockContent = new QWidget(theDock);
     DockData.setupUi(DockContent);
@@ -27,6 +28,7 @@ CreateDoubleWayInteraction::CreateDoubleWayInteraction(MainWindow* aMain, MapVie
     DockData.RoadDistance->setText(QString().setNum(M_PREFS->getdoubleroaddistance()));
 
     aView->setCursor(cursor());
+#endif
 }
 
 CreateDoubleWayInteraction::~CreateDoubleWayInteraction()
@@ -44,7 +46,7 @@ QString CreateDoubleWayInteraction::toHtml()
     //help = (MainWindow::tr("LEFT-CLICK to select; LEFT-DRAG to move"));
 
     QString desc;
-    desc = QString("<big><b>%1</b></big><br/>").arg(MainWindow::tr("Create double way Interaction"));
+    desc = QString("<big><b>%1</b></big><br/>").arg(MainWindow::tr("Create qreal way Interaction"));
     desc += QString("<b>%1</b><br/>").arg(help);
 
     QString S =
@@ -63,7 +65,7 @@ void CreateDoubleWayInteraction::paintEvent(QPaintEvent* /* anEvent */, QPainter
         R1 = R2 = NULL;
     }
 
-    double rB = view()->pixelPerM()*DockData.RoadDistance->text().toDouble()/2;
+    qreal rB = view()->pixelPerM()*DockData.RoadDistance->text().toDouble()/2;
     if (!HaveFirst)
     {
         thePainter.setPen(QColor(0,0,0));
@@ -79,7 +81,7 @@ void CreateDoubleWayInteraction::paintEvent(QPaintEvent* /* anEvent */, QPainter
 
         if (distance(COORD_TO_XY(PreviousPoint), LastCursor) > 1)
         {
-            double rA = FirstDistance * view()->pixelPerM()/2;
+            qreal rA = FirstDistance * view()->pixelPerM()/2;
             LineF FA1(COORD_TO_XY(PreviousPoint),LastCursor);
             LineF FA2(FA1);
             LineF FB1(FA1);
@@ -150,13 +152,13 @@ void CreateDoubleWayInteraction::mousePressEvent(QMouseEvent* anEvent)
             Coord PreviousPoint = PreviousPoints[R1->size()-1];
             if (distance(COORD_TO_XY(PreviousPoint), LastCursor) > 1)
             {
-                double rB = view()->pixelPerM()*DockData.RoadDistance->text().toDouble()/2;
-                double rA = FirstDistance * view()->pixelPerM()/2;
+                qreal rB = view()->pixelPerM()*DockData.RoadDistance->text().toDouble()/2;
+                qreal rA = FirstDistance * view()->pixelPerM()/2;
                 LineF FA1(COORD_TO_XY(PreviousPoint),LastCursor);
                 LineF FA2(FA1);
                 LineF FB1(FA1);
                 LineF FB2(FA1);
-                double Modifier = DockData.DriveRight->isChecked()?1:-1;
+                qreal Modifier = DockData.DriveRight->isChecked()?1:-1;
                 FA1.slide(rA*Modifier);
                 FA2.slide(-rA*Modifier);
                 FB1.slide(rB*Modifier);
@@ -194,13 +196,13 @@ void CreateDoubleWayInteraction::mousePressEvent(QMouseEvent* anEvent)
             Coord PreviousPoint = FirstPoint;
             if (distance(COORD_TO_XY(PreviousPoint), LastCursor) > 1)
             {
-                double rB = view()->pixelPerM()*DockData.RoadDistance->text().toDouble()/2;
-                double rA = FirstDistance * view()->pixelPerM()/2;
+                qreal rB = view()->pixelPerM()*DockData.RoadDistance->text().toDouble()/2;
+                qreal rA = FirstDistance * view()->pixelPerM()/2;
                 LineF FA1(COORD_TO_XY(PreviousPoint),LastCursor);
                 LineF FA2(FA1);
                 LineF FB1(FA1);
                 LineF FB2(FA1);
-                double Modifier = DockData.DriveRight->isChecked()?1:-1;
+                qreal Modifier = DockData.DriveRight->isChecked()?1:-1;
                 FA1.slide(rA*Modifier);
                 FA2.slide(-rA*Modifier);
                 FB1.slide(rB*Modifier);
@@ -250,7 +252,7 @@ void CreateDoubleWayInteraction::mousePressEvent(QMouseEvent* anEvent)
         Interaction::mousePressEvent(anEvent);
 }
 
-#ifndef Q_OS_SYMBIAN
+#ifndef _MOBILE
 QCursor CreateDoubleWayInteraction::cursor() const
 {
     return QCursor(Qt::CrossCursor);

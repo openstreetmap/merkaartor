@@ -53,11 +53,11 @@ public:
     {
     }
 
-    void bind_double(int idx, double val);
+    void bind_double(int idx, qreal val);
     void bind_int(int idx, int val);
     void bind_int64(int idx, qint64 val);
     void bind_string(int idx, const QString& val);
-    double col_double(int idx);
+    qreal col_double(int idx);
     int col_int(int idx);
     qint64 col_int64(int idx);
     QString col_string(int idx);

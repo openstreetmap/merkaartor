@@ -22,13 +22,13 @@ class ExtrudeInteraction : public FeatureSnapInteraction
         virtual void snapMouseDoubleClickEvent(QMouseEvent* , Feature*);
         virtual void paintEvent(QPaintEvent* anEvent, QPainter& thePainter);
         virtual QString toHtml();
-#ifndef Q_OS_SYMBIAN
+#ifndef _MOBILE
         virtual QCursor cursor() const;
 #endif
 
 public:
-        void setSnapAngle(double angle);
-        double snapAngle();
+        void setSnapAngle(qreal angle);
+        qreal snapAngle();
 
         virtual void closeAndFinish();
 
@@ -36,7 +36,7 @@ public:
         Way* theRoad;
         QPointF LastCursor;
         bool Creating;
-        double SnapAngle;
+        qreal SnapAngle;
         int BestSegment;
         QLineF OrigSegment;
 };

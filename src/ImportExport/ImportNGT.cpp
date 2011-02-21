@@ -5,6 +5,7 @@
 #include "TrackSegment.h"
 #include "Global.h"
 
+#include <QApplication>
 #include <QtCore/QFile>
 #include <QtCore/QStringList>
 #include <QtCore/QTextStream>
@@ -17,7 +18,7 @@ bool importNGT(QWidget* /* aParent */, const QString& aFilename, Document* theDo
     if (f.open(QIODevice::ReadOnly))
     {
         QTextStream s(&f);
-        CommandList* theList  = new CommandList(MainWindow::tr("Import NGT"), NULL);
+        CommandList* theList  = new CommandList(QApplication::tr("Import NGT"), NULL);
         TrackSegment* theSegment = g_backend.allocSegment(theLayer);
         while (!f.atEnd())
         {

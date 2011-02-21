@@ -3,10 +3,10 @@
 #include "DocumentCommands.h"
 #include "WayCommands.h"
 #include "NodeCommands.h"
-#include "Maps/Painting.h"
+#include "Painting.h"
 #include "Way.h"
 #include "Node.h"
-#include "Utils/LineF.h"
+#include "LineF.h"
 #include "MainWindow.h"
 #include "PropertiesDock.h"
 #include "Global.h"
@@ -24,12 +24,12 @@ ExtrudeInteraction::~ExtrudeInteraction()
 {
 }
 
-void ExtrudeInteraction::setSnapAngle(double angle)
+void ExtrudeInteraction::setSnapAngle(qreal angle)
 {
     SnapAngle = angle;
 }
 
-double ExtrudeInteraction::snapAngle()
+qreal ExtrudeInteraction::snapAngle()
 {
     return SnapAngle;
 }
@@ -153,7 +153,7 @@ void ExtrudeInteraction::snapMouseDoubleClickEvent(QMouseEvent* anEvent, Feature
     Q_UNUSED(anEvent)
 }
 
-#ifndef Q_OS_SYMBIAN
+#ifndef _MOBILE
 QCursor ExtrudeInteraction::cursor() const
 {
     return QCursor(Qt::SplitHCursor);

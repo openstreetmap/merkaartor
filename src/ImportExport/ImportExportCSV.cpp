@@ -15,7 +15,7 @@
 
 #include "../ImportExport/ImportExportCSV.h"
 #include "ImportCSVDialog.h"
-#include "Maps/Projection.h"
+#include "Projection.h"
 
 bool parseContainer(QDomElement& e, Layer* aLayer);
 

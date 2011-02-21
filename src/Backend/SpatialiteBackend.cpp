@@ -254,8 +254,8 @@ void SpatialiteBackend::sync(Feature *f)
 {
 //    CoordBox bb = f->boundingBox();
 //    if (!bb.isNull()) {
-//        double min[] = {bb.bottomLeft().x(), bb.bottomLeft().y()};
-//        double max[] = {bb.topRight().x(), bb.topRight().y()};
+//        qreal min[] = {bb.bottomLeft().x(), bb.bottomLeft().y()};
+//        qreal max[] = {bb.topRight().x(), bb.topRight().y()};
 //        p->theRTree.Insert(min, max, f);
     //    }
 }

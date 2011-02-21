@@ -19,7 +19,7 @@
 
 #include <ui_PreferencesDialog.h>
 #include "ui_OsmServerWidget.h"
-#include "Preferences/MerkaartorPreferences.h"
+#include "MerkaartorPreferences.h"
 
 /**
     @author cbro <cbro@semperpax.com>

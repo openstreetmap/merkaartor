@@ -20,12 +20,14 @@
 
 
 #include "MainWindow.h"
+#ifndef _MOBILE
 #include <ui_MainWindow.h>
+#endif
 #include "MapView.h"
 
 #include "IMapAdapterFactory.h"
-#include "PaintStyle/IPaintStyle.h"
-#include "PaintStyle/MasPaintStyle.h"
+#include "IPaintStyle.h"
+#include "MasPaintStyle.h"
 
 
 #define M_PARAM_IMPLEMENT_BOOL(Param, Category, Default) \
@@ -137,14 +139,14 @@
 
 #define M_PARAM_IMPLEMENT_DOUBLE(Param, Category, Default) \
     bool mb_##Param = false; \
-    void MerkaartorPreferences::set##Param(double theValue) \
+    void MerkaartorPreferences::set##Param(qreal theValue) \
     { \
         m_##Param = theValue; \
         if (!g_Merk_Ignore_Preferences) { \
             Sets->setValue(#Category"/"#Param, theValue); \
         } \
     } \
-    double MerkaartorPreferences::get##Param() \
+    qreal MerkaartorPreferences::get##Param() \
     { \
         if (!::mb_##Param) { \
             ::mb_##Param = true; \
@@ -623,7 +625,7 @@ const QVector<qreal> MerkaartorPreferences::getParentDashes() const
     return parentDashes;
 }
 
-double MerkaartorPreferences::apiVersionNum() const
+qreal MerkaartorPreferences::apiVersionNum() const
 {
     if (Use06Api)
         return 0.6;
@@ -779,6 +781,8 @@ M_PARAM_IMPLEMENT_STRING(LastSearchTagSelector, search, "");
 
 void MerkaartorPreferences::saveMainWindowState(const MainWindow * mainWindow)
 {
+#ifndef _MOBILE
+
     if (!g_Merk_Ignore_Preferences) {
         //    Sets->setValue("MainWindow/Position", mainWindow->pos());
         //    Sets->setValue("MainWindow/Size", mainWindow->size());
@@ -787,10 +791,12 @@ void MerkaartorPreferences::saveMainWindowState(const MainWindow * mainWindow)
         Sets->setValue("MainWindow/Fullscreen", mainWindow->ui->windowShowAllAction->isEnabled());
         Sets->setValue("MainWindow/FullscreenState", mainWindow->fullscreenState);
     }
+#endif
 }
 
 void MerkaartorPreferences::restoreMainWindowState(MainWindow * mainWindow) const
 {
+#ifndef _MOBILE
     if (!g_Merk_Ignore_Preferences && !g_Merk_Reset_Preferences) {
         //    if (Sets->contains("MainWindow/Position"))
         //        mainWindow->move( Sets->value("MainWindow/Position").toPoint());
@@ -819,6 +825,7 @@ void MerkaartorPreferences::restoreMainWindowState(MainWindow * mainWindow) cons
             mainWindow->ui->windowShowAllAction->setVisible(false);
         }
     }
+#endif
 }
 
 void MerkaartorPreferences::setInitialPosition(MapView* vw)

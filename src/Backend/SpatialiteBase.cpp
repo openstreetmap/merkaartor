@@ -57,7 +57,7 @@ qint64 SpatialiteBase::lastRowId()
 }
 
 /************************************/
-void SpatialStatement::bind_double(int idx, double val)
+void SpatialStatement::bind_double(int idx, qreal val)
 {
     sqlite3_bind_double(statement(), idx, val);
 }
@@ -77,7 +77,7 @@ void SpatialStatement::bind_string(int idx, const QString& val)
     sqlite3_bind_text(statement(), idx, val.toUtf8().data(), val.size(), SQLITE_STATIC);
 }
 
-double SpatialStatement::col_double(int idx)
+qreal SpatialStatement::col_double(int idx)
 {
     return sqlite3_column_double(statement(), idx);
 }

@@ -1,8 +1,8 @@
 #ifndef LAYER_H_
 #define LAYER_H_
 
-#include "Maps/MapTypedef.h"
-#include "Maps/Coord.h"
+#include "MapTypedef.h"
+#include "Coord.h"
 #include "Feature.h"
 
 #include <QProgressDialog>

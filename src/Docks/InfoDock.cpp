@@ -11,7 +11,7 @@
 //
 #include "InfoDock.h"
 #include "MainWindow.h"
-#include "Preferences/MerkaartorPreferences.h"
+#include "MerkaartorPreferences.h"
 #include "DownloadOSM.h"
 
 #include <QApplication>

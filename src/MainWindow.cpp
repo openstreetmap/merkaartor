@@ -31,7 +31,7 @@
 #include "ScaleInteraction.h"
 #include "ZoomInteraction.h"
 #include "ExtrudeInteraction.h"
-#include "Maps/Coord.h"
+#include "Coord.h"
 #include "DownloadOSM.h"
 #include "ImportGPX.h"
 #include "ImportNGT.h"
@@ -40,7 +40,7 @@
 #include "Layer.h"
 #include "ImageMapLayer.h"
 #include "Features.h"
-#include "Maps/FeatureManipulations.h"
+#include "FeatureManipulations.h"
 #include "LayerIterator.h"
 #include "MasPaintStyle.h"
 #include "MapCSSPaintstyle.h"
@@ -103,7 +103,6 @@
 #include "gdal_version.h"
 
 #include "Utils/SlippyMapWidget.h"
-SlippyMapCache* SlippyMapWidget::theSlippyCache = 0;
 
 class MainWindowPrivate
 {
@@ -762,8 +761,8 @@ void MainWindow::on_editCutAction_triggered()
 
     clipboard->setMimeData(md);
 
-    view()->properties()->setSelection(0);
-    view()->properties()->checkMenuStatus();
+    properties()->setSelection(0);
+    properties()->checkMenuStatus();
     view()->invalidate(true, false);
 }
 
@@ -1522,12 +1521,12 @@ void MainWindow::on_viewZoomAllAction_triggered()
 
 void MainWindow::on_viewZoomInAction_triggered()
 {
-    theView->on_ZoomIn_activated();
+    theView->zoomIn();
 }
 
 void MainWindow::on_viewZoomOutAction_triggered()
 {
-    theView->on_ZoomOut_activated();
+    theView->zoomOut();
 }
 
 void MainWindow::on_viewZoomWindowAction_triggered()
@@ -3498,8 +3497,8 @@ void MainWindow::on_gpsReplayAction_triggered()
 
     QGPSFileDevice* aGps = new QGPSFileDevice(fileName);
     if (aGps->openDevice()) {
-        connect(aGps, SIGNAL(updatePosition(float, float, QDateTime, float, float, float)),
-            this, SLOT(updateGpsPosition(float, float, QDateTime, float, float, float)));
+        connect(aGps, SIGNAL(updatePosition(qreal, qreal, QDateTime, qreal, qreal, qreal)),
+            this, SLOT(updateGpsPosition(qreal, qreal, QDateTime, qreal, qreal, qreal)));
 
         ui->gpsConnectAction->setEnabled(false);
         ui->gpsReplayAction->setEnabled(false);
@@ -3529,16 +3528,16 @@ void MainWindow::on_gpsDisconnectAction_triggered()
     theGPS->resetGpsStatus();
 }
 
-void MainWindow::updateGpsPosition(float latitude, float longitude, QDateTime time, float altitude, float speed, float heading)
+void MainWindow::updateGpsPosition(qreal latitude, qreal longitude, QDateTime time, qreal altitude, qreal speed, qreal heading)
 {
     Q_UNUSED(heading)
     if (theGPS->getGpsDevice()) {
         Coord gpsCoord(longitude,latitude);
         if (M_PREFS->getGpsMapCenter()) {
             CoordBox vp = theView->viewport();
-            int lonDiff = vp.lonDiff();
-            int latDiff = vp.latDiff();
-            QRectF vpr = vp.adjusted(lonDiff / 4, latDiff / 4, -lonDiff / 4, -latDiff / 4);
+            qreal lonDiff = vp.lonDiff();
+            qreal latDiff = vp.latDiff();
+            QRectF vpr = vp.adjusted(lonDiff / 4, -latDiff / 4, -lonDiff / 4, latDiff / 4);
             if (!vpr.contains(gpsCoord)) {
                 theView->setCenter(gpsCoord, theView->rect());
                 theView->invalidate(true, true);

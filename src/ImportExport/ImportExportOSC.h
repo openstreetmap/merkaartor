@@ -12,7 +12,7 @@
 #ifndef ImportExportOSC_H
 #define ImportExportOSC_H
 
-#include <ImportExport/IImportExport.h>
+#include "IImportExport.h"
 
 class QDomDocument;
 /**

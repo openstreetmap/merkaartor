@@ -25,7 +25,7 @@ class MDockAncestor : public QDockWidget
 
 class QVBoxLayout;
 
-class MDockAncestor : public QDialog
+class MDockAncestor : public QWidget
 {
     public:
         MDockAncestor(QWidget *parent = 0);

@@ -41,20 +41,18 @@ contains(NODEBUG,1) {
     DEFINES += NDEBUG
     #OBJECTS_DIR += $$PWD/../tmp/$$(QMAKESPEC)/obj_release
 }
-COMMON_DIR=$$PWD/../binaries
-OUTPUT_DIR=$$PWD/../binaries/$$(QMAKESPEC)
+MERKAARTOR_SRC_DIR = $$PWD
+COMMON_DIR = $$PWD/../binaries
+OUTPUT_DIR = $$PWD/../binaries/$$(QMAKESPEC)
 DESTDIR = $$OUTPUT_DIR/bin
 
 #UI_DIR += $$PWD/../tmp/$$(QMAKESPEC)
 #MOC_DIR += $$PWD/../tmp/$$(QMAKESPEC)
 #RCC_DIR += $$PWD/../tmp/$$(QMAKESPEC)
-INCLUDEPATH += $$MOC_DIR
 
+INCLUDEPATH += $$PWD $$PWD/../include $$PWD/../interfaces $$MOC_DIR $$PWD/../include/builtin-ggl
+DEPENDPATH += $$PWD $$PWD/../interfaces
 
-INCLUDEPATH += $$PWD/../include $$PWD/../interfaces
-DEPENDPATH += $$PWD/../interfaces
-
-INCLUDEPATH += $$PWD/../include/builtin-ggl
 unix {
     contains(USE_BUILTIN_BOOST,1) {
         INCLUDEPATH += $$PWD/../include/builtin-boost
@@ -78,8 +76,76 @@ contains(NVIDIA_HACK,1) {
     DEFINES += ENABLE_NVIDIA_HACK
 }
 
-INCLUDEPATH += $$PWD Render qextserialport GPS NameFinder
-DEPENDPATH += $$PWD Render qextserialport GPS NameFinder
+#Include file(s)
+include(common/common.pri)
+include(Backend/Backend.pri)
+include(../interfaces/Interfaces.pri)
+include(PaintStyle/PaintStyle.pri)
+include(PaintStyle/PaintStyleEditor.pri)
+include(Features/Features.pri)
+include(Layers/Layers.pri)
+include(Preferences/Preferences.pri)
+include(Sync/Sync.pri)
+include(Commands/Commands.pri)
+include(Interactions/Interactions.pri)
+include (Docks/Docks.pri)
+include(QMapControl.pri)
+include(ImportExport/ImportExport.pri)
+include(Render/Render.pri)
+!symbian:include(qextserialport/qextserialport.pri)
+include(GPS/GPS.pri)
+include(Tools/Tools.pri)
+include(TagTemplate/TagTemplate.pri)
+include(NameFinder/NameFinder.pri)
+include(Utils/Utils.pri)
+
+# Header files
+HEADERS += \
+    MainWindow.h
+
+SOURCES += \
+    Main.cpp \
+    MainWindow.cpp
+
+# Forms
+FORMS += \
+    MainWindow.ui
+
+OTHER_FILES += CHANGELOG
+
+unix {
+    # Prefix: base instalation directory
+    isEmpty( PREFIX ) {
+        PREFIX = /usr/local
+    }
+    isEmpty( LIBDIR ) {
+        LIBDIR = $${PREFIX}/lib${LIB_SUFFIX}
+    }
+    DEFINES += PLUGINS_DIR=$${LIBDIR}/merkaartor/plugins
+    target.path = $${PREFIX}/bin
+    SHARE_DIR = $${PREFIX}/share/merkaartor
+
+    isEmpty(TRANSDIR_MERKAARTOR) {
+        TRANSDIR_MERKAARTOR = $${SHARE_DIR}/translations
+    }
+}
+win32 {
+    DEFINES += PLUGINS_DIR=plugins
+    SHARE_DIR = share
+    isEmpty(TRANSDIR_MERKAARTOR) {
+        TRANSDIR_MERKAARTOR = translations
+    }
+    isEmpty(TRANSDIR_SYSTEM) {
+        TRANSDIR_SYSTEM = translations
+    }
+}
+
+DEFINES += SHARE_DIR=$${SHARE_DIR}
+INSTALLS += target
+
+win32-msvc* {
+    DEFINES += _USE_MATH_DEFINES
+}
 
 TRANSLATIONS += \
     ../translations/merkaartor_ar.ts \
@@ -120,75 +186,6 @@ BINTRANSLATIONS += \
     ../translations/merkaartor_sv.qm \
     ../translations/merkaartor_uk.qm \
     ../translations/merkaartor_pt_BR.qm \
-
-#Include file(s)
-include(Merkaartor.pri)
-include(Backend/Backend.pri)
-include(../interfaces/Interfaces.pri)
-include(PaintStyle/PaintStyle.pri)
-include(PaintStyle/PaintStyleEditor.pri)
-include(Features/Features.pri)
-include(Layers/Layers.pri)
-include(Preferences/Preferences.pri)
-include(Sync/Sync.pri)
-include(Commands/Commands.pri)
-include(Interactions/Interactions.pri)
-include (Docks/Docks.pri)
-include(QMapControl.pri)
-include(ImportExport/ImportExport.pri)
-include(Render/Render.pri)
-!symbian:include(qextserialport/qextserialport.pri)
-include(GPS/GPS.pri)
-include(Tools/Tools.pri)
-include(TagTemplate/TagTemplate.pri)
-include(NameFinder/NameFinder.pri)
-include(Utils/Utils.pri)
-
-# Header files
-HEADERS += \
-    ./MainWindow.h
-
-SOURCES += \
-    ./MainWindow.cpp
-
-# Forms
-FORMS += \
-    ./MainWindow.ui
-
-unix {
-    # Prefix: base instalation directory
-    isEmpty( PREFIX ) {
-        PREFIX = /usr/local
-    }
-    isEmpty( LIBDIR ) {
-        LIBDIR = $${PREFIX}/lib${LIB_SUFFIX}
-    }
-    DEFINES += PLUGINS_DIR=$${LIBDIR}/merkaartor/plugins
-    target.path = $${PREFIX}/bin
-    SHARE_DIR = $${PREFIX}/share/merkaartor
-
-    isEmpty(TRANSDIR_MERKAARTOR) {
-        TRANSDIR_MERKAARTOR = $${SHARE_DIR}/translations
-    }
-}
-win32 {
-    DEFINES += PLUGINS_DIR=plugins
-    SHARE_DIR = share
-    isEmpty(TRANSDIR_MERKAARTOR) {
-        TRANSDIR_MERKAARTOR = translations
-    }
-    isEmpty(TRANSDIR_SYSTEM) {
-        TRANSDIR_SYSTEM = translations
-    }
-}
-
-DEFINES += SHARE_DIR=$${SHARE_DIR}
-INSTALLS += target
-
-win32-msvc* {
-    DEFINES += _USE_MATH_DEFINES
-}
-
 
 translations.path =  $${TRANSDIR_MERKAARTOR}
 translations.files = $${BINTRANSLATIONS}

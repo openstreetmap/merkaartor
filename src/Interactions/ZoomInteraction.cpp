@@ -2,7 +2,7 @@
 
 #include "MapView.h"
 #include "Document.h"
-#include "Maps/Projection.h"
+#include "Projection.h"
 #include "Node.h"
 
 #include <QtGui/QMouseEvent>
@@ -11,7 +11,9 @@
 ZoomInteraction::ZoomInteraction(MapView* aView)
 : Interaction(aView), HaveFirstPoint(false)
 {
+#ifndef _MOBILE
     aView->setCursor(cursor());
+#endif
 }
 
 ZoomInteraction::~ZoomInteraction(void)
@@ -73,7 +75,7 @@ void ZoomInteraction::mouseMoveEvent(QMouseEvent* event)
     }
 }
 
-#ifndef Q_OS_SYMBIAN
+#ifndef _MOBILE
 QCursor ZoomInteraction::cursor() const
 {
     QPixmap pm(":/Icons/zoomico.xpm");

@@ -12,7 +12,7 @@
 #ifndef ImportExportPBF_H
 #define ImportExportPBF_H
 
-#include <ImportExport/IImportExport.h>
+#include "IImportExport.h"
 
 #include "fileformat.pb.h"
 #include "osmformat.pb.h"

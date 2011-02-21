@@ -49,7 +49,7 @@ public:
     virtual IFeature* getParent(int i) = 0;
     virtual const IFeature* getParent(int i) const = 0;
 
-    virtual bool hasPainter(double PixelPerM) const = 0;
+    virtual bool hasPainter(qreal PixelPerM) const = 0;
 
     /** Give the id of the feature.
      *  If the feature has no id, a random id is generated

@@ -17,8 +17,8 @@
 
 static Node* importTrkPt(const QDomElement& Root, Document* /* theDocument */, Layer* theLayer)
 {
-    double Lat = Root.attribute("lat").toDouble();
-    double Lon = Root.attribute("lon").toDouble();
+    qreal Lat = Root.attribute("lat").toDouble();
+    qreal Lon = Root.attribute("lon").toDouble();
 
     Node* Pt = g_backend.allocNode(theLayer, Coord(Lon,Lat));
     Pt->setLastUpdated(Feature::Log);
@@ -116,7 +116,7 @@ static void importTrkSeg(const QDomElement& Root, Document* theDocument, Layer* 
 
         if (lastPoint)
         {
-            double kilometer = Pt->position().distanceFrom( lastPoint->position() );
+            qreal kilometer = Pt->position().distanceFrom( lastPoint->position() );
 
             if (M_PREFS->getMaxDistNodes() != 0.0 && kilometer > M_PREFS->getMaxDistNodes())
             {
@@ -168,7 +168,7 @@ static void importRte(const QDomElement& Root, Document* theDocument, Layer* the
 
             if (lastPoint)
             {
-                double kilometer = Pt->position().distanceFrom( lastPoint->position() );
+                qreal kilometer = Pt->position().distanceFrom( lastPoint->position() );
 
                 if (M_PREFS->getMaxDistNodes() != 0.0 && kilometer > M_PREFS->getMaxDistNodes())
                 {

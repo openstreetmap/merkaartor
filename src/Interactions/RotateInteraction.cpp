@@ -4,12 +4,12 @@
 #include "DocumentCommands.h"
 #include "WayCommands.h"
 #include "NodeCommands.h"
-#include "Maps/Coord.h"
+#include "Coord.h"
 #include "Document.h"
-#include "Maps/Projection.h"
+#include "Projection.h"
 #include "Node.h"
-#include "Utils/LineF.h"
-#include "Utils/MDiscardableDialog.h"
+#include "LineF.h"
+#include "MDiscardableDialog.h"
 #include "PropertiesDock.h"
 
 #include <QtGui/QCursor>
@@ -57,7 +57,7 @@ QString RotateInteraction::toHtml()
     return S;
 }
 
-#ifndef Q_OS_SYMBIAN
+#ifndef _MOBILE
 QCursor RotateInteraction::cursor() const
 {
     if (LastSnap || Rotating.size()) {
@@ -169,7 +169,7 @@ void RotateInteraction::snapMouseMoveEvent(QMouseEvent* anEvent, Feature* /*Clos
     }
 }
 
-Coord RotateInteraction::rotatePosition(Coord position, double angle)
+Coord RotateInteraction::rotatePosition(Coord position, qreal angle)
 {
     QPointF p = COORD_TO_XY(position);
     QLineF v(RotationCenter, p);
@@ -178,7 +178,7 @@ Coord RotateInteraction::rotatePosition(Coord position, double angle)
     return XY_TO_COORD(v.p2().toPoint());
 }
 
-double RotateInteraction::calculateNewAngle(QMouseEvent *event)
+qreal RotateInteraction::calculateNewAngle(QMouseEvent *event)
 {
     QPointF p1 = COORD_TO_XY(StartDragPosition);
     QLineF v1(RotationCenter, p1);

@@ -1,7 +1,7 @@
 #include "MemoryBackend.h"
 #include "RTree.h"
 
-typedef RTree<Feature*, double, 2, double> CoordTree;
+typedef RTree<Feature*, qreal, 2, qreal> CoordTree;
 
 class MemoryBackendPrivate
 {
@@ -53,8 +53,8 @@ void MemoryBackend::indexAdd(Layer* l, const QRectF& bb, Feature* aFeat)
     if (!p->theRTree.contains(l))
         p->theRTree[l] = new CoordTree();
 
-    double min[] = {bb.bottomLeft().x(), bb.bottomLeft().y()};
-    double max[] = {bb.topRight().x(), bb.topRight().y()};
+    qreal min[] = {bb.bottomLeft().x(), bb.bottomLeft().y()};
+    qreal max[] = {bb.topRight().x(), bb.topRight().y()};
     p->theRTree[l]->Insert(min, max, aFeat);
 }
 
@@ -65,8 +65,8 @@ void MemoryBackend::indexRemove(Layer* l, const QRectF& bb, Feature* aFeat)
     if (!p->theRTree.contains(l))
         return;
 
-    double min[] = {bb.bottomLeft().x(), bb.bottomLeft().y()};
-    double max[] = {bb.topRight().x(), bb.topRight().y()};
+    qreal min[] = {bb.bottomLeft().x(), bb.bottomLeft().y()};
+    qreal max[] = {bb.topRight().x(), bb.topRight().y()};
     p->theRTree[l]->Remove(min, max, aFeat);
 }
 
@@ -74,8 +74,8 @@ const QList<Feature*>& MemoryBackend::indexFind(Layer* l, const QRectF& bb)
 {
     p->findResult.clear();
     if (p->theRTree.contains(l)) {
-        double min[] = {bb.bottomLeft().x(), bb.bottomLeft().y()};
-        double max[] = {bb.topRight().x(), bb.topRight().y()};
+        qreal min[] = {bb.bottomLeft().x(), bb.bottomLeft().y()};
+        qreal max[] = {bb.topRight().x(), bb.topRight().y()};
         p->theRTree[l]->Search(min, max, &indexFindCallbackList, (void*)&p->findResult);
     }
 
@@ -86,8 +86,8 @@ void MemoryBackend::indexFind(Layer* l, const QRectF& bb, const IndexFindContext
 {
     if (!p->theRTree.contains(l))
         return;
-    double min[] = {bb.bottomLeft().x(), bb.bottomLeft().y()};
-    double max[] = {bb.topRight().x(), bb.topRight().y()};
+    qreal min[] = {bb.bottomLeft().x(), bb.bottomLeft().y()};
+    qreal max[] = {bb.topRight().x(), bb.topRight().y()};
     p->theRTree[l]->Search(min, max, &indexFindCallback, (void*)&ctxt);
 }
 
@@ -96,8 +96,8 @@ void MemoryBackend::get(Layer* l, const QRectF& bb, QList<Feature*>& theFeatures
 {
     if (!p->theRTree.contains(l))
         return;
-    double min[] = {bb.bottomLeft().x(), bb.bottomLeft().y()};
-    double max[] = {bb.topRight().x(), bb.topRight().y()};
+    qreal min[] = {bb.bottomLeft().x(), bb.bottomLeft().y()};
+    qreal max[] = {bb.topRight().x(), bb.topRight().y()};
     p->theRTree[l]->Search(min, max, &indexFindCallback, (void*)(&theFeatures));
 }
 

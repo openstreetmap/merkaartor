@@ -9,7 +9,7 @@
 // Copyright: See COPYING file that comes with this distribution
 //
 //
-#include "Preferences/TMSPreferencesDialog.h"
+#include "TMSPreferencesDialog.h"
 
 #include <QMessageBox>
 #include <QDir>

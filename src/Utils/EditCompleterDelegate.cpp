@@ -11,7 +11,7 @@
 //
 #include "Global.h"
 
-#include "Utils/EditCompleterDelegate.h"
+#include "EditCompleterDelegate.h"
 #include "MainWindow.h"
 #include "Document.h"
 #include "TagModel.h"

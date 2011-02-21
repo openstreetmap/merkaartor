@@ -1,0 +1,21 @@
+<RCC>
+    <qresource prefix="/icons">
+        <file alias="up">images/arrow_up_48.png</file>
+        <file alias="down">images/arrow_down_48.png</file>
+        <file alias="back">images/arrow_left_48.png</file>
+        <file alias="forward">images/arrow_right_48.png</file>
+        <file alias="bookmark">images/heart_48.png</file>
+        <file alias="edit">images/pencil_48.png</file>
+        <file alias="stop">images/stop_48.png</file>
+        <file alias="refresh">images/reload_48.png</file>
+        <file alias="add">images/plus_48.png</file>
+        <file alias="remove">images/minus_48.png</file>
+        <file alias="exit">images/on_off_48.png</file>
+        <file alias="zoomOut">images/zoom_out_48.png</file>
+        <file alias="search">images/magnifier_48.png</file>
+        <file alias="zoomIn">images/zoom_in_48.png</file>
+        <file alias="gps">images/wifi_48.png</file>
+        <file alias="menu">images/tray_full_48.png</file>
+        <file alias="settings">images/gear_48.png</file>
+    </qresource>
+</RCC>

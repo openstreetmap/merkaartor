@@ -33,34 +33,35 @@ class QString;
 class QGPS : public MDockAncestor, public Ui_QGPSMainWindowUI
 {
     Q_OBJECT
-    
+
     public:
-    
+
         QGPS(QWidget *parent = 0);
 
-	void setGpsDevice(QGPSDevice * aDevice);
-	QGPSDevice* getGpsDevice() { return gpsDevice; }
+    void setGpsDevice(QGPSDevice * aDevice);
+    QGPSDevice* getGpsDevice() { return gpsDevice; }
         void resetGpsStatus();
-        
+
     private:
-    
-        QGPSDevice  *gpsDevice;      
+
+        QGPSDevice  *gpsDevice;
         QString     serialPort;
-	
-	void changeEvent(QEvent*);
-	void retranslateUi();
-        
+
+    void changeEvent(QEvent*);
+    void retranslateUi();
+
     public slots:
-    
-	void updateGpsStatus();
-	void startGps();
-	void stopGps();
+
+    void updateGpsStatus();
+    void startGps();
+    void stopGps();
 
     protected:
 
-	virtual void showEvent ( QShowEvent * anEvent );
-	virtual void hideEvent ( QHideEvent * anEvent );
-        
+    virtual void showEvent ( QShowEvent * anEvent );
+    virtual void hideEvent ( QHideEvent * anEvent );
+    virtual void resizeEvent(QResizeEvent *anEvent);
+
 };
 
 #endif

@@ -5,12 +5,12 @@
 
 #include "DocumentCommands.h"
 #include "WayCommands.h"
-#include "Maps/Coord.h"
-#include "Maps/Painting.h"
+#include "Coord.h"
+#include "Painting.h"
 #include "MapView.h"
-#include "Utils/LineF.h"
-#include "Utils/MDiscardableDialog.h"
-#include "Utils/Utils.h"
+#include "LineF.h"
+#include "MDiscardableDialog.h"
+#include "Utils.h"
 
 #include <QApplication>
 #include <QtGui/QPainter>
@@ -20,13 +20,11 @@
 #include <algorithm>
 #include <QList>
 
-#ifndef _MOBILE
-#if QT_VERSION < 0x040700
+#if QT_VERSION < 0x040700 && !defined(_MOBILE)
 #include <ggl/ggl.hpp>
 #include <ggl/geometries/cartesian2d.hpp>
 #include <ggl/geometries/adapted/std_as_linestring.hpp>
 #include <ggl/algorithms/intersects.hpp>
-#endif
 #endif
 
 #define TEST_RFLAGS(x) theView->renderOptions().options.testFlag(x)
@@ -52,18 +50,16 @@ class WayPrivate
 
         bool BBoxUpToDate;
 
-        double Area;
-        double Distance;
+        qreal Area;
+        qreal Distance;
         bool NotEverythingDownloaded;
         bool wasPathComplete;
         bool VirtualsUptodate;
         QPainterPath theFullPath;
         QPainterPath thePath;
-#ifndef _MOBILE
         int ProjectionRevision;
-#endif
         int BestSegment;
-        double Width;
+        qreal Width;
 
         void CalculateWidth();
         void updateSmoothed(bool DoSmooth);
@@ -443,7 +439,7 @@ void Way::updateMeta()
     p->doUpdateVirtuals();
 }
 
-double Way::distance()
+qreal Way::distance()
 {
     if (MetaUpToDate == false)
         updateMeta();
@@ -457,7 +453,7 @@ bool Way::isClosed() const
     return (p->Nodes.size() > 3 && p->Nodes[0] == p->Nodes[p->Nodes.size()-1]);
 }
 
-double Way::area()
+qreal Way::area()
 {
     if (MetaUpToDate == false)
         updateMeta();
@@ -465,7 +461,7 @@ double Way::area()
     return p->Area;
 }
 
-double Way::widthOf()
+qreal Way::widthOf()
 {
     if (MetaUpToDate == false)
         updateMeta();
@@ -482,7 +478,7 @@ void Way::draw(QPainter& P, MapView* theView)
         P.drawPath(theView->transform().map(getPath()));
     }
 
-    double theWidth = theView->nodeWidth();
+    qreal theWidth = theView->nodeWidth();
     bool Draw = (theWidth >= 1);
     if (!Draw || !TEST_RFLAGS(RendererOptions::VirtualNodesVisible) || !TEST_RFLAGS(RendererOptions::NodesVisible) || isReadonly())
         return;
@@ -539,16 +535,16 @@ void Way::drawChildrenSpecial(QPainter& thePainter, QPen& Pen, MapView *theView,
 }
 
 
-double Way::pixelDistance(const QPointF& Target, double ClearEndDistance, bool selectNodes, MapView* theView) const
+qreal Way::pixelDistance(const QPointF& Target, qreal ClearEndDistance, bool selectNodes, MapView* theView) const
 {
-    double Best = 1000000;
+    qreal Best = 1000000;
     p->BestSegment = -1;
 
 //    if (selectNodes) {
 //        for (unsigned int i=0; i<p->Nodes.size(); ++i)
 //        {
 //            if (p->Nodes.at(i)) {
-//                double x = ::distance(Target, theView->toView(p->Nodes.at(i)));
+//                qreal x = ::distance(Target, theView->toView(p->Nodes.at(i)));
 //                if (x<ClearEndDistance)
 //                    return Best;
 //            }
@@ -562,7 +558,7 @@ double Way::pixelDistance(const QPointF& Target, double ClearEndDistance, bool s
                 theView->toView(p->Smoothed[i-2]),
                 theView->toView(p->Smoothed[i-1]),
                 theView->toView(p->Smoothed[i]));
-            double D = F.distance(Target);
+            qreal D = F.distance(Target);
             if (D < ClearEndDistance)
                 Best = D;
         }
@@ -571,7 +567,7 @@ double Way::pixelDistance(const QPointF& Target, double ClearEndDistance, bool s
         {
             if (p->Nodes.at(i) && p->Nodes.at(i+1)) {
                 LineF F(theView->toView(p->Nodes.at(i)),theView->toView(p->Nodes.at(i+1)));
-                double D = F.capDistance(Target);
+                qreal D = F.capDistance(Target);
                 if (D < ClearEndDistance && D < Best) {
                     Best = D;
                     if (g_Merk_Segment_Mode)
@@ -582,15 +578,15 @@ double Way::pixelDistance(const QPointF& Target, double ClearEndDistance, bool s
     return Best;
 }
 
-Node* Way::pixelDistanceNode(const QPointF& Target, double ClearEndDistance, MapView* theView, bool NoSelectVirtuals) const
+Node* Way::pixelDistanceNode(const QPointF& Target, qreal ClearEndDistance, MapView* theView, bool NoSelectVirtuals) const
 {
-    double Best = 1000000;
+    qreal Best = 1000000;
     Node* ret = NULL;
 
     for (unsigned int i=0; i<p->Nodes.size(); ++i)
     {
         if (p->Nodes.at(i)) {
-            double D = ::distance(Target,theView->toView(p->Nodes.at(i)));
+            qreal D = ::distance(Target,theView->toView(p->Nodes.at(i)));
             if (D < ClearEndDistance && D < Best) {
                 Best = D;
                 ret = p->Nodes.at(i);
@@ -601,7 +597,7 @@ Node* Way::pixelDistanceNode(const QPointF& Target, double ClearEndDistance, Map
         for (unsigned int i=0; i<p->virtualNodes.size(); ++i)
         {
             if (p->virtualNodes.at(i)) {
-                double D = ::distance(Target,theView->toView(p->virtualNodes.at(i)));
+                qreal D = ::distance(Target,theView->toView(p->virtualNodes.at(i)));
                 if (D < ClearEndDistance && D < Best) {
                     Best = D;
                     return p->virtualNodes.at(i);
@@ -651,7 +647,7 @@ const QPainterPath& Way::getPath() const
 
 void Way::buildPath(const Projection &theProjection, const QTransform& theTransform, const QRectF& cr)
 {
-#if QT_VERSION < 0x040700
+#if QT_VERSION < 0x040700 && !defined(_MOBILE)
     using namespace ggl;
 #endif
 
@@ -671,7 +667,7 @@ void Way::buildPath(const Projection &theProjection, const QTransform& theTransf
         p->ProjectionRevision = theProjection.projectionRevision();
         p->wasPathComplete = true;
     }
-#if QT_VERSION >= 0x040700
+#if QT_VERSION >= 0x040700 || defined(_MOBILE)
     p->thePath = p->theFullPath;
 #else
     if (!g_Merk_SelfClip) {
@@ -976,11 +972,11 @@ int findSnapPointIndex(const Way* R, Coord& P)
     {
         BezierF L(R->smoothed()[0],R->smoothed()[1],R->smoothed()[2],R->smoothed()[3]);
         int BestIdx = 3;
-        double BestDistance = L.distance(P);
+        qreal BestDistance = L.distance(P);
         for (int i=3; i<R->smoothed().size(); i+=3)
         {
             BezierF L(R->smoothed()[i-3],R->smoothed()[i-2],R->smoothed()[i-1],R->smoothed()[i]);
-            double Distance = L.distance(P);
+            qreal Distance = L.distance(P);
             if (Distance < BestDistance)
             {
                 BestIdx = i;
@@ -993,11 +989,11 @@ int findSnapPointIndex(const Way* R, Coord& P)
     }
     LineF L(R->getNode(0)->position(),R->getNode(1)->position());
     int BestIdx = 1;
-    double BestDistance = L.capDistance(P);
+    qreal BestDistance = L.capDistance(P);
     for (int i = 2; i<R->size(); ++i)
     {
         LineF L(R->getNode(i-1)->position(),R->getNode(i)->position());
-        double Distance = L.capDistance(P);
+        qreal Distance = L.capDistance(P);
         if (Distance < BestDistance)
         {
             BestIdx = i;

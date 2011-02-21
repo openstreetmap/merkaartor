@@ -9,8 +9,8 @@
 // Copyright: See COPYING file that comes with this distribution
 //
 //
-#include "Preferences/PreferencesDialog.h"
-#include "PaintStyle/MasPaintStyle.h"
+#include "PreferencesDialog.h"
+#include "MasPaintStyle.h"
 
 #include "MainWindow.h"
 #include "Document.h"

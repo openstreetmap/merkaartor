@@ -24,12 +24,12 @@
 #include <libproxy/proxy.h>
 #endif
 
-#include "Maps/Coord.h"
-#include "Preferences/WmsServersList.h"
-#include "Preferences/TmsServersList.h"
-#include "Preferences/ProjectionsList.h"
-#include "Preferences/BookmarksList.h"
-#include "Preferences/FilterList.h"
+#include "Coord.h"
+#include "WmsServersList.h"
+#include "TmsServersList.h"
+#include "ProjectionsList.h"
+#include "BookmarksList.h"
+#include "FilterList.h"
 
 #include "IRenderer.h"
 
@@ -97,10 +97,10 @@ class IPaintStyle;
         int get##Param();
 #define M_PARAM_DECLARE_DOUBLE(Param) \
     private: \
-        double m_##Param; \
+        qreal m_##Param; \
     public: \
-        void set##Param(double theValue); \
-        double get##Param();
+        void set##Param(qreal theValue); \
+        qreal get##Param();
 #define M_PARAM_DECLARE_COLOR(Param) \
     private: \
         QColor m_##Param; \
@@ -176,7 +176,7 @@ public:
     //bool use06Api() const;
     void setUse06Api(bool b);
     const QString apiVersion() const;
-    double apiVersionNum() const;
+    qreal apiVersionNum() const;
 
     M_PARAM_DECLARE_BOOL(rightsidedriving);
     M_PARAM_DECLARE_DOUBLE(doubleroaddistance);
@@ -430,7 +430,7 @@ protected:
     bool Use06Api;
     QString version;
     bool RightSideDriving;
-    double DoubleRoadDistance;
+    qreal DoubleRoadDistance;
     QString WorkingDir;
     QString OsmWebsite;
     QString OsmUser;

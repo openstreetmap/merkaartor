@@ -1,5 +1,5 @@
-#include "PaintStyle/MapCSSPaintstyle.h"
-#include "Utils/TagSelector.h"
+#include "MapCSSPaintstyle.h"
+#include "TagSelector.h"
 
 #include <QtCore/QFile>
 #include <QtCore/QTextStream>

@@ -1,7 +1,7 @@
 #include "PrimitivePainter.h"
 #include "IFeature.h"
 
-#include "Utils/SvgCache.h"
+#include "SvgCache.h"
 
 #include <QtCore/QString>
 #include <QtGui/QPainter>
@@ -150,7 +150,7 @@ void PrimitivePainter::setSelector(TagSelector* aSel)
     theSelector = aSel->asExpression(false);
 }
 
-TagSelectorMatchResult PrimitivePainter::matchesTag(const IFeature* F, double PixelPerM) const
+TagSelectorMatchResult PrimitivePainter::matchesTag(const IFeature* F, qreal PixelPerM) const
 {
     TagSelectorMatchResult res;
 
@@ -162,14 +162,14 @@ TagSelectorMatchResult PrimitivePainter::matchesTag(const IFeature* F, double Pi
     return TagSelect_NoMatch;
 }
 
-void PrimitivePainter::drawBackground(QPainterPath* R, QPainter* thePainter, double PixelPerM) const
+void PrimitivePainter::drawBackground(QPainterPath* R, QPainter* thePainter, qreal PixelPerM) const
 {
     if (!DrawBackground && !ForegroundFill) return;
 
     thePainter->setPen(Qt::NoPen);
     if (DrawBackground)
     {
-        double WW = PixelPerM*BackgroundScale+BackgroundOffset;
+        qreal WW = PixelPerM*BackgroundScale+BackgroundOffset;
         if (WW >= 0)
         {
             QPen thePen(BackgroundColor,WW);
@@ -190,11 +190,11 @@ void PrimitivePainter::drawBackground(QPainterPath* R, QPainter* thePainter, dou
     thePainter->drawPath(*R);
 }
 
-void PrimitivePainter::drawForeground(QPainterPath* R, QPainter* thePainter, double PixelPerM) const
+void PrimitivePainter::drawForeground(QPainterPath* R, QPainter* thePainter, qreal PixelPerM) const
 {
     if (!DrawForeground) return;
 
-    double WW = 0.0;
+    qreal WW = 0.0;
     if (DrawForeground)
     {
         WW = PixelPerM*ForegroundScale+ForegroundOffset;
@@ -218,13 +218,13 @@ void PrimitivePainter::drawForeground(QPainterPath* R, QPainter* thePainter, dou
     thePainter->drawPath(*R);
 }
 
-void PrimitivePainter::drawTouchup(QPointF* Pt, QPainter* thePainter, double PixelPerM) const
+void PrimitivePainter::drawTouchup(QPointF* Pt, QPainter* thePainter, qreal PixelPerM) const
 {
     bool IconOK = false;
     if (DrawIcon)
     {
         if (!IconName.isEmpty()) {
-            double WW = PixelPerM*IconScale+IconOffset;
+            qreal WW = PixelPerM*IconScale+IconOffset;
 
             QPixmap* pm = getPixmapFromFile(IconName,int(WW));
             if (!pm->isNull()) {
@@ -247,11 +247,11 @@ void PrimitivePainter::drawTouchup(QPointF* Pt, QPainter* thePainter, double Pix
     }
 }
 
-void PrimitivePainter::drawTouchup(QPainterPath* R, QPainter* thePainter, double PixelPerM) const
+void PrimitivePainter::drawTouchup(QPainterPath* R, QPainter* thePainter, qreal PixelPerM) const
 {
     if (DrawTouchup)
     {
-        double WW = PixelPerM*TouchupScale+TouchupOffset;
+        qreal WW = PixelPerM*TouchupScale+TouchupOffset;
         if (WW > 0)
         {
             QPen thePen(TouchupColor,WW);
@@ -271,10 +271,10 @@ void PrimitivePainter::drawTouchup(QPainterPath* R, QPainter* thePainter, double
 //        Feature::TrafficDirectionType TT = trafficDirection(R);
 //        if ( (TT != Feature::UnknownDirection) || (theView->renderOptions().arrowOptions == RendererOptions::ArrowsAlways) )
 //        {
-//            double theWidth = theView->pixelPerM()*R->widthOf()-4;
+//            qreal theWidth = theView->pixelPerM()*R->widthOf()-4;
 //            if (theWidth > 8)
 //                theWidth = 8;
-//            double DistFromCenter = 2*(theWidth+4);
+//            qreal DistFromCenter = 2*(theWidth+4);
 //            if (theWidth > 0)
 //            {
 //                if ( theView->renderOptions().arrowOptions == RendererOptions::ArrowsAlways )
@@ -293,7 +293,7 @@ void PrimitivePainter::drawTouchup(QPainterPath* R, QPainter* thePainter, double
 //                        H *= 0.5;
 //                        if (!theView->rect().contains(H))
 //                            continue;
-//                        double A = angle(FromF-ToF);
+//                        qreal A = angle(FromF-ToF);
 //                        QPoint T(qRound(DistFromCenter*cos(A)),qRound(DistFromCenter*sin(A)));
 //                        QPoint V1(qRound(theWidth*cos(A+M_PI/6)),qRound(theWidth*sin(A+M_PI/6)));
 //                        QPoint V2(qRound(theWidth*cos(A-M_PI/6)),qRound(theWidth*sin(A-M_PI/6)));
@@ -327,10 +327,10 @@ void PrimitivePainter::drawTouchup(QPainterPath* R, QPainter* thePainter, double
 #define BG_SPACING 6
 #define BG_PEN_SZ 2
 
-void PrimitivePainter::drawPointLabel(QPointF C, QString str, QString strBg, QPainter* thePainter, double PixelPerM) const
+void PrimitivePainter::drawPointLabel(QPointF C, QString str, QString strBg, QPainter* thePainter, qreal PixelPerM) const
 {
     LineParameters lp = labelBoundary();
-    double WW = PixelPerM*lp.Proportional+lp.Fixed;
+    qreal WW = PixelPerM*lp.Proportional+lp.Fixed;
     if (WW < 10) return;
 
     QFont font = getLabelFont();
@@ -388,7 +388,7 @@ void PrimitivePainter::drawPointLabel(QPointF C, QString str, QString strBg, QPa
 }
 
 
-void PrimitivePainter::drawLabel(QPointF* Pt, QPainter* thePainter, double PixelPerM, QString str, QString strBg) const
+void PrimitivePainter::drawLabel(QPointF* Pt, QPainter* thePainter, qreal PixelPerM, QString str, QString strBg) const
 {
     if (!DrawLabel)
         return;
@@ -401,7 +401,7 @@ void PrimitivePainter::drawLabel(QPointF* Pt, QPainter* thePainter, double Pixel
     thePainter->restore();
 }
 
-void PrimitivePainter::drawLabel(QPainterPath* R, QPainter* thePainter, double PixelPerM, QString str, QString strBg) const
+void PrimitivePainter::drawLabel(QPainterPath* R, QPainter* thePainter, qreal PixelPerM, QString str, QString strBg) const
 {
     if (!DrawLabel)
         return;
@@ -418,9 +418,9 @@ void PrimitivePainter::drawLabel(QPainterPath* R, QPainter* thePainter, double P
     }
 
     LineParameters lp = labelBoundary();
-    double WW = PixelPerM*lp.Proportional+lp.Fixed;
+    qreal WW = PixelPerM*lp.Proportional+lp.Fixed;
     if (WW < 10) return;
-    //double WWR = qMax(PixelPerM*R->widthOf()*BackgroundScale+BackgroundOffset, PixelPerM*R->widthOf()*ForegroundScale+ForegroundOffset);
+    //qreal WWR = qMax(PixelPerM*R->widthOf()*BackgroundScale+BackgroundOffset, PixelPerM*R->widthOf()*ForegroundScale+ForegroundOffset);
 
     QPainterPath textPath;
     QPainterPath tranformedRoadPath = *R;

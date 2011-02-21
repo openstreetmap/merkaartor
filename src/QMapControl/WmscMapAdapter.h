@@ -21,7 +21,7 @@
 #define WMSCMAPADAPTER_H
 
 #include "mapadapter.h"
-#include "Preferences/WmsServersList.h"
+#include "WmsServersList.h"
 
 //! MapAdapter for servers with image tiles
 /*!
@@ -79,7 +79,7 @@ public:
      */
     virtual QString	getLicenseUrl() const;
 
-    double PI;
+    qreal PI;
 
     virtual void zoom_in();
     virtual void zoom_out();

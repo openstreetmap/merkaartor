@@ -13,11 +13,12 @@
 #include "Global.h"
 #include "DirtyListExecutorOSC.h"
 
+#include "MainWindow.h"
 #include "Features.h"
 #include "DownloadOSM.h"
 #include "MerkaartorPreferences.h"
 #include "Command.h"
-#include "Utils/Utils.h"
+#include "Utils.h"
 
 #include <QMessageBox>
 #include <QDebug>
@@ -128,8 +129,9 @@ QByteArray DirtyListExecutorOSC::getChanges()
 
 bool DirtyListExecutorOSC::executeChanges(QWidget* aParent)
 {
-    bool ok;
+    bool ok = true;
 
+#ifndef _MOBILE
     MainWindow* main = dynamic_cast<MainWindow*>(aParent);
     main->createProgressDialog();
 
@@ -168,6 +170,7 @@ bool DirtyListExecutorOSC::executeChanges(QWidget* aParent)
         }
     }
     main->deleteProgressDialog();
+#endif
 
     return ok;
 }

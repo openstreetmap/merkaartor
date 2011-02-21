@@ -56,7 +56,7 @@ bool ImportExportOSC::import(Layer* aLayer)
         return false;
     }
 
-    CommandList* theList = new CommandList(MainWindow::tr("Import osmChange"), NULL);
+    CommandList* theList = new CommandList(QApplication::tr("Import osmChange"), NULL);
 
     Layer* dLayer = theDoc->getLastDownloadLayer();
     if (!dLayer) {

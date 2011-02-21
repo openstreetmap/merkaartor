@@ -1,5 +1,5 @@
 #include "Painter.h"
-#include "Utils/SvgCache.h"
+#include "SvgCache.h"
 
 #include <QtCore/QString>
 #include <QtGui/QPainter>
@@ -122,13 +122,13 @@ QString colorAsXML(const QString& name, const QColor& c)
         name+"Color=\""+asXML(c)+"\"\n";
 }
 
-QString boundaryAsXML(const QString& name, const QColor& c, double Scale, double Offset)
+QString boundaryAsXML(const QString& name, const QColor& c, qreal Scale, qreal Offset)
 {
     return
         name+"Color=\""+asXML(c)+"\" "+name+"Scale=\""+QString::number(Scale)+"\" "+name+"Offset=\""+QString::number(Offset)+"\"\n";
 }
 
-QString iconAsXML(const QString& name, const QString& fn, double Scale, double Offset)
+QString iconAsXML(const QString& name, const QString& fn, qreal Scale, qreal Offset)
 {
     return
         name+"=\""+fn+"\" "+name+"Scale=\""+QString::number(Scale)+"\" "+name+"Offset=\""+QString::number(Offset)+"\"\n";
@@ -315,11 +315,11 @@ QString Painter::userName() const
     return "Unnamed";
 }
 
-QPair<double, double> Painter::zoomBoundaries() const
+QPair<qreal, qreal> Painter::zoomBoundaries() const
 {
     if (ZoomLimitSet)
         return qMakePair(ZoomUnder,ZoomUpper);
-    return qMakePair(0.0,0.0);
+    return qMakePair((qreal)0.0,(qreal)0.0);
 }
 
 QColor Painter::fillColor() const
@@ -340,7 +340,7 @@ Painter& Painter::drawTrafficDirectionMarks(bool b)
     return *this;
 }
 
-Painter& Painter::zoomBoundary(double anUnder, double anUpper)
+Painter& Painter::zoomBoundary(qreal anUnder, qreal anUpper)
 {
     ZoomLimitSet = true;
     ZoomUnder = anUnder;
@@ -369,7 +369,7 @@ Painter& Painter::backgroundActive(bool b)
     return *this;
 }
 
-Painter& Painter::background(QColor Color, double Scale, double Offset)
+Painter& Painter::background(QColor Color, qreal Scale, qreal Offset)
 {
     DrawBackground = true;
     BackgroundColor = Color;
@@ -396,7 +396,7 @@ Painter& Painter::touchupActive(bool b)
     return *this;
 }
 
-Painter& Painter::touchupDash(double Dash, double White)
+Painter& Painter::touchupDash(qreal Dash, qreal White)
 {
     TouchupDashSet = true;
     TouchupDash = Dash;
@@ -404,7 +404,7 @@ Painter& Painter::touchupDash(double Dash, double White)
     return *this;
 }
 
-Painter& Painter::touchup(QColor Color, double Scale, double Offset)
+Painter& Painter::touchup(QColor Color, qreal Scale, qreal Offset)
 {
     DrawTouchup = true;
     TouchupColor = Color;
@@ -420,7 +420,7 @@ Painter& Painter::foregroundActive(bool b)
     return *this;
 }
 
-Painter& Painter::foregroundDash(double Dash, double White)
+Painter& Painter::foregroundDash(qreal Dash, qreal White)
 {
     ForegroundDashSet = true;
     ForegroundDash = Dash;
@@ -428,7 +428,7 @@ Painter& Painter::foregroundDash(double Dash, double White)
     return *this;
 }
 
-Painter& Painter::foreground(QColor Color, double Scale, double Offset)
+Painter& Painter::foreground(QColor Color, qreal Scale, qreal Offset)
 {
     DrawForeground = true;
     ForegroundColor = Color;
@@ -479,7 +479,7 @@ Painter& Painter::labelBackgroundTag(const QString& val)
     return *this;
 }
 
-Painter& Painter::label(QColor Color, double Scale, double Offset)
+Painter& Painter::label(QColor Color, qreal Scale, qreal Offset)
 {
     DrawLabel = true;
     LabelColor = Color;
@@ -599,7 +599,7 @@ LineParameters Painter::labelBoundary() const
     return P;
 }
 
-Painter& Painter::setIcon(const QString& Name, double Scale, double Offset)
+Painter& Painter::setIcon(const QString& Name, qreal Scale, qreal Offset)
 {
     DrawIcon = true;
     IconName = Name;
@@ -629,7 +629,7 @@ void Painter::setSelector(const QString& anExpression)
     theSelector = anExpression;
 }
 
-bool Painter::matchesZoom(double PixelPerM) const
+bool Painter::matchesZoom(qreal PixelPerM) const
 {
     if (ZoomLimitSet)
         return (ZoomUnder <= PixelPerM) && (PixelPerM <= ZoomUpper);

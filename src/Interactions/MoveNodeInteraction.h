@@ -2,7 +2,7 @@
 #define MERKATOR_MOVENODEINTERACTION_H_
 
 #include "Interaction.h"
-#include "Maps/Coord.h"
+#include "Coord.h"
 
 #include <QList>
 
@@ -18,7 +18,7 @@ class MoveNodeInteraction : public FeatureSnapInteraction
         virtual void snapMouseReleaseEvent(QMouseEvent * event, Feature* aLast);
         virtual void snapMouseMoveEvent(QMouseEvent* event, Feature* aLast);
         virtual QString toHtml();
-#ifndef Q_OS_SYMBIAN
+#ifndef _MOBILE
         virtual QCursor cursor() const;
 #endif
 

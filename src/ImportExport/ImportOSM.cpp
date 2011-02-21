@@ -9,6 +9,7 @@
 #include "Layer.h"
 #include "Features.h"
 #include "Global.h"
+#include "IProgressWindow.h"
 
 #include <QApplication>
 #include <QtCore/QBuffer>
@@ -50,8 +51,8 @@ void parseStandardAttributes(const QXmlAttributes& atts, Feature* F)
 
 void OSMHandler::parseNode(const QXmlAttributes& atts)
 {
-    double Lat = atts.value("lat").toDouble();
-    double Lon = atts.value("lon").toDouble();
+    qreal Lat = atts.value("lat").toDouble();
+    qreal Lon = atts.value("lon").toDouble();
     QString id = atts.value("id");
     Node* Pt = CAST_NODE(theDocument->getFeature(IFeature::FId(IFeature::Point, id.toLongLong())));
     if (Pt)

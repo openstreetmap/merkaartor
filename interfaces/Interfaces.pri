@@ -6,5 +6,7 @@ HEADERS += \
     IRenderer.h \
     IMapAdapterFactory.h \
     IMapWatermark.h \
-    ../../../interfaces/IBackend.h \
-    ../../../interfaces/ILayer.h
+    IBackend.h \
+    ILayer.h \
+    IProgressWindow.h \
+    IMerkMainWindow.h

@@ -5,9 +5,9 @@
 #include "PropertiesDock.h"
 #include "DocumentCommands.h"
 #include "WayCommands.h"
-#include "Maps/Projection.h"
+#include "Projection.h"
 #include "Node.h"
-#include "Utils/LineF.h"
+#include "LineF.h"
 #include "MoveNodeInteraction.h"
 #include "Global.h"
 
@@ -48,7 +48,9 @@ void CreateNodeInteraction::snapMousePressEvent(QMouseEvent * ev, Feature* aFeat
         return theMoveInteraction->snapMousePressEvent(ev, aFeat);
     } else {
         SAFE_DELETE(theMoveInteraction);
+#ifndef _MOBILE
         theView->setCursor(cursor());
+#endif
     }
 
 }
@@ -59,9 +61,13 @@ void CreateNodeInteraction::snapMouseMoveEvent(QMouseEvent* ev, Feature* aFeat)
         if (!theMoveInteraction) {
             theMoveInteraction = new MoveNodeInteraction(theView);
         }
+#ifndef _MOBILE
         theView->setCursor(theMoveInteraction->cursor());
     } else
         theView->setCursor(cursor());
+#else
+    }
+#endif
 
     if (theMoveInteraction)
         return theMoveInteraction->snapMouseMoveEvent(ev, aFeat);
@@ -82,11 +88,13 @@ void CreateNodeInteraction::snapMouseReleaseEvent(QMouseEvent * ev, Feature* aFe
         createNode(P, aFeat);
 
         theMoveInteraction = new MoveNodeInteraction(theView);
+#ifndef _MOBILE
         theView->setCursor(theMoveInteraction->cursor());
+#endif
     }
 }
 
-#ifndef Q_OS_SYMBIAN
+#ifndef _MOBILE
 QCursor CreateNodeInteraction::cursor() const
 {
     return QCursor(Qt::CrossCursor);

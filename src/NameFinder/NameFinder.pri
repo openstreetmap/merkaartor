@@ -1,3 +1,7 @@
+INCLUDEPATH += $$MERKAARTOR_SRC_DIR/NameFinder
+DEPENDPATH += $$MERKAARTOR_SRC_DIR/NameFinder
+
+
 SOURCES += xmlstreamreader.cpp \
     httpquery.cpp \
     namefindertablemodel.cpp \

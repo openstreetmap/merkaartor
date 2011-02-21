@@ -9,7 +9,7 @@
 // Copyright: See COPYING file that comes with this distribution
 //
 //
-#include "Preferences/ProjPreferencesDialog.h"
+#include "ProjPreferencesDialog.h"
 
 #include <QMessageBox>
 #include <QDir>
@@ -17,7 +17,7 @@
 #include <QTextEdit>
 #include <QComboBox>
 
-#include "Utils/ProjectionChooser.h"
+#include "ProjectionChooser.h"
 
 ProjPreferencesDialog::ProjPreferencesDialog(QWidget* parent)
     : QDialog(parent)

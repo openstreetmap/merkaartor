@@ -11,11 +11,11 @@
 //
 #include "Global.h"
 
-#include "Preferences/FilterPreferencesDialog.h"
-#include "Utils/TagSelector.h"
+#include "FilterPreferencesDialog.h"
+#include "TagSelector.h"
 #include "MainWindow.h"
 
-#include "Utils/SelectionDialog.h"
+#include "SelectionDialog.h"
 
 #include <QMessageBox>
 #include <QDir>

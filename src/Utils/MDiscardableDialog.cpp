@@ -1,4 +1,4 @@
-#include "Utils/MDiscardableDialog.h"
+#include "MDiscardableDialog.h"
 #include "MerkaartorPreferences.h"
 
 #include <QVBoxLayout>

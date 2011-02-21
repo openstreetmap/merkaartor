@@ -31,21 +31,21 @@
 
 #include "qgpssatellitetracker.h"
 
-QGPSSatelliteTracker::QGPSSatelliteTracker(QWidget *parent) 
-: QWidget(parent), Heading(0)
+QGPSSatelliteTracker::QGPSSatelliteTracker(QWidget *parent)
+    : QWidget(parent), Heading(0)
 {
 }
 
 void QGPSSatelliteTracker::setSatellites(const QList<Satellite>& aList)
 {
-	List = aList;
-	update();
+    List = aList;
+    update();
 }
 
 void QGPSSatelliteTracker::setHeading(int x)
 {
-	Heading = x;
-	update();
+    Heading = x;
+    update();
 }
 
 /**
@@ -66,12 +66,12 @@ void QGPSSatelliteTracker::paintEvent(QPaintEvent *)
 
     int rad = width();
     if (height() < rad)
-	    rad = height();
+        rad = height();
     rad /= 2;
     rad -= 2;
 
-    painter.setPen(QPen(palette().mid(), 1, Qt::SolidLine));
-    painter.setBrush(QBrush(Qt::black, Qt::NoBrush));
+    painter.setPen(QPen(palette().text(), 1, Qt::SolidLine));
+    painter.setBrush(Qt::NoBrush);
 
     // first paint the two reference circles, one at 0 degrees, and
     // the other at 45 degrees
@@ -82,19 +82,19 @@ void QGPSSatelliteTracker::paintEvent(QPaintEvent *)
     painter.drawLine(-rad,0,rad,0);
     painter.drawLine(0,-rad,0,rad);
 
-   // plot heading
-   if (List.size())
+    // plot heading
+    if (List.size())
     {
-    	painter.setPen(QPen(QColor(240,32,32),3,Qt::SolidLine,Qt::RoundCap));
-	float Alfa = Heading-90;
-	Alfa = Alfa*3.141592/180;
-	float fx = cos(Alfa)*rad*3/4;
-	float fy = sin(Alfa)*rad*3/4;
-    painter.drawLine(0,0,int(fx),int(fy));
-    painter.drawLine(int(fx),int(fy),
-        int(fx+cos(Alfa+3.1415*5/6)*8),int(fy+sin(Alfa+3.1415*5/6)*8));
-    painter.drawLine(int(fx),int(fy),
-        int(fx+cos(Alfa-3.1415*5/6)*8),int(fy+sin(Alfa-3.1415*5/6)*8));
+        painter.setPen(QPen(QColor(240,32,32),3,Qt::SolidLine,Qt::RoundCap));
+        qreal Alfa = Heading-90;
+        Alfa = Alfa*3.141592/180;
+        qreal fx = cos(Alfa)*rad*3/4;
+        qreal fy = sin(Alfa)*rad*3/4;
+        painter.drawLine(0,0,int(fx),int(fy));
+        painter.drawLine(int(fx),int(fy),
+                         int(fx+cos(Alfa+3.1415*5/6)*8),int(fy+sin(Alfa+3.1415*5/6)*8));
+        painter.drawLine(int(fx),int(fy),
+                         int(fx+cos(Alfa-3.1415*5/6)*8),int(fy+sin(Alfa-3.1415*5/6)*8));
     }
 
 
@@ -137,6 +137,6 @@ void QGPSSatelliteTracker::getCoordsFromPos(int rad, int elevation, int azimuth,
     elevation = 90 - elevation;
 
     // you should know this (slept too much in trig)
-	x = int(cos(theta*M_PI/180) * elevation * rad / 90);
-	y = int(sin(theta*M_PI/180) * elevation * rad / 90);
+    x = int(cos(theta*M_PI/180) * elevation * rad / 90);
+    y = int(sin(theta*M_PI/180) * elevation * rad / 90);
 }

@@ -1,5 +1,5 @@
-INCLUDEPATH += Interactions
-DEPENDPATH += Interactions
+INCLUDEPATH += $$MERKAARTOR_SRC_DIR/Interactions
+DEPENDPATH += $$MERKAARTOR_SRC_DIR/Interactions
 
 HEADERS += \
     CreateAreaInteraction.h \

@@ -6,7 +6,7 @@
 #include "MainWindow.h"
 #include "Document.h"
 #include "Layer.h"
-#include "Preferences/MerkaartorPreferences.h"
+#include "MerkaartorPreferences.h"
 
 #include "IMapAdapterFactory.h"
 #include "IMapAdapter.h"
@@ -17,7 +17,7 @@
 #include <QInputDialog>
 #include <QMessageBox>
 
-#include "Utils/SelectionDialog.h"
+#include "SelectionDialog.h"
 
 #define LINEHEIGHT 25
 

@@ -12,7 +12,7 @@
 #ifndef ImportExportGDAL_H
 #define ImportExportGDAL_H
 
-#include <ImportExport/IImportExport.h>
+#include "IImportExport.h"
 
 class Projection;
 class Layer;

@@ -10,7 +10,7 @@
 #include <QPointF>
 
 #include <Painter.h>
-#include "Utils/TagSelector.h"
+#include "TagSelector.h"
 
 class MapView;
 class Feature;

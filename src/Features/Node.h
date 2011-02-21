@@ -1,9 +1,9 @@
 #ifndef MERKATOR_TRACKPOINT_H_
 #define MERKATOR_TRACKPOINT_H_
 
-#include "Preferences/MerkaartorPreferences.h"
+#include "MerkaartorPreferences.h"
 
-#include "Maps/Coord.h"
+#include "Coord.h"
 #include "Feature.h"
 #include "Document.h"
 #include "Layer.h"
@@ -46,7 +46,7 @@ public:
     virtual void drawHover(QPainter& P, MapView* theView);
 #endif
 
-    virtual double pixelDistance(const QPointF& Target, double ClearEndDistance, bool selectNodes, MapView* theView) const;
+    virtual qreal pixelDistance(const QPointF& Target, qreal ClearEndDistance, bool selectNodes, MapView* theView) const;
     virtual void cascadedRemoveIfUsing(Document* theDocument, Feature* aFeature, CommandList* theList, const QList<Feature*>& Alternatives);
     virtual bool notEverythingDownloaded();
     virtual QString description() const;
@@ -71,16 +71,14 @@ public:
     void setPosition(const Coord& aCoord);
     const QPointF& projection() const;
     void setProjection(const QPointF& aProjection);
-#ifndef _MOBILE
     int projectionRevision() const;
     void setProjectionRevision(int aProjectionRevision);
-#endif
 
-    double speed() const;
-    void setSpeed(double aSpeed);
+    qreal speed() const;
+    void setSpeed(qreal aSpeed);
 
-    double elevation() const;
-    void setElevation(double aElevation);
+    qreal elevation() const;
+    void setElevation(qreal aElevation);
 
     bool hasPhoto() const;
     QPixmap photo() const;
@@ -96,8 +94,8 @@ public:
     virtual QString toHtml();
 
 private:
-    double Elevation;
-    double Speed;
+    qreal Elevation;
+    qreal Speed;
 
 private:
     NodePrivate* p;

@@ -4,12 +4,12 @@
 #include "DocumentCommands.h"
 #include "WayCommands.h"
 #include "NodeCommands.h"
-#include "Maps/Coord.h"
+#include "Coord.h"
 #include "Document.h"
-#include "Maps/Projection.h"
+#include "Projection.h"
 #include "Node.h"
-#include "Utils/LineF.h"
-#include "Utils/MDiscardableDialog.h"
+#include "LineF.h"
+#include "MDiscardableDialog.h"
 #include "PropertiesDock.h"
 
 #include <QtGui/QCursor>
@@ -57,7 +57,7 @@ QString ScaleInteraction::toHtml()
     return S;
 }
 
-#ifndef Q_OS_SYMBIAN
+#ifndef _MOBILE
 QCursor ScaleInteraction::cursor() const
 {
     if (LastSnap || Scaling.size()) {
@@ -169,7 +169,7 @@ void ScaleInteraction::snapMouseMoveEvent(QMouseEvent* anEvent, Feature* /*Close
     }
 }
 
-Coord ScaleInteraction::scalePosition(Coord position, double radius)
+Coord ScaleInteraction::scalePosition(Coord position, qreal radius)
 {
     QPointF p = COORD_TO_XY(position);
     QLineF v(ScaleCenter, p);

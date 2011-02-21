@@ -19,7 +19,7 @@
  ***************************************************************************/
 #include "mapnetwork.h"
 
-#include "Preferences/MerkaartorPreferences.h"
+#include "MerkaartorPreferences.h"
 
 #include <QNetworkRequest>
 #include <QNetworkReply>

@@ -21,7 +21,7 @@ class EditInteraction :	public FeatureSnapInteraction
         virtual void snapMouseMoveEvent(QMouseEvent* event, Feature* aLast);
         virtual void snapMouseDoubleClickEvent(QMouseEvent* event, Feature* aLast);
         virtual QString toHtml();
-#ifndef Q_OS_SYMBIAN
+#ifndef _MOBILE
         virtual QCursor cursor() const;
 #endif
 

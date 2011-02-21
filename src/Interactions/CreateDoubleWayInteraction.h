@@ -12,32 +12,32 @@ class QDockWidget;
 
 class CreateDoubleWayInteraction : public Interaction
 {
-	Q_OBJECT
+    Q_OBJECT
 
-	public:
-		CreateDoubleWayInteraction(MainWindow* Main, MapView* aView);
-		~CreateDoubleWayInteraction();
+    public:
+        CreateDoubleWayInteraction(MainWindow* Main, MapView* aView);
+        ~CreateDoubleWayInteraction();
 
-		virtual void mousePressEvent(QMouseEvent * event);
-		virtual void mouseMoveEvent(QMouseEvent* event);
-		virtual void mouseReleaseEvent(QMouseEvent* event);
-		virtual void paintEvent(QPaintEvent* anEvent, QPainter& thePainter);
-		virtual QString toHtml();
-#ifndef Q_OS_SYMBIAN
-		virtual QCursor cursor() const;
+        virtual void mousePressEvent(QMouseEvent * event);
+        virtual void mouseMoveEvent(QMouseEvent* event);
+        virtual void mouseReleaseEvent(QMouseEvent* event);
+        virtual void paintEvent(QPaintEvent* anEvent, QPainter& thePainter);
+        virtual QString toHtml();
+#ifndef _MOBILE
+        virtual QCursor cursor() const;
 #endif
 
-	private:
-		MainWindow* Main;
-		QDockWidget* theDock;
-		Ui::CreateDoubleWayDock DockData;
-		QPoint LastCursor;
-		Way* R1;
-		Way* R2;
-		Coord FirstPoint;
-		double FirstDistance;
-		bool HaveFirst;
-		QHash<int, Coord> PreviousPoints;
+    private:
+        MainWindow* Main;
+        QDockWidget* theDock;
+        Ui::CreateDoubleWayDock DockData;
+        QPoint LastCursor;
+        Way* R1;
+        Way* R2;
+        Coord FirstPoint;
+        qreal FirstDistance;
+        bool HaveFirst;
+        QHash<int, Coord> PreviousPoints;
 };
 
 #endif // INTERACTION\CREATEDOUBLEWAYINTERACTION_H

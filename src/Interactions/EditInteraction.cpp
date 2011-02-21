@@ -2,7 +2,9 @@
 #include "EditInteraction.h"
 
 #include "MainWindow.h"
+#ifndef _MOBILE
 #include "ui_MainWindow.h"
+#endif
 #include "MapView.h"
 #include "PropertiesDock.h"
 #include "InfoDock.h"
@@ -12,10 +14,10 @@
 #include "MoveNodeInteraction.h"
 #include "Document.h"
 #include "Features.h"
-#include "Maps/FeatureManipulations.h"
-#include "Maps/Projection.h"
-#include "Utils/LineF.h"
-#include "Utils/MDiscardableDialog.h"
+#include "FeatureManipulations.h"
+#include "Projection.h"
+#include "LineF.h"
+#include "MDiscardableDialog.h"
 
 #include <QtGui/QMouseEvent>
 #include <QtGui/QPainter>
@@ -30,7 +32,7 @@ EditInteraction::EditInteraction(MapView* theView)
 
     connect(main(),SIGNAL(remove_triggered()),this,SLOT(on_remove_triggered()));
     connect(main(),SIGNAL(reverse_triggered()), this,SLOT(on_reverse_triggered()));
-    view()->properties()->checkMenuStatus();
+    PROPERTIES(checkMenuStatus());
 
     if (!M_PREFS->getSeparateMoveMode()) {
         setDontSelectVirtual(false);
@@ -39,11 +41,13 @@ EditInteraction::EditInteraction(MapView* theView)
 
 EditInteraction::~EditInteraction(void)
 {
+#ifndef _MOBILE
     if(main())
     {
         main()->ui->editRemoveAction->setEnabled(false);
         main()->ui->editReverseAction->setEnabled(false);
     }
+#endif
 }
 
 QString EditInteraction::toHtml()
@@ -124,25 +128,25 @@ void EditInteraction::snapMousePressEvent(QMouseEvent * ev, Feature* aLast)
     if (!view()->isSelectionLocked()) {
         if (modifiers) {
             if (modifiersForToggle(modifiers) && aLast)
-                view()->properties()->toggleSelection(aLast);
+                PROPERTIES(toggleSelection(aLast));
 
             if (modifiersForAdd(modifiers) && aLast)
-                view()->properties()->addSelection(aLast);
+                PROPERTIES(addSelection(aLast));
 
             if (g_Merk_Segment_Mode && aLast) {
-                view()->properties()->setSelection(aLast);
+                PROPERTIES(setSelection(aLast));
             }
         } else {
             StackSnap = SnapList;
 //				if (aLast)
-//					view()->properties()->setSelection(aLast);
+//					PROPERTIES(setSelection(aLast));
         }
         if (!aLast && modifiersForDrag(modifiers))
         {
             EndDrag = StartDrag = XY_TO_COORD(ev->pos());
             Dragging = true;
         }
-        view()->properties()->checkMenuStatus();
+        PROPERTIES(checkMenuStatus());
         view()->update();
     }
 }
@@ -212,14 +216,14 @@ void EditInteraction::snapMouseReleaseEvent(QMouseEvent * ev , Feature* aLast)
             }
         }
         if (!List.isEmpty() || (!modifiersForAdd(modifiers) && !modifiersForToggle(modifiers)))
-            view()->properties()->setSelection(List);
-        view()->properties()->checkMenuStatus();
+            PROPERTIES(setSelection(List));
+        PROPERTIES(checkMenuStatus());
         Dragging = false;
         view()->update();
     } else {
         if (!panning() && !modifiers) {
-            view()->properties()->setSelection(aLast);
-            view()->properties()->checkMenuStatus();
+            PROPERTIES(setSelection(aLast));
+            PROPERTIES(checkMenuStatus());
             view()->update();
         }
     }
@@ -249,8 +253,8 @@ void EditInteraction::snapMouseDoubleClickEvent(QMouseEvent* anEvent, Feature* a
 //            theFeatures << aLast;
 //            for (int i=0; i<aLast->size(); ++i)
 //                theFeatures << aLast->get(i);
-//            view()->properties()->setSelection(theFeatures);
-//            view()->properties()->checkMenuStatus();
+//            PROPERTIES(setSelection(theFeatures));
+//            PROPERTIES(checkMenuStatus());
 //            view()->update();
 //        } else {
 //            Node* N = g_backend.allocNode(XY_TO_COORD(anEvent->pos()));
@@ -337,7 +341,7 @@ void EditInteraction::on_reverse_triggered()
     }
 }
 
-#ifndef Q_OS_SYMBIAN
+#ifndef _MOBILE
 QCursor EditInteraction::cursor() const
 {
     if (LastSnap)

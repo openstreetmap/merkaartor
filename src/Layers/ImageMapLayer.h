@@ -16,12 +16,12 @@ class IImageManager;
 
 struct Tile
 {
-    Tile(int i, int j, double priority)
+    Tile(int i, int j, qreal priority)
         : i(i), j(j), priority(priority)
     {}
 
     int i, j;
-    double priority;
+    qreal priority;
 
     bool operator<(const Tile& rhs) const { return priority < rhs.priority; }
 };
@@ -56,7 +56,7 @@ public:
     virtual void draw(MapView& theView, QRect& rect);
 
     virtual void pan(QPoint delta);
-    virtual void zoom(double zoom, const QPoint& pos, const QRect& rect);
+    virtual void zoom(qreal zoom, const QPoint& pos, const QRect& rect);
     virtual void zoom_in();
     virtual void zoom_out();
     virtual int getCurrentZoom();

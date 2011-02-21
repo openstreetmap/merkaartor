@@ -1,0 +1,15 @@
+<RCC>
+    <qresource prefix="/html">
+        <file>home.html</file>
+        <file>btn_donate_LG.gif</file>
+        <file>pixel.gif</file>
+        <file>t_logo-a.png</file>
+    </qresource>
+    <qresource prefix="/img">
+        <file>semperWeb.svg</file>
+        <file>semperWeb-big.svg</file>
+    </qresource>
+    <qresource prefix="/test">
+        <file alias="test.nma">E:/cbro/Merkaartor/log_2009-04-18_16-40-39.bin.nma</file>
+    </qresource>
+</RCC>

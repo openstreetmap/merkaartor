@@ -14,7 +14,7 @@ MoveNodeCommand::MoveNodeCommand(Node* aPt)
 {
     if (!theLayer)
         theLayer = thePoint->layer();
-    description = MainWindow::tr("Move node %1").arg(aPt->description());
+    description = QApplication::tr("Move node %1").arg(aPt->description());
 }
 
 MoveNodeCommand::MoveNodeCommand(Node* aPt, const Coord& aPos, Layer* aLayer)
@@ -22,7 +22,7 @@ MoveNodeCommand::MoveNodeCommand(Node* aPt, const Coord& aPos, Layer* aLayer)
 {
     if (!theLayer)
         theLayer = thePoint->layer();
-    description = MainWindow::tr("Move node %1").arg(aPt->description());
+    description = QApplication::tr("Move node %1").arg(aPt->description());
     redo();
 }
 
@@ -108,7 +108,7 @@ MoveNodeCommand * MoveNodeCommand::fromXML(Document * d, QXmlStreamReader& strea
         return NULL;
 
     a->thePoint = Feature::getTrackPointOrCreatePlaceHolder(d, a->theLayer, IFeature::FId(IFeature::Point, stream.attributes().value("trackpoint").toString().toLongLong()));
-    a->description = MainWindow::tr("Move node %1").arg(a->thePoint->description());
+    a->description = QApplication::tr("Move node %1").arg(a->thePoint->description());
 
     stream.readNext();
     while(!stream.atEnd() && !stream.isEndElement()) {

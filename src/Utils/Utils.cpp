@@ -69,9 +69,9 @@ bool Utils::QRectInterstects(const QRectF& r, const QLineF& lF, QPointF& a, QPoi
 
     if (hasP1 && hasP2) {
 #if (QT_VERSION >= QT_VERSION_CHECK(4, 4, 0))
-        double la1 = QLineF(a,b).angleTo(lF);
+        qreal la1 = QLineF(a,b).angleTo(lF);
 #else
-        double la1 = QLineF(a,b).angle(lF);
+        qreal la1 = QLineF(a,b).angle(lF);
 #endif
         if (la1 > 15.0 && la1 < 345.0) {
             QPointF t = b;

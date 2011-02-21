@@ -1,15 +1,16 @@
-INCLUDEPATH += Sync
-DEPENDPATH += Sync
+INCLUDEPATH += $$MERKAARTOR_SRC_DIR/Sync
+DEPENDPATH += $$MERKAARTOR_SRC_DIR/Sync
 
 HEADERS += \
     DownloadOSM.h \
-    DirtyList.h \
-    Sync/DirtyListExecutorOSC.h
+    DirtyListExecutorOSC.h \
+    DirtyList.h
 
 SOURCES += \
     DownloadOSM.cpp \
-    DirtyList.cpp \
-    Sync/DirtyListExecutorOSC.cpp
+    DirtyListExecutorOSC.cpp \
+    DirtyList.cpp
 
 FORMS += \
     SyncListDialog.ui
+

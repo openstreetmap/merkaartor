@@ -13,7 +13,7 @@
 #include <QApplication>
 
 #include "WmsServersList.h"
-#include "Preferences/MerkaartorPreferences.h"
+#include "MerkaartorPreferences.h"
 
 WmsServer::WmsServer()
 {

@@ -1,0 +1,17 @@
+<RCC>
+    <qresource prefix="/icons">
+        <file alias="forward">images/go-next.png</file>
+        <file alias="back">images/go-previous.png</file>
+        <file alias="bookmark">images/edit-find.png</file>
+        <file alias="add">images/list-add.png</file>
+        <file alias="remove">images/list-remove.png</file>
+        <file alias="stop">images/process-stop.png</file>
+        <file alias="exit">images/system-log-out.png</file>
+        <file alias="zoom100">images/zoom-original.png</file>
+        <file alias="zoomBest">images/zoom-best-fit.png</file>
+        <file alias="up">images/go-up.png</file>
+        <file alias="down">images/go-down.png</file>
+        <file alias="refresh">images/view-refresh.png</file>
+        <file alias="edit">images/edit-find-replace.png</file>
+    </qresource>
+</RCC>

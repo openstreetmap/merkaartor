@@ -1,11 +1,11 @@
 #include "Global.h"
 
-#include "PaintStyle/PaintStyleEditor.h"
-#include "PaintStyle/Painter.h"
+#include "PaintStyleEditor.h"
+#include "Painter.h"
 #include "MainWindow.h"
 #include "Document.h"
 
-#include "Utils/SelectionDialog.h"
+#include "SelectionDialog.h"
 
 #include <QtGui/QCheckBox>
 #include <QtGui/QColorDialog>
@@ -284,7 +284,7 @@ void PaintStyleEditor::on_LowerZoomBoundary_valueChanged()
     if (idx >= thePainters.size())
         return;
     Painter& FP(thePainters[idx]);
-    QPair<double, double> Result(0, 0);
+    QPair<qreal, qreal> Result(0, 0);
     if (LowerZoomBoundary->value() > 10e-6)
         Result.first = 1 / LowerZoomBoundary->value();
     if (UpperZoomBoundary->value() > 10e-6)

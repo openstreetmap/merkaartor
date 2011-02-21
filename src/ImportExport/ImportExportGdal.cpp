@@ -15,9 +15,9 @@
 #include <QtGui>
 
 #include "../ImportExport/ImportExportGdal.h"
-#include "Maps/Projection.h"
+#include "Projection.h"
 #include "Features.h"
-#include "Utils/ProjectionChooser.h"
+#include "ProjectionChooser.h"
 #include "Global.h"
 
 
@@ -324,12 +324,12 @@ bool ImportExportGdal::import(Layer* aLayer)
         projTitle = QCoreApplication::translate("ImportExportGdal", "Unable to set projection; please specify one");
     }
 
-#ifndef Q_OS_SYMBIAN
+#ifndef _MOBILE
     QApplication::restoreOverrideCursor();
 #endif
     sPrj = ProjectionChooser::getProjection(projTitle, true, sPrj);
     qDebug() << sPrj;
-#ifndef Q_OS_SYMBIAN
+#ifndef _MOBILE
     QApplication::setOverrideCursor(Qt::BusyCursor);
 #endif
 

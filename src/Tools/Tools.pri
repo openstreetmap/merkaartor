@@ -1,12 +1,14 @@
-INCLUDEPATH += Tools
-DEPENDPATH += Tools
+INCLUDEPATH += $$MERKAARTOR_SRC_DIR/Tools
+DEPENDPATH += $$MERKAARTOR_SRC_DIR/Tools
 
-#Header files
-HEADERS += \
-    ActionsDialog.h
+isEmpty(MOBILE) {
+  #Header files
+  HEADERS += \
+      ActionsDialog.h
 
-#Source files
-SOURCES += \
-    ActionsDialog.cpp
+  #Source files
+  SOURCES += \
+      ActionsDialog.cpp
+}
 
 

@@ -17,7 +17,7 @@
 #include <QMap>
 #include <QtXml>
 
-#include "Maps/Coord.h"
+#include "Coord.h"
 
 class WmscLayer
 {

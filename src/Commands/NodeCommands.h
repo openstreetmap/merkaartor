@@ -2,7 +2,7 @@
 #define MERKATOR_NODECOMMANDS_H_
 
 #include "Command.h"
-#include "Maps/Coord.h"
+#include "Coord.h"
 
 class Node;
 class Layer;

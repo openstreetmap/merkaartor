@@ -12,7 +12,7 @@
 #ifndef ExportGPX_H
 #define ExportGPX_H
 
-#include <ImportExport/IImportExport.h>
+#include "IImportExport.h"
 
 /**
 	@author cbro <cbro@semperpax.com>

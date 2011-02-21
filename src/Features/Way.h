@@ -38,8 +38,8 @@ public:
     virtual void drawParentsSpecial(QPainter& P, QPen& Pen, MapView* theView);
     virtual void drawChildrenSpecial(QPainter& P, QPen& Pen, MapView* theView, int depth);
 
-    virtual double pixelDistance(const QPointF& Target, double ClearEndDistance, bool selectNodes, MapView* theView) const;
-    Node* pixelDistanceNode(const QPointF& Target, double ClearEndDistance, MapView* theView, bool NoSelectVirtuals) const;
+    virtual qreal pixelDistance(const QPointF& Target, qreal ClearEndDistance, bool selectNodes, MapView* theView) const;
+    Node* pixelDistanceNode(const QPointF& Target, qreal ClearEndDistance, MapView* theView, bool NoSelectVirtuals) const;
     virtual void cascadedRemoveIfUsing(Document* theDocument, Feature* aFeature, CommandList* theList, const QList<Feature*>& Alternatives);
     virtual bool notEverythingDownloaded();
     virtual QString description() const;
@@ -98,10 +98,10 @@ public:
     virtual void partChanged(Feature* F, int ChangeId);
     virtual void setLayer(Layer* aLayer);
 
-    double area();
+    qreal area();
     bool isClosed() const;
-    double distance();
-    double widthOf();
+    qreal distance();
+    qreal widthOf();
 
     virtual bool deleteChildren(Document* theDocument, CommandList* theList);
 

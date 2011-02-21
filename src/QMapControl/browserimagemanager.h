@@ -51,8 +51,8 @@ class BrowserWebPage : public QWebPage
         void launchRequest ( const QUrl & url );
 
     private:
-        double tllat, tllon;
-        double brlat, brlon;
+        qreal tllat, tllon;
+        qreal brlat, brlon;
 
         int ox, oy, sw, sh;
 };

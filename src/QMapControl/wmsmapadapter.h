@@ -21,7 +21,7 @@
 #define WMSMAPADAPTER_H
 
 #include "IMapAdapter.h"
-#include "Preferences/WmsServersList.h"
+#include "WmsServersList.h"
 
 #include <QLocale>
 

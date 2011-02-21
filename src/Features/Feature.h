@@ -2,9 +2,9 @@
 #define MERKATOR_MAPFEATURE_H_
 
 #include "IFeature.h"
-#include "Maps/Coord.h"
+#include "Coord.h"
 #include "MapView.h"
-#include "PaintStyle/FeaturePainter.h"
+#include "FeaturePainter.h"
 
 #include <QtCore/QString>
 #include <QList>
@@ -44,7 +44,7 @@ public:
     typedef enum { IsArea, IsLinear, IsSingular } Class;
     RenderPriority()
         : theClass(IsLinear), InClassPriority(0.0), theLayer(0) { }
-    RenderPriority(Class C, double IC, int L)
+    RenderPriority(Class C, qreal IC, int L)
         : theClass(C), InClassPriority(IC), theLayer(L) { }
     RenderPriority(const RenderPriority& other)
         : theClass(other.theClass), InClassPriority(other.InClassPriority), theLayer(other.theLayer) { }
@@ -73,7 +73,7 @@ public:
 
 private:
     Class theClass;
-    double InClassPriority;
+    qreal InClassPriority;
     int theLayer;
 };
 
@@ -120,7 +120,7 @@ public:
     virtual void drawHighlight(QPainter& P, MapView* theView);
     virtual void drawFocus(QPainter& P, MapView* theView);
 
-    virtual double pixelDistance(const QPointF& Target, double ClearEndDistance, bool selectNodes, MapView* theView) const = 0;
+    virtual qreal pixelDistance(const QPointF& Target, qreal ClearEndDistance, bool selectNodes, MapView* theView) const = 0;
     virtual void cascadedRemoveIfUsing(Document* theDocument, Feature* aFeature, CommandList* theList, const QList<Feature*>& Alternatives) = 0;
     virtual bool notEverythingDownloaded() = 0;
 
@@ -280,10 +280,10 @@ public:
 
     virtual const QPainterPath& getPath() const;
 
-    const FeaturePainter* getPainter(double PixelPerM) const;
+    const FeaturePainter* getPainter(qreal PixelPerM) const;
     const FeaturePainter* getCurrentPainter() const;
     bool hasPainter() const;
-    bool hasPainter(double PixelPerM) const;
+    bool hasPainter(qreal PixelPerM) const;
     void invalidatePainter();
     QVector<qreal> getParentDashes() const;
 

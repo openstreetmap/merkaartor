@@ -13,7 +13,7 @@
 #include <QApplication>
 
 #include "TmsServersList.h"
-#include "Preferences/MerkaartorPreferences.h"
+#include "MerkaartorPreferences.h"
 
 TmsServer::TmsServer()
 {

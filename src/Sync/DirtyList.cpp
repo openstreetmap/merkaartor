@@ -2,13 +2,13 @@
 
 #include "DirtyList.h"
 #include "Command.h"
-#include "Maps/Coord.h"
+#include "Coord.h"
 #include "DownloadOSM.h"
 #include "ExportOSM.h"
 #include "Document.h"
 #include "Layer.h"
 #include "Features.h"
-#include "Utils/Utils.h"
+#include "Utils.h"
 
 #include <QtCore/QEventLoop>
 #include <QtGui/QDialog>

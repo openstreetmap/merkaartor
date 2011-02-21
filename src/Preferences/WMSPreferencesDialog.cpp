@@ -9,7 +9,7 @@
 // Copyright: See COPYING file that comes with this distribution
 //
 //
-#include "Preferences/WMSPreferencesDialog.h"
+#include "WMSPreferencesDialog.h"
 
 #include <QMessageBox>
 #include <QDir>

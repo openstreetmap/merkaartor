@@ -11,7 +11,7 @@
 // Copyright: See COPYING file that comes with this distribution
 //
 
-#include "Utils/ShortcutOverrideFilter.h"
+#include "ShortcutOverrideFilter.h"
 
 #include <QWidget>
 #include <QLineEdit>

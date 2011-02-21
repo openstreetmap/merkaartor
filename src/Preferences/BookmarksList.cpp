@@ -13,7 +13,7 @@
 #include <QApplication>
 
 #include "BookmarksList.h"
-#include "Preferences/MerkaartorPreferences.h"
+#include "MerkaartorPreferences.h"
 
 Bookmark::Bookmark()
 {

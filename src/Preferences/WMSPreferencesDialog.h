@@ -18,7 +18,7 @@
 
 
 #include <ui_WMSPreferencesDialog.h>
-#include "Preferences/MerkaartorPreferences.h"
+#include "MerkaartorPreferences.h"
 
 #include <QList>
 #include <QtXml>

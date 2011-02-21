@@ -2,10 +2,10 @@
 
 #include "MapView.h"
 #include "Document.h"
-#include "Maps/Projection.h"
+#include "Projection.h"
 #include "Node.h"
 #include "PropertiesDock.h"
-#include "Utils/Utils.h"
+#include "Utils.h"
 #include "Global.h"
 
 #include <QtGui/QMouseEvent>
@@ -156,7 +156,7 @@ void Interaction::mouseDoubleClickEvent(QMouseEvent* /*anEvent*/)
 
 void Interaction::wheelEvent(QWheelEvent* ev)
 {
-    double finalZoom = 1.;
+    qreal finalZoom = 1.;
     int Steps = ev->delta() / 120;
     if (Steps > 0) {
         for (int i = 0; i < Steps; ++i) {
@@ -206,8 +206,8 @@ void Interaction::updateSnap(QMouseEvent* event)
     CoordBox HotZone(XY_TO_COORD(event->pos()-QPoint(M_PREFS->getMaxGeoPicWidth()+5,M_PREFS->getMaxGeoPicWidth()+5)),XY_TO_COORD(event->pos()+QPoint(M_PREFS->getMaxGeoPicWidth()+5,M_PREFS->getMaxGeoPicWidth()+5)));
     CoordBox HotZoneSnap(XY_TO_COORD(event->pos()-QPoint(15,15)),XY_TO_COORD(event->pos()+QPoint(15,15)));
     SnapList.clear();
-    double BestDistance = 5;
-    double BestReadonlyDistance = 5;
+    qreal BestDistance = 5;
+    qreal BestReadonlyDistance = 5;
     bool areNodesSelectable = (theView->nodeWidth() >= 1 && M_PREFS->getTrackPointsVisible());
 
     Way* R;
@@ -253,7 +253,7 @@ void Interaction::updateSnap(QMouseEvent* event)
                         SnapList.push_back(F);
                 }
 
-                double Distance = F->pixelDistance(event->pos(), CLEAR_DISTANCE, areNodesSelectable, view());
+                qreal Distance = F->pixelDistance(event->pos(), CLEAR_DISTANCE, areNodesSelectable, view());
                 if (Distance < BestDistance && !F->isReadonly())
                 {
                     BestDistance = Distance;
@@ -286,7 +286,7 @@ void Interaction::updateSnap(QMouseEvent* event)
         else
             view()->setToolTip("");
     }
-    if (M_PREFS->getInfoOnHover() && main()->info()->isVisible()) {
+    if (M_PREFS->getInfoOnHover() && main()->info() && main()->info()->isVisible()) {
         if (LastSnap) {
             main()->info()->setHoverHtml(LastSnap->toHtml());
         } else
@@ -316,13 +316,16 @@ FeatureSnapInteraction::FeatureSnapInteraction(MapView* theView)
 //    warningCursor = QCursor(Qt::ForbiddenCursor);
     warningCursor = QCursor(QPixmap(":/Icons/cursor-warning"), 16, 5);
 
+#ifndef _MOBILE
     theView->setCursor(cursor());
+#endif
 }
 
 void FeatureSnapInteraction::paintEvent(QPaintEvent* anEvent, QPainter& thePainter)
 {
     Interaction::paintEvent(anEvent, thePainter);
 
+#ifndef _MOBILE
     for (int i=0; i<main()->features()->highlightedSize(); ++i)
         if (document()->exists(main()->features()->highlighted(i)))
             main()->features()->highlighted(i)->drawHighlight(thePainter, view());
@@ -333,7 +336,6 @@ void FeatureSnapInteraction::paintEvent(QPaintEvent* anEvent, QPainter& thePaint
         if (document()->exists(main()->properties()->highlighted(i)))
             main()->properties()->highlighted(i)->drawHighlight(thePainter, view());
 
-#ifndef _MOBILE
     //FIXME document()->exists necessary?
     if (LastSnap && document()->exists(LastSnap)) {
         LastSnap->drawHover(thePainter, view());
@@ -364,10 +366,12 @@ void FeatureSnapInteraction::mouseReleaseEvent(QMouseEvent * event)
 
 void FeatureSnapInteraction::mouseMoveEvent(QMouseEvent* event)
 {
+#ifndef _MOBILE
 //    if (!document()->isDownloadedSafe(theView->fromView(event->pos())))
 //        view()->setCursor(warningCursor);
 //    else
         view()->setCursor(cursor());
+#endif
     snapMouseMoveEvent(event, LastSnap);
     if (!(M_PREFS->getMouseSingleButton() && LastSnap))
         Interaction::mouseMoveEvent(event);
@@ -378,7 +382,9 @@ void FeatureSnapInteraction::mouseDoubleClickEvent(QMouseEvent* event)
 //    if (!document()->isDownloadedSafe(theView->fromView(event->pos())))
 //        view()->setCursor(warningCursor);
 //    else
+#ifndef _MOBILE
         view()->setCursor(cursor());
+#endif
     snapMouseDoubleClickEvent(event, LastSnap);
     if (!(M_PREFS->getMouseSingleButton() && LastSnap))
         Interaction::mouseDoubleClickEvent(event);
@@ -478,7 +484,7 @@ void FeatureSnapInteraction::setDontSelectVirtual(bool b)
     NoSelectVirtuals = b;
 }
 
-#ifndef Q_OS_SYMBIAN
+#ifndef _MOBILE
 QCursor FeatureSnapInteraction::cursor() const
 {
     if (M_PREFS->getMouseSingleButton()) {

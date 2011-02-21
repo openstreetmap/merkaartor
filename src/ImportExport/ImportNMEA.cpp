@@ -42,7 +42,7 @@ bool ImportNMEA::import(Layer* aLayer)
     QTextStream in(Device);
 
     theLayer = dynamic_cast <TrackLayer *> (aLayer);
-    theList = new CommandList(MainWindow::tr("Import NMEA"), NULL);
+    theList = new CommandList(QApplication::tr("Import NMEA"), NULL);
 
     TrackSegment* TS = g_backend.allocSegment(aLayer);
 
@@ -121,9 +121,9 @@ bool ImportNMEA::importGSA (QString line)
     QString autoSelectFix = tokens[1];
     int Fix3D = tokens[2].toInt();
 
-    // double PDOP = tokens[15].toDouble();
-    // double HDOP = tokens[16].toDouble();
-    // double VDOP = tokens[17].toDouble();
+    // qreal PDOP = tokens[15].toDouble();
+    // qreal HDOP = tokens[16].toDouble();
+    // qreal VDOP = tokens[17].toDouble();
 
     return (Fix3D == 1 ? false: true);
 }
@@ -143,14 +143,14 @@ bool ImportNMEA::importGGA (QString line)
     if (tokens.size() < 10)
         return false;
 
-    //double lat = tokens[2].left(2).toDouble();
-    //double lon = tokens[4].left(3).toDouble();
+    //qreal lat = tokens[2].left(2).toDouble();
+    //qreal lon = tokens[4].left(3).toDouble();
 
-    //double latmin = tokens[2].mid(2).toDouble();
+    //qreal latmin = tokens[2].mid(2).toDouble();
     //lat += latmin / 60.0;
     //if (tokens[3] != "N")
     //	lat = -lat;
-    //double lonmin = tokens[4].mid(3).toDouble();
+    //qreal lonmin = tokens[4].mid(3).toDouble();
     //lon += lonmin / 60.0;
     //if (tokens[5] != "E")
     //	lon = -lon;
@@ -193,17 +193,17 @@ Node* ImportNMEA::importRMC (QString line)
     if (tokens[2] != "A")
         return NULL;
 
-    double lat = tokens[3].left(2).toDouble();
-    double latmin = tokens[3].mid(2).toDouble();
+    qreal lat = tokens[3].left(2).toDouble();
+    qreal latmin = tokens[3].mid(2).toDouble();
     lat += latmin / 60.0;
     if (tokens[4] != "N")
         lat = -lat;
-    double lon = tokens[5].left(3).toDouble();
-    double lonmin = tokens[5].mid(3).toDouble();
+    qreal lon = tokens[5].left(3).toDouble();
+    qreal lonmin = tokens[5].mid(3).toDouble();
     lon += lonmin / 60.0;
     if (tokens[6] != "E")
         lon = -lon;
-    double speed = tokens[7].toDouble() * 1.852;
+    qreal speed = tokens[7].toDouble() * 1.852;
     //int date = token[9];
 
     QString strDate = tokens[9] + tokens[1];

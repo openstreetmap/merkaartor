@@ -2,16 +2,16 @@
 
 #include "MainWindow.h"
 #include "MapView.h"
-#include "Maps/Coord.h"
+#include "Coord.h"
 #include "ImportGPX.h"
 #include "ImportOSM.h"
 #include "Document.h"
 #include "Layer.h"
 #include "Feature.h"
 #include "TrackSegment.h"
-#include "Utils/SlippyMapWidget.h"
-#include "Preferences/MerkaartorPreferences.h"
-#include "Utils/OsmLink.h"
+#include "SlippyMapWidget.h"
+#include "MerkaartorPreferences.h"
+#include "OsmLink.h"
 
 #include "IProgressWindow.h"
 
@@ -463,7 +463,7 @@ bool downloadOSM(QWidget* aParent, const QUrl& theUrl, const QString& aUser, con
     }
     if (!Rcv.go(theUrl))
     {
-#ifndef Q_OS_SYMBIAN
+#ifndef _MOBILE
         aParent->setCursor(QCursor(Qt::ArrowCursor));
 #endif
         return false;
@@ -834,9 +834,11 @@ bool downloadOSM(MainWindow* Main, const CoordBox& aBox , Document* theDocument)
             {
                 theDocument->setLastDownloadLayer(theLayer);
                 theDocument->addDownloadBox(theLayer, Clip);
+#ifndef _MOBILE
                 if (directAPI)
                     Main->on_viewZoomAllAction_triggered();
                 else
+#endif
                     Main->view()->setViewport(Clip,Main->view()->rect());
                 Main->invalidateView();
             } else {

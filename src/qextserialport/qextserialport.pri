@@ -1,3 +1,5 @@
+INCLUDEPATH += $$MERKAARTOR_SRC_DIR/qextserialport
+DEPENDPATH += $$MERKAARTOR_SRC_DIR/qextserialport
 
 HEADERS += qextserialbase.h \
            qextserialport.h

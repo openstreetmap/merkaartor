@@ -30,7 +30,7 @@
 #include <QHostAddress>
 
 #include "qgpsdevice.h"
-#ifndef Q_OS_SYMBIAN
+#ifndef _MOBILE
 #include "qextserialport.h"
 #endif
 #include <math.h>
@@ -40,7 +40,7 @@
     #include <cstring> // strerror()
 #endif
 
-#include "Preferences/MerkaartorPreferences.h"
+#include "MerkaartorPreferences.h"
 
 /* GPSSLOTFORWARDER */
 
@@ -110,25 +110,25 @@ QGPSDevice::QGPSDevice()
 int QGPSDevice::latDegrees()    { return (int) (fabs(latitude())); }
 int QGPSDevice::latMinutes()
 {
-    double m = fabs(latitude()) - latDegrees();
+    qreal m = fabs(latitude()) - latDegrees();
     return int(m * 60);
 }
 int QGPSDevice::latSeconds()
 {
-    double m = fabs(latitude()) - latDegrees();
-    double s = (m * 60) - int(m * 60);
+    qreal m = fabs(latitude()) - latDegrees();
+    qreal s = (m * 60) - int(m * 60);
     return int(s * 60);
 }
 int QGPSDevice::longDegrees()    { return (int) (fabs(longitude())); }
 int QGPSDevice::longMinutes()
 {
-    double m = fabs(longitude()) - longDegrees();
+    qreal m = fabs(longitude()) - longDegrees();
     return int(m * 60);
 }
 int QGPSDevice::longSeconds()
 {
-    double m = fabs(longitude()) - longDegrees();
-    double s = (m * 60) - int(m * 60);
+    qreal m = fabs(longitude()) - longDegrees();
+    qreal s = (m * 60) - int(m * 60);
     return int(s * 60);
 }
 
@@ -242,8 +242,8 @@ bool QGPSDevice::parseGGA(const char *ggaString)
 
     QStringList tokens = line.split(",");
 
-    double lat = tokens[2].left(2).toDouble();
-    double latmin = tokens[2].mid(2).toDouble();
+    qreal lat = tokens[2].left(2).toDouble();
+    qreal latmin = tokens[2].mid(2).toDouble();
     lat += latmin / 60.0;
     if (tokens[3] != "N")
         lat = -lat;
@@ -260,8 +260,8 @@ bool QGPSDevice::parseGGA(const char *ggaString)
     }
 
 
-    double lon = tokens[4].left(3).toDouble();
-    double lonmin = tokens[4].mid(3).toDouble();
+    qreal lon = tokens[4].left(3).toDouble();
+    qreal lonmin = tokens[4].mid(3).toDouble();
     lon += lonmin / 60.0;
     if (tokens[5] != "E")
         lon = -lon;
@@ -283,10 +283,10 @@ bool QGPSDevice::parseGGA(const char *ggaString)
     int numSat = tokens[7].toInt();
     setNumSatellites(numSat);
 
-    float dilut = tokens[8].toFloat();
+    qreal dilut = tokens[8].toFloat();
     setDillution(dilut);
 
-    float altitude = tokens[9].toFloat();
+    qreal altitude = tokens[9].toFloat();
     setAltitude(altitude);
 
     mutex->unlock();
@@ -304,8 +304,8 @@ bool QGPSDevice::parseGLL(const char *ggaString)
 
     QStringList tokens = line.split(",");
 
-    double lat = tokens[1].left(2).toDouble();
-    double latmin = tokens[1].mid(2).toDouble();
+    qreal lat = tokens[1].left(2).toDouble();
+    qreal latmin = tokens[1].mid(2).toDouble();
     lat += latmin / 60.0;
     if (tokens[2] != "N")
         lat = -lat;
@@ -321,8 +321,8 @@ bool QGPSDevice::parseGLL(const char *ggaString)
             setLatCardinal(CardinalNone);
     }
 
-    double lon = tokens[3].left(3).toDouble();
-    double lonmin = tokens[3].mid(3).toDouble();
+    qreal lon = tokens[3].left(3).toDouble();
+    qreal lonmin = tokens[3].mid(3).toDouble();
     lon += lonmin / 60.0;
     if (tokens[4] != "E")
         lon = -lon;
@@ -476,8 +476,8 @@ bool QGPSDevice::parseRMC(const char *rmcString)
 
     // Latitude
 
-    double lat = tokens[3].left(2).toDouble();
-    double latmin = tokens[3].mid(2).toDouble();
+    qreal lat = tokens[3].left(2).toDouble();
+    qreal latmin = tokens[3].mid(2).toDouble();
     lat += latmin / 60.0;
     if (tokens[4] != "N")
         lat = -lat;
@@ -493,8 +493,8 @@ bool QGPSDevice::parseRMC(const char *rmcString)
             setLatCardinal(CardinalNone);
     }
 
-    double lon = tokens[5].left(3).toDouble();
-    double lonmin = tokens[5].mid(3).toDouble();
+    qreal lon = tokens[5].left(3).toDouble();
+    qreal lonmin = tokens[5].mid(3).toDouble();
     lon += lonmin / 60.0;
     if (tokens[6] != "E")
         lon = -lon;
@@ -512,17 +512,17 @@ bool QGPSDevice::parseRMC(const char *rmcString)
 
     // Ground speed in km/h
 
-    double speed = QString::number(tokens[7].toDouble() * 1.852, 'f', 1).toDouble();
+    qreal speed = QString::number(tokens[7].toDouble() * 1.852, 'f', 1).toDouble();
     setSpeed(speed);
 
     // Heading
 
-    double heading = tokens[8].toDouble();
+    qreal heading = tokens[8].toDouble();
     setHeading(heading);
 
     // Magnetic variation
 
-    double magvar = tokens[10].toDouble();
+    qreal magvar = tokens[10].toDouble();
     setVariation(magvar);
 
     if (!tokens[11].isEmpty())
@@ -638,7 +638,7 @@ void QGPSDevice::stopDevice()
     emit doStopDevice();
 }
 
-#ifndef Q_OS_SYMBIAN
+#ifndef _MOBILE
 /*** QGPSComDevice  ***/
 
 QGPSComDevice::QGPSComDevice(const QString &device)
@@ -910,7 +910,7 @@ void QGPSFileDevice::onDataAvailable()
     }
 }
 
-#ifndef Q_OS_SYMBIAN
+#ifndef _MOBILE
 /* GPSSDEVICE */
 
 #ifdef USE_GPSD_LIB
@@ -1026,13 +1026,13 @@ void QGPSDDevice::onDataAvailable()
     setFixStatus(StatusActive);
     setLatitude(gpsdata->fix.latitude);
     setLongitude(gpsdata->fix.longitude);
-    double Alt = gpsdata->fix.altitude;
+    qreal Alt = gpsdata->fix.altitude;
     if (!__isnan(Alt))
         setAltitude(Alt);
-    double Speed = gpsdata->fix.speed;
+    qreal Speed = gpsdata->fix.speed;
     if (!__isnan(Speed))
         setSpeed(Speed);
-    double Heading = gpsdata->fix.track;
+    qreal Heading = gpsdata->fix.track;
     if (!__isnan(Heading))
         setHeading(Heading);
     if (gpsdata->fix.time)
@@ -1205,13 +1205,13 @@ void QGPSDDevice::parseO(const QString& s)
     setFixStatus(StatusActive);
     setLatitude(Args[3].toDouble());
     setLongitude(Args[4].toDouble());
-    double Alt = 0;
+    qreal Alt = 0;
     if (Args.count() > 5)
         Alt = Args[5].toDouble();
-    double Speed = 0;
+    qreal Speed = 0;
     if (Args.count() > 9)
         Speed = Args[9].toDouble();
-    double Heading = 0;
+    qreal Heading = 0;
     if (Args.count() > 7)
         Heading = Args[7].toDouble();
     emit updatePosition(Args[3].toDouble(),
@@ -1236,90 +1236,154 @@ void QGPSDDevice::onLinkReady()
 
 #endif
 
-#ifdef Q_OS_SYMBIAN
-/* GPSS60DEVICE */
+#if defined Q_OS_SYMBIAN || defined(Q_WS_SIMULATOR)
 
-#include "xqlocation.h"
+/* QtMobility */
 
-QGPSS60Device::QGPSS60Device()
+// Use the QtMobility namespace
+QTM_USE_NAMESPACE
+
+QGPSMobileDevice::QGPSMobileDevice()
 {
 }
 
-bool QGPSS60Device::openDevice()
+bool QGPSMobileDevice::openDevice()
 {
+    src = QGeoPositionInfoSource::createDefaultSource(this);
+    if (!src) {
+        return false;
+    }
+    src->setUpdateInterval(1000);
+    src->startUpdates();
+
+    connect(src, SIGNAL(updateTimeout()), SLOT(onUpdateTimeout()));
+    connect(src, SIGNAL(positionUpdated(const QGeoPositionInfo&)), SLOT(onPositionUpdated(const QGeoPositionInfo&)));
+
+    satsrc = QGeoSatelliteInfoSource::createDefaultSource(this);
+    if (satsrc) {
+        connect(satsrc, SIGNAL(satellitesInViewUpdated(QList<QGeoSatelliteInfo>)), SLOT(on_satellitesInViewUpdated(QList<QGeoSatelliteInfo>)));
+        connect(satsrc, SIGNAL(satellitesInUseUpdated(QList<QGeoSatelliteInfo>)), SLOT(on_satellitesInUseUpdated(QList<QGeoSatelliteInfo>)));
+        connect(satsrc, SIGNAL(requestTimeout()), SLOT(on_satRequestTimeout()));
+
+        satsrc->startUpdates();
+    }
     return true;
 }
 
-bool QGPSS60Device::closeDevice()
+bool QGPSMobileDevice::closeDevice()
 {
     return true;
 }
 
 // this function will be called within this thread
-void QGPSS60Device::onStop()
+void QGPSMobileDevice::onStop()
 {
     quit();
 }
 
-void QGPSS60Device::run()
+void QGPSMobileDevice::run()
 {
     GPSSlotForwarder Forward(this);
     connect(this,SIGNAL(doStopDevice()),&Forward,SLOT(onStop()));
 
-    XQLocation location;
-    if (location.open() != XQLocation::NoError) {
-        emit(doStopDevice());
-        return;
-    }
-    location.startUpdates(1000);
-
-    connect(&location, SIGNAL(locationChanged(double,double,double,float)), this, SLOT(onLocationChanged(double,double,double,float)));
-    connect(&location, SIGNAL(statusChanged(XQLocation::DeviceStatus)), this, SLOT(onStatusChanged(XQLocation::DeviceStatus)));
-    connect(&location, SIGNAL(dataQualityChanged(XQLocation::DataQuality)), this, SLOT(onDataQualityChanged(XQLocation::DataQuality)));
-    connect(&location, SIGNAL(numberOfSatellitesInViewChanged(int)), this, SLOT(setNumSatellites(int)));
-
     exec();
 
-    location.stopUpdates();
+    src->stopUpdates();
 }
 
-void QGPSS60Device::onLocationChanged(double latitude, double longitude, double altitude, float speed)
+void QGPSMobileDevice::onUpdateTimeout()
 {
-    setLatitude(latitude);
-    setLongitude(longitude);
-    setAltitude(altitude);
-    setSpeed(speed);
-
-    emit updatePosition(latitude, longitude, QDateTime::currentDateTime(),
-            altitude, speed, cur_heading);
+    setFixType(FixUnavailable);
 }
 
-void QGPSS60Device::onStatusChanged(XQLocation::DeviceStatus)
+void QGPSMobileDevice::onPositionUpdated(const QGeoPositionInfo &update)
 {
+    cur_datetime = update.timestamp();
+    cur_latitude = update.coordinate().latitude();
+    cur_longitude = update.coordinate().longitude();
 
-}
+    cur_altitude = update.coordinate().altitude();
 
-void QGPSS60Device::onDataQualityChanged(XQLocation::DataQuality qual)
-{
-    switch (qual) {
-    case XQLocation::DataQualityUnknown:
+    if (update.hasAttribute(QGeoPositionInfo::GroundSpeed)) {
+        cur_speed = update.attribute(QGeoPositionInfo::GroundSpeed);
+    }
+    if (update.hasAttribute(QGeoPositionInfo::HorizontalAccuracy)) {
+        m_accuracy = qRound(update.attribute(QGeoPositionInfo::HorizontalAccuracy));
+    }
+    if (update.hasAttribute(QGeoPositionInfo::Direction)) {
+        cur_heading = qRound(update.attribute(QGeoPositionInfo::Direction));
+    }
+
+    if (m_accuracy > 500) {
+        setFixStatus(StatusVoid);
         setFixType(FixUnavailable);
-        break;
-    case XQLocation::DataQualityLoss:
-        setFixType(FixInvalid);
-        break;
-    case XQLocation::DataQualityPartial:
-        setFixType(Fix2D);
-        break;
-    case XQLocation::DataQualityNormal:
+    } else if (m_accuracy < 100) {
+        setFixStatus(StatusActive);
         setFixType(Fix3D);
+    } else {
+        setFixStatus(StatusActive);
+        setFixType(Fix2D);
+    }
+
+    emit updatePosition(latitude(), longitude(), dateTime(), altitude(), speed(), heading());
+    emit updateStatus();
+}
+
+//int QGPSMobileDevice::getUpdateInterval() const
+//{
+//    if (src)
+//        return src->updateInterval();
+//    else
+//        return 0;
+//}
+
+//void QGPSMobileDevice::setUpdateInterval(int arg)
+//{
+//    if (src)
+//        src->setUpdateInterval(arg);
+//}
+
+void QGPSMobileDevice::on_satellitesInViewUpdated(QList<QGeoSatelliteInfo> satList)
+{
+    qDebug() << "Sat updated";
+    m_List = satList;
+    emit updateStatus();
+}
+
+void QGPSMobileDevice::on_satellitesInUseUpdated(QList<QGeoSatelliteInfo> satList)
+{
+    m_UseList = satList;
+    emit updateStatus();
+}
+
+void QGPSMobileDevice::on_satRequestTimeout()
+{
+    m_List.clear();
+    m_UseList.clear();
+    emit updateStatus();
+}
+
+void QGPSMobileDevice::satInfo(int index, int &elev, int &azim, int &snr)
+{
+    elev = 0;
+    azim = 0;
+    snr = 0;
+
+    foreach (QGeoSatelliteInfo gi, m_List) {
+        if (gi.prnNumber() == index) {
+            elev = gi.attribute(QGeoSatelliteInfo::Elevation);
+            azim = gi.attribute(QGeoSatelliteInfo::Azimuth);
+            snr = gi.signalStrength();
+            return;
+        }
     }
 }
-void QGPSS60Device::onLinkReady()
+
+void QGPSMobileDevice::onLinkReady()
 {
 }
 
-void QGPSS60Device::onDataAvailable()
+void QGPSMobileDevice::onDataAvailable()
 {
 }
 
