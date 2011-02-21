@@ -144,6 +144,16 @@ include(TagTemplate/TagTemplate.pri)
 include(NameFinder/NameFinder.pri)
 include(Utils/Utils.pri)
 
+# Header files
+HEADERS += \
+    ./MainWindow.h
+
+SOURCES += \
+    ./MainWindow.cpp
+
+# Forms
+FORMS += \
+    ./MainWindow.ui
 
 unix {
     # Prefix: base instalation directory

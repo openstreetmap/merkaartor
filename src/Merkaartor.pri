@@ -1,7 +1,6 @@
 # Header files
 HEADERS += Global.h \
     ./IProgressWindow.h \
-    ./MainWindow.h \
     ./Maps/Coord.h \
     ./Document.h \
     ./Maps/MapTypedef.h \
@@ -24,7 +23,6 @@ SOURCES += Global.cpp \
     ./Maps/FeatureManipulations.cpp \
     ./MapView.cpp \
     ./Main.cpp \
-    ./MainWindow.cpp \
     ./TagModel.cpp \
     ./GotoDialog.cpp \
     ./TerraceDialog.cpp \
@@ -33,7 +31,6 @@ SOURCES += Global.cpp \
 # Forms
 FORMS += ./AboutDialog.ui \
     ./DownloadMapDialog.ui \
-    ./MainWindow.ui \
     ./UploadMapDialog.ui \
     ./GotoDialog.ui \
     ./TerraceDialog.ui \
