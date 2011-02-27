@@ -111,7 +111,7 @@ SOURCES += \
 FORMS += \
     MainWindow.ui
 
-OTHER_FILES += CHANGELOG
+OTHER_FILES += ../CHANGELOG ../LICENSE
 
 unix {
     # Prefix: base instalation directory
