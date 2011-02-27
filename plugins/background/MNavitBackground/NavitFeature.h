@@ -1,11 +1,12 @@
 #ifndef NAVITFEATURE_H
 #define NAVITFEATURE_H
 
-#include "Features/IFeature.h"
+#include "IFeature.h"
 #include <QList>
 #include <QVector>
 #include <QPair>
 #include <QPoint>
+#include <QPainterPath>
 
 class PrimitivePainter;
 
@@ -30,7 +31,7 @@ class NavitFeature : public IFeature
 public:
     NavitFeature();
 
-    virtual FeatureType getType() const { return IFeature::All; }
+    virtual char getType() const { return IFeature::All; }
 
     virtual QString xmlId() const { return QString(); }
     virtual const QDateTime& time() const { return QDateTime::currentDateTime(); }
@@ -42,6 +43,12 @@ public:
     virtual const IFeature* getParent(int) const { return NULL; }
 
     virtual bool hasPainter(double) const { return false; }
+
+    /** Give the id of the feature.
+     *  If the feature has no id, a random id is generated
+     * @return the id of the current feature
+     */
+    virtual const IFeature::FId& id() const {return theId;}
 
     /** check if the feature is logically deleted
      * @return true if logically deleted
@@ -98,6 +105,8 @@ public:
      */
     virtual bool isReadonly() { return true; }
 
+    virtual const QPainterPath& getPath() const {return thePath;}
+
     void setType(quint32 aTyp);
 
 public:
@@ -107,6 +116,9 @@ public:
     quint16 order;
     QVector<QPoint> coordinates;
     QList<NavitAttribute> attributes;
+
+    IFeature::FId theId;
+    QPainterPath thePath;
 };
 
 #endif // NAVITFEATURE_H

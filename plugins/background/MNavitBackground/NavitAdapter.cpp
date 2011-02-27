@@ -23,12 +23,23 @@
 #include <QBuffer>
 #include <QPair>
 #include <QStringList>
-
+#include <QDebug>
 #include <math.h>
 
 #include "MasPaintStyle.h"
 
 static const QUuid theUid ("{afc13af7-d538-48e1-9997-a2b45db5b3ff}");
+static const QString theName("Navit");
+
+QUuid NavitAdapterFactory::getId() const
+{
+    return theUid;
+}
+
+QString	NavitAdapterFactory::getName() const
+{
+    return theName;
+}
 
 #define FILTER_OPEN_SUPPORTED \
     tr("Supported formats")+" (*.bin)\n" \
@@ -509,7 +520,7 @@ IMapAdapter::Type NavitAdapter::getType() const
 
 QString	NavitAdapter::getName() const
 {
-    return "Navit";
+    return theName;
 }
 
 QMenu* NavitAdapter::getMenu() const
@@ -643,30 +654,30 @@ void NavitAdapter::cleanup()
 {
 }
 
-bool NavitAdapter::toXML(QDomElement xParent)
+bool NavitAdapter::toXML(QXmlStreamWriter& stream)
 {
     bool OK = true;
 
-    QDomElement fs = xParent.ownerDocument().createElement("Images");
-    xParent.appendChild(fs);
-    if (loaded)
-        fs.setAttribute("filename", navit.filename());
+//    QDomElement fs = xParent.ownerDocument().createElement("Images");
+//    xParent.appendChild(fs);
+//    if (loaded)
+//        fs.setAttribute("filename", navit.filename());
 
     return OK;
 }
 
-void NavitAdapter::fromXML(const QDomElement xParent)
+void NavitAdapter::fromXML(QXmlStreamReader& stream)
 {
-    QDomElement fs = xParent.firstChildElement();
-    while(!fs.isNull()) {
-        if (fs.tagName() == "Images") {
-            QString fn = fs.attribute("filename");
-            if (!fn.isEmpty())
-                loaded = navit.setFilename(fn);
-        }
+//    QDomElement fs = xParent.firstChildElement();
+//    while(!fs.isNull()) {
+//        if (fs.tagName() == "Images") {
+//            QString fn = fs.attribute("filename");
+//            if (!fn.isEmpty())
+//                loaded = navit.setFilename(fn);
+//        }
 
-        fs = fs.nextSiblingElement();
-    }
+//        fs = fs.nextSiblingElement();
+//    }
 }
 
 QString NavitAdapter::toPropertiesHtml()
@@ -680,5 +691,5 @@ QString NavitAdapter::toPropertiesHtml()
 }
 
 #ifndef _MOBILE
-Q_EXPORT_PLUGIN2(MNavitBackgroundPlugin, NavitAdapter)
+Q_EXPORT_PLUGIN2(MNavitBackgroundPlugin, NavitAdapterFactory)
 #endif

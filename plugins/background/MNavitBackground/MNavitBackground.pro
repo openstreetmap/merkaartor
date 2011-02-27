@@ -6,8 +6,8 @@ QT += network \
     svg
 INCLUDEPATH += $$MERKAARTOR_SRC_DIR/src
 DEPENDPATH += $$MERKAARTOR_SRC_DIR/src
-INCLUDEPATH += $$MERKAARTOR_SRC_DIR/src/PaintStyle
-DEPENDPATH += $$MERKAARTOR_SRC_DIR/src/PaintStyle
+INCLUDEPATH += $$MERKAARTOR_SRC_DIR/src/PaintStyle $$MERKAARTOR_SRC_DIR/src/Utils
+DEPENDPATH += $$MERKAARTOR_SRC_DIR/src/PaintStyle $$MERKAARTOR_SRC_DIR/src/Utils
 include(../../../src/PaintStyle/PaintStyle.pri)
 
 include(MNavitBackground.pri)

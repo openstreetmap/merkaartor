@@ -14,6 +14,7 @@
 #define NAVITADAPTER_H
 
 #include "IMapAdapter.h"
+#include "IMapAdapterFactory.h"
 
 #include <QLocale>
 #include <QByteArray>
@@ -23,7 +24,7 @@
 #include "PaintStyle/PrimitivePainter.h"
 class MasPaintStyle;
 
-class NavitAdapter : public QObject, public IMapAdapter
+class NavitAdapter : public IMapAdapter
 {
     Q_OBJECT
     Q_INTERFACES(IMapAdapter)
@@ -60,19 +61,20 @@ public:
     /*!
      * @return the size of the tiles
      */
-    virtual int		getTileSize	() const { return -1; }
+    virtual int		getTileSizeW	() const { return -1; }
+    virtual int		getTileSizeH	() const { return -1; }
 
     //! returns the min zoom value
     /*!
      * @return the min zoom value
      */
-    virtual int 		getMinZoom	() const { return -1; }
+    virtual int 		getMinZoom	(const QRectF &) const { return -1; }
 
     //! returns the max zoom value
     /*!
      * @return the max zoom value
      */
-    virtual int		getMaxZoom	() const { return -1; }
+    virtual int		getMaxZoom	(const QRectF &) const { return -1; }
 
     //! returns the current zoom
     /*!
@@ -80,9 +82,22 @@ public:
      */
     virtual int 		getZoom		() const { return -1; }
 
+    //! returns the source tag to be applied when drawing over this map
+    /*!
+     * @return the source tag
+     */
+    virtual QString	getSourceTag		() const { return ""; }
+    virtual void setSourceTag (const QString& ) {};
+
+    //! returns the Url of the usage license
+    /*!
+     * @return the Url of the usage license
+     */
+    virtual QString	getLicenseUrl() const {return "";}
+
     virtual int		getAdaptedZoom() const { return -1; }
-    virtual int 	getAdaptedMinZoom() const { return -1; }
-    virtual int		getAdaptedMaxZoom() const { return -1; }
+    virtual int 	getAdaptedMinZoom(const QRectF &) const { return -1; }
+    virtual int		getAdaptedMaxZoom(const QRectF &) const { return -1; }
 
     virtual void	zoom_in() {}
     virtual void	zoom_out() {}
@@ -106,9 +121,11 @@ public:
 
     virtual void cleanup();
 
-    virtual bool toXML(QDomElement xParent);
-    virtual void fromXML(const QDomElement xParent);
+    virtual bool toXML(QXmlStreamWriter& stream);
+    virtual void fromXML(QXmlStreamReader& stream);
     virtual QString toPropertiesHtml();
+
+    virtual void setSettings(QSettings* /*aSet*/) {}
 
 public:
     void setFile(const QString& fn);
@@ -128,6 +145,31 @@ private:
 
     QHash< quint32, PrimitivePainter* > myStyles;
     QList<PrimitivePainter> thePrimitivePainters;
+};
+
+class NavitAdapterFactory : public QObject, public IMapAdapterFactory
+{
+    Q_OBJECT
+    Q_INTERFACES(IMapAdapterFactory)
+
+public:
+    //! Creates an instance of the actual plugin
+    /*!
+     * @return  a pointer to the MapAdapter
+     */
+    IMapAdapter* CreateInstance() {return new NavitAdapter(); }
+
+    //! returns the unique identifier (Uuid) of this MapAdapter
+    /*!
+     * @return  the unique identifier (Uuid) of this MapAdapter
+     */
+    virtual QUuid	getId		() const;
+
+    //! returns the name of this MapAdapter
+    /*!
+     * @return  the name of this MapAdapter
+     */
+    virtual QString	getName		() const;
 };
 
 #endif // NAVITADAPTER_H
