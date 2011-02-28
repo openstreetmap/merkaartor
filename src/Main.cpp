@@ -220,6 +220,8 @@ int main(int argc, char** argv)
     QDir pluginsDir = QDir(qApp->applicationDirPath());
     pluginsDir.cdUp();
     pluginsDir.cd("plugins");
+#elif defined(Q_OS_SYMBIAN)
+    QDir pluginsDir(QLibraryInfo::location(QLibraryInfo::PluginsPath));
 #else
     QDir pluginsDir = (g_Merk_Portable ? QDir(qApp->applicationDirPath() + "/plugins") : QDir(STRINGIFY(PLUGINS_DIR)));
 #endif

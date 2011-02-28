@@ -17,3 +17,16 @@ win32 {
     INCLUDEPATH += $$COMMON_DIR/include
     LIBS += -L$$COMMON_DIR/lib
 }
+
+symbian {
+  # Load predefined include paths (e.g. QT_PLUGINS_BASE_DIR) to be used in the pro-files
+  load(data_caging_paths)
+
+  # EPOCALLOWDLLDATA have to set true because Qt macros has initialised global data
+  TARGET.EPOCALLOWDLLDATA=1
+
+  # Defines plugin files into Symbian .pkg package
+  pluginDep.sources = MNavitBackgroundPlugin.dll
+  pluginDep.path = $$QT_PLUGINS_BASE_DIR/background
+  DEPLOYMENT += pluginDep
+}

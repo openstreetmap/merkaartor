@@ -15,6 +15,9 @@
 
 #include "MainWindow.h"
 #include "MyMessageHandler.h"
+#include "MerkaartorPreferences.h"
+
+#include "IMapAdapterFactory.h"
 
 int main(int argc, char *argv[])
 {
@@ -122,6 +125,34 @@ int main(int argc, char *argv[])
 #ifdef QT_KEYPAD_NAVIGATION
     QApplication::setNavigationMode(Qt::NavigationModeCursorAuto);
 #endif
+
+    // Plugins
+#if defined(Q_OS_WIN32)
+    QDir pluginsDir = QDir(qApp->applicationDirPath() + "/plugins");
+
+    // Fixes MacOSX plugin dir (fixes #2253)
+#elif defined(Q_OS_MAC)
+    QDir pluginsDir = QDir(qApp->applicationDirPath());
+    pluginsDir.cdUp();
+    pluginsDir.cd("plugins");
+#elif defined(Q_OS_SYMBIAN)
+    QDir pluginsDir(QLibraryInfo::location(QLibraryInfo::PluginsPath));
+#else
+    QDir pluginsDir = (g_Merk_Portable ? QDir(qApp->applicationDirPath() + "/plugins") : QDir(STRINGIFY(PLUGINS_DIR)));
+#endif
+    QCoreApplication::addLibraryPath(pluginsDir.path());
+
+    pluginsDir.cd("background");
+    foreach (QString fileName, pluginsDir.entryList(QDir::Files)) {
+        QPluginLoader loader(pluginsDir.absoluteFilePath(fileName));
+        QObject *plugin = loader.instance();
+        if (plugin) {
+            IMapAdapterFactory *fac = qobject_cast<IMapAdapterFactory *>(plugin);
+            if (fac)
+                M_PREFS->addBackgroundPlugin(fac);
+        }
+    }
+
     int x =  app.exec();
 
 #ifdef LOG_TO_FILE

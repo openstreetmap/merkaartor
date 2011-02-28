@@ -21,7 +21,7 @@
 #include <QHash>
 
 #include "NavitBin.h"
-#include "PaintStyle/PrimitivePainter.h"
+#include "PrimitivePainter.h"
 class MasPaintStyle;
 
 class NavitAdapter : public IMapAdapter

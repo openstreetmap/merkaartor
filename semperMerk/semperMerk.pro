@@ -12,6 +12,10 @@ symbian: {
 
 # DEFINES += LOG_TO_FILE
 MERKAARTOR_SRC_DIR = $$PWD/../src
+COMMON_DIR = $$MERKAARTOR_SRC_DIR/binaries
+OUTPUT_DIR = $$MERKAARTOR_SRC_DIR/binaries
+DESTDIR = $$OUTPUT_DIR/bin
+
 INCLUDEPATH += $$PWD/src $$PWD/../include $$PWD/../interfaces $MOC_DIR
 DEPENDPATH += $$PWD/../interfaces
 

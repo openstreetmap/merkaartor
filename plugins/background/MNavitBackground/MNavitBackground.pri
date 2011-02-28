@@ -5,8 +5,8 @@ HEADERS += IMapAdapter.h \
     NavitZip.h \
     NavitFeature.h
 SOURCES += \
-    Utils/TagSelector.cpp \
-    Utils/SvgCache.cpp \
+    TagSelector.cpp \
+    SvgCache.cpp \
     NavitAdapter.cpp \
     NavitBin.cpp \
     NavitZip.cpp \
