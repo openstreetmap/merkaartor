@@ -33,6 +33,20 @@
 #include "GosmoreFeature.h"
 
 static const QUuid theUid ("{7b7185c5-46cc-4b67-85b7-7aeb7fb49f31}");
+static const QString theName("Gosmore");
+
+QUuid GosmoreAdapterFactory::getId() const
+{
+    return theUid;
+}
+
+QString	GosmoreAdapterFactory::getName() const
+{
+    return theName;
+}
+
+/********************************/
+
 
 #define FILTER_OPEN_SUPPORTED \
     tr("Supported formats")+" (*.pak)\n" \
@@ -386,7 +400,7 @@ IMapAdapter::Type GosmoreAdapter::getType() const
 
 QString	GosmoreAdapter::getName() const
 {
-    return "Gosmore";
+    return theName;
 }
 
 QMenu* GosmoreAdapter::getMenu() const
@@ -712,30 +726,30 @@ void GosmoreAdapter::cleanup()
 {
 }
 
-bool GosmoreAdapter::toXML(QDomElement xParent)
+bool GosmoreAdapter::toXML(QXmlStreamWriter& stream)
 {
     bool OK = true;
-
-    QDomElement fs = xParent.ownerDocument().createElement("Images");
-    xParent.appendChild(fs);
-    if (pak)
-        fs.setAttribute("filename", pak->fileName());
+    stream.writeStartElement("Source");
+    if (loaded)
+        stream.writeAttribute("filename", pak->fileName());
+    stream.writeEndElement();
 
     return OK;
 }
 
-void GosmoreAdapter::fromXML(const QDomElement xParent)
+void GosmoreAdapter::fromXML(QXmlStreamReader& stream)
 {
-    QDomElement fs = xParent.firstChildElement();
-    while(!fs.isNull()) {
-        if (fs.tagName() == "Images") {
-            QString fn = fs.attribute("filename");
-            if (!fn.isEmpty())
-                setFile(fn);
-        }
+    QString fn;
 
-        fs = fs.nextSiblingElement();
+    while(!stream.atEnd() && !stream.isEndElement()) {
+        if (stream.name() == "Source") {
+            fn = stream.attributes().value("filename").toString();
+        }
+        stream.readNext();
     }
+
+    if (!fn.isEmpty())
+        setFile(fn);
 }
 
 QString GosmoreAdapter::toPropertiesHtml()
@@ -749,5 +763,5 @@ QString GosmoreAdapter::toPropertiesHtml()
 }
 
 #ifndef _MOBILE
-Q_EXPORT_PLUGIN2(MGosmoreBackgroundPlugin, GosmoreAdapter)
+Q_EXPORT_PLUGIN2(MGosmoreBackgroundPlugin, GosmoreAdapterFactory)
 #endif

@@ -1,17 +1,18 @@
 #ifndef GOSMOREFEATURE_H
 #define GOSMOREFEATURE_H
 
-#include "Features/IFeature.h"
+#include "IFeature.h"
 #include "libgosm.h"
 
 #include <QPair>
+#include <QPainterPath>
 
 class GosmoreFeature : public IFeature
 {
 public:
     GosmoreFeature(int stylenr);
 
-    virtual FeatureType getType() const { return IFeature::All; }
+    virtual char getType() const { return IFeature::All; }
 
     virtual QString xmlId() const { return QString(); }
     virtual const QDateTime& time() const { return QDateTime::currentDateTime(); }
@@ -23,6 +24,12 @@ public:
     virtual const IFeature* getParent(int) const { return NULL; }
 
     virtual bool hasPainter(double) const { return false; }
+
+    /** Give the id of the feature.
+     *  If the feature has no id, a random id is generated
+     * @return the id of the current feature
+     */
+    virtual const IFeature::FId& id() const {return theId;}
 
     /** check if the feature is logically deleted
      * @return true if logically deleted
@@ -79,8 +86,13 @@ public:
      */
     virtual bool isReadonly() { return true; }
 
+    virtual const QPainterPath& getPath() const {return thePath;}
+
 protected:
     QList<QPair<QString, QString> > Tags;
+
+    IFeature::FId theId;
+    QPainterPath thePath;
 };
 
 #endif // GOSMOREFEATURE_H
