@@ -143,7 +143,7 @@ private:
 
     NavitBin navit;
 
-    QHash< quint32, PrimitivePainter* > myStyles;
+    QHash< quint32, PrimitivePainter > myStyles;
     QList<PrimitivePainter> thePrimitivePainters;
 };
 

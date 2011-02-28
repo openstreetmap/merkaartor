@@ -195,24 +195,18 @@ void PrimitivePainter::drawForeground(QPainterPath* R, QPainter* thePainter, qre
     if (!DrawForeground) return;
 
     qreal WW = 0.0;
-    if (DrawForeground)
+    WW = PixelPerM*ForegroundScale+ForegroundOffset;
+    if (WW < 0) return;
+    QPen thePen(ForegroundColor,WW);
+    thePen.setCapStyle(CAPSTYLE);
+    thePen.setJoinStyle(JOINSTYLE);
+    if (ForegroundDashSet)
     {
-        WW = PixelPerM*ForegroundScale+ForegroundOffset;
-        if (WW < 0) return;
-        QPen thePen(ForegroundColor,WW);
-        thePen.setCapStyle(CAPSTYLE);
-        thePen.setJoinStyle(JOINSTYLE);
-        if (ForegroundDashSet)
-        {
-            QVector<qreal> Pattern;
-            Pattern << ForegroundDash << ForegroundWhite;
-            thePen.setDashPattern(Pattern);
-        }
-        thePainter->setPen(thePen);
+        QVector<qreal> Pattern;
+        Pattern << ForegroundDash << ForegroundWhite;
+        thePen.setDashPattern(Pattern);
     }
-    else
-        thePainter->setPen(Qt::NoPen);
-
+    thePainter->setPen(thePen);
     thePainter->setBrush(Qt::NoBrush);
 
     thePainter->drawPath(*R);

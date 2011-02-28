@@ -451,7 +451,6 @@ bool SpatialiteAdapter::toXML(QXmlStreamWriter& stream)
 
 void SpatialiteAdapter::fromXML(QXmlStreamReader& stream)
 {
-    stream.readNext();
     while(!stream.atEnd() && !stream.isEndElement()) {
         if (stream.name() == "Database") {
             QString fn = stream.attributes().value("filename").toString();

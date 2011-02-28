@@ -41,6 +41,8 @@ QString	NavitAdapterFactory::getName() const
     return theName;
 }
 
+/********************************/
+
 #define FILTER_OPEN_SUPPORTED \
     tr("Supported formats")+" (*.bin)\n" \
     +tr("All Files (*)")
@@ -440,6 +442,41 @@ enum item_type item_from_name(const char *name)
 
 /*****/
 
+#define DEFAULTWIDTH 6
+#define LANEWIDTH 4
+
+qreal CalculateWidth(NavitFeature& f)
+{
+    qreal Width;
+
+    QString s(f.tagValue("width",QString()));
+    if (!s.isNull()) {
+        Width = s.toDouble();
+        return Width;
+    }
+    QString h = f.tagValue("highway",QString());
+    if (s.isNull()) {
+        Width = DEFAULTWIDTH;
+        return Width;
+    }
+
+    if ( (h == "motorway") || (h=="motorway_link") )
+        Width =  4*LANEWIDTH; // 3 lanes plus emergency
+    else if ( (h == "trunk") || (h=="trunk_link") )
+        Width =  3*LANEWIDTH; // 2 lanes plus emergency
+    else if ( (h == "primary") || (h=="primary_link") )
+        Width =  2*LANEWIDTH; // 2 lanes
+    else if (h == "secondary")
+        Width =  2*LANEWIDTH; // 2 lanes
+    else if (h == "tertiary")
+        Width =  1.5*LANEWIDTH; // shared middle lane
+    else if (h == "cycleway")
+        Width =  1.5;
+    Width = DEFAULTWIDTH;
+
+    return Width;
+}
+
 NavitAdapter::NavitAdapter()
 {
     QAction* loadFile = new QAction(tr("Load Navit file..."), this);
@@ -472,11 +509,19 @@ NavitAdapter::NavitAdapter()
             QStringList kv = t.split("=");
             f.Tags.append(qMakePair(kv[0], kv[1]));
         }
+        bool painterMatch = false;
         for(int i=0; i< thePrimitivePainters.size(); ++i) {
             if (thePrimitivePainters[i].matchesTag(&f, 0)) {
-                myStyles.insert((quint32)typ, &thePrimitivePainters[i]);
+                myStyles.insert((quint32)typ, thePrimitivePainters[i]);
+                painterMatch = true;
                 break;
             }
+        }
+        if (painterMatch && typ > type_line && typ < type_area) {
+            qreal wdth = CalculateWidth(f);
+            myStyles[typ].BackgroundScale *= wdth;
+            myStyles[typ].ForegroundScale *= wdth;
+            myStyles[typ].TouchupScale *= wdth;
         }
     }
 }
@@ -496,11 +541,13 @@ void NavitAdapter::onLoadFile()
         return;
 
     loaded = navit.setFilename(fileName);
+    emit forceRefresh();
 }
 
 void NavitAdapter::setFile(const QString& fn)
 {
     loaded = navit.setFilename(fn);
+    emit forceRefresh();
 }
 
 QString	NavitAdapter::getHost() const
@@ -610,15 +657,16 @@ void NavitAdapter::render(QPainter* P, const QRectF& fullbox, const QRectF& selb
 //            }
             if (!aPath.isEmpty()) {
                 if (myStyles.contains(f.type)) {
-                    if (myStyles[f.type]->matchesZoom(PixelPerM)) {
+                    if (myStyles[f.type].matchesZoom(PixelPerM)) {
                         QPainterPath pp = tfm.map(aPath);
                         if ((f.type & 0xc0000000) == 0xc0000000) {
                             pp.closeSubpath();
-                            myStyles[f.type]->drawBackground(&pp, P, PixelPerM);
+                            myStyles[f.type].drawBackground(&pp, P, PixelPerM);
                         } else {
-                            myStyles[f.type]->drawForeground(&pp, P, PixelPerM);
+                            myStyles[f.type].drawBackground(&pp, P, PixelPerM);
+                            myStyles[f.type].drawForeground(&pp, P, PixelPerM);
                         }
-                        myStyles[f.type]->drawTouchup(&pp, P, PixelPerM);
+                        myStyles[f.type].drawTouchup(&pp, P, PixelPerM);
                         //          f.painter()->drawLabel(&pp, P, PixelPerM);
                     }
                 }
@@ -630,9 +678,9 @@ void NavitAdapter::render(QPainter* P, const QRectF& fullbox, const QRectF& selb
                 //                P.setPen(QPen(Qt::red, 5));
                 //                P.drawPoint(f.coordinates[0]);
                 if (myStyles.contains(f.type)) {
-                    if (myStyles[f.type]->matchesZoom(PixelPerM)) {
+                    if (myStyles[f.type].matchesZoom(PixelPerM)) {
                         QPointF pp = tfm.map(f.coordinates[0]);
-                        myStyles[f.type]->drawTouchup(&pp, P, PixelPerM);
+                        myStyles[f.type].drawTouchup(&pp, P, PixelPerM);
                         //                myStyles[StyleNr(w)]->drawLabel(&pp, &P, PixelPerM, strL[0]);
                     }
                 }
@@ -657,27 +705,27 @@ void NavitAdapter::cleanup()
 bool NavitAdapter::toXML(QXmlStreamWriter& stream)
 {
     bool OK = true;
-
-//    QDomElement fs = xParent.ownerDocument().createElement("Images");
-//    xParent.appendChild(fs);
-//    if (loaded)
-//        fs.setAttribute("filename", navit.filename());
+    stream.writeStartElement("Source");
+    if (loaded)
+        stream.writeAttribute("filename", navit.filename());
+    stream.writeEndElement();
 
     return OK;
 }
 
 void NavitAdapter::fromXML(QXmlStreamReader& stream)
 {
-//    QDomElement fs = xParent.firstChildElement();
-//    while(!fs.isNull()) {
-//        if (fs.tagName() == "Images") {
-//            QString fn = fs.attribute("filename");
-//            if (!fn.isEmpty())
-//                loaded = navit.setFilename(fn);
-//        }
+    QString fn;
 
-//        fs = fs.nextSiblingElement();
-//    }
+    while(!stream.atEnd() && !stream.isEndElement()) {
+        if (stream.name() == "Source") {
+            fn = stream.attributes().value("filename").toString();
+        }
+        stream.readNext();
+    }
+
+    if (!fn.isEmpty())
+        setFile(fn);
 }
 
 QString NavitAdapter::toPropertiesHtml()
