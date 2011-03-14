@@ -17,4 +17,12 @@ win32 {
     INCLUDEPATH += $$COMMON_DIR/include
     LIBS += -L$$COMMON_DIR/lib
 }
-LIBS += -lspatialite
+
+unix {
+    CONFIG += link_pkgconfig
+    PKGCONFIG += spatialite
+}
+win32 {
+    LIBS += -lspatialite
+}
+

@@ -229,7 +229,13 @@ LIBS += -lproj
 
 contains (SPATIALITE, 1) {
     DEFINES += USE_SPATIALITE
-    LIBS += -lspatialite
+    unix {
+        CONFIG += link_pkgconfig
+        PKGCONFIG += spatialite
+    }
+    win32 {
+        LIBS += -lspatialite
+    }
 }
 contains (PROTOBUF, 1) {
     DEFINES += USE_PROTOBUF
