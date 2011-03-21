@@ -361,6 +361,7 @@ bool GdalAdapter::loadImage(const QString& fn)
                 theImg.setPixel(px, py, qRgba(*r, *g, *b, a));
                 break;
             }
+#if QT_VERSION >= 0x040600
             case GdalAdapter::Hsl:
             {
                 float* h = lineBuf + (col*bandCount) + ixH;
@@ -375,6 +376,7 @@ bool GdalAdapter::loadImage(const QString& fn)
                 theImg.setPixel(px, py, C.rgba());
                 break;
             }
+#endif
             case GdalAdapter::Cmyk:
             {
                 float* c = lineBuf + (col*bandCount) + ixC;
@@ -422,6 +424,7 @@ bool GdalAdapter::loadImage(const QString& fn)
                 theImg.setPixel(px, py, qRgba(color->c1, color->c2, color->c3, color->c4));
                 break;
             }
+#if QT_VERSION >= 0x040600
             case GdalAdapter::Palette_HLS:
             {
                 float* ix = (lineBuf + (col*bandCount));
@@ -430,6 +433,7 @@ bool GdalAdapter::loadImage(const QString& fn)
                 theImg.setPixel(px, py, C.rgba());
                 break;
             }
+#endif
             case GdalAdapter::Palette_CMYK:
             {
                 float* ix = (lineBuf + (col*bandCount));
