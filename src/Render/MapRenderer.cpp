@@ -165,7 +165,6 @@ void TouchupStyleLayer::draw(Node* Pt)
             qreal WW = r->theView->nodeWidth();
             if (r->theGlobalPainter.DrawNodes) {
                 theColor = r->theGlobalPainter.NodesColor;
-                WW = r->theView->pixelPerM()*r->theGlobalPainter.NodesProportional+r->theGlobalPainter.NodesFixed;
             }
             QPointF P(r->theView->toView(Pt));
             if (WW >= 1) {

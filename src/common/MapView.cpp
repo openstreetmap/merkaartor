@@ -1453,9 +1453,14 @@ void MapView::setViewport(const CoordBox & TargetMap,
     p->theInvertedTransform = p->theTransform.inverted();
     viewportRecalc(Screen);
 
-    p->NodeWidth = p->PixelPerM * M_PREFS->getNodeSize();
-    if (p->NodeWidth > M_PREFS->getNodeSize())
-        p->NodeWidth = M_PREFS->getNodeSize();
+    GlobalPainter theGlobalPainter = M_STYLE->getGlobalPainter();
+    if (theGlobalPainter.DrawNodes) {
+        p->NodeWidth = p->PixelPerM*theGlobalPainter.NodesProportional+theGlobalPainter.NodesFixed;
+    } else {
+        p->NodeWidth = p->PixelPerM * M_PREFS->getNodeSize();
+        if (p->NodeWidth > M_PREFS->getNodeSize())
+            p->NodeWidth = M_PREFS->getNodeSize();
+    }
     p->ZoomLevel = p->theTransform.m11();
 
     if (TEST_RFLAGS(RendererOptions::LockZoom) && theDocument) {
@@ -1538,9 +1543,14 @@ void MapView::zoom(qreal d, const QPoint & Around,
     p->theInvertedTransform = p->theTransform.inverted();
     viewportRecalc(Screen);
 
-    p->NodeWidth = p->PixelPerM * M_PREFS->getNodeSize();
-    if (p->NodeWidth > M_PREFS->getNodeSize())
-        p->NodeWidth = M_PREFS->getNodeSize();
+    GlobalPainter theGlobalPainter = M_STYLE->getGlobalPainter();
+    if (theGlobalPainter.DrawNodes) {
+        p->NodeWidth = p->PixelPerM*theGlobalPainter.NodesProportional+theGlobalPainter.NodesFixed;
+    } else {
+        p->NodeWidth = p->PixelPerM * M_PREFS->getNodeSize();
+        if (p->NodeWidth > M_PREFS->getNodeSize())
+            p->NodeWidth = M_PREFS->getNodeSize();
+    }
 
     for (LayerIterator<ImageMapLayer*> ImgIt(theDocument); !ImgIt.isEnd(); ++ImgIt)
         ImgIt.get()->zoom(d, Around, Screen);
