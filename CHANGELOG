@@ -1,4 +1,6 @@
 v0.18
+    * FIX : Handle negative id numbers in tag selector (fixes #3269)
+    * FIX : Crash with tag selector without value (fixes #3276)
     * ADD : "Rebuild history" tool, for when history got corrupted
     * ADD : Scale tool: If one and only one node is selected besides ways, scale around this node rather than around the geometrical center
     * ADD : Rotate tool: If one and only one node is selected besides ways, rotate around this node rather than around the geometrical center

@@ -26,6 +26,9 @@ bool canParseString(const QString& Expression, int& idx, QString& Key)
 {
     Key = "";
     skipWhite(Expression,idx);
+    if (idx >= Expression.length())
+        return false;
+
     if (Expression[idx] != '/' && Expression[idx] != '"')
         return false;
     Key += Expression[idx++];
@@ -48,12 +51,15 @@ bool canParseValue(const QString& Expression, int& idx, QString& Key)
 {
     Key = "";
     skipWhite(Expression,idx);
+    if (idx >= Expression.length())
+        return false;
+
     unsigned short opened =0;
     if (Expression[idx] == '/' || Expression[idx] == '"')  //Constants
         return false;
     while (idx < Expression.length())
     {
-        if ( ((Expression[idx] == '_') || (Expression[idx].isLetterOrNumber()) /*|| (Expression[idx].isPunct())*/ || (Expression[idx] == '*') || (Expression[idx] == ':') || (Expression[idx] == '?'))
+        if ( ((Expression[idx] == '_') || (Expression[idx].isLetterOrNumber()) || (Expression[idx] == '-') /*|| (Expression[idx].isPunct())*/ || (Expression[idx] == '*') || (Expression[idx] == ':') || (Expression[idx] == '?'))
                 &&  ( (Expression[idx] != '[') && (Expression[idx] != ']') && (Expression[idx] != ',') && (Expression[idx] != '(')&& (Expression[idx] != ')')) )
             Key += Expression[idx++];
         else if ( Expression[idx] == '[' )
@@ -75,6 +81,9 @@ bool canParseValue(const QString& Expression, int& idx, QString& Key)
 
 bool canParseKey(const QString& Expression, int& idx, QString& Key)
 {
+    if (idx >= Expression.length())
+        return false;
+
     if (!canParseSymbol(Expression,idx,'['))
         return false;
     if (!canParseValue(Expression,idx,Key))
@@ -86,6 +95,9 @@ bool canParseKey(const QString& Expression, int& idx, QString& Key)
 bool canParseLiteral(const QString& Expression, int& idx, const QString& Literal)
 {
     skipWhite(Expression,idx);
+    if (idx >= Expression.length())
+        return false;
+
     if (Expression.indexOf(Literal, idx, Qt::CaseInsensitive) == idx) {
         idx += Literal.length();
         return true;
@@ -266,6 +278,11 @@ TagSelector* parseFactor(const QString& Expression, int& idx)
             Current = parseFactor("not(" + Key + " is _NULL_)", TmpIdx);
         }
     }
+    if (!Current)
+    {
+        ++idx;
+        return NULL;
+    }
     return Current;
 }
 
@@ -308,7 +325,7 @@ TagSelector* parseTagSelector(const QString& Expression, int& idx)
         return Terms[0];
     else if (Terms.size() > 1)
         return new TagSelectorOr(Terms);
-    return new TagSelectorTrue();
+    return new TagSelectorFalse();
 }
 
 TagSelector* TagSelector::parse(const QString& Expression)
