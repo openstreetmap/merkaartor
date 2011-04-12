@@ -9,5 +9,6 @@
         <file alias="Lighting.mas">Lighting.mas</file>
         <file alias="Bicycle.mas">Bicycle.mas</file>
         <file alias="Validation.mas">Validation.mas</file>
+        <file alias="Wireframe.mas">Wireframe.mas</file>
     </qresource>
 </RCC>
