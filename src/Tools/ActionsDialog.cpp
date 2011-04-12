@@ -44,9 +44,9 @@ ActionsDialog::ActionsDialog(QList<QAction *>& actions, MainWindow *parent)
     QPushButton *okButton = new QPushButton(tr("&OK"), this);
     QPushButton *cancelButton = new QPushButton(tr("&Cancel"), this);
 
-    connect(actionsTable, SIGNAL(currentChanged(int, int)),
+    connect(actionsTable, SIGNAL(currentCellChanged(int, int, int, int)),
             this, SLOT(recordAction(int, int)));
-    connect(actionsTable, SIGNAL(valueChanged(int, int)),
+    connect(actionsTable, SIGNAL(cellChanged(int, int)),
             this, SLOT(validateAction(int, int)));
     connect(importButton, SIGNAL(clicked()), this, SLOT(importShortcuts()));
     connect(exportButton, SIGNAL(clicked()), this, SLOT(exportShortcuts()));
