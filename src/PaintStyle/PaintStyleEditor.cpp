@@ -128,9 +128,11 @@ void PaintStyleEditor::on_RemoveButton_clicked()
         return;
     thePainters.erase(thePainters.begin() + idx);
     delete PaintList->takeItem(idx);
+
     if (idx && (idx >= thePainters.size()))
         --idx;
     PaintList->setCurrentRow(idx);
+    updatePaintList();
     on_PaintList_itemSelectionChanged();
 }
 
