@@ -654,10 +654,19 @@ void Way::buildPath(const Projection &theProjection, const QTransform& theTransf
     Q_UNUSED(theTransform);
     Q_UNUSED(cr);
 
-    if (p->Nodes.size() < 2)
+    if (p->Nodes.size() < 2) {
+        p->theFullPath = QPainterPath();
+        p->thePath = QPainterPath();
+        p->wasPathComplete = true;
         return;
-
+    }
+#if QT_VERSION >= 0x040700 || defined(_MOBILE)
+    if (p->wasPathComplete && p->ProjectionRevision == theProjection.projectionRevision())
+        return;
+    else {
+#else
     if (!p->wasPathComplete || p->ProjectionRevision != theProjection.projectionRevision()) {
+#endif
         p->theFullPath = QPainterPath();
 
         p->theFullPath.moveTo(theProjection.project(p->Nodes.at(0)));
