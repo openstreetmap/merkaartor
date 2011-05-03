@@ -206,17 +206,6 @@ MainWindow::MainWindow(QWidget *parent)
     statusBar()->addPermanentWidget(PaintTimeLabel);
 #endif
 
-    QList<QAction*> actions = findChildren<QAction*>();
-    for (int i=0; i<actions.size(); i++) {
-        shortcutsDefault[actions[i]->objectName()] = actions[i]->shortcut().toString();
-    }
-    QStringList shortcuts = M_PREFS->getShortcuts();
-    for (int i=0; i<shortcuts.size(); i+=2) {
-        QAction* act = findChild<QAction*>(shortcuts[i]);
-        if (act)
-            act->setShortcut(QKeySequence(shortcuts[i+1]));
-    }
-
     updateLanguage();
 
     ViewportStatusLabel->setTextInteractionFlags(Qt::TextSelectableByMouse);
@@ -432,6 +421,17 @@ MainWindow::MainWindow(QWidget *parent)
 
 void MainWindow::delayedInit()
 {
+    QList<QAction*> actions = findChildren<QAction*>();
+    for (int i=0; i<actions.size(); i++) {
+        shortcutsDefault[actions[i]->objectName()] = actions[i]->shortcut().toString();
+    }
+    QStringList shortcuts = M_PREFS->getShortcuts();
+    for (int i=0; i<shortcuts.size(); i+=2) {
+        QAction* act = findChild<QAction*>(shortcuts[i]);
+        if (act)
+            act->setShortcut(QKeySequence(shortcuts[i+1]));
+    }
+
     updateWindowMenu();
 
     if (M_PREFS->getLocalServer()) {

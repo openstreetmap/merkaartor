@@ -1,4 +1,5 @@
 v0.18
+    * FIX : Shortcuts not restored if default exists (fixes #3277)
     * ADD : New "Wireframe" style
     * FIX : Handle negative id numbers in tag selector (fixes #3269)
     * FIX : Crash with tag selector without value (fixes #3276)
