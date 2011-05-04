@@ -616,7 +616,7 @@ bool downloadFeatures(MainWindow* Main, const QList<IFeature::FId>& idList , Doc
 
     QString osmWebsite, osmUser, osmPwd;
 
-    osmWebsite = M_PREFS->getOsmWebsite();
+    osmWebsite = M_PREFS->getOsmApiUrl();
     osmUser = M_PREFS->getOsmUser();
     osmPwd = M_PREFS->getOsmPassword();
 
@@ -718,7 +718,7 @@ bool downloadMoreOSM(MainWindow* Main, const CoordBox& aBox , Document* theDocum
 
     QString osmWebsite, osmUser, osmPwd;
 
-    osmWebsite = M_PREFS->getOsmWebsite();
+    osmWebsite = M_PREFS->getOsmApiUrl();
     osmUser = M_PREFS->getOsmUser();
     osmPwd = M_PREFS->getOsmPassword();
 
@@ -751,7 +751,7 @@ bool downloadOSM(MainWindow* Main, const CoordBox& aBox , Document* theDocument)
 
     QDialog * dlg = new QDialog(Main);
 
-    osmWebsite = M_PREFS->getOsmWebsite();
+    osmWebsite = M_PREFS->getOsmApiUrl();
     osmUser = M_PREFS->getOsmUser();
     osmPwd = M_PREFS->getOsmPassword();
 
@@ -798,6 +798,15 @@ bool downloadOSM(MainWindow* Main, const CoordBox& aBox , Document* theDocument)
                 if (link.contains("/api/")) {
                     directAPI=true;
                     directUrl = link;
+                } else if (link.contains("/browse/")) {
+                    QString tag("/browse/");
+                    int ix = link.lastIndexOf(tag) + tag.length();
+                    directUrl = M_PREFS->getOsmApiUrl();
+                    if (!directUrl.endsWith("/")) directUrl += "/";
+                    directUrl += link.right(link.length() - ix);
+                    if (!directUrl.endsWith("/")) directUrl += "/";
+                    directUrl += "full";
+                    directAPI=true;
                 } else {
                     OsmLink ol(link);
                     Clip = ol.getCoordBox();
@@ -808,7 +817,9 @@ bool downloadOSM(MainWindow* Main, const CoordBox& aBox , Document* theDocument)
             else if (ui.FromXapi->isChecked())
             {
                 directAPI = true;
-                directUrl = M_PREFS->getXapiUrl() + ui.edXapiUrl->text();
+                directUrl = M_PREFS->getXapiUrl();
+                if (!directUrl.endsWith("/")) directUrl += "/";
+                directUrl += ui.edXapiUrl->text();
             }
             else if (ui.FromMap->isChecked())
             {

@@ -62,7 +62,7 @@ void InfoDock::on_anchorClicked(const QUrl & link)
 {
     QString data;
 
-    QString osmWebsite = M_PREFS->getOsmWebsite();
+    QString osmWebsite = M_PREFS->getOsmApiUrl();
     QString osmUser = M_PREFS->getOsmUser();
     QString osmPwd = M_PREFS->getOsmPassword();
 

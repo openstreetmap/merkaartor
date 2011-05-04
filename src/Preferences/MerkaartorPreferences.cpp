@@ -350,7 +350,7 @@ void MerkaartorPreferences::fromOsmPref()
 
     if (getOsmUser().isEmpty() || getOsmPassword().isEmpty()) return;
 
-    QUrl osmWeb(getOsmWebsite());
+    QUrl osmWeb(getOsmApiUrl());
     if (osmWeb.port() == -1)
         osmWeb.setPort(80);
 
@@ -459,7 +459,7 @@ void MerkaartorPreferences::on_requestFinished ( int id, bool error )
 
 void MerkaartorPreferences::putOsmPref(const QString& k, const QString& v)
 {
-    QUrl osmWeb(getOsmWebsite());
+    QUrl osmWeb(getOsmApiUrl());
     if (osmWeb.port() == -1)
         osmWeb.setPort(80);
 
@@ -485,7 +485,7 @@ void MerkaartorPreferences::putOsmPref(const QString& k, const QString& v)
 
 void MerkaartorPreferences::deleteOsmPref(const QString& k)
 {
-    QUrl osmWeb(getOsmWebsite());
+    QUrl osmWeb(getOsmApiUrl());
     if (osmWeb.port() == -1)
         osmWeb.setPort(80);
 
@@ -972,7 +972,7 @@ bool MerkaartorPreferences::getDrawTileBoundary()
 
 /* DATA */
 
-QString MerkaartorPreferences::getOsmWebsite() const
+QString MerkaartorPreferences::getOsmApiUrl() const
 {
     QString s;
     if (!g_Merk_Ignore_Preferences && !g_Merk_Reset_Preferences)
@@ -1012,7 +1012,7 @@ void MerkaartorPreferences::setOsmWebsite(const QString & theValue)
         Sets->setValue("osm/Website", theValue);
 }
 
-M_PARAM_IMPLEMENT_STRING(XapiUrl, osm, "http://www.informationfreeway.org/api/0.6/")
+M_PARAM_IMPLEMENT_STRING(XapiUrl, osm, "http://www.informationfreeway.org/api/0.6")
 M_PARAM_IMPLEMENT_STRING(NominatimUrl, osm, "http://nominatim.openstreetmap.org/search")
 M_PARAM_IMPLEMENT_BOOL(AutoHistoryCleanup, data, true);
 

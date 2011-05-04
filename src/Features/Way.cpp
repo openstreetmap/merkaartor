@@ -242,7 +242,6 @@ void Way::partChanged(Feature* /*F*/, int ChangeId)
     p->wasPathComplete = false;
     MetaUpToDate = false;
     p->SmoothedUpToDate = false;
-    p->wasPathComplete = false;
     p->VirtualsUptodate = false;
     g_backend.sync(this);
 
@@ -272,7 +271,6 @@ void Way::add(Node* Pt, int Idx)
     p->wasPathComplete = false;
     MetaUpToDate = false;
     p->SmoothedUpToDate = false;
-    p->wasPathComplete = false;
     p->VirtualsUptodate = false;
     g_backend.sync(this);
 
@@ -306,7 +304,6 @@ void Way::remove(int idx)
     p->wasPathComplete = false;
     MetaUpToDate = false;
     p->SmoothedUpToDate = false;
-    p->wasPathComplete = false;
     p->VirtualsUptodate = false;
     g_backend.sync(this);
 

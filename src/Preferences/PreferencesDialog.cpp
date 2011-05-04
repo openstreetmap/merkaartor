@@ -197,7 +197,7 @@ void PreferencesDialog::loadPrefs()
     if (!theOsmServers->size()) {
         OsmServerWidget* wOSmServer = new OsmServerWidget(grpOSM);
 
-        wOSmServer->edOsmServerUrl->setText(M_PREFS->getOsmWebsite());
+        wOSmServer->edOsmServerUrl->setText(M_PREFS->getOsmApiUrl());
         wOSmServer->edOsmServerUser->setText(M_PREFS->getOsmUser());
         wOSmServer->edOsmServerPwd->setText(M_PREFS->getOsmPassword());
         wOSmServer->rbOsmServerSelected->setChecked(true);
@@ -358,7 +358,7 @@ void PreferencesDialog::savePrefs()
         srv.Password = wOsmServer->edOsmServerPwd->text();
         srv.Selected = wOsmServer->rbOsmServerSelected->isChecked();
 
-        if (srv.Selected && (srv.Url != M_PREFS->getOsmWebsite() || srv.User != M_PREFS->getOsmUser() || srv.Password != M_PREFS->getOsmPassword())) {
+        if (srv.Selected && (srv.Url != M_PREFS->getOsmApiUrl() || srv.User != M_PREFS->getOsmUser() || srv.Password != M_PREFS->getOsmPassword())) {
             M_PREFS->setOsmWebsite(srv.Url);
             M_PREFS->setOsmUser(srv.User);
             M_PREFS->setOsmPassword(srv.Password);

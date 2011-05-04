@@ -1391,7 +1391,7 @@ void MainWindow::on_fileUploadAction_triggered()
             return;
     }
     on_editPropertiesAction_triggered();
-    syncOSM(M_PREFS->getOsmWebsite(), M_PREFS->getOsmUser(), M_PREFS->getOsmPassword());
+    syncOSM(M_PREFS->getOsmApiUrl(), M_PREFS->getOsmUser(), M_PREFS->getOsmPassword());
 
     theDocument->history().updateActions();
     theDirty->updateList();

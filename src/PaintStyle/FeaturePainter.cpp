@@ -360,20 +360,18 @@ void FeaturePainter::drawBackground(Relation* R, QPainter* thePainter, MapView* 
     }
 
     thePainter->setBrush(Qt::NoBrush);
-    if (R->size() > 2) {
-        if (ForegroundFillUseIcon) {
-            if (!IconName.isEmpty()) {
-                qreal PixelPerM = theView->pixelPerM();
-                qreal WW = PixelPerM*IconScale+IconOffset;
+    if (ForegroundFillUseIcon) {
+        if (!IconName.isEmpty()) {
+            qreal PixelPerM = theView->pixelPerM();
+            qreal WW = PixelPerM*IconScale+IconOffset;
 
-                QPixmap* pm = getPixmapFromFile(IconName,int(WW));
-                if (!pm->isNull()) {
-                    thePainter->setBrush(*pm);
-                }
+            QPixmap* pm = getPixmapFromFile(IconName,int(WW));
+            if (!pm->isNull()) {
+                thePainter->setBrush(*pm);
             }
-        } else if (ForegroundFill) {
-            thePainter->setBrush(ForegroundFillFillColor);
         }
+    } else if (ForegroundFill) {
+        thePainter->setBrush(ForegroundFillFillColor);
     }
 
     thePainter->drawPath(theView->transform().map(R->getPath()));

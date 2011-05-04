@@ -38,6 +38,8 @@ class RelationPrivate
     public:
         RelationPrivate(Relation* R)
             : theRelation(R), theModel(0), ModelReferences(0)
+            , wasPathComplete(false)
+            , ProjectionRevision(0)
             , BBoxUpToDate(false)
             , Width(0)
         {
@@ -54,6 +56,8 @@ class RelationPrivate
         int ModelReferences;
         QPainterPath thePath;
         QPainterPath theBoundingPath;
+        bool wasPathComplete;
+        int ProjectionRevision;
 
         bool BBoxUpToDate;
 
@@ -135,6 +139,7 @@ void Relation::partChanged(Feature*, int ChangeId)
     if (isDeleted())
         return;
 
+    p->wasPathComplete = false;
     p->BBoxUpToDate = false;
     MetaUpToDate = false;
     g_backend.sync(this);
@@ -315,6 +320,7 @@ void Relation::add(const QString& Role, Feature* F)
 {
     p->Members.push_back(qMakePair(Role,F));
     F->setParentFeature(this);
+    p->wasPathComplete = false;
     p->BBoxUpToDate = false;
     MetaUpToDate = false;
     g_backend.sync(this);
@@ -327,6 +333,7 @@ void Relation::add(const QString& Role, Feature* F, int Idx)
     p->Members.push_back(qMakePair(Role,F));
     std::rotate(p->Members.begin()+Idx,p->Members.end()-1,p->Members.end());
     F->setParentFeature(this);
+    p->wasPathComplete = false;
     p->BBoxUpToDate = false;
     MetaUpToDate = false;
     g_backend.sync(this);
@@ -341,6 +348,7 @@ void Relation::remove(int Idx)
     p->Members.erase(p->Members.begin()+Idx);
     if (F && find(F) == p->Members.size())
         F->unsetParentFeature(this);
+    p->wasPathComplete = false;
     p->BBoxUpToDate = false;
     MetaUpToDate = false;
     g_backend.sync(this);
@@ -353,8 +361,6 @@ void Relation::remove(Feature* F)
     for (int i=p->Members.size(); i; --i)
         if (F == p->Members[i-1].second)
             remove(i-1);
-    p->BBoxUpToDate = false;
-    MetaUpToDate = false;
 }
 
 int Relation::size() const
@@ -429,17 +435,30 @@ void Relation::buildPath(Projection const &theProjection, const QTransform& /*th
     //p->theBoundingPath.addRect(bb);
 
     p->theBoundingPath.addPolygon(theVector);
-
     p->theBoundingPath = p->theBoundingPath.intersected(clipPath);
+
+
+    if (!p->wasPathComplete || p->ProjectionRevision != theProjection.projectionRevision()) {
+        p->thePath = QPainterPath();
+        for (int i=0; i<size(); ++i) {
+            if (CHECK_WAY(p->Members[i].second)) {
+                Way* M = STATIC_CAST_WAY(p->Members[i].second);
+                if (M->getPath().elementCount() > 0) {
+                    p->thePath.moveTo(M->getPath().elementAt(0));
+                    for (int j=1; j<M->getPath().elementCount(); ++j) {
+                        p->thePath.lineTo(M->getPath().elementAt(j));
+                    }
+                }
+            }
+        }
+        p->thePath = p->thePath.simplified();
+        p->ProjectionRevision = theProjection.projectionRevision();
+        p->wasPathComplete = true;
+    }
 }
 
 const QPainterPath& Relation::getPath() const
 {
-    p->thePath = QPainterPath();
-    for (int i=0; i<size(); ++i)
-        if (Way* M = dynamic_cast<Way*>(p->Members[i].second)) {
-            p->thePath.addPath(M->getPath());
-        }
     return p->thePath;
 }
 
