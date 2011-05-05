@@ -414,7 +414,7 @@ void Relation::releaseMemberModel()
     }
 }
 
-void Relation::buildPath(Projection const &theProjection, const QTransform& /*theTransform*/, const QRectF& cr)
+void Relation::buildPath(Projection const &theProjection, const QTransform& theTransform, const QRectF& cr)
 {
     QPainterPath clipPath;
     clipPath.addRect(cr);
@@ -437,21 +437,51 @@ void Relation::buildPath(Projection const &theProjection, const QTransform& /*th
     p->theBoundingPath.addPolygon(theVector);
     p->theBoundingPath = p->theBoundingPath.intersected(clipPath);
 
-
     if (!p->wasPathComplete || p->ProjectionRevision != theProjection.projectionRevision()) {
         p->thePath = QPainterPath();
+
+        QList<QPainterPath> memberPaths;
         for (int i=0; i<size(); ++i) {
             if (CHECK_WAY(p->Members[i].second)) {
                 Way* M = STATIC_CAST_WAY(p->Members[i].second);
-                if (M->getPath().elementCount() > 0) {
-                    p->thePath.moveTo(M->getPath().elementAt(0));
-                    for (int j=1; j<M->getPath().elementCount(); ++j) {
-                        p->thePath.lineTo(M->getPath().elementAt(j));
-                    }
+                M->buildPath(theProjection, theTransform, cr);
+                if (M->getPath().elementCount() > 1) {
+                    memberPaths << M->getPath();
                 }
             }
         }
-        p->thePath = p->thePath.simplified();
+
+        // Handle polygons made of scattered ways
+        while (memberPaths.size()) {
+            // handle the start...
+            QPointF curPoint;
+            p->thePath.moveTo(memberPaths[0].elementAt(0));
+            for (int j=1; j<memberPaths[0].elementCount(); ++j) {
+                curPoint = memberPaths[0].elementAt(j);
+                p->thePath.lineTo(curPoint);
+            }
+            // ... and remove it
+            memberPaths.removeAt(0);
+            // Check if any remaining path starts or ends at the current point
+            for (int k=0; k<memberPaths.size(); ++k) {
+                if (memberPaths[k].elementAt(0) == curPoint) { // Check start
+                    for (int l=1; l<memberPaths[k].elementCount(); ++l) {
+                        curPoint = memberPaths[k].elementAt(l);
+                        p->thePath.lineTo(curPoint);
+                    }
+                    memberPaths.removeAt(k);
+                    k=0;
+                } else if (memberPaths[k].elementAt(memberPaths[k].elementCount()-1) == curPoint) { // Check end
+                    for (int l=memberPaths[k].elementCount()-2; l>=0; --l) {
+                        curPoint = memberPaths[k].elementAt(l);
+                        p->thePath.lineTo(curPoint);
+                    }
+                    memberPaths.removeAt(k);
+                    k=0;
+                }
+            }
+        }
+
         p->ProjectionRevision = theProjection.projectionRevision();
         p->wasPathComplete = true;
     }
