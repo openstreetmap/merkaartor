@@ -807,6 +807,11 @@ bool downloadOSM(MainWindow* Main, const CoordBox& aBox , Document* theDocument)
                     if (!directUrl.endsWith("/")) directUrl += "/";
                     directUrl += "full";
                     directAPI=true;
+                } else if (link.startsWith("way") || link.startsWith("node") || link.startsWith("relation")) {
+                    directUrl = M_PREFS->getOsmApiUrl();
+                    if (!directUrl.endsWith("/")) directUrl += "/";
+                    directUrl += link;
+                    directAPI=true;
                 } else {
                     OsmLink ol(link);
                     Clip = ol.getCoordBox();
