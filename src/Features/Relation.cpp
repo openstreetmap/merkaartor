@@ -243,8 +243,10 @@ void Relation::drawChildrenSpecial(QPainter& thePainter, QPen& Pen, MapView *the
 }
 
 
-qreal Relation::pixelDistance(const QPointF& Target, qreal ClearEndDistance, bool, MapView* theView) const
+qreal Relation::pixelDistance(const QPointF& Target, qreal ClearEndDistance, const QList<Feature*>& NoSnap, MapView* theView) const
 {
+    Q_UNUSED(NoSnap)
+
     qreal Best = 1000000;
     if (!TEST_RFLAGS(RendererOptions::RelationsVisible) && !M_PREFS->getRelationsSelectableWhenHidden())
         return Best;

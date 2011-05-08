@@ -325,7 +325,7 @@ void Node::drawChildrenSpecial(QPainter& thePainter, QPen& Pen, MapView* theView
 }
 
 
-qreal Node::pixelDistance(const QPointF& Target, qreal, bool, MapView* theView) const
+qreal Node::pixelDistance(const QPointF& Target, qreal, const QList<Feature*>& NoSnap, MapView* theView) const
 {
     qreal Best = 1000000;
 

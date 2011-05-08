@@ -71,8 +71,7 @@ void Interaction::mousePressEvent(QMouseEvent * anEvent)
         if (anEvent->modifiers() & Qt::ControlModifier) {
             EndDrag = StartDrag = XY_TO_COORD(anEvent->pos());
             Dragging = true;
-        } else
-        if (anEvent->modifiers() & Qt::ShiftModifier) {
+        } else if (anEvent->modifiers() & Qt::ShiftModifier) {
         } else {
             Panning = true;
             FirstPan = LastPan = anEvent->pos();
@@ -219,7 +218,7 @@ void Interaction::updateSnap(QMouseEvent* event)
             {
                 if (F->isHidden())
                     continue;
-                if (std::find(NoSnap.begin(),NoSnap.end(),F) != NoSnap.end())
+                if (NoSnap.contains(F))
                     continue;
                 if (F->notEverythingDownloaded())
                     continue;
@@ -253,7 +252,7 @@ void Interaction::updateSnap(QMouseEvent* event)
                         SnapList.push_back(F);
                 }
 
-                qreal Distance = F->pixelDistance(event->pos(), CLEAR_DISTANCE, areNodesSelectable, view());
+                qreal Distance = F->pixelDistance(event->pos(), CLEAR_DISTANCE, NoSnap, view());
                 if (Distance < BestDistance && !F->isReadonly())
                 {
                     BestDistance = Distance;
@@ -269,7 +268,7 @@ void Interaction::updateSnap(QMouseEvent* event)
     if (areNodesSelectable) {
         R = CAST_WAY(LastSnap);
         if (R) {
-            Node* N = R->pixelDistanceNode(event->pos(), CLEAR_DISTANCE, view(), NoSelectVirtuals);
+            Node* N = R->pixelDistanceNode(event->pos(), CLEAR_DISTANCE, view(), NoSnap, NoSelectVirtuals);
             if (N)
                 LastSnap = N;
         }
@@ -413,7 +412,12 @@ void FeatureSnapInteraction::activateSnap(bool b)
 
 void FeatureSnapInteraction::addToNoSnap(Feature* F)
 {
-    NoSnap.push_back(F);
+    NoSnap.append(F);
+}
+
+void FeatureSnapInteraction::addToNoSnap(QList<Feature*> Fl)
+{
+    NoSnap.append(Fl);
 }
 
 void FeatureSnapInteraction::clearNoSnap()

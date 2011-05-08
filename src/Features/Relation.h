@@ -30,7 +30,7 @@ public:
     virtual void drawParentsSpecial(QPainter& P, QPen& Pen, MapView* theView);
     virtual void drawChildrenSpecial(QPainter& P, QPen& Pen, MapView* theView, int depth);
 
-    virtual qreal pixelDistance(const QPointF& Target, qreal ClearEndDistance, bool selectNodes, MapView* theView) const;
+    virtual qreal pixelDistance(const QPointF& Target, qreal ClearEndDistance, const QList<Feature*>& NoSnap, MapView* theView) const;
     virtual void cascadedRemoveIfUsing(Document* theDocument, Feature* aFeature, CommandList* theList, const QList<Feature*>& Alternatives);
     virtual bool notEverythingDownloaded();
     virtual const RenderPriority& renderPriority();

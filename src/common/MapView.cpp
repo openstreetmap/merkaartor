@@ -679,7 +679,7 @@ void MapView::mousePressEvent(QMouseEvent* anEvent)
             Main->info()->setHtml(theInteraction->toHtml());
 
         if (anEvent->button())
-        theInteraction->mousePressEvent(anEvent);
+            theInteraction->mousePressEvent(anEvent);
     }
 }
 
@@ -1013,7 +1013,8 @@ void MapView::dragMoveEvent(QDragMoveEvent *event)
 
     Node *tP;
     for (VisibleFeatureIterator it(document()); !it.isEnd(); ++it) {
-        if ((tP = CAST_NODE(it.get())) && tP->pixelDistance(event->pos(), 5.01, true, this) < 5.01) {
+        QList<Feature*> NoSnap;
+        if ((tP = CAST_NODE(it.get())) && tP->pixelDistance(event->pos(), 5.01, NoSnap, this) < 5.01) {
             dropTarget = tP;
             QRect acceptedRect(tP->projection().toPoint() - QPoint(3, 3), tP->projection().toPoint() + QPoint(3, 3));
             event->acceptProposedAction();

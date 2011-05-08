@@ -120,7 +120,7 @@ public:
     virtual void drawHighlight(QPainter& P, MapView* theView);
     virtual void drawFocus(QPainter& P, MapView* theView);
 
-    virtual qreal pixelDistance(const QPointF& Target, qreal ClearEndDistance, bool selectNodes, MapView* theView) const = 0;
+    virtual qreal pixelDistance(const QPointF& Target, qreal ClearEndDistance, const QList<Feature*>& NoSnap, MapView* theView) const = 0;
     virtual void cascadedRemoveIfUsing(Document* theDocument, Feature* aFeature, CommandList* theList, const QList<Feature*>& Alternatives) = 0;
     virtual bool notEverythingDownloaded() = 0;
 

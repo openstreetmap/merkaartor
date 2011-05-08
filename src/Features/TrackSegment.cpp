@@ -265,7 +265,7 @@ const CoordBox& TrackSegment::boundingBox(bool) const
     return p->BBox;
 }
 
-qreal TrackSegment::pixelDistance(const QPointF& , qreal , bool , MapView*) const
+qreal TrackSegment::pixelDistance(const QPointF& , qreal , const QList<Feature*>& , MapView*) const
 {
     // unable to select that one
     return 1000000;

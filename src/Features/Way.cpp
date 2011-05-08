@@ -532,7 +532,7 @@ void Way::drawChildrenSpecial(QPainter& thePainter, QPen& Pen, MapView *theView,
 }
 
 
-qreal Way::pixelDistance(const QPointF& Target, qreal ClearEndDistance, bool selectNodes, MapView* theView) const
+qreal Way::pixelDistance(const QPointF& Target, qreal ClearEndDistance, const QList<Feature*>& NoSnap, MapView* theView) const
 {
     qreal Best = 1000000;
     p->BestSegment = -1;
@@ -562,6 +562,9 @@ qreal Way::pixelDistance(const QPointF& Target, qreal ClearEndDistance, bool sel
     else
         for (unsigned int i=0; i<p->Nodes.size()-1; ++i)
         {
+            if (NoSnap.contains(p->Nodes.at(i)) || NoSnap.contains(p->Nodes.at(i+1)))
+                continue;
+
             if (p->Nodes.at(i) && p->Nodes.at(i+1)) {
                 LineF F(theView->toView(p->Nodes.at(i)),theView->toView(p->Nodes.at(i+1)));
                 qreal D = F.capDistance(Target);
@@ -575,14 +578,14 @@ qreal Way::pixelDistance(const QPointF& Target, qreal ClearEndDistance, bool sel
     return Best;
 }
 
-Node* Way::pixelDistanceNode(const QPointF& Target, qreal ClearEndDistance, MapView* theView, bool NoSelectVirtuals) const
+Node* Way::pixelDistanceNode(const QPointF& Target, qreal ClearEndDistance, MapView* theView, const QList<Feature*>& NoSnap, bool NoSelectVirtuals) const
 {
     qreal Best = 1000000;
     Node* ret = NULL;
 
     for (unsigned int i=0; i<p->Nodes.size(); ++i)
     {
-        if (p->Nodes.at(i)) {
+        if (p->Nodes.at(i) && !NoSnap.contains(p->Nodes.at(i))) {
             qreal D = ::distance(Target,theView->toView(p->Nodes.at(i)));
             if (D < ClearEndDistance && D < Best) {
                 Best = D;

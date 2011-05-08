@@ -277,11 +277,13 @@ void MoveNodeInteraction::snapMouseMoveEvent(QMouseEvent* event, Feature* Closer
 
 Coord MoveNodeInteraction::calculateNewPosition(QMouseEvent *event, Feature *aLast, CommandList* theList)
 {
+    if (aLast && CHECK_NODE(aLast))
+        return STATIC_CAST_NODE(aLast)->position();
+
     Coord TargetC = XY_TO_COORD(event->pos());
-    if (Node* Pt = dynamic_cast<Node*>(aLast))
-        return Pt->position();
-    else if (Way* R = dynamic_cast<Way*>(aLast))
+    if (aLast && CHECK_WAY(aLast))
     {
+        Way* R = STATIC_CAST_WAY(aLast);
         QPointF Target = TargetC;
         LineF L1(R->getNode(0)->position(),R->getNode(1)->position());
         qreal Dist = L1.capDistance(TargetC);

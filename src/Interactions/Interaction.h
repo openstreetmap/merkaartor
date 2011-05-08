@@ -101,6 +101,7 @@ public:
 
     void activateSnap(bool b);
     void addToNoSnap(Feature* F);
+    void addToNoSnap(QList<Feature *> Fl);
     void clearNoSnap();
     void clearSnap();
     void clearLastSnap();
@@ -117,7 +118,6 @@ public:
 #ifndef _MOBILE
     virtual QCursor cursor() const;
 #endif
-
 private:
     QCursor handCursor;
     QCursor grabCursor;
