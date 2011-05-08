@@ -1018,9 +1018,9 @@ QRect ImageMapLayer::drawTiled(MapView& theView, QRect& rect)
 //    qDebug() << "vp: " << projVp;
     //    qDebug() << "vlm: " << vlm;
     qDebug() << "retRect: " << retRect;
-    QRect expR = QRect(-retRect.left(), -retRect.top(), retRect.width()+retRect.left(), retRect.height()+retRect.top());
-    p->newPix.save("c:/tmp.png");
-    p->newPix.copy(expR).save("c:/tmp2.png");
+//    QRect expR = QRect(-retRect.left(), -retRect.top(), retRect.width()+retRect.left(), retRect.height()+retRect.top());
+//    p->newPix.save("c:/tmp.png");
+//    p->newPix.copy(expR).save("c:/tmp2.png");
     return retRect;
 }
 
