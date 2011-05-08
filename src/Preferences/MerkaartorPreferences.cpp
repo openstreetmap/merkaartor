@@ -972,7 +972,7 @@ bool MerkaartorPreferences::getDrawTileBoundary()
 
 /* DATA */
 
-QString MerkaartorPreferences::getOsmApiUrl() const
+QString MerkaartorPreferences::getOsmWebsite() const
 {
     QString s;
     if (!g_Merk_Ignore_Preferences && !g_Merk_Reset_Preferences)
@@ -1000,6 +1000,14 @@ QString MerkaartorPreferences::getOsmApiUrl() const
     u.setScheme("http");
     u.setPath(p);
 #endif
+
+    return u.toString();
+}
+
+
+QString MerkaartorPreferences::getOsmApiUrl() const
+{
+    QUrl u(getOsmWebsite());
     if (u.path().isEmpty())
         u.setPath("/api/" + apiVersion());
 

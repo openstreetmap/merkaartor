@@ -234,6 +234,7 @@ public:
 
     /* Data */
     void setOsmWebsite(const QString & theValue);
+    QString getOsmWebsite() const;
     QString getOsmApiUrl() const;
 
     M_PARAM_DECLARE_STRING(XapiUrl)

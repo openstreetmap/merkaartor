@@ -1,4 +1,5 @@
 v0.18
+    * CHG : Replace all links in the Info dock by a single one pointing to the "browse" interface on OSM
     * ADD : Add support for "http://www.openstreetmap.org/browse/..." type of url in the download dialog
     * FIX : Shortcuts not restored if default exists (fixes #3277)
     * ADD : New "Wireframe" style

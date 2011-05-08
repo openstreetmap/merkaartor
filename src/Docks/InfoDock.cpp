@@ -15,7 +15,7 @@
 #include "DownloadOSM.h"
 
 #include <QApplication>
-#include <QMessageBox>
+#include <QDesktopServices>
 
 InfoDock::InfoDock(MainWindow* aParent)
     : MDockAncestor(aParent), Main(aParent), theText(new QTextBrowser(this))
@@ -60,26 +60,28 @@ QString InfoDock::getHtml()
 
 void InfoDock::on_anchorClicked(const QUrl & link)
 {
-    QString data;
+//    QString data;
 
-    QString osmWebsite = M_PREFS->getOsmApiUrl();
-    QString osmUser = M_PREFS->getOsmUser();
-    QString osmPwd = M_PREFS->getOsmPassword();
+//    QString osmWebsite = M_PREFS->getOsmApiUrl();
+//    QString osmUser = M_PREFS->getOsmUser();
+//    QString osmPwd = M_PREFS->getOsmPassword();
 
-    Downloader theDownloader(osmUser, osmPwd);
-    QUrl theUrl(osmWebsite+link.path());
+//    Downloader theDownloader(osmUser, osmPwd);
+//    QUrl theUrl(osmWebsite+link.path());
 
-    if (theDownloader.request("GET", theUrl, data)) {
-        QTextBrowser* b = new QTextBrowser;
-        QString s = QString::fromUtf8(theDownloader.content().constData());
-        b->setPlainText(s);
-        b->setAttribute(Qt::WA_DeleteOnClose,true);
-        b->resize(640, 480);
-        b->show();
-        b->raise();
-    } else {
-        QMessageBox::warning(Main,QApplication::translate("Downloader","Download failed"),QApplication::translate("Downloader","Unexpected http status code (%1)").arg(theDownloader.resultCode()));
-    }
+//    if (theDownloader.request("GET", theUrl, data)) {
+//        QTextBrowser* b = new QTextBrowser;
+//        QString s = QString::fromUtf8(theDownloader.content().constData());
+//        b->setPlainText(s);
+//        b->setAttribute(Qt::WA_DeleteOnClose,true);
+//        b->resize(640, 480);
+//        b->show();
+//        b->raise();
+//    } else {
+//        QMessageBox::warning(Main,QApplication::translate("Downloader","Download failed"),QApplication::translate("Downloader","Unexpected http status code (%1)").arg(theDownloader.resultCode()));
+//    }
+    QUrl theUrl(M_PREFS->getOsmWebsite()+link.path());
+    QDesktopServices::openUrl(theUrl);
 }
 
 void InfoDock::changeEvent(QEvent *event)

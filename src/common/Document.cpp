@@ -249,13 +249,13 @@ Document* Document::fromXML(QString title, QXmlStreamReader& stream, qreal versi
             stream.skipCurrentElement();
         }
 
-        if (progress->wasCanceled())
+        if (progress && progress->wasCanceled())
             break;
 
         stream.readNext();
     }
 
-    if (progress->wasCanceled()) {
+    if (progress && progress->wasCanceled()) {
         delete NewDoc;
         NewDoc = NULL;
     }
@@ -270,7 +270,8 @@ Document* Document::fromXML(QString title, QXmlStreamReader& stream, qreal versi
             h = &NewDoc->history();
 
         if (!h->size() && NewDoc->getDirtySize()) {
-            progress->setLabelText("History was corrupted. Rebuilding it...");
+            if (progress)
+                progress->setLabelText("History was corrupted. Rebuilding it...");
             qDebug() << "History was corrupted. Rebuilding it...";
             NewDoc->rebuildHistory();
         }

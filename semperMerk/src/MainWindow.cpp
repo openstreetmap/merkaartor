@@ -57,14 +57,13 @@ void MainWindow::initialize()
     m_mapView->show();
     m_mapView->resize(QSize(width(), height()));
 
-    m_document = new Document();
+    loadTemplateDocument(":/doc/initial.mdc");
     m_mapView->setDocument(m_document);
 
-    ImageMapLayer* ilayer = m_document->addImageLayer();
-    ilayer->setMapAdapter(TMS_ADAPTER_UUID, "OSM Mapnik");
-    ilayer->setVisible(true);
+//    ImageMapLayer* ilayer = m_document->addImageLayer();
+//    ilayer->setMapAdapter(TMS_ADAPTER_UUID, "OSM Mapnik");
+//    ilayer->setVisible(true);
 
-    m_mapView->projection().setProjectionType(ilayer->projection());
     M_PREFS->initialPosition(m_mapView);
     m_mapView->launch(new EditInteraction(m_mapView));
     m_mapView->invalidate(true, true);
@@ -137,48 +136,50 @@ void MainWindow::initialize()
 //    QTimer::singleShot(2000, this, SLOT(showHomeView()));
 }
 
-
-// from Demo Browser
-QUrl guessUrlFromString(const QString &string)
+Document* MainWindow::doLoadDocument(QFile* file)
 {
-    QString urlStr = string.trimmed();
-    QRegExp test(QLatin1String("^[a-zA-Z]+\\:.*"));
-
-    // Check if it looks like a qualified URL. Try parsing it and see.
-    bool hasSchema = test.exactMatch(urlStr);
-    if (hasSchema) {
-        QUrl url = QUrl::fromEncoded(urlStr.toUtf8(), QUrl::TolerantMode);
-        if (url.isValid())
-            return url;
+    QXmlStreamReader stream(file);
+    while (stream.readNext() && stream.tokenType() != QXmlStreamReader::Invalid && stream.tokenType() != QXmlStreamReader::StartElement);
+    if (stream.tokenType() != QXmlStreamReader::StartElement || stream.name() != "MerkaartorDocument") {
+        return NULL;
     }
+    double version = stream.attributes().value("version").toString().toDouble();
 
-    // Might be a file.
-    if (QFile::exists(urlStr)) {
-        QFileInfo info(urlStr);
-        return QUrl::fromLocalFile(info.absoluteFilePath());
-    }
+    Document* newDoc = NULL;
 
-    // Might be a shorturl - try to detect the schema.
-    if (!hasSchema) {
-        int dotIndex = urlStr.indexOf(QLatin1Char('.'));
-        if (dotIndex != -1) {
-            QString prefix = urlStr.left(dotIndex).toLower();
-            QString schema = (prefix == QString("ftp")) ? prefix.toLatin1() : QString("http");
-            QString location = schema + "://" + urlStr;
-            QUrl url = QUrl::fromEncoded(location.toUtf8(), QUrl::TolerantMode);
-            if (url.isValid())
-                return url;
+    if (version < 2.) {
+        stream.readNext();
+        while(!stream.atEnd() && !stream.isEndElement()) {
+            if (stream.name() == "MapDocument") {
+                newDoc = Document::fromXML(QFileInfo(*file).fileName(), stream, version, NULL, NULL);
+            } else if (stream.name() == "MapView") {
+                m_mapView->fromXML(stream);
+            } else if (!stream.isWhitespace()) {
+                qDebug() << "Main: logic error: " << stream.name() << " : " << stream.tokenType() << " (" << stream.lineNumber() << ")";
+                stream.skipCurrentElement();
+            }
+
+            stream.readNext();
         }
     }
-
-    // Fall back to QUrl's own tolerant parser.
-    QUrl url = QUrl::fromEncoded(string.toUtf8(), QUrl::TolerantMode);
-
-    // finally for cases where the user just types in a hostname add http
-    if (url.scheme().isEmpty())
-        url = QUrl::fromEncoded("http://" + string.toUtf8(), QUrl::TolerantMode);
-    return url;
+    return newDoc;
 }
+
+void MainWindow::loadTemplateDocument(QString fn)
+{
+    Document* newDoc = NULL;
+    QFile file(fn);
+    if (file.open(QIODevice::ReadOnly)) {
+        newDoc = doLoadDocument(&file);
+        file.close();
+    }
+
+    if (newDoc) {
+        m_document = newDoc;
+        m_document->setTitle(tr("untitled"));
+    }
+}
+
 
 void MainWindow::sideSlide(int pos)
 {

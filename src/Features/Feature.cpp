@@ -1057,13 +1057,7 @@ QString Feature::toMainHtml(QString type, QString systemtype)
 
     if (hasOSMId()) {
         S += "<hr/>"
-        "<a href='/" + systemtype + "/" + xmlId() + "/history'>"+QApplication::translate("MapFeature", "History")+"</a>";
-        if (systemtype == "node") {
-            S += "<br/>"
-            "<a href='/" + systemtype + "/" + xmlId() + "/ways'>"+QApplication::translate("MapFeature", "Referenced by ways")+"</a>";
-        }
-        S += "<br/>"
-        "<a href='/" + systemtype + "/" + xmlId() + "/relations'>"+QApplication::translate("MapFeature", "Referenced by relation")+"</a>";
+        "<a href='/browse/" + systemtype + "/" + xmlId() + "'>"+QApplication::translate("MapFeature", "Browse")+"</a>";
     }
     S += "</body></html>";
 

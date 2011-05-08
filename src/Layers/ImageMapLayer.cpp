@@ -54,6 +54,7 @@ public:
     QRectF Viewport;
     QTransform AlignementTransform;
     QVector<QTransform> AlignementTransformList;
+    QPointF cumulatedDelta;
 
 public:
     ImageMapLayerPrivate()
@@ -657,6 +658,7 @@ void ImageMapLayer::draw(MapView& theView, QRect& rect)
         return;
 
     p->theProjection.setProjectionType(p->theMapAdapter->projection());
+    p->cumulatedDelta = QPointF();
 
     if (p->theMapAdapter->isTiled())
         p->pr = drawTiled(theView, rect);
@@ -692,7 +694,6 @@ void ImageMapLayer::draw(MapView& theView, QRect& rect)
             pms = p->newPix.copy(drawingRect);
     }
 
-    p->newPix.fill(Qt::transparent);
     QPainter P(&p->curPix);
     P.drawPixmap((pmSize.width()-pms.width())/2, (pmSize.height()-pms.height())/2, pms);
     //    if (p->theMapAdapter->isTiled())
@@ -861,13 +862,14 @@ QRect ImageMapLayer::drawFull(MapView& theView, QRect& rect)
 QRect ImageMapLayer::drawTiled(MapView& theView, QRect& rect)
 {
     QRectF projVp;
+//    QRectF fRect(-rect.width(), -rect.height(), rect.width()*3.0, rect.height()*3.0);
     QRectF fRect(rect);
 
     if (p->theProjection.getProjectionProj4() == theView.projection().getProjectionProj4()) {
         projVp.setTopLeft(theView.invertedTransform().map(fRect.topLeft()));
         projVp.setBottomRight(theView.invertedTransform().map(fRect.bottomRight()));
     } else
-        projVp = p->theProjection.toProjectedRectF(CoordBox(p->Viewport), rect);
+        projVp = p->theProjection.toProjectedRectF(CoordBox(p->Viewport), fRect.toRect());
 
     qreal tileWidth, tileHeight;
     int maxZoom = p->theMapAdapter->getAdaptedMaxZoom(p->Viewport);
@@ -967,7 +969,7 @@ QRect ImageMapLayer::drawTiled(MapView& theView, QRect& rect)
     int cross_scr_x = cross_x * tilesizeW / tileWidth;
     int cross_scr_y = cross_y * tilesizeH / tileHeight;
 
-    QSize pmSize = rect.size();
+    QSize pmSize = fRect.size().toSize();
 //    QSize pmSize((tiles_right+tiles_left+1)*tilesizeW, (tiles_bottom+tiles_above+1)*tilesizeH);
 //    QPixmap tmpPm = p->pm.scaled(retRect.size(), Qt::IgnoreAspectRatio);
     p->newPix = QPixmap(pmSize);
@@ -976,16 +978,16 @@ QRect ImageMapLayer::drawTiled(MapView& theView, QRect& rect)
 //    painter.drawPixmap(0, 0, tmpPm);
 
 //    qDebug() << "Tiles: " << tiles_right+tiles_left+1 << "x" << tiles_bottom+tiles_above+1;
-    for (i=-tiles_left+mapmiddle_tile_x; i<=tiles_right+mapmiddle_tile_x; i++)
+    for (i=-tiles_left; i<=tiles_right; i++)
     {
-        for (j=-tiles_above+mapmiddle_tile_y; j<=tiles_bottom+mapmiddle_tile_y; j++)
+        for (j=-tiles_above; j<=tiles_bottom; j++)
         {
-            if (p->theMapAdapter->isValid(i, j, p->theMapAdapter->getZoom()))
+            if (p->theMapAdapter->isValid(mapmiddle_tile_x+i, mapmiddle_tile_y+j, p->theMapAdapter->getZoom()))
             {
 #ifdef Q_CC_MSVC
-                qreal priority = _hypot(i - mapmiddle_tile_x, j - mapmiddle_tile_y);
+                qreal priority = _hypot(i, j);
 #else
-                qreal priority = hypot(i - mapmiddle_tile_x, j - mapmiddle_tile_y);
+                qreal priority = hypot(i, j);
 #endif
                 tiles.append(Tile(i, j, priority));
             }
@@ -997,15 +999,15 @@ QRect ImageMapLayer::drawTiled(MapView& theView, QRect& rect)
     int n=0; // Arbitrarily limit the number of tiles to 100
     for (QList<Tile>::const_iterator tile = tiles.begin(); tile != tiles.end() && n<100; ++tile)
     {
-        QImage pm = p->theMapAdapter->getImageManager()->getImage(p->theMapAdapter, p->theMapAdapter->getQuery(tile->i, tile->j, p->theMapAdapter->getZoom()));
+        QImage pm = p->theMapAdapter->getImageManager()->getImage(p->theMapAdapter, p->theMapAdapter->getQuery(mapmiddle_tile_x+tile->i, mapmiddle_tile_y+tile->j, p->theMapAdapter->getZoom()));
         if (!pm.isNull())
-            painter.drawImage(((tile->i-mapmiddle_tile_x)*tilesizeW)+pmSize.width()/2 -cross_scr_x,
-                               ((tile->j-mapmiddle_tile_y)*tilesizeH)+pmSize.height()/2-cross_scr_y,
+            painter.drawImage((tile->i*tilesizeW)+pmSize.width()/2 -cross_scr_x,
+                               (tile->j*tilesizeH)+pmSize.height()/2-cross_scr_y,
                                pm);
 
         if (M_PREFS->getDrawTileBoundary()) {
-            painter.drawRect(((tile->i-mapmiddle_tile_x)*tilesizeW)+pmSize.width()/2 -cross_scr_x,
-                             ((tile->j-mapmiddle_tile_y)*tilesizeH)+pmSize.height()/2-cross_scr_y,
+            painter.drawRect((tile->i*tilesizeW)+pmSize.width()/2 -cross_scr_x,
+                             (tile->j*tilesizeH)+pmSize.height()/2-cross_scr_y,
                              tilesizeW, tilesizeH);
         }
         ++n;
@@ -1014,7 +1016,11 @@ QRect ImageMapLayer::drawTiled(MapView& theView, QRect& rect)
 
 //    qDebug() << "tl: " << tl << "; br: " << br;
 //    qDebug() << "vp: " << projVp;
-//    qDebug() << "vlm: " << vlm;
+    //    qDebug() << "vlm: " << vlm;
+    qDebug() << "retRect: " << retRect;
+    QRect expR = QRect(-retRect.left(), -retRect.top(), retRect.width()+retRect.left(), retRect.height()+retRect.top());
+    p->newPix.save("c:/tmp.png");
+    p->newPix.copy(expR).save("c:/tmp2.png");
     return retRect;
 }
 

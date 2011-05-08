@@ -3,6 +3,7 @@
 
 #include <QWidget>
 #include <QDateTime>
+#include <QFile>
 
 #include "IMerkMainWindow.h"
 #include "IProgressWindow.h"
@@ -42,6 +43,10 @@ public:
     QLabel*		  getProgressLabel() { return NULL; }
 
     void updateLanguage();
+
+private:
+    Document * doLoadDocument(QFile *file);
+    void loadTemplateDocument(QString fn);
 
 public slots:
     void invalidateView(bool UpdateDock = true);
