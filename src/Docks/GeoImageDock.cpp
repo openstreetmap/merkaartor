@@ -92,6 +92,7 @@ GeoImageDock::GeoImageDock(MainWindow *aMain)
     setContextMenuPolicy(Qt::ActionsContextMenu);
 
     centerAction = new QAction(tr("Center map"), this);
+    centerAction->setShortcut(tr("c"));
     remImagesAction = new QAction(tr("Remove Images"), this);
     toClipboardAction = new QAction(tr("Copy filename to clipboard"), this);
     nextImageAction = new QAction(tr("Select next image"), this);
