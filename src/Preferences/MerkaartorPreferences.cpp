@@ -1001,6 +1001,9 @@ QString MerkaartorPreferences::getOsmWebsite() const
     u.setPath(p);
 #endif
 
+    if (!u.path().isEmpty())
+        u.setPath("");
+
     return u.toString();
 }
 

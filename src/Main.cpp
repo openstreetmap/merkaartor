@@ -185,7 +185,8 @@ int main(int argc, char** argv)
 #endif
 
     qApp->setStyleSheet(
-            " LayerWidget { color: black; border: 1px solid black; min-height: 20px}"
+            " LayerWidget { border: 1px solid black; min-height: 20px}"
+            " LayerWidget QLineEdit { color: black; }"
 
             " LayerWidget QCheckBox::indicator:checked { image: url(:Icons/eye.xpm); }"
             " LayerWidget QCheckBox::indicator:unchecked { image: url(:Icons/empty.xpm); }"
