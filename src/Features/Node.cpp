@@ -451,6 +451,9 @@ bool Node::toGPX(QXmlStreamWriter& stream, QProgressDialog * progress, QString e
     if (elevation()) {
         stream.writeTextElement("ele", QString::number(elevation(),'f',6));
     }
+    if (speed()) {
+        stream.writeTextElement("speed", QString::number(speed(),'f',6));
+    }
     s = tagValue("_comment_","");
     if (!s.isEmpty()) {
         stream.writeTextElement("cmt", s);
@@ -544,6 +547,10 @@ Node * Node::fromGPX(Document* d, Layer* L, QXmlStreamReader& stream)
         } else if (stream.name() == "ele") {
             stream.readNext();
             Pt->setElevation(stream.text().toString().toFloat());
+            stream.readNext();
+        } else if (stream.name() == "speed") {
+            stream.readNext();
+            Pt->setSpeed(stream.text().toString().toFloat());
             stream.readNext();
         } else if (stream.name() == "name") {
             stream.readNext();
