@@ -473,16 +473,27 @@ void MapView::drawLatLonGrid(QPainter & P)
     if (!TEST_RFLAGS(RendererOptions::LatLonGridVisible))
         return;
 
-    qreal lonInterval = p->Viewport.lonDiff() / 4;
-    qreal latInterval = p->Viewport.latDiff() / 4;
+    QPointF origin(0., 0.);
+    QPoint p1 = toView(origin);
+    QPointF p2 = fromView(QPoint(p1.x()+width(), p1.y()-height()));
+    CoordBox adjViewport(origin, p2);
+    qreal lonInterval = adjViewport.lonDiff() / 4;
+    qreal latInterval = adjViewport.latDiff() / 4;
+
     int prec = log10(lonInterval);
     if (!lonInterval || !latInterval) return; // avoid divide-by-zero
-    qreal lonStart = qMax(int(p->Viewport.bottomLeft().x() / lonInterval) * lonInterval, -COORD_MAX);
-    if (lonStart<1 && lonStart != -COORD_MAX)
-        lonStart -= lonInterval;
+    qreal lonStart = qMax(int((p->Viewport.bottomLeft().x() - origin.x()) / lonInterval) * lonInterval, -COORD_MAX);
+    if (lonStart != -COORD_MAX) {
+        lonStart -= origin.x();
+        if (lonStart<1)
+            lonStart -= lonInterval;
+    }
     qreal latStart = qMax(int(p->Viewport.bottomLeft().y() / latInterval) * latInterval, -COORD_MAX/2);
-    if (latStart<1 && latStart != -COORD_MAX/2)
-        latStart -= lonInterval;
+    if (latStart != -COORD_MAX/2) {
+        latStart -= origin.y();
+        if (latStart<1)
+            latStart -= lonInterval;
+    }
 
     QList<QPolygonF> medianLines;
     QList<QPolygonF> parallelLines;
