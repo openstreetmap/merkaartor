@@ -21,7 +21,7 @@
       <enum>QTabWidget::North</enum>
      </property>
      <property name="currentIndex">
-      <number>8</number>
+      <number>3</number>
      </property>
      <widget class="QWidget" name="tab_4">
       <attribute name="title">
@@ -643,9 +643,32 @@
      </widget>
      <widget class="QWidget" name="tab_5">
       <attribute name="title">
-       <string>Style</string>
+       <string>Rendering</string>
       </attribute>
       <layout class="QVBoxLayout" name="verticalLayout_4">
+       <item>
+        <widget class="QGroupBox" name="groupBox_5">
+         <property name="title">
+          <string>Options</string>
+         </property>
+         <layout class="QGridLayout" name="gridLayout_3">
+          <item row="0" column="0">
+           <widget class="QCheckBox" name="cbAntiAlias">
+            <property name="text">
+             <string>Use Anti-aliasing</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="1">
+           <widget class="QCheckBox" name="cbDisableAntialiasInPanning">
+            <property name="text">
+             <string>Disable Anti-alisaing while panning</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
        <item>
         <widget class="QGroupBox" name="MapStyle">
          <property name="title">
@@ -1565,12 +1588,12 @@
    <slot>setEnabled(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>51</x>
-     <y>62</y>
+     <x>72</x>
+     <y>79</y>
     </hint>
     <hint type="destinationlabel">
-     <x>85</x>
-     <y>59</y>
+     <x>162</x>
+     <y>105</y>
     </hint>
    </hints>
   </connection>
@@ -1581,12 +1604,12 @@
    <slot>setEnabled(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>51</x>
-     <y>62</y>
+     <x>72</x>
+     <y>79</y>
     </hint>
     <hint type="destinationlabel">
-     <x>85</x>
-     <y>55</y>
+     <x>135</x>
+     <y>131</y>
     </hint>
    </hints>
   </connection>
@@ -1597,12 +1620,12 @@
    <slot>setEnabled(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>43</x>
-     <y>45</y>
+     <x>55</x>
+     <y>149</y>
     </hint>
     <hint type="destinationlabel">
-     <x>72</x>
-     <y>45</y>
+     <x>185</x>
+     <y>150</y>
     </hint>
    </hints>
   </connection>
@@ -1613,12 +1636,12 @@
    <slot>setEnabled(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>43</x>
-     <y>45</y>
+     <x>55</x>
+     <y>149</y>
     </hint>
     <hint type="destinationlabel">
-     <x>100</x>
-     <y>45</y>
+     <x>665</x>
+     <y>152</y>
     </hint>
    </hints>
   </connection>
@@ -1629,12 +1652,12 @@
    <slot>setEnabled(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>33</x>
-     <y>45</y>
+     <x>45</x>
+     <y>77</y>
     </hint>
     <hint type="destinationlabel">
-     <x>94</x>
-     <y>45</y>
+     <x>200</x>
+     <y>79</y>
     </hint>
    </hints>
   </connection>
@@ -1645,12 +1668,12 @@
    <slot>setEnabled(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>57</x>
-     <y>63</y>
+     <x>79</x>
+     <y>81</y>
     </hint>
     <hint type="destinationlabel">
-     <x>90</x>
-     <y>63</y>
+     <x>173</x>
+     <y>83</y>
     </hint>
    </hints>
   </connection>
@@ -1661,12 +1684,12 @@
    <slot>setEnabled(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>46</x>
-     <y>58</y>
+     <x>68</x>
+     <y>111</y>
     </hint>
     <hint type="destinationlabel">
-     <x>68</x>
-     <y>58</y>
+     <x>155</x>
+     <y>112</y>
     </hint>
    </hints>
   </connection>
@@ -1677,12 +1700,12 @@
    <slot>setEnabled(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>46</x>
-     <y>58</y>
+     <x>68</x>
+     <y>111</y>
     </hint>
     <hint type="destinationlabel">
-     <x>90</x>
-     <y>58</y>
+     <x>655</x>
+     <y>114</y>
     </hint>
    </hints>
   </connection>
@@ -1709,12 +1732,12 @@
    <slot>setEnabled(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>51</x>
-     <y>62</y>
+     <x>72</x>
+     <y>79</y>
     </hint>
     <hint type="destinationlabel">
-     <x>85</x>
-     <y>52</y>
+     <x>162</x>
+     <y>157</y>
     </hint>
    </hints>
   </connection>
@@ -1725,12 +1748,12 @@
    <slot>setEnabled(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>51</x>
-     <y>62</y>
+     <x>72</x>
+     <y>79</y>
     </hint>
     <hint type="destinationlabel">
-     <x>85</x>
-     <y>48</y>
+     <x>162</x>
+     <y>183</y>
     </hint>
    </hints>
   </connection>
@@ -1741,12 +1764,12 @@
    <slot>setEnabled(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>54</x>
-     <y>62</y>
+     <x>75</x>
+     <y>81</y>
     </hint>
     <hint type="destinationlabel">
-     <x>91</x>
-     <y>62</y>
+     <x>167</x>
+     <y>84</y>
     </hint>
    </hints>
   </connection>
@@ -1757,12 +1780,12 @@
    <slot>setEnabled(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>54</x>
-     <y>55</y>
+     <x>75</x>
+     <y>109</y>
     </hint>
     <hint type="destinationlabel">
-     <x>85</x>
-     <y>55</y>
+     <x>161</x>
+     <y>112</y>
     </hint>
    </hints>
   </connection>
@@ -1773,12 +1796,28 @@
    <slot>setEnabled(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>115</x>
-     <y>171</y>
+     <x>137</x>
+     <y>244</y>
     </hint>
     <hint type="destinationlabel">
-     <x>205</x>
-     <y>174</y>
+     <x>388</x>
+     <y>245</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>cbAntiAlias</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>cbDisableAntialiasInPanning</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>75</x>
+     <y>71</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>402</x>
+     <y>73</y>
     </hint>
    </hints>
   </connection>

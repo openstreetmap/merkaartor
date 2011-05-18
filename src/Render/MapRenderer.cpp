@@ -243,7 +243,8 @@ void MapRenderer::render(
     {
         pix.fill(Qt::transparent);
         thePainter->begin(&pix);
-        thePainter->setRenderHint(QPainter::Antialiasing);
+        if (M_PREFS->getUseAntiAlias())
+            thePainter->setRenderHint(QPainter::Antialiasing);
         int curLayer = (itm.key()).layer();
         while (itm != theFeatures.constEnd() && (itm.key()).layer() == curLayer)
         {
@@ -364,7 +365,6 @@ void MapRenderer::render(
     QMap<RenderPriority, QSet<Feature*> >::const_iterator itmCur;
     QSet<Feature*>::const_iterator it;
 
-    P->setRenderHint(QPainter::Antialiasing);
     thePainter = P;
 
     itm = theFeatures.constBegin();

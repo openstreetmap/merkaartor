@@ -250,6 +250,9 @@ void PreferencesDialog::loadPrefs()
     edCacheDir->setText(M_PREFS->getCacheDir());
     sbCacheSize->setValue(M_PREFS->getCacheSize());
 
+    cbAntiAlias->setChecked(M_PREFS->getUseAntiAlias());
+    cbDisableAntialiasInPanning->setChecked(!M_PREFS->getAntiAliasWhilePanning());
+    cbDisableAntialiasInPanning->setEnabled(M_PREFS->getUseAntiAlias());
     QString s = M_PREFS->getDefaultStyle();
     QString cs = M_PREFS->getCustomStyle();
     if (QFileInfo(cs).isFile())
@@ -397,6 +400,8 @@ void PreferencesDialog::savePrefs()
     M_PREFS->setCacheDir(edCacheDir->text());
     M_PREFS->setCacheSize(sbCacheSize->value());
 
+    M_PREFS->setUseAntiAlias(cbAntiAlias->isChecked());
+    M_PREFS->setAntiAliasWhilePanning(!cbDisableAntialiasInPanning->isChecked());
     M_PREFS->setCustomStyle(CustomStylesDir->text());
 
     bool PainterToInvalidate = false;

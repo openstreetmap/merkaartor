@@ -274,7 +274,9 @@ public:
     QStringList getRecentImport() const;
     void addRecentImport(const QString & theValue);
 
-    /* Styles */
+    /* Rendering */
+    M_PARAM_DECLARE_BOOL(UseAntiAlias)
+    M_PARAM_DECLARE_BOOL(AntiAliasWhilePanning)
     M_PARAM_DECLARE_STRING(DefaultStyle)
     M_PARAM_DECLARE_STRING(CustomStyle)
     M_PARAM_DECLARE_BOOL(DisableStyleForTracks)

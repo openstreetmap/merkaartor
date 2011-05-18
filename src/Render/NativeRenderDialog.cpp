@@ -142,6 +142,7 @@ void NativeRenderDialog::render(QPainter& P, QRect theR, RendererOptions opt)
 {
     P.setClipRect(theR);
     P.setClipping(true);
+    P.setRenderHint(QPainter::Antialiasing);
 
     mapview->setGeometry(theR);
     mapview->setViewport(boundingBox(), theR);

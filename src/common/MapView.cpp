@@ -664,6 +664,9 @@ void MapView::updateStaticBuffer()
 //        P.setRenderHint(QPainter::Antialiasing);
 //        P.setClipping(true);
 //        P.setClipRegion(QRegion(rect()));
+        if (M_PREFS->getUseAntiAlias())
+            if (p->invalidRects[0] == p->Viewport || M_PREFS->getAntiAliasWhilePanning())
+                P.setRenderHint(QPainter::Antialiasing);
         drawFeatures(P);
         P.end();
     }
