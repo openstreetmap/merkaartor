@@ -12,5 +12,6 @@
   <TmsServer minzoom="0" maxzoom="18" path="/tiles/1.0.0/openaerialmap-900913/%1/%2/%3.png" address="tile.openaerialmap.org" name="OpenAerialMap" tilesize="256" />
  <TmsServer minzoom="0" maxzoom="23" path="/maps/nml=Vert&amp;x=%2&amp;y=%3&amp;z=%1" address="www.nearmap.com" name="NearMap" tilesize="256"/>
   <TmsServer minzoom="0" maxzoom="19" sourcetag="Cnes/Spot Image" tmsBaseUrl="http://spotmaps.youmapps.org/spotmaps4osm/" path="/spotmaps4osm/1.0.0/spotmaps4osm/%1/%2/%3.jpeg" projection="EPSG:4326" address="spotmaps.youmapps.org" licenseurl="http://www.youmapps.org/licenses/EULA-OSM-J-fr.html" name="SPOTMaps (France)" tilesize="256" tmsorigin="true"/>
+  <TmsServer minzoom="0" maxzoom="19" sourcetag="Fugro (2005)" path="/fugro2005/%1/%2/%3.jpg" projection="EPSG:900913" address="fugro.openstreetmap.dk" name="Denmark - Fugro Aerial Imagery" tilesize="256"/>
  </TmsServers>
 </MerkaartorList>
