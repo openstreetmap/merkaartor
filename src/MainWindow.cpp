@@ -92,6 +92,7 @@
 #include <QtCore>
 #include <QtGui>
 #include <QTcpServer>
+#include <QTcpSocket>
 #include <QXmlStreamReader>
 
 #include "qttoolbardialog.h"
