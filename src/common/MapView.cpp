@@ -733,7 +733,7 @@ void MapView::mouseMoveEvent(QMouseEvent* anEvent)
         if (!M_PREFS->getSeparateMoveMode()) {
             EditInteraction* EI = dynamic_cast<EditInteraction*>(theInteraction);
             if (EI && EI->isIdle()) {
-                if (EI->lastSnap() && Main->properties()->isSelected(EI->lastSnap())) {
+                if (EI->lastSnap() && Main && Main->properties()->isSelected(EI->lastSnap())) {
                     MoveNodeInteraction* MI = new MoveNodeInteraction(this);
                     launch(MI);
 //                    main()->info()->setHtml(interaction()->toHtml());
@@ -835,9 +835,14 @@ void MapView::launch(Interaction* anInteraction)
 #ifndef _MOBILE
         setCursor(QCursor(Qt::ArrowCursor));
 #endif
-        launch(new EditInteraction(this));
+        launch(defaultInteraction());
         //Q_ASSERT(theInteraction);
     }
+}
+
+Interaction *MapView::defaultInteraction()
+{
+    return new EditInteraction(this);
 }
 
 Interaction *MapView::interaction()

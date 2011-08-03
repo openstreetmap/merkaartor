@@ -285,7 +285,7 @@ void Interaction::updateSnap(QMouseEvent* event)
         else
             view()->setToolTip("");
     }
-    if (M_PREFS->getInfoOnHover() && main()->info() && main()->info()->isVisible()) {
+    if (M_PREFS->getInfoOnHover() && main() && main()->info() && main()->info()->isVisible()) {
         if (LastSnap) {
             main()->info()->setHoverHtml(LastSnap->toHtml());
         } else
@@ -458,7 +458,8 @@ void FeatureSnapInteraction::nextSnap()
     curStackSnap++;
     if (curStackSnap > StackSnap.size() -1)
         curStackSnap = 0;
-    view()->properties()->setSelection(StackSnap[curStackSnap]);
+    if (view()->properties())
+        view()->properties()->setSelection(StackSnap[curStackSnap]);
     view()->update();
 }
 
@@ -469,7 +470,8 @@ void FeatureSnapInteraction::previousSnap()
     curStackSnap--;
     if (curStackSnap < 0)
         curStackSnap = StackSnap.size() -1;
-    view()->properties()->setSelection(StackSnap[curStackSnap]);
+    if (view()->properties())
+        view()->properties()->setSelection(StackSnap[curStackSnap]);
     view()->update();
 }
 
