@@ -52,7 +52,7 @@ public:
     MainWindow* main();
     bool panning() const;
 
-    void updateSnap(QMouseEvent* event);
+    virtual void updateSnap(QMouseEvent* event);
     Feature* lastSnap();
 
 protected:
