@@ -879,7 +879,7 @@ void Feature::toXML(QXmlStreamWriter& stream, bool strict, QString changetsetid)
             stream.writeAttribute("special","true");
         // TODO Manage selection at document level
 #ifndef _MOBILE
-        if (g_Merk_MainWindow->properties()->isSelected(this))
+        if (g_Merk_MainWindow && g_Merk_MainWindow->properties()->isSelected(this))
             stream.writeAttribute("selected","true");
 #endif
     }
