@@ -31,12 +31,12 @@ class MapView :	public QWidget
         ~MapView();
 
         MainWindow* main();
-        void setDocument(Document* aDoc);
+        virtual void setDocument(Document* aDoc);
         Document* document();
-        void launch(Interaction* anInteraction);
+        virtual void launch(Interaction* anInteraction);
         Interaction* interaction();
 
-        void buildFeatureSet();
+        virtual void buildFeatureSet();
         void drawFeatures(QPainter & painter);
         void printFeatures(QPainter & painter);
         void drawLatLonGrid(QPainter & painter);
