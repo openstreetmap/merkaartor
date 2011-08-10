@@ -294,6 +294,8 @@ void Interaction::updateSnap(QMouseEvent* event)
             else
                 main()->info()->unsetHoverHtml();
     }
+
+    emit featureSnap(LastSnap);
 }
 
 Feature* Interaction::lastSnap()
