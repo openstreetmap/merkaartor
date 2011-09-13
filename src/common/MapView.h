@@ -106,7 +106,6 @@ class MapView :	public QWidget
         QPixmap* StaticBackground;
         QPixmap* StaticBuffer;
         QPixmap* StaticMap;
-        bool StaticBufferUpToDate;
         bool StaticMapUpToDate;
         bool SelectionLocked;
         QLabel* lockIcon;
@@ -141,6 +140,7 @@ class MapView :	public QWidget
 
     protected:
         bool event(QEvent *event);
+        bool StaticBufferUpToDate;
 
     private slots:
         void on_imageRequested(ImageMapLayer*);
