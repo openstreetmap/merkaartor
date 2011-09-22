@@ -641,6 +641,8 @@ bool Feature::hasPainter() const
 
 bool Feature::hasPainter(qreal PixelPerM) const
 {
+    if (!layer())
+        return false;
     if (p->PixelPerMForPainter != PixelPerM)
         p->updatePainters(PixelPerM);
     return (p->CurrentPainter != NULL);
