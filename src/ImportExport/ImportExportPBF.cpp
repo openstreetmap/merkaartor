@@ -178,9 +178,9 @@ bool ImportExportPBF::readBlob()
     } else if ( m_blob.has_zlib_data() ) {
         if ( !unpackZlib() )
             return false;
-    } else if ( m_blob.has_bzip2_data() ) {
-        if ( !unpackBzip2() )
-            return false;
+//    } else if ( m_blob.has_bzip2_data() ) {
+//        if ( !unpackBzip2() )
+//            return false;
     } else if ( m_blob.has_lzma_data() ) {
         if ( !unpackLzma() )
             return false;
@@ -223,16 +223,16 @@ bool ImportExportPBF::unpackZlib()
 
 bool ImportExportPBF::unpackBzip2()
 {
-    unsigned size = m_blob.raw_size();
-    m_buffer.resize( size );
-    m_bzip2Buffer.resize( m_blob.bzip2_data().size() );
-    for ( unsigned i = 0; i < m_blob.bzip2_data().size(); i++ )
-        m_bzip2Buffer[i] = m_blob.bzip2_data()[i];
-    int ret = BZ2_bzBuffToBuffDecompress( m_buffer.data(), &size, m_bzip2Buffer.data(), m_bzip2Buffer.size(), 0, 0 );
-    if ( ret != BZ_OK ) {
-        qCritical() << "failed to unpack bzip2 stream";
-        return false;
-    }
+//    unsigned size = m_blob.raw_size();
+//    m_buffer.resize( size );
+//    m_bzip2Buffer.resize( m_blob.bzip2_data().size() );
+//    for ( unsigned i = 0; i < m_blob.bzip2_data().size(); i++ )
+//        m_bzip2Buffer[i] = m_blob.bzip2_data()[i];
+//    int ret = BZ2_bzBuffToBuffDecompress( m_buffer.data(), &size, m_bzip2Buffer.data(), m_bzip2Buffer.size(), 0, 0 );
+//    if ( ret != BZ_OK ) {
+//        qCritical() << "failed to unpack bzip2 stream";
+//        return false;
+//    }
     return true;
 }
 

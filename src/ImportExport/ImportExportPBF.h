@@ -42,7 +42,7 @@ public:
     virtual bool export_(const QList<Feature *>& featList);
 
 protected:
-    OSMPBF::BlockHeader m_blockHeader;
+    OSMPBF::BlobHeader m_blockHeader;
     OSMPBF::Blob m_blob;
 
     OSMPBF::HeaderBlock m_headerBlock;
