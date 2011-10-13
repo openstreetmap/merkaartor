@@ -5,91 +5,13 @@
 #include <google/protobuf/stubs/once.h>
 #include <google/protobuf/io/coded_stream.h>
 #include <google/protobuf/wire_format_lite_inl.h>
-#include <google/protobuf/descriptor.h>
-#include <google/protobuf/reflection_ops.h>
-#include <google/protobuf/wire_format.h>
+// @@protoc_insertion_point(includes)
 
 namespace OSMPBF {
 
-namespace {
-
-const ::google::protobuf::Descriptor* Blob_descriptor_ = NULL;
-const ::google::protobuf::internal::GeneratedMessageReflection*
-  Blob_reflection_ = NULL;
-const ::google::protobuf::Descriptor* BlockHeader_descriptor_ = NULL;
-const ::google::protobuf::internal::GeneratedMessageReflection*
-  BlockHeader_reflection_ = NULL;
-
-}  // namespace
-
-
-void protobuf_AssignDesc_fileformat_2eproto() {
-  protobuf_AddDesc_fileformat_2eproto();
-  const ::google::protobuf::FileDescriptor* file =
-    ::google::protobuf::DescriptorPool::generated_pool()->FindFileByName(
-      "fileformat.proto");
-  GOOGLE_CHECK(file != NULL);
-  Blob_descriptor_ = file->message_type(0);
-  static const int Blob_offsets_[5] = {
-    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Blob, raw_),
-    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Blob, raw_size_),
-    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Blob, zlib_data_),
-    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Blob, lzma_data_),
-    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Blob, bzip2_data_),
-  };
-  Blob_reflection_ =
-    new ::google::protobuf::internal::GeneratedMessageReflection(
-      Blob_descriptor_,
-      Blob::default_instance_,
-      Blob_offsets_,
-      GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Blob, _has_bits_[0]),
-      GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Blob, _unknown_fields_),
-      -1,
-      ::google::protobuf::DescriptorPool::generated_pool(),
-      ::google::protobuf::MessageFactory::generated_factory(),
-      sizeof(Blob));
-  BlockHeader_descriptor_ = file->message_type(1);
-  static const int BlockHeader_offsets_[3] = {
-    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(BlockHeader, type_),
-    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(BlockHeader, indexdata_),
-    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(BlockHeader, datasize_),
-  };
-  BlockHeader_reflection_ =
-    new ::google::protobuf::internal::GeneratedMessageReflection(
-      BlockHeader_descriptor_,
-      BlockHeader::default_instance_,
-      BlockHeader_offsets_,
-      GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(BlockHeader, _has_bits_[0]),
-      GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(BlockHeader, _unknown_fields_),
-      -1,
-      ::google::protobuf::DescriptorPool::generated_pool(),
-      ::google::protobuf::MessageFactory::generated_factory(),
-      sizeof(BlockHeader));
-}
-
-namespace {
-
-GOOGLE_PROTOBUF_DECLARE_ONCE(protobuf_AssignDescriptors_once_);
-inline void protobuf_AssignDescriptorsOnce() {
-  ::google::protobuf::GoogleOnceInit(&protobuf_AssignDescriptors_once_,
-                 &protobuf_AssignDesc_fileformat_2eproto);
-}
-
-void protobuf_RegisterTypes(const ::std::string&) {
-  protobuf_AssignDescriptorsOnce();
-  ::google::protobuf::MessageFactory::InternalRegisterGeneratedMessage(
-    Blob_descriptor_, &Blob::default_instance());
-  ::google::protobuf::MessageFactory::InternalRegisterGeneratedMessage(
-    BlockHeader_descriptor_, &BlockHeader::default_instance());
-}
-
-}  // namespace
-
 void protobuf_ShutdownFile_fileformat_2eproto() {
   delete Blob::default_instance_;
-  delete Blob_reflection_;
-  delete BlockHeader::default_instance_;
-  delete BlockHeader_reflection_;
+  delete BlobHeader::default_instance_;
 }
 
 void protobuf_AddDesc_fileformat_2eproto() {
@@ -98,19 +20,10 @@ void protobuf_AddDesc_fileformat_2eproto() {
   already_here = true;
   GOOGLE_PROTOBUF_VERIFY_VERSION;
 
-  ::google::protobuf::DescriptorPool::InternalAddGeneratedFile(
-    "\n\020fileformat.proto\022\006OSMPBF\"_\n\004Blob\022\013\n\003ra"
-    "w\030\001 \001(\014\022\020\n\010raw_size\030\002 \001(\005\022\021\n\tzlib_data\030\003"
-    " \001(\014\022\021\n\tlzma_data\030\004 \001(\014\022\022\n\nbzip2_data\030\005 "
-    "\001(\014\"@\n\013BlockHeader\022\014\n\004type\030\001 \002(\t\022\021\n\tinde"
-    "xdata\030\002 \001(\014\022\020\n\010datasize\030\003 \002(\005B\017\n\rcrosby."
-    "binary", 206);
-  ::google::protobuf::MessageFactory::InternalRegisterGeneratedFile(
-    "fileformat.proto", &protobuf_RegisterTypes);
   Blob::default_instance_ = new Blob();
-  BlockHeader::default_instance_ = new BlockHeader();
+  BlobHeader::default_instance_ = new BlobHeader();
   Blob::default_instance_->InitAsDefaultInstance();
-  BlockHeader::default_instance_->InitAsDefaultInstance();
+  BlobHeader::default_instance_->InitAsDefaultInstance();
   ::google::protobuf::internal::OnShutdown(&protobuf_ShutdownFile_fileformat_2eproto);
 }
 
@@ -127,23 +40,25 @@ struct StaticDescriptorInitializer_fileformat_2eproto {
 const ::std::string Blob::_default_raw_;
 const ::std::string Blob::_default_zlib_data_;
 const ::std::string Blob::_default_lzma_data_;
-const ::std::string Blob::_default_bzip2_data_;
+const ::std::string Blob::_default_obsolete_bzip2_data_;
 #ifndef _MSC_VER
 const int Blob::kRawFieldNumber;
 const int Blob::kRawSizeFieldNumber;
 const int Blob::kZlibDataFieldNumber;
 const int Blob::kLzmaDataFieldNumber;
-const int Blob::kBzip2DataFieldNumber;
+const int Blob::kOBSOLETEBzip2DataFieldNumber;
 #endif  // !_MSC_VER
 
-Blob::Blob() {
+Blob::Blob()
+  : ::google::protobuf::MessageLite() {
   SharedCtor();
 }
 
 void Blob::InitAsDefaultInstance() {
 }
 
-Blob::Blob(const Blob& from) {
+Blob::Blob(const Blob& from)
+  : ::google::protobuf::MessageLite() {
   SharedCtor();
   MergeFrom(from);
 }
@@ -154,7 +69,7 @@ void Blob::SharedCtor() {
   raw_size_ = 0;
   zlib_data_ = const_cast< ::std::string*>(&_default_zlib_data_);
   lzma_data_ = const_cast< ::std::string*>(&_default_lzma_data_);
-  bzip2_data_ = const_cast< ::std::string*>(&_default_bzip2_data_);
+  obsolete_bzip2_data_ = const_cast< ::std::string*>(&_default_obsolete_bzip2_data_);
   ::memset(_has_bits_, 0, sizeof(_has_bits_));
 }
 
@@ -172,18 +87,18 @@ void Blob::SharedDtor() {
   if (lzma_data_ != &_default_lzma_data_) {
     delete lzma_data_;
   }
-  if (bzip2_data_ != &_default_bzip2_data_) {
-    delete bzip2_data_;
+  if (obsolete_bzip2_data_ != &_default_obsolete_bzip2_data_) {
+    delete obsolete_bzip2_data_;
   }
   if (this != default_instance_) {
   }
 }
 
-const ::google::protobuf::Descriptor* Blob::descriptor() {
-  protobuf_AssignDescriptorsOnce();
-  return Blob_descriptor_;
+void Blob::SetCachedSize(int size) const {
+  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
+  _cached_size_ = size;
+  GOOGLE_SAFE_CONCURRENT_WRITES_END();
 }
-
 const Blob& Blob::default_instance() {
   if (default_instance_ == NULL) protobuf_AddDesc_fileformat_2eproto();  return *default_instance_;
 }
@@ -213,13 +128,12 @@ void Blob::Clear() {
       }
     }
     if (_has_bit(4)) {
-      if (bzip2_data_ != &_default_bzip2_data_) {
-        bzip2_data_->clear();
+      if (obsolete_bzip2_data_ != &_default_obsolete_bzip2_data_) {
+        obsolete_bzip2_data_->clear();
       }
     }
   }
   ::memset(_has_bits_, 0, sizeof(_has_bits_));
-  mutable_unknown_fields()->Clear();
 }
 
 bool Blob::MergePartialFromCodedStream(
@@ -230,65 +144,71 @@ bool Blob::MergePartialFromCodedStream(
     switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
       // optional bytes raw = 1;
       case 1: {
-        if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) !=
+        if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
             ::google::protobuf::internal::WireFormatLite::WIRETYPE_LENGTH_DELIMITED) {
+          DO_(::google::protobuf::internal::WireFormatLite::ReadBytes(
+                input, this->mutable_raw()));
+        } else {
           goto handle_uninterpreted;
         }
-        DO_(::google::protobuf::internal::WireFormatLite::ReadBytes(
-              input, this->mutable_raw()));
         if (input->ExpectTag(16)) goto parse_raw_size;
         break;
       }
       
       // optional int32 raw_size = 2;
       case 2: {
-        if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) !=
+        if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
             ::google::protobuf::internal::WireFormatLite::WIRETYPE_VARINT) {
+         parse_raw_size:
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   ::google::protobuf::int32, ::google::protobuf::internal::WireFormatLite::TYPE_INT32>(
+                 input, &raw_size_)));
+          _set_bit(1);
+        } else {
           goto handle_uninterpreted;
         }
-       parse_raw_size:
-        DO_(::google::protobuf::internal::WireFormatLite::ReadInt32(
-              input, &raw_size_));
-        _set_bit(1);
         if (input->ExpectTag(26)) goto parse_zlib_data;
         break;
       }
       
       // optional bytes zlib_data = 3;
       case 3: {
-        if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) !=
+        if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
             ::google::protobuf::internal::WireFormatLite::WIRETYPE_LENGTH_DELIMITED) {
+         parse_zlib_data:
+          DO_(::google::protobuf::internal::WireFormatLite::ReadBytes(
+                input, this->mutable_zlib_data()));
+        } else {
           goto handle_uninterpreted;
         }
-       parse_zlib_data:
-        DO_(::google::protobuf::internal::WireFormatLite::ReadBytes(
-              input, this->mutable_zlib_data()));
         if (input->ExpectTag(34)) goto parse_lzma_data;
         break;
       }
       
       // optional bytes lzma_data = 4;
       case 4: {
-        if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) !=
+        if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
             ::google::protobuf::internal::WireFormatLite::WIRETYPE_LENGTH_DELIMITED) {
+         parse_lzma_data:
+          DO_(::google::protobuf::internal::WireFormatLite::ReadBytes(
+                input, this->mutable_lzma_data()));
+        } else {
           goto handle_uninterpreted;
         }
-       parse_lzma_data:
-        DO_(::google::protobuf::internal::WireFormatLite::ReadBytes(
-              input, this->mutable_lzma_data()));
-        if (input->ExpectTag(42)) goto parse_bzip2_data;
+        if (input->ExpectTag(42)) goto parse_OBSOLETE_bzip2_data;
         break;
       }
       
-      // optional bytes bzip2_data = 5;
+      // optional bytes OBSOLETE_bzip2_data = 5 [deprecated = true];
       case 5: {
-        if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) !=
+        if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
             ::google::protobuf::internal::WireFormatLite::WIRETYPE_LENGTH_DELIMITED) {
+         parse_OBSOLETE_bzip2_data:
+          DO_(::google::protobuf::internal::WireFormatLite::ReadBytes(
+                input, this->mutable_obsolete_bzip2_data()));
+        } else {
           goto handle_uninterpreted;
         }
-       parse_bzip2_data:
-        DO_(::google::protobuf::internal::WireFormatLite::ReadBytes(
-              input, this->mutable_bzip2_data()));
         if (input->ExpectAtEnd()) return true;
         break;
       }
@@ -299,8 +219,7 @@ bool Blob::MergePartialFromCodedStream(
             ::google::protobuf::internal::WireFormatLite::WIRETYPE_END_GROUP) {
           return true;
         }
-        DO_(::google::protobuf::internal::WireFormat::SkipField(
-              input, tag, mutable_unknown_fields()));
+        DO_(::google::protobuf::internal::WireFormatLite::SkipField(input, tag));
         break;
       }
     }
@@ -311,12 +230,6 @@ bool Blob::MergePartialFromCodedStream(
 
 void Blob::SerializeWithCachedSizes(
     ::google::protobuf::io::CodedOutputStream* output) const {
-  ::google::protobuf::uint8* raw_buffer = output->GetDirectBufferForNBytesAndAdvance(_cached_size_);
-  if (raw_buffer != NULL) {
-    Blob::SerializeWithCachedSizesToArray(raw_buffer);
-    return;
-  }
-  
   // optional bytes raw = 1;
   if (_has_bit(0)) {
     ::google::protobuf::internal::WireFormatLite::WriteBytes(
@@ -340,58 +253,12 @@ void Blob::SerializeWithCachedSizes(
       4, this->lzma_data(), output);
   }
   
-  // optional bytes bzip2_data = 5;
+  // optional bytes OBSOLETE_bzip2_data = 5 [deprecated = true];
   if (_has_bit(4)) {
     ::google::protobuf::internal::WireFormatLite::WriteBytes(
-      5, this->bzip2_data(), output);
+      5, this->obsolete_bzip2_data(), output);
   }
   
-  if (!unknown_fields().empty()) {
-    ::google::protobuf::internal::WireFormat::SerializeUnknownFields(
-        unknown_fields(), output);
-  }
-}
-
-::google::protobuf::uint8* Blob::SerializeWithCachedSizesToArray(
-    ::google::protobuf::uint8* target) const {
-  // optional bytes raw = 1;
-  if (_has_bit(0)) {
-    target =
-      ::google::protobuf::internal::WireFormatLite::WriteBytesToArray(
-        1, this->raw(), target);
-  }
-  
-  // optional int32 raw_size = 2;
-  if (_has_bit(1)) {
-    target = ::google::protobuf::internal::WireFormatLite::WriteInt32ToArray(2, this->raw_size(), target);
-  }
-  
-  // optional bytes zlib_data = 3;
-  if (_has_bit(2)) {
-    target =
-      ::google::protobuf::internal::WireFormatLite::WriteBytesToArray(
-        3, this->zlib_data(), target);
-  }
-  
-  // optional bytes lzma_data = 4;
-  if (_has_bit(3)) {
-    target =
-      ::google::protobuf::internal::WireFormatLite::WriteBytesToArray(
-        4, this->lzma_data(), target);
-  }
-  
-  // optional bytes bzip2_data = 5;
-  if (_has_bit(4)) {
-    target =
-      ::google::protobuf::internal::WireFormatLite::WriteBytesToArray(
-        5, this->bzip2_data(), target);
-  }
-  
-  if (!unknown_fields().empty()) {
-    target = ::google::protobuf::internal::WireFormat::SerializeUnknownFieldsToArray(
-        unknown_fields(), target);
-  }
-  return target;
 }
 
 int Blob::ByteSize() const {
@@ -426,33 +293,23 @@ int Blob::ByteSize() const {
           this->lzma_data());
     }
     
-    // optional bytes bzip2_data = 5;
-    if (has_bzip2_data()) {
+    // optional bytes OBSOLETE_bzip2_data = 5 [deprecated = true];
+    if (has_obsolete_bzip2_data()) {
       total_size += 1 +
         ::google::protobuf::internal::WireFormatLite::BytesSize(
-          this->bzip2_data());
+          this->obsolete_bzip2_data());
     }
     
   }
-  if (!unknown_fields().empty()) {
-    total_size +=
-      ::google::protobuf::internal::WireFormat::ComputeUnknownFieldsSize(
-        unknown_fields());
-  }
+  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
   _cached_size_ = total_size;
+  GOOGLE_SAFE_CONCURRENT_WRITES_END();
   return total_size;
 }
 
-void Blob::MergeFrom(const ::google::protobuf::Message& from) {
-  GOOGLE_CHECK_NE(&from, this);
-  const Blob* source =
-    ::google::protobuf::internal::dynamic_cast_if_available<const Blob*>(
-      &from);
-  if (source == NULL) {
-    ::google::protobuf::internal::ReflectionOps::Merge(from, this);
-  } else {
-    MergeFrom(*source);
-  }
+void Blob::CheckTypeAndMergeFrom(
+    const ::google::protobuf::MessageLite& from) {
+  MergeFrom(*::google::protobuf::down_cast<const Blob*>(&from));
 }
 
 void Blob::MergeFrom(const Blob& from) {
@@ -471,16 +328,9 @@ void Blob::MergeFrom(const Blob& from) {
       set_lzma_data(from.lzma_data());
     }
     if (from._has_bit(4)) {
-      set_bzip2_data(from.bzip2_data());
+      set_obsolete_bzip2_data(from.obsolete_bzip2_data());
     }
   }
-  mutable_unknown_fields()->MergeFrom(from.unknown_fields());
-}
-
-void Blob::CopyFrom(const ::google::protobuf::Message& from) {
-  if (&from == this) return;
-  Clear();
-  MergeFrom(from);
 }
 
 void Blob::CopyFrom(const Blob& from) {
@@ -500,45 +350,42 @@ void Blob::Swap(Blob* other) {
     std::swap(raw_size_, other->raw_size_);
     std::swap(zlib_data_, other->zlib_data_);
     std::swap(lzma_data_, other->lzma_data_);
-    std::swap(bzip2_data_, other->bzip2_data_);
+    std::swap(obsolete_bzip2_data_, other->obsolete_bzip2_data_);
     std::swap(_has_bits_[0], other->_has_bits_[0]);
-    _unknown_fields_.Swap(&other->_unknown_fields_);
     std::swap(_cached_size_, other->_cached_size_);
   }
 }
 
-::google::protobuf::Metadata Blob::GetMetadata() const {
-  protobuf_AssignDescriptorsOnce();
-  ::google::protobuf::Metadata metadata;
-  metadata.descriptor = Blob_descriptor_;
-  metadata.reflection = Blob_reflection_;
-  return metadata;
+::std::string Blob::GetTypeName() const {
+  return "OSMPBF.Blob";
 }
 
 
 // ===================================================================
 
-const ::std::string BlockHeader::_default_type_;
-const ::std::string BlockHeader::_default_indexdata_;
+const ::std::string BlobHeader::_default_type_;
+const ::std::string BlobHeader::_default_indexdata_;
 #ifndef _MSC_VER
-const int BlockHeader::kTypeFieldNumber;
-const int BlockHeader::kIndexdataFieldNumber;
-const int BlockHeader::kDatasizeFieldNumber;
+const int BlobHeader::kTypeFieldNumber;
+const int BlobHeader::kIndexdataFieldNumber;
+const int BlobHeader::kDatasizeFieldNumber;
 #endif  // !_MSC_VER
 
-BlockHeader::BlockHeader() {
+BlobHeader::BlobHeader()
+  : ::google::protobuf::MessageLite() {
   SharedCtor();
 }
 
-void BlockHeader::InitAsDefaultInstance() {
+void BlobHeader::InitAsDefaultInstance() {
 }
 
-BlockHeader::BlockHeader(const BlockHeader& from) {
+BlobHeader::BlobHeader(const BlobHeader& from)
+  : ::google::protobuf::MessageLite() {
   SharedCtor();
   MergeFrom(from);
 }
 
-void BlockHeader::SharedCtor() {
+void BlobHeader::SharedCtor() {
   _cached_size_ = 0;
   type_ = const_cast< ::std::string*>(&_default_type_);
   indexdata_ = const_cast< ::std::string*>(&_default_indexdata_);
@@ -546,11 +393,11 @@ void BlockHeader::SharedCtor() {
   ::memset(_has_bits_, 0, sizeof(_has_bits_));
 }
 
-BlockHeader::~BlockHeader() {
+BlobHeader::~BlobHeader() {
   SharedDtor();
 }
 
-void BlockHeader::SharedDtor() {
+void BlobHeader::SharedDtor() {
   if (type_ != &_default_type_) {
     delete type_;
   }
@@ -561,22 +408,22 @@ void BlockHeader::SharedDtor() {
   }
 }
 
-const ::google::protobuf::Descriptor* BlockHeader::descriptor() {
-  protobuf_AssignDescriptorsOnce();
-  return BlockHeader_descriptor_;
+void BlobHeader::SetCachedSize(int size) const {
+  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
+  _cached_size_ = size;
+  GOOGLE_SAFE_CONCURRENT_WRITES_END();
 }
-
-const BlockHeader& BlockHeader::default_instance() {
+const BlobHeader& BlobHeader::default_instance() {
   if (default_instance_ == NULL) protobuf_AddDesc_fileformat_2eproto();  return *default_instance_;
 }
 
-BlockHeader* BlockHeader::default_instance_ = NULL;
+BlobHeader* BlobHeader::default_instance_ = NULL;
 
-BlockHeader* BlockHeader::New() const {
-  return new BlockHeader;
+BlobHeader* BlobHeader::New() const {
+  return new BlobHeader;
 }
 
-void BlockHeader::Clear() {
+void BlobHeader::Clear() {
   if (_has_bits_[0 / 32] & (0xffu << (0 % 32))) {
     if (_has_bit(0)) {
       if (type_ != &_default_type_) {
@@ -591,10 +438,9 @@ void BlockHeader::Clear() {
     datasize_ = 0;
   }
   ::memset(_has_bits_, 0, sizeof(_has_bits_));
-  mutable_unknown_fields()->Clear();
 }
 
-bool BlockHeader::MergePartialFromCodedStream(
+bool BlobHeader::MergePartialFromCodedStream(
     ::google::protobuf::io::CodedInputStream* input) {
 #define DO_(EXPRESSION) if (!(EXPRESSION)) return false
   ::google::protobuf::uint32 tag;
@@ -602,42 +448,43 @@ bool BlockHeader::MergePartialFromCodedStream(
     switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
       // required string type = 1;
       case 1: {
-        if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) !=
+        if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
             ::google::protobuf::internal::WireFormatLite::WIRETYPE_LENGTH_DELIMITED) {
+          DO_(::google::protobuf::internal::WireFormatLite::ReadString(
+                input, this->mutable_type()));
+        } else {
           goto handle_uninterpreted;
         }
-        DO_(::google::protobuf::internal::WireFormatLite::ReadString(
-              input, this->mutable_type()));
-        ::google::protobuf::internal::WireFormat::VerifyUTF8String(
-          this->type().data(), this->type().length(),
-          ::google::protobuf::internal::WireFormat::PARSE);
         if (input->ExpectTag(18)) goto parse_indexdata;
         break;
       }
       
       // optional bytes indexdata = 2;
       case 2: {
-        if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) !=
+        if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
             ::google::protobuf::internal::WireFormatLite::WIRETYPE_LENGTH_DELIMITED) {
+         parse_indexdata:
+          DO_(::google::protobuf::internal::WireFormatLite::ReadBytes(
+                input, this->mutable_indexdata()));
+        } else {
           goto handle_uninterpreted;
         }
-       parse_indexdata:
-        DO_(::google::protobuf::internal::WireFormatLite::ReadBytes(
-              input, this->mutable_indexdata()));
         if (input->ExpectTag(24)) goto parse_datasize;
         break;
       }
       
       // required int32 datasize = 3;
       case 3: {
-        if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) !=
+        if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
             ::google::protobuf::internal::WireFormatLite::WIRETYPE_VARINT) {
+         parse_datasize:
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   ::google::protobuf::int32, ::google::protobuf::internal::WireFormatLite::TYPE_INT32>(
+                 input, &datasize_)));
+          _set_bit(2);
+        } else {
           goto handle_uninterpreted;
         }
-       parse_datasize:
-        DO_(::google::protobuf::internal::WireFormatLite::ReadInt32(
-              input, &datasize_));
-        _set_bit(2);
         if (input->ExpectAtEnd()) return true;
         break;
       }
@@ -648,8 +495,7 @@ bool BlockHeader::MergePartialFromCodedStream(
             ::google::protobuf::internal::WireFormatLite::WIRETYPE_END_GROUP) {
           return true;
         }
-        DO_(::google::protobuf::internal::WireFormat::SkipField(
-              input, tag, mutable_unknown_fields()));
+        DO_(::google::protobuf::internal::WireFormatLite::SkipField(input, tag));
         break;
       }
     }
@@ -658,19 +504,10 @@ bool BlockHeader::MergePartialFromCodedStream(
 #undef DO_
 }
 
-void BlockHeader::SerializeWithCachedSizes(
+void BlobHeader::SerializeWithCachedSizes(
     ::google::protobuf::io::CodedOutputStream* output) const {
-  ::google::protobuf::uint8* raw_buffer = output->GetDirectBufferForNBytesAndAdvance(_cached_size_);
-  if (raw_buffer != NULL) {
-    BlockHeader::SerializeWithCachedSizesToArray(raw_buffer);
-    return;
-  }
-  
   // required string type = 1;
   if (_has_bit(0)) {
-    ::google::protobuf::internal::WireFormat::VerifyUTF8String(
-      this->type().data(), this->type().length(),
-      ::google::protobuf::internal::WireFormat::SERIALIZE);
     ::google::protobuf::internal::WireFormatLite::WriteString(
       1, this->type(), output);
   }
@@ -686,44 +523,9 @@ void BlockHeader::SerializeWithCachedSizes(
     ::google::protobuf::internal::WireFormatLite::WriteInt32(3, this->datasize(), output);
   }
   
-  if (!unknown_fields().empty()) {
-    ::google::protobuf::internal::WireFormat::SerializeUnknownFields(
-        unknown_fields(), output);
-  }
 }
 
-::google::protobuf::uint8* BlockHeader::SerializeWithCachedSizesToArray(
-    ::google::protobuf::uint8* target) const {
-  // required string type = 1;
-  if (_has_bit(0)) {
-    ::google::protobuf::internal::WireFormat::VerifyUTF8String(
-      this->type().data(), this->type().length(),
-      ::google::protobuf::internal::WireFormat::SERIALIZE);
-    target =
-      ::google::protobuf::internal::WireFormatLite::WriteStringToArray(
-        1, this->type(), target);
-  }
-  
-  // optional bytes indexdata = 2;
-  if (_has_bit(1)) {
-    target =
-      ::google::protobuf::internal::WireFormatLite::WriteBytesToArray(
-        2, this->indexdata(), target);
-  }
-  
-  // required int32 datasize = 3;
-  if (_has_bit(2)) {
-    target = ::google::protobuf::internal::WireFormatLite::WriteInt32ToArray(3, this->datasize(), target);
-  }
-  
-  if (!unknown_fields().empty()) {
-    target = ::google::protobuf::internal::WireFormat::SerializeUnknownFieldsToArray(
-        unknown_fields(), target);
-  }
-  return target;
-}
-
-int BlockHeader::ByteSize() const {
+int BlobHeader::ByteSize() const {
   int total_size = 0;
   
   if (_has_bits_[0 / 32] & (0xffu << (0 % 32))) {
@@ -749,28 +551,18 @@ int BlockHeader::ByteSize() const {
     }
     
   }
-  if (!unknown_fields().empty()) {
-    total_size +=
-      ::google::protobuf::internal::WireFormat::ComputeUnknownFieldsSize(
-        unknown_fields());
-  }
+  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
   _cached_size_ = total_size;
+  GOOGLE_SAFE_CONCURRENT_WRITES_END();
   return total_size;
 }
 
-void BlockHeader::MergeFrom(const ::google::protobuf::Message& from) {
-  GOOGLE_CHECK_NE(&from, this);
-  const BlockHeader* source =
-    ::google::protobuf::internal::dynamic_cast_if_available<const BlockHeader*>(
-      &from);
-  if (source == NULL) {
-    ::google::protobuf::internal::ReflectionOps::Merge(from, this);
-  } else {
-    MergeFrom(*source);
-  }
+void BlobHeader::CheckTypeAndMergeFrom(
+    const ::google::protobuf::MessageLite& from) {
+  MergeFrom(*::google::protobuf::down_cast<const BlobHeader*>(&from));
 }
 
-void BlockHeader::MergeFrom(const BlockHeader& from) {
+void BlobHeader::MergeFrom(const BlobHeader& from) {
   GOOGLE_CHECK_NE(&from, this);
   if (from._has_bits_[0 / 32] & (0xffu << (0 % 32))) {
     if (from._has_bit(0)) {
@@ -783,45 +575,37 @@ void BlockHeader::MergeFrom(const BlockHeader& from) {
       set_datasize(from.datasize());
     }
   }
-  mutable_unknown_fields()->MergeFrom(from.unknown_fields());
 }
 
-void BlockHeader::CopyFrom(const ::google::protobuf::Message& from) {
+void BlobHeader::CopyFrom(const BlobHeader& from) {
   if (&from == this) return;
   Clear();
   MergeFrom(from);
 }
 
-void BlockHeader::CopyFrom(const BlockHeader& from) {
-  if (&from == this) return;
-  Clear();
-  MergeFrom(from);
-}
-
-bool BlockHeader::IsInitialized() const {
+bool BlobHeader::IsInitialized() const {
   if ((_has_bits_[0] & 0x00000005) != 0x00000005) return false;
   
   return true;
 }
 
-void BlockHeader::Swap(BlockHeader* other) {
+void BlobHeader::Swap(BlobHeader* other) {
   if (other != this) {
     std::swap(type_, other->type_);
     std::swap(indexdata_, other->indexdata_);
     std::swap(datasize_, other->datasize_);
     std::swap(_has_bits_[0], other->_has_bits_[0]);
-    _unknown_fields_.Swap(&other->_unknown_fields_);
     std::swap(_cached_size_, other->_cached_size_);
   }
 }
 
-::google::protobuf::Metadata BlockHeader::GetMetadata() const {
-  protobuf_AssignDescriptorsOnce();
-  ::google::protobuf::Metadata metadata;
-  metadata.descriptor = BlockHeader_descriptor_;
-  metadata.reflection = BlockHeader_reflection_;
-  return metadata;
+::std::string BlobHeader::GetTypeName() const {
+  return "OSMPBF.BlobHeader";
 }
 
 
+// @@protoc_insertion_point(namespace_scope)
+
 }  // namespace OSMPBF
+
+// @@protoc_insertion_point(global_scope)
