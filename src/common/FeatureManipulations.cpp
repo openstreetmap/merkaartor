@@ -1745,7 +1745,7 @@ unsigned int axisAlignGuessAxes(PropertiesDock* theDock, const Projection &proj,
         axisAlignCluster(edge_angles, edge_weight, total_weight, axes, theta, edge_axis);
         qreal var = axisAlignCalcVariance(edge_angles, edge_axis, theta);
         // prefer a lower number of axes
-        var *= sqrt(axes);
+        var *= sqrt((float)axes);
         // we want the number of axes with the lowest weighted variance
         if (!min_var_axes || var < min_var) {
             min_var = var;

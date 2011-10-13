@@ -23,7 +23,7 @@ contains(PORTABLE,1): DEFINES += PORTABLE_BUILD
 TEMPLATE = app
 TARGET = merkaartor
 
-CONFIG += rtti stl
+CONFIG += rtti stl exceptions
 #CONFIG -= exceptions
 QT += svg network xml core gui
 win32-msvc* {

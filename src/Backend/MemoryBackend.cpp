@@ -142,7 +142,15 @@ MemoryBackend::~MemoryBackend()
 
 Node * MemoryBackend::allocNode(Layer* l, const Node& other)
 {
-    Node* f = new Node(other);
+    Node* f;
+    try {
+        f = new Node(other);
+        if (!f)
+            return NULL;
+    } catch (...) { // Out-of-memory?
+        return NULL;
+    }
+
     p->AllocFeatures[f] = f->BBox;
     if (!f->BBox.isNull()) {
         indexAdd(l, f->BBox, f);
@@ -152,7 +160,14 @@ Node * MemoryBackend::allocNode(Layer* l, const Node& other)
 
 Node * MemoryBackend::allocNode(Layer* l, const QPointF& aCoord)
 {
-    Node* f = new Node(aCoord);
+    Node* f;
+    try {
+        f = new Node(aCoord);
+        if (!f)
+            return NULL;
+    } catch (...) { // Out-of-memory?
+        return NULL;
+    }
     p->AllocFeatures[f] = f->BBox;
     if (!f->BBox.isNull()) {
         indexAdd(l, f->BBox, f);
@@ -162,41 +177,83 @@ Node * MemoryBackend::allocNode(Layer* l, const QPointF& aCoord)
 
 Node * MemoryBackend::allocVirtualNode(const QPointF& aCoord)
 {
-    Node* f = new Node(aCoord);
+    Node* f;
+    try {
+        f = new Node(aCoord);
+        if (!f)
+            return NULL;
+    } catch (...) { // Out-of-memory?
+        return NULL;
+    }
     return f;
 }
 
 Way * MemoryBackend::allocWay(Layer* l)
 {
-    Way* f = new Way();
+    Way* f;
+    try {
+        f = new Way();
+        if (!f)
+            return NULL;
+    } catch (...) { // Out-of-memory?
+        return NULL;
+    }
     p->AllocFeatures[f] = CoordBox();
     return f;
 }
 
 Way * MemoryBackend::allocWay(Layer* l, const Way& other)
 {
-    Way* f = new Way(other);
+    Way* f;
+    try {
+        f = new Way(other);
+        if (!f)
+            return NULL;
+    } catch (...) { // Out-of-memory?
+        return NULL;
+    }
     p->AllocFeatures[f] = CoordBox();
     return f;
 }
 
 Relation * MemoryBackend::allocRelation(Layer* l)
 {
-    Relation* f = new Relation();
+    Relation* f;
+    try {
+        f = new Relation();
+        if (!f)
+            return NULL;
+    } catch (...) { // Out-of-memory?
+        return NULL;
+    }
     p->AllocFeatures[f] = CoordBox();
     return f;
 }
 
 Relation * MemoryBackend::allocRelation(Layer* l, const Relation& other)
 {
-    Relation* f = new Relation(other);
+    Relation* f;
+    try {
+        f = new Relation(other);
+        if (!f)
+            return NULL;
+    } catch (...) { // Out-of-memory?
+        return NULL;
+    }
     p->AllocFeatures[f] = CoordBox();
     return f;
 }
 
 TrackSegment * MemoryBackend::allocSegment(Layer* l)
 {
-    TrackSegment* f = new TrackSegment();
+    TrackSegment* f;
+    try {
+        f = new TrackSegment();
+        if (!f)
+            return NULL;
+    } catch (...) { // Out-of-memory?
+        return NULL;
+    }
     p->AllocFeatures[f] = CoordBox();
     return f;
 }

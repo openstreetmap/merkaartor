@@ -262,7 +262,16 @@ int main(int argc, char** argv)
 
     splash.finish(&Main);
 
-    int x = instance.exec();
+    int x;
+    try {
+        x = instance.exec();
+    } catch (const std::bad_alloc &) {
+        qDebug() << "Out of memory";
+        x = 254;
+    } catch (...) {
+        qDebug() << "Exception";
+        x = 255;
+    }
 
     qDebug() << "**** " << QDateTime::currentDateTime().toString(Qt::ISODate) << " -- Ending " << QString("%1 %2%3(%4)").arg(qApp->applicationName()).arg(STRINGIFY(VERSION)).arg(STRINGIFY(REVISION)).arg(STRINGIFY(SVNREV));
     if(pLogFile) {

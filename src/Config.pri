@@ -8,7 +8,7 @@ contains(RELEASE,1) {
 } else {
     isEmpty(SVNREV) {
         SVNREV = $$system(git describe --tags)
-        REVISION=""
+        REVISION=SVNREV
     } else {
         REVISION="-git"
     }

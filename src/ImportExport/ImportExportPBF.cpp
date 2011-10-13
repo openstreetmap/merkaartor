@@ -558,7 +558,7 @@ bool ImportExportPBF::import(Layer* aLayer)
 {
     QProgressDialog progress(QApplication::tr("Importing..."), QApplication::tr("Cancel"), 0, 0);
     progress.setWindowModality(Qt::WindowModal);
-    progress.setRange(0, Device->size());
+    progress.setRange(0, 0);
     progress.show();
 
     while (true) {
@@ -583,8 +583,8 @@ bool ImportExportPBF::import(Layer* aLayer)
             parseDense( aLayer );
             continue;
         }
+        qApp->processEvents();
     }
-    progress.setValue(Device->pos());
 
     return true;
 }
