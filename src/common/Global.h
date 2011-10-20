@@ -42,6 +42,9 @@ extern QString g_getTagValue(int idx);
 extern quint32 g_getTagValueIndex(const QString& s);
 extern QStringList g_getTagValueList(QString k) ;
 
+extern quint32 g_setUser(const QString& u);
+extern const QString& g_getUser(quint32 idx);
+
 extern MemoryBackend g_backend;
 
 #endif

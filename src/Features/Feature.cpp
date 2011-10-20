@@ -144,7 +144,7 @@ class MapFeaturePrivate
         QList<Feature*> Parents;
         int LastPartNotification;
         QDateTime Time;
-        QString User;
+        quint32 User;
         int VersionNumber;
         bool Deleted;
         bool Visible;
@@ -300,12 +300,12 @@ void Feature::setTime(const QDateTime& time)
 
 const QString& Feature::user() const
 {
-    return p->User;
+    return g_getUser(p->User);
 }
 
 void Feature::setUser(const QString& user)
 {
-    p->User = user;
+    p->User = g_setUser(user);
 }
 
 int Feature::incDirtyLevel(int inc)

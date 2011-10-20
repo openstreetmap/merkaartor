@@ -15,7 +15,7 @@ void operator delete (void *p)
     free(p);
 }
 
-typedef RTree<Feature*, qreal, 2, qreal> CoordTree;
+typedef RTree<Feature*, qreal, 2, qreal, 32> CoordTree;
 
 class MemoryBackendPrivate
 {
