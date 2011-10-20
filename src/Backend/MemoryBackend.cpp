@@ -1,6 +1,20 @@
 #include "MemoryBackend.h"
 #include "RTree.h"
 
+inline void* operator new (std::size_t sz)
+{
+  // fixme: throw bad_alloc on error
+    void *p = (void *) malloc(sz);
+    if (!p)
+        qDebug() << "Alloc error";
+    return p;
+}
+
+void operator delete (void *p)
+{
+    free(p);
+}
+
 typedef RTree<Feature*, qreal, 2, qreal> CoordTree;
 
 class MemoryBackendPrivate

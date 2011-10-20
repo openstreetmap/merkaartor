@@ -467,14 +467,12 @@ void ImportExportPBF::parseDense( Layer* aLayer )
     }
 
     if (dense.has_denseinfo()) {
-        OSMPBF::DenseInfo denseinfo = dense.denseinfo();
+        m_lastDenseTimestamp += dense.denseinfo().timestamp(m_currentEntity);
+        m_lastDenseChangeset += dense.denseinfo().changeset(m_currentEntity);
+        m_lastDenseUId += dense.denseinfo().uid(m_currentEntity);
+        m_lastDenseUserSid += dense.denseinfo().user_sid(m_currentEntity);
 
-        m_lastDenseTimestamp += denseinfo.timestamp(m_currentEntity);
-        m_lastDenseChangeset += denseinfo.changeset(m_currentEntity);
-        m_lastDenseUId += denseinfo.uid(m_currentEntity);
-        m_lastDenseUserSid += denseinfo.user_sid(m_currentEntity);
-
-        N->setVersionNumber(denseinfo.version(m_currentEntity));
+        N->setVersionNumber(dense.denseinfo().version(m_currentEntity));
         N->setTime(QDateTime::fromTime_t(m_lastDenseTimestamp));
         N->setUser(m_primitiveBlock.stringtable().s(m_lastDenseUserSid).data());
     }
@@ -558,13 +556,13 @@ bool ImportExportPBF::import(Layer* aLayer)
 {
     QProgressDialog progress(QApplication::tr("Importing..."), QApplication::tr("Cancel"), 0, 0);
     progress.setWindowModality(Qt::WindowModal);
-    progress.setRange(0, 0);
+    progress.setRange(0, m_file.size());
     progress.show();
 
-    while (true) {
+    while (true && !progress.wasCanceled()) {
         if ( m_loadBlock ) {
             if ( !readNextBlock() )
-                return true;
+                break;
             loadBlock();
             loadGroup();
         }
@@ -572,19 +570,21 @@ bool ImportExportPBF::import(Layer* aLayer)
         switch ( m_mode ) {
         case ModeNode:
             parseNode( aLayer );
-            continue;
+            break;
         case ModeWay:
             parseWay( aLayer );
-            continue;
+            break;
         case ModeRelation:
             parseRelation( aLayer );
-            continue;
+            break;
         case ModeDense:
             parseDense( aLayer );
-            continue;
+            break;
         }
+        progress.setValue(m_file.pos());
         qApp->processEvents();
     }
+    progress.reset();
 
     return true;
 }
