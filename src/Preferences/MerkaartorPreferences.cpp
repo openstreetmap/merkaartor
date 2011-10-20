@@ -1735,6 +1735,7 @@ QString getDefaultLanguage(bool returnDefault)
             Sets = new QSettings(qApp->applicationDirPath() + "/merkaartor.ini", QSettings::IniFormat);
         }
         QString lang = Sets->value("locale/language").toString();
+        delete Sets;
         if (lang == "")
             if (returnDefault)
                 lang = QLocale::system().name().split("_")[0];

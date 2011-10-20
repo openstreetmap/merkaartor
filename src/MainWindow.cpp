@@ -486,6 +486,7 @@ MainWindow::~MainWindow(void)
     delete p;
 
     delete M_PREFS;
+    delete ui;
 }
 
 void MainWindow::incomingLocalConnection()
