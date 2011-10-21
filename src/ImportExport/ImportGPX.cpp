@@ -15,12 +15,12 @@
 #include <QProgressDialog>
 
 
-static Node* importTrkPt(const QDomElement& Root, Document* /* theDocument */, Layer* theLayer)
+static TrackNode* importTrkPt(const QDomElement& Root, Document* /* theDocument */, Layer* theLayer)
 {
     qreal Lat = Root.attribute("lat").toDouble();
     qreal Lon = Root.attribute("lon").toDouble();
 
-    Node* Pt = g_backend.allocNode(theLayer, Coord(Lon,Lat));
+    TrackNode* Pt = g_backend.allocTrackNode(theLayer, Coord(Lon,Lat));
     Pt->setLastUpdated(Feature::Log);
     if (Root.hasAttribute("xml:id"))
         Pt->setId(IFeature::FId(IFeature::Point, Root.attribute("xml:id").toLongLong()));
@@ -109,7 +109,7 @@ static void importTrkSeg(const QDomElement& Root, Document* theDocument, Layer* 
         if (progress.wasCanceled())
             return;
 
-        Node* Pt = importTrkPt(t,theDocument, theLayer);
+        TrackNode* Pt = importTrkPt(t,theDocument, theLayer);
 
         if (MakeSegment == false)
             continue;
@@ -144,7 +144,7 @@ static void importRte(const QDomElement& Root, Document* theDocument, Layer* the
     if (Root.hasAttribute("xml:id"))
         S->setId(IFeature::FId(IFeature::GpxSegment, Root.attribute("xml:id").toLongLong()));
 
-    Node* lastPoint = NULL;
+    TrackNode* lastPoint = NULL;
 
     for(QDomNode n = Root.firstChild(); !n.isNull(); n = n.nextSibling())
     {
@@ -161,7 +161,7 @@ static void importRte(const QDomElement& Root, Document* theDocument, Layer* the
             if (progress.wasCanceled())
                 return;
 
-            Node* Pt = importTrkPt(t,theDocument, theLayer);
+            TrackNode* Pt = importTrkPt(t,theDocument, theLayer);
 
             if (MakeSegment == false)
                 continue;

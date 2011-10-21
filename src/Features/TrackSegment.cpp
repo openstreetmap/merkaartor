@@ -23,7 +23,7 @@ class TrackSegmentPrivate
         {
         }
 
-        QList<Node*> Nodes;
+        QList<TrackNode*> Nodes;
         qreal Distance;
         CoordBox BBox;
 };
@@ -72,14 +72,14 @@ QString TrackSegment::description() const
     return "tracksegment";
 }
 
-void TrackSegment::add(Node* aPoint)
+void TrackSegment::add(TrackNode* aPoint)
 {
     p->Nodes.push_back(aPoint);
     aPoint->setParentFeature(this);
     g_backend.sync(this);
 }
 
-void TrackSegment::add(Node* Pt, int Idx)
+void TrackSegment::add(TrackNode* Pt, int Idx)
 {
     p->Nodes.push_back(Pt);
     std::rotate(p->Nodes.begin()+Idx,p->Nodes.end()-1,p->Nodes.end());
@@ -119,7 +119,7 @@ Feature* TrackSegment::get(int i)
     return p->Nodes[i];
 }
 
-Node* TrackSegment::getNode(int i)
+TrackNode* TrackSegment::getNode(int i)
 {
     return p->Nodes[i];
 }
@@ -276,10 +276,10 @@ void TrackSegment::cascadedRemoveIfUsing(Document* theDocument, Feature* aFeatur
     for (int i=0; i<p->Nodes.size();) {
         if (p->Nodes[i] == aFeature)
         {
-            QList<Node*> Alternatives;
+            QList<TrackNode*> Alternatives;
             for (int j=0; j<Proposals.size(); ++j)
             {
-                Node* Pt = dynamic_cast<Node*>(Proposals[j]);
+                TrackNode* Pt = CAST_TRACKNODE(Proposals[j]);
                 if (Pt)
                     Alternatives.push_back(Pt);
             }
@@ -300,7 +300,7 @@ void TrackSegment::cascadedRemoveIfUsing(Document* theDocument, Feature* aFeatur
                         }
                     }
                 }
-                theList->add(new TrackSegmentRemoveNodeCommand(this, (Node*)aFeature,aFeature->layer()));
+                theList->add(new TrackSegmentRemoveNodeCommand(this, (TrackNode*)aFeature,aFeature->layer()));
             }
         }
         ++i;
@@ -387,7 +387,7 @@ TrackSegment* TrackSegment::fromGPX(Document* d, Layer* L, QXmlStreamReader& str
     stream.readNext();
     while(!stream.atEnd() && !stream.isEndElement()) {
         if (stream.name() == "trkpt") {
-            Node* N = Node::fromGPX(d, L, stream);
+            TrackNode* N = TrackNode::fromGPX(d, L, stream);
             ts->add(N);
             progress->setValue(stream.characterOffset());
         }

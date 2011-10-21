@@ -36,7 +36,7 @@ private:
     bool importGSV (QString line);
     bool importGGA (QString line);
     bool importGLL (QString line);
-    Node* importRMC (QString line);
+    TrackNode* importRMC (QString line);
 
     qreal curAltitude;
 

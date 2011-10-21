@@ -23,6 +23,7 @@ private:
 public:
     virtual Node* allocNode(Layer* l, const Node& other);
     virtual Node* allocNode(Layer* l, const QPointF& aCoord);
+    virtual TrackNode* allocTrackNode(Layer* l, const QPointF& aCoord);
     virtual Node* allocVirtualNode(const QPointF& aCoord);
 
     virtual Way* allocWay(Layer* l);

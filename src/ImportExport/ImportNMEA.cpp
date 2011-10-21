@@ -92,7 +92,7 @@ bool ImportNMEA::import(Layer* aLayer)
         } else
         if (command == "RMC") {
             if (goodFix && goodFix3D) {
-                Node* p = importRMC(line);
+                TrackNode* p = importRMC(line);
                 if (p)
                     TS->add(p);
             }
@@ -180,7 +180,7 @@ bool ImportNMEA::importGLL (QString line)
     return true;
 }
 
-Node* ImportNMEA::importRMC (QString line)
+TrackNode* ImportNMEA::importRMC (QString line)
 {
     if (line.count('$') > 1)
         return NULL;
@@ -215,7 +215,7 @@ Node* ImportNMEA::importRMC (QString line)
         date = date.addYears(100);
     //date.setTimeSpec(Qt::UTC);
 
-    Node* Pt = g_backend.allocNode(theLayer, Coord(lon,lat));
+    TrackNode* Pt = g_backend.allocTrackNode(theLayer, Coord(lon,lat));
     theLayer->add(Pt);
     Pt->setLastUpdated(Feature::Log);
     Pt->setElevation(curAltitude);

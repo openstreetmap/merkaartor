@@ -10,13 +10,13 @@ TrackSegmentAddNodeCommand::TrackSegmentAddNodeCommand(TrackSegment* R)
 {
 }
 
-TrackSegmentAddNodeCommand::TrackSegmentAddNodeCommand(TrackSegment* R, Node* W, Layer* aLayer)
+TrackSegmentAddNodeCommand::TrackSegmentAddNodeCommand(TrackSegment* R, TrackNode* W, Layer* aLayer)
 : Command(R), theLayer(aLayer), oldLayer(0), theTrackSegment(R), theNode(W), Position(theTrackSegment->size())
 {
     redo();
 }
 
-TrackSegmentAddNodeCommand::TrackSegmentAddNodeCommand(TrackSegment* R, Node* W, int aPos, Layer* aLayer)
+TrackSegmentAddNodeCommand::TrackSegmentAddNodeCommand(TrackSegment* R, TrackNode* W, int aPos, Layer* aLayer)
 : Command(R), theLayer(aLayer), oldLayer(0), theTrackSegment(R), theNode(W), Position(aPos)
 {
     redo();
@@ -91,7 +91,7 @@ TrackSegmentAddNodeCommand * TrackSegmentAddNodeCommand::fromXML(Document * d, Q
         return NULL;
 
     a->theTrackSegment = dynamic_cast<TrackSegment*>(d->getFeature(IFeature::FId(IFeature::GpxSegment, stream.attributes().value("tracksegment").toString().toLongLong())));
-    a->theNode = Feature::getTrackPointOrCreatePlaceHolder(d, a->theLayer, IFeature::FId(IFeature::Point, stream.attributes().value("trackpoint").toString().toLongLong()));
+    a->theNode = Feature::getTrackNodeOrCreatePlaceHolder(d, a->theLayer, IFeature::FId(IFeature::Point, stream.attributes().value("trackpoint").toString().toLongLong()));
     a->Position = stream.attributes().value("pos").toString().toUInt();
 
     return a;
@@ -104,14 +104,14 @@ TrackSegmentRemoveNodeCommand::TrackSegmentRemoveNodeCommand(TrackSegment* R)
 {
 };
 
-TrackSegmentRemoveNodeCommand::TrackSegmentRemoveNodeCommand(TrackSegment* R, Node* W, Layer* aLayer)
+TrackSegmentRemoveNodeCommand::TrackSegmentRemoveNodeCommand(TrackSegment* R, TrackNode* W, Layer* aLayer)
 : Command(R), theLayer(aLayer), oldLayer(0), Idx(R->find(W)), theTrackSegment(R), theTrackPoint(W)
 {
     redo();
 }
 
 TrackSegmentRemoveNodeCommand::TrackSegmentRemoveNodeCommand(TrackSegment* R, int anIdx, Layer* aLayer)
-: Command(R), theLayer(aLayer), oldLayer(0), Idx(anIdx), theTrackSegment(R), theTrackPoint(dynamic_cast <Node*> (R->get(anIdx)))
+: Command(R), theLayer(aLayer), oldLayer(0), Idx(anIdx), theTrackSegment(R), theTrackPoint(CAST_TRACKNODE(R->get(anIdx)))
 {
     redo();
 }
@@ -185,7 +185,7 @@ TrackSegmentRemoveNodeCommand * TrackSegmentRemoveNodeCommand::fromXML(Document 
         return NULL;
 
     a->theTrackSegment = dynamic_cast<TrackSegment*>(d->getFeature(IFeature::FId(IFeature::GpxSegment, stream.attributes().value("tracksegment").toString().toLongLong())));
-    a->theTrackPoint = Feature::getTrackPointOrCreatePlaceHolder(d, a->theLayer, IFeature::FId(IFeature::Point, stream.attributes().value("trackpoint").toString().toLongLong()));
+    a->theTrackPoint = Feature::getTrackNodeOrCreatePlaceHolder(d, a->theLayer, IFeature::FId(IFeature::Point, stream.attributes().value("trackpoint").toString().toLongLong()));
     a->Idx = stream.attributes().value("index").toString().toUInt();
 
     return a;

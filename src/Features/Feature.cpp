@@ -106,23 +106,23 @@ class MapFeaturePrivate
     public:
         MapFeaturePrivate()
             :  LastActor(Feature::User),
-                PossiblePaintersUpToDate(false),
-                PixelPerMForPainter(-1), CurrentPainter(0), HasPainter(false),
-                theFeature(0), LastPartNotification(0),
-                Time(QDateTime::currentDateTime().toTime_t()), Deleted(false), Visible(true), Uploaded(false), ReadOnly(false), FilterRevision(-1)
-                , Virtual(false), Special(false), DirtyLevel(0)
-                , parentLayer(0)
+              PossiblePaintersUpToDate(false),
+              PixelPerMForPainter(-1), CurrentPainter(0), HasPainter(false),
+              theFeature(0), LastPartNotification(0),
+              Time(QDateTime::currentDateTime().toTime_t()), Deleted(false), Visible(true), Uploaded(false), ReadOnly(false), FilterRevision(-1)
+            , Virtual(false), Special(false), DirtyLevel(0)
+            , parentLayer(0), User(0xffffffff)
         {
             initVersionNumber();
         }
         MapFeaturePrivate(const MapFeaturePrivate& other)
             : Tags(other.Tags), LastActor(other.LastActor),
-                PossiblePaintersUpToDate(false),
-                PixelPerMForPainter(-1), CurrentPainter(0), HasPainter(false),
-                theFeature(0), LastPartNotification(0),
-                Time(other.Time), Deleted(false), Visible(true), Uploaded(false), ReadOnly(false), FilterRevision(-1)
-                , Virtual(other.Virtual), Special(other.Special), DirtyLevel(0)
-                , parentLayer(0)
+              PossiblePaintersUpToDate(false),
+              PixelPerMForPainter(-1), CurrentPainter(0), HasPainter(false),
+              theFeature(0), LastPartNotification(0),
+              Time(other.Time), Deleted(false), Visible(true), Uploaded(false), ReadOnly(false), FilterRevision(-1)
+            , Virtual(other.Virtual), Special(other.Special), DirtyLevel(0)
+            , parentLayer(0), User(other.User)
         {
             initVersionNumber();
         }
@@ -305,7 +305,10 @@ void Feature::setTime(uint epoch)
 
 const QString& Feature::user() const
 {
-    return g_getUser(p->User);
+    if (p->User != 0xffffffff)
+        return g_getUser(p->User);
+    else
+        return "";
 }
 
 void Feature::setUser(const QString& user)
@@ -948,7 +951,7 @@ Relation * Feature::GetSingleParentRelation(Feature * mapFeature)
 }
 
 //Static
-Node* Feature::getTrackPointOrCreatePlaceHolder(Document *theDocument, Layer *theLayer, const IFeature::FId& Id)
+Node* Feature::getNodeOrCreatePlaceHolder(Document *theDocument, Layer *theLayer, const IFeature::FId& Id)
 {
     Node* Part = CAST_NODE(theDocument->getFeature(Id));
     if (!Part)
@@ -956,6 +959,21 @@ Node* Feature::getTrackPointOrCreatePlaceHolder(Document *theDocument, Layer *th
         if (!theLayer)
             theLayer = theDocument->getDirtyOrOriginLayer();
         Part = g_backend.allocNode(theLayer, Coord(0,0));
+        Part->setId(Id);
+        Part->setLastUpdated(Feature::NotYetDownloaded);
+        theLayer->add(Part);
+    }
+    return Part;
+}
+
+TrackNode* Feature::getTrackNodeOrCreatePlaceHolder(Document *theDocument, Layer *theLayer, const IFeature::FId& Id)
+{
+    TrackNode* Part = CAST_TRACKNODE(theDocument->getFeature(Id));
+    if (!Part)
+    {
+        if (!theLayer)
+            theLayer = theDocument->getDirtyOrOriginLayer();
+        Part = g_backend.allocTrackNode(theLayer, Coord(0,0));
         Part->setId(Id);
         Part->setLastUpdated(Feature::NotYetDownloaded);
         theLayer->add(Part);

@@ -4,7 +4,7 @@
 #include "Feature.h"
 
 class TrackSegmentPrivate;
-class Node;
+class TrackNode;
 
 class QProgressDialog;
 
@@ -37,14 +37,14 @@ public:
     virtual bool notEverythingDownloaded();
     virtual QString description() const;
 
-    void add(Node* aPoint);
-    void add(Node* Pt, int Idx);
+    void add(TrackNode* aPoint);
+    void add(TrackNode* Pt, int Idx);
     virtual int find(Feature* Pt) const;
     virtual void remove(int idx);
     virtual void remove(Feature* F);
     virtual Feature* get(int idx);
     virtual int size() const;
-    Node* getNode(int idx);
+    TrackNode* getNode(int idx);
     virtual const Feature* get(int Idx) const;
     virtual bool isNull() const;
 

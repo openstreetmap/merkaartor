@@ -33,8 +33,6 @@ class NodePrivate
 
 Node::Node(const Coord& aCoord)
     : Feature()
-    , Elevation(0.0)
-    , Speed(0.0)
     , p(new NodePrivate)
 {
     BBox = CoordBox(aCoord, aCoord);
@@ -43,8 +41,6 @@ Node::Node(const Coord& aCoord)
 
 Node::Node(const Node& other)
     : Feature(other)
-    , Elevation(other.Elevation)
-    , Speed(other.Speed)
     , p(new NodePrivate)
 {
     BBox = other.BBox;
@@ -178,26 +174,6 @@ int Node::projectionRevision() const
 void Node::setProjectionRevision(const int aProjectionRevision)
 {
     p->ProjectionRevision = aProjectionRevision;
-}
-
-qreal Node::speed() const
-{
-    return Speed;
-}
-
-void Node::setSpeed(qreal aSpeed)
-{
-    Speed = aSpeed;
-}
-
-qreal Node::elevation() const
-{
-    return Elevation;
-}
-
-void Node::setElevation(qreal aElevation)
-{
-    Elevation = aElevation;
 }
 
 bool Node::hasPhoto() const
@@ -425,60 +401,6 @@ bool Node::toXML(QXmlStreamWriter& stream, QProgressDialog * progress, bool stri
     return OK;
 }
 
-bool Node::toGPX(QXmlStreamWriter& stream, QProgressDialog * progress, QString element, bool forExport)
-{
-    bool OK = true;
-
-    if (isVirtual())
-        return OK;
-
-    if (!tagValue("_waypoint_","").isEmpty() ||!sizeParents())
-        stream.writeStartElement("wpt");
-    else
-        stream.writeStartElement(element);
-
-    if (!forExport)
-        stream.writeAttribute("xml:id", xmlId());
-    stream.writeAttribute("lon",COORD2STRING(BBox.topRight().x()));
-    stream.writeAttribute("lat", COORD2STRING(BBox.topRight().y()));
-
-    stream.writeTextElement("time", time().toString(Qt::ISODate)+"Z");
-
-    QString s = tagValue("name","");
-    if (!s.isEmpty()) {
-        stream.writeTextElement("name", s);
-    }
-    if (elevation()) {
-        stream.writeTextElement("ele", QString::number(elevation(),'f',6));
-    }
-    if (speed()) {
-        stream.writeTextElement("speed", QString::number(speed(),'f',6));
-    }
-    s = tagValue("_comment_","");
-    if (!s.isEmpty()) {
-        stream.writeTextElement("cmt", s);
-    }
-    s = tagValue("_description_","");
-    if (!s.isEmpty()) {
-        stream.writeTextElement("desc", s);
-    }
-
-    // OpenStreetBug
-    s = tagValue("_special_","");
-    if (!s.isEmpty() && id().type & IFeature::Special) {
-        stream.writeStartElement("extensions");
-        QString sid = stripToOSMId(id());
-        stream.writeTextElement("id", sid);
-        stream.writeEndElement();
-    }
-    stream.writeEndElement();
-
-    if (progress)
-        progress->setValue(progress->value()+1);
-
-    return OK;
-}
-
 Node * Node::fromXML(Document* d, Layer* L, QXmlStreamReader& stream)
 {
     qreal Lat = stream.attributes().value("lat").toString().toDouble();
@@ -514,16 +436,118 @@ Node * Node::fromXML(Document* d, Layer* L, QXmlStreamReader& stream)
     return Pt;
 }
 
-Node * Node::fromGPX(Document* d, Layer* L, QXmlStreamReader& stream)
+QString Node::toHtml()
+{
+    QString D;
+    int i;
+
+
+    if ((i = findKey("_waypoint_")) != -1)
+        D += "<p><b>"+QApplication::translate("MapFeature", "Waypoint")+"</b><br/>";
+    D += "<i>"+QApplication::translate("MapFeature", "coord")+": </i>" + COORD2STRING(position().y()) + " (" + Coord2Sexa(position().y()) + ") / " + COORD2STRING(position().x()) + " (" + Coord2Sexa(position().x()) + ")";
+
+    if ((i = findKey("_description_")) != -1)
+        D += "<br/><i>"+QApplication::translate("MapFeature", "description")+": </i>" + tagValue(i);
+    if ((i = findKey("_comment_")) != -1)
+        D += "<br/><i>"+QApplication::translate("MapFeature", "comment")+": </i>" + tagValue(i);
+
+    return Feature::toMainHtml(QApplication::translate("MapFeature", "Node"), "node").arg(D);
+}
+
+bool Node::toGPX(QXmlStreamWriter& stream, QProgressDialog * progress, QString element, bool forExport)
+{
+    bool OK = true;
+
+    if (isVirtual())
+        return OK;
+
+    if (!tagValue("_waypoint_","").isEmpty() ||!sizeParents())
+        stream.writeStartElement("wpt");
+    else
+        stream.writeStartElement(element);
+
+    if (!forExport)
+        stream.writeAttribute("xml:id", xmlId());
+    stream.writeAttribute("lon",COORD2STRING(BBox.topRight().x()));
+    stream.writeAttribute("lat", COORD2STRING(BBox.topRight().y()));
+
+    stream.writeTextElement("time", time().toString(Qt::ISODate)+"Z");
+
+    QString s = tagValue("name","");
+    if (!s.isEmpty()) {
+        stream.writeTextElement("name", s);
+    }
+    s = tagValue("_comment_","");
+    if (!s.isEmpty()) {
+        stream.writeTextElement("cmt", s);
+    }
+    s = tagValue("_description_","");
+    if (!s.isEmpty()) {
+        stream.writeTextElement("desc", s);
+    }
+
+    // OpenStreetBug
+    s = tagValue("_special_","");
+    if (!s.isEmpty() && id().type & IFeature::Special) {
+        stream.writeStartElement("extensions");
+        QString sid = stripToOSMId(id());
+        stream.writeTextElement("id", sid);
+        stream.writeEndElement();
+    }
+    stream.writeEndElement();
+
+    if (progress)
+        progress->setValue(progress->value()+1);
+
+    return OK;
+}
+
+/*********************************************/
+
+qreal TrackNode::speed() const
+{
+    return Speed;
+}
+
+void TrackNode::setSpeed(qreal aSpeed)
+{
+    Speed = aSpeed;
+}
+
+qreal TrackNode::elevation() const
+{
+    return Elevation;
+}
+
+void TrackNode::setElevation(qreal aElevation)
+{
+    Elevation = aElevation;
+}
+
+TrackNode::TrackNode(const Coord &aCoord)
+    : Node(aCoord)
+    , Elevation(0.0)
+    , Speed(0.0)
+{
+}
+
+TrackNode::TrackNode(const TrackNode& other)
+    : Node(other)
+    , Elevation(other.Elevation)
+    , Speed(other.Speed)
+{
+}
+
+TrackNode * TrackNode::fromGPX(Document* d, Layer* L, QXmlStreamReader& stream)
 {
     qreal Lat = stream.attributes().value("lat").toString().toDouble();
     qreal Lon = stream.attributes().value("lon").toString().toDouble();
 
     QString sid = (stream.attributes().hasAttribute("id") ? stream.attributes().value("id").toString() : stream.attributes().value("xml:id").toString());
     IFeature::FId id(IFeature::Point, sid.toLongLong());
-    Node* Pt = CAST_NODE(d->getFeature(id));
+    TrackNode* Pt = CAST_TRACKNODE(d->getFeature(id));
     if (!Pt) {
-        Pt = g_backend.allocNode(L, Coord(Lon,Lat));
+        Pt = g_backend.allocTrackNode(L, Coord(Lon,Lat));
         Pt->setId(id);
         Pt->setLastUpdated(Feature::Log);
         L->add(Pt);
@@ -593,7 +617,62 @@ Node * Node::fromGPX(Document* d, Layer* L, QXmlStreamReader& stream)
     return Pt;
 }
 
-QString Node::toHtml()
+
+bool TrackNode::toGPX(QXmlStreamWriter& stream, QProgressDialog * progress, QString element, bool forExport)
+{
+    bool OK = true;
+
+    if (isVirtual())
+        return OK;
+
+    if (!tagValue("_waypoint_","").isEmpty() ||!sizeParents())
+        stream.writeStartElement("wpt");
+    else
+        stream.writeStartElement(element);
+
+    if (!forExport)
+        stream.writeAttribute("xml:id", xmlId());
+    stream.writeAttribute("lon",COORD2STRING(BBox.topRight().x()));
+    stream.writeAttribute("lat", COORD2STRING(BBox.topRight().y()));
+
+    stream.writeTextElement("time", time().toString(Qt::ISODate)+"Z");
+
+    QString s = tagValue("name","");
+    if (!s.isEmpty()) {
+        stream.writeTextElement("name", s);
+    }
+    if (elevation()) {
+        stream.writeTextElement("ele", QString::number(elevation(),'f',6));
+    }
+    if (speed()) {
+        stream.writeTextElement("speed", QString::number(speed(),'f',6));
+    }
+    s = tagValue("_comment_","");
+    if (!s.isEmpty()) {
+        stream.writeTextElement("cmt", s);
+    }
+    s = tagValue("_description_","");
+    if (!s.isEmpty()) {
+        stream.writeTextElement("desc", s);
+    }
+
+    // OpenStreetBug
+    s = tagValue("_special_","");
+    if (!s.isEmpty() && id().type & IFeature::Special) {
+        stream.writeStartElement("extensions");
+        QString sid = stripToOSMId(id());
+        stream.writeTextElement("id", sid);
+        stream.writeEndElement();
+    }
+    stream.writeEndElement();
+
+    if (progress)
+        progress->setValue(progress->value()+1);
+
+    return OK;
+}
+
+QString TrackNode::toHtml()
 {
     QString D;
     int i;
@@ -614,3 +693,4 @@ QString Node::toHtml()
 
     return Feature::toMainHtml(QApplication::translate("MapFeature", "Node"), "node").arg(D);
 }
+

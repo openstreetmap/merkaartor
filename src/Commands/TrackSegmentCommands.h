@@ -4,15 +4,15 @@
 #include "Command.h"
 
 class TrackSegment;
-class Node;
+class TrackNode;
 class Layer;
 
 class TrackSegmentAddNodeCommand : public Command
 {
     public:
         TrackSegmentAddNodeCommand(TrackSegment* R = NULL);
-        TrackSegmentAddNodeCommand(TrackSegment* R, Node* W, Layer* aLayer=NULL);
-        TrackSegmentAddNodeCommand(TrackSegment* R, Node* W, int Position, Layer* aLayer=NULL);
+        TrackSegmentAddNodeCommand(TrackSegment* R, TrackNode* W, Layer* aLayer=NULL);
+        TrackSegmentAddNodeCommand(TrackSegment* R, TrackNode* W, int Position, Layer* aLayer=NULL);
         ~TrackSegmentAddNodeCommand(void);
 
         virtual void undo();
@@ -26,7 +26,7 @@ class TrackSegmentAddNodeCommand : public Command
         Layer* theLayer;
         Layer* oldLayer;
         TrackSegment* theTrackSegment;
-        Node* theNode;
+        TrackNode* theNode;
         int Position;
 };
 
@@ -34,7 +34,7 @@ class TrackSegmentRemoveNodeCommand : public Command
 {
     public:
         TrackSegmentRemoveNodeCommand(TrackSegment* R = NULL);
-        TrackSegmentRemoveNodeCommand(TrackSegment* R, Node* W, Layer* aLayer=NULL);
+        TrackSegmentRemoveNodeCommand(TrackSegment* R, TrackNode* W, Layer* aLayer=NULL);
         TrackSegmentRemoveNodeCommand(TrackSegment* R, int anIdx, Layer* aLayer=NULL);
         ~TrackSegmentRemoveNodeCommand(void);
 
@@ -50,7 +50,7 @@ class TrackSegmentRemoveNodeCommand : public Command
         Layer* oldLayer;
         int Idx;
         TrackSegment* theTrackSegment;
-        Node* theTrackPoint;
+        TrackNode* theTrackPoint;
 };
 
 #endif

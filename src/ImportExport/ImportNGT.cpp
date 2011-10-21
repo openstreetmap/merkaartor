@@ -26,7 +26,7 @@ bool importNGT(QWidget* /* aParent */, const QString& aFilename, Document* theDo
             QStringList Items(Line.split('|'));
             if (Items.count() >= 5)
             {
-                Node* Pt = g_backend.allocNode(theLayer, Coord(Items[3].toDouble()*COORD_MAX, Items[4].toDouble()*COORD_MAX));
+                TrackNode* Pt = g_backend.allocTrackNode(theLayer, Coord(Items[3].toDouble()*COORD_MAX, Items[4].toDouble()*COORD_MAX));
                 Pt->setLastUpdated(Feature::Log);
                 theList->add(new AddFeatureCommand(theLayer,Pt, true));
                 theSegment->add(Pt);

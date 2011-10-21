@@ -74,12 +74,6 @@ public:
     int projectionRevision() const;
     void setProjectionRevision(int aProjectionRevision);
 
-    qreal speed() const;
-    void setSpeed(qreal aSpeed);
-
-    qreal elevation() const;
-    void setElevation(qreal aElevation);
-
     bool hasPhoto() const;
     QPixmap photo() const;
     void setPhoto(QPixmap thePhoto);
@@ -87,19 +81,37 @@ public:
     virtual void partChanged(Feature* F, int ChangeId);
 
     virtual bool toXML(QXmlStreamWriter& stream, QProgressDialog * progress, bool strict=false, QString changetsetid="");
-    virtual bool toGPX(QXmlStreamWriter& stream, QProgressDialog * progress, QString element, bool forExport=false);
     static Node* fromXML(Document* d, Layer* L, QXmlStreamReader& stream);
-    static Node* fromGPX(Document* d, Layer* L, QXmlStreamReader& stream);
+
+    virtual bool toGPX(QXmlStreamWriter& stream, QProgressDialog * progress, QString element, bool forExport=false);
+
+    virtual QString toHtml();
+
+private:
+    NodePrivate* p;
+
+};
+
+class TrackNode : public Node
+{
+public:
+    TrackNode(const Coord& aCoord);
+    TrackNode(const TrackNode& other);
+
+    qreal speed() const;
+    void setSpeed(qreal aSpeed);
+
+    qreal elevation() const;
+    void setElevation(qreal aElevation);
+
+    virtual bool toGPX(QXmlStreamWriter& stream, QProgressDialog * progress, QString element, bool forExport=false);
+    static TrackNode* fromGPX(Document* d, Layer* L, QXmlStreamReader& stream);
 
     virtual QString toHtml();
 
 private:
     qreal Elevation;
     qreal Speed;
-
-private:
-    NodePrivate* p;
-
 };
 
 Q_DECLARE_METATYPE( Node * );

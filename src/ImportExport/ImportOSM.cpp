@@ -122,7 +122,7 @@ void OSMHandler::parseNd(const QXmlAttributes& atts)
 {
     Way* R = dynamic_cast<Way*>(Current);
     if (!R) return;
-    Node *Part = Feature::getTrackPointOrCreatePlaceHolder(theDocument, theLayer, IFeature::FId(IFeature::Point, atts.value("ref").toLongLong()));
+    Node *Part = Feature::getNodeOrCreatePlaceHolder(theDocument, theLayer, IFeature::FId(IFeature::Point, atts.value("ref").toLongLong()));
     if (NewFeature)
         R->add(Part);
 }
@@ -201,7 +201,7 @@ void OSMHandler::parseMember(const QXmlAttributes& atts)
     QString Type = atts.value("type");
     Feature* F = 0;
     if (Type == "node")
-        F = Feature::getTrackPointOrCreatePlaceHolder(theDocument, theLayer, IFeature::FId(IFeature::Point, atts.value("ref").toLongLong()));
+        F = Feature::getNodeOrCreatePlaceHolder(theDocument, theLayer, IFeature::FId(IFeature::Point, atts.value("ref").toLongLong()));
     else if (Type == "way")
         F = Feature::getWayOrCreatePlaceHolder(theDocument, theLayer, IFeature::FId(IFeature::LineString, atts.value("ref").toLongLong()));
     else if (Type == "relation")

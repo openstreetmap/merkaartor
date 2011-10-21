@@ -11,12 +11,14 @@
 
 #define CAST_FEATURE(x) (dynamic_cast<Feature*>(x))
 #define CAST_NODE(x) (dynamic_cast<Node*>(x))
+#define CAST_TRACKNODE(x) (dynamic_cast<TrackNode*>(x))
 #define CAST_WAY(x) (dynamic_cast<Way*>(x))
 #define CAST_RELATION(x) (dynamic_cast<Relation*>(x))
 #define CAST_SEGMENT(x) (dynamic_cast<TrackSegment*>(x))
 
 #define STATIC_CAST_FEATURE(x) (static_cast<Feature*>(x))
 #define STATIC_CAST_NODE(x) (static_cast<Node*>(x))
+#define STATIC_CAST_TRACKNODE(x) (static_cast<TrackNode*>(x))
 #define STATIC_CAST_WAY(x) (static_cast<Way*>(x))
 #define STATIC_CAST_RELATION(x) (static_cast<Relation*>(x))
 #define STATIC_CAST_SEGMENT(x) (static_cast<TrackSegment*>(x))
@@ -30,6 +32,7 @@ class CommandList;
 class Document;
 class Layer;
 class Projection;
+class TrackNode;
 
 class QPointF;
 class QPainter;
@@ -326,7 +329,8 @@ public:
     virtual bool deleteChildren(Document* , CommandList* ) { return true; }
 
     static Relation * GetSingleParentRelation(Feature * mapFeature);
-    static Node* getTrackPointOrCreatePlaceHolder(Document *theDocument, Layer *theLayer, const IFeature::FId& Id);
+    static Node* getNodeOrCreatePlaceHolder(Document *theDocument, Layer *theLayer, const IFeature::FId& Id);
+    static TrackNode* getTrackNodeOrCreatePlaceHolder(Document *theDocument, Layer *theLayer, const IFeature::FId& Id);
     static Way* getWayOrCreatePlaceHolder(Document *theDocument, Layer *theLayer, const IFeature::FId& Id);
     static Relation* getRelationOrCreatePlaceHolder(Document *theDocument, Layer *theLayer, const IFeature::FId& Id);
     static void mergeTags(Document* theDocument, CommandList* L, Feature* Dest, Feature* Src);

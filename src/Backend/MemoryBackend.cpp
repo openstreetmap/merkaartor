@@ -189,6 +189,23 @@ Node * MemoryBackend::allocNode(Layer* l, const QPointF& aCoord)
     return f;
 }
 
+TrackNode * MemoryBackend::allocTrackNode(Layer* l, const QPointF& aCoord)
+{
+    TrackNode* f;
+    try {
+        f = new TrackNode(aCoord);
+        if (!f)
+            return NULL;
+    } catch (...) { // Out-of-memory?
+        return NULL;
+    }
+    p->AllocFeatures[f] = f->BBox;
+    if (!f->BBox.isNull()) {
+        indexAdd(l, f->BBox, f);
+    }
+    return f;
+}
+
 Node * MemoryBackend::allocVirtualNode(const QPointF& aCoord)
 {
     Node* f;

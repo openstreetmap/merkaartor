@@ -109,7 +109,7 @@ RelationAddFeatureCommand * RelationAddFeatureCommand::fromXML(Document * d, QXm
     a->theRelation = Feature::getRelationOrCreatePlaceHolder(d, a->theLayer, IFeature::FId(IFeature::OsmRelation, stream.attributes().value("relation").toString().toLongLong()));
     Feature* F;
     if (stream.attributes().value("featureclass") == "TrackPoint") {
-        F = (Feature*) Feature::getTrackPointOrCreatePlaceHolder(d, a->theLayer, IFeature::FId(IFeature::Point, stream.attributes().value("trackpoint").toString().toLongLong()));
+        F = (Feature*) Feature::getNodeOrCreatePlaceHolder(d, a->theLayer, IFeature::FId(IFeature::Point, stream.attributes().value("trackpoint").toString().toLongLong()));
     } else
     if (stream.attributes().value("featureclass") == "Road") {
         F = (Feature*) Feature::getWayOrCreatePlaceHolder(d, a->theLayer, IFeature::FId(IFeature::LineString, stream.attributes().value("road").toString().toLongLong()));
@@ -244,7 +244,7 @@ RelationRemoveFeatureCommand * RelationRemoveFeatureCommand::fromXML(Document * 
     a->theRelation = Feature::getRelationOrCreatePlaceHolder(d, a->theLayer, IFeature::FId(IFeature::OsmRelation, stream.attributes().value("relation").toString().toLongLong()));
     Feature* F = NULL;
     if (stream.attributes().value("featureclass") == "Node") {
-        F = (Feature*) Feature::getTrackPointOrCreatePlaceHolder(d, a->theLayer, IFeature::FId(IFeature::Point, stream.attributes().value("feature").toString().toLongLong()));
+        F = (Feature*) Feature::getNodeOrCreatePlaceHolder(d, a->theLayer, IFeature::FId(IFeature::Point, stream.attributes().value("feature").toString().toLongLong()));
     } else
     if (stream.attributes().value("featureclass") == "Way") {
         F = (Feature*) Feature::getWayOrCreatePlaceHolder(d, a->theLayer, IFeature::FId(IFeature::LineString, stream.attributes().value("feature").toString().toLongLong()));

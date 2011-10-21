@@ -252,7 +252,7 @@ CommandList* CommandList::fromXML(Document* d, QXmlStreamReader& stream)
         l->description = stream.attributes().value("description").toString();
     if (stream.attributes().hasAttribute("feature")) {
         if (stream.attributes().value("featureclass") == "Node") {
-            l->mainFeature = (Feature*) Feature::getTrackPointOrCreatePlaceHolder(d, (Layer *) d->getDirtyOrOriginLayer(), IFeature::FId(IFeature::Point, stream.attributes().value("feature").toString().toLongLong()));
+            l->mainFeature = (Feature*) Feature::getNodeOrCreatePlaceHolder(d, (Layer *) d->getDirtyOrOriginLayer(), IFeature::FId(IFeature::Point, stream.attributes().value("feature").toString().toLongLong()));
         } else
         if (stream.attributes().value("featureclass") == "Way") {
             l->mainFeature = (Feature*) Feature::getWayOrCreatePlaceHolder(d, (Layer *) d->getDirtyOrOriginLayer(), IFeature::FId(IFeature::LineString, stream.attributes().value("feature").toString().toLongLong()));

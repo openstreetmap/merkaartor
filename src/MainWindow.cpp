@@ -3546,7 +3546,7 @@ void MainWindow::updateGpsPosition(qreal latitude, qreal longitude, QDateTime ti
         }
 
         if (ui->gpsRecordAction->isChecked() && !ui->gpsPauseAction->isChecked()) {
-            Node* pt = g_backend.allocNode(gpsRecLayer, gpsCoord);
+            TrackNode* pt = g_backend.allocTrackNode(gpsRecLayer, gpsCoord);
             pt->setTime(time);
             pt->setElevation(altitude);
             pt->setSpeed(speed);

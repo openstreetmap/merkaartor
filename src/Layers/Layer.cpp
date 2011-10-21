@@ -623,8 +623,8 @@ void TrackLayer::extractLayer()
     DrawingLayer* extL = new DrawingLayer(tr("Extract - %1").arg(name()));
     extL->setUploadable(false);
 
-    Node* P;
-    QList<Node*> PL;
+    TrackNode* P;
+    QList<TrackNode*> PL;
 
     const qreal coordPer10M = (double(COORD_MAX) * 2 / 40080000) * 2;
 
@@ -643,14 +643,14 @@ void TrackLayer::extractLayer()
 
             PL.clear();
 
-            P = g_backend.allocNode(extL, S->getNode(0)->position() );
+            P = g_backend.allocTrackNode(extL, S->getNode(0)->position() );
             P->setTime(S->getNode(0)->time());
             P->setElevation(S->getNode(0)->elevation());
             P->setSpeed(S->getNode(0)->speed());
             PL.append(P);
             int startP = 0;
 
-            P = g_backend.allocNode(extL, S->getNode(1)->position() );
+            P = g_backend.allocTrackNode(extL, S->getNode(1)->position() );
             P->setTime(S->getNode(1)->time());
             P->setElevation(S->getNode(1)->elevation());
             P->setSpeed(S->getNode(1)->speed());
@@ -658,7 +658,7 @@ void TrackLayer::extractLayer()
             int endP = 1;
 
             for (int j=2; j < S->size(); j++) {
-                P = g_backend.allocNode(extL, S->getNode(j)->position() );
+                P = g_backend.allocTrackNode(extL, S->getNode(j)->position() );
                 P->setTime(S->getNode(j)->time());
                 P->setElevation(S->getNode(j)->elevation());
                 P->setSpeed(S->getNode(j)->speed());
@@ -778,7 +778,7 @@ TrackLayer * TrackLayer::fromXML(Document* d, QXmlStreamReader& stream, QProgres
                         stream.readNext();
                     }
                 } else if (stream.name() == "wpt") {
-                    /* Node* N = */ Node::fromGPX(d, l, stream);
+                    /* Node* N = */ TrackNode::fromGPX(d, l, stream);
                     //l->add(N);
                     progress->setValue(progress->value()+1);
                 } else if (!stream.isWhitespace()) {
