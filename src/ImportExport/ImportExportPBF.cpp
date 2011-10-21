@@ -473,7 +473,7 @@ void ImportExportPBF::parseDense( Layer* aLayer )
         m_lastDenseUserSid += dense.denseinfo().user_sid(m_currentEntity);
 
         N->setVersionNumber(dense.denseinfo().version(m_currentEntity));
-        N->setTime(QDateTime::fromTime_t(m_lastDenseTimestamp));
+        N->setTime(m_lastDenseTimestamp);
         N->setUser(m_primitiveBlock.stringtable().s(m_lastDenseUserSid).data());
     }
 

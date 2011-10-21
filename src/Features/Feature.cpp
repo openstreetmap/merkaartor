@@ -109,7 +109,7 @@ class MapFeaturePrivate
                 PossiblePaintersUpToDate(false),
                 PixelPerMForPainter(-1), CurrentPainter(0), HasPainter(false),
                 theFeature(0), LastPartNotification(0),
-                Time(QDateTime::currentDateTime()), Deleted(false), Visible(true), Uploaded(false), ReadOnly(false), FilterRevision(-1)
+                Time(QDateTime::currentDateTime().toTime_t()), Deleted(false), Visible(true), Uploaded(false), ReadOnly(false), FilterRevision(-1)
                 , Virtual(false), Special(false), DirtyLevel(0)
                 , parentLayer(0)
         {
@@ -143,7 +143,7 @@ class MapFeaturePrivate
         Feature* theFeature;
         QList<Feature*> Parents;
         int LastPartNotification;
-        QDateTime Time;
+        uint Time;
         quint32 User;
         int VersionNumber;
         bool Deleted;
@@ -290,12 +290,17 @@ bool Feature::hasOSMId() const
 
 const QDateTime& Feature::time() const
 {
-    return p->Time;
+    return QDateTime::fromTime_t(p->Time);
 }
 
 void Feature::setTime(const QDateTime& time)
 {
-    p->Time = time;
+    p->Time = time.toTime_t();
+}
+
+void Feature::setTime(uint epoch)
+{
+    p->Time = epoch;
 }
 
 const QString& Feature::user() const
