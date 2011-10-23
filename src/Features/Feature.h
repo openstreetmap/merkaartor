@@ -39,7 +39,7 @@ class QPainter;
 class QPen;
 class QProgressDialog;
 
-class MapFeaturePrivate;
+class FeaturePrivate;
 
 class RenderPriority
 {
@@ -155,8 +155,6 @@ public:
     int versionNumber() const;
     void setVersionNumber(int vn);
     virtual QString description() const = 0;
-    virtual const RenderPriority& renderPriority();
-    virtual void setRenderPriority(const RenderPriority& aPriority);
 
     /** Set the tag "key=value" to the current object
          * If a tag with the same key exist, it is replaced
@@ -317,8 +315,8 @@ public:
     virtual QString toXML(int lvl=0, QProgressDialog * progress=NULL);
     virtual bool toXML(QXmlStreamWriter& stream, QProgressDialog * progress=NULL, bool strict=false, QString changetsetid="") = 0;
 
-    virtual QString toMainHtml(QString type, QString systemtype);
-    virtual QString toHtml() = 0;
+    QString toMainHtml(QString type, QString systemtype);
+    virtual QString toHtml() { return ""; }
 
     virtual QString getClass() const = 0;
     virtual char getType() const = 0;
@@ -341,7 +339,7 @@ public:
     quint32 internal_id;
 
 private:
-    MapFeaturePrivate* p;
+    FeaturePrivate* p;
 
 protected:
     mutable CoordBox BBox;

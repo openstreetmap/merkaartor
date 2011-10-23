@@ -383,18 +383,41 @@ void GeoImageDock::loadImage(QString file, Coord pos)
             break;
         else
             Pt = 0;
+
+    PhotoNode* phNode;
     if (!Pt) {
-        Pt = g_backend.allocNode(theLayer, pos);
+        phNode = g_backend.allocPhotoNode(theLayer, pos);
         theLayer->add(Pt);
         g_backend.sync(Pt);
+    } else {
+        if (CAST_TRACKNODE(Pt))
+            phNode = g_backend.allocPhotoNode(theLayer, *CAST_TRACKNODE(Pt));
+        else
+            phNode = g_backend.allocPhotoNode(theLayer, *Pt);
+        theLayer->add(phNode);
+        for (int i=0; i<Pt->sizeParents(); ++i) {
+            Feature *P = CAST_FEATURE(Pt->getParent(i));
+            int idx = P->find(Pt);
+            if (Way* W = CAST_WAY(P)) {
+                W->add(phNode, idx);
+            } else if (Relation* R = CAST_RELATION(P)) {
+                R->add(R->getRole(idx), phNode, idx);
+            } else if (TrackSegment* S = CAST_SEGMENT(P)) {
+                S->add(phNode, idx);
+            }
+            P->remove(idx+1);
+            g_backend.deallocFeature(theLayer, Pt);
+
+        }
+
     }
 
     QDateTime time = QFileInfo(file).created();
 
     //Pt->setTag("_waypoint_", "true");
-    Pt->setTag("_picture_", "GeoTagged");
-    Pt->setPhoto(QPixmap(file));
-    addUsedTrackpoint(NodeData(Pt, file, time, i == theLayer->size()));
+    phNode->setTag("_picture_", "GeoTagged");
+    phNode->setPhoto(QPixmap(file));
+    addUsedTrackpoint(NodeData(phNode, file, time, i == theLayer->size()));
 }
 
 void GeoImageDock::loadImages(QStringList fileNames)
@@ -637,16 +660,38 @@ void GeoImageDock::loadImages(QStringList fileNames)
                 else
                     Pt = 0;
             }
+
+            PhotoNode* phNode;
             if (!Pt) {
-                Pt = g_backend.allocNode(theLayer, newPos);
+                phNode = g_backend.allocPhotoNode(theLayer, newPos);
                 theLayer->add(Pt);
                 g_backend.sync(Pt);
-            }
+            } else {
+                if (CAST_TRACKNODE(Pt))
+                    phNode = g_backend.allocPhotoNode(theLayer, *CAST_TRACKNODE(Pt));
+                else
+                    phNode = g_backend.allocPhotoNode(theLayer, *Pt);
+                theLayer->add(phNode);
+                for (int i=0; i<Pt->sizeParents(); ++i) {
+                    Feature *P = CAST_FEATURE(Pt->getParent(i));
+                    int idx = P->find(Pt);
+                    if (Way* W = CAST_WAY(P)) {
+                        W->add(phNode, idx);
+                    } else if (Relation* R = CAST_RELATION(P)) {
+                        R->add(R->getRole(idx), phNode, idx);
+                    } else if (TrackSegment* S = CAST_SEGMENT(P)) {
+                        S->add(phNode, idx);
+                    }
+                    P->remove(idx+1);
+                    g_backend.deallocFeature(theLayer, Pt);
 
-            //Pt->setTag("_waypoint_", "true");
-            Pt->setTag("_picture_", "GeoTagged");
-            Pt->setPhoto(QPixmap(file));
-            addUsedTrackpoint(NodeData(Pt, file, time, i == theLayer->size()));
+                }
+
+            }
+                        //Pt->setTag("_waypoint_", "true");
+            phNode->setTag("_picture_", "GeoTagged");
+            phNode->setPhoto(QPixmap(file));
+            addUsedTrackpoint(NodeData(phNode, file, time, i == theLayer->size()));
         } else if (!time.isNull() && res == 2) {
 
             if (offset == -1) { // ask the user to specify an offset for the images

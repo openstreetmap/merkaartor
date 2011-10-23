@@ -1,6 +1,9 @@
 #include "MemoryBackend.h"
 #include "RTree.h"
 
+RenderPriority NodePri(RenderPriority::IsSingular,0., 0);
+RenderPriority SegmentPri(RenderPriority::IsLinear,0.,99);
+
 inline void* operator new (std::size_t sz)
 {
   // fixme: throw bad_alloc on error
@@ -38,24 +41,30 @@ bool __cdecl indexFindCallback(Feature* F, void* ctxt)
     if (!F->isVisible())
         return true;
 
-    if (pCtxt->theFeatures->value(F->renderPriority()).contains(F))
-        return true;
-
     if (CHECK_WAY(F)) {
         Way * R = STATIC_CAST_WAY(F);
+        if (pCtxt->theFeatures->value(R->renderPriority()).contains(F))
+            return true;
         R->buildPath(*(pCtxt->theProjection), *(pCtxt->theTransform), *(pCtxt->clipRect));
-        (*(pCtxt->theFeatures))[F->renderPriority()].insert(F);
+        (*(pCtxt->theFeatures))[R->renderPriority()].insert(F);
     } else
     if (CHECK_RELATION(F)) {
         Relation * RR = STATIC_CAST_RELATION(F);
+        if (pCtxt->theFeatures->value(RR->renderPriority()).contains(F))
+            return true;
         RR->buildPath(*(pCtxt->theProjection), *(pCtxt->theTransform), *(pCtxt->clipRect));
-        (*(pCtxt->theFeatures))[F->renderPriority()].insert(F);
+        (*(pCtxt->theFeatures))[RR->renderPriority()].insert(F);
     } else
     if (CHECK_NODE(F)) {
+        if (pCtxt->theFeatures->value(NodePri).contains(F))
+            return true;
         if (!(F->isVirtual() && !M_PREFS->getVirtualNodesVisible()))
-            (*(pCtxt->theFeatures))[F->renderPriority()].insert(F);
-    } else
-        (*(pCtxt->theFeatures))[F->renderPriority()].insert(F);
+            (*(pCtxt->theFeatures))[NodePri].insert(F);
+    } else {
+        if (pCtxt->theFeatures->value(SegmentPri).contains(F))
+            return true;
+        (*(pCtxt->theFeatures))[SegmentPri].insert(F);
+    }
 
     return true;
 }
@@ -199,6 +208,59 @@ TrackNode * MemoryBackend::allocTrackNode(Layer* l, const QPointF& aCoord)
     } catch (...) { // Out-of-memory?
         return NULL;
     }
+    p->AllocFeatures[f] = f->BBox;
+    if (!f->BBox.isNull()) {
+        indexAdd(l, f->BBox, f);
+    }
+    return f;
+}
+
+PhotoNode * MemoryBackend::allocPhotoNode(Layer* l, const QPointF& aCoord)
+{
+    PhotoNode* f;
+    try {
+        f = new PhotoNode(aCoord);
+        if (!f)
+            return NULL;
+    } catch (...) { // Out-of-memory?
+        return NULL;
+    }
+    p->AllocFeatures[f] = f->BBox;
+    if (!f->BBox.isNull()) {
+        indexAdd(l, f->BBox, f);
+    }
+    return f;
+}
+
+PhotoNode * MemoryBackend::allocPhotoNode(Layer* l, const Node& other)
+{
+    PhotoNode* f;
+    try {
+        f = new PhotoNode(other);
+        if (!f)
+            return NULL;
+    } catch (...) { // Out-of-memory?
+        return NULL;
+    }
+
+    p->AllocFeatures[f] = f->BBox;
+    if (!f->BBox.isNull()) {
+        indexAdd(l, f->BBox, f);
+    }
+    return f;
+}
+
+PhotoNode * MemoryBackend::allocPhotoNode(Layer* l, const TrackNode& other)
+{
+    PhotoNode* f;
+    try {
+        f = new PhotoNode(other);
+        if (!f)
+            return NULL;
+    } catch (...) { // Out-of-memory?
+        return NULL;
+    }
+
     p->AllocFeatures[f] = f->BBox;
     if (!f->BBox.isNull()) {
         indexAdd(l, f->BBox, f);

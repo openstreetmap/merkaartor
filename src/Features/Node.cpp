@@ -10,49 +10,58 @@
 
 #define TEST_RFLAGS(x) theView->renderOptions().options.testFlag(x)
 
-class NodePrivate
-{
-    public:
-        NodePrivate()
-        : IsWaypoint(false)
-        , ProjectionRevision(0)
-        , HasPhoto(false)
-        , Photo(0)
-        , photoLocationBR(true)
-        {
-        }
-
-        bool IsWaypoint;
-        bool IsPOI;
-        int ProjectionRevision;
-        QPointF Projected;
-        bool HasPhoto;
-        QPixmap* Photo;
-        bool photoLocationBR;
-};
-
 Node::Node(const Coord& aCoord)
     : Feature()
-    , p(new NodePrivate)
 {
     BBox = CoordBox(aCoord, aCoord);
-    setRenderPriority(RenderPriority(RenderPriority::IsSingular,0., 0));
+//    qDebug() << "Node size: " << sizeof(Node) << sizeof(PhotoNode);
+
 }
 
 Node::Node(const Node& other)
     : Feature(other)
-    , p(new NodePrivate)
 {
     BBox = other.BBox;
-    p->Projected = other.p->Projected;
-    p->ProjectionRevision = other.projectionRevision();
-    setRenderPriority(RenderPriority(RenderPriority::IsSingular,0., 0));
+    Projected = other.Projected;
+    ProjectionRevision = other.projectionRevision();
 }
 
 Node::~Node(void)
 {
-    SAFE_DELETE(p->Photo)
-    delete p;
+}
+
+const QPointF& Node::projection() const
+{
+    return Projected;
+}
+
+void Node::setProjection(const QPointF& aProjection)
+{
+    Projected = aProjection;
+}
+
+quint16 Node::projectionRevision() const
+{
+    return ProjectionRevision;
+}
+
+void Node::setProjectionRevision(const quint16 aProjectionRevision)
+{
+    ProjectionRevision = aProjectionRevision;
+}
+
+Coord Node::position() const
+{
+    return BBox.topLeft();
+}
+
+void Node::setPosition(const Coord& aCoord)
+{
+    BBox = CoordBox(aCoord, aCoord);
+    ProjectionRevision = 0;
+    g_backend.sync(this);
+
+    notifyChanges();
 }
 
 void Node::remove(int )
@@ -108,7 +117,7 @@ bool Node::isPOI()
     if (!MetaUpToDate)
         updateMeta();
 
-    return p->IsPOI;
+    return IsPOI;
 }
 
 bool Node::isWaypoint()
@@ -116,7 +125,7 @@ bool Node::isWaypoint()
     if (!MetaUpToDate)
         updateMeta();
 
-    return p->IsWaypoint;
+    return IsWaypoint;
 }
 
 bool Node::isSelectable(MapView* theView)
@@ -142,59 +151,6 @@ bool Node::isSelectable(MapView* theView)
 }
 
 
-Coord Node::position() const
-{
-    return BBox.topLeft();
-}
-
-void Node::setPosition(const Coord& aCoord)
-{
-    BBox = CoordBox(aCoord, aCoord);
-    p->ProjectionRevision = 0;
-    g_backend.sync(this);
-
-    notifyChanges();
-}
-
-const QPointF& Node::projection() const
-{
-    return p->Projected;
-}
-
-void Node::setProjection(const QPointF& aProjection)
-{
-    p->Projected = aProjection;
-}
-
-int Node::projectionRevision() const
-{
-    return p->ProjectionRevision;
-}
-
-void Node::setProjectionRevision(const int aProjectionRevision)
-{
-    p->ProjectionRevision = aProjectionRevision;
-}
-
-bool Node::hasPhoto() const
-{
-    return p->HasPhoto;
-}
-
-QPixmap Node::photo() const
-{
-    if (p->Photo)
-        return *(p->Photo);
-    else
-        return QPixmap();
-}
-void Node::setPhoto(QPixmap thePhoto)
-{
-    SAFE_DELETE(p->Photo)
-    p->Photo = new QPixmap(thePhoto.scaled(M_PREFS->getMaxGeoPicWidth(), M_PREFS->getMaxGeoPicWidth(), Qt::KeepAspectRatio));
-    p->HasPhoto = true;
-}
-
 bool Node::notEverythingDownloaded()
 {
     return lastUpdated() == Feature::NotYetDownloaded;
@@ -207,27 +163,6 @@ const CoordBox& Node::boundingBox(bool) const
 
 void Node::draw(QPainter& thePainter , MapView* theView)
 {
-#ifdef GEOIMAGE
-    if (p->HasPhoto) {
-         QPoint me = theView->toView(this);
-         thePainter.setPen(QPen(QColor(0, 0, 0), 2));
-         QRect box(me - QPoint(5, 3), QSize(10, 6));
-         thePainter.drawRect(box);
-         if (TEST_RFLAGS(RendererOptions::PhotosVisible) && theView->pixelPerM() > M_PREFS->getRegionalZoom()) {
-             qreal rt = qBound(0.2, theView->pixelPerM(), 1.0);
-             QPoint phPt;
-
-             if (p->photoLocationBR) {
-                 phPt = me + QPoint(10*rt, 10*rt);
-             } else {
-                 qreal rt = qBound(0.2, theView->pixelPerM(), 1.0);
-                 qreal phRt = 1. * p->Photo->width() / p->Photo->height();
-                 phPt = me - QPoint(10*rt, 10*rt) - QPoint(M_PREFS->getMaxGeoPicWidth()*rt, M_PREFS->getMaxGeoPicWidth()*rt/phRt);
-             }
-             thePainter.drawPixmap(phPt, p->Photo->scaledToWidth(M_PREFS->getMaxGeoPicWidth()*rt));
-         }
-     }
-#endif
     if (isDirty() && isUploadable() && M_PREFS->getDirtyVisible()) {
         QPoint P = theView->toView(this);
         qreal theWidth = theView->nodeWidth();
@@ -236,34 +171,7 @@ void Node::draw(QPainter& thePainter , MapView* theView)
             thePainter.fillRect(R,M_PREFS->getDirtyColor());
         }
     }
-
 }
-
-#ifdef GEOIMAGE
-void Node::drawHover(QPainter& thePainter, MapView* theView)
-{
-    /* call the parent function */
-    Feature::drawHover(thePainter, theView);
-
-    /* and then the image */
-    if (p->HasPhoto) {
-        if (TEST_RFLAGS(RendererOptions::PhotosVisible) && theView->pixelPerM() > M_PREFS->getRegionalZoom()) {
-            QPoint me(theView->toView(this));
-
-            qreal rt = qBound(0.2, theView->pixelPerM(), 1.0);
-            qreal phRt = 1. * p->Photo->width() / p->Photo->height();
-            QPoint phPt;
-            if (p->photoLocationBR) {
-                phPt = me + QPoint(10*rt, 10*rt);
-            } else {
-                phPt = me - QPoint(10*rt, 10*rt) - QPoint(M_PREFS->getMaxGeoPicWidth()*rt, M_PREFS->getMaxGeoPicWidth()*rt/phRt);
-            }
-            QRect box(phPt, QSize(M_PREFS->getMaxGeoPicWidth()*rt, M_PREFS->getMaxGeoPicWidth()*rt/phRt));
-            thePainter.drawRect(box);
-        }
-    }
-}
-#endif
 
 void Node::drawSpecial(QPainter& thePainter, QPen& Pen, MapView* theView)
 {
@@ -309,26 +217,6 @@ qreal Node::pixelDistance(const QPointF& Target, qreal, const QList<Feature*>& N
 
     Best = distance(Target, me);
 
-#ifdef GEOIMAGE
-    if (p->HasPhoto) {
-        if (TEST_RFLAGS(RendererOptions::PhotosVisible) && theView->pixelPerM() > M_PREFS->getRegionalZoom()) {
-            qreal rt = qBound(0.2, theView->pixelPerM(), 1.0);
-            qreal phRt = 1. * p->Photo->width() / p->Photo->height();
-            QPoint phPt;
-            if (p->photoLocationBR) {
-                phPt = me + QPoint(10*rt, 10*rt);
-            } else {
-                phPt = me - QPoint(10*rt, 10*rt) - QPoint(M_PREFS->getMaxGeoPicWidth()*rt, M_PREFS->getMaxGeoPicWidth()*rt/phRt);
-            }
-            QRect box(phPt, QSize(M_PREFS->getMaxGeoPicWidth()*rt, M_PREFS->getMaxGeoPicWidth()*rt/phRt));
-            if (box.contains(Target.toPoint())) {
-                p->photoLocationBR = !p->photoLocationBR;
-                theView->invalidate(true, false);
-            }
-        }
-    }
-#endif
-
     return Best;
 }
 
@@ -354,16 +242,16 @@ void Node::updateMeta()
     Feature::updateMeta();
     MetaUpToDate = true;
 
-    p->IsWaypoint = (findKey("_waypoint_") != -1);
-    p->IsPOI = false;
+    IsWaypoint = (findKey("_waypoint_") != -1);
+    IsPOI = false;
     for (int i=0; i<tagSize(); ++i) {
         if (!M_PREFS->getTechnicalTags().contains(tagKey(i))) {
-            p->IsPOI = true;
+            IsPOI = true;
             break;
         }
     }
 
-    if (!p->IsPOI && !p->IsWaypoint) {
+    if (!IsPOI && !IsWaypoint) {
         int i=0;
         int prtReadonly=0, prtWritable=0;
         for (; i<sizeParents(); ++i) {
@@ -504,6 +392,27 @@ bool Node::toGPX(QXmlStreamWriter& stream, QProgressDialog * progress, QString e
 
 /*********************************************/
 
+TrackNode::TrackNode(const Coord &aCoord)
+    : Node(aCoord)
+    , Elevation(0.0)
+    , Speed(0.0)
+{
+}
+
+TrackNode::TrackNode(const Node& other)
+    : Node(other)
+    , Elevation(0.0)
+    , Speed(0.0)
+{
+}
+
+TrackNode::TrackNode(const TrackNode& other)
+    : Node(other)
+    , Elevation(other.Elevation)
+    , Speed(other.Speed)
+{
+}
+
 qreal TrackNode::speed() const
 {
     return Speed;
@@ -522,20 +431,6 @@ qreal TrackNode::elevation() const
 void TrackNode::setElevation(qreal aElevation)
 {
     Elevation = aElevation;
-}
-
-TrackNode::TrackNode(const Coord &aCoord)
-    : Node(aCoord)
-    , Elevation(0.0)
-    , Speed(0.0)
-{
-}
-
-TrackNode::TrackNode(const TrackNode& other)
-    : Node(other)
-    , Elevation(other.Elevation)
-    , Speed(other.Speed)
-{
 }
 
 TrackNode * TrackNode::fromGPX(Document* d, Layer* L, QXmlStreamReader& stream)
@@ -617,7 +512,6 @@ TrackNode * TrackNode::fromGPX(Document* d, Layer* L, QXmlStreamReader& stream)
     return Pt;
 }
 
-
 bool TrackNode::toGPX(QXmlStreamWriter& stream, QProgressDialog * progress, QString element, bool forExport)
 {
     bool OK = true;
@@ -693,4 +587,120 @@ QString TrackNode::toHtml()
 
     return Feature::toMainHtml(QApplication::translate("MapFeature", "Node"), "node").arg(D);
 }
+
+/*********************************/
+
+PhotoNode::PhotoNode(const Coord& aCoord)
+    : TrackNode(aCoord)
+    , Photo(0)
+    , photoLocationBR(true)
+{
+
+}
+
+PhotoNode::PhotoNode(const Node& other)
+    : TrackNode(other)
+    , Photo(0)
+    , photoLocationBR(true)
+{
+}
+
+PhotoNode::PhotoNode(const TrackNode& other)
+    : TrackNode(other)
+    , Photo(0)
+    , photoLocationBR(true)
+{
+}
+
+PhotoNode::~PhotoNode(void)
+{
+    SAFE_DELETE(Photo)
+}
+
+QPixmap PhotoNode::photo() const
+{
+    if (Photo)
+        return *(Photo);
+    else
+        return QPixmap();
+}
+
+void PhotoNode::setPhoto(QPixmap thePhoto)
+{
+    SAFE_DELETE(Photo)
+    Photo = new QPixmap(thePhoto.scaled(M_PREFS->getMaxGeoPicWidth(), M_PREFS->getMaxGeoPicWidth(), Qt::KeepAspectRatio));
+}
+
+void PhotoNode::draw(QPainter& thePainter , MapView* theView)
+{
+#ifdef GEOIMAGE
+    QPoint me = theView->toView(this);
+    thePainter.setPen(QPen(QColor(0, 0, 0), 2));
+    QRect box(me - QPoint(5, 3), QSize(10, 6));
+    thePainter.drawRect(box);
+    if (TEST_RFLAGS(RendererOptions::PhotosVisible) && theView->pixelPerM() > M_PREFS->getRegionalZoom()) {
+        qreal rt = qBound(0.2, theView->pixelPerM(), 1.0);
+        QPoint phPt;
+
+        if (photoLocationBR) {
+            phPt = me + QPoint(10*rt, 10*rt);
+        } else {
+            qreal rt = qBound(0.2, theView->pixelPerM(), 1.0);
+            qreal phRt = 1. * Photo->width() / Photo->height();
+            phPt = me - QPoint(10*rt, 10*rt) - QPoint(M_PREFS->getMaxGeoPicWidth()*rt, M_PREFS->getMaxGeoPicWidth()*rt/phRt);
+        }
+        thePainter.drawPixmap(phPt, Photo->scaledToWidth(M_PREFS->getMaxGeoPicWidth()*rt));
+    }
+#endif
+    Node::draw(thePainter, theView);
+}
+
+#ifdef GEOIMAGE
+void PhotoNode::drawHover(QPainter& thePainter, MapView* theView)
+{
+    /* call the parent function */
+    Feature::drawHover(thePainter, theView);
+
+    /* and then the image */
+    if (TEST_RFLAGS(RendererOptions::PhotosVisible) && theView->pixelPerM() > M_PREFS->getRegionalZoom()) {
+        QPoint me(theView->toView(this));
+
+        qreal rt = qBound(0.2, theView->pixelPerM(), 1.0);
+        qreal phRt = 1. * Photo->width() / Photo->height();
+        QPoint phPt;
+        if (photoLocationBR) {
+            phPt = me + QPoint(10*rt, 10*rt);
+        } else {
+            phPt = me - QPoint(10*rt, 10*rt) - QPoint(M_PREFS->getMaxGeoPicWidth()*rt, M_PREFS->getMaxGeoPicWidth()*rt/phRt);
+        }
+        QRect box(phPt, QSize(M_PREFS->getMaxGeoPicWidth()*rt, M_PREFS->getMaxGeoPicWidth()*rt/phRt));
+        thePainter.drawRect(box);
+    }
+}
+#endif
+
+qreal PhotoNode::pixelDistance(const QPointF& Target, qreal ClearDistance, const QList<Feature*>& NoSnap, MapView* theView) const
+{
+    QPoint me = theView->toView(const_cast<PhotoNode*>(this));
+#ifdef GEOIMAGE
+    if (TEST_RFLAGS(RendererOptions::PhotosVisible) && theView->pixelPerM() > M_PREFS->getRegionalZoom()) {
+        qreal rt = qBound(0.2, theView->pixelPerM(), 1.0);
+        qreal phRt = 1. * Photo->width() / Photo->height();
+        QPoint phPt;
+        if (photoLocationBR) {
+            phPt = me + QPoint(10*rt, 10*rt);
+        } else {
+            phPt = me - QPoint(10*rt, 10*rt) - QPoint(M_PREFS->getMaxGeoPicWidth()*rt, M_PREFS->getMaxGeoPicWidth()*rt/phRt);
+        }
+        QRect box(phPt, QSize(M_PREFS->getMaxGeoPicWidth()*rt, M_PREFS->getMaxGeoPicWidth()*rt/phRt));
+        if (box.contains(Target.toPoint())) {
+            photoLocationBR = !photoLocationBR;
+            theView->invalidate(true, false);
+        }
+    }
+#endif
+
+    return Node::pixelDistance(Target, ClearDistance, NoSnap, theView );
+}
+
 

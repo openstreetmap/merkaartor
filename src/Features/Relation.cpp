@@ -155,12 +155,6 @@ QString Relation::description() const
     return QString("%1").arg(id().numId);
 }
 
-const RenderPriority& Relation::renderPriority()
-{
-    setRenderPriority(p->theRenderPriority);
-    return p->theRenderPriority;
-}
-
 const CoordBox& Relation::boundingBox(bool update) const
 {
     if (!p->BBoxUpToDate && update)
@@ -494,6 +488,13 @@ const QPainterPath& Relation::getPath() const
     return p->thePath;
 }
 
+const RenderPriority& Relation::renderPriority()
+{
+    if (!MetaUpToDate)
+        updateMeta();
+    return p->theRenderPriority;
+}
+
 void Relation::updateMeta()
 {
     Feature::updateMeta();
@@ -503,8 +504,13 @@ void Relation::updateMeta()
 
     p->theRenderPriority = RenderPriority(RenderPriority::IsSingular, 0., 0);
     for (int i=0; i<p->Members.size(); ++i) {
-        if (p->Members.at(i).second->renderPriority() < p->theRenderPriority)
-            p->theRenderPriority = p->Members.at(i).second->renderPriority();
+        if (Way* W = CAST_WAY(p->Members.at(i).second)) {
+            if (W->renderPriority() < p->theRenderPriority)
+                p->theRenderPriority = W->renderPriority();
+        } else if (Relation* R = CAST_RELATION(p->Members.at(i).second)) {
+            if (R->renderPriority() < p->theRenderPriority)
+                p->theRenderPriority = R->renderPriority();
+        }
     }
 }
 

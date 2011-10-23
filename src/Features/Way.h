@@ -56,8 +56,6 @@ public:
     virtual bool isNull() const;
     virtual void setDeleted(bool delState);
 
-    const QList<Coord>& smoothed() const;
-
     Node* getNode(int idx);
     const Node* getNode(int idx) const;
     const std::vector<NodePtr>& getNodes() const;
@@ -66,6 +64,8 @@ public:
     int segmentCount();
     QLineF getSegment(int i);
     int bestSegment();
+
+    const RenderPriority& renderPriority();
 
     bool isNodeAtEnd(Node* node);
 

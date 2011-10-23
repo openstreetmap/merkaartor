@@ -101,10 +101,11 @@ void copyTags(Feature* Dest, Feature* Src)
         Dest->setTag(Src->tagKey(i),Src->tagValue(i));
 }
 
-class MapFeaturePrivate
+
+class FeaturePrivate
 {
     public:
-        MapFeaturePrivate()
+        FeaturePrivate()
             :  LastActor(Feature::User),
               PossiblePaintersUpToDate(false),
               PixelPerMForPainter(-1), CurrentPainter(0), HasPainter(false),
@@ -114,8 +115,9 @@ class MapFeaturePrivate
             , parentLayer(0), User(0xffffffff)
         {
             initVersionNumber();
+//            qDebug() << "MapFeaturePrivate size: " << sizeof(FeaturePrivate) << sizeof(IFeature::FId) << sizeof(RenderPriority);
         }
-        MapFeaturePrivate(const MapFeaturePrivate& other)
+        FeaturePrivate(const FeaturePrivate& other)
             : Tags(other.Tags), LastActor(other.LastActor),
               PossiblePaintersUpToDate(false),
               PixelPerMForPainter(-1), CurrentPainter(0), HasPainter(false),
@@ -132,35 +134,34 @@ class MapFeaturePrivate
         void updatePainters(qreal PixelPerM);
         void initVersionNumber();
 
-        mutable IFeature::FId Id;
-        QList<QPair<quint32, quint32> > Tags;
-        Feature::ActorType LastActor;
-        QList<const FeaturePainter*> PossiblePainters;
-        bool PossiblePaintersUpToDate;
-        qreal PixelPerMForPainter;
-        const FeaturePainter* CurrentPainter;
-        bool HasPainter;
-        Feature* theFeature;
-        QList<Feature*> Parents;
-        int LastPartNotification;
-        uint Time;
-        quint32 User;
-        int VersionNumber;
-        bool Deleted;
-        bool Visible;
-        bool Uploaded;
-        bool ReadOnly;
-        int FilterRevision;
-        RenderPriority theRenderPriority;
-        bool Virtual;
-        bool Special;
-        int DirtyLevel;
-        QList<FilterLayer*> FilterLayers;
-        qreal Alpha;
-        Layer* parentLayer;
+        mutable IFeature::FId Id; // 9 (16)
+        QList<QPair<quint32, quint32> > Tags; // 4
+        Feature::ActorType LastActor; // 4
+        QList<const FeaturePainter*> PossiblePainters; // 4
+        bool PossiblePaintersUpToDate; // 1
+        qreal PixelPerMForPainter; // 8
+        const FeaturePainter* CurrentPainter; // 4
+        bool HasPainter; // 1
+        Feature* theFeature; // 4
+        QList<Feature*> Parents; // 4
+        int LastPartNotification; // 4
+        uint Time; // 4
+        quint32 User; // 4
+        int VersionNumber; // 4
+        bool Deleted; // 1
+        bool Visible; // 1
+        bool Uploaded; // 1
+        bool ReadOnly; // 1
+        int FilterRevision; // 4
+        bool Virtual; // 1
+        bool Special; // 1
+        int DirtyLevel; // 4
+        QList<FilterLayer*> FilterLayers; // 4
+        qreal Alpha; // 8
+        Layer* parentLayer; // 4
 };
 
-void MapFeaturePrivate::initVersionNumber()
+void FeaturePrivate::initVersionNumber()
 {
 //    static int VN = -1;
 //    VersionNumber = VN--;
@@ -170,17 +171,17 @@ void MapFeaturePrivate::initVersionNumber()
 Feature::Feature()
 : p(0), MetaUpToDate(false), m_references(0)
 {
-     p = new MapFeaturePrivate;
+     p = new FeaturePrivate;
      p->theFeature = this;
      p->Id = IFeature::FId(IFeature::Uninitialized, 0);
 
-//     qDebug() << "Feature size: " << sizeof(Feature) << sizeof(MapFeaturePrivate);
+//     qDebug() << "Feature size: " << sizeof(Feature);
 }
 
 Feature::Feature(const Feature& other)
 : MetaUpToDate(false), m_references(0)
 {
-    p = new MapFeaturePrivate(*other.p);
+    p = new FeaturePrivate(*other.p);
     p->theFeature = this;
     p->Id = IFeature::FId(IFeature::Uninitialized, 0);
 }
@@ -212,18 +213,6 @@ void Feature::setLayer(Layer* aLayer)
 Layer* Feature::layer() const
 {
     return p->parentLayer;
-}
-
-const RenderPriority& Feature::renderPriority()
-{
-    if (!MetaUpToDate)
-        updateMeta();
-    return p->theRenderPriority;
-}
-
-void Feature::setRenderPriority(const RenderPriority& aPriority)
-{
-    p->theRenderPriority = aPriority;
 }
 
 void Feature::setLastUpdated(Feature::ActorType A)
@@ -572,7 +561,7 @@ const QPainterPath& Feature::getPath() const
     return QPainterPath();
 }
 
-void MapFeaturePrivate::updatePossiblePainters()
+void FeaturePrivate::updatePossiblePainters()
 {
     //still match features with no tags and no parent, i.e. "lost" trackpoints
     if ( (theFeature->layer()->isTrack()) && M_PREFS->getDisableStyleForTracks() ) return blankPainters();
@@ -604,7 +593,7 @@ void MapFeaturePrivate::updatePossiblePainters()
     HasPainter = (PossiblePainters.size() > 0);
 }
 
-void MapFeaturePrivate::updatePainters(qreal PixelPerM)
+void FeaturePrivate::updatePainters(qreal PixelPerM)
 {
     if (!PossiblePaintersUpToDate)
         updatePossiblePainters();
@@ -619,7 +608,7 @@ void MapFeaturePrivate::updatePainters(qreal PixelPerM)
         }
 }
 
-void MapFeaturePrivate::blankPainters()
+void FeaturePrivate::blankPainters()
 {
     CurrentPainter = 0;
     PossiblePainters.clear();

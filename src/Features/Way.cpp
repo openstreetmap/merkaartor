@@ -33,7 +33,7 @@ class WayPrivate
 {
     public:
         WayPrivate(Way* aWay)
-        : theWay(aWay), SmoothedUpToDate(false), BBoxUpToDate(false)
+        : theWay(aWay), BBoxUpToDate(false)
             , Area(0), Distance(0)
             , wasPathComplete(false), VirtualsUptodate(false)
             , ProjectionRevision(0)
@@ -43,10 +43,8 @@ class WayPrivate
         }
         Way* theWay;
 
-        std::vector<NodePtr> Nodes;
-        std::vector<NodePtr> virtualNodes;
-        QList<Coord> Smoothed;
-        bool SmoothedUpToDate;
+        std::vector<Node*> Nodes;
+        std::vector<Node*> virtualNodes;
 
         bool BBoxUpToDate;
 
@@ -61,9 +59,9 @@ class WayPrivate
         int BestSegment;
         qreal Width;
 
+        RenderPriority theRenderPriority; // 10 (24)
+
         void CalculateWidth();
-        void updateSmoothed(bool DoSmooth);
-        void addSmoothedBezier(int i, int j, int k, int l);
         void doUpdateVirtuals();
         void removeVirtuals();
         void addVirtuals();
@@ -98,36 +96,6 @@ void WayPrivate::CalculateWidth()
     else if (h == "cycleway")
         Width =  1.5;
     Width = DEFAULTWIDTH;
-}
-
-void WayPrivate::addSmoothedBezier(int i, int j, int k, int l)
-{
-    Coord A(Nodes[i]->position());
-    Coord B(Nodes[j]->position());
-    Coord C(Nodes[k]->position());
-    Coord D(Nodes[l]->position());
-
-    Coord Ctrl1(B+(C-A)*(1/6));
-    Coord Ctrl2(C-(D-B)*(1/6));
-
-
-    Smoothed.push_back(Ctrl1);
-    Smoothed.push_back(Ctrl2);
-    Smoothed.push_back(C);
-}
-
-void WayPrivate::updateSmoothed(bool DoSmooth)
-{
-    SmoothedUpToDate = true;
-    Smoothed.clear();
-    if ( (Nodes.size() < 3) || !DoSmooth )
-        return;
-    Smoothed.push_back(Nodes[0]->position());
-    addSmoothedBezier(0,0,1,2);
-    for (unsigned int i=1; i<Nodes.size()-2; ++i)
-        addSmoothedBezier(i-1,i,i+1,i+2);
-    int Last = Nodes.size()-1;
-    addSmoothedBezier(Last-2,Last-1,Last,Last);
 }
 
 void WayPrivate::removeVirtuals()
@@ -241,7 +209,6 @@ void Way::partChanged(Feature* /*F*/, int ChangeId)
     p->BBoxUpToDate = false;
     p->wasPathComplete = false;
     MetaUpToDate = false;
-    p->SmoothedUpToDate = false;
     p->VirtualsUptodate = false;
     g_backend.sync(this);
 
@@ -270,7 +237,6 @@ void Way::add(Node* Pt, int Idx)
     p->BBoxUpToDate = false;
     p->wasPathComplete = false;
     MetaUpToDate = false;
-    p->SmoothedUpToDate = false;
     p->VirtualsUptodate = false;
     g_backend.sync(this);
 
@@ -303,7 +269,6 @@ void Way::remove(int idx)
     p->BBoxUpToDate = false;
     p->wasPathComplete = false;
     MetaUpToDate = false;
-    p->SmoothedUpToDate = false;
     p->VirtualsUptodate = false;
     g_backend.sync(this);
 
@@ -421,7 +386,7 @@ void Way::updateMeta()
 
     if (isArea) {
         p->Area = p->Distance;
-        setRenderPriority(RenderPriority(RenderPriority::IsArea,-fabs(p->Area), 0));
+        p->theRenderPriority = RenderPriority(RenderPriority::IsArea,-fabs(p->Area), 0);
     } else {
         qreal Priority = tagValue("layer","0").toInt();
         if (Priority >= 0)
@@ -430,7 +395,7 @@ void Way::updateMeta()
         // dummy number to get a deterministic feature sort
 //		Priority += sin(intToRad(boundingBox().lonDiff()));
         Priority += p->Distance / INT_MAX;
-        setRenderPriority(RenderPriority(RenderPriority::IsLinear,Priority, layer));
+        p->theRenderPriority = RenderPriority(RenderPriority::IsLinear,Priority, layer);
     }
 
     p->doUpdateVirtuals();
@@ -547,34 +512,21 @@ qreal Way::pixelDistance(const QPointF& Target, qreal ClearEndDistance, const QL
 //            }
 //        }
 //    }
-    if (smoothed().size())
-        for (int i=3; i <p->Smoothed.size(); i += 3)
-        {
-            BezierF F(
-                theView->toView(p->Smoothed[i-3]),
-                theView->toView(p->Smoothed[i-2]),
-                theView->toView(p->Smoothed[i-1]),
-                theView->toView(p->Smoothed[i]));
-            qreal D = F.distance(Target);
-            if (D < ClearEndDistance)
-                Best = D;
-        }
-    else
-        for (unsigned int i=0; i<p->Nodes.size()-1; ++i)
-        {
-            if (NoSnap.contains(p->Nodes.at(i)) || NoSnap.contains(p->Nodes.at(i+1)))
-                continue;
+    for (unsigned int i=0; i<p->Nodes.size()-1; ++i)
+    {
+        if (NoSnap.contains(p->Nodes.at(i)) || NoSnap.contains(p->Nodes.at(i+1)))
+            continue;
 
-            if (p->Nodes.at(i) && p->Nodes.at(i+1)) {
-                LineF F(theView->toView(p->Nodes.at(i)),theView->toView(p->Nodes.at(i+1)));
-                qreal D = F.capDistance(Target);
-                if (D < ClearEndDistance && D < Best) {
-                    Best = D;
-                    if (g_Merk_Segment_Mode)
-                        p->BestSegment = i;
-                }
+        if (p->Nodes.at(i) && p->Nodes.at(i+1)) {
+            LineF F(theView->toView(p->Nodes.at(i)),theView->toView(p->Nodes.at(i+1)));
+            qreal D = F.capDistance(Target);
+            if (D < ClearEndDistance && D < Best) {
+                Best = D;
+                if (g_Merk_Segment_Mode)
+                    p->BestSegment = i;
             }
         }
+    }
     return Best;
 }
 
@@ -977,25 +929,6 @@ Feature::TrafficDirectionType trafficDirection(const Way* R)
 
 int findSnapPointIndex(const Way* R, Coord& P)
 {
-    if (R->smoothed().size())
-    {
-        BezierF L(R->smoothed()[0],R->smoothed()[1],R->smoothed()[2],R->smoothed()[3]);
-        int BestIdx = 3;
-        qreal BestDistance = L.distance(P);
-        for (int i=3; i<R->smoothed().size(); i+=3)
-        {
-            BezierF L(R->smoothed()[i-3],R->smoothed()[i-2],R->smoothed()[i-1],R->smoothed()[i]);
-            qreal Distance = L.distance(P);
-            if (Distance < BestDistance)
-            {
-                BestIdx = i;
-                BestDistance = Distance;
-            }
-        }
-        BezierF B(R->smoothed()[BestIdx-3],R->smoothed()[BestIdx-2],R->smoothed()[BestIdx-1],R->smoothed()[BestIdx]);
-        P = B.project(P);
-        return BestIdx/3;
-    }
     LineF L(R->getNode(0)->position(),R->getNode(1)->position());
     int BestIdx = 1;
     qreal BestDistance = L.capDistance(P);
@@ -1012,13 +945,6 @@ int findSnapPointIndex(const Way* R, Coord& P)
     LineF F(R->getNode(BestIdx-1)->position(),R->getNode(BestIdx)->position());
     P = F.project(P);
     return BestIdx;
-}
-
-const QList<Coord>& Way::smoothed() const
-{
-    if (!p->SmoothedUpToDate)
-        p->updateSmoothed(tagValue("smooth","") == "yes");
-    return p->Smoothed;
 }
 
 QString Way::toHtml()
@@ -1149,3 +1075,11 @@ int Way::bestSegment()
 {
     return p->BestSegment;
 }
+
+const RenderPriority& Way::renderPriority()
+{
+    if (!MetaUpToDate)
+        updateMeta();
+    return p->theRenderPriority;
+}
+

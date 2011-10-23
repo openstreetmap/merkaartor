@@ -25,7 +25,8 @@ public:
         All					= 0xff
     } FeatureType;
 
-    struct FId {
+    class FId {
+    public:
         FId() : type(IFeature::Uninitialized), numId(0) {}
         FId(char a, qint64 b) : type(a), numId(b) {}
 

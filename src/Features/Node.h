@@ -18,7 +18,6 @@
 #endif
 #endif
 
-class NodePrivate;
 class QProgressDialog;
 
 class Node : public Feature
@@ -26,10 +25,21 @@ class Node : public Feature
     friend class MemoryBackend;
     friend class SpatialiteBackend;
 
-protected:
+public:
+    Node()
+        : ProjectionRevision(0)
+    {
+    }
+
     Node(const Coord& aCoord);
     Node(const Node& other);
     virtual ~Node();
+
+    quint16 ProjectionRevision;
+    QPointF Projected;
+
+    bool IsWaypoint;
+    bool IsPOI;
 
 public:
     virtual QString getClass() const {return "Node";}
@@ -41,10 +51,6 @@ public:
     virtual void drawSpecial(QPainter& P, QPen& Pen, MapView* theView);
     virtual void drawParentsSpecial(QPainter& P, QPen& Pen, MapView* theView);
     virtual void drawChildrenSpecial(QPainter& P, QPen& Pen, MapView* theView, int depth);
-
-#ifdef GEOIMAGE
-    virtual void drawHover(QPainter& P, MapView* theView);
-#endif
 
     virtual qreal pixelDistance(const QPointF& Target, qreal ClearEndDistance, const QList<Feature*>& NoSnap, MapView* theView) const;
     virtual void cascadedRemoveIfUsing(Document* theDocument, Feature* aFeature, CommandList* theList, const QList<Feature*>& Alternatives);
@@ -67,37 +73,37 @@ public:
          */
     virtual bool isSelectable(MapView* view);
 
-    Coord position() const;
-    void setPosition(const Coord& aCoord);
-    const QPointF& projection() const;
-    void setProjection(const QPointF& aProjection);
-    int projectionRevision() const;
-    void setProjectionRevision(int aProjectionRevision);
-
-    bool hasPhoto() const;
-    QPixmap photo() const;
-    void setPhoto(QPixmap thePhoto);
-
     virtual void partChanged(Feature* F, int ChangeId);
 
-    virtual bool toXML(QXmlStreamWriter& stream, QProgressDialog * progress, bool strict=false, QString changetsetid="");
+public:
+    const QPointF& projection() const;
+    void setProjection(const QPointF& aProjection);
+
+    quint16 projectionRevision() const;
+    void setProjectionRevision(const quint16 aProjectionRevision);
+
+    Coord position() const;
+    void setPosition(const Coord& aCoord);
+
+    bool toXML(QXmlStreamWriter& stream, QProgressDialog * progress, bool strict=false, QString changetsetid="");
     static Node* fromXML(Document* d, Layer* L, QXmlStreamReader& stream);
 
-    virtual bool toGPX(QXmlStreamWriter& stream, QProgressDialog * progress, QString element, bool forExport=false);
+    bool toGPX(QXmlStreamWriter& stream, QProgressDialog * progress, QString element, bool forExport=false);
 
-    virtual QString toHtml();
-
-private:
-    NodePrivate* p;
-
+    QString toHtml();
 };
 
 class TrackNode : public Node
 {
-public:
+    friend class MemoryBackend;
+    friend class SpatialiteBackend;
+
+protected:
     TrackNode(const Coord& aCoord);
+    TrackNode(const Node& other);
     TrackNode(const TrackNode& other);
 
+public:
     qreal speed() const;
     void setSpeed(qreal aSpeed);
 
@@ -113,6 +119,33 @@ private:
     qreal Elevation;
     qreal Speed;
 };
+
+class PhotoNode : public TrackNode
+{
+    friend class MemoryBackend;
+    friend class SpatialiteBackend;
+
+protected:
+    PhotoNode(const Coord& aCoord);
+    PhotoNode(const Node& other);
+    PhotoNode(const TrackNode& other);
+    virtual ~PhotoNode();
+
+public:
+    virtual void draw(QPainter &thePainter, MapView *theView);
+#ifdef GEOIMAGE
+    virtual void drawHover(QPainter& P, MapView* theView);
+#endif
+    virtual qreal pixelDistance(const QPointF& Target, qreal ClearEndDistance, const QList<Feature*>& NoSnap, MapView* theView) const;
+
+    QPixmap photo() const;
+    void setPhoto(QPixmap thePhoto);
+
+protected:
+    QPixmap* Photo;
+    mutable bool photoLocationBR;
+};
+
 
 Q_DECLARE_METATYPE( Node * );
 
