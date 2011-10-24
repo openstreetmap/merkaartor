@@ -46,6 +46,13 @@ bool __cdecl indexFindCallback(Feature* F, void* ctxt)
         if (pCtxt->theFeatures->value(R->renderPriority()).contains(F))
             return true;
         R->buildPath(*(pCtxt->theProjection), *(pCtxt->theTransform), *(pCtxt->clipRect));
+        if (M_PREFS->getTrackPointsVisible()) {
+            for (int i=0; i<R->size(); ++i) {
+                if (pCtxt->bbox.contains(R->getNode(i)->boundingBox()))
+                    if (!pCtxt->theFeatures->value(NodePri).contains(R->getNode(i)))
+                        (*(pCtxt->theFeatures))[NodePri].insert(R->getNode(i));
+            }
+    }
         (*(pCtxt->theFeatures))[R->renderPriority()].insert(F);
     } else
     if (CHECK_RELATION(F)) {
@@ -134,6 +141,7 @@ void MemoryBackend::getFeatureSet(Layer* l, QMap<RenderPriority, QSet <Feature*>
     ctxt.theTransform = &theTransform;
 
     for (int i=0; i < invalidRects.size(); ++i) {
+        ctxt.bbox = invalidRects[i];
         indexFind(l, invalidRects[i], ctxt);
     }
 }
@@ -163,7 +171,7 @@ MemoryBackend::~MemoryBackend()
     delete p;
 }
 
-Node * MemoryBackend::allocNode(Layer* l, const Node& other)
+Node * MemoryBackend::allocNode(Layer* /*l*/, const Node& other)
 {
     Node* f;
     try {
@@ -175,13 +183,10 @@ Node * MemoryBackend::allocNode(Layer* l, const Node& other)
     }
 
     p->AllocFeatures[f] = f->BBox;
-    if (!f->BBox.isNull()) {
-        indexAdd(l, f->BBox, f);
-    }
     return f;
 }
 
-Node * MemoryBackend::allocNode(Layer* l, const QPointF& aCoord)
+Node * MemoryBackend::allocNode(Layer* /*l*/, const QPointF& aCoord)
 {
     Node* f;
     try {
@@ -192,13 +197,10 @@ Node * MemoryBackend::allocNode(Layer* l, const QPointF& aCoord)
         return NULL;
     }
     p->AllocFeatures[f] = f->BBox;
-    if (!f->BBox.isNull()) {
-        indexAdd(l, f->BBox, f);
-    }
     return f;
 }
 
-TrackNode * MemoryBackend::allocTrackNode(Layer* l, const QPointF& aCoord)
+TrackNode * MemoryBackend::allocTrackNode(Layer* /*l*/, const QPointF& aCoord)
 {
     TrackNode* f;
     try {
@@ -209,13 +211,10 @@ TrackNode * MemoryBackend::allocTrackNode(Layer* l, const QPointF& aCoord)
         return NULL;
     }
     p->AllocFeatures[f] = f->BBox;
-    if (!f->BBox.isNull()) {
-        indexAdd(l, f->BBox, f);
-    }
     return f;
 }
 
-PhotoNode * MemoryBackend::allocPhotoNode(Layer* l, const QPointF& aCoord)
+PhotoNode * MemoryBackend::allocPhotoNode(Layer* /*l*/, const QPointF& aCoord)
 {
     PhotoNode* f;
     try {
@@ -226,13 +225,10 @@ PhotoNode * MemoryBackend::allocPhotoNode(Layer* l, const QPointF& aCoord)
         return NULL;
     }
     p->AllocFeatures[f] = f->BBox;
-    if (!f->BBox.isNull()) {
-        indexAdd(l, f->BBox, f);
-    }
     return f;
 }
 
-PhotoNode * MemoryBackend::allocPhotoNode(Layer* l, const Node& other)
+PhotoNode * MemoryBackend::allocPhotoNode(Layer* /*l*/, const Node& other)
 {
     PhotoNode* f;
     try {
@@ -244,13 +240,10 @@ PhotoNode * MemoryBackend::allocPhotoNode(Layer* l, const Node& other)
     }
 
     p->AllocFeatures[f] = f->BBox;
-    if (!f->BBox.isNull()) {
-        indexAdd(l, f->BBox, f);
-    }
     return f;
 }
 
-PhotoNode * MemoryBackend::allocPhotoNode(Layer* l, const TrackNode& other)
+PhotoNode * MemoryBackend::allocPhotoNode(Layer* /*l*/, const TrackNode& other)
 {
     PhotoNode* f;
     try {
@@ -262,9 +255,6 @@ PhotoNode * MemoryBackend::allocPhotoNode(Layer* l, const TrackNode& other)
     }
 
     p->AllocFeatures[f] = f->BBox;
-    if (!f->BBox.isNull()) {
-        indexAdd(l, f->BBox, f);
-    }
     return f;
 }
 
@@ -281,7 +271,7 @@ Node * MemoryBackend::allocVirtualNode(const QPointF& aCoord)
     return f;
 }
 
-Way * MemoryBackend::allocWay(Layer* l)
+Way * MemoryBackend::allocWay(Layer* /*l*/)
 {
     Way* f;
     try {
@@ -295,7 +285,7 @@ Way * MemoryBackend::allocWay(Layer* l)
     return f;
 }
 
-Way * MemoryBackend::allocWay(Layer* l, const Way& other)
+Way * MemoryBackend::allocWay(Layer* /*l*/, const Way& other)
 {
     Way* f;
     try {
@@ -309,7 +299,7 @@ Way * MemoryBackend::allocWay(Layer* l, const Way& other)
     return f;
 }
 
-Relation * MemoryBackend::allocRelation(Layer* l)
+Relation * MemoryBackend::allocRelation(Layer* /*l*/)
 {
     Relation* f;
     try {
@@ -323,7 +313,7 @@ Relation * MemoryBackend::allocRelation(Layer* l)
     return f;
 }
 
-Relation * MemoryBackend::allocRelation(Layer* l, const Relation& other)
+Relation * MemoryBackend::allocRelation(Layer* /*l*/, const Relation& other)
 {
     Relation* f;
     try {
@@ -337,7 +327,7 @@ Relation * MemoryBackend::allocRelation(Layer* l, const Relation& other)
     return f;
 }
 
-TrackSegment * MemoryBackend::allocSegment(Layer* l)
+TrackSegment * MemoryBackend::allocSegment(Layer* /*l*/)
 {
     TrackSegment* f;
     try {

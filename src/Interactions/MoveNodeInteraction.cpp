@@ -170,12 +170,12 @@ void MoveNodeInteraction::snapMouseReleaseEvent(QMouseEvent * event, Feature* Cl
                 else {
                     Feature* f = CAST_FEATURE(Moving[i]->getParent(j));
                     if (f)
-                        g_backend.sync(f);
+                        f->invalidateMeta();
                 }
             }
         }
         foreach (Way* w, WaysToUpdate) {
-            g_backend.sync(w);
+            w->updateMeta();
         }
 
         // If moving a single node (not a track node), see if it got dropped onto another node

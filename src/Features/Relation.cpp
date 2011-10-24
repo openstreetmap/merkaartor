@@ -512,6 +512,7 @@ void Relation::updateMeta()
                 p->theRenderPriority = R->renderPriority();
         }
     }
+    g_backend.sync(this);
 }
 
 bool Relation::toXML(QXmlStreamWriter& stream, QProgressDialog * progress, bool strict, QString changetsetid)

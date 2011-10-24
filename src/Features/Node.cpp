@@ -59,7 +59,7 @@ void Node::setPosition(const Coord& aCoord)
 {
     BBox = CoordBox(aCoord, aCoord);
     ProjectionRevision = 0;
-    g_backend.sync(this);
+    invalidateMeta();
 
     notifyChanges();
 }
@@ -250,6 +250,8 @@ void Node::updateMeta()
             break;
         }
     }
+    if (IsPOI || !sizeParents())
+        g_backend.sync(this);
 
     if (!IsPOI && !IsWaypoint) {
         int i=0;

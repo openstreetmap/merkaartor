@@ -388,7 +388,6 @@ void GeoImageDock::loadImage(QString file, Coord pos)
     if (!Pt) {
         phNode = g_backend.allocPhotoNode(theLayer, pos);
         theLayer->add(Pt);
-        g_backend.sync(Pt);
     } else {
         if (CAST_TRACKNODE(Pt))
             phNode = g_backend.allocPhotoNode(theLayer, *CAST_TRACKNODE(Pt));
@@ -665,7 +664,6 @@ void GeoImageDock::loadImages(QStringList fileNames)
             if (!Pt) {
                 phNode = g_backend.allocPhotoNode(theLayer, newPos);
                 theLayer->add(Pt);
-                g_backend.sync(Pt);
             } else {
                 if (CAST_TRACKNODE(Pt))
                     phNode = g_backend.allocPhotoNode(theLayer, *CAST_TRACKNODE(Pt));

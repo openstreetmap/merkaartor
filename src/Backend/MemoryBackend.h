@@ -8,6 +8,7 @@ struct IndexFindContext {
     QRectF* clipRect;
     Projection* theProjection;
     QTransform* theTransform;
+    CoordBox bbox;
 };
 
 class MemoryBackendPrivate;

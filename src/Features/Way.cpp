@@ -164,6 +164,7 @@ Way::~Way(void)
 //        if (p->Nodes[i])
 //            p->Nodes[i]->unsetParentFeature(this);
 
+    p->removeVirtuals();
     delete p;
 }
 
@@ -234,6 +235,7 @@ void Way::add(Node* Pt, int Idx)
 //	p->Nodes.push_back(Pt);
 //	std::rotate(p->Nodes.begin()+Idx,p->Nodes.end()-1,p->Nodes.end());
     Pt->setParentFeature(this);
+    Pt->invalidateMeta();
     p->BBoxUpToDate = false;
     p->wasPathComplete = false;
     MetaUpToDate = false;
@@ -266,6 +268,7 @@ void Way::remove(int idx)
     p->Nodes.erase(p->Nodes.begin()+idx);
     if (Pt && (find(Pt) >= size()))
         Pt->unsetParentFeature(this);
+    Pt->invalidateMeta();
     p->BBoxUpToDate = false;
     p->wasPathComplete = false;
     MetaUpToDate = false;
@@ -399,6 +402,7 @@ void Way::updateMeta()
     }
 
     p->doUpdateVirtuals();
+    g_backend.sync(this);
 }
 
 qreal Way::distance()
