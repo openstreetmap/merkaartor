@@ -41,17 +41,17 @@ public:
     QString toXML(QString filename) const;
     static FeaturePainter fromXML(const QDomElement& e, QString filename);
 
-    void drawBackground(Node *N, QPainter *thePainter, MapView *theView) const;
-    void drawBackground(Way* R, QPainter* thePainter, MapView* theView) const;
-    void drawBackground(Relation* R, QPainter* thePainter, MapView* theView) const;
-    void drawForeground(Node *N, QPainter *thePainter, MapView *theView) const;
-    void drawForeground(Way* R, QPainter* thePainter, MapView* theView) const;
-    void drawForeground(Relation* R, QPainter* thePainter, MapView* theView) const;
-    void drawTouchup(Way* R, QPainter* thePainter, MapView* theView) const;
-    void drawTouchup(Node* R, QPainter* thePainter, MapView* theView) const;
-    void drawLabel(Way* R, QPainter* thePainter, MapView* theView) const;
-    void drawPointLabel(QPointF C, QString str, QString strBG, QPainter* thePainter, MapView* theView) const;
-    void drawLabel(Node* Pt, QPainter* thePainter, MapView* theView) const;
+    virtual void drawBackground(Node *N, QPainter *thePainter, MapView *theView) const;
+    virtual void drawBackground(Way* R, QPainter* thePainter, MapView* theView) const;
+    virtual void drawBackground(Relation* R, QPainter* thePainter, MapView* theView) const;
+    virtual void drawForeground(Node *N, QPainter *thePainter, MapView *theView) const;
+    virtual void drawForeground(Way* R, QPainter* thePainter, MapView* theView) const;
+    virtual void drawForeground(Relation* R, QPainter* thePainter, MapView* theView) const;
+    virtual void drawTouchup(Way* R, QPainter* thePainter, MapView* theView) const;
+    virtual void drawTouchup(Node* R, QPainter* thePainter, MapView* theView) const;
+    virtual void drawLabel(Way* R, QPainter* thePainter, MapView* theView) const;
+    virtual void drawPointLabel(QPointF C, QString str, QString strBG, QPainter* thePainter, MapView* theView) const;
+    virtual void drawLabel(Node* Pt, QPainter* thePainter, MapView* theView) const;
 
 public:
     TagSelector* theTagSelector;
