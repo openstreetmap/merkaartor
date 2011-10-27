@@ -110,12 +110,21 @@ public:
     qreal elevation() const;
     void setElevation(qreal aElevation);
 
+#ifdef FRISIUS_BUILD
+    const QDateTime& time() const;
+    void setTime(const QDateTime& aTime);
+    void setTime(uint epoch);
+#endif
+
     virtual bool toGPX(QXmlStreamWriter& stream, QProgressDialog * progress, QString element, bool forExport=false);
     static TrackNode* fromGPX(Document* d, Layer* L, QXmlStreamReader& stream);
 
     virtual QString toHtml();
 
 private:
+#ifdef FRISIUS_BUILD
+    uint Time;
+#endif
     qreal Elevation;
     qreal Speed;
 };

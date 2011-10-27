@@ -21,7 +21,6 @@ DEFINES += REVISION=$$REVISION
 contains(PORTABLE,1): DEFINES += PORTABLE_BUILD
 
 TEMPLATE = app
-TARGET = merkaartor
 
 CONFIG += rtti stl exceptions
 #CONFIG -= exceptions
@@ -41,6 +40,21 @@ contains(NODEBUG,1) {
     DEFINES += NDEBUG
     #OBJECTS_DIR += $$PWD/../tmp/$$(QMAKESPEC)/obj_release
 }
+contains(FRISIUS,1) {
+    TARGET = frisius
+    DEFINES += FRISIUS_BUILD
+    DEFINES += PRODUCT=Frisius
+    win32 {
+       RC_FILE = $$PWD/../Icons/merkaartor-win32.rc
+    }
+} else {
+    TARGET = merkaartor
+    DEFINES += PRODUCT=Merkaartor
+    win32 {
+       RC_FILE = $$PWD/../Icons/frisius-win32.rc
+    }
+}
+
 MERKAARTOR_SRC_DIR = $$PWD
 COMMON_DIR = $$PWD/../binaries
 OUTPUT_DIR = $$PWD/../binaries/$$(QMAKESPEC)
@@ -63,7 +77,6 @@ unix {
 win32 {
     INCLUDEPATH += $$COMMON_DIR/include
     LIBS += -L$$COMMON_DIR/lib
-    RC_FILE = $$PWD/../Icons/merkaartor-win32.rc
 }
 
 macx {

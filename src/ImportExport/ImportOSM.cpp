@@ -37,6 +37,7 @@ void OSMHandler::parseTag(const QXmlAttributes &atts)
 
 void parseStandardAttributes(const QXmlAttributes& atts, Feature* F)
 {
+#ifndef FRISIUS_BUILD
     QString ts = atts.value("timestamp");
     QDateTime time = QDateTime::fromString(ts.left(19), Qt::ISODate);
     if (!time.isValid())
@@ -47,6 +48,7 @@ void parseStandardAttributes(const QXmlAttributes& atts, Feature* F)
     QString version = atts.value("version");
     if (!version.isEmpty())
         F->setVersionNumber(version.toInt());
+#endif
 }
 
 void OSMHandler::parseNode(const QXmlAttributes& atts)
@@ -67,12 +69,15 @@ void OSMHandler::parseNode(const QXmlAttributes& atts)
         {
             // conflict
             userPt->setLastUpdated(Feature::UserResolved);
+#ifndef FRISIUS_BUILD
             if (Pt->time() > userPt->time() || Pt->versionNumber() != userPt->versionNumber()) {
                 if (conflictLayer)
                     conflictLayer->add(Pt);
                 userPt->setVersionNumber(Pt->versionNumber());
                 NewFeature = true;
-            } else {
+            } else
+#endif
+            {
                 g_backend.deallocFeature(theLayer, Pt);
                 Pt = userPt;
                 NewFeature = false;
@@ -80,7 +85,11 @@ void OSMHandler::parseNode(const QXmlAttributes& atts)
         }
         else if (userPt->lastUpdated() != Feature::UserResolved)
         {
+#ifndef FRISIUS_BUILD
             if (userPt->lastUpdated() == Feature::NotYetDownloaded || (Pt->time() > userPt->time() || Pt->versionNumber() != userPt->versionNumber())) {
+#else
+            if (userPt->lastUpdated() == Feature::NotYetDownloaded) {
+#endif
                 g_backend.deallocFeature(theLayer, Pt);
                 Pt = userPt;
                 Pt->layer()->remove(Pt);
@@ -145,12 +154,15 @@ void OSMHandler::parseWay(const QXmlAttributes& atts)
             userRd->setLastUpdated(Feature::UserResolved);
             NewFeature = false;
             // conflict
+#ifndef FRISIUS_BUILD
             if (R->time() > userRd->time() || R->versionNumber() != userRd->versionNumber()) {
                 if (conflictLayer)
                     conflictLayer->add(R);
                 userRd->setVersionNumber(R->versionNumber());
                 NewFeature = true;
-            } else {
+            } else
+#endif
+            {
                 g_backend.deallocFeature(theLayer, R);
                 R = userRd;
                 NewFeature = false;
@@ -158,7 +170,11 @@ void OSMHandler::parseWay(const QXmlAttributes& atts)
         }
         else if (R->lastUpdated() != Feature::UserResolved)
         {
+#ifndef FRISIUS_BUILD
             if (userRd->lastUpdated() == Feature::NotYetDownloaded || (R->time() > userRd->time() || R->versionNumber() != userRd->versionNumber())) {
+#else
+            if (userRd->lastUpdated() == Feature::NotYetDownloaded) {
+#endif
                 g_backend.deallocFeature(theLayer, R);
                 R = userRd;
                 R->layer()->remove(R);
@@ -229,12 +245,15 @@ void OSMHandler::parseRelation(const QXmlAttributes& atts)
             R->setLastUpdated(Feature::UserResolved);
             NewFeature = false;
             // conflict
+#ifndef FRISIUS_BUILD
             if (R->time() > userR->time() || R->versionNumber() != userR->versionNumber()) {
                 if (conflictLayer)
                     conflictLayer->add(R);
                 userR->setVersionNumber(R->versionNumber());
                 NewFeature = true;
-            } else {
+            } else
+#endif
+            {
                 g_backend.deallocFeature(theLayer, R);
                 R = userR;
                 NewFeature = false;
@@ -242,7 +261,11 @@ void OSMHandler::parseRelation(const QXmlAttributes& atts)
         }
         else if (R->lastUpdated() != Feature::UserResolved)
         {
+#ifndef FRISIUS_BUILD
             if (userR->lastUpdated() == Feature::NotYetDownloaded || (R->time() > userR->time() || R->versionNumber() != userR->versionNumber())) {
+#else
+            if (userR->lastUpdated() == Feature::NotYetDownloaded) {
+#endif
                 g_backend.deallocFeature(theLayer, R);
                 R = userR;
                 R->layer()->remove(R);

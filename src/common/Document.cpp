@@ -686,6 +686,7 @@ bool Document::importNMEA(const QString& filename, TrackLayer* NewLayer)
 
 bool Document::importOSC(const QString& filename, DrawingLayer* NewLayer)
 {
+#ifndef FRISIUS_BUILD
     ImportExportOSC imp(this);
     if (!imp.loadFile(filename))
         return false;
@@ -695,6 +696,7 @@ bool Document::importOSC(const QString& filename, DrawingLayer* NewLayer)
         return true;
     else
         return false;
+#endif
 }
 
 bool Document::importKML(const QString& filename, TrackLayer* NewLayer)
@@ -941,8 +943,7 @@ Document* Document::getDocumentFromXml(QDomDocument* theXmlDoc)
         }
 
         return NewDoc;
-    } else
-    if (c.tagName() == "kml") {
+    } else if (c.tagName() == "kml") {
         Document* NewDoc = new Document(NULL);
         DrawingLayer* l = new DrawingLayer("Dummy");
         NewDoc->add(l);
@@ -955,22 +956,22 @@ Document* Document::getDocumentFromXml(QDomDocument* theXmlDoc)
             imp.import(l);
 
         return NewDoc;
-    } else
-        if (c.tagName() == "osmChange" || c.tagName() == "osmchange") {
-            Document* NewDoc = new Document(NULL);
-            DrawingLayer* l = new DrawingLayer("Dummy");
-            NewDoc->add(l);
+#ifndef FRISIUS_BUILD
+    } else if (c.tagName() == "osmChange" || c.tagName() == "osmchange") {
+        Document* NewDoc = new Document(NULL);
+        DrawingLayer* l = new DrawingLayer("Dummy");
+        NewDoc->add(l);
 
-            ImportExportOSC imp(NewDoc);
-            QByteArray ba = theXmlDoc->toByteArray();
-            QBuffer buf(&ba);
-            buf.open(QIODevice::ReadOnly);
-            if (imp.setDevice(&buf))
-                imp.import(l);
+        ImportExportOSC imp(NewDoc);
+        QByteArray ba = theXmlDoc->toByteArray();
+        QBuffer buf(&ba);
+        buf.open(QIODevice::ReadOnly);
+        if (imp.setDevice(&buf))
+            imp.import(l);
 
-            return NewDoc;
-        } else
-    if (c.tagName() == "gpx") {
+        return NewDoc;
+#endif
+    } else if (c.tagName() == "gpx") {
     }
     return NULL;
 }

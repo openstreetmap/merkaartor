@@ -547,6 +547,7 @@ TagSelectorMatchResult TagSelectorOperator::matches(const IFeature* F, qreal Pix
             }
             break;
 
+#ifndef FRISIUS_BUILD
         case TagSelectKey_User:
             switch (theOp) {
             case EQ:
@@ -642,6 +643,7 @@ TagSelectorMatchResult TagSelectorOperator::matches(const IFeature* F, qreal Pix
             }
 
             break;
+#endif
 
         case TagSelectKey_PixelPerM: {
             if (!PixelPerM)
@@ -823,6 +825,7 @@ TagSelectorMatchResult TagSelectorIsOneOf::matches(const IFeature* F, qreal /*Pi
                     return TagSelect_Match;
                 break;
 
+#ifndef FRISIUS_BUILD
             case TagSelectKey_User:
                 if (QString::compare(F->user(), Value, Qt::CaseInsensitive) == 0)
                     return TagSelect_Match;
@@ -847,6 +850,7 @@ TagSelectorMatchResult TagSelectorIsOneOf::matches(const IFeature* F, qreal /*Pi
                 if (F->versionNumber() == Value.toInt())
                     return TagSelect_Match;
                 break;
+#endif
 
             default:
                 break;

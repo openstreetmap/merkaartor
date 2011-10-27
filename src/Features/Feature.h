@@ -145,15 +145,17 @@ public:
     bool hasOSMId() const;
     ActorType lastUpdated() const;
     void setLastUpdated(ActorType A);
+#ifndef FRISIUS_BUILD
     const QDateTime& time() const;
     void setTime(const QDateTime& aTime);
     void setTime(uint epoch);
     const QString& user() const;
     void setUser(const QString& aUser);
-    virtual void setLayer(Layer* aLayer);
-    virtual Layer* layer() const;
     int versionNumber() const;
     void setVersionNumber(int vn);
+#endif
+    virtual void setLayer(Layer* aLayer);
+    virtual Layer* layer() const;
     virtual QString description() const = 0;
 
     /** Set the tag "key=value" to the current object

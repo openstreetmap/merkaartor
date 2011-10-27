@@ -28,7 +28,9 @@ static QString tagOSM(const Feature& F)
 
 QString versionAttribute(const Feature& F)
 {
+#ifndef FRISIUS_BUILD
     return QString(" version=\"%1\"").arg(F.versionNumber());
+#endif
 }
 
 QString exportOSM(const Node& Pt, const QString& ChangesetId)

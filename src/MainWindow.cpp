@@ -113,7 +113,7 @@ class MainWindowPrivate
             , theListeningServer(0)
             , latSaveDirtyLevel(0)
         {
-            title = QString("Merkaartor v%1%2(%3)").arg(STRINGIFY(VERSION)).arg(STRINGIFY(REVISION)).arg(STRINGIFY(SVNREV));
+            title = QString("%1 v%2%3(%4)").arg(STRINGIFY(PRODUCT)).arg(STRINGIFY(VERSION)).arg(STRINGIFY(REVISION)).arg(STRINGIFY(SVNREV));
         }
 
         QString FILTER_OPEN_SUPPORTED;
@@ -1117,6 +1117,7 @@ bool MainWindow::importFiles(Document * mapDocument, const QStringList & fileNam
             mapDocument->add(newLayer);
             importOK = importOSM(this, baseFileName, mapDocument, newLayer);
         }
+#ifndef FRISIUS_BUILD
         else if (fn.toLower().endsWith(".osc")) {
             if (g_Merk_Frisius) {
                 newLayer = new DrawingLayer( baseFileName );
@@ -1126,6 +1127,7 @@ bool MainWindow::importFiles(Document * mapDocument, const QStringList & fileNam
             }
             importOK = mapDocument->importOSC(fn, (DrawingLayer*)newLayer);
         }
+#endif
         else if (fn.toLower().endsWith(".ngt")) {
             newLayer = new TrackLayer( baseFileName );
             newLayer->setUploadable(false);
@@ -2780,6 +2782,7 @@ void MainWindow::on_exportOSMAction_triggered()
 
 void MainWindow::on_exportOSCAction_triggered()
 {
+#ifndef FRISIUS_BUILD
     QString fileName;
     QFileDialog dlg(this, tr("Export osmChange"), QString("%1/%2.osc").arg(M_PREFS->getworkingdir()).arg(tr("untitled")), tr("osmChange Files (*.osc)") + "\n" + tr("All Files (*)"));
     dlg.setFileMode(QFileDialog::AnyFile);
@@ -2807,6 +2810,7 @@ void MainWindow::on_exportOSCAction_triggered()
         QApplication::restoreOverrideCursor();
 #endif
     }
+#endif
 }
 
 
@@ -3782,6 +3786,7 @@ bool MainWindow::hasUnsavedChanges()
 
 void MainWindow::syncOSM(const QString& aWeb, const QString& aUser, const QString& aPwd)
 {
+#ifndef FRISIUS_BUILD
     if (checkForConflicts(theDocument))
     {
         QMessageBox::warning(this,tr("Unresolved conflicts"), tr("Please resolve existing conflicts first"));
@@ -3817,4 +3822,5 @@ void MainWindow::syncOSM(const QString& aWeb, const QString& aUser, const QStrin
             }
         }
     }
+#endif
 }

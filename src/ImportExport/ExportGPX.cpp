@@ -48,7 +48,7 @@ bool ExportGPX::export_(const QList<Feature *>& featList)
 
     stream.writeStartElement("gpx");
     stream.writeAttribute("version", "1.1");
-    stream.writeAttribute("creator", QString("Merkaartor v%1%2").arg(STRINGIFY(VERSION)).arg(STRINGIFY(REVISION)));
+    stream.writeAttribute("creator", QString("%1 v%2%3").arg(STRINGIFY(PRODUCT)).arg(STRINGIFY(VERSION)).arg(STRINGIFY(REVISION)));
     stream.writeAttribute("xmlns", "http://www.topografix.com/GPX/1/1");
 
     for (int i=0; i<theFeatures.size(); ++i) {

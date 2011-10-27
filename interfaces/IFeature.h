@@ -42,9 +42,11 @@ public:
     virtual char getType() const = 0;
 
     virtual QString xmlId() const = 0;
+#ifndef FRISIUS_BUILD
     virtual const QDateTime& time() const = 0;
     virtual int versionNumber() const = 0;
     virtual const QString& user() const = 0;
+#endif
 
     virtual int sizeParents() const = 0;
     virtual IFeature* getParent(int i) = 0;

@@ -76,7 +76,7 @@ void myMessageOutput(QtMsgType msgType, const char *buf)
 void showVersion()
 {
     QString o;
-    o = QString("Merkaartor %1%2(%3)\n").arg(STRINGIFY(VERSION)).arg(STRINGIFY(REVISION)).arg(STRINGIFY(SVNREV));
+    o = QString("%1 %2%3(%4)\n").arg(STRINGIFY(PRODUCT)).arg(STRINGIFY(VERSION)).arg(STRINGIFY(REVISION)).arg(STRINGIFY(SVNREV));
     fprintf(stdout, "%s", o.toLatin1().data());
     o = QString("using QT version %1 (built with %2)\n").arg(qVersion()).arg(QT_VERSION_STR);
     fprintf(stdout, "%s", o.toLatin1().data());
@@ -93,8 +93,8 @@ void showHelp()
     fprintf(stdout, "  -h, --help\t\tShow help information\n");
     fprintf(stdout, "  -l, --log logfilename\t\tSave debugging information to file \"logfilename\"\n");
     fprintf(stdout, "  -v, --version\t\tShow version information\n");
-    fprintf(stdout, "  -n, --noreuse\t\tDo not reuse an existing Merkaartor instance\n");
-    fprintf(stdout, "  -p, --portable\t\tExecute Merkaartor as a portable application (all files saved in the application directory)\n");
+    fprintf(stdout, "  -n, --noreuse\t\tDo not reuse an existing instance\n");
+    fprintf(stdout, "  -p, --portable\t\tExecute as a portable application (all files saved in the application directory)\n");
     fprintf(stdout, "  --enable_special_layers\t\tEnable old style \"Dirty\" and \"Uploaded\" layers\n");
     fprintf(stdout, "  --importag-tags-as-is\t\tDo not add underscores to imported tags (allow for immediate upload)\n");
     fprintf(stdout, "  --ignore-preferences\t\tIgnore saved preferences\n");
@@ -143,7 +143,7 @@ int main(int argc, char** argv)
 #ifdef FRISIUS_BUILD
     QCoreApplication::setApplicationName("Frisius");
 #else
-        QCoreApplication::setApplicationName("Merkaartor");
+    QCoreApplication::setApplicationName("Merkaartor");
 #endif
     QString message = argsOut.join("$");
     if (reuse)

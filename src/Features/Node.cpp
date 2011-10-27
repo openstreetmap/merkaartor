@@ -360,8 +360,11 @@ bool Node::toGPX(QXmlStreamWriter& stream, QProgressDialog * progress, QString e
         stream.writeAttribute("xml:id", xmlId());
     stream.writeAttribute("lon",COORD2STRING(BBox.topRight().x()));
     stream.writeAttribute("lat", COORD2STRING(BBox.topRight().y()));
-
+#ifndef FRISIUS_BUILD
     stream.writeTextElement("time", time().toString(Qt::ISODate)+"Z");
+#else
+    stream.writeTextElement("time", QDateTime::currentDateTime().toString(Qt::ISODate)+"Z");
+#endif
 
     QString s = tagValue("name","");
     if (!s.isEmpty()) {
@@ -434,6 +437,24 @@ void TrackNode::setElevation(qreal aElevation)
 {
     Elevation = aElevation;
 }
+
+#ifdef FRISIUS_BUILD
+
+const QDateTime& TrackNode::time() const
+{
+    return QDateTime::fromTime_t(Time);
+}
+
+void TrackNode::setTime(const QDateTime& time)
+{
+    Time = time.toTime_t();
+}
+
+void TrackNode::setTime(uint epoch)
+{
+    Time = epoch;
+}
+#endif
 
 TrackNode * TrackNode::fromGPX(Document* d, Layer* L, QXmlStreamReader& stream)
 {

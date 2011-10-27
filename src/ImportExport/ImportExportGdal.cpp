@@ -111,8 +111,10 @@ bool ImportExportGdal::export_(const QList<Feature *>& featList)
     foreach (Feature* F, featList) {
         poFeature = OGRFeature::CreateFeature( poLayer->GetLayerDefn() );
         poFeature->SetField( "osm_id", (qreal)(F->id().numId));
+#ifndef FRISIUS_BUILD
         poFeature->SetField( "osm_version", F->versionNumber());
         poFeature->SetField( "osm_timestamp", (int)F->time().toTime_t());
+#endif
 
         if (CHECK_NODE(F)) {
             Node* N = STATIC_CAST_NODE(F);
@@ -377,10 +379,12 @@ bool ImportExportGdal::import(Layer* aLayer)
                         QString k = QString::fromUtf8(fd->GetNameRef());
                         if (k == "osm_id") {
                             F->setId(IFeature::FId(F->getType(), (qint64)poFeature->GetFieldAsDouble(i)));
+#ifndef FRISIUS_BUILD
                         } else if (k == "osm_version") {
-                           F->setVersionNumber(poFeature->GetFieldAsInteger(i));
+                            F->setVersionNumber(poFeature->GetFieldAsInteger(i));
                         } else if (k == "osm_timestamp") {
                             F->setTime(QDateTime::fromTime_t(poFeature->GetFieldAsInteger(i)));
+#endif
                         } else {
                             if (!g_Merk_NoGuardedTagsImport) {
                                 k.prepend("_");

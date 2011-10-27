@@ -104,69 +104,81 @@ void copyTags(Feature* Dest, Feature* Src)
 
 class FeaturePrivate
 {
-    public:
-        FeaturePrivate()
-            :  LastActor(Feature::User),
-              PossiblePaintersUpToDate(false),
-              PixelPerMForPainter(-1), CurrentPainter(0), HasPainter(false),
-              theFeature(0), LastPartNotification(0),
-              Time(QDateTime::currentDateTime().toTime_t()), Deleted(false), Visible(true), Uploaded(false), ReadOnly(false), FilterRevision(-1)
-            , Virtual(false), Special(false), DirtyLevel(0)
-            , parentLayer(0), User(0xffffffff)
-        {
-            initVersionNumber();
-//            qDebug() << "MapFeaturePrivate size: " << sizeof(FeaturePrivate) << sizeof(IFeature::FId) << sizeof(RenderPriority);
-        }
-        FeaturePrivate(const FeaturePrivate& other)
-            : Tags(other.Tags), LastActor(other.LastActor),
-              PossiblePaintersUpToDate(false),
-              PixelPerMForPainter(-1), CurrentPainter(0), HasPainter(false),
-              theFeature(0), LastPartNotification(0),
-              Time(other.Time), Deleted(false), Visible(true), Uploaded(false), ReadOnly(false), FilterRevision(-1)
-            , Virtual(other.Virtual), Special(other.Special), DirtyLevel(0)
-            , parentLayer(0), User(other.User)
-        {
-            initVersionNumber();
-        }
+public:
+    FeaturePrivate()
+        :  LastActor(Feature::User)
+        , PossiblePaintersUpToDate(false)
+        , PixelPerMForPainter(-1), CurrentPainter(0), HasPainter(false)
+        , theFeature(0), LastPartNotification(0)
+        , Deleted(false), Visible(true), Uploaded(false), ReadOnly(false), FilterRevision(-1)
+        , Virtual(false), Special(false), DirtyLevel(0)
+        , parentLayer(0)
+    #ifndef FRISIUS_BUILD
+        , Time(QDateTime::currentDateTime().toTime_t()), User(0xffffffff)
+    #endif
+    {
+#ifndef FRISIUS_BUILD
+        initVersionNumber();
+        //            qDebug() << "MapFeaturePrivate size: " << sizeof(FeaturePrivate) << sizeof(IFeature::FId) << sizeof(RenderPriority);
+#endif
+    }
+    FeaturePrivate(const FeaturePrivate& other)
+        : Tags(other.Tags), LastActor(other.LastActor)
+        , PossiblePaintersUpToDate(false)
+        , PixelPerMForPainter(-1), CurrentPainter(0), HasPainter(false)
+        , theFeature(0), LastPartNotification(0)
+        , Deleted(false), Visible(true), Uploaded(false), ReadOnly(false), FilterRevision(-1)
+        , Virtual(other.Virtual), Special(other.Special), DirtyLevel(0)
+        , parentLayer(0)
+    #ifndef FRISIUS_BUILD
+        , Time(other.Time), User(other.User)
+    #endif
+    {
+#ifndef FRISIUS_BUILD
+        initVersionNumber();
+#endif
+    }
 
-        void updatePossiblePainters();
-        void blankPainters();
-        void updatePainters(qreal PixelPerM);
-        void initVersionNumber();
+    void updatePossiblePainters();
+    void blankPainters();
+    void updatePainters(qreal PixelPerM);
+#ifndef FRISIUS_BUILD
+    void initVersionNumber()
+    {
+        //    static int VN = -1;
+        //    VersionNumber = VN--;
+        VersionNumber = 0;
+    }
+#endif
 
-        mutable IFeature::FId Id; // 9 (16)
-        QList<QPair<quint32, quint32> > Tags; // 4
-        Feature::ActorType LastActor; // 4
-        QList<const FeaturePainter*> PossiblePainters; // 4
-        bool PossiblePaintersUpToDate; // 1
-        qreal PixelPerMForPainter; // 8
-        const FeaturePainter* CurrentPainter; // 4
-        bool HasPainter; // 1
-        Feature* theFeature; // 4
-        QList<Feature*> Parents; // 4
-        int LastPartNotification; // 4
-        uint Time; // 4
-        quint32 User; // 4
-        int VersionNumber; // 4
-        bool Deleted; // 1
-        bool Visible; // 1
-        bool Uploaded; // 1
-        bool ReadOnly; // 1
-        int FilterRevision; // 4
-        bool Virtual; // 1
-        bool Special; // 1
-        int DirtyLevel; // 4
-        QList<FilterLayer*> FilterLayers; // 4
-        qreal Alpha; // 8
-        Layer* parentLayer; // 4
+    mutable IFeature::FId Id; // 9 (16)
+    QList<QPair<quint32, quint32> > Tags; // 4
+    Feature::ActorType LastActor; // 4
+    QList<const FeaturePainter*> PossiblePainters; // 4
+    bool PossiblePaintersUpToDate; // 1
+    qreal PixelPerMForPainter; // 8
+    const FeaturePainter* CurrentPainter; // 4
+    bool HasPainter; // 1
+    Feature* theFeature; // 4
+    QList<Feature*> Parents; // 4
+    int LastPartNotification; // 4
+#ifndef FRISIUS_BUILD
+    uint Time; // 4
+    quint32 User; // 4
+    int VersionNumber; // 4
+#endif
+    bool Deleted; // 1
+    bool Visible; // 1
+    bool Uploaded; // 1
+    bool ReadOnly; // 1
+    int FilterRevision; // 4
+    bool Virtual; // 1
+    bool Special; // 1
+    int DirtyLevel; // 4
+    QList<FilterLayer*> FilterLayers; // 4
+    qreal Alpha; // 8
+    Layer* parentLayer; // 4
 };
-
-void FeaturePrivate::initVersionNumber()
-{
-//    static int VN = -1;
-//    VersionNumber = VN--;
-    VersionNumber = 0;
-}
 
 Feature::Feature()
 : p(0), MetaUpToDate(false), m_references(0)
@@ -193,16 +205,6 @@ Feature::~Feature(void)
 //    while (sizeParents())
 //        getParent(0)->remove(this);
     delete p;
-}
-
-void Feature::setVersionNumber(int vn)
-{
-    p->VersionNumber = vn;
-}
-
-int Feature::versionNumber() const
-{
-    return p->VersionNumber;
 }
 
 void Feature::setLayer(Layer* aLayer)
@@ -277,6 +279,8 @@ bool Feature::hasOSMId() const
     return (p->Id.numId >= 0);
 }
 
+#ifndef FRISIUS_BUILD
+
 const QDateTime& Feature::time() const
 {
     return QDateTime::fromTime_t(p->Time);
@@ -304,6 +308,19 @@ void Feature::setUser(const QString& user)
 {
     p->User = g_setUser(user);
 }
+
+void Feature::setVersionNumber(int vn)
+{
+    p->VersionNumber = vn;
+}
+
+int Feature::versionNumber() const
+{
+    return p->VersionNumber;
+}
+
+
+#endif
 
 int Feature::incDirtyLevel(int inc)
 {
@@ -847,9 +864,11 @@ void Feature::fromXML(QXmlStreamReader& stream, Feature* F)
     F->setDirtyLevel(Dirty);
     F->setUploaded(Uploaded);
     F->setSpecial(Special);
+#ifndef FRISIUS_BUILD
     F->setTime(time);
     F->setUser(user);
     F->setVersionNumber(Version);
+#endif
 
     // TODO Manage selection at document level
 //    if(Selected)
@@ -859,9 +878,11 @@ void Feature::fromXML(QXmlStreamReader& stream, Feature* F)
 void Feature::toXML(QXmlStreamWriter& stream, bool strict, QString changetsetid)
 {
     stream.writeAttribute("id", xmlId());
+#ifndef FRISIUS_BUILD
     stream.writeAttribute("timestamp", time().toString(Qt::ISODate)+"Z");
     stream.writeAttribute("version", QString::number(versionNumber()));
     stream.writeAttribute("user", user());
+#endif
     if (!changetsetid.isEmpty())
         stream.writeAttribute("changeset", changetsetid);
     if (!strict) {
@@ -1038,12 +1059,13 @@ QString Feature::toMainHtml(QString type, QString systemtype)
     "<br/>"
     "<i>"
     "<small>";
+#ifndef FRISIUS_BUILD
     S += QApplication::translate("MapFeature", "<i>V: </i><b>%1</b> ").arg(QString::number(versionNumber()));
     if (!user().isEmpty())
         S += QApplication::translate("MapFeature", "<i>last: </i><b>%1</b> by <b>%2</b>").arg(time().toString(Qt::SystemLocaleDate)).arg(user());
     else
         S += QApplication::translate("MapFeature", "<i>last: </i><b>%1</b>").arg(time().toString(Qt::SystemLocaleDate));
-
+#endif
     if (layer())
         S += QApplication::translate("MapFeature", "<br/><i>layer: </i><b>%1</b> ").arg(layer()->name());
     S += "</small>"

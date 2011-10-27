@@ -744,13 +744,13 @@ void GeoImageDock::loadImages(QStringList fileNames)
             time = time.addSecs(offset);
 
             Feature *feature = NULL;
-            Node *Pt, *bestPt = NULL;
+            TrackNode *Pt, *bestPt = NULL;
             int a, secondsTo = INT_MAX;
             int u;
 
             for (u=0; u<theLayer->size(); u++) {
                 feature = theLayer->get(u);
-                if ((Pt = dynamic_cast<Node*>(feature))) {
+                if ((Pt = dynamic_cast<TrackNode*>(feature))) {
                     a = time.secsTo(Pt->time().toLocalTime());
                     if (abs(a) < abs(secondsTo)) {
                         secondsTo = a;

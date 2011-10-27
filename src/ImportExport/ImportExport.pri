@@ -12,7 +12,6 @@ HEADERS += \
     ImportNMEA.h \
     ExportGPX.h \
     ImportExportKML.h \
-    ImportExportOSC.h \
     ImportExportCSV.h \
     ImportCSVDialog.h
 
@@ -26,7 +25,6 @@ SOURCES += \
     ImportNMEA.cpp \
     ExportGPX.cpp \
     ImportExportKML.cpp \
-    ImportExportOSC.cpp \
     ImportExportCSV.cpp \
     ImportCSVDialog.cpp
 
@@ -54,4 +52,11 @@ SOURCES += \
     osmformat.pb.cc
 
 LIBS += -lz -lbz2 -lprotobuf
+}
+
+!contains(FRISIUS,1) {
+    HEADERS += \
+        ImportExportOSC.h
+    SOURCES += \
+        ImportExportOSC.cpp
 }

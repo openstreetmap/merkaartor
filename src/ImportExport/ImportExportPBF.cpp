@@ -279,6 +279,7 @@ void ImportExportPBF::parseNode( Layer* aLayer )
         N->setLastUpdated(Feature::OSMServer);
     }
 
+#ifndef FRISIUS_BUILD
     if (inputNode.has_info()) {
         OSMPBF::Info info = inputNode.info();
         if (info.has_version())
@@ -288,6 +289,7 @@ void ImportExportPBF::parseNode( Layer* aLayer )
         if (info.has_user_sid())
             N->setUser(m_primitiveBlock.stringtable().s(info.user_sid()).data());
     }
+#endif
 
     for ( int tag = 0; tag < inputNode.keys_size(); tag++ ) {
         QString key = QString::fromUtf8( m_primitiveBlock.stringtable().s( inputNode.keys( tag ) ).data() );
@@ -319,6 +321,7 @@ void ImportExportPBF::parseWay( Layer* aLayer )
         W->setLastUpdated(Feature::OSMServer);
     }
 
+#ifndef FRISIUS_BUILD
     if (inputWay.has_info()) {
         OSMPBF::Info info = inputWay.info();
         if (info.has_version())
@@ -328,6 +331,7 @@ void ImportExportPBF::parseWay( Layer* aLayer )
         if (info.has_user_sid())
             W->setUser(m_primitiveBlock.stringtable().s(info.user_sid()).data());
     }
+#endif
 
     for ( int tag = 0; tag < inputWay.keys_size(); tag++ ) {
         QString key = QString::fromUtf8( m_primitiveBlock.stringtable().s( inputWay.keys( tag ) ).data() );
@@ -373,6 +377,7 @@ void ImportExportPBF::parseRelation( Layer* aLayer )
         R->setLastUpdated(Feature::OSMServer);
     }
 
+#ifndef FRISIUS_BUILD
     if (inputRelation.has_info()) {
         OSMPBF::Info info = inputRelation.info();
         if (info.has_version())
@@ -382,6 +387,7 @@ void ImportExportPBF::parseRelation( Layer* aLayer )
         if (info.has_user_sid())
             R->setUser(m_primitiveBlock.stringtable().s(info.user_sid()).data());
     }
+#endif
 
     for ( int tag = 0; tag < inputRelation.keys_size(); tag++ ) {
         QString key = QString::fromUtf8( m_primitiveBlock.stringtable().s( inputRelation.keys( tag ) ).data() );
@@ -472,9 +478,11 @@ void ImportExportPBF::parseDense( Layer* aLayer )
         m_lastDenseUId += dense.denseinfo().uid(m_currentEntity);
         m_lastDenseUserSid += dense.denseinfo().user_sid(m_currentEntity);
 
+#ifndef FRISIUS_BUILD
         N->setVersionNumber(dense.denseinfo().version(m_currentEntity));
         N->setTime(m_lastDenseTimestamp);
         N->setUser(m_primitiveBlock.stringtable().s(m_lastDenseUserSid).data());
+#endif
     }
 
     while ( true ){
