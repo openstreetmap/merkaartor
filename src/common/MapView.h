@@ -35,6 +35,7 @@ class MapView :	public QWidget
         Document* document();
         void launch(Interaction* anInteraction);
         Interaction* interaction();
+        virtual Interaction * defaultInteraction();
 
         void buildFeatureSet();
         void drawFeatures(QPainter & painter);
@@ -94,7 +95,7 @@ class MapView :	public QWidget
 
         QString toPropertiesHtml();
 
-    private:
+	private:
         void drawGPS(QPainter & painter);
         void updateStaticBackground();
         void updateStaticBuffer();
@@ -142,7 +143,7 @@ class MapView :	public QWidget
     protected:
         bool event(QEvent *event);
 
-    private slots:
+    protected slots:
         void on_imageRequested(ImageMapLayer*);
         void on_imageReceived(ImageMapLayer*);
         void on_loadingFinished(ImageMapLayer*);

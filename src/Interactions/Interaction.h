@@ -75,6 +75,7 @@ protected:
 
 signals:
     void requestCustomContextMenu(const QPoint & pos);
+    void featureSnap(Feature*);
 
 protected:
     bool Dragging;

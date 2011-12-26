@@ -655,6 +655,8 @@ bool Feature::hasPainter() const
 
 bool Feature::hasPainter(qreal PixelPerM) const
 {
+    if (!layer())
+        return false;
     if (p->PixelPerMForPainter != PixelPerM)
         p->updatePainters(PixelPerM);
     return (p->CurrentPainter != NULL);
@@ -897,7 +899,7 @@ void Feature::toXML(QXmlStreamWriter& stream, bool strict, QString changetsetid)
             stream.writeAttribute("special","true");
         // TODO Manage selection at document level
 #ifndef _MOBILE
-        if (g_Merk_MainWindow->properties()->isSelected(this))
+        if (g_Merk_MainWindow && g_Merk_MainWindow->properties()->isSelected(this))
             stream.writeAttribute("selected","true");
 #endif
     }
