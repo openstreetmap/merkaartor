@@ -1274,7 +1274,7 @@ M_PARAM_IMPLEMENT_BOOL(MapTooltip, visual, false)
 M_PARAM_IMPLEMENT_BOOL(InfoOnHover, visual, true)
 M_PARAM_IMPLEMENT_BOOL(ShowParents, visual, true)
 
-M_PARAM_IMPLEMENT_INT_DELAYED(TagListFirstColumnWidth, visual, 0)
+M_PARAM_IMPLEMENT_INT_DELAYED(TagListFirstColumnWidth, visual, 20)
 M_PARAM_IMPLEMENT_BOOL(TranslateTags, locale, true)
 
 /* Background */

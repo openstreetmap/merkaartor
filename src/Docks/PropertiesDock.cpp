@@ -380,7 +380,7 @@ void PropertiesDock::cleanUpUi()
 void PropertiesDock::switchUi()
 {
     if (CurrentTagView)
-        M_PREFS->setTagListFirstColumnWidth(CurrentTagView->columnWidth(0));
+        M_PREFS->setTagListFirstColumnWidth(qMax(CurrentTagView->columnWidth(0), 20));
 
     if (FullSelection.size() == 0)
         switchToNoUi();
@@ -602,7 +602,7 @@ void PropertiesDock::resetValues()
     /* first column is the width of the default text (Edit this to add...)  */
     /* And the rest of the space is assigned to the second column           */
     if (CurrentTagView) {
-        if (M_PREFS->getTagListFirstColumnWidth() && M_PREFS->getTagListFirstColumnWidth() > 0 && M_PREFS->getTagListFirstColumnWidth() < CurrentTagView->width())
+        if (M_PREFS->getTagListFirstColumnWidth() > 20 && M_PREFS->getTagListFirstColumnWidth() < CurrentTagView->width())
             CurrentTagView->setColumnWidth(
                 0, M_PREFS->getTagListFirstColumnWidth()
             );
