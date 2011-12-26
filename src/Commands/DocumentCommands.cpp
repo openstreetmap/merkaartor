@@ -135,8 +135,6 @@ RemoveFeatureCommand::RemoveFeatureCommand(Document *theDocument, Feature *aFeat
         if (f)
             f->cascadedRemoveIfUsing(theDocument, aFeature, CascadedCleanUp, Alternatives);
     }
-    for (FeatureIterator it(theDocument); !it.isEnd(); ++it)
-        it.get()->cascadedRemoveIfUsing(theDocument, aFeature, CascadedCleanUp, Alternatives);
     if (CascadedCleanUp->empty())
     {
         SAFE_DELETE(CascadedCleanUp);

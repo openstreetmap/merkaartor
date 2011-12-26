@@ -280,23 +280,24 @@ void Relation::cascadedRemoveIfUsing(Document* theDocument, Feature* aFeature, C
     for (int i=0; i<p->Members.size();) {
         if (p->Members[i].second && p->Members[i].second == aFeature)
         {
-            if ( (p->Members.size() == 1) && (Alternatives.size() == 0) )
-                theList->add(new RemoveFeatureCommand(theDocument,this));
-            else
-            {
-                QString Role = p->Members[i].first;
-                theList->add(new RelationRemoveFeatureCommand(this, i, theDocument->getDirtyOrOriginLayer(layer())));
-                for (int j=0; j<Alternatives.size(); ++j)
-                    if (p->Members[i+j].second != Alternatives[j]) {
-                        if ((i+j) == 0)
-                            theList->add(new RelationAddFeatureCommand(this, Role, Alternatives[j], 0, theDocument->getDirtyOrOriginLayer(Alternatives[j]->layer())));
-                        else if (p->Members[i+j-1].second != Alternatives[j])
-                            theList->add(new RelationAddFeatureCommand(this, Role, Alternatives[j], i+j, theDocument->getDirtyOrOriginLayer(Alternatives[j]->layer())));
-                    }
-                continue;
-            }
+            QString Role = p->Members[i].first;
+            theList->add(new RelationRemoveFeatureCommand(this, i, theDocument->getDirtyOrOriginLayer(layer())));
+            for (int j=0; j<Alternatives.size(); ++j)
+                if (i+j >= p->Members.size() || p->Members[i+j].second != Alternatives[j]) {
+                    if ((i+j) == 0)
+                        theList->add(new RelationAddFeatureCommand(this, Role, Alternatives[j], 0, theDocument->getDirtyOrOriginLayer(Alternatives[j]->layer())));
+                    else if (p->Members[i+j-1].second != Alternatives[j])
+                        theList->add(new RelationAddFeatureCommand(this, Role, Alternatives[j], i+j, theDocument->getDirtyOrOriginLayer(Alternatives[j]->layer())));
+                }
+            continue;
         }
         ++i;
+    }
+    if (p->Members.size() == 0) {
+        if (!isDeleted()) {
+            QList<Feature*> alt;
+            theList->add(new RemoveFeatureCommand(theDocument,this,alt));
+        }
     }
 }
 

@@ -125,6 +125,7 @@ void CreateNodeInteraction::createNode(Coord P, Feature* aFeat)
             if (sl.size())
                 N->setTag("source", sl.join(";"));
         }
+        N->updateMeta();
     }
     g_Merk_MainWindow->document()->addHistory(theList);
     g_Merk_MainWindow->properties()->setSelection(N);

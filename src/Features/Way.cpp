@@ -591,8 +591,10 @@ void Way::cascadedRemoveIfUsing(Document* theDocument, Feature* aFeature, Comman
         ++i;
     }
     if (p->Nodes.size() == 1) {
-        if (!isDeleted())
-            theList->add(new RemoveFeatureCommand(theDocument,this));
+        if (!isDeleted()) {
+            QList<Feature*> alt;
+            theList->add(new RemoveFeatureCommand(theDocument,this,alt));
+        }
     }
 }
 
