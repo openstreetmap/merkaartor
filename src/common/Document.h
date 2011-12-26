@@ -120,9 +120,9 @@ public:
 
     QString toPropertiesHtml();
 
-    void setPainters(QList<Painter> aPainters);
-    int getPaintersSize();
-    const Painter* getPainter(int i);
+    virtual void setPainters(QList<Painter> aPainters);
+    virtual int getPaintersSize();
+    virtual const Painter* getPainter(int i);
 
     QStringList getCurrentSourceTags();
 

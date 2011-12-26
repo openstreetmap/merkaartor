@@ -86,7 +86,7 @@ public:
     virtual Feature* get(const IFeature::FId& id);
     void notifyIdUpdate(const IFeature::FId& id, Feature* aFeature);
 
-    void setDocument(Document* aDocument);
+    virtual void setDocument(Document* aDocument);
     Document* getDocument();
 
     LayerWidget* getWidget(void);
