@@ -24,7 +24,8 @@ class MoveNodeInteraction : public FeatureSnapInteraction
 
         virtual bool isIdle();
 
-    private:
+private:
+        void recurseAddNodes(Feature* F);
         Coord calculateNewPosition(QMouseEvent* event, Feature* aLast, CommandList* theList);
         QList<Node*> Moving;
         QList<Coord> OriginalPosition;

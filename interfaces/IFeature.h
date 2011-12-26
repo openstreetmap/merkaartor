@@ -43,7 +43,7 @@ public:
 
     virtual QString xmlId() const = 0;
 #ifndef FRISIUS_BUILD
-    virtual const QDateTime& time() const = 0;
+    virtual const QDateTime time() const = 0;
     virtual int versionNumber() const = 0;
     virtual const QString& user() const = 0;
 #endif

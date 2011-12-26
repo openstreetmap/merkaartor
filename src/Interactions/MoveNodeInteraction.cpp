@@ -71,6 +71,32 @@ QCursor MoveNodeInteraction::cursor() const
 }
 #endif
 
+void MoveNodeInteraction::recurseAddNodes(Feature* F)
+{
+    if (Node* Pt = CAST_NODE(F))
+    {
+        Moving.push_back(Pt);
+    }
+    else if (Way* R = CAST_WAY(F)) {
+        if (!g_Merk_Segment_Mode) {
+            for (int j=0; j<R->size(); ++j)
+                if (std::find(Moving.begin(),Moving.end(),R->get(j)) == Moving.end()) {
+                    Moving.push_back(R->getNode(j));
+                }
+        } else {
+            for (int j=R->bestSegment(); j<=R->bestSegment()+1; ++j)
+                if (std::find(Moving.begin(),Moving.end(),R->get(j)) == Moving.end()) {
+                    Moving.push_back(R->getNode(j));
+                }
+        }
+        addToNoSnap(R);
+    }
+    else if (Relation* L = CAST_RELATION(F)) {
+        for (int j=0; j<L->size(); ++j)
+            recurseAddNodes(L->get(j));
+        addToNoSnap(L);
+    }
+}
 
 void MoveNodeInteraction::snapMousePressEvent(QMouseEvent * event, Feature* aLast)
 {
@@ -93,43 +119,18 @@ void MoveNodeInteraction::snapMousePressEvent(QMouseEvent * event, Feature* aLas
     Moving.clear();
     OriginalPosition.clear();
     StartDragPosition = XY_TO_COORD(event->pos());
-    for (int i=0; i<sel.size(); i++) {
-        if (Node* Pt = CAST_NODE(sel[i]))
-        {
+    if (sel.size() == 1) {
+        if (Node* Pt = CAST_NODE(sel[0])) {
+            StartDragPosition = Pt->position();
             Moving.push_back(Pt);
-            if (sel.size() == 1)
-                StartDragPosition = Pt->position();
-        }
-        else if (Way* R = CAST_WAY(sel[i])) {
-            if (!g_Merk_Segment_Mode) {
-                for (int j=0; j<R->size(); ++j)
-                    if (std::find(Moving.begin(),Moving.end(),R->get(j)) == Moving.end()) {
-                        Moving.push_back(R->getNode(j));
-                    }
-            } else {
-                for (int j=R->bestSegment(); j<=R->bestSegment()+1; ++j)
-                    if (std::find(Moving.begin(),Moving.end(),R->get(j)) == Moving.end()) {
-                        Moving.push_back(R->getNode(j));
-                    }
-            }
-            addToNoSnap(R);
-        }
-        else if (Relation* L = CAST_RELATION(sel[i])) {
-            for (int j=0; j<L->size(); ++j) {
-                if (Node* N = CAST_NODE(L->get(j))) {
-                    if (std::find(Moving.begin(),Moving.end(),N) == Moving.end()) {
-                        Moving.push_back(N);
-                    }
-                } else {
-                    for (int k=0; k<L->get(j)->size(); k++)
-                        if (std::find(Moving.begin(),Moving.end(),L->get(j)->get(k)) == Moving.end()) {
-                        Moving.push_back(CAST_NODE(L->get(j)->get(k)));
-                    }
-                }
-            }
-            addToNoSnap(L);
+        } else
+            recurseAddNodes(sel[0]);
+    } else {
+        for (int i=0; i<sel.size(); i++) {
+            recurseAddNodes(sel[i]);
         }
     }
+
     for (int i=0; i<Moving.size(); ++i)
     {
         OriginalPosition.push_back(Moving[i]->position());

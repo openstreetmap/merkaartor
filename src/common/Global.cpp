@@ -41,6 +41,7 @@ QStringList tagValues;
 QHash<QString, quint32> tagValuesHash;
 QHash< quint32, QList<quint32> > tagList;
 QStringList userList;
+QString noUser;
 
 QPair<quint32, quint32> g_addToTagList(QString k, QString v)
 {
@@ -126,6 +127,9 @@ quint32 g_getTagValueIndex(const QString& s)
 
 quint32 g_setUser(const QString& u)
 {
+    if (u.isEmpty())
+        return 0xffffffff;
+
     quint32 ret = userList.indexOf(u);
     if (ret == -1) {
         userList.append(u);
@@ -136,5 +140,8 @@ quint32 g_setUser(const QString& u)
 
 const QString& g_getUser(quint32 idx)
 {
-    return userList[idx];
+    if (idx != 0xffffffff)
+        return userList[idx];
+    else
+        return noUser;
 }

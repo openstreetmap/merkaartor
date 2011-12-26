@@ -146,7 +146,7 @@ public:
     ActorType lastUpdated() const;
     void setLastUpdated(ActorType A);
 #ifndef FRISIUS_BUILD
-    const QDateTime& time() const;
+    const QDateTime time() const;
     void setTime(const QDateTime& aTime);
     void setTime(uint epoch);
     const QString& user() const;

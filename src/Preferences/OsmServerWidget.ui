@@ -104,7 +104,6 @@
   <zorder>tbOsmServerAdd</zorder>
   <zorder>tbOsmServerDel</zorder>
   <zorder>label_14</zorder>
-  <zorder></zorder>
  </widget>
  <resources>
   <include location="../../Icons/AllIcons.qrc"/>

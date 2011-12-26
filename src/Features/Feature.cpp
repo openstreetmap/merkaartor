@@ -281,7 +281,7 @@ bool Feature::hasOSMId() const
 
 #ifndef FRISIUS_BUILD
 
-const QDateTime& Feature::time() const
+const QDateTime Feature::time() const
 {
     return QDateTime::fromTime_t(p->Time);
 }
@@ -298,10 +298,7 @@ void Feature::setTime(uint epoch)
 
 const QString& Feature::user() const
 {
-    if (p->User != 0xffffffff)
-        return g_getUser(p->User);
-    else
-        return "";
+    return g_getUser(p->User);
 }
 
 void Feature::setUser(const QString& user)
