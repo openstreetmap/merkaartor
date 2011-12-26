@@ -21,7 +21,7 @@
 #include <QNetworkProxy>
 
 #ifdef USE_LIBPROXY
-#include <libproxy/proxy.h>
+#include <proxy.h>
 #endif
 
 #include "Coord.h"
