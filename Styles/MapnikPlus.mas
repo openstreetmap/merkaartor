@@ -661,7 +661,7 @@
  fillColor="#cc9999cd"
  drawTrafficDirectionMarks="no" labelColor="#333333ff" labelScale="1.5" labelOffset="6"
  labelFont="DejaVu Sans Condensed,12,-1,5,50,0,0,0,0,0" labelTag="name" labelHalo="yes" labelArea="yes">
-  <selector expr=" not [building] is _NULL_"/>
+  <selector expr="building=*"/>
 </painter>
 <painter
  fillColor="#33cc99cd"

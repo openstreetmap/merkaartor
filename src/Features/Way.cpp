@@ -35,7 +35,7 @@ class WayPrivate
         WayPrivate(Way* aWay)
         : theWay(aWay), BBoxUpToDate(false)
             , Area(0), Distance(0)
-            , wasPathComplete(false), VirtualsUptodate(false)
+            , PathUpToDate(false), VirtualsUptodate(false)
             , ProjectionRevision(0)
             , BestSegment(-1)
             , Width(0)
@@ -51,7 +51,7 @@ class WayPrivate
         qreal Area;
         qreal Distance;
         bool NotEverythingDownloaded;
-        bool wasPathComplete;
+        bool PathUpToDate;
         bool VirtualsUptodate;
         QPainterPath theFullPath;
         QPainterPath thePath;
@@ -207,7 +207,7 @@ void Way::partChanged(Feature* /*F*/, int ChangeId)
         return;
 
     p->BBoxUpToDate = false;
-    p->wasPathComplete = false;
+    p->PathUpToDate = false;
     MetaUpToDate = false;
     p->VirtualsUptodate = false;
     g_backend.sync(this);
@@ -236,7 +236,7 @@ void Way::add(Node* Pt, int Idx)
     Pt->setParentFeature(this);
     g_backend.sync(Pt);
     p->BBoxUpToDate = false;
-    p->wasPathComplete = false;
+    p->PathUpToDate = false;
     MetaUpToDate = false;
     p->VirtualsUptodate = false;
     g_backend.sync(this);
@@ -269,7 +269,7 @@ void Way::remove(int idx)
         Pt->unsetParentFeature(this);
     g_backend.sync(Pt);
     p->BBoxUpToDate = false;
-    p->wasPathComplete = false;
+    p->PathUpToDate = false;
     MetaUpToDate = false;
     p->VirtualsUptodate = false;
     g_backend.sync(this);
@@ -602,6 +602,20 @@ const QPainterPath& Way::getPath() const
     return p->thePath;
 }
 
+void Way::addPathHole(const QPainterPath& pth)
+{
+    if (!p->PathUpToDate)
+        return;
+
+    p->thePath = p->thePath.subtracted(pth);
+}
+
+void Way::rebuildPath(const Projection &theProjection, const QTransform& theTransform, const QRectF& cr)
+{
+    p->PathUpToDate = false;
+    buildPath(theProjection, theTransform, cr);
+}
+
 void Way::buildPath(const Projection &theProjection, const QTransform& theTransform, const QRectF& cr)
 {
 #if QT_VERSION < 0x040700 && !defined(_MOBILE)
@@ -611,27 +625,26 @@ void Way::buildPath(const Projection &theProjection, const QTransform& theTransf
     Q_UNUSED(theTransform);
     Q_UNUSED(cr);
 
-    if (p->Nodes.size() < 2) {
-        p->theFullPath = QPainterPath();
-        p->thePath = QPainterPath();
-        p->wasPathComplete = true;
-        return;
-    }
 #if QT_VERSION >= 0x040700 || defined(_MOBILE)
-    if (p->wasPathComplete && p->ProjectionRevision == theProjection.projectionRevision())
+    if (p->PathUpToDate && p->ProjectionRevision == theProjection.projectionRevision())
         return;
     else {
 #else
     if (!p->wasPathComplete || p->ProjectionRevision != theProjection.projectionRevision()) {
 #endif
         p->theFullPath = QPainterPath();
+        if (p->Nodes.size() < 2) {
+            p->thePath = QPainterPath();
+            p->PathUpToDate = true;
+            return;
+        }
 
         p->theFullPath.moveTo(theProjection.project(p->Nodes.at(0)));
         for (unsigned int i=1; i<p->Nodes.size(); ++i) {
             p->theFullPath.lineTo(theProjection.project(p->Nodes.at(i)));
         }
         p->ProjectionRevision = theProjection.projectionRevision();
-        p->wasPathComplete = true;
+        p->PathUpToDate = true;
     }
 #if QT_VERSION >= 0x040700 || defined(_MOBILE)
     p->thePath = p->theFullPath;
@@ -750,30 +763,6 @@ bool Way::deleteChildren(Document* theDocument, CommandList* theList)
             theList->add(new RemoveFeatureCommand(theDocument, ToDeleteKeys[i], Alternatives));
     }
     return true;
-}
-
-void Way::setTag(const QString& key, const QString& value)
-{
-    Feature::setTag(key, value);
-    MetaUpToDate = false;
-}
-
-void Way::setTag(int index, const QString& key, const QString& value)
-{
-    Feature::setTag(index, key, value);
-    MetaUpToDate = false;
-}
-
-void Way::clearTags()
-{
-    Feature::clearTags();
-    MetaUpToDate = false;
-}
-
-void Way::clearTag(const QString& k)
-{
-    Feature::clearTag(k);
-    MetaUpToDate = false;
 }
 
 bool Way::toGPX(QXmlStreamWriter& stream, QProgressDialog * progress, bool forExport)

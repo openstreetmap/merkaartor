@@ -435,11 +435,6 @@
   <selector expr="[amenity] is public_building"/>
 </painter>
 <painter
- fillColor="#cc9999cd"
- drawTrafficDirectionMarks="yes">
-  <selector expr="[building] is company"/>
-</painter>
-<painter
  backgroundColor="#aa5500fc" backgroundScale="0" backgroundOffset="3"
  fillColor="#ffc8aecd"
  drawTrafficDirectionMarks="yes">
@@ -668,7 +663,7 @@
 <painter
  fillColor="#cc9999cd"
  drawTrafficDirectionMarks="yes">
-  <selector expr="[building] isoneof (yes , true)"/>
+  <selector expr="building=*"/>
 </painter>
 <painter
  zoomUnder="0.00666667" zoomUpper="1e+07"

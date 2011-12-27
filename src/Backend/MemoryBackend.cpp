@@ -379,7 +379,7 @@ void MemoryBackend::sync(Feature *f)
         indexRemove(f->layer(), p->AllocFeatures[f], f);
     if (CHECK_NODE(f)) {
         Node* N = STATIC_CAST_NODE(f);
-        if (!N->isPOI())
+        if (!N->tagSize())
             for (int i=0; i<N->sizeParents(); ++i)
                 if (CHECK_WAY(N->getParent(i)))
                     return;

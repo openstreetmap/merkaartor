@@ -69,32 +69,6 @@ public:
 
     bool isNodeAtEnd(Node* node);
 
-    /** Set the tag "key=value" to the current object
-         * If a tag with the same key exist, it is replaced
-         * Otherwise the tag is added at the end
-         * @param key the key of the tag
-         * @param value the value corresponding to the key
-         */
-    virtual void setTag(const QString& key, const QString& value);
-
-    /** Set the tag "key=value" at the position index
-         * If a tag with the same key exist, it is replaced
-         * Otherwise the tag is added at the index position
-         * @param index the place for the given tag. Start at 0.
-         * @param key the key of the tag
-         * @param value the value corresponding to the key
-        */
-    virtual void setTag(int index, const QString& key, const QString& value);
-
-    /** remove all the tags for the curent feature
-         */
-    virtual void clearTags();
-
-    /** remove the tag with the key "k".
-         * if no corresponding tag, don't do anything
-         */
-    virtual void clearTag(const QString& k);
-
     virtual void partChanged(Feature* F, int ChangeId);
     virtual void setLayer(Layer* aLayer);
 
@@ -106,6 +80,8 @@ public:
     virtual bool deleteChildren(Document* theDocument, CommandList* theList);
 
     const QPainterPath& getPath() const;
+    void addPathHole(const QPainterPath &pth);
+    void rebuildPath(const Projection &theProjection, const QTransform &theTransform, const QRectF &cr);
     void buildPath(Projection const &theProjection, const QTransform& thensform, const QRectF& clipRect);
 
     virtual bool toGPX(QXmlStreamWriter& stream, QProgressDialog * progress, bool forExport=false);

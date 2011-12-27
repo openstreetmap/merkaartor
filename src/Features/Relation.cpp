@@ -38,7 +38,7 @@ class RelationPrivate
     public:
         RelationPrivate(Relation* R)
             : theRelation(R), theModel(0), ModelReferences(0)
-            , wasPathComplete(false)
+            , PathUpToDate(false)
             , ProjectionRevision(0)
             , BBoxUpToDate(false)
             , Width(0)
@@ -56,7 +56,7 @@ class RelationPrivate
         int ModelReferences;
         QPainterPath thePath;
         QPainterPath theBoundingPath;
-        bool wasPathComplete;
+        bool PathUpToDate;
         int ProjectionRevision;
 
         bool BBoxUpToDate;
@@ -139,7 +139,7 @@ void Relation::partChanged(Feature*, int ChangeId)
     if (isDeleted())
         return;
 
-    p->wasPathComplete = false;
+    p->PathUpToDate = false;
     p->BBoxUpToDate = false;
     MetaUpToDate = false;
     g_backend.sync(this);
@@ -317,7 +317,7 @@ void Relation::add(const QString& Role, Feature* F)
 {
     p->Members.push_back(qMakePair(Role,F));
     F->setParentFeature(this);
-    p->wasPathComplete = false;
+    p->PathUpToDate = false;
     p->BBoxUpToDate = false;
     MetaUpToDate = false;
     g_backend.sync(this);
@@ -330,7 +330,7 @@ void Relation::add(const QString& Role, Feature* F, int Idx)
     p->Members.push_back(qMakePair(Role,F));
     std::rotate(p->Members.begin()+Idx,p->Members.end()-1,p->Members.end());
     F->setParentFeature(this);
-    p->wasPathComplete = false;
+    p->PathUpToDate = false;
     p->BBoxUpToDate = false;
     MetaUpToDate = false;
     g_backend.sync(this);
@@ -345,7 +345,7 @@ void Relation::remove(int Idx)
     p->Members.erase(p->Members.begin()+Idx);
     if (F && find(F) == p->Members.size())
         F->unsetParentFeature(this);
-    p->wasPathComplete = false;
+    p->PathUpToDate = false;
     p->BBoxUpToDate = false;
     MetaUpToDate = false;
     g_backend.sync(this);
@@ -434,53 +434,83 @@ void Relation::buildPath(Projection const &theProjection, const QTransform& theT
     p->theBoundingPath.addPolygon(theVector);
     p->theBoundingPath = p->theBoundingPath.intersected(clipPath);
 
-    if (!p->wasPathComplete || p->ProjectionRevision != theProjection.projectionRevision()) {
+    if (!p->PathUpToDate || p->ProjectionRevision != theProjection.projectionRevision()) {
         p->thePath = QPainterPath();
 
-        QList<QPainterPath> memberPaths;
-        for (int i=0; i<size(); ++i) {
-            if (CHECK_WAY(p->Members[i].second)) {
-                Way* M = STATIC_CAST_WAY(p->Members[i].second);
-                M->buildPath(theProjection, theTransform, cr);
-                if (M->getPath().elementCount() > 1) {
-                    memberPaths << M->getPath();
+
+        //handle multipolygons
+        if (tagValue("type", "") == "multipolygon") {
+            Way* outerWay = NULL;
+            QList<Way*> innerWays;
+
+            for (int i=0; i<size(); ++i) {
+                if (CHECK_WAY(p->Members[i].second)) {
+                    Way* M = STATIC_CAST_WAY(p->Members[i].second);
+                    M->buildPath(theProjection, theTransform, cr);
+                    if (M->getPath().elementCount() > 0) {
+                        if (p->Members[i].first == "outer")
+                            outerWay = M;
+                        else if (p->Members[i].first == "inner")
+                            innerWays << M;
+                    }
+                }
+            }
+            if (tagSize() > 1 || !outerWay) {
+                p->thePath = outerWay->getPath();
+                for (int i=0; i<innerWays.size(); ++i) {
+                    p->thePath = p->thePath.subtracted(innerWays[i]->getPath());
+                }
+            } else {
+                outerWay->rebuildPath(theProjection, theTransform, cr);
+                for (int i=0; i<innerWays.size(); ++i) {
+                    outerWay->addPathHole(innerWays[i]->getPath());
+                }
+            }
+        } else {
+            // Handle polygons made of scattered ways
+            QList<QPainterPath> memberPaths;
+            for (int i=0; i<size(); ++i) {
+                if (CHECK_WAY(p->Members[i].second)) {
+                    Way* M = STATIC_CAST_WAY(p->Members[i].second);
+                    M->buildPath(theProjection, theTransform, cr);
+                    if (M->getPath().elementCount() > 1) {
+                        memberPaths << M->getPath();
+                    }
+                }
+            }
+
+            while (memberPaths.size()) {
+                // handle the start...
+                QPointF curPoint;
+                p->thePath.moveTo(memberPaths[0].elementAt(0));
+                for (int j=1; j<memberPaths[0].elementCount(); ++j) {
+                    curPoint = memberPaths[0].elementAt(j);
+                    p->thePath.lineTo(curPoint);
+                }
+                // ... and remove it
+                memberPaths.removeAt(0);
+                // Check if any remaining path starts or ends at the current point
+                for (int k=0; k<memberPaths.size(); ++k) {
+                    if (memberPaths[k].elementAt(0) == curPoint) { // Check start
+                        for (int l=1; l<memberPaths[k].elementCount(); ++l) {
+                            curPoint = memberPaths[k].elementAt(l);
+                            p->thePath.lineTo(curPoint);
+                        }
+                        memberPaths.removeAt(k);
+                        k=0;
+                    } else if (memberPaths[k].elementAt(memberPaths[k].elementCount()-1) == curPoint) { // Check end
+                        for (int l=memberPaths[k].elementCount()-2; l>=0; --l) {
+                            curPoint = memberPaths[k].elementAt(l);
+                            p->thePath.lineTo(curPoint);
+                        }
+                        memberPaths.removeAt(k);
+                        k=0;
+                    }
                 }
             }
         }
-
-        // Handle polygons made of scattered ways
-        while (memberPaths.size()) {
-            // handle the start...
-            QPointF curPoint;
-            p->thePath.moveTo(memberPaths[0].elementAt(0));
-            for (int j=1; j<memberPaths[0].elementCount(); ++j) {
-                curPoint = memberPaths[0].elementAt(j);
-                p->thePath.lineTo(curPoint);
-            }
-            // ... and remove it
-            memberPaths.removeAt(0);
-            // Check if any remaining path starts or ends at the current point
-            for (int k=0; k<memberPaths.size(); ++k) {
-                if (memberPaths[k].elementAt(0) == curPoint) { // Check start
-                    for (int l=1; l<memberPaths[k].elementCount(); ++l) {
-                        curPoint = memberPaths[k].elementAt(l);
-                        p->thePath.lineTo(curPoint);
-                    }
-                    memberPaths.removeAt(k);
-                    k=0;
-                } else if (memberPaths[k].elementAt(memberPaths[k].elementCount()-1) == curPoint) { // Check end
-                    for (int l=memberPaths[k].elementCount()-2; l>=0; --l) {
-                        curPoint = memberPaths[k].elementAt(l);
-                        p->thePath.lineTo(curPoint);
-                    }
-                    memberPaths.removeAt(k);
-                    k=0;
-                }
-            }
-        }
-
         p->ProjectionRevision = theProjection.projectionRevision();
-        p->wasPathComplete = true;
+        p->PathUpToDate = true;
     }
 }
 
@@ -501,6 +531,7 @@ void Relation::updateMeta()
     Feature::updateMeta();
     MetaUpToDate = true;
 
+    p->PathUpToDate = false;
     p->CalculateWidth();
 
     p->theRenderPriority = RenderPriority(RenderPriority::IsSingular, 0., 0);
@@ -573,13 +604,13 @@ Relation * Relation::fromXML(Document * d, Layer * L, QXmlStreamReader& stream)
         while (R->p->Members.size())
             R->remove(0);
     }
-    QString role = stream.attributes().value("role").toString();
 
     stream.readNext();
     while(!stream.atEnd() && !stream.isEndElement()) {
         if (stream.name() == "member") {
             QString Type = stream.attributes().value("type").toString();
             QString sId = stream.attributes().value("ref").toString();
+            QString role = stream.attributes().value("role").toString();
             Feature* F = 0;
             if (Type == "node") {
                 IFeature::FId nId(IFeature::Point, sId.toLongLong());
