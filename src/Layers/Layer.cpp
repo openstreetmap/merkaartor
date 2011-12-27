@@ -153,6 +153,7 @@ void Layer::add(Feature* aFeature)
 {
     aFeature->setLayer(this);
     p->Features.push_back(aFeature);
+    g_backend.sync(aFeature);
     aFeature->invalidateMeta();
     notifyIdUpdate(aFeature->id(),aFeature);
 }
@@ -163,7 +164,6 @@ void Layer::remove(Feature* aFeature)
     {
         g_backend.sync(aFeature);
         aFeature->setLayer(0);
-        aFeature->invalidateMeta();
         notifyIdUpdate(aFeature->id(),0);
     }
 }

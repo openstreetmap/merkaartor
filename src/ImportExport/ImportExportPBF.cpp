@@ -591,10 +591,10 @@ bool ImportExportPBF::import(Layer* aLayer)
         }
         progress.setValue(m_file.pos());
         qApp->processEvents();
-#ifndef NDEBUG
-        if (aLayer->size() > 1000000)
-            break;
-#endif
+//#ifndef NDEBUG
+//        if (aLayer->size() > 1000000)
+//            break;
+//#endif
     }
     progress.reset();
 

@@ -333,7 +333,6 @@ void TrackSegment::updateMeta()
 
 
     MetaUpToDate = true;
-    g_backend.sync(this);
 }
 
 qreal TrackSegment::distance()

@@ -58,8 +58,8 @@ public:
 
     Node* getNode(int idx);
     const Node* getNode(int idx) const;
-    const std::vector<NodePtr>& getNodes() const;
-    const std::vector<NodePtr>& getVirtuals() const;
+    const QList<NodePtr>& getNodes() const;
+    const QList<NodePtr>& getVirtuals() const;
 
     int segmentCount();
     QLineF getSegment(int i);

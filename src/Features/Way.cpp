@@ -43,8 +43,8 @@ class WayPrivate
         }
         Way* theWay;
 
-        std::vector<Node*> Nodes;
-        std::vector<Node*> virtualNodes;
+        QList<Node*> Nodes;
+        QList<Node*> virtualNodes;
 
         bool BBoxUpToDate;
 
@@ -164,7 +164,6 @@ Way::~Way(void)
 //        if (p->Nodes[i])
 //            p->Nodes[i]->unsetParentFeature(this);
 
-    p->removeVirtuals();
     delete p;
 }
 
@@ -235,7 +234,7 @@ void Way::add(Node* Pt, int Idx)
 //	p->Nodes.push_back(Pt);
 //	std::rotate(p->Nodes.begin()+Idx,p->Nodes.end()-1,p->Nodes.end());
     Pt->setParentFeature(this);
-    Pt->invalidateMeta();
+    g_backend.sync(Pt);
     p->BBoxUpToDate = false;
     p->wasPathComplete = false;
     MetaUpToDate = false;
@@ -268,7 +267,7 @@ void Way::remove(int idx)
     p->Nodes.erase(p->Nodes.begin()+idx);
     if (Pt && (find(Pt) >= size()))
         Pt->unsetParentFeature(this);
-    Pt->invalidateMeta();
+    g_backend.sync(Pt);
     p->BBoxUpToDate = false;
     p->wasPathComplete = false;
     MetaUpToDate = false;
@@ -300,12 +299,12 @@ const Node* Way::getNode(int idx) const
     return p->Nodes.at(idx);
 }
 
-const std::vector<NodePtr>& Way::getNodes() const
+const QList<NodePtr>& Way::getNodes() const
 {
     return p->Nodes;
 }
 
-const std::vector<NodePtr>& Way::getVirtuals() const
+const QList<NodePtr>& Way::getVirtuals() const
 {
     return p->virtualNodes;
 }
@@ -402,7 +401,6 @@ void Way::updateMeta()
     }
 
     p->doUpdateVirtuals();
-    g_backend.sync(this);
 }
 
 qreal Way::distance()
@@ -593,6 +591,7 @@ void Way::cascadedRemoveIfUsing(Document* theDocument, Feature* aFeature, Comman
     if (p->Nodes.size() == 1) {
         if (!isDeleted()) {
             QList<Feature*> alt;
+            theList->add(new WayRemoveNodeCommand(this, p->Nodes[0], theDocument->getDirtyOrOriginLayer(layer())));
             theList->add(new RemoveFeatureCommand(theDocument,this,alt));
         }
     }

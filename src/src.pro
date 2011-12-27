@@ -45,13 +45,13 @@ contains(FRISIUS,1) {
     DEFINES += FRISIUS_BUILD
     DEFINES += PRODUCT=Frisius
     win32 {
-       RC_FILE = $$PWD/../Icons/merkaartor-win32.rc
+       RC_FILE = $$PWD/../Icons/frisius-win32.rc
     }
 } else {
     TARGET = merkaartor
     DEFINES += PRODUCT=Merkaartor
     win32 {
-       RC_FILE = $$PWD/../Icons/frisius-win32.rc
+       RC_FILE = $$PWD/../Icons/merkaartor-win32.rc
     }
 }
 
