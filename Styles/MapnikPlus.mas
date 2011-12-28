@@ -355,6 +355,13 @@
   <selector expr="[natural] is land"/>
 </painter>
 <painter
+ zoomUnder="0" zoomUpper="1e+07"
+ backgroundColor="#b5d0d0ff" backgroundScale="4" backgroundOffset="4"
+ exterior="yes" foregroundColor="#55aaffff" foregroundScale="0" foregroundOffset="2"
+>
+  <selector expr="[natural] is coastline"/>
+</painter>
+<painter
  zoomUnder="0.03" zoomUpper="1e+07"
  icon=":/Art/Mapnik/peak.png" iconScale="0" iconOffset="0"
  drawTrafficDirectionMarks="no" labelColor="#333333ff" labelScale="4" labelOffset="9"

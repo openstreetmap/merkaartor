@@ -283,6 +283,13 @@
   <selector expr="[natural] is water"/>
 </painter>
 <painter
+ zoomUnder="0" zoomUpper="1e+07"
+ backgroundColor="#b5d0d0ff" backgroundScale="4" backgroundOffset="4"
+ exterior="yes" foregroundColor="#55aaffff" foregroundScale="0" foregroundOffset="2"
+>
+  <selector expr="[natural] is coastline"/>
+</painter>
+<painter
  zoomUnder="0.2" zoomUpper="1e+07"
  fillColor="#f7efb7cd"
  icon=":/Art/Mapnik/parking.png" iconScale="0" iconOffset="0"
