@@ -102,7 +102,7 @@ private:
     void loadPrefs();
     void savePrefs();
     void requestCapabilities(QUrl url);
-    QTreeWidgetItem * parseLayers(const QDomElement& aLayerElem,
+    QTreeWidgetItem * parseLayer(const QDomElement& aLayerElem,
                                   QTreeWidgetItem* aLayerItem);
     void parseVendorSpecific(QDomElement& vendorElem);
     void parseTileSet(QDomElement& tilesetElem, WmscLayer& aLayer);

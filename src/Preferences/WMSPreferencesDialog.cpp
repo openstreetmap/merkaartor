@@ -449,7 +449,7 @@ void WMSPreferencesDialog::httpRequestFinished(QNetworkReply * reply)
     styleList.clear();
     QDomElement layElem = capElem.firstChildElement("Layer");
     while(!layElem.isNull()) {
-        QTreeWidgetItem* it = parseLayers(layElem, NULL);
+        QTreeWidgetItem* it = parseLayer(layElem, NULL);
         tvWmsLayers->addTopLevelItem(it);
         tvWmsLayers->expandItem(it);
 
@@ -537,7 +537,7 @@ void WMSPreferencesDialog::parseTileSet(QDomElement &tilesetElem, WmscLayer &aLa
     }
 }
 
-QTreeWidgetItem * WMSPreferencesDialog::parseLayers(const QDomElement& aLayerElem,
+QTreeWidgetItem * WMSPreferencesDialog::parseLayer(const QDomElement& aLayerElem,
                               QTreeWidgetItem* aLayerItem)
 {
     if (aLayerElem.tagName() != "Layer")
@@ -565,11 +565,12 @@ QTreeWidgetItem * WMSPreferencesDialog::parseLayers(const QDomElement& aLayerEle
         theName = name.firstChild().nodeValue();
         newItem->setFlags(Qt::ItemIsUserCheckable | Qt::ItemIsSelectable | Qt::ItemIsEnabled);
         newItem->setData(0, Qt::UserRole, theName);
+        newItem->setCheckState(0, Qt::Unchecked);
         foreach (QString s, edWmsLayers->text().split(',')) {
-            if (theName == s)
+            if (theName == s) {
                 newItem->setCheckState(0, Qt::Checked);
-            else
-                newItem->setCheckState(0, Qt::Unchecked);
+                break;
+            }
         }
     } else {
 //        newItem->setFlags(Qt::ItemIsUserCheckable | Qt::ItemIsSelectable | Qt::ItemIsEnabled);
@@ -606,7 +607,7 @@ QTreeWidgetItem * WMSPreferencesDialog::parseLayers(const QDomElement& aLayerEle
 
     QDomElement layElem = aLayerElem.firstChildElement("Layer");
     while(!layElem.isNull()) {
-        parseLayers(layElem, newItem);
+        parseLayer(layElem, newItem);
         layElem = layElem.nextSiblingElement("Layer");
     }
 
