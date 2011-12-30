@@ -437,78 +437,87 @@ void Relation::buildPath(Projection const &theProjection, const QTransform& theT
     if (!p->PathUpToDate || p->ProjectionRevision != theProjection.projectionRevision()) {
         p->thePath = QPainterPath();
 
+        Way* outerWay = NULL;
+        int numOuter = 0;
+        bool isMultipolygon = false;
+        if (tagValue("type", "") == "multipolygon")
+            isMultipolygon = true;
 
-        //handle multipolygons
-        if (tagValue("type", "") == "multipolygon") {
-            Way* outerWay = NULL;
-            QList<Way*> innerWays;
 
-            for (int i=0; i<size(); ++i) {
-                if (CHECK_WAY(p->Members[i].second)) {
-                    Way* M = STATIC_CAST_WAY(p->Members[i].second);
-                    M->buildPath(theProjection, theTransform, cr);
-                    if (M->getPath().elementCount() > 0) {
-                        if (p->Members[i].first == "outer")
+        // Handle polygons made of scattered ways
+        QList< QPair<QString,QPainterPath> > memberPaths;
+        for (int i=0; i<size(); ++i) {
+            if (CHECK_WAY(p->Members[i].second)) {
+                Way* M = STATIC_CAST_WAY(p->Members[i].second);
+                M->buildPath(theProjection, theTransform, cr);
+                if (M->getPath().elementCount() > 1) {
+                    memberPaths << qMakePair(p->Members[i].first, M->getPath());
+                    if (isMultipolygon && (p->Members[i].first == "outer" || p->Members[i].first.isEmpty())) {
+                        if (!numOuter)
                             outerWay = M;
-                        else if (p->Members[i].first == "inner")
-                            innerWays << M;
-                    }
-                }
-            }
-            if (tagSize() > 1 || !outerWay) {
-                p->thePath = outerWay->getPath();
-                for (int i=0; i<innerWays.size(); ++i) {
-                    p->thePath = p->thePath.subtracted(innerWays[i]->getPath());
-                }
-            } else {
-                outerWay->rebuildPath(theProjection, theTransform, cr);
-                for (int i=0; i<innerWays.size(); ++i) {
-                    outerWay->addPathHole(innerWays[i]->getPath());
-                }
-            }
-        } else {
-            // Handle polygons made of scattered ways
-            QList<QPainterPath> memberPaths;
-            for (int i=0; i<size(); ++i) {
-                if (CHECK_WAY(p->Members[i].second)) {
-                    Way* M = STATIC_CAST_WAY(p->Members[i].second);
-                    M->buildPath(theProjection, theTransform, cr);
-                    if (M->getPath().elementCount() > 1) {
-                        memberPaths << M->getPath();
-                    }
-                }
-            }
-
-            while (memberPaths.size()) {
-                // handle the start...
-                QPointF curPoint;
-                p->thePath.moveTo(memberPaths[0].elementAt(0));
-                for (int j=1; j<memberPaths[0].elementCount(); ++j) {
-                    curPoint = memberPaths[0].elementAt(j);
-                    p->thePath.lineTo(curPoint);
-                }
-                // ... and remove it
-                memberPaths.removeAt(0);
-                // Check if any remaining path starts or ends at the current point
-                for (int k=0; k<memberPaths.size(); ++k) {
-                    if (memberPaths[k].elementAt(0) == curPoint) { // Check start
-                        for (int l=1; l<memberPaths[k].elementCount(); ++l) {
-                            curPoint = memberPaths[k].elementAt(l);
-                            p->thePath.lineTo(curPoint);
-                        }
-                        memberPaths.removeAt(k);
-                        k=0;
-                    } else if (memberPaths[k].elementAt(memberPaths[k].elementCount()-1) == curPoint) { // Check end
-                        for (int l=memberPaths[k].elementCount()-2; l>=0; --l) {
-                            curPoint = memberPaths[k].elementAt(l);
-                            p->thePath.lineTo(curPoint);
-                        }
-                        memberPaths.removeAt(k);
-                        k=0;
+                        else
+                            outerWay = NULL;
+                        ++numOuter;
                     }
                 }
             }
         }
+
+        QList<QPainterPath> innerPaths;
+        QList<QPainterPath> outerPaths;
+
+        while (memberPaths.size()) {
+            // handle the start...
+            QPointF curPoint;
+            QPainterPath curPath;
+            QString curRole;
+
+            curRole = memberPaths[0].first;
+            curPath.moveTo(memberPaths[0].second.elementAt(0));
+            for (int j=1; j<memberPaths[0].second.elementCount(); ++j) {
+                curPoint = memberPaths[0].second.elementAt(j);
+                curPath.lineTo(curPoint);
+            }
+            // ... and remove it
+            memberPaths.removeAt(0);
+            // Check if any remaining path starts or ends at the current point
+            for (int k=0; k<memberPaths.size(); ++k) {
+                if (memberPaths[k].second.elementAt(0) == curPoint && memberPaths[k].first == curRole) { // Check start
+                    for (int l=1; l<memberPaths[k].second.elementCount(); ++l) {
+                        curPoint = memberPaths[k].second.elementAt(l);
+                        curPath.lineTo(curPoint);
+                    }
+                    memberPaths.removeAt(k);
+                    k=0;
+                } else if (memberPaths[k].second.elementAt(memberPaths[k].second.elementCount()-1) == curPoint  && memberPaths[k].first == curRole) { // Check end
+                    for (int l=memberPaths[k].second.elementCount()-2; l>=0; --l) {
+                        curPoint = memberPaths[k].second.elementAt(l);
+                        curPath.lineTo(curPoint);
+                    }
+                    memberPaths.removeAt(k);
+                    k=0;
+                }
+            }
+            if (curRole == "inner" and isMultipolygon)
+                innerPaths << curPath;
+            else
+                outerPaths << curPath;
+        }
+
+        if (outerWay && tagSize() == 1) {
+            outerWay->rebuildPath(theProjection, theTransform, cr);
+            for (int i=0; i<innerPaths.size(); ++i) {
+                outerWay->addPathHole(innerPaths[i]);
+            }
+        } else {
+            for (int i=0; i<outerPaths.size(); ++i) {
+                p->thePath.addPath(outerPaths[i]);
+            }
+            for (int i=0; i<innerPaths.size(); ++i) {
+                p->thePath = p->thePath.subtracted(innerPaths[i]);
+            }
+        }
+
         p->ProjectionRevision = theProjection.projectionRevision();
         p->PathUpToDate = true;
     }
