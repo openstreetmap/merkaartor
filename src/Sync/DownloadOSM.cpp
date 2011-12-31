@@ -253,6 +253,7 @@ bool Downloader::request(const QString& Method, const QUrl& url, const QString& 
     QHttpRequestHeader Header(Method,sReq);
     Header.setValue("Host",url.host()+':'+QString::number(url.port(80)));
     Header.setValue("User-Agent", USER_AGENT);
+    Header.setValue("Content-Type", "text/xml");
 
     QString auth = QString("%1:%2").arg(User).arg(Password);
     QByteArray ba_auth = auth.toUtf8().toBase64();
