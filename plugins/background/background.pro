@@ -10,8 +10,8 @@ QT_VER_MIN = $$member(QT_VERSION, 1)
     SUBDIRS += \
         # MArbitraryRasterMapBackground \
         # MNavitBackground \
-        MYahooTiledBackground \
-        MYahooBackground \
+#        MYahooTiledBackground \
+#        MYahooBackground \
         MMsBingMapBackground \
         MWalkingPapersBackground
 
