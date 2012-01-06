@@ -589,6 +589,41 @@ void TrackLayerWidget::extractLayer(bool)
     emit (layerChanged(this, false));
 }
 
+// SpecialLayerWidget
+
+SpecialLayerWidget::SpecialLayerWidget(SpecialLayer* aLayer, QWidget* aParent)
+    : LayerWidget(aLayer, aParent)
+{
+    initActions();
+}
+
+void SpecialLayerWidget::initActions()
+{
+    LayerWidget::initActions();
+    ctxMenu->addSeparator();
+    associatedMenu->addSeparator();
+
+    QAction* actExtract = new QAction(tr("Refresh layer"), ctxMenu);
+    ctxMenu->addAction(actExtract);
+    associatedMenu->addAction(actExtract);
+    connect(actExtract, SIGNAL(triggered(bool)), this, SLOT(refreshLayer(bool)));
+
+    closeAction = new QAction(tr("Close"), this);
+    connect(closeAction, SIGNAL(triggered()), this, SLOT(close()));
+    ctxMenu->addAction(closeAction);
+    associatedMenu->addAction(closeAction);
+    closeAction->setEnabled(theLayer->canDelete());
+}
+
+SpecialLayerWidget::~SpecialLayerWidget()
+{
+}
+
+void SpecialLayerWidget::refreshLayer(bool)
+{
+    dynamic_cast<SpecialLayer*>(theLayer.data())->refreshLayer();
+}
+
 // DirtyLayerWidget
 
 DirtyLayerWidget::DirtyLayerWidget(DirtyLayer* aLayer, QWidget* aParent)

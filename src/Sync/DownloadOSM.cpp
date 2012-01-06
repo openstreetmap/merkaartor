@@ -4,6 +4,7 @@
 #include "MapView.h"
 #include "Coord.h"
 #include "ImportGPX.h"
+#include "ImportExportGdal.h"
 #include "ImportOSM.h"
 #include "Document.h"
 #include "Layer.h"
@@ -650,7 +651,66 @@ bool downloadFeatures(MainWindow* Main, const QList<IFeature::FId>& idList , Doc
     return OK;
 }
 
-bool downloadOpenstreetbugs(MainWindow* Main, const CoordBox& aBox, Document* theDocument)
+bool downloadMapdust(MainWindow* Main, const CoordBox& aBox, Document* theDocument, SpecialLayer* theLayer)
+{
+    QUrl url;
+
+    url.setUrl(M_PREFS->getMapdustUrl());
+
+    if (Main)
+        Main->view()->setUpdatesEnabled(false);
+
+    Downloader theDownloader("", "");
+
+    SpecialLayer* trackLayer = theLayer;
+    if (!trackLayer) {
+        trackLayer = new SpecialLayer(QApplication::translate("Downloader","MapDust"), Layer::MapDustLayer);
+        trackLayer->setUploadable(false);
+        theDocument->add(trackLayer);
+    }
+
+    IProgressWindow* aProgressWindow = dynamic_cast<IProgressWindow*>(Main);
+    if (!aProgressWindow)
+        return false;
+
+    QProgressDialog* dlg = aProgressWindow->getProgressDialog();
+    dlg->setWindowTitle(QApplication::translate("Downloader","Parsing..."));
+
+    QProgressBar* Bar = aProgressWindow->getProgressBar();
+    Bar->setTextVisible(false);
+    Bar->setMaximum(11);
+
+    QLabel* Lbl = aProgressWindow->getProgressLabel();
+    Lbl->setText(QApplication::translate("Downloader","Parsing XML"));
+
+    if (dlg)
+        dlg->show();
+
+    theDownloader.setAnimator(dlg,Lbl,Bar,true);
+    Lbl->setText(QApplication::translate("Downloader","Downloading points"));
+    url.addQueryItem("t", COORD2STRING(aBox.topRight().y()));
+    url.addQueryItem("l", COORD2STRING(aBox.bottomLeft().x()));
+    url.addQueryItem("b", COORD2STRING(aBox.bottomLeft().y()));
+    url.addQueryItem("r", COORD2STRING(aBox.topRight().x()));
+
+    if (!theDownloader.go(url))
+        return false;
+    if (theDownloader.resultCode() != 200)
+        return false;
+    QByteArray Ar(theDownloader.content());
+    ImportExportGdal gdal(theDocument);
+    bool OK = gdal.import(trackLayer, Ar, false);
+
+    if (Main)
+        Main->view()->setUpdatesEnabled(true);
+    if (OK) {
+        if (Main)
+            Main->invalidateView();
+    }
+    return OK;
+}
+
+bool downloadOpenstreetbugs(MainWindow* Main, const CoordBox& aBox, Document* theDocument, SpecialLayer* theLayer)
 {
     QUrl osbUrl;
 
@@ -661,10 +721,14 @@ bool downloadOpenstreetbugs(MainWindow* Main, const CoordBox& aBox, Document* th
         Main->view()->setUpdatesEnabled(false);
 
     Downloader theDownloader("", "");
+
     QList<TrackLayer*> theTracklayers;
-    TrackLayer* trackLayer = new TrackLayer(QApplication::translate("Downloader","OpenStreetBugs"));
-    trackLayer->setUploadable(false);
-    theDocument->add(trackLayer);
+    SpecialLayer* trackLayer = theLayer;
+    if (!trackLayer) {
+        SpecialLayer* trackLayer = new SpecialLayer(QApplication::translate("Downloader","OpenStreetBugs"),Layer::OsmBugsLayer);
+        trackLayer->setUploadable(false);
+        theDocument->add(trackLayer);
+    }
     theTracklayers << trackLayer;
 
     IProgressWindow* aProgressWindow = dynamic_cast<IProgressWindow*>(Main);

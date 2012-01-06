@@ -20,8 +20,7 @@
 #include "ProjectionChooser.h"
 #include "Global.h"
 
-
-#include "ogrsf_frmts.h"
+#include "cpl_vsi.h"
 
 #include <QDir>
 
@@ -263,23 +262,14 @@ Feature* ImportExportGdal::parseGeometry(Layer* aLayer, OGRGeometry *poGeometry)
 }
 
 // import the  input
-bool ImportExportGdal::import(Layer* aLayer)
+
+bool ImportExportGdal::importGDALDataset(OGRDataSource* poDS, Layer* aLayer, bool confirmProjection)
 {
-    OGRRegisterAll();
-
-    OGRDataSource       *poDS;
     int ogrError;
-
-    poDS = OGRSFDriverRegistrar::Open( FileName.toUtf8().constData(), FALSE );
-    if( poDS == NULL )
-    {
-        qDebug( "SHP Open failed.\n" );
-        return false;
-    }
 
     OGRSpatialReference wgs84srs;
     if (wgs84srs.SetWellKnownGeogCS("WGS84") != OGRERR_NONE) {
-        qDebug("SHP: couldn't initialise WGS84: %s", CPLGetLastErrorMsg());
+        qDebug("GDAL: couldn't initialise WGS84: %s", CPLGetLastErrorMsg());
         return false;
     }
 
@@ -293,10 +283,10 @@ bool ImportExportGdal::import(Layer* aLayer)
         // Workaround for OSGB - otherwise its datum is ignored (TODO: why?)
         QString gcs = theSrs->GetAttrValue("GEOGCS");
         if (gcs == "GCS_OSGB_1936" || gcs == "OSGB 1936") {
-            qDebug() << "SHP: substituting GCS_OSGB_1936 with EPSG:27700";
+            qDebug() << "GDAL: substituting GCS_OSGB_1936 with EPSG:27700";
             OGRSpatialReference * the27700Srs = new OGRSpatialReference();
             if ((ogrError = the27700Srs->importFromEPSG(27700)) != OGRERR_NONE) {
-                qDebug("SHP: couldn't initialise EPSG:27700: %d: %s", ogrError, CPLGetLastErrorMsg());
+                qDebug("GDAL: couldn't initialise EPSG:27700: %d: %s", ogrError, CPLGetLastErrorMsg());
                 the27700Srs->Release();
             } else {
                 theSrs->Release();
@@ -326,17 +316,19 @@ bool ImportExportGdal::import(Layer* aLayer)
         projTitle = QCoreApplication::translate("ImportExportGdal", "Unable to set projection; please specify one");
     }
 
+    if (!theSrs || confirmProjection) {
 #ifndef _MOBILE
-    QApplication::restoreOverrideCursor();
+        QApplication::restoreOverrideCursor();
 #endif
-    sPrj = ProjectionChooser::getProjection(projTitle, true, sPrj);
-    qDebug() << sPrj;
+        sPrj = ProjectionChooser::getProjection(projTitle, true, sPrj);
+        qDebug() << sPrj;
 #ifndef _MOBILE
-    QApplication::setOverrideCursor(Qt::BusyCursor);
+        QApplication::setOverrideCursor(Qt::BusyCursor);
 #endif
 
-    if (sPrj.isEmpty()) {
-        return false;
+        if (sPrj.isEmpty()) {
+            return false;
+        }
     }
 
     theSrs->Release();
@@ -413,10 +405,12 @@ bool ImportExportGdal::import(Layer* aLayer)
 
     pointHash.clear();
 
+#ifndef _MOBILE
+    QApplication::restoreOverrideCursor();
+#endif
+
     if (toWGS84)
         delete toWGS84;
-
-    OGRDataSource::DestroyDataSource( poDS );
 
     if (progress.wasCanceled())
         return false;
@@ -424,3 +418,41 @@ bool ImportExportGdal::import(Layer* aLayer)
         return true;
 }
 
+bool ImportExportGdal::import(Layer* aLayer)
+{
+    OGRRegisterAll();
+
+    OGRDataSource       *poDS;
+
+    poDS = OGRSFDriverRegistrar::Open( FileName.toUtf8().constData(), FALSE );
+    if( poDS == NULL )
+    {
+        qDebug( "GDAL Open failed.\n" );
+        return false;
+    }
+
+    importGDALDataset(poDS, aLayer, M_PREFS->getGdalConfirmProjection());
+
+    OGRDataSource::DestroyDataSource( poDS );
+}
+
+bool ImportExportGdal::import(Layer* aLayer, const QByteArray& ba, bool confirmProjection)
+{
+    OGRRegisterAll();
+
+    OGRDataSource       *poDS;
+    int ogrError;
+
+    GByte* content = (GByte*)(ba.constData());
+    FILE* f = VSIFileFromMemBuffer("/vsimem/temp", content, ba.size(), FALSE);
+
+    poDS = OGRSFDriverRegistrar::Open( "/vsimem/temp", FALSE );
+    if( poDS == NULL )
+    {
+        qDebug( "GDAL Open failed.\n" );
+        return false;
+    }
+    importGDALDataset(poDS, aLayer, confirmProjection);
+
+    OGRDataSource::DestroyDataSource( poDS );
+}

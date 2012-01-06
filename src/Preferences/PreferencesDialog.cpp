@@ -310,6 +310,7 @@ void PreferencesDialog::loadPrefs()
     cbAutoSaveDoc->setChecked(M_PREFS->getAutoSaveDoc());
     cbAutoExtractTracks->setChecked(M_PREFS->getAutoExtractTracks());
     cbReadonlyTracksDefault->setChecked(M_PREFS->getReadonlyTracksDefault());
+    cbGdalConfirmProjection->setChecked(M_PREFS->getGdalConfirmProjection());
 
     ToolList* tl = M_PREFS->getTools();
     ToolListIterator i(*tl);
@@ -461,6 +462,7 @@ void PreferencesDialog::savePrefs()
     M_PREFS->setAutoSaveDoc(cbAutoSaveDoc->isChecked());
     M_PREFS->setAutoExtractTracks(cbAutoExtractTracks->isChecked());
     M_PREFS->setReadonlyTracksDefault(cbReadonlyTracksDefault->isChecked());
+    M_PREFS->setGdalConfirmProjection(cbGdalConfirmProjection->isChecked());
 
     ToolList* tl = M_PREFS->getTools();
     tl->clear();

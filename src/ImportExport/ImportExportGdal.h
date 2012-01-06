@@ -13,6 +13,7 @@
 #define ImportExportGDAL_H
 
 #include "IImportExport.h"
+#include "ogrsf_frmts.h"
 
 class Projection;
 class Layer;
@@ -38,6 +39,7 @@ public:
     virtual bool saveFile(QString filename);
     // import the  input
     virtual bool import(Layer* aLayer);
+    bool import(Layer *aLayer, const QByteArray &ba, bool confirmProjection);
 
     //export
     virtual bool export_(const QList<Feature *>& featList);
@@ -49,6 +51,8 @@ protected:
 
     Node *nodeFor(Layer* aLayer, OGRPoint point);
     Way *readWay(Layer* aLayer, OGRLineString *poRing);
+
+    bool importGDALDataset(OGRDataSource *poDs, Layer *aLayer, bool confirmProjection);
 
 private:
     QHash<OGRPoint, Node*> pointHash;

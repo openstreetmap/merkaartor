@@ -107,6 +107,21 @@ class TrackLayerWidget : public LayerWidget
         void extractLayer(bool);
 };
 
+class SpecialLayerWidget : public LayerWidget
+{
+    Q_OBJECT
+
+    public:
+        SpecialLayerWidget(SpecialLayer* aLayer, QWidget* aParent = 0);
+        virtual ~SpecialLayerWidget();
+
+    public:
+        virtual void initActions();
+
+    private slots:
+        void refreshLayer(bool);
+};
+
 class ImageLayerWidget : public LayerWidget
 {
     Q_OBJECT

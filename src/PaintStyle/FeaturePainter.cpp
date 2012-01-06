@@ -481,9 +481,12 @@ void FeaturePainter::drawTouchup(Node* Pt, QPainter* thePainter, MapView* theVie
             QPointF P(theView->toView(Pt));
             qreal WW = theView->nodeWidth();
             if (WW >= 1) {
-                if (Pt->isWaypoint()) {
+                if (Pt->layer()->classGroups() & Layer::Special) {
                     QRect R2(P.x()-WW*4/3/2, P.y()-WW*4/3/2, WW*4/3, WW*4/3);
-                    thePainter->fillRect(R2,QColor(255,0,0,128));
+                    thePainter->fillRect(R2,QColor(255,0,255,192));
+                } else if (Pt->isWaypoint()) {
+                    QRect R2(P.x()-WW*4/3/2, P.y()-WW*4/3/2, WW*4/3, WW*4/3);
+                    thePainter->fillRect(R2,QColor(255,0,0,192));
                 }
 
                 QRect R(P.x()-WW/2, P.y()-WW/2, WW, WW);

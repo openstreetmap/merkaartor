@@ -368,6 +368,8 @@ public:
 
     /* Data */
     M_PARAM_DECLARE_STRING(OpenStreetBugsUrl)
+    M_PARAM_DECLARE_STRING(MapdustUrl)
+    M_PARAM_DECLARE_BOOL(GdalConfirmProjection)
     M_PARAM_DECLARE_BOOL(HasAutoLoadDocument)
     M_PARAM_DECLARE_STRING(AutoLoadDocumentFilename)
 

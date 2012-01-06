@@ -24,7 +24,7 @@
      <x>0</x>
      <y>0</y>
      <width>1100</width>
-     <height>26</height>
+     <height>20</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuHelp">
@@ -159,7 +159,6 @@
     <addaction name="separator"/>
     <addaction name="fileDownloadAction"/>
     <addaction name="fileDownloadMoreAction"/>
-    <addaction name="fileDownloadOpenstreetbugsAction"/>
     <addaction name="fileUploadAction"/>
     <addaction name="separator"/>
     <addaction name="filePrintAction"/>
@@ -265,6 +264,8 @@
     <addaction name="layersNewImageAction"/>
     <addaction name="layersNewDrawingAction"/>
     <addaction name="layersNewFilterAction"/>
+    <addaction name="layersOpenstreetbugsAction"/>
+    <addaction name="layersMapdustAction"/>
     <addaction name="separator"/>
    </widget>
    <widget class="QMenu" name="menuGps">
@@ -1552,7 +1553,7 @@
   </action>
   <action name="layersNewImageAction">
    <property name="text">
-    <string>Add new Image layer</string>
+    <string>Add new &amp;Image layer</string>
    </property>
   </action>
   <action name="windowFeatsAction">
@@ -1630,9 +1631,9 @@
     <string>Force Delete</string>
    </property>
   </action>
-  <action name="fileDownloadOpenstreetbugsAction">
+  <action name="layersOpenstreetbugsAction">
    <property name="text">
-    <string>Download OpenStreet&amp;Bugs</string>
+    <string>Add OpenStreet&amp;Bugs layer</string>
    </property>
   </action>
   <action name="featureOsbClose">
@@ -1754,7 +1755,7 @@
   </action>
   <action name="layersNewDrawingAction">
    <property name="text">
-    <string>Add new Drawing layer</string>
+    <string>Add new &amp;Drawing layer</string>
    </property>
   </action>
   <action name="editCutAction">
@@ -1771,7 +1772,7 @@
   </action>
   <action name="layersNewFilterAction">
    <property name="text">
-    <string>Add new Filter layer</string>
+    <string>Add new &amp;Filter layer</string>
    </property>
   </action>
   <action name="roadExtrudeAction">
@@ -1843,6 +1844,11 @@
   <action name="toolsRebuildHistoryAction">
    <property name="text">
     <string>Rebuild &amp;History</string>
+   </property>
+  </action>
+  <action name="layersMapdustAction">
+   <property name="text">
+    <string>Add Map&amp;Dust layer</string>
    </property>
   </action>
  </widget>

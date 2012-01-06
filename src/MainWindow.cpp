@@ -1431,12 +1431,45 @@ void MainWindow::on_fileDownloadMoreAction_triggered()
     emit content_changed();
 }
 
-void MainWindow::on_fileDownloadOpenstreetbugsAction_triggered()
+void MainWindow::on_layersOpenstreetbugsAction_triggered()
 {
+    SpecialLayer* sl = NULL;
+    for (int i=0; i<theDocument->layerSize(); ++i) {
+        if (theDocument->getLayer(i)->classType() == Layer::OsmBugsLayer) {
+            sl = dynamic_cast<SpecialLayer*>(theDocument->getLayer(i));
+            while (sl->size())
+            {
+                sl->deleteFeature(sl->get(0));
+            }
+        }
+    }
+
     createProgressDialog();
 
-    if (!::downloadOpenstreetbugs(this, theView->viewport(), theDocument)) {
+    if (!::downloadOpenstreetbugs(this, theView->viewport(), theDocument, sl)) {
         QMessageBox::warning(this, tr("Error downloading OpenStreetBugs"), tr("The OpenStreetBugs could not be downloaded"));
+    }
+
+    deleteProgressDialog();
+}
+
+void MainWindow::on_layersMapdustAction_triggered()
+{
+    SpecialLayer* sl = NULL;
+    for (int i=0; i<theDocument->layerSize(); ++i) {
+        if (theDocument->getLayer(i)->classType() == Layer::MapDustLayer) {
+            sl = dynamic_cast<SpecialLayer*>(theDocument->getLayer(i));
+            while (sl->size())
+            {
+                sl->deleteFeature(sl->get(0));
+            }
+        }
+    }
+
+    createProgressDialog();
+
+    if (!::downloadMapdust(this, theView->viewport(), theDocument, sl)) {
+        QMessageBox::warning(this, tr("Error downloading MapDust"), tr("The MapDust bugs could not be downloaded"));
     }
 
     deleteProgressDialog();

@@ -72,11 +72,12 @@ public slots:
     virtual void on_layersNewImageAction_triggered();
     virtual void on_layersNewDrawingAction_triggered();
     virtual void on_layersNewFilterAction_triggered();
+    virtual void on_layersOpenstreetbugsAction_triggered();
+    virtual void on_layersMapdustAction_triggered();
 
     virtual void on_fileNewAction_triggered();
     virtual void on_fileDownloadAction_triggered();
     virtual void on_fileDownloadMoreAction_triggered();
-    virtual void on_fileDownloadOpenstreetbugsAction_triggered();
     virtual void on_fileUploadAction_triggered();
     virtual void on_fileImportAction_triggered();
     virtual void on_fileOpenAction_triggered();

@@ -47,7 +47,9 @@ public:
         ImageLayerType,
         TrackLayerType,
         UploadedLayerType,
-        FilterLayerType
+        FilterLayerType,
+        OsmBugsLayer,
+        MapDustLayer
     } LayerType;
 
     enum LayerGroup {
@@ -56,6 +58,7 @@ public:
         Draw				= 0x00000002,
         Tracks				= 0x00000004,
         Filters				= 0x00000008,
+        Special				= 0x00000010,
         All					= 0x0000ffff
     };
 
@@ -180,6 +183,26 @@ public:
 
 protected:
     QString Filename;
+};
+
+class SpecialLayer : public TrackLayer
+{
+    Q_OBJECT
+public:
+    SpecialLayer(const QString& aName="", LayerType type=Layer::UndefinedType, const QString& filename="");
+
+    virtual LayerWidget* newWidget(void);
+
+    virtual void refreshLayer();
+
+    virtual /* const */ LayerType classType() const {return m_type;}
+    virtual const LayerGroups classGroups() const {return(Layer::Special);}
+
+    virtual bool isUploadable() {return false;}
+    virtual bool isTrack() const {return true;}
+
+protected:
+    LayerType m_type;
 };
 
 class DirtyLayer : public DrawingLayer
