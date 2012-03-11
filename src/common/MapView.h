@@ -37,9 +37,7 @@ class MapView :	public QWidget
         Interaction* interaction();
         virtual Interaction * defaultInteraction();
 
-        virtual void buildFeatureSet();
         void drawFeatures(QPainter & painter);
-        void printFeatures(QPainter & painter);
         void drawLatLonGrid(QPainter & painter);
         void drawDownloadAreas(QPainter & painter);
         void drawScale(QPainter & painter);
@@ -95,7 +93,7 @@ class MapView :	public QWidget
 
         QString toPropertiesHtml();
 
-	private:
+private:
         void drawGPS(QPainter & painter);
         void updateStaticBackground();
         void updateStaticBuffer();
@@ -106,7 +104,6 @@ class MapView :	public QWidget
         Interaction* theInteraction;
         QPixmap* StaticBackground;
         QPixmap* StaticBuffer;
-        QPixmap* StaticMap;
         bool StaticMapUpToDate;
         bool SelectionLocked;
         QLabel* lockIcon;
@@ -141,7 +138,6 @@ class MapView :	public QWidget
 
     protected:
         bool event(QEvent *event);
-        bool StaticBufferUpToDate;
 
     protected slots:
         void on_imageRequested(ImageMapLayer*);

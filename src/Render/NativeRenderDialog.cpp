@@ -148,8 +148,7 @@ void NativeRenderDialog::render(QPainter& P, QRect theR, RendererOptions opt)
     mapview->setViewport(boundingBox(), theR);
     mapview->setRenderOptions(opt);
     mapview->invalidate(true, false);
-    mapview->buildFeatureSet();
-    mapview->printFeatures(P);
+    mapview->drawFeatures(P);
     if (opt.options & RendererOptions::ScaleVisible)
         mapview->drawScale(P);
     if (opt.options & RendererOptions::LatLonGridVisible)

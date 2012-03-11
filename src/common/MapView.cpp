@@ -48,6 +48,7 @@
 #include <QToolTip>
 #include <QMap>
 #include <QSet>
+#include <QtConcurrentMap>
 
 // from wikipedia
 #define EQUATORIALRADIUS 6378137.0
@@ -64,7 +65,7 @@ public:
     qreal ZoomLevel;
 //    int AbstractZoomLevel;
     CoordBox Viewport;
-    QList<QRectF> invalidRects;
+    QList<CoordBox> invalidRects;
     QPoint theVectorPanDelta;
     qreal theVectorRotation;
     QMap<RenderPriority, QSet <Feature*> > theFeatures;
@@ -86,8 +87,8 @@ public:
 /****************/
 
 MapView::MapView(QWidget* parent) :
-    QWidget(parent), Main(dynamic_cast<MainWindow*>(parent)), theDocument(0), theInteraction(0), StaticBackground(0), StaticBuffer(0), StaticMap(0),
-        StaticBufferUpToDate(false), SelectionLocked(false),lockIcon(0), numImages(0),
+    QWidget(parent), Main(dynamic_cast<MainWindow*>(parent)), theDocument(0), theInteraction(0), StaticBackground(0), StaticBuffer(0),
+        SelectionLocked(false),lockIcon(0), numImages(0),
         p(new MapViewPrivate)
 {
     setMouseTracking(true);
@@ -148,7 +149,6 @@ MapView::~MapView()
         delete theInteraction;
     delete StaticBackground;
     delete StaticBuffer;
-    delete StaticMap;
     delete p;
 }
 
@@ -192,7 +192,6 @@ void MapView::invalidate(bool updateStaticBuffer, bool updateMap)
         p->invalidRects.push_back(p->Viewport);
         p->theVectorPanDelta = QPoint(0, 0);
         SAFE_DELETE(StaticBackground)
-        StaticBufferUpToDate = false;
     }
     if (theDocument && updateMap) {
         IMapWatermark* WatermarkAdapter = NULL;
@@ -261,7 +260,6 @@ void MapView::panScreen(QPoint delta)
         p->theTransform.translate(qreal(delta.x())/p->theTransform.m11(), qreal(delta.y())/p->theTransform.m22());
         p->theInvertedTransform = p->theTransform.inverted();
         viewportRecalc(rect());
-        StaticBufferUpToDate = false;
     }
 
     for (LayerIterator<ImageMapLayer*> ImgIt(theDocument); !ImgIt.isEnd(); ++ImgIt)
@@ -276,8 +274,9 @@ void MapView::rotateScreen(QPoint center, qreal angle)
     transformCalc(p->theTransform, theProjection, p->theVectorRotation, p->Viewport, rect());
     p->theInvertedTransform = p->theTransform.inverted();
     viewportRecalc(rect());
+    p->invalidRects.clear();
+    p->invalidRects.push_back(p->Viewport);
 
-    StaticBufferUpToDate = false;
 //    for (LayerIterator<ImageMapLayer*> ImgIt(theDocument); !ImgIt.isEnd(); ++ImgIt)
 //        ImgIt.get()->pan(delta);
     update();
@@ -310,9 +309,7 @@ void MapView::paintEvent(QPaintEvent * anEvent)
     }
     P.restore();
 
-    if (!p->invalidRects.isEmpty())
-        buildFeatureSet();
-    if (!StaticBufferUpToDate) {
+    if (!p->invalidRects.isEmpty()) {
         updateStaticBuffer();
     }
     P.drawPixmap(p->theVectorPanDelta, *StaticBuffer);
@@ -412,14 +409,6 @@ void MapView::drawGPS(QPainter & P)
             P.drawPixmap(g - QPoint(16, 16), *pm);
         }
     }
-}
-
-void MapView::buildFeatureSet()
-{
-    QRectF clipRect = p->theInvertedTransform.mapRect(QRectF(rect().adjusted(-200, -200, 200, 200)));
-
-    for (int i=0; i<theDocument->layerSize(); ++i)
-        g_backend.getFeatureSet(theDocument->getLayer(i), p->theFeatures, p->invalidRects, clipRect, theProjection, p->theTransform);
 }
 
 bool testColor(const QImage& theImage, const QPoint& P, const QRgb& targetColor)
@@ -567,11 +556,11 @@ void MapView::drawLatLonGrid(QPainter & P)
 
 void MapView::drawFeatures(QPainter & P)
 {
-    p->renderer.render(&P, p->theFeatures, p->ROptions, this);
-}
+    QRectF clipRect = p->theInvertedTransform.mapRect(QRectF(rect().adjusted(-200, -200, 200, 200)));
 
-void MapView::printFeatures(QPainter & P)
-{
+    for (int i=0; i<theDocument->layerSize(); ++i)
+        g_backend.getFeatureSet(theDocument->getLayer(i), p->theFeatures, p->invalidRects, clipRect, theProjection, p->theTransform);
+
     p->renderer.render(&P, p->theFeatures, p->ROptions, this);
 }
 
@@ -628,12 +617,6 @@ void MapView::updateStaticBackground()
 
 void MapView::updateStaticBuffer()
 {
-    if (!StaticBuffer || (StaticBuffer->size() != size()))
-    {
-        delete StaticBuffer;
-        StaticBuffer = new QPixmap(size());
-    }
-
     QPainter P;
 
     if (!p->theVectorPanDelta.isNull()) {
@@ -673,7 +656,6 @@ void MapView::updateStaticBuffer()
 
     p->invalidRects.clear();
     p->theVectorPanDelta = QPoint(0, 0);
-    StaticBufferUpToDate = true;
 }
 
 void MapView::mousePressEvent(QMouseEvent* anEvent)
@@ -997,10 +979,15 @@ void MapView::on_loadingFinished(ImageMapLayer* aLayer)
 
 void MapView::resizeEvent(QResizeEvent * ev)
 {
-    StaticBufferUpToDate = false;
     viewportRecalc(QRect(QPoint(0,0), ev->size()));
 
     QWidget::resizeEvent(ev);
+
+    if (!StaticBuffer || (StaticBuffer->size() != size()))
+    {
+        delete StaticBuffer;
+        StaticBuffer = new QPixmap(size());
+    }
 
     invalidate(true, true);
 }

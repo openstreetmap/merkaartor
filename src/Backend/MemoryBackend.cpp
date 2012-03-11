@@ -133,7 +133,7 @@ void MemoryBackend::get(Layer* l, const QRectF& bb, QList<Feature*>& theFeatures
 }
 
 void MemoryBackend::getFeatureSet(Layer* l, QMap<RenderPriority, QSet <Feature*> >& theFeatures,
-                   QList<QRectF>& invalidRects, QRectF& clipRect, Projection& theProjection, QTransform& theTransform)
+                                  QList<CoordBox>& invalidRects, QRectF& clipRect, Projection& theProjection, QTransform& theTransform)
 {
     IndexFindContext ctxt;
     ctxt.theFeatures = &theFeatures;
