@@ -45,7 +45,7 @@ bool __cdecl indexFindCallback(Feature* F, void* ctxt)
         Way * R = STATIC_CAST_WAY(F);
         if (pCtxt->theFeatures->value(R->renderPriority()).contains(F))
             return true;
-        R->buildPath(*(pCtxt->theProjection), *(pCtxt->theTransform), *(pCtxt->clipRect));
+        R->buildPath(*(pCtxt->theProjection));
         if (M_PREFS->getTrackPointsVisible()) {
             for (int i=0; i<R->size(); ++i) {
                 if (pCtxt->bbox.contains(R->getNode(i)->boundingBox()))
@@ -59,7 +59,7 @@ bool __cdecl indexFindCallback(Feature* F, void* ctxt)
         Relation * RR = STATIC_CAST_RELATION(F);
         if (pCtxt->theFeatures->value(RR->renderPriority()).contains(F))
             return true;
-        RR->buildPath(*(pCtxt->theProjection), *(pCtxt->theTransform), *(pCtxt->clipRect));
+        RR->buildPath(*(pCtxt->theProjection));
         (*(pCtxt->theFeatures))[RR->renderPriority()].insert(F);
     } else
     if (CHECK_NODE(F)) {
@@ -133,19 +133,29 @@ void MemoryBackend::get(Layer* l, const QRectF& bb, QList<Feature*>& theFeatures
 }
 
 void MemoryBackend::getFeatureSet(Layer* l, QMap<RenderPriority, QSet <Feature*> >& theFeatures,
-                                  QList<CoordBox>& invalidRects, QRectF& clipRect, Projection& theProjection, QTransform& theTransform)
+                                  QList<CoordBox>& invalidRects, Projection& theProjection)
 {
     IndexFindContext ctxt;
     ctxt.theFeatures = &theFeatures;
-    ctxt.clipRect = &clipRect;
     ctxt.theProjection = &theProjection;
-    ctxt.theTransform = &theTransform;
 
     for (int i=0; i < invalidRects.size(); ++i) {
         ctxt.bbox = invalidRects[i];
         indexFind(l, invalidRects[i], ctxt);
     }
 }
+
+void MemoryBackend::getFeatureSet(Layer* l, QMap<RenderPriority, QSet <Feature*> >& theFeatures,
+                                  CoordBox& invalidRect, Projection& theProjection)
+{
+    IndexFindContext ctxt;
+    ctxt.theFeatures = &theFeatures;
+    ctxt.theProjection = &theProjection;
+
+    ctxt.bbox = invalidRect;
+    indexFind(l, invalidRect, ctxt);
+}
+
 
 /******************************/
 

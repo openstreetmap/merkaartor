@@ -47,7 +47,9 @@ public:
     virtual void indexFind(Layer* l, const QRectF& bb, const IndexFindContext& findResult);
     virtual void get(Layer* l, const QRectF& bb, QList<Feature*>& theFeatures);
     virtual void getFeatureSet(Layer* l, QMap<RenderPriority, QSet <Feature*> >& theFeatures,
-                               QList<CoordBox>& invalidRects, QRectF& clipRect, Projection& theProjection, QTransform& theTransform);
+                               QList<CoordBox>& invalidRects, Projection& theProjection);
+    virtual void getFeatureSet(Layer* l, QMap<RenderPriority, QSet <Feature*> >& theFeatures,
+                               CoordBox& invalidRect, Projection& theProjection);
     virtual void indexAdd(Layer* l, const QRectF& bb, Feature* aFeat);
     virtual void indexRemove(Layer* l, const QRectF& bb, Feature* aFeat);
 

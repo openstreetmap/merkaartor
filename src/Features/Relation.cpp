@@ -411,10 +411,10 @@ void Relation::releaseMemberModel()
     }
 }
 
-void Relation::buildPath(Projection const &theProjection, const QTransform& theTransform, const QRectF& cr)
+void Relation::buildPath(Projection const &theProjection)
 {
-    QPainterPath clipPath;
-    clipPath.addRect(cr);
+//    QPainterPath clipPath;
+//    clipPath.addRect(cr);
 
     p->theBoundingPath = QPainterPath();
 
@@ -432,7 +432,7 @@ void Relation::buildPath(Projection const &theProjection, const QTransform& theT
     //p->theBoundingPath.addRect(bb);
 
     p->theBoundingPath.addPolygon(theVector);
-    p->theBoundingPath = p->theBoundingPath.intersected(clipPath);
+//    p->theBoundingPath = p->theBoundingPath.intersected(clipPath);
 
     if (!p->PathUpToDate || p->ProjectionRevision != theProjection.projectionRevision()) {
         p->thePath = QPainterPath();
@@ -449,7 +449,7 @@ void Relation::buildPath(Projection const &theProjection, const QTransform& theT
         for (int i=0; i<size(); ++i) {
             if (CHECK_WAY(p->Members[i].second)) {
                 Way* M = STATIC_CAST_WAY(p->Members[i].second);
-                M->buildPath(theProjection, theTransform, cr);
+                M->buildPath(theProjection);
                 if (M->getPath().elementCount() > 1) {
                     memberPaths << qMakePair(p->Members[i].first, M->getPath());
                     if (isMultipolygon && (p->Members[i].first == "outer" || p->Members[i].first.isEmpty())) {
@@ -505,7 +505,7 @@ void Relation::buildPath(Projection const &theProjection, const QTransform& theT
         }
 
         if (outerWay && tagSize() == 1) {
-            outerWay->rebuildPath(theProjection, theTransform, cr);
+            outerWay->rebuildPath(theProjection);
             for (int i=0; i<innerPaths.size(); ++i) {
                 outerWay->addPathHole(innerPaths[i]);
             }

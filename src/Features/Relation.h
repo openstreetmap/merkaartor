@@ -54,7 +54,7 @@ public:
     virtual void partChanged(Feature* F, int ChangeId);
 
     const QPainterPath& getPath() const;
-    void buildPath(Projection const &theProjection, const QTransform& theTransform, const QRectF& clipRect);
+    void buildPath(Projection const &theProjection);
 
     virtual bool toXML(QXmlStreamWriter& stream, QProgressDialog * progress, bool strict=false, QString changetsetid="");
     static Relation* fromXML(Document* d, Layer* L, QXmlStreamReader& stream);

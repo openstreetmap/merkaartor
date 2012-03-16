@@ -81,8 +81,8 @@ public:
 
     const QPainterPath& getPath() const;
     void addPathHole(const QPainterPath &pth);
-    void rebuildPath(const Projection &theProjection, const QTransform &theTransform, const QRectF &cr);
-    void buildPath(Projection const &theProjection, const QTransform& thensform, const QRectF& clipRect);
+    void rebuildPath(const Projection &theProjection);
+    void buildPath(Projection const &theProjection);
 
     virtual bool toGPX(QXmlStreamWriter& stream, QProgressDialog * progress, bool forExport=false);
     virtual bool toXML(QXmlStreamWriter& stream, QProgressDialog * progress, bool strict=false, QString changetsetid="");

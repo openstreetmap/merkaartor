@@ -53,7 +53,6 @@ class WayPrivate
         bool NotEverythingDownloaded;
         bool PathUpToDate;
         bool VirtualsUptodate;
-        QPainterPath theFullPath;
         QPainterPath thePath;
         int ProjectionRevision;
         int BestSegment;
@@ -610,132 +609,30 @@ void Way::addPathHole(const QPainterPath& pth)
     p->thePath = p->thePath.subtracted(pth);
 }
 
-void Way::rebuildPath(const Projection &theProjection, const QTransform& theTransform, const QRectF& cr)
+void Way::rebuildPath(const Projection &theProjection)
 {
     p->PathUpToDate = false;
-    buildPath(theProjection, theTransform, cr);
+    buildPath(theProjection);
 }
 
-void Way::buildPath(const Projection &theProjection, const QTransform& theTransform, const QRectF& cr)
+void Way::buildPath(const Projection &theProjection)
 {
-#if QT_VERSION < 0x040700 && !defined(_MOBILE)
-    using namespace ggl;
-#endif
-
-    Q_UNUSED(theTransform);
-    Q_UNUSED(cr);
-
-#if QT_VERSION >= 0x040700 || defined(_MOBILE)
     if (p->PathUpToDate && p->ProjectionRevision == theProjection.projectionRevision())
         return;
     else {
-#else
-    if (!p->wasPathComplete || p->ProjectionRevision != theProjection.projectionRevision()) {
-#endif
-        p->theFullPath = QPainterPath();
+        p->thePath = QPainterPath();
         if (p->Nodes.size() < 2) {
-            p->thePath = QPainterPath();
             p->PathUpToDate = true;
             return;
         }
 
-        p->theFullPath.moveTo(theProjection.project(p->Nodes.at(0)));
+        p->thePath.moveTo(theProjection.project(p->Nodes.at(0)));
         for (unsigned int i=1; i<p->Nodes.size(); ++i) {
-            p->theFullPath.lineTo(theProjection.project(p->Nodes.at(i)));
+            p->thePath.lineTo(theProjection.project(p->Nodes.at(i)));
         }
         p->ProjectionRevision = theProjection.projectionRevision();
         p->PathUpToDate = true;
     }
-#if QT_VERSION >= 0x040700 || defined(_MOBILE)
-    p->thePath = p->theFullPath;
-#else
-    if (!g_Merk_SelfClip) {
-        p->thePath = p->theFullPath;
-    } else {
-        bool toClip = !cr.contains(p->theFullPath.boundingRect());
-    //    bool toClip = false;
-        if (!toClip) {
-            p->thePath = p->theFullPath;
-        } else {
-            if (area() > 0) {
-                QPainterPath clipPath;
-                clipPath.addRect(cr);
-
-                p->thePath = clipPath.intersected(p->theFullPath);
-            } else {
-                std::vector<linestring_2d> clipped;
-
-                // Ensure nodes' projection is up-to-date
-                for (unsigned int i=0; i<p->Nodes.size(); ++i)
-                    theProjection.project(p->Nodes[i]);
-                box_2d clipRect (make<point_2d>(cr.bottomLeft().x(), cr.topRight().y()), make<point_2d>(cr.topRight().x(), cr.bottomLeft().y()));
-
-                intersection <linestring_2d, box_2d, /*linestring_2d*/ std::vector<NodePtr>, std::back_insert_iterator <std::vector<linestring_2d> > >
-                        (clipRect, /*in*/ p->Nodes, std::back_inserter(clipped));
-
-                p->thePath = QPainterPath();
-                for (std::vector<linestring_2d>::const_iterator it = clipped.begin(); it != clipped.end(); it++)
-                {
-                    if (!(*it).empty()) {
-                        p->thePath.moveTo(QPointF((*it)[0].x(), (*it)[0].y()));
-                    }
-                    for (linestring_2d::const_iterator itl = (*it).begin()+1; itl != (*it).end(); itl++)
-                    {
-                        p->thePath.lineTo(QPointF((*itl).x(), (*itl).y()));
-                    }
-                }
-
-    //            bool lastPointVisible = true;
-    //            QPointF lastPoint = p->Nodes.at(0)->projection();
-    //            QPointF aP = lastPoint;
-    //            if (!cr.contains(aP)) {
-    //                aP.setX(qMax(cr.left(), aP.x()));
-    //                aP.setX(qMin(cr.right(), aP.x()));
-    //                aP.setY(qMax(cr.top(), aP.y()));
-    //                aP.setY(qMin(cr.bottom(), aP.y()));
-    //                lastPointVisible = false;
-    //            }
-    //            p->thePath = QPainterPath();
-    //            p->thePath.moveTo(aP);
-    //            for (int j=1; j<size(); ++j) {
-    //                aP = p->Nodes.at(j)->projection();
-    //                QLineF l(lastPoint, aP);
-    //                if (!cr.contains(aP)) {
-    //                    if (!lastPointVisible) {
-    //                        QPointF a, b;
-    //                        if (Utils::QRectInterstects(cr, l, a, b)) {
-    //                            p->thePath.lineTo(a);
-    //                            lastPoint = aP;
-    //                            aP = b;
-    //                        } else {
-    //                            lastPoint = aP;
-    //                            aP.setX(qMax(cr.left(), aP.x()));
-    //                            aP.setX(qMin(cr.right(), aP.x()));
-    //                            aP.setY(qMax(cr.top(), aP.y()));
-    //                            aP.setY(qMin(cr.bottom(), aP.y()));
-    //                        }
-    //                    } else {
-    //                        QPointF a, b;
-    //                        Utils::QRectInterstects(cr, l, a, b);
-    //                        lastPoint = aP;
-    //                        aP = a;
-    //                    }
-    //                    lastPointVisible = false;
-    //                } else {
-    //                    if (!lastPointVisible) {
-    //                        QPointF a, b;
-    //                        Utils::QRectInterstects(cr, l, a, b);
-    //                        p->thePath.lineTo(a);
-    //                    }
-    //                    lastPoint = aP;
-    //                    lastPointVisible = true;
-    //                }
-    //                p->thePath.lineTo(aP);
-    //            }
-            }
-        }
-    }
-#endif
 }
 
 bool Way::deleteChildren(Document* theDocument, CommandList* theList)

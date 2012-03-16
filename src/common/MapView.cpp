@@ -559,7 +559,7 @@ void MapView::drawFeatures(QPainter & P)
     QRectF clipRect = p->theInvertedTransform.mapRect(QRectF(rect().adjusted(-200, -200, 200, 200)));
 
     for (int i=0; i<theDocument->layerSize(); ++i)
-        g_backend.getFeatureSet(theDocument->getLayer(i), p->theFeatures, p->invalidRects, clipRect, theProjection, p->theTransform);
+        g_backend.getFeatureSet(theDocument->getLayer(i), p->theFeatures, p->invalidRects, theProjection);
 
     p->renderer.render(&P, p->theFeatures, p->ROptions, this);
 }
