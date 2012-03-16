@@ -73,21 +73,56 @@ public:
     MapRenderer renderer;
     RendererOptions ROptions;
 
+    Projection theProjection;
+    Document* theDocument;
+    Interaction* theInteraction;
+
     bool BackgroundOnlyPanZoom;
     QTransform BackgroundOnlyVpTransform;
 
     QLabel *TL, *TR, *BL, *BR;
 
+    QFuture<QMap<RenderPriority, QSet <Feature*> > > featureGathering;
+
     MapViewPrivate()
       : PixelPerM(0.0), Viewport(WORLD_COORDBOX), theVectorRotation(0.0)
       , BackgroundOnlyPanZoom(false)
+      , theDocument(0)
+      , theInteraction(0)
     {}
+
+};
+
+void addToFeatures(QMap<RenderPriority, QSet <Feature*> > &final, const QMap<RenderPriority, QSet <Feature*> > &intermediate)
+{
+    final.unite(intermediate);
+}
+
+struct GetFeatures
+{
+    GetFeatures(MapViewPrivate* ptr)
+    : p(ptr) { }
+
+    typedef QMap<RenderPriority, QSet <Feature*> > result_type;
+
+    QMap<RenderPriority, QSet <Feature*> > operator()(const CoordBox& invalidRect)
+    {
+        QMap<RenderPriority, QSet <Feature*> > theFeatures;
+
+        for (int i=0; i<p->theDocument->layerSize(); ++i)
+            g_backend.getFeatureSet(p->theDocument->getLayer(i), p->theFeatures, invalidRect, p->theProjection);
+
+        return theFeatures;
+    }
+
+
+    MapViewPrivate* p;
 };
 
 /****************/
 
 MapView::MapView(QWidget* parent) :
-    QWidget(parent), Main(dynamic_cast<MainWindow*>(parent)), theDocument(0), theInteraction(0), StaticBackground(0), StaticBuffer(0),
+    QWidget(parent), Main(dynamic_cast<MainWindow*>(parent)), StaticBackground(0), StaticBuffer(0),
         SelectionLocked(false),lockIcon(0), numImages(0),
         p(new MapViewPrivate)
 {
@@ -145,8 +180,8 @@ MapView::MapView(QWidget* parent) :
 
 MapView::~MapView()
 {
-    if(theInteraction)
-        delete theInteraction;
+    if(p->theInteraction)
+        delete p->theInteraction;
     delete StaticBackground;
     delete StaticBuffer;
     delete p;
@@ -167,8 +202,8 @@ PropertiesDock *MapView::properties()
 
 void MapView::setDocument(Document* aDoc)
 {
-    theDocument = aDoc;
-    if (theDocument) {
+    p->theDocument = aDoc;
+    if (p->theDocument) {
         connect(aDoc, SIGNAL(imageRequested(ImageMapLayer*)),
                 this, SLOT(on_imageRequested(ImageMapLayer*)), Qt::QueuedConnection);
         connect(aDoc, SIGNAL(imageReceived(ImageMapLayer*)),
@@ -182,7 +217,7 @@ void MapView::setDocument(Document* aDoc)
 
 Document *MapView::document()
 {
-    return theDocument;
+    return p->theDocument;
 }
 
 void MapView::invalidate(bool updateStaticBuffer, bool updateMap)
@@ -190,12 +225,14 @@ void MapView::invalidate(bool updateStaticBuffer, bool updateMap)
     if (updateStaticBuffer) {
         p->invalidRects.clear();
         p->invalidRects.push_back(p->Viewport);
+        if (p->theDocument)
+            p->featureGathering = QtConcurrent::mappedReduced(p->invalidRects, GetFeatures(p), addToFeatures);
         p->theVectorPanDelta = QPoint(0, 0);
         SAFE_DELETE(StaticBackground)
     }
-    if (theDocument && updateMap) {
+    if (p->theDocument && updateMap) {
         IMapWatermark* WatermarkAdapter = NULL;
-        for (LayerIterator<ImageMapLayer*> ImgIt(theDocument); !ImgIt.isEnd(); ++ImgIt) {
+        for (LayerIterator<ImageMapLayer*> ImgIt(p->theDocument); !ImgIt.isEnd(); ++ImgIt) {
             if (ImgIt.get()->isVisible()) {
                 ImgIt.get()->forceRedraw(*this, p->BackgroundOnlyVpTransform, rect());
                 WatermarkAdapter = qobject_cast<IMapWatermark*>(ImgIt.get()->getMapAdapter());
@@ -254,15 +291,17 @@ void MapView::panScreen(QPoint delta)
 
         //qDebug() << "Inv rects size: " << p->invalidRects.size();
         //    qDebug() << "delta: " << delta;
-        //qDebug() << "r1 : " << p->theTransform.map(theProjection.project(r1.topLeft())) << ", " << p->theTransform.map(theProjection.project(r1.bottomRight()));
-        //qDebug() << "r2 : " << p->theTransform.map(theProjection.project(r2.topLeft())) << ", " << p->theTransform.map(theProjection.project(r2.bottomRight()));
+        //qDebug() << "r1 : " << p->theTransform.map(p->theProjection.project(r1.topLeft())) << ", " << p->theTransform.map(p->theProjection.project(r1.bottomRight()));
+        //qDebug() << "r2 : " << p->theTransform.map(p->theProjection.project(r2.topLeft())) << ", " << p->theTransform.map(p->theProjection.project(r2.bottomRight()));
 
+        if (p->theDocument)
+            p->featureGathering = QtConcurrent::mappedReduced(p->invalidRects, GetFeatures(p), addToFeatures);
         p->theTransform.translate(qreal(delta.x())/p->theTransform.m11(), qreal(delta.y())/p->theTransform.m22());
         p->theInvertedTransform = p->theTransform.inverted();
         viewportRecalc(rect());
     }
 
-    for (LayerIterator<ImageMapLayer*> ImgIt(theDocument); !ImgIt.isEnd(); ++ImgIt)
+    for (LayerIterator<ImageMapLayer*> ImgIt(p->theDocument); !ImgIt.isEnd(); ++ImgIt)
         ImgIt.get()->pan(delta);
     update();
 }
@@ -271,20 +310,22 @@ void MapView::rotateScreen(QPoint center, qreal angle)
 {
     p->theVectorRotation += angle;
 
-    transformCalc(p->theTransform, theProjection, p->theVectorRotation, p->Viewport, rect());
+    transformCalc(p->theTransform, p->theProjection, p->theVectorRotation, p->Viewport, rect());
     p->theInvertedTransform = p->theTransform.inverted();
     viewportRecalc(rect());
     p->invalidRects.clear();
     p->invalidRects.push_back(p->Viewport);
 
-//    for (LayerIterator<ImageMapLayer*> ImgIt(theDocument); !ImgIt.isEnd(); ++ImgIt)
+//    for (LayerIterator<ImageMapLayer*> ImgIt(p->theDocument); !ImgIt.isEnd(); ++ImgIt)
 //        ImgIt.get()->pan(delta);
+    if (p->theDocument)
+        p->featureGathering = QtConcurrent::mappedReduced(p->invalidRects, GetFeatures(p), addToFeatures);
     update();
 }
 
 void MapView::paintEvent(QPaintEvent * anEvent)
 {
-    if (!theDocument)
+    if (!p->theDocument)
         return;
 
 #ifndef NDEBUG
@@ -301,7 +342,7 @@ void MapView::paintEvent(QPaintEvent * anEvent)
     P.drawPixmap(p->theVectorPanDelta, *StaticBackground);
     P.save();
     QTransform AlignTransform;
-    for (LayerIterator<ImageMapLayer*> ImgIt(theDocument); !ImgIt.isEnd(); ++ImgIt) {
+    for (LayerIterator<ImageMapLayer*> ImgIt(p->theDocument); !ImgIt.isEnd(); ++ImgIt) {
         if (ImgIt.get()->isVisible()) {
             ImgIt.get()->drawImage(&P);
             AlignTransform = ImgIt.get()->getCurrentAlignmentTransform();
@@ -318,9 +359,9 @@ void MapView::paintEvent(QPaintEvent * anEvent)
     drawDownloadAreas(P);
     drawScale(P);
 
-    if (theInteraction) {
+    if (p->theInteraction) {
         P.setRenderHint(QPainter::Antialiasing);
-        theInteraction->paintEvent(anEvent, P);
+        p->theInteraction->paintEvent(anEvent, P);
     }
 
     if (Main)
@@ -336,8 +377,8 @@ void MapView::paintEvent(QPaintEvent * anEvent)
                                            .arg(viewport().topRight().x(),0, 'f',4)
                                            .arg(viewport().topRight().y(),0,'f',4)
                                            ;
-        if (!theProjection.projIsLatLong()) {
-            QRectF pVp = theProjection.toProjectedRectF(viewport(), rect());
+        if (!p->theProjection.projIsLatLong()) {
+            QRectF pVp = p->theProjection.toProjectedRectF(viewport(), rect());
             vpLabel += " / " + QString("%1,%2,%3,%4")
                     .arg(pVp.bottomLeft().x(),0,'f',4)
                     .arg(pVp.bottomLeft().y(),0, 'f',4)
@@ -490,7 +531,7 @@ void MapView::drawLatLonGrid(QPainter & P)
     for (qreal y=latStart; y<=p->Viewport.topLeft().y()+latInterval; y+=latInterval) {
         QPolygonF l;
         for (qreal x=lonStart; x<=p->Viewport.bottomRight().x()+lonInterval; x+=lonInterval) {
-            QPointF pt = theProjection.project(Coord(qMin(x, COORD_MAX), qMin(y, COORD_MAX/2)));
+            QPointF pt = p->theProjection.project(Coord(qMin(x, COORD_MAX), qMin(y, COORD_MAX/2)));
             l << pt;
         }
         parallelLines << l;
@@ -498,7 +539,7 @@ void MapView::drawLatLonGrid(QPainter & P)
     for (qreal x=lonStart; x<=p->Viewport.bottomRight().x()+lonInterval; x+=lonInterval) {
         QPolygonF l;
         for (qreal y=latStart; y<=p->Viewport.topLeft().y()+latInterval; y+=latInterval) {
-            QPointF pt = theProjection.project(Coord(qMin(x, COORD_MAX), qMin(y, COORD_MAX/2)));
+            QPointF pt = p->theProjection.project(Coord(qMin(x, COORD_MAX), qMin(y, COORD_MAX/2)));
             l << pt;
         }
         medianLines << l;
@@ -528,7 +569,7 @@ void MapView::drawLatLonGrid(QPainter & P)
             continue;
 //        QPoint pt = QPoint(0, p->theTransform.map(parallelLines.at(i).at(0)).y());
         QPoint ptt = pt.toPoint() + QPoint(5, -5);
-        P.drawText(ptt, QString("%1").arg(theProjection.inverse2Coord(parallelLines.at(i).at(0)).y(), 0, 'f', 2-prec));
+        P.drawText(ptt, QString("%1").arg(p->theProjection.inverse2Coord(parallelLines.at(i).at(0)).y(), 0, 'f', 2-prec));
     }
     for (int i=0; i<medianLines.size(); ++i) {
 
@@ -548,7 +589,7 @@ void MapView::drawLatLonGrid(QPainter & P)
             continue;
 //        QPoint pt = QPoint(p->theTransform.map(medianLines.at(i).at(0)).x(), 0);
         QPoint ptt = pt.toPoint() + QPoint(5, 10);
-        P.drawText(ptt, QString("%1").arg(theProjection.inverse2Coord(medianLines.at(i).at(0)).x(), 0, 'f', 2-prec));
+        P.drawText(ptt, QString("%1").arg(p->theProjection.inverse2Coord(medianLines.at(i).at(0)).x(), 0, 'f', 2-prec));
     }
 
     P.restore();
@@ -556,12 +597,11 @@ void MapView::drawLatLonGrid(QPainter & P)
 
 void MapView::drawFeatures(QPainter & P)
 {
-    QRectF clipRect = p->theInvertedTransform.mapRect(QRectF(rect().adjusted(-200, -200, 200, 200)));
+//    for (int i=0; i<p->theDocument->layerSize(); ++i)
+//        g_backend.getFeatureSet(p->theDocument->getLayer(i), p->theFeatures, p->invalidRects, p->theProjection);
 
-    for (int i=0; i<theDocument->layerSize(); ++i)
-        g_backend.getFeatureSet(theDocument->getLayer(i), p->theFeatures, p->invalidRects, theProjection);
-
-    p->renderer.render(&P, p->theFeatures, p->ROptions, this);
+//    p->renderer.render(&P, p->theFeatures, p->ROptions, this);
+    p->renderer.render(&P, p->featureGathering.result(), p->ROptions, this);
 }
 
 void MapView::drawDownloadAreas(QPainter & P)
@@ -576,7 +616,7 @@ void MapView::drawDownloadAreas(QPainter & P)
     //QBrush b(Qt::red, Qt::DiagCrossPattern);
     QBrush b(Qt::red, Qt::Dense7Pattern);
 
-    QList<CoordBox> db = theDocument->getDownloadBoxes();
+    QList<CoordBox> db = p->theDocument->getDownloadBoxes();
     QList<CoordBox>::const_iterator bb;
     for (bb = db.constBegin(); bb != db.constEnd(); ++bb) {
         if (viewport().disjunctFrom(*bb)) continue;
@@ -663,19 +703,19 @@ void MapView::mousePressEvent(QMouseEvent* anEvent)
     if (!document())
         return;
 
-    if (theInteraction) {
-        if ((anEvent->modifiers() & Qt::AltModifier) || dynamic_cast<ExtrudeInteraction*>(theInteraction))
+    if (p->theInteraction) {
+        if ((anEvent->modifiers() & Qt::AltModifier) || dynamic_cast<ExtrudeInteraction*>(p->theInteraction))
             g_Merk_Segment_Mode = true;
         else
             g_Merk_Segment_Mode = false;
 
 
-        theInteraction->updateSnap(anEvent);
+        p->theInteraction->updateSnap(anEvent);
         if (Main && Main->info())
-            Main->info()->setHtml(theInteraction->toHtml());
+            Main->info()->setHtml(p->theInteraction->toHtml());
 
         if (anEvent->button())
-            theInteraction->mousePressEvent(anEvent);
+            p->theInteraction->mousePressEvent(anEvent);
     }
 }
 
@@ -684,15 +724,15 @@ void MapView::mouseReleaseEvent(QMouseEvent* anEvent)
     if (!document())
         return;
 
-    if (theInteraction) {
-        if ((anEvent->modifiers() & Qt::AltModifier) || dynamic_cast<ExtrudeInteraction*>(theInteraction))
+    if (p->theInteraction) {
+        if ((anEvent->modifiers() & Qt::AltModifier) || dynamic_cast<ExtrudeInteraction*>(p->theInteraction))
             g_Merk_Segment_Mode = true;
         else
             g_Merk_Segment_Mode = false;
 
 
-        theInteraction->updateSnap(anEvent);
-        theInteraction->mouseReleaseEvent(anEvent);
+        p->theInteraction->updateSnap(anEvent);
+        p->theInteraction->mouseReleaseEvent(anEvent);
     }
 }
 
@@ -704,16 +744,16 @@ void MapView::mouseMoveEvent(QMouseEvent* anEvent)
     if (!updatesEnabled())
         return;
 
-    if (theInteraction) {
-        if ((anEvent->modifiers() & Qt::AltModifier) || dynamic_cast<ExtrudeInteraction*>(theInteraction))
+    if (p->theInteraction) {
+        if ((anEvent->modifiers() & Qt::AltModifier) || dynamic_cast<ExtrudeInteraction*>(p->theInteraction))
             g_Merk_Segment_Mode = true;
         else
             g_Merk_Segment_Mode = false;
 
-        theInteraction->updateSnap(anEvent);
+        p->theInteraction->updateSnap(anEvent);
 
         if (!M_PREFS->getSeparateMoveMode()) {
-            EditInteraction* EI = dynamic_cast<EditInteraction*>(theInteraction);
+            EditInteraction* EI = dynamic_cast<EditInteraction*>(p->theInteraction);
             if (EI && EI->isIdle()) {
                 if (EI->lastSnap() && Main && Main->properties()->isSelected(EI->lastSnap())) {
                     MoveNodeInteraction* MI = new MoveNodeInteraction(this);
@@ -726,7 +766,7 @@ void MapView::mouseMoveEvent(QMouseEvent* anEvent)
                     return;
                 }
             }
-            MoveNodeInteraction* MI = dynamic_cast<MoveNodeInteraction*>(theInteraction);
+            MoveNodeInteraction* MI = dynamic_cast<MoveNodeInteraction*>(p->theInteraction);
             if (MI && !MI->lastSnap() && MI->isIdle()) {
                 EditInteraction* EI = new EditInteraction(this);
                 launch(EI);
@@ -740,7 +780,7 @@ void MapView::mouseMoveEvent(QMouseEvent* anEvent)
 
         }
 
-        theInteraction->mouseMoveEvent(anEvent);
+        p->theInteraction->mouseMoveEvent(anEvent);
     }
 }
 
@@ -752,25 +792,25 @@ void MapView::mouseDoubleClickEvent(QMouseEvent* anEvent)
     if (!updatesEnabled())
         return;
 
-    if (theInteraction) {
-        if ((anEvent->modifiers() & Qt::AltModifier) || dynamic_cast<ExtrudeInteraction*>(theInteraction))
+    if (p->theInteraction) {
+        if ((anEvent->modifiers() & Qt::AltModifier) || dynamic_cast<ExtrudeInteraction*>(p->theInteraction))
             g_Merk_Segment_Mode = true;
         else
             g_Merk_Segment_Mode = false;
 
-        theInteraction->updateSnap(anEvent);
+        p->theInteraction->updateSnap(anEvent);
 
         if (M_PREFS->getSelectModeCreation()) {
             MoveNodeInteraction* MI = NULL;
             if (!M_PREFS->getSeparateMoveMode()) {
-                MI = dynamic_cast<MoveNodeInteraction*>(theInteraction);
+                MI = dynamic_cast<MoveNodeInteraction*>(p->theInteraction);
             }
-            EditInteraction* EI = dynamic_cast<EditInteraction*>(theInteraction);
+            EditInteraction* EI = dynamic_cast<EditInteraction*>(p->theInteraction);
             if ((EI && EI->isIdle()) || (MI && MI->isIdle())) {
-                if ((theInteraction->lastSnap() && theInteraction->lastSnap()->getType() & IFeature::LineString) || !theInteraction->lastSnap())
-                    CreateNodeInteraction::createNode(fromView(anEvent->pos()), theInteraction->lastSnap());
-                else if (theInteraction->lastSnap() && theInteraction->lastSnap()->getType() == IFeature::Point) {
-                    Node* N = CAST_NODE(theInteraction->lastSnap());
+                if ((p->theInteraction->lastSnap() && p->theInteraction->lastSnap()->getType() & IFeature::LineString) || !p->theInteraction->lastSnap())
+                    CreateNodeInteraction::createNode(fromView(anEvent->pos()), p->theInteraction->lastSnap());
+                else if (p->theInteraction->lastSnap() && p->theInteraction->lastSnap()->getType() == IFeature::Point) {
+                    Node* N = CAST_NODE(p->theInteraction->lastSnap());
                     CreateSingleWayInteraction* CI = new CreateSingleWayInteraction(main(), this, N, false);
                     N->invalidatePainter();
                     launch(CI);
@@ -783,7 +823,7 @@ void MapView::mouseDoubleClickEvent(QMouseEvent* anEvent)
                 }
             }
         }
-        theInteraction->mouseDoubleClickEvent(anEvent);
+        p->theInteraction->mouseDoubleClickEvent(anEvent);
     }
 }
 
@@ -792,24 +832,24 @@ void MapView::wheelEvent(QWheelEvent* anEvent)
     if (!document())
         return;
 
-    if (theInteraction) {
-        theInteraction->wheelEvent(anEvent);
+    if (p->theInteraction) {
+        p->theInteraction->wheelEvent(anEvent);
     }
 }
 
 void MapView::launch(Interaction* anInteraction)
 {
-    EditInteraction* EI = dynamic_cast<EditInteraction*>(theInteraction);
+    EditInteraction* EI = dynamic_cast<EditInteraction*>(p->theInteraction);
     if (EI)
         theSnapList = EI->snapList();
     if (!theSnapList.size())
         if (Main && Main->properties())
             theSnapList = Main->properties()->selection();
-    if (theInteraction)
-        delete theInteraction;
-    theInteraction = anInteraction;
-    EI = dynamic_cast<EditInteraction*>(theInteraction);
-    if (theInteraction) {
+    if (p->theInteraction)
+        delete p->theInteraction;
+    p->theInteraction = anInteraction;
+    EI = dynamic_cast<EditInteraction*>(p->theInteraction);
+    if (p->theInteraction) {
         emit interactionChanged(anInteraction);
         if (EI)
             EI->setSnap(theSnapList);
@@ -818,7 +858,7 @@ void MapView::launch(Interaction* anInteraction)
         setCursor(QCursor(Qt::ArrowCursor));
 #endif
         launch(defaultInteraction());
-        //Q_ASSERT(theInteraction);
+        //Q_ASSERT(p->theInteraction);
     }
 }
 
@@ -829,12 +869,12 @@ Interaction *MapView::defaultInteraction()
 
 Interaction *MapView::interaction()
 {
-    return theInteraction;
+    return p->theInteraction;
 }
 
 Projection& MapView::projection()
 {
-    return theProjection;
+    return p->theProjection;
 }
 
 QTransform& MapView::transform()
@@ -849,17 +889,17 @@ QTransform& MapView::invertedTransform()
 
 QPoint MapView::toView(const Coord& aCoord) const
 {
-    return p->theTransform.map(theProjection.project(aCoord)).toPoint();
+    return p->theTransform.map(p->theProjection.project(aCoord)).toPoint();
 }
 
 QPoint MapView::toView(Node* aPt) const
 {
-    return p->theTransform.map(theProjection.project(aPt)).toPoint();
+    return p->theTransform.map(p->theProjection.project(aPt)).toPoint();
 }
 
 Coord MapView::fromView(const QPoint& aPt) const
 {
-    return theProjection.inverse2Coord(p->theInvertedTransform.map(QPointF(aPt)));
+    return p->theProjection.inverse2Coord(p->theInvertedTransform.map(QPointF(aPt)));
 }
 
 void MapView::on_customContextMenuRequested(const QPoint & pos)
@@ -868,7 +908,7 @@ void MapView::on_customContextMenuRequested(const QPoint & pos)
     if (!Main)
         return;
 
-    if (/*EditInteraction* ei = */dynamic_cast<EditInteraction*>(theInteraction) || dynamic_cast<MoveNodeInteraction*>(theInteraction)) {
+    if (/*EditInteraction* ei = */dynamic_cast<EditInteraction*>(p->theInteraction) || dynamic_cast<MoveNodeInteraction*>(p->theInteraction)) {
         QMenu menu;
 
         //FIXME Some of these actions on WIN32-MSVC corrupts the heap.
@@ -1085,7 +1125,7 @@ bool MapView::toXML(QXmlStreamWriter& stream)
 
     stream.writeStartElement("MapView");
     viewport().toXML("Viewport", stream);
-    theProjection.toXML(stream);
+    p->theProjection.toXML(stream);
     stream.writeEndElement();
 
     return OK;
@@ -1099,7 +1139,7 @@ void MapView::fromXML(QXmlStreamReader& stream)
         if (stream.name() == "Viewport") {
             cb = CoordBox::fromXML(stream);
         } else if (stream.name() == "Projection") {
-            theProjection.fromXML(stream);
+            p->theProjection.fromXML(stream);
         }
         stream.readNext();
     }
@@ -1156,7 +1196,7 @@ bool MapView::event(QEvent *event)
     switch (event->type()) {
     case QEvent::ToolTip: {
             QHelpEvent *helpEvent = static_cast<QHelpEvent *>(event);
-            //Coord p = theProjection.inverse(helpEvent->pos());
+            //Coord p = p->theProjection.inverse(helpEvent->pos());
             if (M_PREFS->getMapTooltip()) {
                 if (!toolTip().isEmpty())
                     QToolTip::showText(helpEvent->globalPos(), toolTip());
@@ -1433,9 +1473,9 @@ void MapView::setViewport(const CoordBox & TargetMap)
         p->Viewport = CoordBox (TargetMap.center()-COORD_ENLARGE*10, TargetMap.center()+COORD_ENLARGE*10);
     else
         p->Viewport = TargetMap;
-    if (TEST_RFLAGS(RendererOptions::LockZoom) && theDocument) {
+    if (TEST_RFLAGS(RendererOptions::LockZoom) && p->theDocument) {
         ImageMapLayer* l = NULL;
-        for (LayerIterator<ImageMapLayer*> ImgIt(theDocument); !ImgIt.isEnd(); ++ImgIt) {
+        for (LayerIterator<ImageMapLayer*> ImgIt(p->theDocument); !ImgIt.isEnd(); ++ImgIt) {
             l = ImgIt.get();
             break;
         }
@@ -1456,7 +1496,7 @@ void MapView::setViewport(const CoordBox & TargetMap,
         targetVp = CoordBox (TargetMap.center()-COORD_ENLARGE*10, TargetMap.center()+COORD_ENLARGE*10);
     else
         targetVp = TargetMap;
-    transformCalc(p->theTransform, theProjection, p->theVectorRotation, targetVp, Screen);
+    transformCalc(p->theTransform, p->theProjection, p->theVectorRotation, targetVp, Screen);
     p->theInvertedTransform = p->theTransform.inverted();
     viewportRecalc(Screen);
 
@@ -1470,9 +1510,9 @@ void MapView::setViewport(const CoordBox & TargetMap,
     }
     p->ZoomLevel = p->theTransform.m11();
 
-    if (TEST_RFLAGS(RendererOptions::LockZoom) && theDocument) {
+    if (TEST_RFLAGS(RendererOptions::LockZoom) && p->theDocument) {
         ImageMapLayer* l = NULL;
-        for (LayerIterator<ImageMapLayer*> ImgIt(theDocument); !ImgIt.isEnd(); ++ImgIt) {
+        for (LayerIterator<ImageMapLayer*> ImgIt(p->theDocument); !ImgIt.isEnd(); ++ImgIt) {
             l = ImgIt.get();
             break;
         }
@@ -1497,7 +1537,7 @@ void MapView::zoom(qreal d, const QPoint & Around)
     qreal z = d;
     if (TEST_RFLAGS(RendererOptions::LockZoom)) {
         ImageMapLayer* l = NULL;
-        for (LayerIterator<ImageMapLayer*> ImgIt(theDocument); !ImgIt.isEnd(); ++ImgIt) {
+        for (LayerIterator<ImageMapLayer*> ImgIt(p->theDocument); !ImgIt.isEnd(); ++ImgIt) {
             l = ImgIt.get();
             break;
         }
@@ -1519,7 +1559,7 @@ void MapView::adjustZoomToBoris()
 {
     if (TEST_RFLAGS(RendererOptions::LockZoom)) {
         ImageMapLayer* l = NULL;
-        for (LayerIterator<ImageMapLayer*> ImgIt(theDocument); !ImgIt.isEnd(); ++ImgIt) {
+        for (LayerIterator<ImageMapLayer*> ImgIt(p->theDocument); !ImgIt.isEnd(); ++ImgIt) {
             l = ImgIt.get();
             break;
         }
@@ -1559,12 +1599,12 @@ void MapView::zoom(qreal d, const QPoint & Around,
             p->NodeWidth = M_PREFS->getNodeSize();
     }
 
-    for (LayerIterator<ImageMapLayer*> ImgIt(theDocument); !ImgIt.isEnd(); ++ImgIt)
+    for (LayerIterator<ImageMapLayer*> ImgIt(p->theDocument); !ImgIt.isEnd(); ++ImgIt)
         ImgIt.get()->zoom(d, Around, Screen);
 
     p->ZoomLevel = ScaleLon;
 
-//    QPointF pt = theProjection.project(Coord(0, angToInt(180)));
+//    QPointF pt = p->theProjection.project(Coord(0, angToInt(180)));
 //    qreal earthWidth = pt.x() * 2;
 //    qreal zoomPixPerMat0 = 512. / earthWidth;
 //    qreal z = 0;
@@ -1624,7 +1664,7 @@ QString MapView::toPropertiesHtml()
          ;
     h += "<br/>";
     h += "<u>" + tr("Projection") + "</u><br/>";
-    h += theProjection.getProjectionType();
+    h += p->theProjection.getProjectionType();
     h += "";
 
     return h;

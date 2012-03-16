@@ -99,9 +99,6 @@ private:
         void updateStaticBuffer();
 
         MainWindow* Main;
-        Projection theProjection;
-        Document* theDocument;
-        Interaction* theInteraction;
         QPixmap* StaticBackground;
         QPixmap* StaticBuffer;
         bool StaticMapUpToDate;
