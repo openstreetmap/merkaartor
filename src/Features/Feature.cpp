@@ -677,6 +677,7 @@ void Feature::unsetParentFeature(Feature* F)
 
 void Feature::updateFilters()
 {
+    QMutexLocker mutlock(&featMutex);
     p->FilterLayers.clear();
 
     Layer* L = layer();
@@ -702,6 +703,7 @@ void Feature::updateFilters()
 void Feature::updateMeta()
 {
     updateFilters();
+    QMutexLocker mutlock(&featMutex);
 
     Layer* L = layer();
     if (!L)

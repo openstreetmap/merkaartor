@@ -979,7 +979,7 @@ void MainWindow::on_editPropertiesAction_triggered()
     if (theView->interaction() && dynamic_cast<EditInteraction*>(theView->interaction()))
         p->theProperties->setSelection(0);
     theView->unlockSelection();
-    theView->invalidate(true, false);
+//    theView->invalidate(true, false);
     theView->launch(new EditInteraction(theView));
     theInfo->setHtml(theView->interaction()->toHtml());
 }

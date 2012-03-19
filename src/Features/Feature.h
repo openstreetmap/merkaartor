@@ -347,6 +347,7 @@ protected:
     mutable CoordBox BBox;
     bool MetaUpToDate;
     IFeature::FId newId(IFeature::FeatureType type) const;
+    QMutex featMutex;
 
     bool tagsToXML(QXmlStreamWriter& stream, bool strict);
     static void tagsFromXML(Document* d, Feature* f, QXmlStreamReader& stream);

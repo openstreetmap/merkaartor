@@ -617,6 +617,7 @@ void Way::rebuildPath(const Projection &theProjection)
 
 void Way::buildPath(const Projection &theProjection)
 {
+    QMutexLocker mutlock(&featMutex);
     if (p->PathUpToDate && p->ProjectionRevision == theProjection.projectionRevision())
         return;
     else {

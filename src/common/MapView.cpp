@@ -101,7 +101,7 @@ void addToFeatures(QMap<RenderPriority, QSet <Feature*> > &final, const QMap<Ren
 struct GetFeatures
 {
     GetFeatures(MapViewPrivate* ptr)
-    : p(ptr) { }
+        : p(ptr) { }
 
     typedef QMap<RenderPriority, QSet <Feature*> > result_type;
 
@@ -110,7 +110,7 @@ struct GetFeatures
         QMap<RenderPriority, QSet <Feature*> > theFeatures;
 
         for (int i=0; i<p->theDocument->layerSize(); ++i)
-            g_backend.getFeatureSet(p->theDocument->getLayer(i), p->theFeatures, invalidRect, p->theProjection);
+            g_backend.getFeatureSet(p->theDocument->getLayer(i), theFeatures, invalidRect, p->theProjection);
 
         return theFeatures;
     }
@@ -446,8 +446,8 @@ void MapView::drawGPS(QPainter & P)
         if (Main->gps()->getGpsDevice()->fixStatus() == QGPSDevice::StatusActive) {
             Coord vp(Main->gps()->getGpsDevice()->longitude(), Main->gps()->getGpsDevice()->latitude());
             QPoint g = toView(vp);
-            QPixmap* pm = getPixmapFromFile(":/Gps/Gps_Marker.svg", 32);
-            P.drawPixmap(g - QPoint(16, 16), *pm);
+            QImage* pm = getSVGImageFromFile(":/Gps/Gps_Marker.svg", 32);
+            P.drawImage(g - QPoint(16, 16), *pm);
         }
     }
 }
@@ -1245,6 +1245,7 @@ bool MapView::event(QEvent *event)
             case Qt::Key_T:
                 {
                     rotateScreen(rect().center(), 15.);
+                    return true;
                 }
 
             case Qt::Key_O:

@@ -5,25 +5,23 @@
 #include <QtGui/QPainter>
 #include <QtSvg/QSvgRenderer>
 
-QPixmap* getPixmapFromFile(const QString& aName, int Size)
+QImage* getSVGImageFromFile(const QString& aName, int Size)
 {
-    static QMap<QPair<QString, int>, QPixmap> Cache;
+    static QMap<QPair<QString, int>, QImage> Cache;
     QPair<QString, int> Key(aName,Size);
     if (!Cache.contains(Key))
     {
-        QPixmap result(Size, Size);
+        QImage result(Size, Size, QImage::Format_ARGB32_Premultiplied);
+        result.fill(Qt::transparent);
         if (Size) {
             if (aName.right(4).toUpper() == ".SVG") {
-                result.fill(Qt::transparent);
                 QPainter p(&result);
                 QSvgRenderer Monet(aName);
                 Monet.render(&p,QRectF(0,0,Size,Size));
             } else {
-                result = QPixmap(aName);
+                result = QImage(aName);
                 result = result.scaledToWidth(Size);
             }
-        } else {
-            result = QPixmap(aName);
         }
         Cache[Key] = result;
     }

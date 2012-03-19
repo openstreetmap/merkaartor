@@ -416,6 +416,7 @@ void Relation::buildPath(Projection const &theProjection)
 //    QPainterPath clipPath;
 //    clipPath.addRect(cr);
 
+    QMutexLocker mutlock(&featMutex);
     p->theBoundingPath = QPainterPath();
 
     if (!p->Members.size())

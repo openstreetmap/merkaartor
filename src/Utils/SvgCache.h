@@ -1,8 +1,8 @@
 #ifndef MERKAARTOR_SVGCACHE_H_
 #define MERKAARTOR_SVGCACHE_H_
 
-#include <QtGui/QPixmap>
+#include <QImage>
 
-QPixmap* getPixmapFromFile(const QString& aName, int Size);
+QImage* getSVGImageFromFile(const QString& aName, int Size);
 
 #endif
