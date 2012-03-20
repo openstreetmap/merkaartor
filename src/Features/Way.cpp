@@ -579,7 +579,7 @@ void Way::cascadedRemoveIfUsing(Document* theDocument, Feature* aFeature, Comman
                 {
                     if ((i+j) == 0)
                         theList->add(new WayAddNodeCommand(this, Alternatives[j], 0,theDocument->getDirtyOrOriginLayer(layer())));
-                    else if (p->Nodes[i+j-1] != Alternatives[j] && p->Nodes[i+j+1] != Alternatives[j])
+                    else if (p->Nodes[i+j-1] != Alternatives[j] && (i+j+1 >= p->Nodes.size() || p->Nodes[i+j+1] != Alternatives[j]))
                         theList->add(new WayAddNodeCommand(this, Alternatives[j], i+j,theDocument->getDirtyOrOriginLayer(layer())));
                 }
             }
