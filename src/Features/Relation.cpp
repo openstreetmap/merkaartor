@@ -1,5 +1,6 @@
 #include "Features.h"
 #include "MapView.h"
+#include "MapRenderer.h"
 #include "MainWindow.h"
 #include "DocumentCommands.h"
 #include "RelationCommands.h"
@@ -181,9 +182,9 @@ const CoordBox& Relation::boundingBox(bool update) const
     return BBox;
 }
 
-void Relation::draw(QPainter& P, MapView* theView)
+void Relation::draw(QPainter& P, MapRenderer* theRenderer)
 {
-    if (!TEST_RFLAGS(RendererOptions::RelationsVisible))
+    if (!theRenderer->theOptions.options.testFlag(RendererOptions::RelationsVisible))
         return;
 
     if (notEverythingDownloaded())
@@ -194,7 +195,7 @@ void Relation::draw(QPainter& P, MapView* theView)
         else
             P.setPen(QPen(M_PREFS->getRelationsColor(),M_PREFS->getRelationsWidth(),Qt::DashLine));
     }
-    P.drawPath(theView->transform().map(p->theBoundingPath));
+    P.drawPath(theRenderer->theTransform.map(p->theBoundingPath));
 }
 
 void Relation::drawSpecial(QPainter& thePainter, QPen& Pen, MapView* theView)
@@ -222,7 +223,7 @@ void Relation::drawParentsSpecial(QPainter& thePainter, QPen& Pen, MapView* theV
     }
 }
 
-void Relation::drawChildrenSpecial(QPainter& thePainter, QPen& Pen, MapView *theView, int depth)
+void Relation::drawChildrenSpecial(QPainter& thePainter, QPen& Pen, MapView* theView, int depth)
 {
     QPen TP(Pen);
     TP.setStyle(Qt::DashLine);

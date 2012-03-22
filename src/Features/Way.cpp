@@ -8,6 +8,7 @@
 #include "Coord.h"
 #include "Painting.h"
 #include "MapView.h"
+#include "MapRenderer.h"
 #include "LineF.h"
 #include "MDiscardableDialog.h"
 #include "Utils.h"
@@ -186,12 +187,12 @@ void Way::setDeleted(bool delState)
 void Way::setLayer(Layer* L)
 {
     if (L) {
-        for (unsigned int i=0; i<p->Nodes.size(); ++i) {
+        for (int i=0; i<p->Nodes.size(); ++i) {
             if (p->Nodes[i])
                 p->Nodes[i]->setParentFeature(this);
         }
     } else {
-        for (unsigned int i=0; i<p->Nodes.size(); ++i) {
+        for (int i=0; i<p->Nodes.size(); ++i) {
             if (p->Nodes[i])
                 p->Nodes[i]->unsetParentFeature(this);
         }
@@ -245,7 +246,7 @@ void Way::add(Node* Pt, int Idx)
 
 int Way::find(Feature* Pt) const
 {
-    for (unsigned int i=0; i<p->Nodes.size(); ++i)
+    for (int i=0; i<p->Nodes.size(); ++i)
         if (p->Nodes[i] == Pt)
             return i;
     return p->Nodes.size();
@@ -253,7 +254,7 @@ int Way::find(Feature* Pt) const
 
 int Way::findVirtual(Feature* Pt) const
 {
-    for (unsigned int i=0; i<p->virtualNodes.size(); ++i)
+    for (int i=0; i<p->virtualNodes.size(); ++i)
         if (p->virtualNodes[i] == Pt)
             return i;
     return p->virtualNodes.size();
@@ -339,7 +340,7 @@ const CoordBox& Way::boundingBox(bool update) const
         if (p->Nodes.size())
         {
             BBox = CoordBox(p->Nodes[0]->position(),p->Nodes[0]->position());
-            for (unsigned int i=1; i<p->Nodes.size(); ++i)
+            for (int i=1; i<p->Nodes.size(); ++i)
                 BBox.merge(p->Nodes[i]->position());
         }
         else
@@ -362,7 +363,7 @@ void Way::updateMeta()
     if (lastUpdated() == Feature::NotYetDownloaded)
         p->NotEverythingDownloaded = true;
     else
-        for (unsigned int i=0; i<p->Nodes.size(); ++i)
+        for (int i=0; i<p->Nodes.size(); ++i)
             if (p->Nodes.at(i) && p->Nodes.at(i)->notEverythingDownloaded()) {
                 p->NotEverythingDownloaded = true;
                 break;
@@ -375,7 +376,7 @@ void Way::updateMeta()
     if (tagValue("highway", "") == "" || tagValue("area", "") != "")
         isArea = (p->Nodes[0] == p->Nodes[p->Nodes.size()-1]);
 
-    for (unsigned int i=0; (i+1)<p->Nodes.size(); ++i)
+    for (int i=0; (i+1)<p->Nodes.size(); ++i)
     {
         if (p->Nodes[i] && p->Nodes[i+1]) {
             const Coord & here = p->Nodes[i]->position();
@@ -432,25 +433,25 @@ qreal Way::widthOf()
     return p->Width;
 }
 
-void Way::draw(QPainter& P, MapView* theView)
+void Way::draw(QPainter& P, MapRenderer* theRenderer)
 {
 
     if (isDirty() && isUploadable() && M_PREFS->getDirtyVisible()) {
         QPen thePen(M_PREFS->getDirtyColor(),M_PREFS->getDirtyWidth());
         P.setPen(thePen);
-        P.drawPath(theView->transform().map(getPath()));
+        P.drawPath(theRenderer->theTransform.map(getPath()));
     }
 
-    qreal theWidth = theView->nodeWidth();
+    qreal theWidth = theRenderer->NodeWidth;
     bool Draw = (theWidth >= 1);
-    if (!Draw || !TEST_RFLAGS(RendererOptions::VirtualNodesVisible) || !TEST_RFLAGS(RendererOptions::NodesVisible) || isReadonly())
+    if (!Draw || !theRenderer->theOptions.options.testFlag(RendererOptions::VirtualNodesVisible) || !theRenderer->theOptions.options.testFlag(RendererOptions::NodesVisible) || isReadonly())
         return;
 
     theWidth /= 2;
     P.setPen(QColor(0,0,0));
     foreach (NodePtr N, p->virtualNodes) {
-        if (theView->viewport().contains(N->position())) {
-            QPoint p =  theView->toView(N);
+        if (theRenderer->theViewport.contains(N->projected())) {
+            QPoint p =  theRenderer->toView(N);
             P.drawLine(p+QPoint(-theWidth, -theWidth), p+QPoint(theWidth, theWidth));
             P.drawLine(p+QPoint(theWidth, -theWidth), p+QPoint(-theWidth, theWidth));
         }
@@ -477,7 +478,7 @@ void Way::drawParentsSpecial(QPainter& thePainter, QPen& Pen, MapView* theView)
     }
 }
 
-void Way::drawChildrenSpecial(QPainter& thePainter, QPen& Pen, MapView *theView, int depth)
+void Way::drawChildrenSpecial(QPainter& thePainter, QPen& Pen, MapView* theView, int depth)
 {
     Q_UNUSED(depth);
 
@@ -490,7 +491,7 @@ void Way::drawChildrenSpecial(QPainter& thePainter, QPen& Pen, MapView *theView,
     if (p->BestSegment != -1) {
         for (int i=p->BestSegment; i<=p->BestSegment+1; ++i)
             if (getNode(i)->isVisible() && !getNode(i)->isVirtual())
-                Pl.append(theView->projection().project(getNode(i)));
+                Pl.append(getNode(i)->projected());
     } else
         buildPolygonFromRoad(this,theView->projection(),Pl);
 
@@ -513,7 +514,7 @@ qreal Way::pixelDistance(const QPointF& Target, qreal ClearEndDistance, const QL
 //            }
 //        }
 //    }
-    for (unsigned int i=0; i<p->Nodes.size()-1; ++i)
+    for (int i=0; i<p->Nodes.size()-1; ++i)
     {
         if (NoSnap.contains(p->Nodes.at(i)) || NoSnap.contains(p->Nodes.at(i+1)))
             continue;
@@ -536,7 +537,7 @@ Node* Way::pixelDistanceNode(const QPointF& Target, qreal ClearEndDistance, MapV
     qreal Best = 1000000;
     Node* ret = NULL;
 
-    for (unsigned int i=0; i<p->Nodes.size(); ++i)
+    for (int i=0; i<p->Nodes.size(); ++i)
     {
         if (p->Nodes.at(i) && !NoSnap.contains(p->Nodes.at(i))) {
             qreal D = ::distance(Target,theView->toView(p->Nodes.at(i)));
@@ -547,7 +548,7 @@ Node* Way::pixelDistanceNode(const QPointF& Target, qreal ClearEndDistance, MapV
         }
     }
     if (!NoSelectVirtuals && M_PREFS->getVirtualNodesVisible()) {
-        for (unsigned int i=0; i<p->virtualNodes.size(); ++i)
+        for (int i=0; i<p->virtualNodes.size(); ++i)
         {
             if (p->virtualNodes.at(i)) {
                 qreal D = ::distance(Target,theView->toView(p->virtualNodes.at(i)));
@@ -563,7 +564,7 @@ Node* Way::pixelDistanceNode(const QPointF& Target, qreal ClearEndDistance, MapV
 
 void Way::cascadedRemoveIfUsing(Document* theDocument, Feature* aFeature, CommandList* theList, const QList<Feature*>& Proposals)
 {
-    for (unsigned int i=0; i<p->Nodes.size();) {
+    for (int i=0; i<p->Nodes.size();) {
         if (p->Nodes[i] == aFeature)
         {
             QList<Node*> Alternatives;
@@ -627,9 +628,9 @@ void Way::buildPath(const Projection &theProjection)
             return;
         }
 
-        p->thePath.moveTo(theProjection.project(p->Nodes.at(0)));
-        for (unsigned int i=1; i<p->Nodes.size(); ++i) {
-            p->thePath.lineTo(theProjection.project(p->Nodes.at(i)));
+        p->thePath.moveTo(p->Nodes.at(0)->projected(theProjection));
+        for (int i=1; i<p->Nodes.size(); ++i) {
+            p->thePath.lineTo((p->Nodes.at(i)->projected(theProjection)));
         }
         p->ProjectionRevision = theProjection.projectionRevision();
         p->PathUpToDate = true;

@@ -175,8 +175,8 @@ bool Win_QextSerialPort::open(OpenMode mode) {
             //SetCommConfig(Win_Handle, &Win_CommConfig, sizeof(COMMCONFIG));
             SetCommState(Win_Handle, &Win_CommConfig);
         } else 		{
-	        qDebug("Device handle failed with error : %d\n", GetLastError());
-		}
+            qDebug("Device handle failed with error : %d\n", (int)GetLastError());
+        }
     }
     UNLOCK_MUTEX();
     return isOpen();
@@ -344,7 +344,7 @@ purpose within this class.  This function is meaningless on an unbuffered device
 only prints a warning message to that effect.
 */
 void Win_QextSerialPort::ungetChar(char c) {
-	Q_UNUSED(c);
+    Q_UNUSED(c);
     /*meaningless on unbuffered sequential device - return error and print a warning*/
     TTY_WARNING("Win_QextSerialPort: ungetChar() called on an unbuffered sequential device - operation is meaningless");
 }

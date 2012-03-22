@@ -3579,7 +3579,7 @@ void MainWindow::updateGpsPosition(qreal latitude, qreal longitude, QDateTime ti
             QRectF vpr = vp.adjusted(lonDiff / 4, -latDiff / 4, -lonDiff / 4, latDiff / 4);
             if (!vpr.contains(gpsCoord)) {
                 theView->setCenter(gpsCoord, theView->rect());
-                theView->invalidate(true, true);
+                theView->invalidate(false, true);
             }
         }
 
@@ -3590,7 +3590,7 @@ void MainWindow::updateGpsPosition(qreal latitude, qreal longitude, QDateTime ti
             pt->setSpeed(speed);
             gpsRecLayer->add(pt);
             curGpsTrackSegment->add(pt);
-            theView->invalidate(true, false);
+            theView->invalidate(false, false);
         }
     }
     theView->update();

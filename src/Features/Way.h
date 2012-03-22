@@ -16,6 +16,7 @@
 class WayPrivate;
 class Node;
 class QProgressDialog;
+class MapRenderer;
 
 class Way : public Feature
 {
@@ -33,7 +34,8 @@ public:
     virtual void updateMeta();
 
     virtual const CoordBox& boundingBox(bool update=true) const;
-    virtual void draw(QPainter& P, MapView* theView);
+    virtual void draw(QPainter& P, MapRenderer* theRenderer);
+
     virtual void drawSpecial(QPainter& P, QPen& Pen, MapView* theView);
     virtual void drawParentsSpecial(QPainter& P, QPen& Pen, MapView* theView);
     virtual void drawChildrenSpecial(QPainter& P, QPen& Pen, MapView* theView, int depth);

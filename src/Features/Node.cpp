@@ -1,6 +1,7 @@
 #include "Node.h"
 
 #include "MapView.h"
+#include "MapRenderer.h"
 #include "LineF.h"
 #include "Global.h"
 
@@ -12,6 +13,7 @@
 
 Node::Node(const Coord& aCoord)
     : Feature()
+    , ProjectionRevision(0)
 {
     BBox = CoordBox(aCoord, aCoord);
 //    qDebug() << "Node size: " << sizeof(Node) << sizeof(PhotoNode);
@@ -23,31 +25,27 @@ Node::Node(const Node& other)
 {
     BBox = other.BBox;
     Projected = other.Projected;
-    ProjectionRevision = other.projectionRevision();
 }
 
 Node::~Node(void)
 {
 }
 
-const QPointF& Node::projection() const
+const QPointF& Node::projected() const
 {
     return Projected;
 }
 
-void Node::setProjection(const QPointF& aProjection)
+const QPointF& Node::projected(const Projection& aProjection)
 {
-    Projected = aProjection;
+    setProjection(aProjection);
+    return Projected;
 }
 
-quint16 Node::projectionRevision() const
+void Node::setProjection(const Projection& aProjection)
 {
-    return ProjectionRevision;
-}
-
-void Node::setProjectionRevision(const quint16 aProjectionRevision)
-{
-    ProjectionRevision = aProjectionRevision;
+    if (ProjectionRevision != aProjection.projectionRevision())
+        Projected = aProjection.project(BBox.topLeft());
 }
 
 Coord Node::position() const
@@ -128,22 +126,22 @@ bool Node::isWaypoint()
     return IsWaypoint;
 }
 
-bool Node::isSelectable(MapView* theView)
+bool Node::isSelectable(qreal PixelPerM, RendererOptions options)
 {
     // If Node has non-default tags -> POI -> always selectable
     if (isPOI())
         return true;
 
     bool Draw = false;
-    if (TEST_RFLAGS(RendererOptions::NodesVisible) || (lastUpdated() == Feature::Log && !TEST_RFLAGS(RendererOptions::TrackSegmentVisible))) {
-        Draw = (theView->nodeWidth() >= 1);
+    if (options.options.testFlag(RendererOptions::NodesVisible) || (lastUpdated() == Feature::Log && !options.options.testFlag(RendererOptions::TrackSegmentVisible))) {
+        Draw = (PixelPerM * M_PREFS->getNodeSize() >= 1);
         // Do not draw GPX nodes when simple GPX track appearance is enabled
         if (M_PREFS->getSimpleGpxTrack() && layer()->isTrack())
             Draw = false;
         if (!Draw) {
             if (!sizeParents())
                 Draw = true;
-            else if (lastUpdated() == Feature::Log && !TEST_RFLAGS(RendererOptions::TrackSegmentVisible))
+            else if (lastUpdated() == Feature::Log && !options.options.testFlag(RendererOptions::TrackSegmentVisible))
                 Draw = true;
         }
     }
@@ -161,11 +159,11 @@ const CoordBox& Node::boundingBox(bool) const
     return BBox;
 }
 
-void Node::draw(QPainter& thePainter , MapView* theView)
+void Node::draw(QPainter& thePainter, MapRenderer* theRenderer)
 {
     if (isDirty() && isUploadable() && M_PREFS->getDirtyVisible()) {
-        QPoint P = theView->toView(this);
-        qreal theWidth = theView->nodeWidth();
+        QPoint P = theRenderer->toView(this);
+        qreal theWidth = theRenderer->NodeWidth;
         if (theWidth >= 1) {
             QRect R(P-QPoint(theWidth/2,theWidth/2),QSize(theWidth,theWidth));
             thePainter.fillRect(R,M_PREFS->getDirtyColor());
@@ -652,28 +650,28 @@ void PhotoNode::setPhoto(QPixmap thePhoto)
     Photo = new QPixmap(thePhoto.scaled(M_PREFS->getMaxGeoPicWidth(), M_PREFS->getMaxGeoPicWidth(), Qt::KeepAspectRatio));
 }
 
-void PhotoNode::draw(QPainter& thePainter , MapView* theView)
+void PhotoNode::draw(QPainter& thePainter , MapRenderer* theRenderer)
 {
 #ifdef GEOIMAGE
-    QPoint me = theView->toView(this);
+    QPoint me = theRenderer->toView(this);
     thePainter.setPen(QPen(QColor(0, 0, 0), 2));
     QRect box(me - QPoint(5, 3), QSize(10, 6));
     thePainter.drawRect(box);
-    if (TEST_RFLAGS(RendererOptions::PhotosVisible) && theView->pixelPerM() > M_PREFS->getRegionalZoom()) {
-        qreal rt = qBound(0.2, theView->pixelPerM(), 1.0);
+    if (theRenderer->theOptions.options.testFlag(RendererOptions::PhotosVisible) && theRenderer->thePixelPerM > M_PREFS->getRegionalZoom()) {
+        qreal rt = qBound(0.2, theRenderer->thePixelPerM, 1.0);
         QPoint phPt;
 
         if (photoLocationBR) {
             phPt = me + QPoint(10*rt, 10*rt);
         } else {
-            qreal rt = qBound(0.2, theView->pixelPerM(), 1.0);
+            qreal rt = qBound(0.2, theRenderer->thePixelPerM, 1.0);
             qreal phRt = 1. * Photo->width() / Photo->height();
             phPt = me - QPoint(10*rt, 10*rt) - QPoint(M_PREFS->getMaxGeoPicWidth()*rt, M_PREFS->getMaxGeoPicWidth()*rt/phRt);
         }
         thePainter.drawPixmap(phPt, Photo->scaledToWidth(M_PREFS->getMaxGeoPicWidth()*rt));
     }
 #endif
-    Node::draw(thePainter, theView);
+    Node::draw(thePainter, theRenderer);
 }
 
 #ifdef GEOIMAGE

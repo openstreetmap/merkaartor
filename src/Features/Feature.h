@@ -113,12 +113,11 @@ public:
          * @param P The QPainter used to draw
          * @param theProjection the Projection used to convert real coordinates to screen coordinates
          */
-    virtual void draw(QPainter& P, MapView* theView) = 0;
+    virtual void draw(QPainter& P, MapRenderer* theRenderer) = 0;
 
     virtual void drawSpecial(QPainter& P, QPen& Pen, MapView* theView) = 0;
     virtual void drawParentsSpecial(QPainter& P, QPen& Pen, MapView* theView) = 0;
-    virtual void drawChildrenSpecial(QPainter & P, QPen& Pen, MapView *theView, int depth) = 0;
-
+    virtual void drawChildrenSpecial(QPainter & P, QPen& Pen, MapView* theView, int depth) = 0;
     virtual void drawHover(QPainter& P, MapView* theView);
     virtual void drawHighlight(QPainter& P, MapView* theView);
     virtual void drawFocus(QPainter& P, MapView* theView);

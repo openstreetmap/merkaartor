@@ -850,7 +850,7 @@ void Feature::fromXML(QXmlStreamReader& stream, Feature* F)
     int Dirty = (stream.attributes().hasAttribute("dirtylevel") ? stream.attributes().value("dirtylevel").toString().toInt() : 0);
     bool Uploaded = (stream.attributes().value("uploaded") == "true");
     bool Special = (stream.attributes().value("special") == "true");
-    bool Selected = (stream.attributes().value("selected") == "true");
+//    bool Selected = (stream.attributes().value("selected") == "true");
 
     QDateTime time;
     time = QDateTime::fromString(stream.attributes().value("timestamp").toString().left(19), Qt::ISODate);

@@ -434,6 +434,8 @@ bool ImportExportGdal::import(Layer* aLayer)
     importGDALDataset(poDS, aLayer, M_PREFS->getGdalConfirmProjection());
 
     OGRDataSource::DestroyDataSource( poDS );
+
+    return true;
 }
 
 bool ImportExportGdal::import(Layer* aLayer, const QByteArray& ba, bool confirmProjection)
@@ -441,10 +443,10 @@ bool ImportExportGdal::import(Layer* aLayer, const QByteArray& ba, bool confirmP
     OGRRegisterAll();
 
     OGRDataSource       *poDS;
-    int ogrError;
+//    int ogrError;
 
     GByte* content = (GByte*)(ba.constData());
-    FILE* f = VSIFileFromMemBuffer("/vsimem/temp", content, ba.size(), FALSE);
+    /*FILE* f = */VSIFileFromMemBuffer("/vsimem/temp", content, ba.size(), FALSE);
 
     poDS = OGRSFDriverRegistrar::Open( "/vsimem/temp", FALSE );
     if( poDS == NULL )
@@ -455,4 +457,6 @@ bool ImportExportGdal::import(Layer* aLayer, const QByteArray& ba, bool confirmP
     importGDALDataset(poDS, aLayer, confirmProjection);
 
     OGRDataSource::DestroyDataSource( poDS );
+
+    return true;
 }

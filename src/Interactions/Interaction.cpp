@@ -83,7 +83,7 @@ void Interaction::mouseReleaseEvent(QMouseEvent * anEvent)
 {
     if (Panning) {
         if (FirstPan != LastPan)
-            view()->invalidate(true, true);
+            view()->invalidate(false, true);
 #ifndef _MOBILE
         else
             if (anEvent->button() == Qt::RightButton)
@@ -176,7 +176,6 @@ void Interaction::wheelEvent(QWheelEvent* ev)
         finalZoom = 0.5;
 
     view()->zoom(finalZoom, ev->pos());
-    view()->invalidate(true, true);
 }
 
 void Interaction::paintEvent(QPaintEvent*, QPainter& thePainter)
@@ -207,7 +206,7 @@ void Interaction::updateSnap(QMouseEvent* event)
     SnapList.clear();
     qreal BestDistance = 5;
     qreal BestReadonlyDistance = 5;
-    bool areNodesSelectable = (theView->nodeWidth() >= 1 && M_PREFS->getTrackPointsVisible());
+    bool areNodesSelectable = (/*theView->nodeWidth() >= 1 && */M_PREFS->getTrackPointsVisible());
 
     Way* R;
     Node* N;
@@ -246,7 +245,7 @@ void Interaction::updateSnap(QMouseEvent* event)
                 if ((N = CAST_NODE(F))) {
                     if (NoSelectPoints)
                         continue;
-                    if (!N->isSelectable(theView))
+                    if (!N->isSelectable(theView->pixelPerM(), theView->renderOptions()))
                         continue;
                     if (HotZoneSnap.contains(N->boundingBox()))
                         SnapList.push_back(F);

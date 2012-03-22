@@ -12,7 +12,7 @@
 #include <Painter.h>
 #include "TagSelector.h"
 
-class MapView;
+class MapRenderer;
 class Feature;
 class Projection;
 class Relation;
@@ -36,22 +36,22 @@ public:
 
     void setSelector(const QString& aName);
     void setSelector(TagSelector* aSelector);
-    TagSelectorMatchResult matchesTag(const Feature* F, const MapView* V) const;
+    TagSelectorMatchResult matchesTag(const Feature* F, MapRenderer* theRender) const;
 
     QString toXML(QString filename) const;
     static FeaturePainter fromXML(const QDomElement& e, QString filename);
 
-    virtual void drawBackground(Node *N, QPainter *thePainter, MapView *theView) const;
-    virtual void drawBackground(Way* R, QPainter* thePainter, MapView* theView) const;
-    virtual void drawBackground(Relation* R, QPainter* thePainter, MapView* theView) const;
-    virtual void drawForeground(Node *N, QPainter *thePainter, MapView *theView) const;
-    virtual void drawForeground(Way* R, QPainter* thePainter, MapView* theView) const;
-    virtual void drawForeground(Relation* R, QPainter* thePainter, MapView* theView) const;
-    virtual void drawTouchup(Way* R, QPainter* thePainter, MapView* theView) const;
-    virtual void drawTouchup(Node* R, QPainter* thePainter, MapView* theView) const;
-    virtual void drawLabel(Way* R, QPainter* thePainter, MapView* theView) const;
-    virtual void drawPointLabel(QPointF C, QString str, QString strBG, QPainter* thePainter, MapView* theView) const;
-    virtual void drawLabel(Node* Pt, QPainter* thePainter, MapView* theView) const;
+    virtual void drawBackground(Node *N, QPainter *thePainter, MapRenderer *theRender) const;
+    virtual void drawBackground(Way* R, QPainter* thePainter, MapRenderer* theRender) const;
+    virtual void drawBackground(Relation* R, QPainter* thePainter, MapRenderer* theRender) const;
+    virtual void drawForeground(Node *N, QPainter *thePainter, MapRenderer* theRender) const;
+    virtual void drawForeground(Way* R, QPainter* thePainter, MapRenderer* theRender) const;
+    virtual void drawForeground(Relation* R, QPainter* thePainter, MapRenderer* theRender) const;
+    virtual void drawTouchup(Way* R, QPainter* thePainter, MapRenderer* theRender) const;
+    virtual void drawTouchup(Node* R, QPainter* thePainter, MapRenderer* theRender) const;
+    virtual void drawLabel(Way* R, QPainter* thePainter, MapRenderer* theRender) const;
+    virtual void drawPointLabel(QPointF C, QString str, QString strBG, QPainter* thePainter, MapRenderer* theRender) const;
+    virtual void drawLabel(Node* Pt, QPainter* thePainter, MapRenderer* theRender) const;
 
 public:
     TagSelector* theTagSelector;

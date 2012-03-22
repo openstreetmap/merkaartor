@@ -47,7 +47,7 @@ public:
     virtual void updateMeta();
 
     virtual const CoordBox& boundingBox(bool update=true) const;
-    virtual void draw(QPainter& P, MapView* theView);
+    virtual void draw(QPainter& P, MapRenderer* theRenderer);
     virtual void drawSpecial(QPainter& P, QPen& Pen, MapView* theView);
     virtual void drawParentsSpecial(QPainter& P, QPen& Pen, MapView* theView);
     virtual void drawChildrenSpecial(QPainter& P, QPen& Pen, MapView* theView, int depth);
@@ -71,16 +71,14 @@ public:
     /** check if the feature is drawable
          * @return true if to be drawn
          */
-    virtual bool isSelectable(MapView* view);
+    virtual bool isSelectable(qreal PixelPerM, RendererOptions options);
 
     virtual void partChanged(Feature* F, int ChangeId);
 
 public:
-    const QPointF& projection() const;
-    void setProjection(const QPointF& aProjection);
-
-    quint16 projectionRevision() const;
-    void setProjectionRevision(const quint16 aProjectionRevision);
+    const QPointF& projected() const;
+    const QPointF &projected(const Projection &aProjection);
+    void setProjection(const Projection& aProjection);
 
     Coord position() const;
     void setPosition(const Coord& aCoord);
@@ -141,7 +139,7 @@ protected:
     virtual ~PhotoNode();
 
 public:
-    virtual void draw(QPainter &thePainter, MapView *theView);
+    virtual void draw(QPainter &thePainter, MapRenderer* theRenderer);
 #ifdef GEOIMAGE
     virtual void drawHover(QPainter& P, MapView* theView);
 #endif

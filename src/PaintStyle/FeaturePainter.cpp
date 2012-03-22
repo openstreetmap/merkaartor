@@ -1,4 +1,4 @@
-#include "MapView.h"
+#include "MapRenderer.h"
 #include "FeaturePainter.h"
 #include "Painting.h"
 #include "Projection.h"
@@ -13,7 +13,7 @@
 #include <QDomElement>
 #include <math.h>
 
-#define TEST_RFLAGS(x) theView->renderOptions().options.testFlag(x)
+#define TEST_RFLAGS(x) theRenderer->theOptions.options.testFlag(x)
 #define CAPSTYLE Qt::RoundCap
 #define JOINSTYLE Qt::RoundJoin
 
@@ -155,7 +155,7 @@ void FeaturePainter::setSelector(TagSelector* aSel)
     theSelector = aSel->asExpression(false);
 }
 
-TagSelectorMatchResult FeaturePainter::matchesTag(const Feature* F, const MapView* V) const
+TagSelectorMatchResult FeaturePainter::matchesTag(const Feature* F, MapRenderer* theRender) const
 {
     TagSelectorMatchResult res;
 
@@ -171,8 +171,8 @@ TagSelectorMatchResult FeaturePainter::matchesTag(const Feature* F, const MapVie
     //				return TagSelect_NoMatch;
     //	}
     //}
-    if (V)
-        res = theTagSelector->matches(F,V->pixelPerM());
+    if (theRender)
+        res = theTagSelector->matches(F,theRender->thePixelPerM);
     else
         res = theTagSelector->matches(F,0);
     if (res)
@@ -204,22 +204,22 @@ void buildPathFromRelation(Relation *R, const Projection &theProjection, QPainte
 
 */
 
-void FeaturePainter::drawBackground(Node* N, QPainter* thePainter, MapView* theView) const
+void FeaturePainter::drawBackground(Node* N, QPainter* thePainter, MapRenderer* theRenderer) const
 {
     if (!DrawBackground)
         return;
 
-    qreal PixelPerM = theView->pixelPerM();
+    qreal PixelPerM = theRenderer->thePixelPerM;
     qreal WW = PixelPerM*BackgroundScale+BackgroundOffset;
     if (WW >= 0)
     {
-        QPointF P(theView->toView(N));
+        QPointF P(theRenderer->toView(N));
         QRect R(P.x()-WW/2, P.y()-WW/2, WW, WW);
         thePainter->fillRect(R,BackgroundColor);
     }
 }
 
-void FeaturePainter::drawBackground(Way* R, QPainter* thePainter, MapView* theView) const
+void FeaturePainter::drawBackground(Way* R, QPainter* thePainter, MapRenderer* theRenderer) const
 {
     if (!DrawBackground && !ForegroundFill && !ForegroundFillUseIcon) return;
 
@@ -229,8 +229,7 @@ void FeaturePainter::drawBackground(Way* R, QPainter* thePainter, MapView* theVi
     }
     if (DrawBackground)
     {
-        qreal PixelPerM = theView->pixelPerM();
-        qreal WW = PixelPerM*R->widthOf()*BackgroundScale+BackgroundOffset;
+        qreal WW = theRenderer->thePixelPerM*R->widthOf()*BackgroundScale+BackgroundOffset;
         if (WW >= 0)
         {
             if (BackgroundExterior || BackgroundInterior) {
@@ -239,7 +238,7 @@ void FeaturePainter::drawBackground(Way* R, QPainter* thePainter, MapView* theVi
                 thePen.setJoinStyle(Qt::BevelJoin);
                 thePainter->setPen(thePen);
 
-                QPainterPath thePath = theView->transform().map(R->getPath());
+                QPainterPath thePath = theRenderer->theTransform.map(R->getPath());
                 QPainterPath aPath;
 
                 for (int j=1; j < thePath.elementCount(); j++) {
@@ -283,11 +282,11 @@ void FeaturePainter::drawBackground(Way* R, QPainter* thePainter, MapView* theVi
     if (R->size() > 2) {
         if (ForegroundFillUseIcon) {
             if (!IconName.isEmpty()) {
-                qreal PixelPerM = theView->pixelPerM();
+                qreal PixelPerM = theRenderer->thePixelPerM;
                 qreal WW = PixelPerM*IconScale+IconOffset;
 
                 QImage* pm = getSVGImageFromFile(IconName,int(WW));
-                if (!pm->isNull()) {
+                if (pm && !pm->isNull()) {
                     thePainter->setBrush(*pm);
                 }
             }
@@ -296,10 +295,10 @@ void FeaturePainter::drawBackground(Way* R, QPainter* thePainter, MapView* theVi
         }
     }
 
-    thePainter->drawPath(theView->transform().map(R->getPath()));
+    thePainter->drawPath(theRenderer->theTransform.map(R->getPath()));
 }
 
-void FeaturePainter::drawBackground(Relation* R, QPainter* thePainter, MapView* theView) const
+void FeaturePainter::drawBackground(Relation* R, QPainter* thePainter, MapRenderer* theRenderer) const
 {
     if (!DrawBackground && !ForegroundFill && !ForegroundFillUseIcon) return;
 
@@ -309,7 +308,7 @@ void FeaturePainter::drawBackground(Relation* R, QPainter* thePainter, MapView* 
     }
     if (DrawBackground)
     {
-        qreal PixelPerM = theView->pixelPerM();
+        qreal PixelPerM = theRenderer->thePixelPerM;
         qreal WW = PixelPerM*R->widthOf()*BackgroundScale+BackgroundOffset;
         if (WW >= 0)
         {
@@ -319,7 +318,7 @@ void FeaturePainter::drawBackground(Relation* R, QPainter* thePainter, MapView* 
                 thePen.setJoinStyle(Qt::BevelJoin);
                 thePainter->setPen(thePen);
 
-                QPainterPath thePath = theView->transform().map(R->getPath());
+                QPainterPath thePath = theRenderer->theTransform.map(R->getPath());
                 QPainterPath aPath;
 
                 for (int j=1; j < thePath.elementCount(); j++) {
@@ -362,11 +361,11 @@ void FeaturePainter::drawBackground(Relation* R, QPainter* thePainter, MapView* 
     thePainter->setBrush(Qt::NoBrush);
     if (ForegroundFillUseIcon) {
         if (!IconName.isEmpty()) {
-            qreal PixelPerM = theView->pixelPerM();
+            qreal PixelPerM = theRenderer->thePixelPerM;
             qreal WW = PixelPerM*IconScale+IconOffset;
 
             QImage* pm = getSVGImageFromFile(IconName,int(WW));
-            if (!pm->isNull()) {
+            if (pm && !pm->isNull()) {
                 thePainter->setBrush(*pm);
             }
         }
@@ -374,32 +373,32 @@ void FeaturePainter::drawBackground(Relation* R, QPainter* thePainter, MapView* 
         thePainter->setBrush(ForegroundFillFillColor);
     }
 
-    thePainter->drawPath(theView->transform().map(R->getPath()));
+    thePainter->drawPath(theRenderer->theTransform.map(R->getPath()));
 }
 
-void FeaturePainter::drawForeground(Node* N, QPainter* thePainter, MapView* theView) const
+void FeaturePainter::drawForeground(Node* N, QPainter* thePainter, MapRenderer* theRenderer) const
 {
     if (!DrawForeground)
         return;
 
-    qreal PixelPerM = theView->pixelPerM();
+    qreal PixelPerM = theRenderer->thePixelPerM;
     qreal WW = PixelPerM*ForegroundScale+ForegroundOffset;
     if (WW >= 0)
     {
-        QPointF P(theView->toView(N));
+        QPointF P(theRenderer->toView(N));
         QRect R(P.x()-WW/2, P.y()-WW/2, WW, WW);
         thePainter->fillRect(R,ForegroundColor);
     }
 }
 
-void FeaturePainter::drawForeground(Way* R, QPainter* thePainter, MapView* theView) const
+void FeaturePainter::drawForeground(Way* R, QPainter* thePainter, MapRenderer* theRenderer) const
 {
     if (!DrawForeground) return;
 
     qreal WW = 0.0;
     if (DrawForeground)
     {
-        qreal PixelPerM = theView->pixelPerM();
+        qreal PixelPerM = theRenderer->thePixelPerM;
         WW = PixelPerM*R->widthOf()*ForegroundScale+ForegroundOffset;
         if (WW < 0) return;
         QPen thePen(ForegroundColor,WW);
@@ -418,17 +417,17 @@ void FeaturePainter::drawForeground(Way* R, QPainter* thePainter, MapView* theVi
 
     thePainter->setBrush(Qt::NoBrush);
 
-    thePainter->drawPath(theView->transform().map(R->getPath()));
+    thePainter->drawPath(theRenderer->theTransform.map(R->getPath()));
 }
 
-void FeaturePainter::drawForeground(Relation* R, QPainter* thePainter, MapView* theView) const
+void FeaturePainter::drawForeground(Relation* R, QPainter* thePainter, MapRenderer* theRenderer) const
 {
     if (!DrawForeground) return;
 
     qreal WW = 0.0;
     if (DrawForeground)
     {
-        qreal PixelPerM = theView->pixelPerM();
+        qreal PixelPerM = theRenderer->thePixelPerM;
         WW = PixelPerM*R->widthOf()*ForegroundScale+ForegroundOffset;
         if (WW < 0) return;
         QPen thePen(ForegroundColor,WW);
@@ -447,23 +446,23 @@ void FeaturePainter::drawForeground(Relation* R, QPainter* thePainter, MapView* 
 
     thePainter->setBrush(Qt::NoBrush);
 
-    thePainter->drawPath(theView->transform().map(R->getPath()));
+    thePainter->drawPath(theRenderer->theTransform.map(R->getPath()));
 }
 
 
-void FeaturePainter::drawTouchup(Node* Pt, QPainter* thePainter, MapView* theView) const
+void FeaturePainter::drawTouchup(Node* Pt, QPainter* thePainter, MapRenderer* theRenderer) const
 {
     bool IconOK = false;
     if (DrawIcon)
     {
         if (!IconName.isEmpty()) {
-            qreal PixelPerM = theView->pixelPerM();
+            qreal PixelPerM = theRenderer->thePixelPerM;
             qreal WW = PixelPerM*IconScale+IconOffset;
 
             QImage* pm = getSVGImageFromFile(IconName,int(WW));
-            if (!pm->isNull()) {
+            if (pm && !pm->isNull()) {
                 IconOK = true;
-                QPointF C(theView->transform().map(theView->projection().project(Pt)));
+                QPointF C(theRenderer->theTransform.map(Pt->projected()));
                 // cbro-20090109: Don't draw the dot if there is an icon
                 // thePainter->fillRect(QRect(C-QPoint(2,2),QSize(4,4)),QColor(0,0,0,128));
                 thePainter->drawImage( int(C.x()-pm->width()/2), int(C.y()-pm->height()/2) , *pm);
@@ -478,8 +477,8 @@ void FeaturePainter::drawTouchup(Node* Pt, QPainter* thePainter, MapView* theVie
                 if (DrawBackground)
                     theColor = BackgroundColor;
 
-            QPointF P(theView->toView(Pt));
-            qreal WW = theView->nodeWidth();
+            QPointF P(theRenderer->toView(Pt));
+            qreal WW = theRenderer->NodeWidth;
             if (WW >= 1) {
                 if (Pt->layer()->classGroups() & Layer::Special) {
                     QRect R2(P.x()-WW*4/3/2, P.y()-WW*4/3/2, WW*4/3, WW*4/3);
@@ -496,11 +495,11 @@ void FeaturePainter::drawTouchup(Node* Pt, QPainter* thePainter, MapView* theVie
     }
 }
 
-void FeaturePainter::drawTouchup(Way* R, QPainter* thePainter, MapView* theView) const
+void FeaturePainter::drawTouchup(Way* R, QPainter* thePainter, MapRenderer* theRenderer) const
 {
     if (DrawTouchup)
     {
-        qreal PixelPerM = theView->pixelPerM();
+        qreal PixelPerM = theRenderer->thePixelPerM;
         qreal WW = PixelPerM*R->widthOf()*TouchupScale+TouchupOffset;
         if (WW > 0)
         {
@@ -513,34 +512,34 @@ void FeaturePainter::drawTouchup(Way* R, QPainter* thePainter, MapView* theView)
                 Pattern << TouchupDash << TouchupWhite;
                 thePen.setDashPattern(Pattern);
             }
-            thePainter->strokePath(theView->transform().map(R->getPath()),thePen);
+            thePainter->strokePath(theRenderer->theTransform.map(R->getPath()),thePen);
         }
     }
     if (DrawIcon && !ForegroundFillUseIcon)
     {
         if (!IconName.isEmpty()) {
-            qreal PixelPerM = theView->pixelPerM();
+            qreal PixelPerM = theRenderer->thePixelPerM;
             qreal WW = PixelPerM*IconScale+IconOffset;
 
             QImage* pm = getSVGImageFromFile(IconName,int(WW));
-            if (!pm->isNull()) {
-                QPointF C(theView->transform().map(theView->projection().project(R->boundingBox().center())));
+            if (pm && !pm->isNull()) {
+                QPointF C(theRenderer->theTransform.map(R->getPath().boundingRect().center()));
                 thePainter->drawImage( int(C.x()-pm->width()/2), int(C.y()-pm->height()/2) , *pm);
             }
         }
     }
-    if ( ((DrawTrafficDirectionMarks) && (theView->renderOptions().arrowOptions == RendererOptions::ArrowsOneway)) ||  theView->renderOptions().arrowOptions == RendererOptions::ArrowsAlways)
+    if ( ((DrawTrafficDirectionMarks) && (theRenderer->theOptions.arrowOptions == RendererOptions::ArrowsOneway)) ||  theRenderer->theOptions.arrowOptions == RendererOptions::ArrowsAlways)
     {
         Feature::TrafficDirectionType TT = trafficDirection(R);
-        if ( (TT != Feature::UnknownDirection) || (theView->renderOptions().arrowOptions == RendererOptions::ArrowsAlways) )
+        if ( (TT != Feature::UnknownDirection) || (theRenderer->theOptions.arrowOptions == RendererOptions::ArrowsAlways) )
         {
-            qreal theWidth = theView->pixelPerM()*R->widthOf()-4;
+            qreal theWidth = theRenderer->thePixelPerM*R->widthOf()-4;
             if (theWidth > 8)
                 theWidth = 8;
             qreal DistFromCenter = 2*(theWidth+4);
             if (theWidth > 0)
             {
-                if ( theView->renderOptions().arrowOptions == RendererOptions::ArrowsAlways )
+                if ( theRenderer->theOptions.arrowOptions == RendererOptions::ArrowsAlways )
                     thePainter->setPen(QPen(QColor(255,0,0), 2));
                 else
                     thePainter->setPen(QPen(TrafficDirectionMarksColor, 2));
@@ -548,13 +547,13 @@ void FeaturePainter::drawTouchup(Way* R, QPainter* thePainter, MapView* theView)
 
                 for (int i=1; i<R->size(); ++i)
                 {
-                    QPointF FromF(theView->transform().map(theView->projection().project(R->getNode(i-1))));
-                    QPointF ToF(theView->transform().map(theView->projection().project(R->getNode(i))));
+                    QPointF FromF(theRenderer->theTransform.map(R->getNode(i-1)->projected()));
+                    QPointF ToF(theRenderer->theTransform.map(R->getNode(i)->projected()));
                     if (distance(FromF,ToF) > (DistFromCenter*2+4))
                     {
                         QPoint H(FromF.toPoint()+ToF.toPoint());
                         H *= 0.5;
-                        if (!theView->rect().contains(H))
+                        if (!theRenderer->theScreen.contains(H))
                             continue;
                         qreal A = angle(FromF-ToF);
                         QPoint T(qRound(DistFromCenter*cos(A)),qRound(DistFromCenter*sin(A)));
@@ -572,7 +571,7 @@ void FeaturePainter::drawTouchup(Way* R, QPainter* thePainter, MapView* theView)
                         }
                         else
                         {
-                            if ( theView->renderOptions().arrowOptions == RendererOptions::ArrowsAlways )
+                            if ( theRenderer->theOptions.arrowOptions == RendererOptions::ArrowsAlways )
                             {
                                 thePainter->drawLine(H-T,H-T+V1);
                                 thePainter->drawLine(H-T,H-T+V2);
@@ -590,10 +589,10 @@ void FeaturePainter::drawTouchup(Way* R, QPainter* thePainter, MapView* theView)
 #define BG_SPACING 6
 #define BG_PEN_SZ 2
 
-void FeaturePainter::drawPointLabel(QPointF C, QString str, QString strBg, QPainter* thePainter, MapView* theView) const
+void FeaturePainter::drawPointLabel(QPointF C, QString str, QString strBg, QPainter* thePainter, MapRenderer* theRenderer) const
 {
     LineParameters lp = labelBoundary();
-    qreal PixelPerM = theView->pixelPerM();
+    qreal PixelPerM = theRenderer->thePixelPerM;
     qreal WW = PixelPerM*lp.Proportional+lp.Fixed;
     if (WW < 10) return;
 
@@ -610,7 +609,7 @@ void FeaturePainter::drawPointLabel(QPointF C, QString str, QString strBg, QPain
         modX = - (metrics.width(str)/2);
         if (DrawIcon && (IconName != "") )
         {
-            QPixmap pm(IconName);
+            QImage pm(IconName);
             modY = - pm.height();
             if (DrawLabelBackground)
                 modY -= BG_SPACING;
@@ -622,7 +621,7 @@ void FeaturePainter::drawPointLabel(QPointF C, QString str, QString strBg, QPain
         modX = - (metrics.width(strBg)/2);
         if (DrawIcon && (IconName != "") )
         {
-            QPixmap pm(IconName);
+            QImage pm(IconName);
             modY = - pm.height();
             if (DrawLabelBackground)
                 modY -= BG_SPACING;
@@ -647,12 +646,12 @@ void FeaturePainter::drawPointLabel(QPointF C, QString str, QString strBg, QPain
     if (DrawLabelBackground && !strBg.isEmpty()) {
         QRegion rg = thePainter->clipRegion();
         rg -= textPath.boundingRect().toRect().translated(C.toPoint());
-        thePainter->setClipRegion(theView->transform().map(rg));
+        thePainter->setClipRegion(theRenderer->theTransform.map(rg));
     }
 }
 
 
-void FeaturePainter::drawLabel(Node* Pt, QPainter* thePainter, MapView* theView) const
+void FeaturePainter::drawLabel(Node* Pt, QPainter* thePainter, MapRenderer* theRenderer) const
 {
     if (!DrawLabel)
         return;
@@ -663,11 +662,11 @@ void FeaturePainter::drawLabel(Node* Pt, QPainter* thePainter, MapView* theView)
     if (str.isEmpty() && strBg.isEmpty())
         return;
 
-    QPointF C(theView->transform().map(theView->projection().project(Pt)));
-    drawPointLabel(C, str, strBg, thePainter, theView);
+    QPointF C(theRenderer->theTransform.map(Pt->projected()));
+    drawPointLabel(C, str, strBg, thePainter, theRenderer);
 }
 
-void FeaturePainter::drawLabel(Way* R, QPainter* thePainter, MapView* theView) const
+void FeaturePainter::drawLabel(Way* R, QPainter* thePainter, MapRenderer* theRenderer) const
 {
     if (!DrawLabel)
         return;
@@ -677,32 +676,31 @@ void FeaturePainter::drawLabel(Way* R, QPainter* thePainter, MapView* theView) c
     if (str.isEmpty() && strBg.isEmpty())
         return;
 
-    QRegion rg = thePainter->clipRegion();
     if (getLabelArea()) {
-        QPointF C(theView->transform().map(theView->projection().project(R->boundingBox().center())));
-        if (rg.contains(C.toPoint())) {
-            drawPointLabel(C, str, strBg, thePainter, theView);
-        }
+        QPointF C(theRenderer->theTransform.map(R->getPath().boundingRect().center()));
+//        if (rg.contains(C.toPoint())) {
+            drawPointLabel(C, str, strBg, thePainter, theRenderer);
+//        }
         return;
     }
 
     LineParameters lp = labelBoundary();
-    qreal PixelPerM = theView->pixelPerM();
+    qreal PixelPerM = theRenderer->thePixelPerM;
     qreal WW = PixelPerM*R->widthOf()*lp.Proportional+lp.Fixed;
     if (WW < 10 && !TEST_RFLAGS(RendererOptions::PrintAllLabels)) return;
     //qreal WWR = qMax(PixelPerM*R->widthOf()*BackgroundScale+BackgroundOffset, PixelPerM*R->widthOf()*ForegroundScale+ForegroundOffset);
 
-    QPainterPath tranformedRoadPath = theView->transform().map(R->getPath());
+    QPainterPath tranformedRoadPath = theRenderer->theTransform.map(R->getPath());
     QFont font = getLabelFont();
-#if QT_VERSION >= 0x040700
-    qreal pathSurface = tranformedRoadPath.controlPointRect().width() * tranformedRoadPath.controlPointRect().height();
-    if (pathSurface > theView->rect().width() * theView->rect().height() * 3) {
-        QPainterPath clipPath;
-        clipPath.addRect(theView->rect().adjusted(-500, -500, 500, 500));
+//#if QT_VERSION >= 0x040700
+//    qreal pathSurface = tranformedRoadPath.controlPointRect().width() * tranformedRoadPath.controlPointRect().height();
+//    if (pathSurface > theRenderer->theScreen.width() * theRenderer->theScreen.height() * 3) {
+//        QPainterPath clipPath;
+//        clipPath.addRect(theRenderer->theScreen.adjusted(-500, -500, 500, 500));
 
-        tranformedRoadPath = clipPath.intersected(tranformedRoadPath);
-    }
-#endif
+//        tranformedRoadPath = clipPath.intersected(tranformedRoadPath);
+//    }
+//#endif
 
     if (!str.isEmpty()) {
         font.setPixelSize(int(WW));
@@ -731,8 +729,8 @@ void FeaturePainter::drawLabel(Way* R, QPainter* thePainter, MapView* theView) c
                     qreal t = tranformedRoadPath.percentAtLength(curLen);
                     QPointF pt = tranformedRoadPath.pointAtPercent(t);
 
-                    if (!theView->rect().contains(pt.toPoint()))
-                        continue;
+//                    if (!theRenderer->theScreen.contains(pt.toPoint()))
+//                        continue;
 
                     qreal angle = tranformedRoadPath.angleAtPercent(t);
 //                    modY = (metrics.ascent()/2)-3;
@@ -761,7 +759,6 @@ void FeaturePainter::drawLabel(Way* R, QPainter* thePainter, MapView* theView) c
             thePainter->setPen(Qt::NoPen);
             thePainter->setBrush(LabelColor);
             thePainter->drawPath(textPath);
-            thePainter->setClipRegion(rg);
         }
     }
     if (DrawLabelBackground && !strBg.isEmpty()) {

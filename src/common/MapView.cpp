@@ -54,6 +54,19 @@
 #define EQUATORIALRADIUS 6378137.0
 #define LAT_ANG_PER_M 1.0 / EQUATORIALRADIUS
 #define TEST_RFLAGS(x) p->ROptions.options.testFlag(x)
+#define TILE_SIZE 256
+
+inline uint qHash(const QPoint& p)
+{
+    return (uint)(p.y() + (p.x() << 16));
+}
+
+QCache<TILE_TYPE, QImage> tileCache;
+QList<TILE_TYPE> tiles;
+QReadWriteLock tileLock;
+#define TILE_CONSTRUCTOR(x, y) QPoint(x, y)
+#define TILE_X(t) t.x()
+#define TILE_Y(t) t.y()
 
 class MapViewPrivate
 {
@@ -61,11 +74,8 @@ public:
     QTransform theTransform;
     QTransform theInvertedTransform;
     qreal PixelPerM;
-    qreal NodeWidth;
-    qreal ZoomLevel;
-//    int AbstractZoomLevel;
+    int ZoomLevel;
     CoordBox Viewport;
-    QList<CoordBox> invalidRects;
     QPoint theVectorPanDelta;
     qreal theVectorRotation;
     QMap<RenderPriority, QSet <Feature*> > theFeatures;
@@ -80,9 +90,14 @@ public:
     bool BackgroundOnlyPanZoom;
     QTransform BackgroundOnlyVpTransform;
 
+    qreal tileSizeCoordW;
+    qreal tileSizeCoordH;
+    QPointF tileOriginCoord;
+    QRect tileViewport;
+
     QLabel *TL, *TR, *BL, *BR;
 
-    QFuture<QMap<RenderPriority, QSet <Feature*> > > featureGathering;
+    QFuture<void> renderGathering;
 
     MapViewPrivate()
       : PixelPerM(0.0), Viewport(WORLD_COORDBOX), theVectorRotation(0.0)
@@ -91,35 +106,169 @@ public:
       , theInteraction(0)
     {}
 
-};
-
-void addToFeatures(QMap<RenderPriority, QSet <Feature*> > &final, const QMap<RenderPriority, QSet <Feature*> > &intermediate)
-{
-    final.unite(intermediate);
-}
-
-struct GetFeatures
-{
-    GetFeatures(MapViewPrivate* ptr)
-        : p(ptr) { }
-
-    typedef QMap<RenderPriority, QSet <Feature*> > result_type;
-
-    QMap<RenderPriority, QSet <Feature*> > operator()(const CoordBox& invalidRect)
+    QList<TILE_TYPE> tileCalc(const QRect& rect)
     {
-        QMap<RenderPriority, QSet <Feature*> > theFeatures;
+//        qDebug() << "mapview transform: " << theTransform;
 
-        for (int i=0; i<p->theDocument->layerSize(); ++i)
-            g_backend.getFeatureSet(p->theDocument->getLayer(i), theFeatures, invalidRect, p->theProjection);
+        QPointF tl = theInvertedTransform.map(QPointF(rect.topLeft()));
+        QPointF br = theInvertedTransform.map(QPointF(rect.bottomRight()));
+        QRectF projRect(tl, br);
 
-        return theFeatures;
+        //    qDebug() << "tileSizeCoord" << p->tileSizeCoord;
+        //    qDebug() << "  " << screen.width() << screen.height();
+
+        tileViewport.setLeft(((projRect.left()-tileOriginCoord.x()) / tileSizeCoordW) - 1);
+        tileViewport.setTop(((projRect.top()-tileOriginCoord.y()) / tileSizeCoordH) - 1);
+        tileViewport.setRight(((projRect.right()-tileOriginCoord.x()) / tileSizeCoordW) + 1);
+        tileViewport.setBottom(((projRect.bottom()-tileOriginCoord.y()) / tileSizeCoordH) + 1);
+
+        if (renderGathering.isRunning()) {
+            renderGathering.cancel();
+            renderGathering.waitForFinished();
+        }
+        tiles.clear();
+        for (int i=tileViewport.top(); i<=tileViewport.bottom(); ++i)
+            for (int j=tileViewport.left(); j<=tileViewport.right(); ++j) {
+                TILE_TYPE tile = TILE_CONSTRUCTOR(j, i);
+                tiles << tile;
+            }
+
+        //    qDebug() << "  " << p->tileViewport;
+        //    qDebug() << "  " << viewport.topLeft() << viewport.bottomRight();
+        //    qDebug() << "  " << l*p->tileSizeCoord - 180. << 90. - t*p->tileSizeCoord << r*p->tileSizeCoord -180. << 90. - b*p->tileSizeCoord;
+
+        return tiles;
     }
 
+
+    void resetTileCache(const QRect& rect)
+    {
+        tileLock.lockForWrite();
+        tileCache.clear();
+        tileLock.unlock();
+        tileOriginCoord = theInvertedTransform.map(QPointF(rect.topLeft()));
+        if (theDocument) {
+            QPointF tl = theInvertedTransform.map(QPointF(rect.topLeft()));
+            QPointF br = theInvertedTransform.map(QPointF(rect.bottomRight())+QPointF(1,1));
+            QRectF projRect(tl, br);
+            tileSizeCoordW = (projRect.width()) / rect.width() * TILE_SIZE;
+//            tileSizeCoordH = (projRect.height()) / rect.height() * TILE_SIZE;
+            tileSizeCoordH = tileSizeCoordW * projRect.height() / fabs(projRect.height());
+        }
+
+    }
+
+//    void renderTile(MapView* v, TILE_TYPE tile)
+//    {
+//        if (!tileCache.contains(tile)) {
+//            QMap<RenderPriority, QSet <Feature*> > theFeatures;
+
+//            QPointF projTL((tile.x()*tileSizeCoordW)+tileOriginCoord.x(), (tile.y()*tileSizeCoordH)+tileOriginCoord.y());
+//            QPointF projBR(((tile.x()+1)*tileSizeCoordW)+tileOriginCoord.x(), ((tile.y()+1)*tileSizeCoordH)+tileOriginCoord.y());
+//            QRectF projR(projTL, projBR);
+
+//            qreal z=1.0625;
+//            qreal dlat = (projR.top()-projR.bottom())*(z-1)/2;
+//            qreal dlon = (projR.right()-projR.left())*(z-1)/2;
+//            projR.setBottom(projR.bottom()-dlat);
+//            projR.setLeft(projR.left()-dlon);
+//            projR.setTop(projR.top()+dlat);
+//            projR.setRight(projR.right()+dlon);
+
+//            Coord tl = theProjection.inverse2Coord(projR.topLeft());
+//            Coord br = theProjection.inverse2Coord(projR.bottomRight());
+//            CoordBox invalidRect(tl, br);
+////            qDebug() << invalidRect;
+
+//            for (int i=0; i<theDocument->layerSize(); ++i)
+//                g_backend.getFeatureSet(theDocument->getLayer(i), theFeatures, invalidRect, theProjection);
+
+//            QImage* img = new QImage(TILE_SIZE, TILE_SIZE, QImage::Format_ARGB32);
+//            img->fill(Qt::transparent);
+
+//            QPainter P(img);
+//            if (M_PREFS->getUseAntiAlias())
+//                P.setRenderHint(QPainter::Antialiasing);
+//            renderer.render(&P, theFeatures, projR, /*QRect(0, 0, TILE_SIZE, TILE_SIZE)*/QRect(-8, -8, TILE_SIZE+16, TILE_SIZE+16), PixelPerM, ROptions);
+//            P.end();
+//            tileCache.insert(tile, img);
+////            if (theFeatures.size())
+////                img->save(QString("c:/temp/%1-%2.png").arg(tile.x()).arg(tile.y()));
+//        }
+//    }
+
+};
+
+
+/****************/
+
+struct RenderTile
+{
+    RenderTile(MapView* vw)
+        : p(vw->p) { }
+
+    typedef void result_type;
+
+    void operator()(const TILE_TYPE& tile)
+    {
+#if defined(__MINGW32__)
+        // Workaround for QTBUG-19886
+        asm volatile ("mov %esp, %eax");
+        asm volatile ("and $0xf, %eax");
+        asm volatile ("je alignmentok");
+        asm volatile ("push %eax");
+        asm volatile ("push %eax");
+        asm volatile ("alignmentok:");
+#endif
+
+        tileLock.lockForRead();
+        if (!tileCache.contains(tile)) {
+            tileLock.unlock();
+
+//            qDebug() << "render tile: " << tile << TILE_X(tile) << TILE_Y(tile);
+            QMap<RenderPriority, QSet <Feature*> > theFeatures;
+
+            QPointF projTL((TILE_X(tile)*p->tileSizeCoordW)+p->tileOriginCoord.x(), (TILE_Y(tile)*p->tileSizeCoordH)+p->tileOriginCoord.y());
+            QPointF projBR(((TILE_X(tile)+1)*p->tileSizeCoordW)+p->tileOriginCoord.x(), ((TILE_Y(tile)+1)*p->tileSizeCoordH)+p->tileOriginCoord.y());
+            QRectF projR(projTL, projBR);
+
+#define TILE_SURROUND 2.0
+            qreal z = TILE_SURROUND * ((TILE_SIZE*TILE_SURROUND) / (p->theTransform.m11()*projR.width()*TILE_SURROUND));    // Adjust to main transform
+            qreal dlat = (projR.top()-projR.bottom())*(z-1)/2;
+            qreal dlon = (projR.right()-projR.left())*(z-1)/2;
+            projR.setBottom(projR.bottom()-dlat);
+            projR.setLeft(projR.left()-dlon);
+            projR.setTop(projR.top()+dlat);
+            projR.setRight(projR.right()+dlon);
+
+            Coord tl = p->theProjection.inverse2Coord(projR.topLeft());
+            Coord br = p->theProjection.inverse2Coord(projR.bottomRight());
+            CoordBox invalidRect(tl, br);
+
+            for (int i=0; i<p->theDocument->layerSize(); ++i)
+                g_backend.getFeatureSet(p->theDocument->getLayer(i), theFeatures, invalidRect, p->theProjection);
+
+            QImage* img = new QImage(TILE_SIZE, TILE_SIZE, QImage::Format_ARGB32);
+            img->fill(Qt::transparent);
+
+            QPainter P(img);
+            if (M_PREFS->getUseAntiAlias())
+                P.setRenderHint(QPainter::Antialiasing);
+            MapRenderer r;
+            r.render(&P, theFeatures, projR, /*QRect(0, 0, TILE_SIZE, TILE_SIZE)*/QRect(-((TILE_SIZE*TILE_SURROUND)-TILE_SIZE)/2, -((TILE_SIZE*TILE_SURROUND)-TILE_SIZE)/2, TILE_SIZE*TILE_SURROUND, TILE_SIZE*TILE_SURROUND), p->PixelPerM, p->ROptions);
+            P.end();
+            tileLock.lockForWrite();
+            tileCache.insert(tile, img);
+//            if (theFeatures.size())
+//                img->save(QString("c:/temp/%1-%2.png").arg(tile.x()).arg(tile.y()));
+        }
+        tileLock.unlock();
+    }
 
     MapViewPrivate* p;
 };
 
-/****************/
+/*********************/
 
 MapView::MapView(QWidget* parent) :
     QWidget(parent), Main(dynamic_cast<MainWindow*>(parent)), StaticBackground(0), StaticBuffer(0),
@@ -223,10 +372,14 @@ Document *MapView::document()
 void MapView::invalidate(bool updateStaticBuffer, bool updateMap)
 {
     if (updateStaticBuffer) {
-        p->invalidRects.clear();
-        p->invalidRects.push_back(p->Viewport);
-        if (p->theDocument)
-            p->featureGathering = QtConcurrent::mappedReduced(p->invalidRects, GetFeatures(p), addToFeatures);
+        p->resetTileCache(rect());
+        if (p->theDocument) {
+            p->tileCalc(rect());
+    //            foreach (TILE_TYPE t, tiles) p->renderTile(this, t);
+            if (tiles.size()) {
+                p->renderGathering = QtConcurrent::map(tiles, RenderTile(this));
+            }
+        }
         p->theVectorPanDelta = QPoint(0, 0);
         SAFE_DELETE(StaticBackground)
     }
@@ -265,28 +418,27 @@ void MapView::invalidate(bool updateStaticBuffer, bool updateMap)
 
 void MapView::panScreen(QPoint delta)
 {
-    Coord cDelta = fromView(delta) - fromView(QPoint(0, 0));
-
-    if (p->BackgroundOnlyPanZoom)
+    if (p->BackgroundOnlyPanZoom) {
+        Coord cDelta = fromView(delta) - fromView(QPoint(0, 0));
         p->BackgroundOnlyVpTransform.translate(-cDelta.x(), -cDelta.y());
-    else {
+    } else {
         p->theVectorPanDelta += delta;
 
-        CoordBox r1, r2;
-        if (delta.x()) {
-            if (delta.x() < 0)
-                r1 = CoordBox(p->Viewport.bottomRight(), Coord(p->Viewport.topRight().x() - cDelta.x(), p->Viewport.topRight().y())); // OK
-            else
-                r1 = CoordBox(Coord(p->Viewport.bottomLeft().x() - cDelta.x(), p->Viewport.bottomLeft().y()), p->Viewport.topLeft()); // OK
-            p->invalidRects.push_back(r1);
-        }
-        if (delta.y()) {
-            if (delta.y() < 0)
-                r2 = CoordBox(Coord(p->Viewport.bottomLeft().x(), p->Viewport.bottomLeft().y() - cDelta.y()), p->Viewport.bottomRight()); // OK
-            else
-                r2 = CoordBox(p->Viewport.topLeft(), Coord( p->Viewport.bottomRight().x(), p->Viewport.topRight().y() - cDelta.y())); //NOK
-            p->invalidRects.push_back(r2);
-        }
+//        CoordBox r1, r2;
+//        if (delta.x()) {
+//            if (delta.x() < 0)
+//                r1 = CoordBox(p->Viewport.bottomRight(), Coord(p->Viewport.topRight().x() - cDelta.x(), p->Viewport.topRight().y())); // OK
+//            else
+//                r1 = CoordBox(Coord(p->Viewport.bottomLeft().x() - cDelta.x(), p->Viewport.bottomLeft().y()), p->Viewport.topLeft()); // OK
+//            p->invalidRects.push_back(r1);
+//        }
+//        if (delta.y()) {
+//            if (delta.y() < 0)
+//                r2 = CoordBox(Coord(p->Viewport.bottomLeft().x(), p->Viewport.bottomLeft().y() - cDelta.y()), p->Viewport.bottomRight()); // OK
+//            else
+//                r2 = CoordBox(p->Viewport.topLeft(), Coord( p->Viewport.bottomRight().x(), p->Viewport.topRight().y() - cDelta.y())); //NOK
+//            p->invalidRects.push_back(r2);
+//        }
 
 
         //qDebug() << "Inv rects size: " << p->invalidRects.size();
@@ -294,11 +446,16 @@ void MapView::panScreen(QPoint delta)
         //qDebug() << "r1 : " << p->theTransform.map(p->theProjection.project(r1.topLeft())) << ", " << p->theTransform.map(p->theProjection.project(r1.bottomRight()));
         //qDebug() << "r2 : " << p->theTransform.map(p->theProjection.project(r2.topLeft())) << ", " << p->theTransform.map(p->theProjection.project(r2.bottomRight()));
 
-        if (p->theDocument)
-            p->featureGathering = QtConcurrent::mappedReduced(p->invalidRects, GetFeatures(p), addToFeatures);
-        p->theTransform.translate(qreal(delta.x())/p->theTransform.m11(), qreal(delta.y())/p->theTransform.m22());
+        p->theTransform.translate((qreal)(delta.x())/p->theTransform.m11(), (qreal)(delta.y())/p->theTransform.m22());
         p->theInvertedTransform = p->theTransform.inverted();
         viewportRecalc(rect());
+        if (p->theDocument) {
+            p->tileCalc(rect());
+//            foreach (TILE_TYPE t, tiles) p->renderTile(this, t);
+            if (tiles.size()) {
+                p->renderGathering = QtConcurrent::map(tiles, RenderTile(this));
+            }
+        }
     }
 
     for (LayerIterator<ImageMapLayer*> ImgIt(p->theDocument); !ImgIt.isEnd(); ++ImgIt)
@@ -313,13 +470,11 @@ void MapView::rotateScreen(QPoint center, qreal angle)
     transformCalc(p->theTransform, p->theProjection, p->theVectorRotation, p->Viewport, rect());
     p->theInvertedTransform = p->theTransform.inverted();
     viewportRecalc(rect());
-    p->invalidRects.clear();
-    p->invalidRects.push_back(p->Viewport);
+//    p->invalidRects.clear();
+//    p->invalidRects.push_back(p->Viewport);
 
 //    for (LayerIterator<ImageMapLayer*> ImgIt(p->theDocument); !ImgIt.isEnd(); ++ImgIt)
 //        ImgIt.get()->pan(delta);
-    if (p->theDocument)
-        p->featureGathering = QtConcurrent::mappedReduced(p->invalidRects, GetFeatures(p), addToFeatures);
     update();
 }
 
@@ -350,9 +505,7 @@ void MapView::paintEvent(QPaintEvent * anEvent)
     }
     P.restore();
 
-    if (!p->invalidRects.isEmpty()) {
-        updateStaticBuffer();
-    }
+    updateStaticBuffer();
     P.drawPixmap(p->theVectorPanDelta, *StaticBuffer);
 
     drawLatLonGrid(P);
@@ -601,7 +754,21 @@ void MapView::drawFeatures(QPainter & P)
 //        g_backend.getFeatureSet(p->theDocument->getLayer(i), p->theFeatures, p->invalidRects, p->theProjection);
 
 //    p->renderer.render(&P, p->theFeatures, p->ROptions, this);
-    p->renderer.render(&P, p->featureGathering.result(), p->ROptions, this);
+
+    p->renderGathering.waitForFinished();
+
+    QPointF origin = p->theTransform.map(p->tileOriginCoord);
+    for (int i=p->tileViewport.top(); i<=p->tileViewport.bottom(); ++i)
+        for (int j=p->tileViewport.left(); j<=p->tileViewport.right(); ++j) {
+            tileLock.lockForRead();
+            if (tileCache.contains(TILE_CONSTRUCTOR(j, i))) {
+                QPointF tl = QPointF((j*TILE_SIZE)+origin.x(), (i*TILE_SIZE)+origin.y());
+                P.drawImage(tl, *(tileCache[TILE_CONSTRUCTOR(j, i)]));
+            }
+            tileLock.unlock();
+//            qDebug() << QPoint(j, i) << tl;
+        }
+
 }
 
 void MapView::drawDownloadAreas(QPainter & P)
@@ -657,44 +824,57 @@ void MapView::updateStaticBackground()
 
 void MapView::updateStaticBuffer()
 {
+//    QPainter P;
+
+//    if (!p->theVectorPanDelta.isNull()) {
+//#if QT_VERSION < 0x040600
+//        QPixmap savPix;
+//        savPix = StaticBuffer->copy();
+//        StaticBuffer->fill(Qt::transparent);
+//        P.begin(StaticBuffer);
+//        P.drawPixmap(p->theVectorPanDelta, savPix);
+//        P.setClipping(true);
+//        P.setClipRegion(QRegion(rect()) - QRegion(QRect(p->theVectorPanDelta, size())));
+//#else
+//        QRegion exposed;
+//        StaticBuffer->scroll(p->theVectorPanDelta.x(), p->theVectorPanDelta.y(), StaticBuffer->rect(), &exposed);
+//        P.begin(StaticBuffer);
+//        P.setClipping(true);
+//        P.setClipRegion(exposed);
+//        P.eraseRect(StaticBuffer->rect());
+//#endif
+//    } else {
+//        StaticBuffer->fill(Qt::transparent);
+//        P.begin(StaticBuffer);
+//        P.setClipping(true);
+//        P.setClipRegion(rect());
+//    }
+
+//    if (!p->invalidRects.isEmpty()) {
+////        P.setRenderHint(QPainter::Antialiasing);
+////        P.setClipping(true);
+////        P.setClipRegion(QRegion(rect()));
+//        if (M_PREFS->getUseAntiAlias())
+//            if (p->invalidRects[0] == p->Viewport || M_PREFS->getAntiAliasWhilePanning())
+//                P.setRenderHint(QPainter::Antialiasing);
+//        drawFeatures(P);
+//        P.end();
+//    }
+
+//    p->invalidRects.clear();
+
     QPainter P;
 
-    if (!p->theVectorPanDelta.isNull()) {
-#if QT_VERSION < 0x040600
-        QPixmap savPix;
-        savPix = StaticBuffer->copy();
-        StaticBuffer->fill(Qt::transparent);
-        P.begin(StaticBuffer);
-        P.drawPixmap(p->theVectorPanDelta, savPix);
-        P.setClipping(true);
-        P.setClipRegion(QRegion(rect()) - QRegion(QRect(p->theVectorPanDelta, size())));
-#else
-        QRegion exposed;
-        StaticBuffer->scroll(p->theVectorPanDelta.x(), p->theVectorPanDelta.y(), StaticBuffer->rect(), &exposed);
-        P.begin(StaticBuffer);
-        P.setClipping(true);
-        P.setClipRegion(exposed);
-        P.eraseRect(StaticBuffer->rect());
-#endif
-    } else {
-        StaticBuffer->fill(Qt::transparent);
-        P.begin(StaticBuffer);
-        P.setClipping(true);
-        P.setClipRegion(rect());
-    }
-
-    if (!p->invalidRects.isEmpty()) {
+    StaticBuffer->fill(Qt::transparent);
+    P.begin(StaticBuffer);
+    P.setCompositionMode(QPainter::CompositionMode_Source);
+    P.setClipping(true);
+    P.setClipRegion(rect());
+//    if (M_PREFS->getUseAntiAlias())
 //        P.setRenderHint(QPainter::Antialiasing);
-//        P.setClipping(true);
-//        P.setClipRegion(QRegion(rect()));
-        if (M_PREFS->getUseAntiAlias())
-            if (p->invalidRects[0] == p->Viewport || M_PREFS->getAntiAliasWhilePanning())
-                P.setRenderHint(QPainter::Antialiasing);
-        drawFeatures(P);
-        P.end();
-    }
+    drawFeatures(P);
+    P.end();
 
-    p->invalidRects.clear();
     p->theVectorPanDelta = QPoint(0, 0);
 }
 
@@ -894,7 +1074,7 @@ QPoint MapView::toView(const Coord& aCoord) const
 
 QPoint MapView::toView(Node* aPt) const
 {
-    return p->theTransform.map(p->theProjection.project(aPt)).toPoint();
+    return p->theTransform.map(aPt->projected()).toPoint();
 }
 
 Coord MapView::fromView(const QPoint& aPt) const
@@ -1062,7 +1242,7 @@ void MapView::dragMoveEvent(QDragMoveEvent *event)
         QList<Feature*> NoSnap;
         if ((tP = CAST_NODE(it.get())) && tP->pixelDistance(event->pos(), 5.01, NoSnap, this) < 5.01) {
             dropTarget = tP;
-            QRect acceptedRect(tP->projection().toPoint() - QPoint(3, 3), tP->projection().toPoint() + QPoint(3, 3));
+            QRect acceptedRect(tP->projected().toPoint() - QPoint(3, 3), tP->projected().toPoint() + QPoint(3, 3));
             event->acceptProposedAction();
             event->accept(acceptedRect);
             return;
@@ -1153,14 +1333,14 @@ void MapView::on_MoveLeft_activated()
     QPoint p(rect().width()/4,0);
     panScreen(p);
 
-    invalidate(true, true);
+//    invalidate(true, true);
 }
 void MapView::on_MoveRight_activated()
 {
     QPoint p(-rect().width()/4,0);
     panScreen(p);
 
-    invalidate(true, true);
+//    invalidate(true, true);
 }
 
 void MapView::on_MoveUp_activated()
@@ -1168,7 +1348,7 @@ void MapView::on_MoveUp_activated()
     QPoint p(0,rect().height()/4);
     panScreen(p);
 
-    invalidate(true, true);
+//    invalidate(true, true);
 }
 
 void MapView::on_MoveDown_activated()
@@ -1176,19 +1356,17 @@ void MapView::on_MoveDown_activated()
     QPoint p(0,-rect().height()/4);
     panScreen(p);
 
-    invalidate(true, true);
+//    invalidate(true, true);
 }
 
 void MapView::zoomIn()
 {
     zoom(M_PREFS->getZoomIn()/100., rect().center());
-    invalidate(true, true);
 }
 
 void MapView::zoomOut()
 {
     zoom(M_PREFS->getZoomOut()/100., rect().center());
-    invalidate(true, true);
 }
 
 bool MapView::event(QEvent *event)
@@ -1409,16 +1587,9 @@ const CoordBox& MapView::viewport() const
 
 void MapView::viewportRecalc(const QRect & Screen)
 {
-    Coord bl = fromView(Screen.bottomLeft());
     Coord br = fromView(Screen.bottomRight());
-    Coord tr = fromView(Screen.topRight());
     Coord tl = fromView(Screen.topLeft());
-//    qDebug() << bl.toQPointF() << br.toQPointF() << tr.toQPointF() << tl.toQPointF();
-    qreal t = qMax(tr.y(), tl.y());
-    qreal b = qMin(br.y(), bl.y());
-    qreal l = qMin(tl.x(), bl.x());
-    qreal r = qMax(tr.x(), br.x());
-    p->Viewport = CoordBox(Coord(l, b), Coord(r, t));
+    p->Viewport = CoordBox(tl, br);
 
     // measure geographical distance between mid left and mid right of the screen
     int mid = (Screen.topLeft().y() + Screen.bottomLeft().y()) / 2;
@@ -1468,27 +1639,6 @@ void MapView::transformCalc(QTransform& theTransform, const Projection& theProje
 //    theTransform.rotateRadians(theRotation);
 }
 
-void MapView::setViewport(const CoordBox & TargetMap)
-{
-    if (TargetMap.latDiff() == 0 || TargetMap.lonDiff() == 0)
-        p->Viewport = CoordBox (TargetMap.center()-COORD_ENLARGE*10, TargetMap.center()+COORD_ENLARGE*10);
-    else
-        p->Viewport = TargetMap;
-    if (TEST_RFLAGS(RendererOptions::LockZoom) && p->theDocument) {
-        ImageMapLayer* l = NULL;
-        for (LayerIterator<ImageMapLayer*> ImgIt(p->theDocument); !ImgIt.isEnd(); ++ImgIt) {
-            l = ImgIt.get();
-            break;
-        }
-        if (l && l->isTiled()) {
-            l->setCurrentZoom(*this, p->Viewport, rect());
-            qreal pixpercoord = width() / p->Viewport.lonDiff();
-            qreal z = l->pixelPerCoord() / pixpercoord;
-            zoom(z, rect().center(), rect());
-        }
-    }
-}
-
 void MapView::setViewport(const CoordBox & TargetMap,
                                     const QRect & Screen)
 {
@@ -1501,14 +1651,6 @@ void MapView::setViewport(const CoordBox & TargetMap,
     p->theInvertedTransform = p->theTransform.inverted();
     viewportRecalc(Screen);
 
-    GlobalPainter theGlobalPainter = M_STYLE->getGlobalPainter();
-    if (theGlobalPainter.DrawNodes) {
-        p->NodeWidth = p->PixelPerM*theGlobalPainter.NodesProportional+theGlobalPainter.NodesFixed;
-    } else {
-        p->NodeWidth = p->PixelPerM * M_PREFS->getNodeSize();
-        if (p->NodeWidth > M_PREFS->getNodeSize())
-            p->NodeWidth = M_PREFS->getNodeSize();
-    }
     p->ZoomLevel = p->theTransform.m11();
 
     if (TEST_RFLAGS(RendererOptions::LockZoom) && p->theDocument) {
@@ -1524,6 +1666,7 @@ void MapView::setViewport(const CoordBox & TargetMap,
             zoom(z, Screen.center(), Screen);
         }
     }
+    invalidate(true, true);
 }
 
 void MapView::zoom(qreal d, const QPoint & Around)
@@ -1554,20 +1697,12 @@ void MapView::zoom(qreal d, const QPoint & Around)
     }
 
     zoom(z, Around, rect());
-}
-
-void MapView::adjustZoomToBoris()
-{
-    if (TEST_RFLAGS(RendererOptions::LockZoom)) {
-        ImageMapLayer* l = NULL;
-        for (LayerIterator<ImageMapLayer*> ImgIt(p->theDocument); !ImgIt.isEnd(); ++ImgIt) {
-            l = ImgIt.get();
-            break;
-        }
-        if (l && l->isTiled()) {
-            qreal pixpercoord = width() / p->Viewport.lonDiff();
-            qreal z = l->pixelPerCoord() / pixpercoord;
-            zoom(z, rect().center(), rect());
+    p->resetTileCache(rect());
+    if (p->theDocument) {
+        p->tileCalc(rect());
+//            foreach (TILE_TYPE t, tiles) p->renderTile(this, t);
+        if (tiles.size()) {
+            p->renderGathering = QtConcurrent::map(tiles, RenderTile(this));
         }
     }
 }
@@ -1591,15 +1726,6 @@ void MapView::zoom(qreal d, const QPoint & Around,
     p->theInvertedTransform = p->theTransform.inverted();
     viewportRecalc(Screen);
 
-    GlobalPainter theGlobalPainter = M_STYLE->getGlobalPainter();
-    if (theGlobalPainter.DrawNodes) {
-        p->NodeWidth = p->PixelPerM*theGlobalPainter.NodesProportional+theGlobalPainter.NodesFixed;
-    } else {
-        p->NodeWidth = p->PixelPerM * M_PREFS->getNodeSize();
-        if (p->NodeWidth > M_PREFS->getNodeSize())
-            p->NodeWidth = M_PREFS->getNodeSize();
-    }
-
     for (LayerIterator<ImageMapLayer*> ImgIt(p->theDocument); !ImgIt.isEnd(); ++ImgIt)
         ImgIt.get()->zoom(d, Around, Screen);
 
@@ -1617,6 +1743,22 @@ void MapView::zoom(qreal d, const QPoint & Around,
     update();
 }
 
+void MapView::adjustZoomToBoris()
+{
+    if (TEST_RFLAGS(RendererOptions::LockZoom)) {
+        ImageMapLayer* l = NULL;
+        for (LayerIterator<ImageMapLayer*> ImgIt(p->theDocument); !ImgIt.isEnd(); ++ImgIt) {
+            l = ImgIt.get();
+            break;
+        }
+        if (l && l->isTiled()) {
+            qreal pixpercoord = width() / p->Viewport.lonDiff();
+            qreal z = l->pixelPerCoord() / pixpercoord;
+            zoom(z, rect().center(), rect());
+        }
+    }
+}
+
 void MapView::setCenter(Coord & Center, const QRect & /*Screen*/)
 {
     Coord curCenter(p->Viewport.center());
@@ -1630,11 +1772,6 @@ void MapView::setCenter(Coord & Center, const QRect & /*Screen*/)
 qreal MapView::pixelPerM() const
 {
     return p->PixelPerM;
-}
-
-qreal MapView::nodeWidth() const
-{
-    return p->NodeWidth;
 }
 
 RendererOptions MapView::renderOptions()

@@ -4,6 +4,7 @@
 #include "DocumentCommands.h"
 #include "TrackSegmentCommands.h"
 #include "MapView.h"
+#include "MapRenderer.h"
 #include "Node.h"
 #include "LineF.h"
 
@@ -13,7 +14,7 @@
 #include <algorithm>
 #include <QList>
 
-#define TEST_RFLAGS(x) theView->renderOptions().options.testFlag(x)
+#define TEST_RFLAGS(x) theRenderer->theOptions.options.testFlag(x)
 
 class TrackSegmentPrivate
 {
@@ -154,7 +155,7 @@ void TrackSegment::drawDirectionMarkers(QPainter &P, QPen &pen, const QPointF & 
     P.drawLine(H-T,H-T+V2);
 }
 
-void TrackSegment::draw(QPainter &P, MapView* theView)
+void TrackSegment::draw(QPainter &P, MapRenderer* theRenderer)
 {
     QPen pen;
 
@@ -163,26 +164,23 @@ void TrackSegment::draw(QPainter &P, MapView* theView)
 
     for (int i=1; i<p->Nodes.size(); ++i)
     {
-        Coord last = p->Nodes[i-1]->position();
-        Coord here = p->Nodes[i]->position();
+        QPointF FromF = p->Nodes[i-1]->projected();
+        QPointF ToF = p->Nodes[i]->projected();
 
-        if (CoordBox::visibleLine(theView->viewport(), last, here) == false)
+        if (!theRenderer->theViewport.contains(FromF) && !theRenderer->theViewport.contains(ToF))
             continue;
-
-        QPointF FromF(theView->toView(last));
-        QPointF ToF(theView->toView(here));
 
         if (!M_PREFS->getSimpleGpxTrack())
         {
-            qreal distance = here.distanceFrom(last);
+            qreal distance = p->Nodes[i-1]->position().distanceFrom(p->Nodes[i]->position());
             qreal slope = (p->Nodes[i]->elevation() - p->Nodes[i-1]->elevation()) / (distance * 10.0);
             qreal speed = p->Nodes[i]->speed();
 
             int width = M_PREFS->getGpxTrackWidth();
             // Dynamic track line width adaption to zoom level
-            if (theView->pixelPerM() > 2)
+            if (theRenderer->thePixelPerM > 2)
                 width++;
-            else if (theView->pixelPerM() < 1)
+            else if (theRenderer->thePixelPerM < 1)
                 width--;
 
             // Encode speed in width of path ...
@@ -216,9 +214,9 @@ void TrackSegment::draw(QPainter &P, MapView* theView)
         {
             int width = M_PREFS->getGpxTrackWidth();
             // Dynamic track line width adaption to zoom level
-            if (theView->pixelPerM() > 2)
+            if (theRenderer->thePixelPerM > 2)
                 width++;
-            else if (theView->pixelPerM() < 1)
+            else if (theRenderer->thePixelPerM < 1)
                 width--;
             pen.setWidthF(width);
             pen.setColor(M_PREFS->getGpxTrackColor());

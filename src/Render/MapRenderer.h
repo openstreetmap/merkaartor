@@ -90,8 +90,10 @@ public:
     void render(
             QPainter* P,
             const QMap<RenderPriority, QSet <Feature*> >& theFeatures,
-            const RendererOptions& options,
-            MapView* aView
+            const QRectF& pViewport,
+            const QRect& screen,
+            const qreal pixelPerM,
+            const RendererOptions& options
     );
 //    void print(
 //            QPainter* P,
@@ -100,10 +102,17 @@ public:
 //            MapView* aView
 //    );
 
-    MapView* theView;
+    CoordBox theViewport;
+    QRect theScreen;
+    QTransform theTransform;
+    qreal thePixelPerM;
+    qreal NodeWidth;
+
     QPainter* thePainter;
     RendererOptions theOptions;
     GlobalPainter theGlobalPainter;
+
+    QPoint toView(Node *aPt) const;
 
 protected:
     BackgroundStyleLayer bglayer;

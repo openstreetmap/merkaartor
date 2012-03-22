@@ -65,8 +65,11 @@ bool __cdecl indexFindCallback(Feature* F, void* ctxt)
     if (CHECK_NODE(F)) {
         if (pCtxt->theFeatures->value(NodePri).contains(F))
             return true;
-        if (!(F->isVirtual() && !M_PREFS->getVirtualNodesVisible()))
+        if (!(F->isVirtual() && !M_PREFS->getVirtualNodesVisible())) {
+            Node * N = STATIC_CAST_NODE(F);
+            N->setProjection(*(pCtxt->theProjection));
             (*(pCtxt->theFeatures))[NodePri].insert(F);
+        }
     } else {
         if (pCtxt->theFeatures->value(SegmentPri).contains(F))
             return true;

@@ -221,7 +221,7 @@ void PrimitivePainter::drawTouchup(QPointF* Pt, QPainter* thePainter, qreal Pixe
             qreal WW = PixelPerM*IconScale+IconOffset;
 
             QImage* pm = getSVGImageFromFile(IconName,int(WW));
-            if (!pm->isNull()) {
+            if (pm && !pm->isNull()) {
                 IconOK = true;
                 thePainter->drawImage( int(Pt->x()-pm->width()/2), int(Pt->y()-pm->height()/2) , *pm);
             }
@@ -340,7 +340,7 @@ void PrimitivePainter::drawPointLabel(QPointF C, QString str, QString strBg, QPa
         modX = - (metrics.width(str)/2);
         if (DrawIcon && (IconName != "") )
         {
-            QPixmap pm(IconName);
+            QImage pm(IconName);
             modY = - pm.height();
             if (DrawLabelBackground)
                 modY -= BG_SPACING;
@@ -352,7 +352,7 @@ void PrimitivePainter::drawPointLabel(QPointF C, QString str, QString strBg, QPa
         modX = - (metrics.width(strBg)/2);
         if (DrawIcon && (IconName != "") )
         {
-            QPixmap pm(IconName);
+            QImage pm(IconName);
             modY = - pm.height();
             if (DrawLabelBackground)
                 modY -= BG_SPACING;
