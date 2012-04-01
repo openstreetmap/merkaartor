@@ -152,11 +152,15 @@ bool Layer::isUploadable() const
 
 void Layer::add(Feature* aFeature)
 {
-    aFeature->setLayer(this);
-    p->Features.push_back(aFeature);
-    g_backend.sync(aFeature);
-    aFeature->invalidateMeta();
-    notifyIdUpdate(aFeature->id(),aFeature);
+    if (aFeature) {
+        aFeature->setLayer(this);
+        p->Features.push_back(aFeature);
+        g_backend.sync(aFeature);
+        aFeature->invalidateMeta();
+        notifyIdUpdate(aFeature->id(),aFeature);
+    } else {
+        qDebug() << "Layer::add: logic error, no featured passed";
+    }
 }
 
 void Layer::remove(Feature* aFeature)
