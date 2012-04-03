@@ -113,6 +113,9 @@ class MainWindowPrivate
             , projActgrp(0)
             , theListeningServer(0)
             , latSaveDirtyLevel(0)
+    #ifdef GEOIMAGE
+            , dropTarget(0)
+    #endif
         {
             title = QString("%1 v%2%3(%4)").arg(STRINGIFY(PRODUCT)).arg(STRINGIFY(VERSION)).arg(STRINGIFY(REVISION)).arg(STRINGIFY(SVNREV));
         }
@@ -129,6 +132,9 @@ class MainWindowPrivate
         PropertiesDock* theProperties;
         RendererOptions renderOptions;
         int latSaveDirtyLevel;
+#ifdef GEOIMAGE
+        Node *dropTarget;
+#endif
 };
 
 MainWindow::MainWindow(QWidget *parent)
@@ -604,6 +610,88 @@ void MainWindow::onCustomcontextmenurequested(const QPoint & pos)
 bool MainWindow::eventFilter(QObject *watched, QEvent *event)
 {
     switch (event->type()) {
+
+#ifdef GEOIMAGE
+    case QEvent::DragEnter: {
+        QDragEnterEvent* devent = static_cast<QDragEnterEvent*>(event);
+
+        if (devent->mimeData()->hasUrls() && devent->mimeData()->urls().first().toLocalFile().endsWith(".jpg", Qt::CaseInsensitive)) {
+            p->dropTarget = NULL;
+            event->accept();
+            return true;
+        } else
+            event->ignore();
+
+        return false;
+    }
+
+    case QEvent::DragMove: {
+        QDragMoveEvent* devent = static_cast<QDragMoveEvent*>(event);
+
+        QMouseEvent mE(QEvent::MouseMove, devent->pos(), Qt::LeftButton, Qt::LeftButton, qApp->keyboardModifiers());
+        theView->mouseMoveEvent(&mE);
+
+        Node *tP;
+        for (VisibleFeatureIterator it(document()); !it.isEnd(); ++it) {
+            QList<Feature*> NoSnap;
+            if ((tP = CAST_NODE(it.get())) && tP->pixelDistance(devent->pos(), 5.01, NoSnap, theView) < 5.01) {
+                p->dropTarget = tP;
+                QRect acceptedRect(tP->projected().toPoint() - QPoint(3, 3), tP->projected().toPoint() + QPoint(3, 3));
+                devent->acceptProposedAction();
+                devent->accept(acceptedRect);
+                return true;
+            }
+        }
+        devent->acceptProposedAction();
+        devent->accept();
+        return true;
+    }
+
+    case QEvent::Drop: {
+        QDropEvent* devent = static_cast<QDropEvent*>(event);
+
+        // first save the image url because the even->mimeData() releases its data very soon
+        // this is probably because the drop action ends with calling of this event
+        // so the program that started the drag-action thinks the data isn't needed anymore
+        QList<QUrl> imageUrls = devent->mimeData()->urls();
+        QStringList locFiles;
+        foreach(QUrl url, imageUrls)
+            locFiles << url.toLocalFile();
+
+        if (locFiles.size() > 1)
+            geoImage()->loadImages(locFiles);
+        else {
+            QMenu menu(this);
+            QString imageFn = locFiles[0];
+            Coord mapC = theView->fromView(devent->pos());
+            Coord pos = GeoImageDock::getGeoDataFromImage(imageFn);
+
+            if (pos.isNull()) {
+                QAction *add, *load;
+                load = menu.addAction(tr("Load image"));
+                if (p->dropTarget)
+                    add = menu.addAction(tr("Add node position to image"));
+                else
+                    add = menu.addAction(tr("Geotag image with this position"));
+                menu.addSeparator();
+                menu.addAction(tr("Cancel"));
+                QAction* res = menu.exec(QCursor::pos());
+                if (res == add) {
+                    if (p->dropTarget)
+                        geoImage()->addGeoDataToImage(p->dropTarget->position(), imageFn);
+                    else
+                        geoImage()->addGeoDataToImage(mapC,imageFn);
+                    geoImage()->loadImages(locFiles);
+                } else if (res == load)
+                    geoImage()->loadImage(imageFn, mapC);
+            } else
+                geoImage()->loadImages(locFiles);
+        }
+
+        return false;
+    }
+#endif // GEOIMAGE
+
     case QEvent::MouseButtonDblClick:  {
         if (!theDocument)
             return true;

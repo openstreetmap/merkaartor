@@ -4,29 +4,21 @@
 
 #include "MapView.h"
 #include "MainWindow.h"
-#ifndef _MOBILE
-#include "ui_MainWindow.h"
-#endif
 #include "PropertiesDock.h"
 #include "Document.h"
 #include "Layer.h"
+#include "LayerIterator.h"
 #include "ImageMapLayer.h"
 #include "IMapAdapter.h"
 #include "IMapWatermark.h"
 #include "Feature.h"
-#include "Relation.h"
 #include "Interaction.h"
-#include "MasPaintStyle.h"
+#include "IPaintStyle.h"
 #include "Projection.h"
 #include "qgps.h"
 #include "qgpsdevice.h"
-#include "LayerIterator.h"
 
 #include "MapRenderer.h"
-
-#ifdef GEOIMAGE
-#include "GeoImageDock.h"
-#endif
 
 #ifdef USE_WEBKIT
     #include "browserimagemanager.h"
@@ -275,9 +267,7 @@ MapView::MapView(QWidget* parent) :
     setAttribute(Qt::WA_NoSystemBackground);
     setContextMenuPolicy(Qt::CustomContextMenu);
     setFocusPolicy(Qt::ClickFocus);
-#ifdef GEOIMAGE
     setAcceptDrops(true);
-#endif
 
     MoveRightShortcut = new QShortcut(QKeySequence(Qt::Key_Right), this);
     connect(MoveRightShortcut, SIGNAL(activated()), this, SLOT(on_MoveRight_activated()));
@@ -989,19 +979,12 @@ void MapView::resizeEvent(QResizeEvent * ev)
     invalidate(true, true);
 }
 
-#ifdef GEOIMAGE
 void MapView::dragEnterEvent(QDragEnterEvent *event)
 {
     if (!Main) {
         event->ignore();
         return;
     }
-
-    if (event->mimeData()->hasUrls() && event->mimeData()->urls().first().toLocalFile().endsWith(".jpg", Qt::CaseInsensitive)) {
-        dropTarget = NULL;
-        event->accept();
-    } else
-        event->ignore();
 }
 
 void MapView::dragMoveEvent(QDragMoveEvent *event)
@@ -1010,23 +993,6 @@ void MapView::dragMoveEvent(QDragMoveEvent *event)
         event->ignore();
         return;
     }
-
-    QMouseEvent mE(QEvent::MouseMove, event->pos(), Qt::LeftButton, Qt::LeftButton, qApp->keyboardModifiers());
-    mouseMoveEvent(&mE);
-
-    Node *tP;
-    for (VisibleFeatureIterator it(document()); !it.isEnd(); ++it) {
-        QList<Feature*> NoSnap;
-        if ((tP = CAST_NODE(it.get())) && tP->pixelDistance(event->pos(), 5.01, NoSnap, this) < 5.01) {
-            dropTarget = tP;
-            QRect acceptedRect(tP->projected().toPoint() - QPoint(3, 3), tP->projected().toPoint() + QPoint(3, 3));
-            event->acceptProposedAction();
-            event->accept(acceptedRect);
-            return;
-        }
-    }
-    event->acceptProposedAction();
-    event->accept();
 }
 
 void MapView::dropEvent(QDropEvent *event)
@@ -1035,46 +1001,7 @@ void MapView::dropEvent(QDropEvent *event)
         event->ignore();
         return;
     }
-
-    // first save the image url because the even->mimeData() releases its data very soon
-    // this is probably because the drop action ends with calling of this event
-    // so the program that started the drag-action thinks the data isn't needed anymore
-    QList<QUrl> imageUrls = event->mimeData()->urls();
-    QStringList locFiles;
-    foreach(QUrl url, imageUrls)
-        locFiles << url.toLocalFile();
-
-    if (locFiles.size() > 1)
-        Main->geoImage()->loadImages(locFiles);
-    else {
-        QMenu menu(this);
-        QString imageFn = locFiles[0];
-        Coord mapC = fromView(event->pos());
-        Coord pos = GeoImageDock::getGeoDataFromImage(imageFn);
-
-        if (pos.isNull()) {
-            QAction *add, *load;
-            load = menu.addAction(tr("Load image"));
-            if (dropTarget)
-                add = menu.addAction(tr("Add node position to image"));
-            else
-                add = menu.addAction(tr("Geotag image with this position"));
-            menu.addSeparator();
-            menu.addAction(tr("Cancel"));
-            QAction* res = menu.exec(QCursor::pos());
-            if (res == add) {
-                if (dropTarget)
-                    Main->geoImage()->addGeoDataToImage(dropTarget->position(), imageFn);
-                else
-                    Main->geoImage()->addGeoDataToImage(mapC,imageFn);
-                Main->geoImage()->loadImages(locFiles);
-            } else if (res == load)
-                Main->geoImage()->loadImage(imageFn, mapC);
-        } else
-            Main->geoImage()->loadImages(locFiles);
-    }
 }
-#endif // GEOIMAGE
 
 bool MapView::toXML(QXmlStreamWriter& stream)
 {

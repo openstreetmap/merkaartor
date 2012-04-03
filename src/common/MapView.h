@@ -53,11 +53,9 @@ public:
     virtual void mouseDoubleClickEvent(QMouseEvent* event);
     virtual void wheelEvent(QWheelEvent* ev);
     virtual void resizeEvent(QResizeEvent *event);
-#ifdef GEOIMAGE
     virtual void dragEnterEvent(QDragEnterEvent *event);
     virtual void dragMoveEvent(QDragMoveEvent *event);
     virtual void dropEvent(QDropEvent *event);
-#endif // GEOIMAGE
 
     Projection& projection();
     QTransform& transform();
@@ -103,10 +101,6 @@ private:
     QLabel* lockIcon;
 
     void viewportRecalc(const QRect& Screen);
-
-#ifdef GEOIMAGE
-    Node *dropTarget;
-#endif
 
     int numImages;
 
