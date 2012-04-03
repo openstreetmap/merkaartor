@@ -9,7 +9,7 @@ class CreatePolygonInteraction : public Interaction
     Q_OBJECT
 
     public:
-        CreatePolygonInteraction(MainWindow* Main, MapView* aView, int sides, const QList< QPair <QString, QString> >& tags);
+        CreatePolygonInteraction(MainWindow* Main, int sides, const QList< QPair <QString, QString> >& tags);
         ~CreatePolygonInteraction();
 
         virtual void mousePressEvent(QMouseEvent * event);
@@ -22,7 +22,6 @@ class CreatePolygonInteraction : public Interaction
 #endif
 
     private:
-        MainWindow* Main;
         Coord Origin;
         QPointF OriginF;
         int Sides;

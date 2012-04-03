@@ -1,6 +1,7 @@
 #include "Global.h"
 #include "MoveNodeInteraction.h"
 
+#include "MainWindow.h"
 #include "MapView.h"
 #include "DocumentCommands.h"
 #include "WayCommands.h"
@@ -20,8 +21,8 @@
 
 #include <QList>
 
-MoveNodeInteraction::MoveNodeInteraction(MapView* aView)
-    : FeatureSnapInteraction(aView)
+MoveNodeInteraction::MoveNodeInteraction(MainWindow* aMain)
+    : FeatureSnapInteraction(aMain)
     , StartDragPosition(0,0)
     , theList(0)
 {
@@ -102,14 +103,14 @@ void MoveNodeInteraction::snapMousePressEvent(QMouseEvent * event, Feature* aLas
 {
     QList<Feature*> sel;
     if (view()->isSelectionLocked()) {
-        if (view()->properties()->selection(0))
-            sel.append(view()->properties()->selection(0));
+        if (theMain->properties()->selection(0))
+            sel.append(theMain->properties()->selection(0));
         else
             sel.append(aLast);
     } else {
         if (aLast) {
-            if (view()->properties()->selection().size() && !M_PREFS->getSeparateMoveMode())
-                sel = view()->properties()->selection();
+            if (theMain->properties()->selection().size() && !M_PREFS->getSeparateMoveMode())
+                sel = theMain->properties()->selection();
             else
                 sel.append(aLast);
         }
@@ -227,7 +228,7 @@ void MoveNodeInteraction::snapMouseReleaseEvent(QMouseEvent * event, Feature* Cl
                         theList->add(new RemoveFeatureCommand(document(), samePosPts[i], alt));
                     }
 
-                    view()->properties()->setSelection(merged);
+                    theMain->properties()->setSelection(merged);
                 }
             }
         }
@@ -260,9 +261,9 @@ void MoveNodeInteraction::snapMouseMoveEvent(QMouseEvent* event, Feature* Closer
                 N->setVirtual(false);
                 N->setPosition(OriginalPosition[i]+Diff);
 
-                if (view()->properties()->isSelected(v)) {
-                    view()->properties()->toggleSelection(v);
-                    view()->properties()->toggleSelection(N);
+                if (theMain->properties()->isSelected(v)) {
+                    theMain->properties()->toggleSelection(v);
+                    theMain->properties()->toggleSelection(N);
                 }
                 theList->add(new AddFeatureCommand(main()->document()->getDirtyOrOriginLayer(aRoad->layer()),N,true));
                 theList->add(new WayAddNodeCommand(aRoad,N,SnapIdx,main()->document()->getDirtyOrOriginLayer(aRoad->layer())));

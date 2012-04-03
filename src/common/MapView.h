@@ -15,8 +15,6 @@ class MainWindow;
 class Feature;
 class Way;
 class Document;
-class PropertiesDock;
-class InfoDock;
 class MapAdapter;
 class Interaction;
 class ImageMapLayer;
@@ -36,9 +34,8 @@ public:
     MainWindow* main();
     virtual void setDocument(Document* aDoc);
     Document* document();
-    virtual void launch(Interaction* anInteraction);
     Interaction* interaction();
-    virtual Interaction * defaultInteraction();
+    void setInteraction(Interaction* anInteraction);
 
     void drawFeatures(QPainter & painter);
     void drawLatLonGrid(QPainter & painter);
@@ -69,9 +66,6 @@ public:
     QPoint toView(Node* aPt) const;
     Coord fromView(const QPoint& aPt) const;
 
-    PropertiesDock* properties();
-    //InfoDock* info();
-
     bool isSelectionLocked();
     void lockSelection();
     void unlockSelection();
@@ -80,6 +74,8 @@ public:
     const CoordBox& viewport() const;
     static void transformCalc(QTransform& theTransform, const Projection& theProjection, const qreal& theRotation, const CoordBox& TargetMap, const QRect& Screen);
     qreal pixelPerM() const;
+
+    void setBackgroundOnlyPanZoom(bool val);
 
     void zoom(qreal d, const QPoint& Around);
     void zoom(qreal d, const QPoint& Around, const QRect& Screen);
@@ -105,7 +101,6 @@ private:
     bool StaticMapUpToDate;
     bool SelectionLocked;
     QLabel* lockIcon;
-    QList<Feature*> theSnapList;
 
     void viewportRecalc(const QRect& Screen);
 
@@ -131,17 +126,12 @@ public slots:
     virtual void zoomOut();
 
 signals:
-    void interactionChanged(Interaction* anInteraction);
     void viewportChanged();
-
-protected:
-    bool event(QEvent *event);
 
 protected slots:
     void on_imageRequested(ImageMapLayer*);
     void on_imageReceived(ImageMapLayer*);
     void on_loadingFinished(ImageMapLayer*);
-    void on_customContextMenuRequested(const QPoint & pos);
 
 protected:
     MapViewPrivate* p;

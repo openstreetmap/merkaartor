@@ -206,7 +206,7 @@ void PropertiesDock::checkMenuStatus()
 #endif
 }
 
-int PropertiesDock::size() const
+int PropertiesDock::selectionSize() const
 {
     return Selection.size();
 }

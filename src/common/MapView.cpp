@@ -16,12 +16,6 @@
 #include "Feature.h"
 #include "Relation.h"
 #include "Interaction.h"
-#include "EditInteraction.h"
-#include "CreateSingleWayInteraction.h"
-#include "CreateNodeInteraction.h"
-#include "CreateAreaInteraction.h"
-#include "MoveNodeInteraction.h"
-#include "ExtrudeInteraction.h"
 #include "MasPaintStyle.h"
 #include "Projection.h"
 #include "qgps.h"
@@ -275,6 +269,8 @@ MapView::MapView(QWidget* parent) :
         SelectionLocked(false),lockIcon(0), numImages(0),
         p(new MapViewPrivate)
 {
+    installEventFilter(Main);
+
     setMouseTracking(true);
     setAttribute(Qt::WA_NoSystemBackground);
     setContextMenuPolicy(Qt::CustomContextMenu);
@@ -329,8 +325,6 @@ MapView::MapView(QWidget* parent) :
 
 MapView::~MapView()
 {
-    if(p->theInteraction)
-        delete p->theInteraction;
     delete StaticBackground;
     delete StaticBuffer;
     delete p;
@@ -339,14 +333,6 @@ MapView::~MapView()
 MainWindow *MapView::main()
 {
     return Main;
-}
-
-PropertiesDock *MapView::properties()
-{
-    if (Main)
-        return Main->properties();
-    else
-        return NULL;
 }
 
 void MapView::setDocument(Document* aDoc)
@@ -880,176 +866,44 @@ void MapView::updateStaticBuffer()
 
 void MapView::mousePressEvent(QMouseEvent* anEvent)
 {
-    if (!document())
-        return;
-
-    if (p->theInteraction) {
-        if ((anEvent->modifiers() & Qt::AltModifier) || dynamic_cast<ExtrudeInteraction*>(p->theInteraction))
-            g_Merk_Segment_Mode = true;
-        else
-            g_Merk_Segment_Mode = false;
-
-
-        p->theInteraction->updateSnap(anEvent);
-        if (Main && Main->info())
-            Main->info()->setHtml(p->theInteraction->toHtml());
-
+    if (p->theInteraction)
         if (anEvent->button())
             p->theInteraction->mousePressEvent(anEvent);
-    }
 }
 
 void MapView::mouseReleaseEvent(QMouseEvent* anEvent)
 {
-    if (!document())
-        return;
+    if (p->theInteraction)
+    p->theInteraction->mouseReleaseEvent(anEvent);
 
-    if (p->theInteraction) {
-        if ((anEvent->modifiers() & Qt::AltModifier) || dynamic_cast<ExtrudeInteraction*>(p->theInteraction))
-            g_Merk_Segment_Mode = true;
-        else
-            g_Merk_Segment_Mode = false;
-
-
-        p->theInteraction->updateSnap(anEvent);
-        p->theInteraction->mouseReleaseEvent(anEvent);
-    }
 }
 
 void MapView::mouseMoveEvent(QMouseEvent* anEvent)
 {
-    if (!document())
-        return;
-
-    if (!updatesEnabled())
-        return;
-
-    if (p->theInteraction) {
-        if ((anEvent->modifiers() & Qt::AltModifier) || dynamic_cast<ExtrudeInteraction*>(p->theInteraction))
-            g_Merk_Segment_Mode = true;
-        else
-            g_Merk_Segment_Mode = false;
-
-        p->theInteraction->updateSnap(anEvent);
-
-        if (!M_PREFS->getSeparateMoveMode()) {
-            EditInteraction* EI = dynamic_cast<EditInteraction*>(p->theInteraction);
-            if (EI && EI->isIdle()) {
-                if (EI->lastSnap() && Main && Main->properties()->isSelected(EI->lastSnap())) {
-                    MoveNodeInteraction* MI = new MoveNodeInteraction(this);
-                    launch(MI);
-//                    main()->info()->setHtml(interaction()->toHtml());
-#ifndef _MOBILE
-                    setCursor(MI->cursor());
-#endif
-                    update();
-                    return;
-                }
-            }
-            MoveNodeInteraction* MI = dynamic_cast<MoveNodeInteraction*>(p->theInteraction);
-            if (MI && !MI->lastSnap() && MI->isIdle()) {
-                EditInteraction* EI = new EditInteraction(this);
-                launch(EI);
-//                main()->info()->setHtml(interaction()->toHtml());
-#ifndef _MOBILE
-                setCursor(EI->cursor());
-#endif
-                update();
-                return;
-            }
-
-        }
-
-        p->theInteraction->mouseMoveEvent(anEvent);
-    }
+    if (p->theInteraction)
+    p->theInteraction->mouseMoveEvent(anEvent);
 }
 
 void MapView::mouseDoubleClickEvent(QMouseEvent* anEvent)
 {
-    if (!document())
-        return;
-
-    if (!updatesEnabled())
-        return;
-
-    if (p->theInteraction) {
-        if ((anEvent->modifiers() & Qt::AltModifier) || dynamic_cast<ExtrudeInteraction*>(p->theInteraction))
-            g_Merk_Segment_Mode = true;
-        else
-            g_Merk_Segment_Mode = false;
-
-        p->theInteraction->updateSnap(anEvent);
-
-        if (M_PREFS->getSelectModeCreation()) {
-            MoveNodeInteraction* MI = NULL;
-            if (!M_PREFS->getSeparateMoveMode()) {
-                MI = dynamic_cast<MoveNodeInteraction*>(p->theInteraction);
-            }
-            EditInteraction* EI = dynamic_cast<EditInteraction*>(p->theInteraction);
-            if ((EI && EI->isIdle()) || (MI && MI->isIdle())) {
-                if ((p->theInteraction->lastSnap() && p->theInteraction->lastSnap()->getType() & IFeature::LineString) || !p->theInteraction->lastSnap())
-                    CreateNodeInteraction::createNode(fromView(anEvent->pos()), p->theInteraction->lastSnap());
-                else if (p->theInteraction->lastSnap() && p->theInteraction->lastSnap()->getType() == IFeature::Point) {
-                    Node* N = CAST_NODE(p->theInteraction->lastSnap());
-                    CreateSingleWayInteraction* CI = new CreateSingleWayInteraction(main(), this, N, false);
-                    N->invalidatePainter();
-                    launch(CI);
-                    main()->info()->setHtml(interaction()->toHtml());
-#ifndef _MOBILE
-                    setCursor(CI->cursor());
-#endif
-                    update();
-                    return;
-                }
-            }
-        }
-        p->theInteraction->mouseDoubleClickEvent(anEvent);
-    }
+    if (p->theInteraction)
+    p->theInteraction->mouseDoubleClickEvent(anEvent);
 }
 
 void MapView::wheelEvent(QWheelEvent* anEvent)
 {
-    if (!document())
-        return;
-
-    if (p->theInteraction) {
-        p->theInteraction->wheelEvent(anEvent);
-    }
-}
-
-void MapView::launch(Interaction* anInteraction)
-{
-    EditInteraction* EI = dynamic_cast<EditInteraction*>(p->theInteraction);
-    if (EI)
-        theSnapList = EI->snapList();
-    if (!theSnapList.size())
-        if (Main && Main->properties())
-            theSnapList = Main->properties()->selection();
     if (p->theInteraction)
-        delete p->theInteraction;
-    p->theInteraction = anInteraction;
-    EI = dynamic_cast<EditInteraction*>(p->theInteraction);
-    if (p->theInteraction) {
-        emit interactionChanged(anInteraction);
-        if (EI)
-            EI->setSnap(theSnapList);
-    } else {
-#ifndef _MOBILE
-        setCursor(QCursor(Qt::ArrowCursor));
-#endif
-        launch(defaultInteraction());
-        //Q_ASSERT(p->theInteraction);
-    }
-}
-
-Interaction *MapView::defaultInteraction()
-{
-    return new EditInteraction(this);
+        p->theInteraction->wheelEvent(anEvent);
 }
 
 Interaction *MapView::interaction()
 {
     return p->theInteraction;
+}
+
+void MapView::setInteraction(Interaction *anInteraction)
+{
+    p->theInteraction = anInteraction;
 }
 
 Projection& MapView::projection()
@@ -1080,83 +934,6 @@ QPoint MapView::toView(Node* aPt) const
 Coord MapView::fromView(const QPoint& aPt) const
 {
     return p->theProjection.inverse2Coord(p->theInvertedTransform.map(QPointF(aPt)));
-}
-
-void MapView::on_customContextMenuRequested(const QPoint & pos)
-{
-#ifndef _MOBILE
-    if (!Main)
-        return;
-
-    if (/*EditInteraction* ei = */dynamic_cast<EditInteraction*>(p->theInteraction) || dynamic_cast<MoveNodeInteraction*>(p->theInteraction)) {
-        QMenu menu;
-
-        //FIXME Some of these actions on WIN32-MSVC corrupts the heap.
-
-        //QMenu editMenu(tr("Edit"));
-        //for(int i=0; i<Main->menuEdit->actions().size(); ++i) {
-        //	if (Main->menuEdit->actions()[i]->isEnabled())
-        //		editMenu.addAction(Main->menuEdit->actions()[i]);
-        //}
-        //if (editMenu.actions().size())
-        //	menu.addMenu(&editMenu);
-
-        //QMenu createMenu(tr("Create"));
-        //for(int i=0; i<Main->menuCreate->actions().size(); ++i) {
-        //	if (Main->menuCreate->actions()[i]->isEnabled())
-        //		createMenu.addAction(Main->menuCreate->actions()[i]);
-        //}
-        //if (createMenu.actions().size())
-        //	menu.addMenu(&createMenu);
-
-        menu.addAction(Main->ui->viewZoomOutAction);
-        menu.addAction(Main->ui->viewZoomWindowAction);
-        menu.addAction(Main->ui->viewZoomInAction);
-
-        QMenu featureMenu(tr("Feature"));
-        for(int i=0; i<Main->ui->menu_Feature->actions().size(); ++i) {
-            if (Main->ui->menu_Feature->actions()[i]->isEnabled())
-                featureMenu.addAction(Main->ui->menu_Feature->actions()[i]);
-        }
-        if (featureMenu.actions().size())
-            menu.addMenu(&featureMenu);
-
-
-        QMenu nodeMenu(tr("Node"));
-        for(int i=0; i<Main->ui->menu_Node->actions().size(); ++i) {
-            if (Main->ui->menu_Node->actions()[i]->isEnabled())
-                nodeMenu.addAction(Main->ui->menu_Node->actions()[i]);
-        }
-        if (nodeMenu.actions().size())
-            menu.addMenu(&nodeMenu);
-
-        QMenu roadMenu(tr("Road"));
-        for(int i=0; i<Main->ui->menuRoad->actions().size(); ++i) {
-            if (Main->ui->menuRoad->actions()[i]->isEnabled())
-                roadMenu.addAction(Main->ui->menuRoad->actions()[i]);
-        }
-        if (roadMenu.actions().size())
-            menu.addMenu(&roadMenu);
-
-        QMenu relationMenu(tr("Relation"));
-        for(int i=0; i<Main->ui->menuRelation->actions().size(); ++i) {
-            if (Main->ui->menuRelation->actions()[i]->isEnabled())
-                relationMenu.addAction(Main->ui->menuRelation->actions()[i]);
-        }
-        if (relationMenu.actions().size())
-            menu.addMenu(&relationMenu);
-
-        if (menu.actions().size()) {
-            if (menu.actions().size() == 1) {
-                for (int i=0; i < menu.actions()[0]->menu()->actions().size(); ++i) {
-                    menu.addAction(menu.actions()[0]->menu()->actions()[i]);
-                }
-                menu.removeAction(menu.actions()[0]);
-            }
-            menu.exec(mapToGlobal(pos));
-        }
-    }
-#endif
 }
 
 
@@ -1367,182 +1144,6 @@ void MapView::zoomIn()
 void MapView::zoomOut()
 {
     zoom(M_PREFS->getZoomOut()/100., rect().center());
-}
-
-bool MapView::event(QEvent *event)
-{
-    switch (event->type()) {
-    case QEvent::ToolTip: {
-            QHelpEvent *helpEvent = static_cast<QHelpEvent *>(event);
-            //Coord p = p->theProjection.inverse(helpEvent->pos());
-            if (M_PREFS->getMapTooltip()) {
-                if (!toolTip().isEmpty())
-                    QToolTip::showText(helpEvent->globalPos(), toolTip());
-                else
-                    QToolTip::hideText();
-            }
-            return true;
-        }
-
-    case QEvent::KeyPress: {
-            QKeyEvent *ke = static_cast< QKeyEvent* >( event );
-            switch ( ke->key() ) {
-            case Qt::Key_Space:
-                ke->accept();
-                p->BackgroundOnlyPanZoom = true;
-                return true;
-
-            case Qt::Key_Tab:
-                setFocus();
-                ke->accept();
-
-                //            if (!isSelectionLocked())
-                //                lockSelection();
-                //            else
-                {
-                    FeatureSnapInteraction* intr = dynamic_cast<FeatureSnapInteraction*>(interaction());
-                    if (intr)
-                        intr->nextSnap();
-                }
-                return true;
-
-            case Qt::Key_Backtab:
-                setFocus();
-                ke->accept();
-
-                //            if (!isSelectionLocked())
-                //                lockSelection();
-                //            else
-                {
-                    FeatureSnapInteraction* intr = dynamic_cast<FeatureSnapInteraction*>(interaction());
-                    if (intr)
-                        intr->nextSnap();
-                }
-                return true;
-
-            case Qt::Key_T:
-                {
-                    rotateScreen(rect().center(), 15.);
-                    return true;
-                }
-
-            case Qt::Key_O:
-                {
-                    CreateSingleWayInteraction* intr = dynamic_cast<CreateSingleWayInteraction*>(interaction());
-                    if (!intr)
-                        return false;
-
-                    setFocus();
-                    ke->accept();
-                    intr->setSnapAngle(45.);
-
-                    return true;
-                }
-
-            case Qt::Key_H:
-                {
-                    CreateSingleWayInteraction* intr = dynamic_cast<CreateSingleWayInteraction*>(interaction());
-                    if (!intr)
-                        return false;
-
-                    setFocus();
-                    ke->accept();
-                    intr->setSnapAngle(30.);
-
-                    return true;
-                }
-
-            case Qt::Key_P:
-                {
-                    CreateSingleWayInteraction* intr = dynamic_cast<CreateSingleWayInteraction*>(interaction());
-                    if (!intr)
-                        return false;
-
-                    setFocus();
-                    ke->accept();
-                    intr->setParallelMode(true);
-
-                    return true;
-                }
-
-            case Qt::Key_C:
-                {
-                    CreateSingleWayInteraction* CI = dynamic_cast<CreateSingleWayInteraction*>(interaction());
-                    if (CI) {
-                        setFocus();
-                        ke->accept();
-                        CI->closeAndFinish();
-                    } else {
-                        CreateAreaInteraction* AI = dynamic_cast<CreateAreaInteraction*>(interaction());
-                        if (AI) {
-                            setFocus();
-                            ke->accept();
-                            AI->closeAndFinish();
-                        }
-                        else
-                            return false;
-                    }
-                    return true;
-                }
-
-            default:
-                break;
-
-            }
-        }
-
-    case QEvent::KeyRelease: {
-            QKeyEvent *ke = static_cast< QKeyEvent* >( event );
-            switch ( ke->key() ) {
-            case Qt::Key_Space:
-                ke->accept();
-                p->BackgroundOnlyPanZoom = false;
-                return true;
-
-            case Qt::Key_O:
-            case Qt::Key_H:
-                {
-                    CreateSingleWayInteraction* intr = dynamic_cast<CreateSingleWayInteraction*>(interaction());
-                    if (!intr)
-                        return false;
-
-                    ke->accept();
-                    intr->setSnapAngle(0);
-
-                    return true;
-                }
-
-            case Qt::Key_P:
-                {
-                    CreateSingleWayInteraction* intr = dynamic_cast<CreateSingleWayInteraction*>(interaction());
-                    if (!intr)
-                        return false;
-
-                    ke->accept();
-                    intr->setParallelMode(false);
-
-                    return true;
-                }
-
-            default:
-                break;
-            }
-        }
-
-    case QEvent::Leave: {
-            if (Main && Main->info())
-                Main->info()->unsetHoverHtml();
-            FeatureSnapInteraction* intr = dynamic_cast<FeatureSnapInteraction*>(interaction());
-            if (intr)
-                intr->clearLastSnap();
-            update();
-        }
-
-    default:
-        break;
-    }
-
-    return QWidget::event(event);
 }
 
 bool MapView::isSelectionLocked()
@@ -1772,6 +1373,11 @@ void MapView::setCenter(Coord & Center, const QRect & /*Screen*/)
 qreal MapView::pixelPerM() const
 {
     return p->PixelPerM;
+}
+
+void MapView::setBackgroundOnlyPanZoom(bool val)
+{
+    p->BackgroundOnlyPanZoom = val;
 }
 
 RendererOptions MapView::renderOptions()

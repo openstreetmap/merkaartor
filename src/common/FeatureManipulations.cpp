@@ -62,7 +62,7 @@ bool canBreak(Way* R1, Way* R2)
 bool canJoinRoads(PropertiesDock* theDock)
 {
     QHash<Coord,int> ends;
-    for (int i=0; i<theDock->size(); ++i)
+    for (int i=0; i<theDock->selectionSize(); ++i)
         if (Way* R = CAST_WAY(theDock->selection(i))) {
             if (R->isClosed()) continue;
             if (!R->size()) continue;
@@ -78,7 +78,7 @@ bool canJoinRoads(PropertiesDock* theDock)
 bool canBreakRoads(PropertiesDock* theDock)
 {
     QList<Way*> Input;
-    for (int i=0; i<theDock->size(); ++i)
+    for (int i=0; i<theDock->selectionSize(); ++i)
         if (Way* R = CAST_WAY(theDock->selection(i)))
             Input.push_back(R);
     for (int i=0; i<Input.size(); ++i)
@@ -92,7 +92,7 @@ bool canDetachNodes(PropertiesDock* theDock)
 {
     QList<Way*> Roads, Result;
     QList<Node*> Points;
-    for (int i=0; i<theDock->size(); ++i)
+    for (int i=0; i<theDock->selectionSize(); ++i)
         if (Way* R = CAST_WAY(theDock->selection(i)))
             Roads.push_back(R);
         else if (Node* Pt = CAST_NODE(theDock->selection(i)))
@@ -196,7 +196,7 @@ void simplifyRoads(Document* theDocument, CommandList* theList, PropertiesDock* 
     if (uninterestingKeys.isEmpty())
         uninterestingKeys << "source";
 
-    for (int i = 0;  i < theDock->size();  ++i)
+    for (int i = 0;  i < theDock->selectionSize();  ++i)
         if (Way* w = CAST_WAY(theDock->selection(i))) {
             Layer *layer = theDocument->getDirtyOrOriginLayer(w->layer());
             int end = w->size() - 1;
@@ -465,7 +465,7 @@ void splitRoads(Document* theDocument, CommandList* theList, PropertiesDock* the
 {
     QList<Way*> Roads, Result;
     QList<Node*> Points;
-    for (int i=0; i<theDock->size(); ++i)
+    for (int i=0; i<theDock->selectionSize(); ++i)
         if (Way* R = CAST_WAY(theDock->selection(i)))
             Roads.push_back(R);
         else if (Node* Pt = CAST_NODE(theDock->selection(i)))
@@ -502,7 +502,7 @@ void breakRoads(Document* theDocument, CommandList* theList, PropertiesDock* the
 {
     QList<Way*> Roads, Result;
     QList<Node*> Points;
-    for (int i=0; i<theDock->size(); ++i)
+    for (int i=0; i<theDock->selectionSize(); ++i)
         if (Way* R = CAST_WAY(theDock->selection(i)))
             Roads.push_back(R);
         else if (Node* Pt = CAST_NODE(theDock->selection(i)))
@@ -543,7 +543,7 @@ int createJunction(Document* theDocument, CommandList* theList, PropertiesDock* 
     //TODO test that the junction do not already exists!
 
     QList<Way*> Roads, Result;
-    for (int i=0; i<theDock->size(); ++i)
+    for (int i=0; i<theDock->selectionSize(); ++i)
         if (Way* R = CAST_WAY(theDock->selection(i)))
             Roads.push_back(R);
 
@@ -685,7 +685,7 @@ void createStreetNumbers(Document* theDocument, CommandList* theList, Way* theRo
 void addStreetNumbers(Document* theDocument, CommandList* theList, PropertiesDock* theDock)
 {
     QList<Way*> Roads;
-    for (int i=0; i<theDock->size(); ++i)
+    for (int i=0; i<theDock->selectionSize(); ++i)
         if (Way* R = CAST_WAY(theDock->selection(i)))
             Roads.push_back(R);
 
@@ -707,12 +707,12 @@ void addStreetNumbers(Document* theDocument, CommandList* theList, PropertiesDoc
 
 void alignNodes(Document* theDocument, CommandList* theList, PropertiesDock* theDock)
 {
-    if (theDock->size() < 3) //thre must be at least 3 nodes to align something
+    if (theDock->selectionSize() < 3) //thre must be at least 3 nodes to align something
         return;
 
     //We build a list of selected nodes
     QList<Node*> Nodes;
-    for (int i=0; i<theDock->size(); ++i)
+    for (int i=0; i<theDock->selectionSize(); ++i)
         if (Node* N = CAST_NODE(theDock->selection(i)))
             Nodes.push_back(N);
 
@@ -741,7 +741,7 @@ void bingExtract(Document* theDocument, CommandList* theList, PropertiesDock* th
 {
     //We build a list of selected nodes
     QList<Node*> Nodes;
-    for (int i=0; i<theDock->size(); ++i)
+    for (int i=0; i<theDock->selectionSize(); ++i)
         if (Node* N = CAST_NODE(theDock->selection(i)))
             Nodes.push_back(N);
 
@@ -817,7 +817,7 @@ void bingExtract(Document* theDocument, CommandList* theList, PropertiesDock* th
 void spreadNodes(Document* theDocument, CommandList* theList, PropertiesDock* theDock)
 {
     // There must be at least 3 nodes to align something
-    if (theDock->size() < 3)
+    if (theDock->selectionSize() < 3)
         return;
 
     // We build a list of selected nodes
@@ -826,7 +826,7 @@ void spreadNodes(Document* theDocument, CommandList* theList, PropertiesDock* th
     QList<float> Metrics;
     Coord p;
     Coord delta;
-    for (int i=0; i<theDock->size(); ++i) {
+    for (int i=0; i<theDock->selectionSize(); ++i) {
         if (Node* N = CAST_NODE(theDock->selection(i))) {
             Coord pos(N->position());
             if (Nodes.size() == 0) {
@@ -883,11 +883,11 @@ static void mergeNodes(Document* theDocument, CommandList* theList, Node *node1,
 
 void mergeNodes(Document* theDocument, CommandList* theList, PropertiesDock* theDock)
 {
-    if (theDock->size() <= 1)
+    if (theDock->selectionSize() <= 1)
         return;
     QList<Node*> Nodes;
     QList<Feature*> alt;
-    for (int i=0; i<theDock->size(); ++i)
+    for (int i=0; i<theDock->selectionSize(); ++i)
         if (Node* N = CAST_NODE(theDock->selection(i)))
             Nodes.push_back(N);
     Node* merged = Nodes[0];
@@ -902,7 +902,7 @@ void detachNode(Document* theDocument, CommandList* theList, PropertiesDock* the
 {
     QList<Way*> Roads, Result;
     QList<Node*> Points;
-    for (int i=0; i<theDock->size(); ++i)
+    for (int i=0; i<theDock->selectionSize(); ++i)
         if (Way* R = CAST_WAY(theDock->selection(i)))
             Roads.push_back(R);
         else if (Node* Pt = CAST_NODE(theDock->selection(i)))
@@ -945,7 +945,7 @@ void commitFeatures(Document* theDocument, CommandList* theList, PropertiesDock*
     QSet<Feature*> Features;
     QQueue<Feature*> ToAdd;
 
-    for (int i=0; i<theDock->size(); ++i)
+    for (int i=0; i<theDock->selectionSize(); ++i)
         if (!theDock->selection(i)->isUploadable() && !theDock->selection(i)->isSpecial())
             ToAdd.enqueue(theDock->selection(i));
 
@@ -971,7 +971,7 @@ void addRelationMember(Document* theDocument, CommandList* theList, PropertiesDo
 {
     Relation* theRelation = NULL;
     QList<Feature*> Features;
-    for (int i=0; i<theDock->size(); ++i)
+    for (int i=0; i<theDock->selectionSize(); ++i)
         if ((theDock->selection(i)->getClass() == "Relation") && !theRelation)
             theRelation = CAST_RELATION(theDock->selection(i));
         else
@@ -988,7 +988,7 @@ void removeRelationMember(Document* theDocument, CommandList* theList, Propertie
 {
     Relation* theRelation = NULL;
     QList<Feature*> Features;
-    for (int i=0; i<theDock->size(); ++i)
+    for (int i=0; i<theDock->selectionSize(); ++i)
         if ((theDock->selection(i)->getClass() == "Relation") && !theRelation)
             theRelation = CAST_RELATION(theDock->selection(i));
         else
@@ -1009,7 +1009,7 @@ void addToMultipolygon(Document* theDocument, CommandList* theList, PropertiesDo
 {
     Relation* theRelation = NULL;
     QList<Way*> theWays;
-    for (int i=0; i<theDock->size(); ++i) {
+    for (int i=0; i<theDock->selectionSize(); ++i) {
         if (!theRelation && CHECK_RELATION(theDock->selection(i)) && theDock->selection(i)->tagValue("type", "") == "multipolygon")
             theRelation = STATIC_CAST_RELATION(theDock->selection(i));
         if (CHECK_WAY(theDock->selection(i)))
@@ -1080,7 +1080,7 @@ bool canSubdivideRoad(PropertiesDock* theDock, Way** outTheRoad, unsigned int* o
     // Get the selected way and nodes
     Way* theRoad = NULL;
     Node* theNodes[2] = { NULL, NULL };
-    for (int i = 0; i < theDock->size(); ++i) {
+    for (int i = 0; i < theDock->selectionSize(); ++i) {
         if ((theDock->selection(i)->getClass() == "Way") && !theRoad)
             theRoad = CAST_WAY(theDock->selection(i));
         else if (theDock->selection(i)->getClass() == "Node") {
@@ -1261,7 +1261,7 @@ void joinAreas(Document* theDocument, CommandList* theList, PropertiesDock* theD
 {
     // Collect the set of selected areas
     QSet<Way*> areas;
-    for (int i = 0; i < theDock->size(); ++i)
+    for (int i = 0; i < theDock->selectionSize(); ++i)
         if (theDock->selection(i)->getClass() == "Way") {
             Way* area = CAST_WAY(theDock->selection(i));
             if (area->isClosed())
@@ -1374,13 +1374,13 @@ findNextJoin:
 
 bool canSplitArea(PropertiesDock* theDock, Way** outTheArea, unsigned int outNodes[2])
 {
-    if (theDock->size() != 3)
+    if (theDock->selectionSize() != 3)
         return false;
 
     // Get the selected way and nodes
     Way* theArea = NULL;
     Node* theNodes[2] = { NULL, NULL };
-    for (int i = 0; i < theDock->size(); ++i) {
+    for (int i = 0; i < theDock->selectionSize(); ++i) {
         if ((theDock->selection(i)->getClass() == "Way") && !theArea)
             theArea = CAST_WAY(theDock->selection(i));
         else if (theDock->selection(i)->getClass() == "Node") {
@@ -1482,7 +1482,7 @@ bool canTerraceArea(PropertiesDock* theDock, Way** outTheArea, int* startNode)
     // Get the selected area
     Way* theArea = NULL;
     Node* theNode = NULL;
-    for (int i = 0; i < theDock->size(); ++i)
+    for (int i = 0; i < theDock->selectionSize(); ++i)
         if ((theDock->selection(i)->getClass() == "Way") && !theArea) {
             theArea = CAST_WAY(theDock->selection(i));
         } else if (startNode && theDock->selection(i)->getClass() == "Node") {
@@ -1537,7 +1537,7 @@ void terraceArea(Document* theDocument, CommandList* theList, PropertiesDock* th
 // Remove repeated (adjacent) nodes in ways.
 static void removeRepeatsInRoads(Document* theDocument, CommandList* theList, PropertiesDock* theDock)
 {
-    for (int i = 0; i < theDock->size(); ++i) {
+    for (int i = 0; i < theDock->selectionSize(); ++i) {
         if (theDock->selection(i)->getClass() == "Way") {
             Way *way = CAST_WAY(theDock->selection(i));
             Node *last = 0;

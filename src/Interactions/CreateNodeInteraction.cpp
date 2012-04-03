@@ -13,8 +13,8 @@
 
 #include <QList>
 
-CreateNodeInteraction::CreateNodeInteraction(MapView* aView)
-    : FeatureSnapInteraction(aView)
+CreateNodeInteraction::CreateNodeInteraction(MainWindow* aMain)
+    : FeatureSnapInteraction(aMain)
     , theMoveInteraction(0)
 {
 }
@@ -49,7 +49,7 @@ void CreateNodeInteraction::snapMousePressEvent(QMouseEvent * ev, Feature* aFeat
     } else {
         SAFE_DELETE(theMoveInteraction);
 #ifndef _MOBILE
-        theView->setCursor(cursor());
+        theMain->view()->setCursor(cursor());
 #endif
     }
 
@@ -59,12 +59,12 @@ void CreateNodeInteraction::snapMouseMoveEvent(QMouseEvent* ev, Feature* aFeat)
 {
     if (CAST_NODE(aFeat)) {
         if (!theMoveInteraction) {
-            theMoveInteraction = new MoveNodeInteraction(theView);
+            theMoveInteraction = new MoveNodeInteraction(theMain);
         }
 #ifndef _MOBILE
-        theView->setCursor(theMoveInteraction->cursor());
+        theMain->view()->setCursor(theMoveInteraction->cursor());
     } else
-        theView->setCursor(cursor());
+        theMain->view()->setCursor(cursor());
 #else
     }
 #endif
@@ -87,9 +87,9 @@ void CreateNodeInteraction::snapMouseReleaseEvent(QMouseEvent * ev, Feature* aFe
 
         createNode(P, aFeat);
 
-        theMoveInteraction = new MoveNodeInteraction(theView);
+        theMoveInteraction = new MoveNodeInteraction(theMain);
 #ifndef _MOBILE
-        theView->setCursor(theMoveInteraction->cursor());
+        theMain->view()->setCursor(theMoveInteraction->cursor());
 #endif
     }
 }

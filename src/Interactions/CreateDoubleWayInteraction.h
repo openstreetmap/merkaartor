@@ -6,7 +6,6 @@
 
 class MainWindow;
 class Way;
-class Way;
 
 class QDockWidget;
 
@@ -15,7 +14,7 @@ class CreateDoubleWayInteraction : public Interaction
     Q_OBJECT
 
     public:
-        CreateDoubleWayInteraction(MainWindow* Main, MapView* aView);
+        CreateDoubleWayInteraction(MainWindow* Main);
         ~CreateDoubleWayInteraction();
 
         virtual void mousePressEvent(QMouseEvent * event);
@@ -28,7 +27,6 @@ class CreateDoubleWayInteraction : public Interaction
 #endif
 
     private:
-        MainWindow* Main;
         QDockWidget* theDock;
         Ui::CreateDoubleWayDock DockData;
         QPoint LastCursor;

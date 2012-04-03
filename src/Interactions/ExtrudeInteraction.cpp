@@ -13,8 +13,8 @@
 
 #include <QtGui/QPainter>
 
-ExtrudeInteraction::ExtrudeInteraction(MapView* aView)
-    : FeatureSnapInteraction(aView)
+ExtrudeInteraction::ExtrudeInteraction(MainWindow* aMain)
+    : FeatureSnapInteraction(aMain)
     , Creating(false)
     , BestSegment(-1)
 {

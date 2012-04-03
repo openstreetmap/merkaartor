@@ -11,7 +11,7 @@ class CommandList;
 class MoveNodeInteraction : public FeatureSnapInteraction
 {
     public:
-        MoveNodeInteraction(MapView* aView);
+        MoveNodeInteraction(MainWindow* aMain);
         ~MoveNodeInteraction(void);
 
         virtual void snapMousePressEvent(QMouseEvent * event, Feature* aLast);

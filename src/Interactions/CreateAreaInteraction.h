@@ -14,7 +14,7 @@ class CreateAreaInteraction : public FeatureSnapInteraction
     Q_OBJECT
 
     public:
-        CreateAreaInteraction(MainWindow* Main, MapView* aView);
+        CreateAreaInteraction(MainWindow* Main);
         ~CreateAreaInteraction();
 
         virtual void snapMouseReleaseEvent(QMouseEvent * event, Feature* aLast);
@@ -33,7 +33,6 @@ class CreateAreaInteraction : public FeatureSnapInteraction
         void addToRoad(QMouseEvent* anEvent, Feature* Snap, CommandList* L);
         void finishRoad(CommandList* L);
 
-        MainWindow* Main;
         QPoint LastCursor;
         Relation* theRelation;
         Way* theRoad;

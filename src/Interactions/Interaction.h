@@ -11,7 +11,6 @@ class QMouseEvent;
 class QPaintEvent;
 class QPainter;
 
-#include "MainWindow.h"
 #include "MapView.h"
 #include "InfoDock.h"
 #include "FeaturesDock.h"
@@ -27,15 +26,14 @@ class QPainter;
 
 #include <algorithm>
 
-#define XY_TO_COORD(x)  theView->fromView(x)
-#define COORD_TO_XY(x)  theView->toView(x)
-#define PROPERTIES(x) {if (view()->properties()) view()->properties()->x;}
+#define XY_TO_COORD(x)  theMain->view()->fromView(x)
+#define COORD_TO_XY(x)  theMain->view()->toView(x)
 
 class Interaction : public QObject
 {
     Q_OBJECT
 public:
-    Interaction(MapView* theView);
+    Interaction(MainWindow* aMain);
     virtual ~Interaction();
 
     virtual void mousePressEvent(QMouseEvent * event);
@@ -56,7 +54,7 @@ public:
     Feature* lastSnap();
 
 protected:
-    MapView* theView;
+    MainWindow* theMain;
     bool Panning;
     QPoint FirstPan;
     QPoint LastPan;
@@ -86,7 +84,7 @@ protected:
 class FeatureSnapInteraction : public Interaction
 {
 public:
-    FeatureSnapInteraction(MapView* theView);
+    FeatureSnapInteraction(MainWindow* aMain);
 
     virtual void paintEvent(QPaintEvent* anEvent, QPainter& thePainter);
 

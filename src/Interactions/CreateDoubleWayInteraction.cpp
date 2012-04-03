@@ -13,21 +13,21 @@
 #include <QtGui/QDockWidget>
 #include <QtGui/QPainter>
 
-CreateDoubleWayInteraction::CreateDoubleWayInteraction(MainWindow* aMain, MapView* aView)
-    : Interaction(aView), Main(aMain), R1(0), R2(0), FirstPoint(0,0), HaveFirst(false), theDock(0)
+CreateDoubleWayInteraction::CreateDoubleWayInteraction(MainWindow* aMain)
+    : Interaction(aMain), R1(0), R2(0), FirstPoint(0,0), HaveFirst(false), theDock(0)
 {
 #ifndef _MOBILE
-    theDock = new QDockWidget(Main);
+    theDock = new QDockWidget(theMain);
     QWidget* DockContent = new QWidget(theDock);
     DockData.setupUi(DockContent);
     theDock->setWidget(DockContent);
     theDock->setAllowedAreas(Qt::LeftDockWidgetArea);
-    Main->addDockWidget(Qt::LeftDockWidgetArea, theDock);
+    theMain->addDockWidget(Qt::LeftDockWidgetArea, theDock);
     theDock->show();
     DockData.DriveRight->setChecked(M_PREFS->getrightsidedriving());
     DockData.RoadDistance->setText(QString().setNum(M_PREFS->getdoubleroaddistance()));
 
-    aView->setCursor(cursor());
+    theMain->view()->setCursor(cursor());
 #endif
 }
 
@@ -175,13 +175,13 @@ void CreateDoubleWayInteraction::mousePressEvent(QMouseEvent* anEvent)
                     P1.intersectionWith(N1).toPoint())));
                 L->add(new MoveNodeCommand(A2,XY_TO_COORD(
                     P2.intersectionWith(N2).toPoint())));
-                Node* B1 = g_backend.allocNode(Main->document()->getDirtyOrOriginLayer(), XY_TO_COORD(
+                Node* B1 = g_backend.allocNode(theMain->document()->getDirtyOrOriginLayer(), XY_TO_COORD(
                     FB1.project(LastCursor).toPoint()));
-                Node* B2 = g_backend.allocNode(Main->document()->getDirtyOrOriginLayer(), XY_TO_COORD(
+                Node* B2 = g_backend.allocNode(theMain->document()->getDirtyOrOriginLayer(), XY_TO_COORD(
                     FB2.project(LastCursor).toPoint()));
 
-                L->add(new AddFeatureCommand(Main->document()->getDirtyOrOriginLayer(),B1,true));
-                L->add(new AddFeatureCommand(Main->document()->getDirtyOrOriginLayer(),B2,true));
+                L->add(new AddFeatureCommand(theMain->document()->getDirtyOrOriginLayer(),B1,true));
+                L->add(new AddFeatureCommand(theMain->document()->getDirtyOrOriginLayer(),B2,true));
                 L->add(new WayAddNodeCommand(R1,B1));
                 L->add(new WayAddNodeCommand(R2,B2,(int)0));
                 document()->addHistory(L);
@@ -208,27 +208,27 @@ void CreateDoubleWayInteraction::mousePressEvent(QMouseEvent* anEvent)
                 FB1.slide(rB*Modifier);
                 FB2.slide(-rB*Modifier);
 
-                Node* A1 = g_backend.allocNode(Main->document()->getDirtyOrOriginLayer(), XY_TO_COORD(
+                Node* A1 = g_backend.allocNode(theMain->document()->getDirtyOrOriginLayer(), XY_TO_COORD(
                     FA1.project(COORD_TO_XY(PreviousPoint)).toPoint()));
-                Node* A2 = g_backend.allocNode(Main->document()->getDirtyOrOriginLayer(), XY_TO_COORD(
+                Node* A2 = g_backend.allocNode(theMain->document()->getDirtyOrOriginLayer(), XY_TO_COORD(
                     FA2.project(COORD_TO_XY(PreviousPoint)).toPoint()));
-                Node* B1 = g_backend.allocNode(Main->document()->getDirtyOrOriginLayer(), XY_TO_COORD(
+                Node* B1 = g_backend.allocNode(theMain->document()->getDirtyOrOriginLayer(), XY_TO_COORD(
                     FB1.project(LastCursor).toPoint()));
-                Node* B2 = g_backend.allocNode(Main->document()->getDirtyOrOriginLayer(), XY_TO_COORD(
+                Node* B2 = g_backend.allocNode(theMain->document()->getDirtyOrOriginLayer(), XY_TO_COORD(
                     FB2.project(LastCursor).toPoint()));
-                R1 = g_backend.allocWay(Main->document()->getDirtyOrOriginLayer());
-                R2 = g_backend.allocWay(Main->document()->getDirtyOrOriginLayer());
+                R1 = g_backend.allocWay(theMain->document()->getDirtyOrOriginLayer());
+                R2 = g_backend.allocWay(theMain->document()->getDirtyOrOriginLayer());
 
                 CommandList* L  = new CommandList(MainWindow::tr("Create double-way Road %1").arg(R1->id().numId), R1);
-                L->add(new AddFeatureCommand(Main->document()->getDirtyOrOriginLayer(),A1,true));
-                L->add(new AddFeatureCommand(Main->document()->getDirtyOrOriginLayer(),A2,true));
-                L->add(new AddFeatureCommand(Main->document()->getDirtyOrOriginLayer(),B1,true));
-                L->add(new AddFeatureCommand(Main->document()->getDirtyOrOriginLayer(),B2,true));
+                L->add(new AddFeatureCommand(theMain->document()->getDirtyOrOriginLayer(),A1,true));
+                L->add(new AddFeatureCommand(theMain->document()->getDirtyOrOriginLayer(),A2,true));
+                L->add(new AddFeatureCommand(theMain->document()->getDirtyOrOriginLayer(),B1,true));
+                L->add(new AddFeatureCommand(theMain->document()->getDirtyOrOriginLayer(),B2,true));
 
-                L->add(new AddFeatureCommand(Main->document()->getDirtyOrOriginLayer(),R1,true));
-                L->add(new AddFeatureCommand(Main->document()->getDirtyOrOriginLayer(),R2,true));
+                L->add(new AddFeatureCommand(theMain->document()->getDirtyOrOriginLayer(),R1,true));
+                L->add(new AddFeatureCommand(theMain->document()->getDirtyOrOriginLayer(),R2,true));
                 if (M_PREFS->getAutoSourceTag()) {
-                    QStringList sl = Main->document()->getCurrentSourceTags();
+                    QStringList sl = theMain->document()->getCurrentSourceTags();
                     if (sl.size()) {
                         R1->setTag("source", sl.join(";"));
                         R2->setTag("source", sl.join(";"));

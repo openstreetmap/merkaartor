@@ -25,8 +25,10 @@
 
 #include <QList>
 
-EditInteraction::EditInteraction(MapView* theView)
-: FeatureSnapInteraction(theView), Dragging(false), StartDrag(0,0), EndDrag(0,0)
+#define PROPERTIES(x) {if (theMain->properties()) theMain->properties()->x;}
+
+EditInteraction::EditInteraction(MainWindow* aMain)
+: FeatureSnapInteraction(aMain), Dragging(false), StartDrag(0,0), EndDrag(0,0)
 {
     defaultCursor = QCursor(Qt::ArrowCursor);
 
@@ -41,13 +43,6 @@ EditInteraction::EditInteraction(MapView* theView)
 
 EditInteraction::~EditInteraction(void)
 {
-#ifndef _MOBILE
-    if(main())
-    {
-        main()->ui->editRemoveAction->setEnabled(false);
-        main()->ui->editReverseAction->setEnabled(false);
-    }
-#endif
 }
 
 QString EditInteraction::toHtml()
@@ -269,19 +264,19 @@ void EditInteraction::snapMouseDoubleClickEvent(QMouseEvent* anEvent, Feature* a
 
 void EditInteraction::on_remove_triggered()
 {
-    if (view()->properties()->size() == 0) return;
+    if (theMain->properties()->selectionSize() == 0) return;
 
     QList<Feature*> Sel;
-    for (int i=0; i<view()->properties()->size(); ++i) {
-        if (!document()->isDownloadedSafe(view()->properties()->selection(i)->boundingBox()) && view()->properties()->selection(i)->hasOSMId())
+    for (int i=0; i<theMain->properties()->selectionSize(); ++i) {
+        if (!document()->isDownloadedSafe(theMain->properties()->selection(i)->boundingBox()) && theMain->properties()->selection(i)->hasOSMId())
             continue;
         else
-            Sel.push_back(view()->properties()->selection(i));
+            Sel.push_back(theMain->properties()->selection(i));
     }
     if (Sel.size() == 0) {
         QMessageBox::critical(NULL, tr("Cannot delete"), tr("Cannot delete the selection because it is outside the downloaded area."));
         return;
-    } else if (Sel.size() != view()->properties()->size()) {
+    } else if (Sel.size() != theMain->properties()->selectionSize()) {
         if (!QMessageBox::warning(NULL, tr("Cannot delete everything"),
                              tr("The complete selection cannot be deleted because part of it is outside the downloaded area.\n"
                                 "Delete what can be?"),
@@ -317,8 +312,8 @@ void EditInteraction::on_remove_triggered()
 
     if (theList->size()) {
         document()->addHistory(theList);
-        view()->properties()->setSelection(0);
-        view()->properties()->checkMenuStatus();
+        theMain->properties()->setSelection(0);
+        theMain->properties()->checkMenuStatus();
     }
     else
         delete theList;
@@ -327,7 +322,7 @@ void EditInteraction::on_remove_triggered()
 
 void EditInteraction::on_reverse_triggered()
 {
-    QList<Feature*> selection = view()->properties()->selection();
+    QList<Feature*> selection = theMain->properties()->selection();
     QString desc = selection.size() == 1 ? tr("Reverse way %1").arg(selection[0]->id().numId) : tr("Reverse %1 ways");
     CommandList* theList  = new CommandList(MainWindow::tr("Reverse %1 ways").arg(selection.size()), NULL);
     foreach (Feature* f, selection)

@@ -38,7 +38,7 @@ class PropertiesDock : public MDockAncestor
         Feature* selection(int idx);
         QList<Feature*> selection();
         bool isSelected(Feature *aFeature);
-        int size() const;
+        int selectionSize() const;
         void resetValues();
         void checkMenuStatus();
         bool loadTemplates(const QString& filename = "");

@@ -12,7 +12,7 @@ class CreateRoundaboutInteraction : public Interaction
     Q_OBJECT
 
     public:
-        CreateRoundaboutInteraction(MainWindow* Main, MapView* aView);
+        CreateRoundaboutInteraction(MainWindow* aMain);
         ~CreateRoundaboutInteraction();
 
         virtual void mousePressEvent(QMouseEvent * event);
@@ -25,7 +25,6 @@ class CreateRoundaboutInteraction : public Interaction
 #endif
 
     private:
-        MainWindow* Main;
         QDockWidget* theDock;
         Ui::CreateRoundaboutDock DockData;
         Coord Center;

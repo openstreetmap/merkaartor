@@ -220,7 +220,6 @@ MainWindow::MainWindow(QWidget *parent)
 
     theView = new MapView(this);
     setCentralWidget(theView);
-    connect (theView, SIGNAL(interactionChanged(Interaction*)), this, SLOT(mapView_interactionChanged(Interaction*)));
 
     theInfo = new InfoDock(this);
     connect(theInfo, SIGNAL(visibilityChanged(bool)), this, SLOT(updateWindowMenu(bool)));
@@ -490,6 +489,434 @@ MainWindow::~MainWindow(void)
     delete ui;
 }
 
+void MainWindow::launchInteraction(Interaction* anInteraction)
+{
+    QList<Feature*> theSnapList;
+    EditInteraction* EI = dynamic_cast<EditInteraction*>(theView->interaction());
+    if (EI) {
+        theSnapList = EI->snapList();
+        ui->editRemoveAction->setEnabled(false);
+        ui->editReverseAction->setEnabled(false);
+    }
+    if (!theSnapList.size())
+        if (p->theProperties)
+            theSnapList = p->theProperties->selection();
+    if (theView->interaction())
+        delete theView->interaction();
+    theView->setInteraction(anInteraction);
+    if (anInteraction) {
+        ui->editPropertiesAction->setChecked(dynamic_cast<EditInteraction*>(anInteraction) != NULL);
+        ui->editMoveAction->setChecked(dynamic_cast<MoveNodeInteraction*>(anInteraction) != NULL);
+        ui->editRotateAction->setChecked(dynamic_cast<RotateInteraction*>(anInteraction) != NULL);
+        ui->editScaleAction->setChecked(dynamic_cast<ScaleInteraction*>(anInteraction) != NULL);
+        ui->createNodeAction->setChecked(dynamic_cast<CreateNodeInteraction*>(anInteraction) != NULL);
+        ui->createRoadAction->setChecked(dynamic_cast<CreateSingleWayInteraction*>(anInteraction) != NULL);
+        ui->createAreaAction->setChecked(dynamic_cast<CreateAreaInteraction*>(anInteraction) != NULL);
+        ui->roadExtrudeAction->setChecked(dynamic_cast<ExtrudeInteraction*>(anInteraction) != NULL);
+
+        EditInteraction* EI = dynamic_cast<EditInteraction*>(anInteraction);
+        if (EI)
+            EI->setSnap(theSnapList);
+    } else {
+#ifndef _MOBILE
+        theView->setCursor(QCursor(Qt::ArrowCursor));
+#endif
+        launchInteraction(new EditInteraction(this));
+        //Q_ASSERT(theView->interaction());
+    }
+}
+
+void MainWindow::onCustomcontextmenurequested(const QPoint & pos)
+{
+#ifndef _MOBILE
+    if (/*EditInteraction* ei = */dynamic_cast<EditInteraction*>(theView->interaction()) || dynamic_cast<MoveNodeInteraction*>(theView->interaction())) {
+        QMenu menu;
+
+        //FIXME Some of these actions on WIN32-MSVC corrupts the heap.
+
+        //QMenu editMenu(tr("Edit"));
+        //for(int i=0; i<Main->menuEdit->actions().size(); ++i) {
+        //	if (Main->menuEdit->actions()[i]->isEnabled())
+        //		editMenu.addAction(Main->menuEdit->actions()[i]);
+        //}
+        //if (editMenu.actions().size())
+        //	menu.addMenu(&editMenu);
+
+        //QMenu createMenu(tr("Create"));
+        //for(int i=0; i<Main->menuCreate->actions().size(); ++i) {
+        //	if (Main->menuCreate->actions()[i]->isEnabled())
+        //		createMenu.addAction(Main->menuCreate->actions()[i]);
+        //}
+        //if (createMenu.actions().size())
+        //	menu.addMenu(&createMenu);
+
+        menu.addAction(ui->viewZoomOutAction);
+        menu.addAction(ui->viewZoomWindowAction);
+        menu.addAction(ui->viewZoomInAction);
+
+        QMenu featureMenu(tr("Feature"));
+        for(int i=0; i<ui->menu_Feature->actions().size(); ++i) {
+            if (ui->menu_Feature->actions()[i]->isEnabled())
+                featureMenu.addAction(ui->menu_Feature->actions()[i]);
+        }
+        if (featureMenu.actions().size())
+            menu.addMenu(&featureMenu);
+
+
+        QMenu nodeMenu(tr("Node"));
+        for(int i=0; i<ui->menu_Node->actions().size(); ++i) {
+            if (ui->menu_Node->actions()[i]->isEnabled())
+                nodeMenu.addAction(ui->menu_Node->actions()[i]);
+        }
+        if (nodeMenu.actions().size())
+            menu.addMenu(&nodeMenu);
+
+        QMenu roadMenu(tr("Road"));
+        for(int i=0; i<ui->menuRoad->actions().size(); ++i) {
+            if (ui->menuRoad->actions()[i]->isEnabled())
+                roadMenu.addAction(ui->menuRoad->actions()[i]);
+        }
+        if (roadMenu.actions().size())
+            menu.addMenu(&roadMenu);
+
+        QMenu relationMenu(tr("Relation"));
+        for(int i=0; i<ui->menuRelation->actions().size(); ++i) {
+            if (ui->menuRelation->actions()[i]->isEnabled())
+                relationMenu.addAction(ui->menuRelation->actions()[i]);
+        }
+        if (relationMenu.actions().size())
+            menu.addMenu(&relationMenu);
+
+        if (menu.actions().size()) {
+            if (menu.actions().size() == 1) {
+                for (int i=0; i < menu.actions()[0]->menu()->actions().size(); ++i) {
+                    menu.addAction(menu.actions()[0]->menu()->actions()[i]);
+                }
+                menu.removeAction(menu.actions()[0]);
+            }
+            menu.exec(theView->mapToGlobal(pos));
+        }
+    }
+#endif
+}
+
+
+bool MainWindow::eventFilter(QObject *watched, QEvent *event)
+{
+    switch (event->type()) {
+    case QEvent::MouseButtonDblClick:  {
+        if (!theDocument)
+            return true;
+
+        if (!theView->updatesEnabled())
+            return true;
+
+        if (!theView->interaction())
+            return true;
+
+        QMouseEvent* mevent = static_cast<QMouseEvent*>(event);
+        if ((mevent->modifiers() & Qt::AltModifier) || dynamic_cast<ExtrudeInteraction*>(theView->interaction()))
+            g_Merk_Segment_Mode = true;
+        else
+            g_Merk_Segment_Mode = false;
+
+        theView->interaction()->updateSnap(mevent);
+
+        if (M_PREFS->getSelectModeCreation()) {
+            MoveNodeInteraction* MI = NULL;
+            if (!M_PREFS->getSeparateMoveMode()) {
+                MI = dynamic_cast<MoveNodeInteraction*>(theView->interaction());
+            }
+            EditInteraction* EI = dynamic_cast<EditInteraction*>(theView->interaction());
+            if ((EI && EI->isIdle()) || (MI && MI->isIdle())) {
+                if ((theView->interaction()->lastSnap() && theView->interaction()->lastSnap()->getType() & IFeature::LineString) || !theView->interaction()->lastSnap())
+                    CreateNodeInteraction::createNode(theView->fromView(mevent->pos()), theView->interaction()->lastSnap());
+                else if (theView->interaction()->lastSnap() && theView->interaction()->lastSnap()->getType() == IFeature::Point) {
+                    Node* N = CAST_NODE(theView->interaction()->lastSnap());
+                    CreateSingleWayInteraction* CI = new CreateSingleWayInteraction(this, N, false);
+                    N->invalidatePainter();
+                    launchInteraction(CI);
+                    theInfo->setHtml(theView->interaction()->toHtml());
+#ifndef _MOBILE
+                    theView->setCursor(CI->cursor());
+#endif
+                    theView->update();
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
+
+    case QEvent::MouseButtonPress: {
+        if (!theDocument)
+            return true;
+
+        if (!theView->interaction())
+            return true;
+
+        QMouseEvent* mevent = static_cast<QMouseEvent*>(event);
+        if ((mevent->modifiers() & Qt::AltModifier) || dynamic_cast<ExtrudeInteraction*>(theView->interaction()))
+            g_Merk_Segment_Mode = true;
+        else
+            g_Merk_Segment_Mode = false;
+
+
+        theView->interaction()->updateSnap(mevent);
+        if (theInfo)
+            theInfo->setHtml(theView->interaction()->toHtml());
+
+        return false;
+    }
+
+    case QEvent::MouseButtonRelease: {
+        if (!document())
+            return true;
+
+        if (!theView->interaction())
+            return true;
+
+        QMouseEvent* mevent = static_cast<QMouseEvent*>(event);
+        if ((mevent->modifiers() & Qt::AltModifier) || dynamic_cast<ExtrudeInteraction*>(theView->interaction()))
+            g_Merk_Segment_Mode = true;
+        else
+            g_Merk_Segment_Mode = false;
+
+
+        theView->interaction()->updateSnap(mevent);
+
+        return false;
+    }
+
+    case QEvent::MouseMove: {
+        if (!theDocument)
+            return true;
+
+        if (!theView->updatesEnabled())
+            return true;
+
+        if (!theView->interaction())
+            return false;
+
+        QMouseEvent* mevent = static_cast<QMouseEvent*>(event);
+        if ((mevent->modifiers() & Qt::AltModifier) || dynamic_cast<ExtrudeInteraction*>(theView->interaction()))
+            g_Merk_Segment_Mode = true;
+        else
+            g_Merk_Segment_Mode = false;
+
+        theView->interaction()->updateSnap(mevent);
+
+        if (!M_PREFS->getSeparateMoveMode()) {
+            EditInteraction* EI = dynamic_cast<EditInteraction*>(theView->interaction());
+            if (EI && EI->isIdle()) {
+                if (EI->lastSnap() && p->theProperties->isSelected(EI->lastSnap())) {
+                    MoveNodeInteraction* MI = new MoveNodeInteraction(this);
+                    launchInteraction(MI);
+                    //                    main()->info()->setHtml(interaction()->toHtml());
+#ifndef _MOBILE
+                    theView->setCursor(MI->cursor());
+#endif
+                    theView->update();
+                    return false;
+                }
+            }
+            MoveNodeInteraction* MI = dynamic_cast<MoveNodeInteraction*>(theView->interaction());
+            if (MI && !MI->lastSnap() && MI->isIdle()) {
+                EditInteraction* EI = new EditInteraction(this);
+                launchInteraction(EI);
+#ifndef _MOBILE
+                theView->setCursor(EI->cursor());
+#endif
+                theView->update();
+                return false;
+            }
+
+        }
+
+        return false;
+    }
+
+    case QEvent::Wheel: {
+        if (!theDocument)
+            return true;
+
+        return false;
+    }
+
+    case QEvent::ToolTip: {
+            QHelpEvent *helpEvent = static_cast<QHelpEvent *>(event);
+            //Coord p = p->theProjection.inverse(helpEvent->pos());
+            if (M_PREFS->getMapTooltip()) {
+                if (!toolTip().isEmpty())
+                    QToolTip::showText(helpEvent->globalPos(), toolTip());
+                else
+                    QToolTip::hideText();
+            }
+            return true;
+        }
+
+    case QEvent::KeyPress: {
+            QKeyEvent *ke = static_cast< QKeyEvent* >( event );
+            switch ( ke->key() ) {
+            case Qt::Key_Space:
+                ke->accept();
+                theView->setBackgroundOnlyPanZoom(true);
+                return true;
+
+            case Qt::Key_Tab:
+                theView->setFocus();
+                ke->accept();
+
+                //            if (!isSelectionLocked())
+                //                lockSelection();
+                //            else
+                {
+                    FeatureSnapInteraction* intr = dynamic_cast<FeatureSnapInteraction*>(theView->interaction());
+                    if (intr)
+                        intr->nextSnap();
+                }
+                return true;
+
+            case Qt::Key_Backtab:
+                theView->setFocus();
+                ke->accept();
+
+                //            if (!isSelectionLocked())
+                //                lockSelection();
+                //            else
+                {
+                    FeatureSnapInteraction* intr = dynamic_cast<FeatureSnapInteraction*>(theView->interaction());
+                    if (intr)
+                        intr->nextSnap();
+                }
+                return true;
+
+            case Qt::Key_T:
+                {
+                    theView->rotateScreen(theView->rect().center(), 15.);
+                    return true;
+                }
+
+            case Qt::Key_O:
+                {
+                    CreateSingleWayInteraction* intr = dynamic_cast<CreateSingleWayInteraction*>(theView->interaction());
+                    if (!intr)
+                        return false;
+
+                    theView->setFocus();
+                    ke->accept();
+                    intr->setSnapAngle(45.);
+
+                    return true;
+                }
+
+            case Qt::Key_H:
+                {
+                    CreateSingleWayInteraction* intr = dynamic_cast<CreateSingleWayInteraction*>(theView->interaction());
+                    if (!intr)
+                        return false;
+
+                    theView->setFocus();
+                    ke->accept();
+                    intr->setSnapAngle(30.);
+
+                    return true;
+                }
+
+            case Qt::Key_P:
+                {
+                    CreateSingleWayInteraction* intr = dynamic_cast<CreateSingleWayInteraction*>(theView->interaction());
+                    if (!intr)
+                        return false;
+
+                    theView->setFocus();
+                    ke->accept();
+                    intr->setParallelMode(true);
+
+                    return true;
+                }
+
+            case Qt::Key_C:
+                {
+                    CreateSingleWayInteraction* CI = dynamic_cast<CreateSingleWayInteraction*>(theView->interaction());
+                    if (CI) {
+                        theView->setFocus();
+                        ke->accept();
+                        CI->closeAndFinish();
+                    } else {
+                        CreateAreaInteraction* AI = dynamic_cast<CreateAreaInteraction*>(theView->interaction());
+                        if (AI) {
+                            theView->setFocus();
+                            ke->accept();
+                            AI->closeAndFinish();
+                        }
+                        else
+                            return false;
+                    }
+                    return true;
+                }
+
+            default:
+                break;
+
+            }
+        }
+
+    case QEvent::KeyRelease: {
+            QKeyEvent *ke = static_cast< QKeyEvent* >( event );
+            switch ( ke->key() ) {
+            case Qt::Key_Space:
+                ke->accept();
+                theView->setBackgroundOnlyPanZoom(false);
+                return true;
+
+            case Qt::Key_O:
+            case Qt::Key_H:
+                {
+                    CreateSingleWayInteraction* intr = dynamic_cast<CreateSingleWayInteraction*>(theView->interaction());
+                    if (!intr)
+                        return false;
+
+                    ke->accept();
+                    intr->setSnapAngle(0);
+
+                    return true;
+                }
+
+            case Qt::Key_P:
+                {
+                    CreateSingleWayInteraction* intr = dynamic_cast<CreateSingleWayInteraction*>(theView->interaction());
+                    if (!intr)
+                        return false;
+
+                    ke->accept();
+                    intr->setParallelMode(false);
+
+                    return true;
+                }
+
+            default:
+                break;
+            }
+        }
+
+    case QEvent::Leave: {
+            if (theInfo)
+                theInfo->unsetHoverHtml();
+            FeatureSnapInteraction* intr = dynamic_cast<FeatureSnapInteraction*>(theView->interaction());
+            if (intr)
+                intr->clearLastSnap();
+            theView->update();
+        }
+
+    default:
+        break;
+    }
+
+    return false;
+}
+
 void MainWindow::incomingLocalConnection()
 {
     QTcpSocket *clientConnection = p->theListeningServer->nextPendingConnection();
@@ -730,7 +1157,7 @@ void MainWindow::on_editCutAction_triggered()
 
     //Deletion
     QList<Feature*> Sel;
-    for (int i=0; i<p->theProperties->size(); ++i)
+    for (int i=0; i<p->theProperties->selectionSize(); ++i)
         Sel.push_back(p->theProperties->selection(i));
     if (Sel.size() == 0) return;
 
@@ -980,7 +1407,7 @@ void MainWindow::on_editPropertiesAction_triggered()
         p->theProperties->setSelection(0);
     theView->unlockSelection();
 //    theView->invalidate(true, false);
-    theView->launch(new EditInteraction(theView));
+    launchInteraction(new EditInteraction(this));
     theInfo->setHtml(theView->interaction()->toHtml());
 }
 
@@ -993,20 +1420,20 @@ void MainWindow::on_editRemoveAction_triggered()
 void MainWindow::on_editMoveAction_triggered()
 {
     if (M_PREFS->getSeparateMoveMode()) {
-        view()->launch(new MoveNodeInteraction(view()));
+        launchInteraction(new MoveNodeInteraction(this));
         theInfo->setHtml(theView->interaction()->toHtml());
     }
 }
 
 void MainWindow::on_editRotateAction_triggered()
 {
-    view()->launch(new RotateInteraction(view()));
+    launchInteraction(new RotateInteraction(this));
     theInfo->setHtml(theView->interaction()->toHtml());
 }
 
 void MainWindow::on_editScaleAction_triggered()
 {
-    view()->launch(new ScaleInteraction(view()));
+    launchInteraction(new ScaleInteraction(this));
     theInfo->setHtml(theView->interaction()->toHtml());
 }
 
@@ -1568,7 +1995,7 @@ void MainWindow::on_viewZoomOutAction_triggered()
 
 void MainWindow::on_viewZoomWindowAction_triggered()
 {
-    theView->launch(new ZoomInteraction(theView));
+    launchInteraction(new ZoomInteraction(this));
 }
 
 void MainWindow::on_viewLockZoomAction_triggered()
@@ -1735,7 +2162,7 @@ void MainWindow::on_viewArrowsAlwaysAction_triggered(bool checked)
 
 void MainWindow::on_fileNewAction_triggered()
 {
-    theView->launch(0);
+    launchInteraction(0);
     p->theProperties->setSelection(0);
 
     if (theDocument)
@@ -1783,13 +2210,13 @@ void MainWindow::on_fileNewAction_triggered()
 
 void MainWindow::on_createDoubleWayAction_triggered()
 {
-    theView->launch(new CreateDoubleWayInteraction(this, theView));
+    launchInteraction(new CreateDoubleWayInteraction(this));
     theInfo->setHtml(theView->interaction()->toHtml());
 }
 
 void MainWindow::on_createRoundaboutAction_triggered()
 {
-    theView->launch(new CreateRoundaboutInteraction(this, theView));
+    launchInteraction(new CreateRoundaboutInteraction(this));
     theInfo->setHtml(theView->interaction()->toHtml());
 }
 
@@ -1798,7 +2225,7 @@ void MainWindow::on_createPolygonAction_triggered()
     QList< QPair <QString, QString> > tags;
     int Sides = QInputDialog::getInteger(this, MainWindow::tr("Create Polygon"), MainWindow::tr("Specify the number of sides"), M_PREFS->getPolygonSides(), 3);
     M_PREFS->setPolygonSides(Sides);
-    theView->launch(new CreatePolygonInteraction(this, theView, Sides, tags));
+    launchInteraction(new CreatePolygonInteraction(this, Sides, tags));
     theInfo->setHtml(theView->interaction()->toHtml());
 }
 
@@ -1806,7 +2233,7 @@ void MainWindow::on_createRectangleAction_triggered()
 {
     QList< QPair <QString, QString> > tags;
     tags << qMakePair(QString("building"), QString("yes"));
-    theView->launch(new CreatePolygonInteraction(this, theView, 4, tags));
+    launchInteraction(new CreatePolygonInteraction(this, 4, tags));
     theInfo->setHtml(theView->interaction()->toHtml());
 }
 
@@ -1814,31 +2241,31 @@ void MainWindow::on_createRoadAction_triggered()
 {
     Node * firstPoint = NULL;
 
-    if (p->theProperties->size() == 1)
+    if (p->theProperties->selectionSize() == 1)
     {
         Feature * feature = p->theProperties->selection(0);
         firstPoint = dynamic_cast<Node*>(feature);
     }
 
-    theView->launch(new CreateSingleWayInteraction(this, theView, firstPoint, false));
+    launchInteraction(new CreateSingleWayInteraction(this, firstPoint, false));
     theInfo->setHtml(theView->interaction()->toHtml());
 }
 
 void MainWindow::on_createCurvedRoadAction_triggered()
 {
-    theView->launch(new CreateSingleWayInteraction(this, theView, NULL, true));
+    launchInteraction(new CreateSingleWayInteraction(this, NULL, true));
     theInfo->setHtml(theView->interaction()->toHtml());
 }
 
 void MainWindow::on_createAreaAction_triggered()
 {
-    theView->launch(new CreateAreaInteraction(this, theView));
+    launchInteraction(new CreateAreaInteraction(this));
     theInfo->setHtml(theView->interaction()->toHtml());
 }
 
 void MainWindow::on_createNodeAction_triggered()
 {
-    theView->launch(new CreateNodeInteraction(theView));
+    launchInteraction(new CreateNodeInteraction(this));
     theInfo->setHtml(theView->interaction()->toHtml());
 }
 
@@ -2085,7 +2512,7 @@ void MainWindow::on_roadAxisAlignAction_triggered()
 
 void MainWindow::on_roadExtrudeAction_triggered()
 {
-    theView->launch(new ExtrudeInteraction(theView));
+    launchInteraction(new ExtrudeInteraction(this));
     theInfo->setHtml(theView->interaction()->toHtml());
 }
 
@@ -2257,7 +2684,7 @@ void MainWindow::on_createRelationAction_triggered()
     CommandList* theList = new CommandList(MainWindow::tr("Create Relation %1").arg(R->description()), R);
     theList->add(
         new AddFeatureCommand(document()->getDirtyOrOriginLayer(), R, true));
-    for (int i = 0; i < p->theProperties->size(); ++i)
+    for (int i = 0; i < p->theProperties->selectionSize(); ++i)
         theList->add(new RelationAddFeatureCommand(R, "", p->theProperties->selection(i)));
     theDocument->addHistory(theList);
     p->theProperties->setSelection(R);
@@ -2566,7 +2993,7 @@ void MainWindow::preferencesChanged(PreferencesDialog* prefs)
     updateStyleMenu();
 
     updateMenu();
-    theView->launch(new EditInteraction(theView));
+    launchInteraction(new EditInteraction(this));
     invalidateView(false);
 }
 
@@ -3090,7 +3517,7 @@ void MainWindow::on_editSelectAction_triggered()
             }
         }
         p->theProperties->setMultiSelection(selection);
-        view()->properties()->checkMenuStatus();
+        p->theProperties->checkMenuStatus();
     }
 }
 
@@ -3755,18 +4182,6 @@ void MainWindow::updateLanguage()
             statusBar()->showMessage(tr("Warning! Could not load the Merkaartor translations for the \"%1\" language. Switching to default English.").arg(DefaultLanguage), 15000);
     }
     ui->retranslateUi(this);
-}
-
-void MainWindow::mapView_interactionChanged(Interaction* anInteraction)
-{
-    ui->editPropertiesAction->setChecked(dynamic_cast<EditInteraction*>(anInteraction) != NULL);
-    ui->editMoveAction->setChecked(dynamic_cast<MoveNodeInteraction*>(anInteraction) != NULL);
-    ui->editRotateAction->setChecked(dynamic_cast<RotateInteraction*>(anInteraction) != NULL);
-    ui->editScaleAction->setChecked(dynamic_cast<ScaleInteraction*>(anInteraction) != NULL);
-    ui->createNodeAction->setChecked(dynamic_cast<CreateNodeInteraction*>(anInteraction) != NULL);
-    ui->createRoadAction->setChecked(dynamic_cast<CreateSingleWayInteraction*>(anInteraction) != NULL);
-    ui->createAreaAction->setChecked(dynamic_cast<CreateAreaInteraction*>(anInteraction) != NULL);
-    ui->roadExtrudeAction->setChecked(dynamic_cast<ExtrudeInteraction*>(anInteraction) != NULL);
 }
 
 void MainWindow::updateMenu()

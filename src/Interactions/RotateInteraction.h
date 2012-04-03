@@ -11,7 +11,7 @@ class CommandList;
 class RotateInteraction : public FeatureSnapInteraction
 {
     public:
-        RotateInteraction(MapView* aView);
+        RotateInteraction(MainWindow* aMain);
         ~RotateInteraction(void);
 
         virtual void paintEvent(QPaintEvent* anEvent, QPainter& thePainter);

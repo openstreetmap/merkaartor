@@ -47,6 +47,8 @@ public:
     MainWindow(QWidget *parent = 0);
     virtual ~MainWindow();
 
+    bool eventFilter ( QObject * watched, QEvent * event );
+
 public slots:
     void invalidateView(bool UpdateDock = true);
 
@@ -195,6 +197,8 @@ public slots:
     virtual void on_toolTemplatesMergeAction_triggered();
     virtual void on_toolTemplatesLoadAction_triggered();
 
+    void onCustomcontextmenurequested(const QPoint &pos);
+
 signals:
     void remove_triggered();
     void move_triggered();
@@ -263,6 +267,8 @@ public:
     bool hasUnsavedChanges();
     void syncOSM(const QString &aWeb, const QString &aUser, const QString &aPwd);
 
+    void launchInteraction(Interaction *anInteraction);
+
 protected:
     MapView* theView;
     Document* theDocument;
@@ -288,7 +294,6 @@ private slots:
     void setAreaOpacity(QAction*);
     void updateBookmarksMenu();
     void updateWindowMenu(bool b=false);
-    void mapView_interactionChanged(Interaction* anInteraction);
     void incomingLocalConnection();
     void readLocalConnection();
 

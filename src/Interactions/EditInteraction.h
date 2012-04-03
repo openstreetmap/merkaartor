@@ -12,7 +12,7 @@ class EditInteraction :	public FeatureSnapInteraction
     public:
         typedef enum { EditMode, MoveMode, RotateMode, ScaleMode } EditModeEnum;
 
-        EditInteraction(MapView* theView);
+        EditInteraction(MainWindow* aMain);
         ~EditInteraction(void);
 
         virtual void paintEvent(QPaintEvent* anEvent, QPainter& thePainter);

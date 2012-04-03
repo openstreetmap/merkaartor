@@ -13,7 +13,7 @@ class CreateSingleWayInteraction : public FeatureSnapInteraction
     Q_OBJECT
 
     public:
-        CreateSingleWayInteraction(MainWindow* Main, MapView* aView, Node * firstNode, bool aCurved);
+        CreateSingleWayInteraction(MainWindow* aMain, Node * firstNode, bool aCurved);
         ~CreateSingleWayInteraction();
 
         virtual void snapMousePressEvent(QMouseEvent * event, Feature* aLast);
@@ -33,7 +33,6 @@ public:
         virtual void closeAndFinish();
 
     private:
-        MainWindow* Main;
         QPoint LastCursor;
         Way* theRoad;
         Coord FirstPoint;
