@@ -24,7 +24,7 @@ class MemoryBackendPrivate
 {
 public:
     QHash<Feature*, CoordBox> AllocFeatures;
-    QHash<Layer*, CoordTree*> theRTree;
+    QHash<ILayer*, CoordTree*> theRTree;
     QList<Feature*> findResult;
 };
 
@@ -79,7 +79,7 @@ bool __cdecl indexFindCallback(Feature* F, void* ctxt)
     return true;
 }
 
-void MemoryBackend::indexAdd(Layer* l, const QRectF& bb, Feature* aFeat)
+void MemoryBackend::indexAdd(ILayer* l, const QRectF& bb, Feature* aFeat)
 {
     if (!l)
         return;
@@ -92,7 +92,7 @@ void MemoryBackend::indexAdd(Layer* l, const QRectF& bb, Feature* aFeat)
     p->theRTree[l]->Insert(min, max, aFeat);
 }
 
-void MemoryBackend::indexRemove(Layer* l, const QRectF& bb, Feature* aFeat)
+void MemoryBackend::indexRemove(ILayer* l, const QRectF& bb, Feature* aFeat)
 {
     if (!l)
         return;
@@ -104,7 +104,7 @@ void MemoryBackend::indexRemove(Layer* l, const QRectF& bb, Feature* aFeat)
     p->theRTree[l]->Remove(min, max, aFeat);
 }
 
-const QList<Feature*>& MemoryBackend::indexFind(Layer* l, const QRectF& bb)
+const QList<Feature*>& MemoryBackend::indexFind(ILayer* l, const QRectF& bb)
 {
     p->findResult.clear();
     if (p->theRTree.contains(l)) {
@@ -116,7 +116,7 @@ const QList<Feature*>& MemoryBackend::indexFind(Layer* l, const QRectF& bb)
     return p->findResult;
 }
 
-void MemoryBackend::indexFind(Layer* l, const QRectF& bb, const IndexFindContext& ctxt)
+void MemoryBackend::indexFind(ILayer* l, const QRectF& bb, const IndexFindContext& ctxt)
 {
     if (!p->theRTree.contains(l))
         return;
@@ -126,7 +126,7 @@ void MemoryBackend::indexFind(Layer* l, const QRectF& bb, const IndexFindContext
 }
 
 
-void MemoryBackend::get(Layer* l, const QRectF& bb, QList<Feature*>& theFeatures)
+void MemoryBackend::get(ILayer* l, const QRectF& bb, QList<Feature*>& theFeatures)
 {
     if (!p->theRTree.contains(l))
         return;
@@ -135,7 +135,7 @@ void MemoryBackend::get(Layer* l, const QRectF& bb, QList<Feature*>& theFeatures
     p->theRTree[l]->Search(min, max, &indexFindCallback, (void*)(&theFeatures));
 }
 
-void MemoryBackend::getFeatureSet(Layer* l, QMap<RenderPriority, QSet <Feature*> >& theFeatures,
+void MemoryBackend::getFeatureSet(ILayer* l, QMap<RenderPriority, QSet <Feature*> >& theFeatures,
                                   const QList<CoordBox>& invalidRects, Projection& theProjection)
 {
     IndexFindContext ctxt;
@@ -148,7 +148,7 @@ void MemoryBackend::getFeatureSet(Layer* l, QMap<RenderPriority, QSet <Feature*>
     }
 }
 
-void MemoryBackend::getFeatureSet(Layer* l, QMap<RenderPriority, QSet <Feature*> >& theFeatures,
+void MemoryBackend::getFeatureSet(ILayer* l, QMap<RenderPriority, QSet <Feature*> >& theFeatures,
                                   const CoordBox& invalidRect, Projection& theProjection)
 {
     IndexFindContext ctxt;
@@ -185,7 +185,7 @@ MemoryBackend::~MemoryBackend()
     delete p;
 }
 
-Node * MemoryBackend::allocNode(Layer* l, const Node& other)
+Node * MemoryBackend::allocNode(ILayer* l, const Node& other)
 {
     Node* f;
     try {
@@ -203,7 +203,7 @@ Node * MemoryBackend::allocNode(Layer* l, const Node& other)
     return f;
 }
 
-Node * MemoryBackend::allocNode(Layer* l, const QPointF& aCoord)
+Node * MemoryBackend::allocNode(ILayer* l, const QPointF& aCoord)
 {
     Node* f;
     try {
@@ -220,7 +220,7 @@ Node * MemoryBackend::allocNode(Layer* l, const QPointF& aCoord)
     return f;
 }
 
-TrackNode * MemoryBackend::allocTrackNode(Layer* l, const QPointF& aCoord)
+TrackNode * MemoryBackend::allocTrackNode(ILayer* l, const QPointF& aCoord)
 {
     TrackNode* f;
     try {
@@ -237,7 +237,7 @@ TrackNode * MemoryBackend::allocTrackNode(Layer* l, const QPointF& aCoord)
     return f;
 }
 
-PhotoNode * MemoryBackend::allocPhotoNode(Layer* l, const QPointF& aCoord)
+PhotoNode * MemoryBackend::allocPhotoNode(ILayer* l, const QPointF& aCoord)
 {
     PhotoNode* f;
     try {
@@ -254,7 +254,7 @@ PhotoNode * MemoryBackend::allocPhotoNode(Layer* l, const QPointF& aCoord)
     return f;
 }
 
-PhotoNode * MemoryBackend::allocPhotoNode(Layer* l, const Node& other)
+PhotoNode * MemoryBackend::allocPhotoNode(ILayer* l, const Node& other)
 {
     PhotoNode* f;
     try {
@@ -272,7 +272,7 @@ PhotoNode * MemoryBackend::allocPhotoNode(Layer* l, const Node& other)
     return f;
 }
 
-PhotoNode * MemoryBackend::allocPhotoNode(Layer* l, const TrackNode& other)
+PhotoNode * MemoryBackend::allocPhotoNode(ILayer* l, const TrackNode& other)
 {
     PhotoNode* f;
     try {
@@ -303,7 +303,7 @@ Node * MemoryBackend::allocVirtualNode(const QPointF& aCoord)
     return f;
 }
 
-Way * MemoryBackend::allocWay(Layer* l)
+Way * MemoryBackend::allocWay(ILayer* l)
 {
     Way* f;
     try {
@@ -317,7 +317,7 @@ Way * MemoryBackend::allocWay(Layer* l)
     return f;
 }
 
-Way * MemoryBackend::allocWay(Layer* l, const Way& other)
+Way * MemoryBackend::allocWay(ILayer* l, const Way& other)
 {
     Way* f;
     try {
@@ -331,7 +331,7 @@ Way * MemoryBackend::allocWay(Layer* l, const Way& other)
     return f;
 }
 
-Relation * MemoryBackend::allocRelation(Layer* l)
+Relation * MemoryBackend::allocRelation(ILayer* l)
 {
     Relation* f;
     try {
@@ -345,7 +345,7 @@ Relation * MemoryBackend::allocRelation(Layer* l)
     return f;
 }
 
-Relation * MemoryBackend::allocRelation(Layer* l, const Relation& other)
+Relation * MemoryBackend::allocRelation(ILayer* l, const Relation& other)
 {
     Relation* f;
     try {
@@ -359,7 +359,7 @@ Relation * MemoryBackend::allocRelation(Layer* l, const Relation& other)
     return f;
 }
 
-TrackSegment * MemoryBackend::allocSegment(Layer* l)
+TrackSegment * MemoryBackend::allocSegment(ILayer* l)
 {
     TrackSegment* f;
     try {
@@ -373,7 +373,7 @@ TrackSegment * MemoryBackend::allocSegment(Layer* l)
     return f;
 }
 
-void MemoryBackend::deallocFeature(Layer* l, Feature *f)
+void MemoryBackend::deallocFeature(ILayer* l, Feature *f)
 {
     if (p->AllocFeatures.contains(f)) {
         indexRemove(l, p->AllocFeatures[f], f);

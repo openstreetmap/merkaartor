@@ -1,11 +1,11 @@
-class Document;
+class IDocument;
 
 template <class L>
 class LayerIterator
 {
 
 public:
-    LayerIterator(Document* aDoc)
+    LayerIterator(IDocument* aDoc)
         : theDocument(aDoc), curLayerIdx(0), isAtEnd(false)
     {
         docSize = theDocument->layerSize();
@@ -61,7 +61,7 @@ protected:
         return true;
     }
 
-    Document* theDocument;
+    IDocument* theDocument;
     int curLayerIdx;
     bool isAtEnd;
     int docSize;

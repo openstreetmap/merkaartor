@@ -17,6 +17,7 @@ class MainWindowPrivate;
 class LayerDock;
 class Document;
 class Layer;
+class ImageMapLayer;
 class MapView;
 class Feature;
 class PropertiesDock;
@@ -197,7 +198,12 @@ public slots:
     virtual void on_toolTemplatesMergeAction_triggered();
     virtual void on_toolTemplatesLoadAction_triggered();
 
+
+protected slots:
     void onCustomcontextmenurequested(const QPoint &pos);
+    void onImagerequested(ImageMapLayer*);
+    void onImagereceived(ImageMapLayer* aLayer);
+    void onLoadingfinished(ImageMapLayer*);
 
 signals:
     void remove_triggered();

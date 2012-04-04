@@ -3,6 +3,7 @@
 
 class ILayer
 {
+public:
 };
 
 #endif // ILAYER_H

@@ -3,6 +3,7 @@
 
 #include <QtXml>
 
+#include "IDocument.h"
 #include "Layer.h"
 #include "Coord.h"
 #include "MerkaartorPreferences.h"
@@ -27,7 +28,7 @@ class DeletedLayer;
 class FeaturePainter;
 class SpatialiteBackend;
 
-class Document : public QObject
+class Document : public QObject, public IDocument
 {
 Q_OBJECT
 public:

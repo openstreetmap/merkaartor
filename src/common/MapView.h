@@ -14,7 +14,7 @@
 class MainWindow;
 class Feature;
 class Way;
-class Document;
+class IDocument;
 class MapAdapter;
 class Interaction;
 class ImageMapLayer;
@@ -32,8 +32,8 @@ public:
     ~MapView();
 
     MainWindow* main();
-    virtual void setDocument(Document* aDoc);
-    Document* document();
+    virtual void setDocument(IDocument* aDoc);
+    IDocument* document();
     Interaction* interaction();
     void setInteraction(Interaction* anInteraction);
 
@@ -88,6 +88,8 @@ public:
 
     QString toPropertiesHtml();
 
+    void on_imageReceived(ImageMapLayer *aLayer);
+
 private:
     void drawGPS(QPainter & painter);
     void updateStaticBackground();
@@ -101,8 +103,6 @@ private:
     QLabel* lockIcon;
 
     void viewportRecalc(const QRect& Screen);
-
-    int numImages;
 
     QShortcut* MoveLeftShortcut;
     QShortcut* MoveRightShortcut;
@@ -121,11 +121,6 @@ public slots:
 
 signals:
     void viewportChanged();
-
-protected slots:
-    void on_imageRequested(ImageMapLayer*);
-    void on_imageReceived(ImageMapLayer*);
-    void on_loadingFinished(ImageMapLayer*);
 
 protected:
     MapViewPrivate* p;

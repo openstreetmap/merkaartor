@@ -116,6 +116,7 @@ class MainWindowPrivate
     #ifdef GEOIMAGE
             , dropTarget(0)
     #endif
+            , numImages(0)
         {
             title = QString("%1 v%2%3(%4)").arg(STRINGIFY(PRODUCT)).arg(STRINGIFY(VERSION)).arg(STRINGIFY(REVISION)).arg(STRINGIFY(SVNREV));
         }
@@ -135,6 +136,7 @@ class MainWindowPrivate
 #ifdef GEOIMAGE
         Node *dropTarget;
 #endif
+        int numImages;
 };
 
 MainWindow::MainWindow(QWidget *parent)
@@ -603,6 +605,35 @@ void MainWindow::onCustomcontextmenurequested(const QPoint & pos)
             menu.exec(theView->mapToGlobal(pos));
         }
     }
+#endif
+}
+
+void MainWindow::onImagerequested(ImageMapLayer *)
+{
+#ifndef _MOBILE
+    ++p->numImages;
+    pbImages->setRange(0, p->numImages);
+    //pbImages->setValue(0);
+    pbImages->update();
+    if (pbImages->value() < 0)
+        pbImages->setValue(0);
+#endif
+}
+
+void MainWindow::onImagereceived(ImageMapLayer *aLayer)
+{
+#ifndef _MOBILE
+    if (pbImages->value() < pbImages->maximum())
+        pbImages->setValue(pbImages->value()+1);
+#endif
+    theView->on_imageReceived(aLayer);
+}
+
+void MainWindow::onLoadingfinished(ImageMapLayer *)
+{
+    p->numImages = 0;
+#ifndef _MOBILE
+    pbImages->reset();
 #endif
 }
 
@@ -1804,6 +1835,13 @@ void MainWindow::loadFiles(const QStringList & fileList)
             theDocument = newDoc;
             connect (theDocument, SIGNAL(historyChanged()), theDirty, SLOT(updateList()));
             connect (theDocument, SIGNAL(historyChanged()), this, SIGNAL(content_changed()));
+            connect(theDocument, SIGNAL(imageRequested(ImageMapLayer*)),
+                    this, SLOT(onImagerequested(ImageMapLayer*)), Qt::QueuedConnection);
+            connect(theDocument, SIGNAL(imageReceived(ImageMapLayer*)),
+                    this, SLOT(onImagereceived(ImageMapLayer*)), Qt::QueuedConnection);
+            connect(theDocument, SIGNAL(loadingFinished(ImageMapLayer*)),
+                    this, SLOT(onLoadingfinished(ImageMapLayer*)), Qt::QueuedConnection);
+
             theDirty->updateList();
             theView->setDocument(theDocument);
             on_viewZoomAllAction_triggered();
@@ -2278,6 +2316,12 @@ void MainWindow::on_fileNewAction_triggered()
         theDocument->history().setActions(ui->editUndoAction, ui->editRedoAction, ui->fileUploadAction);
         connect (theDocument, SIGNAL(historyChanged()), theDirty, SLOT(updateList()));
         connect (theDocument, SIGNAL(historyChanged()), this, SIGNAL(content_changed()));
+        connect(theDocument, SIGNAL(imageRequested(ImageMapLayer*)),
+                this, SLOT(onImagerequested(ImageMapLayer*)), Qt::QueuedConnection);
+        connect(theDocument, SIGNAL(imageReceived(ImageMapLayer*)),
+                this, SLOT(onImagereceived(ImageMapLayer*)), Qt::QueuedConnection);
+        connect(theDocument, SIGNAL(loadingFinished(ImageMapLayer*)),
+                this, SLOT(onLoadingfinished(ImageMapLayer*)), Qt::QueuedConnection);
         theDirty->updateList();
 
         fileName = "";
@@ -3268,6 +3312,12 @@ void MainWindow::loadDocument(QString fn)
         theDocument->history().setActions(ui->editUndoAction, ui->editRedoAction, ui->fileUploadAction);
         connect (theDocument, SIGNAL(historyChanged()), theDirty, SLOT(updateList()));
         connect (theDocument, SIGNAL(historyChanged()), this, SIGNAL(content_changed()));
+        connect(theDocument, SIGNAL(imageRequested(ImageMapLayer*)),
+                this, SLOT(onImagerequested(ImageMapLayer*)), Qt::QueuedConnection);
+        connect(theDocument, SIGNAL(imageReceived(ImageMapLayer*)),
+                this, SLOT(onImagereceived(ImageMapLayer*)), Qt::QueuedConnection);
+        connect(theDocument, SIGNAL(loadingFinished(ImageMapLayer*)),
+                this, SLOT(onLoadingfinished(ImageMapLayer*)), Qt::QueuedConnection);
         theDirty->updateList();
         fileName = fn;
         setWindowTitle(QString("%1 - %2").arg(theDocument->title()).arg(p->title));

@@ -5,8 +5,8 @@
 #include "MapView.h"
 #include "MainWindow.h"
 #include "PropertiesDock.h"
-#include "Document.h"
-#include "Layer.h"
+#include "IDocument.h"
+#include "ILayer.h"
 #include "LayerIterator.h"
 #include "ImageMapLayer.h"
 #include "IMapAdapter.h"
@@ -70,7 +70,7 @@ public:
     RendererOptions ROptions;
 
     Projection theProjection;
-    Document* theDocument;
+    IDocument* theDocument;
     Interaction* theInteraction;
 
     bool BackgroundOnlyPanZoom;
@@ -258,7 +258,7 @@ struct RenderTile
 
 MapView::MapView(QWidget* parent) :
     QWidget(parent), Main(dynamic_cast<MainWindow*>(parent)), StaticBackground(0), StaticBuffer(0),
-        SelectionLocked(false),lockIcon(0), numImages(0),
+        SelectionLocked(false),lockIcon(0),
         p(new MapViewPrivate)
 {
     installEventFilter(Main);
@@ -325,22 +325,14 @@ MainWindow *MapView::main()
     return Main;
 }
 
-void MapView::setDocument(Document* aDoc)
+void MapView::setDocument(IDocument* aDoc)
 {
     p->theDocument = aDoc;
-    if (p->theDocument) {
-        connect(aDoc, SIGNAL(imageRequested(ImageMapLayer*)),
-                this, SLOT(on_imageRequested(ImageMapLayer*)), Qt::QueuedConnection);
-        connect(aDoc, SIGNAL(imageReceived(ImageMapLayer*)),
-                this, SLOT(on_imageReceived(ImageMapLayer*)), Qt::QueuedConnection);
-        connect(aDoc, SIGNAL(loadingFinished(ImageMapLayer*)),
-                this, SLOT(on_loadingFinished(ImageMapLayer*)), Qt::QueuedConnection);
-    }
 
     setViewport(viewport(), rect());
 }
 
-Document *MapView::document()
+IDocument *MapView::document()
 {
     return p->theDocument;
 }
@@ -927,41 +919,11 @@ Coord MapView::fromView(const QPoint& aPt) const
 }
 
 
-void MapView::on_imageRequested(ImageMapLayer*)
-{
-    if (Main) {
-#ifndef _MOBILE
-        ++numImages;
-        Main->pbImages->setRange(0, numImages);
-        //pbImages->setValue(0);
-        Main->pbImages->update();
-        if (Main->pbImages->value() < 0)
-            Main->pbImages->setValue(0);
-#endif
-    }
-}
-
 void MapView::on_imageReceived(ImageMapLayer* aLayer)
 {
-    if (Main) {
-#ifndef _MOBILE
-        if (Main->pbImages->value() < Main->pbImages->maximum())
-            Main->pbImages->setValue(Main->pbImages->value()+1);
-#endif
-    }
     aLayer->forceRedraw(*this, p->BackgroundOnlyVpTransform, rect());
     p->BackgroundOnlyVpTransform = QTransform();
     update();
-}
-
-void MapView::on_loadingFinished(ImageMapLayer* aLayer)
-{
-    Q_UNUSED(aLayer)
-    numImages = 0;
-#ifndef _MOBILE
-    if (Main)
-        Main->pbImages->reset();
-#endif
 }
 
 void MapView::resizeEvent(QResizeEvent * ev)

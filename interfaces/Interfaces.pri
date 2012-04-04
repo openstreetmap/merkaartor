@@ -9,4 +9,5 @@ HEADERS += \
     IBackend.h \
     ILayer.h \
     IProgressWindow.h \
-    IMerkMainWindow.h
+    IMerkMainWindow.h \
+    ../../../interfaces/IDocument.h

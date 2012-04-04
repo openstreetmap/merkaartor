@@ -30,7 +30,7 @@ Interaction::Interaction(MainWindow* aMain)
     , Dragging(false)
     , StartDrag(0,0), EndDrag(0,0)
 {
-    connect(this, SIGNAL(requestCustomContextMenu(const QPoint &)), theMain, SLOT(on_customContextMenuRequested(const QPoint &)));
+    connect(this, SIGNAL(requestCustomContextMenu(const QPoint &)), theMain, SLOT(onCustomcontextmenurequested(const QPoint &)));
 }
 
 Interaction::~Interaction()
