@@ -60,7 +60,13 @@ void MapNetwork::launchRequest()
         return;
     LoadingRequest* R = loadingRequests.dequeue();
 
-    QUrl U("http://" + QString(R->host).append(R->url));
+    QUrl U;
+    if (!R->host.contains("://")) {
+        U.setUrl("http://" + QString(R->host).append(R->url));
+    } else {
+        U.setUrl(QString(R->host).append(R->url));
+    }
+
     qDebug() << "getting: " << U.toString();
 
     launchRequest(U, R);
