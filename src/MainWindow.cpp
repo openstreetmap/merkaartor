@@ -1486,11 +1486,16 @@ void MainWindow::clipboardChanged()
     QClipboard *clipboard = QApplication::clipboard();
     //qDebug() << "Clipboard mime: " << clipboard->mimeData()->formats();
     QDomDocument* theXmlDoc = new QDomDocument();
-    if (!theXmlDoc->setContent(clipboard->mimeData()->data("application/x-openstreetmap+xml")))
-        if (!theXmlDoc->setContent(clipboard->text())) {
-            delete theXmlDoc;
-            return;
-        }
+    bool ok = false;
+    if (clipboard->mimeData()->hasFormat("application/x-openstreetmap+xml"))
+        ok = theXmlDoc->setContent(clipboard->mimeData()->data("application/x-openstreetmap+xml"));
+    else if (clipboard->mimeData()->hasText())
+        ok = theXmlDoc->setContent(clipboard->text());
+
+    if (!ok) {
+        delete theXmlDoc;
+        return;
+    }
 
     QDomElement c = theXmlDoc->documentElement();
 
