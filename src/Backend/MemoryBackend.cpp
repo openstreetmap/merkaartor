@@ -67,7 +67,7 @@ bool __cdecl indexFindCallback(Feature* F, void* ctxt)
             return true;
         if (!(F->isVirtual() && !M_PREFS->getVirtualNodesVisible())) {
             Node * N = STATIC_CAST_NODE(F);
-            N->setProjection(*(pCtxt->theProjection));
+            N->buildPath(*(pCtxt->theProjection));
             (*(pCtxt->theFeatures))[NodePri].insert(F);
         }
     } else {

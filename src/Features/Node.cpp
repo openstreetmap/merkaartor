@@ -38,14 +38,16 @@ const QPointF& Node::projected() const
 
 const QPointF& Node::projected(const Projection& aProjection)
 {
-    setProjection(aProjection);
+    buildPath(aProjection);
     return Projected;
 }
 
-void Node::setProjection(const Projection& aProjection)
+void Node::buildPath(const Projection& aProjection)
 {
-    if (ProjectionRevision != aProjection.projectionRevision())
+    if (ProjectionRevision != aProjection.projectionRevision()) {
         Projected = aProjection.project(BBox.topLeft());
+        ProjectionRevision = aProjection.projectionRevision();
+    }
 }
 
 Coord Node::position() const
@@ -159,11 +161,37 @@ const CoordBox& Node::boundingBox(bool) const
     return BBox;
 }
 
-void Node::draw(QPainter& thePainter, MapRenderer* theRenderer)
+void Node::drawSimple(QPainter &P, MapView *theView)
+{
+    if (!TEST_RFLAGS(RendererOptions::Interacting))
+        return;
+
+    if (! ((isReadonly() || !isSelectable(theView->pixelPerM(), theView->renderOptions())) && (!isPOI() && !isWaypoint())))
+        //        if (!Pt->isReadonly() && Pt->isSelectable(r))
+    {
+        qreal WW = theView->nodeWidth();
+        if (WW >= 1) {
+            QColor theColor = QColor(0,0,0,128);
+            QPointF Pp(theView->toView(this));
+            if (layer()->classGroups() & Layer::Special) {
+                QRect R2(Pp.x()-(WW+4)/2, Pp.y()-(WW+4)/2, WW+4, WW+4);
+                P.fillRect(R2,QColor(255,0,255,192));
+            } else if (isWaypoint()) {
+                QRect R2(Pp.x()-(WW+4)/2, Pp.y()-(WW+4)/2, WW+4, WW+4);
+                P.fillRect(R2,QColor(255,0,0,192));
+            }
+
+            QRect R(Pp.x()-WW/2, Pp.y()-WW/2, WW, WW);
+            P.fillRect(R,theColor);
+        }
+    }
+}
+
+void Node::drawTouchup(QPainter& thePainter, MapView* theView)
 {
     if (isDirty() && isUploadable() && M_PREFS->getDirtyVisible()) {
-        QPoint P = theRenderer->toView(this);
-        qreal theWidth = theRenderer->NodeWidth;
+        QPoint P = theView->toView(this);
+        qreal theWidth = theView->nodeWidth();
         if (theWidth >= 1) {
             QRect R(P-QPoint(theWidth/2,theWidth/2),QSize(theWidth,theWidth));
             thePainter.fillRect(R,M_PREFS->getDirtyColor());
@@ -173,10 +201,10 @@ void Node::draw(QPainter& thePainter, MapRenderer* theRenderer)
 
 void Node::drawSpecial(QPainter& thePainter, QPen& Pen, MapView* theView)
 {
-
     QPen TP(Pen);
     TP.setWidth(TP.width() / 2);
 
+    buildPath(theView->projection());
     QPoint me(theView->toView(this));
     QRect R(me-QPoint(3,3),QSize(6,6));
 
@@ -650,28 +678,28 @@ void PhotoNode::setPhoto(QPixmap thePhoto)
     Photo = new QPixmap(thePhoto.scaled(M_PREFS->getMaxGeoPicWidth(), M_PREFS->getMaxGeoPicWidth(), Qt::KeepAspectRatio));
 }
 
-void PhotoNode::draw(QPainter& thePainter , MapRenderer* theRenderer)
+void PhotoNode::drawTouchup(QPainter& thePainter , MapView* theView)
 {
 #ifdef GEOIMAGE
-    QPoint me = theRenderer->toView(this);
+    QPoint me = theView->toView(this);
     thePainter.setPen(QPen(QColor(0, 0, 0), 2));
     QRect box(me - QPoint(5, 3), QSize(10, 6));
     thePainter.drawRect(box);
-    if (theRenderer->theOptions.options.testFlag(RendererOptions::PhotosVisible) && theRenderer->thePixelPerM > M_PREFS->getRegionalZoom()) {
+    if (theView->renderOptions().options.testFlag(RendererOptions::PhotosVisible) && theView->pixelPerM() > M_PREFS->getRegionalZoom()) {
         qreal rt = qBound(0.2, theRenderer->thePixelPerM, 1.0);
         QPoint phPt;
 
         if (photoLocationBR) {
             phPt = me + QPoint(10*rt, 10*rt);
         } else {
-            qreal rt = qBound(0.2, theRenderer->thePixelPerM, 1.0);
+            qreal rt = qBound(0.2, theView->pixelPerM(), 1.0);
             qreal phRt = 1. * Photo->width() / Photo->height();
             phPt = me - QPoint(10*rt, 10*rt) - QPoint(M_PREFS->getMaxGeoPicWidth()*rt, M_PREFS->getMaxGeoPicWidth()*rt/phRt);
         }
         thePainter.drawPixmap(phPt, Photo->scaledToWidth(M_PREFS->getMaxGeoPicWidth()*rt));
     }
 #endif
-    Node::draw(thePainter, theRenderer);
+    Node::drawTouchup(thePainter, theView);
 }
 
 #ifdef GEOIMAGE

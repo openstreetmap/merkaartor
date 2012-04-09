@@ -1532,6 +1532,7 @@ void MainWindow::on_editPropertiesAction_triggered()
     theView->unlockSelection();
 //    theView->invalidate(true, false);
     launchInteraction(new EditInteraction(this));
+    view()->setInteracting(false);
     theInfo->setHtml(theView->interaction()->toHtml());
 }
 

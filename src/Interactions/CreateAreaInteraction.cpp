@@ -51,6 +51,7 @@ void CreateAreaInteraction::paintEvent(QPaintEvent* anEvent, QPainter& thePainte
     if (theRoad && (!theRoad->layer() || theRoad->isDeleted())) { // The road was begon and then undoed. Restarting....
         HaveFirst = false;
         theRoad = NULL;
+        view()->setInteracting(false);
     }
 
     if (HaveFirst)
@@ -107,9 +108,10 @@ void CreateAreaInteraction::startNewRoad(QMouseEvent* anEvent, Feature* aFeature
         theList->add(new AddFeatureCommand(theMain->document()->getDirtyOrOriginLayer(),N,true));
         theList->add(new WayAddNodeCommand(aRoad,N,SnapIdx));
         document()->addHistory(theList);
-        view()->invalidate(true, false);
+        view()->update();
         FirstNode = N;
     }
+    view()->setInteracting(true);
 }
 
 void CreateAreaInteraction::createNewRoad(CommandList* L)
@@ -160,6 +162,7 @@ void CreateAreaInteraction::finishRoad(CommandList* L)
     HaveFirst = false;
     LastRoad = theRoad;
     theRoad = 0;
+    view()->setInteracting(false);
 
     MDiscardableMessage dlg(NULL,
         MainWindow::tr("Add a hole."),
@@ -186,7 +189,7 @@ void CreateAreaInteraction::addToRoad(QMouseEvent* anEvent, Feature* Snap, Comma
         theList->add(new AddFeatureCommand(theMain->document()->getDirtyOrOriginLayer(),N,true));
         theList->add(new WayAddNodeCommand(aRoad,N,SnapIdx));
         document()->addHistory(theList);
-        view()->invalidate(true, false);
+        view()->update();
         To = N;
     }
     if (!To)
@@ -211,6 +214,7 @@ void CreateAreaInteraction::snapMouseReleaseEvent(QMouseEvent* anEvent, Feature*
         theRelation = NULL;
         HaveFirst = false;
         EndNow = false;
+        view()->setInteracting(false);
     } else
     if ( !panning() ) {
         if (!HaveFirst)
@@ -225,7 +229,7 @@ void CreateAreaInteraction::snapMouseReleaseEvent(QMouseEvent* anEvent, Feature*
                 createNewRoad(L);
             addToRoad(anEvent, aFeature, L);
             document()->addHistory(L);
-            view()->invalidate(true, false);
+            view()->update();
             if (theRelation)
                 theMain->properties()->setSelection(theRelation);
             else
@@ -242,6 +246,7 @@ void CreateAreaInteraction::snapMouseReleaseEvent(QMouseEvent* anEvent, Feature*
             theRelation = NULL;
             HaveFirst = false;
             EndNow = false;
+            view()->setInteracting(false);
         }
     }
 }
@@ -255,6 +260,8 @@ QCursor CreateAreaInteraction::cursor() const
 
 void CreateAreaInteraction::closeAndFinish()
 {
+    view()->setInteracting(false);
+
     if (!theRoad || theRoad->size() < 3)
         return;
 

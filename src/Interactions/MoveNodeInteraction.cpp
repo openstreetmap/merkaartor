@@ -235,6 +235,7 @@ void MoveNodeInteraction::snapMouseReleaseEvent(QMouseEvent * event, Feature* Cl
 
         if (theList)
             document()->addHistory(theList);
+        view()->setInteracting(false);
         view()->invalidate(true, false);
     } else
         SAFE_DELETE(theList);
@@ -248,6 +249,7 @@ void MoveNodeInteraction::snapMouseMoveEvent(QMouseEvent* event, Feature* Closer
     if (Moving.size() && !panning())
     {
         HasMoved = true;
+        view()->setInteracting(true);
         Coord Diff = calculateNewPosition(event,Closer,NULL)-StartDragPosition;
         for (int i=0; i<Moving.size(); ++i) {
             if (Moving[i]->isVirtual()) {
@@ -273,7 +275,8 @@ void MoveNodeInteraction::snapMouseMoveEvent(QMouseEvent* event, Feature* Closer
                 Moving[i]->setPosition(OriginalPosition[i]+Diff);
             }
         }
-        view()->invalidate(true, false);
+        view()->update();
+//        view()->invalidate(true, false);
     }
 }
 

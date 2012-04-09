@@ -91,6 +91,8 @@ void RotateInteraction::snapMousePressEvent(QMouseEvent * anEvent, Feature* aLas
     if (!sel.size())
         return;
 
+    view()->setInteracting(true);
+
     StartDragPosition = XY_TO_COORD(anEvent->pos());
     OriginNode = NULL;
     NodeOrigin  = false;
@@ -148,11 +150,12 @@ void RotateInteraction::snapMouseReleaseEvent(QMouseEvent * anEvent, Feature* /*
 
 
         document()->addHistory(theList);
-        view()->invalidate(true, false);
+        view()->update();
     }
     Angle = 0.0;
     Rotating.clear();
     OriginalPosition.clear();
+    view()->setInteracting(false);
     clearNoSnap();
 }
 
@@ -166,7 +169,7 @@ void RotateInteraction::snapMouseMoveEvent(QMouseEvent* anEvent, Feature* /*Clos
                 continue;
             Rotating[i]->setPosition(rotatePosition(OriginalPosition[i], Angle));
         }
-        view()->invalidate(true, false);
+        view()->update();
     }
 }
 

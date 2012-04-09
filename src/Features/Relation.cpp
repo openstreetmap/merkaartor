@@ -182,9 +182,15 @@ const CoordBox& Relation::boundingBox(bool update) const
     return BBox;
 }
 
-void Relation::draw(QPainter& P, MapRenderer* theRenderer)
+void Relation::drawSimple(QPainter &P, MapView *theView)
 {
-    if (!theRenderer->theOptions.options.testFlag(RendererOptions::RelationsVisible))
+    Q_UNUSED(P)
+    Q_UNUSED(theView)
+}
+
+void Relation::drawTouchup(QPainter& P, MapView* theView)
+{
+    if (!theView->renderOptions().options.testFlag(RendererOptions::RelationsVisible))
         return;
 
     if (notEverythingDownloaded())
@@ -195,7 +201,7 @@ void Relation::draw(QPainter& P, MapRenderer* theRenderer)
         else
             P.setPen(QPen(M_PREFS->getRelationsColor(),M_PREFS->getRelationsWidth(),Qt::DashLine));
     }
-    P.drawPath(theRenderer->theTransform.map(p->theBoundingPath));
+    P.drawPath(theView->transform().map(p->theBoundingPath));
 }
 
 void Relation::drawSpecial(QPainter& thePainter, QPen& Pen, MapView* theView)
@@ -209,6 +215,7 @@ void Relation::drawSpecial(QPainter& thePainter, QPen& Pen, MapView* theView)
     } */
 
     thePainter.setPen(TP);
+    buildPath(theView->projection());
     thePainter.drawPath(theView->transform().map(p->theBoundingPath));
 }
 

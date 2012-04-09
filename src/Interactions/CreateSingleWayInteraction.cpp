@@ -25,6 +25,7 @@ CreateSingleWayInteraction::CreateSingleWayInteraction(MainWindow* aMain, Node *
         FirstPoint = firstNode->position();
         LastCursor = COORD_TO_XY(FirstPoint);
         HaveFirst = true;
+        view()->setInteracting(true);
         if ((theRoad = Way::GetSingleParentRoad(firstNode))) {
             if (theRoad->isExtrimity(firstNode)) {
                 Prepend = (theRoad->get(0) == firstNode) ? true : false;
@@ -73,6 +74,7 @@ void CreateSingleWayInteraction::paintEvent(QPaintEvent* anEvent, QPainter& theP
         HaveFirst = false;
         theRoad = NULL;
         Creating = false;
+        view()->setInteracting(false);
     }
 
     if (HaveFirst)
@@ -209,14 +211,16 @@ void CreateSingleWayInteraction::snapMousePressEvent(QMouseEvent* /* anEvent */,
 {
     Q_UNUSED(lastSnap)
     Creating = true;
+    view()->setInteracting(true);
 }
 
 void CreateSingleWayInteraction::snapMouseReleaseEvent(QMouseEvent* anEvent, Feature* lastSnap)
 {
-    if (M_PREFS->getMouseSingleButton() && anEvent->button() == Qt::RightButton) {
+    if (M_PREFS->getMouseSingleButton() && anEvent->button() == Qt::RightButton) {  // Abort
         HaveFirst = false;
         theRoad = NULL;
         Creating = false;
+        view()->setInteracting(false);
     } else
     if ( Creating && !panning() )
     {
@@ -235,7 +239,7 @@ void CreateSingleWayInteraction::snapMouseReleaseEvent(QMouseEvent* anEvent, Fea
                 theList->add(new AddFeatureCommand(theMain->document()->getDirtyOrOriginLayer(),N,true));
                 theList->add(new WayAddNodeCommand(aRoad,N,SnapIdx,theMain->document()->getDirtyOrOriginLayer(aRoad)));
                 document()->addHistory(theList);
-                view()->invalidate(true, false);
+                view()->update();
                 FirstNode = N;
             }
         }
@@ -295,7 +299,7 @@ void CreateSingleWayInteraction::snapMouseReleaseEvent(QMouseEvent* anEvent, Fea
                 theList->add(new AddFeatureCommand(theMain->document()->getDirtyOrOriginLayer(),N,true));
                 theList->add(new WayAddNodeCommand(aRoad,N,SnapIdx,theMain->document()->getDirtyOrOriginLayer(aRoad)));
                 document()->addHistory(theList);
-                view()->invalidate(true, false);
+                view()->update();
                 To = N;
             }
             if (!To)
@@ -311,7 +315,7 @@ void CreateSingleWayInteraction::snapMouseReleaseEvent(QMouseEvent* anEvent, Fea
             else
                 L->add(new WayAddNodeCommand(theRoad,To,theMain->document()->getDirtyOrOriginLayer(theRoad)));
             document()->addHistory(L);
-            view()->invalidate(true, false);
+            view()->update();
             theMain->properties()->setSelection(theRoad);
         }
         FirstPoint = XY_TO_COORD(LastCursor);
@@ -325,6 +329,7 @@ void CreateSingleWayInteraction::snapMouseDoubleClickEvent(QMouseEvent* anEvent,
     HaveFirst = false;
     theRoad = NULL;
     Creating = false;
+    view()->setInteracting(false);
 
     if ((lastSnap() && lastSnap()->getType() & IFeature::LineString) || !lastSnap())
         CreateNodeInteraction::createNode(XY_TO_COORD(anEvent->pos()), lastSnap());
@@ -352,4 +357,5 @@ void CreateSingleWayInteraction::closeAndFinish()
     HaveFirst = false;
     theRoad = NULL;
     Creating = false;
+    view()->setInteracting(false);
 }

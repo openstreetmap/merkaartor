@@ -66,6 +66,7 @@ void CreateRoundaboutInteraction::mousePressEvent(QMouseEvent * event)
         if (!HaveCenter)
         {
             HaveCenter = true;
+            view()->setInteracting(true);
             Center = XY_TO_COORD(event->pos());
         }
         else
@@ -113,6 +114,7 @@ void CreateRoundaboutInteraction::mousePressEvent(QMouseEvent * event)
             }
             theMain->properties()->setSelection(R);
             document()->addHistory(L);
+            view()->setInteracting(false);
             view()->invalidate(true, false);
             theMain->launchInteraction(0);
         }
@@ -133,6 +135,7 @@ void CreateRoundaboutInteraction::mouseReleaseEvent(QMouseEvent* anEvent)
 {
     if (M_PREFS->getMouseSingleButton() && anEvent->button() == Qt::RightButton) {
         HaveCenter = false;
+        view()->setInteracting(false);
         view()->update();
     }
     Interaction::mouseReleaseEvent(anEvent);

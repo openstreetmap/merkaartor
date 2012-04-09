@@ -80,11 +80,15 @@ public:
     void adjustZoomToBoris();
     void setCenter(Coord& Center, const QRect& Screen);
 
+    void setInteracting(bool val);
+
     bool toXML(QXmlStreamWriter& stream);
     void fromXML(QXmlStreamReader& stream);
 
     RendererOptions renderOptions();
     void setRenderOptions(const RendererOptions& opt);
+
+    qreal nodeWidth();
 
     QString toPropertiesHtml();
 

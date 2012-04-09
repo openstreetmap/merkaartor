@@ -63,6 +63,7 @@ void CreatePolygonInteraction::mousePressEvent(QMouseEvent * event)
         if (!HaveOrigin)
         {
             HaveOrigin = true;
+            view()->setInteracting(true);
             Origin = XY_TO_COORD(event->pos());
             OriginF = QPointF(event->pos());
             bAngle = 0.;
@@ -115,6 +116,7 @@ void CreatePolygonInteraction::mousePressEvent(QMouseEvent * event)
             }
             theMain->properties()->setSelection(R);
             document()->addHistory(L);
+            view()->setInteracting(false);
             view()->invalidate(true, false);
             theMain->launchInteraction(0);
         }
@@ -184,6 +186,7 @@ void CreatePolygonInteraction::mouseReleaseEvent(QMouseEvent* event)
 {
     if (M_PREFS->getMouseSingleButton() && event->button() == Qt::RightButton) {
         HaveOrigin = false;
+        view()->setInteracting(false);
         view()->update();
     }
     Interaction::mouseReleaseEvent(event);

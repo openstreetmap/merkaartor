@@ -24,6 +24,7 @@ public:
         ScaleVisible = 0x1000,
         LatLonGridVisible = 0x2000,
         UnstyledHidden = 0x4000,
+        Interacting = 0x8000,
         LockZoom = 0x10000,
         ForPrinting = 0x20000,
         PrintAllLabels = 0x40000

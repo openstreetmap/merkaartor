@@ -26,13 +26,13 @@ void BackgroundStyleLayer::draw(Way* R)
     const FeaturePainter* paintsel = R->getPainter(r->thePixelPerM);
     if (paintsel) {
         paintsel->drawBackground(R, r->thePainter, r);
-    } else if (!R->hasPainter() && !TEST_RENDERER_RFLAGS(RendererOptions::UnstyledHidden))
+    } else if (!TEST_RENDERER_RFLAGS(RendererOptions::UnstyledHidden))
 //    if (/*!globalZoom(r->theProjection) && */!R->hasPainter()) //FIXME Untagged roads level of zoom?
     {
         QPen thePen(QColor(0,0,0),1);
 
         r->thePainter->setBrush(Qt::NoBrush);
-        if (dynamic_cast<ImageMapLayer*>(R->layer()) && M_PREFS->getUseShapefileForBackground()) {
+        if (R->layer()->classType() == Layer::ImageLayerType && M_PREFS->getUseShapefileForBackground()) {
             thePen = QPen(QColor(0xc0,0xc0,0xc0),1);
             if (M_PREFS->getBackgroundOverwriteStyle() || !M_STYLE->getGlobalPainter().getDrawBackground())
                 r->thePainter->setBrush(M_PREFS->getBgColor());
@@ -157,17 +157,17 @@ void TouchupStyleLayer::draw(Node* Pt)
     const FeaturePainter* paintsel = Pt->getPainter(r->thePixelPerM);
     if (paintsel)
         paintsel->drawTouchup(Pt,r->thePainter,r);
-    else if (!Pt->hasPainter() && !TEST_RENDERER_RFLAGS(RendererOptions::UnstyledHidden)) {
+    else if (!TEST_RENDERER_RFLAGS(RendererOptions::UnstyledHidden)) {
         if (! ((Pt->isReadonly() || !Pt->isSelectable(r->thePixelPerM, r->theOptions)) && (!Pt->isPOI() && !Pt->isWaypoint())))
 //        if (!Pt->isReadonly() && Pt->isSelectable(r))
         {
-            QColor theColor = QColor(0,0,0,128);
             qreal WW = r->NodeWidth;
-            if (r->theGlobalPainter.DrawNodes) {
-                theColor = r->theGlobalPainter.NodesColor;
-            }
-            QPointF P(r->toView(Pt));
             if (WW >= 1) {
+                QColor theColor = QColor(0,0,0,128);
+                if (r->theGlobalPainter.DrawNodes) {
+                    theColor = r->theGlobalPainter.NodesColor;
+                }
+                QPointF P(r->toView(Pt));
                 if (Pt->layer()->classGroups() & Layer::Special) {
                     QRect R2(P.x()-(WW+4)/2, P.y()-(WW+4)/2, WW+4, WW+4);
                     r->thePainter->fillRect(R2,QColor(255,0,255,192));
@@ -506,19 +506,6 @@ void MapRenderer::render(
         }
     }
 
-    for (itm = theFeatures.constBegin() ;itm != theFeatures.constEnd(); ++itm)
-    {
-        for (it = itm.value().constBegin() ;it != itm.value().constEnd(); ++it)
-        {
-            qreal alpha = (*it)->getAlpha();
-            if ((*it)->isReadonly() && !TEST_RFLAGS(RendererOptions::ForPrinting))
-                alpha /= 2.0;
-            if (alpha != 1.)
-                P->setOpacity(alpha);
-
-            (*it)->draw(*P, this);
-        }
-    }
     if (lblLayerVisible)
     {
         for (itm = theFeatures.constBegin() ;itm != theFeatures.constEnd(); ++itm) {

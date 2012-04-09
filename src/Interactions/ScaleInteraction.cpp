@@ -91,6 +91,8 @@ void ScaleInteraction::snapMousePressEvent(QMouseEvent * anEvent, Feature* aLast
     if (!sel.size())
         return;
 
+    view()->setInteracting(true);
+
     StartDragPosition = XY_TO_COORD(anEvent->pos());
     OriginNode = NULL;
     NodeOrigin  = false;
@@ -150,6 +152,7 @@ void ScaleInteraction::snapMouseReleaseEvent(QMouseEvent * anEvent, Feature* /*C
         document()->addHistory(theList);
         view()->invalidate(true, false);
     }
+    view()->setInteracting(false);
     Radius = 1.0;
     Scaling.clear();
     OriginalPosition.clear();

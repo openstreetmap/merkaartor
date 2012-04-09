@@ -113,7 +113,8 @@ public:
          * @param P The QPainter used to draw
          * @param theProjection the Projection used to convert real coordinates to screen coordinates
          */
-    virtual void draw(QPainter& P, MapRenderer* theRenderer) = 0;
+    virtual void drawSimple(QPainter& P, MapView* theView) = 0;
+    virtual void drawTouchup(QPainter& P, MapView* theView) = 0;
 
     virtual void drawSpecial(QPainter& P, QPen& Pen, MapView* theView) = 0;
     virtual void drawParentsSpecial(QPainter& P, QPen& Pen, MapView* theView) = 0;
@@ -281,6 +282,7 @@ public:
     virtual bool isSpecial() const;
     virtual void setSpecial(bool val);
 
+    virtual void buildPath(const Projection& aProjection);
     virtual const QPainterPath& getPath() const;
 
     const FeaturePainter* getPainter(qreal PixelPerM) const;

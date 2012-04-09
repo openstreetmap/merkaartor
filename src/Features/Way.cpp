@@ -39,7 +39,7 @@ class WayPrivate
             , PathUpToDate(false), VirtualsUptodate(false)
             , ProjectionRevision(0)
             , BestSegment(-1)
-            , Width(0)
+            , SimpleWidth(0)
         {
         }
         Way* theWay;
@@ -57,7 +57,8 @@ class WayPrivate
         QPainterPath thePath;
         int ProjectionRevision;
         int BestSegment;
-        qreal Width;
+        qreal SimpleWidth;
+        QColor SimpleColor;
 
         RenderPriority theRenderPriority; // 10 (24)
 
@@ -72,30 +73,38 @@ class WayPrivate
 
 void WayPrivate::CalculateWidth()
 {
-    QString s(theWay->tagValue("width",QString()));
-    if (!s.isNull()) {
-        Width = s.toDouble();
-        return;
-    }
     QString h = theWay->tagValue("highway",QString());
-    if (s.isNull()) {
-        Width = DEFAULTWIDTH;
+    if (h.isEmpty()) {
+        SimpleWidth = LANEWIDTH;
+        SimpleColor = QColor(128, 128, 128);
         return;
     }
 
-    if ( (h == "motorway") || (h=="motorway_link") )
-        Width =  4*LANEWIDTH; // 3 lanes plus emergency
-    else if ( (h == "trunk") || (h=="trunk_link") )
-        Width =  3*LANEWIDTH; // 2 lanes plus emergency
-    else if ( (h == "primary") || (h=="primary_link") )
-        Width =  2*LANEWIDTH; // 2 lanes
-    else if (h == "secondary")
-        Width =  2*LANEWIDTH; // 2 lanes
-    else if (h == "tertiary")
-        Width =  1.5*LANEWIDTH; // shared middle lane
-    else if (h == "cycleway")
-        Width =  1.5;
-    Width = DEFAULTWIDTH;
+    SimpleWidth = LANEWIDTH;
+    SimpleColor = QColor(0, 0, 0);
+    if ( (h == "motorway") || (h=="motorway_link") ) {
+        SimpleWidth =  4*LANEWIDTH; // 3 lanes plus emergency
+        SimpleColor = QColor(128, 155, 192);
+    } else if ( (h == "trunk") || (h=="trunk_link") ) {
+        SimpleWidth =  3*LANEWIDTH; // 2 lanes plus emergency
+        SimpleColor = QColor(127, 201, 127);
+    } else if ( (h == "primary") || (h=="primary_link") ) {
+        SimpleWidth =  2*LANEWIDTH; // 2 lanes
+        SimpleColor = QColor(228, 109, 113);
+    } else if (h == "secondary") {
+        SimpleWidth =  2*LANEWIDTH; // 2 lanes
+        SimpleColor = QColor(253, 191, 252);
+    } else if (h == "tertiary") {
+        SimpleWidth =  1.5*LANEWIDTH; // shared middle lane
+        SimpleColor = QColor(255, 229, 33);
+    } else if (h == "cycleway") {
+        SimpleWidth =  LANEWIDTH;
+        SimpleColor = QColor(0, 0, 255);
+    }
+
+    QString s(theWay->tagValue("width",QString()));
+    if (!s.isNull())
+        SimpleWidth = s.toDouble();
 }
 
 void WayPrivate::removeVirtuals()
@@ -350,6 +359,19 @@ const CoordBox& Way::boundingBox(bool update) const
     return BBox;
 }
 
+void Way::drawSimple(QPainter &P, MapView *theView)
+{
+    QBrush theBrush(Qt::NoBrush);
+    if (p->Area > 0.0) {
+        theBrush = QBrush(QColor(240, 240, 240));
+    }
+    QPen thePen(p->SimpleColor,(qreal)p->SimpleWidth/LANEWIDTH);
+
+    P.setBrush(theBrush);
+    P.setPen(thePen);
+    P.drawPath(theView->transform().map(p->thePath));
+}
+
 void Way::updateMeta()
 {
     Feature::updateMeta();
@@ -430,28 +452,28 @@ qreal Way::widthOf()
     if (MetaUpToDate == false)
         updateMeta();
 
-    return p->Width;
+    return p->SimpleWidth;
 }
 
-void Way::draw(QPainter& P, MapRenderer* theRenderer)
+void Way::drawTouchup(QPainter& P, MapView* theView)
 {
 
     if (isDirty() && isUploadable() && M_PREFS->getDirtyVisible()) {
         QPen thePen(M_PREFS->getDirtyColor(),M_PREFS->getDirtyWidth());
         P.setPen(thePen);
-        P.drawPath(theRenderer->theTransform.map(getPath()));
+        P.drawPath(theView->transform().map(getPath()));
     }
 
-    qreal theWidth = theRenderer->NodeWidth;
+    qreal theWidth = theView->nodeWidth();
     bool Draw = (theWidth >= 1);
-    if (!Draw || !theRenderer->theOptions.options.testFlag(RendererOptions::VirtualNodesVisible) || !theRenderer->theOptions.options.testFlag(RendererOptions::NodesVisible) || isReadonly())
+    if (!Draw || !theView->renderOptions().options.testFlag(RendererOptions::VirtualNodesVisible) || !theView->renderOptions().options.testFlag(RendererOptions::NodesVisible) || isReadonly())
         return;
 
     theWidth /= 2;
     P.setPen(QColor(0,0,0));
     foreach (NodePtr N, p->virtualNodes) {
-        if (theRenderer->theViewport.contains(N->projected())) {
-            QPoint p =  theRenderer->toView(N);
+        if (theView->viewport().contains(N->projected())) {
+            QPoint p =  theView->toView(N);
             P.drawLine(p+QPoint(-theWidth, -theWidth), p+QPoint(theWidth, theWidth));
             P.drawLine(p+QPoint(theWidth, -theWidth), p+QPoint(-theWidth, theWidth));
         }
@@ -463,8 +485,10 @@ void Way::drawSpecial(QPainter& thePainter, QPen& Pen, MapView* theView)
     thePainter.setPen(Pen);
     if (p->BestSegment != -1)
         thePainter.drawLine(theView->transform().map(theView->projection().project(getSegment(p->BestSegment))));
-    else
+    else {
+        buildPath(theView->projection());
         thePainter.drawPath(theView->transform().map(p->thePath));
+    }
 }
 
 void Way::drawParentsSpecial(QPainter& thePainter, QPen& Pen, MapView* theView)

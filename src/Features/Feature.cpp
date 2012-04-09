@@ -442,6 +442,10 @@ void Feature::setSpecial(bool val)
     p->Special = val;
 }
 
+void Feature::buildPath(const Projection &)
+{
+}
+
 bool Feature::isSpecial() const
 {
     return p->Special;
@@ -798,7 +802,6 @@ void Feature::drawHover(QPainter& thePainter, MapView* theView)
 void Feature::drawFocus(QPainter& thePainter, MapView* theView)
 {
     QPen TP(M_PREFS->getFocusColor(),M_PREFS->getFocusWidth(),Qt::SolidLine);
-
     thePainter.setPen(TP);
 
     drawSpecial(thePainter, TP, theView);
@@ -816,6 +819,7 @@ void Feature::drawHighlight(QPainter& thePainter, MapView* theView)
 {
     QPen TP(M_PREFS->getHighlightColor(),M_PREFS->getHighlightWidth(),Qt::SolidLine);
     thePainter.setPen(TP);
+
     drawSpecial(thePainter, TP, theView);
 
     drawChildrenSpecial(thePainter, TP, theView, 1);

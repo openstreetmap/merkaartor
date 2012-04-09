@@ -47,7 +47,8 @@ public:
     virtual void updateMeta();
 
     virtual const CoordBox& boundingBox(bool update=true) const;
-    virtual void draw(QPainter& P, MapRenderer* theRenderer);
+    virtual void drawSimple(QPainter& P, MapView* theView);
+    virtual void drawTouchup(QPainter& P, MapView* theView);
     virtual void drawSpecial(QPainter& P, QPen& Pen, MapView* theView);
     virtual void drawParentsSpecial(QPainter& P, QPen& Pen, MapView* theView);
     virtual void drawChildrenSpecial(QPainter& P, QPen& Pen, MapView* theView, int depth);
@@ -78,7 +79,7 @@ public:
 public:
     const QPointF& projected() const;
     const QPointF &projected(const Projection &aProjection);
-    void setProjection(const Projection& aProjection);
+    void buildPath(const Projection& aProjection);
 
     Coord position() const;
     void setPosition(const Coord& aCoord);
@@ -139,7 +140,7 @@ protected:
     virtual ~PhotoNode();
 
 public:
-    virtual void draw(QPainter &thePainter, MapRenderer* theRenderer);
+    virtual void drawTouchup(QPainter &thePainter, MapView* theView);
 #ifdef GEOIMAGE
     virtual void drawHover(QPainter& P, MapView* theView);
 #endif

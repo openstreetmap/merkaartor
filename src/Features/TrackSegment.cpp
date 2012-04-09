@@ -14,7 +14,7 @@
 #include <algorithm>
 #include <QList>
 
-#define TEST_RFLAGS(x) theRenderer->theOptions.options.testFlag(x)
+#define TEST_RFLAGS(x) theView->renderOptions().options.testFlag(x)
 
 class TrackSegmentPrivate
 {
@@ -155,7 +155,13 @@ void TrackSegment::drawDirectionMarkers(QPainter &P, QPen &pen, const QPointF & 
     P.drawLine(H-T,H-T+V2);
 }
 
-void TrackSegment::draw(QPainter &P, MapRenderer* theRenderer)
+void TrackSegment::drawSimple(QPainter &P, MapView *theView)
+{
+    Q_UNUSED(P)
+    Q_UNUSED(theView)
+}
+
+void TrackSegment::drawTouchup(QPainter &P, MapView* theView)
 {
     QPen pen;
 
@@ -167,7 +173,7 @@ void TrackSegment::draw(QPainter &P, MapRenderer* theRenderer)
         QPointF FromF = p->Nodes[i-1]->projected();
         QPointF ToF = p->Nodes[i]->projected();
 
-        if (!theRenderer->theViewport.contains(FromF) && !theRenderer->theViewport.contains(ToF))
+        if (!theView->viewport().contains(FromF) && !theView->viewport().contains(ToF))
             continue;
 
         if (!M_PREFS->getSimpleGpxTrack())
@@ -178,9 +184,9 @@ void TrackSegment::draw(QPainter &P, MapRenderer* theRenderer)
 
             int width = M_PREFS->getGpxTrackWidth();
             // Dynamic track line width adaption to zoom level
-            if (theRenderer->thePixelPerM > 2)
+            if (theView->pixelPerM() > 2)
                 width++;
-            else if (theRenderer->thePixelPerM < 1)
+            else if (theView->pixelPerM() < 1)
                 width--;
 
             // Encode speed in width of path ...
@@ -214,9 +220,9 @@ void TrackSegment::draw(QPainter &P, MapRenderer* theRenderer)
         {
             int width = M_PREFS->getGpxTrackWidth();
             // Dynamic track line width adaption to zoom level
-            if (theRenderer->thePixelPerM > 2)
+            if (theView->pixelPerM() > 2)
                 width++;
-            else if (theRenderer->thePixelPerM < 1)
+            else if (theView->pixelPerM() < 1)
                 width--;
             pen.setWidthF(width);
             pen.setColor(M_PREFS->getGpxTrackColor());
