@@ -546,21 +546,13 @@ void ImageMapLayer::pan(QPoint delta)
     if (p->curPix.isNull())
         return;
 
-#if QT_VERSION < 0x040600
-        QPixmap savPix;
-        savPix = p->curPix.copy();
-        p->curPix.fill(Qt::transparent);
-        QPainter P(&p->curPix);
-        P.drawPixmap(delta, savPix);
-#else
-        QRegion exposed;
-        p->curPix.scroll(delta.x(), delta.y(), p->curPix.rect(), &exposed);
-        QPainter P(&p->curPix);
-        P.setClipping(true);
-        P.setClipRegion(exposed);
-        P.eraseRect(p->curPix.rect());
-#endif
-//        on_imageReceived();
+    QRegion exposed;
+    p->curPix.scroll(delta.x(), delta.y(), p->curPix.rect(), &exposed);
+    QPainter P(&p->curPix);
+    P.setClipping(true);
+    P.setClipRegion(exposed);
+    P.eraseRect(p->curPix.rect());
+    //        on_imageReceived();
 }
 
 void ImageMapLayer::zoom_in()

@@ -686,7 +686,7 @@ void PhotoNode::drawTouchup(QPainter& thePainter , MapView* theView)
     QRect box(me - QPoint(5, 3), QSize(10, 6));
     thePainter.drawRect(box);
     if (theView->renderOptions().options.testFlag(RendererOptions::PhotosVisible) && theView->pixelPerM() > M_PREFS->getRegionalZoom()) {
-        qreal rt = qBound(0.2, theRenderer->thePixelPerM, 1.0);
+        qreal rt = qBound(0.2, theView->pixelPerM(), 1.0);
         QPoint phPt;
 
         if (photoLocationBR) {

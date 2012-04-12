@@ -18,7 +18,7 @@
 #include "qgps.h"
 #include "qgpsdevice.h"
 
-#include "MapRenderer.h"
+#include "OsmRenderLayer.h"
 
 #ifdef USE_WEBKIT
     #include "browserimagemanager.h"
@@ -40,19 +40,6 @@
 #define EQUATORIALRADIUS 6378137.0
 #define LAT_ANG_PER_M 1.0 / EQUATORIALRADIUS
 #define TEST_RFLAGS(x) p->ROptions.options.testFlag(x)
-#define TILE_SIZE 256
-
-inline uint qHash(const QPoint& p)
-{
-    return (uint)(p.y() + (p.x() << 16));
-}
-
-QCache<TILE_TYPE, QImage> tileCache;
-QList<TILE_TYPE> tiles;
-QReadWriteLock tileLock;
-#define TILE_CONSTRUCTOR(x, y) QPoint(x, y)
-#define TILE_X(t) t.x()
-#define TILE_Y(t) t.y()
 
 class MapViewPrivate
 {
@@ -66,7 +53,6 @@ public:
     QPoint theVectorPanDelta;
     qreal theVectorRotation;
     QList<Node*> theVirtualNodes;
-    MapRenderer renderer;
     RendererOptions ROptions;
 
     Projection theProjection;
@@ -76,15 +62,9 @@ public:
     bool BackgroundOnlyPanZoom;
     QTransform BackgroundOnlyVpTransform;
 
-    qreal tileSizeCoordW;
-    qreal tileSizeCoordH;
-    QPointF tileOriginCoord;
-    QRect tileViewport;
-
     QLabel *TL, *TR, *BL, *BR;
 
-    QFuture<void> renderGathering;
-    QFutureWatcher<void> renderGatheringWatcher;
+    OsmRenderLayer* osmLayer;
 
     MapViewPrivate()
       : PixelPerM(0.0), Viewport(WORLD_COORDBOX), theVectorRotation(0.0)
@@ -92,174 +72,6 @@ public:
       , theDocument(0)
       , theInteraction(0)
     {}
-
-    void tileCalc(const QRect& rect)
-    {
-        if (renderGathering.isRunning())
-            renderGathering.cancel();
-
-        if (!theDocument)
-            return;
-
-        QPointF tl = theInvertedTransform.map(QPointF(rect.topLeft()));
-        QPointF br = theInvertedTransform.map(QPointF(rect.bottomRight()));
-        QRectF projRect(tl, br);
-
-        tileViewport.setLeft(((projRect.left()-tileOriginCoord.x()) / tileSizeCoordW) - 1);
-        tileViewport.setTop(((projRect.top()-tileOriginCoord.y()) / tileSizeCoordH) - 1);
-        tileViewport.setRight(((projRect.right()-tileOriginCoord.x()) / tileSizeCoordW) + 1);
-        tileViewport.setBottom(((projRect.bottom()-tileOriginCoord.y()) / tileSizeCoordH) + 1);
-
-        tileLock.lockForRead();
-        tiles.clear();
-        for (int i=tileViewport.top(); i<=tileViewport.bottom(); ++i)
-            for (int j=tileViewport.left(); j<=tileViewport.right(); ++j) {
-                TILE_TYPE tile = TILE_CONSTRUCTOR(j, i);
-                if (!tileCache.contains(tile))
-                    tiles << tile;
-            }
-        tileLock.unlock();
-    }
-
-
-    void resetTileCache(const QRect& rect)
-    {
-        if (renderGathering.isRunning())
-            renderGathering.cancel();
-
-        if (!theDocument)
-            return;
-
-        tileLock.lockForWrite();
-        tileCache.clear();
-        tileOriginCoord = theInvertedTransform.map(QPointF(rect.topLeft()));
-
-        QPointF tl = theInvertedTransform.map(QPointF(rect.topLeft()));
-        QPointF br = theInvertedTransform.map(QPointF(rect.bottomRight())+QPointF(1,1));
-        QRectF projRect(tl, br);
-        tileSizeCoordW = (projRect.width()) / rect.width() * TILE_SIZE;
-        //            tileSizeCoordH = (projRect.height()) / rect.height() * TILE_SIZE;
-        tileSizeCoordH = tileSizeCoordW * projRect.height() / fabs(projRect.height());
-
-        tileViewport.setLeft(((projRect.left()-tileOriginCoord.x()) / tileSizeCoordW) - 1);
-        tileViewport.setTop(((projRect.top()-tileOriginCoord.y()) / tileSizeCoordH) - 1);
-        tileViewport.setRight(((projRect.right()-tileOriginCoord.x()) / tileSizeCoordW) + 1);
-        tileViewport.setBottom(((projRect.bottom()-tileOriginCoord.y()) / tileSizeCoordH) + 1);
-
-        tiles.clear();
-        for (int i=tileViewport.top(); i<=tileViewport.bottom(); ++i)
-            for (int j=tileViewport.left(); j<=tileViewport.right(); ++j) {
-                TILE_TYPE tile = TILE_CONSTRUCTOR(j, i);
-                tiles << tile;
-            }
-        tileLock.unlock();
-    }
-
-//    void renderTile(MapView* v, TILE_TYPE tile)
-//    {
-//        if (!tileCache.contains(tile)) {
-//            QMap<RenderPriority, QSet <Feature*> > theFeatures;
-
-//            QPointF projTL((tile.x()*tileSizeCoordW)+tileOriginCoord.x(), (tile.y()*tileSizeCoordH)+tileOriginCoord.y());
-//            QPointF projBR(((tile.x()+1)*tileSizeCoordW)+tileOriginCoord.x(), ((tile.y()+1)*tileSizeCoordH)+tileOriginCoord.y());
-//            QRectF projR(projTL, projBR);
-
-//            qreal z=1.0625;
-//            qreal dlat = (projR.top()-projR.bottom())*(z-1)/2;
-//            qreal dlon = (projR.right()-projR.left())*(z-1)/2;
-//            projR.setBottom(projR.bottom()-dlat);
-//            projR.setLeft(projR.left()-dlon);
-//            projR.setTop(projR.top()+dlat);
-//            projR.setRight(projR.right()+dlon);
-
-//            Coord tl = theProjection.inverse2Coord(projR.topLeft());
-//            Coord br = theProjection.inverse2Coord(projR.bottomRight());
-//            CoordBox invalidRect(tl, br);
-////            qDebug() << invalidRect;
-
-//            for (int i=0; i<theDocument->layerSize(); ++i)
-//                g_backend.getFeatureSet(theDocument->getLayer(i), theFeatures, invalidRect, theProjection);
-
-//            QImage* img = new QImage(TILE_SIZE, TILE_SIZE, QImage::Format_ARGB32);
-//            img->fill(Qt::transparent);
-
-//            QPainter P(img);
-//            if (M_PREFS->getUseAntiAlias())
-//                P.setRenderHint(QPainter::Antialiasing);
-//            renderer.render(&P, theFeatures, projR, /*QRect(0, 0, TILE_SIZE, TILE_SIZE)*/QRect(-8, -8, TILE_SIZE+16, TILE_SIZE+16), PixelPerM, ROptions);
-//            P.end();
-//            tileCache.insert(tile, img);
-////            if (theFeatures.size())
-////                img->save(QString("c:/temp/%1-%2.png").arg(tile.x()).arg(tile.y()));
-//        }
-//    }
-
-};
-
-
-/****************/
-
-struct RenderTile
-{
-    RenderTile(MapView* vw)
-        : p(vw->p) { }
-
-    typedef void result_type;
-
-    void operator()(const TILE_TYPE& theTile)
-    {
-#if defined(__MINGW32__)
-        // Workaround for QTBUG-19886
-        asm volatile ("mov %esp, %eax");
-        asm volatile ("and $0xf, %eax");
-        asm volatile ("je alignmentok");
-        asm volatile ("push %eax");
-        asm volatile ("push %eax");
-        asm volatile ("alignmentok:");
-#endif
-
-        TILE_TYPE tile = theTile;
-
-        QPointF projTL((TILE_X(tile)*p->tileSizeCoordW)+p->tileOriginCoord.x(), (TILE_Y(tile)*p->tileSizeCoordH)+p->tileOriginCoord.y());
-        QPointF projBR(((TILE_X(tile)+1)*p->tileSizeCoordW)+p->tileOriginCoord.x(), ((TILE_Y(tile)+1)*p->tileSizeCoordH)+p->tileOriginCoord.y());
-        QRectF projR(projTL, projBR);
-
-#define TILE_SURROUND 2.0
-        qreal z = TILE_SURROUND * ((TILE_SIZE*TILE_SURROUND) / (p->theTransform.m11()*projR.width()*TILE_SURROUND));    // Adjust to main transform
-        qreal dlat = (projR.top()-projR.bottom())*(z-1)/2;
-        qreal dlon = (projR.right()-projR.left())*(z-1)/2;
-        projR.setBottom(projR.bottom()-dlat);
-        projR.setLeft(projR.left()-dlon);
-        projR.setTop(projR.top()+dlat);
-        projR.setRight(projR.right()+dlon);
-
-        Coord tl = p->theProjection.inverse2Coord(projR.topLeft());
-        Coord br = p->theProjection.inverse2Coord(projR.bottomRight());
-        CoordBox invalidRect(tl, br);
-
-        QMap<RenderPriority, QSet <Feature*> > theFeatures;
-
-        for (int i=0; i<p->theDocument->layerSize(); ++i)
-            g_backend.getFeatureSet(p->theDocument->getLayer(i), theFeatures, invalidRect, p->theProjection);
-
-        QImage* img = new QImage(TILE_SIZE, TILE_SIZE, QImage::Format_ARGB32);
-        img->fill(Qt::transparent);
-
-        QPainter P(img);
-        if (M_PREFS->getUseAntiAlias())
-            P.setRenderHint(QPainter::Antialiasing);
-        MapRenderer r;
-        r.render(&P, theFeatures, projR, /*QRect(0, 0, TILE_SIZE, TILE_SIZE)*/QRect(-((TILE_SIZE*TILE_SURROUND)-TILE_SIZE)/2, -((TILE_SIZE*TILE_SURROUND)-TILE_SIZE)/2, TILE_SIZE*TILE_SURROUND, TILE_SIZE*TILE_SURROUND), p->PixelPerM, p->ROptions);
-        P.end();
-        tileLock.lockForWrite();
-        tileCache.insert(tile, img);
-
-        //            if (theFeatures.size())
-        //                img->save(QString("c:/temp/%1-%2.png").arg(tile.x()).arg(tile.y()));
-        tileLock.unlock();
-    }
-
-    MapViewPrivate* p;
 };
 
 /*********************/
@@ -320,7 +132,9 @@ MapView::MapView(QWidget* parent) :
     p->BL->setVisible(false);
     p->BR->setVisible(false);
 
-    connect(&(p->renderGatheringWatcher), SIGNAL(finished()), SLOT(update()));
+
+    p->osmLayer = new OsmRenderLayer(this);
+    connect(p->osmLayer, SIGNAL(renderingDone()), SLOT(update()));
 }
 
 MapView::~MapView()
@@ -338,6 +152,7 @@ MainWindow *MapView::main()
 void MapView::setDocument(IDocument* aDoc)
 {
     p->theDocument = aDoc;
+    p->osmLayer->setDocument(aDoc);
 
     setViewport(viewport(), rect());
 }
@@ -350,13 +165,8 @@ IDocument *MapView::document()
 void MapView::invalidate(bool updateStaticBuffer, bool updateMap)
 {
     if (updateStaticBuffer) {
-        QElapsedTimer timer;
-        timer.start();
-        p->resetTileCache(rect());
-        if (tiles.size()) {
-            p->renderGathering = QtConcurrent::map(tiles, RenderTile(this));
-            p->renderGatheringWatcher.setFuture(p->renderGathering);
-        }
+        if (p->theDocument)
+            p->osmLayer->forceRedraw(p->theProjection, p->theTransform, rect(), p->PixelPerM, p->ROptions);
         p->theVectorPanDelta = QPoint(0, 0);
         SAFE_DELETE(StaticBackground)
     }
@@ -427,11 +237,7 @@ void MapView::panScreen(QPoint delta)
         p->theInvertedTransform = p->theTransform.inverted();
         viewportRecalc(rect());
         if (p->theDocument) {
-            p->tileCalc(rect());
-            if (tiles.size()) {
-                p->renderGathering = QtConcurrent::map(tiles, RenderTile(this));
-                p->renderGatheringWatcher.setFuture(p->renderGathering);
-            }
+            p->osmLayer->pan(delta);
         }
     }
 
@@ -738,7 +544,7 @@ void MapView::drawFeatures(QPainter & P)
     for (int i=0; i<p->theDocument->layerSize(); ++i)
         g_backend.getFeatureSet(p->theDocument->getLayer(i), theFeatures, p->Viewport, p->theProjection);
 
-    if (!p->renderGathering.isFinished() || TEST_RFLAGS(RendererOptions::Interacting)) {
+    if (!p->osmLayer->isRenderingDone() || TEST_RFLAGS(RendererOptions::Interacting)) {
         P.save();
         P.setRenderHint(QPainter::Antialiasing, TEST_RFLAGS(RendererOptions::Interacting));
 
@@ -757,17 +563,7 @@ void MapView::drawFeatures(QPainter & P)
 
 
     if (!TEST_RFLAGS(RendererOptions::Interacting)) {
-        QPointF origin = p->theTransform.map(p->tileOriginCoord);
-        for (int i=p->tileViewport.top(); i<=p->tileViewport.bottom(); ++i)
-            for (int j=p->tileViewport.left(); j<=p->tileViewport.right(); ++j) {
-                tileLock.lockForRead();
-                if (tileCache.contains(TILE_CONSTRUCTOR(j, i))) {
-                    QPointF tl = QPointF((j*TILE_SIZE)+origin.x(), (i*TILE_SIZE)+origin.y());
-                    P.drawImage(tl, *(tileCache[TILE_CONSTRUCTOR(j, i)]));
-                }
-                tileLock.unlock();
-                //            qDebug() << QPoint(j, i) << tl;
-            }
+        p->osmLayer->drawImage(&P);
     }
 
     P.save();
@@ -1238,11 +1034,7 @@ void MapView::zoom(qreal d, const QPoint & Around)
     }
 
     zoom(z, Around, rect());
-    p->resetTileCache(rect());
-    if (tiles.size()) {
-        p->renderGathering = QtConcurrent::map(tiles, RenderTile(this));
-        p->renderGatheringWatcher.setFuture(p->renderGathering);
-    }
+    invalidate(true, true);
 }
 
 void MapView::zoom(qreal d, const QPoint & Around,
@@ -1278,7 +1070,6 @@ void MapView::zoom(qreal d, const QPoint & Around,
 //        qreal zoomPixPerMatCur = zoomPixPerMat0 * pow(2., p->AbstractZoomLevel);
 //        z = zoomPixPerMatCur / p->PixelPerM;
 //    }
-    update();
 }
 
 void MapView::adjustZoomToBoris()

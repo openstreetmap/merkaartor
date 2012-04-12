@@ -5,10 +5,12 @@ HEADERS += Layer.h \
     ImageMapLayer.h \
     LayerIterator.h \
     LayerWidget.h \
-    LayerPrivate.h
+    LayerPrivate.h \
+    Layers/OsmRenderLayer.h
 SOURCES += Layer.cpp \
     ImageMapLayer.cpp \
-    LayerWidget.cpp
+    LayerWidget.cpp \
+    Layers/OsmRenderLayer.cpp
 FORMS += LayerWidget.ui \
     FilterEditDialog.ui \
     LicenseDisplayDialog.ui
