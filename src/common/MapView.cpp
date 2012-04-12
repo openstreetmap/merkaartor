@@ -50,6 +50,7 @@ public:
     qreal NodeWidth;
     int ZoomLevel;
     CoordBox Viewport;
+    QList<CoordBox> invalidRects;
     QPoint theVectorPanDelta;
     qreal theVectorRotation;
     QList<Node*> theVirtualNodes;
@@ -77,9 +78,10 @@ public:
 /*********************/
 
 MapView::MapView(QWidget* parent) :
-    QWidget(parent), Main(dynamic_cast<MainWindow*>(parent)), StaticBackground(0), StaticBuffer(0),
-        SelectionLocked(false),lockIcon(0),
-        p(new MapViewPrivate)
+    QWidget(parent), Main(dynamic_cast<MainWindow*>(parent)), StaticBackground(0)
+  , StaticWireframe(0), StaticTouchup(0)
+  , SelectionLocked(false),lockIcon(0)
+  , p(new MapViewPrivate)
 {
     installEventFilter(Main);
 
@@ -140,7 +142,8 @@ MapView::MapView(QWidget* parent) :
 MapView::~MapView()
 {
     delete StaticBackground;
-    delete StaticBuffer;
+    delete StaticWireframe;
+    delete StaticTouchup;
     delete p;
 }
 
@@ -167,6 +170,8 @@ void MapView::invalidate(bool updateStaticBuffer, bool updateMap)
     if (updateStaticBuffer) {
         if (p->theDocument)
             p->osmLayer->forceRedraw(p->theProjection, p->theTransform, rect(), p->PixelPerM, p->ROptions);
+        p->invalidRects.clear();
+        p->invalidRects.push_back(p->Viewport);
         p->theVectorPanDelta = QPoint(0, 0);
         SAFE_DELETE(StaticBackground)
     }
@@ -205,33 +210,27 @@ void MapView::invalidate(bool updateStaticBuffer, bool updateMap)
 
 void MapView::panScreen(QPoint delta)
 {
+    Coord cDelta = fromView(delta) - fromView(QPoint(0, 0));
     if (p->BackgroundOnlyPanZoom) {
-        Coord cDelta = fromView(delta) - fromView(QPoint(0, 0));
         p->BackgroundOnlyVpTransform.translate(-cDelta.x(), -cDelta.y());
     } else {
         p->theVectorPanDelta += delta;
 
-//        CoordBox r1, r2;
-//        if (delta.x()) {
-//            if (delta.x() < 0)
-//                r1 = CoordBox(p->Viewport.bottomRight(), Coord(p->Viewport.topRight().x() - cDelta.x(), p->Viewport.topRight().y())); // OK
-//            else
-//                r1 = CoordBox(Coord(p->Viewport.bottomLeft().x() - cDelta.x(), p->Viewport.bottomLeft().y()), p->Viewport.topLeft()); // OK
-//            p->invalidRects.push_back(r1);
-//        }
-//        if (delta.y()) {
-//            if (delta.y() < 0)
-//                r2 = CoordBox(Coord(p->Viewport.bottomLeft().x(), p->Viewport.bottomLeft().y() - cDelta.y()), p->Viewport.bottomRight()); // OK
-//            else
-//                r2 = CoordBox(p->Viewport.topLeft(), Coord( p->Viewport.bottomRight().x(), p->Viewport.topRight().y() - cDelta.y())); //NOK
-//            p->invalidRects.push_back(r2);
-//        }
-
-
-        //qDebug() << "Inv rects size: " << p->invalidRects.size();
-        //    qDebug() << "delta: " << delta;
-        //qDebug() << "r1 : " << p->theTransform.map(p->theProjection.project(r1.topLeft())) << ", " << p->theTransform.map(p->theProjection.project(r1.bottomRight()));
-        //qDebug() << "r2 : " << p->theTransform.map(p->theProjection.project(r2.topLeft())) << ", " << p->theTransform.map(p->theProjection.project(r2.bottomRight()));
+        CoordBox r1, r2;
+        if (delta.x()) {
+            if (delta.x() < 0)
+                r1 = CoordBox(p->Viewport.bottomRight(), Coord(p->Viewport.topRight().x() - cDelta.x(), p->Viewport.topRight().y())); // OK
+            else
+                r1 = CoordBox(Coord(p->Viewport.bottomLeft().x() - cDelta.x(), p->Viewport.bottomLeft().y()), p->Viewport.topLeft()); // OK
+            p->invalidRects.push_back(r1);
+        }
+        if (delta.y()) {
+            if (delta.y() < 0)
+                r2 = CoordBox(Coord(p->Viewport.bottomLeft().x(), p->Viewport.bottomLeft().y() - cDelta.y()), p->Viewport.bottomRight()); // OK
+            else
+                r2 = CoordBox(p->Viewport.topLeft(), Coord( p->Viewport.bottomRight().x(), p->Viewport.topRight().y() - cDelta.y())); //NOK
+            p->invalidRects.push_back(r2);
+        }
 
         p->theTransform.translate((qreal)(delta.x())/p->theTransform.m11(), (qreal)(delta.y())/p->theTransform.m22());
         p->theInvertedTransform = p->theTransform.inverted();
@@ -286,8 +285,13 @@ void MapView::paintEvent(QPaintEvent * anEvent)
     }
     P.restore();
 
-    updateStaticBuffer();
-    P.drawPixmap(p->theVectorPanDelta, *StaticBuffer);
+    if (!p->invalidRects.isEmpty()) {
+        updateWireframe();
+    }
+    P.drawPixmap(p->theVectorPanDelta, *StaticWireframe);
+//    drawFeatures(P);
+//    P.drawPixmap(p->theVectorPanDelta, *StaticTouchup);
+
 
     drawLatLonGrid(P);
     drawDownloadAreas(P);
@@ -531,56 +535,9 @@ void MapView::drawLatLonGrid(QPainter & P)
 
 void MapView::drawFeatures(QPainter & P)
 {
-//    for (int i=0; i<p->theDocument->layerSize(); ++i)
-//        g_backend.getFeatureSet(p->theDocument->getLayer(i), p->theFeatures, p->invalidRects, p->theProjection);
-
-//    p->renderer.render(&P, p->theFeatures, p->ROptions, this);
-
-//    p->renderGathering.waitForFinished();
-    QMap<RenderPriority, QSet <Feature*> > theFeatures;
-    QMap<RenderPriority, QSet<Feature*> >::const_iterator itm;
-    QSet<Feature*>::const_iterator it;
-
-    for (int i=0; i<p->theDocument->layerSize(); ++i)
-        g_backend.getFeatureSet(p->theDocument->getLayer(i), theFeatures, p->Viewport, p->theProjection);
-
-    if (!p->osmLayer->isRenderingDone() || TEST_RFLAGS(RendererOptions::Interacting)) {
-        P.save();
-        P.setRenderHint(QPainter::Antialiasing, TEST_RFLAGS(RendererOptions::Interacting));
-
-        for (itm = theFeatures.constBegin() ;itm != theFeatures.constEnd(); ++itm)
-        {
-            for (it = itm.value().constBegin() ;it != itm.value().constEnd(); ++it)
-            {
-                qreal alpha = (*it)->getAlpha();
-                P.setOpacity(alpha);
-
-                (*it)->drawSimple(P, this);
-            }
-        }
-        P.restore();
-    }
-
-
     if (!TEST_RFLAGS(RendererOptions::Interacting)) {
         p->osmLayer->drawImage(&P);
     }
-
-    P.save();
-    P.setRenderHint(QPainter::Antialiasing);
-
-    for (itm = theFeatures.constBegin() ;itm != theFeatures.constEnd(); ++itm)
-    {
-        for (it = itm.value().constBegin() ;it != itm.value().constEnd(); ++it)
-        {
-            qreal alpha = (*it)->getAlpha();
-            P.setOpacity(alpha);
-
-            (*it)->drawTouchup(P, this);
-        }
-    }
-    P.restore();
-
 }
 
 void MapView::drawDownloadAreas(QPainter & P)
@@ -634,60 +591,95 @@ void MapView::updateStaticBackground()
     }
 }
 
-void MapView::updateStaticBuffer()
+void MapView::updateWireframe()
 {
-//    QPainter P;
-
-//    if (!p->theVectorPanDelta.isNull()) {
-//#if QT_VERSION < 0x040600
-//        QPixmap savPix;
-//        savPix = StaticBuffer->copy();
-//        StaticBuffer->fill(Qt::transparent);
-//        P.begin(StaticBuffer);
-//        P.drawPixmap(p->theVectorPanDelta, savPix);
-//        P.setClipping(true);
-//        P.setClipRegion(QRegion(rect()) - QRegion(QRect(p->theVectorPanDelta, size())));
-//#else
-//        QRegion exposed;
-//        StaticBuffer->scroll(p->theVectorPanDelta.x(), p->theVectorPanDelta.y(), StaticBuffer->rect(), &exposed);
-//        P.begin(StaticBuffer);
-//        P.setClipping(true);
-//        P.setClipRegion(exposed);
-//        P.eraseRect(StaticBuffer->rect());
-//#endif
-//    } else {
-//        StaticBuffer->fill(Qt::transparent);
-//        P.begin(StaticBuffer);
-//        P.setClipping(true);
-//        P.setClipRegion(rect());
-//    }
-
-//    if (!p->invalidRects.isEmpty()) {
-////        P.setRenderHint(QPainter::Antialiasing);
-////        P.setClipping(true);
-////        P.setClipRegion(QRegion(rect()));
-//        if (M_PREFS->getUseAntiAlias())
-//            if (p->invalidRects[0] == p->Viewport || M_PREFS->getAntiAliasWhilePanning())
-//                P.setRenderHint(QPainter::Antialiasing);
-//        drawFeatures(P);
-//        P.end();
-//    }
-
-//    p->invalidRects.clear();
+    QMap<RenderPriority, QSet <Feature*> > theFeatures;
+    QMap<RenderPriority, QSet<Feature*> >::const_iterator itm;
+    QSet<Feature*>::const_iterator it;
 
     QPainter P;
 
-    StaticBuffer->fill(Qt::transparent);
-    P.begin(StaticBuffer);
-    P.setCompositionMode(QPainter::CompositionMode_Source);
-    P.setClipping(true);
-    P.setClipRegion(rect());
-//    if (M_PREFS->getUseAntiAlias())
-//        P.setRenderHint(QPainter::Antialiasing);
-    drawFeatures(P);
+    for (int i=0; i<p->theDocument->layerSize(); ++i)
+        g_backend.getFeatureSet(p->theDocument->getLayer(i), theFeatures, p->invalidRects, p->theProjection);
+
+    if (!p->theVectorPanDelta.isNull()) {
+        QRegion exposed;
+        StaticWireframe->scroll(p->theVectorPanDelta.x(), p->theVectorPanDelta.y(), StaticWireframe->rect(), &exposed);
+        P.begin(StaticWireframe);
+        P.setClipping(true);
+        P.setClipRegion(exposed);
+        P.fillRect(StaticWireframe->rect(), Qt::transparent);
+    } else {
+        StaticWireframe->fill(Qt::transparent);
+        P.begin(StaticWireframe);
+        P.setClipping(true);
+        P.setClipRegion(rect());
+    }
+
+    if (M_PREFS->getUseAntiAlias())
+        if (p->invalidRects[0] == p->Viewport || M_PREFS->getAntiAliasWhilePanning())
+            P.setRenderHint(QPainter::Antialiasing);
+
+    if (!p->osmLayer->isRenderingDone() || TEST_RFLAGS(RendererOptions::Interacting) || true) {
+        P.setRenderHint(QPainter::Antialiasing, TEST_RFLAGS(RendererOptions::Interacting));
+
+        for (itm = theFeatures.constBegin() ;itm != theFeatures.constEnd(); ++itm)
+        {
+            for (it = itm.value().constBegin() ;it != itm.value().constEnd(); ++it)
+            {
+                qreal alpha = (*it)->getAlpha();
+                P.setOpacity(alpha);
+
+                (*it)->drawSimple(P, this);
+            }
+        }
+    }
     P.end();
 
+    if (!p->theVectorPanDelta.isNull()) {
+        QRegion exposed;
+        StaticTouchup->scroll(p->theVectorPanDelta.x(), p->theVectorPanDelta.y(), StaticTouchup->rect(), &exposed);
+        P.begin(StaticTouchup);
+        P.setClipping(true);
+        P.setClipRegion(exposed);
+        P.fillRect(StaticTouchup->rect(), Qt::transparent);
+    } else {
+        StaticTouchup->fill(Qt::transparent);
+        P.begin(StaticTouchup);
+        P.setClipping(true);
+        P.setClipRegion(rect());
+    }
+
+    if (M_PREFS->getUseAntiAlias())
+        P.setRenderHint(QPainter::Antialiasing);
+
+    for (itm = theFeatures.constBegin() ;itm != theFeatures.constEnd(); ++itm)
+    {
+        for (it = itm.value().constBegin() ;it != itm.value().constEnd(); ++it)
+        {
+            qreal alpha = (*it)->getAlpha();
+            P.setOpacity(alpha);
+
+            (*it)->drawTouchup(P, this);
+        }
+    }
+    P.end();
+
+    p->invalidRects.clear();
     p->theVectorPanDelta = QPoint(0, 0);
+
+
+//    QPainter P;
+
+//    StaticBuffer->fill(Qt::transparent);
+//    P.begin(StaticBuffer);
+//    P.setCompositionMode(QPainter::CompositionMode_Source);
+//    P.setClipping(true);
+//    P.setClipRegion(rect());
+////    if (M_PREFS->getUseAntiAlias())
+////        P.setRenderHint(QPainter::Antialiasing);
+//    drawFeatures(P);
+//    P.end();
 }
 
 void MapView::mousePressEvent(QMouseEvent* anEvent)
@@ -776,10 +768,15 @@ void MapView::resizeEvent(QResizeEvent * ev)
 
     QWidget::resizeEvent(ev);
 
-    if (!StaticBuffer || (StaticBuffer->size() != size()))
+    if (!StaticWireframe || (StaticWireframe->size() != size()))
     {
-        delete StaticBuffer;
-        StaticBuffer = new QPixmap(size());
+        delete StaticWireframe;
+        StaticWireframe = new QPixmap(size());
+    }
+    if (!StaticTouchup || (StaticTouchup->size() != size()))
+    {
+        delete StaticTouchup;
+        StaticTouchup = new QPixmap(size());
     }
 
     invalidate(true, true);

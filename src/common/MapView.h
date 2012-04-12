@@ -44,7 +44,7 @@ public:
 
     void panScreen(QPoint delta) ;
     void rotateScreen(QPoint center, qreal angle);
-    void invalidate(bool updateStaticBuffer, bool updateMap);
+    void invalidate(bool updateWireframe, bool updateMap);
 
     virtual void paintEvent(QPaintEvent* anEvent);
     virtual void mousePressEvent(QMouseEvent * event);
@@ -97,11 +97,12 @@ public:
 private:
     void drawGPS(QPainter & painter);
     void updateStaticBackground();
-    void updateStaticBuffer();
+    void updateWireframe();
 
     MainWindow* Main;
     QPixmap* StaticBackground;
-    QPixmap* StaticBuffer;
+    QPixmap* StaticWireframe;
+    QPixmap* StaticTouchup;
     bool StaticMapUpToDate;
     bool SelectionLocked;
     QLabel* lockIcon;
