@@ -260,6 +260,10 @@ void PreferencesDialog::loadPrefs()
     CustomStylesDir->setText(cs);
     updateStyles();
 
+    rbQuickEdit->setChecked(M_PREFS->getEditRendering() == 0);
+    rbWireframeEdit->setChecked(M_PREFS->getEditRendering() == 1);
+    rbFullEdit->setChecked(M_PREFS->getEditRendering() == 2);
+
     cbDisableStyleForTracks->setChecked(M_PREFS->getDisableStyleForTracks());
 
     QString t = M_PREFS->getDefaultTemplate();
@@ -404,6 +408,13 @@ void PreferencesDialog::savePrefs()
     M_PREFS->setUseAntiAlias(cbAntiAlias->isChecked());
     M_PREFS->setAntiAliasWhilePanning(!cbDisableAntialiasInPanning->isChecked());
     M_PREFS->setCustomStyle(CustomStylesDir->text());
+
+    if (rbQuickEdit->isChecked())
+        M_PREFS->setEditRendering(0);
+    else if (rbWireframeEdit->isChecked())
+        M_PREFS->setEditRendering(1);
+    else
+        M_PREFS->setEditRendering(2);
 
     bool PainterToInvalidate = false;
     if (cbDisableStyleForTracks->isChecked() != M_PREFS->getDisableStyleForTracks()) {

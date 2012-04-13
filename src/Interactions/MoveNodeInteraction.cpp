@@ -275,8 +275,7 @@ void MoveNodeInteraction::snapMouseMoveEvent(QMouseEvent* event, Feature* Closer
                 Moving[i]->setPosition(OriginalPosition[i]+Diff);
             }
         }
-        view()->update();
-//        view()->invalidate(true, false);
+        view()->invalidate(true, false);
     }
 }
 

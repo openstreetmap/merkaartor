@@ -239,7 +239,7 @@ void CreateSingleWayInteraction::snapMouseReleaseEvent(QMouseEvent* anEvent, Fea
                 theList->add(new AddFeatureCommand(theMain->document()->getDirtyOrOriginLayer(),N,true));
                 theList->add(new WayAddNodeCommand(aRoad,N,SnapIdx,theMain->document()->getDirtyOrOriginLayer(aRoad)));
                 document()->addHistory(theList);
-                view()->update();
+                view()->invalidate(true, false);
                 FirstNode = N;
             }
         }
@@ -299,7 +299,7 @@ void CreateSingleWayInteraction::snapMouseReleaseEvent(QMouseEvent* anEvent, Fea
                 theList->add(new AddFeatureCommand(theMain->document()->getDirtyOrOriginLayer(),N,true));
                 theList->add(new WayAddNodeCommand(aRoad,N,SnapIdx,theMain->document()->getDirtyOrOriginLayer(aRoad)));
                 document()->addHistory(theList);
-                view()->update();
+                view()->invalidate(true, false);
                 To = N;
             }
             if (!To)
@@ -315,7 +315,7 @@ void CreateSingleWayInteraction::snapMouseReleaseEvent(QMouseEvent* anEvent, Fea
             else
                 L->add(new WayAddNodeCommand(theRoad,To,theMain->document()->getDirtyOrOriginLayer(theRoad)));
             document()->addHistory(L);
-            view()->update();
+            view()->invalidate(true, false);
             theMain->properties()->setSelection(theRoad);
         }
         FirstPoint = XY_TO_COORD(LastCursor);

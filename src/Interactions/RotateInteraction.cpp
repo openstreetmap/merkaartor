@@ -150,7 +150,7 @@ void RotateInteraction::snapMouseReleaseEvent(QMouseEvent * anEvent, Feature* /*
 
 
         document()->addHistory(theList);
-        view()->update();
+        view()->invalidate(true, false);
     }
     Angle = 0.0;
     Rotating.clear();
@@ -169,7 +169,7 @@ void RotateInteraction::snapMouseMoveEvent(QMouseEvent* anEvent, Feature* /*Clos
                 continue;
             Rotating[i]->setPosition(rotatePosition(OriginalPosition[i], Angle));
         }
-        view()->update();
+        view()->invalidate(true, false);
     }
 }
 

@@ -90,6 +90,7 @@ public:
 
 OsmRenderLayer::OsmRenderLayer(QObject *parent)
     : QObject(parent)
+    , theDocument(0)
 {
     connect(&(renderGatheringWatcher), SIGNAL(finished()), SIGNAL(renderingDone()));
 }
@@ -112,8 +113,13 @@ void OsmRenderLayer::setProjection(const Projection& aProjection)
 
 void OsmRenderLayer::forceRedraw(const Projection& aProjection, const QTransform &aTransform, const QRect& rect, qreal ppm, const RendererOptions& roptions)
 {
-    if (renderGathering.isRunning())
+    if (renderGathering.isRunning()) {
         renderGathering.cancel();
+        renderGathering.waitForFinished();
+    }
+
+    if (!theDocument)
+        return;
 
     setProjection(aProjection);
     setTransform(aTransform);
@@ -154,8 +160,10 @@ void OsmRenderLayer::forceRedraw(const Projection& aProjection, const QTransform
 
 void OsmRenderLayer::pan(QPoint delta)
 {
-    if (renderGathering.isRunning())
+    if (renderGathering.isRunning()) {
         renderGathering.cancel();
+        renderGathering.waitForFinished();
+    }
 
     theTransform.translate((qreal)(delta.x())/theTransform.m11(), (qreal)(delta.y())/theTransform.m22());
     theInvertedTransform = theTransform.inverted();

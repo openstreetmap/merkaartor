@@ -168,10 +168,16 @@ IDocument *MapView::document()
 void MapView::invalidate(bool updateStaticBuffer, bool updateMap)
 {
     if (updateStaticBuffer) {
-        if (p->theDocument)
+        if (!TEST_RFLAGS(RendererOptions::Interacting))
             p->osmLayer->forceRedraw(p->theProjection, p->theTransform, rect(), p->PixelPerM, p->ROptions);
-        p->invalidRects.clear();
-        p->invalidRects.push_back(p->Viewport);
+        else if (M_PREFS->getEditRendering() == 2)
+            p->osmLayer->forceRedraw(p->theProjection, p->theTransform, rect(), p->PixelPerM, p->ROptions);
+
+        if (!p->osmLayer->isRenderingDone() || (TEST_RFLAGS(RendererOptions::Interacting) && M_PREFS->getEditRendering() == 1)) {
+            p->invalidRects.clear();
+            p->invalidRects.push_back(p->Viewport);
+        }
+
         p->theVectorPanDelta = QPoint(0, 0);
         SAFE_DELETE(StaticBackground)
     }
@@ -288,9 +294,11 @@ void MapView::paintEvent(QPaintEvent * anEvent)
     if (!p->invalidRects.isEmpty()) {
         updateWireframe();
     }
-    P.drawPixmap(p->theVectorPanDelta, *StaticWireframe);
-//    drawFeatures(P);
-//    P.drawPixmap(p->theVectorPanDelta, *StaticTouchup);
+    if (!p->osmLayer->isRenderingDone() || M_PREFS->getEditRendering() == 1)
+        P.drawPixmap(p->theVectorPanDelta, *StaticWireframe);
+    if (!(TEST_RFLAGS(RendererOptions::Interacting) && M_PREFS->getEditRendering() == 1))
+        drawFeatures(P);
+    P.drawPixmap(p->theVectorPanDelta, *StaticTouchup);
 
 
     drawLatLonGrid(P);
@@ -535,9 +543,7 @@ void MapView::drawLatLonGrid(QPainter & P)
 
 void MapView::drawFeatures(QPainter & P)
 {
-    if (!TEST_RFLAGS(RendererOptions::Interacting)) {
-        p->osmLayer->drawImage(&P);
-    }
+    p->osmLayer->drawImage(&P);
 }
 
 void MapView::drawDownloadAreas(QPainter & P)
@@ -608,6 +614,7 @@ void MapView::updateWireframe()
         P.begin(StaticWireframe);
         P.setClipping(true);
         P.setClipRegion(exposed);
+        P.setCompositionMode(QPainter::CompositionMode_Source);
         P.fillRect(StaticWireframe->rect(), Qt::transparent);
     } else {
         StaticWireframe->fill(Qt::transparent);
@@ -616,13 +623,9 @@ void MapView::updateWireframe()
         P.setClipRegion(rect());
     }
 
-    if (M_PREFS->getUseAntiAlias())
-        if (p->invalidRects[0] == p->Viewport || M_PREFS->getAntiAliasWhilePanning())
+    if (!p->osmLayer->isRenderingDone() || M_PREFS->getEditRendering() == 1) {
+        if (M_PREFS->getEditRendering() == 1)
             P.setRenderHint(QPainter::Antialiasing);
-
-    if (!p->osmLayer->isRenderingDone() || TEST_RFLAGS(RendererOptions::Interacting) || true) {
-        P.setRenderHint(QPainter::Antialiasing, TEST_RFLAGS(RendererOptions::Interacting));
-
         for (itm = theFeatures.constBegin() ;itm != theFeatures.constEnd(); ++itm)
         {
             for (it = itm.value().constBegin() ;it != itm.value().constEnd(); ++it)
@@ -642,6 +645,7 @@ void MapView::updateWireframe()
         P.begin(StaticTouchup);
         P.setClipping(true);
         P.setClipRegion(exposed);
+        P.setCompositionMode(QPainter::CompositionMode_Source);
         P.fillRect(StaticTouchup->rect(), Qt::transparent);
     } else {
         StaticTouchup->fill(Qt::transparent);
@@ -650,8 +654,7 @@ void MapView::updateWireframe()
         P.setClipRegion(rect());
     }
 
-    if (M_PREFS->getUseAntiAlias())
-        P.setRenderHint(QPainter::Antialiasing);
+    P.setRenderHint(QPainter::Antialiasing);
 
     for (itm = theFeatures.constBegin() ;itm != theFeatures.constEnd(); ++itm)
     {
@@ -772,10 +775,12 @@ void MapView::resizeEvent(QResizeEvent * ev)
     {
         delete StaticWireframe;
         StaticWireframe = new QPixmap(size());
+        StaticWireframe->fill(Qt::transparent);
     }
     if (!StaticTouchup || (StaticTouchup->size() != size()))
     {
         delete StaticTouchup;
+        StaticTouchup = new QPixmap(size());
         StaticTouchup = new QPixmap(size());
     }
 
@@ -1101,7 +1106,7 @@ void MapView::setInteracting(bool val)
         p->ROptions.options |= RendererOptions::Interacting;
     else
         p->ROptions.options &= ~RendererOptions::Interacting;
-    update();
+    invalidate(true, false);
 }
 
 qreal MapView::pixelPerM() const

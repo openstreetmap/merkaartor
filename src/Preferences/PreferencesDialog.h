@@ -17,7 +17,7 @@
 #include <QBuffer>
 #include <QListWidgetItem>
 
-#include <ui_PreferencesDialog.h>
+#include "ui_PreferencesDialog.h"
 #include "ui_OsmServerWidget.h"
 #include "MerkaartorPreferences.h"
 

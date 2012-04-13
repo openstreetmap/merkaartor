@@ -187,7 +187,7 @@ void CreateDoubleWayInteraction::mousePressEvent(QMouseEvent* anEvent)
                 L->add(new WayAddNodeCommand(R1,B1));
                 L->add(new WayAddNodeCommand(R2,B2,(int)0));
                 document()->addHistory(L);
-                view()->update();
+                view()->invalidate(true, false);
                 //FirstPoint = view()->projection().inverse(anEvent->pos());
                 PreviousPoints[R1->size()-1] = XY_TO_COORD(anEvent->pos());
                 FirstDistance = DockData.RoadDistance->text().toDouble();
@@ -243,7 +243,7 @@ void CreateDoubleWayInteraction::mousePressEvent(QMouseEvent* anEvent)
                 L->add(new WayAddNodeCommand(R2,B2));
                 L->add(new WayAddNodeCommand(R2,A2));
                 document()->addHistory(L);
-                view()->update();
+                view()->invalidate(true, false);
                 //FirstPoint = view()->projection().inverse(anEvent->pos());
                 PreviousPoints[R1->size()-1] = XY_TO_COORD(anEvent->pos());
                 FirstDistance = DockData.RoadDistance->text().toDouble();

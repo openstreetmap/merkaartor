@@ -1216,6 +1216,7 @@ M_PARAM_IMPLEMENT_STRING(DefaultStyle, style, ":/Styles/Mapnik.mas")
 M_PARAM_IMPLEMENT_STRING(CustomStyle, style, "")
 M_PARAM_IMPLEMENT_BOOL(DisableStyleForTracks, style, true)
 M_PARAM_IMPLEMENT_STRINGLIST(TechnicalTags, style, TECHNICAL_TAGS)
+M_PARAM_IMPLEMENT_INT(EditRendering, style, 0)
 
 /* Zoom */
 M_PARAM_IMPLEMENT_INT(ZoomIn, zoom, 133)

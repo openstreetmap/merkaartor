@@ -247,10 +247,10 @@ public:
     void setOsmPassword(const QString & theValue);
     QString getOsmPassword() const;
 
-    M_PARAM_DECLARE_DOUBLE(MaxDistNodes);
+    M_PARAM_DECLARE_DOUBLE(MaxDistNodes)
 
-    M_PARAM_DECLARE_BOOL(AutoSaveDoc);
-    M_PARAM_DECLARE_BOOL(AutoExtractTracks);
+    M_PARAM_DECLARE_BOOL(AutoSaveDoc)
+    M_PARAM_DECLARE_BOOL(AutoExtractTracks)
 
     /* Export Type */
     void setExportType(ExportType theValue);
@@ -281,6 +281,7 @@ public:
     M_PARAM_DECLARE_STRING(CustomStyle)
     M_PARAM_DECLARE_BOOL(DisableStyleForTracks)
     M_PARAM_DECLARE_STRINGList(TechnicalTags)
+    M_PARAM_DECLARE_INT(EditRendering)
 
     /* Visual */
     M_PARAM_DECLARE_INT(ZoomIn)
