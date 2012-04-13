@@ -163,8 +163,8 @@ const CoordBox& Node::boundingBox(bool) const
 
 void Node::drawSimple(QPainter &P, MapView *theView)
 {
-    if (!TEST_RFLAGS(RendererOptions::Interacting))
-        return;
+//    if (!M_PREFS->getWireframeView() && !TEST_RFLAGS(RendererOptions::Interacting))
+//        return;
 
     if (! ((isReadonly() || !isSelectable(theView->pixelPerM(), theView->renderOptions())) && (!isPOI() && !isWaypoint())))
         //        if (!Pt->isReadonly() && Pt->isSelectable(r))

@@ -311,6 +311,8 @@ public:
     M_PARAM_DECLARE_BOOL(RelationsVisible)
     M_PARAM_DECLARE_BOOL(PhotosVisible)
     M_PARAM_DECLARE_BOOL(DirtyVisible)
+    M_PARAM_DECLARE_BOOL(WireframeView)
+
 
     /* Templates */
     M_PARAM_DECLARE_STRING(DefaultTemplate)

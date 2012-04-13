@@ -24,7 +24,7 @@
      <x>0</x>
      <y>0</y>
      <width>1100</width>
-     <height>19</height>
+     <height>20</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuHelp">
@@ -115,6 +115,7 @@
     <addaction name="viewZoomInAction"/>
     <addaction name="viewLockZoomAction"/>
     <addaction name="separator"/>
+    <addaction name="viewWireframeAction"/>
     <addaction name="mnuAreaOpacity"/>
     <addaction name="mnuProjections"/>
     <addaction name="separator"/>
@@ -1849,6 +1850,17 @@
   <action name="layersMapdustAction">
    <property name="text">
     <string>Add Map&amp;Dust layer</string>
+   </property>
+  </action>
+  <action name="viewWireframeAction">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Wireframe</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Alt+W</string>
    </property>
   </action>
  </widget>

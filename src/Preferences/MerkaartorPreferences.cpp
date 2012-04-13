@@ -1248,6 +1248,7 @@ M_PARAM_IMPLEMENT_BOOL(RelationsVisible, visual, false)
 M_PARAM_IMPLEMENT_BOOL(PhotosVisible, visual, true)
 M_PARAM_IMPLEMENT_BOOL(VirtualNodesVisible, visual, true)
 M_PARAM_IMPLEMENT_BOOL(DirtyVisible, visual, true)
+M_PARAM_IMPLEMENT_BOOL(WireframeView, visual, false)
 
 /* Templates */
 M_PARAM_IMPLEMENT_STRING(DefaultTemplate, templates, ":/Templates/default.mat")

@@ -168,12 +168,14 @@ IDocument *MapView::document()
 void MapView::invalidate(bool updateStaticBuffer, bool updateMap)
 {
     if (updateStaticBuffer) {
-        if (!TEST_RFLAGS(RendererOptions::Interacting))
-            p->osmLayer->forceRedraw(p->theProjection, p->theTransform, rect(), p->PixelPerM, p->ROptions);
-        else if (M_PREFS->getEditRendering() == 2)
-            p->osmLayer->forceRedraw(p->theProjection, p->theTransform, rect(), p->PixelPerM, p->ROptions);
+        if (!M_PREFS->getWireframeView()) {
+            if (!TEST_RFLAGS(RendererOptions::Interacting))
+                p->osmLayer->forceRedraw(p->theProjection, p->theTransform, rect(), p->PixelPerM, p->ROptions);
+            else if (M_PREFS->getEditRendering() == 2)
+                p->osmLayer->forceRedraw(p->theProjection, p->theTransform, rect(), p->PixelPerM, p->ROptions);
+        }
 
-        if (!p->osmLayer->isRenderingDone() || (TEST_RFLAGS(RendererOptions::Interacting) && M_PREFS->getEditRendering() == 1)) {
+        if (M_PREFS->getWireframeView() || !p->osmLayer->isRenderingDone() || (TEST_RFLAGS(RendererOptions::Interacting) && M_PREFS->getEditRendering() == 1)) {
             p->invalidRects.clear();
             p->invalidRects.push_back(p->Viewport);
         }
@@ -241,7 +243,7 @@ void MapView::panScreen(QPoint delta)
         p->theTransform.translate((qreal)(delta.x())/p->theTransform.m11(), (qreal)(delta.y())/p->theTransform.m22());
         p->theInvertedTransform = p->theTransform.inverted();
         viewportRecalc(rect());
-        if (p->theDocument) {
+        if (!M_PREFS->getWireframeView() && p->theDocument) {
             p->osmLayer->pan(delta);
         }
     }
@@ -294,10 +296,11 @@ void MapView::paintEvent(QPaintEvent * anEvent)
     if (!p->invalidRects.isEmpty()) {
         updateWireframe();
     }
-    if (!p->osmLayer->isRenderingDone() || M_PREFS->getEditRendering() == 1)
+    if (M_PREFS->getWireframeView() || !p->osmLayer->isRenderingDone() || M_PREFS->getEditRendering() == 1)
         P.drawPixmap(p->theVectorPanDelta, *StaticWireframe);
-    if (!(TEST_RFLAGS(RendererOptions::Interacting) && M_PREFS->getEditRendering() == 1))
-        drawFeatures(P);
+    if (!M_PREFS->getWireframeView())
+        if (!(TEST_RFLAGS(RendererOptions::Interacting) && M_PREFS->getEditRendering() == 1))
+            drawFeatures(P);
     P.drawPixmap(p->theVectorPanDelta, *StaticTouchup);
 
 
@@ -623,8 +626,10 @@ void MapView::updateWireframe()
         P.setClipRegion(rect());
     }
 
-    if (!p->osmLayer->isRenderingDone() || M_PREFS->getEditRendering() == 1) {
-        if (M_PREFS->getEditRendering() == 1)
+    if (M_PREFS->getWireframeView() || !p->osmLayer->isRenderingDone() || M_PREFS->getEditRendering() == 1) {
+        if (M_PREFS->getWireframeView() && M_PREFS->getUseAntiAlias())
+            P.setRenderHint(QPainter::Antialiasing);
+        else if (M_PREFS->getEditRendering() == 1)
             P.setRenderHint(QPainter::Antialiasing);
         for (itm = theFeatures.constBegin() ;itm != theFeatures.constEnd(); ++itm)
         {
