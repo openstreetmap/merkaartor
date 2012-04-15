@@ -16,7 +16,7 @@
      QMessageBox::Ignore | QMessageBox::Cancel, QMessageBox::Ignore) == QMessageBox::Ignore) \
         continue; \
     else { \
-        theView->invalidate(true, false); \
+        theView->invalidate(true, true, false); \
         return; \
     } \
 }
@@ -28,7 +28,7 @@
         if (replyButton == QMessageBox::No) \
             continue; \
         else if (replyButton == QMessageBox::Abort) { \
-            theView->invalidate(true, false); \
+            theView->invalidate(true, true, false); \
             return; \
         } \
         else if (replyButton != QMessageBox::Yes) \

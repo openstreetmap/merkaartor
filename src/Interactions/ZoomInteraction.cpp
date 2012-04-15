@@ -62,7 +62,7 @@ void ZoomInteraction::mouseReleaseEvent(QMouseEvent * event)
     {
         P2 = event->pos();
         view()->setViewport(CoordBox(XY_TO_COORD(P1),XY_TO_COORD(P2)),view()->rect());
-        view()->invalidate(true, true);
+        view()->invalidate(true, true, true);
         theMain->launchInteraction(0);
     }
 }

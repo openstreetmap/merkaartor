@@ -742,7 +742,7 @@ qreal PhotoNode::pixelDistance(const QPointF& Target, qreal ClearDistance, const
         QRect box(phPt, QSize(M_PREFS->getMaxGeoPicWidth()*rt, M_PREFS->getMaxGeoPicWidth()*rt/phRt));
         if (box.contains(Target.toPoint())) {
             photoLocationBR = !photoLocationBR;
-            theView->invalidate(true, false);
+            theView->invalidate(true, false, false);
         }
     }
 #endif

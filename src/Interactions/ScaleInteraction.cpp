@@ -150,7 +150,7 @@ void ScaleInteraction::snapMouseReleaseEvent(QMouseEvent * anEvent, Feature* /*C
 
 
         document()->addHistory(theList);
-        view()->invalidate(true, false);
+        view()->invalidate(true, true, false);
     }
     view()->setInteracting(false);
     Radius = 1.0;
@@ -169,7 +169,7 @@ void ScaleInteraction::snapMouseMoveEvent(QMouseEvent* anEvent, Feature* /*Close
                 continue;
             Scaling[i]->setPosition(scalePosition(OriginalPosition[i], Radius));
         }
-        view()->invalidate(true, false);
+        view()->invalidate(true, true, false);
     }
 }
 

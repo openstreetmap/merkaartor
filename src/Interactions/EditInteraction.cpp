@@ -257,7 +257,7 @@ void EditInteraction::snapMouseDoubleClickEvent(QMouseEvent* anEvent, Feature* a
 //            theList->add(new AddFeatureCommand(main()->document()->getDirtyOrOriginLayer(),N,true));
 //            document()->addHistory(theList);
 //            main()->properties()->setSelection(N);
-//            view()->invalidate(true, false);
+//            view()->invalidate(true, true, false);
 //       }
 //    }
 }
@@ -317,7 +317,7 @@ void EditInteraction::on_remove_triggered()
     }
     else
         delete theList;
-    view()->invalidate(true, false);
+    view()->invalidate(true, true, false);
 }
 
 void EditInteraction::on_reverse_triggered()
@@ -332,7 +332,7 @@ void EditInteraction::on_reverse_triggered()
         delete theList;
     } else {
         document()->addHistory(theList);
-        view()->invalidate(true, false);
+        view()->invalidate(true, true, false);
     }
 }
 

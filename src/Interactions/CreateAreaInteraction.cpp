@@ -108,7 +108,7 @@ void CreateAreaInteraction::startNewRoad(QMouseEvent* anEvent, Feature* aFeature
         theList->add(new AddFeatureCommand(theMain->document()->getDirtyOrOriginLayer(),N,true));
         theList->add(new WayAddNodeCommand(aRoad,N,SnapIdx));
         document()->addHistory(theList);
-        view()->invalidate(true, false);
+        view()->invalidate(true, true, false);
         FirstNode = N;
     }
     view()->setInteracting(true);
@@ -189,7 +189,7 @@ void CreateAreaInteraction::addToRoad(QMouseEvent* anEvent, Feature* Snap, Comma
         theList->add(new AddFeatureCommand(theMain->document()->getDirtyOrOriginLayer(),N,true));
         theList->add(new WayAddNodeCommand(aRoad,N,SnapIdx));
         document()->addHistory(theList);
-        view()->invalidate(true, false);
+        view()->invalidate(true, true, false);
         To = N;
     }
     if (!To)
@@ -229,7 +229,7 @@ void CreateAreaInteraction::snapMouseReleaseEvent(QMouseEvent* anEvent, Feature*
                 createNewRoad(L);
             addToRoad(anEvent, aFeature, L);
             document()->addHistory(L);
-            view()->invalidate(true, false);
+            view()->invalidate(true, true, false);
             if (theRelation)
                 theMain->properties()->setSelection(theRelation);
             else
@@ -269,7 +269,7 @@ void CreateAreaInteraction::closeAndFinish()
     CommandList* theList  = new CommandList(MainWindow::tr("Close Area %1").arg(theRoad->description()), theRoad);
     addToRoad(NULL, N, theList);
     document()->addHistory(theList);
-    view()->invalidate(true, false);
+    view()->invalidate(true, true, false);
     if (theRelation)
         theMain->properties()->setSelection(theRelation);
     else

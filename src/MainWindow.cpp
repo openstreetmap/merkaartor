@@ -1185,7 +1185,7 @@ void MainWindow::setAreaOpacity(QAction *act)
     qreal a = act->data().toDouble();
     M_PREFS->setAreaOpacity(int(a*100));
 
-    theView->invalidate(true, false);
+    theView->invalidate(true, true, false);
 }
 
 void MainWindow::adjustLayers(bool adjustViewport)
@@ -1212,7 +1212,7 @@ void MainWindow::adjustLayers(bool adjustViewport)
 void MainWindow::invalidateView(bool UpdateDock)
 {
     theView->setRenderOptions(p->renderOptions);
-    theView->invalidate(true, true);
+    theView->invalidate(true, true, true);
     //theLayers->updateContent();
     if (UpdateDock)
         p->theProperties->resetValues();
@@ -1312,7 +1312,7 @@ void MainWindow::on_editCutAction_triggered()
 
     properties()->setSelection(0);
     properties()->checkMenuStatus();
-    view()->invalidate(true, false);
+    view()->invalidate(true, true, false);
 }
 
 void MainWindow::on_editCopyAction_triggered()
@@ -1383,7 +1383,7 @@ void MainWindow::on_editPasteFeatureAction_triggered()
                     theList->setDescription("Paste Features");
                     theDocument->addHistory(theList);
 
-                    view()->invalidate(true, false);
+                    view()->invalidate(true, true, false);
 
                     return;
                 }
@@ -1408,7 +1408,7 @@ void MainWindow::on_editPasteFeatureAction_triggered()
     delete doc;
 
     p->theProperties->setSelection(theFeats);
-    view()->invalidate(true, false);
+    view()->invalidate(true, true, false);
 }
 
 void MainWindow::on_editPasteOverwriteAction_triggered()
@@ -1531,7 +1531,7 @@ void MainWindow::on_editPropertiesAction_triggered()
     if (theView->interaction() && dynamic_cast<EditInteraction*>(theView->interaction()))
         p->theProperties->setSelection(0);
     theView->unlockSelection();
-//    theView->invalidate(true, false);
+//    theView->invalidate(true, true, false);
     launchInteraction(new EditInteraction(this));
     view()->setInteracting(false);
     theInfo->setHtml(theView->interaction()->toHtml());
@@ -4151,7 +4151,7 @@ void MainWindow::updateGpsPosition(qreal latitude, qreal longitude, QDateTime ti
             QRectF vpr = vp.adjusted(lonDiff / 4, -latDiff / 4, -lonDiff / 4, latDiff / 4);
             if (!vpr.contains(gpsCoord)) {
                 theView->setCenter(gpsCoord, theView->rect());
-                theView->invalidate(false, true);
+                theView->invalidate(false, false, true);
             }
         }
 
@@ -4162,7 +4162,6 @@ void MainWindow::updateGpsPosition(qreal latitude, qreal longitude, QDateTime ti
             pt->setSpeed(speed);
             gpsRecLayer->add(pt);
             curGpsTrackSegment->add(pt);
-            theView->invalidate(false, false);
         }
     }
     theView->update();

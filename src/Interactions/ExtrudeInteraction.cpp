@@ -143,7 +143,7 @@ void ExtrudeInteraction::snapMouseReleaseEvent(QMouseEvent* anEvent, Feature* la
 
 
         document()->addHistory(theList);
-        view()->invalidate(true, false);
+        view()->invalidate(true, true, false);
     }
     Creating = false;
 }

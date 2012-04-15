@@ -129,5 +129,5 @@ void CreateNodeInteraction::createNode(Coord P, Feature* aFeat)
     }
     g_Merk_MainWindow->document()->addHistory(theList);
     g_Merk_MainWindow->properties()->setSelection(N);
-    g_Merk_MainWindow->view()->invalidate(true, false);
+    g_Merk_MainWindow->view()->invalidate(true, true, false);
 }

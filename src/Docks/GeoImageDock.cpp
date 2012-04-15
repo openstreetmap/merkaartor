@@ -213,7 +213,7 @@ void GeoImageDock::setImage(int ImageId)
         updateByMe = true;
         if (!Main->properties()->isSelected(theFeature)) {
             Main->properties()->setSelection(theFeature);
-            Main->view()->invalidate(true, false);
+            Main->view()->invalidate(true, true, false);
         }
         updateByMe = false;
     }
@@ -243,7 +243,7 @@ void GeoImageDock::removeImages(void)
     curImage = -1;
     Image->setImage("");
 
-    Main->view()->invalidate(true, false);
+    Main->view()->invalidate(true, true, false);
 }
 
 void GeoImageDock::toClipboard(void)
@@ -734,7 +734,7 @@ void GeoImageDock::loadImages(QStringList fileNames)
                     else
                         offset = 0;
                 } else {
-                    theView->invalidate(true, false);
+                    theView->invalidate(true, true, false);
                     if (photoLayer && !photoLayer->size()) {
                         theDocument->remove(photoLayer);
                         SAFE_DELETE(photoLayer);
@@ -791,7 +791,7 @@ void GeoImageDock::loadImages(QStringList fileNames)
         }
 
         if (progress.wasCanceled()) {
-            theView->invalidate(true, false);
+            theView->invalidate(true, true, false);
             if (photoLayer && !photoLayer->size()) {
                 theDocument->remove(photoLayer);
                 SAFE_DELETE(photoLayer);
@@ -810,7 +810,7 @@ void GeoImageDock::loadImages(QStringList fileNames)
         theDocument->remove(photoLayer);
         SAFE_DELETE(photoLayer);
     }
-    theView->invalidate(true, false);
+    theView->invalidate(true, true, false);
 
 }
 

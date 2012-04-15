@@ -147,7 +147,7 @@ void NativeRenderDialog::render(QPainter& P, QRect theR, RendererOptions opt)
     mapview->setGeometry(theR);
     mapview->setViewport(boundingBox(), theR);
     mapview->setRenderOptions(opt);
-    mapview->invalidate(true, false);
+    mapview->invalidate(true, true, false);
     mapview->drawFeatures(P);
     if (opt.options & RendererOptions::ScaleVisible)
         mapview->drawScale(P);

@@ -91,7 +91,7 @@ void Interaction::mouseReleaseEvent(QMouseEvent * anEvent)
 {
     if (Panning) {
         if (FirstPan != LastPan)
-            view()->invalidate(false, true);
+            view()->invalidate(false, false, true);
 #ifndef _MOBILE
         else
             if (anEvent->button() == Qt::RightButton)
@@ -104,7 +104,7 @@ void Interaction::mouseReleaseEvent(QMouseEvent * anEvent)
         CoordBox DragBox(StartDrag,XY_TO_COORD(anEvent->pos()));
         if (!DragBox.isEmpty()) {
             view()->setViewport(DragBox,view()->rect());
-            view()->invalidate(true, true);
+            view()->invalidate(true, true, true);
             theMain->launchInteraction(0);
         }
         Dragging = false;
@@ -121,7 +121,7 @@ void Interaction::mouseMoveEvent(QMouseEvent* anEvent)
             view()->panScreen(-Delta);
             LastPan = anEvent->pos();
 #if defined(ENABLE_NVIDIA_HACK)
-            view()->invalidate(true, false);
+            view()->invalidate(true, true, false);
 #endif // ENABLE_NVIDIA_HACK
         }
     } else
@@ -146,7 +146,7 @@ void Interaction::mouseMoveEvent(QMouseEvent* anEvent)
             view()->panScreen(-Delta);
             LastPan = anEvent->pos();
 #if defined(ENABLE_NVIDIA_HACK)
-            view()->invalidate(true, false);
+            view()->invalidate(true, true, false);
 #endif // ENABLE_NVIDIA_HACK
         } else
         if (Dragging)

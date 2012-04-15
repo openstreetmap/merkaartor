@@ -236,7 +236,7 @@ void MoveNodeInteraction::snapMouseReleaseEvent(QMouseEvent * event, Feature* Cl
         if (theList)
             document()->addHistory(theList);
         view()->setInteracting(false);
-        view()->invalidate(true, false);
+        view()->invalidate(true, true, false);
     } else
         SAFE_DELETE(theList);
     Moving.clear();
@@ -275,7 +275,7 @@ void MoveNodeInteraction::snapMouseMoveEvent(QMouseEvent* event, Feature* Closer
                 Moving[i]->setPosition(OriginalPosition[i]+Diff);
             }
         }
-        view()->invalidate(true, false);
+        view()->invalidate(true, true, false);
     }
 }
 

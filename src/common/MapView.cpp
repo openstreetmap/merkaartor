@@ -165,25 +165,24 @@ IDocument *MapView::document()
     return p->theDocument;
 }
 
-void MapView::invalidate(bool updateStaticBuffer, bool updateMap)
+void MapView::invalidate(bool updateWireframe, bool updateOsmMap, bool updateBgMap)
 {
-    if (updateStaticBuffer) {
+    if (updateOsmMap) {
         if (!M_PREFS->getWireframeView()) {
             if (!TEST_RFLAGS(RendererOptions::Interacting))
                 p->osmLayer->forceRedraw(p->theProjection, p->theTransform, rect(), p->PixelPerM, p->ROptions);
             else if (M_PREFS->getEditRendering() == 2)
                 p->osmLayer->forceRedraw(p->theProjection, p->theTransform, rect(), p->PixelPerM, p->ROptions);
         }
-
-        if (M_PREFS->getWireframeView() || !p->osmLayer->isRenderingDone() || (TEST_RFLAGS(RendererOptions::Interacting) && M_PREFS->getEditRendering() == 1)) {
-            p->invalidRects.clear();
-            p->invalidRects.push_back(p->Viewport);
-        }
+    }
+    if (updateWireframe) {
+        p->invalidRects.clear();
+        p->invalidRects.push_back(p->Viewport);
 
         p->theVectorPanDelta = QPoint(0, 0);
         SAFE_DELETE(StaticBackground)
     }
-    if (p->theDocument && updateMap) {
+    if (p->theDocument && updateBgMap) {
         IMapWatermark* WatermarkAdapter = NULL;
         for (LayerIterator<ImageMapLayer*> ImgIt(p->theDocument); !ImgIt.isEnd(); ++ImgIt) {
             if (ImgIt.get()->isVisible()) {
@@ -789,7 +788,7 @@ void MapView::resizeEvent(QResizeEvent * ev)
         StaticTouchup = new QPixmap(size());
     }
 
-    invalidate(true, true);
+    invalidate(true, true, true);
 }
 
 void MapView::dragEnterEvent(QDragEnterEvent *event)
@@ -850,14 +849,14 @@ void MapView::on_MoveLeft_activated()
     QPoint p(rect().width()/4,0);
     panScreen(p);
 
-//    invalidate(true, true);
+//    invalidate(true, true, true);
 }
 void MapView::on_MoveRight_activated()
 {
     QPoint p(-rect().width()/4,0);
     panScreen(p);
 
-//    invalidate(true, true);
+//    invalidate(true, true, true);
 }
 
 void MapView::on_MoveUp_activated()
@@ -865,7 +864,7 @@ void MapView::on_MoveUp_activated()
     QPoint p(0,rect().height()/4);
     panScreen(p);
 
-//    invalidate(true, true);
+//    invalidate(true, true, true);
 }
 
 void MapView::on_MoveDown_activated()
@@ -873,7 +872,7 @@ void MapView::on_MoveDown_activated()
     QPoint p(0,-rect().height()/4);
     panScreen(p);
 
-//    invalidate(true, true);
+//    invalidate(true, true, true);
 }
 
 void MapView::zoomIn()
@@ -1010,7 +1009,7 @@ void MapView::setViewport(const CoordBox & TargetMap,
             zoom(z, Screen.center(), Screen);
         }
     }
-    invalidate(true, true);
+    invalidate(true, true, true);
 }
 
 void MapView::zoom(qreal d, const QPoint & Around)
@@ -1041,7 +1040,7 @@ void MapView::zoom(qreal d, const QPoint & Around)
     }
 
     zoom(z, Around, rect());
-    invalidate(true, true);
+    invalidate(true, true, true);
 }
 
 void MapView::zoom(qreal d, const QPoint & Around,
@@ -1111,7 +1110,7 @@ void MapView::setInteracting(bool val)
         p->ROptions.options |= RendererOptions::Interacting;
     else
         p->ROptions.options &= ~RendererOptions::Interacting;
-    invalidate(true, false);
+    invalidate(true, true, false);
 }
 
 qreal MapView::pixelPerM() const

@@ -239,7 +239,7 @@ void CreateSingleWayInteraction::snapMouseReleaseEvent(QMouseEvent* anEvent, Fea
                 theList->add(new AddFeatureCommand(theMain->document()->getDirtyOrOriginLayer(),N,true));
                 theList->add(new WayAddNodeCommand(aRoad,N,SnapIdx,theMain->document()->getDirtyOrOriginLayer(aRoad)));
                 document()->addHistory(theList);
-                view()->invalidate(true, false);
+                view()->invalidate(true, true, false);
                 FirstNode = N;
             }
         }
@@ -299,7 +299,7 @@ void CreateSingleWayInteraction::snapMouseReleaseEvent(QMouseEvent* anEvent, Fea
                 theList->add(new AddFeatureCommand(theMain->document()->getDirtyOrOriginLayer(),N,true));
                 theList->add(new WayAddNodeCommand(aRoad,N,SnapIdx,theMain->document()->getDirtyOrOriginLayer(aRoad)));
                 document()->addHistory(theList);
-                view()->invalidate(true, false);
+                view()->invalidate(true, true, false);
                 To = N;
             }
             if (!To)
@@ -315,7 +315,7 @@ void CreateSingleWayInteraction::snapMouseReleaseEvent(QMouseEvent* anEvent, Fea
             else
                 L->add(new WayAddNodeCommand(theRoad,To,theMain->document()->getDirtyOrOriginLayer(theRoad)));
             document()->addHistory(L);
-            view()->invalidate(true, false);
+            view()->invalidate(true, true, false);
             theMain->properties()->setSelection(theRoad);
         }
         FirstPoint = XY_TO_COORD(LastCursor);
@@ -351,7 +351,7 @@ void CreateSingleWayInteraction::closeAndFinish()
     CommandList* theList  = new CommandList(MainWindow::tr("Close Road %1").arg(theRoad->description()), theRoad);
     theList->add(new WayAddNodeCommand(theRoad,N,theMain->document()->getDirtyOrOriginLayer(theRoad)));
     document()->addHistory(theList);
-    view()->invalidate(true, false);
+    view()->invalidate(true, true, false);
     theMain->properties()->setSelection(theRoad);
 
     HaveFirst = false;

@@ -44,7 +44,7 @@ public:
 
     void panScreen(QPoint delta) ;
     void rotateScreen(QPoint center, qreal angle);
-    void invalidate(bool updateWireframe, bool updateMap);
+    void invalidate(bool updateWireframe, bool updateOsmMap, bool updateBgMap);
 
     virtual void paintEvent(QPaintEvent* anEvent);
     virtual void mousePressEvent(QMouseEvent * event);
