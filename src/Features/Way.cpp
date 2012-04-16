@@ -363,7 +363,7 @@ void Way::drawSimple(QPainter &P, MapView *theView)
 {
     QBrush theBrush(Qt::NoBrush);
     if (p->Area > 0.0) {
-        theBrush = QBrush(QColor(240, 240, 240));
+        theBrush = QBrush(QColor(240, 240, 240, 127));
     }
     QPen thePen(p->SimpleColor,(qreal)p->SimpleWidth/LANEWIDTH);
 

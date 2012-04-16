@@ -595,7 +595,7 @@ void MapView::updateStaticBackground()
         else if (M_STYLE->getGlobalPainter().getDrawBackground())
             StaticBackground->fill(M_STYLE->getGlobalPainter().getBackgroundColor());
         else
-            StaticBackground->fill(Qt::white);
+            StaticBackground->fill(M_PREFS->getBgColor());
     }
 }
 
