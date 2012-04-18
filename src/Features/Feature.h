@@ -89,6 +89,7 @@ void intrusive_ptr_release(Feature * p);
 /// Used to store objects of the map
 class Feature : public IFeature
 {
+    friend class FeaturePrivate;
     friend class MemoryBackend;
     friend class SpatialiteBackend;
 

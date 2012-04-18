@@ -105,11 +105,11 @@ void copyTags(Feature* Dest, Feature* Src)
 class FeaturePrivate
 {
 public:
-    FeaturePrivate()
+    FeaturePrivate(Feature* aFeature)
         :  LastActor(Feature::User)
         , PossiblePaintersUpToDate(false)
         , PixelPerMForPainter(-1), CurrentPainter(0), HasPainter(false)
-        , theFeature(0), LastPartNotification(0)
+        , theFeature(aFeature), LastPartNotification(0)
         , Deleted(false), Visible(true), Uploaded(false), ReadOnly(false), FilterRevision(-1)
         , Virtual(false), Special(false), DirtyLevel(0)
         , parentLayer(0)
@@ -126,7 +126,7 @@ public:
         : Tags(other.Tags), LastActor(other.LastActor)
         , PossiblePaintersUpToDate(false)
         , PixelPerMForPainter(-1), CurrentPainter(0), HasPainter(false)
-        , theFeature(0), LastPartNotification(0)
+        , theFeature(other.theFeature), LastPartNotification(0)
         , Deleted(false), Visible(true), Uploaded(false), ReadOnly(false), FilterRevision(-1)
         , Virtual(other.Virtual), Special(other.Special), DirtyLevel(0)
         , parentLayer(0)
@@ -183,18 +183,16 @@ public:
 Feature::Feature()
 : p(0), MetaUpToDate(false), m_references(0)
 {
-     p = new FeaturePrivate;
-     p->theFeature = this;
-     p->Id = IFeature::FId(IFeature::Uninitialized, 0);
+    p = new FeaturePrivate(this);
+    p->Id = IFeature::FId(IFeature::Uninitialized, 0);
 
-//     qDebug() << "Feature size: " << sizeof(Feature);
+    //     qDebug() << "Feature size: " << sizeof(Feature);
 }
 
 Feature::Feature(const Feature& other)
 : MetaUpToDate(false), m_references(0)
 {
     p = new FeaturePrivate(*other.p);
-    p->theFeature = this;
     p->Id = IFeature::FId(IFeature::Uninitialized, 0);
 }
 
@@ -581,6 +579,8 @@ const QPainterPath& Feature::getPath() const
 
 void FeaturePrivate::updatePossiblePainters()
 {
+    QMutexLocker mutlock(&theFeature->featMutex);
+
     //still match features with no tags and no parent, i.e. "lost" trackpoints
     if ( (theFeature->layer()->isTrack()) && M_PREFS->getDisableStyleForTracks() ) return blankPainters();
 
@@ -682,6 +682,7 @@ void Feature::unsetParentFeature(Feature* F)
 void Feature::updateFilters()
 {
     QMutexLocker mutlock(&featMutex);
+
     p->FilterLayers.clear();
 
     Layer* L = layer();
