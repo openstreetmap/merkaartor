@@ -2478,6 +2478,33 @@ void MainWindow::on_featureSelectChildrenAction_triggered()
     invalidateView();
 }
 
+void MainWindow::on_featureSelectParentsAction_triggered()
+{
+    QList<Feature*> theFeatures;
+    foreach (Feature* F, p->theProperties->selection()) {
+        for (int i=0; i<F->sizeParents(); ++i) {
+            Feature* Feat = STATIC_CAST_FEATURE(F->getParent(i));
+            theFeatures << Feat;
+        }
+    }
+    p->theProperties->setSelection(theFeatures);
+    p->theProperties->checkMenuStatus();
+    invalidateView();
+}
+
+void MainWindow::on_featureDownloadMissingChildrenAction_triggered()
+{
+#ifndef _MOBILE
+    QList<Feature*> toResolve;
+    foreach (Feature* F, p->theProperties->selection()) {
+        if (F->notEverythingDownloaded()) {
+            toResolve.push_back(F);
+        }
+    }
+    downloadFeatures(toResolve);
+#endif
+}
+
 void MainWindow::on_featureDeleteAction_triggered()
 {
     Feature* F = p->theProperties->selection(0);

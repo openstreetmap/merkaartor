@@ -133,6 +133,8 @@ public slots:
     virtual void on_roadBingExtractAction_triggered();
 
     virtual void on_featureSelectChildrenAction_triggered();
+    virtual void on_featureSelectParentsAction_triggered();
+    virtual void on_featureDownloadMissingChildrenAction_triggered();
     virtual void on_featureDeleteAction_triggered();
     virtual void on_featureCommitAction_triggered();
     virtual void on_featureOsbClose_triggered();

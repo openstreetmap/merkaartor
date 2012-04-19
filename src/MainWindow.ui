@@ -252,9 +252,12 @@
      <addaction name="featureOsbClose"/>
     </widget>
     <addaction name="featureSelectChildrenAction"/>
+    <addaction name="featureSelectParentsAction"/>
     <addaction name="separator"/>
     <addaction name="featureDeleteAction"/>
     <addaction name="featureCommitAction"/>
+    <addaction name="separator"/>
+    <addaction name="featureDownloadMissingChildrenAction"/>
     <addaction name="separator"/>
     <addaction name="menuOpenStreetBugs"/>
    </widget>
@@ -1861,6 +1864,16 @@
    </property>
    <property name="shortcut">
     <string>Ctrl+Alt+W</string>
+   </property>
+  </action>
+  <action name="featureSelectParentsAction">
+   <property name="text">
+    <string>Select parent(s)</string>
+   </property>
+  </action>
+  <action name="featureDownloadMissingChildrenAction">
+   <property name="text">
+    <string>Download missing children</string>
    </property>
   </action>
  </widget>

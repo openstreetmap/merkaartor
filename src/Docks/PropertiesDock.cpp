@@ -138,6 +138,9 @@ void PropertiesDock::checkMenuStatus()
     int NumRelation = 0;
     int NumRelationChild = 0;
     int NumAreas = 0;
+    int NumParents = 0;
+    int NumChildren = 0;
+    int NumIncomplete = 0;
     if (Selection.size() == 1)
     {
         IsPoint = CAST_NODE(Selection[0]) != 0;
@@ -152,6 +155,13 @@ void PropertiesDock::checkMenuStatus()
     }
     for (int i=0; i<Selection.size(); ++i)
     {
+        if (Selection[i]->sizeParents())
+            ++NumParents;
+        if (Selection[i]->size())
+            ++NumChildren;
+        if (Selection[i]->notEverythingDownloaded())
+            ++NumIncomplete;
+
         if (CAST_NODE(Selection[i]))
             ++NumPoints;
         if (Way* R = dynamic_cast<Way*>(Selection[i]))
@@ -189,7 +199,9 @@ void PropertiesDock::checkMenuStatus()
     Main->ui->areaJoinAction->setEnabled(NumAreas > 1);
     Main->ui->areaSplitAction->setEnabled(NumAreas == 1 && NumPoints == 2 && canSplitArea(this));
     Main->ui->areaTerraceAction->setEnabled(NumAreas == 1 && NumRoads == 0 && canTerraceArea(this));
-    Main->ui->featureSelectChildrenAction->setEnabled(Selection.size());
+    Main->ui->featureSelectChildrenAction->setEnabled(NumChildren);
+    Main->ui->featureSelectParentsAction->setEnabled(NumParents);
+    Main->ui->featureDownloadMissingChildrenAction->setEnabled(NumIncomplete);
     Main->ui->featureDeleteAction->setEnabled((IsPoint || IsRoad || IsRelation) && !Selection[0]->isDirty());
     Main->ui->featureCommitAction->setEnabled(NumCommitableFeature);
     Main->ui->nodeMergeAction->setEnabled(NumPoints > 1);
