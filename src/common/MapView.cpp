@@ -1040,7 +1040,9 @@ void MapView::zoom(qreal d, const QPoint & Around)
     }
 
     zoom(z, Around, rect());
-    invalidate(true, true, true);
+    if (!M_PREFS->getWireframeView())
+        p->osmLayer->forceRedraw(p->theProjection, p->theTransform, rect(), p->PixelPerM, p->ROptions);
+    invalidate(true, false, true);
 }
 
 void MapView::zoom(qreal d, const QPoint & Around,
