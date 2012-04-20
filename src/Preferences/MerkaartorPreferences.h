@@ -232,6 +232,8 @@ public:
 
     bool getDrawTileBoundary();
 
+    M_PARAM_DECLARE_BOOL(HideToolbarLabels)
+
     /* Data */
     void setOsmWebsite(const QString & theValue);
     QString getOsmWebsite() const;

@@ -970,6 +970,8 @@ bool MerkaartorPreferences::getDrawTileBoundary()
     return false;
 }
 
+M_PARAM_IMPLEMENT_BOOL(HideToolbarLabels, interface, false)
+
 /* DATA */
 
 QString MerkaartorPreferences::getOsmWebsite() const

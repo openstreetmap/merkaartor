@@ -52,6 +52,7 @@ public:
 
 public slots:
     void invalidateView(bool UpdateDock = true);
+    void toggleButtonStyle();
 
     virtual void on_createRoundaboutAction_triggered();
     virtual void on_createPolygonAction_triggered();
@@ -320,6 +321,7 @@ private:
 
 protected:
     void closeEvent(QCloseEvent * event);
+    virtual QMenu * createPopupMenu ();
 };
 
 #endif

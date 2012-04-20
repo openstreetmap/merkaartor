@@ -450,6 +450,12 @@ void MainWindow::delayedInit()
             qDebug() << "Remote control: Unable to listen on 8111";
     }
 
+    if (M_PREFS->getHideToolbarLabels()) {
+        setToolButtonStyle(Qt::ToolButtonIconOnly);
+    } else {
+        setToolButtonStyle(Qt::ToolButtonTextUnderIcon);
+    }
+
 //    M_PREFS->initialPosition(theView);
     on_fileNewAction_triggered();
     invalidateView();
@@ -1216,6 +1222,17 @@ void MainWindow::invalidateView(bool UpdateDock)
     //theLayers->updateContent();
     if (UpdateDock)
         p->theProperties->resetValues();
+}
+
+void MainWindow::toggleButtonStyle()
+{
+    if (M_PREFS->getHideToolbarLabels()) {
+        M_PREFS->setHideToolbarLabels(false);
+        setToolButtonStyle(Qt::ToolButtonTextUnderIcon);
+    } else {
+        M_PREFS->setHideToolbarLabels(true);
+        setToolButtonStyle(Qt::ToolButtonIconOnly);
+    }
 }
 
 PropertiesDock* MainWindow::properties()
@@ -3711,6 +3728,20 @@ void MainWindow::closeEvent(QCloseEvent * event)
     saveTemplateDocument(TEMPLATE_DOCUMENT);
     M_PREFS->save();
     QMainWindow::closeEvent(event);
+}
+
+QMenu *MainWindow::createPopupMenu()
+{
+    QMenu* mnu = QMainWindow::createPopupMenu();
+    mnu->addSeparator();
+
+    QAction* toolbarstyle = new QAction(tr("Hide tool buttons labels"), mnu);
+    toolbarstyle->setCheckable(true);
+    toolbarstyle->setChecked(M_PREFS->getHideToolbarLabels());
+    connect(toolbarstyle, SIGNAL(triggered()), SLOT(toggleButtonStyle()));
+    mnu->addAction(toolbarstyle);
+
+    return mnu;
 }
 
 void MainWindow::updateBookmarksMenu()
