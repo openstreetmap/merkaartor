@@ -130,7 +130,7 @@ quint32 g_setUser(const QString& u)
     if (u.isEmpty())
         return 0xffffffff;
 
-    quint32 ret = userList.indexOf(u);
+    qint32 ret = userList.indexOf(u);
     if (ret == -1) {
         userList.append(u);
         return userList.size()-1;

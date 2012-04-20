@@ -110,7 +110,7 @@ public:
         , PossiblePaintersUpToDate(false)
         , PixelPerMForPainter(-1), CurrentPainter(0), HasPainter(false)
         , theFeature(aFeature), LastPartNotification(0)
-        , Deleted(false), Visible(true), Uploaded(false), ReadOnly(false), FilterRevision(-1)
+        , Deleted(false), Visible(true), Uploaded(false), FilterRevision(-1)
         , Virtual(false), Special(false), DirtyLevel(0)
         , parentLayer(0)
     #ifndef FRISIUS_BUILD
@@ -127,7 +127,7 @@ public:
         , PossiblePaintersUpToDate(false)
         , PixelPerMForPainter(-1), CurrentPainter(0), HasPainter(false)
         , theFeature(other.theFeature), LastPartNotification(0)
-        , Deleted(false), Visible(true), Uploaded(false), ReadOnly(false), FilterRevision(-1)
+        , Deleted(false), Visible(true), Uploaded(false), FilterRevision(-1)
         , Virtual(other.Virtual), Special(other.Special), DirtyLevel(0)
         , parentLayer(0)
     #ifndef FRISIUS_BUILD
@@ -170,7 +170,6 @@ public:
     bool Deleted; // 1
     bool Visible; // 1
     bool Uploaded; // 1
-    bool ReadOnly; // 1
     int FilterRevision; // 4
     bool Virtual; // 1
     bool Special; // 1
@@ -181,7 +180,7 @@ public:
 };
 
 Feature::Feature()
-: p(0), MetaUpToDate(false), m_references(0)
+: p(0), MetaUpToDate(false), m_references(0), ReadOnly(false)
 {
     p = new FeaturePrivate(this);
     p->Id = IFeature::FId(IFeature::Uninitialized, 0);
@@ -190,7 +189,7 @@ Feature::Feature()
 }
 
 Feature::Feature(const Feature& other)
-: MetaUpToDate(false), m_references(0)
+: MetaUpToDate(false), m_references(0), ReadOnly(other.ReadOnly)
 {
     p = new FeaturePrivate(*other.p);
     p->Id = IFeature::FId(IFeature::Uninitialized, 0);
@@ -375,14 +374,14 @@ bool Feature::isUploadable() const
 
 void Feature::setReadonly(bool val)
 {
-    p->ReadOnly = val;
+    ReadOnly = val;
 }
 
 bool Feature::isReadonly()
 {
     if (!MetaUpToDate)
         updateMeta();
-    return p->ReadOnly;
+    return ReadOnly;
 }
 
 void Feature::setDeleted(bool delState)
@@ -681,8 +680,6 @@ void Feature::unsetParentFeature(Feature* F)
 
 void Feature::updateFilters()
 {
-    QMutexLocker mutlock(&featMutex);
-
     p->FilterLayers.clear();
 
     Layer* L = layer();
@@ -708,7 +705,6 @@ void Feature::updateFilters()
 void Feature::updateMeta()
 {
     updateFilters();
-    QMutexLocker mutlock(&featMutex);
 
     Layer* L = layer();
     if (!L)
@@ -739,12 +735,12 @@ void Feature::updateMeta()
     }
 
     if (L->isReadonly())
-        setReadonly(true);
+        ReadOnly = true;
     else {
-        setReadonly(false);
+        ReadOnly = false;
         foreach(FilterLayer* Fl, p->FilterLayers) {
             if (Fl->isReadonly()) {
-                setReadonly(true);
+                ReadOnly = true;
                 break;
             }
 

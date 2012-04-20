@@ -347,6 +347,7 @@ private:
 
 protected:
     mutable CoordBox BBox;
+    bool ReadOnly; // 1
     bool MetaUpToDate;
     IFeature::FId newId(IFeature::FeatureType type) const;
     QMutex featMutex;

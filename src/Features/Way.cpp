@@ -121,7 +121,7 @@ void WayPrivate::removeVirtuals()
 
 void WayPrivate::addVirtuals()
 {
-    for (unsigned int i=1; i<Nodes.size(); ++i) {
+    for (int i=1; i<Nodes.size(); ++i) {
         QLineF l(Nodes[i-1]->position(), Nodes[i]->position());
         l.setLength(l.length()/2);
         Node* v = g_backend.allocVirtualNode(l.p2());
@@ -348,9 +348,13 @@ const CoordBox& Way::boundingBox(bool update) const
     {
         if (p->Nodes.size())
         {
-            BBox = CoordBox(p->Nodes[0]->position(),p->Nodes[0]->position());
+            bool haveFirst = false;
             for (int i=1; i<p->Nodes.size(); ++i)
-                BBox.merge(p->Nodes[i]->position());
+                if (!haveFirst && !p->Nodes[i]->position().isNull()) {
+                    BBox = p->Nodes[i]->boundingBox();
+                    haveFirst = true;
+                } else
+                    BBox.merge(p->Nodes[i]->position());
         }
         else
             BBox = CoordBox(Coord(0,0),Coord(0,0));
@@ -374,8 +378,11 @@ void Way::drawSimple(QPainter &P, MapView *theView)
 
 void Way::updateMeta()
 {
+    QMutexLocker mutlock(&featMutex);
+    if (MetaUpToDate)
+        return;
+
     Feature::updateMeta();
-    MetaUpToDate = true;
 
     p->Area = 0;
     p->Distance = 0;
@@ -423,6 +430,7 @@ void Way::updateMeta()
     }
 
     p->doUpdateVirtuals();
+    MetaUpToDate = true;
 }
 
 qreal Way::distance()

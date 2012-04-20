@@ -167,7 +167,7 @@ const CoordBox& Relation::boundingBox(bool update) const
             CoordBox Clip;
             bool haveFirst = false;
             for (int i=0; i<p->Members.size(); ++i) {
-                if (p->Members[i].second && !p->Members[i].second->notEverythingDownloaded()/* && !CAST_RELATION(p->Members[i].second)*/) {
+                if (p->Members[i].second && !p->Members[i].second->boundingBox().isNull()/* && !CAST_RELATION(p->Members[i].second)*/) {
                     if (!haveFirst) {
                         Clip = p->Members[i].second->boundingBox();
                         haveFirst = true;
@@ -546,8 +546,11 @@ const RenderPriority& Relation::renderPriority()
 
 void Relation::updateMeta()
 {
+    QMutexLocker mutlock(&featMutex);
+    if (MetaUpToDate)
+        return;
+
     Feature::updateMeta();
-    MetaUpToDate = true;
 
     p->PathUpToDate = false;
     p->CalculateWidth();
@@ -562,6 +565,7 @@ void Relation::updateMeta()
                 p->theRenderPriority = R->renderPriority();
         }
     }
+    MetaUpToDate = true;
 }
 
 bool Relation::toXML(QXmlStreamWriter& stream, QProgressDialog * progress, bool strict, QString changetsetid)

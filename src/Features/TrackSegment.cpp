@@ -315,6 +315,10 @@ void TrackSegment::partChanged(Feature*, int)
 
 void TrackSegment::updateMeta()
 {
+    QMutexLocker mutlock(&featMutex);
+    if (MetaUpToDate)
+        return;
+
     Feature::updateMeta();
 
     p->Distance = 0;

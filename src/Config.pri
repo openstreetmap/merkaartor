@@ -19,3 +19,5 @@ win32|macx {
 } else {
     system('echo -n "$${LITERAL_HASH}define SVNREV $${SVNREV}" > revision.h')
 }
+
+QMAKE_CXXFLAGS_WARN_ON += -Wno-reorder

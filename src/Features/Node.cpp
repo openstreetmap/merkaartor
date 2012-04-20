@@ -265,8 +265,11 @@ void Node::partChanged(Feature*, int)
 
 void Node::updateMeta()
 {
+    QMutexLocker mutlock(&featMutex);
+    if (MetaUpToDate)
+        return;
+
     Feature::updateMeta();
-    MetaUpToDate = true;
 
     IsWaypoint = (findKey("_waypoint_") != -1);
     IsPOI = false;
@@ -286,11 +289,12 @@ void Node::updateMeta()
             else
                 ++prtWritable;
         }
-        if (!isReadonly()) {
+        if (!ReadOnly) {
             if (prtReadonly && !prtWritable)
                 setReadonly(true);
         }
     }
+    MetaUpToDate = true;
 }
 
 bool Node::toXML(QXmlStreamWriter& stream, QProgressDialog * progress, bool strict, QString changesetid)
