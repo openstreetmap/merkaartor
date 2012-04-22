@@ -20,6 +20,7 @@ class MapRenderer;
 
 class Way : public Feature
 {
+    friend class WayPrivate;
     friend class MemoryBackend;
     friend class SpatialiteBackend;
 
@@ -100,6 +101,7 @@ public:
     static int createJunction(Document* theDocument, CommandList* theList, Way* R1, Way* R2, bool doIt);
 
 protected:
+    bool canAddVirtualNodes();
     WayPrivate* p;
 };
 

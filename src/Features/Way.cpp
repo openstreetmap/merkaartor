@@ -140,7 +140,7 @@ void WayPrivate::doUpdateVirtuals()
         return;
 
     removeVirtuals();
-    if (M_PREFS->getUseVirtualNodes() && theWay->layer() && !(theWay->isReadonly()) && !(theWay->isDeleted()))
+    if (theWay->canAddVirtualNodes())
         addVirtuals();
 
     VirtualsUptodate = true;
@@ -984,6 +984,14 @@ int Way::createJunction(Document* theDocument, CommandList* theList, Way* R1, Wa
     }
 
     return numInter;
+}
+
+bool Way::canAddVirtualNodes()
+{
+    if (M_PREFS->getUseVirtualNodes() && layer() && !ReadOnly && !isDeleted())
+        return true;
+
+    return false;
 }
 
 int Way::segmentCount()
