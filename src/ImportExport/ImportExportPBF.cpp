@@ -20,7 +20,7 @@
 #include "Global.h"
 
 #include "zlib.h"
-#include "bzlib.h"
+//#include "bzlib.h"
 
 #define NANO ( 1000.0 * 1000.0 * 1000.0 )
 #define MAX_BLOCK_HEADER_SIZE ( 64 * 1024 )
