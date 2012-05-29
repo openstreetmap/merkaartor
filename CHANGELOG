@@ -1,4 +1,27 @@
 v0.18
+    * FIX : mutex deadlock (refs #3319)
+    * FIX : Protect updatemeta (fixes #3317)
+    * ADD : Allow to show/hide the toolbars labels (toolbar context menu)
+    * ADD : "Select parent(s)" & "Download missing children" to the Feature menu (refs #3314)
+    * FIX : force redrawing the osm map when zooming (fixes #3316)
+    * FIX : Mutex-lock update of the painters (fixes #3315)
+    * ADD : Preferences regarding rendering during edition + Wireframe view
+    * CHG : Switch to wireframe while editing
+    * FIX : Clipboard crash at launch
+    * FIX : crash in merge nodes when merging last node (fixes #3309)
+    * FIX : Crash when loading images
+    * ADD : support for MapDust
+    * CHG : Deprecate Yahoo background
+    * FIX : Set Content-type to 'text/xml' for OSM uploads (fixes #3307)
+    * FIX : Handle more multipolygon cases (closes #3295)
+    * FIX : Problem parsing WMS layer value in editor (fixes #3301)
+    * FIX : Stylizing "natural=coastline" in Mapnik* styles only (fixes #3283)
+    * FIX : Improve rendering of multipolygon buildings
+    * FIX : properly cascade to relation a way deletion (fixes #3300)
+    * FIX : solve moving nested relations (fixes #3290)
+    * FIX : set minimal size on "Key" column to avoid 0 width (fixes #3289)
+    * FIX : url.port(80) returns P instead of port number (fixes #3296)
+    * ADD : Added Denmark - Fugro Aerial Imagery to TmsServerList
     * ADD : Preference to disable Antialiasing + disable while panning (closes #3284)
     * FIX : "Fixed" Lat/Lon grid (fixes #3282)
     * FIX : Export 'speed' attribute in GPX (fixes #3280)
