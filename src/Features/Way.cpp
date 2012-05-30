@@ -349,7 +349,7 @@ const CoordBox& Way::boundingBox(bool update) const
         if (p->Nodes.size())
         {
             bool haveFirst = false;
-            for (int i=1; i<p->Nodes.size(); ++i)
+            for (int i=0; i<p->Nodes.size(); ++i)
                 if (!haveFirst && !p->Nodes[i]->position().isNull()) {
                     BBox = p->Nodes[i]->boundingBox();
                     haveFirst = true;

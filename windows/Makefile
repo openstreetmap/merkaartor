@@ -1,11 +1,11 @@
 #ToWin = `cygpath --windows $1`
 ToWin = $1
-DOSWIXDIR := c:\\Program Files\\Windows Installer XML v3\\
-LIGHT := "c:/Program Files/Windows Installer XML v3/bin/light.exe"
-CANDLE := "c:/Program Files/Windows Installer XML v3/bin/candle.exe"
-LRELEASE := "d:/Qt/4.7.1/bin/lrelease.exe"
-#VERSION=0.16
-#REVISION=-svn
+DOSWIXDIR := c:\\Program Files\\Windows Installer XML v3.6\\
+LIGHT := "c:/Program Files/Windows Installer XML v3.6/bin/light.exe"
+CANDLE := "c:/Program Files/Windows Installer XML v3.6/bin/candle.exe"
+LRELEASE := "/cygdrive/c/QtSDK/Desktop/Qt/4.7.4/mingw/bin/lrelease.exe"
+VERSION=0.18
+REVISION=.0
 
 all: release debug svn 
 

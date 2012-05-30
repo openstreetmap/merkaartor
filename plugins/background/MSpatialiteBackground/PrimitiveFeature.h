@@ -33,7 +33,7 @@ public:
     virtual char getType() const { return IFeature::All; }
 
     virtual QString xmlId() const { return QString(); }
-    virtual const QDateTime& time() const { return QDateTime::currentDateTime(); }
+    virtual const QDateTime time() const { return QDateTime::currentDateTime(); }
     virtual int versionNumber() const { return -1; }
     virtual const QString& user() const { return QString(); }
 

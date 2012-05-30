@@ -46,10 +46,10 @@
 
       <DirectoryRef Id="MPBACKGROUND">
          <Component Id="background_plug" Guid="A37E552D-FF55-4507-8C8D-3201993F7C48">
-            <File Id="MYahooBackgroundPlugin0.dll" Name="MYahooBackgroundPlugin0.dll"
+		 <!--            <File Id="MYahooBackgroundPlugin0.dll" Name="MYahooBackgroundPlugin0.dll"
 			    Source="$(var.BinPath)\plugins\background\MYahooBackgroundPlugin0.dll" DiskId="1" />
             <File Id="MYahooTiledBackgroundPlugin0.dll" Name="MYahooTiledBackgroundPlugin0.dll"
-			    Source="$(var.BinPath)\plugins\background\MYahooTiledBackgroundPlugin0.dll" DiskId="1" />
+			    Source="$(var.BinPath)\plugins\background\MYahooTiledBackgroundPlugin0.dll" DiskId="1" /> -->
             <File Id="MGeoTiffBackgroundPlugin0.dll" Name="MGeoTiffBackgroundPlugin0.dll"
                    Source="$(var.BinPath)\plugins\background\MGeoTiffBackgroundPlugin0.dll" DiskId="1" />
             <File Id="MWalkingPapersBackgroundPlugin0.dll" Name="MWalkingPapersBackgroundPlugid0.dll"

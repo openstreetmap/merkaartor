@@ -15,7 +15,7 @@
                Source="$(var.DllPath)\libgdal.dll" DiskId="1">
             </File>
             <File Id="libexpat1.dll" Name="libexpat-1.dll"
-               Source="$(var.MingwPath)\bin\libexpat-1.dll" DiskId="1">
+               Source="$(var.DllPath)\libexpat-1.dll" DiskId="1">
             </File>
             <File Id="libxerces" Name="libxerces-c2_8_0.dll"
                Source="$(var.DllPath)\libxerces-c2_8_0.dll" DiskId="1">
