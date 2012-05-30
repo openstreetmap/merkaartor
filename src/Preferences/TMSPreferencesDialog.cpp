@@ -49,9 +49,7 @@ void TMSPreferencesDialog::on_btApplyTmsServer_clicked(void)
         return;
 
     QUrl theUrl(edTmsUrl->text());
-    QString theAdress = theUrl.host();
-    if (theUrl.port() != -1)
-        theAdress += ":" + QString::number(theUrl.port());
+    QString theAdress = theUrl.toString(QUrl::RemovePath | QUrl::RemoveQuery | QUrl::RemoveFragment);
 
     TmsServer& WS(theTmsServers[idx]);
 
@@ -86,9 +84,7 @@ void TMSPreferencesDialog::on_btApplyTmsServer_clicked(void)
 void TMSPreferencesDialog::on_btAddTmsServer_clicked(void)
 {
     QUrl theUrl(edTmsUrl->text());
-    QString theAdress = theUrl.host();
-    if (theUrl.port() != -1)
-        theAdress += ":" + QString::number(theUrl.port());
+    QString theAdress = theUrl.toString(QUrl::RemovePath | QUrl::RemoveQuery | QUrl::RemoveFragment);
 
     QString theBaseUrl;
     if (frOSGeo->isVisible()) {
@@ -131,7 +127,12 @@ void TMSPreferencesDialog::on_lvTmsServers_itemSelectionChanged()
 
     TmsServer& WS(theTmsServers[idx]);
     edTmsName->setText(WS.TmsName);
-    edTmsUrl->setText("http://" + WS.TmsAdress + WS.TmsPath);
+    
+    if (WS.TmsAdress.contains("://")) {
+        edTmsUrl->setText(WS.TmsAdress + WS.TmsPath);
+    } else {
+        edTmsUrl->setText("http://" + WS.TmsAdress + WS.TmsPath);
+    }
     sbTileSize->setValue(WS.TmsTileSize);
     sbMinZoom->setValue(WS.TmsMinZoom);
     sbMaxZoom->setValue(WS.TmsMaxZoom);
