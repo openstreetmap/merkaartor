@@ -21,7 +21,7 @@
 #include <algorithm>
 #include <QList>
 
-#if QT_VERSION < 0x040700 && !defined(_MOBILE)
+#if (QT_VERSION < 0x040700 || defined(FORCE_46)) && !defined(_MOBILE)
 #include <ggl/ggl.hpp>
 #include <ggl/geometries/cartesian2d.hpp>
 #include <ggl/geometries/adapted/std_as_linestring.hpp>

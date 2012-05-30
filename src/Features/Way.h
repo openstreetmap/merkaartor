@@ -8,7 +8,7 @@
 #include "Layer.h"
 
 #ifndef _MOBILE
-#if QT_VERSION < 0x040700
+#if QT_VERSION < 0x040700 || defined(FORCE_46)
 #include <ggl/ggl.hpp>
 #endif
 #endif

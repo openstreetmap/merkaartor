@@ -12,7 +12,7 @@
 #include <QtXml>
 
 #ifndef _MOBILE
-#if QT_VERSION < 0x040700
+#if QT_VERSION < 0x040700 || defined(FORCE_46)
 #include <ggl/ggl.hpp>
 #include <ggl/geometries/register/point.hpp>
 #endif
@@ -158,7 +158,7 @@ protected:
 Q_DECLARE_METATYPE( Node * );
 
 #ifndef _MOBILE
-#if QT_VERSION < 0x040700
+#if QT_VERSION < 0x040700 || defined(FORCE_46)
 // Register this point as being a recognizable point by the GGL
 //GEOMETRY_REGISTER_POINT_2D_CONST(TrackPoint, qreal, cs::cartesian, projection().x(), projection().y())
 
@@ -182,7 +182,7 @@ struct access<NodePtr>
     template <std::size_t I>
     static inline qreal get(const NodePtr& p)
     {
-        return I == 0 ? p->projection().x() : p->projection().y();
+        return I == 0 ? p->projected().x() : p->projected().y();
     }
 
     //    template <std::size_t I>

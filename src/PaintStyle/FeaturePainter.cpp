@@ -692,7 +692,7 @@ void FeaturePainter::drawLabel(Way* R, QPainter* thePainter, MapRenderer* theRen
 
     QPainterPath tranformedRoadPath = theRenderer->theTransform.map(R->getPath());
     QFont font = getLabelFont();
-//#if QT_VERSION >= 0x040700
+//#if QT_VERSION >= 0x040700 || defined(FORCE_46)
 //    qreal pathSurface = tranformedRoadPath.controlPointRect().width() * tranformedRoadPath.controlPointRect().height();
 //    if (pathSurface > theRenderer->theScreen.width() * theRenderer->theScreen.height() * 3) {
 //        QPainterPath clipPath;

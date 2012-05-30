@@ -982,7 +982,7 @@ QString MerkaartorPreferences::getOsmWebsite() const
     else
         s = "www.openstreetmap.org";
 
-#if QT_VERSION >= 0x040600
+#if QT_VERSION >= 0x040600 && !defined(FORCE_46)
     QUrl u = QUrl::fromUserInput(s);
 #else
     // convenience for creating a valid URL

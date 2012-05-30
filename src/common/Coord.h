@@ -64,7 +64,7 @@ uint qHash(const Coord &c);
 
 
 #ifndef _MOBILE
-#if QT_VERSION < 0x040700
+#if QT_VERSION < 0x040700 || defined(FORCE_46)
 #include <ggl/ggl.hpp>
 #include <ggl/geometries/register/point.hpp>
 
@@ -206,7 +206,7 @@ class CoordBox : public QRectF
 Q_DECLARE_METATYPE( CoordBox );
 
 #ifndef _MOBILE
-#if QT_VERSION < 0x040700
+#if QT_VERSION < 0x040700 || defined(FORCE_46)
 #include <ggl/geometries/register/box.hpp>
 
 GEOMETRY_REGISTER_BOX(CoordBox, Coord, bottomLeft, topRight)

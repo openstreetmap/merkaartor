@@ -76,7 +76,7 @@
 #include "TerraceDialog.h"
 
 #include "revision.h"
-#if QT_VERSION < 0x040700
+#if QT_VERSION < 0x040700 || defined(FORCE_46)
 #include <boost/version.hpp>
 #endif
 
@@ -2102,7 +2102,7 @@ void MainWindow::on_helpAboutAction_triggered()
     dlg.setWindowFlags(dlg.windowFlags() | Qt::MSWindowsFixedSizeDialogHint);
     About.Version->setText(About.Version->text().arg(STRINGIFY(VERSION)).arg(STRINGIFY(REVISION)).arg(STRINGIFY(SVNREV)));
     About.QTVersion->setText(About.QTVersion->text().arg(qVersion()).arg(QT_VERSION_STR));
-#if QT_VERSION < 0x040700
+#if QT_VERSION < 0x040700 || defined(FORCE_46)
     int boostMajVer = BOOST_VERSION / 100000;
     int boostMinVer = BOOST_VERSION / 100 % 1000;
     About.BoostVersion->setText(About.BoostVersion->text().arg(QString::number(boostMajVer)+"."+QString::number(boostMinVer)));

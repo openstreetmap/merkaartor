@@ -25,7 +25,7 @@ bool g_Merk_Segment_Mode = false;
 bool g_Merk_Ignore_Preferences = false;
 bool g_Merk_Reset_Preferences = false;
 bool g_Merk_IgnoreStartupTemplate = false;
-#if QT_VERSION < 0x040700
+#if QT_VERSION < 0x040700 || defined(FORCE_46)
 bool g_Merk_SelfClip = true;
 #else
 bool g_Merk_SelfClip = false;
