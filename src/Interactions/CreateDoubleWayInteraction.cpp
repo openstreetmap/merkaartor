@@ -46,7 +46,7 @@ QString CreateDoubleWayInteraction::toHtml()
     //help = (MainWindow::tr("LEFT-CLICK to select; LEFT-DRAG to move"));
 
     QString desc;
-    desc = QString("<big><b>%1</b></big><br/>").arg(MainWindow::tr("Create qreal way Interaction"));
+    desc = QString("<big><b>%1</b></big><br/>").arg(MainWindow::tr("Create double way Interaction"));
     desc += QString("<b>%1</b><br/>").arg(help);
 
     QString S =

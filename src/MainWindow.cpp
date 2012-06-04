@@ -3035,7 +3035,7 @@ void MainWindow::on_toolsResetDiscardableAction_triggered()
 
 void MainWindow::on_toolsRebuildHistoryAction_triggered()
 {
-    QMessageBox::StandardButton ret = QMessageBox::warning(this, tr("Rebuild History"), tr("An attempt will be mode to rebuild the history.\nNo guarantee, though, and no Undo.\nAre you sure you want to try this? ")
+    QMessageBox::StandardButton ret = QMessageBox::warning(this, tr("Rebuild History"), tr("An attempt will be made to rebuild the history.\nNo guarantee, though, and no Undo.\nAre you sure you want to try this? ")
                                                          , QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes);
     if (ret == QMessageBox::Yes) {
         theDocument->rebuildHistory();
