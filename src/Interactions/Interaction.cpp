@@ -334,21 +334,18 @@ void FeatureSnapInteraction::paintEvent(QPaintEvent* anEvent, QPainter& thePaint
     Interaction::paintEvent(anEvent, thePainter);
 
 #ifndef _MOBILE
-    for (int i=0; i<theMain->features()->highlightedSize(); ++i)
-        if (document()->exists(theMain->features()->highlighted(i))) {
-            theMain->features()->highlighted(i)->buildPath(view()->projection());
-            theMain->features()->highlighted(i)->drawHighlight(thePainter, view());
-        }
-    for (int i=0; i<theMain->properties()->selectionSize(); ++i)
-        if (document()->exists(theMain->properties()->selection(i))) {
-            theMain->properties()->selection(i)->buildPath(view()->projection());
-            theMain->properties()->selection(i)->drawFocus(thePainter, view());
-        }
-    for (int i=0; i<theMain->properties()->highlightedSize(); ++i)
-        if (document()->exists(theMain->properties()->highlighted(i))) {
-            theMain->properties()->highlighted(i)->buildPath(view()->projection());
-            theMain->properties()->highlighted(i)->drawHighlight(thePainter, view());
-        }
+    for (int i=0; i<theMain->features()->highlightedSize(); ++i) {
+        theMain->features()->highlighted(i)->buildPath(view()->projection());
+        theMain->features()->highlighted(i)->drawHighlight(thePainter, view());
+    }
+    for (int i=0; i<theMain->properties()->selectionSize(); ++i) {
+        theMain->properties()->selection(i)->buildPath(view()->projection());
+        theMain->properties()->selection(i)->drawFocus(thePainter, view());
+    }
+    for (int i=0; i<theMain->properties()->highlightedSize(); ++i) {
+        theMain->properties()->highlighted(i)->buildPath(view()->projection());
+        theMain->properties()->highlighted(i)->drawHighlight(thePainter, view());
+    }
 
     //FIXME document()->exists necessary?
     if (LastSnap && document()->exists(LastSnap)) {

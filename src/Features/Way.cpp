@@ -480,7 +480,7 @@ void Way::drawTouchup(QPainter& P, MapView* theView)
     theWidth /= 2;
     P.setPen(QColor(0,0,0));
     foreach (NodePtr N, p->virtualNodes) {
-        if (theView->viewport().contains(N->projected())) {
+        if (theView->viewport().contains(N->position())) {
             QPoint p =  theView->toView(N);
             P.drawLine(p+QPoint(-theWidth, -theWidth), p+QPoint(theWidth, theWidth));
             P.drawLine(p+QPoint(theWidth, -theWidth), p+QPoint(-theWidth, theWidth));
@@ -583,6 +583,7 @@ Node* Way::pixelDistanceNode(const QPointF& Target, qreal ClearEndDistance, MapV
         for (int i=0; i<p->virtualNodes.size(); ++i)
         {
             if (p->virtualNodes.at(i)) {
+                p->virtualNodes.at(i)->buildPath(theView->projection());
                 qreal D = ::distance(Target,theView->toView(p->virtualNodes.at(i)));
                 if (D < ClearEndDistance && D < Best) {
                     Best = D;
@@ -663,6 +664,9 @@ void Way::buildPath(const Projection &theProjection)
         p->thePath.moveTo(p->Nodes.at(0)->projected(theProjection));
         for (int i=1; i<p->Nodes.size(); ++i) {
             p->thePath.lineTo((p->Nodes.at(i)->projected(theProjection)));
+        }
+        for (int i=0; i<p->virtualNodes.size(); ++i) {
+            p->virtualNodes[i]->buildPath(theProjection);
         }
         p->ProjectionRevision = theProjection.projectionRevision();
         p->PathUpToDate = true;

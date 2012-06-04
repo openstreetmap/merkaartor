@@ -126,7 +126,7 @@ public:
         : Tags(other.Tags), LastActor(other.LastActor)
         , PossiblePaintersUpToDate(false)
         , PixelPerMForPainter(-1), CurrentPainter(0), HasPainter(false)
-        , theFeature(other.theFeature), LastPartNotification(0)
+        , theFeature(NULL), LastPartNotification(0)
         , Deleted(false), Visible(true), Uploaded(false), FilterRevision(-1)
         , Virtual(other.Virtual), Special(other.Special), DirtyLevel(0)
         , parentLayer(0)
@@ -193,6 +193,7 @@ Feature::Feature(const Feature& other)
 {
     p = new FeaturePrivate(*other.p);
     p->Id = IFeature::FId(IFeature::Uninitialized, 0);
+    p->theFeature = this;
 }
 
 Feature::~Feature(void)
