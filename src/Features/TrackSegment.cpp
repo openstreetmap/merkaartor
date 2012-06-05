@@ -170,11 +170,11 @@ void TrackSegment::drawTouchup(QPainter &P, MapView* theView)
 
     for (int i=1; i<p->Nodes.size(); ++i)
     {
-        QPointF FromF = p->Nodes[i-1]->projected();
-        QPointF ToF = p->Nodes[i]->projected();
-
-        if (!theView->viewport().contains(FromF) && !theView->viewport().contains(ToF))
+        if (!theView->viewport().contains(p->Nodes[i-1]->position()) && !theView->viewport().contains(p->Nodes[i]->position()))
             continue;
+
+        QPointF FromF = theView->toView(p->Nodes[i-1]);
+        QPointF ToF = theView->toView(p->Nodes[i]);
 
         if (!M_PREFS->getSimpleGpxTrack())
         {
