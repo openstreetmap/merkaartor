@@ -130,8 +130,8 @@ RemoveFeatureCommand::RemoveFeatureCommand(Document *theDocument, Feature *aFeat
 : Command(aFeature), theLayer(0), theFeature(aFeature), CascadedCleanUp(0), RemoveExecuted(false), theAlternatives(Alternatives)
 {
     CascadedCleanUp  = new CommandList(QApplication::tr("Cascaded cleanup"), NULL);
-    for (int i=0; i<aFeature->sizeParents(); ++i) {
-        Feature* f = CAST_FEATURE(aFeature->getParent(i));
+    while (aFeature->sizeParents()) {
+        Feature* f = CAST_FEATURE(aFeature->getParent(0));
         if (f)
             f->cascadedRemoveIfUsing(theDocument, aFeature, CascadedCleanUp, Alternatives);
     }
