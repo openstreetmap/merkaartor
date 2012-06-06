@@ -63,9 +63,7 @@ QWidget* EditCompleterDelegate::createEditor(QWidget* parent, const QStyleOption
     } else {
         QModelIndex i = index.model()->index(index.row(), 0);
         QString k = index.model()->data(i).toString();
-        if (
-                (k != "name")
-            ) {
+        if (k != "name") {
             QStringList sl = g_getTagValueList(k);
             sl.sort();
             completer = new QCompleter(sl, (QObject *)this);
@@ -96,9 +94,9 @@ void EditCompleterDelegate::setEditorData(QWidget* editor, const QModelIndex& in
             edit->clearEditText();
         edit->lineEdit()->selectAll();
     } else
-    if (QLineEdit *edit = dynamic_cast<QLineEdit*>(editor)) {
-        edit->setText(index.model()->data(index).toString());
-    }
+        if (QLineEdit *edit = dynamic_cast<QLineEdit*>(editor)) {
+            edit->setText(index.model()->data(index).toString());
+        }
 }
 
 void EditCompleterDelegate::setModelData(QWidget* editor, QAbstractItemModel* model, const QModelIndex& index) const
@@ -107,8 +105,8 @@ void EditCompleterDelegate::setModelData(QWidget* editor, QAbstractItemModel* mo
     if (QComboBox *edit = dynamic_cast<QComboBox*>(editor))
         newVal = edit->currentText();
     else
-    if (QLineEdit *edit = dynamic_cast<QLineEdit*>(editor))
-        newVal = edit->text();
+        if (QLineEdit *edit = dynamic_cast<QLineEdit*>(editor))
+            newVal = edit->text();
 
     if (newVal == index.model()->data(index).toString()) return;
     if (!newVal.isEmpty())
@@ -125,17 +123,17 @@ bool EditCompleterDelegate::eventFilter(QObject* object, QEvent* event)
 {
     QWidget* editor = qobject_cast<QWidget*>(object);
     if (!editor)
-            return false;
+        return false;
 
     // Note that keys already bound to shortcuts will be QEvent::ShortcutOverride not QEvent::KeyPress
     if (event->type() == QEvent::KeyPress) {
         QKeyEvent *keyEvent = (QKeyEvent*)event;
         switch (keyEvent->key()) {
-            case Qt::Key_Enter:
-            case Qt::Key_Return:
-                emit commitData(editor);
-                emit closeEditor(editor, QAbstractItemDelegate::EditNextItem);
-                return true;
+        case Qt::Key_Enter:
+        case Qt::Key_Return:
+            emit commitData(editor);
+            emit closeEditor(editor, QAbstractItemDelegate::EditNextItem);
+            return true;
         }
     }
     return QItemDelegate::eventFilter(object, event);
