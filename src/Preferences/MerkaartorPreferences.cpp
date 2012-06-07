@@ -1214,6 +1214,7 @@ M_PARAM_IMPLEMENT_INT(PolygonSides, Tools, 3)
 /* Rendering */
 M_PARAM_IMPLEMENT_BOOL(UseAntiAlias, style, true)
 M_PARAM_IMPLEMENT_BOOL(AntiAliasWhilePanning, style, false)
+M_PARAM_IMPLEMENT_BOOL(UseStyledWireframe, style, false)
 M_PARAM_IMPLEMENT_STRING(DefaultStyle, style, ":/Styles/Mapnik.mas")
 M_PARAM_IMPLEMENT_STRING(CustomStyle, style, "")
 M_PARAM_IMPLEMENT_BOOL(DisableStyleForTracks, style, true)

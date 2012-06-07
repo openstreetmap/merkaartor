@@ -616,7 +616,7 @@ void FeaturePrivate::updatePainters(qreal PixelPerM)
     if (!PossiblePaintersUpToDate)
         updatePossiblePainters();
 
-    CurrentPainter = 0;
+    CurrentPainter = NULL;
     PixelPerMForPainter = PixelPerM;
     for (int i=0; i<PossiblePainters.size(); ++i)
         if (PossiblePainters[i]->matchesZoom(PixelPerM))
@@ -628,7 +628,7 @@ void FeaturePrivate::updatePainters(qreal PixelPerM)
 
 void FeaturePrivate::blankPainters()
 {
-    CurrentPainter = 0;
+    CurrentPainter = NULL;
     PossiblePainters.clear();
     PossiblePaintersUpToDate = true;
     HasPainter = false;
@@ -643,7 +643,13 @@ const FeaturePainter* Feature::getPainter(qreal PixelPerM) const
 
 const FeaturePainter* Feature::getCurrentPainter() const
 {
-    return p->CurrentPainter;
+    if (p->CurrentPainter)
+        return p->CurrentPainter;
+    else {
+        if (p->PossiblePainters.size())
+            return p->PossiblePainters[0];
+        else return NULL;
+    }
 }
 
 bool Feature::hasPainter() const

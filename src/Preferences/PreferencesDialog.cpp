@@ -253,6 +253,7 @@ void PreferencesDialog::loadPrefs()
     cbAntiAlias->setChecked(M_PREFS->getUseAntiAlias());
     cbDisableAntialiasInPanning->setChecked(!M_PREFS->getAntiAliasWhilePanning());
     cbDisableAntialiasInPanning->setEnabled(M_PREFS->getUseAntiAlias());
+    cbStyledWireframe->setChecked(M_PREFS->getUseStyledWireframe());
     QString s = M_PREFS->getDefaultStyle();
     QString cs = M_PREFS->getCustomStyle();
     if (QFileInfo(cs).isFile())
@@ -407,6 +408,7 @@ void PreferencesDialog::savePrefs()
 
     M_PREFS->setUseAntiAlias(cbAntiAlias->isChecked());
     M_PREFS->setAntiAliasWhilePanning(!cbDisableAntialiasInPanning->isChecked());
+    M_PREFS->setUseStyledWireframe(cbStyledWireframe->isChecked());
     M_PREFS->setCustomStyle(CustomStylesDir->text());
 
     if (rbQuickEdit->isChecked())

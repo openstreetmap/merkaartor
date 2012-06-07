@@ -172,6 +172,13 @@ void Node::drawSimple(QPainter &P, MapView *theView)
         qreal WW = theView->nodeWidth();
         if (WW >= 1) {
             QColor theColor = QColor(0,0,0,128);
+            if (M_PREFS->getUseStyledWireframe() && hasPainter()) {
+                const FeaturePainter* thePainter = getCurrentPainter();
+                if (thePainter->DrawForeground)
+                    theColor = thePainter->ForegroundColor;
+                else if (thePainter->DrawBackground)
+                    theColor = thePainter->BackgroundColor;
+            }
             QPointF Pp(theView->toView(this));
             if (layer()->classGroups() & Layer::Special) {
                 QRect R2(Pp.x()-(WW+4)/2, Pp.y()-(WW+4)/2, WW+4, WW+4);

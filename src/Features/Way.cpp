@@ -366,10 +366,28 @@ const CoordBox& Way::boundingBox(bool update) const
 void Way::drawSimple(QPainter &P, MapView *theView)
 {
     QBrush theBrush(Qt::NoBrush);
-    if (p->Area > 0.0) {
-        theBrush = QBrush(QColor(240, 240, 240, 127));
+    QPen thePen(Qt::NoPen);
+    if (!M_PREFS->getUseStyledWireframe() || !hasPainter()) {
+//        if (p->Area > 0.0) {
+//            theBrush = QBrush(QColor(240, 240, 240, 127));
+//        }
+        thePen = QPen(p->SimpleColor,(qreal)p->SimpleWidth/LANEWIDTH);
+    } else {
+        const FeaturePainter* thePainter = getCurrentPainter();
+        if (thePainter->ForegroundFill && p->Area > 0.0) {
+            theBrush = thePainter->ForegroundFillFillColor;
+            if (thePainter->DrawForeground)
+                thePen = QPen(thePainter->ForegroundColor,thePainter->ForegroundOffset);
+            else if (thePainter->DrawBackground)
+                thePen = QPen(thePainter->BackgroundColor,thePainter->BackgroundOffset);
+            else
+                thePen = QPen(p->SimpleColor,(qreal)p->SimpleWidth/LANEWIDTH);
+        } else
+            if (thePainter->DrawForeground)
+                thePen = QPen(thePainter->ForegroundColor,thePainter->ForegroundOffset);
+            else
+                thePen = QPen(p->SimpleColor,(qreal)p->SimpleWidth/LANEWIDTH);
     }
-    QPen thePen(p->SimpleColor,(qreal)p->SimpleWidth/LANEWIDTH);
 
     P.setBrush(theBrush);
     P.setPen(thePen);
