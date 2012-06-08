@@ -12,12 +12,34 @@ inline uint qHash(const QPoint& p)
 }
 
 #define TILE_SIZE 256
-QCache<TILE_TYPE, QImage> tileCache;
 QList<TILE_TYPE> tiles;
 QReadWriteLock tileLock;
 #define TILE_CONSTRUCTOR(x, y) QPoint(x, y)
 #define TILE_X(t) t.x()
 #define TILE_Y(t) t.y()
+
+class TileCache : public QObject
+{
+public:
+    TileCache(QObject* parent) : QObject(parent) {}
+    void insert(const TILE_TYPE& k, QImage* v)
+    {
+        m_tileCache.insert(k, v);
+    }
+    bool contains(const TILE_TYPE& k)
+    {
+        return m_tileCache.contains(k);
+    }
+    QImage* get(const TILE_TYPE& k)
+    {
+        return m_tileCache[k];
+    }
+
+private:
+    QCache<const TILE_TYPE, QImage> m_tileCache;
+};
+
+TileCache* tileCache;
 
 class RenderTile
 {
@@ -76,7 +98,7 @@ public:
         r.render(&P, theFeatures, projR, /*QRect(0, 0, TILE_SIZE, TILE_SIZE)*/QRect(-((TILE_SIZE*TILE_SURROUND)-TILE_SIZE)/2, -((TILE_SIZE*TILE_SURROUND)-TILE_SIZE)/2, TILE_SIZE*TILE_SURROUND, TILE_SIZE*TILE_SURROUND), p->PixelPerM, p->ROptions);
         P.end();
         tileLock.lockForWrite();
-        tileCache.insert(tile, img);
+        tileCache->insert(tile, img);
 
         //            if (theFeatures.size())
         //                img->save(QString("c:/temp/%1-%2.png").arg(tile.x()).arg(tile.y()));
@@ -92,6 +114,7 @@ OsmRenderLayer::OsmRenderLayer(QObject *parent)
     : QObject(parent)
     , theDocument(0)
 {
+    tileCache = new TileCache(this);
     connect(&(renderGatheringWatcher), SIGNAL(finished()), SIGNAL(renderingDone()));
 }
 
@@ -128,7 +151,8 @@ void OsmRenderLayer::forceRedraw(const Projection& aProjection, const QTransform
     ROptions = roptions;
 
     tileLock.lockForWrite();
-    tileCache.clear();
+    tileCache->deleteLater();
+    tileCache = new TileCache(this);
     tileOriginCoord = theInvertedTransform.map(QPointF(rect.topLeft()));
 
     QPointF tl = theInvertedTransform.map(QPointF(rect.topLeft()));
@@ -180,7 +204,7 @@ void OsmRenderLayer::pan(QPoint delta)
     for (int i=tileViewport.top(); i<=tileViewport.bottom(); ++i)
         for (int j=tileViewport.left(); j<=tileViewport.right(); ++j) {
             TILE_TYPE tile = TILE_CONSTRUCTOR(j, i);
-            if (!tileCache.contains(tile))
+            if (!tileCache->contains(tile))
                 tiles << tile;
         }
     tileLock.unlock();
@@ -197,9 +221,9 @@ void OsmRenderLayer::drawImage(QPainter *P)
     for (int i=tileViewport.top(); i<=tileViewport.bottom(); ++i)
         for (int j=tileViewport.left(); j<=tileViewport.right(); ++j) {
             tileLock.lockForRead();
-            if (tileCache.contains(TILE_CONSTRUCTOR(j, i))) {
+            if (tileCache->contains(TILE_CONSTRUCTOR(j, i))) {
                 QPointF tl = QPointF((j*TILE_SIZE)+origin.x(), (i*TILE_SIZE)+origin.y());
-                P->drawImage(tl, *(tileCache[TILE_CONSTRUCTOR(j, i)]));
+                P->drawImage(tl, *(tileCache->get(TILE_CONSTRUCTOR(j, i))));
             }
             tileLock.unlock();
             //            qDebug() << QPoint(j, i) << tl;

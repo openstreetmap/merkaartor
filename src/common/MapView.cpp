@@ -1112,7 +1112,7 @@ void MapView::setInteracting(bool val)
         p->ROptions.options |= RendererOptions::Interacting;
     else
         p->ROptions.options &= ~RendererOptions::Interacting;
-    invalidate(true, true, false);
+//    invalidate(true, true, false);
 }
 
 qreal MapView::pixelPerM() const
