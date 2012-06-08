@@ -303,7 +303,7 @@ Node * MemoryBackend::allocVirtualNode(const QPointF& aCoord)
     return f;
 }
 
-Way * MemoryBackend::allocWay(ILayer* l)
+Way * MemoryBackend::allocWay(ILayer* /*l*/)
 {
     Way* f;
     try {
@@ -317,7 +317,7 @@ Way * MemoryBackend::allocWay(ILayer* l)
     return f;
 }
 
-Way * MemoryBackend::allocWay(ILayer* l, const Way& other)
+Way * MemoryBackend::allocWay(ILayer* /*l*/, const Way& other)
 {
     Way* f;
     try {
@@ -331,7 +331,7 @@ Way * MemoryBackend::allocWay(ILayer* l, const Way& other)
     return f;
 }
 
-Relation * MemoryBackend::allocRelation(ILayer* l)
+Relation * MemoryBackend::allocRelation(ILayer* /*l*/)
 {
     Relation* f;
     try {
@@ -345,7 +345,7 @@ Relation * MemoryBackend::allocRelation(ILayer* l)
     return f;
 }
 
-Relation * MemoryBackend::allocRelation(ILayer* l, const Relation& other)
+Relation * MemoryBackend::allocRelation(ILayer* /*l*/, const Relation& other)
 {
     Relation* f;
     try {
@@ -359,7 +359,7 @@ Relation * MemoryBackend::allocRelation(ILayer* l, const Relation& other)
     return f;
 }
 
-TrackSegment * MemoryBackend::allocSegment(ILayer* l)
+TrackSegment * MemoryBackend::allocSegment(ILayer* /*l*/)
 {
     TrackSegment* f;
     try {

@@ -336,7 +336,7 @@ bool Painter::isFilled() const
 
 Painter& Painter::drawTrafficDirectionMarks(bool b)
 {
-    DrawTrafficDirectionMarks = true;
+    DrawTrafficDirectionMarks = b;
     return *this;
 }
 

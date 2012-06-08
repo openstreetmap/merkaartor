@@ -645,7 +645,7 @@ void WMSPreferencesDialog::on_tvWmsLayers_itemChanged(QTreeWidgetItem *twi, int)
     refreshStyles();
 }
 
-void WMSPreferencesDialog::on_tvWmsLayers_currentItemChanged(QTreeWidgetItem *current, QTreeWidgetItem *previous)
+void WMSPreferencesDialog::on_tvWmsLayers_currentItemChanged(QTreeWidgetItem *current, QTreeWidgetItem */*previous*/)
 {
     if (current)
         curLayer = current->text(0);

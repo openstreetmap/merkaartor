@@ -150,7 +150,7 @@ void FilterPreferencesDialog::on_edFilterName_textChanged(const QString & text)
     }
 }
 
-void FilterPreferencesDialog::on_edFilterString_textChanged(const QString & text)
+void FilterPreferencesDialog::on_edFilterString_textChanged(const QString & /*text*/)
 {
 }
 
