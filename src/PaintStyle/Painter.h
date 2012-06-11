@@ -41,7 +41,7 @@ public:
     Painter();
     Painter(const Painter& f);
     Painter& operator=(const Painter& F);
-    ~Painter();
+    virtual ~Painter();
 
     virtual void setSelector(const QString& aName);
 

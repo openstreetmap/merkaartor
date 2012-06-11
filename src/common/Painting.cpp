@@ -9,6 +9,7 @@
 
 #include <utility>
 
+#if 0
 static void buildCubicPath(QPainterPath& Path, const QPointF& P1, const QPointF& P2, const QPointF& P3, const QPointF& P4)
 {
     LineF L(P1,P4);
@@ -29,6 +30,7 @@ static void buildCubicPath(QPainterPath& Path, const QPointF& P1, const QPointF&
 
     }
 }
+#endif
 
 //bool QRectInterstects(const QRect& r, const QLine& l, QPoint& a, QPoint& b)
 //{

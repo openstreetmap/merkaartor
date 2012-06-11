@@ -50,7 +50,8 @@ bool ImportExportOSC::import(Layer* aLayer)
 {
     QXmlStreamReader stream(Device);
 
-    while (stream.readNext() && stream.tokenType() != QXmlStreamReader::Invalid && stream.tokenType() != QXmlStreamReader::StartElement);
+    while (stream.readNext() && stream.tokenType() != QXmlStreamReader::Invalid && stream.tokenType() != QXmlStreamReader::StartElement)
+        ;
     if (stream.name() != "osmChange" && stream.name() != "osmchange") {
 //        QMessageBox::critical(this, tr("Invalid file"), tr("%1 is not a valid osmChange file.").arg(fn));
         return false;

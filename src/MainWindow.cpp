@@ -645,7 +645,7 @@ void MainWindow::onLoadingfinished(ImageMapLayer *)
 }
 
 
-bool MainWindow::eventFilter(QObject *watched, QEvent *event)
+bool MainWindow::eventFilter(QObject */* watched */, QEvent *event)
 {
     switch (event->type()) {
 
@@ -3299,7 +3299,8 @@ Document* MainWindow::doLoadDocument(QFile* file)
     progress.setWindowModality(Qt::WindowModal);
 
     QXmlStreamReader stream(file);
-    while (stream.readNext() && stream.tokenType() != QXmlStreamReader::Invalid && stream.tokenType() != QXmlStreamReader::StartElement);
+    while (stream.readNext() && stream.tokenType() != QXmlStreamReader::Invalid && stream.tokenType() != QXmlStreamReader::StartElement)
+        ;
     if (stream.tokenType() != QXmlStreamReader::StartElement || stream.name() != "MerkaartorDocument") {
         QMessageBox::critical(this, tr("Invalid file"), tr("%1 is not a valid Merkaartor document.").arg(file->fileName()));
         return NULL;

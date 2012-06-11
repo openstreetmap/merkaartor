@@ -116,7 +116,7 @@ void TagTemplateWidget::generateCommonElements(QDomElement& e)
     }
 
     for (int i=0; i<theValues.size(); ++i) {
-        theValues[i]->toXML(e);
+        theValues[i]->toXML(e, false);
     }
 }
 
@@ -136,7 +136,7 @@ TagTemplateWidgetValue* TagTemplateWidgetValue::fromXml(const QDomElement& e)
     return aTCV;
 }
 
-bool TagTemplateWidgetValue::toXML(QDomElement& xParent)
+bool TagTemplateWidgetValue::toXML(QDomElement& xParent, bool /* header */)
 {
     QDomElement v = xParent.ownerDocument().createElement("value");
     xParent.appendChild(v);

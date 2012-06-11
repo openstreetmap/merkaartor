@@ -178,7 +178,7 @@ public:
     virtual /* const */ LayerType classType() const {return Layer::TrackLayerType;}
     virtual const LayerGroups classGroups() const {return(Layer::Tracks);}
 
-    virtual bool isUploadable() {return true;}
+    virtual bool isUploadable() const {return true;}
     virtual bool isTrack() const {return true;}
 
 protected:
@@ -198,7 +198,7 @@ public:
     virtual /* const */ LayerType classType() const {return m_type;}
     virtual const LayerGroups classGroups() const {return(Layer::Special);}
 
-    virtual bool isUploadable() {return false;}
+    virtual bool isUploadable() const {return false;}
     virtual bool isTrack() const {return true;}
 
 protected:
@@ -254,7 +254,7 @@ public:
     virtual const LayerGroups classGroups() const {return(Layer::None);}
     virtual LayerWidget* newWidget(void);
 
-    virtual bool isUploadable() {return false;}
+    virtual bool isUploadable() const {return false;}
     virtual bool canDelete() const { return false; }
 };
 

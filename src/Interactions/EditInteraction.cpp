@@ -101,10 +101,12 @@ static bool modifiersForDrag(Qt::KeyboardModifiers modifiers)
         return true;
 }
 
+#if 0
 static bool modifiersForSegmentSelect(Qt::KeyboardModifiers modifiers)
 {
     return modifiers.testFlag(Qt::AltModifier);
 }
+#endif
 
 static bool modifiersForGreedyAdd(Qt::KeyboardModifiers modifiers)
 {

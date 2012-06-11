@@ -44,8 +44,8 @@ public:
     }
 
     QWidget *createEditor(QWidget *parent,
-         const QStyleOptionViewItem & option ,
-         const QModelIndex & index ) const
+         const QStyleOptionViewItem & /*option*/,
+         const QModelIndex & /*index*/ ) const
     {
         // create check box as our editor
          QCheckBox *editor = new QCheckBox(parent);
@@ -76,7 +76,7 @@ public:
      }
 
      void updateEditorGeometry(QWidget *editor,
-         const QStyleOptionViewItem &option, const QModelIndex &index ) const
+         const QStyleOptionViewItem &option, const QModelIndex & /*index*/ ) const
      {
          editor->setGeometry(option.rect);
      }

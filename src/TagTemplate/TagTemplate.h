@@ -84,7 +84,7 @@ class TagTemplateWidgetValue: public TagTemplateWidget
         QString		theTagValue;
 
     public:
-        virtual bool toXML(QDomElement& xParent);
+        virtual bool toXML(QDomElement& xParent, bool /* header */);
         static TagTemplateWidgetValue*		fromXml(const QDomElement& e);
 
 };

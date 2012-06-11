@@ -9,11 +9,6 @@
         <translation>A propos de Merkaartor</translation>
     </message>
     <message>
-        <location filename="../src/common/AboutDialog.ui" line="123"/>
-        <source>Copyright Bart Vanhauwaert, Chris Browet and others, 2006-2010</source>
-        <translation>Copyright Bart Vanhauwaert, Chris Browet et autres, 2006-2010</translation>
-    </message>
-    <message>
         <location filename="../src/common/AboutDialog.ui" line="130"/>
         <source>This program is licensed under the GNU Public License v2</source>
         <translation>Ce programme est publié sous Licence Publique GNU v2</translation>
@@ -105,6 +100,11 @@ p, li { white-space: pre-wrap; }
 p, li { white-space: pre-wrap; }
 &lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-size:small; font-weight:400; font-style:normal;&quot;&gt;
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-style:italic;&quot;&gt;Version de GDAL&lt;/span&gt;&lt;br /&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;%1&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
+    </message>
+    <message>
+        <location filename="../src/common/AboutDialog.ui" line="123"/>
+        <source>Copyright Bart Vanhauwaert, Chris Browet and others, 2006-2012</source>
+        <translation type="unfinished">Copyright Bart Vanhauwaert, Chris Browet et autres, 2006-2012</translation>
     </message>
     <message>
         <location filename="../src/common/AboutDialog.ui" line="157"/>
@@ -2260,6 +2260,13 @@ Do you want to save your changes?</source>
         <translation>Tous les fichiers (*)</translation>
     </message>
     <message>
+        <location filename="../src/MainWindow.cpp" line="3038"/>
+        <source>An attempt will be made to rebuild the history.
+No guarantee, though, and no Undo.
+Are you sure you want to try this? </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../src/MainWindow.cpp" line="3209"/>
         <source>Save Merkaartor template document</source>
         <translation type="unfinished"></translation>
@@ -2678,6 +2685,7 @@ Voulez-vous le faire maintenant ?</translation>
         <translation>Ctrl+N</translation>
     </message>
     <message>
+        <location filename="../src/MainWindow.ui" line="793"/>
         <location filename="../src/MainWindow.ui" line="891"/>
         <source>Save &amp;As...</source>
         <translation>Sauvegarder &amp;sous...</translation>
@@ -2882,7 +2890,7 @@ Voulez-vous le faire maintenant ?</translation>
     </message>
     <message>
         <location filename="../src/Interactions/CreateDoubleWayInteraction.cpp" line="49"/>
-        <source>Create qreal way Interaction</source>
+        <source>Create double way Interaction</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -3603,13 +3611,6 @@ En cas de doute, demandez un avis sur les listes de diffusion OSM &quot;legal&qu
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="3038"/>
-        <source>An attempt will be mode to rebuild the history.
-No guarantee, though, and no Undo.
-Are you sure you want to try this? </source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="../src/MainWindow.cpp" line="3273"/>
         <source>Unable to open save file</source>
         <translation>Impossible d&apos;ouvrir le fichier de sauvegarde</translation>
@@ -3826,11 +3827,6 @@ Are you sure you want to try this? </source>
     <message>
         <location filename="../src/MainWindow.ui" line="694"/>
         <source>R&amp;oundabout</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/MainWindow.ui" line="793"/>
-        <source>Save. &amp;As..</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -4620,27 +4616,27 @@ Voulez-vous créer un carrefour pour chacune d&apos;elles? (Les carrefours non d
 <context>
     <name>MapFeature</name>
     <message>
-        <location filename="../src/Features/Feature.cpp" line="1065"/>
+        <location filename="../src/Features/Feature.cpp" line="1072"/>
         <source>&lt;i&gt;V: &lt;/i&gt;&lt;b&gt;%1&lt;/b&gt; </source>
         <translation>&lt;i&gt;V: &lt;/i&gt;&lt;b&gt;%1&lt;/b&gt; </translation>
     </message>
     <message>
-        <location filename="../src/Features/Feature.cpp" line="1067"/>
+        <location filename="../src/Features/Feature.cpp" line="1074"/>
         <source>&lt;i&gt;last: &lt;/i&gt;&lt;b&gt;%1&lt;/b&gt; by &lt;b&gt;%2&lt;/b&gt;</source>
         <translation>&lt;i&gt;dernier: &lt;/i&gt;&lt;b&gt;%1&lt;/b&gt; par &lt;b&gt;%2&lt;/b&gt;</translation>
     </message>
     <message>
-        <location filename="../src/Features/Feature.cpp" line="1069"/>
+        <location filename="../src/Features/Feature.cpp" line="1076"/>
         <source>&lt;i&gt;last: &lt;/i&gt;&lt;b&gt;%1&lt;/b&gt;</source>
         <translation>&lt;i&gt;dernier: &lt;/i&gt;&lt;b&gt;%1&lt;/b&gt;</translation>
     </message>
     <message>
-        <location filename="../src/Features/Feature.cpp" line="1072"/>
+        <location filename="../src/Features/Feature.cpp" line="1079"/>
         <source>&lt;br/&gt;&lt;i&gt;layer: &lt;/i&gt;&lt;b&gt;%1&lt;/b&gt; </source>
         <translation>&lt;br/&gt;&lt;i&gt;Calque: &lt;/i&gt;&lt;b&gt;%1&lt;/b&gt; </translation>
     </message>
     <message>
-        <location filename="../src/Features/Feature.cpp" line="1096"/>
+        <location filename="../src/Features/Feature.cpp" line="1103"/>
         <source>Browse</source>
         <translation type="unfinished"></translation>
     </message>
@@ -4656,13 +4652,13 @@ Voulez-vous créer un carrefour pour chacune d&apos;elles? (Les carrefours non d
     </message>
     <message>
         <location filename="../src/Features/Relation.cpp" line="707"/>
-        <location filename="../src/Features/Way.cpp" line="894"/>
+        <location filename="../src/Features/Way.cpp" line="916"/>
         <source>Topleft</source>
         <translation>En haut à gauche</translation>
     </message>
     <message>
         <location filename="../src/Features/Relation.cpp" line="709"/>
-        <location filename="../src/Features/Way.cpp" line="896"/>
+        <location filename="../src/Features/Way.cpp" line="918"/>
         <source>Botright</source>
         <translation>BasDroit</translation>
     </message>
@@ -4682,72 +4678,72 @@ Voulez-vous créer un carrefour pour chacune d&apos;elles? (Les carrefours non d
         <translation>Membre</translation>
     </message>
     <message>
-        <location filename="../src/Features/Way.cpp" line="898"/>
+        <location filename="../src/Features/Way.cpp" line="920"/>
         <source>Way</source>
         <translation>Route</translation>
     </message>
     <message>
-        <location filename="../src/Features/Node.cpp" line="365"/>
-        <location filename="../src/Features/Node.cpp" line="628"/>
+        <location filename="../src/Features/Node.cpp" line="372"/>
+        <location filename="../src/Features/Node.cpp" line="635"/>
         <source>coord</source>
         <translation>coordonnées</translation>
     </message>
     <message>
-        <location filename="../src/Features/Node.cpp" line="372"/>
-        <location filename="../src/Features/Node.cpp" line="639"/>
+        <location filename="../src/Features/Node.cpp" line="379"/>
+        <location filename="../src/Features/Node.cpp" line="646"/>
         <source>Node</source>
         <translation>Noeud</translation>
     </message>
     <message>
-        <location filename="../src/Features/Way.cpp" line="891"/>
+        <location filename="../src/Features/Way.cpp" line="913"/>
         <source>%1 nodes</source>
         <translation>%1 nœuds</translation>
     </message>
     <message>
-        <location filename="../src/Features/Way.cpp" line="889"/>
+        <location filename="../src/Features/Way.cpp" line="911"/>
         <source>Length</source>
         <translation>Longueur</translation>
     </message>
     <message>
-        <location filename="../src/Features/Way.cpp" line="886"/>
+        <location filename="../src/Features/Way.cpp" line="908"/>
         <source>Closed way</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Features/Way.cpp" line="891"/>
+        <location filename="../src/Features/Way.cpp" line="913"/>
         <source>Size</source>
         <translation>Taille</translation>
     </message>
     <message>
-        <location filename="../src/Features/Way.cpp" line="898"/>
+        <location filename="../src/Features/Way.cpp" line="920"/>
         <source>Area</source>
         <translation>Aire</translation>
     </message>
     <message>
-        <location filename="../src/Features/Node.cpp" line="631"/>
+        <location filename="../src/Features/Node.cpp" line="638"/>
         <source>elevation</source>
         <translation>élévation</translation>
     </message>
     <message>
-        <location filename="../src/Features/Node.cpp" line="633"/>
+        <location filename="../src/Features/Node.cpp" line="640"/>
         <source>speed</source>
         <translation>vitesse</translation>
     </message>
     <message>
-        <location filename="../src/Features/Node.cpp" line="364"/>
-        <location filename="../src/Features/Node.cpp" line="627"/>
+        <location filename="../src/Features/Node.cpp" line="371"/>
+        <location filename="../src/Features/Node.cpp" line="634"/>
         <source>Waypoint</source>
         <translation>Noeud intermédiaire</translation>
     </message>
     <message>
-        <location filename="../src/Features/Node.cpp" line="368"/>
-        <location filename="../src/Features/Node.cpp" line="635"/>
+        <location filename="../src/Features/Node.cpp" line="375"/>
+        <location filename="../src/Features/Node.cpp" line="642"/>
         <source>description</source>
         <translation>description</translation>
     </message>
     <message>
-        <location filename="../src/Features/Node.cpp" line="370"/>
-        <location filename="../src/Features/Node.cpp" line="637"/>
+        <location filename="../src/Features/Node.cpp" line="377"/>
+        <location filename="../src/Features/Node.cpp" line="644"/>
         <source>comment</source>
         <translation>commentaire</translation>
     </message>
@@ -5363,160 +5359,160 @@ What do you want to do next?</source>
         <translation>Opacité bas/haut</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="705"/>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="715"/>
         <source>Map style</source>
         <translation>Style de carte</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="831"/>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="841"/>
         <source>Custom</source>
         <translation>Personnalisé</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="1267"/>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="1277"/>
         <source>Password:</source>
         <translation>Mot-de-passe:</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="1248"/>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="1258"/>
         <source>Network</source>
         <translation>Réseau</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="1254"/>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="1264"/>
         <source>Proxy settings</source>
         <translation>Configuration du Proxy</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="1260"/>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="1270"/>
         <source>Use Proxy</source>
         <translation>Utiliser un serveur mandataire</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="1304"/>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="1314"/>
         <source>Host:</source>
         <translation>Nom d&apos;hôte:</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="1297"/>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="1307"/>
         <source>Port:</source>
         <translation>Port:</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="1414"/>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="1424"/>
         <source>Background Image</source>
         <translation>Image d&apos;arrière-plan</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="1426"/>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="1436"/>
         <source>Cache directory</source>
         <translation>Répertoire du cache</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="1436"/>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="1446"/>
         <source>Cache size (in Mb; 0 to disable)</source>
         <translation>Taille du cache (en Mb; 0 pour désactiver)</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="1455"/>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="1465"/>
         <source>Map Adapter</source>
         <translation>Adapteur de carte</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="880"/>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="890"/>
         <source>Data</source>
         <translation>Données</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="958"/>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="968"/>
         <source>Documents</source>
         <translation>Documents</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="994"/>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="1004"/>
         <source>Autosave documents after upload</source>
         <translation>Sauvegarder automatiquement les documents après téléversage</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="807"/>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="817"/>
         <source>Built-in</source>
         <translation>Inclus</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="769"/>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="779"/>
         <source>Disable styles for track layers</source>
         <translation>Désactiver les styles pour les couches de piste</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="1004"/>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="1014"/>
         <source>Tracks</source>
         <translation>Pistes</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="1012"/>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="1022"/>
         <source>Automatically extract tracks on open</source>
         <translation>Extraire automatiquement les pistes à l&apos;ouverture</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.cpp" line="519"/>
-        <location filename="../src/Preferences/PreferencesDialog.cpp" line="532"/>
-        <location filename="../src/Preferences/PreferencesDialog.cpp" line="545"/>
-        <location filename="../src/Preferences/PreferencesDialog.cpp" line="558"/>
-        <location filename="../src/Preferences/PreferencesDialog.cpp" line="571"/>
-        <location filename="../src/Preferences/PreferencesDialog.cpp" line="584"/>
-        <location filename="../src/Preferences/PreferencesDialog.cpp" line="596"/>
+        <location filename="../src/Preferences/PreferencesDialog.cpp" line="521"/>
+        <location filename="../src/Preferences/PreferencesDialog.cpp" line="534"/>
+        <location filename="../src/Preferences/PreferencesDialog.cpp" line="547"/>
+        <location filename="../src/Preferences/PreferencesDialog.cpp" line="560"/>
+        <location filename="../src/Preferences/PreferencesDialog.cpp" line="573"/>
+        <location filename="../src/Preferences/PreferencesDialog.cpp" line="586"/>
+        <location filename="../src/Preferences/PreferencesDialog.cpp" line="598"/>
         <source>Select Color</source>
         <translation>Choisir une couleur</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.cpp" line="611"/>
+        <location filename="../src/Preferences/PreferencesDialog.cpp" line="613"/>
         <source>Tool already exists</source>
         <translation>L&apos;outil existe déjà</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.cpp" line="612"/>
+        <location filename="../src/Preferences/PreferencesDialog.cpp" line="614"/>
         <source>A tool of this name already exists.
 Please select another name or click the &lt;Apply&gt; button if you want to modify the existing one</source>
         <translation>Un outil portant ce nom existe déjà.
 Veuillez choisir un autre nom ou cliquer sur le boutton &lt;Appliquer&gt; si vous désirer modifier celui existant</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.cpp" line="631"/>
+        <location filename="../src/Preferences/PreferencesDialog.cpp" line="633"/>
         <source>Cannot delete preset tool</source>
         <translation>Impossible de supprimer l&apos;outil prédéfini</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.cpp" line="632"/>
+        <location filename="../src/Preferences/PreferencesDialog.cpp" line="634"/>
         <source>Cannot delete preset tool &quot;%1&quot;</source>
         <translation>Impossible de supprimer l&apos;outil prédéfini &quot;%1&quot;</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.cpp" line="650"/>
+        <location filename="../src/Preferences/PreferencesDialog.cpp" line="652"/>
         <source>Cannot modify preset tool name</source>
         <translation>Impossible de modifier le nom d&apos;un outil prédéfini</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.cpp" line="651"/>
+        <location filename="../src/Preferences/PreferencesDialog.cpp" line="653"/>
         <source>Cannot modify preset tool &quot;%1&quot;&apos;s name</source>
         <translation>Impossible de modifier le nom de l&apos;outil prédéfini &quot;%1&quot;&apos;</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.cpp" line="676"/>
+        <location filename="../src/Preferences/PreferencesDialog.cpp" line="678"/>
         <source>Select tool executable</source>
         <translation>Séléctionnez l&apos;exécutable de l&apos;outil</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.cpp" line="684"/>
+        <location filename="../src/Preferences/PreferencesDialog.cpp" line="686"/>
         <source>Select template document</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.cpp" line="684"/>
+        <location filename="../src/Preferences/PreferencesDialog.cpp" line="686"/>
         <source>Merkaartor document (*.mdc)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.cpp" line="692"/>
+        <location filename="../src/Preferences/PreferencesDialog.cpp" line="694"/>
         <source>Select Log directory</source>
         <translation>Séléctionnez le dossier des fichiers de journalisation</translation>
     </message>
@@ -5578,11 +5574,11 @@ Veuillez choisir un autre nom ou cliquer sur le boutton &lt;Appliquer&gt; si vou
         <location filename="../src/Preferences/PreferencesDialog.ui" line="393"/>
         <location filename="../src/Preferences/PreferencesDialog.ui" line="446"/>
         <location filename="../src/Preferences/PreferencesDialog.ui" line="513"/>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="736"/>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="854"/>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="985"/>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="1209"/>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="1545"/>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="746"/>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="864"/>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="995"/>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="1219"/>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="1555"/>
         <source>...</source>
         <translation>...</translation>
     </message>
@@ -5592,95 +5588,95 @@ Veuillez choisir un autre nom ou cliquer sur le boutton &lt;Appliquer&gt; si vou
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="892"/>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="902"/>
         <source>OSM API (URL is, e.g., &quot;http://www.openstreetmap.org/api/0.6&quot;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="906"/>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="916"/>
         <source>XAPI</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="914"/>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="946"/>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="924"/>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="956"/>
         <source>URL:</source>
         <translation>URL :</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="935"/>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="945"/>
         <source>Nominatim (Geo Search)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="1079"/>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="1089"/>
         <source>GPS</source>
         <translation>GPS</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="1186"/>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="1196"/>
         <source>Save NMEA log</source>
         <translation>Sauver les fichiers de journalisation NMEA</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="1227"/>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="1237"/>
         <source>Set system time to GPS</source>
         <translation>Mettre l&apos;horloge système à celle du GPS</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="1393"/>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="1403"/>
         <source>Enable JOSM-compatible local server on port 8111</source>
         <translation>Activer le serveur local compatible JOSM sur le port 8111</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="1461"/>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="1471"/>
         <source>Automatically add &quot;source&quot; tag when creating features over a background map</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="1490"/>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="1500"/>
         <source>Tools</source>
         <translation>Outils</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="1508"/>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="1518"/>
         <source>Name:</source>
         <translation>Nom:</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="1518"/>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="1528"/>
         <source>Path:</source>
         <translation>Chemin:</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="1567"/>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="1577"/>
         <source>Apply</source>
         <translation>Appliquer</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="1574"/>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="1584"/>
         <source>Add</source>
         <translation>Ajouter</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="1581"/>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="1591"/>
         <source>Remove</source>
         <translation>Supprimer</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="713"/>
-        <location filename="../src/Preferences/PreferencesDialog.cpp" line="501"/>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="723"/>
+        <location filename="../src/Preferences/PreferencesDialog.cpp" line="503"/>
         <source>Custom styles directory</source>
         <translation>Répertoire des styles personnalisés</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="799"/>
-        <location filename="../src/Preferences/PreferencesDialog.cpp" line="510"/>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="809"/>
+        <location filename="../src/Preferences/PreferencesDialog.cpp" line="512"/>
         <source>Tag Template</source>
         <translation>Modèkle de tag</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.cpp" line="510"/>
+        <location filename="../src/Preferences/PreferencesDialog.cpp" line="512"/>
         <source>Merkaartor tag template (*.mat)</source>
         <translation>Modèle de tag Merkaartor (*.mat)</translation>
     </message>
@@ -5735,67 +5731,77 @@ Veuillez choisir un autre nom ou cliquer sur le boutton &lt;Appliquer&gt; si vou
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="672"/>
+        <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;If enabled, wireframe rendering (View-Wireframe) will use the current style for colors and fill. Only the fixed thickness will be used for width. &lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../src/Preferences/PreferencesDialog.ui" line="675"/>
+        <source>Use current style for wireframe rendering</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="685"/>
         <source>Editing</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="681"/>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="691"/>
         <source>Quick editing</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="688"/>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="698"/>
         <source>Wireframe editing</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="695"/>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="705"/>
         <source>Full render editing</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="747"/>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="757"/>
         <source>Current style</source>
         <translation>Style actuel</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="793"/>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="803"/>
         <source>Template</source>
         <translation>Modèle</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="969"/>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="979"/>
         <source>Autoload template document</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="1019"/>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="1029"/>
         <source>Track layers readonly by default</source>
         <translation>Couches de traces en lecture seule par défaut</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="1030"/>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="1040"/>
         <source>Don&apos;t connect GPX nodes separated by more than (in km; 0 to disable)</source>
         <translation>Ne pas connecter les nœuds du GPX séparés par plus de (en km; 0 pour désactiver)</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="1049"/>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="1059"/>
         <source>GDAL</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="1055"/>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="1065"/>
         <source>Confirm projection</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="1355"/>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="1365"/>
         <source>Network Timeout (sec)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="1420"/>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="1430"/>
         <source>Tiles Caching (not active for Yahoo! due to legal restrictions)</source>
         <translation>Mise en cache des tuiles (Inactif pour Yahoo! pour des raisons légales)</translation>
     </message>
@@ -5860,7 +5866,7 @@ Veuillez choisir un autre nom ou cliquer sur le boutton &lt;Appliquer&gt; si vou
         <translation>Russe</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="1290"/>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="1300"/>
         <source>User:</source>
         <translation>Utilisateur:</translation>
     </message>
@@ -5880,28 +5886,28 @@ Veuillez choisir un autre nom ou cliquer sur le boutton &lt;Appliquer&gt; si vou
         <translation>Utiliser l&apos;apparence simplifiée pour les traces GPX</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="1085"/>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="1095"/>
         <source>GPS input</source>
         <translation>Entrée GPS</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="1091"/>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="1101"/>
         <source>gpsd</source>
         <translation>gpsd</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="1098"/>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="1108"/>
         <source>Serial</source>
         <translation>Série</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="1120"/>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="1158"/>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="1130"/>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="1168"/>
         <source>Port</source>
         <translation>Port</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="1148"/>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="1158"/>
         <source>Host</source>
         <translation>Hôte</translation>
     </message>
@@ -6792,24 +6798,24 @@ p, li { white-space: pre-wrap; }
         <translation>Supprimer</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/TMSPreferencesDialog.cpp" line="216"/>
-        <location filename="../src/Preferences/TMSPreferencesDialog.cpp" line="269"/>
-        <location filename="../src/Preferences/TMSPreferencesDialog.cpp" line="279"/>
+        <location filename="../src/Preferences/TMSPreferencesDialog.cpp" line="217"/>
+        <location filename="../src/Preferences/TMSPreferencesDialog.cpp" line="270"/>
+        <location filename="../src/Preferences/TMSPreferencesDialog.cpp" line="280"/>
         <source>Merkaartor: GetServices</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Preferences/TMSPreferencesDialog.cpp" line="216"/>
+        <location filename="../src/Preferences/TMSPreferencesDialog.cpp" line="217"/>
         <source>Address and Path cannot be blank.</source>
         <translation>L&apos;adresse et le chemin ne peuvent pas être vides.</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/TMSPreferencesDialog.cpp" line="270"/>
+        <location filename="../src/Preferences/TMSPreferencesDialog.cpp" line="271"/>
         <source>Download failed: %1.</source>
         <translation>Le téléchargement a échoué: %1.</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/TMSPreferencesDialog.cpp" line="279"/>
+        <location filename="../src/Preferences/TMSPreferencesDialog.cpp" line="280"/>
         <source>Error reading services.
 </source>
         <translation>Erreur lors de la lecture des services.

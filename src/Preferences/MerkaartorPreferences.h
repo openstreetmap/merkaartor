@@ -60,7 +60,12 @@ class IPaintStyle;
 #define M_PREFS MerkaartorPreferences::instance()
 #define M_STYLE MerkaartorPreferences::styleinstance()
 
+#ifdef Q_WS_MACX
+// Follow conventions on Mac OS X
+#define HOMEDIR (g_Merk_Portable ? qApp->applicationDirPath() : QDir::homePath() + "/Library/Merkaartor")
+#else
 #define HOMEDIR (g_Merk_Portable ? qApp->applicationDirPath() : QDir::homePath() + "/.merkaartor")
+#endif
 #define SHAREDIR (g_Merk_Portable ? qApp->applicationDirPath() : STRINGIFY(SHARE_DIR))
 #define TEMPLATE_DOCUMENT (HOMEDIR + "/Startup.mdc")
 

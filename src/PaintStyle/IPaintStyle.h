@@ -21,6 +21,8 @@ public:
     virtual QString getFilename() = 0;
     virtual void savePainters(const QString& filename) = 0;
     virtual void loadPainters(const QString& filename) = 0;
+    
+    virtual ~IPaintStyle() {};
 };
 
 #endif // IPAINTSTYLE_H

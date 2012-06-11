@@ -179,10 +179,10 @@ void TMSPreferencesDialog::setSelectedServer(QString theValue)
 
 void TMSPreferencesDialog::on_buttonBox_clicked(QAbstractButton * button)
 {
-    if ((button == buttonBox->button(QDialogButtonBox::Apply))) {
+    if (button == buttonBox->button(QDialogButtonBox::Apply)) {
         savePrefs();
     } else
-        if ((button == buttonBox->button(QDialogButtonBox::Ok))) {
+        if (button == buttonBox->button(QDialogButtonBox::Ok)) {
             savePrefs();
             this->accept();
         }

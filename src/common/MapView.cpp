@@ -252,7 +252,7 @@ void MapView::panScreen(QPoint delta)
     update();
 }
 
-void MapView::rotateScreen(QPoint center, qreal angle)
+void MapView::rotateScreen(QPoint /* center */, qreal angle)
 {
     p->theVectorRotation += angle;
 
@@ -943,7 +943,7 @@ void MapView::viewportRecalc(const QRect & Screen)
     emit viewportChanged();
 }
 
-void MapView::transformCalc(QTransform& theTransform, const Projection& theProjection, const qreal& theRotation, const CoordBox& TargetMap, const QRect& screen)
+void MapView::transformCalc(QTransform& theTransform, const Projection& theProjection, const qreal& /* theRotation */, const CoordBox& TargetMap, const QRect& screen)
 {
     QRectF pViewport = theProjection.toProjectedRectF(TargetMap, screen);
 //    QPointF pCenter(pViewport.center());

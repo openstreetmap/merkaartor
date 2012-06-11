@@ -49,7 +49,15 @@ INCLUDEPATH += $${MERKAARTOR_SRC_DIR}/interfaces
 INCLUDEPATH += $$MERKAARTOR_SRC_DIR/include
 LIBS += -L$$OUTPUT_DIR
 
-unix {
+macx {
+    # Prefix: base instalation directory
+    PREFIX = /Applications
+    LIBDIR = $${PREFIX}/lib${LIB_SUFFIX}
+    target.path = $${PREFIX}/merkaartor.app/Contents/plugins
+    INSTALLS += target
+}
+
+unix:!macx {
     # Prefix: base instalation directory
     isEmpty( PREFIX ) {
         PREFIX = /usr/local

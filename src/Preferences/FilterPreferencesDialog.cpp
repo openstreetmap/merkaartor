@@ -168,10 +168,10 @@ void FilterPreferencesDialog::setSelectedItem(QString theValue)
 
 void FilterPreferencesDialog::on_buttonBox_clicked(QAbstractButton * button)
 {
-    if ((button == buttonBox->button(QDialogButtonBox::Apply))) {
+    if (button == buttonBox->button(QDialogButtonBox::Apply)) {
         savePrefs();
     } else
-        if ((button == buttonBox->button(QDialogButtonBox::Ok))) {
+        if (button == buttonBox->button(QDialogButtonBox::Ok)) {
             savePrefs();
             this->accept();
         }

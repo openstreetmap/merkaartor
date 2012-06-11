@@ -82,6 +82,7 @@ win32 {
 macx {
     RC_FILE = $$PWD/../Icons/merkaartor.icns
     QMAKE_INFO_PLIST = $$PWD/../macos/Info.plist
+    # This is where we get the the ports from
     INCLUDEPATH += /opt/local/include
 }
 
@@ -126,7 +127,17 @@ FORMS += \
 
 OTHER_FILES += ../CHANGELOG ../LICENSE
 
-unix {
+macx {
+    # Prefix: base instalation directory (fixed for the mac)
+    PREFIX = /Applications
+    LIBDIR = $${PREFIX}/lib${LIB_SUFFIX}
+    DEFINES += PLUGINS_DIR=$${PREFIX}/merkaartor.app/Contents/plugins
+    target.path = $${PREFIX}
+    SHARE_DIR = $${PREFIX}/merkaartor.app/Contents/Resources
+    TRANSDIR_MERKAARTOR = $${SHARE_DIR}/
+}
+
+unix:!macx {
     # Prefix: base instalation directory
     isEmpty( PREFIX ) {
         PREFIX = /usr/local
@@ -142,6 +153,7 @@ unix {
         TRANSDIR_MERKAARTOR = $${SHARE_DIR}/translations
     }
 }
+
 win32 {
     DEFINES += PLUGINS_DIR=plugins
     SHARE_DIR = share
@@ -254,10 +266,12 @@ contains (PROTOBUF, 1) {
     DEFINES += USE_PROTOBUF
 }
 
-desktop.path = $${PREFIX}/share/applications
-desktop.files = merkaartor.desktop
-desktopicons.path = $${PREFIX}/share/icons/hicolor/48x48/apps/
-desktopicons.files = $$PWD/../Icons/48x48/merkaartor.png
-INSTALLS += desktop desktopicons
+unix:!macx {
+    desktop.path = $${PREFIX}/share/applications
+    desktop.files = merkaartor.desktop
+    desktopicons.path = $${PREFIX}/share/icons/hicolor/48x48/apps/
+    desktopicons.files = $$PWD/../Icons/48x48/merkaartor.png
+    INSTALLS += desktop desktopicons
+}
 
 

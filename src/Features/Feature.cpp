@@ -189,7 +189,7 @@ Feature::Feature()
 }
 
 Feature::Feature(const Feature& other)
-: MetaUpToDate(false), m_references(0), ReadOnly(other.ReadOnly)
+: IFeature(other), MetaUpToDate(false), m_references(0), ReadOnly(other.ReadOnly)
 {
     p = new FeaturePrivate(*other.p);
     p->Id = IFeature::FId(IFeature::Uninitialized, 0);
@@ -572,9 +572,11 @@ void Feature::invalidatePainter()
     p->PixelPerMForPainter = -1;
 }
 
+static QPainterPath painterPath;
+
 const QPainterPath& Feature::getPath() const
 {
-    return QPainterPath();
+    return painterPath;
 }
 
 void FeaturePrivate::updatePossiblePainters()

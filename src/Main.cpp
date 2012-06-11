@@ -210,9 +210,15 @@ int main(int argc, char** argv)
     splash.showMessage(QString(instance.translate("Main", "%1 v%2%3(%4)\nLoading plugins...")).arg(qApp->applicationName()).arg(STRINGIFY(VERSION)).arg(STRINGIFY(REVISION)).arg(STRINGIFY(SVNREV)), Qt::AlignBottom | Qt::AlignHCenter, Qt::black);
     instance.processEvents();
 
-    if (!g_Merk_Portable)
+    if (!g_Merk_Portable) {
+#ifdef Q_OS_MAC
+        if (!QDir::home().exists(HOMEDIR))
+            QDir::home().mkpath(HOMEDIR);
+#else
         if (!QDir::home().exists("." + qApp->applicationName().toLower()))
             QDir::home().mkdir("." + qApp->applicationName().toLower());
+#endif
+    }
 #if defined(Q_OS_WIN32)
     QDir pluginsDir = QDir(qApp->applicationDirPath() + "/" + STRINGIFY(PLUGINS_DIR));
 

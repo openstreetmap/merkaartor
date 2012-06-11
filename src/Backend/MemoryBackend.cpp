@@ -4,7 +4,7 @@
 RenderPriority NodePri(RenderPriority::IsSingular,0., 0);
 RenderPriority SegmentPri(RenderPriority::IsLinear,0.,99);
 
-inline void* operator new (std::size_t sz)
+inline void* operator new (std::size_t sz) throw(std::bad_alloc)
 {
   // fixme: throw bad_alloc on error
     void *p = (void *) malloc(sz);
@@ -13,7 +13,7 @@ inline void* operator new (std::size_t sz)
     return p;
 }
 
-void operator delete (void *p)
+void operator delete (void *p) throw()
 {
     free(p);
 }

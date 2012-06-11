@@ -307,7 +307,7 @@ QImage BrowserImageManager::prefetchImage(IMapAdapter* anAdapter, int x, int y, 
     return getImage(anAdapter, anAdapter->getQuery(x, y, z));
 }
 
-void BrowserImageManager::receivedData(const QByteArray& ba, const QHash<QString, QString>& headers, const QString& hash)
+void BrowserImageManager::receivedData(const QByteArray& /* ba */, const QHash<QString, QString>& /* headers */, const QString& hash)
 {
     if (prefetch.contains(hash))
     {

@@ -146,11 +146,11 @@ PreferencesDialog::~PreferencesDialog()
 
 void PreferencesDialog::on_buttonBox_clicked(QAbstractButton * button)
 {
-    if ((button == buttonBox->button(QDialogButtonBox::Apply))) {
+    if (button == buttonBox->button(QDialogButtonBox::Apply)) {
         savePrefs();
         emit(preferencesChanged(this));
     } else
-        if ((button == buttonBox->button(QDialogButtonBox::Ok))) {
+        if (button == buttonBox->button(QDialogButtonBox::Ok)) {
             savePrefs();
             emit(preferencesChanged(this));
             this->accept();
