@@ -6,6 +6,7 @@
 #include <QtGui/QPainterPath>
 #include <QtXml/QDomDocument>
 #include <QtXml/QDomNode>
+#include <QFileInfo>
 
 
 #include <math.h>
@@ -53,8 +54,15 @@ void MasPaintStyle::savePainters(const QString& filename)
     m_isDirty = false;
 }
 
-void MasPaintStyle::loadPainters(const QString& filename)
+void MasPaintStyle::loadPainters(const QString& fn)
 {
+    QString filename = fn;
+    if (filename.endsWith("msz", Qt::CaseInsensitive)) {
+        QFileInfo fi(filename);
+        QString basename = fi.baseName();
+        filename = fn + "/" + basename + ".mas";
+    }
+
     QDomDocument doc;
     QFile file(filename);
     if (!file.open(QIODevice::ReadOnly))

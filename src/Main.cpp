@@ -12,6 +12,8 @@
 #include "revision.h"
 #include "proj_api.h"
 #include "gdal_version.h"
+#include "QFatFs.h"
+#include "ZipEngine.h"
 
 #include "IMapAdapterFactory.h"
 
@@ -248,6 +250,10 @@ int main(int argc, char** argv)
     splash.showMessage(QString(instance.translate("Main", "%1 v%2%3(%4)\nInitializing...")).arg(qApp->applicationName()).arg(STRINGIFY(VERSION)).arg(STRINGIFY(REVISION)).arg(STRINGIFY(SVNREV)), Qt::AlignBottom | Qt::AlignHCenter, Qt::black);
     instance.processEvents();
 
+//    QFatFsHandler* fatHandler = new QFatFsHandler(50000, 8192);
+    ZipEngineHandler* zipHandler = new ZipEngineHandler();
+
+
     MainWindow Main;
     g_Merk_MainWindow = &Main;
     instance.setActivationWindow(&Main, false);
@@ -284,6 +290,9 @@ int main(int argc, char** argv)
         fclose(pLogFile);
         pLogFile = NULL;
     }
+
+//    delete fatHandler;
+    delete zipHandler;
 
     return x;
 }

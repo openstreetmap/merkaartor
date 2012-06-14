@@ -3857,7 +3857,7 @@ void MainWindow::updateStyleMenu()
         p->theStyle->addItem(a);
     }
     if (!M_PREFS->getCustomStyle().isEmpty()) {
-        QDir customStyles(M_PREFS->getCustomStyle(), "*.mas");
+        QDir customStyles(M_PREFS->getCustomStyle(), "*.mas *.msz");
         for (int i=0; i < customStyles.entryList().size(); ++i) {
             QAction* a = new QAction(customStyles.entryList().at(i), ui->menuStyles);
             actgrp->addAction(a);
