@@ -382,9 +382,8 @@ void Way::drawSimple(QPainter &P, MapView *theView)
                 thePen = QPen(thePainter->BackgroundColor,thePainter->BackgroundOffset);
             else
                 thePen = QPen(p->SimpleColor,(qreal)p->SimpleWidth/LANEWIDTH);
-        } else
-            if (thePainter->DrawForeground)
-                thePen = QPen(thePainter->ForegroundColor,thePainter->ForegroundOffset);
+        } else if (thePainter->DrawForeground)
+                thePen = QPen(thePainter->ForegroundColor,thePainter->ForegroundOffset >= 1 ? thePainter->ForegroundOffset : (qreal)p->SimpleWidth/LANEWIDTH);
             else
                 thePen = QPen(p->SimpleColor,(qreal)p->SimpleWidth/LANEWIDTH);
     }
