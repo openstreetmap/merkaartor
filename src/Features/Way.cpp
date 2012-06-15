@@ -93,7 +93,7 @@ void WayPrivate::CalculateWidth()
         SimpleColor = QColor(228, 109, 113);
     } else if (h == "secondary") {
         SimpleWidth =  2*LANEWIDTH; // 2 lanes
-        SimpleColor = QColor(253, 191, 252);
+        SimpleColor = QColor(253, 191, 111);
     } else if (h == "tertiary") {
         SimpleWidth =  1.5*LANEWIDTH; // shared middle lane
         SimpleColor = QColor(255, 229, 33);
