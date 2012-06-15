@@ -59,6 +59,7 @@ class WayPrivate
         int BestSegment;
         qreal SimpleWidth;
         QColor SimpleColor;
+        Feature::TrafficDirectionType DirectionType;
 
         RenderPriority theRenderPriority; // 10 (24)
 
@@ -446,6 +447,26 @@ void Way::updateMeta()
         p->theRenderPriority = RenderPriority(RenderPriority::IsLinear,Priority, layer);
     }
 
+
+    p->DirectionType = Feature::UnknownDirection;
+    QString d;
+    int idx=findKey("oneway");
+    if (idx != -1)
+    {
+        d = tagValue(idx);
+        if ( (d == "yes") || (d == "1") || (d == "true")) p->DirectionType = Feature::OneWay;
+        if (d == "-1") p->DirectionType = Feature::OtherWay;
+        if ((d == "no") || (d == "false") || (d == "0")) p->DirectionType = Feature::BothWays;
+    }
+
+    idx=findKey("junction");
+    if (idx != -1)
+    {
+        d = tagValue(idx);
+        if(d=="roundabout") p->DirectionType = Feature::OneWay;
+        //TODO For motorway and motorway_link, this is still discussed on the wiki.
+    }
+
     p->doUpdateVirtuals();
     MetaUpToDate = true;
 }
@@ -482,7 +503,6 @@ qreal Way::widthOf()
 
 void Way::drawTouchup(QPainter& P, MapView* theView)
 {
-
     if (isDirty() && isUploadable() && M_PREFS->getDirtyVisible()) {
         QPen thePen(M_PREFS->getDirtyColor(),M_PREFS->getDirtyWidth());
         P.setPen(thePen);
@@ -490,17 +510,69 @@ void Way::drawTouchup(QPainter& P, MapView* theView)
     }
 
     qreal theWidth = theView->nodeWidth();
-    bool Draw = (theWidth >= 1);
-    if (!Draw || !theView->renderOptions().options.testFlag(RendererOptions::VirtualNodesVisible) || !theView->renderOptions().options.testFlag(RendererOptions::NodesVisible) || isReadonly())
-        return;
+    if (theWidth >= 1 && theView->renderOptions().options.testFlag(RendererOptions::VirtualNodesVisible) && theView->renderOptions().options.testFlag(RendererOptions::NodesVisible) && !isReadonly()) {
+        theWidth /= 2;
+        P.setPen(QColor(0,0,0));
+        foreach (NodePtr N, p->virtualNodes) {
+            if (theView->viewport().contains(N->position())) {
+                QPoint p =  theView->toView(N);
+                P.drawLine(p+QPoint(-theWidth, -theWidth), p+QPoint(theWidth, theWidth));
+                P.drawLine(p+QPoint(theWidth, -theWidth), p+QPoint(-theWidth, theWidth));
+            }
+        }
+    }
 
-    theWidth /= 2;
-    P.setPen(QColor(0,0,0));
-    foreach (NodePtr N, p->virtualNodes) {
-        if (theView->viewport().contains(N->position())) {
-            QPoint p =  theView->toView(N);
-            P.drawLine(p+QPoint(-theWidth, -theWidth), p+QPoint(theWidth, theWidth));
-            P.drawLine(p+QPoint(theWidth, -theWidth), p+QPoint(-theWidth, theWidth));
+    if (M_PREFS->getWireframeView()) {
+        Feature::TrafficDirectionType TT = p->DirectionType;
+        if ( (TT != Feature::UnknownDirection) || (theView->renderOptions().arrowOptions == RendererOptions::ArrowsAlways) )
+        {
+            qreal theWidth = theView->pixelPerM()*p->SimpleWidth-4;
+            if (theWidth > 8)
+                theWidth = 8;
+            qreal DistFromCenter = 2*(theWidth+4);
+            if (theWidth > 0)
+            {
+                if ( theView->renderOptions().arrowOptions == RendererOptions::ArrowsAlways )
+                    P.setPen(QPen(QColor(255,0,0), 2));
+                else
+                    P.setPen(QPen(QColor(0,0,255), 2));
+
+
+                for (int i=1; i<p->Nodes.size(); ++i)
+                {
+                    QPointF FromF(theView->transform().map(p->Nodes[i-1]->projected()));
+                    QPointF ToF(theView->transform().map(p->Nodes[i]->projected()));
+                    if (::distance(FromF,ToF) > (DistFromCenter*2+4))
+                    {
+                        QPoint H(FromF.toPoint()+ToF.toPoint());
+                        H *= 0.5;
+                        if (!theView->rect().contains(H))
+                            continue;
+                        qreal A = angle(FromF-ToF);
+                        QPoint T(qRound(DistFromCenter*cos(A)),qRound(DistFromCenter*sin(A)));
+                        QPoint V1(qRound(theWidth*cos(A+M_PI/6)),qRound(theWidth*sin(A+M_PI/6)));
+                        QPoint V2(qRound(theWidth*cos(A-M_PI/6)),qRound(theWidth*sin(A-M_PI/6)));
+                        if ( (TT == Feature::OtherWay) || (TT == Feature::BothWays) )
+                        {
+                            P.drawLine(H+T,H+T-V1);
+                            P.drawLine(H+T,H+T-V2);
+                        }
+                        if ( (TT == Feature::OneWay) || (TT == Feature::BothWays) )
+                        {
+                            P.drawLine(H-T,H-T+V1);
+                            P.drawLine(H-T,H-T+V2);
+                        }
+                        else
+                        {
+                            if ( theView->renderOptions().arrowOptions == RendererOptions::ArrowsAlways )
+                            {
+                                P.drawLine(H-T,H-T+V1);
+                                P.drawLine(H-T,H-T+V2);
+                            }
+                        }
+                    }
+                }
+            }
         }
     }
 }
@@ -850,27 +922,11 @@ Way * Way::fromXML(Document* d, Layer * L, QXmlStreamReader& stream)
     return R;
 }
 
-Feature::TrafficDirectionType trafficDirection(const Way* R)
+Feature::TrafficDirectionType Way::getTrafficDirection()
 {
-    // TODO some duplication with Way trafficDirection
-    QString d;
-    int idx=R->findKey("oneway");
-    if (idx != -1)
-    {
-        d = R->tagValue(idx);
-        if ( (d == "yes") || (d == "1") || (d == "true")) return Feature::OneWay;
-        if (d == "-1") return Feature::OtherWay;
-        if ((d == "no") || (d == "false") || (d == "0")) return Feature::BothWays;
-    }
-
-    idx=R->findKey("junction");
-    if (idx != -1)
-    {
-        d = R->tagValue(idx);
-        if(d=="roundabout") return Feature::OneWay;
-        //TODO For motorway and motorway_link, this is still discussed on the wiki.
-    }
-    return Feature::UnknownDirection;
+    if (!MetaUpToDate)
+        updateMeta();
+    return p->DirectionType;
 }
 
 int findSnapPointIndex(const Way* R, Coord& P)

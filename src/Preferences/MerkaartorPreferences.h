@@ -320,6 +320,7 @@ public:
     M_PARAM_DECLARE_BOOL(PhotosVisible)
     M_PARAM_DECLARE_BOOL(DirtyVisible)
     M_PARAM_DECLARE_BOOL(WireframeView)
+    M_PARAM_DECLARE_BOOL(ViewTurnRestrictions)
 
 
     /* Templates */

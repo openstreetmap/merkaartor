@@ -98,7 +98,7 @@ void TouchupStyleLayer::draw(Way* R)
     else if (!R->hasPainter() && !TEST_RENDERER_RFLAGS(RendererOptions::UnstyledHidden)) {
         if ( r->theOptions.arrowOptions != RendererOptions::ArrowsNever )
         {
-            Feature::TrafficDirectionType TT = trafficDirection(R);
+            Feature::TrafficDirectionType TT = R->getTrafficDirection();
             if ( (TT != Feature::UnknownDirection) || (r->theOptions.arrowOptions == RendererOptions::ArrowsAlways) )
             {
                 qreal theWidth = r->thePixelPerM*R->widthOf()-4;

@@ -21,51 +21,55 @@
 
 class RelationMemberModel : public QAbstractTableModel
 {
-    public:
-        RelationMemberModel(RelationPrivate* aParent, MainWindow* aMain);
-        int rowCount(const QModelIndex &parent = QModelIndex()) const;
-        int columnCount(const QModelIndex &parent = QModelIndex()) const;
-        QVariant data(const QModelIndex &index, int role) const;
-        QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const;
-        Qt::ItemFlags flags(const QModelIndex &index) const;
-        bool setData(const QModelIndex &index, const QVariant &value, int role = Qt::EditRole);
+public:
+    RelationMemberModel(RelationPrivate* aParent, MainWindow* aMain);
+    int rowCount(const QModelIndex &parent = QModelIndex()) const;
+    int columnCount(const QModelIndex &parent = QModelIndex()) const;
+    QVariant data(const QModelIndex &index, int role) const;
+    QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const;
+    Qt::ItemFlags flags(const QModelIndex &index) const;
+    bool setData(const QModelIndex &index, const QVariant &value, int role = Qt::EditRole);
 
-        RelationPrivate* Parent;
-        MainWindow* Main;
+    RelationPrivate* Parent;
+    MainWindow* Main;
 };
 
 class RelationPrivate
 {
-    public:
-        RelationPrivate(Relation* R)
-            : theRelation(R), theModel(0), ModelReferences(0)
-            , PathUpToDate(false)
-            , ProjectionRevision(0)
-            , BBoxUpToDate(false)
-            , Width(0)
-        {
-        }
-        ~RelationPrivate()
-        {
-            delete theModel;
-        }
-        void CalculateWidth();
+public:
+    RelationPrivate(Relation* R)
+        : theRelation(R), theModel(0), ModelReferences(0)
+        , PathUpToDate(false)
+        , ProjectionRevision(0)
+        , TurnRestrictionTypeIndex(-1)
+        , IsTurnRestrictionOnly(false)
+        , BBoxUpToDate(false)
+        , Width(0)
+    {
+    }
+    ~RelationPrivate()
+    {
+        delete theModel;
+    }
+    void CalculateWidth();
 
-        Relation* theRelation;
-        QList<QPair<QString, MapFeaturePtr> > Members;
-        RelationMemberModel* theModel;
-        int ModelReferences;
-        QPainterPath thePath;
-        QPainterPath theBoundingPath;
-        bool PathUpToDate;
-        int ProjectionRevision;
+    Relation* theRelation;
+    QList<QPair<QString, MapFeaturePtr> > Members;
+    RelationMemberModel* theModel;
+    int ModelReferences;
+    QPainterPath thePath;
+    QPainterPath theBoundingPath;
+    bool PathUpToDate;
+    int ProjectionRevision;
+    int TurnRestrictionTypeIndex;
+    bool IsTurnRestrictionOnly;
 
-        bool BBoxUpToDate;
+    bool BBoxUpToDate;
 
-        RenderPriority theRenderPriority;
+    RenderPriority theRenderPriority;
 
-        qreal Width;
-    };
+    qreal Width;
+};
 
 #define DEFAULTWIDTH 6
 #define LANEWIDTH 4
@@ -115,9 +119,9 @@ Relation::~Relation()
 {
     // TODO Those cleanup shouldn't be necessary and lead to crashes
     //      Check for side effect of supressing them.
-//	for (int i=0; i<p->Members.size(); ++i)
-//		if (p->Members[i].second)
-//			p->Members[i].second->unsetParentFeature(this);
+    //	for (int i=0; i<p->Members.size(); ++i)
+    //		if (p->Members[i].second)
+    //			p->Members[i].second->unsetParentFeature(this);
     delete p;
 }
 
@@ -188,20 +192,115 @@ void Relation::drawSimple(QPainter &P, MapView *theView)
     Q_UNUSED(theView)
 }
 
+static const QColor onlyTurnColor(0, 85, 255, 127);
+static const QColor noTurnColor(255, 32, 0, 127);
+static const QColor errorTurnColor(255, 0, 0, 0);
+
 void Relation::drawTouchup(QPainter& P, MapView* theView)
 {
-    if (!theView->renderOptions().options.testFlag(RendererOptions::RelationsVisible))
-        return;
+    P.save();
+    if (M_PREFS->getViewTurnRestrictions() && p->TurnRestrictionTypeIndex >= 0) {
+        QList<Node*> viaNodes;
+        for (int i=0; i<p->Members.size(); ++i) {
+            if (p->Members[i].first == "via") {
+                if (Node* N = CAST_NODE(p->Members[i].second))
+                    viaNodes << N;
+                else if (Way* R = CAST_WAY(p->Members[i].second)) {
+                    for (int j=0; j<R->size(); ++j)
+                        viaNodes << R->getNode(j);
+                }
+            }
+        }
+        for (int i=0; i<p->Members.size(); ++i) {
+            Way* R = CAST_WAY(p->Members[i].second);
+            if (R && R->size() < 2)
+                continue;
+            if (R && (p->Members[i].first == "from" || (p->Members[i].first == "to"))) {
+                qreal WW = theView->pixelPerM()*3+2;
+                QColor c;
+                int viaNode = -1;
+                foreach (Node* N, viaNodes) {
+                    if (R->getNode(0) == N ) {
+                        viaNode = 0;
+                        break;
+                    } else if (R->getNode(R->size()-1) == N) {
+                        viaNode = R->size()-1;
+                        break;
+                    }
+                }
+                if (viaNode == -1)
+                    c = errorTurnColor;
+                else if (p->IsTurnRestrictionOnly)
+                    c = onlyTurnColor;
+                else
+                    c = noTurnColor;
 
-    if (notEverythingDownloaded())
-        P.setPen(QPen(Qt::red,M_PREFS->getRelationsWidth(),Qt::DashLine));
-    else {
-        if (isDirty() && isUploadable() && M_PREFS->getDirtyVisible())
-            P.setPen(QPen(M_PREFS->getDirtyColor(),M_PREFS->getDirtyWidth()));
-        else
-            P.setPen(QPen(M_PREFS->getRelationsColor(),M_PREFS->getRelationsWidth(),Qt::DashLine));
+                QPen thePen(QBrush(c),WW);
+                thePen.setCapStyle(Qt::RoundCap);
+                thePen.setJoinStyle(Qt::RoundJoin);
+                P.setPen(thePen);
+                P.setBrush(Qt::NoBrush);
+                P.drawPath(theView->transform().map(p->Members[i].second->getPath()));
+
+                if (p->Members[i].first == "to") {
+                    qreal WW = theView->pixelPerM()*5+2;
+                    if (viaNode != -1) {
+
+                        int j, jmin1;
+                        if (viaNode == 0) {
+                            j = R->size()-1;
+                            jmin1 = R->size()-2;
+                        } else {
+                            j = 0;
+                            jmin1 = 1;
+                        }
+                        QPointF FromF(theView->transform().map(R->getNode(jmin1)->projected()));
+                        QPointF ToF(theView->transform().map(R->getNode(j)->projected()));
+                        QPoint H(ToF.toPoint());
+                        qreal A = angle(FromF-ToF);
+                        if (p->IsTurnRestrictionOnly) {
+                            QPoint V1(qRound(WW*cos(A+M_PI/4)),qRound(WW*sin(A+M_PI/4)));
+                            QPoint V2(qRound(WW*cos(A-M_PI/4)),qRound(WW*sin(A-M_PI/4)));
+                            QPoint T(V1.x()+(V2.x()-V1.x())/2, V1.y()+(V2.y()-V1.y())/2);
+
+                            const QPoint points[3] = {
+                                H-T,
+                                H-T+V1,
+                                H-T+V2
+                            };
+
+                            P.setPen(Qt::NoPen);
+                            P.setBrush(c);
+                            P.drawPolygon(points, 3);
+                        } else {
+                            P.save();
+                            P.setPen(Qt::NoPen);
+                            P.setBrush(c);
+                            P.translate(ToF);
+                            P.rotate(radToAng(A-M_PI/2));
+                            P.drawRect(-WW*0.75, -WW/2, WW*1.5, WW/2);
+                            P.restore();
+                        }
+                    }
+                }
+            } else if (p->Members[i].first == "location_hint") {
+            }
+        }
     }
-    P.drawPath(theView->transform().map(p->theBoundingPath));
+
+    if (theView->renderOptions().options.testFlag(RendererOptions::RelationsVisible)) {
+        P.setBrush(Qt::NoBrush);
+        if (notEverythingDownloaded())
+            P.setPen(QPen(Qt::red,M_PREFS->getRelationsWidth(),Qt::DashLine));
+        else {
+            if (isDirty() && isUploadable() && M_PREFS->getDirtyVisible())
+                P.setPen(QPen(M_PREFS->getDirtyColor(),M_PREFS->getDirtyWidth()));
+            else
+                P.setPen(QPen(M_PREFS->getRelationsColor(),M_PREFS->getRelationsWidth(),Qt::DashLine));
+        }
+        P.drawPath(theView->transform().map(p->theBoundingPath));
+    }
+    P.restore();
 }
 
 void Relation::drawSpecial(QPainter& thePainter, QPen& Pen, MapView* theView)
@@ -421,8 +520,8 @@ void Relation::releaseMemberModel()
 
 void Relation::buildPath(Projection const &theProjection)
 {
-//    QPainterPath clipPath;
-//    clipPath.addRect(cr);
+    //    QPainterPath clipPath;
+    //    clipPath.addRect(cr);
 
     QMutexLocker mutlock(&featMutex);
     p->theBoundingPath = QPainterPath();
@@ -441,7 +540,7 @@ void Relation::buildPath(Projection const &theProjection)
     //p->theBoundingPath.addRect(bb);
 
     p->theBoundingPath.addPolygon(theVector);
-//    p->theBoundingPath = p->theBoundingPath.intersected(clipPath);
+    //    p->theBoundingPath = p->theBoundingPath.intersected(clipPath);
 
     if (!p->PathUpToDate || p->ProjectionRevision != theProjection.projectionRevision()) {
         p->thePath = QPainterPath();
@@ -565,6 +664,16 @@ void Relation::updateMeta()
                 p->theRenderPriority = R->renderPriority();
         }
     }
+
+    p->TurnRestrictionTypeIndex = -1;
+    p->IsTurnRestrictionOnly = false;
+    for (int i=0; i<tagSize(); ++i) {
+        if (tagKey(i).startsWith("restriction"))
+            p->TurnRestrictionTypeIndex = i;
+        if (tagValue(i).startsWith("only"))
+            p->IsTurnRestrictionOnly = true;
+    }
+
     MetaUpToDate = true;
 }
 
@@ -722,7 +831,7 @@ qreal Relation::widthOf()
 /* RELATIONMODEL */
 
 RelationMemberModel::RelationMemberModel(RelationPrivate *aParent, MainWindow* aMain)
-: Parent(aParent), Main(aMain)
+    : Parent(aParent), Main(aMain)
 {
 }
 

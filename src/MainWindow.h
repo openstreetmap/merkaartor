@@ -307,6 +307,7 @@ private slots:
     void readLocalConnection();
 
     void on_viewWireframeAction_toggled(bool arg1);
+    void on_viewTurnRestrictionsAction_toggled(bool arg1);
 
 private:
     void updateMenu();

@@ -69,6 +69,7 @@ public:
     QLineF getSegment(int i);
     int bestSegment();
 
+    Feature::TrafficDirectionType getTrafficDirection();
     const RenderPriority& renderPriority();
 
     bool isNodeAtEnd(Node* node);
@@ -107,7 +108,6 @@ protected:
 
 Q_DECLARE_METATYPE( Way * );
 
-Feature::TrafficDirectionType trafficDirection(const Way* R);
 int findSnapPointIndex(const Way* R, Coord& P);
 
 #endif

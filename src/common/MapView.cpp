@@ -217,6 +217,8 @@ void MapView::invalidate(bool updateWireframe, bool updateOsmMap, bool updateBgM
 
 void MapView::panScreen(QPoint delta)
 {
+    Coord safety = fromView(QPoint(100, -100)) - fromView(QPoint(0, 0));
+    qDebug() << safety;
     Coord cDelta = fromView(delta) - fromView(QPoint(0, 0));
     if (p->BackgroundOnlyPanZoom) {
         p->BackgroundOnlyVpTransform.translate(-cDelta.x(), -cDelta.y());
@@ -229,14 +231,14 @@ void MapView::panScreen(QPoint delta)
                 r1 = CoordBox(p->Viewport.bottomRight(), Coord(p->Viewport.topRight().x() - cDelta.x(), p->Viewport.topRight().y())); // OK
             else
                 r1 = CoordBox(Coord(p->Viewport.bottomLeft().x() - cDelta.x(), p->Viewport.bottomLeft().y()), p->Viewport.topLeft()); // OK
-            p->invalidRects.push_back(r1);
+            p->invalidRects.push_back(r1.adjusted(-safety.x(), safety.y(), safety.x(), -safety.y()));
         }
         if (delta.y()) {
             if (delta.y() < 0)
                 r2 = CoordBox(Coord(p->Viewport.bottomLeft().x(), p->Viewport.bottomLeft().y() - cDelta.y()), p->Viewport.bottomRight()); // OK
             else
                 r2 = CoordBox(p->Viewport.topLeft(), Coord( p->Viewport.bottomRight().x(), p->Viewport.topRight().y() - cDelta.y())); //NOK
-            p->invalidRects.push_back(r2);
+            p->invalidRects.push_back(r2.adjusted(-safety.x(), safety.y(), safety.x(), -safety.y()));
         }
 
         p->theTransform.translate((qreal)(delta.x())/p->theTransform.m11(), (qreal)(delta.y())/p->theTransform.m22());

@@ -116,6 +116,8 @@
     <addaction name="viewLockZoomAction"/>
     <addaction name="separator"/>
     <addaction name="viewWireframeAction"/>
+    <addaction name="viewTurnRestrictionsAction"/>
+    <addaction name="separator"/>
     <addaction name="mnuAreaOpacity"/>
     <addaction name="mnuProjections"/>
     <addaction name="separator"/>
@@ -1871,6 +1873,14 @@
   <action name="featureDownloadMissingChildrenAction">
    <property name="text">
     <string>Download missing children</string>
+   </property>
+  </action>
+  <action name="viewTurnRestrictionsAction">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>View Turn Restrictions</string>
    </property>
   </action>
  </widget>

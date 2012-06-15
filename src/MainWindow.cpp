@@ -294,6 +294,7 @@ MainWindow::MainWindow(QWidget *parent)
     ui->viewVirtualNodesAction->setChecked(M_PREFS->getVirtualNodesVisible());
     ui->viewLockZoomAction->setChecked(M_PREFS->getZoomBoris());
     ui->viewWireframeAction->setChecked(M_PREFS->getWireframeView());
+    ui->viewTurnRestrictionsAction->setChecked(M_PREFS->getViewTurnRestrictions());
 
     if (M_PREFS->getBackgroundVisible()) p->renderOptions.options |= RendererOptions::BackgroundVisible; else p->renderOptions.options &= ~RendererOptions::BackgroundVisible;
     if (M_PREFS->getForegroundVisible()) p->renderOptions.options |= RendererOptions::ForegroundVisible; else p->renderOptions.options &= ~RendererOptions::ForegroundVisible;
@@ -4480,5 +4481,11 @@ void MainWindow::syncOSM(const QString& aWeb, const QString& aUser, const QStrin
 void MainWindow::on_viewWireframeAction_toggled(bool val)
 {
     M_PREFS->setWireframeView(val);
+    invalidateView();
+}
+
+void MainWindow::on_viewTurnRestrictionsAction_toggled(bool val)
+{
+    M_PREFS->setViewTurnRestrictions(val);
     invalidateView();
 }

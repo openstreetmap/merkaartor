@@ -530,7 +530,7 @@ void FeaturePainter::drawTouchup(Way* R, QPainter* thePainter, MapRenderer* theR
     }
     if ( ((DrawTrafficDirectionMarks) && (theRenderer->theOptions.arrowOptions == RendererOptions::ArrowsOneway)) ||  theRenderer->theOptions.arrowOptions == RendererOptions::ArrowsAlways)
     {
-        Feature::TrafficDirectionType TT = trafficDirection(R);
+        Feature::TrafficDirectionType TT = R->getTrafficDirection();
         if ( (TT != Feature::UnknownDirection) || (theRenderer->theOptions.arrowOptions == RendererOptions::ArrowsAlways) )
         {
             qreal theWidth = theRenderer->thePixelPerM*R->widthOf()-4;
