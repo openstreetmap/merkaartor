@@ -1,0 +1,13 @@
+<RCC>
+    <qresource prefix="/TurnRestrictions">
+        <file>no_entry.png</file>
+        <file>no_left_turn.png</file>
+        <file>no_right_turn.png</file>
+        <file>no_straight_on.png</file>
+        <file>no_u_turn.png</file>
+        <file>only_left_turn.png</file>
+        <file>only_right_turn.png</file>
+        <file>only_straight_on.png</file>
+        <file>no_exit.png</file>
+    </qresource>
+</RCC>

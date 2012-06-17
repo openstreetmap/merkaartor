@@ -26,7 +26,7 @@ QImage* getSVGImageFromFile(const QString& aName, int Size)
         } else {
             QImage result(aName);
             if (Size)
-                result = result.scaledToWidth(Size);
+                result = result.scaledToWidth(Size, Qt::SmoothTransformation);
             Cache[Key] = result;
         }
     }

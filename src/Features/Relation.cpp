@@ -7,6 +7,7 @@
 #include "Document.h"
 #include "LineF.h"
 #include "Global.h"
+#include "SvgCache.h"
 
 #include <QApplication>
 #include <QAbstractTableModel>
@@ -199,8 +200,15 @@ static const QColor errorTurnColor(255, 0, 0, 0);
 void Relation::drawTouchup(QPainter& P, MapView* theView)
 {
     P.save();
+
     if (M_PREFS->getViewTurnRestrictions() && p->TurnRestrictionTypeIndex >= 0) {
+        int FromViaNode = -1;
+        int ToViaNode = -1;
+        Way* ToWay;
+        qreal FromAng = 0;
+        QPointF FromToF;
         QList<Node*> viaNodes;
+
         for (int i=0; i<p->Members.size(); ++i) {
             if (p->Members[i].first == "via") {
                 if (Node* N = CAST_NODE(p->Members[i].second))
@@ -218,19 +226,7 @@ void Relation::drawTouchup(QPainter& P, MapView* theView)
             if (R && (p->Members[i].first == "from" || (p->Members[i].first == "to"))) {
                 qreal WW = theView->pixelPerM()*3+2;
                 QColor c;
-                int viaNode = -1;
-                foreach (Node* N, viaNodes) {
-                    if (R->getNode(0) == N ) {
-                        viaNode = 0;
-                        break;
-                    } else if (R->getNode(R->size()-1) == N) {
-                        viaNode = R->size()-1;
-                        break;
-                    }
-                }
-                if (viaNode == -1)
-                    c = errorTurnColor;
-                else if (p->IsTurnRestrictionOnly)
+                if (p->IsTurnRestrictionOnly)
                     c = onlyTurnColor;
                 else
                     c = noTurnColor;
@@ -242,12 +238,46 @@ void Relation::drawTouchup(QPainter& P, MapView* theView)
                 P.setBrush(Qt::NoBrush);
                 P.drawPath(theView->transform().map(p->Members[i].second->getPath()));
 
-                if (p->Members[i].first == "to") {
-                    qreal WW = theView->pixelPerM()*5+2;
-                    if (viaNode != -1) {
+                if (p->Members[i].first == "from") {
+                    foreach (Node* N, viaNodes) {
+                        if (R->getNode(0) == N ) {
+                            FromViaNode = 0;
+                            break;
+                        } else if (R->getNode(R->size()-1) == N) {
+                            FromViaNode = R->size()-1;
+                            break;
+                        }
+                    }
+                    if (FromViaNode != -1) {
 
                         int j, jmin1;
-                        if (viaNode == 0) {
+                        if (FromViaNode == 0) {
+                            j = 0;
+                            jmin1 = 1;
+                        } else {
+                            j = R->size()-1;
+                            jmin1 = R->size()-2;
+                        }
+                        QPointF FromF(theView->transform().map(R->getNode(jmin1)->projected()));
+                        FromToF = QPointF(theView->transform().map(R->getNode(j)->projected()));
+                        FromAng = angle(FromF-FromToF);
+                    }
+                } else if (p->Members[i].first == "to") {
+                    ToWay = R;
+                    qreal WW = theView->pixelPerM()*5+2;
+                    foreach (Node* N, viaNodes) {
+                        if (R->getNode(0) == N ) {
+                            ToViaNode = 0;
+                            break;
+                        } else if (R->getNode(R->size()-1) == N) {
+                            ToViaNode = R->size()-1;
+                            break;
+                        }
+                    }
+                    if (ToViaNode != -1) {
+
+                        int j, jmin1;
+                        if (ToViaNode == 0) {
                             j = R->size()-1;
                             jmin1 = R->size()-2;
                         } else {
@@ -257,10 +287,10 @@ void Relation::drawTouchup(QPainter& P, MapView* theView)
                         QPointF FromF(theView->transform().map(R->getNode(jmin1)->projected()));
                         QPointF ToF(theView->transform().map(R->getNode(j)->projected()));
                         QPoint H(ToF.toPoint());
-                        qreal A = angle(FromF-ToF);
+                        qreal ToAng = angle(FromF-ToF);
                         if (p->IsTurnRestrictionOnly) {
-                            QPoint V1(qRound(WW*cos(A+M_PI/4)),qRound(WW*sin(A+M_PI/4)));
-                            QPoint V2(qRound(WW*cos(A-M_PI/4)),qRound(WW*sin(A-M_PI/4)));
+                            QPoint V1(qRound(WW*cos(ToAng+M_PI/4)),qRound(WW*sin(ToAng+M_PI/4)));
+                            QPoint V2(qRound(WW*cos(ToAng-M_PI/4)),qRound(WW*sin(ToAng-M_PI/4)));
                             QPoint T(V1.x()+(V2.x()-V1.x())/2, V1.y()+(V2.y()-V1.y())/2);
 
                             const QPoint points[3] = {
@@ -277,13 +307,44 @@ void Relation::drawTouchup(QPainter& P, MapView* theView)
                             P.setPen(Qt::NoPen);
                             P.setBrush(c);
                             P.translate(ToF);
-                            P.rotate(radToAng(A-M_PI/2));
+                            P.rotate(radToAng(ToAng-M_PI/2));
                             P.drawRect(-WW*0.75, -WW/2, WW*1.5, WW/2);
                             P.restore();
                         }
                     }
                 }
             } else if (p->Members[i].first == "location_hint") {
+            }
+        }
+        if (FromViaNode != -1) {
+            if (ToViaNode != -1) {
+
+                int j, jmin1;
+                if (ToViaNode == 0) {
+                    j = 1;
+                    jmin1 = 0;
+                } else {
+                    j = ToWay->size()-2;
+                    jmin1 = ToWay->size()-1;
+                }
+                QPointF FromF(theView->transform().map(ToWay->getNode(jmin1)->projected()));
+                QPointF ToF(theView->transform().map(ToWay->getNode(j)->projected()));
+                qreal ToAng = angle(FromF-ToF);
+
+                qreal WW = theView->pixelPerM()*3+2;
+                QImage* pm = getSVGImageFromFile(":/TurnRestrictions/" + tagValue(p->TurnRestrictionTypeIndex) + ".png",int(WW));
+
+                if (pm && !pm->isNull()) {
+                    qreal A = ToAng - ((ToAng-FromAng)/2);
+                    qDebug() << radToAng( ToAng) << radToAng(FromAng) << radToAng(A);
+                    P.save();
+                    P.translate(FromToF);
+//                    P.rotate(radToAng(A-M_PI/2));
+                    P.rotate(radToAng(FromAng-M_PI/2));
+                    P.translate(QPoint(WW, 0));
+                    P.drawImage( int(-pm->width()/2), int(-pm->height()/2) , *pm);
+                    P.restore();
+                }
             }
         }
     }
@@ -606,7 +667,7 @@ void Relation::buildPath(Projection const &theProjection)
                     k=0;
                 }
             }
-            if (curRole == "inner" and isMultipolygon)
+            if (curRole == "inner" && isMultipolygon)
                 innerPaths << curPath;
             else
                 outerPaths << curPath;

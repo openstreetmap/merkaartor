@@ -38,4 +38,5 @@ FORMS += AboutDialog.ui \
 # Resource file(s)
 RESOURCES += $$MERKAARTOR_SRC_DIR/../Icons/AllIcons.qrc \
     $$MERKAARTOR_SRC_DIR/../share/share.qrc \
-    $$MERKAARTOR_SRC_DIR/../Styles/Styles.qrc
+    $$MERKAARTOR_SRC_DIR/../Styles/Styles.qrc \
+    $$MERKAARTOR_SRC_DIR/../Icons/TurnRestrictions/TurnRestrictions.qrc

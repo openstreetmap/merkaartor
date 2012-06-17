@@ -218,7 +218,6 @@ void MapView::invalidate(bool updateWireframe, bool updateOsmMap, bool updateBgM
 void MapView::panScreen(QPoint delta)
 {
     Coord safety = fromView(QPoint(100, -100)) - fromView(QPoint(0, 0));
-    qDebug() << safety;
     Coord cDelta = fromView(delta) - fromView(QPoint(0, 0));
     if (p->BackgroundOnlyPanZoom) {
         p->BackgroundOnlyVpTransform.translate(-cDelta.x(), -cDelta.y());

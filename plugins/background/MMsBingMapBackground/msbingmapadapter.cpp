@@ -225,7 +225,7 @@ Q_EXPORT_PLUGIN2(MMsBingMapBackgroundPlugin, MsBingMapAdapterFactory)
 QString MsBingMapAdapter::getAttributionsHtml(const QRectF &bbox, const QRect &screen)
 {
     QStringList providers;
-    int zoom = qRound(log(360. / bbox.width()) / log(2));   // log2 not available on FreeBSD
+    int zoom = qRound(log(360. / bbox.width()) / log(2.));   // log2 not available on FreeBSD
     qDebug() << "Bing Zoom: " << zoom;
     foreach (BingProvider prov, theProviders) {
         if (prov.bbox.intersects(bbox))
