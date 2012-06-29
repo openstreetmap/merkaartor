@@ -266,6 +266,7 @@ void SpatialiteBackend::getFeatureSet(QMap<RenderPriority, QSet<Feature *> > &th
 
 const QList<Feature *> & SpatialiteBackend::indexFind(const QRectF &vp)
 {
+    return findResult;
 }
 
 void SpatialiteBackend::get(const QRectF &bb, QList<Feature *> &theFeatures)

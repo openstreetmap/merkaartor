@@ -74,6 +74,7 @@ public slots:
 protected:
     bool isTemp;
     QString theFilename;
+    QList<Feature*> findResult;
 };
 
 #endif // SPATIALITEBACKEND_H
