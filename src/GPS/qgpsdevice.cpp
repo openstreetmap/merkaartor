@@ -958,27 +958,33 @@ void QGPSDDevice::run()
     connect(this,SIGNAL(doStopDevice()),&Forward,SLOT(onStop()));
 //    exec();
     QEventLoop l;
-
+#if GPSD_API_MAJOR_VERSION < 5
     Server = new gpsmm();
     errno = 0;
     gpsdata = Server->open(M_PREFS->getGpsdHost().toAscii().data(),QString::number(M_PREFS->getGpsdPort()).toAscii().data());
     if (!gpsdata) {
-#ifndef Q_OS_WIN32
+  #ifndef Q_OS_WIN32
         QString msg( (errno<0) ? gps_errstr(errno) : strerror(errno) );
-#else
+  #else
         QString msg( (errno<0) ? "" : strerror(errno) );
-#endif
+  #endif
         qDebug() << tr("Unable to connect to %1:%2").arg(M_PREFS->getGpsdHost()).arg(QString::number(M_PREFS->getGpsdPort()))
                  << ": " << msg;
         return;
     }
-
+#else
+    Server = new gpsmm(M_PREFS->getGpsdHost().toAscii().data(),QString::number(M_PREFS->getGpsdPort()).toAscii().data());
+#endif
     onLinkReady();
     l.processEvents();
 
     forever {
 #if GPSD_API_MAJOR_VERSION > 3
+#if GPSD_API_MAJOR_VERSION < 5
         if (Server->waiting())
+#else
+        if (Server->waiting(0))
+#endif
 #endif
             onDataAvailable();
         l.processEvents();
@@ -994,16 +1000,12 @@ void QGPSDDevice::onDataAvailable()
        if (!gpsdata)
            return;
     #else
-       if ( Server->waiting() )
+       gpsdata = Server->read();
+       if (!gpsdata)
            {
-           errno = 0;
-           gpsdata = Server->read();
-           if ( gpsdata == 0 )
-               {
-               QString msg( (errno==0) ? "socket to gpsd was closed" : strerror(errno) );
-               qDebug() << "gpsmm::read() failed: " << msg;
-               return;
-               }
+           QString msg( (errno==0) ? "socket to gpsd was closed" : strerror(errno) );
+           qDebug() << "gpsmm::read() failed: " << msg;
+           return;
            }
     #endif
 
