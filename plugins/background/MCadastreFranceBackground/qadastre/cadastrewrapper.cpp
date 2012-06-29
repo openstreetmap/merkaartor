@@ -219,6 +219,7 @@ void CadastreWrapper::networkFinished(QNetworkReply *reply)
         m_gotCookie = true;
     } else if (reply->url() == QUrl("http://www.cadastre.gouv.fr/scpc/rechercherPlan.do")) {
         QString pageData = reply->readAll();
+        qDebug() << pageData;
         QWebPage parsedPage(this);
         QWebFrame *frame = parsedPage.mainFrame();
         frame->setHtml(pageData);
@@ -238,7 +239,7 @@ void CadastreWrapper::networkFinished(QNetworkReply *reply)
         } else {
             // We may have been successfull, who knows ?
             QString name = frame->findFirstElement("#ville").attribute("value");
-            QWebElementCollection links = frame->findAllElements(".resultat > .parcelles .view a");
+            QWebElementCollection links = frame->findAllElements(".resultat > .parcelles a");
             QRegExp linkRE("c=(\\w+)");
             foreach (QWebElement link, links) {
                 QString js = link.attribute("onclick");
