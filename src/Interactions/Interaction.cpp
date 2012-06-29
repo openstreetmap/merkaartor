@@ -347,8 +347,7 @@ void FeatureSnapInteraction::paintEvent(QPaintEvent* anEvent, QPainter& thePaint
         theMain->properties()->highlighted(i)->drawHighlight(thePainter, view());
     }
 
-    //FIXME document()->exists necessary?
-    if (LastSnap && document()->exists(LastSnap)) {
+    if (LastSnap) {
         LastSnap->drawHover(thePainter, view());
         view()->setToolTip(LastSnap->toHtml());
     } else {
