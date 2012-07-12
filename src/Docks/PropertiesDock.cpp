@@ -1,6 +1,8 @@
 #include "PropertiesDock.h"
+
+#include "Global.h"
+
 #include "InfoDock.h"
-#include "MainWindow.h"
 #ifndef _MOBILE
 #include "ui_MainWindow.h"
 #endif
@@ -34,15 +36,15 @@
 
 #include <algorithm>
 
-PropertiesDock::PropertiesDock(MainWindow* aParent)
-: MDockAncestor(aParent), Main(aParent), CurrentUi(0),
-    theTemplates(0), CurrentTagView(0), CurrentMembersView(0), NowShowing(NoUiShowing)
+PropertiesDock::PropertiesDock()
+: MDockAncestor(), CurrentUi(0),
+    theTemplates(0), CurrentTagView(0), NowShowing(NoUiShowing)
 {
     setMinimumSize(220,100);
     switchToNoUi();
     setObjectName("propertiesDock");
-    theModel = new TagModel(aParent);
-    delegate = new EditCompleterDelegate(aParent);
+    theModel = new TagModel();
+    delegate = new EditCompleterDelegate(this);
 
     // Set up the shortcut event filter for the tableviews
     // This allows them to react to keys already bound to
@@ -59,8 +61,6 @@ PropertiesDock::PropertiesDock(MainWindow* aParent)
     connect(centerAction, SIGNAL(triggered()), this, SLOT(on_centerAction_triggered()));
     centerZoomAction = new QAction(NULL, this);
     connect(centerZoomAction, SIGNAL(triggered()), this, SLOT(on_centerZoomAction_triggered()));
-    selectAction = new QAction(NULL, this);
-    connect(selectAction, SIGNAL(triggered()), this, SLOT(on_Member_selected()));
 
     loadTemplates();
 
@@ -184,37 +184,37 @@ void PropertiesDock::checkMenuStatus()
             ++NumCommitableFeature;
     }
 #ifndef _MOBILE
-    Main->ui->createRelationAction->setEnabled(Selection.size());
-    Main->ui->editRemoveAction->setEnabled(Selection.size());
-    Main->ui->editMoveAction->setEnabled(true);
-    Main->ui->editReverseAction->setEnabled(IsRoad || NumAreas + NumRoads > 0);
-    Main->ui->roadAddStreetNumbersAction->setEnabled(NumRoads >= 1);
-    Main->ui->roadJoinAction->setEnabled(NumRoads >= 1 && canJoinRoads(this));
-    Main->ui->roadCreateJunctionAction->setEnabled(NumRoads > 1 && canCreateJunction(this));
-    Main->ui->roadSplitAction->setEnabled((IsParentRoadInner && !IsParentArea) || (NumRoads && NumPoints) || (NumAreas && NumPoints > 1));
-    Main->ui->roadBreakAction->setEnabled(IsParentRoadInner || ((NumRoads == 1 || NumAreas == 1) && NumPoints) || (NumRoads > 1 && canBreakRoads(this)));
-    Main->ui->roadSimplifyAction->setEnabled(IsRoad || NumRoads > 0 || NumAreas > 0);
-    Main->ui->roadSubdivideAction->setEnabled((NumRoads + NumAreas) == 1 && (!NumPoints || NumPoints == 2) && canSubdivideRoad(this));
-    Main->ui->roadAxisAlignAction->setEnabled((NumRoads + NumAreas) > 0 || (NumRelation > 0 && canAxisAlignRoads(this)));
-    Main->ui->areaJoinAction->setEnabled(NumAreas > 1);
-    Main->ui->areaSplitAction->setEnabled(NumAreas == 1 && NumPoints == 2 && canSplitArea(this));
-    Main->ui->areaTerraceAction->setEnabled(NumAreas == 1 && NumRoads == 0 && canTerraceArea(this));
-    Main->ui->featureSelectChildrenAction->setEnabled(NumChildren);
-    Main->ui->featureSelectParentsAction->setEnabled(NumParents);
-    Main->ui->featureDownloadMissingChildrenAction->setEnabled(NumIncomplete);
-    Main->ui->featureDeleteAction->setEnabled((IsPoint || IsRoad || IsRelation) && !Selection[0]->isDirty());
-    Main->ui->featureCommitAction->setEnabled(NumCommitableFeature);
-    Main->ui->nodeMergeAction->setEnabled(NumPoints > 1);
-    Main->ui->nodeAlignAction->setEnabled(NumPoints > 2);
-    Main->ui->nodeSpreadAction->setEnabled(NumPoints > 2);
-    Main->ui->nodeDetachAction->setEnabled(NumPoints && canDetachNodes(this));
-    Main->ui->relationAddMemberAction->setEnabled(NumRelation && Selection.size() > 1);
-    Main->ui->relationRemoveMemberAction->setEnabled((NumRelation && Selection.size() > 1 && NumRelationChild) || IsParentRelation);
-    Main->ui->relationAddToMultipolygonAction->setEnabled((NumAreas > 1) || (NumAreas >0 && NumRelation == 1));
-    Main->ui->menuOpenStreetBugs->setEnabled(IsOpenStreetBug);
+    CUR_MAINWINDOW->ui->createRelationAction->setEnabled(Selection.size());
+    CUR_MAINWINDOW->ui->editRemoveAction->setEnabled(Selection.size());
+    CUR_MAINWINDOW->ui->editMoveAction->setEnabled(true);
+    CUR_MAINWINDOW->ui->editReverseAction->setEnabled(IsRoad || NumAreas + NumRoads > 0);
+    CUR_MAINWINDOW->ui->roadAddStreetNumbersAction->setEnabled(NumRoads >= 1);
+    CUR_MAINWINDOW->ui->roadJoinAction->setEnabled(NumRoads >= 1 && canJoinRoads(this));
+    CUR_MAINWINDOW->ui->roadCreateJunctionAction->setEnabled(NumRoads > 1 && canCreateJunction(this));
+    CUR_MAINWINDOW->ui->roadSplitAction->setEnabled((IsParentRoadInner && !IsParentArea) || (NumRoads && NumPoints) || (NumAreas && NumPoints > 1));
+    CUR_MAINWINDOW->ui->roadBreakAction->setEnabled(IsParentRoadInner || ((NumRoads == 1 || NumAreas == 1) && NumPoints) || (NumRoads > 1 && canBreakRoads(this)));
+    CUR_MAINWINDOW->ui->roadSimplifyAction->setEnabled(IsRoad || NumRoads > 0 || NumAreas > 0);
+    CUR_MAINWINDOW->ui->roadSubdivideAction->setEnabled((NumRoads + NumAreas) == 1 && (!NumPoints || NumPoints == 2) && canSubdivideRoad(this));
+    CUR_MAINWINDOW->ui->roadAxisAlignAction->setEnabled((NumRoads + NumAreas) > 0 || (NumRelation > 0 && canAxisAlignRoads(this)));
+    CUR_MAINWINDOW->ui->areaJoinAction->setEnabled(NumAreas > 1);
+    CUR_MAINWINDOW->ui->areaSplitAction->setEnabled(NumAreas == 1 && NumPoints == 2 && canSplitArea(this));
+    CUR_MAINWINDOW->ui->areaTerraceAction->setEnabled(NumAreas == 1 && NumRoads == 0 && canTerraceArea(this));
+    CUR_MAINWINDOW->ui->featureSelectChildrenAction->setEnabled(NumChildren);
+    CUR_MAINWINDOW->ui->featureSelectParentsAction->setEnabled(NumParents);
+    CUR_MAINWINDOW->ui->featureDownloadMissingChildrenAction->setEnabled(NumIncomplete);
+    CUR_MAINWINDOW->ui->featureDeleteAction->setEnabled((IsPoint || IsRoad || IsRelation) && !Selection[0]->isDirty());
+    CUR_MAINWINDOW->ui->featureCommitAction->setEnabled(NumCommitableFeature);
+    CUR_MAINWINDOW->ui->nodeMergeAction->setEnabled(NumPoints > 1);
+    CUR_MAINWINDOW->ui->nodeAlignAction->setEnabled(NumPoints > 2);
+    CUR_MAINWINDOW->ui->nodeSpreadAction->setEnabled(NumPoints > 2);
+    CUR_MAINWINDOW->ui->nodeDetachAction->setEnabled(NumPoints && canDetachNodes(this));
+    CUR_MAINWINDOW->ui->relationAddMemberAction->setEnabled(NumRelation && Selection.size() > 1);
+    CUR_MAINWINDOW->ui->relationRemoveMemberAction->setEnabled((NumRelation && Selection.size() > 1 && NumRelationChild) || IsParentRelation);
+    CUR_MAINWINDOW->ui->relationAddToMultipolygonAction->setEnabled((NumAreas > 1) || (NumAreas >0 && NumRelation == 1));
+    CUR_MAINWINDOW->ui->menuOpenStreetBugs->setEnabled(IsOpenStreetBug);
 
-    Main->ui->editCopyAction->setEnabled(Selection.size());
-    Main->clipboardChanged();
+    CUR_MAINWINDOW->ui->editCopyAction->setEnabled(Selection.size());
+    CUR_MAINWINDOW->clipboardChanged();
 #endif
 }
 
@@ -253,20 +253,28 @@ void PropertiesDock::setMultiSelection(const QList<Feature*>& aFeatureList)
     for (int i=0; i<aFeatureList.size(); ++i)
         Selection.push_back(aFeatureList[i]);
     FullSelection = Selection;
-    switchToMultiUi();
-    // to prevent slots to change the values also
-    QList<Feature*> Current = Selection;
-    Selection.clear();
-    MultiUi.TagView->setModel(theModel);
-    MultiUi.TagView->setItemDelegate(delegate);
-    Main->info()->setHtml("");
-    #ifdef GEOIMAGE
-    Main->geoImage()->setImage((Node *)NULL);
-    #endif
-    CurrentTagView = MultiUi.TagView;
-    theModel->setFeature(Current);
-    Selection = Current;
+    switchUi();
     fillMultiUiSelectionBox();
+
+//    cleanUpUi();
+//    Selection.clear();
+//    for (int i=0; i<aFeatureList.size(); ++i)
+//        Selection.push_back(aFeatureList[i]);
+//    FullSelection = Selection;
+//    switchToMultiUi();
+//    // to prevent slots to change the values also
+//    QList<Feature*> Current = Selection;
+//    Selection.clear();
+//    MultiUi.TagView->setModel(theModel);
+//    MultiUi.TagView->setItemDelegate(delegate);
+//    INFO_DOCK->setHtml("");
+//    #ifdef GEOIMAGE
+//    CUR_MAINWINDOW->geoImage()->setImage((Node *)NULL);
+//    #endif
+//    CurrentTagView = MultiUi.TagView;
+//    theModel->setFeature(Current);
+//    Selection = Current;
+//    fillMultiUiSelectionBox();
 }
 
 void PropertiesDock::toggleSelection(Feature* S)
@@ -293,13 +301,21 @@ void PropertiesDock::addSelection(Feature* S)
     fillMultiUiSelectionBox();
 }
 
+void PropertiesDock::setHighlighted(const QList<Feature*>& aFeatureList)
+{
+    cleanUpUi();
+    Highlighted.clear();
+    for (int i=0; i<aFeatureList.size(); ++i)
+        Highlighted.push_back(aFeatureList[i]);
+}
+
 void PropertiesDock::adjustSelection()
 {
     QList<Feature*> aSelection;
     int cnt = Selection.size();
 
     for (int i=0; i<FullSelection.size(); ++i) {
-        if (Main->document()->exists(FullSelection[i]) && FullSelection[i] && !FullSelection[i]->isDeleted()) {
+        if (CUR_DOCUMENT->exists(FullSelection[i]) && FullSelection[i] && !FullSelection[i]->isDeleted()) {
             aSelection.push_back(FullSelection[i]);
         } else {
             QList<Feature*>::iterator it = std::find(Selection.begin(),Selection.end(),FullSelection[i]);
@@ -328,7 +344,7 @@ void PropertiesDock::fillMultiUiSelectionBox()
     {
         // to prevent on_SelectionList_itemSelectionChanged to kick in
         NowShowing = NoUiShowing;
-        Main->setUpdatesEnabled(false);
+        CUR_MAINWINDOW->setUpdatesEnabled(false);
         MultiUi.SelectionList->clear();
         for (int i=0; i<FullSelection.size(); ++i)
         {
@@ -337,7 +353,7 @@ void PropertiesDock::fillMultiUiSelectionBox()
             it->setSelected(true);
         }
         MultiUi.lbStatus->setText(tr("%1/%1 selected item(s)").arg(FullSelection.size()));
-        Main->setUpdatesEnabled(true);
+        CUR_MAINWINDOW->setUpdatesEnabled(true);
         NowShowing = MultiShowing;
     }
 }
@@ -346,21 +362,20 @@ void PropertiesDock::on_SelectionList_itemSelectionChanged()
 {
     if (NowShowing == MultiShowing)
     {
-        Selection.clear();
+        Highlighted.clear();
         for (int i=0; i<FullSelection.size(); ++i)
             if (MultiUi.SelectionList->item(i)->isSelected())
-                Selection.push_back(FullSelection[i]);
-        if (Selection.size() == 1) {
-            Main->info()->setHtml(Selection[0]->toHtml());
+                Highlighted.push_back(FullSelection[i]);
+        if (Highlighted.size() == 1) {
+            INFO_DOCK->setHtml(Highlighted[0]->toHtml());
 
             #ifdef GEOIMAGE
             Node *Pt;
-            if ((Pt = dynamic_cast<Node*>(Selection[0]))) Main->geoImage()->setImage(Pt);
+            if ((Pt = dynamic_cast<Node*>(Highlighted[0]))) CUR_MAINWINDOW->geoImage()->setImage(Pt);
             #endif
         }
-        theModel->setFeature(Selection);
-        MultiUi.lbStatus->setText(tr("%1/%2 selected item(s)").arg(Selection.size()).arg(FullSelection.size()));
-        Main->view()->update();
+        MultiUi.lbStatus->setText(tr("%1/%2 selected item(s)").arg(Highlighted.size()).arg(FullSelection.size()));
+        CUR_VIEW->update();
     }
 }
 
@@ -381,12 +396,12 @@ void PropertiesDock::executePendingSelectionChange()
 
 void PropertiesDock::cleanUpUi()
 {
-    if (NowShowing == RelationUiShowing)
-    {
-        RelationUi.MembersView->setModel(0);
-        Relation* R = dynamic_cast<Relation*>(FullSelection[0]);
-        R->releaseMemberModel();
-    }
+//    if (NowShowing == RelationUiShowing)
+//    {
+//        RelationUi.MembersView->setModel(0);
+//        Relation* R = dynamic_cast<Relation*>(FullSelection[0]);
+//        R->releaseMemberModel();
+//    }
 }
 
 void PropertiesDock::switchUi()
@@ -402,12 +417,8 @@ void PropertiesDock::switchUi()
             switchToNoUi();
         else if (CAST_NODE(FullSelection[0]))
             switchToNodeUi();
-        else if (CAST_WAY(FullSelection[0]))
-            switchToWayUi();
-        else if (CAST_RELATION(FullSelection[0]))
-            switchToRelationUi();
         else
-            switchToNoUi();
+            switchToDefaultUi();
     }
     else
         switchToMultiUi();
@@ -451,40 +462,19 @@ void PropertiesDock::switchToNodeUi()
     setWindowTitle(tr("Properties - Node"));
 }
 
-void PropertiesDock::switchToWayUi()
+void PropertiesDock::switchToDefaultUi()
 {
-    NowShowing = RoadUiShowing;
+    NowShowing = DefaultUiShowing;
     QWidget* NewUi = new QWidget(this);
-    RoadUi.setupUi(NewUi);
-    RoadUi.TagView->verticalHeader()->hide();
+    DefaultUi.setupUi(NewUi);
+    DefaultUi.TagView->verticalHeader()->hide();
     setWidget(NewUi);
     if (CurrentUi)
         CurrentUi->deleteLater();
     CurrentUi = NewUi;
-    connect(RoadUi.RemoveTagButton,SIGNAL(clicked()),this, SLOT(on_RemoveTagButton_clicked()));
-    connect(RoadUi.SourceTagButton,SIGNAL(clicked()),this, SLOT(on_SourceTagButton_clicked()));
-    setWindowTitle(tr("Properties - Road"));
-}
-
-void PropertiesDock::switchToRelationUi()
-{
-    NowShowing = RelationUiShowing;
-    QWidget* NewUi = new QWidget(this);
-    RelationUi.setupUi(NewUi);
-    RelationUi.TagView->verticalHeader()->hide();
-    setWidget(NewUi);
-    if (CurrentUi)
-        CurrentUi->deleteLater();
-    CurrentUi = NewUi;
-    RelationUi.MembersView->setContextMenuPolicy(Qt::CustomContextMenu);
-    connect(RelationUi.MembersView, SIGNAL(customContextMenuRequested(const QPoint &)), this, SLOT(on_Member_customContextMenuRequested(const QPoint &)));
-    connect(RelationUi.MembersView, SIGNAL(clicked(QModelIndex)), this, SLOT(on_Member_clicked(QModelIndex)));
-    connect(RelationUi.RemoveMemberButton,SIGNAL(clicked()),this, SLOT(on_RemoveMemberButton_clicked()));
-    connect(RelationUi.RemoveTagButton,SIGNAL(clicked()),this, SLOT(on_RemoveTagButton_clicked()));
-    connect(RelationUi.SourceTagButton,SIGNAL(clicked()),this, SLOT(on_SourceTagButton_clicked()));
-    connect(RelationUi.btMemberUp, SIGNAL(clicked()), SLOT(on_btMemberUp_clicked()));
-    connect(RelationUi.btMemberDown, SIGNAL(clicked()), SLOT(on_btMemberDown_clicked()));
-    setWindowTitle(tr("Properties - Relation"));
+    connect(DefaultUi.RemoveTagButton,SIGNAL(clicked()),this, SLOT(on_RemoveTagButton_clicked()));
+    connect(DefaultUi.SourceTagButton,SIGNAL(clicked()),this, SLOT(on_SourceTagButton_clicked()));
+    setWindowTitle(tr("Properties - Default"));
 }
 
 void PropertiesDock::switchToNoUi()
@@ -505,18 +495,16 @@ void PropertiesDock::resetValues()
 
     // Tables that might need column sizing
     CurrentTagView = NULL;
-    CurrentMembersView = NULL;
 
     // to prevent slots to change the values also
     QList<Feature*> Current = Selection;
     Selection.clear();
     if (FullSelection.size() == 1)
     {
-        Main->info()->setHtml(FullSelection[0]->toHtml());
+        INFO_DOCK->setHtml(FullSelection[0]->toHtml());
 
         Node* Pt = dynamic_cast<Node*>(FullSelection[0]);
-        Way* R = dynamic_cast<Way*>(FullSelection[0]);
-        Relation* L = dynamic_cast<Relation*>(FullSelection[0]);
+        Feature* F = FullSelection[0];
 
         if ((Pt) && (NowShowing == TrackPointUiShowing))
         {
@@ -525,6 +513,8 @@ void PropertiesDock::resetValues()
             TrackPointUi.Longitude->setText(COORD2STRING(Pt->position().x()));
             TrackPointUi.TagView->setModel(theModel);
             TrackPointUi.TagView->setItemDelegate(delegate);
+            TrackPointUi.RemoveTagButton->setEnabled(false);
+            TrackPointUi.SourceTagButton->setEnabled(!CUR_DOCUMENT->getCurrentSourceTags().isEmpty());
 
             QWidget* w;
             for (int i=0; i<TrackPointUi.variableLayout->count(); ++i) {
@@ -535,7 +525,7 @@ void PropertiesDock::resetValues()
                 }
             }
             if (theTemplates) {
-                w = theTemplates->getWidget(Pt, Main->view());
+                w = theTemplates->getWidget(Pt, CUR_VIEW);
                 w->installEventFilter(shortcutFilter);
                 TrackPointUi.variableLayout->addWidget(w);
             }
@@ -543,54 +533,33 @@ void PropertiesDock::resetValues()
             CurrentTagView = TrackPointUi.TagView;
 
             #ifdef GEOIMAGE
-            Main->geoImage()->setImage(Pt);
+            CUR_MAINWINDOW->geoImage()->setImage(Pt);
             #endif
         }
-        else if ((R) && (NowShowing == RoadUiShowing))
+        else if ((F) && (NowShowing == DefaultUiShowing))
         {
-            RoadUi.Id->setText(QString::number(R->id().numId));
-            //RoadUi.Name->setText(R->tagValue("name",""));
-            RoadUi.TagView->setModel(theModel);
-            RoadUi.TagView->setItemDelegate(delegate);
+            DefaultUi.Id->setText(QString::number(F->id().numId));
+            //DefaultUi.Name->setText(F->tagValue("name",""));
+            DefaultUi.TagView->setModel(theModel);
+            DefaultUi.TagView->setItemDelegate(delegate);
+            DefaultUi.RemoveTagButton->setEnabled(false);
+            DefaultUi.SourceTagButton->setEnabled(!CUR_DOCUMENT->getCurrentSourceTags().isEmpty());
 
             QWidget* w;
-            for (int i=0; i<RoadUi.variableLayout->count(); ++i) {
-                w = RoadUi.variableLayout->itemAt(i)->widget();
+            for (int i=0; i<DefaultUi.variableLayout->count(); ++i) {
+                w = DefaultUi.variableLayout->itemAt(i)->widget();
                 if (w) {
                     w->hide();
                     w->deleteLater();
                 }
             }
             if (theTemplates) {
-                w = theTemplates->getWidget(R, Main->view());
+                w = theTemplates->getWidget(F, CUR_VIEW);
                 w->installEventFilter(shortcutFilter);
-                RoadUi.variableLayout->addWidget(w);
+                DefaultUi.variableLayout->addWidget(w);
             }
 
-            CurrentTagView = RoadUi.TagView;
-        }
-        else if ((L) && (NowShowing == RelationUiShowing))
-        {
-            RelationUi.MembersView->setModel(L->referenceMemberModel(Main));
-            RelationUi.TagView->setModel(theModel);
-            RelationUi.TagView->setItemDelegate(delegate);
-
-            QWidget* w;
-            for (int i=0; i<RelationUi.variableLayout->count(); ++i) {
-                w = RelationUi.variableLayout->itemAt(i)->widget();
-                if (w) {
-                    w->hide();
-                    w->deleteLater();
-                }
-            }
-            if (theTemplates) {
-                w = theTemplates->getWidget(L, Main->view());
-                w->installEventFilter(shortcutFilter);
-                RelationUi.variableLayout->addWidget(w);
-            }
-
-            CurrentTagView     = RelationUi.TagView;
-            CurrentMembersView = RelationUi.MembersView;
+            CurrentTagView = DefaultUi.TagView;
         }
 
         if (theTemplates)
@@ -598,12 +567,13 @@ void PropertiesDock::resetValues()
     }
     else if ((FullSelection.size() > 1)  && (NowShowing == MultiShowing))
     {
-        Main->info()->setHtml("");
+        INFO_DOCK->setHtml("");
         #ifdef GEOIMAGE
-        Main->geoImage()->setImage((Node *)NULL);
+        CUR_MAINWINDOW->geoImage()->setImage((Node *)NULL);
         #endif
         MultiUi.TagView->setModel(theModel);
         MultiUi.TagView->setItemDelegate(delegate);
+        MultiUi.RemoveTagButton->setEnabled(false);
         CurrentTagView = MultiUi.TagView;
     }
     theModel->setFeature(Current);
@@ -622,15 +592,9 @@ void PropertiesDock::resetValues()
             CurrentTagView->setColumnWidth(
                 0, CurrentTagView->fontMetrics().width(theModel->newKeyText())+10
             );
+        connect(CurrentTagView->selectionModel(), SIGNAL(selectionChanged(QItemSelection,QItemSelection)), this, SLOT(on_tag_selection_changed(QItemSelection,QItemSelection)));
         CurrentTagView->horizontalHeader()->setStretchLastSection(true);
         CurrentTagView->installEventFilter(shortcutFilter);
-    }
-    if (CurrentMembersView) {
-        CurrentMembersView->setColumnWidth(
-            0, CurrentMembersView->fontMetrics().width(theModel->newKeyText())+10
-        );
-        CurrentMembersView->horizontalHeader()->setStretchLastSection(true);
-        CurrentMembersView->installEventFilter(shortcutFilter);
     }
 }
 
@@ -640,10 +604,10 @@ void PropertiesDock::on_TrackPointLat_editingFinished()
     Node* Pt = dynamic_cast<Node*>(selection(0));
     if (Pt)
     {
-        Main->document()->addHistory(
+        CUR_DOCUMENT->addHistory(
             new MoveNodeCommand(Pt,
-                Coord(Pt->position().x(), TrackPointUi.Latitude->text().toDouble()), Main->document()->getDirtyOrOriginLayer(Pt->layer()) ));
-        Main->invalidateView(false);
+                Coord(Pt->position().x(), TrackPointUi.Latitude->text().toDouble()), CUR_DOCUMENT->getDirtyOrOriginLayer(Pt->layer()) ));
+        CUR_MAINWINDOW->invalidateView(false);
     }
 }
 
@@ -653,10 +617,59 @@ void PropertiesDock::on_TrackPointLon_editingFinished()
     Node* Pt = dynamic_cast<Node*>(selection(0));
     if (Pt)
     {
-        Main->document()->addHistory(
+        CUR_DOCUMENT->addHistory(
             new MoveNodeCommand(Pt,
-                Coord(TrackPointUi.Longitude->text().toDouble(), Pt->position().y()), Main->document()->getDirtyOrOriginLayer(Pt->layer()) ));
-        Main->invalidateView(false);
+                Coord(TrackPointUi.Longitude->text().toDouble(), Pt->position().y()), CUR_DOCUMENT->getDirtyOrOriginLayer(Pt->layer()) ));
+        CUR_MAINWINDOW->invalidateView(false);
+    }
+}
+
+void PropertiesDock::on_tag_selection_changed(const QItemSelection & selected, const QItemSelection & deselected)
+{
+    QModelIndexList indexes = selected.indexes();
+    if (indexes.isEmpty()) return;
+
+    switch(NowShowing) {
+    case NoUiShowing:
+        return;
+
+    case TrackPointUiShowing:
+        TrackPointUi.RemoveTagButton->setEnabled(false);
+        break;
+
+    case DefaultUiShowing:
+        DefaultUi.RemoveTagButton->setEnabled(false);
+        break;
+
+    case MultiShowing:
+        MultiUi.RemoveTagButton->setEnabled(false);
+        break;
+    }
+
+    while (!indexes.isEmpty()) {
+        QModelIndex index = indexes.takeLast();
+        QModelIndex idx = index.sibling(index.row(),0);
+        QVariant Content(theModel->data(idx,Qt::DisplayRole));
+        if (Content.isValid() && Content.toString() != TagModel::newKeyText())
+        {
+            switch(NowShowing) {
+            case NoUiShowing:
+                return;
+
+            case TrackPointUiShowing:
+                TrackPointUi.RemoveTagButton->setEnabled(true);
+                break;
+
+            case DefaultUiShowing:
+                DefaultUi.RemoveTagButton->setEnabled(true);
+                break;
+
+            case MultiShowing:
+                MultiUi.RemoveTagButton->setEnabled(true);
+                break;
+            }
+            break;
+        }
     }
 }
 
@@ -666,8 +679,8 @@ void PropertiesDock::on_tag_changed(QString k, QString v)
         return;
     Feature* F = FullSelection[0];
     if (F->tagValue(k, "__NULL__") != v) {
-        Main->document()->addHistory(new SetTagCommand(F,k,v,Main->document()->getDirtyOrOriginLayer(F->layer())));
-        Main->invalidateView();
+        CUR_DOCUMENT->addHistory(new SetTagCommand(F,k,v,CUR_DOCUMENT->getDirtyOrOriginLayer(F->layer())));
+        CUR_MAINWINDOW->invalidateView();
     }
 }
 
@@ -676,28 +689,16 @@ void PropertiesDock::on_tag_cleared(QString k)
     if (!FullSelection.size())
         return;
     Feature* F = FullSelection[0];
-    Main->document()->addHistory(new ClearTagCommand(F,k,Main->document()->getDirtyOrOriginLayer(F->layer())));
-    Main->invalidateView();
+    CUR_DOCUMENT->addHistory(new ClearTagCommand(F,k,CUR_DOCUMENT->getDirtyOrOriginLayer(F->layer())));
+    CUR_MAINWINDOW->invalidateView();
 }
 
 void PropertiesDock::on_RemoveTagButton_clicked()
 {
-    QTableView* TagTable = 0;
-    switch (NowShowing)
-    {
-    case TrackPointUiShowing:
-        TagTable = TrackPointUi.TagView; break;
-    case RoadUiShowing:
-        TagTable = RoadUi.TagView; break;
-    case MultiShowing:
-        TagTable = MultiUi.TagView; break;
-    case RelationUiShowing:
-        TagTable = RelationUi.TagView; break;
-    default: break;
-    }
-    if (!TagTable) return;
+    if (!CurrentTagView)
+        return;
 
-    QModelIndexList indexes = TagTable->selectionModel()->selectedIndexes();
+    QModelIndexList indexes = CurrentTagView->selectionModel()->selectedIndexes();
     if (indexes.isEmpty()) return;
 
     CommandList *L = 0;
@@ -712,7 +713,7 @@ void PropertiesDock::on_RemoveTagButton_clicked()
             L = new CommandList(MainWindow::tr("Clear Tag '%1' on %2").arg(KeyName).arg(Selection[0]->id().numId), Selection[0]);
             for (int i=0; i<Selection.size(); ++i)
                 if (Selection[i]->findKey(KeyName) != -1)
-                    L->add(new ClearTagCommand(Selection[i],KeyName,Main->document()->getDirtyOrOriginLayer(Selection[i]->layer())));
+                    L->add(new ClearTagCommand(Selection[i],KeyName,CUR_DOCUMENT->getDirtyOrOriginLayer(Selection[i]->layer())));
         }
     }
     else
@@ -727,7 +728,7 @@ void PropertiesDock::on_RemoveTagButton_clicked()
                 QString KeyName = Content.toString();
                 for (int i=0; i<Selection.size(); ++i)
                     if (Selection[i]->findKey(KeyName) != -1)
-                        L->add(new ClearTagCommand(Selection[i],KeyName,Main->document()->getDirtyOrOriginLayer(Selection[i]->layer())));
+                        L->add(new ClearTagCommand(Selection[i],KeyName,CUR_DOCUMENT->getDirtyOrOriginLayer(Selection[i]->layer())));
             }
         }
     }
@@ -735,14 +736,14 @@ void PropertiesDock::on_RemoveTagButton_clicked()
     if (L->empty()) {
         delete L;
     } else {
-        Main->document()->addHistory(L);
-        Main->invalidateView();
+        CUR_DOCUMENT->addHistory(L);
+        CUR_MAINWINDOW->invalidateView();
     }
 }
 
 void PropertiesDock::on_SourceTagButton_clicked()
 {
-    QStringList sl = Main->document()->getCurrentSourceTags();
+    QStringList sl = CUR_DOCUMENT->getCurrentSourceTags();
     if (!sl.size())
         return;
 
@@ -752,190 +753,8 @@ void PropertiesDock::on_SourceTagButton_clicked()
 
     CommandList* L = new CommandList(MainWindow::tr("Set \"source\" tag on %1").arg(Selection[0]->id().numId), Selection[0]);
     L->add(new SetTagCommand(Selection[0], "source", sl.join(";")));
-    Main->document()->addHistory(L);
-    Main->invalidateView();
-}
-
-void PropertiesDock::on_RemoveMemberButton_clicked()
-{
-    if (CurrentMembersView)
-    {
-        Relation* R = dynamic_cast<Relation*>(Selection[0]);
-        if (R) {
-            QModelIndexList indexes = CurrentMembersView->selectionModel()->selectedIndexes();
-            QModelIndex index;
-
-            foreach(index, indexes)
-            {
-                QModelIndex idx = index.sibling(index.row(),0);
-                QVariant Content(R->referenceMemberModel(Main)->data(idx,Qt::UserRole));
-                if (Content.isValid())
-                {
-                    Feature* F = Content.value<Feature*>();
-                    if (F) {
-                        CommandList* L = new CommandList(MainWindow::tr("Remove member '%1' on %2").arg(F->description()).arg(R->description()), R);
-                        if (R->find(F) < R->size())
-                            L->add(new RelationRemoveFeatureCommand(R,F,Main->document()->getDirtyOrOriginLayer(R->layer())));
-                        if (L->empty())
-                            delete L;
-                        else
-                        {
-                            Main->document()->addHistory(L);
-                            Main->invalidateView();
-                            return;
-                        }
-                    }
-                }
-            }
-        }
-    }
-}
-
-void PropertiesDock::on_Member_customContextMenuRequested(const QPoint & pos)
-{
-    QModelIndex ix = CurrentMembersView->indexAt(pos);
-    if (ix.isValid()) {
-        QMenu menu(CurrentMembersView);
-        menu.addAction(centerAction);
-        menu.addAction(centerZoomAction);
-        menu.addAction(selectAction);
-        menu.exec(CurrentMembersView->mapToGlobal(pos));
-    }
-}
-
-void PropertiesDock::on_Member_clicked(const QModelIndex & index)
-{
-    Highlighted.clear();
-
-    Relation* R = dynamic_cast<Relation*>(Selection[0]);
-    if (R) {
-        QVariant Content(R->referenceMemberModel(Main)->data(index,Qt::UserRole));
-        if (Content.isValid())
-        {
-            Feature* F = Content.value<Feature*>();
-            if (F)
-                Highlighted.push_back(F);
-        }
-    }
-    Main->view()->update();
-}
-
-void PropertiesDock::on_Member_selected()
-{
-    QList<Feature*> Features;
-    Relation* R = dynamic_cast<Relation*>(Selection[0]);
-    if (R) {
-        QModelIndexList indexes = CurrentMembersView->selectionModel()->selectedIndexes();
-        QModelIndex index;
-
-        foreach(index, indexes)
-        {
-            QModelIndex idx = index.sibling(index.row(),0);
-            QVariant Content(R->referenceMemberModel(Main)->data(idx,Qt::UserRole));
-            if (Content.isValid())
-            {
-                Feature* F = Content.value<Feature*>();
-                if (F) {
-                    Features.append(F);
-                }
-            }
-        }
-        if (!Features.isEmpty())
-            setMultiSelection(Features);
-    }
-    Main->invalidateView(false);
-}
-
-void PropertiesDock::on_btMemberUp_clicked()
-{
-    Relation* R = dynamic_cast<Relation*>(Selection[0]);
-    if (R) {
-        CommandList* theList = new CommandList(MainWindow::tr("Reorder members in relation %1").arg(R->id().numId), R);
-
-        QModelIndex index;
-        foreach(index, CurrentMembersView->selectionModel()->selectedIndexes())
-        {
-            CurrentMembersView->selectionModel()->select(index, QItemSelectionModel::Select | QItemSelectionModel::Rows);
-        }
-        QModelIndexList indexes = CurrentMembersView->selectionModel()->selectedRows(0);
-        QModelIndexList newSel;
-        foreach(index, indexes)
-        {
-            QVariant Content(R->referenceMemberModel(Main)->data(index,Qt::UserRole));
-            if (Content.isValid())
-            {
-                Feature* F = Content.value<Feature*>();
-                if (F) {
-                    int pos = R->find(F);
-                    if (!pos)
-                        break;
-                    QString role = R->getRole(pos);
-                    theList->add(new RelationRemoveFeatureCommand(R, pos, Main->document()->getDirtyOrOriginLayer(R->layer())));
-                    theList->add(new RelationAddFeatureCommand(R, role, F, pos-1, Main->document()->getDirtyOrOriginLayer(R->layer())));
-                    newSel.append(CurrentMembersView->model()->index(pos-1, 0));
-                }
-            }
-        }
-        CurrentMembersView->selectionModel()->clearSelection();
-        foreach(index, newSel)
-        {
-            CurrentMembersView->selectionModel()->select(index, QItemSelectionModel::Select | QItemSelectionModel::Rows);
-        }
-        if (theList->empty())
-            delete theList;
-        else
-        {
-            Main->document()->addHistory(theList);
-            Main->invalidateView();
-        }
-    }
-}
-
-void PropertiesDock::on_btMemberDown_clicked()
-{
-    Relation* R = dynamic_cast<Relation*>(Selection[0]);
-    if (R) {
-        CommandList* theList = new CommandList(MainWindow::tr("Reorder members in relation %1").arg(R->id().numId), R);
-
-        QModelIndex index;
-        foreach(index, CurrentMembersView->selectionModel()->selectedIndexes())
-        {
-            CurrentMembersView->selectionModel()->select(index, QItemSelectionModel::Select | QItemSelectionModel::Rows);
-        }
-        QModelIndexList indexes = CurrentMembersView->selectionModel()->selectedRows(0);
-        QModelIndexList newSel;
-        // We need to iterate backwards so that earlier moves don't corrupt the inputs to later ones
-        for (int i = indexes.count()-1;  i >= 0;  i--)
-        {
-            index = indexes[i];
-            QVariant Content(R->referenceMemberModel(Main)->data(index,Qt::UserRole));
-            if (Content.isValid())
-            {
-                Feature* F = Content.value<Feature*>();
-                if (F) {
-                    int pos = R->find(F);
-                    if (pos >= R->size()-1)
-                        break;
-                    QString role = R->getRole(pos);
-                    theList->add(new RelationRemoveFeatureCommand(R, pos, Main->document()->getDirtyOrOriginLayer(R->layer())));
-                    theList->add(new RelationAddFeatureCommand(R, role, F, pos+1, Main->document()->getDirtyOrOriginLayer(R->layer())));
-                    newSel.append(CurrentMembersView->model()->index(pos+1, 0));
-                }
-            }
-        }
-        CurrentMembersView->selectionModel()->clearSelection();
-        foreach(index, newSel)
-        {
-            CurrentMembersView->selectionModel()->select(index, QItemSelectionModel::Select | QItemSelectionModel::Rows);
-        }
-        if (theList->empty())
-            delete theList;
-        else
-        {
-            Main->document()->addHistory(theList);
-            Main->invalidateView();
-        }
-    }
+    CUR_DOCUMENT->addHistory(L);
+    CUR_MAINWINDOW->invalidateView();
 }
 
 void PropertiesDock::on_SelectionList_customContextMenuRequested(const QPoint & pos)
@@ -952,30 +771,8 @@ void PropertiesDock::on_SelectionList_customContextMenuRequested(const QPoint & 
 void PropertiesDock::on_centerAction_triggered()
 {
     CoordBox cb;
-    if (CurrentMembersView)
-    {
-        Relation* R = dynamic_cast<Relation*>(Selection[0]);
-        if (R) {
-            QModelIndexList indexes = CurrentMembersView->selectionModel()->selectedIndexes();
-            QModelIndex index;
-
-            foreach(index, indexes)
-            {
-                QModelIndex idx = index.sibling(index.row(),0);
-                QVariant Content(R->referenceMemberModel(Main)->data(idx,Qt::UserRole));
-                if (Content.isValid())
-                {
-                    Feature* F = Content.value<Feature*>();
-                    if (F) {
-                        //setSelection(F);
-                        cb = F->boundingBox();
-                    }
-                }
-            }
-        }
-    } else
     if (CurrentTagView) {
-        Main->setUpdatesEnabled(false);
+        CUR_MAINWINDOW->setUpdatesEnabled(false);
         int idx = MultiUi.SelectionList->selectedItems()[0]->data(Qt::UserRole).toUInt();
         cb = FullSelection[idx]->boundingBox();
         for (int i=1; i < MultiUi.SelectionList->selectedItems().size(); i++) {
@@ -984,41 +781,16 @@ void PropertiesDock::on_centerAction_triggered()
         }
     }
     Coord c = cb.center();
-    Main->view()->setCenter(c, Main->view()->rect());
-    Main->setUpdatesEnabled(true);
-    Main->invalidateView(false);
+    CUR_VIEW->setCenter(c, CUR_VIEW->rect());
+    CUR_MAINWINDOW->setUpdatesEnabled(true);
+    CUR_MAINWINDOW->invalidateView(false);
 }
 
 void PropertiesDock::on_centerZoomAction_triggered()
 {
     CoordBox cb;
-    if (CurrentMembersView)
-    {
-        Relation* R = dynamic_cast<Relation*>(Selection[0]);
-        if (R) {
-            QModelIndexList indexes = CurrentMembersView->selectionModel()->selectedIndexes();
-            QModelIndex index;
-
-            foreach(index, indexes)
-            {
-                QModelIndex idx = index.sibling(index.row(),0);
-                QVariant Content(R->referenceMemberModel(Main)->data(idx,Qt::UserRole));
-                if (Content.isValid())
-                {
-                    Feature* F = Content.value<Feature*>();
-                    if (F) {
-                        //setSelection(F);
-                        cb = F->boundingBox();
-                        CoordBox mini(cb.center()-COORD_ENLARGE, cb.center()+COORD_ENLARGE);
-                        cb.merge(mini);
-                        cb = cb.zoomed(1.1);
-                    }
-                }
-            }
-        }
-    } else
     if (CurrentTagView) {
-        Main->setUpdatesEnabled(false);
+        CUR_MAINWINDOW->setUpdatesEnabled(false);
         int idx = MultiUi.SelectionList->selectedItems()[0]->data(Qt::UserRole).toUInt();
         cb = FullSelection[idx]->boundingBox();
         for (int i=1; i < MultiUi.SelectionList->selectedItems().size(); i++) {
@@ -1029,9 +801,9 @@ void PropertiesDock::on_centerZoomAction_triggered()
         cb.merge(mini);
         cb = cb.zoomed(1.1);
     }
-    Main->view()->setViewport(cb, Main->view()->rect());
-    Main->setUpdatesEnabled(true);
-    Main->invalidateView(false);
+    CUR_VIEW->setViewport(cb, CUR_VIEW->rect());
+    CUR_MAINWINDOW->setUpdatesEnabled(true);
+    CUR_MAINWINDOW->invalidateView(false);
 }
 
 bool PropertiesDock::loadTemplates(const QString& filename)
@@ -1057,7 +829,7 @@ bool PropertiesDock::loadTemplates(const QString& filename)
     if (!DomDoc.setContent(&File, true, &ErrorStr, &ErrorLine,&ErrorColumn))
     {
         File.close();
-        QMessageBox::warning(Main,"Parse error",
+        QMessageBox::warning(CUR_MAINWINDOW,"Parse error",
             QString("Parse error at line %1, column %2:\n%3")
                                   .arg(ErrorLine)
                                   .arg(ErrorColumn)
@@ -1072,7 +844,7 @@ bool PropertiesDock::loadTemplates(const QString& filename)
         connect(theTemplates, SIGNAL(tagCleared(QString)), this, SLOT(on_tag_cleared(QString)));
         connect(theTemplates, SIGNAL(templateChanged(TagTemplate*)), this, SLOT(on_template_changed(TagTemplate*)));
     } else {
-        QMessageBox::warning(Main,"Template read error", "Error parsing template file");
+        QMessageBox::warning(CUR_MAINWINDOW,"Template read error", "Error parsing template file");
         return false;
     }
 
@@ -1088,7 +860,7 @@ bool PropertiesDock::mergeTemplates(const QString& filename)
         return false;
 
     if (!File.open(QIODevice::ReadOnly)) {
-        QMessageBox::warning(Main,"Template read error", "Error reading template file");
+        QMessageBox::warning(CUR_MAINWINDOW,"Template read error", "Error reading template file");
         return false;
     }
 
@@ -1100,7 +872,7 @@ bool PropertiesDock::mergeTemplates(const QString& filename)
     if (!DomDoc.setContent(&File, true, &ErrorStr, &ErrorLine,&ErrorColumn))
     {
         File.close();
-        QMessageBox::warning(Main,"Parse error",
+        QMessageBox::warning(CUR_MAINWINDOW,"Parse error",
             QString("Parse error at line %1, column %2:\n%3")
                                   .arg(ErrorLine)
                                   .arg(ErrorColumn)
@@ -1110,7 +882,7 @@ bool PropertiesDock::mergeTemplates(const QString& filename)
 
     QDomElement root = DomDoc.documentElement();
     if (!theTemplates->mergeXml(root)) {
-        QMessageBox::warning(Main,"Template read error", "Error parsing template file");
+        QMessageBox::warning(CUR_MAINWINDOW,"Template read error", "Error parsing template file");
         return false;
     }
 
@@ -1126,13 +898,13 @@ bool PropertiesDock::saveTemplates(const QString& filename)
     theXmlDoc.appendChild(theXmlDoc.createProcessingInstruction("xml", "version=\"1.0\""));
 
     if (!theTemplates->toXML(theXmlDoc)) {
-        QMessageBox::warning(Main,"Tag templates write error", "Unable to generate XML document");
+        QMessageBox::warning(CUR_MAINWINDOW,"Tag templates write error", "Unable to generate XML document");
         return false;
     }
 
     QFile File(filename);
     if (!File.open(QIODevice::WriteOnly)) {
-        QMessageBox::warning(Main,"Tag templates write error", "Error opening template file for writing");
+        QMessageBox::warning(CUR_MAINWINDOW,"Tag templates write error", "Error opening template file for writing");
         return false;
     }
     File.write(theXmlDoc.toString().toUtf8());
@@ -1157,7 +929,6 @@ void PropertiesDock::retranslateUi()
     setWindowTitle(tr("Properties"));
     centerAction->setText(tr("Center map"));
     centerZoomAction->setText(tr("Center && Zoom map"));
-    selectAction->setText(tr("Select member"));
 }
 
 int PropertiesDock::highlightedSize() const

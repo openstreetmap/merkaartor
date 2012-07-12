@@ -1,7 +1,6 @@
 #include "Global.h"
 #include "MoveNodeInteraction.h"
 
-#include "MainWindow.h"
 #include "MapView.h"
 #include "DocumentCommands.h"
 #include "WayCommands.h"
@@ -21,8 +20,8 @@
 
 #include <QList>
 
-MoveNodeInteraction::MoveNodeInteraction(MainWindow* aMain)
-    : FeatureSnapInteraction(aMain)
+MoveNodeInteraction::MoveNodeInteraction()
+    : FeatureSnapInteraction()
     , StartDragPosition(0,0)
     , theList(0)
 {
@@ -103,14 +102,14 @@ void MoveNodeInteraction::snapMousePressEvent(QMouseEvent * event, Feature* aLas
 {
     QList<Feature*> sel;
     if (view()->isSelectionLocked()) {
-        if (theMain->properties()->selection(0))
-            sel.append(theMain->properties()->selection(0));
+        if (PROPERTIES_DOCK->selection(0))
+            sel.append(PROPERTIES_DOCK->selection(0));
         else
             sel.append(aLast);
     } else {
         if (aLast) {
-            if (theMain->properties()->selection().size() && !M_PREFS->getSeparateMoveMode())
-                sel = theMain->properties()->selection();
+            if (PROPERTIES_DOCK->selection().size() && !M_PREFS->getSeparateMoveMode())
+                sel = PROPERTIES_DOCK->selection();
             else
                 sel.append(aLast);
         }
@@ -228,7 +227,7 @@ void MoveNodeInteraction::snapMouseReleaseEvent(QMouseEvent * event, Feature* Cl
                         theList->add(new RemoveFeatureCommand(document(), samePosPts[i], alt));
                     }
 
-                    theMain->properties()->setSelection(merged);
+                    PROPERTIES_DOCK->setSelection(merged);
                 }
             }
         }
@@ -259,16 +258,16 @@ void MoveNodeInteraction::snapMouseMoveEvent(QMouseEvent* event, Feature* Closer
                 theList->setDescription(MainWindow::tr("Create node in Road: %1").arg(aRoad->id().numId));
                 theList->setFeature(aRoad);
                 int SnapIdx = aRoad->findVirtual(v)+1;
-                Node* N = g_backend.allocNode(main()->document()->getDirtyOrOriginLayer(aRoad->layer()), *v);
+                Node* N = g_backend.allocNode(CUR_DOCUMENT->getDirtyOrOriginLayer(aRoad->layer()), *v);
                 N->setVirtual(false);
                 N->setPosition(OriginalPosition[i]+Diff);
 
-                if (theMain->properties()->isSelected(v)) {
-                    theMain->properties()->toggleSelection(v);
-                    theMain->properties()->toggleSelection(N);
+                if (PROPERTIES_DOCK->isSelected(v)) {
+                    PROPERTIES_DOCK->toggleSelection(v);
+                    PROPERTIES_DOCK->toggleSelection(N);
                 }
-                theList->add(new AddFeatureCommand(main()->document()->getDirtyOrOriginLayer(aRoad->layer()),N,true));
-                theList->add(new WayAddNodeCommand(aRoad,N,SnapIdx,main()->document()->getDirtyOrOriginLayer(aRoad->layer())));
+                theList->add(new AddFeatureCommand(CUR_DOCUMENT->getDirtyOrOriginLayer(aRoad->layer()),N,true));
+                theList->add(new WayAddNodeCommand(aRoad,N,SnapIdx,CUR_DOCUMENT->getDirtyOrOriginLayer(aRoad->layer())));
 
                 Moving[i] = N;
             } else {

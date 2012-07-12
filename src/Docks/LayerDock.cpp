@@ -1,7 +1,8 @@
 #include "LayerDock.h"
 #include "LayerWidget.h"
 
-#include "MainWindow.h"
+#include "Global.h"
+
 #ifndef _MOBILE
 #include "ui_MainWindow.h"
 #endif
@@ -25,12 +26,11 @@
 class LayerDockPrivate
 {
     public:
-        LayerDockPrivate(MainWindow* aMain) :
-          Main(aMain), Scroller(0), Content(0), Layout(0), theDropWidget(0),
+        LayerDockPrivate() :
+          Scroller(0), Content(0), Layout(0), theDropWidget(0),
           lastSelWidget(0)
           {}
     public:
-        MainWindow* Main;
         QScrollArea* Scroller;
         QWidget* Content;
         QVBoxLayout* Layout;
@@ -42,10 +42,10 @@ class LayerDockPrivate
         QList<LayerWidget*> selWidgets;
 };
 
-LayerDock::LayerDock(MainWindow* aMain)
-: MDockAncestor(aMain)
+LayerDock::LayerDock()
+: MDockAncestor()
 {
-    p = new LayerDockPrivate(aMain);
+    p = new LayerDockPrivate();
     setMinimumSize(1,1);
     setObjectName("layersDock");
     setAcceptDrops(true);
@@ -107,7 +107,7 @@ void LayerDock::dropEvent(QDropEvent *event)
         return;
     }
 
-    p->Main->document()->moveLayer(p->theDropWidget->getLayer(), p->Layout->indexOf(p->theDropWidget));
+    CUR_DOCUMENT->moveLayer(p->theDropWidget->getLayer(), p->Layout->indexOf(p->theDropWidget));
     emit(layersChanged(false));
     update();
 }
@@ -134,7 +134,7 @@ void LayerDock::addLayer(Layer* aLayer)
         connect(w, SIGNAL(layerProjection(const QString&)), this, SLOT(layerProjection(const QString&)));
 
 #ifndef _MOBILE
-        p->Main->ui->menuLayers->addMenu(w->getAssociatedMenu());
+        CUR_MAINWINDOW->ui->menuLayers->addMenu(w->getAssociatedMenu());
 #endif
 
         //w->setChecked(aLayer->isSelected());
@@ -154,7 +154,7 @@ void LayerDock::deleteLayer(Layer* aLayer)
             continue;
         if (CHILD_LAYER(i) == aLayer) {
 #ifndef _MOBILE
-            p->Main->ui->menuLayers->removeAction(CHILD_WIDGET(i)->getAssociatedMenu()->menuAction());
+            CUR_MAINWINDOW->ui->menuLayers->removeAction(CHILD_WIDGET(i)->getAssociatedMenu()->menuAction());
 #endif
             LayerWidget* curW = CHILD_WIDGET(i);
             curW->deleteLater();
@@ -291,11 +291,11 @@ void LayerDock::layerClosed(Layer* l)
     l->getWidget()->setVisible(false);
     l->getWidget()->getAssociatedMenu()->setVisible(false);
 #ifndef _MOBILE
-    p->Main->on_editPropertiesAction_triggered();
+    CUR_MAINWINDOW->on_editPropertiesAction_triggered();
 #endif
-    p->Main->document()->removeDownloadBox(l);
-    if (p->Main->document()->getLastDownloadLayer() == l)
-        p->Main->document()->setLastDownloadLayer(NULL);
+    CUR_DOCUMENT->removeDownloadBox(l);
+    if (CUR_DOCUMENT->getLastDownloadLayer() == l)
+        CUR_DOCUMENT->setLastDownloadLayer(NULL);
 
     emit layersClosed();
     update();
@@ -305,7 +305,7 @@ void LayerDock::layerCleared(Layer* l)
 {
     l->clear();
 #ifndef _MOBILE
-    p->Main->on_editPropertiesAction_triggered();
+    CUR_MAINWINDOW->on_editPropertiesAction_triggered();
 #endif
 
     emit layersCleared();
@@ -321,7 +321,7 @@ void LayerDock::layerZoom(Layer * l)
     CoordBox mini(bb.center()-COORD_ENLARGE, bb.center()+COORD_ENLARGE);
     bb.merge(mini);
 //    bb = bb.zoomed(1.1);
-    p->Main->view()->setViewport(bb, p->Main->view()->rect());
+    CUR_VIEW->setViewport(bb, CUR_VIEW->rect());
     emit(layersChanged(false));
 }
 
@@ -458,7 +458,7 @@ void LayerDock::resetLayers()
     }
     foreach (Layer* f, toDelete)
         layerClosed(f);
-    p->Main->document()->addFilterLayers();
+    CUR_DOCUMENT->addFilterLayers();
 }
 
 void LayerDock::contextMenuEvent(QContextMenuEvent* anEvent)
@@ -557,8 +557,8 @@ void LayerDock::mousePressEvent ( QMouseEvent * ev )
         aWidget->setChecked(true);
         p->lastSelWidget = aWidget;
 
-        if (p->Main->info())
-            p->Main->info()->setHtml(aWidget->getLayer()->toHtml());
+        if (INFO_DOCK)
+            INFO_DOCK->setHtml(aWidget->getLayer()->toHtml());
     }
     ev->accept();
 }

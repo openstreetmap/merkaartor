@@ -5,13 +5,11 @@
 
 #include <QCompleter>
 
-#include "MainWindow.h"
 #include "Document.h"
 
-TagSelectorWidget::TagSelectorWidget(MainWindow* mw, QWidget *parent) :
+TagSelectorWidget::TagSelectorWidget(QWidget *parent) :
     QWidget(parent),
-    ui(new Ui::TagSelectorWidget),
-    main(mw)
+    ui(new Ui::TagSelectorWidget)
 {
     ui->setupUi(this);
 

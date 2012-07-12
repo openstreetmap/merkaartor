@@ -2,7 +2,6 @@
 
 #include "PaintStyleEditor.h"
 #include "Painter.h"
-#include "MainWindow.h"
 #include "Document.h"
 
 #include "SelectionDialog.h"
@@ -844,7 +843,7 @@ void PaintStyleEditor::on_edFilter_textChanged(const QString &/*text*/)
 
 void PaintStyleEditor::on_btSelectorHelper_clicked()
 {
-    SelectionDialog* Sel = new SelectionDialog(g_Merk_MainWindow, false);
+    SelectionDialog* Sel = new SelectionDialog(CUR_MAINWINDOW, false);
     if (!Sel)
         return;
 

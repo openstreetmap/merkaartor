@@ -4,7 +4,6 @@
 #include <ui_CreateDoubleWayDock.h>
 #include "Interaction.h"
 
-class MainWindow;
 class Way;
 
 class QDockWidget;
@@ -14,7 +13,7 @@ class CreateDoubleWayInteraction : public Interaction
     Q_OBJECT
 
     public:
-        CreateDoubleWayInteraction(MainWindow* Main);
+        CreateDoubleWayInteraction();
         ~CreateDoubleWayInteraction();
 
         virtual void mousePressEvent(QMouseEvent * event);

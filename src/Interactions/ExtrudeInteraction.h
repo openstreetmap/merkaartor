@@ -13,7 +13,7 @@ class ExtrudeInteraction : public FeatureSnapInteraction
     Q_OBJECT
 
     public:
-        ExtrudeInteraction(MainWindow* aMain);
+        ExtrudeInteraction();
         ~ExtrudeInteraction();
 
         virtual void snapMousePressEvent(QMouseEvent * event, Feature* aLast);

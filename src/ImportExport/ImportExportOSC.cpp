@@ -102,21 +102,21 @@ bool ImportExportOSC::import(Layer* aLayer)
                     IFeature::FId id(Feature::Point, sid.toLongLong());
                     F = theDoc->getFeature(id);
                     if (!F || F->notEverythingDownloaded())
-                        downloadFeature(0, id, theDoc, dLayer);
+                        downloadFeature(id, theDoc, dLayer);
                     F = Node::fromXML(theDoc, aLayer, stream);
                     theList->add(new AddFeatureCommand(aLayer, F, true));
                 } else if (stream.name() == "way") {
                     IFeature::FId id(Feature::LineString, sid.toLongLong());
                     F = theDoc->getFeature(id);
                     if (!F || F->notEverythingDownloaded())
-                        downloadFeature(0, id, theDoc, dLayer);
+                        downloadFeature(id, theDoc, dLayer);
                     F = Way::fromXML(theDoc, aLayer, stream);
                     theList->add(new AddFeatureCommand(aLayer, F, true));
                 } else if (stream.name() == "relation") {
                     IFeature::FId id(Feature::OsmRelation, sid.toLongLong());
                     F = theDoc->getFeature(id);
                     if (!F || F->notEverythingDownloaded())
-                        downloadFeature(0, id, theDoc, dLayer);
+                        downloadFeature(id, theDoc, dLayer);
                     F = Relation::fromXML(theDoc, aLayer, stream);
                     theList->add(new AddFeatureCommand(aLayer, F, true));
                 } else if (!stream.isWhitespace()) {
@@ -153,7 +153,7 @@ bool ImportExportOSC::import(Layer* aLayer)
 
         stream.readNext();
     }
-    downloadFeatures(0, featIdList, theDoc, dLayer);
+    downloadFeatures(featIdList, theDoc, dLayer);
 
     if (dLayer->size() == 0 && dLayer != theDoc->getLastDownloadLayer()) {
         theDoc->remove(dLayer);

@@ -4,7 +4,6 @@
 #include "Document.h"
 #include "Feature.h"
 
-class MainWindow;
 class RelationPrivate;
 class QAbstractTableModel;
 class QProgressDialog;
@@ -47,7 +46,7 @@ public:
     virtual bool isNull() const;
 
     const QString& getRole(int Idx) const;
-    QAbstractTableModel* referenceMemberModel(MainWindow* aMain);
+    QAbstractTableModel* referenceMemberModel();
     void releaseMemberModel();
     QString description() const;
 

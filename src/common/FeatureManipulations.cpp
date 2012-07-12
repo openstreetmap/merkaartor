@@ -323,7 +323,7 @@ void joinRoads(Document* theDocument, CommandList* theList, PropertiesDock* theD
             selection.removeOne(R2);
         }
     }
-    theDock->setSelection(selection);
+    theDock->setMultiSelection(selection);
 }
 
 static bool handleWaysplitSpecialRestriction(Document* theDocument, CommandList* theList, Way* FirstPart, Way* NextPart, Relation* theRel)
@@ -396,7 +396,7 @@ static void handleWaysplitRelations(Document* theDocument, CommandList* theList,
 }
 
 
-static void splitRoad(Document* theDocument, CommandList* theList, Way* In, const QList<Node*>& Points, QList<Way*>& Result)
+static void splitRoad(Document* theDocument, CommandList* theList, Way* In, const QList<Node*>& Points, QList<Feature*>& Result)
 {
     int pos;
     if (In->isClosed()) {  // Special case: If area, rotate the area so that the start node is the first point of splitting
@@ -463,7 +463,7 @@ static void splitRoad(Document* theDocument, CommandList* theList, Way* In, cons
 
 void splitRoads(Document* theDocument, CommandList* theList, PropertiesDock* theDock)
 {
-    QList<Way*> Roads, Result;
+    QList<Feature*> Roads, Result;
     QList<Node*> Points;
     for (int i=0; i<theDock->selectionSize(); ++i)
         if (Way* R = CAST_WAY(theDock->selection(i)))
@@ -479,8 +479,8 @@ void splitRoads(Document* theDocument, CommandList* theList, PropertiesDock* the
     }
 
     for (int i=0; i<Roads.size(); ++i)
-        splitRoad(theDocument, theList,Roads[i],Points, Result);
-    theDock->setSelection(Result);
+        splitRoad(theDocument, theList, STATIC_CAST_WAY(Roads[i]), Points, Result);
+    theDock->setMultiSelection(Result);
 }
 
 static void breakRoad(Document* theDocument, CommandList* theList, Way* R, Node* Pt)
@@ -500,7 +500,8 @@ static void breakRoad(Document* theDocument, CommandList* theList, Way* R, Node*
 
 void breakRoads(Document* theDocument, CommandList* theList, PropertiesDock* theDock)
 {
-    QList<Way*> Roads, Result;
+    QList<Way*> Roads;
+    QList<Feature*> Result;
     QList<Node*> Points;
     for (int i=0; i<theDock->selectionSize(); ++i)
         if (Way* R = CAST_WAY(theDock->selection(i)))
@@ -518,12 +519,14 @@ void breakRoads(Document* theDocument, CommandList* theList, PropertiesDock* the
     }
 
     if (Roads.size() == 1 && Points.size() ) {
-        splitRoad(theDocument, theList,Roads[0],Points, Result);
+        splitRoad(theDocument, theList, Roads[0],Points, Result);
         if (Roads[0]->area() > 0.0) {
             for (int i=0; i<Points.size(); ++i)
                 breakRoad(theDocument, theList, Roads[0],Points[i]);
         } else {
-            Roads = Result;
+            Roads.clear();
+            for (int i=0; i<Result.size(); ++i)
+                Roads << STATIC_CAST_WAY(Result[i]);
         }
     }
 
@@ -1362,7 +1365,7 @@ findNextJoin:
                     // Remove otherArea from selection.
                     QList<Feature*> sel = theDock->selection();
                     sel.removeOne(otherArea);
-                    theDock->setSelection(sel);
+                    theDock->setMultiSelection(sel);
                     // Restart the process again.
                     goto findNextJoin;
                 }
@@ -1439,7 +1442,7 @@ void splitArea(Document* theDocument, CommandList* theList, PropertiesDock* theD
     if (!splitArea(theDocument, theList, theArea, nodes, &newArea))
         return;
 
-    theDock->setSelection(QList<Way*>() << theArea << newArea);
+    theDock->setMultiSelection(QList<Feature*>() << theArea << newArea);
 }
 
 static void terraceArea(Document* theDocument, CommandList* theList,
@@ -1531,7 +1534,7 @@ void terraceArea(Document* theDocument, CommandList* theList, PropertiesDock* th
     QList<Feature*> areas;
     terraceArea(theDocument, theList, theArea, sides, divisions, startNode, &areas);
 
-    theDock->setSelection(areas);
+    theDock->setMultiSelection(areas);
 }
 
 // Remove repeated (adjacent) nodes in ways.

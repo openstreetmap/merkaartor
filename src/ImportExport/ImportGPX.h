@@ -10,8 +10,8 @@ class QByteArray;
 class QString;
 class QWidget;
 
-bool importGPX(QWidget* aParent, const QString& aFilename, Document* theDocument, QList<TrackLayer*>& theTracklayers);
-bool importGPX(QWidget* aParent, QByteArray& aFile, Document* theDocument, QList<TrackLayer*>& theTracklayers, bool MakeSegment);
+bool importGPX(const QString& aFilename, Document* theDocument, QList<TrackLayer*>& theTracklayers);
+bool importGPX(QByteArray& aFile, Document* theDocument, QList<TrackLayer*>& theTracklayers, bool MakeSegment);
 
 #endif
 

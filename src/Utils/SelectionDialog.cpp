@@ -12,7 +12,6 @@
 #include "Global.h"
 
 #include "SelectionDialog.h"
-#include "MainWindow.h"
 #include "Document.h"
 
 #include <QCompleter>

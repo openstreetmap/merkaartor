@@ -11,7 +11,7 @@
 //
 #include "FeaturesDock.h"
 
-#include "MainWindow.h"
+#include "Global.h"
 #include "MapView.h"
 #include "Document.h"
 #include "ImageMapLayer.h"
@@ -29,11 +29,10 @@
 
 #define MAX_FEATS 100
 
-FeaturesDock::FeaturesDock(MainWindow* aParent)
-    : MDockAncestor(aParent),
-    Main(aParent),
-    curFeatType(IFeature::OsmRelation),
-    findMode(false)
+FeaturesDock::FeaturesDock()
+    : MDockAncestor()
+    , curFeatType(IFeature::OsmRelation)
+    , findMode(false)
 {
 //    setMinimumSize(220,100);
     setObjectName("FeaturesDock");
@@ -103,14 +102,14 @@ void FeaturesDock::on_FeaturesList_itemSelectionChanged()
         Highlighted.push_back(F);
     }
 
-    Main->view()->update();
+    CUR_VIEW->update();
 }
 
 void FeaturesDock::on_FeaturesList_itemDoubleClicked(QListWidgetItem* item)
 {
     Feature * F = item->data(Qt::UserRole).value<Feature*>();
-    Main->properties()->setSelection(F);
-    Main->view()->update();
+    PROPERTIES_DOCK->setSelection(F);
+    CUR_VIEW->update();
 }
 
 void FeaturesDock::on_FeaturesList_customContextMenuRequested(const QPoint & pos)
@@ -146,20 +145,20 @@ void FeaturesDock::on_FeaturesList_delete()
         return;
 
     Feature* F;
-    Main->view()->blockSignals(true);
+    CUR_VIEW->blockSignals(true);
 
     Highlighted.clear();
-    Main->properties()->setSelection(0);
+    PROPERTIES_DOCK->setSelection(0);
     for (int i=0; i < ui.FeaturesList->selectedItems().count(); ++i) {
         F = ui.FeaturesList->selectedItems()[i]->data(Qt::UserRole).value<Feature*>();
         if (F) {
-            Main->properties()->addSelection(F);
+            PROPERTIES_DOCK->addSelection(F);
         }
     }
 
-    Main->view()->blockSignals(false);
+    CUR_VIEW->blockSignals(false);
 #ifndef _MOBILE
-    Main->on_editRemoveAction_triggered();
+    CUR_MAINWINDOW->on_editRemoveAction_triggered();
 #endif
 }
 
@@ -175,7 +174,7 @@ void FeaturesDock::on_centerAction_triggered()
     Feature* F;
     CoordBox cb;
 
-    Main->view()->blockSignals(true);
+    CUR_VIEW->blockSignals(true);
 
     for (int i=0; i < ui.FeaturesList->selectedItems().count(); ++i) {
         F = ui.FeaturesList->selectedItems()[i]->data(Qt::UserRole).value<Feature*>();
@@ -188,10 +187,10 @@ void FeaturesDock::on_centerAction_triggered()
     }
     if (!cb.isNull()) {
         Coord c = cb.center();
-        Main->view()->setCenter(c, Main->view()->rect());
-        Main->invalidateView();
+        CUR_VIEW->setCenter(c, CUR_VIEW->rect());
+        CUR_MAINWINDOW->invalidateView();
     }
-    Main->view()->blockSignals(false);
+    CUR_VIEW->blockSignals(false);
 
     QTimer::singleShot(10, this, SLOT(on_Viewport_changed()));
 }
@@ -201,7 +200,7 @@ void FeaturesDock::on_centerZoomAction_triggered()
     Feature* F;
     CoordBox cb;
 
-    Main->view()->blockSignals(true);
+    CUR_VIEW->blockSignals(true);
 
     for (int i=0; i < ui.FeaturesList->selectedItems().count(); ++i) {
         F = ui.FeaturesList->selectedItems()[i]->data(Qt::UserRole).value<Feature*>();
@@ -216,10 +215,10 @@ void FeaturesDock::on_centerZoomAction_triggered()
         CoordBox mini(cb.center()-COORD_ENLARGE, cb.center()+COORD_ENLARGE);
         cb.merge(mini);
         cb = cb.zoomed(1.1);
-        Main->view()->setViewport(cb, Main->view()->rect());
-        Main->invalidateView();
+        CUR_VIEW->setViewport(cb, CUR_VIEW->rect());
+        CUR_MAINWINDOW->invalidateView();
     }
-    Main->view()->blockSignals(false);
+    CUR_VIEW->blockSignals(false);
 
     QTimer::singleShot(10, this, SLOT(on_Viewport_changed()));
 }
@@ -236,28 +235,28 @@ void FeaturesDock::on_downloadAction_triggered()
             toResolve.push_back(F);
         }
     }
-    Main->downloadFeatures(toResolve);
+    CUR_MAINWINDOW->downloadFeatures(toResolve);
 #endif
 }
 
 void FeaturesDock::on_addSelectAction_triggered()
 {
     Feature* F;
-    Main->view()->blockSignals(true);
+    CUR_VIEW->blockSignals(true);
 
     for (int i=0; i < ui.FeaturesList->selectedItems().count(); ++i) {
         F = ui.FeaturesList->selectedItems()[i]->data(Qt::UserRole).value<Feature*>();
         if (F) {
-            Main->properties()->addSelection(F);
+            PROPERTIES_DOCK->addSelection(F);
         }
     }
 
-    Main->view()->blockSignals(false);
+    CUR_VIEW->blockSignals(false);
 }
 
 void FeaturesDock::on_btFind_clicked(bool)
 {
-    SelectionDialog* dlg = new SelectionDialog(Main);
+    SelectionDialog* dlg = new SelectionDialog(CUR_MAINWINDOW);
     if (!dlg->exec())
         return;
 
@@ -267,8 +266,8 @@ void FeaturesDock::on_btFind_clicked(bool)
 
     Found.clear();
     int added = 0;
-    for (VisibleFeatureIterator i(Main->document()); !i.isEnd() && (!dlg->sbMaxResult->value() || added < dlg->sbMaxResult->value()); ++i) {
-        if (tsel->matches(i.get(), Main->view()->pixelPerM())) {
+    for (VisibleFeatureIterator i(CUR_DOCUMENT); !i.isEnd() && (!dlg->sbMaxResult->value() || added < dlg->sbMaxResult->value()); ++i) {
+        if (tsel->matches(i.get(), CUR_VIEW->pixelPerM())) {
             Found << i.get();
         }
     }
@@ -304,7 +303,7 @@ void FeaturesDock::tabChanged(int idx)
 
 void FeaturesDock::on_Viewport_changed()
 {
-    theViewport = Main->view()->viewport();
+    theViewport = CUR_VIEW->viewport();
 
     updateList();
 }
@@ -370,28 +369,28 @@ void FeaturesDock::updateList()
 
     clearItems();
 
-    if (!isVisible() || !Main->document())
+    if (!isVisible() || !CUR_DOCUMENT)
         return;
 
     if (findMode) {
         foreach (MapFeaturePtr F, Found) {
             if (ui.cbWithin->isChecked()) {
-                if (Main->view()->viewport().contains(F->boundingBox()))
+                if (CUR_VIEW->viewport().contains(F->boundingBox()))
                     addItem(F);
             } else
                 addItem(F);
         }
     } else {
-        for (int j=0; j<Main->document()->layerSize(); ++j) {
-            if (!Main->document()->getLayer(j)->size())
+        for (int j=0; j<CUR_DOCUMENT->layerSize(); ++j) {
+            if (!CUR_DOCUMENT->getLayer(j)->size())
                 continue;
-            QList < Feature* > ret = g_backend.indexFind(Main->document()->getLayer(j), theViewport);
+            QList < Feature* > ret = g_backend.indexFind(CUR_DOCUMENT->getLayer(j), theViewport);
             foreach (Feature* F, ret) {
                 if (F->isHidden())
                     continue;
 
                 if (ui.cbWithin->isChecked()) {
-                    if (Main->view()->viewport().contains(F->boundingBox()))
+                    if (CUR_VIEW->viewport().contains(F->boundingBox()))
                         addItem(F);
                 } else
                     addItem(F);

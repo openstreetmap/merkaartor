@@ -12,7 +12,7 @@
 #include "PreferencesDialog.h"
 #include "MasPaintStyle.h"
 
-#include "MainWindow.h"
+#include "Global.h"
 #include "Document.h"
 #include "Feature.h"
 #include "PropertiesDock.h"
@@ -97,8 +97,8 @@ void OsmServerWidget::on_rbOsmServerSelected_clicked()
     rbOsmServerSelected->setChecked(true);
 }
 
-PreferencesDialog::PreferencesDialog(QWidget* parent)
-    : QDialog(parent)
+PreferencesDialog::PreferencesDialog()
+    : QDialog(CUR_MAINWINDOW)
 {
 #ifdef _MOBILE
     setWindowState(Qt::WindowFullScreen);
@@ -346,7 +346,7 @@ void PreferencesDialog::savePrefs()
     else
         setDefaultLanguage("");
 
-    ((MainWindow*)parent())->updateLanguage();
+    CUR_MAINWINDOW->updateLanguage();
     retranslateUi(this);
 
     M_PREFS->setTranslateTags(TranslateTags->isChecked());
@@ -428,7 +428,7 @@ void PreferencesDialog::savePrefs()
         PainterToInvalidate = true;
     }
     if (PainterToInvalidate) {
-        for (FeatureIterator it(((MainWindow*)parent())->document()); !it.isEnd(); ++it)
+        for (FeatureIterator it(CUR_DOCUMENT); !it.isEnd(); ++it)
         {
             it.get()->invalidatePainter();
         }
@@ -443,7 +443,7 @@ void PreferencesDialog::savePrefs()
     if (NewTemplate != M_PREFS->getDefaultTemplate())
     {
         M_PREFS->setDefaultTemplate(NewTemplate);
-        ((MainWindow*)parent())->properties()->loadTemplates(NewTemplate);
+        PROPERTIES_DOCK->loadTemplates(NewTemplate);
     }
 
     M_PREFS->setCustomStyle(CustomStylesDir->text());

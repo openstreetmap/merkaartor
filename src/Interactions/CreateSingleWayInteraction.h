@@ -3,7 +3,6 @@
 
 #include "Interaction.h"
 
-class MainWindow;
 class Way;
 
 class QDockWidget;
@@ -13,7 +12,7 @@ class CreateSingleWayInteraction : public FeatureSnapInteraction
     Q_OBJECT
 
     public:
-        CreateSingleWayInteraction(MainWindow* aMain, Node * firstNode, bool aCurved);
+        CreateSingleWayInteraction(Node * firstNode, bool aCurved);
         ~CreateSingleWayInteraction();
 
         virtual void snapMousePressEvent(QMouseEvent * event, Feature* aLast);

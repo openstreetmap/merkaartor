@@ -17,7 +17,9 @@ SOURCES += MDockAncestor.cpp \
     FeaturesDock.cpp
 FORMS += DirtyDock.ui \
     StyleDock.ui \
-    MinimumRelationProperties.ui \
     MinimumTrackPointProperties.ui \
-    MinimumRoadProperties.ui \
+    DefaultProperties.ui \
     FeaturesDock.ui
+
+#    MinimumRoadProperties.ui \
+#    MinimumRelationProperties.ui \

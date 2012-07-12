@@ -9,16 +9,18 @@
 // Copyright: See COPYING file that comes with this distribution
 //
 //
+#include "Global.h"
+
 #include "InfoDock.h"
-#include "MainWindow.h"
 #include "MerkaartorPreferences.h"
 #include "DownloadOSM.h"
 
 #include <QApplication>
 #include <QDesktopServices>
 
-InfoDock::InfoDock(MainWindow* aParent)
-    : MDockAncestor(aParent), Main(aParent), theText(new QTextBrowser(this))
+InfoDock::InfoDock()
+    : MDockAncestor()
+    , theText(new QTextBrowser(this))
 {
     setMinimumSize(220,100);
     setWindowTitle(tr("Info"));

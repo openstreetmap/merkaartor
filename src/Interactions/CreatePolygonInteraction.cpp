@@ -1,6 +1,5 @@
 #include "CreatePolygonInteraction.h"
 
-#include "MainWindow.h"
 #include "DocumentCommands.h"
 #include "WayCommands.h"
 #include "NodeCommands.h"
@@ -17,11 +16,11 @@
 
 #include <math.h>
 
-CreatePolygonInteraction::CreatePolygonInteraction(MainWindow* aMain, int sides, const QList< QPair <QString, QString> >& tags)
-    : Interaction(aMain), Origin(0,0), Sides(sides), HaveOrigin(false), bAngle(0.0), bScale(QPointF(1., 1.)), theTags(tags)
+CreatePolygonInteraction::CreatePolygonInteraction(int sides, const QList< QPair <QString, QString> >& tags)
+    : Interaction(), Origin(0,0), Sides(sides), HaveOrigin(false), bAngle(0.0), bScale(QPointF(1., 1.)), theTags(tags)
 {
 #ifndef _MOBILE
-    theMain->view()->setCursor(cursor());
+    CUR_VIEW->setCursor(cursor());
 #endif
 }
 
@@ -85,22 +84,22 @@ void CreatePolygonInteraction::mousePressEvent(QMouseEvent * event)
             m.scale(bScale.x(), bScale.y());
 
             QPointF Prev(CenterF.x()+cos(-Angle/2)*Radius,CenterF.y()+sin(-Angle/2)*Radius);
-            Node* First = g_backend.allocNode(theMain->document()->getDirtyOrOriginLayer(), XY_TO_COORD(m.map(Prev).toPoint()));
-            Way* R = g_backend.allocWay(theMain->document()->getDirtyOrOriginLayer());
+            Node* First = g_backend.allocNode(CUR_DOCUMENT->getDirtyOrOriginLayer(), XY_TO_COORD(m.map(Prev).toPoint()));
+            Way* R = g_backend.allocWay(CUR_DOCUMENT->getDirtyOrOriginLayer());
             CommandList* L  = new CommandList(MainWindow::tr("Create Polygon %1").arg(R->id().numId), R);
-            L->add(new AddFeatureCommand(theMain->document()->getDirtyOrOriginLayer(),R,true));
+            L->add(new AddFeatureCommand(CUR_DOCUMENT->getDirtyOrOriginLayer(),R,true));
             R->add(First);
-            L->add(new AddFeatureCommand(theMain->document()->getDirtyOrOriginLayer(),First,true));
+            L->add(new AddFeatureCommand(CUR_DOCUMENT->getDirtyOrOriginLayer(),First,true));
             for (qreal a = 2*M_PI - Angle*3/2; a>0; a-=Angle)
             {
                 QPointF Next(CenterF.x()+cos(a)*Radius,CenterF.y()+sin(a)*Radius);
-                Node* New = g_backend.allocNode(theMain->document()->getDirtyOrOriginLayer(), XY_TO_COORD(m.map(Next).toPoint()));
-                L->add(new AddFeatureCommand(theMain->document()->getDirtyOrOriginLayer(),New,true));
+                Node* New = g_backend.allocNode(CUR_DOCUMENT->getDirtyOrOriginLayer(), XY_TO_COORD(m.map(Next).toPoint()));
+                L->add(new AddFeatureCommand(CUR_DOCUMENT->getDirtyOrOriginLayer(),New,true));
                 R->add(New);
             }
             R->add(First);
             if (M_PREFS->getAutoSourceTag()) {
-                QStringList sl = theMain->document()->getCurrentSourceTags();
+                QStringList sl = CUR_DOCUMENT->getCurrentSourceTags();
                 if (sl.size())
                     R->setTag("source", sl.join(";"));
             }
@@ -112,13 +111,13 @@ void CreatePolygonInteraction::mousePressEvent(QMouseEvent * event)
             {
                 Way* W1 = dynamic_cast<Way*>(it.get());
                 if (W1 && (W1 != R))
-                    Way::createJunction(theMain->document(), L, R, W1, true);
+                    Way::createJunction(CUR_DOCUMENT, L, R, W1, true);
             }
-            theMain->properties()->setSelection(R);
+            PROPERTIES_DOCK->setSelection(R);
             document()->addHistory(L);
             view()->setInteracting(false);
             view()->invalidate(true, true, false);
-            theMain->launchInteraction(0);
+            CUR_MAINWINDOW->launchInteraction(0);
         }
     }
     else

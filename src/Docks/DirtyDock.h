@@ -19,39 +19,37 @@
 
 #include <QList>
 
-class MainWindow;
 class Feature;
 
 /**
-	@author cbro <cbro@semperpax.com>
+    @author cbro <cbro@semperpax.com>
 */
 class DirtyDock : public MDockAncestor
 {
 Q_OBJECT
 public:
-    DirtyDock(MainWindow* aParent);
+    DirtyDock();
 
     ~DirtyDock();
 
 public slots:
-	void updateList();
-	void on_ChangesList_itemSelectionChanged();
-	void on_ChangesList_itemDoubleClicked(QListWidgetItem* item);
-	void on_ChangesList_customContextMenuRequested(const QPoint & pos);
-	void on_centerAction_triggered();
-	void on_centerZoomAction_triggered();
-	void on_pbCleanupHistory_clicked();
+    void updateList();
+    void on_ChangesList_itemSelectionChanged();
+    void on_ChangesList_itemDoubleClicked(QListWidgetItem* item);
+    void on_ChangesList_customContextMenuRequested(const QPoint & pos);
+    void on_centerAction_triggered();
+    void on_centerZoomAction_triggered();
+    void on_pbCleanupHistory_clicked();
 
 private:
-	MainWindow* Main;
-	Ui::DirtyDockWidget ui;
-	QAction* centerAction;
-	QAction* centerZoomAction;
-	
-	QList<Feature*> Selection;
+    Ui::DirtyDockWidget ui;
+    QAction* centerAction;
+    QAction* centerZoomAction;
+
+    QList<Feature*> Selection;
 public:
-	void changeEvent(QEvent*);
-	void retranslateUi();
+    void changeEvent(QEvent*);
+    void retranslateUi();
 };
 
 #endif

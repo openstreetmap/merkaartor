@@ -11,7 +11,6 @@
 
 #define TILE_TYPE QPoint
 
-class MainWindow;
 class Feature;
 class Way;
 class IDocument;
@@ -31,7 +30,6 @@ public:
 public:
     ~MapView();
 
-    MainWindow* main();
     virtual void setDocument(IDocument* aDoc);
     IDocument* document();
     Interaction* interaction();
@@ -99,7 +97,6 @@ private:
     void updateStaticBackground();
     void updateWireframe();
 
-    MainWindow* Main;
     QPixmap* StaticBackground;
     QPixmap* StaticWireframe;
     QPixmap* StaticTouchup;

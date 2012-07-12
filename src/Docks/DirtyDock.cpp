@@ -9,9 +9,11 @@
 // Copyright: See COPYING file that comes with this distribution
 //
 //
+
+#include "Global.h"
+
 #include "DirtyDock.h"
 #include "PropertiesDock.h"
-#include "MainWindow.h"
 #include "MapView.h"
 #include "MerkaartorPreferences.h"
 #include "Document.h"
@@ -22,8 +24,8 @@
 
 #include <QMenu>
 
-DirtyDock::DirtyDock(MainWindow* aParent)
-    : MDockAncestor(aParent), Main(aParent)
+DirtyDock::DirtyDock()
+    : MDockAncestor()
 {
     setMinimumSize(220,100);
     setObjectName("dirtyDock");
@@ -57,10 +59,10 @@ void DirtyDock::updateList()
 {
     ui.ChangesList->clear();
 
-    if (!Main->document())
+    if (!CUR_DOCUMENT)
         return;
 
-    int dirtyObjects = Main->document()->getDirtySize();
+    int dirtyObjects = CUR_DOCUMENT->getDirtySize();
     switch (dirtyObjects)
     {
         case 0:
@@ -75,7 +77,7 @@ void DirtyDock::updateList()
             break;
     }
 
-    Main->document()->history().buildUndoList(ui.ChangesList);
+    CUR_DOCUMENT->history().buildUndoList(ui.ChangesList);
 
     if (!M_PREFS->getAutoHistoryCleanup()) {
         if (!dirtyObjects)
@@ -92,21 +94,21 @@ void DirtyDock::on_ChangesList_itemSelectionChanged()
     if (ui.ChangesList->selectedItems().count() != 0) {
 
         if (ui.ChangesList->selectedItems().count() == 1) {
-            F = Main->document()->getFeature(ui.ChangesList->selectedItems()[0]->data(Qt::UserRole).value<IFeature::FId>());
+            F = CUR_DOCUMENT->getFeature(ui.ChangesList->selectedItems()[0]->data(Qt::UserRole).value<IFeature::FId>());
             if (F)
-                Main->properties()->setSelection(F);
+                PROPERTIES_DOCK->setSelection(F);
         } else {
             Selection.clear();
             for (int i=0; i < ui.ChangesList->selectedItems().count(); ++i) {
-                F = Main->document()->getFeature(ui.ChangesList->selectedItems()[i]->data(Qt::UserRole).value<IFeature::FId>());
+                F = CUR_DOCUMENT->getFeature(ui.ChangesList->selectedItems()[i]->data(Qt::UserRole).value<IFeature::FId>());
                 if (F)
                     Selection.push_back(F);
             }
-            Main->properties()->setMultiSelection(Selection);
+            PROPERTIES_DOCK->setMultiSelection(Selection);
         }
 
     }
-    Main->view()->update();
+    CUR_VIEW->update();
 }
 
 void DirtyDock::on_ChangesList_itemDoubleClicked(QListWidgetItem* /* item */)
@@ -130,9 +132,9 @@ void DirtyDock::on_centerAction_triggered()
     Feature* F;
     CoordBox cb;
 
-    Main->setUpdatesEnabled(false);
+    CUR_MAINWINDOW->setUpdatesEnabled(false);
     for (int i=0; i < ui.ChangesList->selectedItems().count(); ++i) {
-        F = Main->document()->getFeature(ui.ChangesList->selectedItems()[i]->data(Qt::UserRole).value<IFeature::FId>());
+        F = CUR_DOCUMENT->getFeature(ui.ChangesList->selectedItems()[i]->data(Qt::UserRole).value<IFeature::FId>());
         if (F) {
             if (cb.isNull())
                 cb = F->boundingBox();
@@ -142,10 +144,10 @@ void DirtyDock::on_centerAction_triggered()
     }
     if (!cb.isNull()) {
         Coord c = cb.center();
-        Main->view()->setCenter(c, Main->view()->rect());
-        Main->invalidateView();
+        CUR_VIEW->setCenter(c, CUR_VIEW->rect());
+        CUR_MAINWINDOW->invalidateView();
     }
-    Main->setUpdatesEnabled(true);
+    CUR_MAINWINDOW->setUpdatesEnabled(true);
 }
 
 void DirtyDock::on_centerZoomAction_triggered()
@@ -153,9 +155,9 @@ void DirtyDock::on_centerZoomAction_triggered()
     Feature* F;
     CoordBox cb;
 
-    Main->setUpdatesEnabled(false);
+    CUR_MAINWINDOW->setUpdatesEnabled(false);
     for (int i=0; i < ui.ChangesList->selectedItems().count(); ++i) {
-        F = Main->document()->getFeature(ui.ChangesList->selectedItems()[i]->data(Qt::UserRole).value<IFeature::FId>());
+        F = CUR_DOCUMENT->getFeature(ui.ChangesList->selectedItems()[i]->data(Qt::UserRole).value<IFeature::FId>());
         if (F) {
             if (cb.isNull())
                 cb = F->boundingBox();
@@ -167,16 +169,16 @@ void DirtyDock::on_centerZoomAction_triggered()
         CoordBox mini(cb.center()-COORD_ENLARGE, cb.center()+COORD_ENLARGE);
         cb.merge(mini);
         cb = cb.zoomed(1.1);
-        Main->view()->setViewport(cb, Main->view()->rect());
-        Main->invalidateView();
+        CUR_VIEW->setViewport(cb, CUR_VIEW->rect());
+        CUR_MAINWINDOW->invalidateView();
     }
-    Main->setUpdatesEnabled(true);
+    CUR_MAINWINDOW->setUpdatesEnabled(true);
 }
 
 void DirtyDock::on_pbCleanupHistory_clicked()
 {
-    Main->document()->history().cleanup();
-    Main->document()->history().updateActions();
+    CUR_DOCUMENT->history().cleanup();
+    CUR_DOCUMENT->history().updateActions();
     updateList();
 }
 

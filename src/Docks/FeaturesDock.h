@@ -19,14 +19,13 @@
 
 #include "ui_FeaturesDock.h"
 
-class MainWindow;
 class QAction;
 
 class FeaturesDock : public MDockAncestor
 {
 Q_OBJECT
 public:
-    FeaturesDock(MainWindow* aParent);
+    FeaturesDock();
 
     ~FeaturesDock();
 
@@ -62,7 +61,6 @@ private:
     QList<Feature*> Highlighted;
     QList<Feature*> Found;
 
-    MainWindow* Main;
     Ui::FeaturesDockWidget ui;
     QAction* centerAction;
     QAction* centerZoomAction;

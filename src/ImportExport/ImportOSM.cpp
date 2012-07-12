@@ -437,7 +437,7 @@ static bool deleteIncompleteRelations(QWidget* /*aParent*/, Document* /*theDocum
     return true;
 }
 
-bool importOSM(QWidget* aParent, QIODevice& File, Document* theDocument, Layer* theLayer, Downloader* theDownloader)
+bool importOSM(QIODevice& File, Document* theDocument, Layer* theLayer, Downloader* theDownloader)
 {
     QDomDocument DomDoc;
     QString ErrorStr;
@@ -447,7 +447,7 @@ bool importOSM(QWidget* aParent, QIODevice& File, Document* theDocument, Layer* 
     QProgressDialog* dlg = NULL;
     QProgressBar* Bar = NULL;
     QLabel* Lbl = NULL;
-    IProgressWindow* aProgressWindow = dynamic_cast<IProgressWindow*>(aParent);
+    IProgressWindow* aProgressWindow = dynamic_cast<IProgressWindow*>(CUR_MAINWINDOW);
     if (aProgressWindow) {
         dlg = aProgressWindow->getProgressDialog();
         if (dlg) {
@@ -497,9 +497,9 @@ bool importOSM(QWidget* aParent, QIODevice& File, Document* theDocument, Layer* 
     if (dlg)
         WasCanceled = dlg->wasCanceled();
     if (!WasCanceled && M_PREFS->getResolveRelations())
-        WasCanceled = !resolveNotYetDownloaded(aParent,theDocument,theLayer,theDownloader);
+        WasCanceled = !resolveNotYetDownloaded(CUR_MAINWINDOW,theDocument,theLayer,theDownloader);
     if (!WasCanceled && M_PREFS->getDeleteIncompleteRelations())
-        WasCanceled = !deleteIncompleteRelations(aParent,theDocument,theLayer,theDownloader);
+        WasCanceled = !deleteIncompleteRelations(CUR_MAINWINDOW,theDocument,theLayer,theDownloader);
 
     if (WasCanceled)
     {
@@ -535,7 +535,7 @@ bool importOSM(QWidget* aParent, QIODevice& File, Document* theDocument, Layer* 
         }
 
         if (EmptyFeature.size()) {
-            if (QMessageBox::warning(aParent,QApplication::translate("Downloader","Empty roads/relations detected"),
+            if (QMessageBox::warning(CUR_MAINWINDOW,QApplication::translate("Downloader","Empty roads/relations detected"),
                     QApplication::translate("Downloader",
                     "Empty roads/relations are probably errors.\n"
                     "Do you want to mark them for deletion?"),
@@ -556,7 +556,7 @@ bool importOSM(QWidget* aParent, QIODevice& File, Document* theDocument, Layer* 
             theDocument->remove(conflictLayer);
             delete conflictLayer;
         } else {
-            QMessageBox::warning(aParent,QApplication::translate("Downloader","Conflicts have been detected"),
+            QMessageBox::warning(CUR_MAINWINDOW,QApplication::translate("Downloader","Conflicts have been detected"),
                 QApplication::translate("Downloader",
                 "This means that some of the feature you modified"
                 " since your last download have since been modified by someone else on the server.\n"
@@ -570,19 +570,19 @@ bool importOSM(QWidget* aParent, QIODevice& File, Document* theDocument, Layer* 
     return true;
 }
 
-bool importOSM(QWidget* aParent, const QString& aFilename, Document* theDocument, Layer* theLayer)
+bool importOSM(const QString& aFilename, Document* theDocument, Layer* theLayer)
 {
     QFile File(aFilename);
     if (!File.open(QIODevice::ReadOnly))
          return false;
-    return importOSM(aParent, File, theDocument, theLayer, 0 );
+    return importOSM(File, theDocument, theLayer, 0 );
 }
 
-bool importOSM(QWidget* aParent, QByteArray& Content, Document* theDocument, Layer* theLayer, Downloader* theDownloader)
+bool importOSM(QByteArray& Content, Document* theDocument, Layer* theLayer, Downloader* theDownloader)
 {
     QBuffer File(&Content);
     File.open(QIODevice::ReadOnly);
-    return importOSM(aParent, File, theDocument, theLayer, theDownloader);
+    return importOSM(File, theDocument, theLayer, theDownloader);
 }
 
 

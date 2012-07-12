@@ -1,4 +1,6 @@
 v0.18
+    * ADD : Allow to select members from the members list
+    * CHG : Move Relation members list to templates and allow to restrict roles and types
     * ADD : Self-contained style packages (*.msz)
     * FIX : mutex deadlock (refs #3319)
     * FIX : Protect updatemeta (fixes #3317)

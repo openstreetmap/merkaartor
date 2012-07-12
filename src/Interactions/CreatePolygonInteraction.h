@@ -9,7 +9,7 @@ class CreatePolygonInteraction : public Interaction
     Q_OBJECT
 
     public:
-        CreatePolygonInteraction(MainWindow* Main, int sides, const QList< QPair <QString, QString> >& tags);
+        CreatePolygonInteraction(int sides, const QList< QPair <QString, QString> >& tags);
         ~CreatePolygonInteraction();
 
         virtual void mousePressEvent(QMouseEvent * event);

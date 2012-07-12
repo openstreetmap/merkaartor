@@ -43,7 +43,7 @@ class PreferencesDialog : public QDialog, public Ui::PreferencesDialog
     Q_OBJECT
 
 public:
-    PreferencesDialog(QWidget* parent = 0);
+    PreferencesDialog();
     ~PreferencesDialog();
 
 public slots:

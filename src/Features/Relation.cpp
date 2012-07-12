@@ -1,12 +1,13 @@
+#include "Relation.h"
+
+#include "Global.h"
 #include "Features.h"
 #include "MapView.h"
 #include "MapRenderer.h"
-#include "MainWindow.h"
 #include "DocumentCommands.h"
 #include "RelationCommands.h"
 #include "Document.h"
 #include "LineF.h"
-#include "Global.h"
 #include "SvgCache.h"
 
 #include <QApplication>
@@ -23,7 +24,7 @@
 class RelationMemberModel : public QAbstractTableModel
 {
 public:
-    RelationMemberModel(RelationPrivate* aParent, MainWindow* aMain);
+    RelationMemberModel(RelationPrivate* aParent);
     int rowCount(const QModelIndex &parent = QModelIndex()) const;
     int columnCount(const QModelIndex &parent = QModelIndex()) const;
     QVariant data(const QModelIndex &index, int role) const;
@@ -32,7 +33,6 @@ public:
     bool setData(const QModelIndex &index, const QVariant &value, int role = Qt::EditRole);
 
     RelationPrivate* Parent;
-    MainWindow* Main;
 };
 
 class RelationPrivate
@@ -561,11 +561,11 @@ const QString& Relation::getRole(int idx) const
     return p->Members[idx].first;
 }
 
-QAbstractTableModel* Relation::referenceMemberModel(MainWindow* aMain)
+QAbstractTableModel* Relation::referenceMemberModel()
 {
     ++p->ModelReferences;
     if (!p->theModel)
-        p->theModel = new RelationMemberModel(p, aMain);
+        p->theModel = new RelationMemberModel(p);
     return p->theModel;
 }
 
@@ -891,8 +891,8 @@ qreal Relation::widthOf()
 
 /* RELATIONMODEL */
 
-RelationMemberModel::RelationMemberModel(RelationPrivate *aParent, MainWindow* aMain)
-    : Parent(aParent), Main(aMain)
+RelationMemberModel::RelationMemberModel(RelationPrivate *aParent)
+    : Parent(aParent)
 {
 }
 
@@ -923,6 +923,8 @@ QVariant RelationMemberModel::data(const QModelIndex &index, int role) const
     {
         if ( (index.column() == 0) )
             return Parent->Members[index.row()].first;
+        else
+            return Parent->Members[index.row()].second->description();
     }
     else if (role == Qt::UserRole)
     {
@@ -951,20 +953,28 @@ Qt::ItemFlags RelationMemberModel::flags(const QModelIndex &index) const
 {
     if (!index.isValid())
         return Qt::ItemIsEnabled;
-    if (index.column() == 0)
-        return QAbstractTableModel::flags(index) | Qt::ItemIsEditable  | Qt::ItemIsEnabled | Qt::ItemIsSelectable;
-    return QAbstractTableModel::flags(index) | Qt::ItemIsEnabled | Qt::ItemIsSelectable;
+    return QAbstractTableModel::flags(index) | Qt::ItemIsEditable  | Qt::ItemIsEnabled | Qt::ItemIsSelectable;
 }
 
 bool RelationMemberModel::setData(const QModelIndex &index, const QVariant &value, int role)
 {
     if (index.isValid() && role == Qt::EditRole)
     {
-        Feature* Tmp = Parent->Members[index.row()].second;
+        QString Role;
+        Feature* Member;
+        if (index.column() == 0) {
+            Member = Parent->Members[index.row()].second;
+            Role = value.toString();
+        } else {
+            Member = (Feature *) value.value<void *>();
+            if (Member == NULL)
+                return false;
+            Role = Parent->Members[index.row()].first;
+        }
         CommandList* L = new CommandList(MainWindow::tr("Relation Modified %1").arg(Parent->theRelation->id().numId), Parent->theRelation);
-        L->add(new RelationRemoveFeatureCommand(Parent->theRelation, index.row(), Main->document()->getDirtyOrOriginLayer(Parent->theRelation->layer())));
-        L->add(new RelationAddFeatureCommand(Parent->theRelation,value.toString(),Tmp,index.row(), Main->document()->getDirtyOrOriginLayer(Parent->theRelation->layer())));
-        Main->document()->addHistory(L);
+        L->add(new RelationRemoveFeatureCommand(Parent->theRelation, index.row(), CUR_DOCUMENT->getDirtyOrOriginLayer(Parent->theRelation->layer())));
+        L->add(new RelationAddFeatureCommand(Parent->theRelation,Role,Member,index.row(), CUR_DOCUMENT->getDirtyOrOriginLayer(Parent->theRelation->layer())));
+        CUR_DOCUMENT->addHistory(L);
         emit dataChanged(index, index);
         return true;
     }

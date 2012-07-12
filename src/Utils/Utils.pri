@@ -6,6 +6,7 @@ HEADERS += \
     ShortcutOverrideFilter.h \
     SlippyMapWidget.h \
     EditCompleterDelegate.h \
+    RelationMemberDelegate.h \
     PictureViewerDialog.h \
     PixmapWidget.h \
     SelectionDialog.h \
@@ -21,6 +22,7 @@ SOURCES += \
     ShortcutOverrideFilter.cpp \
     SlippyMapWidget.cpp \
     EditCompleterDelegate.cpp \
+    RelationMemberDelegate.cpp \
     PictureViewerDialog.cpp \
     PixmapWidget.cpp \
     SelectionDialog.cpp \

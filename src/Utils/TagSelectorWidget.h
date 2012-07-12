@@ -12,7 +12,7 @@ namespace Ui {
 class TagSelectorWidget : public QWidget {
     Q_OBJECT
 public:
-    TagSelectorWidget(MainWindow* mw, QWidget *parent = 0);
+    TagSelectorWidget(QWidget *parent = 0);
     ~TagSelectorWidget();
 
 protected:
@@ -28,8 +28,6 @@ private slots:
 
 private:
     Ui::TagSelectorWidget *ui;
-
-    MainWindow* main;
 };
 
 #endif // TAGSELECTORWIDGET_H

@@ -12,7 +12,6 @@
 #include "LineF.h"
 
 #include "Global.h"
-#include "MainWindow.h"
 
 #include <QApplication>
 #include <QMultiMap>
@@ -823,9 +822,9 @@ LayerWidget* SpecialLayer::newWidget(void)
 void SpecialLayer::refreshLayer()
 {
     if (m_type == Layer::OsmBugsLayer) {
-        g_Merk_MainWindow->on_layersOpenstreetbugsAction_triggered();
+        CUR_MAINWINDOW->on_layersOpenstreetbugsAction_triggered();
     } else if (m_type == Layer::MapDustLayer) {
-        g_Merk_MainWindow->on_layersMapdustAction_triggered();
+        CUR_MAINWINDOW->on_layersMapdustAction_triggered();
     }
 }
 

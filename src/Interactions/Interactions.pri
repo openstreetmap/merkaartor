@@ -8,8 +8,9 @@ HEADERS += \
     CreateRoundaboutInteraction.h \
     CreatePolygonInteraction.h \
     CreateSingleWayInteraction.h \
-    EditInteraction.h \
     Interaction.h \
+    SelectInteraction.h \
+    EditInteraction.h \
     MoveNodeInteraction.h \
     RotateInteraction.h \
     ScaleInteraction.h \
@@ -23,8 +24,9 @@ SOURCES += \
     CreateSingleWayInteraction.cpp \
     CreateRoundaboutInteraction.cpp \
     CreatePolygonInteraction.cpp \
-    EditInteraction.cpp \
     Interaction.cpp \
+    SelectInteraction.cpp \
+    EditInteraction.cpp \
     MoveNodeInteraction.cpp \
     RotateInteraction.cpp \
     ScaleInteraction.cpp \

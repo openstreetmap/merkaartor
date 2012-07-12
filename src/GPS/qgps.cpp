@@ -29,8 +29,8 @@
 
 //#include "MerkaartorPreferences.h"
 
-QGPS::QGPS(QWidget *parent)
-    : MDockAncestor(parent), gpsDevice(0)
+QGPS::QGPS()
+    : MDockAncestor(), gpsDevice(0)
 {
     setupUi(getWidget());
     setObjectName("GPSMainWindow");

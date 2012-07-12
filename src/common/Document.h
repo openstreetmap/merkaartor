@@ -13,7 +13,6 @@
 
 class QString;
 class QProgressDialog;
-class QMainWindow;
 
 class Command;
 class CommandHistory;
@@ -125,6 +124,7 @@ public:
     virtual int getPaintersSize();
     virtual const Painter* getPainter(int i);
 
+    void updateSourceTags();
     QStringList getCurrentSourceTags();
 
     static Document* getDocumentFromXml(QDomDocument* theXmlDoc);
@@ -144,6 +144,7 @@ signals:
     void imageReceived(ImageMapLayer*);
     void loadingFinished(ImageMapLayer*);
     void historyChanged();
+    void sourceTagsChanged();
 
 };
 

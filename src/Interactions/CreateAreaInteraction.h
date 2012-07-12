@@ -14,7 +14,7 @@ class CreateAreaInteraction : public FeatureSnapInteraction
     Q_OBJECT
 
     public:
-        CreateAreaInteraction(MainWindow* Main);
+        CreateAreaInteraction();
         ~CreateAreaInteraction();
 
         virtual void snapMouseReleaseEvent(QMouseEvent * event, Feature* aLast);

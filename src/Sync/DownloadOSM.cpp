@@ -1,6 +1,6 @@
 #include "DownloadOSM.h"
 
-#include "MainWindow.h"
+#include "Global.h"
 #include "MapView.h"
 #include "Coord.h"
 #include "ImportGPX.h"
@@ -437,11 +437,11 @@ QString Downloader::getURLToTrackPoints()
     return URL;
 }
 
-bool downloadOSM(QWidget* aParent, const QUrl& theUrl, const QString& aUser, const QString& aPassword, Document* theDocument, Layer* theLayer)
+bool downloadOSM(const QUrl& theUrl, const QString& aUser, const QString& aPassword, Document* theDocument, Layer* theLayer)
 {
     Downloader Rcv(aUser, aPassword);
 
-    IProgressWindow* aProgressWindow = dynamic_cast<IProgressWindow*>(aParent);
+    IProgressWindow* aProgressWindow = dynamic_cast<IProgressWindow*>(CUR_MAINWINDOW);
     if (aProgressWindow) {
 
         QProgressDialog* dlg = aProgressWindow->getProgressDialog();
@@ -466,7 +466,7 @@ bool downloadOSM(QWidget* aParent, const QUrl& theUrl, const QString& aUser, con
     if (!Rcv.go(theUrl))
     {
 #ifndef _MOBILE
-        aParent->setCursor(QCursor(Qt::ArrowCursor));
+        CUR_MAINWINDOW->setCursor(QCursor(Qt::ArrowCursor));
 #endif
         return false;
     }
@@ -484,36 +484,36 @@ bool downloadOSM(QWidget* aParent, const QUrl& theUrl, const QString& aUser, con
         QString aWeb = Rcv.locationText();
         if (!aWeb.isEmpty()) {
             QUrl aURL(aWeb);
-            return downloadOSM(aParent, aURL, aUser, aPassword, theDocument, theLayer);
+            return downloadOSM(aURL, aUser, aPassword, theDocument, theLayer);
         } else {
             QString msg = QApplication::translate("Downloader","Unexpected http status code (%1)\nServer message is '%2'").arg(x).arg(Rcv.resultText());
             if (!Rcv.errorText().isEmpty())
                 msg += QApplication::translate("Downloader", "\nAPI message is '%1'").arg(Rcv.errorText());
-            QMessageBox::warning(aParent,QApplication::translate("Downloader","Download failed"), msg);
+            QMessageBox::warning(CUR_MAINWINDOW,QApplication::translate("Downloader","Download failed"), msg);
             return false;
         }
         break;
     }
     case 401:
-        QMessageBox::warning(aParent,QApplication::translate("Downloader","Download failed"),QApplication::translate("Downloader","Username/password invalid"));
+        QMessageBox::warning(CUR_MAINWINDOW,QApplication::translate("Downloader","Download failed"),QApplication::translate("Downloader","Username/password invalid"));
         return false;
     default:
         QString msg = QApplication::translate("Downloader","Unexpected http status code (%1)\nServer message is '%2'").arg(x).arg(Rcv.resultText());
         if (!Rcv.errorText().isEmpty())
             msg += QApplication::translate("Downloader", "\nAPI message is '%1'").arg(Rcv.errorText());
-        QMessageBox::warning(aParent,QApplication::translate("Downloader","Download failed"), msg);
+        QMessageBox::warning(CUR_MAINWINDOW,QApplication::translate("Downloader","Download failed"), msg);
         return false;
     }
     Downloader Down(aUser, aPassword);
-    bool OK = importOSM(aParent, Rcv.content(), theDocument, theLayer, &Down);
+    bool OK = importOSM(Rcv.content(), theDocument, theLayer, &Down);
     return OK;
 }
 
-bool downloadOSM(QWidget* aParent, const QString& aWeb, const QString& aUser, const QString& aPassword, const CoordBox& aBox , Document* theDocument, Layer* theLayer)
+bool downloadOSM(const QString& aWeb, const QString& aUser, const QString& aPassword, const CoordBox& aBox , Document* theDocument, Layer* theLayer)
 {
     if (checkForConflicts(theDocument))
     {
-        QMessageBox::warning(aParent,QApplication::translate("Downloader","Unresolved conflicts"), QApplication::translate("Downloader","Please resolve existing conflicts first"));
+        QMessageBox::warning(CUR_MAINWINDOW,QApplication::translate("Downloader","Unresolved conflicts"), QApplication::translate("Downloader","Please resolve existing conflicts first"));
         return false;
     }
     Downloader Rcv(aUser, aPassword);
@@ -521,17 +521,17 @@ bool downloadOSM(QWidget* aParent, const QString& aWeb, const QString& aUser, co
     URL = URL.arg(aBox.bottomLeft().x(), 0, 'f').arg(aBox.bottomLeft().y(), 0, 'f').arg(aBox.topRight().x(), 0, 'f').arg(aBox.topRight().y(), 0, 'f');
 
     QUrl theUrl(aWeb+URL);
-    return downloadOSM(aParent, theUrl, aUser, aPassword, theDocument, theLayer);
+    return downloadOSM(theUrl, aUser, aPassword, theDocument, theLayer);
 }
 
-bool downloadTracksFromOSM(QWidget* Main, const QString& aWeb, const QString& aUser, const QString& aPassword, const CoordBox& aBox , Document* theDocument)
+bool downloadTracksFromOSM(const QString& aWeb, const QString& aUser, const QString& aPassword, const CoordBox& aBox , Document* theDocument)
 {
     Downloader theDownloader(aUser, aPassword);
     QList<TrackLayer*> theTracklayers;
     //TrackMapLayer* trackLayer = new TrackMapLayer(QApplication::translate("Downloader","Downloaded tracks"));
     //theDocument->add(trackLayer);
 
-    IProgressWindow* aProgressWindow = dynamic_cast<IProgressWindow*>(Main);
+    IProgressWindow* aProgressWindow = dynamic_cast<IProgressWindow*>(CUR_MAINWINDOW);
     if (!aProgressWindow)
         return false;
 
@@ -565,7 +565,7 @@ bool downloadTracksFromOSM(QWidget* Main, const QString& aWeb, const QString& aU
             return false;
         int Before = theTracklayers.size();
         QByteArray Ar(theDownloader.content());
-        bool OK = importGPX(Main, Ar, theDocument, theTracklayers, true);
+        bool OK = importGPX(Ar, theDocument, theTracklayers, true);
         if (!OK)
             return false;
         if (Before == theTracklayers.size())
@@ -585,28 +585,28 @@ bool checkForConflicts(Document* theDocument)
     return false;
 }
 
-bool downloadFeatures(MainWindow* Main, const QList<Feature*>& aDownloadList , Document* theDocument)
+bool downloadFeatures(const QList<Feature*>& aDownloadList , Document* theDocument)
 {
     QList<IFeature::FId> list;
     foreach (Feature* F, aDownloadList) {
         list << F->id();
     }
 
-    bool ok = downloadFeatures(Main, list, theDocument, NULL);
+    bool ok = downloadFeatures(list, theDocument, NULL);
 
     return ok;
 }
 
-bool downloadFeature(MainWindow* Main, const IFeature::FId& id, Document* theDocument, Layer* theLayer)
+bool downloadFeature(const IFeature::FId& id, Document* theDocument, Layer* theLayer)
 {
     QList<IFeature::FId> list;
     list << id;
-    bool ok = downloadFeatures(Main, list, theDocument, theLayer);
+    bool ok = downloadFeatures(list, theDocument, theLayer);
 
     return ok;
 }
 
-bool downloadFeatures(MainWindow* Main, const QList<IFeature::FId>& idList , Document* theDocument, Layer* theLayer)
+bool downloadFeatures(const QList<IFeature::FId>& idList , Document* theDocument, Layer* theLayer)
 {
     if (!theLayer) {
         if (!theDocument->getLastDownloadLayer()) {
@@ -622,8 +622,7 @@ bool downloadFeatures(MainWindow* Main, const QList<IFeature::FId>& idList , Doc
     osmUser = M_PREFS->getOsmUser();
     osmPwd = M_PREFS->getOsmPassword();
 
-    if (Main)
-        Main->view()->setUpdatesEnabled(false);
+    CUR_VIEW->setUpdatesEnabled(false);
 
     bool OK = true;
     Downloader Rcv(osmUser, osmPwd);
@@ -632,15 +631,13 @@ bool downloadFeatures(MainWindow* Main, const QList<IFeature::FId>& idList , Doc
         QString URL = Rcv.getURLToFetchFull(idList[i]);
         QUrl theUrl(osmWebsite+URL);
 
-        downloadOSM(Main, theUrl, osmUser, osmPwd, theDocument, theLayer);
+        downloadOSM(theUrl, osmUser, osmPwd, theDocument, theLayer);
     }
 
-    if (Main)
-        Main->view()->setUpdatesEnabled(true);
+    CUR_VIEW->setUpdatesEnabled(true);
     if (OK)
     {
-        if (Main)
-            Main->invalidateView();
+        CUR_MAINWINDOW->invalidateView();
     } else
     {
         if (theLayer != theDocument->getLastDownloadLayer()) {
@@ -651,14 +648,13 @@ bool downloadFeatures(MainWindow* Main, const QList<IFeature::FId>& idList , Doc
     return OK;
 }
 
-bool downloadMapdust(MainWindow* Main, const CoordBox& aBox, Document* theDocument, SpecialLayer* theLayer)
+bool downloadMapdust(const CoordBox& aBox, Document* theDocument, SpecialLayer* theLayer)
 {
     QUrl url;
 
     url.setUrl(M_PREFS->getMapdustUrl());
 
-    if (Main)
-        Main->view()->setUpdatesEnabled(false);
+    CUR_VIEW->setUpdatesEnabled(false);
 
     Downloader theDownloader("", "");
 
@@ -669,7 +665,7 @@ bool downloadMapdust(MainWindow* Main, const CoordBox& aBox, Document* theDocume
         theDocument->add(trackLayer);
     }
 
-    IProgressWindow* aProgressWindow = dynamic_cast<IProgressWindow*>(Main);
+    IProgressWindow* aProgressWindow = dynamic_cast<IProgressWindow*>(CUR_MAINWINDOW);
     if (!aProgressWindow)
         return false;
 
@@ -701,24 +697,21 @@ bool downloadMapdust(MainWindow* Main, const CoordBox& aBox, Document* theDocume
     ImportExportGdal gdal(theDocument);
     bool OK = gdal.import(trackLayer, Ar, false);
 
-    if (Main)
-        Main->view()->setUpdatesEnabled(true);
+    CUR_VIEW->setUpdatesEnabled(true);
     if (OK) {
-        if (Main)
-            Main->invalidateView();
+        CUR_MAINWINDOW->invalidateView();
     }
     return OK;
 }
 
-bool downloadOpenstreetbugs(MainWindow* Main, const CoordBox& aBox, Document* theDocument, SpecialLayer* theLayer)
+bool downloadOpenstreetbugs(const CoordBox& aBox, Document* theDocument, SpecialLayer* theLayer)
 {
     QUrl osbUrl;
 
     osbUrl.setUrl(M_PREFS->getOpenStreetBugsUrl());
     osbUrl.setPath(osbUrl.path() + "getGPX");
 
-    if (Main)
-        Main->view()->setUpdatesEnabled(false);
+    CUR_VIEW->setUpdatesEnabled(false);
 
     Downloader theDownloader("", "");
 
@@ -731,7 +724,7 @@ bool downloadOpenstreetbugs(MainWindow* Main, const CoordBox& aBox, Document* th
     }
     theTracklayers << trackLayer;
 
-    IProgressWindow* aProgressWindow = dynamic_cast<IProgressWindow*>(Main);
+    IProgressWindow* aProgressWindow = dynamic_cast<IProgressWindow*>(CUR_MAINWINDOW);
     if (!aProgressWindow)
         return false;
 
@@ -761,18 +754,16 @@ bool downloadOpenstreetbugs(MainWindow* Main, const CoordBox& aBox, Document* th
     if (theDownloader.resultCode() != 200)
         return false;
     QByteArray Ar(theDownloader.content());
-    bool OK = importGPX(Main, Ar, theDocument, theTracklayers, true);
+    bool OK = importGPX(Ar, theDocument, theTracklayers, true);
 
-    if (Main)
-        Main->view()->setUpdatesEnabled(true);
+    CUR_VIEW->setUpdatesEnabled(true);
     if (OK) {
-        if (Main)
-            Main->invalidateView();
+        CUR_MAINWINDOW->invalidateView();
     }
     return OK;
 }
 
-bool downloadMoreOSM(MainWindow* Main, const CoordBox& aBox , Document* theDocument)
+bool downloadMoreOSM(const CoordBox& aBox , Document* theDocument)
 {
     Layer* theLayer;
     if (!theDocument->getLastDownloadLayer()) {
@@ -787,18 +778,18 @@ bool downloadMoreOSM(MainWindow* Main, const CoordBox& aBox , Document* theDocum
     osmUser = M_PREFS->getOsmUser();
     osmPwd = M_PREFS->getOsmPassword();
 
-    Main->view()->setUpdatesEnabled(false);
+    CUR_VIEW->setUpdatesEnabled(false);
 
     bool OK = true;
-    OK = downloadOSM(Main,osmWebsite,osmUser,osmPwd,aBox,theDocument,theLayer);
-    Main->view()->setUpdatesEnabled(true);
+    OK = downloadOSM(osmWebsite,osmUser,osmPwd,aBox,theDocument,theLayer);
+    CUR_VIEW->setUpdatesEnabled(true);
     if (OK)
     {
         theDocument->setLastDownloadLayer(theLayer);
         theDocument->addDownloadBox(theLayer, aBox);
         // Don't jump around on Download More
         // aParent->view()->projection().setViewport(aBox,aParent->view()->rect());
-        Main->invalidateView();
+        CUR_MAINWINDOW->invalidateView();
     } else
     {
         if (theLayer != theDocument->getLastDownloadLayer()) {
@@ -809,12 +800,12 @@ bool downloadMoreOSM(MainWindow* Main, const CoordBox& aBox , Document* theDocum
     return OK;
 }
 
-bool downloadOSM(MainWindow* Main, const CoordBox& aBox , Document* theDocument)
+bool downloadOSM(const CoordBox& aBox , Document* theDocument)
 {
     QString osmWebsite, osmUser, osmPwd;
     static bool DownloadRaw = false;
 
-    QDialog * dlg = new QDialog(Main);
+    QDialog * dlg = new QDialog(CUR_MAINWINDOW);
 
     osmWebsite = M_PREFS->getOsmApiUrl();
     osmUser = M_PREFS->getOsmUser();
@@ -897,31 +888,31 @@ bool downloadOSM(MainWindow* Main, const CoordBox& aBox , Document* theDocument)
                 Clip = CoordBox(Coord(R.x(), R.y()), Coord(R.x()+R.width(), R.y()+R.height()));
             }
             if (retry) continue;
-            Main->view()->setUpdatesEnabled(false);
+            CUR_VIEW->setUpdatesEnabled(false);
             Layer* theLayer = new DrawingLayer(QApplication::translate("Downloader","%1 download").arg(QDateTime::currentDateTime().toString(Qt::ISODate)));
             theDocument->add(theLayer);
             M_PREFS->setResolveRelations(ui.ResolveRelations->isChecked());
             if (directAPI) {
                 if (ui.FromXapi->isChecked())
                     theLayer->setUploadable(false);
-                OK = downloadOSM(Main,QUrl(QUrl::fromEncoded(directUrl.toAscii())),osmUser,osmPwd,theDocument,theLayer);
+                OK = downloadOSM(QUrl(QUrl::fromEncoded(directUrl.toAscii())),osmUser,osmPwd,theDocument,theLayer);
             }
             else
-                OK = downloadOSM(Main,osmWebsite,osmUser,osmPwd,Clip,theDocument,theLayer);
+                OK = downloadOSM(osmWebsite,osmUser,osmPwd,Clip,theDocument,theLayer);
             if (OK && ui.IncludeTracks->isChecked())
-                OK = downloadTracksFromOSM(Main,osmWebsite,osmUser,osmPwd, Clip,theDocument);
-            Main->view()->setUpdatesEnabled(true);
+                OK = downloadTracksFromOSM(osmWebsite,osmUser,osmPwd, Clip,theDocument);
+            CUR_VIEW->setUpdatesEnabled(true);
             if (OK)
             {
                 theDocument->setLastDownloadLayer(theLayer);
                 theDocument->addDownloadBox(theLayer, Clip);
 #ifndef _MOBILE
                 if (directAPI)
-                    Main->on_viewZoomAllAction_triggered();
+                    CUR_MAINWINDOW->on_viewZoomAllAction_triggered();
                 else
 #endif
-                    Main->view()->setViewport(Clip,Main->view()->rect());
-                Main->invalidateView();
+                    CUR_VIEW->setViewport(Clip,CUR_VIEW->rect());
+                CUR_MAINWINDOW->invalidateView();
             } else {
                 retry = true;
                 theDocument->remove(theLayer);

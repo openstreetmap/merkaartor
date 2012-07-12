@@ -36,7 +36,7 @@ class QGPS : public MDockAncestor, public Ui_QGPSMainWindowUI
 
     public:
 
-        QGPS(QWidget *parent = 0);
+        QGPS();
 
     void setGpsDevice(QGPSDevice * aDevice);
     QGPSDevice* getGpsDevice() { return gpsDevice; }

@@ -31,7 +31,7 @@ bool g_Merk_SelfClip = true;
 bool g_Merk_SelfClip = false;
 #endif
 
-MainWindow* g_Merk_MainWindow = NULL;
+MainWindow* CUR_MAINWINDOW = NULL;
 MemoryBackend g_backend;
 SlippyMapCache* SlippyMapWidget::theSlippyCache = 0;
 

@@ -248,7 +248,7 @@ static void importGPX(const QDomElement& Root, Document* theDocument, QList<Trac
     }
 }
 
-bool importGPX(QWidget* aParent, QIODevice& File, Document* theDocument, QList<TrackLayer*>& theTracklayers, bool MakeSegment)
+bool importGPX(QIODevice& File, Document* theDocument, QList<TrackLayer*>& theTracklayers, bool MakeSegment)
 {
     // TODO remove debug messageboxes
     QDomDocument DomDoc;
@@ -258,7 +258,7 @@ bool importGPX(QWidget* aParent, QIODevice& File, Document* theDocument, QList<T
     if (!DomDoc.setContent(&File, true, &ErrorStr, &ErrorLine,&ErrorColumn))
     {
         File.close();
-        QMessageBox::warning(aParent,"Parse error",
+        QMessageBox::warning(CUR_MAINWINDOW,"Parse error",
             QString("Parse error at line %1, column %2:\n%3")
                                   .arg(ErrorLine)
                                   .arg(ErrorColumn)
@@ -268,7 +268,7 @@ bool importGPX(QWidget* aParent, QIODevice& File, Document* theDocument, QList<T
     QDomElement root = DomDoc.documentElement();
     if (root.tagName() != "gpx")
     {
-        QMessageBox::information(aParent, "Parse error","Root is not a gpx node");
+        QMessageBox::information(CUR_MAINWINDOW, "Parse error","Root is not a gpx node");
         return false;
     }
 
@@ -287,18 +287,18 @@ bool importGPX(QWidget* aParent, QIODevice& File, Document* theDocument, QList<T
 }
 
 
-bool importGPX(QWidget* aParent, const QString& aFilename, Document* theDocument, QList<TrackLayer*>& theTracklayers)
+bool importGPX(const QString& aFilename, Document* theDocument, QList<TrackLayer*>& theTracklayers)
 {
     QFile File(aFilename);
     if (!File.open(QIODevice::ReadOnly))
     {
         return false;
     }
-    return importGPX(aParent, File, theDocument, theTracklayers, true);
+    return importGPX(File, theDocument, theTracklayers, true);
 }
 
-bool importGPX(QWidget* aParent, QByteArray& aFile, Document* theDocument, QList<TrackLayer*>& theTracklayers, bool MakeSegment)
+bool importGPX(QByteArray& aFile, Document* theDocument, QList<TrackLayer*>& theTracklayers, bool MakeSegment)
 {
     QBuffer buf(&aFile);
-    return importGPX(aParent,buf, theDocument, theTracklayers, MakeSegment);
+    return importGPX(buf, theDocument, theTracklayers, MakeSegment);
 }

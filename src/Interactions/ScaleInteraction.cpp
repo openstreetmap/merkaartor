@@ -1,6 +1,7 @@
 #include "ScaleInteraction.h"
 
-#include "MainWindow.h"
+#include "Global.h"
+
 #include "MapView.h"
 #include "DocumentCommands.h"
 #include "WayCommands.h"
@@ -21,8 +22,8 @@
 #include <QList>
 #include <QPainter>
 
-ScaleInteraction::ScaleInteraction(MainWindow* aMain)
-    : FeatureSnapInteraction(aMain), StartDragPosition(0,0)
+ScaleInteraction::ScaleInteraction()
+    : FeatureSnapInteraction(), StartDragPosition(0,0)
   {
     QPixmap pm(":/Icons/rotate.png");
     rotateCursor =  QCursor(pm.scaledToWidth(22));
@@ -74,12 +75,12 @@ void ScaleInteraction::snapMousePressEvent(QMouseEvent * anEvent, Feature* aLast
 {
     QList<Feature*> sel;
     if (view()->isSelectionLocked()) {
-        if (theMain->properties()->selection(0))
-            sel.append(theMain->properties()->selection(0));
+        if (PROPERTIES_DOCK->selection(0))
+            sel.append(PROPERTIES_DOCK->selection(0));
         else
             sel.append(aLast);
     } else {
-        sel = theMain->properties()->selection();
+        sel = PROPERTIES_DOCK->selection();
         if (!sel.size() && aLast)
             sel.append(aLast);
     }

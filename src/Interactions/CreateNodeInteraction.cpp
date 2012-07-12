@@ -1,7 +1,6 @@
 #include "Global.h"
 #include "CreateNodeInteraction.h"
 
-#include "MainWindow.h"
 #include "PropertiesDock.h"
 #include "DocumentCommands.h"
 #include "WayCommands.h"
@@ -13,8 +12,8 @@
 
 #include <QList>
 
-CreateNodeInteraction::CreateNodeInteraction(MainWindow* aMain)
-    : FeatureSnapInteraction(aMain)
+CreateNodeInteraction::CreateNodeInteraction()
+    : FeatureSnapInteraction()
     , theMoveInteraction(0)
 {
 }
@@ -49,7 +48,7 @@ void CreateNodeInteraction::snapMousePressEvent(QMouseEvent * ev, Feature* aFeat
     } else {
         SAFE_DELETE(theMoveInteraction);
 #ifndef _MOBILE
-        theMain->view()->setCursor(cursor());
+        CUR_VIEW->setCursor(cursor());
 #endif
     }
 
@@ -59,12 +58,12 @@ void CreateNodeInteraction::snapMouseMoveEvent(QMouseEvent* ev, Feature* aFeat)
 {
     if (CAST_NODE(aFeat)) {
         if (!theMoveInteraction) {
-            theMoveInteraction = new MoveNodeInteraction(theMain);
+            theMoveInteraction = new MoveNodeInteraction();
         }
 #ifndef _MOBILE
-        theMain->view()->setCursor(theMoveInteraction->cursor());
+        CUR_VIEW->setCursor(theMoveInteraction->cursor());
     } else
-        theMain->view()->setCursor(cursor());
+        CUR_VIEW->setCursor(cursor());
 #else
     }
 #endif
@@ -87,9 +86,9 @@ void CreateNodeInteraction::snapMouseReleaseEvent(QMouseEvent * ev, Feature* aFe
 
         createNode(P, aFeat);
 
-        theMoveInteraction = new MoveNodeInteraction(theMain);
+        theMoveInteraction = new MoveNodeInteraction();
 #ifndef _MOBILE
-        theMain->view()->setCursor(theMoveInteraction->cursor());
+        CUR_VIEW->setCursor(theMoveInteraction->cursor());
 #endif
     }
 }
@@ -108,26 +107,26 @@ void CreateNodeInteraction::createNode(Coord P, Feature* aFeat)
     Way* aRoad = dynamic_cast<Way*>(aFeat);
     if (aRoad)
     {
-        g_Merk_MainWindow->properties()->setSelection(0);
+        PROPERTIES_DOCK->setSelection(0);
         theList  = new CommandList(MainWindow::tr("Create node in Road: %1").arg(aRoad->id().numId), aRoad);
         int SnapIdx = findSnapPointIndex(aRoad, P);
-        N = g_backend.allocNode(g_Merk_MainWindow->document()->getDirtyOrOriginLayer(aRoad->layer()), P);
-        theList->add(new AddFeatureCommand(g_Merk_MainWindow->document()->getDirtyOrOriginLayer(aRoad->layer()),N,true));
-        theList->add(new WayAddNodeCommand(aRoad,N,SnapIdx,g_Merk_MainWindow->document()->getDirtyOrOriginLayer(aRoad->layer())));
+        N = g_backend.allocNode(CUR_DOCUMENT->getDirtyOrOriginLayer(aRoad->layer()), P);
+        theList->add(new AddFeatureCommand(CUR_DOCUMENT->getDirtyOrOriginLayer(aRoad->layer()),N,true));
+        theList->add(new WayAddNodeCommand(aRoad,N,SnapIdx,CUR_DOCUMENT->getDirtyOrOriginLayer(aRoad->layer())));
     }
     else
     {
-        N = g_backend.allocNode(g_Merk_MainWindow->document()->getDirtyOrOriginLayer(), P);
+        N = g_backend.allocNode(CUR_DOCUMENT->getDirtyOrOriginLayer(), P);
         theList  = new CommandList(MainWindow::tr("Create POI %1").arg(N->id().numId), N);
-        theList->add(new AddFeatureCommand(g_Merk_MainWindow->document()->getDirtyOrOriginLayer(),N,true));
+        theList->add(new AddFeatureCommand(CUR_DOCUMENT->getDirtyOrOriginLayer(),N,true));
         if (M_PREFS->getAutoSourceTag()) {
-            QStringList sl = g_Merk_MainWindow->document()->getCurrentSourceTags();
+            QStringList sl = CUR_DOCUMENT->getCurrentSourceTags();
             if (sl.size())
                 N->setTag("source", sl.join(";"));
         }
         N->updateMeta();
     }
-    g_Merk_MainWindow->document()->addHistory(theList);
-    g_Merk_MainWindow->properties()->setSelection(N);
-    g_Merk_MainWindow->view()->invalidate(true, true, false);
+    CUR_DOCUMENT->addHistory(theList);
+    PROPERTIES_DOCK->setSelection(N);
+    CUR_VIEW->invalidate(true, true, false);
 }

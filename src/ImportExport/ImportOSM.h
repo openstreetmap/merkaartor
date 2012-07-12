@@ -43,7 +43,7 @@ public:
         QSet<Relation*> touchedRelations;
 };
 
-bool importOSM(QWidget* aParent, const QString& aFilename, Document* theDocument, Layer* theLayer);
-bool importOSM(QWidget* aParent, QByteArray& Content, Document* theDocument, Layer* theLayer, Downloader* theDownloader);
+bool importOSM(const QString& aFilename, Document* theDocument, Layer* theLayer);
+bool importOSM(QByteArray& Content, Document* theDocument, Layer* theLayer, Downloader* theDownloader);
 
 #endif

@@ -15,7 +15,6 @@
 #include "ImportExportPBF.h"
 #endif
 
-#include "MainWindow.h"
 #include "MerkaartorPreferences.h"
 #include "LayerWidget.h"
 
@@ -26,6 +25,7 @@
 #include "LayerIterator.h"
 #include "IMapAdapter.h"
 
+#include "IProgressWindow.h"
 
 #include <QString>
 #include <QMultiMap>
@@ -71,6 +71,7 @@ public:
     Layer*	lastDownloadLayer;
     QDateTime lastDownloadTimestamp;
     QHash<Layer*, CoordBox>	downloadBoxes;
+    QStringList sourceTags;
 
     TagSelector* tagFilter;
     int FilterRevision;
@@ -884,17 +885,25 @@ QString Document::toPropertiesHtml()
     return h;
 }
 
-QStringList Document::getCurrentSourceTags()
+void Document::updateSourceTags()
 {
-    QStringList theSrc;
+    QStringList sourceTags;
     for (LayerIterator<ImageMapLayer*> ImgIt(this); !ImgIt.isEnd(); ++ImgIt) {
         if (ImgIt.get()->isVisible()) {
             QString s = ImgIt.get()->getMapAdapter()->getSourceTag();
             if (!s.isEmpty())
-                theSrc << ImgIt.get()->getMapAdapter()->getSourceTag();
+                sourceTags << ImgIt.get()->getMapAdapter()->getSourceTag();
         }
     }
-    return theSrc;
+    if (sourceTags != p->sourceTags) {
+        p->sourceTags = sourceTags;
+        emit(sourceTagsChanged());
+    }
+}
+
+QStringList Document::getCurrentSourceTags()
+{
+    return p->sourceTags;
 }
 
 Document* Document::getDocumentFromXml(QDomDocument* theXmlDoc)

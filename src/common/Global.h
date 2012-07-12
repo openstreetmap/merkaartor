@@ -16,9 +16,7 @@
 #include <QPair>
 
 #include "MemoryBackend.h"
-
-class MainWindow;
-class IBackend;
+#include "MainWindow.h"
 
 extern bool g_Merk_Portable;
 extern bool g_Merk_Frisius;
@@ -30,6 +28,11 @@ extern bool g_Merk_IgnoreStartupTemplate;
 extern bool g_Merk_SelfClip;
 
 extern MainWindow* g_Merk_MainWindow;
+#define CUR_MAINWINDOW g_Merk_MainWindow
+#define CUR_VIEW g_Merk_MainWindow->view()
+#define CUR_DOCUMENT g_Merk_MainWindow->document()
+#define PROPERTIES_DOCK g_Merk_MainWindow->properties()
+#define INFO_DOCK g_Merk_MainWindow->info()
 
 extern QPair<quint32, quint32> g_addToTagList(QString k, QString v);
 extern void g_removeFromTagList(quint32 k, quint32 v);

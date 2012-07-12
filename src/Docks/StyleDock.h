@@ -16,29 +16,27 @@
 
 #include "ui_StyleDock.h"
 
-class MainWindow;
 class QAction;
 
 class StyleDock : public MDockAncestor
 {
 Q_OBJECT
 public:
-    StyleDock(MainWindow* aParent);
+    StyleDock();
 
     ~StyleDock();
 
-	void setCurrent(QAction * a);
+    void setCurrent(QAction * a);
     //void updateList();
-	void clearItems();
-	void addItem(QAction* a);
+    void clearItems();
+    void addItem(QAction* a);
 
 public slots:
-	void on_StyleList_itemSelectionChanged();
+    void on_StyleList_itemSelectionChanged();
     void on_StyleList_itemDoubleClicked(QListWidgetItem* item);
     void on_StyleList_customContextMenuRequested(const QPoint & pos);
 
 private:
-    MainWindow* Main;
     Ui::StyleDockWidget ui;
 
 public:

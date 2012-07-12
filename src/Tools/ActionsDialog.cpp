@@ -6,12 +6,12 @@
 #include <QFileDialog>
 #include <QMessageBox>
 
-#include "MainWindow.h"
+#include "Global.h"
 #include "MerkaartorPreferences.h"
 #include "ActionsDialog.h"
 
-ActionsDialog::ActionsDialog(QList<QAction *>& actions, MainWindow *parent)
-    : QDialog(parent), Main(parent)
+ActionsDialog::ActionsDialog(QList<QAction *>& actions)
+    : QDialog(CUR_MAINWINDOW)
 {
     setWindowFlags(windowFlags() & ~Qt::WindowContextHelpButtonHint);
 
@@ -77,7 +77,7 @@ void ActionsDialog::resetToDefault()
 {
     for (int row = 0; row < (int)actionsList.size(); ++row) {
         QAction *action = actionsList[row];
-        actionsTable->item(row, 1)->setText(Main->shortcutsDefault[action->objectName()]);
+        actionsTable->item(row, 1)->setText(CUR_MAINWINDOW->shortcutsDefault[action->objectName()]);
     }
 }
 

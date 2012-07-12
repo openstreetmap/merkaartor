@@ -8,7 +8,6 @@
 #include <QButtonGroup>
 #include <QTabBar>
 
-class MainWindow;
 class Layer;
 class LayerWidget;
 class LayerDockPrivate;
@@ -18,7 +17,7 @@ class LayerDock : public MDockAncestor
     Q_OBJECT
 
     public:
-        LayerDock(MainWindow* aParent);
+        LayerDock();
     public:
         ~LayerDock(void);
 

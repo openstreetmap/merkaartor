@@ -1,6 +1,5 @@
 
 #include "MapView.h"
-#include "MainWindow.h"
 #include "Document.h"
 
 #include <QtGui/QPainter>
@@ -45,7 +44,7 @@ class GeoImageDock : public MDockAncestor
     Q_OBJECT
 
 public:
-    GeoImageDock(MainWindow *aMain);
+    GeoImageDock();
     ~GeoImageDock(void);
 
     void clear();
@@ -67,7 +66,6 @@ private slots:
 
 private:
 
-    MainWindow *Main;
     QAction *centerAction;
     QAction *remImagesAction;
     QAction *toClipboardAction;

@@ -11,7 +11,6 @@
 //
 #include "NativeRenderDialog.h"
 
-#include "MainWindow.h"
 #include "Document.h"
 #include "MapView.h"
 #include "Projection.h"

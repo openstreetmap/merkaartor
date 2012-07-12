@@ -3,7 +3,6 @@
 #include <errno.h>
 
 #include "MapView.h"
-#include "MainWindow.h"
 #include "PropertiesDock.h"
 #include "IDocument.h"
 #include "ILayer.h"
@@ -27,7 +26,6 @@
 #include "SvgCache.h"
 
 #include <QTime>
-#include <QMainWindow>
 #include <QMouseEvent>
 #include <QPainter>
 #include <QStatusBar>
@@ -78,12 +76,12 @@ public:
 /*********************/
 
 MapView::MapView(QWidget* parent) :
-    QWidget(parent), Main(dynamic_cast<MainWindow*>(parent)), StaticBackground(0)
+    QWidget(parent), StaticBackground(0)
   , StaticWireframe(0), StaticTouchup(0)
   , SelectionLocked(false),lockIcon(0)
   , p(new MapViewPrivate)
 {
-    installEventFilter(Main);
+    installEventFilter((QObject*)CUR_MAINWINDOW);
 
     setMouseTracking(true);
     setAttribute(Qt::WA_NoSystemBackground);
@@ -145,11 +143,6 @@ MapView::~MapView()
     delete StaticWireframe;
     delete StaticTouchup;
     delete p;
-}
-
-MainWindow *MapView::main()
-{
-    return Main;
 }
 
 void MapView::setDocument(IDocument* aDoc)
@@ -313,45 +306,42 @@ void MapView::paintEvent(QPaintEvent * anEvent)
         p->theInteraction->paintEvent(anEvent, P);
     }
 
-    if (Main)
-        drawGPS(P);
+    drawGPS(P);
 
     P.end();
 
 #ifndef _MOBILE
-    if (Main) {
-        QString vpLabel = QString("%1,%2,%3,%4")
-                                           .arg(viewport().bottomLeft().x(),0,'f',4)
-                                           .arg(viewport().bottomLeft().y(),0, 'f',4)
-                                           .arg(viewport().topRight().x(),0, 'f',4)
-                                           .arg(viewport().topRight().y(),0,'f',4)
-                                           ;
-        if (!p->theProjection.projIsLatLong()) {
-            QRectF pVp = p->theProjection.toProjectedRectF(viewport(), rect());
-            vpLabel += " / " + QString("%1,%2,%3,%4")
-                    .arg(pVp.bottomLeft().x(),0,'f',4)
-                    .arg(pVp.bottomLeft().y(),0, 'f',4)
-                    .arg(pVp.topRight().x(),0, 'f',4)
-                    .arg(pVp.topRight().y(),0,'f',4)
-                    ;
-        }
-        Main->ViewportStatusLabel->setText(vpLabel);
-
-        Main->MeterPerPixelLabel->setText(tr("%1 m/pixel").arg(1/p->PixelPerM, 0, 'f', 2));
-        if (!AlignTransform.isIdentity()) {
-            QLineF l(0, 0, AlignTransform.dx(), AlignTransform.dy());
-            l.translate(viewport().center());
-            Main->AdjusmentMeterLabel->setVisible(true);
-            qreal distance = Coord(l.p2()).distanceFrom(Coord(l.p1()))*1000;
-            Main->AdjusmentMeterLabel->setText(tr("Align: %1m @ %2").arg(distance, 0, 'f', 2).arg(l.angle(), 0, 'f', 2) + QString::fromUtf8("°"));
-        } else {
-            Main->AdjusmentMeterLabel->setVisible(false);
-        }
-#ifndef NDEBUG
-        QTime Stop(QTime::currentTime());
-        Main->PaintTimeLabel->setText(tr("%1ms").arg(Start.msecsTo(Stop)));
-#endif
+    QString vpLabel = QString("%1,%2,%3,%4")
+            .arg(viewport().bottomLeft().x(),0,'f',4)
+            .arg(viewport().bottomLeft().y(),0, 'f',4)
+            .arg(viewport().topRight().x(),0, 'f',4)
+            .arg(viewport().topRight().y(),0,'f',4)
+            ;
+    if (!p->theProjection.projIsLatLong()) {
+        QRectF pVp = p->theProjection.toProjectedRectF(viewport(), rect());
+        vpLabel += " / " + QString("%1,%2,%3,%4")
+                .arg(pVp.bottomLeft().x(),0,'f',4)
+                .arg(pVp.bottomLeft().y(),0, 'f',4)
+                .arg(pVp.topRight().x(),0, 'f',4)
+                .arg(pVp.topRight().y(),0,'f',4)
+                ;
     }
+    CUR_MAINWINDOW->ViewportStatusLabel->setText(vpLabel);
+
+    CUR_MAINWINDOW->MeterPerPixelLabel->setText(tr("%1 m/pixel").arg(1/p->PixelPerM, 0, 'f', 2));
+    if (!AlignTransform.isIdentity()) {
+        QLineF l(0, 0, AlignTransform.dx(), AlignTransform.dy());
+        l.translate(viewport().center());
+        CUR_MAINWINDOW->AdjusmentMeterLabel->setVisible(true);
+        qreal distance = Coord(l.p2()).distanceFrom(Coord(l.p1()))*1000;
+        CUR_MAINWINDOW->AdjusmentMeterLabel->setText(tr("Align: %1m @ %2").arg(distance, 0, 'f', 2).arg(l.angle(), 0, 'f', 2) + QString::fromUtf8("°"));
+    } else {
+        CUR_MAINWINDOW->AdjusmentMeterLabel->setVisible(false);
+    }
+#ifndef NDEBUG
+    QTime Stop(QTime::currentTime());
+    CUR_MAINWINDOW->PaintTimeLabel->setText(tr("%1ms").arg(Start.msecsTo(Stop)));
+#endif
 #endif
 }
 
@@ -391,9 +381,9 @@ void MapView::drawScale(QPainter & P)
 
 void MapView::drawGPS(QPainter & P)
 {
-    if (Main->gps() && Main->gps()->getGpsDevice()) {
-        if (Main->gps()->getGpsDevice()->fixStatus() == QGPSDevice::StatusActive) {
-            Coord vp(Main->gps()->getGpsDevice()->longitude(), Main->gps()->getGpsDevice()->latitude());
+    if (CUR_MAINWINDOW->gps() && CUR_MAINWINDOW->gps()->getGpsDevice()) {
+        if (CUR_MAINWINDOW->gps()->getGpsDevice()->fixStatus() == QGPSDevice::StatusActive) {
+            Coord vp(CUR_MAINWINDOW->gps()->getGpsDevice()->longitude(), CUR_MAINWINDOW->gps()->getGpsDevice()->latitude());
             QPoint g = toView(vp);
             QImage* pm = getSVGImageFromFile(":/Gps/Gps_Marker.svg", 32);
             P.drawImage(g - QPoint(16, 16), *pm);
@@ -794,26 +784,14 @@ void MapView::resizeEvent(QResizeEvent * ev)
 
 void MapView::dragEnterEvent(QDragEnterEvent *event)
 {
-    if (!Main) {
-        event->ignore();
-        return;
-    }
 }
 
 void MapView::dragMoveEvent(QDragMoveEvent *event)
 {
-    if (!Main) {
-        event->ignore();
-        return;
-    }
 }
 
 void MapView::dropEvent(QDropEvent *event)
 {
-    if (!Main) {
-        event->ignore();
-        return;
-    }
 }
 
 bool MapView::toXML(QXmlStreamWriter& stream)
@@ -893,15 +871,12 @@ bool MapView::isSelectionLocked()
 
 void MapView::lockSelection()
 {
-    if (!Main)
-        return;
-
-    if (!SelectionLocked && Main->properties()->selection().size()) {
+    if (!SelectionLocked && PROPERTIES_DOCK->selection().size()) {
 #ifndef _MOBILE
         lockIcon = new QLabel(this);
         lockIcon->setPixmap(QPixmap(":/Icons/emblem-readonly.png"));
-        Main->statusBar()->clearMessage();
-        Main->statusBar()->addWidget(lockIcon);
+        CUR_MAINWINDOW->statusBar()->clearMessage();
+        CUR_MAINWINDOW->statusBar()->addWidget(lockIcon);
 #endif
         SelectionLocked = true;
     }
@@ -909,12 +884,9 @@ void MapView::lockSelection()
 
 void MapView::unlockSelection()
 {
-    if (!Main)
-        return;
-
     if (SelectionLocked) {
 #ifndef _MOBILE
-        Main->statusBar()->removeWidget(lockIcon);
+        CUR_MAINWINDOW->statusBar()->removeWidget(lockIcon);
         SAFE_DELETE(lockIcon)
 #endif
         SelectionLocked = false;

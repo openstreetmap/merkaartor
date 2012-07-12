@@ -1,6 +1,7 @@
 #include "ZoomInteraction.h"
 
-#include "MainWindow.h"
+#include "Global.h"
+
 #include "MapView.h"
 #include "Document.h"
 #include "Projection.h"
@@ -9,11 +10,11 @@
 #include <QtGui/QMouseEvent>
 #include <QtGui/QPainter>
 
-ZoomInteraction::ZoomInteraction(MainWindow* aMain)
-: Interaction(aMain), HaveFirstPoint(false)
+ZoomInteraction::ZoomInteraction()
+: Interaction(), HaveFirstPoint(false)
 {
 #ifndef _MOBILE
-    theMain->view()->setCursor(cursor());
+    CUR_VIEW->setCursor(cursor());
 #endif
 }
 
@@ -63,7 +64,7 @@ void ZoomInteraction::mouseReleaseEvent(QMouseEvent * event)
         P2 = event->pos();
         view()->setViewport(CoordBox(XY_TO_COORD(P1),XY_TO_COORD(P2)),view()->rect());
         view()->invalidate(true, true, true);
-        theMain->launchInteraction(0);
+        CUR_MAINWINDOW->launchInteraction(0);
     }
 }
 

@@ -1,6 +1,5 @@
 #include "Global.h"
 
-#include "MainWindow.h"
 #include "MapView.h"
 #include "ImageMapLayer.h"
 
@@ -256,8 +255,8 @@ void ImageMapLayer::setMapAdapter(const QUuid& theAdapterUid, const QString& ser
             connect(p->theMapAdapter, SIGNAL(forceZoom()), theImageWidget, SLOT(zoomLayer()));
             connect(p->theMapAdapter, SIGNAL(forceProjection()), theImageWidget, SLOT(setProjection()));
 #ifndef _MOBILE
-            if (g_Merk_MainWindow)
-                connect(p->theMapAdapter, SIGNAL(forceRefresh()), g_Merk_MainWindow, SLOT(invalidateView()));
+            if (CUR_MAINWINDOW)
+                connect(p->theMapAdapter, SIGNAL(forceRefresh()), CUR_MAINWINDOW, SLOT(invalidateView()));
 #endif
         } else
             setNoneAdapter();

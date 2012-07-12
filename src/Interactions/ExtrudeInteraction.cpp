@@ -7,14 +7,13 @@
 #include "Way.h"
 #include "Node.h"
 #include "LineF.h"
-#include "MainWindow.h"
 #include "PropertiesDock.h"
 #include "Global.h"
 
 #include <QtGui/QPainter>
 
-ExtrudeInteraction::ExtrudeInteraction(MainWindow* aMain)
-    : FeatureSnapInteraction(aMain)
+ExtrudeInteraction::ExtrudeInteraction()
+    : FeatureSnapInteraction()
     , Creating(false)
     , BestSegment(-1)
 {

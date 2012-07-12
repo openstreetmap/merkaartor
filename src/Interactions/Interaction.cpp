@@ -1,6 +1,5 @@
 #include "Interaction.h"
 
-#include "MainWindow.h"
 #include "MapView.h"
 #include "Document.h"
 #include "Projection.h"
@@ -23,14 +22,14 @@
 
 #define CLEAR_DISTANCE 7.01
 
-Interaction::Interaction(MainWindow* aMain)
-    : QObject(aMain), theMain(aMain), Panning(false)
+Interaction::Interaction()
+    : QObject(CUR_MAINWINDOW), Panning(false)
     , LastSnap(0), SnapActive(true)
     , NoSelectPoints(false), NoSelectRoads(false), NoSelectVirtuals(true)
     , Dragging(false)
     , StartDrag(0,0), EndDrag(0,0)
 {
-    connect(this, SIGNAL(requestCustomContextMenu(const QPoint &)), theMain, SLOT(onCustomcontextmenurequested(const QPoint &)));
+    connect(this, SIGNAL(requestCustomContextMenu(const QPoint &)), CUR_MAINWINDOW, SLOT(onCustomcontextmenurequested(const QPoint &)));
 }
 
 Interaction::~Interaction()
@@ -42,19 +41,14 @@ bool Interaction::panning() const
     return (Panning && (LastPan != FirstPan));
 }
 
-MainWindow* Interaction::main()
-{
-    return theMain;
-}
-
 MapView* Interaction::view()
 {
-    return theMain->view();
+    return CUR_VIEW;
 }
 
 Document* Interaction::document()
 {
-    return theMain->document();
+    return CUR_DOCUMENT;
 }
 
 void Interaction::mousePressEvent(QMouseEvent * anEvent)
@@ -105,7 +99,7 @@ void Interaction::mouseReleaseEvent(QMouseEvent * anEvent)
         if (!DragBox.isEmpty()) {
             view()->setViewport(DragBox,view()->rect());
             view()->invalidate(true, true, true);
-            theMain->launchInteraction(0);
+            CUR_MAINWINDOW->launchInteraction(0);
         }
         Dragging = false;
     }
@@ -214,7 +208,7 @@ void Interaction::updateSnap(QMouseEvent* event)
     SnapList.clear();
     qreal BestDistance = 5;
     qreal BestReadonlyDistance = 5;
-    bool areNodesSelectable = (/*theMain->view()->nodeWidth() >= 1 && */M_PREFS->getTrackPointsVisible());
+    bool areNodesSelectable = (/*CUR_VIEW->nodeWidth() >= 1 && */M_PREFS->getTrackPointsVisible());
 
     Way* R;
     Node* N;
@@ -253,7 +247,7 @@ void Interaction::updateSnap(QMouseEvent* event)
                 if ((N = CAST_NODE(F))) {
                     if (NoSelectPoints)
                         continue;
-                    if (!N->isSelectable(theMain->view()->pixelPerM(), theMain->view()->renderOptions()))
+                    if (!N->isSelectable(CUR_VIEW->pixelPerM(), CUR_VIEW->renderOptions()))
                         continue;
                     if (HotZoneSnap.contains(N->boundingBox()))
                         SnapList.push_back(F);
@@ -292,14 +286,14 @@ void Interaction::updateSnap(QMouseEvent* event)
         else
             view()->setToolTip("");
     }
-    if (M_PREFS->getInfoOnHover() && main() && theMain->info() && theMain->info()->isVisible()) {
+    if (M_PREFS->getInfoOnHover() && INFO_DOCK && INFO_DOCK->isVisible()) {
         if (LastSnap) {
-            theMain->info()->setHoverHtml(LastSnap->toHtml());
+            INFO_DOCK->setHoverHtml(LastSnap->toHtml());
         } else
             if (ReadOnlySnap)
-                theMain->info()->setHoverHtml(ReadOnlySnap->toHtml());
+                INFO_DOCK->setHoverHtml(ReadOnlySnap->toHtml());
             else
-                theMain->info()->unsetHoverHtml();
+                INFO_DOCK->unsetHoverHtml();
     }
 
     emit featureSnap(LastSnap);
@@ -313,8 +307,8 @@ Feature* Interaction::lastSnap()
 
 /***************/
 
-FeatureSnapInteraction::FeatureSnapInteraction(MainWindow* aMain)
-        : Interaction(aMain)
+FeatureSnapInteraction::FeatureSnapInteraction()
+        : Interaction()
 {
 //    handCursor = QCursor(QPixmap(":/Icons/grab.png"));
 //    grabCursor = QCursor(QPixmap(":/Icons/grabbing.png"));
@@ -325,7 +319,7 @@ FeatureSnapInteraction::FeatureSnapInteraction(MainWindow* aMain)
     warningCursor = QCursor(QPixmap(":/Icons/cursor-warning"), 16, 5);
 
 #ifndef _MOBILE
-    theMain->view()->setCursor(cursor());
+    CUR_VIEW->setCursor(cursor());
 #endif
 }
 
@@ -334,17 +328,17 @@ void FeatureSnapInteraction::paintEvent(QPaintEvent* anEvent, QPainter& thePaint
     Interaction::paintEvent(anEvent, thePainter);
 
 #ifndef _MOBILE
-    for (int i=0; i<theMain->features()->highlightedSize(); ++i) {
-        theMain->features()->highlighted(i)->buildPath(view()->projection());
-        theMain->features()->highlighted(i)->drawHighlight(thePainter, view());
+    for (int i=0; i<CUR_MAINWINDOW->features()->highlightedSize(); ++i) {
+        CUR_MAINWINDOW->features()->highlighted(i)->buildPath(view()->projection());
+        CUR_MAINWINDOW->features()->highlighted(i)->drawHighlight(thePainter, view());
     }
-    for (int i=0; i<theMain->properties()->selectionSize(); ++i) {
-        theMain->properties()->selection(i)->buildPath(view()->projection());
-        theMain->properties()->selection(i)->drawFocus(thePainter, view());
+    for (int i=0; i<PROPERTIES_DOCK->selectionSize(); ++i) {
+        PROPERTIES_DOCK->selection(i)->buildPath(view()->projection());
+        PROPERTIES_DOCK->selection(i)->drawFocus(thePainter, view());
     }
-    for (int i=0; i<theMain->properties()->highlightedSize(); ++i) {
-        theMain->properties()->highlighted(i)->buildPath(view()->projection());
-        theMain->properties()->highlighted(i)->drawHighlight(thePainter, view());
+    for (int i=0; i<PROPERTIES_DOCK->highlightedSize(); ++i) {
+        PROPERTIES_DOCK->highlighted(i)->buildPath(view()->projection());
+        PROPERTIES_DOCK->highlighted(i)->drawHighlight(thePainter, view());
     }
 
     //FIXME document()->exists necessary?
@@ -378,7 +372,7 @@ void FeatureSnapInteraction::mouseReleaseEvent(QMouseEvent * event)
 void FeatureSnapInteraction::mouseMoveEvent(QMouseEvent* event)
 {
 #ifndef _MOBILE
-//    if (!document()->isDownloadedSafe(theMain->view()->fromView(event->pos())))
+//    if (!document()->isDownloadedSafe(CUR_VIEW->fromView(event->pos())))
 //        view()->setCursor(warningCursor);
 //    else
         view()->setCursor(cursor());
@@ -390,7 +384,7 @@ void FeatureSnapInteraction::mouseMoveEvent(QMouseEvent* event)
 
 void FeatureSnapInteraction::mouseDoubleClickEvent(QMouseEvent* event)
 {
-//    if (!document()->isDownloadedSafe(theMain->view()->fromView(event->pos())))
+//    if (!document()->isDownloadedSafe(CUR_VIEW->fromView(event->pos())))
 //        view()->setCursor(warningCursor);
 //    else
 #ifndef _MOBILE
@@ -470,8 +464,8 @@ void FeatureSnapInteraction::nextSnap()
     curStackSnap++;
     if (curStackSnap > StackSnap.size() -1)
         curStackSnap = 0;
-    if (theMain->properties())
-        theMain->properties()->setSelection(StackSnap[curStackSnap]);
+    if (PROPERTIES_DOCK)
+        PROPERTIES_DOCK->setSelection(StackSnap[curStackSnap]);
     view()->update();
 }
 
@@ -482,8 +476,8 @@ void FeatureSnapInteraction::previousSnap()
     curStackSnap--;
     if (curStackSnap < 0)
         curStackSnap = StackSnap.size() -1;
-    if (theMain->properties())
-        theMain->properties()->setSelection(StackSnap[curStackSnap]);
+    if (PROPERTIES_DOCK)
+        PROPERTIES_DOCK->setSelection(StackSnap[curStackSnap]);
     view()->update();
 }
 

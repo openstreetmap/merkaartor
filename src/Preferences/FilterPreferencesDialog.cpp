@@ -13,7 +13,6 @@
 
 #include "FilterPreferencesDialog.h"
 #include "TagSelector.h"
-#include "MainWindow.h"
 
 #include "SelectionDialog.h"
 
@@ -95,7 +94,7 @@ void FilterPreferencesDialog::on_btDel_clicked(void)
 
 void FilterPreferencesDialog::on_btFilterHelper_clicked()
 {
-    SelectionDialog* Sel = new SelectionDialog(g_Merk_MainWindow, false);
+    SelectionDialog* Sel = new SelectionDialog(CUR_MAINWINDOW, false);
     if (!Sel)
         return;
 

@@ -7,15 +7,14 @@
 #include "Way.h"
 #include "Node.h"
 #include "LineF.h"
-#include "MainWindow.h"
 #include "PropertiesDock.h"
 #include "Global.h"
 
 #include <QtGui/QDockWidget>
 #include <QtGui/QPainter>
 
-CreateSingleWayInteraction::CreateSingleWayInteraction(MainWindow* aMain, Node *firstNode, bool aCurved)
-    : FeatureSnapInteraction(aMain), theRoad(0), FirstPoint(0,0),
+CreateSingleWayInteraction::CreateSingleWayInteraction(Node *firstNode, bool aCurved)
+    : FeatureSnapInteraction(), theRoad(0), FirstPoint(0,0),
      FirstNode(firstNode), HaveFirst(false), Prepend(false), IsCurved(aCurved), Creating(false)
      , SnapAngle(0)
      , ParallelMode(false)
@@ -234,10 +233,10 @@ void CreateSingleWayInteraction::snapMouseReleaseEvent(QMouseEvent* anEvent, Fea
             {
                 Coord P(XY_TO_COORD(LastCursor));
                 int SnapIdx = findSnapPointIndex(aRoad, P);
-                Node* N = g_backend.allocNode(theMain->document()->getDirtyOrOriginLayer(), P);
+                Node* N = g_backend.allocNode(CUR_DOCUMENT->getDirtyOrOriginLayer(), P);
                 CommandList* theList  = new CommandList(MainWindow::tr("Create Node %1 in Road %2").arg(N->description()).arg(aRoad->description()), N);
-                theList->add(new AddFeatureCommand(theMain->document()->getDirtyOrOriginLayer(),N,true));
-                theList->add(new WayAddNodeCommand(aRoad,N,SnapIdx,theMain->document()->getDirtyOrOriginLayer(aRoad)));
+                theList->add(new AddFeatureCommand(CUR_DOCUMENT->getDirtyOrOriginLayer(),N,true));
+                theList->add(new WayAddNodeCommand(aRoad,N,SnapIdx,CUR_DOCUMENT->getDirtyOrOriginLayer(aRoad)));
                 document()->addHistory(theList);
                 view()->invalidate(true, true, false);
                 FirstNode = N;
@@ -249,30 +248,30 @@ void CreateSingleWayInteraction::snapMouseReleaseEvent(QMouseEvent* anEvent, Fea
             if (!theRoad)
             {
                 Node* From = 0;
-                theRoad = g_backend.allocWay(theMain->document()->getDirtyOrOriginLayer());
-                L->add(new AddFeatureCommand(theMain->document()->getDirtyOrOriginLayer(),theRoad,true));
+                theRoad = g_backend.allocWay(CUR_DOCUMENT->getDirtyOrOriginLayer());
+                L->add(new AddFeatureCommand(CUR_DOCUMENT->getDirtyOrOriginLayer(),theRoad,true));
                 if (FirstNode) {
                     if (FirstNode->isVirtual()) {
                         Way* aRoad = CAST_WAY(FirstNode->getParent(0));
                         int SnapIdx = aRoad->findVirtual(FirstNode)+1;
-                        From = g_backend.allocNode(theMain->document()->getDirtyOrOriginLayer(aRoad->layer()), *FirstNode);
+                        From = g_backend.allocNode(CUR_DOCUMENT->getDirtyOrOriginLayer(aRoad->layer()), *FirstNode);
                         From->setVirtual(false);
                         From->setPosition(FirstNode->position());
-                        L->add(new AddFeatureCommand(theMain->document()->getDirtyOrOriginLayer(aRoad->layer()),From,true));
-                        L->add(new WayAddNodeCommand(aRoad,From,SnapIdx,main()->document()->getDirtyOrOriginLayer(aRoad->layer())));
+                        L->add(new AddFeatureCommand(CUR_DOCUMENT->getDirtyOrOriginLayer(aRoad->layer()),From,true));
+                        L->add(new WayAddNodeCommand(aRoad,From,SnapIdx,CUR_DOCUMENT->getDirtyOrOriginLayer(aRoad->layer())));
                     } else {
                         From = FirstNode;
                         if (!From->isDirty() && !From->hasOSMId() && From->isUploadable())
-                            L->add(new AddFeatureCommand(theMain->document()->getDirtyOrOriginLayer(),From,true));
+                            L->add(new AddFeatureCommand(CUR_DOCUMENT->getDirtyOrOriginLayer(),From,true));
                     }
                 }
                 else
                 {
-                    From = g_backend.allocNode(theMain->document()->getDirtyOrOriginLayer(), FirstPoint);
-                    L->add(new AddFeatureCommand(theMain->document()->getDirtyOrOriginLayer(),From,true));
+                    From = g_backend.allocNode(CUR_DOCUMENT->getDirtyOrOriginLayer(), FirstPoint);
+                    L->add(new AddFeatureCommand(CUR_DOCUMENT->getDirtyOrOriginLayer(),From,true));
                 }
                 if (M_PREFS->getAutoSourceTag()) {
-                    QStringList sl = theMain->document()->getCurrentSourceTags();
+                    QStringList sl = CUR_DOCUMENT->getCurrentSourceTags();
                     if (sl.size())
                         theRoad->setTag("source", sl.join(";"));
                 }
@@ -286,7 +285,7 @@ void CreateSingleWayInteraction::snapMouseReleaseEvent(QMouseEvent* anEvent, Fea
             if (Pt) {
                 To = Pt;
                 if (!To->isDirty() && !To->hasOSMId() && To->isUploadable()) {
-                    L->add(new AddFeatureCommand(theMain->document()->getDirtyOrOriginLayer(),To,true));
+                    L->add(new AddFeatureCommand(CUR_DOCUMENT->getDirtyOrOriginLayer(),To,true));
                     L->setDescription(MainWindow::tr("Create Node: %1").arg(To->description()));
                 }
             }
@@ -294,29 +293,29 @@ void CreateSingleWayInteraction::snapMouseReleaseEvent(QMouseEvent* anEvent, Fea
             {
                 Coord P(XY_TO_COORD(LastCursor));
                 int SnapIdx = findSnapPointIndex(aRoad, P);
-                Node* N = g_backend.allocNode(theMain->document()->getDirtyOrOriginLayer(), P);
+                Node* N = g_backend.allocNode(CUR_DOCUMENT->getDirtyOrOriginLayer(), P);
                 CommandList* theList  = new CommandList(MainWindow::tr("Create Node %1 in Road %2").arg(N->description()).arg(aRoad->description()), N);
-                theList->add(new AddFeatureCommand(theMain->document()->getDirtyOrOriginLayer(),N,true));
-                theList->add(new WayAddNodeCommand(aRoad,N,SnapIdx,theMain->document()->getDirtyOrOriginLayer(aRoad)));
+                theList->add(new AddFeatureCommand(CUR_DOCUMENT->getDirtyOrOriginLayer(),N,true));
+                theList->add(new WayAddNodeCommand(aRoad,N,SnapIdx,CUR_DOCUMENT->getDirtyOrOriginLayer(aRoad)));
                 document()->addHistory(theList);
                 view()->invalidate(true, true, false);
                 To = N;
             }
             if (!To)
             {
-                To = g_backend.allocNode(theMain->document()->getDirtyOrOriginLayer(), XY_TO_COORD(LastCursor));
-                L->add(new AddFeatureCommand(theMain->document()->getDirtyOrOriginLayer(),To,true));
+                To = g_backend.allocNode(CUR_DOCUMENT->getDirtyOrOriginLayer(), XY_TO_COORD(LastCursor));
+                L->add(new AddFeatureCommand(CUR_DOCUMENT->getDirtyOrOriginLayer(),To,true));
                 L->setDescription(MainWindow::tr("Create Node %1 in Road %2").arg(To->description()).arg(theRoad->description()));
                 L->setFeature(To);
             }
             L->setDescription(MainWindow::tr("Add Node %1 to Road %2").arg(To->description()).arg(theRoad->description()));
             if (Prepend)
-                L->add(new WayAddNodeCommand(theRoad,To,(int)0,theMain->document()->getDirtyOrOriginLayer(theRoad)));
+                L->add(new WayAddNodeCommand(theRoad,To,(int)0,CUR_DOCUMENT->getDirtyOrOriginLayer(theRoad)));
             else
-                L->add(new WayAddNodeCommand(theRoad,To,theMain->document()->getDirtyOrOriginLayer(theRoad)));
+                L->add(new WayAddNodeCommand(theRoad,To,CUR_DOCUMENT->getDirtyOrOriginLayer(theRoad)));
             document()->addHistory(L);
             view()->invalidate(true, true, false);
-            theMain->properties()->setSelection(theRoad);
+            PROPERTIES_DOCK->setSelection(theRoad);
         }
         FirstPoint = XY_TO_COORD(LastCursor);
     }
@@ -349,10 +348,10 @@ void CreateSingleWayInteraction::closeAndFinish()
 
     Node* N = theRoad->getNode(0);
     CommandList* theList  = new CommandList(MainWindow::tr("Close Road %1").arg(theRoad->description()), theRoad);
-    theList->add(new WayAddNodeCommand(theRoad,N,theMain->document()->getDirtyOrOriginLayer(theRoad)));
+    theList->add(new WayAddNodeCommand(theRoad,N,CUR_DOCUMENT->getDirtyOrOriginLayer(theRoad)));
     document()->addHistory(theList);
     view()->invalidate(true, true, false);
-    theMain->properties()->setSelection(theRoad);
+    PROPERTIES_DOCK->setSelection(theRoad);
 
     HaveFirst = false;
     theRoad = NULL;

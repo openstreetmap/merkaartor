@@ -10,7 +10,8 @@ SOURCES += \
     TagTemplate.cpp
 
 #Forms
-FORMS +=
+FORMS += \
+    RelationMembers.ui
 
 #Resource file(s)
 RESOURCES +=../Templates/Templates.qrc

@@ -1,5 +1,7 @@
 #include "GeoImageDock.h"
 
+#include "Global.h"
+
 #include "Node.h"
 #include "Layer.h"
 #include "DocumentCommands.h"
@@ -77,8 +79,8 @@ bool GeoImageDock::askAndgetWalkingPapersDetails(double &lat, double &lon, bool&
         return false;
 }
 
-GeoImageDock::GeoImageDock(MainWindow *aMain)
-    : MDockAncestor(aMain), Main(aMain)
+GeoImageDock::GeoImageDock()
+    : MDockAncestor()
     , photoLayer(0)
 {
     curImage = lastImage = -1;
@@ -180,7 +182,7 @@ void GeoImageDock::setImage(int ImageId)
         bool ok = false;
         Feature* theFeature;
         while (!ok) {
-            FeatureIterator it(Main->document());
+            FeatureIterator it(CUR_DOCUMENT);
             for (; !it.isEnd(); ++it) // find TrackPoint
                 if (usedTrackPoints.at(lookImage).node == it.get()) {
                     break;
@@ -211,9 +213,9 @@ void GeoImageDock::setImage(int ImageId)
 //        }
 
         updateByMe = true;
-        if (!Main->properties()->isSelected(theFeature)) {
-            Main->properties()->setSelection(theFeature);
-            Main->view()->invalidate(true, true, false);
+        if (!PROPERTIES_DOCK->isSelected(theFeature)) {
+            PROPERTIES_DOCK->setSelection(theFeature);
+            CUR_VIEW->invalidate(true, true, false);
         }
         updateByMe = false;
     }
@@ -243,7 +245,7 @@ void GeoImageDock::removeImages(void)
     curImage = -1;
     Image->setImage("");
 
-    Main->view()->invalidate(true, true, false);
+    CUR_VIEW->invalidate(true, true, false);
 }
 
 void GeoImageDock::toClipboard(void)
@@ -285,8 +287,8 @@ void GeoImageDock::centerMap(void)
     Feature* f = usedTrackPoints.at(index).node;
     if (f && !f->isNull()) {
         Coord c = f->boundingBox().center();
-        Main->view()->setCenter(c, Main->view()->rect());
-        Main->invalidateView();
+        CUR_VIEW->setCenter(c, CUR_VIEW->rect());
+        CUR_MAINWINDOW->invalidateView();
     }
 }
 
@@ -304,8 +306,8 @@ void GeoImageDock::addUsedTrackpoint(NodeData data)
 
 void GeoImageDock::loadImage(QString file, Coord pos)
 {
-    Document *theDocument = Main->document();
-    //MapView *theView = Main->view();
+    Document *theDocument = CUR_DOCUMENT;
+    //MapView *theView = CUR_VIEW;
 
     Layer *theLayer;
     if (photoLayer == NULL) {
@@ -426,8 +428,8 @@ void GeoImageDock::loadImages(QStringList fileNames)
     QDateTime time;
     int offset = -1, noMatchQuestion = 0;
 
-    Document *theDocument = Main->document();
-    MapView *theView = Main->view();
+    Document *theDocument = CUR_DOCUMENT;
+    MapView *theView = CUR_VIEW;
 
     Exiv2::Image::AutoPtr image;
     Exiv2::ExifData exifData;

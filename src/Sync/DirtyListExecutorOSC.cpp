@@ -13,7 +13,6 @@
 #include "Global.h"
 #include "DirtyListExecutorOSC.h"
 
-#include "MainWindow.h"
 #include "Features.h"
 #include "DownloadOSM.h"
 #include "MerkaartorPreferences.h"
@@ -127,24 +126,23 @@ QByteArray DirtyListExecutorOSC::getChanges()
     return OscBuffer.buffer();
 }
 
-bool DirtyListExecutorOSC::executeChanges(QWidget* aParent)
+bool DirtyListExecutorOSC::executeChanges()
 {
     bool ok = true;
 
 #ifndef _MOBILE
-    MainWindow* main = dynamic_cast<MainWindow*>(aParent);
-    main->createProgressDialog();
+    CUR_MAINWINDOW->createProgressDialog();
 
-    Progress = main->getProgressDialog();
+    Progress = CUR_MAINWINDOW->getProgressDialog();
     if (Progress) {
         Progress->setMaximum(Tasks);
         Progress->setWindowTitle(QApplication::translate("Downloader", "Uploading..."));
     }
 
-    QProgressBar* Bar = main->getProgressBar();
+    QProgressBar* Bar = CUR_MAINWINDOW->getProgressBar();
     Bar->setTextVisible(false);
 
-    QLabel* Lbl = main->getProgressLabel();
+    QLabel* Lbl = CUR_MAINWINDOW->getProgressLabel();
 
     if (Progress)
         Progress->show();
@@ -169,7 +167,7 @@ bool DirtyListExecutorOSC::executeChanges(QWidget* aParent)
             ok = stop();
         }
     }
-    main->deleteProgressDialog();
+    CUR_MAINWINDOW->deleteProgressDialog();
 #endif
 
     return ok;

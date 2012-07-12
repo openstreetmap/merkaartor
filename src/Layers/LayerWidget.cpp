@@ -3,7 +3,6 @@
 #include "LayerWidget.h"
 #include "LayerDock.h"
 
-#include "MainWindow.h"
 #include "Document.h"
 #include "Layer.h"
 #include "MerkaartorPreferences.h"
@@ -712,7 +711,7 @@ void FilterLayerWidget::mouseDoubleClickEvent(QMouseEvent */*event*/)
 
 void FilterLayerWidget::on_filterHelperClicked()
 {
-    SelectionDialog* Sel = new SelectionDialog(g_Merk_MainWindow, false);
+    SelectionDialog* Sel = new SelectionDialog(CUR_MAINWINDOW, false);
     if (!Sel)
         return;
 

@@ -5,12 +5,10 @@ class Document;
 
 class QHttp;
 class QString;
-class QMainWindow;
 class QProgressBar;
 class QLabel;
 class QProgressDialog;
 class QTimer;
-class MainWindow;
 class CoordBox;
 class Feature;
 class Layer;
@@ -76,13 +74,13 @@ class Downloader : public QObject
         QTimer *AnimationTimer;
 };
 
-bool downloadOSM(MainWindow* Main, const CoordBox& aBox , Document* theDocument);
-bool downloadMoreOSM(MainWindow* Main, const CoordBox& aBox , Document* theDocument);
-bool downloadFeatures(MainWindow* Main, const QList<Feature*>& aDownloadList , Document* theDocument);
-bool downloadFeature(MainWindow* Main, const IFeature::FId& id, Document* theDocument, Layer* theLayer=NULL);
-bool downloadFeatures(MainWindow* Main, const QList<IFeature::FId>& aDownloadList, Document* theDocument, Layer* theLayer=NULL);
-bool downloadOpenstreetbugs(MainWindow* Main, const CoordBox& aBox, Document* theDocument, SpecialLayer* theLayer=NULL);
-bool downloadMapdust(MainWindow* Main, const CoordBox& aBox, Document* theDocument, SpecialLayer* theLayer=NULL);
+bool downloadOSM(const CoordBox& aBox , Document* theDocument);
+bool downloadMoreOSM(const CoordBox& aBox , Document* theDocument);
+bool downloadFeatures(const QList<Feature*>& aDownloadList , Document* theDocument);
+bool downloadFeature(const IFeature::FId& id, Document* theDocument, Layer* theLayer=NULL);
+bool downloadFeatures(const QList<IFeature::FId>& aDownloadList, Document* theDocument, Layer* theLayer=NULL);
+bool downloadOpenstreetbugs(const CoordBox& aBox, Document* theDocument, SpecialLayer* theLayer=NULL);
+bool downloadMapdust(const CoordBox& aBox, Document* theDocument, SpecialLayer* theLayer=NULL);
 
 bool checkForConflicts(Document* theDocument);
 

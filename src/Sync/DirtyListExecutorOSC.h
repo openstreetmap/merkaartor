@@ -45,7 +45,7 @@ public:
     virtual bool eraseRoad(Way* R);
     virtual bool eraseRelation(Relation* R);
 
-    bool executeChanges(QWidget* Parent);
+    bool executeChanges();
     QByteArray getChanges();
 
 private:

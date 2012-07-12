@@ -1,6 +1,7 @@
 #include "RotateInteraction.h"
 
-#include "MainWindow.h"
+#include "Global.h"
+
 #include "MapView.h"
 #include "DocumentCommands.h"
 #include "WayCommands.h"
@@ -21,8 +22,8 @@
 #include <QList>
 #include <QPainter>
 
-RotateInteraction::RotateInteraction(MainWindow* aMain)
-    : FeatureSnapInteraction(aMain), StartDragPosition(0,0)
+RotateInteraction::RotateInteraction()
+    : FeatureSnapInteraction(), StartDragPosition(0,0)
 {
     QPixmap pm(":/Icons/rotate.png");
     rotateCursor =  QCursor(pm.scaledToWidth(22));
@@ -74,12 +75,12 @@ void RotateInteraction::snapMousePressEvent(QMouseEvent * anEvent, Feature* aLas
 {
     QList<Feature*> sel;
     if (view()->isSelectionLocked()) {
-        if (theMain->properties()->selection(0))
-            sel.append(theMain->properties()->selection(0));
+        if (PROPERTIES_DOCK->selection(0))
+            sel.append(PROPERTIES_DOCK->selection(0));
         else
             sel.append(aLast);
     } else {
-        sel = theMain->properties()->selection();
+        sel = PROPERTIES_DOCK->selection();
         if (!sel.size() && aLast)
             sel.append(aLast);
     }

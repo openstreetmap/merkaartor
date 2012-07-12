@@ -4,6 +4,12 @@
 #include <QApplication>
 #include <QDialogButtonBox>
 
+#include "Global.h"
+
+MDockAncestor::MDockAncestor()
+    : QDockWidget(CUR_MAINWINDOW), mainWidget(0)
+{}
+
 #ifdef _MOBILE
 
 MDockAncestor::MDockAncestor(QWidget *parent)

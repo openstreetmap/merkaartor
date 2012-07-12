@@ -1,6 +1,40 @@
 <?xml version="1.0" encoding="UTF8"?>
 <templates>
  <widgets>
+   <widget id="turn_restriction" tag="restriction" type="combo">
+    <link src="http://wiki.openstreetmap.org/wiki/Relation:restriction" />
+	 <value tag="no_right_turn">
+	   <description locale="en">No right turn</description>
+	 </value>
+	 <value tag="no_left_turn">
+	   <description locale="en">No left turn</description>
+	 </value>
+	 <value tag="no_u_turn">
+	   <description locale="en">No U turn</description>
+	 </value>
+	 <value tag="no_straight_on">
+	   <description locale="en">No straight on</description>
+	 </value>
+	 <value tag="only_right_turn">
+	   <description locale="en">Only right turn</description>
+	 </value>
+	 <value tag="only_left_turn">
+	   <description locale="en">Only left turn</description>
+	 </value>
+	 <value tag="only_straight_on">
+	   <description locale="en">Only straight on</description>
+	 </value>
+	 <value tag="no_entry">
+	   <description locale="en">No entry</description>
+	 </value>
+	 <value tag="no_exit">
+	   <description locale="en">No exit</description>
+	 </value>
+	 <value tag="maxspeed">
+	   <description locale="en">Max speed</description>
+	 </value>
+   </widget>
+
   <widget tag="place" type="combo">
    <link src="http://wiki.openstreetmap.org/index.php/Key:place" />
    <description locale="en" >Place</description>
@@ -2814,7 +2848,9 @@
   <description locale="sv" >Generella relationer</description>
   <description locale="uk" >Загальні Відношення</description>
   <widgetref id="landuse" />
- </template>
+   <widget type="memberlist">
+  </widget>
+</template>
  <template>
   <selector expr="[Default] Type is Way" />
   <description locale="en" >Generic Ways</description>
@@ -2890,6 +2926,16 @@
   </widget>
   <widgetref id="amenity" />
   <widgetref id="place" />
+ </template>
+ 
+ <template>
+  <selector expr="Type is Relation and [type] is restriction" />
+  <description locale="en" >Turn Restriction</description>
+  <widgetref id="turn_restriction" />
+  <widget type="memberlist">
+    <restrictroles>to,from,via</restrictroles>
+	<restricttypes>node,way</restricttypes>
+  </widget>
  </template>
 
   </templates>

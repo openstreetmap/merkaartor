@@ -11,15 +11,16 @@
 //
 #include "StyleDock.h"
 
-#include "MainWindow.h"
+#include "Global.h"
+
 #include "MapView.h"
 #include "Document.h"
 #include "Feature.h"
 
 #include <QAction>
 
-StyleDock::StyleDock(MainWindow* aParent)
-    : MDockAncestor(aParent), Main(aParent)
+StyleDock::StyleDock()
+    : MDockAncestor()
 {
     setMinimumSize(220,100);
     setObjectName("StyleDock");

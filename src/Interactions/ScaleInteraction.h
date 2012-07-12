@@ -11,7 +11,7 @@ class CommandList;
 class ScaleInteraction : public FeatureSnapInteraction
 {
     public:
-        ScaleInteraction(MainWindow* aMain);
+        ScaleInteraction();
         ~ScaleInteraction(void);
 
         virtual void paintEvent(QPaintEvent* anEvent, QPainter& thePainter);

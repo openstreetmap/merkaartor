@@ -150,6 +150,8 @@ MainWindow::MainWindow(QWidget *parent)
         , merkaartorTranslator(0)
         , toolBarManager(0)
 {
+    CUR_MAINWINDOW = this;
+
     setlocale(LC_NUMERIC, "C");  // impose decimal point separator
     qsrand(QDateTime::currentDateTime().toTime_t());  //initialize random generator
 
@@ -229,33 +231,33 @@ MainWindow::MainWindow(QWidget *parent)
     theView = new MapView(this);
     setCentralWidget(theView);
 
-    theInfo = new InfoDock(this);
+    theInfo = new InfoDock();
     connect(theInfo, SIGNAL(visibilityChanged(bool)), this, SLOT(updateWindowMenu(bool)));
 
-    theLayers = new LayerDock(this);
+    theLayers = new LayerDock();
     connect(theLayers, SIGNAL(visibilityChanged(bool)), this, SLOT(updateWindowMenu(bool)));
 
-    p->theProperties = new PropertiesDock(this);
+    p->theProperties = new PropertiesDock();
     connect(p->theProperties, SIGNAL(visibilityChanged(bool)), this, SLOT(updateWindowMenu(bool)));
     on_editPropertiesAction_triggered();
 
-    theDirty = new DirtyDock(this);
+    theDirty = new DirtyDock();
     connect(theDirty, SIGNAL(visibilityChanged(bool)), this, SLOT(updateWindowMenu(bool)));
 
-    p->theStyle = new StyleDock(this);
+    p->theStyle = new StyleDock();
     connect(p->theStyle, SIGNAL(visibilityChanged(bool)), this, SLOT(updateWindowMenu(bool)));
 
-    p->theFeats = new FeaturesDock(this);
+    p->theFeats = new FeaturesDock();
     connect(p->theFeats, SIGNAL(visibilityChanged(bool)), this, SLOT(updateWindowMenu(bool)));
     connect(theView, SIGNAL(viewportChanged()), p->theFeats, SLOT(on_Viewport_changed()), Qt::QueuedConnection);
     connect(this, SIGNAL(content_changed()), p->theFeats, SLOT(on_Viewport_changed()), Qt::QueuedConnection);
     connect(this, SIGNAL(content_changed()), p->theProperties, SLOT(adjustSelection()), Qt::QueuedConnection);
 
-    theGPS = new QGPS(this);
+    theGPS = new QGPS();
     connect(theGPS, SIGNAL(visibilityChanged(bool)), this, SLOT(updateWindowMenu(bool)));
 
 #ifdef GEOIMAGE
-    theGeoImage = new GeoImageDock(this);
+    theGeoImage = new GeoImageDock();
     theGeoImage->setAllowedAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea);
     addDockWidget(Qt::RightDockWidgetArea, theGeoImage);
     connect(theGeoImage, SIGNAL(visibilityChanged(bool)), this, SLOT(updateWindowMenu(bool)));
@@ -531,15 +533,21 @@ void MainWindow::launchInteraction(Interaction* anInteraction)
         ui->roadExtrudeAction->setChecked(dynamic_cast<ExtrudeInteraction*>(anInteraction) != NULL);
 
         EditInteraction* EI = dynamic_cast<EditInteraction*>(anInteraction);
-        if (EI)
+        if (EI) {
             EI->setSnap(theSnapList);
+            connect(EI, SIGNAL(setSelection(Feature*)), p->theProperties, SLOT(setSelection(Feature*)));
+            connect(EI, SIGNAL(toggleSelection(Feature*)), p->theProperties, SLOT(toggleSelection(Feature*)));
+            connect(EI, SIGNAL(addSelection(Feature*)), p->theProperties, SLOT(addSelection(Feature*)));
+            connect(EI, SIGNAL(setMultiSelection(QList<Feature*>)), p->theProperties, SLOT(setMultiSelection(QList<Feature*>)));
+        }
     } else {
 #ifndef _MOBILE
         theView->setCursor(QCursor(Qt::ArrowCursor));
 #endif
-        launchInteraction(new EditInteraction(this));
+        return launchInteraction(new EditInteraction());
         //Q_ASSERT(theView->interaction());
     }
+    p->theProperties->checkMenuStatus();
 }
 
 void MainWindow::onCustomcontextmenurequested(const QPoint & pos)
@@ -760,7 +768,7 @@ bool MainWindow::eventFilter(QObject */* watched */, QEvent *event)
                     CreateNodeInteraction::createNode(theView->fromView(mevent->pos()), theView->interaction()->lastSnap());
                 else if (theView->interaction()->lastSnap() && theView->interaction()->lastSnap()->getType() == IFeature::Point) {
                     Node* N = CAST_NODE(theView->interaction()->lastSnap());
-                    CreateSingleWayInteraction* CI = new CreateSingleWayInteraction(this, N, false);
+                    CreateSingleWayInteraction* CI = new CreateSingleWayInteraction(N, false);
                     N->invalidatePainter();
                     launchInteraction(CI);
                     theInfo->setHtml(theView->interaction()->toHtml());
@@ -838,7 +846,7 @@ bool MainWindow::eventFilter(QObject */* watched */, QEvent *event)
             EditInteraction* EI = dynamic_cast<EditInteraction*>(theView->interaction());
             if (EI && EI->isIdle()) {
                 if (EI->lastSnap() && p->theProperties->isSelected(EI->lastSnap())) {
-                    MoveNodeInteraction* MI = new MoveNodeInteraction(this);
+                    MoveNodeInteraction* MI = new MoveNodeInteraction();
                     launchInteraction(MI);
                     //                    main()->info()->setHtml(interaction()->toHtml());
 #ifndef _MOBILE
@@ -850,7 +858,7 @@ bool MainWindow::eventFilter(QObject */* watched */, QEvent *event)
             }
             MoveNodeInteraction* MI = dynamic_cast<MoveNodeInteraction*>(theView->interaction());
             if (MI && !MI->lastSnap() && MI->isIdle()) {
-                EditInteraction* EI = new EditInteraction(this);
+                EditInteraction* EI = new EditInteraction();
                 launchInteraction(EI);
 #ifndef _MOBILE
                 theView->setCursor(EI->cursor());
@@ -1213,6 +1221,8 @@ void MainWindow::adjustLayers(bool adjustViewport)
         theVp = theView->viewport();
         theView->setViewport(theVp, theView->rect());
     }
+    theDocument->updateSourceTags();
+    p->theProperties->resetValues();
     invalidateView(true);
 }
 
@@ -1425,7 +1435,7 @@ void MainWindow::on_editPasteFeatureAction_triggered()
 
     delete doc;
 
-    p->theProperties->setSelection(theFeats);
+    p->theProperties->setMultiSelection(theFeats);
     view()->invalidate(true, true, false);
 }
 
@@ -1550,7 +1560,7 @@ void MainWindow::on_editPropertiesAction_triggered()
         p->theProperties->setSelection(0);
     theView->unlockSelection();
 //    theView->invalidate(true, true, false);
-    launchInteraction(new EditInteraction(this));
+    launchInteraction(new EditInteraction());
     view()->setInteracting(false);
     theInfo->setHtml(theView->interaction()->toHtml());
 }
@@ -1564,20 +1574,20 @@ void MainWindow::on_editRemoveAction_triggered()
 void MainWindow::on_editMoveAction_triggered()
 {
     if (M_PREFS->getSeparateMoveMode()) {
-        launchInteraction(new MoveNodeInteraction(this));
+        launchInteraction(new MoveNodeInteraction());
         theInfo->setHtml(theView->interaction()->toHtml());
     }
 }
 
 void MainWindow::on_editRotateAction_triggered()
 {
-    launchInteraction(new RotateInteraction(this));
+    launchInteraction(new RotateInteraction());
     theInfo->setHtml(theView->interaction()->toHtml());
 }
 
 void MainWindow::on_editScaleAction_triggered()
 {
-    launchInteraction(new ScaleInteraction(this));
+    launchInteraction(new ScaleInteraction());
     theInfo->setHtml(theView->interaction()->toHtml());
 }
 
@@ -1664,7 +1674,7 @@ bool MainWindow::importFiles(Document * mapDocument, const QStringList & fileNam
             TrackLayer* newLayer = new TrackLayer( baseFileName + " - " + tr("Waypoints"), baseFileName);
             mapDocument->add(newLayer);
             theTracklayers.append(newLayer);
-            importOK = importGPX(this, baseFileName, mapDocument, theTracklayers);
+            importOK = importGPX(baseFileName, mapDocument, theTracklayers);
             if (!importOK) {
                 for (int i=0; i<theTracklayers.size(); i++) {
                     mapDocument->remove(theTracklayers[i]);
@@ -1687,7 +1697,7 @@ bool MainWindow::importFiles(Document * mapDocument, const QStringList & fileNam
         else if (fn.toLower().endsWith(".osm")) {
             newLayer = new DrawingLayer( baseFileName );
             mapDocument->add(newLayer);
-            importOK = importOSM(this, baseFileName, mapDocument, newLayer);
+            importOK = importOSM(baseFileName, mapDocument, newLayer);
         }
 #ifndef FRISIUS_BUILD
         else if (fn.toLower().endsWith(".osc")) {
@@ -1984,7 +1994,7 @@ void MainWindow::on_fileDownloadAction_triggered()
 {
     createProgressDialog();
 
-    if (downloadOSM(this, theView->viewport(), theDocument)) {
+    if (downloadOSM(theView->viewport(), theDocument)) {
         on_editPropertiesAction_triggered();
     } else
         QMessageBox::warning(this, tr("Error downloading"), tr("The map could not be downloaded"));
@@ -2000,7 +2010,7 @@ void MainWindow::on_fileDownloadMoreAction_triggered()
 {
     createProgressDialog();
 
-    if (!downloadMoreOSM(this, theView->viewport(), theDocument)) {
+    if (!downloadMoreOSM(theView->viewport(), theDocument)) {
         QMessageBox::warning(this, tr("Error downloading"), tr("The map could not be downloaded"));
     }
 
@@ -2024,7 +2034,7 @@ void MainWindow::on_layersOpenstreetbugsAction_triggered()
 
     createProgressDialog();
 
-    if (!::downloadOpenstreetbugs(this, theView->viewport(), theDocument, sl)) {
+    if (!::downloadOpenstreetbugs(theView->viewport(), theDocument, sl)) {
         QMessageBox::warning(this, tr("Error downloading OpenStreetBugs"), tr("The OpenStreetBugs could not be downloaded"));
     }
 
@@ -2046,7 +2056,7 @@ void MainWindow::on_layersMapdustAction_triggered()
 
     createProgressDialog();
 
-    if (!::downloadMapdust(this, theView->viewport(), theDocument, sl)) {
+    if (!::downloadMapdust(theView->viewport(), theDocument, sl)) {
         QMessageBox::warning(this, tr("Error downloading MapDust"), tr("The MapDust bugs could not be downloaded"));
     }
 
@@ -2057,7 +2067,7 @@ void MainWindow::downloadFeatures(const QList<Feature*>& aDownloadList)
 {
     createProgressDialog();
 
-    if (!::downloadFeatures(this, aDownloadList, theDocument)) {
+    if (!::downloadFeatures(aDownloadList, theDocument)) {
         QMessageBox::warning(this, tr("Error downloading"), tr("The map could not be downloaded"));
     }
 
@@ -2146,7 +2156,7 @@ void MainWindow::on_viewZoomOutAction_triggered()
 
 void MainWindow::on_viewZoomWindowAction_triggered()
 {
-    launchInteraction(new ZoomInteraction(this));
+    launchInteraction(new ZoomInteraction());
 }
 
 void MainWindow::on_viewLockZoomAction_triggered()
@@ -2367,13 +2377,13 @@ void MainWindow::on_fileNewAction_triggered()
 
 void MainWindow::on_createDoubleWayAction_triggered()
 {
-    launchInteraction(new CreateDoubleWayInteraction(this));
+    launchInteraction(new CreateDoubleWayInteraction());
     theInfo->setHtml(theView->interaction()->toHtml());
 }
 
 void MainWindow::on_createRoundaboutAction_triggered()
 {
-    launchInteraction(new CreateRoundaboutInteraction(this));
+    launchInteraction(new CreateRoundaboutInteraction());
     theInfo->setHtml(theView->interaction()->toHtml());
 }
 
@@ -2382,7 +2392,7 @@ void MainWindow::on_createPolygonAction_triggered()
     QList< QPair <QString, QString> > tags;
     int Sides = QInputDialog::getInteger(this, MainWindow::tr("Create Polygon"), MainWindow::tr("Specify the number of sides"), M_PREFS->getPolygonSides(), 3);
     M_PREFS->setPolygonSides(Sides);
-    launchInteraction(new CreatePolygonInteraction(this, Sides, tags));
+    launchInteraction(new CreatePolygonInteraction(Sides, tags));
     theInfo->setHtml(theView->interaction()->toHtml());
 }
 
@@ -2390,7 +2400,7 @@ void MainWindow::on_createRectangleAction_triggered()
 {
     QList< QPair <QString, QString> > tags;
     tags << qMakePair(QString("building"), QString("yes"));
-    launchInteraction(new CreatePolygonInteraction(this, 4, tags));
+    launchInteraction(new CreatePolygonInteraction(4, tags));
     theInfo->setHtml(theView->interaction()->toHtml());
 }
 
@@ -2404,25 +2414,25 @@ void MainWindow::on_createRoadAction_triggered()
         firstPoint = dynamic_cast<Node*>(feature);
     }
 
-    launchInteraction(new CreateSingleWayInteraction(this, firstPoint, false));
+    launchInteraction(new CreateSingleWayInteraction(firstPoint, false));
     theInfo->setHtml(theView->interaction()->toHtml());
 }
 
 void MainWindow::on_createCurvedRoadAction_triggered()
 {
-    launchInteraction(new CreateSingleWayInteraction(this, NULL, true));
+    launchInteraction(new CreateSingleWayInteraction(NULL, true));
     theInfo->setHtml(theView->interaction()->toHtml());
 }
 
 void MainWindow::on_createAreaAction_triggered()
 {
-    launchInteraction(new CreateAreaInteraction(this));
+    launchInteraction(new CreateAreaInteraction());
     theInfo->setHtml(theView->interaction()->toHtml());
 }
 
 void MainWindow::on_createNodeAction_triggered()
 {
-    launchInteraction(new CreateNodeInteraction(this));
+    launchInteraction(new CreateNodeInteraction());
     theInfo->setHtml(theView->interaction()->toHtml());
 }
 
@@ -2491,7 +2501,7 @@ void MainWindow::on_featureSelectChildrenAction_triggered()
         for (int i=0; i<F->size(); ++i)
             theFeatures << F->get(i);
     }
-    p->theProperties->setSelection(theFeatures);
+    p->theProperties->setMultiSelection(theFeatures);
     p->theProperties->checkMenuStatus();
     invalidateView();
 }
@@ -2505,7 +2515,7 @@ void MainWindow::on_featureSelectParentsAction_triggered()
             theFeatures << Feat;
         }
     }
-    p->theProperties->setSelection(theFeatures);
+    p->theProperties->setMultiSelection(theFeatures);
     p->theProperties->checkMenuStatus();
     invalidateView();
 }
@@ -2696,7 +2706,7 @@ void MainWindow::on_roadAxisAlignAction_triggered()
 
 void MainWindow::on_roadExtrudeAction_triggered()
 {
-    launchInteraction(new ExtrudeInteraction(this));
+    launchInteraction(new ExtrudeInteraction());
     theInfo->setHtml(theView->interaction()->toHtml());
 }
 
@@ -3113,13 +3123,13 @@ void MainWindow::on_toolsShortcutsAction_triggered()
             theActions << a;
     }
 
-    ActionsDialog dlg(theActions, this);
+    ActionsDialog dlg(theActions);
     dlg.exec();
 }
 
 void MainWindow::toolsPreferencesAction_triggered(bool focusData)
 {
-    PreferencesDialog* Pref = new PreferencesDialog(this);
+    PreferencesDialog* Pref = new PreferencesDialog();
     if (focusData)
         Pref->tabPref->setCurrentWidget(Pref->tabData);
     else
@@ -3177,7 +3187,7 @@ void MainWindow::preferencesChanged(PreferencesDialog* prefs)
     updateStyleMenu();
 
     updateMenu();
-    launchInteraction(new EditInteraction(this));
+    launchInteraction(new EditInteraction());
     invalidateView(false);
 }
 
@@ -4454,7 +4464,7 @@ void MainWindow::syncOSM(const QString& aWeb, const QString& aUser, const QStrin
     {
         Future.resetUpdates();
         DirtyListExecutorOSC Exec(theDocument,Future,aWeb,aUser,aPwd,Describer.tasks());
-        ok = Exec.executeChanges(this);
+        ok = Exec.executeChanges();
         if (ok) {
             if (M_PREFS->getAutoHistoryCleanup() && !theDocument->getDirtyOrOriginLayer()->getDirtySize())
                 theDocument->history().cleanup();

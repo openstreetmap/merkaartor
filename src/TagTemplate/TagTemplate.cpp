@@ -12,16 +12,22 @@
 
 #include "TagTemplate.h"
 
+#include "Global.h"
 #include "Features.h"
 #include "FeatureCommands.h"
 #include "MapView.h"
+#include "PropertiesDock.h"
+#include "RelationCommands.h"
+#include "RelationMemberDelegate.h"
 
 #include <QComboBox>
 #include <QLabel>
 #include <QCheckBox>
 #include <QGroupBox>
 #include <QLineEdit>
+#include <QListView>
 #include <QRegExp>
+#include <QMenu>
 
 /** TagTemplateWidget **/
 
@@ -48,15 +54,14 @@ TagTemplateWidget* TagTemplateWidget::fromXml(const QDomElement& e)
     TagTemplateWidget* aTW = NULL;
     if (e.attribute("type") == "combo") {
         aTW = TagTemplateWidgetCombo::fromXml(e);
-    } else
-    if (e.attribute("type") == "yesno") {
+    } else if (e.attribute("type") == "yesno") {
         aTW = TagTemplateWidgetYesno::fromXml(e);
-    } else
-    if (e.attribute("type") == "constant") {
+    } else if (e.attribute("type") == "constant") {
         aTW = TagTemplateWidgetConstant::fromXml(e);
-    } else
-    if (e.attribute("type") == "edit") {
+    } else if (e.attribute("type") == "edit") {
         aTW = TagTemplateWidgetEdit::fromXml(e);
+    } else if (e.attribute("type") == "memberlist") {
+        aTW = TagTemplateWidgetMemberList::fromXml(e);
     } else
         Q_ASSERT(false);
 
@@ -69,22 +74,24 @@ TagTemplateWidget* TagTemplateWidget::fromXml(const QDomElement& e)
     return aTW;
 }
 
-void TagTemplateWidget::parseCommonElements(const QDomElement& e)
+bool TagTemplateWidget::parseCommonElements(const QDomElement& e)
 {
     if (e.tagName() == "description") {
         theDescriptions.insert(e.attribute("locale"), e.firstChild().toText().nodeValue());
-    } else
-    if (e.tagName() == "link") {
+        return true;
+    } else if (e.tagName() == "link") {
         theUrl = QUrl(e.attribute("src"));
-    } else
-    if (e.tagName() == "selector") {
+        return true;
+    } else if (e.tagName() == "selector") {
         theSelector = TagSelector::parse(e.attribute("expr"));
-    }
-    if (e.tagName() == "value") {
+        return true;
+    } else if (e.tagName() == "value") {
         TagTemplateWidgetValue* aTCV = TagTemplateWidgetValue::fromXml(e);
         if (aTCV)
             theValues.append(aTCV);
+        return true;
     }
+    return false;
 }
 
 void TagTemplateWidget::generateCommonElements(QDomElement& e)
@@ -188,7 +195,7 @@ QWidget* TagTemplateWidgetCombo::getWidget(const Feature* F, const MapView* V)
 
     QComboBox* aCombo = new QComboBox();
     aCombo->setEditable(true);
-//	aCombo->setSizeAdjustPolicy(QComboBox::AdjustToMinimumContentsLengthWithIcon);
+    //	aCombo->setSizeAdjustPolicy(QComboBox::AdjustToMinimumContentsLengthWithIcon);
     aCombo->setSizePolicy(QSizePolicy::Maximum, QSizePolicy::Fixed);
     aCombo->setMinimumWidth(100);
     aLayout->addWidget(aCombo);
@@ -340,10 +347,10 @@ QWidget* TagTemplateWidgetYesno::getWidget(const Feature* F, const MapView* V)
     if (val == "yes" || val == "1" || val == "true")
         aCB->setCheckState(Qt::Checked);
     else
-    if (val == "no" || val == "0" || val == "false")
-        aCB->setCheckState(Qt::Unchecked);
-    else
-        aCB->setCheckState(Qt::PartiallyChecked);
+        if (val == "no" || val == "0" || val == "false")
+            aCB->setCheckState(Qt::Unchecked);
+        else
+            aCB->setCheckState(Qt::PartiallyChecked);
 
     if (!theUrl.isEmpty())
         aLabel->setText(QString("<a href=\"%1\">%2</a>").arg(theUrl.toString()).arg(theDescription));
@@ -638,7 +645,6 @@ bool TagTemplateWidgetEdit::toXML(QDomElement& xParent, bool header)
         if (!theId.isEmpty())
             e.setAttribute("id", theId);
         e.setAttribute("type", theType);
-        e.setAttribute("tag", theTag);
         generateCommonElements(e);
     }
 
@@ -654,6 +660,368 @@ void TagTemplateWidgetEdit::on_editingFinished()
     } else {
         emit tagChanged(theTag, W->text());
     }
+}
+
+/** TagTemplateWidgetMemberList **/
+
+QWidget* TagTemplateWidgetMemberList::getWidget(const Feature* F, const MapView* V)
+{
+    if (theSelector && (theSelector->matches(F,V->pixelPerM()) != TagSelect_Match && theSelector->matches(F,V->pixelPerM()) != TagSelect_DefaultMatch))
+        return NULL;
+    if (!CHECK_RELATION(F))
+        return NULL;
+    R = STATIC_CAST_RELATION(const_cast<Feature*>(F));
+
+    QString lang = getDefaultLanguage();
+    QString defLang = "en";
+    if (lang == "-" || !M_PREFS->getTranslateTags())
+        lang = "en";
+
+    theWidget = new QWidget();
+    QVBoxLayout* aLayout = new QVBoxLayout(theWidget);
+    aLayout->setContentsMargins(0, 0, 0, 0);
+
+    QWidget* memberlist = new QWidget(theWidget);
+    memberlist->setContentsMargins(0, 0, 0, 0);
+    RelationUi.setupUi(memberlist);
+    RelationUi.MembersView->setContextMenuPolicy(Qt::CustomContextMenu);
+    RelationUi.MembersView->horizontalHeader()->setStretchLastSection(true);
+
+    RelationMemberDelegate* delegate = new RelationMemberDelegate(RestrictedRoles, RestrictedTypes, RelationUi.MembersView);
+    RelationUi.MembersView->setItemDelegate(delegate);
+
+    connect(RelationUi.MembersView, SIGNAL(customContextMenuRequested(const QPoint &)), this, SLOT(on_Member_customContextMenuRequested(const QPoint &)));
+    connect(RelationUi.MembersView, SIGNAL(clicked(QModelIndex)), this, SLOT(on_Member_clicked(QModelIndex)));
+    connect(RelationUi.RemoveMemberButton,SIGNAL(clicked()),this, SLOT(on_RemoveMemberButton_clicked()));
+    connect(RelationUi.btMemberUp, SIGNAL(clicked()), SLOT(on_btMemberUp_clicked()));
+    connect(RelationUi.btMemberDown, SIGNAL(clicked()), SLOT(on_btMemberDown_clicked()));
+    RelationUi.MembersView->setModel(R->referenceMemberModel());
+    aLayout->addWidget(memberlist);
+
+    centerAction = new QAction(NULL, theWidget);
+    connect(centerAction, SIGNAL(triggered()), this, SLOT(on_centerAction_triggered()));
+    centerZoomAction = new QAction(NULL, theWidget);
+    connect(centerZoomAction, SIGNAL(triggered()), this, SLOT(on_centerZoomAction_triggered()));
+    selectAction = new QAction(NULL, theWidget);
+    connect(selectAction, SIGNAL(triggered()), this, SLOT(on_Member_selected()));
+    centerAction->setText(tr("Center map"));
+    centerZoomAction->setText(tr("Center && Zoom map"));
+    selectAction->setText(tr("Select member"));
+
+    theMainWidget = memberlist;
+    theLabelWidget = NULL;
+
+    return theWidget;
+}
+
+void TagTemplateWidgetMemberList::on_RemoveMemberButton_clicked()
+{
+    QModelIndexList indexes = RelationUi.MembersView->selectionModel()->selectedIndexes();
+    QModelIndex index;
+
+    foreach(index, indexes)
+    {
+        QModelIndex idx = index.sibling(index.row(),0);
+        QVariant Content(R->referenceMemberModel()->data(idx,Qt::UserRole));
+        if (Content.isValid())
+        {
+            Feature* F = Content.value<Feature*>();
+            if (F) {
+                CommandList* L = new CommandList(MainWindow::tr("Remove member '%1' on %2").arg(F->description()).arg(R->description()), R);
+                if (R->find(F) < R->size())
+                    L->add(new RelationRemoveFeatureCommand(R,F,CUR_DOCUMENT->getDirtyOrOriginLayer(R->layer())));
+                if (L->empty())
+                    delete L;
+                else
+                {
+                    CUR_DOCUMENT->addHistory(L);
+                    CUR_MAINWINDOW->invalidateView();
+                    return;
+                }
+            }
+        }
+    }
+}
+
+void TagTemplateWidgetMemberList::on_Member_customContextMenuRequested(const QPoint & pos)
+{
+    QModelIndex ix = RelationUi.MembersView->indexAt(pos);
+    if (ix.isValid()) {
+        QMenu menu(RelationUi.MembersView);
+        menu.addAction(centerAction);
+        menu.addAction(centerZoomAction);
+        menu.addAction(selectAction);
+        menu.exec(RelationUi.MembersView->mapToGlobal(pos));
+    }
+}
+
+void TagTemplateWidgetMemberList::on_centerAction_triggered()
+{
+    CoordBox cb;
+    QModelIndexList indexes = RelationUi.MembersView->selectionModel()->selectedIndexes();
+    QModelIndex index;
+
+    foreach(index, indexes)
+    {
+        QModelIndex idx = index.sibling(index.row(),0);
+        QVariant Content(R->referenceMemberModel()->data(idx,Qt::UserRole));
+        if (Content.isValid())
+        {
+            Feature* F = Content.value<Feature*>();
+            if (F) {
+                //setSelection(F);
+                cb = F->boundingBox();
+            }
+        }
+    }
+    Coord c = cb.center();
+    CUR_VIEW->setCenter(c, CUR_VIEW->rect());
+    CUR_MAINWINDOW->setUpdatesEnabled(true);
+    CUR_MAINWINDOW->invalidateView(false);
+}
+
+void TagTemplateWidgetMemberList::on_centerZoomAction_triggered()
+{
+    CoordBox cb;
+    QModelIndexList indexes = RelationUi.MembersView->selectionModel()->selectedIndexes();
+    QModelIndex index;
+
+    foreach(index, indexes)
+    {
+        QModelIndex idx = index.sibling(index.row(),0);
+        QVariant Content(R->referenceMemberModel()->data(idx,Qt::UserRole));
+        if (Content.isValid())
+        {
+            Feature* F = Content.value<Feature*>();
+            if (F) {
+                //setSelection(F);
+                cb = F->boundingBox();
+                CoordBox mini(cb.center()-COORD_ENLARGE, cb.center()+COORD_ENLARGE);
+                cb.merge(mini);
+                cb = cb.zoomed(1.1);
+            }
+        }
+    }
+    CUR_VIEW->setViewport(cb, CUR_VIEW->rect());
+    CUR_MAINWINDOW->setUpdatesEnabled(true);
+    CUR_MAINWINDOW->invalidateView(false);
+}
+
+void TagTemplateWidgetMemberList::on_Member_clicked(const QModelIndex & index)
+{
+    QList<Feature*> Highlighted;
+
+    QVariant Content(R->referenceMemberModel()->data(index,Qt::UserRole));
+    if (Content.isValid())
+    {
+        Feature* F = Content.value<Feature*>();
+        if (F)
+            Highlighted.push_back(F);
+    }
+    if (!Highlighted.isEmpty())
+        PROPERTIES_DOCK->setHighlighted(Highlighted);
+    CUR_VIEW->update();
+}
+
+void TagTemplateWidgetMemberList::on_Member_selected()
+{
+    QList<Feature*> Features;
+    QModelIndexList indexes = RelationUi.MembersView->selectionModel()->selectedIndexes();
+    QModelIndex index;
+
+    foreach(index, indexes)
+    {
+        QModelIndex idx = index.sibling(index.row(),0);
+        QVariant Content(R->referenceMemberModel()->data(idx,Qt::UserRole));
+        if (Content.isValid())
+        {
+            Feature* F = Content.value<Feature*>();
+            if (F) {
+                Features.append(F);
+            }
+        }
+    }
+    if (!Features.isEmpty())
+        PROPERTIES_DOCK->setMultiSelection(Features);
+    CUR_MAINWINDOW->invalidateView(false);
+}
+
+void TagTemplateWidgetMemberList::on_btMemberUp_clicked()
+{
+    CommandList* theList = new CommandList(MainWindow::tr("Reorder members in relation %1").arg(R->id().numId), R);
+
+    QModelIndex index;
+    foreach(index, RelationUi.MembersView->selectionModel()->selectedIndexes())
+    {
+        RelationUi.MembersView->selectionModel()->select(index, QItemSelectionModel::Select | QItemSelectionModel::Rows);
+    }
+    QModelIndexList indexes = RelationUi.MembersView->selectionModel()->selectedRows(0);
+    QModelIndexList newSel;
+    foreach(index, indexes)
+    {
+        QVariant Content(R->referenceMemberModel()->data(index,Qt::UserRole));
+        if (Content.isValid())
+        {
+            Feature* F = Content.value<Feature*>();
+            if (F) {
+                int pos = R->find(F);
+                if (!pos)
+                    break;
+                QString role = R->getRole(pos);
+                theList->add(new RelationRemoveFeatureCommand(R, pos, CUR_DOCUMENT->getDirtyOrOriginLayer(R->layer())));
+                theList->add(new RelationAddFeatureCommand(R, role, F, pos-1, CUR_DOCUMENT->getDirtyOrOriginLayer(R->layer())));
+                newSel.append(RelationUi.MembersView->model()->index(pos-1, 0));
+            }
+        }
+    }
+    RelationUi.MembersView->selectionModel()->clearSelection();
+    foreach(index, newSel)
+    {
+        RelationUi.MembersView->selectionModel()->select(index, QItemSelectionModel::Select | QItemSelectionModel::Rows);
+    }
+    if (theList->empty())
+        delete theList;
+    else
+    {
+        CUR_DOCUMENT->addHistory(theList);
+        CUR_MAINWINDOW->invalidateView();
+    }
+}
+
+void TagTemplateWidgetMemberList::on_btMemberDown_clicked()
+{
+    CommandList* theList = new CommandList(MainWindow::tr("Reorder members in relation %1").arg(R->id().numId), R);
+
+    QModelIndex index;
+    foreach(index, RelationUi.MembersView->selectionModel()->selectedIndexes())
+    {
+        RelationUi.MembersView->selectionModel()->select(index, QItemSelectionModel::Select | QItemSelectionModel::Rows);
+    }
+    QModelIndexList indexes = RelationUi.MembersView->selectionModel()->selectedRows(0);
+    QModelIndexList newSel;
+    // We need to iterate backwards so that earlier moves don't corrupt the inputs to later ones
+    for (int i = indexes.count()-1;  i >= 0;  i--)
+    {
+        index = indexes[i];
+        QVariant Content(R->referenceMemberModel()->data(index,Qt::UserRole));
+        if (Content.isValid())
+        {
+            Feature* F = Content.value<Feature*>();
+            if (F) {
+                int pos = R->find(F);
+                if (pos >= R->size()-1)
+                    break;
+                QString role = R->getRole(pos);
+                theList->add(new RelationRemoveFeatureCommand(R, pos, CUR_DOCUMENT->getDirtyOrOriginLayer(R->layer())));
+                theList->add(new RelationAddFeatureCommand(R, role, F, pos+1, CUR_DOCUMENT->getDirtyOrOriginLayer(R->layer())));
+                newSel.append(RelationUi.MembersView->model()->index(pos+1, 0));
+            }
+        }
+    }
+    RelationUi.MembersView->selectionModel()->clearSelection();
+    foreach(index, newSel)
+    {
+        RelationUi.MembersView->selectionModel()->select(index, QItemSelectionModel::Select | QItemSelectionModel::Rows);
+    }
+    if (theList->empty())
+        delete theList;
+    else
+    {
+        CUR_DOCUMENT->addHistory(theList);
+        CUR_MAINWINDOW->invalidateView();
+    }
+}
+
+void TagTemplateWidgetMemberList::apply(const Feature*)
+{
+}
+
+TagTemplateWidgetMemberList* TagTemplateWidgetMemberList::fromXml(const QDomElement& e)
+{
+    TagTemplateWidgetMemberList* aCW = new TagTemplateWidgetMemberList();
+
+    for(QDomNode n = e.firstChild(); !n.isNull(); n = n.nextSibling()) {
+        QDomElement t = n.toElement();
+        if (t.isNull())
+            continue;
+
+        if (!aCW->parseCommonElements(t)) {
+            if (t.tagName() == "restrictroles") {
+                aCW->RestrictedRoles = t.firstChild().toText().nodeValue().split(',');
+            } else if (t.tagName() == "restricttypes") {
+                QStringList sl = t.firstChild().toText().nodeValue().split(',');
+                foreach (QString s, sl)  {
+                    if (s == "node")
+                        aCW->RestrictedTypes << IFeature::Point;
+                    else if (s == "way")
+                        aCW->RestrictedTypes << IFeature::LineString;
+                    else if (s == "area")
+                        aCW->RestrictedTypes << IFeature::Polygon;
+                    else if (s == "relation")
+                        aCW->RestrictedTypes << IFeature::OsmRelation;
+                }
+            }
+        }
+    }
+
+    return aCW;
+}
+
+bool TagTemplateWidgetMemberList::toXML(QDomElement& xParent, bool header)
+{
+    bool OK = true;
+
+    if (!header) {
+        QDomElement e = xParent.ownerDocument().createElement("widgetref");
+        xParent.appendChild(e);
+        if (!theId.isEmpty())
+            e.setAttribute("id", theId);
+        else
+            e.setAttribute("id", theTag);
+    } else {
+        QDomElement e = xParent.ownerDocument().createElement("widget");
+        xParent.appendChild(e);
+
+        if (!theId.isEmpty())
+            e.setAttribute("id", theId);
+        e.setAttribute("type", theType);
+        generateCommonElements(e);
+        if (RestrictedRoles.size()) {
+            QDomElement c = xParent.ownerDocument().createElement("restrictroles");
+            e.appendChild(c);
+            QDomText v = c.ownerDocument().createTextNode(RestrictedRoles.join(","));
+            c.appendChild(v);
+        }
+        if (RestrictedTypes.size()) {
+            QDomElement c = xParent.ownerDocument().createElement("restricttypes");
+            e.appendChild(c);
+            QStringList sl;
+            foreach(IFeature::FeatureType ft, RestrictedTypes) {
+                switch (ft) {
+                case IFeature::Point:
+                    sl << "node";
+                    break;
+
+                case IFeature::LineString:
+                    sl << "way";
+                    break;
+
+                case IFeature::Polygon:
+                    sl << "area";
+                    break;
+
+                case IFeature::OsmRelation:
+                    sl << "relation";
+                    break;
+                }
+            }
+
+            QDomText v = c.ownerDocument().createTextNode(sl.join(","));
+            c.appendChild(v);
+        }
+    }
+
+    return OK;
 }
 
 
@@ -778,29 +1146,29 @@ TagTemplate* TagTemplate::fromXml(const QDomElement& e, TagTemplates* templates)
         if (t.tagName() == "description") {
             aTemplate->theDescriptions.insert(t.attribute("locale"), t.firstChild().toText().nodeValue());
         } else
-        if (t.tagName() == "selector") {
-            TagSelector* aSel = TagSelector::parse(t.attribute("expr"));
-            if (!aSel)
-                return NULL;
-            aTemplate->setSelector(aSel);
-        } else
-        if (t.tagName() == "widget") {
-            TagTemplateWidget* aTW = TagTemplateWidget::fromXml(t);
-            if (aTW) {
-                templates->addWidget(aTW);
-                aTemplate->theFields.append(aTW);
-                connect(aTW, SIGNAL(tagChanged(QString, QString)), aTemplate, SLOT(on_tag_changed(QString, QString)));
-                connect(aTW, SIGNAL(tagCleared(QString)), aTemplate, SLOT(on_tag_cleared(QString)));
-            }
-        } else
-        if (t.tagName() == "widgetref") {
-            TagTemplateWidget* aTW = templates->findWidget(t.attribute("id"));
-            if (aTW) {
-                aTemplate->theFields.append(aTW);
-                connect(aTW, SIGNAL(tagChanged(QString, QString)), aTemplate, SLOT(on_tag_changed(QString, QString)));
-                connect(aTW, SIGNAL(tagCleared(QString)), aTemplate, SLOT(on_tag_cleared(QString)));
-            }
-        }
+            if (t.tagName() == "selector") {
+                TagSelector* aSel = TagSelector::parse(t.attribute("expr"));
+                if (!aSel)
+                    return NULL;
+                aTemplate->setSelector(aSel);
+            } else
+                if (t.tagName() == "widget") {
+                    TagTemplateWidget* aTW = TagTemplateWidget::fromXml(t);
+                    if (aTW) {
+                        templates->addWidget(aTW);
+                        aTemplate->theFields.append(aTW);
+                        connect(aTW, SIGNAL(tagChanged(QString, QString)), aTemplate, SLOT(on_tag_changed(QString, QString)));
+                        connect(aTW, SIGNAL(tagCleared(QString)), aTemplate, SLOT(on_tag_cleared(QString)));
+                    }
+                } else
+                    if (t.tagName() == "widgetref") {
+                        TagTemplateWidget* aTW = templates->findWidget(t.attribute("id"));
+                        if (aTW) {
+                            aTemplate->theFields.append(aTW);
+                            connect(aTW, SIGNAL(tagChanged(QString, QString)), aTemplate, SLOT(on_tag_changed(QString, QString)));
+                            connect(aTW, SIGNAL(tagCleared(QString)), aTemplate, SLOT(on_tag_cleared(QString)));
+                        }
+                    }
     }
     return aTemplate;
 }
@@ -895,10 +1263,10 @@ QWidget* TagTemplates::getWidget(const Feature* F, const MapView* V)
     theCombo = new QComboBox();
     theCombo->setEditable(true);
     theCombo->setInsertPolicy(QComboBox::InsertAtBottom);
-//	QFont f = theCombo->font();
-//	f.setPointSize(6);
-//	theCombo->setFont(f);
-//	theCombo->setMaximumHeight(16);
+    //	QFont f = theCombo->font();
+    //	f.setPointSize(6);
+    //	theCombo->setFont(f);
+    //	theCombo->setMaximumHeight(16);
     theCombo->setMinimumWidth(100);
     theCombo->setSizePolicy(QSizePolicy::Maximum, QSizePolicy::Preferred);
 
@@ -999,19 +1367,19 @@ TagTemplates* TagTemplates::fromXml(const QDomElement& e)
             else
                 return NULL;
         } else
-        if (t.tagName() == "widgets") {
-            for(QDomNode n = t.firstChild(); !n.isNull(); n = n.nextSibling())
-            {
-                QDomElement w = n.toElement();
-                if (w.tagName() == "widget") {
-                    TagTemplateWidget* aTW = TagTemplateWidget::fromXml(w);
-                    if (aTW)
-                        aTemplates->addWidget(aTW);
-                    else
-                        return NULL;
+            if (t.tagName() == "widgets") {
+                for(QDomNode n = t.firstChild(); !n.isNull(); n = n.nextSibling())
+                {
+                    QDomElement w = n.toElement();
+                    if (w.tagName() == "widget") {
+                        TagTemplateWidget* aTW = TagTemplateWidget::fromXml(w);
+                        if (aTW)
+                            aTemplates->addWidget(aTW);
+                        else
+                            return NULL;
+                    }
                 }
             }
-        }
     }
     return aTemplates;
 }
@@ -1035,19 +1403,19 @@ bool TagTemplates::mergeXml(const QDomElement& e)
             else
                 return false;
         } else
-        if (t.tagName() == "widgets") {
-            for(QDomNode n = t.firstChild(); !n.isNull(); n = n.nextSibling())
-            {
-                QDomElement w = n.toElement();
-                if (w.tagName() == "widget") {
-                    TagTemplateWidget* aTW = TagTemplateWidget::fromXml(w);
-                    if (aTW)
-                        addWidget(aTW);
-                    else
-                        return false;
+            if (t.tagName() == "widgets") {
+                for(QDomNode n = t.firstChild(); !n.isNull(); n = n.nextSibling())
+                {
+                    QDomElement w = n.toElement();
+                    if (w.tagName() == "widget") {
+                        TagTemplateWidget* aTW = TagTemplateWidget::fromXml(w);
+                        if (aTW)
+                            addWidget(aTW);
+                        else
+                            return false;
+                    }
                 }
             }
-        }
     }
     return true;
 }

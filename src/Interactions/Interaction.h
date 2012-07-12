@@ -2,7 +2,6 @@
 #define MERKATOR_INTERACTION_H_
 
 class Node;
-class MainWindow;
 class Projection;
 class Node;
 class Way;
@@ -26,14 +25,14 @@ class QPainter;
 
 #include <algorithm>
 
-#define XY_TO_COORD(x)  theMain->view()->fromView(x)
-#define COORD_TO_XY(x)  theMain->view()->toView(x)
+#define XY_TO_COORD(x)  CUR_VIEW->fromView(x)
+#define COORD_TO_XY(x)  CUR_VIEW->toView(x)
 
 class Interaction : public QObject
 {
     Q_OBJECT
 public:
-    Interaction(MainWindow* aMain);
+    Interaction();
     virtual ~Interaction();
 
     virtual void mousePressEvent(QMouseEvent * event);
@@ -47,14 +46,12 @@ public:
 
     MapView* view();
     Document* document();
-    MainWindow* main();
     bool panning() const;
 
     virtual void updateSnap(QMouseEvent* event);
     Feature* lastSnap();
 
 protected:
-    MainWindow* theMain;
     bool Panning;
     QPoint FirstPan;
     QPoint LastPan;
@@ -84,7 +81,7 @@ protected:
 class FeatureSnapInteraction : public Interaction
 {
 public:
-    FeatureSnapInteraction(MainWindow* aMain);
+    FeatureSnapInteraction();
 
     virtual void paintEvent(QPaintEvent* anEvent, QPainter& thePainter);
 

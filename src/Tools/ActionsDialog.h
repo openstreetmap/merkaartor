@@ -8,14 +8,13 @@ class QAction;
 class QTableWidget;
 class QTableItem;
 class QWidget;
-class MainWindow;
 
 class ActionsDialog : public QDialog
 {
     Q_OBJECT
 
 public:
-    ActionsDialog(QList<QAction *>& actions, MainWindow *parent = 0);
+    ActionsDialog(QList<QAction *>& actions);
 
 protected slots:
     void accept();
@@ -24,11 +23,10 @@ protected slots:
 private slots:
     void recordAction(int row, int column);
     void validateAction(int row, int column);
-	void importShortcuts();
-	void exportShortcuts();
+    void importShortcuts();
+    void exportShortcuts();
 
 private:
-	MainWindow* Main;
     QString oldAccelText;
     QTableWidget *actionsTable;
     QList<QAction*> actionsList;

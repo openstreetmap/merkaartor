@@ -12,7 +12,7 @@ class CreateRoundaboutInteraction : public Interaction
     Q_OBJECT
 
     public:
-        CreateRoundaboutInteraction(MainWindow* aMain);
+        CreateRoundaboutInteraction();
         ~CreateRoundaboutInteraction();
 
         virtual void mousePressEvent(QMouseEvent * event);

@@ -15,35 +15,33 @@
 #include "MDockAncestor.h"
 #include <QTextBrowser>
 
-class MainWindow;
 class Feature;
 
 /**
-	@author cbro <cbro@semperpax.com>
+    @author cbro <cbro@semperpax.com>
 */
 class InfoDock : public MDockAncestor
 {
 Q_OBJECT
 public:
-    InfoDock(MainWindow* aParent);
+    InfoDock();
 
     ~InfoDock();
 
 public:
-	void setHtml(QString html);
-	QString getHtml();
-	void setHoverHtml(QString html);
-	void unsetHoverHtml();
+    void setHtml(QString html);
+    QString getHtml();
+    void setHoverHtml(QString html);
+    void unsetHoverHtml();
         void changeEvent(QEvent *);
         void retranslateUi();
 
 private slots:
-	void on_anchorClicked(const QUrl & link);
+    void on_anchorClicked(const QUrl & link);
 
 private:
-	MainWindow* Main;
-	QTextBrowser* theText;
-	QString currentHtml;
+    QTextBrowser* theText;
+    QString currentHtml;
 };
 
 #endif

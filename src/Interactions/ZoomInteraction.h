@@ -10,7 +10,7 @@ class MapView;
 class ZoomInteraction : public Interaction
 {
     public:
-        ZoomInteraction(MainWindow* aMain);
+        ZoomInteraction();
         ~ZoomInteraction();
 
         virtual void mouseReleaseEvent(QMouseEvent * event);

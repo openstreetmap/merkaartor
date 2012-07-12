@@ -8,7 +8,7 @@ class MoveNodeInteraction;
 class CreateNodeInteraction : public FeatureSnapInteraction
 {
     public:
-        CreateNodeInteraction(MainWindow* aMain);
+        CreateNodeInteraction();
         ~CreateNodeInteraction(void);
 
 

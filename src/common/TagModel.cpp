@@ -1,14 +1,14 @@
 #include <algorithm>
+
+#include "Global.h"
 #include "TagModel.h"
-#include "MainWindow.h"
 #include "DocumentCommands.h"
 #include "FeatureCommands.h"
 #include "Document.h"
 #include "Feature.h"
 #include "Layer.h"
 
-TagModel::TagModel(MainWindow* aMain)
-: Main(aMain)
+TagModel::TagModel()
 {
 }
 
@@ -138,13 +138,13 @@ bool TagModel::setData(const QModelIndex &index, const QVariant &value, int role
 
                     if (!theFeatures[i]->isDirty() && !theFeatures[i]->hasOSMId() && theFeatures[i]->isUploadable()) {
                         bool userAdded = !(theFeatures[i]->id().type & IFeature::Conflict);
-                        L->add(new AddFeatureCommand(Main->document()->getDirtyOrOriginLayer(),theFeatures[i],userAdded));
+                        L->add(new AddFeatureCommand(CUR_DOCUMENT->getDirtyOrOriginLayer(),theFeatures[i],userAdded));
                     }
-                    L->add(new SetTagCommand(theFeatures[i],value.toString(),"", Main->document()->getDirtyOrOriginLayer(theFeatures[i]->layer())));
+                    L->add(new SetTagCommand(theFeatures[i],value.toString(),"", CUR_DOCUMENT->getDirtyOrOriginLayer(theFeatures[i]->layer())));
                     theFeatures[i]->setLastUpdated(Feature::User);
                 }
                 Tags.push_back(qMakePair(value.toString(),QString("")));
-                Main->document()->addHistory(L);
+                CUR_DOCUMENT->addHistory(L);
                 endInsertRows();
             }
             else
@@ -171,14 +171,14 @@ bool TagModel::setData(const QModelIndex &index, const QVariant &value, int role
                 if (j != -1) {
                     if (!theFeatures[i]->isDirty() && !theFeatures[i]->hasOSMId() && theFeatures[i]->isUploadable()) {
                         bool userAdded = !(theFeatures[i]->id().type & IFeature::Conflict);
-                        L->add(new AddFeatureCommand(Main->document()->getDirtyOrOriginLayer(),theFeatures[i],userAdded));
+                        L->add(new AddFeatureCommand(CUR_DOCUMENT->getDirtyOrOriginLayer(),theFeatures[i],userAdded));
                     }
-                    L->add(new SetTagCommand(theFeatures[i],j , Tags[index.row()].first, Tags[index.row()].second, Main->document()->getDirtyOrOriginLayer(theFeatures[i]->layer())));
+                    L->add(new SetTagCommand(theFeatures[i],j , Tags[index.row()].first, Tags[index.row()].second, CUR_DOCUMENT->getDirtyOrOriginLayer(theFeatures[i]->layer())));
                 }
                 theFeatures[i]->setLastUpdated(Feature::User);
             }
-            Main->document()->addHistory(L);
-            Main->invalidateView(false);
+            CUR_DOCUMENT->addHistory(L);
+            CUR_MAINWINDOW->invalidateView(false);
         }
         emit dataChanged(index, index);
         return true;

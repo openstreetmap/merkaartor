@@ -1,6 +1,5 @@
 #include "CreateRoundaboutInteraction.h"
 
-#include "MainWindow.h"
 #include "DocumentCommands.h"
 #include "WayCommands.h"
 #include "NodeCommands.h"
@@ -17,20 +16,20 @@
 
 #include <math.h>
 
-CreateRoundaboutInteraction::CreateRoundaboutInteraction(MainWindow* aMain)
-    : Interaction(aMain), Center(0,0), HaveCenter(false), theDock(0)
+CreateRoundaboutInteraction::CreateRoundaboutInteraction()
+    : Interaction(), Center(0,0), HaveCenter(false), theDock(0)
 {
 #ifndef _MOBILE
-    theDock = new QDockWidget(theMain);
+    theDock = new QDockWidget(CUR_MAINWINDOW);
     QWidget* DockContent = new QWidget(theDock);
     DockData.setupUi(DockContent);
     theDock->setWidget(DockContent);
     theDock->setAllowedAreas(Qt::LeftDockWidgetArea);
-    theMain->addDockWidget(Qt::LeftDockWidgetArea, theDock);
+    CUR_MAINWINDOW->addDockWidget(Qt::LeftDockWidgetArea, theDock);
     theDock->show();
     DockData.DriveRight->setChecked(M_PREFS->getrightsidedriving());
 
-    theMain->view()->setCursor(cursor());
+    CUR_VIEW->setCursor(cursor());
 #endif
 }
 
@@ -84,14 +83,14 @@ void CreateRoundaboutInteraction::mousePressEvent(QMouseEvent * event)
             QBrush SomeBrush(QColor(0xff,0x77,0x11,128));
             QPen TP(SomeBrush,view()->pixelPerM()*4+1);
             QPointF Prev(CenterF.x()+cos(Modifier*Angle/2)*Radius,CenterF.y()+sin(Modifier*Angle/2)*Radius);
-            Node* First = g_backend.allocNode(theMain->document()->getDirtyOrOriginLayer(), XY_TO_COORD(Prev.toPoint()));
-            Way* R = g_backend.allocWay(theMain->document()->getDirtyOrOriginLayer());
+            Node* First = g_backend.allocNode(CUR_DOCUMENT->getDirtyOrOriginLayer(), XY_TO_COORD(Prev.toPoint()));
+            Way* R = g_backend.allocWay(CUR_DOCUMENT->getDirtyOrOriginLayer());
             CommandList* L  = new CommandList(MainWindow::tr("Create Roundabout %1").arg(R->id().numId), R);
-            L->add(new AddFeatureCommand(theMain->document()->getDirtyOrOriginLayer(),R,true));
+            L->add(new AddFeatureCommand(CUR_DOCUMENT->getDirtyOrOriginLayer(),R,true));
             R->add(First);
-            L->add(new AddFeatureCommand(theMain->document()->getDirtyOrOriginLayer(),First,true));
+            L->add(new AddFeatureCommand(CUR_DOCUMENT->getDirtyOrOriginLayer(),First,true));
             if (M_PREFS->getAutoSourceTag()) {
-                QStringList sl = theMain->document()->getCurrentSourceTags();
+                QStringList sl = CUR_DOCUMENT->getCurrentSourceTags();
                 if (sl.size())
                     R->setTag("source", sl.join(";"));
             }
@@ -101,8 +100,8 @@ void CreateRoundaboutInteraction::mousePressEvent(QMouseEvent * event)
             for (qreal a = Angle*3/2; a<2*M_PI; a+=Angle)
             {
                 QPointF Next(CenterF.x()+cos(Modifier*a)*Radius,CenterF.y()+sin(Modifier*a)*Radius);
-                Node* New = g_backend.allocNode(theMain->document()->getDirtyOrOriginLayer(), XY_TO_COORD(Next.toPoint()));
-                L->add(new AddFeatureCommand(theMain->document()->getDirtyOrOriginLayer(),New,true));
+                Node* New = g_backend.allocNode(CUR_DOCUMENT->getDirtyOrOriginLayer(), XY_TO_COORD(Next.toPoint()));
+                L->add(new AddFeatureCommand(CUR_DOCUMENT->getDirtyOrOriginLayer(),New,true));
                 R->add(New);
             }
             R->add(First);
@@ -110,13 +109,13 @@ void CreateRoundaboutInteraction::mousePressEvent(QMouseEvent * event)
             {
                 Way* W1 = CAST_WAY(it.get());
                 if (W1 && (W1 != R))
-                    Way::createJunction(theMain->document(), L, R, W1, true);
+                    Way::createJunction(CUR_DOCUMENT, L, R, W1, true);
             }
-            theMain->properties()->setSelection(R);
+            PROPERTIES_DOCK->setSelection(R);
             document()->addHistory(L);
             view()->setInteracting(false);
             view()->invalidate(true, true, false);
-            theMain->launchInteraction(0);
+            CUR_MAINWINDOW->launchInteraction(0);
         }
     }
     else

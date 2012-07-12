@@ -10,7 +10,6 @@
 #include "ui_LayerWidget.h"
 #include "ui_FilterEditDialog.h"
 
-class MainWindow;
 class Layer;
 
 class LayerWidget : public QPushButton
