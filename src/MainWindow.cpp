@@ -509,20 +509,21 @@ MainWindow::~MainWindow(void)
 
 void MainWindow::launchInteraction(Interaction* anInteraction)
 {
-    QList<Feature*> theSnapList;
-    EditInteraction* EI = dynamic_cast<EditInteraction*>(theView->interaction());
-    if (EI) {
-        theSnapList = EI->snapList();
-        ui->editRemoveAction->setEnabled(false);
-        ui->editReverseAction->setEnabled(false);
-    }
-    if (!theSnapList.size())
-        if (p->theProperties)
-            theSnapList = p->theProperties->selection();
-    if (theView->interaction())
-        delete theView->interaction();
-    theView->setInteraction(anInteraction);
     if (anInteraction) {
+        QList<Feature*> theSnapList;
+        EditInteraction* EI = dynamic_cast<EditInteraction*>(theView->interaction());
+        if (EI) {
+            theSnapList = EI->snapList();
+            ui->editRemoveAction->setEnabled(false);
+            ui->editReverseAction->setEnabled(false);
+        }
+        if (!theSnapList.size())
+            if (p->theProperties)
+                theSnapList = p->theProperties->selection();
+        if (theView->interaction())
+            delete theView->interaction();
+        theView->setInteraction(anInteraction);
+
         ui->editPropertiesAction->setChecked(dynamic_cast<EditInteraction*>(anInteraction) != NULL);
         ui->editMoveAction->setChecked(dynamic_cast<MoveNodeInteraction*>(anInteraction) != NULL);
         ui->editRotateAction->setChecked(dynamic_cast<RotateInteraction*>(anInteraction) != NULL);
@@ -532,13 +533,13 @@ void MainWindow::launchInteraction(Interaction* anInteraction)
         ui->createAreaAction->setChecked(dynamic_cast<CreateAreaInteraction*>(anInteraction) != NULL);
         ui->roadExtrudeAction->setChecked(dynamic_cast<ExtrudeInteraction*>(anInteraction) != NULL);
 
-        EditInteraction* EI = dynamic_cast<EditInteraction*>(anInteraction);
-        if (EI) {
-            EI->setSnap(theSnapList);
-            connect(EI, SIGNAL(setSelection(Feature*)), p->theProperties, SLOT(setSelection(Feature*)));
-            connect(EI, SIGNAL(toggleSelection(Feature*)), p->theProperties, SLOT(toggleSelection(Feature*)));
-            connect(EI, SIGNAL(addSelection(Feature*)), p->theProperties, SLOT(addSelection(Feature*)));
-            connect(EI, SIGNAL(setMultiSelection(QList<Feature*>)), p->theProperties, SLOT(setMultiSelection(QList<Feature*>)));
+        EditInteraction* NEI = dynamic_cast<EditInteraction*>(anInteraction);
+        if (NEI) {
+            NEI->setSnap(theSnapList);
+            connect(NEI, SIGNAL(setSelection(Feature*)), p->theProperties, SLOT(setSelection(Feature*)));
+            connect(NEI, SIGNAL(toggleSelection(Feature*)), p->theProperties, SLOT(toggleSelection(Feature*)));
+            connect(NEI, SIGNAL(addSelection(Feature*)), p->theProperties, SLOT(addSelection(Feature*)));
+            connect(NEI, SIGNAL(setMultiSelection(QList<Feature*>)), p->theProperties, SLOT(setMultiSelection(QList<Feature*>)));
         }
     } else {
 #ifndef _MOBILE

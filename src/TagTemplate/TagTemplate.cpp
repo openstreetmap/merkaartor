@@ -670,7 +670,7 @@ QWidget* TagTemplateWidgetMemberList::getWidget(const Feature* F, const MapView*
         return NULL;
     if (!CHECK_RELATION(F))
         return NULL;
-    R = STATIC_CAST_RELATION(const_cast<Feature*>(F));
+    theRelation = STATIC_CAST_RELATION(const_cast<Feature*>(F));
 
     QString lang = getDefaultLanguage();
     QString defLang = "en";
@@ -695,7 +695,7 @@ QWidget* TagTemplateWidgetMemberList::getWidget(const Feature* F, const MapView*
     connect(RelationUi.RemoveMemberButton,SIGNAL(clicked()),this, SLOT(on_RemoveMemberButton_clicked()));
     connect(RelationUi.btMemberUp, SIGNAL(clicked()), SLOT(on_btMemberUp_clicked()));
     connect(RelationUi.btMemberDown, SIGNAL(clicked()), SLOT(on_btMemberDown_clicked()));
-    RelationUi.MembersView->setModel(R->referenceMemberModel());
+    RelationUi.MembersView->setModel(theRelation->referenceMemberModel());
     aLayout->addWidget(memberlist);
 
     centerAction = new QAction(NULL, theWidget);
@@ -722,14 +722,16 @@ void TagTemplateWidgetMemberList::on_RemoveMemberButton_clicked()
     foreach(index, indexes)
     {
         QModelIndex idx = index.sibling(index.row(),0);
-        QVariant Content(R->referenceMemberModel()->data(idx,Qt::UserRole));
+        if (idx.row() >= theRelation->size())
+            continue;
+        QVariant Content(theRelation->referenceMemberModel()->data(idx,Qt::UserRole));
         if (Content.isValid())
         {
             Feature* F = Content.value<Feature*>();
             if (F) {
-                CommandList* L = new CommandList(MainWindow::tr("Remove member '%1' on %2").arg(F->description()).arg(R->description()), R);
-                if (R->find(F) < R->size())
-                    L->add(new RelationRemoveFeatureCommand(R,F,CUR_DOCUMENT->getDirtyOrOriginLayer(R->layer())));
+                CommandList* L = new CommandList(MainWindow::tr("Remove member '%1' on %2").arg(F->description()).arg(theRelation->description()), theRelation);
+                if (theRelation->find(F) < theRelation->size())
+                    L->add(new RelationRemoveFeatureCommand(theRelation,F,CUR_DOCUMENT->getDirtyOrOriginLayer(theRelation->layer())));
                 if (L->empty())
                     delete L;
                 else
@@ -746,6 +748,8 @@ void TagTemplateWidgetMemberList::on_RemoveMemberButton_clicked()
 void TagTemplateWidgetMemberList::on_Member_customContextMenuRequested(const QPoint & pos)
 {
     QModelIndex ix = RelationUi.MembersView->indexAt(pos);
+    if (ix.row() >= theRelation->size())
+        return;
     if (ix.isValid()) {
         QMenu menu(RelationUi.MembersView);
         menu.addAction(centerAction);
@@ -764,7 +768,9 @@ void TagTemplateWidgetMemberList::on_centerAction_triggered()
     foreach(index, indexes)
     {
         QModelIndex idx = index.sibling(index.row(),0);
-        QVariant Content(R->referenceMemberModel()->data(idx,Qt::UserRole));
+        if (idx.row() >= theRelation->size())
+            continue;
+        QVariant Content(theRelation->referenceMemberModel()->data(idx,Qt::UserRole));
         if (Content.isValid())
         {
             Feature* F = Content.value<Feature*>();
@@ -789,7 +795,9 @@ void TagTemplateWidgetMemberList::on_centerZoomAction_triggered()
     foreach(index, indexes)
     {
         QModelIndex idx = index.sibling(index.row(),0);
-        QVariant Content(R->referenceMemberModel()->data(idx,Qt::UserRole));
+        if (idx.row() >= theRelation->size())
+            continue;
+        QVariant Content(theRelation->referenceMemberModel()->data(idx,Qt::UserRole));
         if (Content.isValid())
         {
             Feature* F = Content.value<Feature*>();
@@ -811,7 +819,10 @@ void TagTemplateWidgetMemberList::on_Member_clicked(const QModelIndex & index)
 {
     QList<Feature*> Highlighted;
 
-    QVariant Content(R->referenceMemberModel()->data(index,Qt::UserRole));
+    if (index.row() >= theRelation->size())
+        return;
+
+    QVariant Content(theRelation->referenceMemberModel()->data(index,Qt::UserRole));
     if (Content.isValid())
     {
         Feature* F = Content.value<Feature*>();
@@ -832,7 +843,9 @@ void TagTemplateWidgetMemberList::on_Member_selected()
     foreach(index, indexes)
     {
         QModelIndex idx = index.sibling(index.row(),0);
-        QVariant Content(R->referenceMemberModel()->data(idx,Qt::UserRole));
+        if (idx.row() >= theRelation->size())
+            continue;
+        QVariant Content(theRelation->referenceMemberModel()->data(idx,Qt::UserRole));
         if (Content.isValid())
         {
             Feature* F = Content.value<Feature*>();
@@ -848,28 +861,30 @@ void TagTemplateWidgetMemberList::on_Member_selected()
 
 void TagTemplateWidgetMemberList::on_btMemberUp_clicked()
 {
-    CommandList* theList = new CommandList(MainWindow::tr("Reorder members in relation %1").arg(R->id().numId), R);
+    CommandList* theList = new CommandList(MainWindow::tr("Reorder members in relation %1").arg(theRelation->id().numId), theRelation);
 
     QModelIndex index;
     foreach(index, RelationUi.MembersView->selectionModel()->selectedIndexes())
     {
+        if (index.row() >= theRelation->size())
+            continue;
         RelationUi.MembersView->selectionModel()->select(index, QItemSelectionModel::Select | QItemSelectionModel::Rows);
     }
     QModelIndexList indexes = RelationUi.MembersView->selectionModel()->selectedRows(0);
     QModelIndexList newSel;
     foreach(index, indexes)
     {
-        QVariant Content(R->referenceMemberModel()->data(index,Qt::UserRole));
+        QVariant Content(theRelation->referenceMemberModel()->data(index,Qt::UserRole));
         if (Content.isValid())
         {
             Feature* F = Content.value<Feature*>();
             if (F) {
-                int pos = R->find(F);
+                int pos = theRelation->find(F);
                 if (!pos)
                     break;
-                QString role = R->getRole(pos);
-                theList->add(new RelationRemoveFeatureCommand(R, pos, CUR_DOCUMENT->getDirtyOrOriginLayer(R->layer())));
-                theList->add(new RelationAddFeatureCommand(R, role, F, pos-1, CUR_DOCUMENT->getDirtyOrOriginLayer(R->layer())));
+                QString role = theRelation->getRole(pos);
+                theList->add(new RelationRemoveFeatureCommand(theRelation, pos, CUR_DOCUMENT->getDirtyOrOriginLayer(theRelation->layer())));
+                theList->add(new RelationAddFeatureCommand(theRelation, role, F, pos-1, CUR_DOCUMENT->getDirtyOrOriginLayer(theRelation->layer())));
                 newSel.append(RelationUi.MembersView->model()->index(pos-1, 0));
             }
         }
@@ -890,11 +905,13 @@ void TagTemplateWidgetMemberList::on_btMemberUp_clicked()
 
 void TagTemplateWidgetMemberList::on_btMemberDown_clicked()
 {
-    CommandList* theList = new CommandList(MainWindow::tr("Reorder members in relation %1").arg(R->id().numId), R);
+    CommandList* theList = new CommandList(MainWindow::tr("Reorder members in relation %1").arg(theRelation->id().numId), theRelation);
 
     QModelIndex index;
     foreach(index, RelationUi.MembersView->selectionModel()->selectedIndexes())
     {
+        if (index.row() >= theRelation->size())
+            continue;
         RelationUi.MembersView->selectionModel()->select(index, QItemSelectionModel::Select | QItemSelectionModel::Rows);
     }
     QModelIndexList indexes = RelationUi.MembersView->selectionModel()->selectedRows(0);
@@ -903,17 +920,17 @@ void TagTemplateWidgetMemberList::on_btMemberDown_clicked()
     for (int i = indexes.count()-1;  i >= 0;  i--)
     {
         index = indexes[i];
-        QVariant Content(R->referenceMemberModel()->data(index,Qt::UserRole));
+        QVariant Content(theRelation->referenceMemberModel()->data(index,Qt::UserRole));
         if (Content.isValid())
         {
             Feature* F = Content.value<Feature*>();
             if (F) {
-                int pos = R->find(F);
-                if (pos >= R->size()-1)
+                int pos = theRelation->find(F);
+                if (pos >= theRelation->size()-1)
                     break;
-                QString role = R->getRole(pos);
-                theList->add(new RelationRemoveFeatureCommand(R, pos, CUR_DOCUMENT->getDirtyOrOriginLayer(R->layer())));
-                theList->add(new RelationAddFeatureCommand(R, role, F, pos+1, CUR_DOCUMENT->getDirtyOrOriginLayer(R->layer())));
+                QString role = theRelation->getRole(pos);
+                theList->add(new RelationRemoveFeatureCommand(theRelation, pos, CUR_DOCUMENT->getDirtyOrOriginLayer(theRelation->layer())));
+                theList->add(new RelationAddFeatureCommand(theRelation, role, F, pos+1, CUR_DOCUMENT->getDirtyOrOriginLayer(theRelation->layer())));
                 newSel.append(RelationUi.MembersView->model()->index(pos+1, 0));
             }
         }

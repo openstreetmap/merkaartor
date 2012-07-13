@@ -52,6 +52,7 @@ public:
 
 public slots:
     void invalidateView(bool UpdateDock = true);
+    void launchInteraction(Interaction *anInteraction=NULL);
     void toggleButtonStyle();
 
     virtual void on_createRoundaboutAction_triggered();
@@ -275,8 +276,6 @@ public:
 
     bool hasUnsavedChanges();
     void syncOSM(const QString &aWeb, const QString &aUser, const QString &aPwd);
-
-    void launchInteraction(Interaction *anInteraction);
 
 protected:
     MapView* theView;

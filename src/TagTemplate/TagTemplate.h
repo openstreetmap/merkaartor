@@ -174,7 +174,7 @@ public:
     bool toXML(QDomElement& xParent, bool header);
 
 protected:
-    Relation* R;
+    Relation* theRelation;
     Ui::RelationMembers RelationUi;
     QAction* centerAction;
     QAction* centerZoomAction;

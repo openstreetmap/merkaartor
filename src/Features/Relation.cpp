@@ -21,20 +21,6 @@
 
 #define TEST_RFLAGS(x) theView->renderOptions().options.testFlag(x)
 
-class RelationMemberModel : public QAbstractTableModel
-{
-public:
-    RelationMemberModel(RelationPrivate* aParent);
-    int rowCount(const QModelIndex &parent = QModelIndex()) const;
-    int columnCount(const QModelIndex &parent = QModelIndex()) const;
-    QVariant data(const QModelIndex &index, int role) const;
-    QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const;
-    Qt::ItemFlags flags(const QModelIndex &index) const;
-    bool setData(const QModelIndex &index, const QVariant &value, int role = Qt::EditRole);
-
-    RelationPrivate* Parent;
-};
-
 class RelationPrivate
 {
 public:
@@ -898,7 +884,7 @@ RelationMemberModel::RelationMemberModel(RelationPrivate *aParent)
 
 int RelationMemberModel::rowCount(const QModelIndex &) const
 {
-    return Parent->Members.size();
+    return Parent->Members.size()+1;
 }
 
 int RelationMemberModel::columnCount(const QModelIndex &) const
@@ -910,17 +896,24 @@ QVariant RelationMemberModel::data(const QModelIndex &index, int role) const
 {
     if (!index.isValid())
         return QVariant();
-    if (index.row() >= (int)Parent->Members.size())
-        return QVariant();
     if (role == Qt::DisplayRole)
     {
+        if (index.row() >= Parent->Members.size()) {
+            if (index.column() == 0)
+                return "";
+            else
+                return newMemberText();
+        }
         if (index.column() == 0)
             return Parent->Members[index.row()].first;
         else
+
             return Parent->Members[index.row()].second->description();
     }
     else if (role == Qt::EditRole)
     {
+        if (index.row() >= Parent->Members.size())
+            return "";
         if ( (index.column() == 0) )
             return Parent->Members[index.row()].first;
         else
@@ -962,17 +955,30 @@ bool RelationMemberModel::setData(const QModelIndex &index, const QVariant &valu
     {
         QString Role;
         Feature* Member;
-        if (index.column() == 0) {
-            Member = Parent->Members[index.row()].second;
-            Role = value.toString();
-        } else {
-            Member = (Feature *) value.value<void *>();
-            if (Member == NULL)
+        CommandList* L;
+
+        if (index.row() >= Parent->Members.size()) {
+            if (index.column() == 0) {
+                // Do not allow to add a member with a NULL feature
                 return false;
-            Role = Parent->Members[index.row()].first;
+            } else {
+                Member = (Feature *) value.value<void *>();
+                Role = "";
+            }
+            L = new CommandList(MainWindow::tr("Relation Modified %1").arg(Parent->theRelation->id().numId), Parent->theRelation);
+        } else {
+            if (index.column() == 0) {
+                Member = Parent->Members[index.row()].second;
+                Role = value.toString();
+            } else {
+                Member = (Feature *) value.value<void *>();
+                if (Member == NULL)
+                    return false;
+                Role = Parent->Members[index.row()].first;
+            }
+            L = new CommandList(MainWindow::tr("Relation Modified %1").arg(Parent->theRelation->id().numId), Parent->theRelation);
+            L->add(new RelationRemoveFeatureCommand(Parent->theRelation, index.row(), CUR_DOCUMENT->getDirtyOrOriginLayer(Parent->theRelation->layer())));
         }
-        CommandList* L = new CommandList(MainWindow::tr("Relation Modified %1").arg(Parent->theRelation->id().numId), Parent->theRelation);
-        L->add(new RelationRemoveFeatureCommand(Parent->theRelation, index.row(), CUR_DOCUMENT->getDirtyOrOriginLayer(Parent->theRelation->layer())));
         L->add(new RelationAddFeatureCommand(Parent->theRelation,Role,Member,index.row(), CUR_DOCUMENT->getDirtyOrOriginLayer(Parent->theRelation->layer())));
         CUR_DOCUMENT->addHistory(L);
         emit dataChanged(index, index);

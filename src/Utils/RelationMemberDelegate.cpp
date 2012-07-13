@@ -38,7 +38,12 @@ QWidget* RelationMemberDelegate::createEditor(QWidget* parent, const QStyleOptio
 
     if (index.column() == 0) {
 
-        if (RestrictedRoles.size()) {
+        if (index.row() >= index.model()->rowCount()-1) {
+            QLineEdit* le = new QLineEdit(parent);
+            le->setReadOnly(true);
+            le->setPlaceholderText(RelationMemberModel::newMemberText());
+            edit = le;
+        } else if (RestrictedRoles.size()) {
             QComboBox *cb = new QComboBox(parent);
             cb->setInsertPolicy(QComboBox::InsertAlphabetically);
             cb->insertItems(-1, RestrictedRoles);
@@ -50,11 +55,11 @@ QWidget* RelationMemberDelegate::createEditor(QWidget* parent, const QStyleOptio
         }
     } else {
         QLineEdit* le = new QLineEdit(parent);
-        le->setEnabled(false);
+        le->setReadOnly(true);
         edit = le;
 
-        curModel = const_cast<QAbstractItemModel*>(index.model());
         curIndex = index;
+        curModel = const_cast<QAbstractItemModel*>(index.model());
         SelectInteraction* selI = new SelectInteraction();
         connect(selI, SIGNAL(setSelection(Feature*)), this, SLOT(onFeatureSelected(Feature*)));
         CUR_MAINWINDOW->launchInteraction(selI);
@@ -66,7 +71,7 @@ void RelationMemberDelegate::setEditorData(QWidget* editor, const QModelIndex& i
 {
     if (index.column() == 0) {
         if (QComboBox *edit = dynamic_cast<QComboBox*>(editor)) {
-            if (index.model()->data(index).toString() != TagModel::newKeyText()) {
+            if (index.model()->data(index).toString() != RelationMemberModel::newMemberText()) {
                 int idx = edit->findText(index.model()->data(index).toString());
                 if (idx > -1)
                     edit->setCurrentIndex(idx);
@@ -88,6 +93,9 @@ void RelationMemberDelegate::setEditorData(QWidget* editor, const QModelIndex& i
 
 void RelationMemberDelegate::setModelData(QWidget* editor, QAbstractItemModel* model, const QModelIndex& index) const
 {
+    if (index.column() != 0)
+        return;
+
     QString newVal;
     if (QComboBox *edit = dynamic_cast<QComboBox*>(editor))
         newVal = edit->currentText();
@@ -128,7 +136,12 @@ bool RelationMemberDelegate::eventFilter(QObject* object, QEvent* event)
 
 void RelationMemberDelegate::onFeatureSelected(Feature *F)
 {
-    curModel->setData(curIndex, qVariantFromValue((void*)F));
-    CUR_MAINWINDOW->launchInteraction(new EditInteraction());
-    CUR_MAINWINDOW->invalidateView();
+    Feature* curF = NULL;
+    if (curIndex.row() < curModel->rowCount() - 1)
+        curF = curModel->data(curIndex, Qt::UserRole).value<Feature*>();
+    if (F != curF) {
+        curModel->setData(curIndex, qVariantFromValue((void*)F));
+        CUR_MAINWINDOW->invalidateView();
+    }
+    QTimer::singleShot(0, CUR_MAINWINDOW, SLOT(launchInteraction()));
 }

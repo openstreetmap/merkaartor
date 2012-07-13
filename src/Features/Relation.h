@@ -8,6 +8,24 @@ class RelationPrivate;
 class QAbstractTableModel;
 class QProgressDialog;
 
+class RelationMemberModel : public QAbstractTableModel
+{
+public:
+    inline static const QString newMemberText(void)
+    { return tr("Edit this to add..."); }
+
+    RelationMemberModel(RelationPrivate* aParent);
+    int rowCount(const QModelIndex &parent = QModelIndex()) const;
+    int columnCount(const QModelIndex &parent = QModelIndex()) const;
+    QVariant data(const QModelIndex &index, int role) const;
+    QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const;
+    Qt::ItemFlags flags(const QModelIndex &index) const;
+    bool setData(const QModelIndex &index, const QVariant &value, int role = Qt::EditRole);
+
+    RelationPrivate* Parent;
+};
+
+
 class Relation : public Feature
 {
     friend class MemoryBackend;
