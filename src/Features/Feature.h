@@ -103,7 +103,7 @@ public:
     /// @param other the MapFeature
     Feature(const Feature& other);
     /// Destructor
-    virtual ~Feature() = 0;
+    virtual ~Feature();
 
     /** Return the smalest box contening all the MapFeature
          * @return A coord box

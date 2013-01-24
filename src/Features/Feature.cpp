@@ -180,7 +180,7 @@ public:
 };
 
 Feature::Feature()
-: p(0), MetaUpToDate(false), m_references(0), ReadOnly(false)
+: MetaUpToDate(false), m_references(0), ReadOnly(false)
 {
     p = new FeaturePrivate(this);
     p->Id = IFeature::FId(IFeature::Uninitialized, 0);

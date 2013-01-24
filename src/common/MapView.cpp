@@ -785,7 +785,6 @@ void MapView::resizeEvent(QResizeEvent * ev)
     {
         delete StaticTouchup;
         StaticTouchup = new QPixmap(size());
-        StaticTouchup = new QPixmap(size());
     }
 
     invalidate(true, true, true);
