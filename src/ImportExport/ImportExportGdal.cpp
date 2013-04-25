@@ -331,7 +331,8 @@ bool ImportExportGdal::importGDALDataset(OGRDataSource* poDS, Layer* aLayer, boo
         }
     }
 
-    theSrs->Release();
+    if (theSrs)
+        theSrs->Release();
     theSrs = new OGRSpatialReference();
     theSrs->importFromProj4(sPrj.toLatin1().data());
     toWGS84 = OGRCreateCoordinateTransformation(theSrs, &wgs84srs);
