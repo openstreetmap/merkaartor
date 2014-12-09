@@ -385,14 +385,18 @@ QString Downloader::getURLToFetch(const QString &What)
 QString Downloader::getURLToFetchFull(IFeature::FId id)
 {
     QString type;
-    if (id.type & IFeature::Point)
+	QString URL;
+    if (id.type & IFeature::Point) {
         type = "node";
-    else if (id.type & IFeature::LineString)
-        type = "way";
-    else if (id.type & IFeature::OsmRelation)
-        type = "relation";
+		URL = QString("/%1/%2");
+	} else {
+		if (id.type & IFeature::LineString)
+			type = "way";
+		if (id.type & IFeature::OsmRelation)
+			type = "relation";
+		URL = QString("/%1/%2/full");
+	}
 
-    QString URL = QString("/%1/%2/full");
     return URL.arg(type).arg(id.numId);
 }
 
