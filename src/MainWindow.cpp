@@ -1894,7 +1894,43 @@ void MainWindow::loadUrl(const QUrl& u)
 {
     activateWindow();
 
-    if (u.path() == "/load_and_zoom") {
+    if (u.path() == "/load_object") {
+        QString obj = u.queryItemValue("objects");
+        IFeature::FId mId;
+        if (obj.startsWith("n")) {
+            obj.remove("n");
+            mId.type = IFeature::Point;
+            mId.numId = obj.toLongLong();
+        } else if (obj.startsWith("w")) {
+            obj.remove("w");
+            mId.type = IFeature::LineString;
+            mId.numId = obj.toLongLong();
+        } else if (obj.startsWith("r")) {
+            obj.remove("r");
+            mId.type = IFeature::LineString;
+            mId.numId = obj.toLongLong();
+        } else {
+            QMessageBox::critical(this, tr("Incoming Remote Control Request"),
+                tr("Wanted to load object '%1', but don't know how to do that. Sorry.").arg(u.toString()));
+            return;
+        }
+        Feature* F = theDocument->getFeature(mId);
+        if (!F) {
+            /* The feature is missing, download it first. */
+            createProgressDialog();
+            downloadFeature(this, mId, theDocument, NULL);
+            deleteProgressDialog();
+            F = theDocument->getFeature(mId);
+        }
+        /* The feature is on our map, just select it. */
+        if (theView) {
+            theView->setViewport(F->boundingBox(), theView->rect());
+            on_fileDownloadMoreAction_triggered();
+        }
+        properties()->setSelection(0);
+        properties()->addSelection(F);
+        emit content_changed();
+    } else if (u.path() == "/load_and_zoom") {
         qreal t = u.queryItemValue("top").toDouble();
         qreal b = u.queryItemValue("bottom").toDouble();
         qreal r = u.queryItemValue("right").toDouble();
