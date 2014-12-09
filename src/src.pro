@@ -9,7 +9,9 @@ include(Custom.pri)
 include(../3rdparty/qtsingleapplication-2.6_1-opensource/src/qtsingleapplication.pri)
 include(../3rdparty/qttoolbardialog-2.2_1-opensource/src/qttoolbardialog.pri)
 DEFINES += QUAZIP_STATIC
-include(../3rdparty/quazip-0.4.4/quazip/quazip.pri)
+#include(../3rdparty/quazip-0.4.4/quazip/quazip.pri)
+
+LIBS += -lquazip
 
 #Qt Version
 QT_VERSION = $$[QT_VERSION]

@@ -6,8 +6,8 @@
 
 // From et-map-editor by Matthias Fauconneau (https://gitorious.org/et-map-editor)
 
-#include <quazip.h>
-#include <quazipfile.h>
+#include <quazip/quazip.h>
+#include <quazip/quazipfile.h>
 
 class ZipIterator : public QAbstractFileEngineIterator {
 public:
