@@ -24,7 +24,7 @@
      <x>0</x>
      <y>0</y>
      <width>1100</width>
-     <height>20</height>
+     <height>19</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuHelp">
@@ -388,6 +388,8 @@
    <addaction name="areaSplitAction"/>
    <addaction name="areaTerraceAction"/>
    <addaction name="roadAxisAlignAction"/>
+   <addaction name="separator"/>
+   <addaction name="markBridgeAction"/>
   </widget>
   <action name="fileQuitAction">
    <property name="text">
@@ -1871,6 +1873,24 @@
   <action name="featureDownloadMissingChildrenAction">
    <property name="text">
     <string>Download missing children</string>
+   </property>
+  </action>
+  <action name="markBridgeAction">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="../Icons/AllIcons.qrc">
+     <normaloff>:/Icons/actions/build_bridge.png</normaloff>:/Icons/actions/build_bridge.png</iconset>
+   </property>
+   <property name="text">
+    <string>&amp;Bridge</string>
+   </property>
+   <property name="toolTip">
+    <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Transform way to a bridge&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+B</string>
    </property>
   </action>
  </widget>

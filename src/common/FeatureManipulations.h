@@ -10,9 +10,11 @@ class Projection;
 
 #include <QList>
 #include "Coord.h"
+#include "Node.h"
 
 void joinRoads(Document* theDocument, CommandList* theList, PropertiesDock* theDock);
 void splitRoads(Document* theDocument, CommandList* theList, PropertiesDock* theDock);
+Way *cutoutRoad(Document* theDocument, CommandList* theList, PropertiesDock* thedock, Node *N1, Node *N2);
 void breakRoads(Document* theDocument, CommandList* theList, PropertiesDock* theDock);
 bool canCreateJunction(PropertiesDock* theDock);
 int createJunction(Document* theDocument, CommandList* theList, PropertiesDock* theDock, bool doIt=true);

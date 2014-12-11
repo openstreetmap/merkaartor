@@ -22,6 +22,7 @@
 #include "CreateAreaInteraction.h"
 #include "CreateDoubleWayInteraction.h"
 #include "CreateNodeInteraction.h"
+#include "BuildBridgeInteraction.h"
 #include "CreateRoundaboutInteraction.h"
 #include "CreatePolygonInteraction.h"
 #include "CreateSingleWayInteraction.h"
@@ -528,6 +529,7 @@ void MainWindow::launchInteraction(Interaction* anInteraction)
         ui->createRoadAction->setChecked(dynamic_cast<CreateSingleWayInteraction*>(anInteraction) != NULL);
         ui->createAreaAction->setChecked(dynamic_cast<CreateAreaInteraction*>(anInteraction) != NULL);
         ui->roadExtrudeAction->setChecked(dynamic_cast<ExtrudeInteraction*>(anInteraction) != NULL);
+        ui->markBridgeAction->setChecked(dynamic_cast<BuildBridgeInteraction*>(anInteraction) != NULL);
 
         EditInteraction* EI = dynamic_cast<EditInteraction*>(anInteraction);
         if (EI)
@@ -2458,6 +2460,12 @@ void MainWindow::on_createAreaAction_triggered()
 void MainWindow::on_createNodeAction_triggered()
 {
     launchInteraction(new CreateNodeInteraction(this));
+    theInfo->setHtml(theView->interaction()->toHtml());
+}
+
+void MainWindow::on_markBridgeAction_triggered()
+{
+    launchInteraction(new BuildBridgeInteraction(this));
     theInfo->setHtml(theView->interaction()->toHtml());
 }
 

@@ -14,7 +14,8 @@ HEADERS += \
     RotateInteraction.h \
     ScaleInteraction.h \
     ZoomInteraction.h \
-    ExtrudeInteraction.h
+    ExtrudeInteraction.h \
+    BuildBridgeInteraction.h
 
 SOURCES += \
     CreateAreaInteraction.cpp \
@@ -29,7 +30,8 @@ SOURCES += \
     RotateInteraction.cpp \
     ScaleInteraction.cpp \
     ZoomInteraction.cpp \
-    ExtrudeInteraction.cpp
+    ExtrudeInteraction.cpp \
+    BuildBridgeInteraction.cpp
 
 FORMS +=  \
     CreateDoubleWayDock.ui \

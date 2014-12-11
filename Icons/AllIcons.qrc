@@ -1,5 +1,6 @@
 <RCC>
     <qresource prefix="/Icons">
+        <file>actions/build_bridge.png</file>
         <file>actions/GPS.png</file>
         <file>actions/camera.png</file>
         <file>Merkaartor.xpm</file>

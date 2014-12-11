@@ -483,6 +483,32 @@ void splitRoads(Document* theDocument, CommandList* theList, PropertiesDock* the
     theDock->setSelection(Result);
 }
 
+/* Split road by the two nodes and return the way joining them, if there is one. */
+Way *cutoutRoad(Document* theDocument, CommandList* theList, PropertiesDock* thedock, Node *N1, Node *N2) {
+    QList<Way*> Roads, Result;
+    QList<Node*> Points;
+
+	Way *R1 = Way::GetSingleParentRoadInner( N1 );
+	Way *R2 = Way::GetSingleParentRoadInner( N2 );
+
+	if (R1)
+		Roads.push_back(R1);
+	if (R2)
+		Roads.push_back(R2);
+
+    Points.push_back(N1);
+    Points.push_back(N2);
+
+    for (int i=0; i<Roads.size(); ++i)
+        splitRoad(theDocument, theList, Roads[i], Points, Result);
+
+	for (int i = 0; i < Result.size(); ++i) {
+		if (Result[i]->isExtrimity(N1) && Result[i]->isExtrimity(N2))
+			return Result[i];
+	}
+	return NULL;
+}
+
 static void breakRoad(Document* theDocument, CommandList* theList, Way* R, Node* Pt)
 {
     for (int i=0; i<R->size(); ++i)
