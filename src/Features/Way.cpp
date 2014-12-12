@@ -239,6 +239,7 @@ void Way::add(Node* Pt)
 
 void Way::add(Node* Pt, int Idx)
 {
+    QMutexLocker mutlock(&featMutex);
     p->Nodes.insert(p->Nodes.begin() + Idx, Pt);
 //	p->Nodes.push_back(Pt);
 //	std::rotate(p->Nodes.begin()+Idx,p->Nodes.end()-1,p->Nodes.end());
@@ -271,6 +272,7 @@ int Way::findVirtual(Feature* Pt) const
 
 void Way::remove(int idx)
 {
+    QMutexLocker mutlock(&featMutex);
     Node* Pt = p->Nodes[idx];
     // only remove as parent if the node is only included once
     p->Nodes.erase(p->Nodes.begin()+idx);
