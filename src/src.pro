@@ -117,6 +117,8 @@ include(TagTemplate/TagTemplate.pri)
 include(NameFinder/NameFinder.pri)
 include(Utils/Utils.pri)
 
+VPATH += $$INCLUDEPATH
+
 # Header files
 HEADERS += \
     MainWindow.h
