@@ -15,7 +15,10 @@
 #include <QtCore>
 #include <QtCore/QSettings>
 #include <QColor>
-#include <QHttp>
+#include <QNetworkAccessManager>
+#include <QNetworkRequest>
+#include <QNetworkReply>
+#include <QAuthenticator>
 #include <QBuffer>
 #include <QUuid>
 #include <QNetworkProxy>
@@ -452,11 +455,10 @@ protected:
     QString OsmUser;
     QString OsmPassword;
 
-    QHttp httpRequest;
-    int OsmPrefLoadId;
-    int OsmPrefSaveId;
-    int OsmPrefDeleteId;
-    QBuffer OsmPrefContent;
+    QNetworkAccessManager httpRequest;
+    QNetworkReply *OsmPrefLoadReply;
+    QNetworkReply *OsmPrefSaveReply;
+    QNetworkReply *OsmPrefDeleteReply;
     QMap<QString, int> OsmPrefListsCount;
 
     void setWmsServers();
@@ -486,8 +488,8 @@ private:
     static IPaintStyle* m_EPSInstance;
 
 private slots:
-    void on_responseHeaderReceived(const QHttpResponseHeader & hdr);
-    void on_requestFinished ( int id, bool error );
+	void on_requestFinished ( QNetworkReply *reply );
+	void on_authenticationRequired( QNetworkReply *reply, QAuthenticator *auth );
 
 signals:
     void bookmarkChanged();

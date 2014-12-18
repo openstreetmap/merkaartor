@@ -240,8 +240,8 @@ MerkaartorPreferences::MerkaartorPreferences()
 
     theToolList = new ToolList();
 
-    connect(&httpRequest, SIGNAL(responseHeaderReceived(const QHttpResponseHeader &)), this, SLOT(on_responseHeaderReceived(const QHttpResponseHeader &)));
-    connect(&httpRequest,SIGNAL(requestFinished(int, bool)),this,SLOT(on_requestFinished(int, bool)));
+    connect(&httpRequest, SIGNAL(authenticationRequired(QNetworkReply*, QAuthenticator*)), this, SLOT(on_authenticationRequired(QNetworkReply*, QAuthenticator*)));
+    connect(&httpRequest,SIGNAL(finished(QNetworkReply*)),this,SLOT(on_requestFinished(QNetworkReply*)));
 
 #ifdef USE_LIBPROXY
     // Initialise libproxy
@@ -348,38 +348,54 @@ void MerkaartorPreferences::fromOsmPref()
 {
     if (getOfflineMode()) return;
 
+    qDebug() << "Requesting preferences from OSM server." << endl;
+
     if (getOsmUser().isEmpty() || getOsmPassword().isEmpty()) return;
 
-    QUrl osmWeb(getOsmApiUrl());
+    QUrl osmWeb(getOsmApiUrl()+"/user/preferences");
     if (osmWeb.port() == -1)
         osmWeb.setPort(80);
 
-    httpRequest.setHost(osmWeb.host(), osmWeb.port());
-
-    QHttpRequestHeader Header("GET", osmWeb.path() + "/user/preferences/");
-    if (osmWeb.port() == 80)
-        Header.setValue("Host",osmWeb.host());
-    else
-        Header.setValue("Host",osmWeb.host() + ':' + QString::number(osmWeb.port()));
-    Header.setValue("User-Agent", USER_AGENT);
-
-    QString auth = QString("%1:%2").arg(getOsmUser()).arg(getOsmPassword());
-    QByteArray ba_auth = auth.toUtf8().toBase64();
-    Header.setValue("Authorization", QString("Basic %1").arg(QString(ba_auth)));
+    QNetworkRequest req(osmWeb);
+    req.setRawHeader(QByteArray("User-Agent"), USER_AGENT.toAscii());
 
     httpRequest.setProxy(getProxy(osmWeb));
-    OsmPrefLoadId = httpRequest.request(Header, NULL, &OsmPrefContent);
+    OsmPrefLoadReply = httpRequest.get(req);
 }
 
-void MerkaartorPreferences::on_requestFinished ( int id, bool error )
+void MerkaartorPreferences::on_authenticationRequired( QNetworkReply *reply, QAuthenticator *auth ) {
+    Q_UNUSED(reply)
+    auth->setUser(getOsmUser());
+    auth->setPassword(getOsmPassword());
+}
+
+void MerkaartorPreferences::on_requestFinished ( QNetworkReply *reply )
 {
-    if (id != OsmPrefLoadId || error)
+    int error = reply->error();
+    if (error != QNetworkReply::NoError) {
+        qDebug() << "Received response with code " << error << endl;
+        switch (error) {
+            case 406:
+                QMessageBox::critical(NULL,QApplication::translate("MerkaartorPreferences","Preferences upload failed"), QApplication::translate("MerkaartorPreferences","Duplicate key"));
+                return;
+            case 413:
+                QMessageBox::critical(NULL,QApplication::translate("MerkaartorPreferences","Preferences upload failed"), QApplication::translate("MerkaartorPreferences","More than 150 preferences"));
+                return;
+            default:
+                QMessageBox::critical(NULL,QApplication::translate("MerkaartorPreferences","Preferences communication failed"), QApplication::translate("MerkaartorPreferences", "Unknown error code ")+error);
+                return;
+        }
+    } else {
+        qDebug() << "Received response." << endl;
+    }
+
+    if (reply != OsmPrefLoadReply)
         return;
 
-    QMap<QString, QString> OsmPref;
+    qDebug() << "Reading preferences." << endl;
 
     QDomDocument aOsmPrefDoc;
-    aOsmPrefDoc.setContent(OsmPrefContent.buffer(), false);
+    aOsmPrefDoc.setContent(reply, false);
 
     QDomNodeList prefList = aOsmPrefDoc.elementsByTagName("preference");
 
@@ -454,78 +470,44 @@ void MerkaartorPreferences::on_requestFinished ( int id, bool error )
 
         c = c.nextSiblingElement();
     }
+
+    reply->deleteLater();
 }
 
 
 void MerkaartorPreferences::putOsmPref(const QString& k, const QString& v)
 {
-    QUrl osmWeb(getOsmApiUrl());
+    qDebug() << "Saving OSM preference online: " << k << "=" << v;
+    QUrl osmWeb(getOsmApiUrl()+QString("/user/preferences/%1").arg(k));
     if (osmWeb.port() == -1)
         osmWeb.setPort(80);
 
     QByteArray ba(v.toUtf8());
     QBuffer Buf(&ba);
 
-    httpRequest.setHost(osmWeb.host(), osmWeb.port());
-
-    QHttpRequestHeader Header("PUT", osmWeb.path() + QString("/user/preferences/%1").arg(k));
-    if (osmWeb.port() == 80)
-        Header.setValue("Host",osmWeb.host());
-    else
-        Header.setValue("Host",osmWeb.host() + ':' + QString::number(osmWeb.port()));
-    Header.setValue("User-Agent", USER_AGENT);
-
-    QString auth = QString("%1:%2").arg(getOsmUser()).arg(getOsmPassword());
-    QByteArray ba_auth = auth.toUtf8().toBase64();
-    Header.setValue("Authorization", QString("Basic %1").arg(QString(ba_auth)));
+    QNetworkRequest req(osmWeb);
 
     httpRequest.setProxy(getProxy(osmWeb));
-    OsmPrefSaveId = httpRequest.request(Header,ba);
+    OsmPrefSaveReply = httpRequest.put(req, ba);
 }
 
 void MerkaartorPreferences::deleteOsmPref(const QString& k)
 {
-    QUrl osmWeb(getOsmApiUrl());
+    qDebug() << "Deleting OSM preference online: " << k;
+
+    QUrl osmWeb(getOsmApiUrl()+QString("/user/preferences/%1").arg(k));
     if (osmWeb.port() == -1)
         osmWeb.setPort(80);
 
-    httpRequest.setHost(osmWeb.host(), osmWeb.port());
-
-    QHttpRequestHeader Header("DELETE", osmWeb.path() + QString("/user/preferences/%1").arg(k));
-    if (osmWeb.port() == 80)
-        Header.setValue("Host",osmWeb.host());
-    else
-        Header.setValue("Host",osmWeb.host() + ':' + QString::number(osmWeb.port()));
-    Header.setValue("User-Agent", USER_AGENT);
-
-    QString auth = QString("%1:%2").arg(getOsmUser()).arg(getOsmPassword());
-    QByteArray ba_auth = auth.toUtf8().toBase64();
-    Header.setValue("Authorization", QString("Basic %1").arg(QString(ba_auth)));
+    QNetworkRequest req(osmWeb);
 
     httpRequest.setProxy(getProxy(osmWeb));
-    httpRequest.request(Header);
-}
-
-void MerkaartorPreferences::on_responseHeaderReceived(const QHttpResponseHeader & hdr)
-{
-    switch (hdr.statusCode()) {
-        case 200:
-            break;
-        case 406:
-            QMessageBox::critical(NULL,QApplication::translate("MerkaartorPreferences","Preferences upload failed"), QApplication::translate("MerkaartorPreferences","Duplicate key"));
-            break;
-        case 413:
-            QMessageBox::critical(NULL,QApplication::translate("MerkaartorPreferences","Preferences upload failed"), QApplication::translate("MerkaartorPreferences","More than 150 preferences"));
-            break;
-        default:
-            qDebug() << "MerkaartorPreferences::on_responseHeaderReceived :" << hdr.statusCode() << hdr.reasonPhrase();
-            break;
-    }
+    OsmPrefSaveReply = httpRequest.sendCustomRequest(req,"DELETE");
 }
 
 void MerkaartorPreferences::initialize()
 {
-//	Use06Api = Sets->value("osm/use06api", "true").toBool();
+//  Use06Api = Sets->value("osm/use06api", "true").toBool();
     Use06Api = true;
 
     // PRoxy upgrade
@@ -663,7 +645,7 @@ BookmarkList* MerkaartorPreferences::getBookmarks()
 
 WmsServerList* MerkaartorPreferences::getWmsServers()
 {
-//	return Sets->value("WSM/servers").toStringList();
+//  return Sets->value("WSM/servers").toStringList();
     return theWmsServerList.getServers();
 }
 
@@ -672,15 +654,15 @@ void MerkaartorPreferences::setWmsServers()
     //QStringList Servers;
     //WmsServerListIterator i(theWmsServerList);
     //while (i.hasNext()) {
-    //	i.next();
-    //	WmsServer S = i.value();
-    //	Servers.append(S.WmsName);
-    //	Servers.append(S.WmsAdress);
-    //	Servers.append(S.WmsPath);
-    //	Servers.append(S.WmsLayers);
-    //	Servers.append(S.WmsProjections);
-    //	Servers.append(S.WmsStyles);
-    //	Servers.append(S.WmsImgFormat);
+    //  i.next();
+    //  WmsServer S = i.value();
+    //  Servers.append(S.WmsName);
+    //  Servers.append(S.WmsAdress);
+    //  Servers.append(S.WmsPath);
+    //  Servers.append(S.WmsLayers);
+    //  Servers.append(S.WmsProjections);
+    //  Servers.append(S.WmsStyles);
+    //  Servers.append(S.WmsImgFormat);
     //}
     //Sets->setValue("WSM/servers", Servers);
 }
@@ -694,7 +676,7 @@ OsmServerList* MerkaartorPreferences::getOsmServers()
 
 TmsServerList* MerkaartorPreferences::getTmsServers()
 {
-//	return Sets->value("WSM/servers").toStringList();
+//  return Sets->value("WSM/servers").toStringList();
     return theTmsServerList.getServers();
 }
 
@@ -703,14 +685,14 @@ void MerkaartorPreferences::setTmsServers()
     //QStringList Servers;
     //TmsServerListIterator i(theTmsServerList);
     //while (i.hasNext()) {
-    //	i.next();
-    //	TmsServer S = i.value();
-    //	Servers.append(S.TmsName);
-    //	Servers.append(S.TmsAdress);
-    //	Servers.append(S.TmsPath);
-    //	Servers.append(QString::number(S.TmsTileSize));
-    //	Servers.append(QString::number(S.TmsMinZoom));
-    //	Servers.append(QString::number(S.TmsMaxZoom));
+    //  i.next();
+    //  TmsServer S = i.value();
+    //  Servers.append(S.TmsName);
+    //  Servers.append(S.TmsAdress);
+    //  Servers.append(S.TmsPath);
+    //  Servers.append(QString::number(S.TmsTileSize));
+    //  Servers.append(QString::number(S.TmsMinZoom));
+    //  Servers.append(QString::number(S.TmsMaxZoom));
     //}
     //Sets->setValue("TMS/servers", Servers);
 }
@@ -1386,13 +1368,13 @@ void MerkaartorPreferences::loadProjection(QString fn)
     qDebug() << "loadProjection " << fn;
     QFile file(fn);
     if (!file.open(QIODevice::ReadOnly)) {
-//		QMessageBox::critical(this, tr("Invalid file"), tr("%1 could not be opened.").arg(fn));
+//      QMessageBox::critical(this, tr("Invalid file"), tr("%1 could not be opened.").arg(fn));
         return;
     }
 
     QDomDocument* theXmlDoc = new QDomDocument();
     if (!theXmlDoc->setContent(&file)) {
-//		QMessageBox::critical(this, tr("Invalid file"), tr("%1 is not a valid XML file.").arg(fn));
+//      QMessageBox::critical(this, tr("Invalid file"), tr("%1 is not a valid XML file.").arg(fn));
         file.close();
         return;
     }
@@ -1523,13 +1505,13 @@ void MerkaartorPreferences::loadWMS(QString fn)
 
     QFile file(fn);
     if (!file.open(QIODevice::ReadOnly)) {
-//		QMessageBox::critical(this, tr("Invalid file"), tr("%1 could not be opened.").arg(fn));
+//      QMessageBox::critical(this, tr("Invalid file"), tr("%1 could not be opened.").arg(fn));
         return;
     }
 
     QDomDocument* theXmlDoc = new QDomDocument();
     if (!theXmlDoc->setContent(&file)) {
-//		QMessageBox::critical(this, tr("Invalid file"), tr("%1 is not a valid XML file.").arg(fn));
+//      QMessageBox::critical(this, tr("Invalid file"), tr("%1 is not a valid XML file.").arg(fn));
         file.close();
         return;
     }
@@ -1583,13 +1565,13 @@ void MerkaartorPreferences::loadTMS(QString fn)
 
     QFile file(fn);
     if (!file.open(QIODevice::ReadOnly)) {
-//		QMessageBox::critical(this, tr("Invalid file"), tr("%1 could not be opened.").arg(fn));
+//      QMessageBox::critical(this, tr("Invalid file"), tr("%1 could not be opened.").arg(fn));
         return;
     }
 
     QDomDocument* theXmlDoc = new QDomDocument();
     if (!theXmlDoc->setContent(&file)) {
-//		QMessageBox::critical(this, tr("Invalid file"), tr("%1 is not a valid XML file.").arg(fn));
+//      QMessageBox::critical(this, tr("Invalid file"), tr("%1 is not a valid XML file.").arg(fn));
         file.close();
         return;
     }
@@ -1643,13 +1625,13 @@ void MerkaartorPreferences::loadBookmark(QString fn)
 
     QFile file(fn);
     if (!file.open(QIODevice::ReadOnly)) {
-//		QMessageBox::critical(this, tr("Invalid file"), tr("%1 could not be opened.").arg(fn));
+//      QMessageBox::critical(this, tr("Invalid file"), tr("%1 could not be opened.").arg(fn));
         return;
     }
 
     QDomDocument* theXmlDoc = new QDomDocument();
     if (!theXmlDoc->setContent(&file)) {
-//		QMessageBox::critical(this, tr("Invalid file"), tr("%1 is not a valid XML file.").arg(fn));
+//      QMessageBox::critical(this, tr("Invalid file"), tr("%1 is not a valid XML file.").arg(fn));
         file.close();
         return;
     }
