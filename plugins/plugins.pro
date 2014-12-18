@@ -1,3 +1,4 @@
 TEMPLATE = subdirs
 
-SUBDIRS += background qtstyle
+SUBDIRS += background
+# qtstyle
