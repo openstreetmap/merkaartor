@@ -66,7 +66,6 @@ namespace NameFinder {
     private:
         Ui::NameFinderWidgetUi *m_ui;
 
-        QBuffer buffer;
         HttpQuery *query;
         NameFinderTableModel *model;
         QList<NameFinderResult> *results;
@@ -75,8 +74,8 @@ namespace NameFinder {
 
 
     private slots:
-        void display();
-        void displayError(QHttp::Error);
+        void display(QIODevice *reply);
+        void displayError(QNetworkReply::NetworkError);
         void selection_selectionChanged(const QItemSelection & selected, const QItemSelection & deselected);
         void doubleClick();
     };

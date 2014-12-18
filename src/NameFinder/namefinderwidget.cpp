@@ -67,16 +67,16 @@ namespace NameFinder
     void NameFinderWidget::search ( QString object, QPointF coord )
     {
         theCenter = coord;
-        query = new HttpQuery ( this, &buffer );
-        connect ( query, SIGNAL ( done() ), this, SLOT ( display() ) );
-        connect ( query, SIGNAL ( doneWithError(QHttp::Error) ), this, SLOT ( displayError(QHttp::Error) ));
+        query = new HttpQuery ( this );
+        connect ( query, SIGNAL ( done( QIODevice* ) ), this, SLOT ( display(QIODevice*) ) );
+        connect ( query, SIGNAL ( doneWithError(QNetworkReply::NetworkError) ), this, SLOT ( displayError(QNetworkReply::NetworkError) ));
 
         query->startSearch ( object );
     }
 
-    void NameFinderWidget::display()
+    void NameFinderWidget::display(QIODevice *reply)
     {
-        XmlStreamReader reader ( &buffer, theCenter );
+        XmlStreamReader reader ( reply, theCenter );
         reader.read();
         model->setResults ( new QList<NameFinderResult> ( reader.getResults() ) );
 
@@ -84,23 +84,22 @@ namespace NameFinder
     }
 
     //! Displays a QMessageBox with the connection error
-    void NameFinderWidget::displayError(QHttp::Error error)
+    void NameFinderWidget::displayError(QNetworkReply::NetworkError error)
     {
         QMessageBox errorBox;
         errorBox.setIcon(QMessageBox::Critical);
         errorBox.setWindowTitle(tr("Error!"));
-        switch (error)
-        {
-        case QHttp::HostNotFound:
-            errorBox.setText(tr("Name finder service host not found."));
-            break;
-        case QHttp::ConnectionRefused:
-            errorBox.setText(tr("Name finder service host refused connection."));
-            break;
-        case QHttp::AuthenticationRequiredError:
+        if (error == QNetworkReply::AuthenticationRequiredError) {
             errorBox.setText(tr("Name finder service requires authentication."));
-        default:
-            errorBox.setText(tr("Unknown error."));
+        } else {
+            QMetaObject meta = QNetworkReply::staticMetaObject;
+            for (int i=0; i < meta.enumeratorCount(); ++i) {
+                QMetaEnum m = meta.enumerator(i);
+                if (m.name() == QLatin1String("NetworkError")) {
+                    errorBox.setText(QLatin1String(m.valueToKey(error)));
+                    break;
+                }
+            }
         }
         errorBox.exec();
         emit done();
