@@ -12,8 +12,8 @@
 #include "revision.h"
 #include "proj_api.h"
 #include "gdal_version.h"
-#include "QFatFs.h"
-#include "ZipEngine.h"
+//#include "QFatFs.h"
+//#include "ZipEngine.h"
 
 #include "IMapAdapterFactory.h"
 
@@ -251,7 +251,7 @@ int main(int argc, char** argv)
     instance.processEvents();
 
 //    QFatFsHandler* fatHandler = new QFatFsHandler(50000, 8192);
-    ZipEngineHandler* zipHandler = new ZipEngineHandler();
+    //ZipEngineHandler* zipHandler = new ZipEngineHandler();
 
 
     MainWindow Main;
