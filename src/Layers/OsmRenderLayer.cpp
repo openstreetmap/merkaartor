@@ -6,6 +6,10 @@
 #include "MapRenderer.h"
 #include "MerkaartorPreferences.h"
 
+#if QT_VERSION >= 0x050000
+#include <QtConcurrent>
+#endif
+
 inline uint qHash(const QPoint& p)
 {
     return (uint)(p.y() + (p.x() << 16));

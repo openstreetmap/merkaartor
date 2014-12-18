@@ -16,6 +16,7 @@
 #include <QStylePainter>
 #include <QInputDialog>
 #include <QMessageBox>
+#include <QDrag>
 
 #include "SelectionDialog.h"
 
