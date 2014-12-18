@@ -18,6 +18,7 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 #include "wmsmapadapter.h"
+#include "Global.h"
 
 WMSMapAdapter::WMSMapAdapter(WmsServer aServer)
  : theServer(aServer)
@@ -73,29 +74,39 @@ IMapAdapter::Type WMSMapAdapter::getType() const
 QString WMSMapAdapter::getQuery(const QRectF& /*wgs84Bbox*/, const QRectF& projBbox, const QRect& size) const
 {
     QUrl theUrl(theServer.WmsPath);
-    if (!theUrl.hasQueryItem("VERSION"))
-        theUrl.addQueryItem("VERSION", "1.1.1");
-    if (!theUrl.hasQueryItem("SERVICE"))
-        theUrl.addQueryItem("SERVICE", "WMS");
-    theUrl.addQueryItem("REQUEST", "GetMap");
+#ifdef QT5
+    QUrlQuery theQuery(theUrl);
+#define theQuery theQuery
+#else
+#define theQuery theUrl
+#endif
+    if (!theQuery.hasQueryItem("VERSION"))
+        theQuery.addQueryItem("VERSION", "1.1.1");
+    if (!theQuery.hasQueryItem("SERVICE"))
+        theQuery.addQueryItem("SERVICE", "WMS");
+    theQuery.addQueryItem("REQUEST", "GetMap");
 
-    if (!theUrl.hasQueryItem("TRANSPARENT"))
-        theUrl.addQueryItem("TRANSPARENT", "TRUE");
-    if (!theUrl.hasQueryItem("LAYERS"))
-        theUrl.addQueryItem("LAYERS", theServer.WmsLayers);
-    if (!theUrl.hasQueryItem("SRS"))
-        theUrl.addQueryItem("SRS", theServer.WmsProjections);
-    if (!theUrl.hasQueryItem("STYLES"))
-        theUrl.addQueryItem("STYLES", theServer.WmsStyles);
-    if (!theUrl.hasQueryItem("FORMAT"))
-        theUrl.addQueryItem("FORMAT", theServer.WmsImgFormat);
-    theUrl.addQueryItem("WIDTH", QString::number(size.width()));
-    theUrl.addQueryItem("HEIGHT", QString::number(size.height()));
-    theUrl.addQueryItem("BBOX", loc.toString(projBbox.bottomLeft().x(),'f',6).append(",")
+    if (!theQuery.hasQueryItem("TRANSPARENT"))
+        theQuery.addQueryItem("TRANSPARENT", "TRUE");
+    if (!theQuery.hasQueryItem("LAYERS"))
+        theQuery.addQueryItem("LAYERS", theServer.WmsLayers);
+    if (!theQuery.hasQueryItem("SRS"))
+        theQuery.addQueryItem("SRS", theServer.WmsProjections);
+    if (!theQuery.hasQueryItem("STYLES"))
+        theQuery.addQueryItem("STYLES", theServer.WmsStyles);
+    if (!theQuery.hasQueryItem("FORMAT"))
+        theQuery.addQueryItem("FORMAT", theServer.WmsImgFormat);
+    theQuery.addQueryItem("WIDTH", QString::number(size.width()));
+    theQuery.addQueryItem("HEIGHT", QString::number(size.height()));
+    theQuery.addQueryItem("BBOX", loc.toString(projBbox.bottomLeft().x(),'f',6).append(",")
             .append(loc.toString(projBbox.bottomLeft().y(),'f',6)).append(",")
             .append(loc.toString(projBbox.topRight().x(),'f',6)).append(",")
             .append(loc.toString(projBbox.topRight().y(),'f',6))
             );
+#ifdef QT5
+    theUrl.setQuery(theQuery);
+#endif
+#undef theQuery
 
     return theUrl.toString(QUrl::RemoveScheme | QUrl::RemoveAuthority);
 }
