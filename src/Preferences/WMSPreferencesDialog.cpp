@@ -53,17 +53,27 @@ WMSPreferencesDialog::~WMSPreferencesDialog()
 void WMSPreferencesDialog::updateUrl()
 {
     QUrl theUrl(edWmsUrl->text());
-    if (!theUrl.hasQueryItem("VERSION"))
-        theUrl.addQueryItem("VERSION", "1.1.1");
-    if (!theUrl.hasQueryItem("SERVICE"))
-        theUrl.addQueryItem("SERVICE", "WMS");
+#if QT_VERSION >= QT_VERSION_CHECK(5,0,0)
+    // FIXME: I'm not sure this is correct. Needs testing.
+    QUrlQuery theQuery(theUrl);
+#else
+#define theQuery theUrl
+#endif
+    if (!theQuery.hasQueryItem("VERSION"))
+        theQuery.addQueryItem("VERSION", "1.1.1");
+    if (!theQuery.hasQueryItem("SERVICE"))
+        theQuery.addQueryItem("SERVICE", "WMS");
 
-    theUrl.removeQueryItem("TRANSPARENT"); theUrl.addQueryItem("TRANSPARENT", "TRUE");
-    theUrl.removeQueryItem("LAYERS"); theUrl.addQueryItem("LAYERS", edWmsLayers->text());
-    theUrl.removeQueryItem("SRS"); theUrl.addQueryItem("SRS", cbWmsProj->currentText());
-    theUrl.removeQueryItem("STYLES"); theUrl.addQueryItem("STYLES", cbWmsStyle->currentText());
-    theUrl.removeQueryItem("FORMAT"); theUrl.addQueryItem("FORMAT", cbWmsImgFormat->currentText());
-
+    theQuery.removeQueryItem("TRANSPARENT"); theQuery.addQueryItem("TRANSPARENT", "TRUE");
+    theQuery.removeQueryItem("LAYERS"); theQuery.addQueryItem("LAYERS", edWmsLayers->text());
+    theQuery.removeQueryItem("SRS"); theQuery.addQueryItem("SRS", cbWmsProj->currentText());
+    theQuery.removeQueryItem("STYLES"); theQuery.addQueryItem("STYLES", cbWmsStyle->currentText());
+    theQuery.removeQueryItem("FORMAT"); theQuery.addQueryItem("FORMAT", cbWmsImgFormat->currentText());
+#if QT_VERSION >= QT_VERSION_CHECK(5,0,0)
+    theUrl.setQuery(theQuery);
+#else
+#undef theQuery
+#endif
     edWmsUrl->setText(theUrl.toString());
 }
 
@@ -103,16 +113,23 @@ void WMSPreferencesDialog::generateWmscLayer()
 
 void WMSPreferencesDialog::on_edWmsUrl_textEdited(const QString &newText)
 {
-    QUrl u(newText);
+    QUrl theUrl(newText);
+#if QT_VERSION >= QT_VERSION_CHECK(5,0,0)
+    QUrlQuery theQuery(theUrl);
+#define theQuery theQuery
+#else
+#define theQuery theUrl
+#endif
 
-    if (u.hasEncodedQueryItem("LAYERS"))
-        edWmsLayers->setText(QUrl::fromPercentEncoding(u.queryItemValue("LAYERS").toLatin1()));
-    if (u.hasEncodedQueryItem("SRS"))
-        cbWmsProj->setEditText(QUrl::fromPercentEncoding(u.queryItemValue("SRS").toLatin1()));
-    if (u.hasEncodedQueryItem("STYLES"))
-        cbWmsStyle->setEditText(QUrl::fromPercentEncoding(u.queryItemValue("STYLES").toLatin1()));
-    if (u.hasEncodedQueryItem("FORMAT"))
-        cbWmsImgFormat->setEditText(QUrl::fromPercentEncoding(u.queryItemValue("FORMAT").toLatin1()));
+    if (theQuery.hasQueryItem("LAYERS"))
+        edWmsLayers->setText(QUrl::fromPercentEncoding(theQuery.queryItemValue("LAYERS").toLatin1()));
+    if (theQuery.hasQueryItem("SRS"))
+        cbWmsProj->setEditText(QUrl::fromPercentEncoding(theQuery.queryItemValue("SRS").toLatin1()));
+    if (theQuery.hasQueryItem("STYLES"))
+        cbWmsStyle->setEditText(QUrl::fromPercentEncoding(theQuery.queryItemValue("STYLES").toLatin1()));
+    if (theQuery.hasQueryItem("FORMAT"))
+        cbWmsImgFormat->setEditText(QUrl::fromPercentEncoding(theQuery.queryItemValue("FORMAT").toLatin1()));
+#undef theQuery
 }
 
 void WMSPreferencesDialog::on_edWmsUrl_editingFinished()
@@ -342,19 +359,30 @@ void WMSPreferencesDialog::showCapabilities(void)
         return;
 
     QUrl theUrl(edWmsUrl->text());
+#if QT_VERSION >= QT_VERSION_CHECK(5,0,0)
+    QUrlQuery theQuery(theUrl);
+#define theQuery theQuery
+#else
+#define theQuery theUrl
+#endif
     if ((theUrl.host() == "") || (theUrl.path() == "")) {
         QMessageBox::critical(this, tr("Merkaartor: GetCapabilities"), tr("Address and Path cannot be blank."), QMessageBox::Ok);
     }
 
-    if (!theUrl.hasQueryItem("VERSION"))
-        theUrl.addQueryItem("VERSION", "1.1.1");
-    if (!theUrl.hasQueryItem("SERVICE"))
-        theUrl.addQueryItem("SERVICE", "WMS");
-    theUrl.removeAllQueryItems("LAYERS");
-    theUrl.removeAllQueryItems("SRS");
-    theUrl.removeAllQueryItems("FORMAT");
-    theUrl.removeAllQueryItems("STYLES");
-    theUrl.addQueryItem("REQUEST", "GetCapabilities");
+    if (!theQuery.hasQueryItem("VERSION"))
+        theQuery.addQueryItem("VERSION", "1.1.1");
+    if (!theQuery.hasQueryItem("SERVICE"))
+        theQuery.addQueryItem("SERVICE", "WMS");
+    theQuery.removeAllQueryItems("LAYERS");
+    theQuery.removeAllQueryItems("SRS");
+    theQuery.removeAllQueryItems("FORMAT");
+    theQuery.removeAllQueryItems("STYLES");
+    theQuery.addQueryItem("REQUEST", "GetCapabilities");
+
+#if QT_VERSION >= QT_VERSION_CHECK(5,0,0)
+    theUrl.setQuery(theQuery);
+#endif
+#undef theQuery
 //    QUrl url(edWmsUrl->text() + "VERSION=1.1.1&SERVICE=WMS&request=GetCapabilities");
 
     requestCapabilities(theUrl);

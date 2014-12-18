@@ -36,24 +36,35 @@ public:
 
     State validate ( QString & input, int & /*pos*/ ) const
     {
-        QUrl u(input);
-        if (!u.isValid())
+        QUrl theUrl(input);
+
+        if (!theUrl.isValid())
             return QValidator::Intermediate;
 
-        if (u.hasEncodedQueryItem("BBOX"))
-            u.removeEncodedQueryItem("BBOX");
-        if (u.hasEncodedQueryItem("REQUEST"))
-            u.removeEncodedQueryItem("REQUEST");
-        if (u.hasEncodedQueryItem("WIDTH"))
-            u.removeEncodedQueryItem("WIDTH");
-        if (u.hasEncodedQueryItem("HEIGHT"))
-            u.removeEncodedQueryItem("HEIGHT");
-        if (u.hasEncodedQueryItem("TRANSPARENT"))
-            u.removeEncodedQueryItem("TRANSPARENT");
-        if (u.hasEncodedQueryItem("tiled"))
-            u.removeEncodedQueryItem("tiled");
+#if QT_VERSION >= QT_VERSION_CHECK(5,0,0)
+        QUrlQuery theQuery(theUrl);
+#define theQuery theQuery
+#else
+#define theQuery theUrl
+#endif
 
-        input = u.toString();
+        if (theQuery.hasQueryItem("BBOX"))
+            theQuery.removeQueryItem("BBOX");
+        if (theQuery.hasQueryItem("REQUEST"))
+            theQuery.removeQueryItem("REQUEST");
+        if (theQuery.hasQueryItem("WIDTH"))
+            theQuery.removeQueryItem("WIDTH");
+        if (theQuery.hasQueryItem("HEIGHT"))
+            theQuery.removeQueryItem("HEIGHT");
+        if (theQuery.hasQueryItem("TRANSPARENT"))
+            theQuery.removeQueryItem("TRANSPARENT");
+        if (theQuery.hasQueryItem("tiled"))
+            theQuery.removeQueryItem("tiled");
+
+#if QT_VERSION >= QT_VERSION_CHECK(5,0,0)
+        theUrl.setQuery(theQuery);
+#endif
+        input = theUrl.toString();
         return QValidator::Acceptable;
     }
 
