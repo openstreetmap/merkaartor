@@ -14,6 +14,7 @@
 #include "gdal_version.h"
 //#include "QFatFs.h"
 //#include "ZipEngine.h"
+#include "Global.h"
 
 #include "IMapAdapterFactory.h"
 
@@ -23,8 +24,12 @@ extern Q_CORE_EXPORT void qWinMsgHandler(QtMsgType t, const char* str);
 
 FILE* pLogFile = NULL;
 
-void myMessageOutput(QtMsgType msgType, const char *buf)
-{
+#ifdef QT5
+void myMessageOutput(QtMsgType msgType, const QMessageLogContext &, const QString & str) {
+    const char * buf = str.toStdString().c_str();
+#else
+void myMessageOutput(QtMsgType msgType, const char *buf) {
+#endif
 // From corelib/global/qglobal.cpp : qt_message_output
 
 #if defined(Q_OS_WIN) && !defined(NDEBUG)
@@ -171,7 +176,11 @@ int main(int argc, char** argv)
 
     if (!logFilename.isNull())
         pLogFile = fopen(logFilename.toLatin1(), "a");
+#ifdef QT5
+    qInstallMessageHandler(myMessageOutput);
+#else
     qInstallMsgHandler(myMessageOutput);
+#endif
 
     qDebug() << "**** " << QDateTime::currentDateTime().toString(Qt::ISODate) << " -- Starting " << USER_AGENT;
     qDebug() <<	"-------" << QString("using QT version %1 (built with %2)").arg(qVersion()).arg(QT_VERSION_STR);
@@ -292,7 +301,7 @@ int main(int argc, char** argv)
     }
 
 //    delete fatHandler;
-    delete zipHandler;
+    //delete zipHandler;
 
     return x;
 }
