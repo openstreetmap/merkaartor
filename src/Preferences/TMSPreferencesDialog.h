@@ -13,8 +13,8 @@
 #define TMSPREFERENCESDIALOG_H
 
 #include <QWidget>
-#include <QHttp>
 #include <QBuffer>
+#include <QNetworkAccessManager>
 
 
 #include <ui_TMSPreferencesDialog.h>
@@ -65,11 +65,10 @@ private:
     void loadPrefs();
     void savePrefs();
 
-    int sendRequest(QUrl url);
+    QNetworkReply* sendRequest(QUrl url);
 
 private slots:
-    void readResponseHeader(const QHttpResponseHeader &responseHeader);
-    void httpRequestFinished(int id, bool error);
+    void httpRequestFinished( QNetworkReply *reply);
 
 public:
     QList<TmsServer> theTmsServers;
@@ -78,8 +77,7 @@ public:
 
 private:
     QString selectedServer;
-    QHttp *http;
-    int httpGetId;
+    QNetworkAccessManager http;
     QBuffer* buf;
     TileServiceList services;
 
