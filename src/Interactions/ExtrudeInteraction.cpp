@@ -83,7 +83,11 @@ void ExtrudeInteraction::snapMouseMoveEvent(QMouseEvent* ev, Feature* lastSnap)
 {
     Q_UNUSED(lastSnap)
 
+#ifdef QT5
+    LastCursor = ev->localPos();
+#else
     LastCursor = ev->posF();
+#endif
     view()->update();
 }
 
@@ -110,7 +114,12 @@ void ExtrudeInteraction::snapMouseReleaseEvent(QMouseEvent* anEvent, Feature* la
     Q_UNUSED(lastSnap)
 
     if (Creating) {
-        QLineF l(OrigSegment.p1(), anEvent->posF());
+#ifdef QT5
+        QPointF pos = anEvent->localPos();
+#else
+        QPointF pos = anEvent->posF();
+#endif
+        QLineF l(OrigSegment.p1(), pos);
         qreal a = OrigSegment.angleTo(l);
         qreal largeur = sin(angToRad(a))*l.length();
 

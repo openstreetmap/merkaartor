@@ -14,8 +14,15 @@
 
 #include <QList>
 #include <QPair>
+#include <QtGlobal>
 
 #include "MemoryBackend.h"
+
+#if QT_VERSION >= QT_VERSION_CHECK(5,0,0)
+#define QT5
+#else
+#define QT4
+#endif
 
 class MainWindow;
 class IBackend;
