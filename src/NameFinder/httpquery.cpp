@@ -20,7 +20,6 @@
 #include "httpquery.h"
 #include <QtDebug>
 #include "Global.h"
-#include <QUrlQuery>
 
 #include "MerkaartorPreferences.h"
 
@@ -60,7 +59,11 @@ namespace NameFinder
 
         QUrl url("http://"+myService.host());
         url.setPath(myService.path());
+#ifdef QT5
         url.setQuery(myService.query());
+#else
+        url.setEncodedQuery(myService.encodedQuery());
+#endif
 
         qDebug() << "HttpQuery: getting " << url;
         QNetworkRequest req(url);

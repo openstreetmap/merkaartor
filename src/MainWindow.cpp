@@ -2431,9 +2431,9 @@ void MainWindow::on_createPolygonAction_triggered()
     QList< QPair <QString, QString> > tags;
 #ifdef QT5
 #define getInteger getInt
+#endif
     int Sides = QInputDialog::getInteger(this, MainWindow::tr("Create Polygon"), MainWindow::tr("Specify the number of sides"), M_PREFS->getPolygonSides(), 3);
 #undef getInteger
-#endif
     M_PREFS->setPolygonSides(Sides);
     launchInteraction(new CreatePolygonInteraction(this, Sides, tags));
     theInfo->setHtml(theView->interaction()->toHtml());
@@ -2723,11 +2723,11 @@ void MainWindow::on_roadAxisAlignAction_triggered()
         axes = 4;
 #ifdef QT5
 #define getInteger getInt
+#endif
     axes = QInputDialog::getInteger(this, tr("Axis Align"),
                                     tr("Specify the number of regular axes to align edges on (e.g. 4 for rectangular)"),
                                     axes, 3, max_axes, 1, &ok);
 #undef getInteger
-#endif
     if (!ok)
         return;
 
