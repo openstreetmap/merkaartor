@@ -19,6 +19,8 @@
  ***************************************************************************/
 #include "httpquery.h"
 #include <QtDebug>
+#include "Global.h"
+#include <QUrlQuery>
 
 #include "MerkaartorPreferences.h"
 
@@ -43,12 +45,22 @@ namespace NameFinder
     {
         connect(&connection,SIGNAL(finished(QNetworkReply*)),this,SLOT(on_requestFinished(QNetworkReply*)));
 
-        myService.addQueryItem ( "q",question );
-        myService.addQueryItem ( "format","xml" );
+#ifdef QT5
+        QUrlQuery theQuery(myService);
+#define theQuery theQuery
+#else
+#define theQuery myService
+#endif
+        theQuery.addQueryItem ( "q",question );
+        theQuery.addQueryItem ( "format","xml" );
+#ifdef QT5
+        myService.setQuery(theQuery);
+#endif
+#undef theQuery
 
         QUrl url("http://"+myService.host());
         url.setPath(myService.path());
-        url.setEncodedQuery(myService.encodedQuery());
+        url.setQuery(myService.query());
 
         qDebug() << "HttpQuery: getting " << url;
         QNetworkRequest req(url);
