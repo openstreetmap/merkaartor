@@ -667,10 +667,21 @@ bool downloadMapdust(MainWindow* Main, const CoordBox& aBox, Document* theDocume
 
     theDownloader.setAnimator(dlg,Lbl,Bar,true);
     Lbl->setText(QApplication::translate("Downloader","Downloading points"));
-    url.addQueryItem("t", COORD2STRING(aBox.topRight().y()));
-    url.addQueryItem("l", COORD2STRING(aBox.bottomLeft().x()));
-    url.addQueryItem("b", COORD2STRING(aBox.bottomLeft().y()));
-    url.addQueryItem("r", COORD2STRING(aBox.topRight().x()));
+
+#if QT_VERSION >= QT_VERSION_CHECK(5,0,0)
+    QUrlQuery theQuery(url);
+#define theQuery theQuery
+#else
+#define theQuery url
+#endif
+    theQuery.addQueryItem("t", COORD2STRING(aBox.topRight().y()));
+    theQuery.addQueryItem("l", COORD2STRING(aBox.bottomLeft().x()));
+    theQuery.addQueryItem("b", COORD2STRING(aBox.bottomLeft().y()));
+    theQuery.addQueryItem("r", COORD2STRING(aBox.topRight().x()));
+#if QT_VERSION >= QT_VERSION_CHECK(5,0,0)
+    url.setQuery(theQuery);
+#endif
+#undef theQuery
 
     if (!theDownloader.go(url))
         return false;
@@ -729,11 +740,22 @@ bool downloadOpenstreetbugs(MainWindow* Main, const CoordBox& aBox, Document* th
 
     theDownloader.setAnimator(dlg,Lbl,Bar,true);
     Lbl->setText(QApplication::translate("Downloader","Downloading points"));
-    osbUrl.addQueryItem("t", COORD2STRING(aBox.topRight().y()));
-    osbUrl.addQueryItem("l", COORD2STRING(aBox.bottomLeft().x()));
-    osbUrl.addQueryItem("b", COORD2STRING(aBox.bottomLeft().y()));
-    osbUrl.addQueryItem("r", COORD2STRING(aBox.topRight().x()));
-    osbUrl.addQueryItem("open", "yes");
+
+#if QT_VERSION >= QT_VERSION_CHECK(5,0,0)
+    QUrlQuery theQuery(osbUrl);
+#define theQuery theQuery
+#else
+#define theQuery osbUrl
+#endif
+    theQuery.addQueryItem("t", COORD2STRING(aBox.topRight().y()));
+    theQuery.addQueryItem("l", COORD2STRING(aBox.bottomLeft().x()));
+    theQuery.addQueryItem("b", COORD2STRING(aBox.bottomLeft().y()));
+    theQuery.addQueryItem("r", COORD2STRING(aBox.topRight().x()));
+    theQuery.addQueryItem("open", "yes");
+#if QT_VERSION >= QT_VERSION_CHECK(5,0,0)
+    osbUrl.setQuery(theQuery);
+#endif
+#undef theQuery
 
     if (!theDownloader.go(osbUrl))
         return false;
