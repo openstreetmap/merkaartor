@@ -4186,7 +4186,7 @@ void paintTitleBar(QPainter *painter, const QStyleOptionTitleBar *option, QPalet
 	QPalette palette = option->palette;
 
 	if (widget && widget->inherits("QMdiSubWindow")) {
-		if (widget->objectName() != QString::fromAscii("SkulpturePreviewWindow")) {
+		if (widget->objectName() != QString::fromLatin1("SkulpturePreviewWindow")) {
 			getTitleBarPalette(palette);
 		}
 	}
@@ -5231,7 +5231,7 @@ void paintProgressBarContents(QPainter *painter, const QStyleOptionProgressBar *
 		if (option->progress == option->maximum || option->text == QString()) {
 			m = 0;
 		} else if (bar) {
-			if (bar->format() != QString::fromAscii("%p%")) {
+			if (bar->format() != QString::fromLatin1("%p%")) {
 				m = 0;
 			}
 		}
@@ -7696,13 +7696,13 @@ int SkulptureStyle::styleHint(StyleHint hint, const QStyleOption *option, const 
 		setting = 0;
 	}
 #if 1
-	if (setting && d->settings && setting->type != StyleSetting::Parent && !d->settings->contains(QString::fromAscii(setting->label))) {
-		d->settings->setValue(QString::fromAscii(setting->label), value);
+	if (setting && d->settings && setting->type != StyleSetting::Parent && !d->settings->contains(QString::fromLatin1(setting->label))) {
+		d->settings->setValue(QString::fromLatin1(setting->label), value);
 	}
 #endif
 	if (setting) {
 		if (d->settings) {
-			value = d->settings->value(QString::fromAscii(setting->label), value);
+			value = d->settings->value(QString::fromLatin1(setting->label), value);
 		}
 		switch (setting->type) {
 			case StyleSetting::Color:
@@ -7811,9 +7811,9 @@ void paintToolButton(QPainter *painter, const QStyleOptionToolButton *option, QP
 
 void SkulptureStyle::Private::readSettings(const QSettings &s)
 {
-	animateProgressBars = s.value(QString::fromAscii("ProgressBar/AnimateProgressBars"), true).toBool();
-	allowScrollBarSliderToCoverArrows = s.value(QString::fromAscii("ScrollBar/AllowScrollBarSliderToCoverArrows"), true).toBool();
-	hideShortcutUnderlines = s.value(QString::fromAscii("General/HideShortcutUnderlines"), true).toBool();
+	animateProgressBars = s.value(QString::fromLatin1("ProgressBar/AnimateProgressBars"), true).toBool();
+	allowScrollBarSliderToCoverArrows = s.value(QString::fromLatin1("ScrollBar/AllowScrollBarSliderToCoverArrows"), true).toBool();
+	hideShortcutUnderlines = s.value(QString::fromLatin1("General/HideShortcutUnderlines"), true).toBool();
 }
 
 

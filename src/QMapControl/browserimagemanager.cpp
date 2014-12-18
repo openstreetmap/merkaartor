@@ -174,7 +174,7 @@ QImage BrowserImageManager::getImage(IMapAdapter* anAdapter, QString url)
 
     QString host = anAdapter->getHost();
     QString strHash = QString("%1%2").arg(anAdapter->getName()).arg(url);
-    QString hash = QString(strHash.toAscii().toBase64());
+    QString hash = QString(strHash.toLatin1().toBase64());
     if (hash.size() > 255) {
         QCryptographicHash crypt(QCryptographicHash::Md5);
         crypt.addData(hash.toLatin1());
@@ -258,7 +258,7 @@ void BrowserImageManager::pageLoadFinished(bool ok)
 
         if (!(pt.isNull())) {
             QPixmapCache::insert(R.hash, pt);
-            QString strHash = QByteArray::fromBase64(R.hash.toAscii());
+            QString strHash = QByteArray::fromBase64(R.hash.toLatin1());
 
             if (cacheMaxSize && !strHash.startsWith("Yahoo")) {
                 pt.save(cacheDir.absolutePath() + "/" + R.hash + ".png");
@@ -301,7 +301,7 @@ QImage BrowserImageManager::prefetchImage(IMapAdapter* anAdapter, int x, int y, 
     QString host = anAdapter->getHost();
     QString url = anAdapter->getQuery(x, y, z);
     QString strHash = QString("%1;%2;%3;%4;%5").arg(anAdapter->getName()).arg(QString::number(x)).arg(QString::number(y)).arg(QString::number(z)).arg(anAdapter->getTileSizeW());
-    QString hash = QString(strHash.toAscii().toBase64());
+    QString hash = QString(strHash.toLatin1().toBase64());
 
     prefetch.append(hash);
     return getImage(anAdapter, anAdapter->getQuery(x, y, z));

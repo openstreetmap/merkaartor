@@ -63,24 +63,24 @@ void CadastreWrapper::searchVille(const QString &city, const QString &department
 {
     // {"numerovoie": "", "indiceRepetition": "", "nomvoie": "", "lieuDit": "", "ville": city.upper(), "codePostal": "", "codeDepartement": dept, "nbResultatParPage": 20, "x": 0, "y" : 0}
     QString data = QString("numerovoie=&indiceRepetition=&nomvoie=&lieuDit=&ville=%1&codePostal=&codeDepartement=%2&nbResultatParPage=20&x=0&y=0")
-                   .arg(QString::fromAscii(QUrl::toPercentEncoding(city.toUpper())))
+                   .arg(QString::fromLatin1(QUrl::toPercentEncoding(city.toUpper())))
                    .arg(department);
     qDebug() << data;
-    qDebug() << data.toAscii();
+    qDebug() << data.toLatin1();
     qDebug() << m_networkManager;
-    m_networkManager->post(QNetworkRequest(QUrl("http://www.cadastre.gouv.fr/scpc/rechercherPlan.do")), data.toAscii());
+    m_networkManager->post(QNetworkRequest(QUrl("http://www.cadastre.gouv.fr/scpc/rechercherPlan.do")), data.toLatin1());
 }
 
 void CadastreWrapper::searchCode(const QString &code, const QString &department)
 {
     // {"numerovoie": "", "indiceRepetition": "", "nomvoie": "", "lieuDit": "", "ville": city.upper(), "codePostal": "", "codeDepartement": dept, "nbResultatParPage": 20, "x": 0, "y" : 0}
     QString data = QString("numerovoie=&indiceRepetition=&nomvoie=&lieuDit=&codeCommune=%1&codeDepartement=%2&nbResultatParPage=20&x=0&y=0")
-                   .arg(QString::fromAscii(QUrl::toPercentEncoding(code.toUpper())))
+                   .arg(QString::fromLatin1(QUrl::toPercentEncoding(code.toUpper())))
                    .arg(department);
     qDebug() << data;
-    qDebug() << data.toAscii();
+    qDebug() << data.toLatin1();
     qDebug() << m_networkManager;
-    m_networkManager->post(QNetworkRequest(QUrl("http://www.cadastre.gouv.fr/scpc/rechercherPlan.do")), data.toAscii());
+    m_networkManager->post(QNetworkRequest(QUrl("http://www.cadastre.gouv.fr/scpc/rechercherPlan.do")), data.toLatin1());
 }
 
 City CadastreWrapper::requestCity(const QString &code)

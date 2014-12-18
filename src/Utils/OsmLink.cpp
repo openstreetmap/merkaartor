@@ -105,7 +105,7 @@ void OsmLink::parseShortUrl(QString code)
         int z = 0;
         int z_offset = 0;
 
-        QByteArray ar = code.toAscii();
+        QByteArray ar = code.toLatin1();
         for (int i=0; i<ar.size(); ++i) {
         qint8 t = possibleChar.indexOf(ar.at(i));
         if (t == -1)

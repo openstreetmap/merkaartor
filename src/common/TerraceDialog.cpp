@@ -77,7 +77,7 @@ unsigned int TerraceDialog::calcNumbering(int type, const QString& ranges, QStri
                         count -= maxNum - num;
                     int cur = ends[0];
                     for (int i = 0; i < count; i++, cur += step)
-                        *outNumbers << QString::fromAscii("%1").arg(cur);
+                        *outNumbers << QString::fromLatin1("%1").arg(cur);
                 }
                 if (num >= maxNum)
                     return maxNum;

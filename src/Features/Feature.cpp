@@ -73,7 +73,7 @@ IFeature::FId Feature::newId(IFeature::FeatureType type) const
 //		memcpy(&buffer[25+(i*2)], &hex[uuid.data4[i+2]], 2);
 //	}
 //
-//	return QString::fromAscii(buffer,38);
+//	return QString::fromLatin1(buffer,38);
 //#endif
 //}
 

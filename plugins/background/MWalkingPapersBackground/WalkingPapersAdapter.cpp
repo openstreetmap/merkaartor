@@ -152,7 +152,7 @@ bool WalkingPapersAdapter::getWalkingPapersDetails(const QUrl& reqUrl, QRectF& b
         return false;
     }
 
-    QString center = QString::fromAscii(reply->rawHeader("X-Print-Bounds"));
+    QString center = QString::fromLatin1(reply->rawHeader("X-Print-Bounds"));
     QStringList sl = center.split(" ");
     if (!sl.size() == 4)
         return false;

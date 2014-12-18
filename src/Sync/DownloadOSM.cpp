@@ -908,7 +908,7 @@ bool downloadOSM(MainWindow* Main, const CoordBox& aBox , Document* theDocument)
             if (directAPI) {
                 if (ui.FromXapi->isChecked())
                     theLayer->setUploadable(false);
-                OK = downloadOSM(Main,QUrl(QUrl::fromEncoded(directUrl.toAscii())),osmUser,osmPwd,theDocument,theLayer);
+                OK = downloadOSM(Main,QUrl(QUrl::fromEncoded(directUrl.toLatin1())),osmUser,osmPwd,theDocument,theLayer);
             }
             else
                 OK = downloadOSM(Main,osmWebsite,osmUser,osmPwd,Clip,theDocument,theLayer);

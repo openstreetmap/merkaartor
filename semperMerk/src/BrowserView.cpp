@@ -454,7 +454,7 @@ void BrowserView::navigate(const QUrl &url)
         addWebview();
     }
     QNetworkRequest req(url);
-    req.setRawHeader(QString("Referer").toAscii(), referer.toString().toAscii());
+    req.setRawHeader(QString("Referer").toLatin1(), referer.toString().toLatin1());
     req.setAttribute(QNetworkRequest::CacheLoadControlAttribute, QNetworkRequest::PreferCache);
     unsupHandled = false;
     curWebView->load(req);

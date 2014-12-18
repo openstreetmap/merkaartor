@@ -417,7 +417,7 @@ void SlippyMapCache::startDownload()
                 reqUrl.setPort(80);
             qDebug() << "Starting download with url: " << reqUrl;
             QNetworkRequest req(reqUrl);
-            req.setRawHeader(QByteArray("User-Agent"), USER_AGENT.toAscii());
+            req.setRawHeader(QByteArray("User-Agent"), USER_AGENT.toLatin1());
             DownloadReply = Download.get(req);
             return;
         }

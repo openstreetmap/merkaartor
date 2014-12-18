@@ -357,7 +357,7 @@ void MerkaartorPreferences::fromOsmPref()
         osmWeb.setPort(80);
 
     QNetworkRequest req(osmWeb);
-    req.setRawHeader(QByteArray("User-Agent"), USER_AGENT.toAscii());
+    req.setRawHeader(QByteArray("User-Agent"), USER_AGENT.toLatin1());
 
     httpRequest.setProxy(getProxy(osmWeb));
     OsmPrefLoadReply = httpRequest.get(req);
@@ -426,7 +426,7 @@ void MerkaartorPreferences::on_requestFinished ( QNetworkReply *reply )
 
     QByteArray PrefsXML;
     for (int i=0; i<sz; i++)
-        PrefsXML.append(slicedPrefs[i].toAscii());
+        PrefsXML.append(slicedPrefs[i].toLatin1());
 
     //qDebug() << "Size: " << PrefsXML.size();
 
