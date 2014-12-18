@@ -33,6 +33,9 @@ class WalkingPapersAdapter : public IMapAdapter
 {
     Q_OBJECT
     Q_INTERFACES(IMapAdapter)
+#if QT_VERSION >= QT_VERSION_CHECK(5,0,0)
+    Q_PLUGIN_METADATA(IID "be.merkaartor.walkingpapersadapter" FILE "WalkingPapersAdapter.json")
+#endif
 
 public:
     WalkingPapersAdapter();

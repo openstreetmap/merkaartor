@@ -33,6 +33,9 @@ class GdalAdapter : public IMapAdapter
 {
     Q_OBJECT
     Q_INTERFACES(IMapAdapter)
+#if QT_VERSION >= QT_VERSION_CHECK(5,0,0)
+    Q_PLUGIN_METADATA(IID "be.merkaartor.gdaladapter" FILE "GdalAdapter.json")
+#endif
 
 public:
     enum ImgType
