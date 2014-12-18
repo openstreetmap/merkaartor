@@ -2,7 +2,7 @@
 #include "HomeView.h"
 
 #include <QtCore>
-#include <QtGui>
+#include <QtWidgets>
 
 #include "AddressBar.h"
 #include "BookmarkBar.h"

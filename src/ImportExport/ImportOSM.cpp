@@ -12,15 +12,15 @@
 #include "IProgressWindow.h"
 
 #include <QApplication>
-#include <QtCore/QBuffer>
-#include <QtCore/QDateTime>
-#include <QtCore/QEventLoop>
-#include <QtCore/QFile>
-#include <QtGui/QMessageBox>
-#include <QtGui/QProgressBar>
-#include <QtGui/QProgressDialog>
-#include <QtXml/QDomDocument>
-#include <QtXml/QXmlAttributes>
+#include <QBuffer>
+#include <QDateTime>
+#include <QEventLoop>
+#include <QFile>
+#include <QMessageBox>
+#include <QProgressBar>
+#include <QProgressDialog>
+#include <QDomDocument>
+#include <QXmlAttributes>
 
 
 OSMHandler::OSMHandler(Document* aDoc, Layer* aLayer, Layer* aConflict)

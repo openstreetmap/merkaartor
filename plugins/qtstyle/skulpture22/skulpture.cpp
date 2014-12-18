@@ -22,51 +22,51 @@
 // ### This file is a mess
 
 #include "skulpture_p.h"
-#include <QtGui/QLayout>
-#include <QtGui/QLCDNumber>
+#include <QLayout>
+#include <QLCDNumber>
 #include <QtGui/QPainter>
-#include <QtGui/QLabel>
-#include <QtGui/QProgressBar>
-#include <QtGui/QScrollBar>
+#include <QLabel>
+#include <QProgressBar>
+#include <QScrollBar>
 #include <QtGui/QIcon>
-#include <QtGui/QStatusBar>
-#include <QtGui/QAbstractScrollArea>
-#include <QtGui/QScrollArea>
+#include <QStatusBar>
+#include <QAbstractScrollArea>
+#include <QScrollArea>
 #if (QT_VERSION >= QT_VERSION_CHECK(4, 3, 0))
-#include <QtGui/QMdiArea>
-#include <QtGui/QMdiSubWindow>
+#include <QMdiArea>
+#include <QMdiSubWindow>
 #endif
-#include <QtGui/QMenu>
-#include <QtGui/QMenuBar>
+#include <QMenu>
+#include <QMenuBar>
 #include <QtGui/QWorkspace>
-#include <QtGui/QHeaderView>
-#include <QtGui/QListView>
-#include <QtGui/QTreeView>
-#include <QtGui/QTableView>
-#include <QtGui/QMainWindow>
-#include <QtGui/QSplitter>
+#include <QHeaderView>
+#include <QListView>
+#include <QTreeView>
+#include <QTableView>
+#include <QMainWindow>
+#include <QSplitter>
 #include <QtGui/QPainterPath>
-#include <QtGui/QGroupBox>
-#include <QtGui/QDockWidget>
-#include <QtGui/QToolButton>
-#include <QtGui/QTextEdit>
+#include <QGroupBox>
+#include <QDockWidget>
+#include <QToolButton>
+#include <QTextEdit>
 #if (QT_VERSION >= QT_VERSION_CHECK(4, 4, 0))
-#include <QtGui/QPlainTextEdit>
-#include <QtGui/QFormLayout>
+#include <QPlainTextEdit>
+#include <QFormLayout>
 #endif
-#include <QtGui/QStackedLayout>
-#include <QtGui/QGridLayout>
-#include <QtGui/QBoxLayout>
-#include <QtGui/QComboBox>
-#include <QtGui/QDial>
-#include <QtGui/QRadioButton>
-#include <QtGui/QCheckBox>
-#include <QtGui/QToolBox>
-#include <QtGui/QToolBar>
-#include <QtGui/QApplication>
-#include <QtGui/QPushButton>
-#include <QtGui/QLineEdit>
-#include <QtGui/QDialog>
+#include <QStackedLayout>
+#include <QGridLayout>
+#include <QBoxLayout>
+#include <QComboBox>
+#include <QDial>
+#include <QRadioButton>
+#include <QCheckBox>
+#include <QToolBox>
+#include <QToolBar>
+#include <QApplication>
+#include <QPushButton>
+#include <QLineEdit>
+#include <QDialog>
 #include <QtCore/QFile>
 #include <QtCore/QTextStream>
 #include <QtGui/QKeyEvent>
@@ -77,7 +77,7 @@
 
 /*-----------------------------------------------------------------------*/
 
-#include <QtGui/QStylePlugin>
+#include <QStylePlugin>
 
 class SkulptureStylePlugin : public QStylePlugin
 {
@@ -1108,7 +1108,7 @@ SkulptureDrawFunction(drawControl, ControlElement, QStyleOption, d->draw_element
  */
 
 #include "skulpture_p.h"
-#include <QtGui/QProgressBar>
+#include <QProgressBar>
 #include <QtCore/QTimerEvent>
 
 
@@ -2242,7 +2242,7 @@ void paintCachedIndicatorBranchChildren(QPainter *painter, const QStyleOption *o
  */
 
 #include "skulpture_p.h"
-#include <QtGui/QApplication>
+#include <QApplication>
 
 
 /*-----------------------------------------------------------------------*/
@@ -2450,7 +2450,7 @@ void SkulptureStyle::polish(QPalette &palette)
 
 #include "skulpture_p.h"
 #include <QtGui/QPainter>
-#include <QtGui/QApplication>
+#include <QApplication>
 
 
 /*-----------------------------------------------------------------------*/
@@ -2776,7 +2776,7 @@ void SkulptureStyle::drawComplexControl(ComplexControl control, const QStyleOpti
 
 #include "skulpture_p.h"
 #include <QtGui/QPainter>
-#include <QtGui/QAbstractSlider>
+#include <QAbstractSlider>
 #include <cmath>
 
 
@@ -2852,7 +2852,7 @@ void paintDial(QPainter *painter, const QStyleOptionSlider *option, const QWidge
 
 #include "skulpture_p.h"
 #include <QtGui/QPainter>
-#include <QtGui/QDockWidget>
+#include <QDockWidget>
 
 
 /*-----------------------------------------------------------------------*/
@@ -3454,16 +3454,16 @@ void AbstractFactory::create()
  */
 
 #include "skulpture_p.h"
-#include <QtGui/QAbstractSpinBox>
-#include <QtGui/QSpinBox>
-#include <QtGui/QDoubleSpinBox>
-#include <QtGui/QAbstractItemView>
+#include <QAbstractSpinBox>
+#include <QSpinBox>
+#include <QDoubleSpinBox>
+#include <QAbstractItemView>
 #include <QtGui/QMouseEvent>
-#include <QtGui/QApplication>
-#include <QtGui/QComboBox>
+#include <QApplication>
+#include <QComboBox>
 #include <QtGui/QPainter>
-#include <QtGui/QLCDNumber>
-#include <QtGui/QLineEdit>
+#include <QLCDNumber>
+#include <QLineEdit>
 #include <cmath>
 
 
@@ -4010,7 +4010,7 @@ QGradient GradientFactory::createGradient(GradientFactory::Description descripti
 #include "skulpture_p.h"
 #include "sk_factory.h"
 #include <QtGui/QPainter>
-#include <QtGui/QHeaderView>
+#include <QHeaderView>
 
 
 /*-----------------------------------------------------------------------*/
@@ -4145,9 +4145,9 @@ void paintHeaderSortIndicator(QPainter *painter, const QStyleOptionHeader *optio
 #include "skulpture_p.h"
 #include "sk_factory.h"
 #include <QtCore/QSettings>
-#include <QtGui/QStyleOption>
-#include <QtGui/QDockWidget>
-#include <QtGui/QFrame>
+#include <QStyleOption>
+#include <QDockWidget>
+#include <QFrame>
 #include <QtGui/QPainter>
 #include "sk_effects.h"
 #include <cstdlib>
@@ -4527,14 +4527,14 @@ QVariant readKdeSetting(const QString &entry)
 
 #include "skulpture_p.h"
 #include <QtCore/QSettings>
-#include <QtGui/QFrame>
-#include <QtGui/QApplication>
-#include <QtGui/QShortcut>
-#include <QtGui/QLayout>
+#include <QFrame>
+#include <QApplication>
+#include <QShortcut>
+#include <QLayout>
 #if (QT_VERSION >= QT_VERSION_CHECK(4, 4, 0))
-#include <QtGui/QFormLayout>
-#include <QtGui/QLabel>
-#include <QtGui/QCheckBox>
+#include <QFormLayout>
+#include <QLabel>
+#include <QCheckBox>
 #endif
 
 
@@ -5388,7 +5388,7 @@ void SkulptureStyle::Private::polishLayout(QLayout *layout)
 #include "skulpture_p.h"
 #include <QtGui/QPainter>
 #if (QT_VERSION >= QT_VERSION_CHECK(4, 3, 0))
-#include <QtGui/QMdiSubWindow>
+#include <QMdiSubWindow>
 #endif
 #include <QtCore/QSettings>
 #include <cmath>
@@ -5658,13 +5658,13 @@ int getWindowFrameMask(QStyleHintReturnMask *mask, const QStyleOptionTitleBar *o
 
 #include "skulpture_p.h"
 #include <QtGui/QPainter>
-#include <QtGui/QMenu>
-#include <QtGui/QShortcut>
-#include <QtGui/QApplication>
+#include <QMenu>
+#include <QShortcut>
+#include <QApplication>
 #include <QtGui/QTabletEvent>
 #include <QtGui/QMouseEvent>
 #if (QT_VERSION >= QT_VERSION_CHECK(4, 2, 0))
-#include <QtGui/QWidgetAction>
+#include <QWidgetAction>
 #endif
 
 
@@ -6175,7 +6175,7 @@ bool SkulptureStyle::Private::menuEventFilter(QMenu *menu, QEvent *event)
 
 #include "skulpture_p.h"
 #include <QtGui/QPainter>
-#include <QtGui/QTableView>
+#include <QTableView>
 
 
 /*-----------------------------------------------------------------------*/
@@ -6542,7 +6542,7 @@ int getRubberBandMask(QStyleHintReturnMask *mask, const QStyleOption *option, co
 
 #include "skulpture_p.h"
 #include <QtGui/QPainter>
-#include <QtGui/QProgressBar>
+#include <QProgressBar>
 #include <QtCore/QTime>
 #include "sk_effects.h"
 
@@ -6946,8 +6946,8 @@ void paintProgressBarContents(QPainter *painter, const QStyleOptionProgressBarV2
 
 #include "skulpture_p.h"
 #include <QtGui/QPainter>
-#include <QtGui/QAbstractScrollArea>
-#include <QtGui/QApplication>
+#include <QAbstractScrollArea>
+#include <QApplication>
 #include <climits>
 
 
@@ -7431,11 +7431,11 @@ QStyle::SubControl hitTestComplexControlScrollBar(const QStyleOptionSlider *opti
  */
 
 #include "skulpture_p.h"
-#include <QtGui/QAbstractScrollArea>
+#include <QAbstractScrollArea>
 #if (QT_VERSION >= QT_VERSION_CHECK(4, 3, 0))
-#include <QtGui/QMdiArea>
+#include <QMdiArea>
 #endif
-#include <QtGui/QApplication>
+#include <QApplication>
 #include <QtGui/QMouseEvent>
 #include <QtCore/QEvent>
 #include <QtGui/QPainter>
@@ -7955,15 +7955,15 @@ QPainterPath ShapeFactory::createShape(ShapeFactory::Description description)
 #include "skulpture_p.h"
 #include <QtGui/QKeyEvent>
 #include <QtGui/QFocusEvent>
-#include <QtGui/QMenu>
-#include <QtGui/QMenuBar>
-#include <QtGui/QAbstractButton>
-#include <QtGui/QLabel>
-#include <QtGui/QDockWidget>
-#include <QtGui/QToolBox>
-#include <QtGui/QGroupBox>
-#include <QtGui/QTabBar>
-#include <QtGui/QApplication>
+#include <QMenu>
+#include <QMenuBar>
+#include <QAbstractButton>
+#include <QLabel>
+#include <QDockWidget>
+#include <QToolBox>
+#include <QGroupBox>
+#include <QTabBar>
+#include <QApplication>
 
 
 /*-----------------------------------------------------------------------*/
@@ -8150,7 +8150,7 @@ ShortcutHandler::~ShortcutHandler()
  */
 
 #include "skulpture_p.h"
-#include <QtGui/QAbstractSlider>
+#include <QAbstractSlider>
 #include <QtGui/QPainter>
 
 
@@ -8423,8 +8423,8 @@ QRect subControlRectSlider(const QStyleOptionSlider *option, QStyle::SubControl 
  */
 
 #include "skulpture_p.h"
-#include <QtGui/QAbstractSpinBox>
-#include <QtGui/QApplication>
+#include <QAbstractSpinBox>
+#include <QApplication>
 #include <QtGui/QPainter>
 
 
@@ -8622,7 +8622,7 @@ void paintSpinBox(QPainter *painter, const QStyleOptionSpinBox *option, const QW
 
 #include "skulpture_p.h"
 #include <QtGui/QPainter>
-#include <QtGui/QTabWidget>
+#include <QTabWidget>
 
 
 /*-----------------------------------------------------------------------*/
@@ -9155,15 +9155,15 @@ void paintTabBarTabLabel(QPainter *painter, const QStyleOptionTab *option, const
 
 #include "skulpture_p.h"
 #include <QtGui/QPainter>
-#include <QtGui/QTextEdit>
+#include <QTextEdit>
 #if (QT_VERSION >= QT_VERSION_CHECK(4, 4, 0))
-#include <QtGui/QPlainTextEdit>
+#include <QPlainTextEdit>
 #endif
-#include <QtGui/QTextBrowser>
+#include <QTextBrowser>
 #include <QtGui/QTextFrame>
 #include <QtGui/QTextCursor>
-#include <QtGui/QScrollBar>
-#include <QtGui/QApplication>
+#include <QScrollBar>
+#include <QApplication>
 
 
 /*-----------------------------------------------------------------------*/
@@ -9363,9 +9363,9 @@ void SkulptureStyle::drawItemText(QPainter * painter, const QRect &rectangle, in
 
 #include "skulpture_p.h"
 #include <QtGui/QPainter>
-#include <QtGui/QToolBar>
-#include <QtGui/QToolButton>
-#include <QtGui/QTabBar>
+#include <QToolBar>
+#include <QToolButton>
+#include <QTabBar>
 
 
 /*-----------------------------------------------------------------------*/
@@ -9773,15 +9773,15 @@ void SkulptureStyle::Private::updateToolBarOrientation(Qt::Orientation /*orienta
 #include "skulpture_p.h"
 #include <QtCore/QSettings>
 #include <QtCore/QLocale>
-#include <QtGui/QSlider>
+#include <QSlider>
 #if (QT_VERSION >= QT_VERSION_CHECK(4, 2, 0))
-#include <QtGui/QDialogButtonBox>
+#include <QDialogButtonBox>
 #endif
 #if (QT_VERSION >= QT_VERSION_CHECK(4, 3, 0))
-#include <QtGui/QWizard>
+#include <QWizard>
 #endif
 #if (QT_VERSION >= QT_VERSION_CHECK(4, 4, 0))
-#include <QtGui/QFormLayout>
+#include <QFormLayout>
 #endif
 
 

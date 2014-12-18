@@ -20,7 +20,7 @@
 #ifndef NAMEFINDERWIDGET_H
 #define NAMEFINDERWIDGET_H
 
-#include <QtGui/QWidget>
+#include <QWidget>
 #include "httpquery.h"
 #include <QBuffer>
 #include "namefindertablemodel.h"

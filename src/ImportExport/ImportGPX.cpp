@@ -7,11 +7,11 @@
 #include "TrackSegment.h"
 #include "Global.h"
 
-#include <QtCore/QBuffer>
-#include <QtCore/QDateTime>
-#include <QtCore/QFile>
-#include <QtGui/QMessageBox>
-#include <QtXml/QDomDocument>
+#include <QBuffer>
+#include <QDateTime>
+#include <QFile>
+#include <QMessageBox>
+#include <QDomDocument>
 #include <QProgressDialog>
 
 

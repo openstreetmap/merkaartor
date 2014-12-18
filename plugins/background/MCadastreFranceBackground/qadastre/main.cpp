@@ -15,7 +15,7 @@
     along with Qadastre. If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include <QtGui/QApplication>
+#include <QtWidgets/QApplication>
 #include <QDesktopServices>
 #include <QDebug>
 #include <QDir>

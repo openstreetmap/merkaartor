@@ -1,7 +1,7 @@
 #include "Global.h"
 
-#include <QtGui/QApplication>
-#include <QtGui/QMessageBox>
+#include <QApplication>
+#include <QMessageBox>
 
 #include <QLibraryInfo>
 #include <QSplashScreen>

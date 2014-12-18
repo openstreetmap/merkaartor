@@ -22,7 +22,7 @@
 #ifndef SKULPTURE_H
 #define SKULPTURE_H 1
 
-#include <QtGui/QCommonStyle>
+#include <QCommonStyle>
 
 
 /*-----------------------------------------------------------------------*/

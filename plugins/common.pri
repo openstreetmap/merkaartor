@@ -34,7 +34,7 @@ win32-msvc* {
 TEMPLATE = lib
 CONFIG += plugin
 
-QT += core xml network
+QT += core xml network widgets
 
 #DEFINES += QT_NO_DEBUG_OUTPUT
 

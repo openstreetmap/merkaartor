@@ -10,8 +10,8 @@
 #include "MerkaartorPreferences.h"
 #include "Global.h"
 
-#include <QtGui/QDockWidget>
-#include <QtGui/QPainter>
+#include <QDockWidget>
+#include <QPainter>
 
 CreateDoubleWayInteraction::CreateDoubleWayInteraction(MainWindow* aMain)
     : Interaction(aMain), R1(0), R2(0), FirstPoint(0,0), HaveFirst(false), theDock(0)

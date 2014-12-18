@@ -3,7 +3,7 @@
 
 #include <QtCore/QBuffer>
 #include <QtCore/QByteArray>
-#include <QtGui/QWidget>
+#include <QWidget>
 #include <QtNetwork/QHttp>
 
 #include <QMap>

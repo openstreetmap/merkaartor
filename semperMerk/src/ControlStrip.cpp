@@ -3,7 +3,7 @@
 #include "MouseMachine/MouseMachine.h"
 
 #include <QtCore>
-#include <QtGui>
+#include <QtWidgets>
 #include <QObject>
 
 #define STRIP_WIDTH 60

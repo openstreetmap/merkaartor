@@ -11,7 +11,7 @@
 //
 
 #include <QtCore>
-#include <QtGui>
+#include <QtWidgets>
 
 #include "MainWindow.h"
 #include "MyMessageHandler.h"

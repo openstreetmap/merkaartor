@@ -12,8 +12,8 @@
 #include "MerkaartorPreferences.h"
 #include "Global.h"
 
-#include <QtGui/QDockWidget>
-#include <QtGui/QPainter>
+#include <QDockWidget>
+#include <QPainter>
 
 #include <math.h>
 

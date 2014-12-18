@@ -13,9 +13,9 @@
 #include "MDiscardableDialog.h"
 #include "Global.h"
 
-#include <QtGui/QDockWidget>
-#include <QtGui/QMessageBox>
-#include <QtGui/QPainter>
+#include <QDockWidget>
+#include <QMessageBox>
+#include <QPainter>
 
 CreateAreaInteraction::CreateAreaInteraction(MainWindow* aMain)
     : FeatureSnapInteraction(aMain),

@@ -25,7 +25,7 @@
 
 /*-----------------------------------------------------------------------*/
 
-#include <QtCore/QObject>
+#include <QObject>
 class QWidget;
 
 class ShortcutHandler : public QObject
@@ -83,7 +83,7 @@ enum ArrowPlacementMode
 #include <QtCore/QPointer>
 #include <QtCore/QSignalMapper>
 #include <QtCore/QHash>
-#include <QtGui/QStyleOption>
+#include <QStyleOption>
 class QPainter;
 class QSettings;
 class QTextEdit;

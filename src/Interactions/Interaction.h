@@ -19,7 +19,7 @@ class QPainter;
 
 #include <QtCore/QObject>
 #include <QtCore/QTime>
-#include <QtGui/QApplication>
+#include <QApplication>
 #include <QtGui/QCursor>
 #include <QtGui/QMouseEvent>
 #include <QList>

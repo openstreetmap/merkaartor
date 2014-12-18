@@ -1,7 +1,7 @@
 #include "BookmarkBar.h"
 
 #include <QtCore>
-#include <QtGui>
+#include <QtWidgets>
 
 BookmarkBar::BookmarkBar(QWidget *parent)
     : QWidget(parent)

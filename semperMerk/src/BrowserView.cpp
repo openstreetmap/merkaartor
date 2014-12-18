@@ -1,6 +1,6 @@
 #include "BrowserView.h"
 
-#include <QtGui>
+#include <QtWidgets>
 #include <QtNetwork>
 #include <QNetworkCookieJar>
 #include <QTimeLine>

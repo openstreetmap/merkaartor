@@ -6,6 +6,8 @@ DEPENDPATH += $${MERKAARTOR_SRC_DIR}/interfaces
 INCLUDEPATH += $${MERKAARTOR_SRC_DIR}/interfaces
 include ($${MERKAARTOR_SRC_DIR}/interfaces/Interfaces.pri)
 
+QT += widgets
+
 HEADERS += \
     mapadapter.h \
     msbingmapadapter.h
