@@ -26,9 +26,12 @@ MoveNodeInteraction::MoveNodeInteraction(MainWindow* aMain)
     , StartDragPosition(0,0)
     , theList(0)
 {
+    setDontSelectVirtual(true);
+/* FIXME: The following code was here. I'm not sure why someone would want to move virtual node, and Merkaartor crashes on it anyway. Check why it was here.
     if (M_PREFS->getSeparateMoveMode()) {
         setDontSelectVirtual(false);
     }
+*/
 }
 
 MoveNodeInteraction::~MoveNodeInteraction(void)
