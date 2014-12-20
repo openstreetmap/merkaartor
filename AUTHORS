@@ -1,9 +1,10 @@
-Copyright 2006-2010 Bart Vanhauwaert, Chris Browet and others
+Copyright 2006-2014 Bart Vanhauwaert, Chris Browet, Ladislav Láska and others
 
 AUTHORS
 
 Bart Vanhauwaert bvh-osm@irule.be
 Chris "Koying" Browet
+Ladislav Láska <krakonos@krakonos.org>
 Elrond elrond+openstreetmap.org@samba-tng.org
 Oliver Heesakkers
 Patric Cameron
@@ -19,6 +20,8 @@ Tomás Mika
 Yves "LonelyPixel" Goergen
 Toby Speight
 James Hogan
+Richard Brinkman
+Balgofil
 
 Merkaartor uses icons from the Tango Desktop Project 
 (http://tango-freedesktop.org/)
