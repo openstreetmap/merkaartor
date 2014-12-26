@@ -1,0 +1,189 @@
+\section{Qua\-Gzip\-File Class Reference}
+\label{classQuaGzipFile}\index{Qua\-Gzip\-File@{Qua\-Gzip\-File}}
+
+
+G\-Z\-I\-P file.  
+
+
+
+
+{\ttfamily \#include $<$quagzipfile.\-h$>$}
+
+
+
+Inheritance diagram for Qua\-Gzip\-File\-:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=114pt]{classQuaGzipFile__inherit__graph}
+\end{center}
+\end{figure}
+
+
+Collaboration diagram for Qua\-Gzip\-File\-:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=114pt]{classQuaGzipFile__coll__graph}
+\end{center}
+\end{figure}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+{\bf Qua\-Gzip\-File} ()
+\begin{DoxyCompactList}\small\item\em Empty constructor. \end{DoxyCompactList}\item 
+{\bf Qua\-Gzip\-File} (Q\-Object $\ast$parent)
+\begin{DoxyCompactList}\small\item\em Empty constructor with a parent. \end{DoxyCompactList}\item 
+{\bf Qua\-Gzip\-File} (const Q\-String \&file\-Name, Q\-Object $\ast$parent=N\-U\-L\-L)
+\begin{DoxyCompactList}\small\item\em Constructor. \end{DoxyCompactList}\item 
+virtual {\bf $\sim$\-Qua\-Gzip\-File} ()\label{classQuaGzipFile_a1200bc76f36bb2e1991e1e0467befbf2}
+
+\begin{DoxyCompactList}\small\item\em Destructor. \end{DoxyCompactList}\item 
+void {\bf set\-File\-Name} (const Q\-String \&file\-Name)\label{classQuaGzipFile_a253fbaf410a3d4ae0a719505c5525149}
+
+\begin{DoxyCompactList}\small\item\em Sets the name of the G\-Z\-I\-P file to be opened. \end{DoxyCompactList}\item 
+Q\-String {\bf get\-File\-Name} () const \label{classQuaGzipFile_a9a0954a1db1fcf2aeba0530239bce71c}
+
+\begin{DoxyCompactList}\small\item\em Returns the name of the G\-Z\-I\-P file. \end{DoxyCompactList}\item 
+virtual bool {\bf is\-Sequential} () const 
+\begin{DoxyCompactList}\small\item\em Returns true. \end{DoxyCompactList}\item 
+virtual bool {\bf open} (Q\-I\-O\-Device\-::\-Open\-Mode mode)
+\begin{DoxyCompactList}\small\item\em Opens the file. \end{DoxyCompactList}\item 
+virtual bool {\bf open} (int fd, Q\-I\-O\-Device\-::\-Open\-Mode mode)
+\begin{DoxyCompactList}\small\item\em Opens the file. \end{DoxyCompactList}\item 
+virtual bool {\bf flush} ()
+\begin{DoxyCompactList}\small\item\em Flushes data to file. \end{DoxyCompactList}\item 
+virtual void {\bf close} ()\label{classQuaGzipFile_a273205350b1235a242a1eb5cbf586434}
+
+\begin{DoxyCompactList}\small\item\em Closes the file. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Protected Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+virtual qint64 {\bf read\-Data} (char $\ast$data, qint64 max\-Size)\label{classQuaGzipFile_a9eab41b46367e63e0c269c42ca883d82}
+
+\begin{DoxyCompactList}\small\item\em Implementation of Q\-I\-O\-Device\-::read\-Data(). \end{DoxyCompactList}\item 
+virtual qint64 {\bf write\-Data} (const char $\ast$data, qint64 max\-Size)\label{classQuaGzipFile_a6dd09d41d8a51c96b0f2134eff37f676}
+
+\begin{DoxyCompactList}\small\item\em Implementation of Q\-I\-O\-Device\-::write\-Data(). \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+G\-Z\-I\-P file. 
+
+This class is a wrapper around G\-Z\-I\-P file access functions in zlib. Unlike \doxyref{Qua\-Zip}{p.}{classQuaZip} classes, it doesn't allow reading from a G\-Z\-I\-P file opened as Q\-I\-O\-Device, for example, if your G\-Z\-I\-P file is in Q\-Buffer. It only provides Q\-I\-O\-Device access to a G\-Z\-I\-P file contents, but the G\-Z\-I\-P file itself must be identified by its name on disk or by descriptor id. 
+
+\subsection{Constructor \& Destructor Documentation}
+\index{Qua\-Gzip\-File@{Qua\-Gzip\-File}!Qua\-Gzip\-File@{Qua\-Gzip\-File}}
+\index{Qua\-Gzip\-File@{Qua\-Gzip\-File}!QuaGzipFile@{Qua\-Gzip\-File}}
+\subsubsection[{Qua\-Gzip\-File}]{\setlength{\rightskip}{0pt plus 5cm}Qua\-Gzip\-File\-::\-Qua\-Gzip\-File (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)}\label{classQuaGzipFile_a709608207b41ca81d5beed2b34982809}
+
+
+Empty constructor. 
+
+Must call \doxyref{set\-File\-Name()}{p.}{classQuaGzipFile_a253fbaf410a3d4ae0a719505c5525149} before trying to open. \index{Qua\-Gzip\-File@{Qua\-Gzip\-File}!Qua\-Gzip\-File@{Qua\-Gzip\-File}}
+\index{Qua\-Gzip\-File@{Qua\-Gzip\-File}!QuaGzipFile@{Qua\-Gzip\-File}}
+\subsubsection[{Qua\-Gzip\-File}]{\setlength{\rightskip}{0pt plus 5cm}Qua\-Gzip\-File\-::\-Qua\-Gzip\-File (
+\begin{DoxyParamCaption}
+\item[{Q\-Object $\ast$}]{parent}
+\end{DoxyParamCaption}
+)}\label{classQuaGzipFile_a13996f5db660c4a29645f8d208b9ca6b}
+
+
+Empty constructor with a parent. 
+
+Must call \doxyref{set\-File\-Name()}{p.}{classQuaGzipFile_a253fbaf410a3d4ae0a719505c5525149} before trying to open. 
+\begin{DoxyParams}{Parameters}
+{\em parent} & The parent object, as per Q\-Object logic. \\
+\hline
+\end{DoxyParams}
+\index{Qua\-Gzip\-File@{Qua\-Gzip\-File}!Qua\-Gzip\-File@{Qua\-Gzip\-File}}
+\index{Qua\-Gzip\-File@{Qua\-Gzip\-File}!QuaGzipFile@{Qua\-Gzip\-File}}
+\subsubsection[{Qua\-Gzip\-File}]{\setlength{\rightskip}{0pt plus 5cm}Qua\-Gzip\-File\-::\-Qua\-Gzip\-File (
+\begin{DoxyParamCaption}
+\item[{const Q\-String \&}]{file\-Name, }
+\item[{Q\-Object $\ast$}]{parent = {\ttfamily NULL}}
+\end{DoxyParamCaption}
+)}\label{classQuaGzipFile_ac7f7703bda9c6169c001aa15641bb2ea}
+
+
+Constructor. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em file\-Name} & The name of the G\-Z\-I\-P file. \\
+\hline
+{\em parent} & The parent object, as per Q\-Object logic. \\
+\hline
+\end{DoxyParams}
+
+
+\subsection{Member Function Documentation}
+\index{Qua\-Gzip\-File@{Qua\-Gzip\-File}!is\-Sequential@{is\-Sequential}}
+\index{is\-Sequential@{is\-Sequential}!QuaGzipFile@{Qua\-Gzip\-File}}
+\subsubsection[{is\-Sequential}]{\setlength{\rightskip}{0pt plus 5cm}bool Qua\-Gzip\-File\-::is\-Sequential (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+) const\hspace{0.3cm}{\ttfamily [virtual]}}\label{classQuaGzipFile_ae97f4e15d86c965c156df33d00318176}
+
+
+Returns true. 
+
+Strictly speaking, zlib supports seeking for G\-Z\-I\-P files, but it is poorly implemented, because there is no way to implement it properly. For reading, seeking backwards is very slow, and for writing, it is downright impossible. Therefore, \doxyref{Qua\-Gzip\-File}{p.}{classQuaGzipFile} does not support seeking at all. \index{Qua\-Gzip\-File@{Qua\-Gzip\-File}!open@{open}}
+\index{open@{open}!QuaGzipFile@{Qua\-Gzip\-File}}
+\subsubsection[{open}]{\setlength{\rightskip}{0pt plus 5cm}bool Qua\-Gzip\-File\-::open (
+\begin{DoxyParamCaption}
+\item[{Q\-I\-O\-Device\-::\-Open\-Mode}]{mode}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [virtual]}}\label{classQuaGzipFile_a1d560babdfff3a3441d704099a5bc1e4}
+
+
+Opens the file. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em mode} & Can be either Q\-I\-O\-Device\-::\-Write or Q\-I\-O\-Device\-::\-Read. Read\-Write and Append aren't supported. \\
+\hline
+\end{DoxyParams}
+\index{Qua\-Gzip\-File@{Qua\-Gzip\-File}!open@{open}}
+\index{open@{open}!QuaGzipFile@{Qua\-Gzip\-File}}
+\subsubsection[{open}]{\setlength{\rightskip}{0pt plus 5cm}bool Qua\-Gzip\-File\-::open (
+\begin{DoxyParamCaption}
+\item[{int}]{fd, }
+\item[{Q\-I\-O\-Device\-::\-Open\-Mode}]{mode}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [virtual]}}\label{classQuaGzipFile_adf5a954bb9bfda2d33cd336a213e2549}
+
+
+Opens the file. 
+
+This is an overloaded member function, provided for convenience. It differs from the above function only in what argument(s) it accepts. 
+\begin{DoxyParams}{Parameters}
+{\em fd} & The file descriptor to read/write the G\-Z\-I\-P file from/to. \\
+\hline
+{\em mode} & Can be either Q\-I\-O\-Device\-::\-Write or Q\-I\-O\-Device\-::\-Read. Read\-Write and Append aren't supported. \\
+\hline
+\end{DoxyParams}
+\index{Qua\-Gzip\-File@{Qua\-Gzip\-File}!flush@{flush}}
+\index{flush@{flush}!QuaGzipFile@{Qua\-Gzip\-File}}
+\subsubsection[{flush}]{\setlength{\rightskip}{0pt plus 5cm}bool Qua\-Gzip\-File\-::flush (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [virtual]}}\label{classQuaGzipFile_ab745f345b727c81abbc3eb5af4dca844}
+
+
+Flushes data to file. 
+
+The data is written using Z\-\_\-\-S\-Y\-N\-C\-\_\-\-F\-L\-U\-S\-H mode. Doesn't make any sense when reading. 
+
+The documentation for this class was generated from the following files\-:\begin{DoxyCompactItemize}
+\item 
+quazip/quagzipfile.\-h\item 
+quazip/quagzipfile.\-cpp\end{DoxyCompactItemize}

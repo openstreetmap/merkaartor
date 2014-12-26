@@ -1,0 +1,360 @@
+\section{Qua\-Zip\-New\-Info Struct Reference}
+\label{structQuaZipNewInfo}\index{Qua\-Zip\-New\-Info@{Qua\-Zip\-New\-Info}}
+
+
+Information about a file to be created.  
+
+
+
+
+{\ttfamily \#include $<$quazipnewinfo.\-h$>$}
+
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+{\bf Qua\-Zip\-New\-Info} (const Q\-String \&{\bf name})
+\begin{DoxyCompactList}\small\item\em Constructs \doxyref{Qua\-Zip\-New\-Info}{p.}{structQuaZipNewInfo} instance. \end{DoxyCompactList}\item 
+{\bf Qua\-Zip\-New\-Info} (const Q\-String \&{\bf name}, const Q\-String \&file)
+\begin{DoxyCompactList}\small\item\em Constructs \doxyref{Qua\-Zip\-New\-Info}{p.}{structQuaZipNewInfo} instance. \end{DoxyCompactList}\item 
+{\bf Qua\-Zip\-New\-Info} (const {\bf Qua\-Zip\-File\-Info} \&existing)
+\begin{DoxyCompactList}\small\item\em Initializes the new instance from existing file info. \end{DoxyCompactList}\item 
+{\bf Qua\-Zip\-New\-Info} (const {\bf Qua\-Zip\-File\-Info64} \&existing)
+\begin{DoxyCompactList}\small\item\em Initializes the new instance from existing file info. \end{DoxyCompactList}\item 
+void {\bf set\-File\-Date\-Time} (const Q\-String \&file)
+\begin{DoxyCompactList}\small\item\em Sets the file timestamp from the existing file. \end{DoxyCompactList}\item 
+void {\bf set\-File\-Permissions} (const Q\-String \&file)
+\begin{DoxyCompactList}\small\item\em Sets the file permissions from the existing file. \end{DoxyCompactList}\item 
+void {\bf set\-Permissions} (Q\-File\-::\-Permissions permissions)
+\begin{DoxyCompactList}\small\item\em Sets the file permissions. \end{DoxyCompactList}\item 
+void {\bf set\-File\-N\-T\-F\-S\-Times} (const Q\-String \&file\-Name)
+\begin{DoxyCompactList}\small\item\em Sets the N\-T\-F\-S times from an existing file. \end{DoxyCompactList}\item 
+void {\bf set\-File\-N\-T\-F\-Sm\-Time} (const Q\-Date\-Time \&m\-Time, int fine\-Ticks=0)
+\begin{DoxyCompactList}\small\item\em Sets the N\-T\-F\-S modification time. \end{DoxyCompactList}\item 
+void {\bf set\-File\-N\-T\-F\-Sa\-Time} (const Q\-Date\-Time \&a\-Time, int fine\-Ticks=0)
+\begin{DoxyCompactList}\small\item\em Sets the N\-T\-F\-S access time. \end{DoxyCompactList}\item 
+void {\bf set\-File\-N\-T\-F\-Sc\-Time} (const Q\-Date\-Time \&c\-Time, int fine\-Ticks=0)
+\begin{DoxyCompactList}\small\item\em Sets the N\-T\-F\-S creation time. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+Q\-String {\bf name}
+\begin{DoxyCompactList}\small\item\em File name. \end{DoxyCompactList}\item 
+Q\-Date\-Time {\bf date\-Time}
+\begin{DoxyCompactList}\small\item\em File timestamp. \end{DoxyCompactList}\item 
+quint16 {\bf internal\-Attr}\label{structQuaZipNewInfo_a59ce9776c2ac7547ade8cb4c404c77ab}
+
+\begin{DoxyCompactList}\small\item\em File internal attributes. \end{DoxyCompactList}\item 
+quint32 {\bf external\-Attr}
+\begin{DoxyCompactList}\small\item\em File external attributes. \end{DoxyCompactList}\item 
+Q\-String {\bf comment}
+\begin{DoxyCompactList}\small\item\em File comment. \end{DoxyCompactList}\item 
+Q\-Byte\-Array {\bf extra\-Local}\label{structQuaZipNewInfo_ab377a81c51cf495c7aeee4f19340a43f}
+
+\begin{DoxyCompactList}\small\item\em File local extra field. \end{DoxyCompactList}\item 
+Q\-Byte\-Array {\bf extra\-Global}\label{structQuaZipNewInfo_abda207eb3949db3a88761c1b06e6bd58}
+
+\begin{DoxyCompactList}\small\item\em File global extra field. \end{DoxyCompactList}\item 
+ulong {\bf uncompressed\-Size}
+\begin{DoxyCompactList}\small\item\em Uncompressed file size. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+Information about a file to be created. 
+
+This structure holds information about a file to be created inside Z\-I\-P archive. At least name should be set to something correct before passing this structure to Qua\-Zip\-File\-::open(\-Open\-Mode,const Qua\-Zip\-New\-Info\&,int,int,bool).
+
+Zip64 support of this structure is slightly limited\-: in the raw mode (when a pre-\/compressed file is written into a Z\-I\-P file as-\/is), it is necessary to specify the uncompressed file size and the appropriate field is 32 bit. Since the raw mode is used extremely rare, there is no real need to have a separate Qua\-Zip\-New\-Info64 structure like \doxyref{Qua\-Zip\-File\-Info64}{p.}{structQuaZipFileInfo64}. It may be added in the future though, if there is a demand for the raw mode with zip64 archives. 
+
+\subsection{Constructor \& Destructor Documentation}
+\index{Qua\-Zip\-New\-Info@{Qua\-Zip\-New\-Info}!Qua\-Zip\-New\-Info@{Qua\-Zip\-New\-Info}}
+\index{Qua\-Zip\-New\-Info@{Qua\-Zip\-New\-Info}!QuaZipNewInfo@{Qua\-Zip\-New\-Info}}
+\subsubsection[{Qua\-Zip\-New\-Info}]{\setlength{\rightskip}{0pt plus 5cm}Qua\-Zip\-New\-Info\-::\-Qua\-Zip\-New\-Info (
+\begin{DoxyParamCaption}
+\item[{const Q\-String \&}]{name}
+\end{DoxyParamCaption}
+)}\label{structQuaZipNewInfo_a46c0f551cf9e6b2131929beb39187aac}
+
+
+Constructs \doxyref{Qua\-Zip\-New\-Info}{p.}{structQuaZipNewInfo} instance. 
+
+Initializes name with {\itshape name}, date\-Time with current date and time. Attributes are initialized with zeros, comment and extra field with null values. \index{Qua\-Zip\-New\-Info@{Qua\-Zip\-New\-Info}!Qua\-Zip\-New\-Info@{Qua\-Zip\-New\-Info}}
+\index{Qua\-Zip\-New\-Info@{Qua\-Zip\-New\-Info}!QuaZipNewInfo@{Qua\-Zip\-New\-Info}}
+\subsubsection[{Qua\-Zip\-New\-Info}]{\setlength{\rightskip}{0pt plus 5cm}Qua\-Zip\-New\-Info\-::\-Qua\-Zip\-New\-Info (
+\begin{DoxyParamCaption}
+\item[{const Q\-String \&}]{name, }
+\item[{const Q\-String \&}]{file}
+\end{DoxyParamCaption}
+)}\label{structQuaZipNewInfo_ad47cf11f4277edcb09a8ba2b2963f2a9}
+
+
+Constructs \doxyref{Qua\-Zip\-New\-Info}{p.}{structQuaZipNewInfo} instance. 
+
+Initializes name with {\itshape name}. Timestamp and permissions are taken from the specified file. If the {\itshape file} does not exists or its timestamp is inaccessible (e. g. you do not have read permission for the directory file in), uses current time and zero permissions. Other attributes are initialized with zeros, comment and extra field with null values.
+
+\begin{DoxySeeAlso}{See Also}
+\doxyref{set\-File\-Date\-Time()}{p.}{structQuaZipNewInfo_a2b18b554d056877a2f33ffb9d241ed85} 
+\end{DoxySeeAlso}
+
+
+References date\-Time.
+
+\index{Qua\-Zip\-New\-Info@{Qua\-Zip\-New\-Info}!Qua\-Zip\-New\-Info@{Qua\-Zip\-New\-Info}}
+\index{Qua\-Zip\-New\-Info@{Qua\-Zip\-New\-Info}!QuaZipNewInfo@{Qua\-Zip\-New\-Info}}
+\subsubsection[{Qua\-Zip\-New\-Info}]{\setlength{\rightskip}{0pt plus 5cm}Qua\-Zip\-New\-Info\-::\-Qua\-Zip\-New\-Info (
+\begin{DoxyParamCaption}
+\item[{const {\bf Qua\-Zip\-File\-Info} \&}]{existing}
+\end{DoxyParamCaption}
+)}\label{structQuaZipNewInfo_a5f1a867f3b0d29d076f9014f70b59e5a}
+
+
+Initializes the new instance from existing file info. 
+
+Mainly used when copying files between archives.
+
+Both extra fields are initialized to existing.\-extra. \doxyref{Qua\-Zip\-New\-Info}{p.}{structQuaZipNewInfo} 
+\begin{DoxyParams}{Parameters}
+{\em existing} & \\
+\hline
+\end{DoxyParams}
+\index{Qua\-Zip\-New\-Info@{Qua\-Zip\-New\-Info}!Qua\-Zip\-New\-Info@{Qua\-Zip\-New\-Info}}
+\index{Qua\-Zip\-New\-Info@{Qua\-Zip\-New\-Info}!QuaZipNewInfo@{Qua\-Zip\-New\-Info}}
+\subsubsection[{Qua\-Zip\-New\-Info}]{\setlength{\rightskip}{0pt plus 5cm}Qua\-Zip\-New\-Info\-::\-Qua\-Zip\-New\-Info (
+\begin{DoxyParamCaption}
+\item[{const {\bf Qua\-Zip\-File\-Info64} \&}]{existing}
+\end{DoxyParamCaption}
+)}\label{structQuaZipNewInfo_a4afa2e8c282a801fc216f79026c2d062}
+
+
+Initializes the new instance from existing file info. 
+
+Mainly used when copying files between archives.
+
+Both extra fields are initialized to existing.\-extra. \doxyref{Qua\-Zip\-New\-Info}{p.}{structQuaZipNewInfo} 
+\begin{DoxyParams}{Parameters}
+{\em existing} & \\
+\hline
+\end{DoxyParams}
+
+
+\subsection{Member Function Documentation}
+\index{Qua\-Zip\-New\-Info@{Qua\-Zip\-New\-Info}!set\-File\-Date\-Time@{set\-File\-Date\-Time}}
+\index{set\-File\-Date\-Time@{set\-File\-Date\-Time}!QuaZipNewInfo@{Qua\-Zip\-New\-Info}}
+\subsubsection[{set\-File\-Date\-Time}]{\setlength{\rightskip}{0pt plus 5cm}void Qua\-Zip\-New\-Info\-::set\-File\-Date\-Time (
+\begin{DoxyParamCaption}
+\item[{const Q\-String \&}]{file}
+\end{DoxyParamCaption}
+)}\label{structQuaZipNewInfo_a2b18b554d056877a2f33ffb9d241ed85}
+
+
+Sets the file timestamp from the existing file. 
+
+Use this function to set the file timestamp from the existing file. Use it like this\-: 
+\begin{DoxyCode}
+QuaZipFile zipFile(&zip);
+QFile file(\textcolor{stringliteral}{"file-to-add"});
+file.open(QIODevice::ReadOnly);
+QuaZipNewInfo info(\textcolor{stringliteral}{"file-name-in-archive"});
+info.setFileDateTime(\textcolor{stringliteral}{"file-to-add"}); \textcolor{comment}{// take the timestamp from file}
+zipFile.open(QIODevice::WriteOnly, info);
+\end{DoxyCode}
+
+
+This function does not change date\-Time if some error occured (e. g. file is inaccessible). 
+
+References date\-Time.
+
+\index{Qua\-Zip\-New\-Info@{Qua\-Zip\-New\-Info}!set\-File\-Permissions@{set\-File\-Permissions}}
+\index{set\-File\-Permissions@{set\-File\-Permissions}!QuaZipNewInfo@{Qua\-Zip\-New\-Info}}
+\subsubsection[{set\-File\-Permissions}]{\setlength{\rightskip}{0pt plus 5cm}void Qua\-Zip\-New\-Info\-::set\-File\-Permissions (
+\begin{DoxyParamCaption}
+\item[{const Q\-String \&}]{file}
+\end{DoxyParamCaption}
+)}\label{structQuaZipNewInfo_a08bee5211eb0b49da260c7a9e7a266b8}
+
+
+Sets the file permissions from the existing file. 
+
+Takes permissions from the file and sets the high 16 bits of external attributes. Uses Q\-File\-Info to get permissions on all platforms. \index{Qua\-Zip\-New\-Info@{Qua\-Zip\-New\-Info}!set\-Permissions@{set\-Permissions}}
+\index{set\-Permissions@{set\-Permissions}!QuaZipNewInfo@{Qua\-Zip\-New\-Info}}
+\subsubsection[{set\-Permissions}]{\setlength{\rightskip}{0pt plus 5cm}void Qua\-Zip\-New\-Info\-::set\-Permissions (
+\begin{DoxyParamCaption}
+\item[{Q\-File\-::\-Permissions}]{permissions}
+\end{DoxyParamCaption}
+)}\label{structQuaZipNewInfo_aed68dc20f7dc42b5056491cf3c1d2d20}
+
+
+Sets the file permissions. 
+
+Modifies the highest 16 bits of external attributes. The type part is set to dir if the name ends with a slash, and to regular file otherwise. 
+
+References name.
+
+\index{Qua\-Zip\-New\-Info@{Qua\-Zip\-New\-Info}!set\-File\-N\-T\-F\-S\-Times@{set\-File\-N\-T\-F\-S\-Times}}
+\index{set\-File\-N\-T\-F\-S\-Times@{set\-File\-N\-T\-F\-S\-Times}!QuaZipNewInfo@{Qua\-Zip\-New\-Info}}
+\subsubsection[{set\-File\-N\-T\-F\-S\-Times}]{\setlength{\rightskip}{0pt plus 5cm}void Qua\-Zip\-New\-Info\-::set\-File\-N\-T\-F\-S\-Times (
+\begin{DoxyParamCaption}
+\item[{const Q\-String \&}]{file\-Name}
+\end{DoxyParamCaption}
+)}\label{structQuaZipNewInfo_a663a37c5a7a2d18900ba8b0199617eff}
+
+
+Sets the N\-T\-F\-S times from an existing file. 
+
+If the file doesn't exist, a warning is printed to the stderr and nothing is done. Otherwise, all three times, as reported by Q\-File\-Info\-::last\-Modified(), Q\-File\-Info\-::last\-Read() and Q\-File\-Info\-::created(), are written to the N\-T\-F\-S extra field record.
+
+The N\-T\-F\-S record is written to both the local and the global extra fields, updating the existing record if there is one, or creating a new one and appending it to the end of each extra field.
+
+The microseconds will be zero, as they aren't reported by Q\-File\-Info. 
+\begin{DoxyParams}{Parameters}
+{\em file\-Name} & \\
+\hline
+\end{DoxyParams}
+
+
+References set\-File\-N\-T\-F\-Sa\-Time(), set\-File\-N\-T\-F\-Sc\-Time(), and set\-File\-N\-T\-F\-Sm\-Time().
+
+\index{Qua\-Zip\-New\-Info@{Qua\-Zip\-New\-Info}!set\-File\-N\-T\-F\-Sm\-Time@{set\-File\-N\-T\-F\-Sm\-Time}}
+\index{set\-File\-N\-T\-F\-Sm\-Time@{set\-File\-N\-T\-F\-Sm\-Time}!QuaZipNewInfo@{Qua\-Zip\-New\-Info}}
+\subsubsection[{set\-File\-N\-T\-F\-Sm\-Time}]{\setlength{\rightskip}{0pt plus 5cm}void Qua\-Zip\-New\-Info\-::set\-File\-N\-T\-F\-Sm\-Time (
+\begin{DoxyParamCaption}
+\item[{const Q\-Date\-Time \&}]{m\-Time, }
+\item[{int}]{fine\-Ticks = {\ttfamily 0}}
+\end{DoxyParamCaption}
+)}\label{structQuaZipNewInfo_a3af07365df1d67502ab1d0ca0d45df79}
+
+
+Sets the N\-T\-F\-S modification time. 
+
+The time is written into the N\-T\-F\-S record in both the local and the global extra fields, updating the existing record if there is one, or creating a new one and appending it to the end of each extra field. When updating an existing record, all other fields are left intact. 
+\begin{DoxyParams}{Parameters}
+{\em m\-Time} & The new modification time. \\
+\hline
+{\em fine\-Ticks} & The fractional part of milliseconds, in 100-\/nanosecond ticks (i. e. 9999 ticks = 999.\-9 microsecond). Values greater than 9999 will add milliseconds or even seconds, but this can be confusing and therefore is discouraged. \\
+\hline
+\end{DoxyParams}
+
+
+References extra\-Global, and extra\-Local.
+
+
+
+Referenced by set\-File\-N\-T\-F\-S\-Times().
+
+\index{Qua\-Zip\-New\-Info@{Qua\-Zip\-New\-Info}!set\-File\-N\-T\-F\-Sa\-Time@{set\-File\-N\-T\-F\-Sa\-Time}}
+\index{set\-File\-N\-T\-F\-Sa\-Time@{set\-File\-N\-T\-F\-Sa\-Time}!QuaZipNewInfo@{Qua\-Zip\-New\-Info}}
+\subsubsection[{set\-File\-N\-T\-F\-Sa\-Time}]{\setlength{\rightskip}{0pt plus 5cm}void Qua\-Zip\-New\-Info\-::set\-File\-N\-T\-F\-Sa\-Time (
+\begin{DoxyParamCaption}
+\item[{const Q\-Date\-Time \&}]{a\-Time, }
+\item[{int}]{fine\-Ticks = {\ttfamily 0}}
+\end{DoxyParamCaption}
+)}\label{structQuaZipNewInfo_a1042ac3d55a9deed760eb357aaa8284c}
+
+
+Sets the N\-T\-F\-S access time. 
+
+The time is written into the N\-T\-F\-S record in both the local and the global extra fields, updating the existing record if there is one, or creating a new one and appending it to the end of each extra field. When updating an existing record, all other fields are left intact. 
+\begin{DoxyParams}{Parameters}
+{\em a\-Time} & The new access time. \\
+\hline
+{\em fine\-Ticks} & The fractional part of milliseconds, in 100-\/nanosecond ticks (i. e. 9999 ticks = 999.\-9 microsecond). Values greater than 9999 will add milliseconds or even seconds, but this can be confusing and therefore is discouraged. \\
+\hline
+\end{DoxyParams}
+
+
+References extra\-Global, and extra\-Local.
+
+
+
+Referenced by set\-File\-N\-T\-F\-S\-Times().
+
+\index{Qua\-Zip\-New\-Info@{Qua\-Zip\-New\-Info}!set\-File\-N\-T\-F\-Sc\-Time@{set\-File\-N\-T\-F\-Sc\-Time}}
+\index{set\-File\-N\-T\-F\-Sc\-Time@{set\-File\-N\-T\-F\-Sc\-Time}!QuaZipNewInfo@{Qua\-Zip\-New\-Info}}
+\subsubsection[{set\-File\-N\-T\-F\-Sc\-Time}]{\setlength{\rightskip}{0pt plus 5cm}void Qua\-Zip\-New\-Info\-::set\-File\-N\-T\-F\-Sc\-Time (
+\begin{DoxyParamCaption}
+\item[{const Q\-Date\-Time \&}]{c\-Time, }
+\item[{int}]{fine\-Ticks = {\ttfamily 0}}
+\end{DoxyParamCaption}
+)}\label{structQuaZipNewInfo_a44675ac1e306eddefcaa35972c294d15}
+
+
+Sets the N\-T\-F\-S creation time. 
+
+The time is written into the N\-T\-F\-S record in both the local and the global extra fields, updating the existing record if there is one, or creating a new one and appending it to the end of each extra field. When updating an existing record, all other fields are left intact. 
+\begin{DoxyParams}{Parameters}
+{\em c\-Time} & The new creation time. \\
+\hline
+{\em fine\-Ticks} & The fractional part of milliseconds, in 100-\/nanosecond ticks (i. e. 9999 ticks = 999.\-9 microsecond). Values greater than 9999 will add milliseconds or even seconds, but this can be confusing and therefore is discouraged. \\
+\hline
+\end{DoxyParams}
+
+
+References extra\-Global, and extra\-Local.
+
+
+
+Referenced by set\-File\-N\-T\-F\-S\-Times().
+
+
+
+\subsection{Member Data Documentation}
+\index{Qua\-Zip\-New\-Info@{Qua\-Zip\-New\-Info}!name@{name}}
+\index{name@{name}!QuaZipNewInfo@{Qua\-Zip\-New\-Info}}
+\subsubsection[{name}]{\setlength{\rightskip}{0pt plus 5cm}Q\-String Qua\-Zip\-New\-Info\-::name}\label{structQuaZipNewInfo_a2bdef01b6ac3326e48598e32bfa5fbe8}
+
+
+File name. 
+
+This field holds file name inside archive, including path relative to archive root. 
+
+Referenced by Qua\-Zip\-File\-::open(), and set\-Permissions().
+
+\index{Qua\-Zip\-New\-Info@{Qua\-Zip\-New\-Info}!date\-Time@{date\-Time}}
+\index{date\-Time@{date\-Time}!QuaZipNewInfo@{Qua\-Zip\-New\-Info}}
+\subsubsection[{date\-Time}]{\setlength{\rightskip}{0pt plus 5cm}Q\-Date\-Time Qua\-Zip\-New\-Info\-::date\-Time}\label{structQuaZipNewInfo_aec7f3ac72c72a2e10b82ad64c2fa3453}
+
+
+File timestamp. 
+
+This is the last file modification date and time. Will be stored in the archive central directory. It is a good practice to set it to the source file timestamp instead of archive creating time. Use \doxyref{set\-File\-Date\-Time()}{p.}{structQuaZipNewInfo_a2b18b554d056877a2f33ffb9d241ed85} or \doxyref{Qua\-Zip\-New\-Info(const Q\-String\&, const Q\-String\&)}{p.}{structQuaZipNewInfo_ad47cf11f4277edcb09a8ba2b2963f2a9}. 
+
+Referenced by Qua\-Zip\-File\-::open(), Qua\-Zip\-New\-Info(), and set\-File\-Date\-Time().
+
+\index{Qua\-Zip\-New\-Info@{Qua\-Zip\-New\-Info}!external\-Attr@{external\-Attr}}
+\index{external\-Attr@{external\-Attr}!QuaZipNewInfo@{Qua\-Zip\-New\-Info}}
+\subsubsection[{external\-Attr}]{\setlength{\rightskip}{0pt plus 5cm}quint32 Qua\-Zip\-New\-Info\-::external\-Attr}\label{structQuaZipNewInfo_affd1a9700d302e1395bd04f0864da7d0}
+
+
+File external attributes. 
+
+The highest 16 bits contain Unix file permissions and type (dir or file). The constructor \doxyref{Qua\-Zip\-New\-Info(const Q\-String\&, const Q\-String\&)}{p.}{structQuaZipNewInfo_ad47cf11f4277edcb09a8ba2b2963f2a9} takes permissions from the provided file. 
+
+Referenced by Qua\-Zip\-File\-::open().
+
+\index{Qua\-Zip\-New\-Info@{Qua\-Zip\-New\-Info}!comment@{comment}}
+\index{comment@{comment}!QuaZipNewInfo@{Qua\-Zip\-New\-Info}}
+\subsubsection[{comment}]{\setlength{\rightskip}{0pt plus 5cm}Q\-String Qua\-Zip\-New\-Info\-::comment}\label{structQuaZipNewInfo_ae24b1d38c3550b4724862ffcf8f20924}
+
+
+File comment. 
+
+Will be encoded using \doxyref{Qua\-Zip\-::get\-Comment\-Codec()}{p.}{classQuaZip_a008260161781d8b5d2a0a28493fddaf4}. 
+
+Referenced by Qua\-Zip\-File\-::open().
+
+\index{Qua\-Zip\-New\-Info@{Qua\-Zip\-New\-Info}!uncompressed\-Size@{uncompressed\-Size}}
+\index{uncompressed\-Size@{uncompressed\-Size}!QuaZipNewInfo@{Qua\-Zip\-New\-Info}}
+\subsubsection[{uncompressed\-Size}]{\setlength{\rightskip}{0pt plus 5cm}ulong Qua\-Zip\-New\-Info\-::uncompressed\-Size}\label{structQuaZipNewInfo_a18c079b3f2f5ab6eecdd61d6dbe93be6}
+
+
+Uncompressed file size. 
+
+This is only needed if you are using raw file zipping mode, i. e. adding precompressed file in the zip archive. 
+
+Referenced by Qua\-Zip\-File\-::open().
+
+
+
+The documentation for this struct was generated from the following files\-:\begin{DoxyCompactItemize}
+\item 
+quazip/quazipnewinfo.\-h\item 
+quazip/quazipnewinfo.\-cpp\end{DoxyCompactItemize}

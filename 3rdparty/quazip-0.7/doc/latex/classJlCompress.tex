@@ -1,0 +1,274 @@
+\section{Jl\-Compress Class Reference}
+\label{classJlCompress}\index{Jl\-Compress@{Jl\-Compress}}
+
+
+Utility class for typical operations.  
+
+
+
+
+{\ttfamily \#include $<$Jl\-Compress.\-h$>$}
+
+\subsection*{Static Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+static bool {\bf compress\-File} (Q\-String file\-Compressed, Q\-String file)
+\begin{DoxyCompactList}\small\item\em Compress a single file. \end{DoxyCompactList}\item 
+static bool {\bf compress\-Files} (Q\-String file\-Compressed, Q\-String\-List files)
+\begin{DoxyCompactList}\small\item\em Compress a list of files. \end{DoxyCompactList}\item 
+static bool {\bf compress\-Dir} (Q\-String file\-Compressed, Q\-String dir=Q\-String(), bool recursive=true)
+\begin{DoxyCompactList}\small\item\em Compress a whole directory. \end{DoxyCompactList}\item 
+static Q\-String {\bf extract\-File} (Q\-String file\-Compressed, Q\-String file\-Name, Q\-String file\-Dest=Q\-String())
+\begin{DoxyCompactList}\small\item\em Extract a single file. \end{DoxyCompactList}\item 
+static Q\-String\-List {\bf extract\-Files} (Q\-String file\-Compressed, Q\-String\-List files, Q\-String dir=Q\-String())
+\begin{DoxyCompactList}\small\item\em Extract a list of files. \end{DoxyCompactList}\item 
+static Q\-String\-List {\bf extract\-Dir} (Q\-String file\-Compressed, Q\-String dir=Q\-String())
+\begin{DoxyCompactList}\small\item\em Extract a whole archive. \end{DoxyCompactList}\item 
+static Q\-String\-List {\bf get\-File\-List} (Q\-String file\-Compressed)
+\begin{DoxyCompactList}\small\item\em Get the file list. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+Utility class for typical operations. 
+
+This class contains a number of useful static functions to perform simple operations, such as mass Z\-I\-P packing or extraction. 
+
+\subsection{Member Function Documentation}
+\index{Jl\-Compress@{Jl\-Compress}!compress\-File@{compress\-File}}
+\index{compress\-File@{compress\-File}!JlCompress@{Jl\-Compress}}
+\subsubsection[{compress\-File}]{\setlength{\rightskip}{0pt plus 5cm}bool Jl\-Compress\-::compress\-File (
+\begin{DoxyParamCaption}
+\item[{Q\-String}]{file\-Compressed, }
+\item[{Q\-String}]{file}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [static]}}\label{classJlCompress_a4a4de9c62ecf161bb658d4d80495ea97}
+
+
+Compress a single file. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em file\-Compressed} & The name of the archive. \\
+\hline
+{\em file} & The file to compress. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+true if success, false otherwise.
+\end{DoxyReturn}
+O\-K Comprime il file file\-Name nel file file\-Compressed. Se la funzione fallisce restituisce false e cancella il file che si e tentato di creare.
+
+La funzione fallisce se\-:
+\begin{DoxyItemize}
+\item non si riesce ad aprire l'oggetto zip;
+\item la compressione del file fallisce;
+\item non si riesce a chiudere l'oggetto zip; 
+\end{DoxyItemize}
+
+References Qua\-Zip\-::close(), Qua\-Zip\-::get\-Zip\-Error(), Qua\-Zip\-::md\-Create, and Qua\-Zip\-::open().
+
+\index{Jl\-Compress@{Jl\-Compress}!compress\-Files@{compress\-Files}}
+\index{compress\-Files@{compress\-Files}!JlCompress@{Jl\-Compress}}
+\subsubsection[{compress\-Files}]{\setlength{\rightskip}{0pt plus 5cm}bool Jl\-Compress\-::compress\-Files (
+\begin{DoxyParamCaption}
+\item[{Q\-String}]{file\-Compressed, }
+\item[{Q\-String\-List}]{files}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [static]}}\label{classJlCompress_a9cdb92d29a94c6b13a718a3249685846}
+
+
+Compress a list of files. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em file\-Compressed} & The name of the archive. \\
+\hline
+{\em files} & The file list to compress. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+true if success, false otherwise.
+\end{DoxyReturn}
+O\-K Comprime i file specificati in files nel file file\-Compressed. Se la funzione fallisce restituisce false e cancella il file che si e tentato di creare.
+
+La funzione fallisce se\-:
+\begin{DoxyItemize}
+\item non si riesce ad aprire l'oggetto zip;
+\item la compressione di un file fallisce;
+\item non si riesce a chiudere l'oggetto zip; 
+\end{DoxyItemize}
+
+References Qua\-Zip\-::close(), Qua\-Zip\-::get\-Zip\-Error(), Qua\-Zip\-::md\-Create, and Qua\-Zip\-::open().
+
+\index{Jl\-Compress@{Jl\-Compress}!compress\-Dir@{compress\-Dir}}
+\index{compress\-Dir@{compress\-Dir}!JlCompress@{Jl\-Compress}}
+\subsubsection[{compress\-Dir}]{\setlength{\rightskip}{0pt plus 5cm}bool Jl\-Compress\-::compress\-Dir (
+\begin{DoxyParamCaption}
+\item[{Q\-String}]{file\-Compressed, }
+\item[{Q\-String}]{dir = {\ttfamily QString()}, }
+\item[{bool}]{recursive = {\ttfamily true}}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [static]}}\label{classJlCompress_a8708eafcadc5c192a1d492e784cfc98f}
+
+
+Compress a whole directory. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em file\-Compressed} & The name of the archive. \\
+\hline
+{\em dir} & The directory to compress. \\
+\hline
+{\em recursive} & Whether to pack the subdirectories as well, or just regular files. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+true if success, false otherwise.
+\end{DoxyReturn}
+O\-K Comprime la cartella dir nel file file\-Compressed, se recursive e true allora comprime anche le sotto cartelle. Se la funzione fallisce restituisce false e cancella il file che si e tentato di creare.
+
+La funzione fallisce se\-:
+\begin{DoxyItemize}
+\item non si riesce ad aprire l'oggetto zip;
+\item la compressione di un file fallisce;
+\item non si riesce a chiudere l'oggetto zip; 
+\end{DoxyItemize}
+
+References Qua\-Zip\-::close(), Qua\-Zip\-::get\-Zip\-Error(), Qua\-Zip\-::md\-Create, and Qua\-Zip\-::open().
+
+\index{Jl\-Compress@{Jl\-Compress}!extract\-File@{extract\-File}}
+\index{extract\-File@{extract\-File}!JlCompress@{Jl\-Compress}}
+\subsubsection[{extract\-File}]{\setlength{\rightskip}{0pt plus 5cm}Q\-String Jl\-Compress\-::extract\-File (
+\begin{DoxyParamCaption}
+\item[{Q\-String}]{file\-Compressed, }
+\item[{Q\-String}]{file\-Name, }
+\item[{Q\-String}]{file\-Dest = {\ttfamily QString()}}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [static]}}\label{classJlCompress_a38c0d58bfe3bbbcb3cf4e98d126633a3}
+
+
+Extract a single file. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em file\-Compressed} & The name of the archive. \\
+\hline
+{\em file\-Name} & The file to extract. \\
+\hline
+{\em file\-Dest} & The destination file, assumed to be identical to {\itshape file} if left empty. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The list of the full paths of the files extracted, empty on failure.
+\end{DoxyReturn}
+O\-K Estrae il file file\-Name, contenuto nel file file\-Compressed, con il nome file\-Dest. Se file\-Dest = \char`\"{}\char`\"{} allora il file viene estratto con lo stesso nome con cui e stato compresso. Se la funzione fallisce cancella il file che si e tentato di estrarre. Restituisce il nome assoluto del file estratto.
+
+La funzione fallisce se\-:
+\begin{DoxyItemize}
+\item non si riesce ad aprire l'oggetto zip;
+\item l'estrazione del file fallisce;
+\item non si riesce a chiudere l'oggetto zip; 
+\end{DoxyItemize}
+
+References Qua\-Zip\-::close(), Qua\-Zip\-::get\-Zip\-Error(), Qua\-Zip\-::md\-Unzip, and Qua\-Zip\-::open().
+
+\index{Jl\-Compress@{Jl\-Compress}!extract\-Files@{extract\-Files}}
+\index{extract\-Files@{extract\-Files}!JlCompress@{Jl\-Compress}}
+\subsubsection[{extract\-Files}]{\setlength{\rightskip}{0pt plus 5cm}Q\-String\-List Jl\-Compress\-::extract\-Files (
+\begin{DoxyParamCaption}
+\item[{Q\-String}]{file\-Compressed, }
+\item[{Q\-String\-List}]{files, }
+\item[{Q\-String}]{dir = {\ttfamily QString()}}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [static]}}\label{classJlCompress_a309e9ee366719a4d8aa28f837fab73ae}
+
+
+Extract a list of files. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em file\-Compressed} & The name of the archive. \\
+\hline
+{\em files} & The file list to extract. \\
+\hline
+{\em dir} & The directory to put the files to, the current directory if left empty. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The list of the full paths of the files extracted, empty on failure.
+\end{DoxyReturn}
+O\-K Estrae i file specificati in files, contenuti nel file file\-Compressed, nella cartella dir. La struttura a cartelle del file compresso viene rispettata. Se dir = \char`\"{}\char`\"{} allora il file viene estratto nella cartella corrente. Se la funzione fallisce cancella i file che si e tentato di estrarre. Restituisce i nomi assoluti dei file estratti.
+
+La funzione fallisce se\-:
+\begin{DoxyItemize}
+\item non si riesce ad aprire l'oggetto zip;
+\item l'estrazione di un file fallisce;
+\item non si riesce a chiudere l'oggetto zip; 
+\end{DoxyItemize}
+
+References Qua\-Zip\-::close(), Qua\-Zip\-::get\-Zip\-Error(), Qua\-Zip\-::md\-Unzip, and Qua\-Zip\-::open().
+
+\index{Jl\-Compress@{Jl\-Compress}!extract\-Dir@{extract\-Dir}}
+\index{extract\-Dir@{extract\-Dir}!JlCompress@{Jl\-Compress}}
+\subsubsection[{extract\-Dir}]{\setlength{\rightskip}{0pt plus 5cm}Q\-String\-List Jl\-Compress\-::extract\-Dir (
+\begin{DoxyParamCaption}
+\item[{Q\-String}]{file\-Compressed, }
+\item[{Q\-String}]{dir = {\ttfamily QString()}}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [static]}}\label{classJlCompress_a365a153baa4c11812d93cbca60b6a293}
+
+
+Extract a whole archive. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em file\-Compressed} & The name of the archive. \\
+\hline
+{\em dir} & The directory to extract to, the current directory if left empty. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The list of the full paths of the files extracted, empty on failure.
+\end{DoxyReturn}
+O\-K Estrae il file file\-Compressed nella cartella dir. Se dir = \char`\"{}\char`\"{} allora il file viene estratto nella cartella corrente. Se la funzione fallisce cancella i file che si e tentato di estrarre. Restituisce i nomi assoluti dei file estratti.
+
+La funzione fallisce se\-:
+\begin{DoxyItemize}
+\item non si riesce ad aprire l'oggetto zip;
+\item la compressione di un file fallisce;
+\item non si riesce a chiudere l'oggetto zip; 
+\end{DoxyItemize}
+
+References Qua\-Zip\-::close(), Qua\-Zip\-::get\-Current\-File\-Name(), Qua\-Zip\-::get\-Zip\-Error(), Qua\-Zip\-::go\-To\-First\-File(), Qua\-Zip\-::go\-To\-Next\-File(), Qua\-Zip\-::md\-Unzip, and Qua\-Zip\-::open().
+
+\index{Jl\-Compress@{Jl\-Compress}!get\-File\-List@{get\-File\-List}}
+\index{get\-File\-List@{get\-File\-List}!JlCompress@{Jl\-Compress}}
+\subsubsection[{get\-File\-List}]{\setlength{\rightskip}{0pt plus 5cm}Q\-String\-List Jl\-Compress\-::get\-File\-List (
+\begin{DoxyParamCaption}
+\item[{Q\-String}]{file\-Compressed}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [static]}}\label{classJlCompress_ab42422be913f817d7e04c1b1cd5d0156}
+
+
+Get the file list. 
+
+\begin{DoxyReturn}{Returns}
+The list of the files in the archive, or, more precisely, the list of the entries, including both files and directories if they are present separately.
+\end{DoxyReturn}
+O\-K Restituisce la lista dei file resenti nel file compresso file\-Compressed. Se la funzione fallisce, restituisce un elenco vuoto.
+
+La funzione fallisce se\-:
+\begin{DoxyItemize}
+\item non si riesce ad aprire l'oggetto zip;
+\item la richiesta di informazioni di un file fallisce;
+\item non si riesce a chiudere l'oggetto zip; 
+\end{DoxyItemize}
+
+References Qua\-Zip\-::close(), Qua\-Zip\-::get\-Current\-File\-Info(), Qua\-Zip\-::get\-Zip\-Error(), Qua\-Zip\-::go\-To\-First\-File(), Qua\-Zip\-::go\-To\-Next\-File(), Qua\-Zip\-::md\-Unzip, Qua\-Zip\-File\-Info64\-::name, and Qua\-Zip\-::open().
+
+
+
+The documentation for this class was generated from the following files\-:\begin{DoxyCompactItemize}
+\item 
+quazip/Jl\-Compress.\-h\item 
+quazip/Jl\-Compress.\-cpp\end{DoxyCompactItemize}
