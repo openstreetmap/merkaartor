@@ -169,6 +169,15 @@ win32 {
     }
 }
 
+
+unix {
+    CONFIG += link_pkgconfig
+    PKGCONFIG += sqlite3
+}
+win32 {
+    LIBS += -lsqlite3
+}
+
 DEFINES += SHARE_DIR=$${SHARE_DIR}
 INSTALLS += target
 
