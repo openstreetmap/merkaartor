@@ -41,7 +41,7 @@ public:
     virtual IFeature* getParent(int) { return NULL; }
     virtual const IFeature* getParent(int) const { return NULL; }
 
-    virtual bool hasPainter(double) const { return false; }
+    virtual bool hasPainter(qreal) const { return false; }
 
     /** Give the id of the feature.
      *  If the feature has no id, a random id is generated
