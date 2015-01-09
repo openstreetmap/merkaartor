@@ -60,6 +60,9 @@ static PProcessIdToSessionId pProcessIdToSessionId = 0;
 #include <time.h>
 #endif
 
+#include <unistd.h>
+#include <sys/types.h>
+
 namespace QtLP_Private {
 #include "qtlockedfile.cpp"
 #if defined(Q_OS_WIN)
@@ -68,6 +71,7 @@ namespace QtLP_Private {
 #include "qtlockedfile_unix.cpp"
 #endif
 }
+
 
 const char* QtLocalPeer::ack = "ack";
 
@@ -101,7 +105,7 @@ QtLocalPeer::QtLocalPeer(QObject* parent, const QString &appId)
         socketName += QLatin1Char('-') + QString::number(sessionId, 16);
     }
 #else
-    socketName += QLatin1Char('-') + QString::number(::getuid(), 16);
+    socketName += QLatin1Char('-') + QString::number(getuid(), 16);
 #endif
 
     server = new QLocalServer(this);
