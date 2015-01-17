@@ -241,7 +241,8 @@ MerkaartorPreferences::MerkaartorPreferences()
     theToolList = new ToolList();
 
     connect(&httpRequest, SIGNAL(authenticationRequired(QNetworkReply*, QAuthenticator*)), this, SLOT(on_authenticationRequired(QNetworkReply*, QAuthenticator*)));
-    connect(&httpRequest,SIGNAL(finished(QNetworkReply*)),this,SLOT(on_requestFinished(QNetworkReply*)));
+    connect(&httpRequest, SIGNAL(finished(QNetworkReply*)),this,SLOT(on_requestFinished(QNetworkReply*)));
+    connect(&httpRequest, SIGNAL(sslErrors(QNetworkReply *, const QList<QSslError>&)), this, SLOT(on_sslErrors(QNetworkReply*, const QList<QSslError>&)));
 
 #ifdef USE_LIBPROXY
     // Initialise libproxy
@@ -348,13 +349,11 @@ void MerkaartorPreferences::fromOsmPref()
 {
     if (getOfflineMode()) return;
 
-    qDebug() << "Requesting preferences from OSM server." << endl;
+    qDebug() << "Requesting preferences from OSM server.";
 
     if (getOsmUser().isEmpty() || getOsmPassword().isEmpty()) return;
 
     QUrl osmWeb(getOsmApiUrl()+"/user/preferences");
-    if (osmWeb.port() == -1)
-        osmWeb.setPort(80);
 
     QNetworkRequest req(osmWeb);
     req.setRawHeader(QByteArray("User-Agent"), USER_AGENT.toLatin1());
@@ -364,16 +363,25 @@ void MerkaartorPreferences::fromOsmPref()
 }
 
 void MerkaartorPreferences::on_authenticationRequired( QNetworkReply *reply, QAuthenticator *auth ) {
+    qDebug() << "Authentication required and provided.";
     Q_UNUSED(reply)
     auth->setUser(getOsmUser());
     auth->setPassword(getOsmPassword());
+}
+
+void MerkaartorPreferences::on_sslErrors(QNetworkReply *reply, const QList<QSslError>& errors) {
+    qDebug() << "We stumbled upon some SSL errors: ";
+    foreach ( QSslError error, errors ) {
+        qDebug() << "1:";
+        qDebug() << error.errorString();
+    }
 }
 
 void MerkaartorPreferences::on_requestFinished ( QNetworkReply *reply )
 {
     int error = reply->error();
     if (error != QNetworkReply::NoError) {
-        qDebug() << "Received response with code " << error << endl;
+        qDebug() << "Received response with code " << error << "(" << reply->errorString() << ")";
         switch (error) {
             case 406:
                 QMessageBox::critical(NULL,QApplication::translate("MerkaartorPreferences","Preferences upload failed"), QApplication::translate("MerkaartorPreferences","Duplicate key"));
@@ -382,17 +390,17 @@ void MerkaartorPreferences::on_requestFinished ( QNetworkReply *reply )
                 QMessageBox::critical(NULL,QApplication::translate("MerkaartorPreferences","Preferences upload failed"), QApplication::translate("MerkaartorPreferences","More than 150 preferences"));
                 return;
             default:
-                QMessageBox::critical(NULL,QApplication::translate("MerkaartorPreferences","Preferences communication failed"), QApplication::translate("MerkaartorPreferences", "Unknown error code ")+error);
+                QMessageBox::critical(NULL,QApplication::translate("MerkaartorPreferences","Preferences communication failed"), QApplication::translate("MerkaartorPreferences", "Communication error")+":\n"+reply->errorString());
                 return;
         }
     } else {
-        qDebug() << "Received response." << endl;
+        qDebug() << "Received response.";
     }
 
     if (reply != OsmPrefLoadReply)
         return;
 
-    qDebug() << "Reading preferences." << endl;
+    qDebug() << "Reading preferences.";
 
     QDomDocument aOsmPrefDoc;
     aOsmPrefDoc.setContent(reply, false);
@@ -479,8 +487,6 @@ void MerkaartorPreferences::putOsmPref(const QString& k, const QString& v)
 {
     qDebug() << "Saving OSM preference online: " << k << "=" << v;
     QUrl osmWeb(getOsmApiUrl()+QString("/user/preferences/%1").arg(k));
-    if (osmWeb.port() == -1)
-        osmWeb.setPort(80);
 
     QByteArray ba(v.toUtf8());
     QBuffer Buf(&ba);
@@ -496,8 +502,6 @@ void MerkaartorPreferences::deleteOsmPref(const QString& k)
     qDebug() << "Deleting OSM preference online: " << k;
 
     QUrl osmWeb(getOsmApiUrl()+QString("/user/preferences/%1").arg(k));
-    if (osmWeb.port() == -1)
-        osmWeb.setPort(80);
 
     QNetworkRequest req(osmWeb);
 

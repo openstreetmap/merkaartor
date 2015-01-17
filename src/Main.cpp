@@ -188,6 +188,7 @@ int main(int argc, char** argv)
     qDebug() <<	"-------" << QString("using PROJ4 version %1.%2.%3").arg(projVer.left(1)).arg(projVer.mid(1, 1)).arg(projVer.right(1));
     qDebug() <<	"-------" << QString("using GDAL version %1").arg(GDAL_RELEASE_NAME);
     qDebug() << "-------" << "with arguments: " << QCoreApplication::arguments();
+    qDebug() << "-------" << "SSL: " << (QSslSocket::supportsSsl() ? "enabled" : "disabled");
 
 #ifdef _MOBILE
     QFont appFont = QApplication::font();

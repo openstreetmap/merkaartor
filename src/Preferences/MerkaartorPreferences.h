@@ -22,6 +22,7 @@
 #include <QBuffer>
 #include <QUuid>
 #include <QNetworkProxy>
+#include <QSslError>
 
 #ifdef USE_LIBPROXY
 #include <proxy.h>
@@ -490,6 +491,7 @@ private:
 private slots:
 	void on_requestFinished ( QNetworkReply *reply );
 	void on_authenticationRequired( QNetworkReply *reply, QAuthenticator *auth );
+	void on_sslErrors(QNetworkReply *reply, const QList<QSslError>& errors);
 
 signals:
     void bookmarkChanged();
