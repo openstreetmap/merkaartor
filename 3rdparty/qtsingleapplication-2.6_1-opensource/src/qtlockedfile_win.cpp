@@ -47,6 +47,9 @@
 #include "qtlockedfile.h"
 #include <qt_windows.h>
 #include <QtCore/QFileInfo>
+#if QT_VERSION >= 0x050000
+#define QT_WA(unicode,ansi) unicode
+#endif
 
 #define MUTEX_PREFIX "QtLockedFile mutex "
 // Maximum number of concurrent read locks. Must not be greater than MAXIMUM_WAIT_OBJECTS
