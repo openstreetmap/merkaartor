@@ -169,6 +169,10 @@ void Node::drawSimple(QPainter &P, MapView *theView)
     if (! ((isReadonly() || !isSelectable(theView->pixelPerM(), theView->renderOptions())) && (!isPOI() && !isWaypoint())))
         //        if (!Pt->isReadonly() && Pt->isSelectable(r))
     {
+        if (!layer()) {
+            qDebug() << "Node without layer: " << id().numId << xmlId();
+            return;
+        }
         qreal WW = theView->nodeWidth();
         if (WW >= 1) {
             QColor theColor = QColor(0,0,0,128);
