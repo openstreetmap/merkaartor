@@ -285,7 +285,7 @@ void LayerDock::layerClosed(Layer* l)
 //	Main->document()->getUploadedLayer()->clear();
     //Main->document()->remove(l);
     //delete l;
-    l->clear();
+    l->deleteAll();
     l->setEnabled(false);
     l->setVisible(false);
     l->getWidget()->setVisible(false);

@@ -79,6 +79,7 @@ public:
     virtual void remove(Feature* aFeature);
     virtual void deleteFeature(Feature* aFeature);
     virtual void clear();
+    virtual void deleteAll();
     bool exists(Feature* aFeature) const;
     int getDisplaySize() const;
     virtual int size() const;
