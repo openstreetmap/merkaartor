@@ -618,6 +618,7 @@ void FeaturePrivate::updatePainters(qreal PixelPerM)
     if (!PossiblePaintersUpToDate)
         updatePossiblePainters();
 
+    QMutexLocker mutlock(&theFeature->featMutex);
     CurrentPainter = NULL;
     PixelPerMForPainter = PixelPerM;
     for (int i=0; i<PossiblePainters.size(); ++i)
