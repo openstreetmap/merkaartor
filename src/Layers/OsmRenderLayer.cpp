@@ -55,6 +55,18 @@ public:
 
     void operator()(const TILE_TYPE& theTile)
     {
+#if 0
+#if defined(__MINGW32__)
+        // Workaround for QTBUG-19886
+        asm volatile ("mov %esp, %eax");
+        asm volatile ("and $0xf, %eax");
+        asm volatile ("je alignmentok");
+        asm volatile ("push %eax");
+        asm volatile ("push %eax");
+        asm volatile ("alignmentok:");
+#endif
+#endif
+
         if (!p->theDocument)
             return;
 
