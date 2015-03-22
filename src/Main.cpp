@@ -105,6 +105,21 @@ void showHelp()
     fprintf(stdout, "  [filenames]\t\tOpen designated files \n");
 }
 
+void loadPluginsFromDir( QDir & pluginsDir ) {
+    qDebug() << "Loading plugins from directory " << pluginsDir.dirName();
+    foreach (QString fileName, pluginsDir.entryList(QDir::Files)) {
+        QPluginLoader loader(pluginsDir.absoluteFilePath(fileName));
+        QObject *plugin = loader.instance();
+        qDebug() << "Loading" << fileName << "as plugin.";
+        if (plugin) {
+            IMapAdapterFactory *fac = qobject_cast<IMapAdapterFactory *>(plugin);
+            if (fac)
+                M_PREFS->addBackgroundPlugin(fac);
+            qDebug() << "Plugin loaded: " << fileName << ".";
+        }
+    }
+}
+
 int main(int argc, char** argv)
 {
     QtSingleApplication instance(argc,argv);
@@ -235,17 +250,10 @@ int main(int argc, char** argv)
     QDir pluginsDir = (g_Merk_Portable ? QDir(qApp->applicationDirPath() + "/plugins") : QDir(STRINGIFY(PLUGINS_DIR)));
 #endif
     QCoreApplication::addLibraryPath(pluginsDir.path());
+    loadPluginsFromDir(pluginsDir);
 
     pluginsDir.cd("background");
-    foreach (QString fileName, pluginsDir.entryList(QDir::Files)) {
-        QPluginLoader loader(pluginsDir.absoluteFilePath(fileName));
-        QObject *plugin = loader.instance();
-        if (plugin) {
-            IMapAdapterFactory *fac = qobject_cast<IMapAdapterFactory *>(plugin);
-            if (fac)
-                M_PREFS->addBackgroundPlugin(fac);
-        }
-    }
+    loadPluginsFromDir(pluginsDir);
 
     splash.showMessage(QString(instance.translate("Main", "%1 v%2%3(%4)\nInitializing...")).arg(qApp->applicationName()).arg(STRINGIFY(VERSION)).arg(STRINGIFY(REVISION)).arg(STRINGIFY(SVNREV)), Qt::AlignBottom | Qt::AlignHCenter, Qt::black);
     instance.processEvents();
