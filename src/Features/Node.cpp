@@ -169,6 +169,10 @@ void Node::drawSimple(QPainter &P, MapView *theView)
     if (! ((isReadonly() || !isSelectable(theView->pixelPerM(), theView->renderOptions())) && (!isPOI() && !isWaypoint())))
         //        if (!Pt->isReadonly() && Pt->isSelectable(r))
     {
+        if (!layer()) {
+            qDebug() << "Node without layer: " << id().numId << xmlId();
+            return;
+        }
         qreal WW = theView->nodeWidth();
         if (WW >= 1) {
             QColor theColor = QColor(0,0,0,128);
@@ -697,13 +701,13 @@ void PhotoNode::drawTouchup(QPainter& thePainter , MapView* theView)
     QRect box(me - QPoint(5, 3), QSize(10, 6));
     thePainter.drawRect(box);
     if (theView->renderOptions().options.testFlag(RendererOptions::PhotosVisible) && theView->pixelPerM() > M_PREFS->getRegionalZoom()) {
-        qreal rt = qBound(0.2, theView->pixelPerM(), 1.0);
+        qreal rt = qBound(0.2, (double)theView->pixelPerM(), 1.0);
         QPoint phPt;
 
         if (photoLocationBR) {
             phPt = me + QPoint(10*rt, 10*rt);
         } else {
-            qreal rt = qBound(0.2, theView->pixelPerM(), 1.0);
+            qreal rt = qBound(0.2, (double)theView->pixelPerM(), 1.0);
             qreal phRt = 1. * Photo->width() / Photo->height();
             phPt = me - QPoint(10*rt, 10*rt) - QPoint(M_PREFS->getMaxGeoPicWidth()*rt, M_PREFS->getMaxGeoPicWidth()*rt/phRt);
         }
@@ -723,7 +727,7 @@ void PhotoNode::drawHover(QPainter& thePainter, MapView* theView)
     if (TEST_RFLAGS(RendererOptions::PhotosVisible) && theView->pixelPerM() > M_PREFS->getRegionalZoom()) {
         QPoint me(theView->toView(this));
 
-        qreal rt = qBound(0.2, theView->pixelPerM(), 1.0);
+        qreal rt = qBound(0.2, (double)theView->pixelPerM(), 1.0);
         qreal phRt = 1. * Photo->width() / Photo->height();
         QPoint phPt;
         if (photoLocationBR) {
@@ -742,7 +746,7 @@ qreal PhotoNode::pixelDistance(const QPointF& Target, qreal ClearDistance, const
     QPoint me = theView->toView(const_cast<PhotoNode*>(this));
 #ifdef GEOIMAGE
     if (TEST_RFLAGS(RendererOptions::PhotosVisible) && theView->pixelPerM() > M_PREFS->getRegionalZoom()) {
-        qreal rt = qBound(0.2, theView->pixelPerM(), 1.0);
+        qreal rt = qBound(0.2, (double)theView->pixelPerM(), 1.0);
         qreal phRt = 1. * Photo->width() / Photo->height();
         QPoint phPt;
         if (photoLocationBR) {

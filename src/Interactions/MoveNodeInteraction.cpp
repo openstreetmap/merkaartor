@@ -26,6 +26,7 @@ MoveNodeInteraction::MoveNodeInteraction(MainWindow* aMain)
     , StartDragPosition(0,0)
     , theList(0)
 {
+    setDontSelectVirtual(true);
     if (M_PREFS->getSeparateMoveMode()) {
         setDontSelectVirtual(false);
     }

@@ -37,6 +37,7 @@ Layer::Layer()
 Layer::Layer(const QString& aName)
 :  p(new LayerPrivate), theWidget(0)
 {
+    qDebug() << "Created layer" << aName;
     p->Name = aName;
     p->alpha = 1.0;
     p->dirtyLevel = 0;
@@ -188,6 +189,13 @@ void Layer::clear()
     while (p->Features.count())
     {
         remove(p->Features[0]);
+    }
+}
+
+void Layer::deleteAll() {
+    while (p->Features.count())
+    {
+        deleteFeature(p->Features[0]);
     }
 }
 

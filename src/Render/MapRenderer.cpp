@@ -168,7 +168,7 @@ void TouchupStyleLayer::draw(Node* Pt)
                     theColor = r->theGlobalPainter.NodesColor;
                 }
                 QPointF P(r->toView(Pt));
-                if (Pt->layer()->classGroups() & Layer::Special) {
+                if (Pt->layer() && (Pt->layer()->classGroups() & Layer::Special)) {
                     QRect R2(P.x()-(WW+4)/2, P.y()-(WW+4)/2, WW+4, WW+4);
                     r->thePainter->fillRect(R2,QColor(255,0,255,192));
                 } else if (Pt->isWaypoint()) {

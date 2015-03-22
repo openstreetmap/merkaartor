@@ -86,10 +86,11 @@ void OSMHandler::parseNode(const QXmlAttributes& atts)
         else if (userPt->lastUpdated() != Feature::UserResolved)
         {
 #ifndef FRISIUS_BUILD
-            if (userPt->lastUpdated() == Feature::NotYetDownloaded || (Pt->time() > userPt->time() || Pt->versionNumber() != userPt->versionNumber())) {
+            if (userPt->lastUpdated() == Feature::NotYetDownloaded || (Pt->time() > userPt->time() || Pt->versionNumber() != userPt->versionNumber()))
 #else
-            if (userPt->lastUpdated() == Feature::NotYetDownloaded) {
+            if (userPt->lastUpdated() == Feature::NotYetDownloaded)
 #endif
+            {
                 g_backend.deallocFeature(theLayer, Pt);
                 Pt = userPt;
                 Pt->layer()->remove(Pt);
@@ -104,6 +105,11 @@ void OSMHandler::parseNode(const QXmlAttributes& atts)
                 Pt = userPt;
                 NewFeature = false;
             }
+        } else {
+            qDebug() << "Node conflicted, but already is tagged as Feature::UserResolved. Ignoring " << Pt->xmlId();
+            g_backend.deallocFeature(theLayer, Pt);
+            Pt = userPt;
+            NewFeature = false;
         }
     }
     else

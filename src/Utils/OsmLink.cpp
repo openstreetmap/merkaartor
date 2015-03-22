@@ -37,7 +37,16 @@ QString OsmLink::parseUrl(QUrl theUrl)
 
     if (!theUrl.isValid()) return QString("Invalid URL: %1").arg(theUrl.toString());;
 
-    if (theUrl.toString().contains("osm.org/go"))
+    if (theUrl.toString().contains("openstreetmap.org/#map=")) {
+        // first is 'map', zoom, lat and lon follows
+        QStringList list = theUrl.fragment().split(QRegExp("[/=]"));
+        qreal zoom = list[1].toInt(&parseOk);   ARG_VALID(zoom);
+        qreal lat = list[2].toDouble(&parseOk); ARG_VALID(lat);
+        qreal lon = list[3].toDouble(&parseOk); ARG_VALID(lon);
+
+        setLatLonZoom(lat, lon, zoom);
+    }
+    else if (theUrl.toString().contains("osm.org/go"))
     {
         parseShortUrl(theUrl.path().section('/', -1));
     }

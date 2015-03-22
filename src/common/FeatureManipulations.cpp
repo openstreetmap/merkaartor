@@ -435,12 +435,12 @@ static void splitRoad(Document* theDocument, CommandList* theList, Way* In, cons
         }
     }
 
-    Way* FirstPart = In;
-    Result.push_back(FirstPart);
+    Way* FirstPart     = In;
+    bool FirstWayValid = false;
     for (int i=1; (i+1)<FirstPart->size(); ++i)
     {
-        if (std::find(Points.begin(),Points.end(),FirstPart->get(i)) != Points.end())
-        {
+        if (std::find(Points.begin(),Points.end(),FirstPart->get(i)) != Points.end() and FirstPart->get(i) != FirstPart->get(i+1) \
+                and (FirstWayValid or FirstPart->get(0) != FirstPart->get(i))) {
             Way* NextPart = g_backend.allocWay(theDocument->getDirtyOrOriginLayer(In->layer()));
             theList->add(new AddFeatureCommand(theDocument->getDirtyOrOriginLayer(In->layer()),NextPart,true));
             copyTags(NextPart,FirstPart);
@@ -452,12 +452,13 @@ static void splitRoad(Document* theDocument, CommandList* theList, Way* In, cons
             }
             handleWaysplitRelations(theDocument, theList, FirstPart, NextPart);
 
-            Result.push_back(NextPart);
+            FirstWayValid = true;
+            Result.push_back(FirstPart);
             FirstPart = NextPart;
             i=0;
         }
     }
-
+    Result.push_back(FirstPart);
 
 }
 

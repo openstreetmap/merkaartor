@@ -1,0 +1,85 @@
+ \section{Overview}\label{index_overview}
+Qua\-Z\-I\-P is a simple C++ wrapper over {\tt Gilles Vollant's Z\-I\-P/\-U\-N\-Z\-I\-P package} that can be used to access Z\-I\-P archives. It uses {\tt the Qt toolkit}.
+
+If you do not know what Qt is, you have two options\-:
+\begin{DoxyItemize}
+\item Just forget about Qua\-Z\-I\-P.
+\item Learn more about Qt by downloading it and/or reading the excellent {\tt official Qt documentation}
+\end{DoxyItemize}
+
+The choice is yours, but if you are really interested in cross-\/platform (Windows/\-Linux/\-B\-S\-D/\-U\-N\-I\-X/\-Mac/\-Others) software development, I would definitely recommend you the latter $^\wedge$\-\_\-$^\wedge$
+
+Qua\-Z\-I\-P allows you to access files inside Z\-I\-P archives using Q\-I\-O\-Device A\-P\-I, and -\/ yes! -\/ that means that you can also use Q\-Text\-Stream, Q\-Data\-Stream or whatever you would like to use on your zipped files.
+
+Qua\-Z\-I\-P provides complete abstraction of the Z\-I\-P/\-U\-N\-Z\-I\-P A\-P\-I, for both reading from and writing to Z\-I\-P archives.\section{Download Qua\-Z\-I\-P}\label{index_download}
+Downloads are available from {\tt Qua\-Z\-I\-P project's page at Source\-Forge.\-net}.\section{Platforms supported}\label{index_platforms}
+Qua\-Z\-I\-P has been currently tested on the following platforms\-:
+\begin{DoxyItemize}
+\item linux-\/g++ (Ubuntu 11.\-10, Qt 4.\-7.\-4)
+\item freebsd-\/g++ (Qt 4.\-0.\-0
+\item hpux-\/acc (H\-P-\/\-U\-X 11.\-11)
+\item hpux-\/g++ (H\-P-\/\-U\-X 11.\-11)
+\item win32-\/g++ (Min\-G\-W)
+\item win32-\/msvc2010 (M\-S V\-S 2010 Express, Qt 4.\-8.\-4)
+\item win32-\/msvc2010 (Qt Creator, Qt 5.\-0.\-1)
+\item win32-\/msvc2012 (Qt Creator, Qt 5.\-2.\-0)
+\item some Symbian version, reportedly
+\end{DoxyItemize}
+
+No testing has been officially done on other systems. Of course, patches to make it work on any platform that it currently does not work on are always welcome!\section{What is new in this version of Qua\-Z\-I\-P?}\label{index_whats-new}
+See the N\-E\-W\-S.\-txt file supplied with the distribution.\section{Requirements}\label{index_Requirements}
+Just {\tt zlib} and Qt 4/5. Well, Qt 4 depends on zlib anyway, but you will need zlib headers to compile Qua\-Z\-I\-P. With Qt5 sometimes you need the zlib library as well (on Windows, for example).\section{Building, testing and installing}\label{index_building}
+\begin{DoxyNote}{Note}
+Instructions given in this section assume that you are using some U\-N\-I\-X dialect, but the build process should be very similar on win32-\/g++ platform too. On other platforms it's essentially the same process, maybe with some qmake adjustments not specific to Qua\-Z\-I\-P itself.
+\end{DoxyNote}
+To build the library, run\-: \begin{DoxyVerb}$ cd /wherever/quazip/source/is/quazip-x.y.z/quazip
+$ qmake [PREFIX=where-to-install]
+$ make
+\end{DoxyVerb}
+
+
+Make sure that you have Qt 4/5 installed with all required headers and utilities (that is, including the 'dev' or 'devel' package on Linux) and that you run qmake utility of the Qt 4, not some other version you may have already installed (you may need to type full path to qmake like /usr/local/qt4/bin/qmake).
+
+To reconfigure (with another P\-R\-E\-F\-I\-X, for example), just run qmake with appropriate arguments again.
+
+If you need to specify additional include path or libraries, use qmake features (see qmake reference in the Qt documentation). For example\-:
+
+\begin{DoxyVerb}$ qmake LIBS+=-L/usr/local/zlib/lib INCLUDEPATH+=/usr/local/zlib/include
+\end{DoxyVerb}
+ (note abscence of \char`\"{}-\/\-I\char`\"{} before the include path and the presence of \char`\"{}-\/\-L\char`\"{} before the lib path)
+
+Also note that you may or may not need to define Z\-L\-I\-B\-\_\-\-W\-I\-N\-A\-P\-I (qmake D\-E\-F\-I\-N\-E\-S+=Z\-L\-I\-B\-\_\-\-W\-I\-N\-A\-P\-I) when linking to zlib on Windows, depending on how zlib was built (generally, if using zlibwapi.\-dll, this define is needed).
+
+To install compiled library\-: \begin{DoxyVerb}$ make install
+\end{DoxyVerb}
+
+
+By default, Qua\-Z\-I\-P compiles as a D\-L\-L/\-S\-O, but you have other options\-:
+\begin{DoxyItemize}
+\item Just copy appropriate source files to your project and use them, but you need to define Q\-U\-A\-Z\-I\-P\-\_\-\-S\-T\-A\-T\-I\-C before including any Qua\-Z\-I\-P headers (best done as a compiler option). This will save you from possible side effects of importing/exporting Qua\-Z\-I\-P symbols.
+\item Compile it as a static library using C\-O\-N\-F\-I\-G += staticlib qmake option. Q\-U\-A\-Z\-I\-P\-\_\-\-S\-T\-A\-T\-I\-C is defined automatically by qmake in this case.
+\end{DoxyItemize}
+
+Binary compatibility is guaranteed between minor releases starting with version 0.\-5, thanks to the Pimpl idiom. That is, the next binary incompatible version will be 1.\-x.\section{Testing}\label{index_test}
+To check if Qua\-Z\-I\-P's basic features work O\-K on your platform, you may wish to compile the test suite provided in test directory\-: \begin{DoxyVerb}$ cd /wherever/quazip/source/is/quazip-x.y.z/qztest
+$ qmake
+$ make
+$ ./qztest
+\end{DoxyVerb}
+
+
+Note that the test suite looks for the quazip library in the \char`\"{}quazip\char`\"{} folder of the project (\char`\"{}../quazip\char`\"{}), but you may wish to use L\-I\-B\-S for some systems (Windows often puts the library in the separate \char`\"{}debug\char`\"{} or \char`\"{}release\char`\"{} directory). If you wish to use the quazip version that's already installed, provide the appropriate path.
+
+On some systems you may need to set P\-A\-T\-H, L\-D\-\_\-\-L\-I\-B\-R\-A\-R\-Y\-\_\-\-P\-A\-T\-H or S\-H\-L\-I\-B\-\_\-\-P\-A\-T\-H to get \char`\"{}qztest\char`\"{} to actually run.
+
+If everything went fine, the test suite should report a lot of P\-A\-S\-S messages. If something goes wrong, it will provide details and a warning that some tests failed.\section{Using}\label{index_using}
+See \doxyref{usage page}{p.}{usage}.\section{Authors and contacts}\label{index_contacts}
+This wrapper has been written by Sergey A. Tachenov, A\-K\-A Alqualos. This is my first open source project, so it may suck, but I did not find anything like that, so I just had no other choice but to write it.
+
+If you have anything to say to me about Qua\-Z\-I\-P library, feel free to do so (read the \doxyref{Qua\-Zip F\-A\-Q}{p.}{faq} first, though). I can not promise, though, that I fix all the bugs you report in, add any features you want, or respond to your critics, or respond to your feedback at all. I may be busy, I may be tired of working on Qua\-Z\-I\-P, I may be even dead already (you never know...).
+
+To report bugs or to post ideas about what should be done, use Source\-Forge.\-net's {\tt trackers}. If you want to send me a private message, use my e-\/mail address {\tt stachenov@gmail.\-com}.
+
+Do not use e-\/mail to report bugs, please. Reporting bugs and problems with the Source\-Forge.\-net's bug report system has that advantage that it is visible to public, and I can always search for open tickets that were created long ago. It is highly unlikely that I will search my mail for that kind of stuff, so if a bug reported by mail isn't fixed immediately, it will likely be forgotten forever.
+
+Copyright (C) 2005-\/2014 Sergey A. Tachenov and contributors 

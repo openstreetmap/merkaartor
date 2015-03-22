@@ -180,7 +180,7 @@ public:
 };
 
 Feature::Feature()
-: p(0), MetaUpToDate(false), m_references(0), ReadOnly(false)
+: MetaUpToDate(false), m_references(0), ReadOnly(false)
 {
     p = new FeaturePrivate(this);
     p->Id = IFeature::FId(IFeature::Uninitialized, 0);
@@ -618,6 +618,7 @@ void FeaturePrivate::updatePainters(qreal PixelPerM)
     if (!PossiblePaintersUpToDate)
         updatePossiblePainters();
 
+    QMutexLocker mutlock(&theFeature->featMutex);
     CurrentPainter = NULL;
     PixelPerMForPainter = PixelPerM;
     for (int i=0; i<PossiblePainters.size(); ++i)

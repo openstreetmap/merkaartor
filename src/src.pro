@@ -9,9 +9,9 @@ include(Custom.pri)
 include(../3rdparty/qtsingleapplication-2.6_1-opensource/src/qtsingleapplication.pri)
 include(../3rdparty/qttoolbardialog-2.2_1-opensource/src/qttoolbardialog.pri)
 DEFINES += QUAZIP_STATIC
-#include(../3rdparty/quazip-0.4.4/quazip/quazip.pri)
+include(../3rdparty/quazip-0.7/quazip.pri)
 
-LIBS += -lquazip
+#LIBS += -lquazip
 
 #Qt Version
 QT_VERSION = $$[QT_VERSION]
@@ -169,6 +169,15 @@ win32 {
     isEmpty(TRANSDIR_SYSTEM) {
         TRANSDIR_SYSTEM = translations
     }
+}
+
+
+unix {
+    CONFIG += link_pkgconfig
+    PKGCONFIG += sqlite3
+}
+win32 {
+    LIBS += -lsqlite3
 }
 
 DEFINES += SHARE_DIR=$${SHARE_DIR}

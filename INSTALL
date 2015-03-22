@@ -1,11 +1,29 @@
 Prerequisites:
-* Working C++ compiler
-* Qt 4.4.0 or later development environment
+==============
+
+ * Working C++ compiler
+ * Qt 4.4.0 or later development environment (for Qt 5.x.y, use qt5 branch)
+ * Proj.4
+ * GDAL
 
 On (K)ubuntu Edgy it is sufficient to install the qt4-dev package
 to satisfy these requirements.
 
-Instructions
+Instructions:
+=============
+
+0. Get the sources, either tarball or git:
+
+$ git clone git@github.com:openstreetmap/merkaartor.git
+
+ !  By default, this is the latest development version. If you want to use an older
+ !  one, you have to checkout the commit/tag:
+ !  
+ !  $ git checkout 0.17.0
+ !  
+ !  Please, use this only for testing (for example, if some feature does not
+ !  work, but it did in older release and you want to check which one), never
+ !  report bugs for older versions.
 
 1. Change directory to the one in which you unpacked Merkaartor
 
@@ -28,13 +46,12 @@ $ /usr/share/qt4/bin/qmake
 
 2.1 Other qmake parameters for Merkaartor.pro
 
-PREFIX=<path>			- base prefix for installation (unix only)
-TRANSDIR_MERKAARTOR=<path>	- where will the Merkaartor translations be installed
-TRANSDIR_SYSTEM=<path>		- where your global Qt translation directory is
-NODEBUG=1			- release target
-NOUSEWEBKIT                 	- disable use of WebKit (Yahoo adapter)
+PREFIX=<path>               - base prefix for installation (unix only)
+TRANSDIR_MERKAARTOR=<path>  - where will the Merkaartor translations be installed
+TRANSDIR_SYSTEM=<path>      - where your global Qt translation directory is
+NODEBUG=1                   - release target
+NOUSEWEBKIT                 - disable use of WebKit (Yahoo adapter)
 
-see http://wiki.openstreetmap.org/wiki/Merkaartor/Compiling for the complete list
 
 3. Run your build tool, make for posix like systems, nmake for
 Windows C++ Build system
@@ -43,9 +60,12 @@ $ make
 or
 $ nmake
 
-4. If you are lucky, you'll find an executable in the
-binaries subdirectory. Otherwise mail a complete error log to
-bvh-osm@irule.be
+4. If you are lucky, you'll find an executable in the binaries subdirectory.
+Otherwise, check our github page [1], especially check the issues and possibly
+report yours.
 
-Bart Vanhauwaert
+[1] https://github.com/openstreetmap/merkaartor
 
+
+
+Bart Vanhauwaert, Ladislav Láska, and others

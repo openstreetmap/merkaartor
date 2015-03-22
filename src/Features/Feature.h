@@ -1,6 +1,13 @@
 #ifndef MERKATOR_MAPFEATURE_H_
 #define MERKATOR_MAPFEATURE_H_
 
+class Feature;
+namespace boost
+{
+    void intrusive_ptr_add_ref(Feature * p);
+    void intrusive_ptr_release(Feature * p);
+}
+
 #include "IFeature.h"
 #include "Coord.h"
 #include "MapView.h"
@@ -80,11 +87,6 @@ private:
     int theLayer;
 };
 
-namespace boost
-{
-void intrusive_ptr_add_ref(Feature * p);
-void intrusive_ptr_release(Feature * p);
-}
 
 /// Used to store objects of the map
 class Feature : public IFeature
@@ -103,7 +105,7 @@ public:
     /// @param other the MapFeature
     Feature(const Feature& other);
     /// Destructor
-    virtual ~Feature() = 0;
+    virtual ~Feature();
 
     /** Return the smalest box contening all the MapFeature
          * @return A coord box

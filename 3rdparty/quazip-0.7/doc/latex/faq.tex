@@ -1,0 +1,14 @@
+\label{faq_faq-non-QIODevice}%
+Q. Is there any way to use \doxyref{Qua\-Zip\-File}{p.}{classQuaZipFile} in Qt where you are supposed to use normal (non-\/zipped) file, but not through Q\-I\-O\-Device A\-P\-I?
+
+A. Usually not. For example, if you are passing file name to some database driver (like S\-Q\-Lite), Qt usually just passes this name down to the 3rd-\/party library, which is usually does not know anything about Q\-I\-O\-Device and therefore there is no way to pass \doxyref{Qua\-Zip\-File}{p.}{classQuaZipFile} as normal file. However, if we are talking about some place where you pass file name, and then indirectly use Q\-File to open it, then it is a good idea to make overloaded method, which accepts a Q\-I\-O\-Device pointer. Then you would be able to pass \doxyref{Qua\-Zip\-File}{p.}{classQuaZipFile} as well as many other nice things such as Q\-Buffer or Q\-Process.
+
+\label{faq_faq-zip64}%
+Q. Can Qua\-Z\-I\-P handle files larger than 4\-G\-B? What about zip64 standard?
+
+A. Starting with version 0.\-6, Qua\-Z\-I\-P uses Minizip 1.\-1 with zip64 support which should handle large files perfectly. The zip64 support in Minizip looks like it's not 100\% conforming to the standard, but 3rd party tools seem to have no problem with the resulting archives.
+
+\label{faq_faq-seekable}%
+Q. Can Qua\-Z\-I\-P write archives to a sequential Q\-I\-O\-Device like Q\-Tcp\-Socket?
+
+A. Not yet. It is not supported by vanilla Minizip (the back-\/end Qua\-Z\-I\-P uses), although theoretically possible according to the Z\-I\-P standard. It would require some Minizip modifications that would allow it to detect non-\/seekable I/\-O and produce necessary output structures. Qua\-Z\-I\-P already writes data descriptor which is necessary for non-\/seekable I/\-O. The only thing that is apparently left is to make Minizip fill local headers with correct values and forget about seeking after closing the file. 

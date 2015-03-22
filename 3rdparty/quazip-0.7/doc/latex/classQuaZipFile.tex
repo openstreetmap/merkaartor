@@ -1,0 +1,700 @@
+\section{Qua\-Zip\-File Class Reference}
+\label{classQuaZipFile}\index{Qua\-Zip\-File@{Qua\-Zip\-File}}
+
+
+A file inside Z\-I\-P archive.  
+
+
+
+
+{\ttfamily \#include $<$quazip/quazipfile.\-h$>$}
+
+
+
+Inheritance diagram for Qua\-Zip\-File\-:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=108pt]{classQuaZipFile__inherit__graph}
+\end{center}
+\end{figure}
+
+
+Collaboration diagram for Qua\-Zip\-File\-:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=108pt]{classQuaZipFile__coll__graph}
+\end{center}
+\end{figure}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+{\bf Qua\-Zip\-File} ()
+\begin{DoxyCompactList}\small\item\em Constructs a \doxyref{Qua\-Zip\-File}{p.}{classQuaZipFile} instance. \end{DoxyCompactList}\item 
+{\bf Qua\-Zip\-File} (Q\-Object $\ast$parent)
+\begin{DoxyCompactList}\small\item\em Constructs a \doxyref{Qua\-Zip\-File}{p.}{classQuaZipFile} instance. \end{DoxyCompactList}\item 
+{\bf Qua\-Zip\-File} (const Q\-String \&zip\-Name, Q\-Object $\ast$parent=N\-U\-L\-L)
+\begin{DoxyCompactList}\small\item\em Constructs a \doxyref{Qua\-Zip\-File}{p.}{classQuaZipFile} instance. \end{DoxyCompactList}\item 
+{\bf Qua\-Zip\-File} (const Q\-String \&zip\-Name, const Q\-String \&file\-Name, {\bf Qua\-Zip\-::\-Case\-Sensitivity} cs={\bf Qua\-Zip\-::cs\-Default}, Q\-Object $\ast$parent=N\-U\-L\-L)
+\begin{DoxyCompactList}\small\item\em Constructs a \doxyref{Qua\-Zip\-File}{p.}{classQuaZipFile} instance. \end{DoxyCompactList}\item 
+{\bf Qua\-Zip\-File} ({\bf Qua\-Zip} $\ast$zip, Q\-Object $\ast$parent=N\-U\-L\-L)
+\begin{DoxyCompactList}\small\item\em Constructs a \doxyref{Qua\-Zip\-File}{p.}{classQuaZipFile} instance. \end{DoxyCompactList}\item 
+virtual {\bf $\sim$\-Qua\-Zip\-File} ()
+\begin{DoxyCompactList}\small\item\em Destroys a \doxyref{Qua\-Zip\-File}{p.}{classQuaZipFile} instance. \end{DoxyCompactList}\item 
+Q\-String {\bf get\-Zip\-Name} () const 
+\begin{DoxyCompactList}\small\item\em Returns the Z\-I\-P archive file name. \end{DoxyCompactList}\item 
+{\bf Qua\-Zip} $\ast$ {\bf get\-Zip} () const 
+\begin{DoxyCompactList}\small\item\em Returns a pointer to the associated \doxyref{Qua\-Zip}{p.}{classQuaZip} object. \end{DoxyCompactList}\item 
+Q\-String {\bf get\-File\-Name} () const 
+\begin{DoxyCompactList}\small\item\em Returns file name. \end{DoxyCompactList}\item 
+{\bf Qua\-Zip\-::\-Case\-Sensitivity} {\bf get\-Case\-Sensitivity} () const 
+\begin{DoxyCompactList}\small\item\em Returns case sensitivity of the file name. \end{DoxyCompactList}\item 
+Q\-String {\bf get\-Actual\-File\-Name} () const 
+\begin{DoxyCompactList}\small\item\em Returns the actual file name in the archive. \end{DoxyCompactList}\item 
+void {\bf set\-Zip\-Name} (const Q\-String \&zip\-Name)
+\begin{DoxyCompactList}\small\item\em Sets the Z\-I\-P archive file name. \end{DoxyCompactList}\item 
+bool {\bf is\-Raw} () const 
+\begin{DoxyCompactList}\small\item\em Returns {\ttfamily true} if the file was opened in raw mode. \end{DoxyCompactList}\item 
+void {\bf set\-Zip} ({\bf Qua\-Zip} $\ast$zip)
+\begin{DoxyCompactList}\small\item\em Binds to the existing \doxyref{Qua\-Zip}{p.}{classQuaZip} instance. \end{DoxyCompactList}\item 
+void {\bf set\-File\-Name} (const Q\-String \&file\-Name, {\bf Qua\-Zip\-::\-Case\-Sensitivity} cs={\bf Qua\-Zip\-::cs\-Default})
+\begin{DoxyCompactList}\small\item\em Sets the file name. \end{DoxyCompactList}\item 
+virtual bool {\bf open} (Open\-Mode mode)
+\begin{DoxyCompactList}\small\item\em Opens a file for reading. \end{DoxyCompactList}\item 
+bool {\bf open} (Open\-Mode mode, const char $\ast$password)
+\begin{DoxyCompactList}\small\item\em Opens a file for reading. \end{DoxyCompactList}\item 
+bool {\bf open} (Open\-Mode mode, int $\ast$method, int $\ast$level, bool raw, const char $\ast$password=N\-U\-L\-L)
+\begin{DoxyCompactList}\small\item\em Opens a file for reading. \end{DoxyCompactList}\item 
+bool {\bf open} (Open\-Mode mode, const {\bf Qua\-Zip\-New\-Info} \&info, const char $\ast$password=N\-U\-L\-L, quint32 crc=0, int method=Z\-\_\-\-D\-E\-F\-L\-A\-T\-E\-D, int level=Z\-\_\-\-D\-E\-F\-A\-U\-L\-T\-\_\-\-C\-O\-M\-P\-R\-E\-S\-S\-I\-O\-N, bool raw=false, int window\-Bits=-\/M\-A\-X\-\_\-\-W\-B\-I\-T\-S, int mem\-Level=D\-E\-F\-\_\-\-M\-E\-M\-\_\-\-L\-E\-V\-E\-L, int strategy=Z\-\_\-\-D\-E\-F\-A\-U\-L\-T\-\_\-\-S\-T\-R\-A\-T\-E\-G\-Y)
+\begin{DoxyCompactList}\small\item\em Opens a file for writing. \end{DoxyCompactList}\item 
+virtual bool {\bf is\-Sequential} () const \label{classQuaZipFile_a64430ec50820c8096f963a7e5f53001f}
+
+\begin{DoxyCompactList}\small\item\em Returns {\ttfamily true}, but \doxyref{beware}{p.}{classQuaZipFile_quazipfile-sequential}! \end{DoxyCompactList}\item 
+virtual qint64 {\bf pos} () const 
+\begin{DoxyCompactList}\small\item\em Returns current position in the file. \end{DoxyCompactList}\item 
+virtual bool {\bf at\-End} () const 
+\begin{DoxyCompactList}\small\item\em Returns {\ttfamily true} if the end of file was reached. \end{DoxyCompactList}\item 
+virtual qint64 {\bf size} () const 
+\begin{DoxyCompactList}\small\item\em Returns file size. \end{DoxyCompactList}\item 
+qint64 {\bf csize} () const 
+\begin{DoxyCompactList}\small\item\em Returns compressed file size. \end{DoxyCompactList}\item 
+qint64 {\bf usize} () const 
+\begin{DoxyCompactList}\small\item\em Returns uncompressed file size. \end{DoxyCompactList}\item 
+bool {\bf get\-File\-Info} ({\bf Qua\-Zip\-File\-Info} $\ast$info)
+\begin{DoxyCompactList}\small\item\em Gets information about current file. \end{DoxyCompactList}\item 
+bool {\bf get\-File\-Info} ({\bf Qua\-Zip\-File\-Info64} $\ast$info)
+\begin{DoxyCompactList}\small\item\em Gets information about current file with zip64 support. \end{DoxyCompactList}\item 
+virtual void {\bf close} ()
+\begin{DoxyCompactList}\small\item\em Closes the file. \end{DoxyCompactList}\item 
+int {\bf get\-Zip\-Error} () const \label{classQuaZipFile_a26d2ee56aad947193b73052f80597ef0}
+
+\begin{DoxyCompactList}\small\item\em Returns the error code returned by the last Z\-I\-P/\-U\-N\-Z\-I\-P A\-P\-I call. \end{DoxyCompactList}\item 
+virtual qint64 {\bf bytes\-Available} () const \label{classQuaZipFile_a29fbfb34677f69394ae7c986ffd3a0c1}
+
+\begin{DoxyCompactList}\small\item\em Returns the number of bytes available for reading. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Protected Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+qint64 {\bf read\-Data} (char $\ast$data, qint64 max\-Size)\label{classQuaZipFile_aa1f2274e1579327855a17d67a9046ec2}
+
+\begin{DoxyCompactList}\small\item\em Implementation of the Q\-I\-O\-Device\-::read\-Data(). \end{DoxyCompactList}\item 
+qint64 {\bf write\-Data} (const char $\ast$data, qint64 max\-Size)\label{classQuaZipFile_abd07949a6fcc2ef094d2be5398bc8e7c}
+
+\begin{DoxyCompactList}\small\item\em Implementation of the Q\-I\-O\-Device\-::write\-Data(). \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Friends}
+\begin{DoxyCompactItemize}
+\item 
+class {\bfseries Qua\-Zip\-File\-Private}\label{classQuaZipFile_abeded291f2788ca39fe2256d78f95266}
+
+\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+A file inside Z\-I\-P archive. 
+
+This is the most interesting class. Not only it provides C++ interface to the Z\-I\-P/\-U\-N\-Z\-I\-P package, but also integrates it with Qt by subclassing Q\-I\-O\-Device. This makes possible to access files inside Z\-I\-P archive using Q\-Text\-Stream or Q\-Data\-Stream, for example. Actually, this is the main purpose of the whole Qua\-Z\-I\-P library.
+
+You can either use existing \doxyref{Qua\-Zip}{p.}{classQuaZip} instance to create instance of this class or pass Z\-I\-P archive file name to this class, in which case it will create internal \doxyref{Qua\-Zip}{p.}{classQuaZip} object. See constructors' descriptions for details. Writing is only possible with the existing instance.
+
+Note that due to the underlying library's limitation it is not possible to use multiple \doxyref{Qua\-Zip\-File}{p.}{classQuaZipFile} instances to open several files in the same archive at the same time. If you need to write to multiple files in parallel, then you should write to temporary files first, then pack them all at once when you have finished writing. If you need to read multiple files inside the same archive in parallel, you should extract them all into a temporary directory first.\subsection{Sequential or random-\/access?}\label{classQuaZipFile_quazipfile-sequential}
+At the first thought, \doxyref{Qua\-Zip\-File}{p.}{classQuaZipFile} has fixed size, the start and the end and should be therefore considered random-\/access device. But there is one major obstacle to making it random-\/access\-: Z\-I\-P/\-U\-N\-Z\-I\-P A\-P\-I does not support seek() operation and the only way to implement it is through reopening the file and re-\/reading to the required position, but this is prohibitively slow.
+
+Therefore, \doxyref{Qua\-Zip\-File}{p.}{classQuaZipFile} is considered to be a sequential device. This has advantage of availability of the unget\-Char() operation (Q\-I\-O\-Device does not implement it properly for non-\/sequential devices unless they support seek()). Disadvantage is a somewhat strange behaviour of the \doxyref{size()}{p.}{classQuaZipFile_ad1a17cc690a01c3edfb82984c3a4c8f0} and \doxyref{pos()}{p.}{classQuaZipFile_a90fd55dab83eca7f95df50b2c41b7f22} functions. This should be kept in mind while using this class. 
+
+\subsection{Constructor \& Destructor Documentation}
+\index{Qua\-Zip\-File@{Qua\-Zip\-File}!Qua\-Zip\-File@{Qua\-Zip\-File}}
+\index{Qua\-Zip\-File@{Qua\-Zip\-File}!QuaZipFile@{Qua\-Zip\-File}}
+\subsubsection[{Qua\-Zip\-File}]{\setlength{\rightskip}{0pt plus 5cm}Qua\-Zip\-File\-::\-Qua\-Zip\-File (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)}\label{classQuaZipFile_ad31592e0e8a9eaa009c6c0e2040a2158}
+
+
+Constructs a \doxyref{Qua\-Zip\-File}{p.}{classQuaZipFile} instance. 
+
+You should use \doxyref{set\-Zip\-Name()}{p.}{classQuaZipFile_ac8109e9a5c19bea75982ff6986b5cb1e} and \doxyref{set\-File\-Name()}{p.}{classQuaZipFile_a3732ca7704379d457b6a27db8837de95} or \doxyref{set\-Zip()}{p.}{classQuaZipFile_ab7939a26d1e8de2f6aca54f49a12b980} before trying to call \doxyref{open()}{p.}{classQuaZipFile_a4c20c0ef00ae79c9a59eafe2906c9384} on the constructed object. \index{Qua\-Zip\-File@{Qua\-Zip\-File}!Qua\-Zip\-File@{Qua\-Zip\-File}}
+\index{Qua\-Zip\-File@{Qua\-Zip\-File}!QuaZipFile@{Qua\-Zip\-File}}
+\subsubsection[{Qua\-Zip\-File}]{\setlength{\rightskip}{0pt plus 5cm}Qua\-Zip\-File\-::\-Qua\-Zip\-File (
+\begin{DoxyParamCaption}
+\item[{Q\-Object $\ast$}]{parent}
+\end{DoxyParamCaption}
+)}\label{classQuaZipFile_a1349ad27f1947bc3e346d83dbf9586c4}
+
+
+Constructs a \doxyref{Qua\-Zip\-File}{p.}{classQuaZipFile} instance. 
+
+{\itshape parent} argument specifies this object's parent object.
+
+You should use \doxyref{set\-Zip\-Name()}{p.}{classQuaZipFile_ac8109e9a5c19bea75982ff6986b5cb1e} and \doxyref{set\-File\-Name()}{p.}{classQuaZipFile_a3732ca7704379d457b6a27db8837de95} or \doxyref{set\-Zip()}{p.}{classQuaZipFile_ab7939a26d1e8de2f6aca54f49a12b980} before trying to call \doxyref{open()}{p.}{classQuaZipFile_a4c20c0ef00ae79c9a59eafe2906c9384} on the constructed object. \index{Qua\-Zip\-File@{Qua\-Zip\-File}!Qua\-Zip\-File@{Qua\-Zip\-File}}
+\index{Qua\-Zip\-File@{Qua\-Zip\-File}!QuaZipFile@{Qua\-Zip\-File}}
+\subsubsection[{Qua\-Zip\-File}]{\setlength{\rightskip}{0pt plus 5cm}Qua\-Zip\-File\-::\-Qua\-Zip\-File (
+\begin{DoxyParamCaption}
+\item[{const Q\-String \&}]{zip\-Name, }
+\item[{Q\-Object $\ast$}]{parent = {\ttfamily NULL}}
+\end{DoxyParamCaption}
+)}\label{classQuaZipFile_ae614495d6b2404a6c59d7cfca5c3f6fd}
+
+
+Constructs a \doxyref{Qua\-Zip\-File}{p.}{classQuaZipFile} instance. 
+
+{\itshape parent} argument specifies this object's parent object and {\itshape zip\-Name} specifies Z\-I\-P archive file name.
+
+You should use \doxyref{set\-File\-Name()}{p.}{classQuaZipFile_a3732ca7704379d457b6a27db8837de95} before trying to call \doxyref{open()}{p.}{classQuaZipFile_a4c20c0ef00ae79c9a59eafe2906c9384} on the constructed object.
+
+\doxyref{Qua\-Zip\-File}{p.}{classQuaZipFile} constructed by this constructor can be used for read only access. Use \doxyref{Qua\-Zip\-File(\-Qua\-Zip$\ast$,\-Q\-Object$\ast$)}{p.}{classQuaZipFile_a54e944a6b3d27030f64c8f30d2cc33bb} for writing. \index{Qua\-Zip\-File@{Qua\-Zip\-File}!Qua\-Zip\-File@{Qua\-Zip\-File}}
+\index{Qua\-Zip\-File@{Qua\-Zip\-File}!QuaZipFile@{Qua\-Zip\-File}}
+\subsubsection[{Qua\-Zip\-File}]{\setlength{\rightskip}{0pt plus 5cm}Qua\-Zip\-File\-::\-Qua\-Zip\-File (
+\begin{DoxyParamCaption}
+\item[{const Q\-String \&}]{zip\-Name, }
+\item[{const Q\-String \&}]{file\-Name, }
+\item[{{\bf Qua\-Zip\-::\-Case\-Sensitivity}}]{cs = {\ttfamily {\bf Qua\-Zip\-::cs\-Default}}, }
+\item[{Q\-Object $\ast$}]{parent = {\ttfamily NULL}}
+\end{DoxyParamCaption}
+)}\label{classQuaZipFile_ac6e883b5a5d3a58c9c56eb497dd91220}
+
+
+Constructs a \doxyref{Qua\-Zip\-File}{p.}{classQuaZipFile} instance. 
+
+{\itshape parent} argument specifies this object's parent object, {\itshape zip\-Name} specifies Z\-I\-P archive file name and {\itshape file\-Name} and {\itshape cs} specify a name of the file to open inside archive.
+
+\doxyref{Qua\-Zip\-File}{p.}{classQuaZipFile} constructed by this constructor can be used for read only access. Use \doxyref{Qua\-Zip\-File(\-Qua\-Zip$\ast$,\-Q\-Object$\ast$)}{p.}{classQuaZipFile_a54e944a6b3d27030f64c8f30d2cc33bb} for writing.
+
+\begin{DoxySeeAlso}{See Also}
+\doxyref{Qua\-Zip\-::set\-Current\-File()}{p.}{classQuaZip_a6c657bfcfccb59d728e0da24c677d899} 
+\end{DoxySeeAlso}
+\index{Qua\-Zip\-File@{Qua\-Zip\-File}!Qua\-Zip\-File@{Qua\-Zip\-File}}
+\index{Qua\-Zip\-File@{Qua\-Zip\-File}!QuaZipFile@{Qua\-Zip\-File}}
+\subsubsection[{Qua\-Zip\-File}]{\setlength{\rightskip}{0pt plus 5cm}Qua\-Zip\-File\-::\-Qua\-Zip\-File (
+\begin{DoxyParamCaption}
+\item[{{\bf Qua\-Zip} $\ast$}]{zip, }
+\item[{Q\-Object $\ast$}]{parent = {\ttfamily NULL}}
+\end{DoxyParamCaption}
+)}\label{classQuaZipFile_a54e944a6b3d27030f64c8f30d2cc33bb}
+
+
+Constructs a \doxyref{Qua\-Zip\-File}{p.}{classQuaZipFile} instance. 
+
+{\itshape parent} argument specifies this object's parent object.
+
+{\itshape zip} is the pointer to the existing \doxyref{Qua\-Zip}{p.}{classQuaZip} object. This \doxyref{Qua\-Zip\-File}{p.}{classQuaZipFile} object then can be used to read current file in the {\itshape zip} or to write to the file inside it.
+
+\begin{DoxyWarning}{Warning}
+Using this constructor for reading current file can be tricky. Let's take the following example\-: 
+\begin{DoxyCode}
+QuaZip zip(\textcolor{stringliteral}{"archive.zip"});
+zip.open(QuaZip::mdUnzip);
+zip.setCurrentFile(\textcolor{stringliteral}{"file-in-archive"});
+QuaZipFile file(&zip);
+file.open(QIODevice::ReadOnly);
+\textcolor{comment}{// ok, now we can read from the file}
+file.read(somewhere, some);
+zip.setCurrentFile(\textcolor{stringliteral}{"another-file-in-archive"}); \textcolor{comment}{// oops...}
+QuaZipFile anotherFile(&zip);
+anotherFile.open(QIODevice::ReadOnly);
+anotherFile.read(somewhere, some); \textcolor{comment}{// this is still ok...}
+file.read(somewhere, some); \textcolor{comment}{// and this is NOT}
+\end{DoxyCode}
+ So, what exactly happens here? When we change current file in the {\ttfamily zip} archive, {\ttfamily file} that references it becomes invalid (actually, as far as I understand Z\-I\-P/\-U\-N\-Z\-I\-P sources, it becomes closed, but \doxyref{Qua\-Zip\-File}{p.}{classQuaZipFile} has no means to detect it).
+\end{DoxyWarning}
+Summary\-: do not close {\ttfamily zip} object or change its current file as long as \doxyref{Qua\-Zip\-File}{p.}{classQuaZipFile} is open. Even better -\/ use another constructors which create internal \doxyref{Qua\-Zip}{p.}{classQuaZip} instances, one per object, and therefore do not cause unnecessary trouble. This constructor may be useful, though, if you already have a \doxyref{Qua\-Zip}{p.}{classQuaZip} instance and do not want to access several files at once. Good example\-: 
+\begin{DoxyCode}
+QuaZip zip(\textcolor{stringliteral}{"archive.zip"});
+zip.open(QuaZip::mdUnzip);
+\textcolor{comment}{// first, we need some information about archive itself}
+QByteArray comment=zip.getComment();
+\textcolor{comment}{// and now we are going to access files inside it}
+QuaZipFile file(&zip);
+\textcolor{keywordflow}{for}(\textcolor{keywordtype}{bool} more=zip.goToFirstFile(); more; more=zip.goToNextFile()) \{
+  file.open(QIODevice::ReadOnly);
+  \textcolor{comment}{// do something cool with file here}
+  file.close(); \textcolor{comment}{// do not forget to close!}
+\}
+zip.close();
+\end{DoxyCode}
+ \index{Qua\-Zip\-File@{Qua\-Zip\-File}!$\sim$\-Qua\-Zip\-File@{$\sim$\-Qua\-Zip\-File}}
+\index{$\sim$\-Qua\-Zip\-File@{$\sim$\-Qua\-Zip\-File}!QuaZipFile@{Qua\-Zip\-File}}
+\subsubsection[{$\sim$\-Qua\-Zip\-File}]{\setlength{\rightskip}{0pt plus 5cm}Qua\-Zip\-File\-::$\sim$\-Qua\-Zip\-File (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [virtual]}}\label{classQuaZipFile_aa1e5a0cf491bafae6cc73e649caa97fc}
+
+
+Destroys a \doxyref{Qua\-Zip\-File}{p.}{classQuaZipFile} instance. 
+
+Closes file if open, destructs internal \doxyref{Qua\-Zip}{p.}{classQuaZip} object (if it exists and {\itshape is} internal, of course). 
+
+References close().
+
+
+
+\subsection{Member Function Documentation}
+\index{Qua\-Zip\-File@{Qua\-Zip\-File}!get\-Zip\-Name@{get\-Zip\-Name}}
+\index{get\-Zip\-Name@{get\-Zip\-Name}!QuaZipFile@{Qua\-Zip\-File}}
+\subsubsection[{get\-Zip\-Name}]{\setlength{\rightskip}{0pt plus 5cm}Q\-String Qua\-Zip\-File\-::get\-Zip\-Name (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+) const}\label{classQuaZipFile_a6f034a714aa94631367590de3f8f4e22}
+
+
+Returns the Z\-I\-P archive file name. 
+
+If this object was created by passing \doxyref{Qua\-Zip}{p.}{classQuaZip} pointer to the constructor, this function will return that \doxyref{Qua\-Zip}{p.}{classQuaZip}'s file name (or null string if that object does not have file name yet).
+
+Otherwise, returns associated Z\-I\-P archive file name or null string if there are no name set yet.
+
+\begin{DoxySeeAlso}{See Also}
+\doxyref{set\-Zip\-Name()}{p.}{classQuaZipFile_ac8109e9a5c19bea75982ff6986b5cb1e} \doxyref{get\-File\-Name()}{p.}{classQuaZipFile_a6999362e70a5b2396fba5cfb30095ff9} 
+\end{DoxySeeAlso}
+
+
+References Qua\-Zip\-::get\-Zip\-Name().
+
+\index{Qua\-Zip\-File@{Qua\-Zip\-File}!get\-Zip@{get\-Zip}}
+\index{get\-Zip@{get\-Zip}!QuaZipFile@{Qua\-Zip\-File}}
+\subsubsection[{get\-Zip}]{\setlength{\rightskip}{0pt plus 5cm}{\bf Qua\-Zip} $\ast$ Qua\-Zip\-File\-::get\-Zip (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+) const}\label{classQuaZipFile_a72daf8a9da14907a801a783603003205}
+
+
+Returns a pointer to the associated \doxyref{Qua\-Zip}{p.}{classQuaZip} object. 
+
+Returns {\ttfamily N\-U\-L\-L} if there is no associated \doxyref{Qua\-Zip}{p.}{classQuaZip} or it is internal (so you will not mess with it). \index{Qua\-Zip\-File@{Qua\-Zip\-File}!get\-File\-Name@{get\-File\-Name}}
+\index{get\-File\-Name@{get\-File\-Name}!QuaZipFile@{Qua\-Zip\-File}}
+\subsubsection[{get\-File\-Name}]{\setlength{\rightskip}{0pt plus 5cm}Q\-String Qua\-Zip\-File\-::get\-File\-Name (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+) const}\label{classQuaZipFile_a6999362e70a5b2396fba5cfb30095ff9}
+
+
+Returns file name. 
+
+This function returns file name you passed to this object either by using \doxyref{Qua\-Zip\-File(const Q\-String\&,const Q\-String\&,\-Qua\-Zip\-::\-Case\-Sensitivity,\-Q\-Object$\ast$)}{p.}{classQuaZipFile_ac6e883b5a5d3a58c9c56eb497dd91220} or by calling \doxyref{set\-File\-Name()}{p.}{classQuaZipFile_a3732ca7704379d457b6a27db8837de95}. Real name of the file may differ in case if you used case-\/insensitivity.
+
+Returns null string if there is no file name set yet. This is the case when this \doxyref{Qua\-Zip\-File}{p.}{classQuaZipFile} operates on the existing \doxyref{Qua\-Zip}{p.}{classQuaZip} object (constructor \doxyref{Qua\-Zip\-File(\-Qua\-Zip$\ast$,\-Q\-Object$\ast$)}{p.}{classQuaZipFile_a54e944a6b3d27030f64c8f30d2cc33bb} or \doxyref{set\-Zip()}{p.}{classQuaZipFile_ab7939a26d1e8de2f6aca54f49a12b980} was used).
+
+\begin{DoxySeeAlso}{See Also}
+\doxyref{get\-Actual\-File\-Name}{p.}{classQuaZipFile_a7b8e3c39026855cd98661a1b2815c220} 
+\end{DoxySeeAlso}
+\index{Qua\-Zip\-File@{Qua\-Zip\-File}!get\-Case\-Sensitivity@{get\-Case\-Sensitivity}}
+\index{get\-Case\-Sensitivity@{get\-Case\-Sensitivity}!QuaZipFile@{Qua\-Zip\-File}}
+\subsubsection[{get\-Case\-Sensitivity}]{\setlength{\rightskip}{0pt plus 5cm}{\bf Qua\-Zip\-::\-Case\-Sensitivity} Qua\-Zip\-File\-::get\-Case\-Sensitivity (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+) const}\label{classQuaZipFile_a25dbfddc589bf6b69b39905f3c3bcc73}
+
+
+Returns case sensitivity of the file name. 
+
+This function returns case sensitivity argument you passed to this object either by using \doxyref{Qua\-Zip\-File(const Q\-String\&,const Q\-String\&,\-Qua\-Zip\-::\-Case\-Sensitivity,\-Q\-Object$\ast$)}{p.}{classQuaZipFile_ac6e883b5a5d3a58c9c56eb497dd91220} or by calling \doxyref{set\-File\-Name()}{p.}{classQuaZipFile_a3732ca7704379d457b6a27db8837de95}.
+
+Returns unpredictable value if \doxyref{get\-File\-Name()}{p.}{classQuaZipFile_a6999362e70a5b2396fba5cfb30095ff9} returns null string (this is the case when you did not used \doxyref{set\-File\-Name()}{p.}{classQuaZipFile_a3732ca7704379d457b6a27db8837de95} or constructor above).
+
+\begin{DoxySeeAlso}{See Also}
+\doxyref{get\-File\-Name}{p.}{classQuaZipFile_a6999362e70a5b2396fba5cfb30095ff9} 
+\end{DoxySeeAlso}
+\index{Qua\-Zip\-File@{Qua\-Zip\-File}!get\-Actual\-File\-Name@{get\-Actual\-File\-Name}}
+\index{get\-Actual\-File\-Name@{get\-Actual\-File\-Name}!QuaZipFile@{Qua\-Zip\-File}}
+\subsubsection[{get\-Actual\-File\-Name}]{\setlength{\rightskip}{0pt plus 5cm}Q\-String Qua\-Zip\-File\-::get\-Actual\-File\-Name (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+) const}\label{classQuaZipFile_a7b8e3c39026855cd98661a1b2815c220}
+
+
+Returns the actual file name in the archive. 
+
+This is {\itshape not} a Z\-I\-P archive file name, but a name of file inside archive. It is not necessary the same name that you have passed to the \doxyref{Qua\-Zip\-File(const Q\-String\&,const Q\-String\&,\-Qua\-Zip\-::\-Case\-Sensitivity,\-Q\-Object$\ast$)}{p.}{classQuaZipFile_ac6e883b5a5d3a58c9c56eb497dd91220}, \doxyref{set\-File\-Name()}{p.}{classQuaZipFile_a3732ca7704379d457b6a27db8837de95} or \doxyref{Qua\-Zip\-::set\-Current\-File()}{p.}{classQuaZip_a6c657bfcfccb59d728e0da24c677d899} -\/ this is the real file name inside archive, so it may differ in case if the file name search was case-\/insensitive.
+
+Equivalent to calling get\-Current\-File\-Name() on the associated \doxyref{Qua\-Zip}{p.}{classQuaZip} object. Returns null string if there is no associated \doxyref{Qua\-Zip}{p.}{classQuaZip} object or if it does not have a current file yet. And this is the case if you called \doxyref{set\-File\-Name()}{p.}{classQuaZipFile_a3732ca7704379d457b6a27db8837de95} but did not open the file yet. So this is perfectly fine\-: 
+\begin{DoxyCode}
+QuaZipFile file(\textcolor{stringliteral}{"somezip.zip"});
+file.setFileName(\textcolor{stringliteral}{"somefile"});
+QString name=file.getName(); \textcolor{comment}{// name=="somefile"}
+QString actual=file.getActualFileName(); \textcolor{comment}{// actual is null string}
+file.open(QIODevice::ReadOnly);
+QString actual=file.getActualFileName(); \textcolor{comment}{// actual can be "SoMeFiLe" on Windows}
+\end{DoxyCode}
+
+
+\begin{DoxySeeAlso}{See Also}
+\doxyref{get\-Zip\-Name()}{p.}{classQuaZipFile_a6f034a714aa94631367590de3f8f4e22}, \doxyref{get\-File\-Name()}{p.}{classQuaZipFile_a6999362e70a5b2396fba5cfb30095ff9}, \doxyref{Qua\-Zip\-::\-Case\-Sensitivity}{p.}{classQuaZip_a6053a1d249ed210a85c9d5eb7cf9cdbe} 
+\end{DoxySeeAlso}
+
+
+References Qua\-Zip\-::get\-Current\-File\-Name(), and Qua\-Zip\-::get\-Zip\-Error().
+
+\index{Qua\-Zip\-File@{Qua\-Zip\-File}!set\-Zip\-Name@{set\-Zip\-Name}}
+\index{set\-Zip\-Name@{set\-Zip\-Name}!QuaZipFile@{Qua\-Zip\-File}}
+\subsubsection[{set\-Zip\-Name}]{\setlength{\rightskip}{0pt plus 5cm}void Qua\-Zip\-File\-::set\-Zip\-Name (
+\begin{DoxyParamCaption}
+\item[{const Q\-String \&}]{zip\-Name}
+\end{DoxyParamCaption}
+)}\label{classQuaZipFile_ac8109e9a5c19bea75982ff6986b5cb1e}
+
+
+Sets the Z\-I\-P archive file name. 
+
+Automatically creates internal \doxyref{Qua\-Zip}{p.}{classQuaZip} object and destroys previously created internal \doxyref{Qua\-Zip}{p.}{classQuaZip} object, if any.
+
+Will do nothing if this file is already open. You must \doxyref{close()}{p.}{classQuaZipFile_a42a39b12619bccd3d419ee60bbb3fcf6} it first. \index{Qua\-Zip\-File@{Qua\-Zip\-File}!is\-Raw@{is\-Raw}}
+\index{is\-Raw@{is\-Raw}!QuaZipFile@{Qua\-Zip\-File}}
+\subsubsection[{is\-Raw}]{\setlength{\rightskip}{0pt plus 5cm}bool Qua\-Zip\-File\-::is\-Raw (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+) const}\label{classQuaZipFile_a0df3db94c2a34c8d17ddaa0f54fc32c1}
+
+
+Returns {\ttfamily true} if the file was opened in raw mode. 
+
+If the file is not open, the returned value is undefined.
+
+\begin{DoxySeeAlso}{See Also}
+\doxyref{open(\-Open\-Mode,int$\ast$,int$\ast$,bool,const char$\ast$)}{p.}{classQuaZipFile_aed75bace51f2bb4c3e4f656ab4493aac} 
+\end{DoxySeeAlso}
+
+
+Referenced by close().
+
+\index{Qua\-Zip\-File@{Qua\-Zip\-File}!set\-Zip@{set\-Zip}}
+\index{set\-Zip@{set\-Zip}!QuaZipFile@{Qua\-Zip\-File}}
+\subsubsection[{set\-Zip}]{\setlength{\rightskip}{0pt plus 5cm}void Qua\-Zip\-File\-::set\-Zip (
+\begin{DoxyParamCaption}
+\item[{{\bf Qua\-Zip} $\ast$}]{zip}
+\end{DoxyParamCaption}
+)}\label{classQuaZipFile_ab7939a26d1e8de2f6aca54f49a12b980}
+
+
+Binds to the existing \doxyref{Qua\-Zip}{p.}{classQuaZip} instance. 
+
+This function destroys internal \doxyref{Qua\-Zip}{p.}{classQuaZip} object, if any, and makes this \doxyref{Qua\-Zip\-File}{p.}{classQuaZipFile} to use current file in the {\itshape zip} object for any further operations. See \doxyref{Qua\-Zip\-File(\-Qua\-Zip$\ast$,\-Q\-Object$\ast$)}{p.}{classQuaZipFile_a54e944a6b3d27030f64c8f30d2cc33bb} for the possible pitfalls.
+
+Will do nothing if the file is currently open. You must \doxyref{close()}{p.}{classQuaZipFile_a42a39b12619bccd3d419ee60bbb3fcf6} it first. \index{Qua\-Zip\-File@{Qua\-Zip\-File}!set\-File\-Name@{set\-File\-Name}}
+\index{set\-File\-Name@{set\-File\-Name}!QuaZipFile@{Qua\-Zip\-File}}
+\subsubsection[{set\-File\-Name}]{\setlength{\rightskip}{0pt plus 5cm}void Qua\-Zip\-File\-::set\-File\-Name (
+\begin{DoxyParamCaption}
+\item[{const Q\-String \&}]{file\-Name, }
+\item[{{\bf Qua\-Zip\-::\-Case\-Sensitivity}}]{cs = {\ttfamily {\bf Qua\-Zip\-::cs\-Default}}}
+\end{DoxyParamCaption}
+)}\label{classQuaZipFile_a3732ca7704379d457b6a27db8837de95}
+
+
+Sets the file name. 
+
+Will do nothing if at least one of the following conditions is met\-:
+\begin{DoxyItemize}
+\item Z\-I\-P name has not been set yet (\doxyref{get\-Zip\-Name()}{p.}{classQuaZipFile_a6f034a714aa94631367590de3f8f4e22} returns null string).
+\item This \doxyref{Qua\-Zip\-File}{p.}{classQuaZipFile} is associated with external \doxyref{Qua\-Zip}{p.}{classQuaZip}. In this case you should call that \doxyref{Qua\-Zip}{p.}{classQuaZip}'s set\-Current\-File() function instead!
+\item File is already open so setting the name is meaningless.
+\end{DoxyItemize}
+
+\begin{DoxySeeAlso}{See Also}
+\doxyref{Qua\-Zip\-::set\-Current\-File}{p.}{classQuaZip_a6c657bfcfccb59d728e0da24c677d899} 
+\end{DoxySeeAlso}
+\index{Qua\-Zip\-File@{Qua\-Zip\-File}!open@{open}}
+\index{open@{open}!QuaZipFile@{Qua\-Zip\-File}}
+\subsubsection[{open}]{\setlength{\rightskip}{0pt plus 5cm}bool Qua\-Zip\-File\-::open (
+\begin{DoxyParamCaption}
+\item[{Open\-Mode}]{mode}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [virtual]}}\label{classQuaZipFile_a4c20c0ef00ae79c9a59eafe2906c9384}
+
+
+Opens a file for reading. 
+
+Returns {\ttfamily true} on success, {\ttfamily false} otherwise. Call \doxyref{get\-Zip\-Error()}{p.}{classQuaZipFile_a26d2ee56aad947193b73052f80597ef0} to get error code.
+
+\begin{DoxyNote}{Note}
+Since Z\-I\-P/\-U\-N\-Z\-I\-P A\-P\-I provides buffered reading only, \doxyref{Qua\-Zip\-File}{p.}{classQuaZipFile} does not support unbuffered reading. So do not pass Q\-I\-O\-Device\-::\-Unbuffered flag in {\itshape mode}, or open will fail. 
+\end{DoxyNote}
+\index{Qua\-Zip\-File@{Qua\-Zip\-File}!open@{open}}
+\index{open@{open}!QuaZipFile@{Qua\-Zip\-File}}
+\subsubsection[{open}]{\setlength{\rightskip}{0pt plus 5cm}bool Qua\-Zip\-File\-::open (
+\begin{DoxyParamCaption}
+\item[{Open\-Mode}]{mode, }
+\item[{const char $\ast$}]{password}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\label{classQuaZipFile_a0bff0d15bbcd70306dc4a553a55776b9}
+
+
+Opens a file for reading. 
+
+This is an overloaded member function, provided for convenience. It differs from the above function only in what argument(s) it accepts. Argument {\itshape password} specifies a password to decrypt the file. If it is N\-U\-L\-L then this function behaves just like \doxyref{open(\-Open\-Mode)}{p.}{classQuaZipFile_a4c20c0ef00ae79c9a59eafe2906c9384}. \index{Qua\-Zip\-File@{Qua\-Zip\-File}!open@{open}}
+\index{open@{open}!QuaZipFile@{Qua\-Zip\-File}}
+\subsubsection[{open}]{\setlength{\rightskip}{0pt plus 5cm}bool Qua\-Zip\-File\-::open (
+\begin{DoxyParamCaption}
+\item[{Open\-Mode}]{mode, }
+\item[{int $\ast$}]{method, }
+\item[{int $\ast$}]{level, }
+\item[{bool}]{raw, }
+\item[{const char $\ast$}]{password = {\ttfamily NULL}}
+\end{DoxyParamCaption}
+)}\label{classQuaZipFile_aed75bace51f2bb4c3e4f656ab4493aac}
+
+
+Opens a file for reading. 
+
+This is an overloaded member function, provided for convenience. It differs from the above function only in what argument(s) it accepts. Argument {\itshape password} specifies a password to decrypt the file.
+
+An integers pointed by {\itshape method} and {\itshape level} will receive codes of the compression method and level used. See unzip.\-h.
+
+If raw is {\ttfamily true} then no decompression is performed.
+
+{\itshape method} should not be {\ttfamily N\-U\-L\-L}. {\itshape level} can be {\ttfamily N\-U\-L\-L} if you don't want to know the compression level. 
+
+References Qua\-Zip\-::close(), Qua\-Zip\-::get\-Mode(), Qua\-Zip\-::get\-Unz\-File(), Qua\-Zip\-::get\-Zip\-Error(), Qua\-Zip\-::has\-Current\-File(), Qua\-Zip\-::md\-Unzip, Qua\-Zip\-::open(), and Qua\-Zip\-::set\-Current\-File().
+
+\index{Qua\-Zip\-File@{Qua\-Zip\-File}!open@{open}}
+\index{open@{open}!QuaZipFile@{Qua\-Zip\-File}}
+\subsubsection[{open}]{\setlength{\rightskip}{0pt plus 5cm}bool Qua\-Zip\-File\-::open (
+\begin{DoxyParamCaption}
+\item[{Open\-Mode}]{mode, }
+\item[{const {\bf Qua\-Zip\-New\-Info} \&}]{info, }
+\item[{const char $\ast$}]{password = {\ttfamily NULL}, }
+\item[{quint32}]{crc = {\ttfamily 0}, }
+\item[{int}]{method = {\ttfamily Z\-\_\-DEFLATED}, }
+\item[{int}]{level = {\ttfamily Z\-\_\-DEFAULT\-\_\-COMPRESSION}, }
+\item[{bool}]{raw = {\ttfamily false}, }
+\item[{int}]{window\-Bits = {\ttfamily -\/MAX\-\_\-WBITS}, }
+\item[{int}]{mem\-Level = {\ttfamily DEF\-\_\-MEM\-\_\-LEVEL}, }
+\item[{int}]{strategy = {\ttfamily Z\-\_\-DEFAULT\-\_\-STRATEGY}}
+\end{DoxyParamCaption}
+)}\label{classQuaZipFile_a2429ea59c77371d7af56d739db130b18}
+
+
+Opens a file for writing. 
+
+{\itshape info} argument specifies information about file. It should at least specify a correct file name. Also, it is a good idea to specify correct timestamp (by default, current time will be used). See \doxyref{Qua\-Zip\-New\-Info}{p.}{structQuaZipNewInfo}.
+
+The {\itshape password} argument specifies the password for crypting. Pass N\-U\-L\-L if you don't need any crypting. The {\itshape crc} argument was supposed to be used for crypting too, but then it turned out that it's false information, so you need to set it to 0 unless you want to use the raw mode (see below).
+
+Arguments {\itshape method} and {\itshape level} specify compression method and level. The only method supported is Z\-\_\-\-D\-E\-F\-L\-A\-T\-E\-D, but you may also specify 0 for no compression. If all of the files in the archive use both method 0 and either level 0 is explicitly specified or data descriptor writing is disabled with \doxyref{Qua\-Zip\-::set\-Data\-Descriptor\-Writing\-Enabled()}{p.}{classQuaZip_a6c23a12af88f7ea5edd4f9c0a24b9453}, then the resulting archive is supposed to be compatible with the 1.\-0 Z\-I\-P format version, should you need that. Except for this, {\itshape level} has no other effects with method 0.
+
+If {\itshape raw} is {\ttfamily true}, no compression is performed. In this case, {\itshape crc} and uncompressed\-Size field of the {\itshape info} are required.
+
+Arguments {\itshape window\-Bits}, {\itshape mem\-Level}, {\itshape strategy} provide zlib algorithms tuning. See deflate\-Init2() in zlib. 
+
+References Qua\-Zip\-New\-Info\-::comment, Qua\-Zip\-New\-Info\-::date\-Time, Qua\-Zip\-New\-Info\-::external\-Attr, Qua\-Zip\-New\-Info\-::extra\-Global, Qua\-Zip\-New\-Info\-::extra\-Local, Qua\-Zip\-::get\-Comment\-Codec(), Qua\-Zip\-::get\-File\-Name\-Codec(), Qua\-Zip\-::get\-Mode(), Qua\-Zip\-::get\-Zip\-File(), Qua\-Zip\-New\-Info\-::internal\-Attr, Qua\-Zip\-::is\-Data\-Descriptor\-Writing\-Enabled(), Qua\-Zip\-::is\-Zip64\-Enabled(), Qua\-Zip\-::md\-Add, Qua\-Zip\-::md\-Append, Qua\-Zip\-::md\-Create, Qua\-Zip\-New\-Info\-::name, and Qua\-Zip\-New\-Info\-::uncompressed\-Size.
+
+\index{Qua\-Zip\-File@{Qua\-Zip\-File}!pos@{pos}}
+\index{pos@{pos}!QuaZipFile@{Qua\-Zip\-File}}
+\subsubsection[{pos}]{\setlength{\rightskip}{0pt plus 5cm}qint64 Qua\-Zip\-File\-::pos (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+) const\hspace{0.3cm}{\ttfamily [virtual]}}\label{classQuaZipFile_a90fd55dab83eca7f95df50b2c41b7f22}
+
+
+Returns current position in the file. 
+
+Implementation of the Q\-I\-O\-Device\-::pos(). When reading, this function is a wrapper to the Z\-I\-P/\-U\-N\-Z\-I\-P unztell(), therefore it is unable to keep track of the unget\-Char() calls (which is non-\/virtual and therefore is dangerous to reimplement). So if you are using unget\-Char() feature of the Q\-I\-O\-Device, this function reports incorrect value until you get back characters which you ungot.
+
+When writing, \doxyref{pos()}{p.}{classQuaZipFile_a90fd55dab83eca7f95df50b2c41b7f22} returns number of bytes already written (uncompressed unless you use raw mode).
+
+\begin{DoxyNote}{Note}
+Although \doxyref{Qua\-Zip\-File is a sequential device}{p.}{classQuaZipFile_quazipfile-sequential} and therefore \doxyref{pos()}{p.}{classQuaZipFile_a90fd55dab83eca7f95df50b2c41b7f22} should always return zero, it does not, because it would be misguiding. Keep this in mind.
+\end{DoxyNote}
+This function returns -\/1 if the file or archive is not open.
+
+Error code returned by \doxyref{get\-Zip\-Error()}{p.}{classQuaZipFile_a26d2ee56aad947193b73052f80597ef0} is not affected by this function call. 
+
+References Qua\-Zip\-::get\-Unz\-File().
+
+
+
+Referenced by bytes\-Available().
+
+\index{Qua\-Zip\-File@{Qua\-Zip\-File}!at\-End@{at\-End}}
+\index{at\-End@{at\-End}!QuaZipFile@{Qua\-Zip\-File}}
+\subsubsection[{at\-End}]{\setlength{\rightskip}{0pt plus 5cm}bool Qua\-Zip\-File\-::at\-End (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+) const\hspace{0.3cm}{\ttfamily [virtual]}}\label{classQuaZipFile_a1e3f4c3c075da98af426fc167440cfc3}
+
+
+Returns {\ttfamily true} if the end of file was reached. 
+
+This function returns {\ttfamily false} in the case of error. This means that you called this function on either not open file, or a file in the not open archive or even on a \doxyref{Qua\-Zip\-File}{p.}{classQuaZipFile} instance that does not even have \doxyref{Qua\-Zip}{p.}{classQuaZip} instance associated. Do not do that because there is no means to determine whether {\ttfamily false} is returned because of error or because end of file was reached. Well, on the other side you may interpret {\ttfamily false} return value as \char`\"{}there is no file open to check for end of file and there is
+no end of file therefore\char`\"{}.
+
+When writing, this function always returns {\ttfamily true} (because you are always writing to the end of file).
+
+Error code returned by \doxyref{get\-Zip\-Error()}{p.}{classQuaZipFile_a26d2ee56aad947193b73052f80597ef0} is not affected by this function call. 
+
+References Qua\-Zip\-::get\-Unz\-File().
+
+\index{Qua\-Zip\-File@{Qua\-Zip\-File}!size@{size}}
+\index{size@{size}!QuaZipFile@{Qua\-Zip\-File}}
+\subsubsection[{size}]{\setlength{\rightskip}{0pt plus 5cm}qint64 Qua\-Zip\-File\-::size (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+) const\hspace{0.3cm}{\ttfamily [virtual]}}\label{classQuaZipFile_ad1a17cc690a01c3edfb82984c3a4c8f0}
+
+
+Returns file size. 
+
+This function returns \doxyref{csize()}{p.}{classQuaZipFile_ac4da08e5cdec368a2a686775f7dc5639} if the file is open for reading in raw mode, \doxyref{usize()}{p.}{classQuaZipFile_a4814b5e6e39fb254737b81ea10964f50} if it is open for reading in normal mode and \doxyref{pos()}{p.}{classQuaZipFile_a90fd55dab83eca7f95df50b2c41b7f22} if it is open for writing.
+
+Returns -\/1 on error, call \doxyref{get\-Zip\-Error()}{p.}{classQuaZipFile_a26d2ee56aad947193b73052f80597ef0} to get error code.
+
+\begin{DoxyNote}{Note}
+This function returns file size despite that \doxyref{Qua\-Zip\-File is considered to be sequential device}{p.}{classQuaZipFile_quazipfile-sequential}, for which \doxyref{size()}{p.}{classQuaZipFile_ad1a17cc690a01c3edfb82984c3a4c8f0} should return \doxyref{bytes\-Available()}{p.}{classQuaZipFile_a29fbfb34677f69394ae7c986ffd3a0c1} instead. But its name would be very misguiding otherwise, so just keep in mind this inconsistence. 
+\end{DoxyNote}
+
+
+References csize(), and usize().
+
+
+
+Referenced by bytes\-Available().
+
+\index{Qua\-Zip\-File@{Qua\-Zip\-File}!csize@{csize}}
+\index{csize@{csize}!QuaZipFile@{Qua\-Zip\-File}}
+\subsubsection[{csize}]{\setlength{\rightskip}{0pt plus 5cm}qint64 Qua\-Zip\-File\-::csize (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+) const}\label{classQuaZipFile_ac4da08e5cdec368a2a686775f7dc5639}
+
+
+Returns compressed file size. 
+
+Equivalent to calling \doxyref{get\-File\-Info()}{p.}{classQuaZipFile_ad3f5807329321be21b12c1ba5798b359} and then getting compressed\-Size field, but more convenient and faster.
+
+File must be open for reading before calling this function.
+
+Returns -\/1 on error, call \doxyref{get\-Zip\-Error()}{p.}{classQuaZipFile_a26d2ee56aad947193b73052f80597ef0} to get error code. 
+
+References Qua\-Zip\-::get\-Mode(), Qua\-Zip\-::get\-Unz\-File(), and Qua\-Zip\-::md\-Unzip.
+
+
+
+Referenced by size().
+
+\index{Qua\-Zip\-File@{Qua\-Zip\-File}!usize@{usize}}
+\index{usize@{usize}!QuaZipFile@{Qua\-Zip\-File}}
+\subsubsection[{usize}]{\setlength{\rightskip}{0pt plus 5cm}qint64 Qua\-Zip\-File\-::usize (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+) const}\label{classQuaZipFile_a4814b5e6e39fb254737b81ea10964f50}
+
+
+Returns uncompressed file size. 
+
+Equivalent to calling \doxyref{get\-File\-Info()}{p.}{classQuaZipFile_ad3f5807329321be21b12c1ba5798b359} and then getting uncompressed\-Size field, but more convenient and faster. See \doxyref{get\-File\-Info()}{p.}{classQuaZipFile_ad3f5807329321be21b12c1ba5798b359} for a warning.
+
+File must be open for reading before calling this function.
+
+Returns -\/1 on error, call \doxyref{get\-Zip\-Error()}{p.}{classQuaZipFile_a26d2ee56aad947193b73052f80597ef0} to get error code. 
+
+References Qua\-Zip\-::get\-Mode(), Qua\-Zip\-::get\-Unz\-File(), and Qua\-Zip\-::md\-Unzip.
+
+
+
+Referenced by size().
+
+\index{Qua\-Zip\-File@{Qua\-Zip\-File}!get\-File\-Info@{get\-File\-Info}}
+\index{get\-File\-Info@{get\-File\-Info}!QuaZipFile@{Qua\-Zip\-File}}
+\subsubsection[{get\-File\-Info}]{\setlength{\rightskip}{0pt plus 5cm}bool Qua\-Zip\-File\-::get\-File\-Info (
+\begin{DoxyParamCaption}
+\item[{{\bf Qua\-Zip\-File\-Info} $\ast$}]{info}
+\end{DoxyParamCaption}
+)}\label{classQuaZipFile_ad3f5807329321be21b12c1ba5798b359}
+
+
+Gets information about current file. 
+
+This function does the same thing as calling \doxyref{Qua\-Zip\-::get\-Current\-File\-Info()}{p.}{classQuaZip_a9c91a53ed4c2038e153c64bdc097ebe8} on the associated \doxyref{Qua\-Zip}{p.}{classQuaZip} object, but you can not call get\-Current\-File\-Info() if the associated \doxyref{Qua\-Zip}{p.}{classQuaZip} is internal (because you do not have access to it), while you still can call this function in that case.
+
+File must be open for reading before calling this function.
+
+\begin{DoxyReturn}{Returns}
+{\ttfamily false} in the case of an error.
+\end{DoxyReturn}
+This function doesn't support zip64, but will still work fine on zip64 archives if file sizes are below 4 G\-B, otherwise the values will be set as if converted using \doxyref{Qua\-Zip\-File\-Info64\-::to\-Qua\-Zip\-File\-Info()}{p.}{structQuaZipFileInfo64_ada29945c7ee4c9df6fbe95864793aade}.
+
+\begin{DoxySeeAlso}{See Also}
+\doxyref{get\-File\-Info(\-Qua\-Zip\-File\-Info64$\ast$)}{p.}{classQuaZipFile_af35876a5ac6e9c35234275a9e503110d} 
+\end{DoxySeeAlso}
+
+
+References Qua\-Zip\-File\-Info64\-::to\-Qua\-Zip\-File\-Info().
+
+\index{Qua\-Zip\-File@{Qua\-Zip\-File}!get\-File\-Info@{get\-File\-Info}}
+\index{get\-File\-Info@{get\-File\-Info}!QuaZipFile@{Qua\-Zip\-File}}
+\subsubsection[{get\-File\-Info}]{\setlength{\rightskip}{0pt plus 5cm}bool Qua\-Zip\-File\-::get\-File\-Info (
+\begin{DoxyParamCaption}
+\item[{{\bf Qua\-Zip\-File\-Info64} $\ast$}]{info}
+\end{DoxyParamCaption}
+)}\label{classQuaZipFile_af35876a5ac6e9c35234275a9e503110d}
+
+
+Gets information about current file with zip64 support. 
+
+This is an overloaded member function, provided for convenience. It differs from the above function only in what argument(s) it accepts.
+
+\begin{DoxySeeAlso}{See Also}
+\doxyref{get\-File\-Info(\-Qua\-Zip\-File\-Info$\ast$)}{p.}{classQuaZipFile_ad3f5807329321be21b12c1ba5798b359} 
+\end{DoxySeeAlso}
+
+
+References Qua\-Zip\-::get\-Current\-File\-Info(), Qua\-Zip\-::get\-Mode(), Qua\-Zip\-::get\-Zip\-Error(), and Qua\-Zip\-::md\-Unzip.
+
+\index{Qua\-Zip\-File@{Qua\-Zip\-File}!close@{close}}
+\index{close@{close}!QuaZipFile@{Qua\-Zip\-File}}
+\subsubsection[{close}]{\setlength{\rightskip}{0pt plus 5cm}void Qua\-Zip\-File\-::close (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [virtual]}}\label{classQuaZipFile_a42a39b12619bccd3d419ee60bbb3fcf6}
+
+
+Closes the file. 
+
+Call \doxyref{get\-Zip\-Error()}{p.}{classQuaZipFile_a26d2ee56aad947193b73052f80597ef0} to determine if the close was successful. 
+
+References Qua\-Zip\-::close(), Qua\-Zip\-::get\-Unz\-File(), Qua\-Zip\-::get\-Zip\-Error(), Qua\-Zip\-::get\-Zip\-File(), Qua\-Zip\-::is\-Open(), and is\-Raw().
+
+
+
+Referenced by $\sim$\-Qua\-Zip\-File().
+
+
+
+The documentation for this class was generated from the following files\-:\begin{DoxyCompactItemize}
+\item 
+quazip/quazipfile.\-h\item 
+quazip/quazipfile.\-cpp\end{DoxyCompactItemize}
