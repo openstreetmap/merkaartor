@@ -34,15 +34,15 @@ win32-msvc* {
     LIBS += -lz
 }
 
-!contains(NODEBUG,1) {
-    CONFIG += debug
-    #OBJECTS_DIR += $$PWD/../tmp/$$(QMAKESPEC)/obj_debug
-}
-contains(NODEBUG,1) {
-    CONFIG += release
-    DEFINES += NDEBUG
-    #OBJECTS_DIR += $$PWD/../tmp/$$(QMAKESPEC)/obj_release
-}
+#!contains(NODEBUG,1) {
+#    CONFIG += debug
+#    #OBJECTS_DIR += $$PWD/../tmp/$$(QMAKESPEC)/obj_debug
+#}
+#contains(NODEBUG,1) {
+#    CONFIG += release
+#    DEFINES += NDEBUG
+#    #OBJECTS_DIR += $$PWD/../tmp/$$(QMAKESPEC)/obj_release
+#}
 contains(FRISIUS,1) {
     TARGET = frisius
     DEFINES += FRISIUS_BUILD
@@ -149,7 +149,12 @@ unix:!macx {
     isEmpty( LIBDIR ) {
         LIBDIR = $${PREFIX}/lib${LIB_SUFFIX}
     }
-    DEFINES += PLUGINS_DIR=$${LIBDIR}/merkaartor/plugins
+    CONFIG(debug,debug|release) {
+        DEFINES += PLUGINS_DIR=$$OUTPUT_DIR/bin/plugins
+    }
+    CONFIG(release,debug|release) {
+        DEFINES += PLUGINS_DIR=$${LIBDIR}/merkaartor/plugins
+    }
     target.path = $${PREFIX}/bin
     SHARE_DIR = $${PREFIX}/share/merkaartor
 

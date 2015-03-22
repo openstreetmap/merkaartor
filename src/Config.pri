@@ -2,7 +2,9 @@
 
 isEmpty(VERSION): VERSION="0.18"
 
-contains(RELEASE,1) {
+CONFIG += debug_and_release debug
+
+CONFIG(release,debug|release) {
     DEFINES += RELEASE
     SVNREV="release"
 } else {
