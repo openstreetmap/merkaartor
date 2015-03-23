@@ -272,6 +272,7 @@ void MoveNodeInteraction::snapMouseMoveEvent(QMouseEvent* event, Feature* Closer
                 theList->add(new WayAddNodeCommand(aRoad,N,SnapIdx,main()->document()->getDirtyOrOriginLayer(aRoad->layer())));
 
                 Moving[i] = N;
+                LastSnap = N;
             } else {
                 Moving[i]->setPosition(OriginalPosition[i]+Diff);
             }
