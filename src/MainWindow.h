@@ -321,13 +321,12 @@ private:
     void doSaveDocument(QFile* fn, bool asTemplate=false);
 
     QString translationsPath();
-
-    bool tryLoadQtTranslator(const QString& languagePrefix);
-    bool tryLoadMerkaartorTranslator(const QString& defaultLanguage);
-
 #if defined(Q_OS_MAC)
     QString macOsTranslationsPath();
 #endif
+
+    bool tryLoadQtTranslator(const QString& languagePrefix);
+    bool tryLoadMerkaartorTranslator(const QString& defaultLanguage);
 
     void dieClipboardInvalid();
     void warnMapDownloadFailed();

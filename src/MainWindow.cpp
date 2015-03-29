@@ -4335,7 +4335,7 @@ bool MainWindow::tryLoadQtTranslator(const QString& languagePrefix)
 #if defined(Q_OS_MAC)
         return qtTranslator->load("qt_" + languagePrefix, macOsTranslationsPath());
 #else
-        return qtTranslator->load("qt_" + langaugePrefix, QLibraryInfo::location(QLibraryInfo::TranslationsPath));
+        return qtTranslator->load("qt_" + languagePrefix, QLibraryInfo::location(QLibraryInfo::TranslationsPath));
 #endif // Q_OS_MAC
 #endif // TRANSDIR_SYSTEM
     }
@@ -4376,7 +4376,7 @@ void MainWindow::updateLanguage()
     if (language != "-" && language != "en") {
         qtTranslator = new QTranslator;
         const QString languagePrefix = language.left(2);
-        if (tryLoadTranslator(languagePrefix))
+        if (tryLoadQtTranslator(languagePrefix))
             QCoreApplication::installTranslator(qtTranslator);
 
         // Do not prevent Merkaartor translations to be loaded, even if there is no Qt translation for the language.
@@ -4384,7 +4384,7 @@ void MainWindow::updateLanguage()
         if (tryLoadMerkaartorTranslator(language))
             QCoreApplication::installTranslator(merkaartorTranslator);
         else
-            statusBar()->showMessage(tr("Warning! Could not load the Merkaartor translations for the \"%1\" language. Switching to default English.").arg(DefaultLanguage), 15000);
+            statusBar()->showMessage(tr("Warning! Could not load the Merkaartor translations for the \"%1\" language. Switching to default English.").arg(language), 15000);
     }
     ui->retranslateUi(this);
 }
