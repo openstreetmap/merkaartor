@@ -320,6 +320,18 @@ private:
     Document* doLoadDocument(QFile* file);
     void doSaveDocument(QFile* fn, bool asTemplate=false);
 
+    QString translationsPath();
+
+    bool tryLoadQtTranslator(const QString& languagePrefix);
+    bool tryLoadMerkaartorTranslator(const QString& defaultLanguage);
+
+#if defined(Q_OS_MAC)
+    QString macOsTranslationsPath();
+#endif
+
+    void dieClipboardInvalid();
+    void warnMapDownloadFailed();
+
 protected:
     void closeEvent(QCloseEvent * event);
     virtual QMenu * createPopupMenu ();
