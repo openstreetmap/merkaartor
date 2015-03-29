@@ -4361,6 +4361,7 @@ bool MainWindow::tryLoadMerkaartorTranslator(const QString& language)
                 return merkaartorTranslator->load("merkaartor_" + language, STRINGIFY(TRANSDIR_MERKAARTOR));
         }
 #endif
+	return success;
     }
 }
 
