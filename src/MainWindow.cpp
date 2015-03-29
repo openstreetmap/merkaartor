@@ -110,6 +110,8 @@ namespace {
 
 const QString MIME_OPENSTREETMAP_XML = "application/x-openstreetmap+xml";
 const QString MIME_GOOGLE_EARTH_KML = "application/vnd.google-earth.kml+xml";
+const QString MIME_GPX = "application/gpx+xml";
+const QString MIME_MERKAARTOR_UNDO_XML = "application/x-merkaartor-undo+xml";
 
 }  // namespace
 
@@ -1096,75 +1098,39 @@ void MainWindow::readLocalConnection()
     }
 }
 
+namespace {
+
+void AddActionsIntoManager(QtToolBarManager* manager, QWidget* widget,
+		const QString& label) {
+    foreach(QAction* a, widget->actions()) {
+        if (!a->isSeparator() && !a->menu())
+            manager->addAction(a, label);
+    }
+}
+
+}  // namespace
+
 void MainWindow::createToolBarManager()
 {
     toolBarManager = new QtToolBarManager(this);
     toolBarManager->setMainWindow(this);
 
-    foreach(QAction* a, ui->menuFile->actions()) {
-        if (!a->isSeparator() && !a->menu())
-            toolBarManager->addAction(a, tr("File"));;
-    }
-    foreach(QAction* a, ui->menuEdit->actions()) {
-        if (!a->isSeparator() && !a->menu())
-            toolBarManager->addAction(a, tr("Edit"));;
-    }
-    foreach(QAction* a, ui->menuView->actions()) {
-        if (!a->isSeparator() && !a->menu())
-            toolBarManager->addAction(a, tr("View"));;
-    }
-    foreach(QAction* a, ui->menu_Show->actions()) {
-        if (!a->isSeparator() && !a->menu())
-            toolBarManager->addAction(a, tr("Show"));;
-    }
-    foreach(QAction* a, ui->menuShow_directional_Arrows->actions()) {
-        if (!a->isSeparator() && !a->menu())
-            toolBarManager->addAction(a, tr("Directional Arrows"));;
-    }
-    foreach(QAction* a, ui->menuGps->actions()) {
-        if (!a->isSeparator() && !a->menu())
-            toolBarManager->addAction(a, tr("GPS"));;
-    }
-    foreach(QAction* a, ui->menuLayers->actions()) {
-        if (!a->isSeparator() && !a->menu())
-            toolBarManager->addAction(a, tr("Layers"));;
-    }
-    foreach(QAction* a, ui->menuCreate->actions()) {
-        if (!a->isSeparator() && !a->menu())
-            toolBarManager->addAction(a, tr("Create"));;
-    }
-    foreach(QAction* a, ui->menu_Feature->actions()) {
-        if (!a->isSeparator() && !a->menu())
-            toolBarManager->addAction(a, tr("Feature"));;
-    }
-    foreach(QAction* a, ui->menuOpenStreetBugs->actions()) {
-        if (!a->isSeparator() && !a->menu())
-            toolBarManager->addAction(a, tr("OpenStreetBugs"));;
-    }
-    foreach(QAction* a, ui->menu_Node->actions()) {
-        if (!a->isSeparator() && !a->menu())
-            toolBarManager->addAction(a, tr("Node"));;
-    }
-    foreach(QAction* a, ui->menuRoad->actions()) {
-        if (!a->isSeparator() && !a->menu())
-            toolBarManager->addAction(a, tr("Way"));;
-    }
-    foreach(QAction* a, ui->menuRelation->actions()) {
-        if (!a->isSeparator() && !a->menu())
-            toolBarManager->addAction(a, tr("Relation"));;
-    }
-    foreach(QAction* a, ui->menuTools->actions()) {
-        if (!a->isSeparator() && !a->menu())
-            toolBarManager->addAction(a, tr("Tools"));;
-    }
-    foreach(QAction* a, ui->menuWindow->actions()) {
-        if (!a->isSeparator() && !a->menu())
-            toolBarManager->addAction(a, tr("Windows"));;
-    }
-    foreach(QAction* a, ui->menuHelp->actions()) {
-        if (!a->isSeparator() && !a->menu())
-            toolBarManager->addAction(a, tr("Help"));;
-    }
+    AddActionsIntoManager(toolBarManager, ui->menuFile, tr("File"));
+    AddActionsIntoManager(toolBarManager, ui->menuEdit, tr("Edit"));
+    AddActionsIntoManager(toolBarManager, ui->menuView, tr("View"));
+    AddActionsIntoManager(toolBarManager, ui->menu_Show, tr("Show"));
+    AddActionsIntoManager(toolBarManager, ui->menuShow_directional_Arrows, tr("Directional Arrows"));
+    AddActionsIntoManager(toolBarManager, ui->menuGps, tr("GPS"));
+    AddActionsIntoManager(toolBarManager, ui->menuLayers, tr("Layers"));
+    AddActionsIntoManager(toolBarManager, ui->menuCreate, tr("Create"));
+    AddActionsIntoManager(toolBarManager, ui->menu_Feature, tr("Feature"));
+    AddActionsIntoManager(toolBarManager, ui->menuOpenStreetBugs, tr("OpenStreetBugs"));
+    AddActionsIntoManager(toolBarManager, ui->menu_Node, tr("Node"));
+    AddActionsIntoManager(toolBarManager, ui->menuRoad, tr("Way"));
+    AddActionsIntoManager(toolBarManager, ui->menuRelation, tr("Relation"));
+    AddActionsIntoManager(toolBarManager, ui->menuTools, tr("Tools"));
+    AddActionsIntoManager(toolBarManager, ui->menuWindow, tr("Windows"));
+    AddActionsIntoManager(toolBarManager, ui->menuHelp, tr("Help"));
 
     toolBarManager->addToolBar(ui->toolBar, "");
 
@@ -1311,7 +1277,7 @@ void MainWindow::on_editCutAction_triggered()
     gpxBuf.open(QIODevice::WriteOnly);
     if (gpxexp.setDevice(&gpxBuf)) {
         gpxexp.export_(p->theProperties->selection());
-        md->setData("application/gpx+xml", gpxBuf.data());
+        md->setData(MIME_GPX, gpxBuf.data());
     }
 
     //Deletion
@@ -1344,7 +1310,7 @@ void MainWindow::on_editCutAction_triggered()
     theList->toXML(stream);
     stream.writeEndElement();
     stream.writeEndDocument();
-    md->setData("application/x-merkaartor-undo+xml", xml.toUtf8());
+    md->setData(MIME_MERKAARTOR_UNDO_XML, xml.toUtf8());
 //    qDebug() << doc.toString(2);
 
     clipboard->setMimeData(md);
@@ -1380,7 +1346,7 @@ void MainWindow::on_editCopyAction_triggered()
     gpxBuf.open(QIODevice::WriteOnly);
     if (gpxexp.setDevice(&gpxBuf)) {
         gpxexp.export_(p->theProperties->selection());
-        md->setData("application/gpx+xml", gpxBuf.data());
+        md->setData(MIME_GPX, gpxBuf.data());
     }
 
     clipboard->setMimeData(md);
@@ -1396,9 +1362,9 @@ void MainWindow::on_editPasteFeatureAction_triggered()
     Document* doc;
 
     QClipboard *clipboard = QApplication::clipboard();
-    if (clipboard->mimeData()->hasFormat("application/x-merkaartor-undo+xml")) {
+    if (clipboard->mimeData()->hasFormat(MIME_MERKAARTOR_UNDO_XML)) {
         QDomDocument* theXmlDoc = new QDomDocument();
-        if (!theXmlDoc->setContent(clipboard->mimeData()->data("application/x-merkaartor-undo+xml"))) {
+        if (!theXmlDoc->setContent(clipboard->mimeData()->data(MIME_MERKAARTOR_UNDO_XML))) {
             delete theXmlDoc;
         } else {
             QDomElement root = theXmlDoc->firstChildElement("MerkaartorUndo");
@@ -3124,7 +3090,7 @@ void CollectActions(QList<QAction*>& collectedActions, const QWidget* widget) {
     }
 }
 
-}
+}  // namespace
 
 void MainWindow::on_toolsShortcutsAction_triggered()
 {
