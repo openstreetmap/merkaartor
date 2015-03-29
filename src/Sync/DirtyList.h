@@ -24,7 +24,7 @@ class DirtyList
 {
     public:
         DirtyList() : errorAbort(false) {}
-        virtual ~DirtyList() = 0;
+        virtual ~DirtyList();
         virtual bool add(Feature* F) = 0;
         virtual bool update(Feature* F) = 0;
         virtual bool erase(Feature* F) = 0;
