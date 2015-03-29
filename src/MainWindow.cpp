@@ -1431,7 +1431,7 @@ void MainWindow::on_editPasteFeatureAction_triggered()
     }
 
     if (!(doc = Document::getDocumentFromClipboard())) {
-	dieClipboardInvalid();
+        dieClipboardInvalid();
         return;
     }
 
@@ -1463,7 +1463,7 @@ void MainWindow::on_editPasteOverwriteAction_triggered()
 
     Document* doc;
     if (!(doc = Document::getDocumentFromClipboard())) {
-	dieClipboardInvalid();
+        dieClipboardInvalid();
         return;
     }
 
@@ -1497,7 +1497,7 @@ void MainWindow::on_editPasteMergeAction_triggered()
 
     Document* doc;
     if (!(doc = Document::getDocumentFromClipboard())) {
-	dieClipboardInvalid();
+        dieClipboardInvalid();
         return;
     }
 
@@ -2052,7 +2052,7 @@ void MainWindow::on_fileDownloadAction_triggered()
     if (downloadOSM(this, theView->viewport(), theDocument)) {
         on_editPropertiesAction_triggered();
     } else
-	warnMapDownloadFailed();
+        warnMapDownloadFailed();
 
     deleteProgressDialog();
 
@@ -2066,7 +2066,7 @@ void MainWindow::on_fileDownloadMoreAction_triggered()
     createProgressDialog();
 
     if (!downloadMoreOSM(this, theView->viewport(), theDocument)) {
-	warnMapDownloadFailed();
+        warnMapDownloadFailed();
     }
 
     deleteProgressDialog();
@@ -3115,77 +3115,39 @@ void MainWindow::on_toolsRebuildHistoryAction_triggered()
     }
 }
 
+namespace {
+
+void CollectActions(QList<QAction*>& collectedActions, const QWidget* widget) {
+    foreach(QAction* a, widget->actions()) {
+        if (!a->isSeparator() && !a->menu())
+            collectedActions << a;
+    }
+}
+
+}
+
 void MainWindow::on_toolsShortcutsAction_triggered()
 {
     QList<QAction*> theActions;
 
-    foreach(QAction* a, ui->menuFile->actions()) {
-        if (!a->isSeparator() && !a->menu())
-            theActions << a;
-    }
-    foreach(QAction* a, ui->menuEdit->actions()) {
-        if (!a->isSeparator() && !a->menu())
-            theActions << a;
-    }
-    foreach(QAction* a, ui->menuView->actions()) {
-        if (!a->isSeparator() && !a->menu())
-            theActions << a;
-    }
-    foreach(QAction* a, ui->menu_Show->actions()) {
-        if (!a->isSeparator() && !a->menu())
-            theActions << a;
-    }
-    foreach(QAction* a, ui->menuShow_directional_Arrows->actions()) {
-        if (!a->isSeparator() && !a->menu())
-            theActions << a;
-    }
-    foreach(QAction* a, ui->menuGps->actions()) {
-        if (!a->isSeparator() && !a->menu())
-            theActions << a;
-    }
-    foreach(QAction* a, ui->menuLayers->actions()) {
-        if (!a->isSeparator() && !a->menu())
-            theActions << a;
-    }
-    foreach(QAction* a, ui->menuCreate->actions()) {
-        if (!a->isSeparator() && !a->menu())
-            theActions << a;
-    }
-    foreach(QAction* a, ui->menu_Feature->actions()) {
-        if (!a->isSeparator() && !a->menu())
-            theActions << a;
-    }
-    foreach(QAction* a, ui->menuOpenStreetBugs->actions()) {
-        if (!a->isSeparator() && !a->menu())
-            theActions << a;
-    }
-    foreach(QAction* a, ui->menu_Node->actions()) {
-        if (!a->isSeparator() && !a->menu())
-            theActions << a;
-    }
-    foreach(QAction* a, ui->menuRoad->actions()) {
-        if (!a->isSeparator() && !a->menu())
-            theActions << a;
-    }
-    foreach(QAction* a, ui->menuRelation->actions()) {
-        if (!a->isSeparator() && !a->menu())
-            theActions << a;
-    }
-    foreach(QAction* a, ui->menuTools->actions()) {
-        if (!a->isSeparator() && !a->menu())
-            theActions << a;
-    }
-    foreach(QAction* a, ui->menuWindow->actions()) {
-        if (!a->isSeparator() && !a->menu())
-            theActions << a;
-    }
-    foreach(QAction* a, ui->menuHelp->actions()) {
-        if (!a->isSeparator() && !a->menu())
-            theActions << a;
-    }
+    CollectActions(theActions, ui->menuFile);
+    CollectActions(theActions, ui->menuEdit);
+    CollectActions(theActions, ui->menuView);
+    CollectActions(theActions, ui->menu_Show);
+    CollectActions(theActions, ui->menuShow_directional_Arrows);
+    CollectActions(theActions, ui->menuGps);
+    CollectActions(theActions, ui->menuLayers);
+    CollectActions(theActions, ui->menuCreate);
+    CollectActions(theActions, ui->menu_Feature);
+    CollectActions(theActions, ui->menuOpenStreetBugs);
+    CollectActions(theActions, ui->menu_Node);
+    CollectActions(theActions, ui->menuRoad);
+    CollectActions(theActions, ui->menuRelation);
+    CollectActions(theActions, ui->menuTools);
+    CollectActions(theActions, ui->menuWindow);
+    CollectActions(theActions, ui->menuHelp);
 
-    ActionsDialog dlg(theActions, this);
-    dlg.exec();
+    ActionsDialog(theActions, this).exec();
 }
 
 void MainWindow::toolsPreferencesAction_triggered(bool focusData)
@@ -3261,9 +3223,6 @@ void MainWindow::on_fileSaveAsAction_triggered()
             fileName = dlg.selectedFiles()[0];
     }
 
-//    fileName = QFileDialog::getSaveFileName(this,
-//        tr("Save Merkaartor document"), QString("%1/%2.mdc").arg(M_PREFS->getworkingdir()).arg(tr("untitled")), tr("Merkaartor documents Files (*.mdc)"));
-
     if (!fileName.isEmpty()) {
         saveDocument(fileName);
         M_PREFS->addRecentOpen(fileName);
@@ -3284,8 +3243,6 @@ void MainWindow::on_fileSaveAsTemplateAction_triggered()
         if (dlg.selectedFiles().size())
             tfileName = dlg.selectedFiles()[0];
     }
-//    QString tfileName = QFileDialog::getSaveFileName(this,
-//        tr("Save Merkaartor template document"), QString("%1/%2.mdc").arg(M_PREFS->getworkingdir()).arg(tr("untitled")), tr("Merkaartor documents Files (*.mdc)"));
 
     if (!tfileName.isEmpty()) {
         saveTemplateDocument(tfileName);
@@ -3303,11 +3260,9 @@ void MainWindow::on_fileSaveAction_triggered()
 
 void MainWindow::doSaveDocument(QFile* file, bool asTemplate)
 {
-
 #ifndef Q_OS_SYMBIAN
     QApplication::setOverrideCursor(Qt::BusyCursor);
 #endif
-
 
     QXmlStreamWriter stream(file);
     stream.setAutoFormatting(true);
@@ -4454,7 +4409,7 @@ void MainWindow::updateLanguage()
     QString language = getDefaultLanguage();
     if (language != "-" && language != "en") {
         qtTranslator = new QTranslator;
-	const QString languagePrefix = language.left(2);
+        const QString languagePrefix = language.left(2);
         if (tryLoadTranslator(languagePrefix))
             QCoreApplication::installTranslator(qtTranslator);
 
