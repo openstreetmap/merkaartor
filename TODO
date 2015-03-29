@@ -1,3 +1,5 @@
+- Write a README with a description of how to build Merkaartor
+
 - Implement printing (with barcode reference)
 - Implement generalization of Walking Paper plugin to own system
 - Implement GDAL writing
