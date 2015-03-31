@@ -106,6 +106,15 @@
 
 #include "Utils/SlippyMapWidget.h"
 
+namespace {
+
+const QString MIME_OPENSTREETMAP_XML = "application/x-openstreetmap+xml";
+const QString MIME_GOOGLE_EARTH_KML = "application/vnd.google-earth.kml+xml";
+const QString MIME_GPX = "application/gpx+xml";
+const QString MIME_MERKAARTOR_UNDO_XML = "application/x-merkaartor-undo+xml";
+
+}  // namespace
+
 class MainWindowPrivate
 {
     public:
@@ -139,6 +148,19 @@ class MainWindowPrivate
 #endif
         int numImages;
 };
+
+namespace {
+
+void SetOptionValue(RendererOptions& options,
+		RendererOptions::RenderOption option, bool on) {
+    if (on) {
+	options.options |= option;
+    } else {
+	options.options &= ~option;
+    }
+}
+
+}  // namespace
 
 MainWindow::MainWindow(QWidget *parent)
         : QMainWindow(parent)
@@ -296,19 +318,19 @@ MainWindow::MainWindow(QWidget *parent)
     ui->viewLockZoomAction->setChecked(M_PREFS->getZoomBoris());
     ui->viewWireframeAction->setChecked(M_PREFS->getWireframeView());
 
-    if (M_PREFS->getBackgroundVisible()) p->renderOptions.options |= RendererOptions::BackgroundVisible; else p->renderOptions.options &= ~RendererOptions::BackgroundVisible;
-    if (M_PREFS->getForegroundVisible()) p->renderOptions.options |= RendererOptions::ForegroundVisible; else p->renderOptions.options &= ~RendererOptions::ForegroundVisible;
-    if (M_PREFS->getTouchupVisible()) p->renderOptions.options |= RendererOptions::TouchupVisible; else p->renderOptions.options &= ~RendererOptions::TouchupVisible;
-    if (M_PREFS->getNamesVisible()) p->renderOptions.options |= RendererOptions::NamesVisible; else p->renderOptions.options &= ~RendererOptions::NamesVisible;
-    if (M_PREFS->getPhotosVisible()) p->renderOptions.options |= RendererOptions::PhotosVisible; else p->renderOptions.options &= ~RendererOptions::PhotosVisible;
-    if (M_PREFS->getVirtualNodesVisible()) p->renderOptions.options |= RendererOptions::VirtualNodesVisible; else p->renderOptions.options &= ~RendererOptions::VirtualNodesVisible;
-    if (M_PREFS->getTrackPointsVisible()) p->renderOptions.options |= RendererOptions::NodesVisible; else p->renderOptions.options &= ~RendererOptions::NodesVisible;
-    if (M_PREFS->getTrackSegmentsVisible()) p->renderOptions.options |= RendererOptions::TrackSegmentVisible; else p->renderOptions.options &= ~RendererOptions::TrackSegmentVisible;
-    if (M_PREFS->getRelationsVisible()) p->renderOptions.options |= RendererOptions::RelationsVisible; else p->renderOptions.options &= ~RendererOptions::RelationsVisible;
-    if (M_PREFS->getDownloadedVisible()) p->renderOptions.options |= RendererOptions::DownloadedVisible; else p->renderOptions.options &= ~RendererOptions::DownloadedVisible;
-    if (M_PREFS->getScaleVisible()) p->renderOptions.options |= RendererOptions::ScaleVisible; else p->renderOptions.options &= ~RendererOptions::ScaleVisible;
-    if (M_PREFS->getLatLonGridVisible()) p->renderOptions.options |= RendererOptions::LatLonGridVisible; else p->renderOptions.options &= ~RendererOptions::LatLonGridVisible;
-    if (M_PREFS->getZoomBoris()) p->renderOptions.options |= RendererOptions::LockZoom; else p->renderOptions.options &= ~RendererOptions::LockZoom;
+    SetOptionValue(p->renderOptions, RendererOptions::BackgroundVisible, M_PREFS->getBackgroundVisible());
+    SetOptionValue(p->renderOptions, RendererOptions::ForegroundVisible, M_PREFS->getForegroundVisible());
+    SetOptionValue(p->renderOptions, RendererOptions::TouchupVisible, M_PREFS->getTouchupVisible());
+    SetOptionValue(p->renderOptions, RendererOptions::NamesVisible, M_PREFS->getNamesVisible());
+    SetOptionValue(p->renderOptions, RendererOptions::PhotosVisible, M_PREFS->getPhotosVisible());
+    SetOptionValue(p->renderOptions, RendererOptions::VirtualNodesVisible, M_PREFS->getVirtualNodesVisible());
+    SetOptionValue(p->renderOptions, RendererOptions::NodesVisible, M_PREFS->getTrackPointsVisible());
+    SetOptionValue(p->renderOptions, RendererOptions::TrackSegmentVisible, M_PREFS->getTrackSegmentsVisible());
+    SetOptionValue(p->renderOptions, RendererOptions::RelationsVisible, M_PREFS->getRelationsVisible());
+    SetOptionValue(p->renderOptions, RendererOptions::DownloadedVisible, M_PREFS->getDownloadedVisible());
+    SetOptionValue(p->renderOptions, RendererOptions::ScaleVisible, M_PREFS->getScaleVisible());
+    SetOptionValue(p->renderOptions, RendererOptions::LatLonGridVisible, M_PREFS->getLatLonGridVisible());
+    SetOptionValue(p->renderOptions, RendererOptions::LockZoom, M_PREFS->getZoomBoris());
 
     updateMenu();
 
@@ -384,8 +406,8 @@ MainWindow::MainWindow(QWidget *parent)
 #endif
 
 #ifndef GEOIMAGE
-        ui->windowGeoimageAction->setVisible(false);
-        ui->viewPhotosAction->setVisible(false);
+    ui->windowGeoimageAction->setVisible(false);
+    ui->viewPhotosAction->setVisible(false);
 #endif
 
     ui->viewStyleBackgroundAction->setVisible(false);
@@ -1076,75 +1098,39 @@ void MainWindow::readLocalConnection()
     }
 }
 
+namespace {
+
+void AddActionsIntoManager(QtToolBarManager* manager, QWidget* widget,
+		const QString& label) {
+    foreach(QAction* a, widget->actions()) {
+        if (!a->isSeparator() && !a->menu())
+            manager->addAction(a, label);
+    }
+}
+
+}  // namespace
+
 void MainWindow::createToolBarManager()
 {
     toolBarManager = new QtToolBarManager(this);
     toolBarManager->setMainWindow(this);
 
-    foreach(QAction* a, ui->menuFile->actions()) {
-        if (!a->isSeparator() && !a->menu())
-            toolBarManager->addAction(a, tr("File"));;
-    }
-    foreach(QAction* a, ui->menuEdit->actions()) {
-        if (!a->isSeparator() && !a->menu())
-            toolBarManager->addAction(a, tr("Edit"));;
-    }
-    foreach(QAction* a, ui->menuView->actions()) {
-        if (!a->isSeparator() && !a->menu())
-            toolBarManager->addAction(a, tr("View"));;
-    }
-    foreach(QAction* a, ui->menu_Show->actions()) {
-        if (!a->isSeparator() && !a->menu())
-            toolBarManager->addAction(a, tr("Show"));;
-    }
-    foreach(QAction* a, ui->menuShow_directional_Arrows->actions()) {
-        if (!a->isSeparator() && !a->menu())
-            toolBarManager->addAction(a, tr("Directional Arrows"));;
-    }
-    foreach(QAction* a, ui->menuGps->actions()) {
-        if (!a->isSeparator() && !a->menu())
-            toolBarManager->addAction(a, tr("GPS"));;
-    }
-    foreach(QAction* a, ui->menuLayers->actions()) {
-        if (!a->isSeparator() && !a->menu())
-            toolBarManager->addAction(a, tr("Layers"));;
-    }
-    foreach(QAction* a, ui->menuCreate->actions()) {
-        if (!a->isSeparator() && !a->menu())
-            toolBarManager->addAction(a, tr("Create"));;
-    }
-    foreach(QAction* a, ui->menu_Feature->actions()) {
-        if (!a->isSeparator() && !a->menu())
-            toolBarManager->addAction(a, tr("Feature"));;
-    }
-    foreach(QAction* a, ui->menuOpenStreetBugs->actions()) {
-        if (!a->isSeparator() && !a->menu())
-            toolBarManager->addAction(a, tr("OpenStreetBugs"));;
-    }
-    foreach(QAction* a, ui->menu_Node->actions()) {
-        if (!a->isSeparator() && !a->menu())
-            toolBarManager->addAction(a, tr("Node"));;
-    }
-    foreach(QAction* a, ui->menuRoad->actions()) {
-        if (!a->isSeparator() && !a->menu())
-            toolBarManager->addAction(a, tr("Way"));;
-    }
-    foreach(QAction* a, ui->menuRelation->actions()) {
-        if (!a->isSeparator() && !a->menu())
-            toolBarManager->addAction(a, tr("Relation"));;
-    }
-    foreach(QAction* a, ui->menuTools->actions()) {
-        if (!a->isSeparator() && !a->menu())
-            toolBarManager->addAction(a, tr("Tools"));;
-    }
-    foreach(QAction* a, ui->menuWindow->actions()) {
-        if (!a->isSeparator() && !a->menu())
-            toolBarManager->addAction(a, tr("Windows"));;
-    }
-    foreach(QAction* a, ui->menuHelp->actions()) {
-        if (!a->isSeparator() && !a->menu())
-            toolBarManager->addAction(a, tr("Help"));;
-    }
+    AddActionsIntoManager(toolBarManager, ui->menuFile, tr("File"));
+    AddActionsIntoManager(toolBarManager, ui->menuEdit, tr("Edit"));
+    AddActionsIntoManager(toolBarManager, ui->menuView, tr("View"));
+    AddActionsIntoManager(toolBarManager, ui->menu_Show, tr("Show"));
+    AddActionsIntoManager(toolBarManager, ui->menuShow_directional_Arrows, tr("Directional Arrows"));
+    AddActionsIntoManager(toolBarManager, ui->menuGps, tr("GPS"));
+    AddActionsIntoManager(toolBarManager, ui->menuLayers, tr("Layers"));
+    AddActionsIntoManager(toolBarManager, ui->menuCreate, tr("Create"));
+    AddActionsIntoManager(toolBarManager, ui->menu_Feature, tr("Feature"));
+    AddActionsIntoManager(toolBarManager, ui->menuOpenStreetBugs, tr("OpenStreetBugs"));
+    AddActionsIntoManager(toolBarManager, ui->menu_Node, tr("Node"));
+    AddActionsIntoManager(toolBarManager, ui->menuRoad, tr("Way"));
+    AddActionsIntoManager(toolBarManager, ui->menuRelation, tr("Relation"));
+    AddActionsIntoManager(toolBarManager, ui->menuTools, tr("Tools"));
+    AddActionsIntoManager(toolBarManager, ui->menuWindow, tr("Windows"));
+    AddActionsIntoManager(toolBarManager, ui->menuHelp, tr("Help"));
 
     toolBarManager->addToolBar(ui->toolBar, "");
 
@@ -1276,14 +1262,14 @@ void MainWindow::on_editCutAction_triggered()
     QList<Feature*> exportedFeatures = document()->exportCoreOSM(p->theProperties->selection());
     theDocument->exportOSM(this, &osmBuf, exportedFeatures);
     md->setText(QString(osmBuf.data()));
-    md->setData("application/x-openstreetmap+xml", osmBuf.data());
+    md->setData(MIME_OPENSTREETMAP_XML, osmBuf.data());
 
     ImportExportKML kmlexp(theDocument);
     QBuffer kmlBuf;
     kmlBuf.open(QIODevice::WriteOnly);
     if (kmlexp.setDevice(&kmlBuf)) {
         kmlexp.export_(p->theProperties->selection());
-        md->setData("application/vnd.google-earth.kml+xml", kmlBuf.data());
+        md->setData(MIME_GOOGLE_EARTH_KML, kmlBuf.data());
     }
 
     ExportGPX gpxexp(theDocument);
@@ -1291,7 +1277,7 @@ void MainWindow::on_editCutAction_triggered()
     gpxBuf.open(QIODevice::WriteOnly);
     if (gpxexp.setDevice(&gpxBuf)) {
         gpxexp.export_(p->theProperties->selection());
-        md->setData("application/gpx+xml", gpxBuf.data());
+        md->setData(MIME_GPX, gpxBuf.data());
     }
 
     //Deletion
@@ -1324,7 +1310,7 @@ void MainWindow::on_editCutAction_triggered()
     theList->toXML(stream);
     stream.writeEndElement();
     stream.writeEndDocument();
-    md->setData("application/x-merkaartor-undo+xml", xml.toUtf8());
+    md->setData(MIME_MERKAARTOR_UNDO_XML, xml.toUtf8());
 //    qDebug() << doc.toString(2);
 
     clipboard->setMimeData(md);
@@ -1345,14 +1331,14 @@ void MainWindow::on_editCopyAction_triggered()
     QList<Feature*> exportedFeatures = document()->exportCoreOSM(p->theProperties->selection(), true);
     theDocument->exportOSM(this, &osmBuf, exportedFeatures);
     md->setText(QString(osmBuf.data()));
-    md->setData("application/x-openstreetmap+xml", osmBuf.data());
+    md->setData(MIME_OPENSTREETMAP_XML, osmBuf.data());
 
     ImportExportKML kmlexp(theDocument);
     QBuffer kmlBuf;
     kmlBuf.open(QIODevice::WriteOnly);
     if (kmlexp.setDevice(&kmlBuf)) {
         kmlexp.export_(p->theProperties->selection());
-        md->setData("application/vnd.google-earth.kml+xml", kmlBuf.data());
+        md->setData(MIME_GOOGLE_EARTH_KML, kmlBuf.data());
     }
 
     ExportGPX gpxexp(theDocument);
@@ -1360,7 +1346,7 @@ void MainWindow::on_editCopyAction_triggered()
     gpxBuf.open(QIODevice::WriteOnly);
     if (gpxexp.setDevice(&gpxBuf)) {
         gpxexp.export_(p->theProperties->selection());
-        md->setData("application/gpx+xml", gpxBuf.data());
+        md->setData(MIME_GPX, gpxBuf.data());
     }
 
     clipboard->setMimeData(md);
@@ -1376,9 +1362,9 @@ void MainWindow::on_editPasteFeatureAction_triggered()
     Document* doc;
 
     QClipboard *clipboard = QApplication::clipboard();
-    if (clipboard->mimeData()->hasFormat("application/x-merkaartor-undo+xml")) {
+    if (clipboard->mimeData()->hasFormat(MIME_MERKAARTOR_UNDO_XML)) {
         QDomDocument* theXmlDoc = new QDomDocument();
-        if (!theXmlDoc->setContent(clipboard->mimeData()->data("application/x-merkaartor-undo+xml"))) {
+        if (!theXmlDoc->setContent(clipboard->mimeData()->data(MIME_MERKAARTOR_UNDO_XML))) {
             delete theXmlDoc;
         } else {
             QDomElement root = theXmlDoc->firstChildElement("MerkaartorUndo");
@@ -1411,7 +1397,7 @@ void MainWindow::on_editPasteFeatureAction_triggered()
     }
 
     if (!(doc = Document::getDocumentFromClipboard())) {
-        QMessageBox::critical(this, tr("Clipboard invalid"), tr("Clipboard do not contain valid data."));
+        dieClipboardInvalid();
         return;
     }
 
@@ -1430,6 +1416,11 @@ void MainWindow::on_editPasteFeatureAction_triggered()
     view()->invalidate(true, true, false);
 }
 
+void MainWindow::dieClipboardInvalid()
+{
+    QMessageBox::critical(this, tr("Clipboard invalid"), tr("Clipboard do not contain valid data."));
+}
+
 void MainWindow::on_editPasteOverwriteAction_triggered()
 {
     QList<Feature*> sel = properties()->selection();
@@ -1438,7 +1429,7 @@ void MainWindow::on_editPasteOverwriteAction_triggered()
 
     Document* doc;
     if (!(doc = Document::getDocumentFromClipboard())) {
-        QMessageBox::critical(this, tr("Clipboard invalid"), tr("Clipboard do not contain valid data."));
+        dieClipboardInvalid();
         return;
     }
 
@@ -1472,7 +1463,7 @@ void MainWindow::on_editPasteMergeAction_triggered()
 
     Document* doc;
     if (!(doc = Document::getDocumentFromClipboard())) {
-        QMessageBox::critical(this, tr("Clipboard invalid"), tr("Clipboard do not contain valid data."));
+        dieClipboardInvalid();
         return;
     }
 
@@ -1507,8 +1498,8 @@ void MainWindow::clipboardChanged()
     //qDebug() << "Clipboard mime: " << clipboard->mimeData()->formats();
     QDomDocument* theXmlDoc = new QDomDocument();
     bool ok = false;
-    if (clipboard->mimeData()->hasFormat("application/x-openstreetmap+xml"))
-        ok = theXmlDoc->setContent(clipboard->mimeData()->data("application/x-openstreetmap+xml"));
+    if (clipboard->mimeData()->hasFormat(MIME_OPENSTREETMAP_XML))
+        ok = theXmlDoc->setContent(clipboard->mimeData()->data(MIME_OPENSTREETMAP_XML));
     else if (clipboard->mimeData()->hasText())
         ok = theXmlDoc->setContent(clipboard->text());
 
@@ -1797,7 +1788,6 @@ bool MainWindow::importFiles(Document * mapDocument, const QStringList & fileNam
 
 void MainWindow::loadFiles(const QStringList & fileList)
 {
-
     QStringList fileNames(fileList);
 
 #ifdef GEOIMAGE
@@ -2017,6 +2007,10 @@ void MainWindow::on_fileUploadAction_triggered()
     invalidateView();
 }
 
+void MainWindow::warnMapDownloadFailed() {
+    QMessageBox::warning(this, tr("Error downloading"), tr("The map could not be downloaded"));
+}
+
 void MainWindow::on_fileDownloadAction_triggered()
 {
     createProgressDialog();
@@ -2024,7 +2018,7 @@ void MainWindow::on_fileDownloadAction_triggered()
     if (downloadOSM(this, theView->viewport(), theDocument)) {
         on_editPropertiesAction_triggered();
     } else
-        QMessageBox::warning(this, tr("Error downloading"), tr("The map could not be downloaded"));
+        warnMapDownloadFailed();
 
     deleteProgressDialog();
 
@@ -2038,7 +2032,7 @@ void MainWindow::on_fileDownloadMoreAction_triggered()
     createProgressDialog();
 
     if (!downloadMoreOSM(this, theView->viewport(), theDocument)) {
-        QMessageBox::warning(this, tr("Error downloading"), tr("The map could not be downloaded"));
+        warnMapDownloadFailed();
     }
 
     deleteProgressDialog();
@@ -2208,7 +2202,7 @@ void MainWindow::on_viewLockZoomAction_triggered()
 void MainWindow::on_viewDownloadedAction_triggered()
 {
     M_PREFS->setDownloadedVisible(!M_PREFS->getDownloadedVisible());
-    if (M_PREFS->getDownloadedVisible()) p->renderOptions.options |= RendererOptions::DownloadedVisible; else p->renderOptions.options &= ~RendererOptions::DownloadedVisible;
+    SetOptionValue(p->renderOptions, RendererOptions::DownloadedVisible, M_PREFS->getDownloadedVisible());
     ui->viewDownloadedAction->setChecked(M_PREFS->getDownloadedVisible());
     invalidateView();
 }
@@ -2216,7 +2210,7 @@ void MainWindow::on_viewDownloadedAction_triggered()
 void MainWindow::on_viewDirtyAction_triggered()
 {
     M_PREFS->setDirtyVisible(!M_PREFS->getDirtyVisible());
-    if (M_PREFS->getDirtyVisible()) p->renderOptions.options |= RendererOptions::DirtyVisible; else p->renderOptions.options &= ~RendererOptions::DirtyVisible;
+    SetOptionValue(p->renderOptions, RendererOptions::DirtyVisible, M_PREFS->getDirtyVisible());
     ui->viewDirtyAction->setChecked(M_PREFS->getDirtyVisible());
     invalidateView();
 }
@@ -2224,7 +2218,7 @@ void MainWindow::on_viewDirtyAction_triggered()
 void MainWindow::on_viewScaleAction_triggered()
 {
     M_PREFS->setScaleVisible(!M_PREFS->getScaleVisible());
-    if (M_PREFS->getScaleVisible()) p->renderOptions.options |= RendererOptions::ScaleVisible; else p->renderOptions.options &= ~RendererOptions::ScaleVisible;
+    SetOptionValue(p->renderOptions, RendererOptions::ScaleVisible, M_PREFS->getScaleVisible());
     ui->viewScaleAction->setChecked(M_PREFS->getScaleVisible());
     invalidateView();
 }
@@ -2232,7 +2226,7 @@ void MainWindow::on_viewScaleAction_triggered()
 void MainWindow::on_viewPhotosAction_triggered()
 {
     M_PREFS->setPhotosVisible(!M_PREFS->getPhotosVisible());
-    if (M_PREFS->getPhotosVisible()) p->renderOptions.options |= RendererOptions::PhotosVisible; else p->renderOptions.options &= ~RendererOptions::PhotosVisible;
+    SetOptionValue(p->renderOptions, RendererOptions::PhotosVisible, M_PREFS->getPhotosVisible());
     ui->viewPhotosAction->setChecked(M_PREFS->getPhotosVisible());
     invalidateView();
 }
@@ -2240,7 +2234,7 @@ void MainWindow::on_viewPhotosAction_triggered()
 void MainWindow::on_viewShowLatLonGridAction_triggered()
 {
     M_PREFS->setLatLonGridVisible(!M_PREFS->getLatLonGridVisible());
-    if (M_PREFS->getLatLonGridVisible()) p->renderOptions.options |= RendererOptions::LatLonGridVisible; else p->renderOptions.options &= ~RendererOptions::LatLonGridVisible;
+    SetOptionValue(p->renderOptions, RendererOptions::LatLonGridVisible, M_PREFS->getLatLonGridVisible());
     ui->viewShowLatLonGridAction->setChecked(M_PREFS->getLatLonGridVisible());
     invalidateView();
 }
@@ -2248,7 +2242,7 @@ void MainWindow::on_viewShowLatLonGridAction_triggered()
 void MainWindow::on_viewStyleBackgroundAction_triggered()
 {
     M_PREFS->setBackgroundVisible(!M_PREFS->getBackgroundVisible());
-    if (M_PREFS->getBackgroundVisible()) p->renderOptions.options |= RendererOptions::BackgroundVisible; else p->renderOptions.options &= ~RendererOptions::BackgroundVisible;
+    SetOptionValue(p->renderOptions, RendererOptions::BackgroundVisible, M_PREFS->getBackgroundVisible());
     ui->viewStyleBackgroundAction->setChecked(M_PREFS->getBackgroundVisible());
     invalidateView();
 }
@@ -2256,7 +2250,7 @@ void MainWindow::on_viewStyleBackgroundAction_triggered()
 void MainWindow::on_viewStyleForegroundAction_triggered()
 {
     M_PREFS->setForegroundVisible(!M_PREFS->getForegroundVisible());
-    if (M_PREFS->getForegroundVisible()) p->renderOptions.options |= RendererOptions::ForegroundVisible; else p->renderOptions.options &= ~RendererOptions::ForegroundVisible;
+    SetOptionValue(p->renderOptions, RendererOptions::ForegroundVisible, M_PREFS->getForegroundVisible());
     ui->viewStyleForegroundAction->setChecked(M_PREFS->getForegroundVisible());
     invalidateView();
 }
@@ -2264,7 +2258,7 @@ void MainWindow::on_viewStyleForegroundAction_triggered()
 void MainWindow::on_viewStyleTouchupAction_triggered()
 {
     M_PREFS->setTouchupVisible(!M_PREFS->getTouchupVisible());
-    if (M_PREFS->getTouchupVisible()) p->renderOptions.options |= RendererOptions::TouchupVisible; else p->renderOptions.options &= ~RendererOptions::TouchupVisible;
+    SetOptionValue(p->renderOptions, RendererOptions::TouchupVisible, M_PREFS->getTouchupVisible());
     ui->viewStyleTouchupAction->setChecked(M_PREFS->getTouchupVisible());
     invalidateView();
 }
@@ -2272,7 +2266,7 @@ void MainWindow::on_viewStyleTouchupAction_triggered()
 void MainWindow::on_viewNamesAction_triggered()
 {
     M_PREFS->setNamesVisible(!M_PREFS->getNamesVisible());
-    if (M_PREFS->getNamesVisible()) p->renderOptions.options |= RendererOptions::NamesVisible; else p->renderOptions.options &= ~RendererOptions::NamesVisible;
+    SetOptionValue(p->renderOptions, RendererOptions::NamesVisible, M_PREFS->getNamesVisible());
     ui->viewNamesAction->setChecked(M_PREFS->getNamesVisible());
     invalidateView();
 }
@@ -2280,7 +2274,7 @@ void MainWindow::on_viewNamesAction_triggered()
 void MainWindow::on_viewVirtualNodesAction_triggered()
 {
     M_PREFS->setVirtualNodesVisible(!M_PREFS->getVirtualNodesVisible());
-    if (M_PREFS->getVirtualNodesVisible()) p->renderOptions.options |= RendererOptions::VirtualNodesVisible; else p->renderOptions.options &= ~RendererOptions::VirtualNodesVisible;
+    SetOptionValue(p->renderOptions, RendererOptions::VirtualNodesVisible, M_PREFS->getVirtualNodesVisible());
     ui->viewVirtualNodesAction->setChecked(M_PREFS->getVirtualNodesVisible());
     invalidateView();
 }
@@ -2288,7 +2282,7 @@ void MainWindow::on_viewVirtualNodesAction_triggered()
 void MainWindow::on_viewTrackPointsAction_triggered()
 {
     M_PREFS->setTrackPointsVisible(!M_PREFS->getTrackPointsVisible());
-    if (M_PREFS->getTrackPointsVisible()) p->renderOptions.options |= RendererOptions::NodesVisible; else p->renderOptions.options &= ~RendererOptions::NodesVisible;
+    SetOptionValue(p->renderOptions, RendererOptions::NodesVisible, M_PREFS->getTrackPointsVisible());
     ui->viewTrackPointsAction->setChecked(M_PREFS->getTrackPointsVisible());
     invalidateView();
 }
@@ -2296,7 +2290,7 @@ void MainWindow::on_viewTrackPointsAction_triggered()
 void MainWindow::on_viewTrackSegmentsAction_triggered()
 {
     M_PREFS->setTrackSegmentsVisible(!M_PREFS->getTrackSegmentsVisible());
-    if (M_PREFS->getTrackSegmentsVisible()) p->renderOptions.options |= RendererOptions::TrackSegmentVisible; else p->renderOptions.options &= ~RendererOptions::TrackSegmentVisible;
+    SetOptionValue(p->renderOptions, RendererOptions::TrackSegmentVisible, M_PREFS->getTrackSegmentsVisible());
     ui->viewTrackSegmentsAction->setChecked(M_PREFS->getTrackSegmentsVisible());
     invalidateView();
 }
@@ -2304,7 +2298,7 @@ void MainWindow::on_viewTrackSegmentsAction_triggered()
 void MainWindow::on_viewRelationsAction_triggered()
 {
     M_PREFS->setRelationsVisible(!M_PREFS->getRelationsVisible());
-    if (M_PREFS->getRelationsVisible()) p->renderOptions.options |= RendererOptions::RelationsVisible; else p->renderOptions.options &= ~RendererOptions::RelationsVisible;
+    SetOptionValue(p->renderOptions, RendererOptions::RelationsVisible, M_PREFS->getRelationsVisible());
     ui->viewRelationsAction->setChecked(M_PREFS->getRelationsVisible());
     invalidateView();
 }
@@ -3087,77 +3081,39 @@ void MainWindow::on_toolsRebuildHistoryAction_triggered()
     }
 }
 
+namespace {
+
+void CollectActions(QList<QAction*>& collectedActions, const QWidget* widget) {
+    foreach(QAction* a, widget->actions()) {
+        if (!a->isSeparator() && !a->menu())
+            collectedActions << a;
+    }
+}
+
+}  // namespace
+
 void MainWindow::on_toolsShortcutsAction_triggered()
 {
     QList<QAction*> theActions;
 
-    foreach(QAction* a, ui->menuFile->actions()) {
-        if (!a->isSeparator() && !a->menu())
-            theActions << a;
-    }
-    foreach(QAction* a, ui->menuEdit->actions()) {
-        if (!a->isSeparator() && !a->menu())
-            theActions << a;
-    }
-    foreach(QAction* a, ui->menuView->actions()) {
-        if (!a->isSeparator() && !a->menu())
-            theActions << a;
-    }
-    foreach(QAction* a, ui->menu_Show->actions()) {
-        if (!a->isSeparator() && !a->menu())
-            theActions << a;
-    }
-    foreach(QAction* a, ui->menuShow_directional_Arrows->actions()) {
-        if (!a->isSeparator() && !a->menu())
-            theActions << a;
-    }
-    foreach(QAction* a, ui->menuGps->actions()) {
-        if (!a->isSeparator() && !a->menu())
-            theActions << a;
-    }
-    foreach(QAction* a, ui->menuLayers->actions()) {
-        if (!a->isSeparator() && !a->menu())
-            theActions << a;
-    }
-    foreach(QAction* a, ui->menuCreate->actions()) {
-        if (!a->isSeparator() && !a->menu())
-            theActions << a;
-    }
-    foreach(QAction* a, ui->menu_Feature->actions()) {
-        if (!a->isSeparator() && !a->menu())
-            theActions << a;
-    }
-    foreach(QAction* a, ui->menuOpenStreetBugs->actions()) {
-        if (!a->isSeparator() && !a->menu())
-            theActions << a;
-    }
-    foreach(QAction* a, ui->menu_Node->actions()) {
-        if (!a->isSeparator() && !a->menu())
-            theActions << a;
-    }
-    foreach(QAction* a, ui->menuRoad->actions()) {
-        if (!a->isSeparator() && !a->menu())
-            theActions << a;
-    }
-    foreach(QAction* a, ui->menuRelation->actions()) {
-        if (!a->isSeparator() && !a->menu())
-            theActions << a;
-    }
-    foreach(QAction* a, ui->menuTools->actions()) {
-        if (!a->isSeparator() && !a->menu())
-            theActions << a;
-    }
-    foreach(QAction* a, ui->menuWindow->actions()) {
-        if (!a->isSeparator() && !a->menu())
-            theActions << a;
-    }
-    foreach(QAction* a, ui->menuHelp->actions()) {
-        if (!a->isSeparator() && !a->menu())
-            theActions << a;
-    }
+    CollectActions(theActions, ui->menuFile);
+    CollectActions(theActions, ui->menuEdit);
+    CollectActions(theActions, ui->menuView);
+    CollectActions(theActions, ui->menu_Show);
+    CollectActions(theActions, ui->menuShow_directional_Arrows);
+    CollectActions(theActions, ui->menuGps);
+    CollectActions(theActions, ui->menuLayers);
+    CollectActions(theActions, ui->menuCreate);
+    CollectActions(theActions, ui->menu_Feature);
+    CollectActions(theActions, ui->menuOpenStreetBugs);
+    CollectActions(theActions, ui->menu_Node);
+    CollectActions(theActions, ui->menuRoad);
+    CollectActions(theActions, ui->menuRelation);
+    CollectActions(theActions, ui->menuTools);
+    CollectActions(theActions, ui->menuWindow);
+    CollectActions(theActions, ui->menuHelp);
 
-    ActionsDialog dlg(theActions, this);
-    dlg.exec();
+    ActionsDialog(theActions, this).exec();
 }
 
 void MainWindow::toolsPreferencesAction_triggered(bool focusData)
@@ -3179,13 +3135,10 @@ void MainWindow::preferencesChanged(PreferencesDialog* prefs)
     if (iQVer < 451) {
         QApplication::setStyle(QStyleFactory::create("skulpture"));
     } else {
-        if (!M_PREFS->getMerkaartorStyle())
-        {
+        if (!M_PREFS->getMerkaartorStyle()) {
             if (QApplication::style()->objectName() != p->defStyle)
                 QApplication::setStyle(p->defStyle);
-        }
-        else
-        {
+        } else {
             QApplication::setStyle(QStyleFactory::create(M_PREFS->getMerkaartorStyleString()));
         }
     }
@@ -3236,9 +3189,6 @@ void MainWindow::on_fileSaveAsAction_triggered()
             fileName = dlg.selectedFiles()[0];
     }
 
-//    fileName = QFileDialog::getSaveFileName(this,
-//        tr("Save Merkaartor document"), QString("%1/%2.mdc").arg(M_PREFS->getworkingdir()).arg(tr("untitled")), tr("Merkaartor documents Files (*.mdc)"));
-
     if (!fileName.isEmpty()) {
         saveDocument(fileName);
         M_PREFS->addRecentOpen(fileName);
@@ -3259,8 +3209,6 @@ void MainWindow::on_fileSaveAsTemplateAction_triggered()
         if (dlg.selectedFiles().size())
             tfileName = dlg.selectedFiles()[0];
     }
-//    QString tfileName = QFileDialog::getSaveFileName(this,
-//        tr("Save Merkaartor template document"), QString("%1/%2.mdc").arg(M_PREFS->getworkingdir()).arg(tr("untitled")), tr("Merkaartor documents Files (*.mdc)"));
 
     if (!tfileName.isEmpty()) {
         saveTemplateDocument(tfileName);
@@ -3278,11 +3226,9 @@ void MainWindow::on_fileSaveAction_triggered()
 
 void MainWindow::doSaveDocument(QFile* file, bool asTemplate)
 {
-
 #ifndef Q_OS_SYMBIAN
     QApplication::setOverrideCursor(Qt::BusyCursor);
 #endif
-
 
     QXmlStreamWriter stream(file);
     stream.setAutoFormatting(true);
@@ -4362,6 +4308,63 @@ void MainWindow::on_toolTemplatesLoadAction_triggered()
     p->theProperties->resetValues();
 }
 
+QString MainWindow::translationsPath() {
+    return QCoreApplication::applicationDirPath() + "/translations";
+}
+
+#if defined(Q_OS_MAC)
+QString MainWindow::macOsTranslationsPath() {
+    QDir resources = QDir(QCoreApplication::applicationDirPath());
+    resources.cdUp();
+    resources.cd("Resources");
+    return resources.absolutePath();
+}
+#endif
+
+bool MainWindow::tryLoadQtTranslator(const QString& languagePrefix)
+{
+    if (g_Merk_Portable) {
+        return qtTranslator->load("qt_" + languagePrefix, translationsPath());
+    } else {
+#ifdef TRANSDIR_SYSTEM
+        if (!QDir::isAbsolutePath(STRINGIFY(TRANSDIR_SYSTEM)))
+            return qtTranslator->load("qt_" + languagePrefix, QCoreApplication::applicationDirPath() + "/" + STRINGIFY(TRANSDIR_SYSTEM));
+        else
+            return qtTranslator->load("qt_" + languagePrefix, STRINGIFY(TRANSDIR_SYSTEM));
+#else
+#if defined(Q_OS_MAC)
+        return qtTranslator->load("qt_" + languagePrefix, macOsTranslationsPath());
+#else
+        return qtTranslator->load("qt_" + languagePrefix, QLibraryInfo::location(QLibraryInfo::TranslationsPath));
+#endif // Q_OS_MAC
+#endif // TRANSDIR_SYSTEM
+    }
+}
+
+bool MainWindow::tryLoadMerkaartorTranslator(const QString& language)
+{
+    if (g_Merk_Portable) {
+        return merkaartorTranslator->load("merkaartor_" + language, translationsPath());
+    } else {
+	bool success;
+#if defined(Q_OS_MAC)
+        success = merkaartorTranslator->load("merkaartor_" + language, macOsTranslationsPath());
+#else
+        success = merkaartorTranslator->load("merkaartor_" + language, QCoreApplication::applicationDirPath());
+#endif
+#ifdef TRANSDIR_MERKAARTOR
+        if (!success) {
+            // Next, try the TRANSDIR_MERKAARTOR, if defined
+            if (!QDir::isAbsolutePath(STRINGIFY(TRANSDIR_MERKAARTOR)))
+                return merkaartorTranslator->load("merkaartor_" + language, QCoreApplication::applicationDirPath() + "/" + STRINGIFY(TRANSDIR_MERKAARTOR));
+            else
+                return merkaartorTranslator->load("merkaartor_" + language, STRINGIFY(TRANSDIR_MERKAARTOR));
+        }
+#endif
+	return success;
+    }
+}
+
 void MainWindow::updateLanguage()
 {
     if (qtTranslator) {
@@ -4370,63 +4373,19 @@ void MainWindow::updateLanguage()
     if (merkaartorTranslator) {
         QCoreApplication::removeTranslator(merkaartorTranslator);
     }
-    QString DefaultLanguage = getDefaultLanguage();
-    if (DefaultLanguage != "-" && DefaultLanguage != "en")
-    {
-#if defined(Q_OS_MAC)
-        QDir resources = QDir(QCoreApplication::applicationDirPath());
-        resources.cdUp();
-        resources.cd("Resources");
-#endif
+    QString language = getDefaultLanguage();
+    if (language != "-" && language != "en") {
         qtTranslator = new QTranslator;
-        bool retQt;
-        if (g_Merk_Portable) {
-            retQt = qtTranslator->load("qt_" + DefaultLanguage.left(2), QCoreApplication::applicationDirPath() + "/translations");
-        } else {
-#ifdef TRANSDIR_SYSTEM
-            if (!QDir::isAbsolutePath(STRINGIFY(TRANSDIR_SYSTEM)))
-                retQt = qtTranslator->load("qt_" + DefaultLanguage.left(2), QCoreApplication::applicationDirPath() + "/" + STRINGIFY(TRANSDIR_SYSTEM));
-            else
-                retQt = qtTranslator->load("qt_" + DefaultLanguage.left(2), STRINGIFY(TRANSDIR_SYSTEM));
-#else
-#if defined(Q_OS_MAC)
-            retQt = qtTranslator->load("qt_" + DefaultLanguage.left(2), resources.absolutePath());
-#else
-            retQt = qtTranslator->load("qt_" + DefaultLanguage.left(2), QLibraryInfo::location(QLibraryInfo::TranslationsPath));
-#endif // Q_OS_MAC
-#endif // TRANSDIR_SYSTEM
-        }
-
-        if (retQt)
+        const QString languagePrefix = language.left(2);
+        if (tryLoadQtTranslator(languagePrefix))
             QCoreApplication::installTranslator(qtTranslator);
 
-        merkaartorTranslator = new QTranslator;
         // Do not prevent Merkaartor translations to be loaded, even if there is no Qt translation for the language.
-
-        bool retM;
-        if (g_Merk_Portable) {
-            retM = merkaartorTranslator->load("merkaartor_" + DefaultLanguage, QCoreApplication::applicationDirPath() + "/translations");
-        } else {
-#if defined(Q_OS_MAC)
-            retM = merkaartorTranslator->load("merkaartor_" + DefaultLanguage, resources.absolutePath());
-#else
-            retM = merkaartorTranslator->load("merkaartor_" + DefaultLanguage, QCoreApplication::applicationDirPath());
-#endif
-#ifdef TRANSDIR_MERKAARTOR
-            if (!retM) {
-                // Next, try the TRANSDIR_MERKAARTOR, if defined
-                if (!QDir::isAbsolutePath(STRINGIFY(TRANSDIR_MERKAARTOR)))
-                    retM = merkaartorTranslator->load("merkaartor_" + DefaultLanguage, QCoreApplication::applicationDirPath() + "/" + STRINGIFY(TRANSDIR_MERKAARTOR));
-                else
-                    retM = merkaartorTranslator->load("merkaartor_" + DefaultLanguage, STRINGIFY(TRANSDIR_MERKAARTOR));
-            }
-#endif
-        }
-
-        if (retM)
+        merkaartorTranslator = new QTranslator;
+        if (tryLoadMerkaartorTranslator(language))
             QCoreApplication::installTranslator(merkaartorTranslator);
         else
-            statusBar()->showMessage(tr("Warning! Could not load the Merkaartor translations for the \"%1\" language. Switching to default English.").arg(DefaultLanguage), 15000);
+            statusBar()->showMessage(tr("Warning! Could not load the Merkaartor translations for the \"%1\" language. Switching to default English.").arg(language), 15000);
     }
     ui->retranslateUi(this);
 }
@@ -4483,22 +4442,18 @@ bool MainWindow::hasUnsavedChanges()
 void MainWindow::syncOSM(const QString& aWeb, const QString& aUser, const QString& aPwd)
 {
 #ifndef FRISIUS_BUILD
-    if (checkForConflicts(theDocument))
-    {
+    if (checkForConflicts(theDocument)) {
         QMessageBox::warning(this,tr("Unresolved conflicts"), tr("Please resolve existing conflicts first"));
         return;
     }
 
-    bool ok;
     DirtyListBuild Future;
     theDocument->history().buildDirtyList(Future);
     DirtyListDescriber Describer(theDocument,Future);
-    if (Describer.showChanges(this) && Describer.tasks())
-    {
+    if (Describer.showChanges(this) && Describer.tasks()) {
         Future.resetUpdates();
         DirtyListExecutorOSC Exec(theDocument,Future,aWeb,aUser,aPwd,Describer.tasks());
-        ok = Exec.executeChanges(this);
-        if (ok) {
+        if (Exec.executeChanges(this)) {
             if (M_PREFS->getAutoHistoryCleanup() && !theDocument->getDirtyOrOriginLayer()->getDirtySize())
                 theDocument->history().cleanup();
 
