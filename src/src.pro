@@ -6,11 +6,17 @@ include (Config.pri)
 #Custom config
 include(Custom.pri)
 
-include(../3rdparty/qtsingleapplication-2.6_1-opensource/src/qtsingleapplication.pri)
-DEFINES += QUAZIP_STATIC
-include(../3rdparty/quazip-0.7/quazip.pri)
-
-#LIBS += -lquazip
+isEmpty(SYSTEM_QTSA) {
+  include(../3rdparty/qtsingleapplication-2.6_1-opensource/src/qtsingleapplication.pri)
+} else {
+  CONFIG += qtsingleapplication
+}
+isEmpty(SYSTEM_QUAZIP) {
+  DEFINES += QUAZIP_STATIC
+  include(../3rdparty/quazip-0.7/quazip.pri)
+} else {
+  LIBS += -lquazip
+}
 
 #Qt Version
 QT_VERSION = $$[QT_VERSION]
