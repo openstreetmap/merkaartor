@@ -440,7 +440,7 @@ public:
 
     M_PARAM_DECLARE_STRING(SelectedServer);
 
-protected:
+private:
     QVector<qreal> parentDashes;
 
     bool Use06Api;
@@ -464,7 +464,6 @@ protected:
     void setTools();
     void initialize();
 
-private:
     QHash<QString, qreal> alpha;
     ToolList* theToolList;
     QSettings * Sets;
