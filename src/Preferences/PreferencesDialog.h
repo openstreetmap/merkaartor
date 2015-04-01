@@ -77,6 +77,7 @@ private:
     void savePrefs();
 
     void changeEvent(QEvent *);
+    QColor pickColor(QColor defaultColor);
 
 private:
     QList<Tool> theTools;

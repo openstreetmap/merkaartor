@@ -81,6 +81,8 @@ TRANSDIR_MERKAARTOR=<path>  - where will the Merkaartor translations be installe
 TRANSDIR_SYSTEM=<path>      - where your global Qt translation directory is
 NODEBUG=1                   - release target
 NOUSEWEBKIT                 - disable use of WebKit (Yahoo adapter)
+SYSTEM_QTSA                 - use system copy of qtsingleapplication instead of internal
+SYSTEM_QUAZIP               - use system copy of quazip instead of internal
 
 
 3. Run your build tool, make for posix like systems (including MSYS2), nmake for

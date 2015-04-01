@@ -6,12 +6,17 @@ include (Config.pri)
 #Custom config
 include(Custom.pri)
 
-include(../3rdparty/qtsingleapplication-2.6_1-opensource/src/qtsingleapplication.pri)
-include(../3rdparty/qttoolbardialog-2.2_1-opensource/src/qttoolbardialog.pri)
-DEFINES += QUAZIP_STATIC
-include(../3rdparty/quazip-0.7/quazip.pri)
-
-#LIBS += -lquazip
+isEmpty(SYSTEM_QTSA) {
+  include(../3rdparty/qtsingleapplication-2.6_1-opensource/src/qtsingleapplication.pri)
+} else {
+  CONFIG += qtsingleapplication
+}
+isEmpty(SYSTEM_QUAZIP) {
+  DEFINES += QUAZIP_STATIC
+  include(../3rdparty/quazip-0.7/quazip.pri)
+} else {
+  LIBS += -lquazip
+}
 
 #Qt Version
 QT_VERSION = $$[QT_VERSION]
@@ -35,15 +40,15 @@ win32-msvc* {
     LIBS += -lz
 }
 
-!contains(NODEBUG,1) {
-    CONFIG += debug
-    #OBJECTS_DIR += $$PWD/../tmp/$$(QMAKESPEC)/obj_debug
-}
-contains(NODEBUG,1) {
-    CONFIG += release
-    DEFINES += NDEBUG
-    #OBJECTS_DIR += $$PWD/../tmp/$$(QMAKESPEC)/obj_release
-}
+#!contains(NODEBUG,1) {
+#    CONFIG += debug
+#    #OBJECTS_DIR += $$PWD/../tmp/$$(QMAKESPEC)/obj_debug
+#}
+#contains(NODEBUG,1) {
+#    CONFIG += release
+#    DEFINES += NDEBUG
+#    #OBJECTS_DIR += $$PWD/../tmp/$$(QMAKESPEC)/obj_release
+#}
 contains(FRISIUS,1) {
     TARGET = frisius
     DEFINES += FRISIUS_BUILD
@@ -116,6 +121,7 @@ include(Tools/Tools.pri)
 include(TagTemplate/TagTemplate.pri)
 include(NameFinder/NameFinder.pri)
 include(Utils/Utils.pri)
+include(QToolBarDialog/QToolBarDialog.pri)
 
 VPATH += $$INCLUDEPATH
 
@@ -151,7 +157,12 @@ unix:!macx {
     isEmpty( LIBDIR ) {
         LIBDIR = $${PREFIX}/lib${LIB_SUFFIX}
     }
-    DEFINES += PLUGINS_DIR=$${LIBDIR}/merkaartor/plugins
+    CONFIG(debug,debug|release) {
+        DEFINES += PLUGINS_DIR=$$OUTPUT_DIR/bin/plugins
+    }
+    CONFIG(release,debug|release) {
+        DEFINES += PLUGINS_DIR=$${LIBDIR}/merkaartor/plugins
+    }
     target.path = $${PREFIX}/bin
     SHARE_DIR = $${PREFIX}/share/merkaartor
 

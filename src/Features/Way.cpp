@@ -407,6 +407,8 @@ void Way::updateMeta()
     p->Distance = 0;
     p->CalculateWidth();
 
+    MetaUpToDate = true;
+
     p->NotEverythingDownloaded = false;
     if (lastUpdated() == Feature::NotYetDownloaded)
         p->NotEverythingDownloaded = true;
@@ -449,7 +451,6 @@ void Way::updateMeta()
     }
 
     p->doUpdateVirtuals();
-    MetaUpToDate = true;
 }
 
 qreal Way::distance()

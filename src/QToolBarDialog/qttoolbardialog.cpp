@@ -1810,12 +1810,12 @@ QtToolBarDialog::QtToolBarDialog(QWidget *parent, Qt::WindowFlags flags)
 //    ui.currentToolBarList->setItemDelegate(del);
 //    ui.currentToolBarList->setAcceptDrops(true);
 
-    d_ptr->ui.upButton->setIcon(QIcon(":/qttoolbardialog/images/up.png"));
-    d_ptr->ui.downButton->setIcon(QIcon(":/qttoolbardialog/images/down.png"));
-    d_ptr->ui.leftButton->setIcon(QIcon(":/qttoolbardialog/images/back.png"));
-    d_ptr->ui.rightButton->setIcon(QIcon(":/qttoolbardialog/images/forward.png"));
-    d_ptr->ui.newButton->setIcon(QIcon(":/qttoolbardialog/images/plus.png"));
-    d_ptr->ui.removeButton->setIcon(QIcon(":/qttoolbardialog/images/minus.png"));
+    d_ptr->ui.upButton->setIcon(QIcon(":/qttoolbardialog/up.png"));
+    d_ptr->ui.downButton->setIcon(QIcon(":/qttoolbardialog/down.png"));
+    d_ptr->ui.leftButton->setIcon(QIcon(":/qttoolbardialog/back.png"));
+    d_ptr->ui.rightButton->setIcon(QIcon(":/qttoolbardialog/forward.png"));
+    d_ptr->ui.newButton->setIcon(QIcon(":/qttoolbardialog/plus.png"));
+    d_ptr->ui.removeButton->setIcon(QIcon(":/qttoolbardialog/minus.png"));
 
     connect(d_ptr->ui.newButton, SIGNAL(clicked()), this, SLOT(newClicked()));
     connect(d_ptr->ui.removeButton, SIGNAL(clicked()), this, SLOT(removeClicked()));

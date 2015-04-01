@@ -1,0 +1,10 @@
+<RCC version="1.0">
+    <qresource prefix="/qttoolbardialog">
+        <file>up.png</file>
+        <file>down.png</file>
+        <file>forward.png</file>
+        <file>back.png</file>
+        <file>plus.png</file>
+        <file>minus.png</file>
+    </qresource>
+</RCC>
