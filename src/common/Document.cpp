@@ -1019,33 +1019,26 @@ QList<Feature*> Document::mergeDocument(Document* otherDoc, Layer* layer, Comman
 Document* Document::getDocumentFromClipboard()
 {
     QClipboard *clipboard = QApplication::clipboard();
-    QDomDocument* theXmlDoc = new QDomDocument();
+    QDomDocument theXmlDoc;
 
     if (clipboard->mimeData()->hasFormat("application/x-openstreetmap+xml")) {
-        if (!theXmlDoc->setContent(clipboard->mimeData()->data("application/x-openstreetmap+xml"))) {
-            delete theXmlDoc;
+        if (!theXmlDoc.setContent(clipboard->mimeData()->data("application/x-openstreetmap+xml"))) {
             return NULL;
         }
     } else
     if (clipboard->mimeData()->hasFormat("application/vnd.google-earth.kml+xml")) {
-        if (!theXmlDoc->setContent(clipboard->mimeData()->data("application/vnd.google-earth.kml+xml"))) {
-            delete theXmlDoc;
+        if (!theXmlDoc.setContent(clipboard->mimeData()->data("application/vnd.google-earth.kml+xml"))) {
             return NULL;
         }
     } else
     if (clipboard->mimeData()->hasText()) {
-        if (!theXmlDoc->setContent(clipboard->text())) {
-            delete theXmlDoc;
+        if (!theXmlDoc.setContent(clipboard->text())) {
             return NULL;
         }
     } else {
-        delete theXmlDoc;
         return NULL;
     }
-    Document* doc = Document::getDocumentFromXml(theXmlDoc);
-    delete theXmlDoc;
-
-    return doc;
+    return Document::getDocumentFromXml(&theXmlDoc);
 }
 
 /* FEATUREITERATOR */

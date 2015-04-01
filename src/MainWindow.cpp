@@ -1363,16 +1363,16 @@ void MainWindow::on_editPasteFeatureAction_triggered()
 
     QClipboard *clipboard = QApplication::clipboard();
     if (clipboard->mimeData()->hasFormat(MIME_MERKAARTOR_UNDO_XML)) {
-        QDomDocument* theXmlDoc = new QDomDocument();
-        if (!theXmlDoc->setContent(clipboard->mimeData()->data(MIME_MERKAARTOR_UNDO_XML))) {
-            delete theXmlDoc;
+        QDomDocument theXmlDoc;
+        if (!theXmlDoc.setContent(clipboard->mimeData()->data(MIME_MERKAARTOR_UNDO_XML))) {
+            // Do nothing.
         } else {
-            QDomElement root = theXmlDoc->firstChildElement("MerkaartorUndo");
+            QDomElement root = theXmlDoc.firstChildElement("MerkaartorUndo");
             if (!root.isNull()) {
                 QString docId = root.attribute("documentid");
                 if (theDocument->id() == docId) {
 
-                    QDomNodeList nl = theXmlDoc->elementsByTagName("RemoveFeatureCommand");
+                    QDomNodeList nl = theXmlDoc.elementsByTagName("RemoveFeatureCommand");
                     for (int i=0; i<nl.size(); ++i) {
                         nl.at(i).toElement().setAttribute("layer", l->id());
                     }
@@ -1496,30 +1496,26 @@ void MainWindow::clipboardChanged()
 
     QClipboard *clipboard = QApplication::clipboard();
     //qDebug() << "Clipboard mime: " << clipboard->mimeData()->formats();
-    QDomDocument* theXmlDoc = new QDomDocument();
+    QDomDocument theXmlDoc;
     bool ok = false;
     if (clipboard->mimeData()->hasFormat(MIME_OPENSTREETMAP_XML))
-        ok = theXmlDoc->setContent(clipboard->mimeData()->data(MIME_OPENSTREETMAP_XML));
+        ok = theXmlDoc.setContent(clipboard->mimeData()->data(MIME_OPENSTREETMAP_XML));
     else if (clipboard->mimeData()->hasText())
-        ok = theXmlDoc->setContent(clipboard->text());
+        ok = theXmlDoc.setContent(clipboard->text());
 
     if (!ok) {
-        delete theXmlDoc;
         return;
     }
 
-    QDomElement c = theXmlDoc->documentElement();
+    QDomElement c = theXmlDoc.documentElement();
 
     if (c.tagName() != "osm" && c.tagName() != "kml") {
-        delete theXmlDoc;
         return;
     }
 
     ui->editPasteFeatureAction->setEnabled(true);
     ui->editPasteMergeAction->setEnabled(true);
     ui->editPasteOverwriteAction->setEnabled(true);
-
-    delete theXmlDoc;
 }
 
 void MainWindow::on_editRedoAction_triggered()
