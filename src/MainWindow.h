@@ -331,6 +331,8 @@ private:
     void dieClipboardInvalid();
     void warnMapDownloadFailed();
 
+    void updateSegmentMode(QMouseEvent* mouseEvent);
+
 protected:
     void closeEvent(QCloseEvent * event);
     virtual QMenu * createPopupMenu ();

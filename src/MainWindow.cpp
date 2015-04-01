@@ -668,6 +668,10 @@ void MainWindow::onLoadingfinished(ImageMapLayer *)
 #endif
 }
 
+void MainWindow::updateSegmentMode(QMouseEvent* mouseEvent)
+{
+    g_Merk_Segment_Mode = (mouseEvent->modifiers() & Qt::AltModifier) || dynamic_cast<ExtrudeInteraction*>(theView->interaction());
+}
 
 bool MainWindow::eventFilter(QObject */* watched */, QEvent *event)
 {
@@ -765,10 +769,7 @@ bool MainWindow::eventFilter(QObject */* watched */, QEvent *event)
             return true;
 
         QMouseEvent* mevent = static_cast<QMouseEvent*>(event);
-        if ((mevent->modifiers() & Qt::AltModifier) || dynamic_cast<ExtrudeInteraction*>(theView->interaction()))
-            g_Merk_Segment_Mode = true;
-        else
-            g_Merk_Segment_Mode = false;
+        updateSegmentMode(mevent);
 
         theView->interaction()->updateSnap(mevent);
 
@@ -807,11 +808,7 @@ bool MainWindow::eventFilter(QObject */* watched */, QEvent *event)
             return true;
 
         QMouseEvent* mevent = static_cast<QMouseEvent*>(event);
-        if ((mevent->modifiers() & Qt::AltModifier) || dynamic_cast<ExtrudeInteraction*>(theView->interaction()))
-            g_Merk_Segment_Mode = true;
-        else
-            g_Merk_Segment_Mode = false;
-
+        updateSegmentMode(mevent);
 
         theView->interaction()->updateSnap(mevent);
         if (theInfo)
@@ -828,11 +825,7 @@ bool MainWindow::eventFilter(QObject */* watched */, QEvent *event)
             return true;
 
         QMouseEvent* mevent = static_cast<QMouseEvent*>(event);
-        if ((mevent->modifiers() & Qt::AltModifier) || dynamic_cast<ExtrudeInteraction*>(theView->interaction()))
-            g_Merk_Segment_Mode = true;
-        else
-            g_Merk_Segment_Mode = false;
-
+        updateSegmentMode(mevent);
 
         theView->interaction()->updateSnap(mevent);
 
@@ -850,10 +843,7 @@ bool MainWindow::eventFilter(QObject */* watched */, QEvent *event)
             return false;
 
         QMouseEvent* mevent = static_cast<QMouseEvent*>(event);
-        if ((mevent->modifiers() & Qt::AltModifier) || dynamic_cast<ExtrudeInteraction*>(theView->interaction()))
-            g_Merk_Segment_Mode = true;
-        else
-            g_Merk_Segment_Mode = false;
+        updateSegmentMode(mevent);
 
         theView->interaction()->updateSnap(mevent);
 
