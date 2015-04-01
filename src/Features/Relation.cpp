@@ -555,6 +555,8 @@ void Relation::updateMeta()
     p->PathUpToDate = false;
     p->CalculateWidth();
 
+    MetaUpToDate = true;
+
     p->theRenderPriority = RenderPriority(RenderPriority::IsSingular, 0., 0);
     for (int i=0; i<p->Members.size(); ++i) {
         if (Way* W = CAST_WAY(p->Members.at(i).second)) {
@@ -565,7 +567,6 @@ void Relation::updateMeta()
                 p->theRenderPriority = R->renderPriority();
         }
     }
-    MetaUpToDate = true;
 }
 
 bool Relation::toXML(QXmlStreamWriter& stream, QProgressDialog * progress, bool strict, QString changetsetid)
