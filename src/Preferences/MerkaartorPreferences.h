@@ -459,8 +459,6 @@ private:
     QBuffer OsmPrefContent;
     QMap<QString, int> OsmPrefListsCount;
 
-    void setWmsServers();
-    void setTmsServers();
     void setTools();
     void initialize();
 
