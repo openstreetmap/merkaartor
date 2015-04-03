@@ -20,6 +20,7 @@
 #include <QMessageBox>
 #include <QInputDialog>
 #include <QTimer>
+#include <QImage>
 
 #include <QNetworkAccessManager>
 #include <QNetworkRequest>
@@ -111,17 +112,17 @@ void make_grayscale(QImage& in)
 {
     if(in.format()!=QImage::Format_Indexed8)
         throw "format error";
-    QVector<int> transform_table(in.numColors());
-    for(int i=0;i<in.numColors();i++)
+    QVector<int> transform_table(in.colorCount());
+    for(int i=0;i<in.colorCount();i++)
     {
         QRgb c1=in.color(i);
         int avg=qGray(c1);
         transform_table[i] = avg;
     }
-    in.setNumColors(256);
+    in.setColorCount(256);
     for(int i=0;i<256;i++)
         in.setColor(i,qRgb(i,i,i));
-    for(int i=0;i<in.numBytes();i++)
+    for(int i=0;i<in.byteCount();i++)
     {
         in.bits()[i]=transform_table[in.bits()[i]];
     }
@@ -152,7 +153,7 @@ bool WalkingPapersAdapter::getWalkingPapersDetails(const QUrl& reqUrl, QRectF& b
         return false;
     }
 
-    QString center = QString::fromAscii(reply->rawHeader("X-Print-Bounds"));
+    QString center = QString::fromLatin1(reply->rawHeader("X-Print-Bounds"));
     QStringList sl = center.split(" ");
     if (!sl.size() == 4)
         return false;
@@ -337,7 +338,7 @@ QPixmap WalkingPapersAdapter::getPixmap(const QRectF& wgs84Bbox, const QRectF& /
         double rty = theImg.height() / (double)sz.height();
 
         QRect mRect = QRect(s, sz);
-        QRect iRect = theImg.rect().intersect(mRect);
+        QRect iRect = theImg.rect().intersected(mRect);
         QRect sRect = QRect(iRect.topLeft() - mRect.topLeft(), iRect.size());
         QRect fRect = QRect(sRect.x() * rtx, sRect.y() * rty, sRect.width() * rtx, sRect.height() * rty);
 
@@ -440,4 +441,6 @@ QString WalkingPapersAdapter::toPropertiesHtml()
 }
 
 
+#if !(QT_VERSION >= QT_VERSION_CHECK(5,0,0))
 Q_EXPORT_PLUGIN2(MWalkingPapersBackgroundPlugin, WalkingPapersAdapterFactory)
+#endif

@@ -95,6 +95,11 @@
 #include <QTcpServer>
 #include <QTcpSocket>
 #include <QXmlStreamReader>
+#include <QStyleFactory>
+#include <QMessageBox>
+#include <QFileDialog>
+#include <QInputDialog>
+#include <QToolTip>
 
 #include "qttoolbardialog.h"
 
@@ -1868,12 +1873,18 @@ void MainWindow::loadFiles(const QStringList & fileList)
     invalidateView(false);
 }
 
-void MainWindow::loadUrl(const QUrl& u)
+void MainWindow::loadUrl(const QUrl& theUrl)
 {
     activateWindow();
 
-    if (u.path() == "/load_object") {
-        QString obj = u.queryItemValue("objects");
+#ifdef QT5
+    QUrlQuery theQuery(theUrl);
+#define theQuery theQuery
+#else
+#define theQuery theUrl
+#endif
+    if (theUrl.path() == "/load_object") {
+        QString obj = theQuery.queryItemValue("objects");
         IFeature::FId mId;
         if (obj.startsWith("n")) {
             obj.remove("n");
@@ -1889,7 +1900,7 @@ void MainWindow::loadUrl(const QUrl& u)
             mId.numId = obj.toLongLong();
         } else {
             QMessageBox::critical(this, tr("Incoming Remote Control Request"),
-                tr("Wanted to load object '%1', but don't know how to do that. Sorry.").arg(u.toString()));
+                tr("Wanted to load object '%1', but don't know how to do that. Sorry.").arg(theUrl.toString()));
             return;
         }
         Feature* F = theDocument->getFeature(mId);
@@ -1908,11 +1919,11 @@ void MainWindow::loadUrl(const QUrl& u)
         properties()->setSelection(0);
         properties()->addSelection(F);
         emit content_changed();
-    } else if (u.path() == "/load_and_zoom") {
-        qreal t = u.queryItemValue("top").toDouble();
-        qreal b = u.queryItemValue("bottom").toDouble();
-        qreal r = u.queryItemValue("right").toDouble();
-        qreal l = u.queryItemValue("left").toDouble();
+    } else if (theUrl.path() == "/load_and_zoom") {
+        qreal t = theQuery.queryItemValue("top").toDouble();
+        qreal b = theQuery.queryItemValue("bottom").toDouble();
+        qreal r = theQuery.queryItemValue("right").toDouble();
+        qreal l = theQuery.queryItemValue("left").toDouble();
 
         if (theView) {
             CoordBox vp(Coord(l,b), Coord(r,t));
@@ -1923,7 +1934,7 @@ void MainWindow::loadUrl(const QUrl& u)
 
         Feature* F;
         IFeature::FId mId;
-        QString sel = u.queryItemValue("select");
+        QString sel = theQuery.queryItemValue("select");
         if (!sel.isNull()) {
             QStringList sl = sel.split(",");
             foreach (QString f, sl) {
@@ -1946,8 +1957,9 @@ void MainWindow::loadUrl(const QUrl& u)
             }
         }
     } else {
-        QMessageBox::critical(this, tr("Incoming Remote control request"), tr("Unknow action url: %1").arg(u.toString()));
+        QMessageBox::critical(this, tr("Incoming Remote control request"), tr("Unknow action url: %1").arg(theUrl.toString()));
     }
+#undef theQuery
 }
 
 void MainWindow::on_fileOpenAction_triggered()
@@ -2397,7 +2409,11 @@ void MainWindow::on_createRoundaboutAction_triggered()
 void MainWindow::on_createPolygonAction_triggered()
 {
     QList< QPair <QString, QString> > tags;
+#ifdef QT5
+#define getInteger getInt
+#endif
     int Sides = QInputDialog::getInteger(this, MainWindow::tr("Create Polygon"), MainWindow::tr("Specify the number of sides"), M_PREFS->getPolygonSides(), 3);
+#undef getInteger
     M_PREFS->setPolygonSides(Sides);
     launchInteraction(new CreatePolygonInteraction(this, Sides, tags));
     theInfo->setHtml(theView->interaction()->toHtml());
@@ -2584,7 +2600,13 @@ void MainWindow::on_featureOsbClose_triggered()
     QUrl osbUrl;
     osbUrl.setUrl(M_PREFS->getOpenStreetBugsUrl());
     osbUrl.setPath(osbUrl.path() + "closePOIexec");
+#ifdef QT5
+    QUrlQuery theQuery(osbUrl);
+    theQuery.addQueryItem("id", Feature::stripToOSMId(bugNd->id()));
+    osbUrl.setQuery(theQuery);
+#else
     osbUrl.addQueryItem("id", Feature::stripToOSMId(bugNd->id()));
+#endif
     qDebug() << osbUrl.toString();
 
     QString rply;
@@ -2679,9 +2701,13 @@ void MainWindow::on_roadAxisAlignAction_triggered()
     axes = axisAlignGuessAxes(p->theProperties, view()->projection(), max_axes);
     if (!axes)
         axes = 4;
+#ifdef QT5
+#define getInteger getInt
+#endif
     axes = QInputDialog::getInteger(this, tr("Axis Align"),
                                     tr("Specify the number of regular axes to align edges on (e.g. 4 for rectangular)"),
                                     axes, 3, max_axes, 1, &ok);
+#undef getInteger
     if (!ok)
         return;
 

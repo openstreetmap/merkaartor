@@ -39,6 +39,9 @@ class SpatialiteAdapter : public IMapAdapter
 {
     Q_OBJECT
     Q_INTERFACES(IMapAdapter)
+#if QT_VERSION >= QT_VERSION_CHECK(5,0,0)
+    Q_PLUGIN_METADATA(IID "be.merkaartor.SpatialiteAdapter" FILE "SpatialiteAdapter.json")
+#endif
 
 public:
     SpatialiteAdapter();

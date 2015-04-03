@@ -25,6 +25,8 @@ TMSPreferencesDialog::TMSPreferencesDialog(QWidget* parent)
 
     setWindowFlags(windowFlags() & ~Qt::WindowContextHelpButtonHint);
 
+    connect (&http, SIGNAL(finished(QNetworkReply*)), this, SLOT(httpRequestFinished(QNetworkReply*)));
+
     loadPrefs();
 }
 
@@ -220,36 +222,23 @@ void TMSPreferencesDialog::on_btGetServices_clicked()
     lvTmsServices->clear();
     services.clear();
 
-    http = new QHttp(this);
-    http->setProxy(M_PREFS->getProxy(theUrl));
-    connect (http, SIGNAL(requestFinished(int, bool)), this, SLOT(httpRequestFinished(int, bool)));
-    connect(http, SIGNAL(responseHeaderReceived(const QHttpResponseHeader &)),
-        this, SLOT(readResponseHeader(const QHttpResponseHeader &)));
+    http.setProxy(M_PREFS->getProxy(theUrl));
 
-    httpGetId = sendRequest(theUrl);
-
+    sendRequest(theUrl);
 }
 
-int TMSPreferencesDialog::sendRequest(QUrl url)
+QNetworkReply* TMSPreferencesDialog::sendRequest(QUrl url)
 {
-    QString requestUrl = url.encodedPath();
-    if (!url.encodedQuery().isNull())
-        requestUrl += "?" + url.encodedQuery();
-    QHttpRequestHeader header("GET", requestUrl);
-    qDebug() << header.toString();
+    qDebug() << "TMS: Sending request to " << url;
+    QNetworkRequest req(url);
+    req.setRawHeader(QByteArray("User-Agent"), USER_AGENT.toLatin1());
 
-    QString host = url.host();
-    if (url.port() != -1)
-        host += ":" + QString::number(url.port());
-    header.setValue("Host", host);
-    header.setValue("User-Agent", USER_AGENT);
+    http.setProxy(M_PREFS->getProxy(url));
 
-    http->setHost(url.host(), url.port() == -1 ? 80 : url.port());
-    http->setProxy(M_PREFS->getProxy(url));
-
-    return http->request(header);
+    return http.get(req);
 }
 
+/*
 void TMSPreferencesDialog::readResponseHeader(const QHttpResponseHeader &responseHeader)
 {
     qDebug() << responseHeader.toString();
@@ -272,17 +261,26 @@ void TMSPreferencesDialog::readResponseHeader(const QHttpResponseHeader &respons
                                   .arg(responseHeader.reasonPhrase()));
     }
 }
+*/
 
-void TMSPreferencesDialog::httpRequestFinished(int /*id*/, bool error)
+void TMSPreferencesDialog::httpRequestFinished( QNetworkReply *reply)
 {
-    if (error) {
-        if (http->error() != QHttp::Aborted)
-            QMessageBox::critical(this, tr("Merkaartor: GetServices"), tr("Error reading services.\n") + http->errorString(), QMessageBox::Ok);
+    qDebug() << "TMS: request finished.";
+    reply->deleteLater();
+    if (reply->error()) {
+        if (reply->error() != QNetworkReply::OperationCanceledError)
+            QMessageBox::critical(this, tr("Merkaartor: GetServices"), tr("Error reading services.\n") + reply->errorString(), QMessageBox::Ok);
         return;
     }
 
+    /* Check for redirects */
+    QVariant redir = reply->attribute(QNetworkRequest::RedirectionTargetAttribute);
+    if (redir.isValid()) {
+        sendRequest(QUrl(redir.toString()));
+    }
+
     QDomDocument doc;
-    QString content = http->readAll();
+    QString content = reply->readAll();
     qDebug() << content;
     doc.setContent(content);
     if (doc.isNull())

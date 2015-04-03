@@ -3,11 +3,12 @@
 
 #include <QtCore/QBuffer>
 #include <QtCore/QByteArray>
-#include <QtGui/QWidget>
-#include <QtNetwork/QHttp>
+#include <QWidget>
+#include <QNetworkAccessManager>
 
 #include <QMap>
 #include <QList>
+#include <QUrl>
 
 class SlippyMapWidgetPrivate;
 
@@ -36,7 +37,7 @@ class SlippyMapCache : public QObject
         QPixmap* getImage(int x, int y, int Zoom);
         QPixmap* getDirty(int x, int y, int Zoom);
     private slots:
-        void on_requestFinished(int id, bool Error);
+        void on_requestFinished( QNetworkReply *reply);
     private:
         void addToQueue(const Coord& C);
         void startDownload();
@@ -44,10 +45,11 @@ class SlippyMapCache : public QObject
 
         QMap<Coord, QByteArray> Memory, Dirties;
         QList<Coord> Queue;
-        QHttp Download;
+        QUrl baseUrl;
+        QNetworkAccessManager Download;
         QByteArray DownloadData;
         QBuffer DownloadBuffer;
-        int DownloadId;
+        QNetworkReply *DownloadReply;
         Coord DownloadCoord;
         bool DownloadBusy;
         SlippyMapWidgetPrivate* theMap;

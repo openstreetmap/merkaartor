@@ -22,7 +22,8 @@
 
 #include <QObject>
 #include <QIODevice>
-#include <QtNetwork/QHttp>
+#include <QNetworkAccessManager>
+#include <QNetworkReply>
 #include <QUrl>
 
 namespace NameFinder {
@@ -33,29 +34,25 @@ namespace NameFinder {
 class HttpQuery : public QObject {
         Q_OBJECT
 public:
-        HttpQuery(QObject *parent, QIODevice *device);
-        HttpQuery(QObject *parent, QUrl service, QIODevice *device);
+        HttpQuery(QObject *parent );
+        HttpQuery(QObject *parent, QUrl service );
         ~HttpQuery();
 
         bool   startSearch(QString question);
 
 signals:
-	void done();
-	void doneWithError(QHttp::Error error);
+	void done(QIODevice *reply);
+	void doneWithError(QNetworkReply::NetworkError error);
 
 private:
-        QHttp connection;
+        QNetworkAccessManager connection;
         QUrl url;
-//! What we are looking for...
         QString myQuestion;
         QUrl myService;
-//! Our input device - so we can use QFile, QBuffer, etc...
-        QIODevice *myDevice;
-		int reqId;
+		QNetworkReply *myReply;
 
 private slots:
-		void on_requestFinished ( int id, bool error );
-		void on_responseHeaderReceived(const QHttpResponseHeader & hdr);
+		void on_requestFinished ( QNetworkReply *reply );
 };
 
 }

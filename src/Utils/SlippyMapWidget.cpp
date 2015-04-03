@@ -298,14 +298,12 @@ bool SlippyMapWidget::isDragging()
 /* SLIPPYMAPCACHE */
 
 SlippyMapCache::SlippyMapCache()
-: QObject(0), DownloadId(0), DownloadBusy(false), theMap(0)
+: QObject(0), DownloadReply(0), DownloadBusy(false), theMap(0)
 {
-    Download.setProxy(M_PREFS->getProxy(QUrl(QString("http://tile.openstreetmap.org"))));
-    Download.setHost("tile.openstreetmap.org");
+    baseUrl.setUrl("http://tile.openstreetmap.org");
+    Download.setProxy(M_PREFS->getProxy(baseUrl));
 
-    DownloadBuffer.setBuffer(&DownloadData);
-    DownloadBuffer.open(QIODevice::WriteOnly);
-    connect(&Download,SIGNAL(requestFinished(int,bool)),this,SLOT(on_requestFinished(int, bool)));
+    connect(&Download,SIGNAL(finished(QNetworkReply*)),this,SLOT(on_requestFinished(QNetworkReply*)));
 
     preload(Coord(0,0,0),":/Tiles/000.png");
     preload(Coord(0,0,1),":/Tiles/100.png");
@@ -334,14 +332,15 @@ void SlippyMapCache::preload(const Coord& C, const QString& Filename)
 }
 
 
-void SlippyMapCache::on_requestFinished(int Id, bool Error)
+void SlippyMapCache::on_requestFinished(QNetworkReply *reply)
 {
-    if (Id == DownloadId)
+    qDebug() << "Finished with error code" << reply->error();
+    if (reply == DownloadReply)
     {
         DownloadBusy = false;
-        if (!Error)
+        if (!reply->error())
         {
-            Memory[DownloadCoord] = DownloadData;
+            Memory[DownloadCoord] = reply->readAll();
             if (theMap)
                 theMap->newData(DownloadCoord.X,DownloadCoord.Y,DownloadCoord.Zoom);
             QMap<Coord,QByteArray>::iterator i = Dirties.find(DownloadCoord);
@@ -412,11 +411,12 @@ void SlippyMapCache::startDownload()
             DownloadBusy = true;
             DownloadCoord = Queue[0];
             Queue.erase(Queue.begin());
-            QString Path("/%1/%2/%3.png");
-            Path = Path.arg(DownloadCoord.Zoom).arg(DownloadCoord.X).arg(DownloadCoord.Y);
-            DownloadData.clear();
-            DownloadBuffer.reset();
-            DownloadId = Download.get(Path, &DownloadBuffer);
+            QUrl reqUrl(baseUrl);
+            reqUrl.setPath(QString("/%1/%2/%3.png").arg(DownloadCoord.Zoom).arg(DownloadCoord.X).arg(DownloadCoord.Y));
+            qDebug() << "Starting download with url: " << reqUrl;
+            QNetworkRequest req(reqUrl);
+            req.setRawHeader(QByteArray("User-Agent"), USER_AGENT.toLatin1());
+            DownloadReply = Download.get(req);
             return;
         }
         Queue.erase(Queue.begin());

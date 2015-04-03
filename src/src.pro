@@ -33,7 +33,7 @@ TEMPLATE = app
 
 CONFIG += rtti stl exceptions
 #CONFIG -= exceptions
-QT += svg network xml core gui
+QT += svg network xml core gui webkitwidgets concurrent printsupport
 win32-msvc* {
     LIBS += -lzlib
 } else {
@@ -122,6 +122,8 @@ include(TagTemplate/TagTemplate.pri)
 include(NameFinder/NameFinder.pri)
 include(Utils/Utils.pri)
 include(QToolBarDialog/QToolBarDialog.pri)
+
+VPATH += $$INCLUDEPATH
 
 # Header files
 HEADERS += \

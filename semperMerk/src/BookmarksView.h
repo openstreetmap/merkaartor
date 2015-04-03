@@ -42,7 +42,7 @@
 #ifndef BOOKMARKSVIEW_H
 #define BOOKMARKSVIEW_H
 
-#include <QtGui>
+#include <QtWidgets>
 #include <QtXml>
 
 #include "BookmarksModel.h"

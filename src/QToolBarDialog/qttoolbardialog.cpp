@@ -47,12 +47,12 @@
 #include "qttoolbardialog.h"
 #include "ui_qttoolbardialog.h"
 #include <QtCore/QSet>
-#include <QtGui/QAction>
-#include <QtGui/QToolBar>
-#include <QtGui/QMainWindow>
-#include <QtGui/QShowEvent>
-#include <QtGui/QHideEvent>
-#include <QtGui/QHeaderView>
+#include <QAction>
+#include <QToolBar>
+#include <QMainWindow>
+#include <QShowEvent>
+#include <QHideEvent>
+#include <QHeaderView>
 
 class QtFullToolBarManagerPrivate
 {
@@ -1789,7 +1789,7 @@ void QtToolBarListWidget::dropEvent(QDropEvent *event)
     Creates a toolbar dialog with the given \a parent and the specifed
     window \a flags.
 */
-QtToolBarDialog::QtToolBarDialog(QWidget *parent, Qt::WFlags flags)
+QtToolBarDialog::QtToolBarDialog(QWidget *parent, Qt::WindowFlags flags)
     : QDialog(parent, flags)
 {
     d_ptr = new QtToolBarDialogPrivate;

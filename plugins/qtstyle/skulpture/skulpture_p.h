@@ -39,7 +39,7 @@ class ShortcutHandler : public QObject
 #include <QtCore/QSignalMapper>
 #include <QtCore/QHash>
 #include <QtCore/QSet>
-#include <QtGui/QStyleOption>
+#include <QtWidgets/QStyleOption>
 class QPainter;
 class QSettings;
 class QTextEdit;

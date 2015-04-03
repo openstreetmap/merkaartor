@@ -24,7 +24,7 @@
 #include <QPixmap>
 
 #include <QtNetwork/QtNetwork>
-#include "qwebframe.h"
+#include <QWebFrame>
 #include "qwebhistory.h"
 #include "qwebhistoryinterface.h"
 #include "qwebkitglobal.h"

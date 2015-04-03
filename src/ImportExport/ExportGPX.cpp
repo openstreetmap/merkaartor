@@ -11,6 +11,7 @@
 //
 
 #include <QtGui>
+#include <QApplication>
 
 #include "../ImportExport/ExportGPX.h"
 

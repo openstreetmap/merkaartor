@@ -3,7 +3,6 @@
 
 class Document;
 
-class QHttp;
 class QString;
 class QMainWindow;
 class QProgressBar;
@@ -19,7 +18,7 @@ class SpecialLayer;
 #include <QtCore/QByteArray>
 #include <QtCore/QEventLoop>
 #include <QtCore/QObject>
-#include <QtNetwork/QHttp>
+#include <QNetworkAccessManager>
 #include <QUrl>
 
 #include "IFeature.h"
@@ -31,7 +30,7 @@ class Downloader : public QObject
     public:
         Downloader(const QString& aUser, const QString& aPwd);
 
-        bool request(const QString& Method, const QUrl& URL, const QString& Out, bool FireForget=false);
+        bool request(const QString& theMethod, const QUrl& URL, const QString& Out, bool FireForget=false);
         bool go(const QUrl& url);
         QByteArray& content();
         int resultCode();
@@ -53,21 +52,21 @@ class Downloader : public QObject
         void setAnimator(QProgressDialog *anAnimator, QLabel* AnimatorLabel, QProgressBar* AnimatorBar, bool anAnimate);
 
     public slots:
-        void progress( int done, int total );
-        void on_requestFinished(int Id, bool Error);
-        void on_responseHeaderReceived(const QHttpResponseHeader & hdr);
+        void progress( qint64 done, qint64 total );
+        void on_requestFinished( QNetworkReply *reply);
+        void on_authenticationRequired( QNetworkReply *reply, QAuthenticator *auth);
         void animate();
         void on_Cancel_clicked();
 
     private:
-        QHttp Request;
+        QNetworkAccessManager netManager;
         QString User, Password;
         QByteArray Content;
         int Result;
         QString LocationText;
         QString ResultText;
         QString ErrorText;
-        int Id;
+        QNetworkReply *currentReply;
         int IdAuth;
         bool Error;
         QEventLoop Loop;

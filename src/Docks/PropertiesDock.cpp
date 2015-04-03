@@ -23,11 +23,11 @@
 #include "GeoImageDock.h"
 #endif
 
-#include <QtCore/QTimer>
-#include <QtGui/QHeaderView>
-#include <QtGui/QLineEdit>
-#include <QtGui/QListWidget>
-#include <QtGui/QTableView>
+#include <QTimer>
+#include <QHeaderView>
+#include <QLineEdit>
+#include <QListWidget>
+#include <QTableView>
 #include <QClipboard>
 #include <QMessageBox>
 #include <QMenu>

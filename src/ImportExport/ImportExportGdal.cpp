@@ -13,6 +13,7 @@
 #include "Global.h"
 
 #include <QtGui>
+#include <QApplication>
 
 #include "../ImportExport/ImportExportGdal.h"
 #include "Projection.h"

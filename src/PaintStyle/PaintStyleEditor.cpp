@@ -7,14 +7,14 @@
 
 #include "SelectionDialog.h"
 
-#include <QtGui/QCheckBox>
-#include <QtGui/QColorDialog>
-#include <QtGui/QDoubleSpinBox>
-#include <QtGui/QIcon>
-#include <QtGui/QListWidget>
-#include <QtGui/QPainter>
-#include <QtGui/QPixmap>
-#include <QtGui/QToolButton>
+#include <QCheckBox>
+#include <QColorDialog>
+#include <QDoubleSpinBox>
+#include <QIcon>
+#include <QListWidget>
+#include <QPainter>
+#include <QPixmap>
+#include <QToolButton>
 
 static void makeBoundaryIcon(QToolButton* bt, QColor C)
 {

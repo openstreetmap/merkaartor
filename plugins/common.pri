@@ -34,7 +34,7 @@ win32-msvc* {
 TEMPLATE = lib
 CONFIG += plugin
 
-QT += core xml network
+QT += core xml network widgets
 
 #DEFINES += QT_NO_DEBUG_OUTPUT
 
@@ -44,10 +44,12 @@ MOC_DIR += tmp/$$(QMAKESPEC)
 RCC_DIR += tmp/$$(QMAKESPEC)
 DESTDIR = $$OUTPUT_DIR/$$(QMAKESPEC)/bin/plugins
 
-DEPENDPATH += $${MERKAARTOR_SRC_DIR}/interfaces
-INCLUDEPATH += $${MERKAARTOR_SRC_DIR}/interfaces
+DEPENDPATH += $${MERKAARTOR_SRC_DIR}/interfaces $${MERKAARTOR_SRC_DIR}/src/Utils
+INCLUDEPATH += $${MERKAARTOR_SRC_DIR}/interfaces $${MERKAARTOR_SRC_DIR}/src/Utils
 INCLUDEPATH += $$MERKAARTOR_SRC_DIR/include
 LIBS += -L$$OUTPUT_DIR
+
+VPATH=$$INCLUDEPATH
 
 macx {
     # Prefix: base instalation directory

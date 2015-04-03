@@ -11,8 +11,8 @@
 #include "PropertiesDock.h"
 #include "Global.h"
 
-#include <QtGui/QDockWidget>
-#include <QtGui/QPainter>
+#include <QDockWidget>
+#include <QPainter>
 
 CreateSingleWayInteraction::CreateSingleWayInteraction(MainWindow* aMain, Node *firstNode, bool aCurved)
     : FeatureSnapInteraction(aMain), theRoad(0), FirstPoint(0,0),

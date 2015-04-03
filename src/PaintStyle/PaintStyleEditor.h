@@ -4,7 +4,7 @@
 #include <ui_PaintStyleEditor.h>
 #include "Painter.h"
 
-#include <QtGui/QDialog>
+#include <QDialog>
 
 #include <QList>
 

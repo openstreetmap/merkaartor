@@ -45,7 +45,7 @@
 ****************************************************************************/
 
 #include <qtsingleapplication.h>
-#include <QtGui/QTextEdit>
+#include <QtWidgets/QTextEdit>
 
 class TextEdit : public QTextEdit
 {

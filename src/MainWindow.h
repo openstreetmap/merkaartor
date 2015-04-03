@@ -4,7 +4,7 @@
 #include "IMerkMainWindow.h"
 #include "IProgressWindow.h"
 
-#include <QtGui/QMainWindow>
+#include <QMainWindow>
 #include <QtXml>
 #include <QProgressBar>
 #include <QLabel>

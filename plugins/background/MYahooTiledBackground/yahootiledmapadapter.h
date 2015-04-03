@@ -34,6 +34,9 @@ class YahooTiledMapAdapter : public IMapAdapter
 {
     Q_OBJECT
     Q_INTERFACES(IMapAdapter)
+#if QT_VERSION >= QT_VERSION_CHECK(5,0,0)
+    Q_PLUGIN_METADATA(IID "be.merkaartor.YahooTiledMapAdapter" FILE "YahooTileMapAdapter.json")
+#endif
 
 public:
     //! constructor

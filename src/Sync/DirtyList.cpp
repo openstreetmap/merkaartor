@@ -10,12 +10,12 @@
 #include "Features.h"
 #include "Utils.h"
 
-#include <QtCore/QEventLoop>
-#include <QtGui/QDialog>
-#include <QtGui/QListWidget>
-#include <QtGui/QMessageBox>
-#include <QtGui/QProgressDialog>
-#include <QtNetwork/QTcpSocket>
+#include <QEventLoop>
+#include <QDialog>
+#include <QListWidget>
+#include <QMessageBox>
+#include <QProgressDialog>
+#include <QTcpSocket>
 #include <QInputDialog>
 
 #include <algorithm>

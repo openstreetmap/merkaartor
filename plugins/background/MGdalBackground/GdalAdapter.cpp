@@ -554,7 +554,7 @@ QPixmap GdalAdapter::getPixmap(const QRectF& /*wgs84Bbox*/, const QRectF& thePro
         double rty = src.height() / (double)sz.height();
 
         QRect mRect = QRect(s.toPoint(), sz.toSize());
-        QRect iRect = theImg.rect().intersect(mRect);
+        QRect iRect = theImg.rect().intersected(mRect);
         QRect sRect = QRect(iRect.topLeft() - mRect.topLeft(), iRect.size());
         QRect fRect = QRect(sRect.x() * rtx, sRect.y() * rty, sRect.width() * rtx, sRect.height() * rty);
 
@@ -654,4 +654,6 @@ QString GdalAdapter::toPropertiesHtml()
     return h;
 }
 
+#if !(QT_VERSION >= QT_VERSION_CHECK(5,0,0))
 Q_EXPORT_PLUGIN2(MGdalBackgroundPlugin, GdalAdapterFactory)
+#endif

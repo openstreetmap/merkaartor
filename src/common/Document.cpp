@@ -375,7 +375,7 @@ FilterLayer* Document::addFilterLayer(FilterLayer *aLayer)
 {
     FilterLayer* theLayer = aLayer;
     if (!theLayer)
-        theLayer = new FilterLayer(QUuid::createUuid(), tr("Filter layer #%1").arg(++p->layerNum), "false");
+        theLayer = new FilterLayer(QUuid::createUuid().toString(), tr("Filter layer #%1").arg(++p->layerNum), "false");
     add(theLayer);
 
     FeatureIterator it(this);

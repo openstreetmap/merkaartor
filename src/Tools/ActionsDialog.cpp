@@ -9,6 +9,7 @@
 #include "MainWindow.h"
 #include "MerkaartorPreferences.h"
 #include "ActionsDialog.h"
+#include "Global.h"
 
 ActionsDialog::ActionsDialog(QList<QAction *>& actions, MainWindow *parent)
     : QDialog(parent), Main(parent)
@@ -21,8 +22,12 @@ ActionsDialog::ActionsDialog(QList<QAction *>& actions, MainWindow *parent)
     actionsTable->setHorizontalHeaderLabels(hdr);
     actionsTable->verticalHeader()->hide();
     actionsTable->horizontalHeader()->setMinimumSectionSize(100);
+#ifdef QT5
+#define setResizeMode setSectionResizeMode
+#endif
     actionsTable->horizontalHeader()->setResizeMode(0, QHeaderView::Stretch);
     actionsTable->horizontalHeader()->setResizeMode(1, QHeaderView::ResizeToContents);
+#undef setResizeMode
     //actionsTable->setColumnReadOnly(0, true);
 
     int row = 0;
@@ -103,7 +108,7 @@ void ActionsDialog::recordAction(int row, int column)
 void ActionsDialog::validateAction(int row, int column)
 {
     QTableWidgetItem *item = actionsTable->item(row, column);
-    QString accelText = QString(QKeySequence(item->text()));
+    QString accelText = QString(QKeySequence(item->text()).toString());
 
     if (accelText.isEmpty() && !item->text().isEmpty())
         item->setText(oldAccelText);

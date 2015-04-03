@@ -22,6 +22,9 @@ class MsBingMapAdapter : public MapAdapter, public IMapWatermark
 {
     Q_OBJECT
     Q_INTERFACES(IMapAdapter IMapWatermark)
+#if QT_VERSION >= QT_VERSION_CHECK(5,0,0)
+    Q_PLUGIN_METADATA(IID "be.merkaartor.msbingmapadapter" FILE "msbingmapadapter.json")
+#endif
 
 public:
     //! constructor

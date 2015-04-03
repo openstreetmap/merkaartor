@@ -38,13 +38,11 @@
 
 Downloader::Downloader(const QString& aUser, const QString& aPwd)
 : User(aUser), Password(aPwd),
-  Id(0),Error(false), AnimatorLabel(0), AnimatorBar(0), AnimationTimer(0)
+  currentReply(0),Error(false), AnimatorLabel(0), AnimatorBar(0), AnimationTimer(0)
 {
     //IdAuth = Request.setUser(User.toUtf8(), Password.toUtf8());
-//	connect(&Request,SIGNAL(done(bool)), this,SLOT(allDone(bool)));
-    connect(&Request,SIGNAL(requestFinished(int, bool)),this,SLOT(on_requestFinished(int, bool)));
-    connect(&Request,SIGNAL(dataReadProgress(int, int)), this,SLOT(progress(int, int)));
-    connect(&Request, SIGNAL(responseHeaderReceived(const QHttpResponseHeader &)), this, SLOT(on_responseHeaderReceived(const QHttpResponseHeader &)));
+    connect(&netManager,SIGNAL(finished(QNetworkReply*)),this,SLOT(on_requestFinished(QNetworkReply*)));
+    connect(&netManager,SIGNAL(authenticationRequired(QNetworkReply*,QAuthenticator*)), this,SLOT(on_authenticationRequired(QNetworkReply*,QAuthenticator*)));
 }
 
 
@@ -82,7 +80,7 @@ void Downloader::on_Cancel_clicked()
         Loop.exit(QDialog::Rejected);
 }
 
-#include "QtGui/QTextBrowser"
+#include "QTextBrowser"
 
 void showDebug(const QString& Method, const QString& URL, const QString& Sent, const QByteArray& arr)
 {
@@ -172,122 +170,98 @@ bool Downloader::go(const QUrl& url)
 {
     if (Error) return false;
 
-    Request.setProxy(M_PREFS->getProxy(url));
-    Request.setHost(url.host(),url.port(80));
+    netManager.setProxy(M_PREFS->getProxy(url));
+
+    qDebug() << "Downloader::go: " << url;
+
+    QNetworkRequest req(url);
 
     if (AnimationTimer)
         AnimationTimer->start(200);
-    Content.clear();
-    QBuffer ResponseBuffer(&Content);
-    ResponseBuffer.open(QIODevice::WriteOnly);
-    QString sReq = url.toString(QUrl::RemoveScheme | QUrl::RemoveAuthority);
-    qDebug() << "Downloader::go: " << url << sReq;
-    QHttpRequestHeader Header("GET",sReq);
-    Header.setValue("Accept-Encoding", "gzip,deflate");
-    Header.setValue("Host",url.host()+':'+QString::number(url.port(80)));
-    Header.setValue("User-Agent", USER_AGENT);
-    Content.clear();
-    Id = Request.request(Header,QByteArray(), &ResponseBuffer);
+
+    req.setRawHeader(QByteArray("Accept-Encoding"), QByteArray("gzip,deflate"));
+    req.setRawHeader(QByteArray("User-Agent"), USER_AGENT.toLatin1());
+
+    currentReply = netManager.get(req);
+    connect(currentReply,SIGNAL(downloadProgress(qint64, qint64)), this,SLOT(progress(qint64, qint64)));
 
     if (Loop.exec() == QDialog::Rejected)
-    {
-        Request.abort();
         return false;
+
+    if (currentReply->error())
+        QMessageBox::information(0,tr("error"), currentReply->errorString());
+
+    // FIXME: Is is worth it? I don't think the API even specifies length in advance.
+    //if (Request.lastResponse().hasContentLength() && Content.size() != (int)Request.lastResponse().contentLength())
+    //   QMessageBox::information(0,tr("didn't download enough"),QString("%1 %2").arg(Content.size()).arg(Request.lastResponse().contentLength()));
+
+    QByteArray encoding = currentReply->rawHeader(QByteArray("Content-encoding"));
+    if (encoding == "gzip") {
+        Content = gzipDecode(currentReply->readAll());
+    } else {
+        qDebug() << "Downloader: received non-compressed content. The encoding was: " << encoding;
+        Content = currentReply->readAll();
     }
 
-    if (Error)
-    {
-        QMessageBox::information(0,tr("error"),Request.errorString());
-    }
-    if (Request.lastResponse().hasContentLength() && Content.size() != (int)Request.lastResponse().contentLength())
-    {
-        QMessageBox::information(0,tr("didn't download enough"),QString("%1 %2").arg(Content.size()).arg(Request.lastResponse().contentLength()));
-    }
-
-    if (Request.lastResponse().hasKey("Content-encoding"))
-    {
-        QString t(Request.lastResponse().value("Content-encoding"));
-        if (t == "gzip")
-        {
-            QByteArray Uncompressed(gzipDecode(Content));
-            Content = Uncompressed;
-        }
-    }
-
-#ifdef DEBUG_EVERY_CALL
-    showDebug("GET", Web.path() + url, QByteArray() ,Content);
-#endif
     SAFE_DELETE(AnimationTimer);
-    LocationText = Request.lastResponse().value("Location");
 
-    Result = Request.lastResponse().statusCode();
-    switch (Result) {
-    case 301:
-    case 302:
-    case 307: {
-            qDebug() << "New location: " << LocationText;
-            if (!LocationText.isEmpty()) {
-                QUrl aURL(LocationText);
-                return go(aURL);
-            }
-            break;
+    QVariant redir = currentReply->attribute(QNetworkRequest::RedirectionTargetAttribute);
+    if (redir.isValid()) {
+        LocationText = redir.toString();
+        if (!LocationText.isEmpty()) {
+            QUrl aURL(LocationText);
+            return go(aURL);
         }
     }
 
-    ResultText = Request.lastResponse().reasonPhrase();
-    ErrorText = Request.lastResponse().value("Error");
+    Result = currentReply->attribute(QNetworkRequest::HttpStatusCodeAttribute).toInt();
+    ResultText = currentReply->errorString();
+    ErrorText = currentReply->rawHeader("Error");
+
     return !Error;
 }
 
-bool Downloader::request(const QString& Method, const QUrl& url, const QString& Data, bool FireForget)
+bool Downloader::request(const QString& theMethod, const QUrl& url, const QString& theData, bool FireForget)
 {
     if (Error) return false;
 
-    Request.setProxy(M_PREFS->getProxy(url));
-    Request.setHost(url.host(),url.port(80));
+    netManager.setProxy(M_PREFS->getProxy(url));
+
     qDebug() << "Downloader::request: " << url;
 
-    QByteArray ba(Data.toUtf8());
-    QBuffer Buf(&ba);
+    QNetworkRequest req(url);
 
-    QString sReq = url.toString(QUrl::RemoveScheme | QUrl::RemoveAuthority);
-    QHttpRequestHeader Header(Method,sReq);
-    Header.setValue("Host",url.host()+':'+QString::number(url.port(80)));
-    Header.setValue("User-Agent", USER_AGENT);
-    Header.setValue("Content-Type", "text/xml");
+    req.setRawHeader(QByteArray("Content-Type"), QByteArray("text/xml"));
+    req.setRawHeader(QByteArray("User-Agent"), USER_AGENT.toLatin1());
 
-    QString auth = QString("%1:%2").arg(User).arg(Password);
-    QByteArray ba_auth = auth.toUtf8().toBase64();
-    Header.setValue("Authorization", QString("Basic %1").arg(QString(ba_auth)));
-
-    Content.clear();
-    Id = Request.request(Header,ba);
+    QByteArray dataArray(theData.toUtf8());
+    QBuffer dataBuffer(&dataArray);
+    currentReply = netManager.sendCustomRequest(req, theMethod.toLatin1(), &dataBuffer);
 
     if (FireForget)
         return true;
 
     if (Loop.exec() == QDialog::Rejected)
-    {
-        Request.abort();
         return false;
+
+    QByteArray encoding = currentReply->rawHeader(QByteArray("Content-encoding"));
+    if (encoding == "gzip") {
+        Content = gzipDecode(currentReply->readAll());
+    } else {
+        qDebug() << "Downloader: received non-compressed content. The encoding was: " << encoding;
+        Content = currentReply->readAll();
     }
-    Content = Request.readAll();
-    if (Request.lastResponse().hasKey("Content-encoding"))
-    {
-        QString t(Request.lastResponse().value("Content-encoding"));
-        if (t == "gzip")
-        {
-            QByteArray Uncompressed(gzipDecode(Content));
-            Content = Uncompressed;
-        }
-    }
-#ifdef DEBUG_NONGET_CALL
-    showDebug(Method,URL,Data,Content);
-#endif
-    Result = Request.lastResponse().statusCode();
-    ResultText = Request.lastResponse().reasonPhrase();
-    ErrorText = Request.lastResponse().value("Error");
+
+    Result = currentReply->attribute(QNetworkRequest::HttpStatusCodeAttribute).toInt();
+    ResultText = currentReply->errorString();
+    ErrorText = currentReply->rawHeader("Error");
     return !Error;
+}
+
+void Downloader::on_authenticationRequired( QNetworkReply *reply, QAuthenticator *auth) {
+    Q_UNUSED(reply);
+    auth->setUser(User);
+    auth->setPassword(Password);
 }
 
 QByteArray& Downloader::content()
@@ -295,6 +269,7 @@ QByteArray& Downloader::content()
     return Content;
 }
 
+/*
 void Downloader::on_responseHeaderReceived(const QHttpResponseHeader & hdr)
 {
     //switch (hdr.statusCode()) {
@@ -313,17 +288,17 @@ void Downloader::on_responseHeaderReceived(const QHttpResponseHeader & hdr)
     //}
 
     qDebug() << "Downloader::on_responseHeaderReceived: " << hdr.statusCode() << hdr.reasonPhrase();
-}
+} */
 
-void Downloader::on_requestFinished(int anId, bool anError)
+void Downloader::on_requestFinished( QNetworkReply *reply)
 {
-    if (anError)
+    if (reply->error())
         Error = true;
-    if ( (anId == Id) && Loop.isRunning() )
+    if ( (reply == currentReply) && Loop.isRunning() )
         Loop.exit(QDialog::Accepted);
 }
 
-void Downloader::progress(int done, int total)
+void Downloader::progress(qint64 done, qint64 total)
 {
     if (AnimatorLabel && AnimatorBar)
     {
@@ -692,10 +667,21 @@ bool downloadMapdust(MainWindow* Main, const CoordBox& aBox, Document* theDocume
 
     theDownloader.setAnimator(dlg,Lbl,Bar,true);
     Lbl->setText(QApplication::translate("Downloader","Downloading points"));
-    url.addQueryItem("t", COORD2STRING(aBox.topRight().y()));
-    url.addQueryItem("l", COORD2STRING(aBox.bottomLeft().x()));
-    url.addQueryItem("b", COORD2STRING(aBox.bottomLeft().y()));
-    url.addQueryItem("r", COORD2STRING(aBox.topRight().x()));
+
+#if QT_VERSION >= QT_VERSION_CHECK(5,0,0)
+    QUrlQuery theQuery(url);
+#define theQuery theQuery
+#else
+#define theQuery url
+#endif
+    theQuery.addQueryItem("t", COORD2STRING(aBox.topRight().y()));
+    theQuery.addQueryItem("l", COORD2STRING(aBox.bottomLeft().x()));
+    theQuery.addQueryItem("b", COORD2STRING(aBox.bottomLeft().y()));
+    theQuery.addQueryItem("r", COORD2STRING(aBox.topRight().x()));
+#if QT_VERSION >= QT_VERSION_CHECK(5,0,0)
+    url.setQuery(theQuery);
+#endif
+#undef theQuery
 
     if (!theDownloader.go(url))
         return false;
@@ -754,11 +740,22 @@ bool downloadOpenstreetbugs(MainWindow* Main, const CoordBox& aBox, Document* th
 
     theDownloader.setAnimator(dlg,Lbl,Bar,true);
     Lbl->setText(QApplication::translate("Downloader","Downloading points"));
-    osbUrl.addQueryItem("t", COORD2STRING(aBox.topRight().y()));
-    osbUrl.addQueryItem("l", COORD2STRING(aBox.bottomLeft().x()));
-    osbUrl.addQueryItem("b", COORD2STRING(aBox.bottomLeft().y()));
-    osbUrl.addQueryItem("r", COORD2STRING(aBox.topRight().x()));
-    osbUrl.addQueryItem("open", "yes");
+
+#if QT_VERSION >= QT_VERSION_CHECK(5,0,0)
+    QUrlQuery theQuery(osbUrl);
+#define theQuery theQuery
+#else
+#define theQuery osbUrl
+#endif
+    theQuery.addQueryItem("t", COORD2STRING(aBox.topRight().y()));
+    theQuery.addQueryItem("l", COORD2STRING(aBox.bottomLeft().x()));
+    theQuery.addQueryItem("b", COORD2STRING(aBox.bottomLeft().y()));
+    theQuery.addQueryItem("r", COORD2STRING(aBox.topRight().x()));
+    theQuery.addQueryItem("open", "yes");
+#if QT_VERSION >= QT_VERSION_CHECK(5,0,0)
+    osbUrl.setQuery(theQuery);
+#endif
+#undef theQuery
 
     if (!theDownloader.go(osbUrl))
         return false;
@@ -790,6 +787,7 @@ bool downloadMoreOSM(MainWindow* Main, const CoordBox& aBox , Document* theDocum
     osmWebsite = M_PREFS->getOsmApiUrl();
     osmUser = M_PREFS->getOsmUser();
     osmPwd = M_PREFS->getOsmPassword();
+    qDebug() << "Requesting more from " << osmWebsite;
 
     Main->view()->setUpdatesEnabled(false);
 
@@ -908,7 +906,7 @@ bool downloadOSM(MainWindow* Main, const CoordBox& aBox , Document* theDocument)
             if (directAPI) {
                 if (ui.FromXapi->isChecked())
                     theLayer->setUploadable(false);
-                OK = downloadOSM(Main,QUrl(QUrl::fromEncoded(directUrl.toAscii())),osmUser,osmPwd,theDocument,theLayer);
+                OK = downloadOSM(Main,QUrl(QUrl::fromEncoded(directUrl.toLatin1())),osmUser,osmPwd,theDocument,theLayer);
             }
             else
                 OK = downloadOSM(Main,osmWebsite,osmUser,osmPwd,Clip,theDocument,theLayer);

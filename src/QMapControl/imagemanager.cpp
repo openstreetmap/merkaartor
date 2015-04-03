@@ -48,7 +48,7 @@ QByteArray ImageManager::getData(IMapAdapter* anAdapter, QString url)
 {
     QString host = anAdapter->getHost();
     QString strHash = QString("%1%2").arg(anAdapter->getName()).arg(url);
-    QString hash = QString(strHash.toAscii().toBase64());
+    QString hash = QString(strHash.toLatin1().toBase64());
     if (hash.size() > 255) {
         QCryptographicHash crypt(QCryptographicHash::Md5);
         crypt.addData(hash.toLatin1());
@@ -78,7 +78,7 @@ QImage ImageManager::getImage(IMapAdapter* anAdapter, QString url)
 
     QString host = anAdapter->getHost();
     QString strHash = QString("%1%2").arg(anAdapter->getName()).arg(url);
-    QString hash = QString(strHash.toAscii().toBase64());
+    QString hash = QString(strHash.toLatin1().toBase64());
     if (hash.size() > 255) {
         QCryptographicHash crypt(QCryptographicHash::Md5);
         crypt.addData(hash.toLatin1());
@@ -123,7 +123,7 @@ QImage ImageManager::prefetchImage(IMapAdapter* anAdapter, int x, int y, int z)
     QString host = anAdapter->getHost();
     QString url = anAdapter->getQuery(x, y, z);
     QString strHash = QString("%1%2").arg(anAdapter->getName()).arg(url);
-    QString hash = QString(strHash.toAscii().toBase64());
+    QString hash = QString(strHash.toLatin1().toBase64());
 
     prefetch.append(hash);
     return getImage(anAdapter, anAdapter->getQuery(x, y, z));

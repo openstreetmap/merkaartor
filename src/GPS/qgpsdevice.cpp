@@ -964,7 +964,7 @@ void QGPSDDevice::run()
 #if GPSD_API_MAJOR_VERSION < 5
     Server = new gpsmm();
     errno = 0;
-    gpsdata = Server->open(M_PREFS->getGpsdHost().toAscii().data(),QString::number(M_PREFS->getGpsdPort()).toAscii().data());
+    gpsdata = Server->open(M_PREFS->getGpsdHost().toLatin1().data(),QString::number(M_PREFS->getGpsdPort()).toLatin1().data());
     if (!gpsdata) {
   #ifndef Q_OS_WIN32
         QString msg( (errno<0) ? gps_errstr(errno) : strerror(errno) );
@@ -976,7 +976,7 @@ void QGPSDDevice::run()
         return;
     }
 #else
-    Server = new gpsmm(M_PREFS->getGpsdHost().toAscii().data(),QString::number(M_PREFS->getGpsdPort()).toAscii().data());
+    Server = new gpsmm(M_PREFS->getGpsdHost().toLatin1().data(),QString::number(M_PREFS->getGpsdPort()).toLatin1().data());
 #endif
     onLinkReady();
     l.processEvents();

@@ -42,7 +42,7 @@
 #include "AddressBar.h"
 
 #include <QtCore>
-#include <QtGui>
+#include <QtWidgets>
 
 class LineEdit: public QLineEdit
 {

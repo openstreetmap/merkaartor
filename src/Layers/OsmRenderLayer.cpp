@@ -6,6 +6,10 @@
 #include "MapRenderer.h"
 #include "MerkaartorPreferences.h"
 
+#if QT_VERSION >= 0x050000
+#include <QtConcurrent>
+#endif
+
 inline uint qHash(const QPoint& p)
 {
     return (uint)(p.y() + (p.x() << 16));
@@ -51,16 +55,6 @@ public:
 
     void operator()(const TILE_TYPE& theTile)
     {
-#if defined(__MINGW32__)
-        // Workaround for QTBUG-19886
-        asm volatile ("mov %esp, %eax");
-        asm volatile ("and $0xf, %eax");
-        asm volatile ("je alignmentok");
-        asm volatile ("push %eax");
-        asm volatile ("push %eax");
-        asm volatile ("alignmentok:");
-#endif
-
         if (!p->theDocument)
             return;
 

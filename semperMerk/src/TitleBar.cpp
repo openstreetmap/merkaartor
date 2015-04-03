@@ -42,7 +42,7 @@
 #include "TitleBar.h"
 
 #include <QtCore>
-#include <QtGui>
+#include <QtWidgets>
 
 TitleBar::TitleBar(QWidget *parent)
     : QWidget(parent)

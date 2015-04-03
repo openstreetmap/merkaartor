@@ -1,7 +1,7 @@
 #ifndef MERKAARTOR_SATELLITEVIEW_H_
 #define MERKAARTOR_SATELLITEVIEW_H_
 
-#include <QtGui/QWidget>
+#include <QWidget>
 #include <QList>
 
 class Satellite

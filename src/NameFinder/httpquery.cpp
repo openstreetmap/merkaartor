@@ -19,21 +19,20 @@
  ***************************************************************************/
 #include "httpquery.h"
 #include <QtDebug>
+#include "Global.h"
 
 #include "MerkaartorPreferences.h"
 
 namespace NameFinder
 {
 
-    HttpQuery::HttpQuery ( QObject *parent, QIODevice *device ) : QObject ( parent )
+    HttpQuery::HttpQuery ( QObject *parent ) : QObject ( parent )
     {
         myService = M_PREFS->getNominatimUrl();
-        myDevice = device;
     }
-    HttpQuery::HttpQuery ( QObject *parent, QUrl service, QIODevice *device ) : QObject ( parent )
+    HttpQuery::HttpQuery ( QObject *parent, QUrl service ) : QObject ( parent )
     {
         myService = service;
-        myDevice = device;
     }
 
 
@@ -43,48 +42,52 @@ namespace NameFinder
 
     bool HttpQuery::startSearch ( QString question )
     {
-        connect(&connection, SIGNAL(responseHeaderReceived(const QHttpResponseHeader &)), this, SLOT(on_responseHeaderReceived(const QHttpResponseHeader &)));
-        connect(&connection,SIGNAL(requestFinished(int, bool)),this,SLOT(on_requestFinished(int, bool)));
-        //if (!myService.isValid() || myService.scheme() != "http" || myService.path().isEmpty())
-        //  return false;
+        connect(&connection,SIGNAL(finished(QNetworkReply*)),this,SLOT(on_requestFinished(QNetworkReply*)));
 
-        myService.addQueryItem ( "q",question );
-        myService.addQueryItem ( "format","xml" );
-        connection.setHost ( myService.host(), myService.port ( 80 ) );
+#ifdef QT5
+        QUrlQuery theQuery(myService);
+#define theQuery theQuery
+#else
+#define theQuery myService
+#endif
+        theQuery.addQueryItem ( "q",question );
+        theQuery.addQueryItem ( "format","xml" );
+#ifdef QT5
+        myService.setQuery(theQuery);
+#endif
+#undef theQuery
 
-        QHttpRequestHeader request( "GET", myService.path() + "?" + myService.encodedQuery() );
-        if (myService.port(80) != 80)
-            request.setValue( "Host", myService.host() + ":" + myService.port ( 80 ) );
-        else
-            request.setValue( "Host", myService.host() );
-        request.setValue( "Connection", "Keep-Alive" );
-        request.setValue("User-Agent", USER_AGENT);
+        QUrl url("http://"+myService.host());
+        url.setPath(myService.path());
+#ifdef QT5
+        url.setQuery(myService.query());
+#else
+        url.setEncodedQuery(myService.encodedQuery());
+#endif
+
+        qDebug() << "HttpQuery: getting " << url;
+        QNetworkRequest req(url);
+
+        req.setRawHeader(QByteArray("User-Agent"), USER_AGENT.toLatin1());
 
         connection.setProxy(M_PREFS->getProxy(myService));
-        reqId = connection.request( request, NULL, myDevice );
-        connection.close();
+
+        myReply = connection.get( req );
         return true;
     }
 
-    void HttpQuery::on_responseHeaderReceived(const QHttpResponseHeader & hdr)
+    void HttpQuery::on_requestFinished ( QNetworkReply *reply )
     {
-        switch (hdr.statusCode()) {
-            case 200:
-                break;
-            default:
-                qDebug() << hdr.statusCode();
-                qDebug() << hdr.reasonPhrase();
-                break;
-        }
-    }
-
-    void HttpQuery::on_requestFinished ( int id, bool error )
-    {
-        if ((id == reqId) && !error) {
-            emit done();
-        }
-        else if ((id == reqId) && error) {
-            emit doneWithError(connection.error());
+        if (reply == myReply) {
+            if (!reply->error()) {
+                qDebug() << "HttpQuery: request completed without error.";
+                emit done(reply);
+            } else {
+                qDebug() << "HttpQuery: request returned with error " << reply->error() << ": " << reply->errorString();
+                emit doneWithError(reply->error());
+            }
+        } else {
+            qDebug() << "HttpQuery: reply received to unknown request";
         }
     }
 }

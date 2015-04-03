@@ -47,7 +47,7 @@
 #ifndef QTTOOLBARDIALOG_H
 #define QTTOOLBARDIALOG_H
 
-#include <QtGui/QDialog>
+#include <QDialog>
 
 #if defined(Q_WS_WIN)
 #  if !defined(QT_QTTOOLBARDIALOG_EXPORT) && !defined(QT_QTTOOLBARDIALOG_IMPORT)
@@ -108,7 +108,7 @@ class QT_QTTOOLBARDIALOG_EXPORT QtToolBarDialog : public QDialog
     Q_OBJECT
 public:
 
-    QtToolBarDialog(QWidget *parent = 0, Qt::WFlags flags = 0);
+    QtToolBarDialog(QWidget *parent = 0, Qt::WindowFlags flags = 0);
     ~QtToolBarDialog();
 
     void setToolBarManager(QtToolBarManager *toolBarManager);

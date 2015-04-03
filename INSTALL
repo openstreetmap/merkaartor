@@ -9,6 +9,36 @@ Prerequisites:
 On (K)ubuntu Edgy it is sufficient to install the qt4-dev package
 to satisfy these requirements.
 
+
+Windows (32bit)
+---------------
+
+Not tested recently. Try the same as in 64bit case, just use the 32bit packages instead:
+
+$ pacman -S base-devel \
+	msys/git \
+	mingw32/mingw-w32-i686-qt5 \
+	mingw32/mingw-w32-i686-gdal \
+	mingw32/mingw-w32-i686-proj \
+	mingw32/mingw-w32-i686-openjpeg2 \
+	mingw32/mingw-w32-i686-json-c
+
+Windows (64bit)
+---------------
+
+On Windows, download MSYS2, run the mingw64 shell install the dependencies with
+(it seems openjpeg and json-c is also needed, but not installed correctly by
+their users):
+
+$ pacman -S base-devel \
+	msys/git \
+	mingw64/mingw-w64-x86_64-qt5 \
+	mingw64/mingw-w64-x86_64-gdal \
+	mingw64/mingw-w64-x86_64-proj \
+	mingw64/mingw-w64-x86_64-openjpeg2 \
+	mingw64/mingw-w64-x86_64-json-c
+
+
 Instructions:
 =============
 
@@ -55,7 +85,7 @@ SYSTEM_QTSA                 - use system copy of qtsingleapplication instead of 
 SYSTEM_QUAZIP               - use system copy of quazip instead of internal
 
 
-3. Run your build tool, make for posix like systems, nmake for
+3. Run your build tool, make for posix like systems (including MSYS2), nmake for
 Windows C++ Build system
 
 $ make

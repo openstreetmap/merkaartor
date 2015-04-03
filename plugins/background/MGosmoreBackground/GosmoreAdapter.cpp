@@ -763,5 +763,7 @@ QString GosmoreAdapter::toPropertiesHtml()
 }
 
 #ifndef _MOBILE
+#if !(QT_VERSION >= QT_VERSION_CHECK(5,0,0))
 Q_EXPORT_PLUGIN2(MGosmoreBackgroundPlugin, GosmoreAdapterFactory)
+#endif
 #endif

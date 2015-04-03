@@ -2,7 +2,7 @@
 #include "MainWindow.h"
 
 #include <QtCore>
-#include <QtGui>
+#include <QtWidgets>
 
 #include "MapView.h"
 #include "Document.h"

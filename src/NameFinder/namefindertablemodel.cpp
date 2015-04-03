@@ -53,8 +53,9 @@ namespace NameFinder
 
     void NameFinderTableModel::setResults ( QList<NameFinderResult> *results )
     {
+        beginResetModel();
         myResults = results;
-        reset();
+        endResetModel();
     }
     QVariant NameFinderTableModel::headerData ( int section, Qt::Orientation orientation, int role ) const
     {

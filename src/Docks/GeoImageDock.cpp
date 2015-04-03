@@ -12,13 +12,13 @@
 #include <zbar/QZBarImage.h>
 #endif
 
-#include <QtGui/QInputDialog>
-#include <QtGui/QMessageBox>
-#include <QtGui/QProgressDialog>
+#include <QtWidgets/QInputDialog>
+#include <QtWidgets/QMessageBox>
+#include <QtWidgets/QProgressDialog>
 #include <QtGui/QClipboard>
-#include <QtGui/QRadioButton>
-#include <QtGui/QTimeEdit>
-#include <QtGui/QDialogButtonBox>
+#include <QtWidgets/QRadioButton>
+#include <QtWidgets/QTimeEdit>
+#include <QtWidgets/QDialogButtonBox>
 #include <QFileDialog>
 
 #include <QNetworkAccessManager>
@@ -52,7 +52,7 @@ bool GeoImageDock::getWalkingPapersDetails(const QUrl& reqUrl, double &lat, doub
         return false;
     }
 
-    QString center = QString::fromAscii(reply->rawHeader("X-Print-Center"));
+    QString center = QString::fromLatin1(reply->rawHeader("X-Print-Center"));
     QStringList sl = center.split(" ");
     if (!sl.size() == 3)
         return false;

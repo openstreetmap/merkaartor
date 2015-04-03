@@ -3,6 +3,7 @@
 #include <QApplication>
 #include <QMessageBox>
 #include <QStringList>
+#include "Global.h"
 
 OsmLink::OsmLink(QString url)
     : m_IsValid(false)
@@ -20,13 +21,19 @@ OsmLink::OsmLink(QUrl url)
         qDebug() << "OsmLink:" << s;
 }
 
-#define ARG_VALID(param) if (!parseOk) return QString("Unparsed " #param "=\"%1\"").arg(theUrl.queryItemValue(#param))
+#define ARG_VALID(param) if (!parseOk) return QString("Unparsed " #param "=\"%1\"").arg(theQuery.queryItemValue(#param))
 #define PARSE_ERROR(val)  if (!parseOk) return QString("Unparsed " #val "=\"%1\"").arg(val)
 
 QString OsmLink::parseUrl(QUrl theUrl)
 {
     // On parse failure, we bail early, leaving m_isValid unset
     bool parseOk;
+#ifdef QT5
+    QUrlQuery theQuery;
+#define theQuery theQuery
+#else
+#define theQuery theUrl
+#endif
 
     if (!theUrl.isValid()) return QString("Invalid URL: %1").arg(theUrl.toString());;
 
@@ -43,64 +50,65 @@ QString OsmLink::parseUrl(QUrl theUrl)
     {
         parseShortUrl(theUrl.path().section('/', -1));
     }
-    else if (theUrl.hasQueryItem("lat") && theUrl.hasQueryItem("lon") && theUrl.hasQueryItem("zoom"))
+    else if (theQuery.hasQueryItem("lat") && theQuery.hasQueryItem("lon") && theQuery.hasQueryItem("zoom"))
     {
-        qreal lat = theUrl.queryItemValue("lat").toDouble(&parseOk);   ARG_VALID(lat);
-        qreal lon = theUrl.queryItemValue("lon").toDouble(&parseOk);   ARG_VALID(lon);
-        qreal zoom = theUrl.queryItemValue("zoom").toInt(&parseOk);    ARG_VALID(zoom);
+        qreal lat = theQuery.queryItemValue("lat").toDouble(&parseOk);   ARG_VALID(lat);
+        qreal lon = theQuery.queryItemValue("lon").toDouble(&parseOk);   ARG_VALID(lon);
+        qreal zoom = theQuery.queryItemValue("zoom").toInt(&parseOk);    ARG_VALID(zoom);
 
         setLatLonZoom(lat, lon, zoom);
     }
-    else if (theUrl.hasQueryItem("mlat") && theUrl.hasQueryItem("mlon") && theUrl.hasQueryItem("zoom"))
+    else if (theQuery.hasQueryItem("mlat") && theQuery.hasQueryItem("mlon") && theQuery.hasQueryItem("zoom"))
     {
-        qreal lat = theUrl.queryItemValue("mlat").toDouble(&parseOk);   ARG_VALID(lat);
-        qreal lon = theUrl.queryItemValue("mlon").toDouble(&parseOk);   ARG_VALID(lon);
-        qreal zoom = theUrl.queryItemValue("zoom").toInt(&parseOk);     ARG_VALID(zoom);
+        qreal lat = theQuery.queryItemValue("mlat").toDouble(&parseOk);   ARG_VALID(lat);
+        qreal lon = theQuery.queryItemValue("mlon").toDouble(&parseOk);   ARG_VALID(lon);
+        qreal zoom = theQuery.queryItemValue("zoom").toInt(&parseOk);     ARG_VALID(zoom);
 
         setLatLonZoom(lat, lon, zoom);
     }
-    else if (theUrl.hasQueryItem("minlon") && theUrl.hasQueryItem("maxlon") &&
-         theUrl.hasQueryItem("minlat") && theUrl.hasQueryItem("maxlat"))
+    else if (theQuery.hasQueryItem("minlon") && theQuery.hasQueryItem("maxlon") &&
+         theQuery.hasQueryItem("minlat") && theQuery.hasQueryItem("maxlat"))
     {
-        qreal bottom = theUrl.queryItemValue("minlat").toDouble(&parseOk);   ARG_VALID(minlat);
-        qreal left = theUrl.queryItemValue("minlon").toDouble(&parseOk);     ARG_VALID(minlon);
-        qreal top = theUrl.queryItemValue("maxlat").toDouble(&parseOk);      ARG_VALID(maxlat);
-        qreal right = theUrl.queryItemValue("maxlon").toDouble(&parseOk);    ARG_VALID(maxlon);
+        qreal bottom = theQuery.queryItemValue("minlat").toDouble(&parseOk);   ARG_VALID(minlat);
+        qreal left = theQuery.queryItemValue("minlon").toDouble(&parseOk);     ARG_VALID(minlon);
+        qreal top = theQuery.queryItemValue("maxlat").toDouble(&parseOk);      ARG_VALID(maxlat);
+        qreal right = theQuery.queryItemValue("maxlon").toDouble(&parseOk);    ARG_VALID(maxlon);
 
         setMinMax(bottom, left, top, right);
     }
-    else if (theUrl.hasQueryItem("left") && theUrl.hasQueryItem("right") &&
-         theUrl.hasQueryItem("bottom") && theUrl.hasQueryItem("top"))
+    else if (theQuery.hasQueryItem("left") && theQuery.hasQueryItem("right") &&
+         theQuery.hasQueryItem("bottom") && theQuery.hasQueryItem("top"))
     {
-        qreal bottom = theUrl.queryItemValue("bottom").toDouble(&parseOk);  ARG_VALID(minlat);
-        qreal left = theUrl.queryItemValue("left").toDouble(&parseOk);      ARG_VALID(minlon);
-        qreal top = theUrl.queryItemValue("top").toDouble(&parseOk);        ARG_VALID(maxlat);
-        qreal right = theUrl.queryItemValue("right").toDouble(&parseOk);    ARG_VALID(maxlon);
+        qreal bottom = theQuery.queryItemValue("bottom").toDouble(&parseOk);  ARG_VALID(minlat);
+        qreal left = theQuery.queryItemValue("left").toDouble(&parseOk);      ARG_VALID(minlon);
+        qreal top = theQuery.queryItemValue("top").toDouble(&parseOk);        ARG_VALID(maxlat);
+        qreal right = theQuery.queryItemValue("right").toDouble(&parseOk);    ARG_VALID(maxlon);
 
         setMinMax(bottom, left, top, right);
     }
-    else if (theUrl.hasQueryItem("left") && theUrl.hasQueryItem("right") &&
-         theUrl.hasQueryItem("bottom") && theUrl.hasQueryItem("top"))
+    else if (theQuery.hasQueryItem("left") && theQuery.hasQueryItem("right") &&
+         theQuery.hasQueryItem("bottom") && theQuery.hasQueryItem("top"))
     {
-        qreal bottom = theUrl.queryItemValue("bottom").toDouble(&parseOk);  ARG_VALID(minlat);
-        qreal left = theUrl.queryItemValue("left").toDouble(&parseOk);      ARG_VALID(minlon);
-        qreal top = theUrl.queryItemValue("top").toDouble(&parseOk);        ARG_VALID(maxlat);
-        qreal right = theUrl.queryItemValue("right").toDouble(&parseOk);    ARG_VALID(maxlon);
+        qreal bottom = theQuery.queryItemValue("bottom").toDouble(&parseOk);  ARG_VALID(minlat);
+        qreal left = theQuery.queryItemValue("left").toDouble(&parseOk);      ARG_VALID(minlon);
+        qreal top = theQuery.queryItemValue("top").toDouble(&parseOk);        ARG_VALID(maxlat);
+        qreal right = theQuery.queryItemValue("right").toDouble(&parseOk);    ARG_VALID(maxlon);
 
         setMinMax(bottom, left, top, right);
     }
     else if ((theUrl.host().contains("maps.google.com") || theUrl.host().contains("maps.google.co.uk")) &&
-         theUrl.hasQueryItem("ll") && theUrl.hasQueryItem("spn"))
+         theQuery.hasQueryItem("ll") && theQuery.hasQueryItem("spn"))
     {
-        QStringList ll = theUrl.queryItemValue("ll").split(",");     if (ll.count() != 2) return QString("Unsplit=\"%2\" (%1 elements)").arg(ll.count()).arg(theUrl.queryItemValue("ll"));
+        QStringList ll = theQuery.queryItemValue("ll").split(",");     if (ll.count() != 2) return QString("Unsplit=\"%2\" (%1 elements)").arg(ll.count()).arg(theQuery.queryItemValue("ll"));
         qreal lat = ll[0].toDouble(&parseOk);                       PARSE_ERROR(ll[0]);
         qreal lon = ll[1].toDouble(&parseOk);                       PARSE_ERROR(ll[1]);
-        QStringList spn = theUrl.queryItemValue("spn").split(",");   if (spn.count() != 2) return QString("Unsplit=\"%2\" (%1 elements)").arg(spn.count()).arg(theUrl.queryItemValue("spn"));
+        QStringList spn = theQuery.queryItemValue("spn").split(",");   if (spn.count() != 2) return QString("Unsplit=\"%2\" (%1 elements)").arg(spn.count()).arg(theQuery.queryItemValue("spn"));
         qreal spanLat = spn[0].toDouble(&parseOk);                  PARSE_ERROR(spn[0]);
         qreal spanLon = spn[1].toDouble(&parseOk);                  PARSE_ERROR(spn[1]);
 
         setMinMax(lat-spanLat, lon-spanLon/2, lat+spanLat, lon+spanLon/2);
     }
+#undef theQuery
     return QString("Unrecognised URL: %1").arg(theUrl.toString());
 }
 
@@ -114,7 +122,7 @@ void OsmLink::parseShortUrl(QString code)
         int z = 0;
         int z_offset = 0;
 
-        QByteArray ar = code.toAscii();
+        QByteArray ar = code.toLatin1();
         for (int i=0; i<ar.size(); ++i) {
         qint8 t = possibleChar.indexOf(ar.at(i));
         if (t == -1)

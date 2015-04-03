@@ -4,9 +4,9 @@
 #include "Document.h"
 
 #include <QtGui/QPainter>
-#include <QtGui/QDockWidget>
+#include <QtWidgets/QDockWidget>
 #include <QtGui/QMouseEvent>
-#include <QtGui/QShortcut>
+#include <QtWidgets/QShortcut>
 #include <exiv2/image.hpp>
 #include <exiv2/exif.hpp>
 

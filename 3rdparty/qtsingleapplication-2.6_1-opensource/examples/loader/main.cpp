@@ -46,11 +46,11 @@
 
 #include <qtsingleapplication.h>
 #include <QtCore/QFile>
-#include <QtGui/QMainWindow>
-#include <QtGui/QPrinter>
+#include <QtWidgets/QMainWindow>
+#include <QtPrintSupport/QPrinter>
 #include <QtGui/QPainter>
-#include <QtGui/QTextEdit>
-#include <QtGui/QMdiArea>
+#include <QtWidgets/QTextEdit>
+#include <QtWidgets/QMdiArea>
 #include <QtCore/QTextStream>
 
 class MainWindow : public QMainWindow

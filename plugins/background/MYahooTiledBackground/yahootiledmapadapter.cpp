@@ -221,4 +221,6 @@ bool YahooTiledMapAdapter::isValid(int x, int y, int z) const
 }
 
 
+#if !(QT_VERSION >= QT_VERSION_CHECK(5,0,0))
 Q_EXPORT_PLUGIN2(MYahooTiledBackgroundPlugin, YahooTiledMapAdapterFactory)
+#endif

@@ -13,7 +13,6 @@
 #define PREFERENCESDIALOG_H
 
 #include <QWidget>
-#include <QHttp>
 #include <QBuffer>
 #include <QListWidgetItem>
 
