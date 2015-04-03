@@ -589,6 +589,9 @@ bool QGPSDevice::parseGSV(const char *gsvString)
     currentSentence = tokens[2].toInt();
     totalSatellites = tokens[3].toInt();
 
+    qDebug() << "Parsing GSV string " << gsvString;
+    qDebug() << " --> sentence " << currentSentence << " of " << totalSentences << ", " << totalSatellites << " total satellites in view";
+
     for(int i = 0; (i < 4) && ((i*4)+4+3 < tokens.size()); i ++) {
         prn = tokens[(i*4)+4].toInt();
         elev = tokens[(i*4)+4+1].toInt();

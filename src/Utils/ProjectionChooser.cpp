@@ -46,6 +46,7 @@ QString ProjectionChooser::getProjection(QString title, bool bShowPredefined, QS
         dlg->ui->cbPredefined->setVisible(false);
     }
 #else
+    Q_UNUSED(bShowPredefined);
     dlg->ui->chkPredefined->setVisible(false);
     dlg->ui->cbPredefined->setVisible(false);
 #endif

@@ -222,7 +222,7 @@ QString MsBingMapAdapter::getLicenseUrl() const
 
 Q_EXPORT_PLUGIN2(MMsBingMapBackgroundPlugin, MsBingMapAdapterFactory)
 
-QString MsBingMapAdapter::getAttributionsHtml(const QRectF &bbox, const QRect &screen)
+QString MsBingMapAdapter::getAttributionsHtml(const QRectF &bbox , const QRect &/* screen */)
 {
     QStringList providers;
     int zoom = qRound(log(360. / bbox.width()) / log(2));   // log2 not available on FreeBSD
@@ -241,22 +241,22 @@ QString MsBingMapAdapter::getLogoHtml()
     return QString("<center><a href=\"http://www.bing.com/maps/\"><img src=\":/images/bing_logo.png\"/></a><br/><a href=\"http://opengeodata.org/microsoft-imagery-details\" style=\"color:silver; font-size:9px\">%1</a></center>").arg(tr("Terms of Use"));
 }
 
-int MsBingMapAdapter::getMinZoom(const QRectF &bbox) const
+int MsBingMapAdapter::getMinZoom(const QRectF &/* bbox */) const
 {
     return min_zoom;
 }
 
-int MsBingMapAdapter::getMaxZoom(const QRectF &bbox) const
+int MsBingMapAdapter::getMaxZoom(const QRectF &/* bbox */) const
 {
     return max_zoom;
 }
 
-int MsBingMapAdapter::getAdaptedMinZoom(const QRectF &bbox) const
+int MsBingMapAdapter::getAdaptedMinZoom(const QRectF &/* bbox */) const
 {
     return 0;
 }
 
-int MsBingMapAdapter::getAdaptedMaxZoom(const QRectF &bbox) const
+int MsBingMapAdapter::getAdaptedMaxZoom(const QRectF &/* bbox */) const
 {
     return max_zoom > min_zoom ? max_zoom - min_zoom : min_zoom - max_zoom;
 }

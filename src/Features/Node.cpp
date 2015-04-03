@@ -743,14 +743,13 @@ void PhotoNode::drawHover(QPainter& thePainter, MapView* theView)
 
 qreal PhotoNode::pixelDistance(const QPointF& Target, qreal ClearDistance, const QList<Feature*>& NoSnap, MapView* theView) const
 {
-    QPoint me = theView->toView(const_cast<PhotoNode*>(this));
 #ifdef GEOIMAGE
+    QPoint me = theView->toView(const_cast<PhotoNode*>(this));
     if (TEST_RFLAGS(RendererOptions::PhotosVisible) && theView->pixelPerM() > M_PREFS->getRegionalZoom()) {
         qreal rt = qBound(0.2, (double)theView->pixelPerM(), 1.0);
         qreal phRt = 1. * Photo->width() / Photo->height();
         QPoint phPt;
         if (photoLocationBR) {
-            phPt = me + QPoint(10*rt, 10*rt);
         } else {
             phPt = me - QPoint(10*rt, 10*rt) - QPoint(M_PREFS->getMaxGeoPicWidth()*rt, M_PREFS->getMaxGeoPicWidth()*rt/phRt);
         }

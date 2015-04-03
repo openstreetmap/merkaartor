@@ -519,7 +519,7 @@ void ImportCSVDialog::on_btSave_clicked()
     if (tDelim == "\t")
         tDelim = "tab";
     root.setAttribute("delimiter", tDelim);
-    root.setAttribute("header", ui->cbHasHeader->isChecked() ? "true" : false);
+    root.setAttribute("header", ui->cbHasHeader->isChecked() ? "true" : "false");
     root.setAttribute("from", QString::number(ui->sbFrom->value()));
     root.setAttribute("to", QString::number(ui->sbTo->value()));
 

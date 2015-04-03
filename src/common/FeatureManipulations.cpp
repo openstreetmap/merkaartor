@@ -485,7 +485,7 @@ void splitRoads(Document* theDocument, CommandList* theList, PropertiesDock* the
 }
 
 /* Split road by the two nodes and return the way joining them, if there is one. */
-Way *cutoutRoad(Document* theDocument, CommandList* theList, PropertiesDock* thedock, Node *N1, Node *N2) {
+Way *cutoutRoad(Document* theDocument, CommandList* theList, PropertiesDock* /* theDock */, Node *N1, Node *N2) {
     QList<Way*> Roads, Result;
     QList<Node*> Points;
 
@@ -1962,12 +1962,10 @@ AxisAlignResult axisAlignRoads(Document* theDocument, CommandList* theList, Prop
         // tweak midpoints
         i = 0;
         foreach (Way *theWay, theWays) {
-            Node *n1;
             Node *n2 = theWay->getNode(0);
             QPointF p1;
             QPointF p2 = node_pos[n2];
             for (int j = 0; j < theWay->size()-1; ++j, ++i) {
-                n1 = n2;
                 n2 = theWay->getNode(j + 1);
                 p1 = p2;
                 p2 = node_pos[n2];
