@@ -1390,19 +1390,17 @@ void MerkaartorPreferences::loadProjection(QString fn)
         return;
     }
 
-    QDomDocument* theXmlDoc = new QDomDocument();
-    if (!theXmlDoc->setContent(&file)) {
+    QDomDocument theXmlDoc;
+    if (!theXmlDoc.setContent(&file)) {
 //		QMessageBox::critical(this, tr("Invalid file"), tr("%1 is not a valid XML file.").arg(fn));
         file.close();
         return;
     }
     file.close();
 
-    QDomElement docElem = theXmlDoc->documentElement();
+    QDomElement docElem = theXmlDoc.documentElement();
     ProjectionsList aProjList = ProjectionsList::fromXml(docElem.firstChildElement());
     theProjectionsList.add(aProjList);
-
-    delete theXmlDoc;
 }
 
 void MerkaartorPreferences::loadProjections()
@@ -1459,18 +1457,16 @@ void MerkaartorPreferences::loadFilter(QString fn)
         return;
     }
 
-    QDomDocument* theXmlDoc = new QDomDocument();
-    if (!theXmlDoc->setContent(&file)) {
+    QDomDocument theXmlDoc;
+    if (!theXmlDoc.setContent(&file)) {
         file.close();
         return;
     }
     file.close();
 
-    QDomElement docElem = theXmlDoc->documentElement();
+    QDomElement docElem = theXmlDoc.documentElement();
     FiltersList aFilterList = FiltersList::fromXml(docElem.firstChildElement());
     theFiltersList.add(aFilterList);
-
-    delete theXmlDoc;
 }
 
 void MerkaartorPreferences::loadFilters()
@@ -1527,19 +1523,17 @@ void MerkaartorPreferences::loadWMS(QString fn)
         return;
     }
 
-    QDomDocument* theXmlDoc = new QDomDocument();
-    if (!theXmlDoc->setContent(&file)) {
+    QDomDocument theXmlDoc;
+    if (!theXmlDoc.setContent(&file)) {
 //		QMessageBox::critical(this, tr("Invalid file"), tr("%1 is not a valid XML file.").arg(fn));
         file.close();
         return;
     }
     file.close();
 
-    QDomElement docElem = theXmlDoc->documentElement();
+    QDomElement docElem = theXmlDoc.documentElement();
     WmsServersList aWmsList = WmsServersList::fromXml(docElem.firstChildElement());
     theWmsServerList.add(aWmsList);
-
-    delete theXmlDoc;
 }
 
 void MerkaartorPreferences::loadWMSes()
@@ -1587,19 +1581,17 @@ void MerkaartorPreferences::loadTMS(QString fn)
         return;
     }
 
-    QDomDocument* theXmlDoc = new QDomDocument();
-    if (!theXmlDoc->setContent(&file)) {
+    QDomDocument theXmlDoc;
+    if (!theXmlDoc.setContent(&file)) {
 //		QMessageBox::critical(this, tr("Invalid file"), tr("%1 is not a valid XML file.").arg(fn));
         file.close();
         return;
     }
     file.close();
 
-    QDomElement docElem = theXmlDoc->documentElement();
+    QDomElement docElem = theXmlDoc.documentElement();
     TmsServersList aTmsList = TmsServersList::fromXml(docElem.firstChildElement());
     theTmsServerList.add(aTmsList);
-
-    delete theXmlDoc;
 }
 
 void MerkaartorPreferences::loadTMSes()
@@ -1647,19 +1639,17 @@ void MerkaartorPreferences::loadBookmark(QString fn)
         return;
     }
 
-    QDomDocument* theXmlDoc = new QDomDocument();
-    if (!theXmlDoc->setContent(&file)) {
+    QDomDocument theXmlDoc;
+    if (!theXmlDoc.setContent(&file)) {
 //		QMessageBox::critical(this, tr("Invalid file"), tr("%1 is not a valid XML file.").arg(fn));
         file.close();
         return;
     }
     file.close();
 
-    QDomElement docElem = theXmlDoc->documentElement();
+    QDomElement docElem = theXmlDoc.documentElement();
     BookmarksList aBkList = BookmarksList::fromXml(docElem.firstChildElement());
     theBookmarkList.add(aBkList);
-
-    delete theXmlDoc;
 }
 
 void MerkaartorPreferences::loadBookmarks()

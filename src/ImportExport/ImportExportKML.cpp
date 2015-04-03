@@ -301,17 +301,15 @@ bool parseKML(QDomElement& e, Layer* aLayer)
 // import the  input
 bool ImportExportKML::import(Layer* aLayer)
 {
-    QDomDocument* theXmlDoc = new QDomDocument();
-    if (!theXmlDoc->setContent(Device)) {
+    QDomDocument theXmlDoc;
+    if (!theXmlDoc.setContent(Device)) {
         //QMessageBox::critical(this, tr("Invalid file"), tr("%1 is not a valid XML file.").arg(fn));
         Device->close();
-        delete theXmlDoc;
-        theXmlDoc = NULL;
         return false;
     }
     Device->close();
 
-    QDomElement docElem = theXmlDoc->documentElement();
+    QDomElement docElem = theXmlDoc.documentElement();
     if (docElem.tagName() != "kml") {
         //QMessageBox::critical(this, tr("Invalid file"), tr("%1 is not a valid KML document.").arg(fn));
         return false;
