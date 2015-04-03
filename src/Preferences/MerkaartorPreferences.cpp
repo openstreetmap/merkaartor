@@ -272,8 +272,6 @@ void MerkaartorPreferences::save(bool UserPwdChanged)
         return;
 
     Sets->setValue("version/version", QString("%1").arg(STRINGIFY(VERSION)));
-    setWmsServers();
-    setTmsServers();
     setTools();
     setAlphaList();
 
@@ -480,7 +478,7 @@ void MerkaartorPreferences::putOsmPref(const QString& k, const QString& v)
     Header.setValue("Authorization", QString("Basic %1").arg(QString(ba_auth)));
 
     httpRequest.setProxy(getProxy(osmWeb));
-    OsmPrefSaveId = httpRequest.request(Header,ba);
+    httpRequest.request(Header,ba);
 }
 
 void MerkaartorPreferences::deleteOsmPref(const QString& k)
@@ -667,24 +665,6 @@ WmsServerList* MerkaartorPreferences::getWmsServers()
     return theWmsServerList.getServers();
 }
 
-void MerkaartorPreferences::setWmsServers()
-{
-    //QStringList Servers;
-    //WmsServerListIterator i(theWmsServerList);
-    //while (i.hasNext()) {
-    //	i.next();
-    //	WmsServer S = i.value();
-    //	Servers.append(S.WmsName);
-    //	Servers.append(S.WmsAdress);
-    //	Servers.append(S.WmsPath);
-    //	Servers.append(S.WmsLayers);
-    //	Servers.append(S.WmsProjections);
-    //	Servers.append(S.WmsStyles);
-    //	Servers.append(S.WmsImgFormat);
-    //}
-    //Sets->setValue("WSM/servers", Servers);
-}
-
 OsmServerList* MerkaartorPreferences::getOsmServers()
 {
     return &theOsmServers;
@@ -696,23 +676,6 @@ TmsServerList* MerkaartorPreferences::getTmsServers()
 {
 //	return Sets->value("WSM/servers").toStringList();
     return theTmsServerList.getServers();
-}
-
-void MerkaartorPreferences::setTmsServers()
-{
-    //QStringList Servers;
-    //TmsServerListIterator i(theTmsServerList);
-    //while (i.hasNext()) {
-    //	i.next();
-    //	TmsServer S = i.value();
-    //	Servers.append(S.TmsName);
-    //	Servers.append(S.TmsAdress);
-    //	Servers.append(S.TmsPath);
-    //	Servers.append(QString::number(S.TmsTileSize));
-    //	Servers.append(QString::number(S.TmsMinZoom));
-    //	Servers.append(QString::number(S.TmsMaxZoom));
-    //}
-    //Sets->setValue("TMS/servers", Servers);
 }
 
 /* */
