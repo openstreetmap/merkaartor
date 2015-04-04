@@ -14,7 +14,7 @@
 class MainWindow;
 class Feature;
 class Way;
-class IDocument;
+class Document;
 class MapAdapter;
 class Interaction;
 class ImageMapLayer;
@@ -32,8 +32,8 @@ public:
     ~MapView();
 
     MainWindow* main();
-    virtual void setDocument(IDocument* aDoc);
-    IDocument* document();
+    virtual void setDocument(Document* aDoc);
+    Document* document();
     Interaction* interaction();
     void setInteraction(Interaction* anInteraction);
 

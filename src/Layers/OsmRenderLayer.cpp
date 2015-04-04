@@ -112,7 +112,7 @@ OsmRenderLayer::OsmRenderLayer(QObject *parent)
     connect(&(renderGatheringWatcher), SIGNAL(finished()), SIGNAL(renderingDone()));
 }
 
-void OsmRenderLayer::setDocument(IDocument *aDocument)
+void OsmRenderLayer::setDocument(Document *aDocument)
 {
     theDocument = aDocument;
 }

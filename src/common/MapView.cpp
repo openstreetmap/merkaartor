@@ -5,7 +5,7 @@
 #include "MapView.h"
 #include "MainWindow.h"
 #include "PropertiesDock.h"
-#include "IDocument.h"
+#include "Document.h"
 #include "ILayer.h"
 #include "LayerIterator.h"
 #include "ImageMapLayer.h"
@@ -57,7 +57,7 @@ public:
     RendererOptions ROptions;
 
     Projection theProjection;
-    IDocument* theDocument;
+    Document* theDocument;
     Interaction* theInteraction;
 
     bool BackgroundOnlyPanZoom;
@@ -152,7 +152,7 @@ MainWindow *MapView::main()
     return Main;
 }
 
-void MapView::setDocument(IDocument* aDoc)
+void MapView::setDocument(Document* aDoc)
 {
     p->theDocument = aDoc;
     p->osmLayer->setDocument(aDoc);
@@ -160,7 +160,7 @@ void MapView::setDocument(IDocument* aDoc)
     setViewport(viewport(), rect());
 }
 
-IDocument *MapView::document()
+Document *MapView::document()
 {
     return p->theDocument;
 }
