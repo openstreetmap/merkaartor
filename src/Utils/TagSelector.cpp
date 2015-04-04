@@ -429,7 +429,8 @@ TagSelectorMatchResult TagSelectorOperator::evaluateVal(const QString& val) cons
             if (val.toUpper() != emptyString) return TagSelect_Match;
         }
     } else if (UseSimpleRegExp) {
-        if (rx.exactMatch(val))  {
+        QRegExp lrx(rx);
+        if (lrx.exactMatch(val))  {
             if (theOp == EQ)
                 return TagSelect_Match;
         } else {
@@ -438,7 +439,8 @@ TagSelectorMatchResult TagSelectorOperator::evaluateVal(const QString& val) cons
         }
 
     } else if (UseFullRegExp) {
-        if (rx.indexIn(val) != -1)  {
+        QRegExp lrx(rx);
+        if (lrx.indexIn(val) != -1)  {
             if (theOp == EQ)
                 return TagSelect_Match;
         } else {
