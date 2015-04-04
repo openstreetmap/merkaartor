@@ -58,6 +58,8 @@ public:
         if (!p->theDocument)
             return;
 
+        p->theDocument->lockPainters();
+
         TILE_TYPE tile = theTile;
 
         QPointF projTL((TILE_X(tile)*p->tileSizeCoordW)+p->tileOriginCoord.x(), (TILE_Y(tile)*p->tileSizeCoordH)+p->tileOriginCoord.y());
@@ -91,6 +93,7 @@ public:
         MapRenderer r;
         r.render(&P, theFeatures, projR, /*QRect(0, 0, TILE_SIZE, TILE_SIZE)*/QRect(-((TILE_SIZE*TILE_SURROUND)-TILE_SIZE)/2, -((TILE_SIZE*TILE_SURROUND)-TILE_SIZE)/2, TILE_SIZE*TILE_SURROUND, TILE_SIZE*TILE_SURROUND), p->PixelPerM, p->ROptions);
         P.end();
+        p->theDocument->unlockPainters();
         tileLock.lockForWrite();
         tileCache->insert(tile, img);
 
