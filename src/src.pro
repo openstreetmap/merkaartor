@@ -73,7 +73,7 @@ DESTDIR = $$OUTPUT_DIR/bin
 #MOC_DIR += $$PWD/../tmp/$$(QMAKESPEC)
 #RCC_DIR += $$PWD/../tmp/$$(QMAKESPEC)
 
-INCLUDEPATH += $$PWD $$PWD/../include $$PWD/../interfaces $$MOC_DIR $$PWD/../include/builtin-ggl
+INCLUDEPATH += $$PWD $$PWD/../include $$PWD/../interfaces $$MOC_DIR
 DEPENDPATH += $$PWD $$PWD/../interfaces
 
 unix {

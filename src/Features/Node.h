@@ -11,13 +11,6 @@
 #include <QtCore/QDateTime>
 #include <QtXml>
 
-#ifndef _MOBILE
-#if QT_VERSION < 0x040700 || defined(FORCE_46)
-#include <ggl/ggl.hpp>
-#include <ggl/geometries/register/point.hpp>
-#endif
-#endif
-
 class QProgressDialog;
 
 class Node : public Feature
@@ -156,50 +149,6 @@ protected:
 
 
 Q_DECLARE_METATYPE( Node * );
-
-#ifndef _MOBILE
-#if QT_VERSION < 0x040700 || defined(FORCE_46)
-// Register this point as being a recognizable point by the GGL
-//GEOMETRY_REGISTER_POINT_2D_CONST(TrackPoint, qreal, cs::cartesian, projection().x(), projection().y())
-
-namespace ggl { namespace traits {
-
-template<> struct tag<NodePtr>
-{ typedef point_tag type; };
-
-template<> struct coordinate_type<NodePtr>
-{ typedef qreal type; };
-
-template<> struct coordinate_system<NodePtr>
-{ typedef cs::cartesian type; };
-
-template<> struct dimension<NodePtr>
-        : boost::mpl::int_<2> {};
-
-template<>
-struct access<NodePtr>
-{
-    template <std::size_t I>
-    static inline qreal get(const NodePtr& p)
-    {
-        return I == 0 ? p->projected().x() : p->projected().y();
-    }
-
-    //    template <std::size_t I>
-    //    static inline void set(TrackPointPtr& p, const qreal& value)
-    //    {
-    //        // Or (better) implement an accessor with specializations
-    //        if (I == 0) p->position().setLon(value);
-    //        else if (I == 1) p->position().setLat(value);
-    //    }
-
-};
-
-}} // namespace ggl::traits
-
-#endif
-#endif
-
 
 #endif
 

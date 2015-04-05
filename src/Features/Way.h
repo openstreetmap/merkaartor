@@ -7,12 +7,6 @@
 #include "Feature.h"
 #include "Layer.h"
 
-#ifndef _MOBILE
-#if QT_VERSION < 0x040700 || defined(FORCE_46)
-#include <ggl/ggl.hpp>
-#endif
-#endif
-
 class WayPrivate;
 class Node;
 class QProgressDialog;
