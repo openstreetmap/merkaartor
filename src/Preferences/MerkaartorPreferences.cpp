@@ -30,6 +30,11 @@
 #include "MasPaintStyle.h"
 
 
+// TODO: Replace 'g_Merk_Ignore_Preferences' by having two implementations
+// of the "preferences API": one that behaves as if
+// g_Merk_Ignore_Preferences == false, and one that ignores writes
+// and always returns default settings.
+
 #define M_PARAM_IMPLEMENT_BOOL(Param, Category, Default) \
     bool mb_##Param = false; \
     void MerkaartorPreferences::set##Param(bool theValue) \
@@ -290,6 +295,9 @@ void MerkaartorPreferences::save(bool UserPwdChanged)
     saveTagListFirstColumnWidth();
     Sets->sync();
 
+    // TODO: There is either some misnaming here or a bug. Why would settings
+    // be pulled from OSM only if the password changed, and pushed to OSM
+    // only otherwise?
     if (UserPwdChanged)
         fromOsmPref();
     else
@@ -319,6 +327,7 @@ void MerkaartorPreferences::toOsmPref()
     QByteArray ba = qCompress(theXmlDoc.toString().toUtf8());
     QByteArray PrefsXML = ba.toBase64();
 
+    // TODO: Why is it required to load from PrefsXML in chunk of 254?
     QStringList slicedPrefs;
     for (int i=0; i<PrefsXML.size(); i+=254) {
         QString s = PrefsXML.mid(i, 254);
@@ -581,6 +590,9 @@ void MerkaartorPreferences::initialize()
     QStringList Servers;
     if (!g_Merk_Ignore_Preferences && !g_Merk_Reset_Preferences) {
         Servers = Sets->value("WSM/servers").toStringList();
+	// TODO: Apparently WMS/servers is a list, and every 7 consecutive
+	// items describe a single server. There should be some documentation
+	// about what do the fields mean. Same with TMS/servers.
         if (Servers.size()) {
             for (int i=0; i<Servers.size(); i+=7) {
                 WmsServer S(Servers[i], Servers[i+1], Servers[i+2], Servers[i+3], Servers[i+4], Servers[i+5], Servers[i+6], "", "");
