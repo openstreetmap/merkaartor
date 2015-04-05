@@ -333,6 +333,9 @@ private:
 
     void updateSegmentMode(QMouseEvent* mouseEvent);
 
+    void startBusyCursor();
+    void endBusyCursor();
+
 protected:
     void closeEvent(QCloseEvent * event);
     virtual QMenu * createPopupMenu ();
