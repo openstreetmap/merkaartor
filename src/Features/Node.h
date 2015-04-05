@@ -173,9 +173,6 @@ template<> struct coordinate_type<NodePtr>
 template<> struct coordinate_system<NodePtr>
 { typedef cs::cartesian type; };
 
-template<> struct dimension<NodePtr>
-        : boost::mpl::int_<2> {};
-
 template<>
 struct access<NodePtr>
 {
