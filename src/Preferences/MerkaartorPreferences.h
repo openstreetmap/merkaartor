@@ -175,11 +175,6 @@ public:
     QSettings* getQSettings() const { return Sets; }
     void save(bool UserPwdChanged = false);
 
-    void toOsmPref();
-    void fromOsmPref();
-    void putOsmPref(const QString& k, const QString& v);
-    void deleteOsmPref(const QString& k);
-
     const QVector<qreal> getParentDashes() const;
 
     //bool use06Api() const;
@@ -207,7 +202,6 @@ public:
 
     /* Visual */
     QStringList getAlphaList() const;
-    void setAlphaList();
     qreal getAlpha(QString lvl);
     QHash<QString, qreal>* getAlphaPtr();
 
@@ -233,8 +227,8 @@ public:
     M_PARAM_DECLARE_INT_DELAYED(TagListFirstColumnWidth)
 
     /* MainWindow state */
-    void saveMainWindowState(const class MainWindow * mainWindow);
-    void restoreMainWindowState(class MainWindow * mainWindow) const;
+    void saveMainWindowState(const MainWindow * mainWindow);
+    void restoreMainWindowState(MainWindow * mainWindow) const;
 
     void setInitialPosition(MapView* vw);
     void initialPosition(MapView* vw);
@@ -279,11 +273,15 @@ public:
     M_PARAM_DECLARE_INT(PolygonSides)
 
     /* Recent */
+private:
     void setRecentOpen(const QStringList & theValue);
+public:
     QStringList getRecentOpen() const;
     void addRecentOpen(const QString & theValue);
 
+private:
     void setRecentImport(const QStringList & theValue);
+public:
     QStringList getRecentImport() const;
     void addRecentImport(const QString & theValue);
 
@@ -400,10 +398,6 @@ public:
     IMapAdapterFactory* getBackgroundPlugin(const QUuid& anAdapterUid);
     QMap<QUuid, IMapAdapterFactory *> getBackgroundPlugins();
 
-    /* Projections */
-    void loadProjection(QString fn);
-    void loadProjections();
-    void saveProjections();
 #ifndef _MOBILE
     void setProjectionType(QString theValue);
     QString getProjectionType();
@@ -411,14 +405,23 @@ public:
     ProjectionItem getProjection(QString aProj);
 #endif
 
-    /* Filters */
-    void loadFilter(QString fn);
-    void loadFilters();
-    void saveFilters();
-    void setCurrentFilter(FilterType theValue);
     FilterType getCurrentFilter();
     FiltersList* getFiltersList();
     FilterItem getFilter(QString aFilter);
+
+    BookmarkList*  getBookmarks();
+    WmsServerList* getWmsServers();
+    TmsServerList* getTmsServers();
+    OsmServerList* getOsmServers();
+
+    M_PARAM_DECLARE_STRING(SelectedServer);
+
+private:
+    void fromOsmPref();
+    void toOsmPref();
+    void putOsmPref(const QString& k, const QString& v);
+    void deleteOsmPref(const QString& k);
+    void setAlphaList();
 
     /* WMSes */
     void loadWMS(QString fn);
@@ -439,24 +442,20 @@ public:
     void loadOsmServers();
     void saveOsmServers();
 
-    BookmarkList*  getBookmarks();
-    WmsServerList* getWmsServers();
-    TmsServerList* getTmsServers();
-    OsmServerList* getOsmServers();
+    /* Filters */
+    void loadFilter(QString fn);
+    void loadFilters();
+    void saveFilters();
 
-    M_PARAM_DECLARE_STRING(SelectedServer);
+    /* Projections */
+    void loadProjection(QString fn);
+    void loadProjections();
+    void saveProjections();
 
-private:
     QVector<qreal> parentDashes;
 
     bool Use06Api;
     QString version;
-    bool RightSideDriving;
-    qreal DoubleRoadDistance;
-    QString WorkingDir;
-    QString OsmWebsite;
-    QString OsmUser;
-    QString OsmPassword;
 
     QNetworkAccessManager httpRequest;
     QNetworkReply *OsmPrefLoadReply;
@@ -470,7 +469,6 @@ private:
     QHash<QString, qreal> alpha;
     ToolList theToolList;
     QSettings * Sets;
-    QStringList projTypes;
     QMap<QUuid, IMapAdapterFactory *> mBackgroundPlugins;
     ProjectionsList theProjectionsList;
     FiltersList theFiltersList;
@@ -488,9 +486,9 @@ private:
     static IPaintStyle* m_EPSInstance;
 
 private slots:
-	void on_requestFinished ( QNetworkReply *reply );
-	void on_authenticationRequired( QNetworkReply *reply, QAuthenticator *auth );
-	void on_sslErrors(QNetworkReply *reply, const QList<QSslError>& errors);
+    void on_requestFinished ( QNetworkReply *reply );
+    void on_authenticationRequired( QNetworkReply *reply, QAuthenticator *auth );
+    void on_sslErrors(QNetworkReply *reply, const QList<QSslError>& errors);
 
 signals:
     void bookmarkChanged();

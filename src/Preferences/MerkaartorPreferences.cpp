@@ -845,12 +845,6 @@ ProjectionItem MerkaartorPreferences::getProjection(QString aProj)
 }
 #endif
 
-void MerkaartorPreferences::setCurrentFilter(FilterType theValue)
-{
-    if (!g_Merk_Ignore_Preferences)
-        Sets->setValue("filter/Type", theValue);
-}
-
 QString MerkaartorPreferences::getCurrentFilter()
 {
     if (!g_Merk_Ignore_Preferences && !g_Merk_Reset_Preferences)
