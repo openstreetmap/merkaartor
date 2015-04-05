@@ -217,24 +217,31 @@ Tool::Tool()
 
 /* MekaartorPreferences */
 
+namespace {
+
+QSettings* getSettings() {
+    if (!g_Merk_Portable) {
+        return new QSettings();
+    } else {
+        return new QSettings(qApp->applicationDirPath() + "/merkaartor.ini", QSettings::IniFormat);
+    }
+}
+
+}  // namespace
+
 MerkaartorPreferences::MerkaartorPreferences()
-    : Sets(0)
 {
     if (!g_Merk_Ignore_Preferences) {
-        if (!g_Merk_Portable) {
-            Sets = new QSettings();
+        Sets = getSettings();
 
-            QSettings oldSettings("BartVanhauwaert", "Merkaartor");
-            QStringList oldKeys = oldSettings.allKeys();
-            foreach(QString k, oldKeys) {
-                Sets->setValue(k, oldSettings.value(k));
-                Sets->sync();
-                oldSettings.remove(k);
-            }
-            oldSettings.clear();
-        } else {
-            Sets = new QSettings(qApp->applicationDirPath() + "/merkaartor.ini", QSettings::IniFormat);
+        QSettings oldSettings("BartVanhauwaert", "Merkaartor");
+        QStringList oldKeys = oldSettings.allKeys();
+        foreach(QString k, oldKeys) {
+            Sets->setValue(k, oldSettings.value(k));
+            Sets->sync();
+            oldSettings.remove(k);
         }
+        oldSettings.clear();
         version = Sets->value("version/version", "0").toString();
     }
 
@@ -1674,14 +1681,9 @@ void MerkaartorPreferences::saveOsmServers()
 QString getDefaultLanguage(bool returnDefault)
 {
     if (!g_Merk_Ignore_Preferences && !g_Merk_Reset_Preferences) {
-        QSettings* Sets;
-        if (!g_Merk_Portable) {
-            Sets = new QSettings();
-        } else {
-            Sets = new QSettings(qApp->applicationDirPath() + "/merkaartor.ini", QSettings::IniFormat);
-        }
-        QString lang = Sets->value("locale/language").toString();
-        delete Sets;
+        QSettings* sets = getSettings();
+        QString lang = sets->value("locale/language").toString();
+        delete sets;
         if (lang == "")
             if (returnDefault)
                 lang = QLocale::system().name().split("_")[0];
@@ -1697,12 +1699,8 @@ QString getDefaultLanguage(bool returnDefault)
 void setDefaultLanguage(const QString& theValue)
 {
     if (!g_Merk_Ignore_Preferences) {
-        QSettings* Sets;
-        if (!g_Merk_Portable) {
-            Sets = new QSettings();
-        } else {
-            Sets = new QSettings(qApp->applicationDirPath() + "/merkaartor.ini", QSettings::IniFormat);
-        }
-        Sets->setValue("locale/language", theValue);
+        QSettings* sets = getSettings();
+        sets->setValue("locale/language", theValue);
+        // TODO: 'sets' memory leak?
     }
 }
