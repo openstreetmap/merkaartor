@@ -275,7 +275,6 @@ public:
     void updateLanguage();
 
     bool hasUnsavedChanges();
-    void syncOSM(const QString &aWeb, const QString &aUser, const QString &aPwd);
 
     void launchInteraction(Interaction *anInteraction);
 
@@ -333,6 +332,7 @@ private:
 
     void updateSegmentMode(QMouseEvent* mouseEvent);
 
+    void syncOSM(const QString &aWeb, const QString &aUser, const QString &aPwd);
 protected:
     void closeEvent(QCloseEvent * event);
     virtual QMenu * createPopupMenu ();
