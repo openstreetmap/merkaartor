@@ -40,7 +40,7 @@
 </painter>
 <painter
  zoomUnder="0.02" zoomUpper="1e+07"
- backgroundColor="#a37b48fc" backgroundScale="30" backgroundOffset="3"
+ backgroundColor="#a37b48fc" backgroundScale="0" backgroundOffset="3"
  foregroundColor="#fdbf6ffc" foregroundScale="0" foregroundOffset="1"
  drawTrafficDirectionMarks="yes" trafficDirectionMarksColor="#000000ff"
  labelColor="#a37b48fc" labelScale="1.3" labelOffset="4"
