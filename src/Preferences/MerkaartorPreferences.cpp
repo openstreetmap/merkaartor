@@ -1575,20 +1575,20 @@ void MerkaartorPreferences::saveTMSes()
 }
 
 /* Bookmarks */
-void MerkaartorPreferences::loadBookmark(QString fn)
+void MerkaartorPreferences::loadBookmarksFromFile(QString fileName)
 {
-    if (QDir::isRelativePath(fn))
-        fn = QCoreApplication::applicationDirPath() + "/" + fn;
+    if (QDir::isRelativePath(fileName))
+        fileName = QCoreApplication::applicationDirPath() + "/" + fileName;
 
-    QFile file(fn);
+    QFile file(fileName);
     if (!file.open(QIODevice::ReadOnly)) {
-//      QMessageBox::critical(this, tr("Invalid file"), tr("%1 could not be opened.").arg(fn));
+//      QMessageBox::critical(this, tr("Invalid file"), tr("%1 could not be opened.").arg(fileName));
         return;
     }
 
     QDomDocument theXmlDoc;
     if (!theXmlDoc.setContent(&file)) {
-//		QMessageBox::critical(this, tr("Invalid file"), tr("%1 is not a valid XML file.").arg(fn));
+//		QMessageBox::critical(this, tr("Invalid file"), tr("%1 is not a valid XML file.").arg(fileName));
         file.close();
         return;
     }
@@ -1601,16 +1601,9 @@ void MerkaartorPreferences::loadBookmark(QString fn)
 
 void MerkaartorPreferences::loadBookmarks()
 {
-    QString fn;
-
-    fn = HOMEDIR + "/BookmarksList.xml";
-    loadBookmark(fn);
-
-    fn = QString(SHAREDIR) + "/BookmarksList.xml";
-    loadBookmark(fn);
-
-    fn = ":/BookmarksList.xml";
-    loadBookmark(fn);
+    loadBookmarksFromFile(HOMEDIR + "/BookmarksList.xml");
+    loadBookmarksFromFile(QString(SHAREDIR) + "/BookmarksList.xml");
+    loadBookmarksFromFile(":/BookmarksList.xml");
 }
 
 void MerkaartorPreferences::saveBookmarks()

@@ -434,7 +434,7 @@ private:
     void saveTMSes();
 
     /* Bookmarks */
-    void loadBookmark(QString fn);
+    void loadBookmarksFromFile(QString fileName);
     void loadBookmarks();
     void saveBookmarks();
 
