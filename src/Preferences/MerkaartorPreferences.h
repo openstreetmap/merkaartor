@@ -268,7 +268,9 @@ public:
     ExportType getExportType() const;
 
     /* Tools */
-    ToolList* getTools() const;
+    // TODO: Returning ToolList* here is very promiscuous.
+    // 'getTools()' should probably return 'const ToolList&' instead.
+    ToolList* getTools();
     Tool getTool(QString toolName) const;
 
     QStringList getShortcuts() const;
@@ -466,7 +468,7 @@ private:
     void initialize();
 
     QHash<QString, qreal> alpha;
-    ToolList* theToolList;
+    ToolList theToolList;
     QSettings * Sets;
     QStringList projTypes;
     QMap<QUuid, IMapAdapterFactory *> mBackgroundPlugins;

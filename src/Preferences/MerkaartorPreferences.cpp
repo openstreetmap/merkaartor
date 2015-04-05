@@ -245,8 +245,6 @@ MerkaartorPreferences::MerkaartorPreferences()
         version = Sets->value("version/version", "0").toString();
     }
 
-    theToolList = new ToolList();
-
     connect(&httpRequest, SIGNAL(authenticationRequired(QNetworkReply*, QAuthenticator*)), this, SLOT(on_authenticationRequired(QNetworkReply*, QAuthenticator*)));
     connect(&httpRequest, SIGNAL(finished(QNetworkReply*)),this,SLOT(on_requestFinished(QNetworkReply*)));
     connect(&httpRequest, SIGNAL(sslErrors(QNetworkReply *, const QList<QSslError>&)), this, SLOT(on_sslErrors(QNetworkReply*, const QList<QSslError>&)));
@@ -267,7 +265,6 @@ MerkaartorPreferences::MerkaartorPreferences()
 
 MerkaartorPreferences::~MerkaartorPreferences()
 {
-    delete theToolList;
     delete Sets;
 #ifdef USE_LIBPROXY
     px_proxy_factory_free(proxyFactory);
@@ -573,12 +570,12 @@ void MerkaartorPreferences::initialize()
         tl = Sets->value("Tools/list").toStringList();
         for (int i=0; i<tl.size(); i+=TOOL_FIELD_SIZE) {
             Tool t(tl[i], tl[i+1]);
-            theToolList->insert(tl[i], t);
+            theToolList.insert(tl[i], t);
         }
     }
-    if (!theToolList->contains("Inkscape")) {
+    if (!theToolList.contains("Inkscape")) {
         Tool t("Inkscape", "");
-        theToolList->insert("Inkscape", t);
+        theToolList.insert("Inkscape", t);
     }
 
     QStringList Servers;
@@ -1058,16 +1055,16 @@ ExportType MerkaartorPreferences::getExportType() const
 }
 
 /* Tools */
-ToolList* MerkaartorPreferences::getTools() const
+ToolList* MerkaartorPreferences::getTools()
 {
-    return theToolList;
+    return &theToolList;
 }
 
 void MerkaartorPreferences::setTools()
 {
     if (!g_Merk_Ignore_Preferences) {
         QStringList tl;
-        ToolListIterator i(*theToolList);
+        ToolListIterator i(theToolList);
         while (i.hasNext()) {
             i.next();
             Tool t = i.value();
@@ -1082,7 +1079,7 @@ Tool MerkaartorPreferences::getTool(QString toolName) const
 {
     Tool ret;
 
-    ToolListIterator i(*theToolList);
+    ToolListIterator i(theToolList);
     while (i.hasNext()) {
         i.next();
         if (i.key() == toolName) {
