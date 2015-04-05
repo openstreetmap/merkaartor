@@ -516,7 +516,7 @@ void MerkaartorPreferences::initialize()
 //  Use06Api = Sets->value("osm/use06api", "true").toBool();
     Use06Api = true;
 
-    // PRoxy upgrade
+    // Proxy upgrade
     if (!g_Merk_Ignore_Preferences && !g_Merk_Reset_Preferences) {
         if (Sets->contains("proxy/Use")) {
             bool b = Sets->value("proxy/Use").toBool();
