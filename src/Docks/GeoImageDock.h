@@ -10,34 +10,6 @@
 #include <exiv2/image.hpp>
 #include <exiv2/exif.hpp>
 
-
-#define WARNING(title, message) { \
-    if (QMessageBox::warning(this, title, message.arg(file), \
-     QMessageBox::Ignore | QMessageBox::Cancel, QMessageBox::Ignore) == QMessageBox::Ignore) \
-        continue; \
-    else { \
-        theView->invalidate(true, true, false); \
-        return; \
-    } \
-}
-
-#define QUESTION(title, message, always) { \
-    if (always == 0) { \
-        int replyButton = QMessageBox::question(this, title, message, \
-         QMessageBox::Yes | QMessageBox::YesToAll | QMessageBox::No | QMessageBox::NoToAll | QMessageBox::Abort, QMessageBox::Yes ); \
-        if (replyButton == QMessageBox::No) \
-            continue; \
-        else if (replyButton == QMessageBox::Abort) { \
-            theView->invalidate(true, true, false); \
-            return; \
-        } \
-        else if (replyButton != QMessageBox::Yes) \
-            always = replyButton; \
-    } \
-    if (always == QMessageBox::NoToAll) \
-        continue; \
-}
-
 class ImageView;
 
 class GeoImageDock : public MDockAncestor
