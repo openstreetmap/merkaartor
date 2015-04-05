@@ -424,12 +424,12 @@ private:
     void setAlphaList();
 
     /* WMSes */
-    void loadWMS(QString fn);
+    void loadWMSesFromFile(QString fileName);
     void loadWMSes();
     void saveWMSes();
 
     /* TMSes */
-    void loadTMS(QString fn);
+    void loadTMSesFromFile(QString fileName);
     void loadTMSes();
     void saveTMSes();
 
@@ -443,12 +443,12 @@ private:
     void saveOsmServers();
 
     /* Filters */
-    void loadFilter(QString fn);
+    void loadFiltersFromFile(QString fileName);
     void loadFilters();
     void saveFilters();
 
     /* Projections */
-    void loadProjection(QString fn);
+    void loadProjectionsFromFile(QString fileName);
     void loadProjections();
     void saveProjections();
 
@@ -457,11 +457,12 @@ private:
     bool Use06Api;
     QString version;
 
+    // TODO: These network objects shouldn't be shared between methods
+    // of MerkaartorPreferences.
     QNetworkAccessManager httpRequest;
     QNetworkReply *OsmPrefLoadReply;
     QNetworkReply *OsmPrefSaveReply;
     QNetworkReply *OsmPrefDeleteReply;
-    QMap<QString, int> OsmPrefListsCount;
 
     void setTools();
     void initialize();
