@@ -2931,17 +2931,12 @@ void MainWindow::on_editMapStyleAction_triggered()
     GlobalPainter saveGlobalPainter = M_STYLE->getGlobalPainter();
     QList<Painter> savePainters = M_STYLE->getPainters();
     if (dlg->exec() == QDialog::Accepted) {
-        M_STYLE->setGlobalPainter(dlg->theGlobalPainter);
-        M_STYLE->setPainters(dlg->thePainters);
+        applyPainters(&dlg->theGlobalPainter, &dlg->thePainters);
     } else {
-        M_STYLE->setGlobalPainter(saveGlobalPainter);
-        M_STYLE->setPainters(savePainters);
+        /* FIXME: Is it really needed? The painter should be already set up. */
+        applyPainters(&saveGlobalPainter, &savePainters);
     }
 
-    theDocument->setPainters(dlg->thePainters);
-    for (VisibleFeatureIterator i(theDocument); !i.isEnd(); ++i)
-        i.get()->invalidatePainter();
-    invalidateView();
     delete dlg;
 }
 
@@ -2954,11 +2949,7 @@ void MainWindow::applyStyles(QString NewStyle)
         }
         M_PREFS->setDefaultStyle(NewStyle);
         M_STYLE->loadPainters(M_PREFS->getDefaultStyle());
-        document()->setPainters(M_STYLE->getPainters());
-        for (FeatureIterator it(document()); !it.isEnd(); ++it)
-        {
-            it.get()->invalidatePainter();
-        }
+        theDocument->setPainters(M_STYLE->getPainters());
         invalidateView(false);
     }
 }
@@ -2969,8 +2960,6 @@ void MainWindow::applyPainters(GlobalPainter* theGlobalPainter, QList<Painter>* 
     M_STYLE->setPainters(*thePainters);
 
     theDocument->setPainters(*thePainters);
-    for (VisibleFeatureIterator i(theDocument); !i.isEnd(); ++i)
-        i.get()->invalidatePainter();
     invalidateView(false);
 }
 
@@ -3031,8 +3020,6 @@ void MainWindow::on_mapStyleLoadAction_triggered()
         else {
             M_STYLE->loadPainters(f);
             document()->setPainters(M_STYLE->getPainters());
-            for (VisibleFeatureIterator i(theDocument); !i.isEnd(); ++i)
-                i.get()->invalidatePainter();
             invalidateView();
         }
     }

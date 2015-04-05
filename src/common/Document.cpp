@@ -36,6 +36,7 @@
 #include <QList>
 #include <QMenu>
 #include <QSet>
+#include <QReadWriteLock>
 
 /* MAPDOCUMENT */
 
@@ -51,6 +52,7 @@ public:
         , lastDownloadLayer(0)
         , tagFilter(0), FilterRevision(0)
         , layerNum(0)
+        , theFeaturePaintersLock( QReadWriteLock::Recursive )
     {
     };
     ~MapDocumentPrivate()
@@ -79,6 +81,7 @@ public:
     mutable QString Id;
 
     QList<FeaturePainter> theFeaturePainters;
+    QReadWriteLock theFeaturePaintersLock;
 };
 
 Document::Document()
@@ -124,16 +127,34 @@ const QString& Document::id() const
 
 void Document::setPainters(QList<Painter> aPainters)
 {
+    lockPaintersForWrite();
     p->theFeaturePainters.clear();
     for (int i=0; i<aPainters.size(); ++i) {
         FeaturePainter fp(aPainters[i]);
         p->theFeaturePainters.append(fp);
     }
+    for (FeatureIterator it(this); !it.isEnd(); ++it)
+    {
+        it.get()->invalidatePainter();
+    }
+    unlockPainters();
 }
 
 int Document::getPaintersSize()
 {
     return p->theFeaturePainters.size();
+}
+
+void Document::unlockPainters() {
+    p->theFeaturePaintersLock.unlock();
+}
+
+void Document::lockPainters() {
+    p->theFeaturePaintersLock.lockForRead();
+}
+
+void Document::lockPaintersForWrite() {
+    qDebug() << "LockW";
 }
 
 const Painter* Document::getPainter(int i)

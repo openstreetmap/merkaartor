@@ -11,7 +11,7 @@
 #include "IRenderer.h"
 #include "Projection.h"
 
-class IDocument;
+class Document;
 class Projection;
 
 class OsmRenderLayer : public QObject
@@ -22,7 +22,7 @@ class OsmRenderLayer : public QObject
 
 public:
     OsmRenderLayer(QObject*parent=0);
-    void setDocument(IDocument *aDocument);
+    void setDocument(Document *aDocument);
     void setTransform(const QTransform& aTransform);
     void setProjection(const Projection& aProjection);
 
@@ -36,7 +36,7 @@ signals:
     void renderingDone();
 
 protected:
-    IDocument* theDocument;
+    Document* theDocument;
 
     QRectF projRect;
     qreal tileSizeCoordW;

@@ -123,6 +123,9 @@ public:
 
     virtual void setPainters(QList<Painter> aPainters);
     virtual int getPaintersSize();
+    void lockPainters();
+    void lockPaintersForWrite();
+    void unlockPainters();
     virtual const Painter* getPainter(int i);
 
     QStringList getCurrentSourceTags();
