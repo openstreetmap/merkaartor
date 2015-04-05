@@ -292,6 +292,12 @@ contains (PROTOBUF, 1) {
     DEFINES += USE_PROTOBUF
 }
 
+!isEmpty(SANITIZE) {
+    QMAKE_CXXFLAGS+=-fsanitize=address -fno-omit-frame-pointer
+    QMAKE_CFLAGS+=-fsanitize=address -fno-omit-frame-pointer
+    QMAKE_LFLAGS+=-fsanitize=address
+}
+
 unix:!macx {
     desktop.path = $${PREFIX}/share/applications
     desktop.files = merkaartor.desktop
