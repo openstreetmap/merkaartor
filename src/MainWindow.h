@@ -278,6 +278,7 @@ public:
     void syncOSM(const QString &aWeb, const QString &aUser, const QString &aPwd);
 
     void launchInteraction(Interaction *anInteraction);
+    bool getPathToSave(const QString& title, const QString& extension, const QString& allowedTypes, QString* path);
 
 protected:
     MapView* theView;
