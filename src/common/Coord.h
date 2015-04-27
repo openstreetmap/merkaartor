@@ -63,16 +63,6 @@ class Coord : public QPointF
 uint qHash(const Coord &c);
 
 
-#ifndef _MOBILE
-#if QT_VERSION < 0x040700 || defined(FORCE_46)
-#include <ggl/ggl.hpp>
-#include <ggl/geometries/register/point.hpp>
-
-GEOMETRY_REGISTER_POINT_2D_GET_SET(Coord, qreal, cs::cartesian, x, y, setX, setY)
-
-#endif
-#endif
-
 inline Coord operator-(const Coord& A, const Coord& B)
 {
     return Coord(A.x()-B.x(), A.y()-B.y());
