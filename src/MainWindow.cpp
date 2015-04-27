@@ -1621,13 +1621,21 @@ static bool mayDiscardStyleChanges(QWidget* aWidget)
                                  QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes) == QMessageBox::No;
 }
 
-bool MainWindow::importFiles(Document * mapDocument, const QStringList & fileNames, QStringList * importedFileNames )
-{
-    createProgressDialog();
+void MainWindow::startBusyCursor() {
 #ifndef Q_OS_SYMBIAN
     QApplication::setOverrideCursor(Qt::BusyCursor);
 #endif
+}
 
+void MainWindow::endBusyCursor() {
+#ifndef Q_OS_SYMBIAN
+    QApplication::restoreOverrideCursor();
+#endif
+}
+
+bool MainWindow::importFiles(Document * mapDocument, const QStringList & fileNames, QStringList * importedFileNames )
+{
+    createProgressDialog();
     bool foundImport = false;
 
     QStringListIterator it(fileNames);
@@ -1727,9 +1735,7 @@ bool MainWindow::importFiles(Document * mapDocument, const QStringList & fileNam
                 importAborted = true;
         }
         else if (fn.toLower().endsWith(".csv")) {
-#ifndef Q_OS_SYMBIAN
-            QApplication::restoreOverrideCursor();
-#endif
+            endBusyCursor();
             newLayer = new DrawingLayer( baseFileName );
             newLayer->setUploadable(false);
             mapDocument->add(newLayer);
@@ -1769,9 +1775,7 @@ bool MainWindow::importFiles(Document * mapDocument, const QStringList & fileNam
             QMessageBox::warning(this, tr("No valid file"), tr("%1 could not be opened.").arg(fn));
         }
     }
-#ifndef Q_OS_SYMBIAN
-    QApplication::restoreOverrideCursor();
-#endif
+    endBusyCursor();
     deleteProgressDialog();
 
     return foundImport;
@@ -3225,10 +3229,7 @@ void MainWindow::on_fileSaveAction_triggered()
 
 void MainWindow::doSaveDocument(QFile* file, bool asTemplate)
 {
-#ifndef Q_OS_SYMBIAN
-    QApplication::setOverrideCursor(Qt::BusyCursor);
-#endif
-
+    startBusyCursor();
     QXmlStreamWriter stream(file);
     stream.setAutoFormatting(true);
     stream.setAutoFormattingIndent(2);
@@ -3250,9 +3251,7 @@ void MainWindow::doSaveDocument(QFile* file, bool asTemplate)
     theDocument->setTitle(QFileInfo(fileName).fileName());
     setWindowTitle(QString("%1 - %2").arg(theDocument->title()).arg(p->title));
 
-#ifndef Q_OS_SYMBIAN
-    QApplication::restoreOverrideCursor();
-#endif
+    endBusyCursor();
 }
 
 void MainWindow::saveDocument(const QString& fn)
@@ -3437,18 +3436,12 @@ void MainWindow::on_exportOSCAction_triggered()
 //        tr("Export osmChange"), M_PREFS->getworkingdir() + "/untitled.osc", tr("osmChange Files (*.osc)"));
 
     if (fileName != "") {
-#ifndef Q_OS_SYMBIAN
-        QApplication::setOverrideCursor(Qt::BusyCursor);
-#endif
-
+        startBusyCursor();
         ImportExportOSC osc(document());
         if (osc.saveFile(fileName)) {
             osc.export_();
         }
-
-#ifndef Q_OS_SYMBIAN
-        QApplication::restoreOverrideCursor();
-#endif
+        endBusyCursor();
     }
 #endif
 }
@@ -3476,18 +3469,12 @@ void MainWindow::on_exportGPXAction_triggered()
 //        tr("Export GPX"), M_PREFS->getworkingdir() + "/untitled.gpx", tr("GPX Files (*.gpx)"));
 
     if (fileName != "") {
-#ifndef Q_OS_SYMBIAN
-        QApplication::setOverrideCursor(Qt::BusyCursor);
-#endif
-
+        startBusyCursor();
         ExportGPX gpx(document());
         if (gpx.saveFile(fileName)) {
             gpx.export_(theFeatures);
         }
-
-#ifndef Q_OS_SYMBIAN
-        QApplication::restoreOverrideCursor();
-#endif
+        endBusyCursor();
     }
     deleteProgressDialog();
 }
@@ -3499,16 +3486,10 @@ void MainWindow::on_exportGDALAction_triggered()
     createProgressDialog();
     if (!selectExportedFeatures(theFeatures))
         return;
-#ifndef Q_OS_SYMBIAN
-    QApplication::setOverrideCursor(Qt::BusyCursor);
-#endif
-
+    startBusyCursor();
     ImportExportGdal gdal(document());
     gdal.export_(theFeatures);
-
-#ifndef Q_OS_SYMBIAN
-    QApplication::restoreOverrideCursor();
-#endif
+    endBusyCursor();
 
     deleteProgressDialog();
 }
@@ -3535,18 +3516,14 @@ void MainWindow::on_exportKMLAction_triggered()
 //        tr("Export KML"), M_PREFS->getworkingdir() + "/untitled.kml", tr("KML Files (*.kml)"));
 
     if (fileName != "") {
-#ifndef Q_OS_SYMBIAN
-        QApplication::setOverrideCursor(Qt::BusyCursor);
-#endif
+        startBusyCursor();
 
         ImportExportKML kml(document());
         if (kml.saveFile(fileName)) {
             kml.export_(theFeatures);
         }
 
-#ifndef Q_OS_SYMBIAN
-        QApplication::restoreOverrideCursor();
-#endif
+        endBusyCursor();
     }
     deleteProgressDialog();
 }
