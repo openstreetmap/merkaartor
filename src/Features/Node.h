@@ -151,5 +151,3 @@ protected:
 Q_DECLARE_METATYPE( Node * );
 
 #endif
-
-

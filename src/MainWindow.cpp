@@ -77,9 +77,6 @@
 #include "TerraceDialog.h"
 
 #include "revision.h"
-#if QT_VERSION < 0x040700 || defined(FORCE_46)
-#include <boost/version.hpp>
-#endif
 
 #ifdef GEOIMAGE
 #include "GeoImageDock.h"
@@ -2136,13 +2133,6 @@ void MainWindow::on_helpAboutAction_triggered()
     dlg.setWindowFlags(dlg.windowFlags() | Qt::MSWindowsFixedSizeDialogHint);
     About.Version->setText(About.Version->text().arg(STRINGIFY(VERSION)).arg(STRINGIFY(REVISION)).arg(STRINGIFY(SVNREV)));
     About.QTVersion->setText(About.QTVersion->text().arg(qVersion()).arg(QT_VERSION_STR));
-#if QT_VERSION < 0x040700 || defined(FORCE_46)
-    int boostMajVer = BOOST_VERSION / 100000;
-    int boostMinVer = BOOST_VERSION / 100 % 1000;
-    About.BoostVersion->setText(About.BoostVersion->text().arg(QString::number(boostMajVer)+"."+QString::number(boostMinVer)));
-#else
-    About.BoostVersion->setVisible(false);
-#endif
     QString projVer = QString(STRINGIFY(PJ_VERSION));
     About.Proj4Version->setText(About.Proj4Version->text().arg(QString("%1.%2.%3").arg(projVer.left(1)).arg(projVer.mid(1, 1)).arg(projVer.right(1))));
     About.GdalVersion->setText(About.GdalVersion->text().arg(GDAL_RELEASE_NAME));

@@ -77,24 +77,6 @@ IFeature::FId Feature::newId(IFeature::FeatureType type) const
 //#endif
 //}
 
-namespace boost
-{
-    void intrusive_ptr_add_ref(Feature * p)
-    {
-        ++(p->m_references);
-    }
-    void intrusive_ptr_release(Feature * p)
-    {
-        if (--(p->m_references) == 0) {
-            if (p->layer())
-                p->layer()->deleteFeature(p);
-            else
-                delete p;
-        }
-    }
-} // namespace boost
-
-
 void copyTags(Feature* Dest, Feature* Src)
 {
     for (int i=0; i<Src->tagSize(); ++i)
