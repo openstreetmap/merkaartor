@@ -2,11 +2,6 @@
 #define MERKATOR_MAPFEATURE_H_
 
 class Feature;
-namespace boost
-{
-    void intrusive_ptr_add_ref(Feature * p);
-    void intrusive_ptr_release(Feature * p);
-}
 
 #include "IFeature.h"
 #include "Coord.h"
@@ -358,8 +353,6 @@ protected:
     static void tagsFromXML(Document* d, Feature* f, QXmlStreamReader& stream);
 
     long    m_references;
-    friend void ::boost::intrusive_ptr_add_ref(Feature * p);
-    friend void ::boost::intrusive_ptr_release(Feature * p);
 
     QPainterPath thePath;
 };

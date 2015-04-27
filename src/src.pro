@@ -76,13 +76,6 @@ DESTDIR = $$OUTPUT_DIR/bin
 INCLUDEPATH += $$PWD $$PWD/../include $$PWD/../interfaces $$MOC_DIR
 DEPENDPATH += $$PWD $$PWD/../interfaces
 
-unix {
-    contains(USE_BUILTIN_BOOST,1) {
-        INCLUDEPATH += $$PWD/../include/builtin-boost
-    }
-} else {
-    INCLUDEPATH += $$PWD/../include/builtin-boost
-}
 win32 {
     INCLUDEPATH += $$COMMON_DIR/include
     LIBS += -L$$COMMON_DIR/lib
