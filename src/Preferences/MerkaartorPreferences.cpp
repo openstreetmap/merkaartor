@@ -30,6 +30,11 @@
 #include "MasPaintStyle.h"
 
 
+// TODO: Replace 'g_Merk_Ignore_Preferences' by having two implementations
+// of the "preferences API": one that behaves as if
+// g_Merk_Ignore_Preferences == false, and one that ignores writes
+// and always returns default settings.
+
 #define M_PARAM_IMPLEMENT_BOOL(Param, Category, Default) \
     bool mb_##Param = false; \
     void MerkaartorPreferences::set##Param(bool theValue) \
@@ -217,28 +222,33 @@ Tool::Tool()
 
 /* MekaartorPreferences */
 
+namespace {
+
+QSettings* getSettings() {
+    if (!g_Merk_Portable) {
+        return new QSettings();
+    } else {
+        return new QSettings(qApp->applicationDirPath() + "/merkaartor.ini", QSettings::IniFormat);
+    }
+}
+
+}  // namespace
+
 MerkaartorPreferences::MerkaartorPreferences()
-    : Sets(0)
 {
     if (!g_Merk_Ignore_Preferences) {
-        if (!g_Merk_Portable) {
-            Sets = new QSettings();
+        Sets = getSettings();
 
-            QSettings oldSettings("BartVanhauwaert", "Merkaartor");
-            QStringList oldKeys = oldSettings.allKeys();
-            foreach(QString k, oldKeys) {
-                Sets->setValue(k, oldSettings.value(k));
-                Sets->sync();
-                oldSettings.remove(k);
-            }
-            oldSettings.clear();
-        } else {
-            Sets = new QSettings(qApp->applicationDirPath() + "/merkaartor.ini", QSettings::IniFormat);
+        QSettings oldSettings("BartVanhauwaert", "Merkaartor");
+        QStringList oldKeys = oldSettings.allKeys();
+        foreach(QString k, oldKeys) {
+            Sets->setValue(k, oldSettings.value(k));
+            Sets->sync();
+            oldSettings.remove(k);
         }
+        oldSettings.clear();
         version = Sets->value("version/version", "0").toString();
     }
-
-    theToolList = new ToolList();
 
     connect(&httpRequest, SIGNAL(authenticationRequired(QNetworkReply*, QAuthenticator*)), this, SLOT(on_authenticationRequired(QNetworkReply*, QAuthenticator*)));
     connect(&httpRequest, SIGNAL(finished(QNetworkReply*)),this,SLOT(on_requestFinished(QNetworkReply*)));
@@ -260,7 +270,6 @@ MerkaartorPreferences::MerkaartorPreferences()
 
 MerkaartorPreferences::~MerkaartorPreferences()
 {
-    delete theToolList;
     delete Sets;
 #ifdef USE_LIBPROXY
     px_proxy_factory_free(proxyFactory);
@@ -286,6 +295,9 @@ void MerkaartorPreferences::save(bool UserPwdChanged)
     saveTagListFirstColumnWidth();
     Sets->sync();
 
+    // TODO: There is either some misnaming here or a bug. Why would settings
+    // be pulled from OSM only if the password changed, and pushed to OSM
+    // only otherwise?
     if (UserPwdChanged)
         fromOsmPref();
     else
@@ -315,6 +327,7 @@ void MerkaartorPreferences::toOsmPref()
     QByteArray ba = qCompress(theXmlDoc.toString().toUtf8());
     QByteArray PrefsXML = ba.toBase64();
 
+    // TODO: Why is it required to load from PrefsXML in chunk of 254?
     QStringList slicedPrefs;
     for (int i=0; i<PrefsXML.size(); i+=254) {
         QString s = PrefsXML.mid(i, 254);
@@ -512,7 +525,7 @@ void MerkaartorPreferences::initialize()
 //  Use06Api = Sets->value("osm/use06api", "true").toBool();
     Use06Api = true;
 
-    // PRoxy upgrade
+    // Proxy upgrade
     if (!g_Merk_Ignore_Preferences && !g_Merk_Reset_Preferences) {
         if (Sets->contains("proxy/Use")) {
             bool b = Sets->value("proxy/Use").toBool();
@@ -566,17 +579,20 @@ void MerkaartorPreferences::initialize()
         tl = Sets->value("Tools/list").toStringList();
         for (int i=0; i<tl.size(); i+=TOOL_FIELD_SIZE) {
             Tool t(tl[i], tl[i+1]);
-            theToolList->insert(tl[i], t);
+            theToolList.insert(tl[i], t);
         }
     }
-    if (!theToolList->contains("Inkscape")) {
+    if (!theToolList.contains("Inkscape")) {
         Tool t("Inkscape", "");
-        theToolList->insert("Inkscape", t);
+        theToolList.insert("Inkscape", t);
     }
 
     QStringList Servers;
     if (!g_Merk_Ignore_Preferences && !g_Merk_Reset_Preferences) {
         Servers = Sets->value("WSM/servers").toStringList();
+	// TODO: Apparently WMS/servers is a list, and every 7 consecutive
+	// items describe a single server. There should be some documentation
+	// about what do the fields mean. Same with TMS/servers.
         if (Servers.size()) {
             for (int i=0; i<Servers.size(); i+=7) {
                 WmsServer S(Servers[i], Servers[i+1], Servers[i+2], Servers[i+3], Servers[i+4], Servers[i+5], Servers[i+6], "", "");
@@ -841,12 +857,6 @@ ProjectionItem MerkaartorPreferences::getProjection(QString aProj)
 }
 #endif
 
-void MerkaartorPreferences::setCurrentFilter(FilterType theValue)
-{
-    if (!g_Merk_Ignore_Preferences)
-        Sets->setValue("filter/Type", theValue);
-}
-
 QString MerkaartorPreferences::getCurrentFilter()
 {
     if (!g_Merk_Ignore_Preferences && !g_Merk_Reset_Preferences)
@@ -1051,16 +1061,16 @@ ExportType MerkaartorPreferences::getExportType() const
 }
 
 /* Tools */
-ToolList* MerkaartorPreferences::getTools() const
+ToolList* MerkaartorPreferences::getTools()
 {
-    return theToolList;
+    return &theToolList;
 }
 
 void MerkaartorPreferences::setTools()
 {
     if (!g_Merk_Ignore_Preferences) {
         QStringList tl;
-        ToolListIterator i(*theToolList);
+        ToolListIterator i(theToolList);
         while (i.hasNext()) {
             i.next();
             Tool t = i.value();
@@ -1075,7 +1085,7 @@ Tool MerkaartorPreferences::getTool(QString toolName) const
 {
     Tool ret;
 
-    ToolListIterator i(*theToolList);
+    ToolListIterator i(theToolList);
     while (i.hasNext()) {
         i.next();
         if (i.key() == toolName) {
@@ -1326,22 +1336,58 @@ M_PARAM_IMPLEMENT_BOOL(ReadonlyTracksDefault, data, false)
 /* FeaturesDock */
 M_PARAM_IMPLEMENT_BOOL(FeaturesWithin, FeaturesDock, true)
 
-/* Projections */
-void MerkaartorPreferences::loadProjection(QString fn)
-{
-    if (QDir::isRelativePath(fn))
-        fn = QCoreApplication::applicationDirPath() + "/" + fn;
+namespace {
 
-    qDebug() << "loadProjection " << fn;
-    QFile file(fn);
+// Preference XMLs may be stored in several directories depending
+// on the platform. This method returns the list of directories to load
+// preference XMLs from.
+QStringList getPreferenceDirectories() {
+    QList<QString> directories;
+    directories << HOMEDIR;
+    // TODO: Some files are loaded without this override for Q_OS_MAC. Why?
+#if defined(Q_OS_MAC)
+    {
+        QDir resources = QDir(QCoreApplication::applicationDirPath());
+        resources.cdUp();
+        resources.cd("Resources");
+        directories << resources.absolutePath();
+    }
+#else
+    directories << QString(SHAREDIR);
+#endif
+    directories << ":";
+    return directories;
+}
+
+// Returns the list of all alternative locations of the given preference
+// file.
+QStringList getPreferenceFilePaths(QString fileName) {
+    QList<QString> paths;
+    const QStringList directories = getPreferenceDirectories();
+    for (QStringList::const_iterator i = directories.begin(); i != directories.end(); ++i) {
+	paths << (*i) + "/" + fileName;
+    }
+    return paths;
+}
+
+}  // namespace
+
+/* Projections */
+void MerkaartorPreferences::loadProjectionsFromFile(QString fileName)
+{
+    if (QDir::isRelativePath(fileName))
+        fileName = QCoreApplication::applicationDirPath() + "/" + fileName;
+
+    qDebug() << "loadProjection " << fileName;
+    QFile file(fileName);
     if (!file.open(QIODevice::ReadOnly)) {
-//      QMessageBox::critical(this, tr("Invalid file"), tr("%1 could not be opened.").arg(fn));
+//      QMessageBox::critical(this, tr("Invalid file"), tr("%1 could not be opened.").arg(fileName));
         return;
     }
 
     QDomDocument theXmlDoc;
     if (!theXmlDoc.setContent(&file)) {
-//		QMessageBox::critical(this, tr("Invalid file"), tr("%1 is not a valid XML file.").arg(fn));
+//		QMessageBox::critical(this, tr("Invalid file"), tr("%1 is not a valid XML file.").arg(fileName));
         file.close();
         return;
     }
@@ -1354,25 +1400,10 @@ void MerkaartorPreferences::loadProjection(QString fn)
 
 void MerkaartorPreferences::loadProjections()
 {
-    QString fn;
-
-    fn = HOMEDIR + "/Projections.xml";
-    loadProjection(fn);
-
-#if defined(Q_OS_MAC)
-    {
-        QDir resources = QDir(QCoreApplication::applicationDirPath());
-        resources.cdUp();
-        resources.cd("Resources");
-        fn = resources.absolutePath() + "/Projections.xml";
+    const QStringList paths = getPreferenceFilePaths("Projections.xml");
+    for (QStringList::const_iterator i = paths.begin(); i != paths.end(); ++i) {
+	loadProjectionsFromFile(*i);
     }
-#else
-    fn = QString(SHAREDIR) + "/Projections.xml";
-#endif
-    loadProjection(fn);
-
-    fn = ":/Projections.xml";
-    loadProjection(fn);
 }
 
 void MerkaartorPreferences::saveProjections()
@@ -1395,13 +1426,13 @@ void MerkaartorPreferences::saveProjections()
 }
 
 /* Filters */
-void MerkaartorPreferences::loadFilter(QString fn)
+void MerkaartorPreferences::loadFiltersFromFile(QString fileName)
 {
-    if (QDir::isRelativePath(fn))
-        fn = QCoreApplication::applicationDirPath() + "/" + fn;
+    if (QDir::isRelativePath(fileName))
+        fileName = QCoreApplication::applicationDirPath() + "/" + fileName;
 
-    qDebug() << "loadFilter " << fn;
-    QFile file(fn);
+    qDebug() << "loadFiltersFromFile " << fileName;
+    QFile file(fileName);
     if (!file.open(QIODevice::ReadOnly)) {
         return;
     }
@@ -1420,25 +1451,10 @@ void MerkaartorPreferences::loadFilter(QString fn)
 
 void MerkaartorPreferences::loadFilters()
 {
-    QString fn;
-
-    fn = HOMEDIR + "/Filters.xml";
-    loadFilter(fn);
-
-#if defined(Q_OS_MAC)
-    {
-        QDir resources = QDir(QCoreApplication::applicationDirPath());
-        resources.cdUp();
-        resources.cd("Resources");
-        fn = resources.absolutePath() + "/Filters.xml";
+    const QStringList paths = getPreferenceFilePaths("Filters.xml");
+    for (QStringList::const_iterator i = paths.begin(); i != paths.end(); ++i) {
+        loadFiltersFromFile(*i);
     }
-#else
-    fn = QString(SHAREDIR) + "/Filters.xml";
-#endif
-    loadFilter(fn);
-
-    fn = ":/Filters.xml";
-    loadFilter(fn);
 }
 
 void MerkaartorPreferences::saveFilters()
@@ -1461,20 +1477,20 @@ void MerkaartorPreferences::saveFilters()
 
 
 /* WMS Servers */
-void MerkaartorPreferences::loadWMS(QString fn)
+void MerkaartorPreferences::loadWMSesFromFile(QString fileName)
 {
-    if (QDir::isRelativePath(fn))
-        fn = QCoreApplication::applicationDirPath() + "/" + fn;
+    if (QDir::isRelativePath(fileName))
+        fileName = QCoreApplication::applicationDirPath() + "/" + fileName;
 
-    QFile file(fn);
+    QFile file(fileName);
     if (!file.open(QIODevice::ReadOnly)) {
-//      QMessageBox::critical(this, tr("Invalid file"), tr("%1 could not be opened.").arg(fn));
+//      QMessageBox::critical(this, tr("Invalid file"), tr("%1 could not be opened.").arg(fileName));
         return;
     }
 
     QDomDocument theXmlDoc;
     if (!theXmlDoc.setContent(&file)) {
-//		QMessageBox::critical(this, tr("Invalid file"), tr("%1 is not a valid XML file.").arg(fn));
+//		QMessageBox::critical(this, tr("Invalid file"), tr("%1 is not a valid XML file.").arg(fileName));
         file.close();
         return;
     }
@@ -1487,16 +1503,11 @@ void MerkaartorPreferences::loadWMS(QString fn)
 
 void MerkaartorPreferences::loadWMSes()
 {
-    QString fn;
-
-    fn = HOMEDIR + "/WmsServersList.xml";
-    loadWMS(fn);
-
-    fn = QString(SHAREDIR) + "/WmsServersList.xml";
-    loadWMS(fn);
-
-    fn = ":/WmsServersList.xml";
-    loadWMS(fn);
+    loadWMSesFromFile(HOMEDIR + "/WmsServersList.xml");
+    // TODO: Why is the Q_OS_MAC override in getPreferenceDirectories()
+    // missing here? Is that a bug, or an intention?
+    loadWMSesFromFile(QString(SHAREDIR) + "/WmsServersList.xml");
+    loadWMSesFromFile(":/WmsServersList.xml");
 }
 
 void MerkaartorPreferences::saveWMSes()
@@ -1519,20 +1530,20 @@ void MerkaartorPreferences::saveWMSes()
 }
 
 /* TMS Servers */
-void MerkaartorPreferences::loadTMS(QString fn)
+void MerkaartorPreferences::loadTMSesFromFile(QString fileName)
 {
-    if (QDir::isRelativePath(fn))
-        fn = QCoreApplication::applicationDirPath() + "/" + fn;
+    if (QDir::isRelativePath(fileName))
+        fileName = QCoreApplication::applicationDirPath() + "/" + fileName;
 
-    QFile file(fn);
+    QFile file(fileName);
     if (!file.open(QIODevice::ReadOnly)) {
-//      QMessageBox::critical(this, tr("Invalid file"), tr("%1 could not be opened.").arg(fn));
+//      QMessageBox::critical(this, tr("Invalid file"), tr("%1 could not be opened.").arg(fileName));
         return;
     }
 
     QDomDocument theXmlDoc;
     if (!theXmlDoc.setContent(&file)) {
-//		QMessageBox::critical(this, tr("Invalid file"), tr("%1 is not a valid XML file.").arg(fn));
+//		QMessageBox::critical(this, tr("Invalid file"), tr("%1 is not a valid XML file.").arg(fileName));
         file.close();
         return;
     }
@@ -1545,16 +1556,11 @@ void MerkaartorPreferences::loadTMS(QString fn)
 
 void MerkaartorPreferences::loadTMSes()
 {
-    QString fn;
-
-    fn = HOMEDIR + "/TmsServersList.xml";
-    loadTMS(fn);
-
-    fn = QString(SHAREDIR) + "/TmsServersList.xml";
-    loadTMS(fn);
-
-    fn = ":/TmsServersList.xml";
-    loadTMS(fn);
+    loadTMSesFromFile(HOMEDIR + "/TmsServersList.xml");
+    // TODO: Why is the Q_OS_MAC override in getPreferenceDirectories()
+    // missing here? Is that a bug, or an intention?
+    loadTMSesFromFile(QString(SHAREDIR) + "/TmsServersList.xml");
+    loadTMSesFromFile(":/TmsServersList.xml");
 }
 
 void MerkaartorPreferences::saveTMSes()
@@ -1577,20 +1583,20 @@ void MerkaartorPreferences::saveTMSes()
 }
 
 /* Bookmarks */
-void MerkaartorPreferences::loadBookmark(QString fn)
+void MerkaartorPreferences::loadBookmarksFromFile(QString fileName)
 {
-    if (QDir::isRelativePath(fn))
-        fn = QCoreApplication::applicationDirPath() + "/" + fn;
+    if (QDir::isRelativePath(fileName))
+        fileName = QCoreApplication::applicationDirPath() + "/" + fileName;
 
-    QFile file(fn);
+    QFile file(fileName);
     if (!file.open(QIODevice::ReadOnly)) {
-//      QMessageBox::critical(this, tr("Invalid file"), tr("%1 could not be opened.").arg(fn));
+//      QMessageBox::critical(this, tr("Invalid file"), tr("%1 could not be opened.").arg(fileName));
         return;
     }
 
     QDomDocument theXmlDoc;
     if (!theXmlDoc.setContent(&file)) {
-//		QMessageBox::critical(this, tr("Invalid file"), tr("%1 is not a valid XML file.").arg(fn));
+//		QMessageBox::critical(this, tr("Invalid file"), tr("%1 is not a valid XML file.").arg(fileName));
         file.close();
         return;
     }
@@ -1603,16 +1609,11 @@ void MerkaartorPreferences::loadBookmark(QString fn)
 
 void MerkaartorPreferences::loadBookmarks()
 {
-    QString fn;
-
-    fn = HOMEDIR + "/BookmarksList.xml";
-    loadBookmark(fn);
-
-    fn = QString(SHAREDIR) + "/BookmarksList.xml";
-    loadBookmark(fn);
-
-    fn = ":/BookmarksList.xml";
-    loadBookmark(fn);
+    loadBookmarksFromFile(HOMEDIR + "/BookmarksList.xml");
+    // TODO: Why is the Q_OS_MAC override in getPreferenceDirectories()
+    // missing here? Is that a bug, or an intention?
+    loadBookmarksFromFile(QString(SHAREDIR) + "/BookmarksList.xml");
+    loadBookmarksFromFile(":/BookmarksList.xml");
 }
 
 void MerkaartorPreferences::saveBookmarks()
@@ -1674,14 +1675,9 @@ void MerkaartorPreferences::saveOsmServers()
 QString getDefaultLanguage(bool returnDefault)
 {
     if (!g_Merk_Ignore_Preferences && !g_Merk_Reset_Preferences) {
-        QSettings* Sets;
-        if (!g_Merk_Portable) {
-            Sets = new QSettings();
-        } else {
-            Sets = new QSettings(qApp->applicationDirPath() + "/merkaartor.ini", QSettings::IniFormat);
-        }
-        QString lang = Sets->value("locale/language").toString();
-        delete Sets;
+        QSettings* sets = getSettings();
+        QString lang = sets->value("locale/language").toString();
+        delete sets;
         if (lang == "")
             if (returnDefault)
                 lang = QLocale::system().name().split("_")[0];
@@ -1697,12 +1693,8 @@ QString getDefaultLanguage(bool returnDefault)
 void setDefaultLanguage(const QString& theValue)
 {
     if (!g_Merk_Ignore_Preferences) {
-        QSettings* Sets;
-        if (!g_Merk_Portable) {
-            Sets = new QSettings();
-        } else {
-            Sets = new QSettings(qApp->applicationDirPath() + "/merkaartor.ini", QSettings::IniFormat);
-        }
-        Sets->setValue("locale/language", theValue);
+        QSettings* sets = getSettings();
+        sets->setValue("locale/language", theValue);
+        // TODO: 'sets' memory leak?
     }
 }
