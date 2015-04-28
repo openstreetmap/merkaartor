@@ -28,10 +28,6 @@
 #include <QStatusBar>
 #include <QInputDialog>
 
-// #define DEBUG_EVERY_CALL
-// #define DEBUG_MAPCALL_ONLY
-// #define DEBUG_NONGET_CALL
-
 /* DOWNLOADER */
 
 Downloader::Downloader(const QString& aUser, const QString& aPwd)
@@ -80,81 +76,16 @@ void Downloader::on_Cancel_clicked()
 
 #include "QTextBrowser"
 
-void showDebug(const QString& Method, const QString& URL, const QString& Sent, const QByteArray& arr)
-{
-    static int Download = 0;
-    ++Download;
-    QTextBrowser* b = new QTextBrowser;
-    b->setWindowTitle(Method + " " + URL+" -- "+QString::number(Download));
-    if (Sent.length())
-    {
-        b->append(Sent+QString("\n"));
-        b->append(" <======================== "+QString("\n"));
-        b->append(" ========================> "+QString("\n"));
-    }
-    b->append(QString::fromUtf8(arr));
-    b->setAttribute(Qt::WA_DeleteOnClose,true);
-    b->show();
-    b->raise();
+bool Downloader::go(const QUrl& url) {
+    return request("GET", url, QString(), false);
 }
 
-bool Downloader::go(const QUrl& url)
-{
+bool Downloader::request(const QString& theMethod, const QUrl& url, const QString& theData, bool FireForget) {
     if (Error) return false;
-
-    netManager.setProxy(M_PREFS->getProxy(url));
-
-    qDebug() << "Downloader::go: " << url;
-
-    QNetworkRequest req(url);
-
-    if (AnimationTimer)
-        AnimationTimer->start(200);
-
-    req.setRawHeader(QByteArray("User-Agent"), USER_AGENT.toLatin1());
-
-    currentReply = netManager.get(req);
-    connect(currentReply,SIGNAL(downloadProgress(qint64, qint64)), this,SLOT(progress(qint64, qint64)));
-
-    if (Loop.exec() == QDialog::Rejected)
-        return false;
-
-    if (currentReply->error())
-        QMessageBox::information(0,tr("error"), currentReply->errorString());
-
-    // FIXME: Is is worth it? I don't think the API even specifies length in advance.
-    //if (Request.lastResponse().hasContentLength() && Content.size() != (int)Request.lastResponse().contentLength())
-    //   QMessageBox::information(0,tr("didn't download enough"),QString("%1 %2").arg(Content.size()).arg(Request.lastResponse().contentLength()));
-
-    QByteArray encoding = currentReply->rawHeader(QByteArray("Content-encoding"));
-    Content = currentReply->readAll();
-
-    SAFE_DELETE(AnimationTimer);
-
-    QVariant redir = currentReply->attribute(QNetworkRequest::RedirectionTargetAttribute);
-    if (redir.isValid()) {
-        LocationText = redir.toString();
-        if (!LocationText.isEmpty()) {
-            QUrl aURL(LocationText);
-            return go(aURL);
-        }
-    }
-
-    Result = currentReply->attribute(QNetworkRequest::HttpStatusCodeAttribute).toInt();
-    ResultText = currentReply->errorString();
-    ErrorText = currentReply->rawHeader("Error");
-
-    return !Error;
-}
-
-bool Downloader::request(const QString& theMethod, const QUrl& url, const QString& theData, bool FireForget)
-{
-    if (Error) return false;
-
-    netManager.setProxy(M_PREFS->getProxy(url));
 
     qDebug() << "Downloader::request: " << url;
 
+    netManager.setProxy(M_PREFS->getProxy(url));
     QNetworkRequest req(url);
 
     req.setRawHeader(QByteArray("Content-Type"), QByteArray("text/xml"));
@@ -164,18 +95,37 @@ bool Downloader::request(const QString& theMethod, const QUrl& url, const QStrin
     QBuffer dataBuffer(&dataArray);
     currentReply = netManager.sendCustomRequest(req, theMethod.toLatin1(), &dataBuffer);
 
+    if (AnimationTimer) {
+        AnimationTimer->start(200);
+        connect(currentReply,SIGNAL(downloadProgress(qint64, qint64)), this,SLOT(progress(qint64, qint64)));
+    }
+
     if (FireForget)
         return true;
 
     if (Loop.exec() == QDialog::Rejected)
         return false;
 
+    if (AnimationTimer)
+        SAFE_DELETE(AnimationTimer);
+
+    /* Test for redirections */
+    QVariant redir = currentReply->attribute(QNetworkRequest::RedirectionTargetAttribute);
+    if (redir.isValid()) {
+        LocationText = redir.toString();
+        if (!LocationText.isEmpty()) {
+            QUrl newUrl(LocationText);
+            return request(theMethod, newUrl, theData, FireForget);
+        }
+    }
+
+    /* Handler error? */
     if (currentReply->error())
         QMessageBox::information(0,tr("error"), currentReply->errorString());
 
-    QByteArray encoding = currentReply->rawHeader(QByteArray("Content-encoding"));
-    Content = currentReply->readAll();
 
+    /* Read the data */
+    Content = currentReply->readAll();
     Result = currentReply->attribute(QNetworkRequest::HttpStatusCodeAttribute).toInt();
     ResultText = currentReply->errorString();
     ErrorText = currentReply->rawHeader("Error");
@@ -352,9 +302,6 @@ bool downloadOSM(QWidget* aParent, const QUrl& theUrl, const QString& aUser, con
 #endif
         return false;
     }
-#ifdef DEBUG_MAPCALL_ONLY
-    showDebug("GET", URL,QByteArray(), Rcv.content());
-#endif
     int x = Rcv.resultCode();
     switch (x)
     {
