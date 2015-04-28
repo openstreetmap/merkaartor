@@ -278,6 +278,7 @@ public:
     void syncOSM(const QString &aWeb, const QString &aUser, const QString &aPwd);
 
     void launchInteraction(Interaction *anInteraction);
+    enum ImportStatus { IMPORT_OK, IMPORT_ABORTED, IMPORT_ERROR };
 
 protected:
     MapView* theView;
@@ -310,6 +311,7 @@ private slots:
     void on_viewWireframeAction_toggled(bool arg1);
 
 private:
+    ImportStatus importFile(Document* mapDocument, const QString& fileName, Layer*& newLayer);
     void updateMenu();
     void updateRecentOpenMenu();
     void updateRecentImportMenu();
