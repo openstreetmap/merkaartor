@@ -221,7 +221,7 @@ public:
     MainWindowPrivate* p;
     Ui::MainWindow *ui;
 
-    QString fileName;
+    QString currentProjectFile;
     PropertiesDock* properties();
     FeaturesDock* features();
     InfoDock* info();

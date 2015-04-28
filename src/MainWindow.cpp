@@ -168,7 +168,7 @@ void SetOptionValue(RendererOptions& options,
 MainWindow::MainWindow(QWidget *parent)
         : QMainWindow(parent)
         , ui(new Ui::MainWindow)
-        , fileName("")
+        , currentProjectFile("")
         , theDocument(0)
         , gpsRecLayer(0)
         , curGpsTrackSegment(0)
@@ -2386,7 +2386,7 @@ void MainWindow::on_fileNewAction_triggered()
                 this, SLOT(onLoadingfinished(ImageMapLayer*)), Qt::QueuedConnection);
         theDirty->updateList();
 
-        fileName = "";
+        currentProjectFile = "";
         setWindowTitle(QString("%1 - %2").arg(theDocument->title()).arg(p->title));
 
         updateProjectionMenu();
@@ -3206,7 +3206,7 @@ void MainWindow::on_fileSaveAsAction_triggered()
 {
     QString path;
     if (getPathToSave(tr("Save Merkaartor document"), "mdc", tr("Merkaartor documents Files (*.mdc)") + "\n" + tr("All Files (*)"), &path)) {
-        saveDocument(fileName);
+        saveDocument(path);
         M_PREFS->addRecentOpen(path);
         updateRecentOpenMenu();
     }
@@ -3222,8 +3222,8 @@ void MainWindow::on_fileSaveAsTemplateAction_triggered()
 
 void MainWindow::on_fileSaveAction_triggered()
 {
-    if (fileName != "") {
-        saveDocument(fileName);
+    if (currentProjectFile != "") {
+        saveDocument(currentProjectFile);
     } else {
         on_fileSaveAsAction_triggered();
     }
@@ -3250,7 +3250,7 @@ void MainWindow::doSaveDocument(QFile* file, bool asTemplate)
 
     progress.setValue(progress.maximum());
 
-    theDocument->setTitle(QFileInfo(fileName).fileName());
+    theDocument->setTitle(QFileInfo(currentProjectFile).fileName());
     setWindowTitle(QString("%1 - %2").arg(theDocument->title()).arg(p->title));
 
     endBusyCursor();
@@ -3267,6 +3267,7 @@ void MainWindow::saveDocument(const QString& fn)
 
     doSaveDocument(&file);
     file.close();
+    currentProjectFile = fn;
 
     p->latSaveDirtyLevel = theDocument->getDirtySize();
 }
@@ -3361,7 +3362,7 @@ void MainWindow::loadDocument(QString fn)
         connect(theDocument, SIGNAL(loadingFinished(ImageMapLayer*)),
                 this, SLOT(onLoadingfinished(ImageMapLayer*)), Qt::QueuedConnection);
         theDirty->updateList();
-        fileName = fn;
+        currentProjectFile = fn;
         setWindowTitle(QString("%1 - %2").arg(theDocument->title()).arg(p->title));
         p->latSaveDirtyLevel = theDocument->getDirtySize();
     }
@@ -4375,14 +4376,14 @@ void MainWindow::syncOSM(const QString& aWeb, const QString& aUser, const QStrin
 
             p->latSaveDirtyLevel = theDocument->getDirtySize();
 
-            if (!fileName.isEmpty()) {
+            if (!currentProjectFile.isEmpty()) {
                 if (M_PREFS->getAutoSaveDoc()) {
-                    saveDocument(fileName);
+                    saveDocument(currentProjectFile);
                 } else {
                     if (QMessageBox::warning(this,tr("Unsaved changes"),
                                              tr("It is strongly recommended to save the changes to your document after an upload.\nDo you want to do this now?"),
                                              QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes) == QMessageBox::Yes) {
-                        saveDocument(fileName);
+                        saveDocument(currentProjectFile);
 
                     }
                 }
