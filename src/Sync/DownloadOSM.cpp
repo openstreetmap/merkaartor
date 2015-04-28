@@ -28,8 +28,6 @@
 #include <QStatusBar>
 #include <QInputDialog>
 
-#include <zlib.h>
-
 // #define DEBUG_EVERY_CALL
 // #define DEBUG_MAPCALL_ONLY
 // #define DEBUG_NONGET_CALL
@@ -100,72 +98,6 @@ void showDebug(const QString& Method, const QString& URL, const QString& Sent, c
     b->raise();
 }
 
-
-#define CHUNK 4096
-
-QByteArray gzipDecode(const QByteArray& In)
-{
-    QByteArray Total;
-
-    int ret;
-    unsigned have;
-    z_stream strm;
-    char in[CHUNK+2];
-    char out[CHUNK+2];
-    /* allocate inflate state */
-    strm.zalloc = Z_NULL;
-    strm.zfree = Z_NULL;
-    strm.opaque = Z_NULL;
-    strm.avail_in = 0;
-    strm.next_in = Z_NULL;
-    ret = inflateInit2(&strm,15+32);
-    if (ret != Z_OK)
-       {
-               (void)inflateEnd(&strm);
-        return Total;
-       }
-    int RealSize = In.size();
-    for (int i=0; i<RealSize/CHUNK+1; ++i)
-    {
-        int Left = RealSize-(i*CHUNK);
-        if (Left > CHUNK)
-            Left = CHUNK;
-        memcpy(in,In.constData()+(i*CHUNK),Left);
-        strm.avail_in = Left;
-        strm.next_in = reinterpret_cast<unsigned char*>(in);
-
-        /* run inflate() on input until output buffer not full */
-        do
-        {
-            strm.avail_out = CHUNK;
-            strm.next_out = reinterpret_cast<unsigned char*>(out);
-            ret = inflate(&strm, Z_NO_FLUSH);
-            if (ret == Z_STREAM_ERROR)
-                       {
-                               (void)inflateEnd(&strm);
-                return Total;
-                       }
-            switch (ret)
-            {
-                case Z_NEED_DICT:
-                    ret = Z_DATA_ERROR;     /* and fall through */
-                case Z_DATA_ERROR:
-                case Z_MEM_ERROR:
-                    (void)inflateEnd(&strm);
-                    return Total;
-            }
-            have = CHUNK - strm.avail_out;
-            out[have] = 0;
-            Total.append(QByteArray(out,have));
-        } while (strm.avail_out == 0);
-    }
-       (void)inflateEnd(&strm);
-    return Total;
-}
-
-
-
-
 bool Downloader::go(const QUrl& url)
 {
     if (Error) return false;
@@ -179,7 +111,6 @@ bool Downloader::go(const QUrl& url)
     if (AnimationTimer)
         AnimationTimer->start(200);
 
-    req.setRawHeader(QByteArray("Accept-Encoding"), QByteArray("gzip,deflate"));
     req.setRawHeader(QByteArray("User-Agent"), USER_AGENT.toLatin1());
 
     currentReply = netManager.get(req);
@@ -196,12 +127,7 @@ bool Downloader::go(const QUrl& url)
     //   QMessageBox::information(0,tr("didn't download enough"),QString("%1 %2").arg(Content.size()).arg(Request.lastResponse().contentLength()));
 
     QByteArray encoding = currentReply->rawHeader(QByteArray("Content-encoding"));
-    if (encoding == "gzip") {
-        Content = gzipDecode(currentReply->readAll());
-    } else {
-        qDebug() << "Downloader: received non-compressed content. The encoding was: " << encoding;
-        Content = currentReply->readAll();
-    }
+    Content = currentReply->readAll();
 
     SAFE_DELETE(AnimationTimer);
 
@@ -244,13 +170,11 @@ bool Downloader::request(const QString& theMethod, const QUrl& url, const QStrin
     if (Loop.exec() == QDialog::Rejected)
         return false;
 
+    if (currentReply->error())
+        QMessageBox::information(0,tr("error"), currentReply->errorString());
+
     QByteArray encoding = currentReply->rawHeader(QByteArray("Content-encoding"));
-    if (encoding == "gzip") {
-        Content = gzipDecode(currentReply->readAll());
-    } else {
-        qDebug() << "Downloader: received non-compressed content. The encoding was: " << encoding;
-        Content = currentReply->readAll();
-    }
+    Content = currentReply->readAll();
 
     Result = currentReply->attribute(QNetworkRequest::HttpStatusCodeAttribute).toInt();
     ResultText = currentReply->errorString();
@@ -268,27 +192,6 @@ QByteArray& Downloader::content()
 {
     return Content;
 }
-
-/*
-void Downloader::on_responseHeaderReceived(const QHttpResponseHeader & hdr)
-{
-    //switch (hdr.statusCode()) {
-    //	case 200:
-    //		break;
-    //	case 406:
-    //		QMessageBox::critical(NULL,QApplication::translate("MerkaartorPreferences","Preferences upload failed"), QApplication::translate("MerkaartorPreferences","Duplicate key"));
-    //		break;
-    //	case 413:
-    //		QMessageBox::critical(NULL,QApplication::translate("MerkaartorPreferences","Preferences upload failed"), QApplication::translate("MerkaartorPreferences","More than 150 preferences"));
-    //		break;
-    //	default:
-    //		qDebug() << hdr.statusCode();
-    //		qDebug() << hdr.reasonPhrase();
-    //		break;
-    //}
-
-    qDebug() << "Downloader::on_responseHeaderReceived: " << hdr.statusCode() << hdr.reasonPhrase();
-} */
 
 void Downloader::on_requestFinished( QNetworkReply *reply)
 {
