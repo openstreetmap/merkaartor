@@ -279,6 +279,7 @@ public:
 
     void launchInteraction(Interaction *anInteraction);
     enum ImportStatus { IMPORT_OK, IMPORT_ABORTED, IMPORT_ERROR };
+    bool getPathToSave(const QString& title, const QString& extension, const QString& allowedTypes, QString* path);
 
 protected:
     MapView* theView;
