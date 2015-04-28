@@ -2189,7 +2189,7 @@ void MainWindow::on_viewZoomWindowAction_triggered()
 void MainWindow::on_viewLockZoomAction_triggered()
 {
     M_PREFS->setZoomBoris(!M_PREFS->getZoomBoris());
-    if (M_PREFS->getZoomBoris()) p->renderOptions.options |= RendererOptions::LockZoom; else p->renderOptions.options &= ~RendererOptions::LockZoom;
+    SetOptionValue(p->renderOptions, RendererOptions::LockZoom, M_PREFS->getZoomBoris());
     ui->viewLockZoomAction->setChecked(M_PREFS->getZoomBoris());
     ImageMapLayer* l = NULL;
     for (LayerIterator<ImageMapLayer*> ImgIt(theDocument); !ImgIt.isEnd(); ++ImgIt) {

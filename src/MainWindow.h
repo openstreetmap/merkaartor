@@ -275,7 +275,6 @@ public:
     void updateLanguage();
 
     bool hasUnsavedChanges();
-    void syncOSM(const QString &aWeb, const QString &aUser, const QString &aPwd);
 
     void launchInteraction(Interaction *anInteraction);
     enum ImportStatus { IMPORT_OK, IMPORT_ABORTED, IMPORT_ERROR };
@@ -339,6 +338,7 @@ private:
     void startBusyCursor();
     void endBusyCursor();
 
+    void syncOSM(const QString &aWeb, const QString &aUser, const QString &aPwd);
 protected:
     void closeEvent(QCloseEvent * event);
     virtual QMenu * createPopupMenu ();
