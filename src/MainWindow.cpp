@@ -101,6 +101,7 @@
 #include "qttoolbardialog.h"
 
 #include <locale.h>
+#include <limits.h>
 
 //For About
 #include "proj_api.h"
@@ -2400,14 +2401,23 @@ void MainWindow::on_createRoundaboutAction_triggered()
     theInfo->setHtml(theView->interaction()->toHtml());
 }
 
+namespace {
+
+// TODO: Move Qt4/Qt5 wrappers to a separate file.
+int getInteger(QWidget* parent, const QString& title, const QString& label, int value = 0, int minimum = INT_MIN, int maximum = INT_MAX, int step = 1, bool* ok = NULL) {
+#ifdef QT5
+    return QInputDialog::getInt(parent, title, label, value, minimum, maximum, step, ok);
+#else
+    return QInputDialog::getInteger(parent, title, label, value, minimum, maximum, step, ok);
+#endif
+}
+
+}
+
 void MainWindow::on_createPolygonAction_triggered()
 {
     QList< QPair <QString, QString> > tags;
-#ifdef QT5
-#define getInteger getInt
-#endif
-    int Sides = QInputDialog::getInteger(this, MainWindow::tr("Create Polygon"), MainWindow::tr("Specify the number of sides"), M_PREFS->getPolygonSides(), 3);
-#undef getInteger
+    int Sides = getInteger(this, tr("Create Polygon"), tr("Specify the number of sides"), M_PREFS->getPolygonSides(), 3);
     M_PREFS->setPolygonSides(Sides);
     launchInteraction(new CreatePolygonInteraction(this, Sides, tags));
     theInfo->setHtml(theView->interaction()->toHtml());
@@ -2663,7 +2673,7 @@ void MainWindow::on_roadSubdivideAction_triggered()
 {
 #if QT_VERSION < 0x040500
     {
-        int divisions = QInputDialog::getInteger(this, MainWindow::tr("Number of segments to divide into"), MainWindow::tr("Specify the number of segments"), 2, 99);
+        int divisions = getInteger(this, tr("Number of segments to divide into"), tr("Specify the number of segments"), 2, 99);
 #else
     QInputDialog *Dlg = new QInputDialog(this);
     Dlg->setInputMode(QInputDialog::IntInput);
@@ -2695,13 +2705,9 @@ void MainWindow::on_roadAxisAlignAction_triggered()
     axes = axisAlignGuessAxes(p->theProperties, view()->projection(), max_axes);
     if (!axes)
         axes = 4;
-#ifdef QT5
-#define getInteger getInt
-#endif
-    axes = QInputDialog::getInteger(this, tr("Axis Align"),
+    axes = getInteger(this, tr("Axis Align"),
                                     tr("Specify the number of regular axes to align edges on (e.g. 4 for rectangular)"),
                                     axes, 3, max_axes, 1, &ok);
-#undef getInteger
     if (!ok)
         return;
 
