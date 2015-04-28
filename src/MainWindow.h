@@ -275,9 +275,10 @@ public:
     void updateLanguage();
 
     bool hasUnsavedChanges();
-    void syncOSM(const QString &aWeb, const QString &aUser, const QString &aPwd);
 
     void launchInteraction(Interaction *anInteraction);
+    enum ImportStatus { IMPORT_OK, IMPORT_ABORTED, IMPORT_ERROR };
+    bool getPathToSave(const QString& title, const QString& extension, const QString& allowedTypes, QString* path);
 
 protected:
     MapView* theView;
@@ -310,6 +311,7 @@ private slots:
     void on_viewWireframeAction_toggled(bool arg1);
 
 private:
+    ImportStatus importFile(Document* mapDocument, const QString& fileName, Layer*& newLayer);
     void updateMenu();
     void updateRecentOpenMenu();
     void updateRecentImportMenu();
@@ -336,6 +338,7 @@ private:
     void startBusyCursor();
     void endBusyCursor();
 
+    void syncOSM(const QString &aWeb, const QString &aUser, const QString &aPwd);
 protected:
     void closeEvent(QCloseEvent * event);
     virtual QMenu * createPopupMenu ();

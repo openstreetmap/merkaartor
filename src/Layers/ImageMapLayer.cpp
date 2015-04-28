@@ -46,9 +46,6 @@ public:
 #endif
     ImageManager* theNetworkImageManager;
 
-    TileMapAdapter* tmsa;
-    WMSMapAdapter* wmsa;
-    WmscMapAdapter* wmsca;
     QRect pr;
     QTransform theTransform;
     QRectF Viewport;
@@ -65,9 +62,6 @@ public:
         theBrowserImageManager = NULL;
 #endif
         theNetworkImageManager = NULL;
-        tmsa = NULL;
-        wmsa = NULL;
-        wmsca = NULL;
     }
     ~ImageMapLayerPrivate()
     {
@@ -207,20 +201,15 @@ void ImageMapLayer::setMapAdapter(const QUuid& theAdapterUid, const QString& ser
         } else {
             p->selServer = server;
             WmsServer theWmsServer(wsl->value(p->selServer));
+            p->theMapAdapter = new WMSMapAdapter(theWmsServer);
             switch (theWmsServer.WmsIsTiled) {
             case 0:
-                p->wmsa = new WMSMapAdapter(theWmsServer);
-                p->theMapAdapter = p->wmsa;
                 setName(tr("Map - WMS - %1").arg(p->theMapAdapter->getName()));
                 break;
             case 1:
-                p->wmsca = new WmscMapAdapter(theWmsServer);
-                p->theMapAdapter = p->wmsca;
                 setName(tr("Map - WMS-C - %1").arg(p->theMapAdapter->getName()));
                 break;
             case 2:
-                p->wmsca = new WmscMapAdapter(theWmsServer);
-                p->theMapAdapter = p->wmsca;
                 setName(tr("Map - WMS-Tiled - %1").arg(p->theMapAdapter->getName()));
                 break;
             }
@@ -234,8 +223,7 @@ void ImageMapLayer::setMapAdapter(const QUuid& theAdapterUid, const QString& ser
         } else {
             p->selServer = server;
             TmsServer ts = tsl->value(p->selServer);
-            p->tmsa = new TileMapAdapter(ts);
-            p->theMapAdapter = p->tmsa;
+            p->theMapAdapter = new TileMapAdapter(ts);
 
             setName(tr("Map - TMS - %1").arg(p->theMapAdapter->getName()));
             id += p->theMapAdapter->getName();
@@ -289,14 +277,11 @@ void ImageMapLayer::setMapAdapter(const QUuid& theAdapterUid, const QString& ser
                         }
                     }
                     if (!ui.cbAgree->isChecked()) {
-                        SAFE_DELETE(p->wmsa)
-                                SAFE_DELETE(p->wmsca)
-                                SAFE_DELETE(p->tmsa)
-                                if (p->theImageManager)
-                                    p->theImageManager->abortLoading();
+                        SAFE_DELETE(p->theMapAdapter)
+                        if (p->theImageManager)
+                            p->theImageManager->abortLoading();
                         SAFE_DELETE(p->theImageManager)
-                                on_loadingFinished();
-                        p->theMapAdapter = NULL;
+                        on_loadingFinished();
                         p->curPix = QPixmap();
 
                         p->bgType = NONE_ADAPTER_UUID;
@@ -404,8 +389,6 @@ QTransform QTransformFomXml(QXmlStreamReader& stream)
 
 bool ImageMapLayer::toXML(QXmlStreamWriter& stream, bool asTemplate, QProgressDialog * /* progress */)
 {
-    bool OK = true;
-
     stream.writeStartElement(metaObject()->className());
 
     stream.writeAttribute("xml:id", id());
@@ -448,7 +431,7 @@ bool ImageMapLayer::toXML(QXmlStreamWriter& stream, bool asTemplate, QProgressDi
     }
     stream.writeEndElement();
 
-    return OK;
+    return true;
 }
 
 ImageMapLayer * ImageMapLayer::fromXML(Document* d, QXmlStreamReader& stream, QProgressDialog * /*progress*/)
@@ -462,6 +445,7 @@ ImageMapLayer * ImageMapLayer::fromXML(Document* d, QXmlStreamReader& stream, QP
     QUuid bgtype = QUuid(stream.attributes().value("bgtype").toString());
 
     qreal alpha = stream.attributes().value("alpha").toString().toDouble();
+    // TODO: Note that the logic for "enabled" is slightly different. Why?
     bool visible = (stream.attributes().value("visible") == "true" ? true : false);
     bool selected = (stream.attributes().value("selected") == "true" ? true : false);
     bool enabled = (stream.attributes().value("enabled") == "false" ? false : true);

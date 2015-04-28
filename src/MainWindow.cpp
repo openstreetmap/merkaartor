@@ -1631,146 +1631,159 @@ void MainWindow::endBusyCursor() {
 #endif
 }
 
+MainWindow::ImportStatus MainWindow::importFile(Document * mapDocument, const QString& fileName, Layer*& newLayer) {
+    QString baseFileName = fileName.section('/', - 1);
+    if (fileName.toLower().endsWith(".gpx")) {
+        QList<TrackLayer*> theTracklayers;
+        newLayer = new TrackLayer( baseFileName + " - " + tr("Waypoints"), baseFileName);
+        mapDocument->add(newLayer);
+        theTracklayers.append((TrackLayer*) newLayer);
+        bool importOK = importGPX(this, baseFileName, mapDocument, theTracklayers);
+        if (!importOK) {
+            for (int i=0; i<theTracklayers.size(); i++) {
+                mapDocument->remove(theTracklayers[i]);
+                delete theTracklayers[i];
+            }
+        } else {
+            if (!newLayer->size()) {
+                mapDocument->remove(newLayer);
+                delete newLayer;
+            }
+            for (int i=1; i<theTracklayers.size(); i++) {
+                if (theTracklayers[i]->name().isEmpty())
+                    theTracklayers[i]->setName(QString(baseFileName + " - " + tr("Track %1").arg(i)));
+                if (importOK && M_PREFS->getAutoExtractTracks()) {
+                    theTracklayers[i]->extractLayer();
+                }
+            }
+        }
+	return importOK ? IMPORT_OK : IMPORT_ERROR;
+    }
+    else if (fileName.toLower().endsWith(".osm")) {
+        newLayer = new DrawingLayer( baseFileName );
+        mapDocument->add(newLayer);
+        return importOSM(this, baseFileName, mapDocument, newLayer) ? IMPORT_OK : IMPORT_ERROR;
+    }
+#ifndef FRISIUS_BUILD
+    else if (fileName.toLower().endsWith(".osc")) {
+        if (g_Merk_Frisius) {
+            newLayer = new DrawingLayer( baseFileName );
+            mapDocument->add(newLayer);
+        } else {
+            newLayer = mapDocument->getDirtyOrOriginLayer();
+        }
+        return mapDocument->importOSC(fileName, (DrawingLayer*)newLayer) ? IMPORT_OK : IMPORT_ERROR;
+    }
+#endif
+    else if (fileName.toLower().endsWith(".ngt")) {
+        newLayer = new TrackLayer( baseFileName );
+        newLayer->setUploadable(false);
+        mapDocument->add(newLayer);
+        bool importOK = importNGT(this, baseFileName, mapDocument, newLayer);
+        if (importOK && M_PREFS->getAutoExtractTracks()) {
+            ((TrackLayer *)newLayer)->extractLayer();
+        }
+        return importOK ? IMPORT_OK : IMPORT_ERROR;
+    }
+    else if (fileName.toLower().endsWith(".nmea") || (fileName.toLower().endsWith(".nma"))) {
+        newLayer = new TrackLayer( baseFileName );
+        newLayer->setUploadable(false);
+        mapDocument->add(newLayer);
+        bool importOK = mapDocument->importNMEA(baseFileName, (TrackLayer *)newLayer);
+        if (importOK && M_PREFS->getAutoExtractTracks()) {
+            ((TrackLayer *)newLayer)->extractLayer();
+        }
+        return importOK ? IMPORT_OK : IMPORT_ERROR;
+    }
+    else if (fileName.toLower().endsWith(".kml")) {
+        if (QMessageBox::warning(this, MainWindow::tr("Big Fat Copyright Warning"),
+                 MainWindow::tr(
+                 "You are trying to import a KML file. Please be aware that:\n"
+                 "\n"
+                 " - You cannot import to OSM a KML file created from Google Earth. While you might\n"
+                 "   think that nodes you created from GE are yours, they are not!\n"
+                 "   They are still a derivative work from GE, and, as such, cannot be used in OSM.\n"
+                 "\n"
+                 " - If you downloaded it from the Internet, chances are that there is a copyright on it.\n"
+                 "   Please be absolutely sure that using those data in OSM is permitted by the author, or\n"
+                 "   that the data is public domain.\n"
+                 "\n"
+                 "If unsure, please seek advice on the \"legal\" or \"talk\" openstreetmap mailing lists.\n"
+                 "\n"
+                 "Are you absolutely sure this KML can legally be imported in OSM?"),
+                 QMessageBox::Yes | QMessageBox::No, QMessageBox::No) == QMessageBox::Yes)
+        {
+            newLayer = new DrawingLayer( baseFileName );
+            newLayer->setUploadable(false);
+            mapDocument->add(newLayer);
+            return mapDocument->importKML(baseFileName, (TrackLayer *)newLayer) ? IMPORT_OK : IMPORT_ERROR;
+        } else
+            return IMPORT_ABORTED;
+    }
+    else if (fileName.toLower().endsWith(".csv")) {
+#ifndef Q_OS_SYMBIAN
+        QApplication::restoreOverrideCursor();
+#endif
+        newLayer = new DrawingLayer( baseFileName );
+        newLayer->setUploadable(false);
+        mapDocument->add(newLayer);
+        return mapDocument->importCSV(baseFileName, (DrawingLayer*)newLayer) ? IMPORT_OK : IMPORT_ERROR;
+    }
+#ifdef USE_PROTOBUF
+    else if (fileName.toLower().endsWith(".pbf")) {
+        newLayer = new DrawingLayer( baseFileName );
+        mapDocument->add(newLayer);
+        return mapDocument->importPBF(baseFileName, (DrawingLayer*)newLayer) ? IMPORT_OK : IMPORT_ERROR;
+    }
+#endif
+    else { // Fallback to GDAL
+        qDebug() << "Trying GDAL";
+        newLayer = new DrawingLayer( baseFileName );
+        newLayer->setUploadable(false);
+        mapDocument->add(newLayer);
+        return mapDocument->importGDAL(baseFileName, (DrawingLayer*)newLayer) ? IMPORT_OK : IMPORT_ERROR;
+    }
+}
+
 bool MainWindow::importFiles(Document * mapDocument, const QStringList & fileNames, QStringList * importedFileNames )
 {
     createProgressDialog();
+#ifndef Q_OS_SYMBIAN
+    QApplication::setOverrideCursor(Qt::BusyCursor);
+#endif
+
     bool foundImport = false;
 
     QStringListIterator it(fileNames);
     while (it.hasNext())
     {
         const QString & fn = it.next();
-        changeCurrentDirToFile(fn);
+        changeCurrentDirToFile(fn);  // TODO: Whyyyyy?!
 
-        QString baseFileName = fn.section('/', - 1);
         Layer* newLayer = NULL;
+	// TODO: The passing mechanism of newLayer is evil black magic.
+	ImportStatus fileImportResult = importFile(mapDocument, fn, newLayer);
 
-        bool importOK = false;
-        bool importAborted = false;
-
-        if (fn.toLower().endsWith(".gpx")) {
-            QList<TrackLayer*> theTracklayers;
-            TrackLayer* newLayer = new TrackLayer( baseFileName + " - " + tr("Waypoints"), baseFileName);
-            mapDocument->add(newLayer);
-            theTracklayers.append(newLayer);
-            importOK = importGPX(this, baseFileName, mapDocument, theTracklayers);
-            if (!importOK) {
-                for (int i=0; i<theTracklayers.size(); i++) {
-                    mapDocument->remove(theTracklayers[i]);
-                    delete theTracklayers[i];
-                }
-            } else {
-                if (!newLayer->size()) {
-                    mapDocument->remove(newLayer);
-                    delete newLayer;
-                }
-                for (int i=1; i<theTracklayers.size(); i++) {
-                    if (theTracklayers[i]->name().isEmpty())
-                        theTracklayers[i]->setName(QString(baseFileName + " - " + tr("Track %1").arg(i)));
-                    if (importOK && M_PREFS->getAutoExtractTracks()) {
-                        theTracklayers[i]->extractLayer();
-                    }
-                }
-            }
-        }
-        else if (fn.toLower().endsWith(".osm")) {
-            newLayer = new DrawingLayer( baseFileName );
-            mapDocument->add(newLayer);
-            importOK = importOSM(this, baseFileName, mapDocument, newLayer);
-        }
-#ifndef FRISIUS_BUILD
-        else if (fn.toLower().endsWith(".osc")) {
-            if (g_Merk_Frisius) {
-                newLayer = new DrawingLayer( baseFileName );
-                mapDocument->add(newLayer);
-            } else {
-                newLayer = mapDocument->getDirtyOrOriginLayer();
-            }
-            importOK = mapDocument->importOSC(fn, (DrawingLayer*)newLayer);
-        }
-#endif
-        else if (fn.toLower().endsWith(".ngt")) {
-            newLayer = new TrackLayer( baseFileName );
-            newLayer->setUploadable(false);
-            mapDocument->add(newLayer);
-            importOK = importNGT(this, baseFileName, mapDocument, newLayer);
-            if (importOK && M_PREFS->getAutoExtractTracks()) {
-                ((TrackLayer *)newLayer)->extractLayer();
-            }
-        }
-        else if (fn.toLower().endsWith(".nmea") || (fn.toLower().endsWith(".nma"))) {
-            newLayer = new TrackLayer( baseFileName );
-            newLayer->setUploadable(false);
-            mapDocument->add(newLayer);
-            importOK = mapDocument->importNMEA(baseFileName, (TrackLayer *)newLayer);
-            if (importOK && M_PREFS->getAutoExtractTracks()) {
-                ((TrackLayer *)newLayer)->extractLayer();
-            }
-        }
-        else if (fn.toLower().endsWith(".kml")) {
-            if (QMessageBox::warning(this, MainWindow::tr("Big Fat Copyright Warning"),
-                     MainWindow::tr(
-                     "You are trying to import a KML file. Please be aware that:\n"
-                     "\n"
-                     " - You cannot import to OSM a KML file created from Google Earth. While you might\n"
-                     "   think that nodes you created from GE are yours, they are not!\n"
-                     "   They are still a derivative work from GE, and, as such, cannot be used in OSM.\n"
-                     "\n"
-                     " - If you downloaded it from the Internet, chances are that there is a copyright on it.\n"
-                     "   Please be absolutely sure that using those data in OSM is permitted by the author, or\n"
-                     "   that the data is public domain.\n"
-                     "\n"
-                     "If unsure, please seek advice on the \"legal\" or \"talk\" openstreetmap mailing lists.\n"
-                     "\n"
-                     "Are you absolutely sure this KML can legally be imported in OSM?"),
-                     QMessageBox::Yes | QMessageBox::No, QMessageBox::No) == QMessageBox::Yes)
-            {
-                newLayer = new DrawingLayer( baseFileName );
-                newLayer->setUploadable(false);
-                mapDocument->add(newLayer);
-                importOK = mapDocument->importKML(baseFileName, (TrackLayer *)newLayer);
-            } else
-                importAborted = true;
-        }
-        else if (fn.toLower().endsWith(".csv")) {
-            endBusyCursor();
-            newLayer = new DrawingLayer( baseFileName );
-            newLayer->setUploadable(false);
-            mapDocument->add(newLayer);
-            importOK = mapDocument->importCSV(baseFileName, (DrawingLayer*)newLayer);
-        }
-#ifdef USE_PROTOBUF
-        else if (fn.toLower().endsWith(".pbf")) {
-            newLayer = new DrawingLayer( baseFileName );
-            mapDocument->add(newLayer);
-            importOK = mapDocument->importPBF(baseFileName, (DrawingLayer*)newLayer);
-        }
-#endif
-        else { // Fallback to GDAL
-            qDebug() << "Trying GDAL";
-            newLayer = new DrawingLayer( baseFileName );
-            newLayer->setUploadable(false);
-            mapDocument->add(newLayer);
-            importOK = mapDocument->importGDAL(baseFileName, (DrawingLayer*)newLayer);
-        }
-
-        if (!importOK && newLayer)
+	// TODO: Cleaning up after an unsuccessful import should be done
+	// in importFile.
+        if (fileImportResult != IMPORT_OK && newLayer)
             mapDocument->remove(newLayer);
 
-        if (importOK)
-        {
-            foundImport = true;
+	switch (fileImportResult) {
+	    case IMPORT_OK:
+                foundImport = true;
 
-            if (importedFileNames)
-                importedFileNames->append(fn);
+                if (importedFileNames)
+                    importedFileNames->append(fn);
 
-            emit content_changed();
-        }
-        else
-        if (!importAborted)
-        {
-            delete newLayer;
-            QMessageBox::warning(this, tr("No valid file"), tr("%1 could not be opened.").arg(fn));
+                emit content_changed();
+		break;
+	    case IMPORT_ERROR:
+                delete newLayer;
+                QMessageBox::warning(this, tr("No valid file"), tr("%1 could not be opened.").arg(fn));
+	    case IMPORT_ABORTED:
+		// noop
+		break;
         }
     }
     endBusyCursor();
@@ -2176,7 +2189,7 @@ void MainWindow::on_viewZoomWindowAction_triggered()
 void MainWindow::on_viewLockZoomAction_triggered()
 {
     M_PREFS->setZoomBoris(!M_PREFS->getZoomBoris());
-    if (M_PREFS->getZoomBoris()) p->renderOptions.options |= RendererOptions::LockZoom; else p->renderOptions.options &= ~RendererOptions::LockZoom;
+    SetOptionValue(p->renderOptions, RendererOptions::LockZoom, M_PREFS->getZoomBoris());
     ui->viewLockZoomAction->setChecked(M_PREFS->getZoomBoris());
     ImageMapLayer* l = NULL;
     for (LayerIterator<ImageMapLayer*> ImgIt(theDocument); !ImgIt.isEnd(); ++ImgIt) {
@@ -2997,7 +3010,6 @@ void MainWindow::on_mapStyleSaveAsAction_triggered()
         if (dlg.selectedFiles().size())
             f = dlg.selectedFiles()[0];
     }
-//    f = QFileDialog::getSaveFileName(this, tr("Save map style"), M_PREFS->getCustomStyle(), tr("Merkaartor map style (*.mas)"));
     if (!f.isNull()) {
         M_STYLE->savePainters(f);
     }
@@ -3176,41 +3188,35 @@ void MainWindow::preferencesChanged(PreferencesDialog* prefs)
     invalidateView(false);
 }
 
-void MainWindow::on_fileSaveAsAction_triggered()
-{
-    QFileDialog dlg(this, tr("Save Merkaartor document"), QString("%1/%2.mdc").arg(M_PREFS->getworkingdir()).arg(tr("untitled")), tr("Merkaartor documents Files (*.mdc)") + "\n" + tr("All Files (*)"));
+bool MainWindow::getPathToSave(const QString& title, const QString& extension, const QString& allowedTypes, QString* path) {
+    const QString defaultFile = QString("%1/%2.%3").arg(M_PREFS->getworkingdir()).arg(tr("untitled")).arg(extension);
+    QFileDialog dlg(this, title, defaultFile, allowedTypes);
     dlg.setFileMode(QFileDialog::AnyFile);
-    dlg.setDefaultSuffix("mdc");
+    dlg.setDefaultSuffix(extension);
     dlg.setAcceptMode(QFileDialog::AcceptSave);
 
-    if (dlg.exec()) {
-        if (dlg.selectedFiles().size())
-            fileName = dlg.selectedFiles()[0];
+    if (dlg.exec() && dlg.selectedFiles().size() && !dlg.selectedFiles()[0].isEmpty()) {
+	*path = dlg.selectedFiles()[0];
+        return true;
     }
+    return false;
+}
 
-    if (!fileName.isEmpty()) {
+void MainWindow::on_fileSaveAsAction_triggered()
+{
+    QString path;
+    if (getPathToSave(tr("Save Merkaartor document"), "mdc", tr("Merkaartor documents Files (*.mdc)") + "\n" + tr("All Files (*)"), &path)) {
         saveDocument(fileName);
-        M_PREFS->addRecentOpen(fileName);
+        M_PREFS->addRecentOpen(path);
         updateRecentOpenMenu();
     }
 }
 
 void MainWindow::on_fileSaveAsTemplateAction_triggered()
 {
-    QString tfileName;
-
-    QFileDialog dlg(this, tr("Save Merkaartor template document"), QString("%1/%2.mdc").arg(M_PREFS->getworkingdir()).arg(tr("untitled")), tr("Merkaartor documents Files (*.mdc)") + "\n" + tr("All Files (*)"));
-    dlg.setFileMode(QFileDialog::AnyFile);
-    dlg.setDefaultSuffix("mdc");
-    dlg.setAcceptMode(QFileDialog::AcceptSave);
-
-    if (dlg.exec()) {
-        if (dlg.selectedFiles().size())
-            tfileName = dlg.selectedFiles()[0];
-    }
-
-    if (!tfileName.isEmpty()) {
-        saveTemplateDocument(tfileName);
+    QString path;
+    if (getPathToSave(tr("Save Merkaartor template document"), "mdc", tr("Merkaartor documents Files (*.mdc)") + "\n" + tr("All Files (*)"), &path)) {
+        saveTemplateDocument(path);
     }
 }
 
@@ -3389,28 +3395,14 @@ void MainWindow::on_exportOSMAction_triggered()
     if (!selectExportedFeatures(theFeatures))
         return;
 
-    QString fileName;
-    QFileDialog dlg(this, tr("Export OSM"), QString("%1/%2.osm").arg(M_PREFS->getworkingdir()).arg(tr("untitled")), tr("OSM Files (*.osm)") + "\n" + tr("All Files (*)"));
-    dlg.setFileMode(QFileDialog::AnyFile);
-    dlg.setDefaultSuffix("osm");
-    dlg.setAcceptMode(QFileDialog::AcceptSave);
-
-    if (dlg.exec()) {
-        if (dlg.selectedFiles().size())
-            fileName = dlg.selectedFiles()[0];
-    }
-//    QString fileName = QFileDialog::getSaveFileName(this,
-//        tr("Export OSM"), M_PREFS->getworkingdir() + "/untitled.osm", tr("OSM Files (*.osm)"));
-
-    if (fileName != "") {
-
-        QFile file(fileName);
+    QString path;
+    if (getPathToSave(tr("Export OSM"), "osm", tr("OSM Files (*.osm)") + "\n" + tr("All Files (*)"), &path)) {
+        QFile file(path);
         if (!file.open(QIODevice::WriteOnly | QIODevice::Text))
             return;
 
         theDocument->exportOSM(this, &file, theFeatures);
         file.close();
-
     }
     deleteProgressDialog();
 }
@@ -3418,23 +3410,11 @@ void MainWindow::on_exportOSMAction_triggered()
 void MainWindow::on_exportOSCAction_triggered()
 {
 #ifndef FRISIUS_BUILD
-    QString fileName;
-    QFileDialog dlg(this, tr("Export osmChange"), QString("%1/%2.osc").arg(M_PREFS->getworkingdir()).arg(tr("untitled")), tr("osmChange Files (*.osc)") + "\n" + tr("All Files (*)"));
-    dlg.setFileMode(QFileDialog::AnyFile);
-    dlg.setDefaultSuffix("osc");
-    dlg.setAcceptMode(QFileDialog::AcceptSave);
-
-    if (dlg.exec()) {
-        if (dlg.selectedFiles().size())
-            fileName = dlg.selectedFiles()[0];
-    }
-//    QString fileName = QFileDialog::getSaveFileName(this,
-//        tr("Export osmChange"), M_PREFS->getworkingdir() + "/untitled.osc", tr("osmChange Files (*.osc)"));
-
-    if (fileName != "") {
+    QString path;
+    if (getPathToSave(tr("Export osmChange"), "osc", tr("osmChange Files (*.osc)") + "\n" + tr("All Files (*)"), &path)) {
         startBusyCursor();
         ImportExportOSC osc(document());
-        if (osc.saveFile(fileName)) {
+        if (osc.saveFile(path)) {
             osc.export_();
         }
         endBusyCursor();
@@ -3451,23 +3431,11 @@ void MainWindow::on_exportGPXAction_triggered()
     if (!selectExportedFeatures(theFeatures))
         return;
 
-    QString fileName;
-    QFileDialog dlg(this, tr("Export GPX"), QString("%1/%2.gpx").arg(M_PREFS->getworkingdir()).arg(tr("untitled")), tr("GPX Files (*.gpx)") + "\n" + tr("All Files (*)"));
-    dlg.setFileMode(QFileDialog::AnyFile);
-    dlg.setDefaultSuffix("gpx");
-    dlg.setAcceptMode(QFileDialog::AcceptSave);
-
-    if (dlg.exec()) {
-        if (dlg.selectedFiles().size())
-            fileName = dlg.selectedFiles()[0];
-    }
-//    QString fileName = QFileDialog::getSaveFileName(this,
-//        tr("Export GPX"), M_PREFS->getworkingdir() + "/untitled.gpx", tr("GPX Files (*.gpx)"));
-
-    if (fileName != "") {
+    QString path;
+    if (getPathToSave(tr("Export GPX"), "gpx", tr("GPX Files (*.gpx)") + "\n" + tr("All Files (*)"), &path)) {
         startBusyCursor();
         ExportGPX gpx(document());
-        if (gpx.saveFile(fileName)) {
+        if (gpx.saveFile(path)) {
             gpx.export_(theFeatures);
         }
         endBusyCursor();
@@ -3498,27 +3466,13 @@ void MainWindow::on_exportKMLAction_triggered()
     if (!selectExportedFeatures(theFeatures))
         return;
 
-    QString fileName;
-    QFileDialog dlg(this, tr("Export KML"), QString("%1/%2.kml").arg(M_PREFS->getworkingdir()).arg(tr("untitled")), tr("KML Files (*.kml)") + "\n" + tr("All Files (*)"));
-    dlg.setFileMode(QFileDialog::AnyFile);
-    dlg.setDefaultSuffix("kml");
-    dlg.setAcceptMode(QFileDialog::AcceptSave);
-
-    if (dlg.exec()) {
-        if (dlg.selectedFiles().size())
-            fileName = dlg.selectedFiles()[0];
-    }
-//    QString fileName = QFileDialog::getSaveFileName(this,
-//        tr("Export KML"), M_PREFS->getworkingdir() + "/untitled.kml", tr("KML Files (*.kml)"));
-
-    if (fileName != "") {
+    QString path;
+    if (getPathToSave(tr("Export KML"), "kml", tr("KML Files (*.kml)") + "\n" + tr("All Files (*)"), &path)) {
         startBusyCursor();
-
         ImportExportKML kml(document());
-        if (kml.saveFile(fileName)) {
+        if (kml.saveFile(path)) {
             kml.export_(theFeatures);
         }
-
         endBusyCursor();
     }
     deleteProgressDialog();
@@ -4236,19 +4190,9 @@ void MainWindow::on_gpsPauseAction_triggered()
 
 void MainWindow::on_toolTemplatesSaveAction_triggered()
 {
-    QString f;
-    QFileDialog dlg(this, tr("Save Tag Templates"), QString("%1/%2.mat").arg(M_PREFS->getworkingdir()).arg(tr("untitled")), tr("Merkaartor tag templates (*.mat)") + "\n" + tr("All Files (*)"));
-    dlg.setFileMode(QFileDialog::AnyFile);
-    dlg.setDefaultSuffix("mat");
-    dlg.setAcceptMode(QFileDialog::AcceptSave);
-
-    if (dlg.exec()) {
-        if (dlg.selectedFiles().size())
-            f = dlg.selectedFiles()[0];
-    }
-//    QString f = QFileDialog::getSaveFileName(this, tr("Save Tag Templates"), "", tr("Merkaartor tag templates (*.mat)"));
-    if (!f.isNull()) {
-        p->theProperties->saveTemplates(f);
+    QString path;
+    if (getPathToSave(tr("Save Tag Templates"), "mat", tr("Merkaartor tag templates (*.mat)") + "\n" + tr("All Files (*)"), &path)) {
+	p->theProperties->saveTemplates(path);
     }
 }
 
