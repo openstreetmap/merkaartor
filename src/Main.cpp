@@ -18,10 +18,6 @@
 
 #include "IMapAdapterFactory.h"
 
-#if defined(Q_OS_WIN)
-extern Q_CORE_EXPORT void qWinMsgHandler(QtMsgType t, const char* str);
-#endif
-
 FILE* pLogFile = NULL;
 
 #ifdef QT5
@@ -32,9 +28,6 @@ void myMessageOutput(QtMsgType msgType, const char *buf) {
 #endif
 // From corelib/global/qglobal.cpp : qt_message_output
 
-#if defined(Q_OS_WIN) && !defined(NDEBUG)
-    qWinMsgHandler(msgType, buf);
-#endif
 #if defined(Q_CC_MWERKS) && !defined(Q_OS_SYMBIAN)
     mac_default_handler(buf);
 #elif defined(Q_OS_WINCE)
