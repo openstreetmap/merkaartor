@@ -88,9 +88,11 @@ SYSTEM_QUAZIP               - use system copy of quazip instead of internal
 3. Run your build tool, make for posix like systems (including MSYS2), nmake for
 Windows C++ Build system
 
-$ make
+$ make release
 or
-$ nmake
+$ nmake release
+
+Substitute release with debug, if you want to debug the code or report bugs.
 
 4. If you are lucky, you'll find an executable in the binaries subdirectory.
 Otherwise, check our github page [1], especially check the issues and possibly
