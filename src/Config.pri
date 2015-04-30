@@ -16,6 +16,11 @@ CONFIG(release,debug|release) {
     }
 }
 
+win32 {
+system(echo "!define VER $${SVNREV}" > ../windows/version.nch )
+
+}
+
 win32|macx {
     system(echo $${LITERAL_HASH}define SVNREV $${SVNREV} > revision.h )
 } else {
