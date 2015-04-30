@@ -151,7 +151,7 @@ unix:!macx {
         LIBDIR = $${PREFIX}/lib${LIB_SUFFIX}
     }
     CONFIG(debug,debug|release) {
-        DEFINES += PLUGINS_DIR=$$OUTPUT_DIR/bin/plugins
+        DEFINES += PLUGINS_DIR=$${OUTPUT_DIR}bin/plugins
     }
     CONFIG(release,debug|release) {
         DEFINES += PLUGINS_DIR=$${LIBDIR}/merkaartor/plugins

@@ -8,23 +8,16 @@ QT_VER_MIN = $$member(QT_VERSION, 1)
 
 !symbian {
     SUBDIRS += \
-        # MArbitraryRasterMapBackground \
-        # MNavitBackground \
+#        MNavitBackground \
+#        MCadastreFranceBackground \
 #        MYahooTiledBackground \
 #        MYahooBackground \
         MMsBingMapBackground \
-        MWalkingPapersBackground
-
-    greaterThan(QT_VER_MAJ, 3) : greaterThan(QT_VER_MIN, 5) {
-        SUBDIRS += MCadastreFranceBackground
-    }
-
-    SUBDIRS += MGeoTiffBackground \
-               MGdalBackground
+        MWalkingPapersBackground \
+        MGeoTiffBackground \
+        MGdalBackground
 
     contains (SPATIALITE, 1) {
         SUBDIRS += MSpatialiteBackground
     }
-
 }
-

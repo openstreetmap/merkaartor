@@ -33,9 +33,6 @@ class GeoTiffAdapter : public IMapAdapter
 {
     Q_OBJECT
     Q_INTERFACES(IMapAdapter)
-#if QT_VERSION >= QT_VERSION_CHECK(5,0,0)
-    Q_PLUGIN_METADATA(IID "be.merkaartor.geotiffadapter" FILE "GeoTiffAdapter.json")
-#endif
 
 public:
     enum TiffType
@@ -177,6 +174,9 @@ class GeoTiffAdapterFactory : public QObject, public IMapAdapterFactory
 {
     Q_OBJECT
     Q_INTERFACES(IMapAdapterFactory)
+#if QT_VERSION >= QT_VERSION_CHECK(5,0,0)
+    Q_PLUGIN_METADATA(IID "be.merkaartor.geotiffadapter" FILE "GeoTiffAdapter.json")
+#endif
 
 public:
     //! Creates an instance of the actual plugin

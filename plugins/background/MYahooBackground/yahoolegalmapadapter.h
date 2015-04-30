@@ -29,9 +29,6 @@ class YahooLegalMapAdapter : public IMapAdapter
 {
     Q_OBJECT
     Q_INTERFACES(IMapAdapter)
-#if QT_VERSION >= QT_VERSION_CHECK(5,0,0)
-    Q_PLUGIN_METADATA(IID "be.merkaartor.YahooLegalMapAdapter" FILE "YahooLegalMapAdapter.json")
-#endif
 
 public:
     YahooLegalMapAdapter();
@@ -141,6 +138,9 @@ class YahooLegalMapAdapterFactory : public QObject, public IMapAdapterFactory
 {
     Q_OBJECT
     Q_INTERFACES(IMapAdapterFactory)
+#if QT_VERSION >= QT_VERSION_CHECK(5,0,0)
+    Q_PLUGIN_METADATA(IID "be.merkaartor.YahooLegalMapAdapter" FILE "yahoolegalmapadapter.json")
+#endif
 
 public:
     //! Creates an instance of the actual plugin

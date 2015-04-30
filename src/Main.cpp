@@ -115,12 +115,17 @@ void loadPluginsFromDir( QDir & pluginsDir ) {
     foreach (QString fileName, pluginsDir.entryList(QDir::Files)) {
         QPluginLoader loader(pluginsDir.absoluteFilePath(fileName));
         QObject *plugin = loader.instance();
-        qDebug() << "Loading" << fileName << "as plugin.";
+        qDebug() << "  Loading" << fileName << "as plugin.";
         if (plugin) {
             IMapAdapterFactory *fac = qobject_cast<IMapAdapterFactory *>(plugin);
-            if (fac)
+            if (fac) {
                 M_PREFS->addBackgroundPlugin(fac);
-            qDebug() << "Plugin loaded: " << fileName << ".";
+                qDebug() << "  Plugin loaded: " << fileName << ".";
+            } else {
+                qWarning() << "  Failed to load plugin: " << fileName << ".";
+            }
+        } else {
+            qWarning() << "  Not a plugin: " << fileName << ".";
         }
     }
 }
@@ -258,6 +263,8 @@ int main(int argc, char** argv)
 #else
     QDir pluginsDir = (g_Merk_Portable ? QDir(qApp->applicationDirPath() + "/plugins") : QDir(STRINGIFY(PLUGINS_DIR)));
 #endif
+    qDebug() << "applicationDirPath:" << qApp->applicationDirPath();
+    qDebug() << "PluginsDir:" << STRINGIFY(PLUGINS_DIR);
     QCoreApplication::addLibraryPath(pluginsDir.path());
     loadPluginsFromDir(pluginsDir);
 
