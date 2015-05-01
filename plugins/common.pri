@@ -10,22 +10,13 @@ QT_VER_MIN = $$member(QT_VERSION, 1)
 
 MERKAARTOR_SRC_DIR = $$PWD/..
 
+CONFIG += debug_and_release
+
 #Static config
 include ($$MERKAARTOR_SRC_DIR/src/Config.pri)
 
 DEFINES += VERSION=\"\\\"$$VERSION\\\"\"
 DEFINES += REVISION=\"\\\"$$REVISION\\\"\"
-
-!contains(NODEBUG,1) {
-    CONFIG += debug
-    OBJECTS_DIR += tmp/$$(QMAKESPEC)/obj_debug
-}
-contains(NODEBUG,1) {
-    CONFIG += release
-    DEFINES += NDEBUG
-    DEFINES += QT_NO_DEBUG_OUTPUT
-    OBJECTS_DIR += tmp/$$(QMAKESPEC)/obj_release
-}
 
 win32-msvc* {
     DEFINES += _USE_MATH_DEFINES
@@ -36,13 +27,11 @@ CONFIG += plugin
 
 QT += core xml network widgets
 
-#DEFINES += QT_NO_DEBUG_OUTPUT
-
-OUTPUT_DIR = $$MERKAARTOR_SRC_DIR/$$(QMAKESPEC)/binaries
-UI_DIR += tmp/$$(QMAKESPEC)
-MOC_DIR += tmp/$$(QMAKESPEC)
-RCC_DIR += tmp/$$(QMAKESPEC)
-DESTDIR = $$OUTPUT_DIR/$$(QMAKESPEC)/bin/plugins
+OUTPUT_DIR = $$OUT_PWD/../binaries
+UI_DIR += tmp
+MOC_DIR += tmp
+RCC_DIR += tmp
+DESTDIR = $$OUTPUT_DIR/bin/plugins
 
 DEPENDPATH += $${MERKAARTOR_SRC_DIR}/interfaces $${MERKAARTOR_SRC_DIR}/src/Utils
 INCLUDEPATH += $${MERKAARTOR_SRC_DIR}/interfaces $${MERKAARTOR_SRC_DIR}/src/Utils

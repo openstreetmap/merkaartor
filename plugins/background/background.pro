@@ -1,5 +1,7 @@
 TEMPLATE = subdirs
 
+CONFIG += debug_and_release
+
 #Qt Version
 QT_VERSION = $$[QT_VERSION]
 QT_VERSION = $$split(QT_VERSION, ".")

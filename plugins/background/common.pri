@@ -1,4 +1,6 @@
-DESTDIR = $$OUTPUT_DIR/$$(QMAKESPEC)/bin/plugins/background
+OUTPUT_DIR = $$OUT_PWD/../../../binaries
+DESTDIR = $$OUTPUT_DIR/bin/plugins/background
+
 macx {
 	target.path = $${PREFIX}/merkaartor.app/Contents/plugins/background
 }
