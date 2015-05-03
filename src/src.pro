@@ -141,12 +141,9 @@ unix:!macx {
     isEmpty( LIBDIR ) {
         LIBDIR = $${PREFIX}/lib${LIB_SUFFIX}
     }
-    CONFIG(debug,debug|release) {
-        DEFINES += PLUGINS_DIR=$${OUTPUT_DIR}/bin/plugins
-    }
-    CONFIG(release,debug|release) {
-        DEFINES += PLUGINS_DIR=$${LIBDIR}/merkaartor/plugins
-    }
+
+    DEFINES += PLUGINS_DIR=$${LIBDIR}/merkaartor/plugins
+
     target.path = $${PREFIX}/bin
     SHARE_DIR = $${PREFIX}/share/merkaartor
 

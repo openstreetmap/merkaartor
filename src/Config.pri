@@ -2,7 +2,7 @@
 
 isEmpty(VERSION): VERSION="0.18"
 
-CONFIG += debug_and_release debug
+CONFIG += debug_and_release
 
 CONFIG(release,debug|release) {
     DEFINES += RELEASE

@@ -234,6 +234,7 @@ int main(int argc, char** argv)
     splash.showMessage(QString(instance.translate("Main", "%1 v%2%3(%4)\nLoading plugins...")).arg(qApp->applicationName()).arg(STRINGIFY(VERSION)).arg(STRINGIFY(REVISION)).arg(STRINGIFY(SVNREV)), Qt::AlignBottom | Qt::AlignHCenter, Qt::black);
     instance.processEvents();
 
+    /* Create configuration directory for non-portable build. */
     if (!g_Merk_Portable) {
 #ifdef Q_OS_MAC
         if (!QDir::home().exists(HOMEDIR))
@@ -243,10 +244,10 @@ int main(int argc, char** argv)
             QDir::home().mkdir("." + qApp->applicationName().toLower());
 #endif
     }
+
+    /* Load plugins; this handles different OS habits. */
 #if defined(Q_OS_WIN32)
     QDir pluginsDir = QDir(qApp->applicationDirPath() + "/" + STRINGIFY(PLUGINS_DIR));
-
-    // Fixes MacOSX plugin dir (fixes #2253)
 #elif defined(Q_OS_MAC)
     QDir pluginsDir = QDir(qApp->applicationDirPath());
     pluginsDir.cdUp();
@@ -254,10 +255,14 @@ int main(int argc, char** argv)
 #elif defined(Q_OS_SYMBIAN)
     QDir pluginsDir(QLibraryInfo::location(QLibraryInfo::PluginsPath));
 #else
-    QDir pluginsDir = (g_Merk_Portable ? QDir(qApp->applicationDirPath() + "/plugins") : QDir(STRINGIFY(PLUGINS_DIR)));
+
+    /* Try directory with the application first. */
+    QDir pluginsDir = qApp->applicationDirPath() + "/plugins";
+    if (!pluginsDir.exists())
+        pluginsDir = QDir(STRINGIFY(PLUGINS_DIR));
 #endif
-    qDebug() << "applicationDirPath:" << qApp->applicationDirPath();
-    qDebug() << "PluginsDir:" << STRINGIFY(PLUGINS_DIR);
+
+    qDebug() << "PluginsDir:" << pluginsDir.path();
     QCoreApplication::addLibraryPath(pluginsDir.path());
     loadPluginsFromDir(pluginsDir);
 
