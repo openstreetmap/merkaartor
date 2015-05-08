@@ -44,7 +44,7 @@ int main(int argc, char *argv[])
 
     qDebug() << "**** " << QDateTime::currentDateTime().toString(Qt::ISODate) << " -- Starting " << QString("%1 %2")
                             .arg(QCoreApplication::applicationName()).arg(QCoreApplication::applicationVersion());
-    qDebug() <<	"-------" << QString("using QT version %1 (built with %2)").arg(qVersion()).arg(QT_VERSION_STR);
+    qDebug() <<	"-------" << QString("using Qt version %1 (built with %2)").arg(qVersion()).arg(QT_VERSION_STR);
 #ifdef Q_WS_X11
     qDebug() << "-------" << "on X11";
 #endif
