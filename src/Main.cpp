@@ -78,7 +78,7 @@ void showVersion()
     QString o;
     o = QString("%1 %2%3(%4)\n").arg(STRINGIFY(PRODUCT)).arg(STRINGIFY(VERSION)).arg(STRINGIFY(REVISION)).arg(STRINGIFY(SVNREV));
     fprintf(stdout, "%s", o.toLatin1().data());
-    o = QString("using QT version %1 (built with %2)\n").arg(qVersion()).arg(QT_VERSION_STR);
+    o = QString("using Qt version %1 (built with %2)\n").arg(qVersion()).arg(QT_VERSION_STR);
     fprintf(stdout, "%s", o.toLatin1().data());
     fprintf(stdout, "Copyright Bart Vanhauwaert, Chris Browet and others, 2006-2010\n");
     fprintf(stdout, "This program is licensed under the Version 2 of the GNU Public License or any later version\n");
@@ -196,7 +196,7 @@ int main(int argc, char** argv)
 #endif
 
     qDebug() << "**** " << QDateTime::currentDateTime().toString(Qt::ISODate) << " -- Starting " << USER_AGENT;
-    qDebug() <<	"-------" << QString("using QT version %1 (built with %2)").arg(qVersion()).arg(QT_VERSION_STR);
+    qDebug() <<	"-------" << QString("using Qt version %1 (built with %2)").arg(qVersion()).arg(QT_VERSION_STR);
     QString projVer = QString(STRINGIFY(PJ_VERSION));
     qDebug() <<	"-------" << QString("using PROJ4 version %1.%2.%3").arg(projVer.left(1)).arg(projVer.mid(1, 1)).arg(projVer.right(1));
     qDebug() <<	"-------" << QString("using GDAL version %1").arg(GDAL_RELEASE_NAME);
