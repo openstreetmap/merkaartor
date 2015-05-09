@@ -374,10 +374,16 @@ void MerkaartorPreferences::fromOsmPref()
 }
 
 void MerkaartorPreferences::on_authenticationRequired( QNetworkReply *reply, QAuthenticator *auth ) {
-    qDebug() << "Authentication required and provided.";
-    Q_UNUSED(reply)
-    auth->setUser(getOsmUser());
-    auth->setPassword(getOsmPassword());
+    static QNetworkReply *lastReply = NULL;
+
+    /* Only provide authentication the first time we see this reply, to avoid
+     * infinite loop providing the same credentials. */
+    if (lastReply != reply) {
+        lastReply = reply;
+        qDebug() << "Authentication required and provided.";
+        auth->setUser(getOsmUser());
+        auth->setPassword(getOsmPassword());
+    }
 }
 
 void MerkaartorPreferences::on_sslErrors(QNetworkReply *reply, const QList<QSslError>& errors) {

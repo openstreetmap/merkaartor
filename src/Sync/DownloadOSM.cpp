@@ -133,9 +133,16 @@ bool Downloader::request(const QString& theMethod, const QUrl& url, const QStrin
 }
 
 void Downloader::on_authenticationRequired( QNetworkReply *reply, QAuthenticator *auth) {
-    Q_UNUSED(reply);
-    auth->setUser(User);
-    auth->setPassword(Password);
+    static QNetworkReply *lastReply = NULL;
+
+    /* Only provide authentication the first time we see this reply, to avoid
+     * infinite loop providing the same credentials. */
+    if (lastReply != reply) {
+        lastReply = reply;
+        qDebug() << "Downloader authentication required and provided.";
+        auth->setUser(User);
+        auth->setPassword(Password);
+    }
 }
 
 QByteArray& Downloader::content()
