@@ -28,3 +28,4 @@ win32|macx {
 }
 
 QMAKE_CXXFLAGS_WARN_ON += -Wno-reorder
+CONFIG += c++11
