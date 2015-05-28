@@ -11,6 +11,8 @@ install:
  - sudo apt-get update -qq
  - sudo apt-cache search qt
  - sudo apt-get install gcc-5
+ - sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-5 90
+
  - sudo apt-get install gdb libgdal-dev libproj-dev
  - sudo apt-get install libqt4-xml libqt4-network libqt4-gui libqt4-svg libqt4-webkit libqt4-dev qt4-qmake
  - sudo apt-get install libqt5xml5* libqt5network5* libqt5gui5* libqt5svg5* libqt5webkit5* libqt5quick5* qtdeclarative5-dev qttools5-dev qtbase5-dev qt5-qmake qtchooser
