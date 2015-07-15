@@ -13,7 +13,15 @@
 #define ImportExportGDAL_H
 
 #include "IImportExport.h"
-#include "ogrsf_frmts.h"
+
+#include <ogrsf_frmts.h>
+#include <gdal.h>
+#include <gdal_priv.h>
+#include <gdal_version.h>
+
+#if GDAL_VERSION_MAJOR == 2
+#define GDAL2
+#endif
 
 class Projection;
 class Layer;
@@ -52,7 +60,11 @@ protected:
     Node *nodeFor(Layer* aLayer, OGRPoint point);
     Way *readWay(Layer* aLayer, OGRLineString *poRing);
 
-    bool importGDALDataset(OGRDataSource *poDs, Layer *aLayer, bool confirmProjection);
+#ifndef GDAL2
+#define GDALDataset OGRDataSource
+#endif
+    bool importGDALDataset(GDALDataset *poDs, Layer *aLayer, bool confirmProjection);
+#undef GDALDataset
 
 private:
     QHash<OGRPoint, Node*> pointHash;

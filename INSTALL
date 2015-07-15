@@ -4,7 +4,8 @@ Prerequisites:
  * Working C++ compiler
  * Qt 4.4.0 or later development environment (for Qt 5.x.y, use qt5 branch)
  * Proj.4
- * GDAL
+ * GDAL (2.0.0 or newer for GDAL exports)
+ * spatialite-4.2.0 or newer for GDAL exports
 
 On (K)ubuntu Edgy it is sufficient to install the qt4-dev package
 to satisfy these requirements.
