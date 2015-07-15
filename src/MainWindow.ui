@@ -1836,7 +1836,7 @@
   </action>
   <action name="exportGDALAction">
    <property name="text">
-    <string>GDAL</string>
+    <string>GDAL SQLite/SpatiLite</string>
    </property>
   </action>
   <action name="roadBingExtractAction">
