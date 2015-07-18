@@ -25,7 +25,7 @@
 these headers are required in order to support
 SQLite/SpatiaLite
 */
-#include <spatialite/sqlite3.h>
+#include <sqlite3.h>
 #include <spatialite/gaiageo.h>
 #include <spatialite.h>
 
@@ -167,6 +167,7 @@ private:
 
     QString m_dbName;
     sqlite3 *m_handle;
+    void * s_handle;
     QHash<QString, sqlite3_stmt*> m_stmtHandles;
 
     mutable QCache<IFeature::FId, IFeature> m_cache;

@@ -27,42 +27,30 @@ public:
 SpatialiteBackend::SpatialiteBackend()
     : SpatialiteBase(), p(new SpatialBackendPrivate)
 {
-    /*
-    VERY IMPORTANT:
-    you must initialize the SpatiaLite extension [and related]
-    BEFORE attempting to perform any other SQLite call
-    */
-    spatialite_init (0);
+    isTemp = true;
+    theFilename = HOMEDIR + "/" + QDateTime::currentDateTime().toString("yyyyMMdd-hhmmsszzz") + ".spatialite";
+    open(HOMEDIR + "/temDb.spatialite", SQLITE_OPEN_READWRITE | SQLITE_OPEN_CREATE);
 
     /* showing the SQLite version */
     qDebug ("SQLite version: %s", sqlite3_libversion ());
     /* showing the SpatiaLite version */
     qDebug ("SpatiaLite version: %s", spatialite_version ());
 
-    isTemp = true;
-    theFilename = HOMEDIR + "/" + QDateTime::currentDateTime().toString("yyyyMMdd-hhmmsszzz") + ".spatialite";
-    open(HOMEDIR + "/temDb.spatialite", SQLITE_OPEN_READWRITE | SQLITE_OPEN_CREATE);
     InitializeNew();
 }
 
 SpatialiteBackend::SpatialiteBackend(const QString& filename)
     : SpatialiteBase(), p(new SpatialBackendPrivate)
 {
-    /*
-    VERY IMPORTANT:
-    you must initialize the SpatiaLite extension [and related]
-    BEFORE attempting to perform any other SQLite call
-    */
-    spatialite_init (0);
+    isTemp = false;
+    theFilename = filename;
+    open(theFilename, SQLITE_OPEN_READWRITE | SQLITE_OPEN_CREATE);
 
     /* showing the SQLite version */
     qDebug ("SQLite version: %s", sqlite3_libversion ());
     /* showing the SpatiaLite version */
     qDebug ("SpatiaLite version: %s", spatialite_version ());
 
-    isTemp = false;
-    theFilename = filename;
-    open(theFilename, SQLITE_OPEN_READWRITE | SQLITE_OPEN_CREATE);
     InitializeNew();
 }
 

@@ -21,12 +21,15 @@ SpatialiteBase::SpatialiteBase()
 sqlite3* SpatialiteBase::open(const QString& aNom,
                                  const int aFlags)
 {
+    void *sp_connection = spatialite_alloc_connection();
     const int err = sqlite3_open_v2 (aNom.toUtf8().data(), &m_handle, aFlags, NULL);
     if (err != SQLITE_OK) {
         qDebug() << QString(sqlite3_errmsg(m_handle)) + " while opening: " + aNom;
         sqlite3_close (m_handle);
+        spatialite_cleanup_ex(sp_connection);
         return NULL;
     }
+    spatialite_init_ex(m_handle, sp_connection, 0);
     return m_handle;
 }
 
