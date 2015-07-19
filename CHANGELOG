@@ -1,3 +1,74 @@
+v0.18.2
+    * FIX : Updated the INSTALL file with current instructions both for Linux and Windows.
+    * FIX : Fixed version info on Linux, and added 32/64bit information to the version string.
+    * CHG : Migrated GDAL to 2.0 API.
+    * ADD : Improved Windows Installer splash image.
+    * FIX : Fixed a lot of the Windows build system.
+    * DEL : Remove semperMerk
+    * FIX : Fix bug #44: infinite loop in network code when password is wrong.
+    * FIX : Use proper capitalization for the Qt framework
+    * FIX : Fix build failure with Qt 5.5 snapshot
+    * FIX : Plugin path and debug builds fixed.
+    * DEL : Removed reference to qWinMsgHandler.
+    * CHG : Updated install instructions to reflect debug/release.
+    * FIX : Removed the Win32 assembly in Layers/OsmRenderLayer.cpp
+    * FIX : Fixed some plugin interfaces for Qt5.
+    * DEL : Removed plugins/qtstyle.
+    * FIX : Fixed file saving.
+    * CHG : Clean up DownloadOSM a bit.
+    * FIX : Update after upload.
+    * CHG : Remove all remaining references to Boost, incl. translations
+    * CHG : Remove built-in GGL copy
+    * CHG : Keep Symbian #ifndef's for busy cursors in one place only
+    * CHG : Move single file importing into separate method
+    * ChG : Merge uselessly explicit management of MapAdapter implementations
+    * CHG : Factor together some instances of preference file localization
+    * CHG : Better name for MerkaartorPreferences::loadBookmark
+    * CHG : Factor together loading of QSettings
+    * FIX : Fixed Wireframe.mas style.
+    * ADD : Support for address sanitizer.
+    * FIX : Fixed random crashes while changing styles.
+    * CHG : Removed the use of IDocument in OsmRenderLayer and MapView.
+    * FIX : Segfault in QRegExp.
+    * ADD : travis-ci automated builds.
+    * ADD : Qt5 support.
+    * FIX : A potential deadlock in Realtion/Way.
+    * FIX : Replace bashism in Config.pri
+    * ADD : Support for building with system qtsingleapplication and quazip
+    * FIX : Fixed crash on moving virtual node.
+    * CHG : Added debug_and_release CONFIG option.
+    * FIX : Fixed loading of plugins (at least for some cases).
+    * FIX : Moved the QToolBarDialog into src/.
+    * FIX : Removed the inline assembler in OsmRenderLayer.cpp
+    * FIX : Added locking to Feature::updatePainters.
+    * ADD : The openstreetmap.org/#map= URL parsing.
+    * FIX : Re-enable virtual node movement.
+    * FIX : After layer is closed, all of its features are deleted.
+    * FIX : Define QT_WA macro on QT5 to always use unicode.
+    * FIX : Conflict sometimes create Nodes without layers.
+    * FIX : Fix building markaartor on arm.
+    * FIX : Fix building with gcc 4.7 and later.
+    * FIX : Merkaartor needs to link libsqlite3.
+    * FIX : Replaced the static version of quazip with a new one.
+    * CHG : Updated Authors.
+    * FIX : Removed 3 memory leaks
+    * FIX : splitting of roads containing duplicate nodes
+    * FIX : Fixed SlippyMap (bad requests caused by a typo).
+    * FIX : Minor fixes in the Qt4/Qt5 usage.
+    * DEL : Removed the qtstyle plugins from compilation.
+    * FIX : Updated the plugin interface for Qt5.
+    * FIX : Removed deprecated call to ::translate.
+    * FIX : Added locking to Way::add and Way::remove.
+    * ADD : Implemented jOSM-like load_objects feature.
+    * FIX : Don't try GET ... /full on nodes, as API does not support it.
+    * FIX : GDAL crash
+    * FIX : Virtual nodes not highlighted on hover (fixes #3333)
+    * FIX : French cadastre parsing issue (fixes #3334)
+    * FIX : openSUSE build
+    * FIX : libgps20 build fix (from Dirk Stocker)
+    * FIX : secondary road simple color
+    * FIX : Assert "width > 0" with wireframe with style
+
 v0.18
     * ADD : Self-contained style packages (*.msz)
     * FIX : mutex deadlock (refs #3319)
