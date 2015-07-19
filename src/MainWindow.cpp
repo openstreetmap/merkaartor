@@ -76,8 +76,6 @@
 #include "GotoDialog.h"
 #include "TerraceDialog.h"
 
-#include "revision.h"
-
 #ifdef GEOIMAGE
 #include "GeoImageDock.h"
 #endif

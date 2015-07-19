@@ -1,7 +1,7 @@
 # see http://merkaartor.be/wiki/merkaartor/Compiling
 
 REVISION = $$system(git describe --tags)
-VERSION = $$system(git describe --tags | sed 's/-g.*//;s/-/./g')
+VERSION = $$system(git describe --tags | sed "'s/-g.*//;s/-/./g'")
 ARCH=""
 BITS=""
 win32 {
@@ -14,6 +14,15 @@ win32 {
 		REVISION=$${REVISION}-32bit
 	}
 }
+
+linux-g++:contains(QT_ARCH, x86_64):{
+    REVISION=$${REVISION}-64bit
+}
+
+linux-g++:contains(QT_ARCH, i386):{
+    REVISION=$${REVISION}-32bit
+}
+
 
 
 win32 {

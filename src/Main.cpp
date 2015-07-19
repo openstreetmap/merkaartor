@@ -9,7 +9,6 @@
 #include <qtsingleapplication.h>
 #include "MainWindow.h"
 #include "Preferences/MerkaartorPreferences.h"
-#include "revision.h"
 #include "proj_api.h"
 #include "gdal_version.h"
 //#include "QFatFs.h"
