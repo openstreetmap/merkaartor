@@ -40,7 +40,7 @@
   !define MUI_ABORTWARNING
 
   !define MUI_WELCOMEPAGE_TEXT "This setup will install Merkaartor in version ${VER}."
-  !define MUI_WELCOMEFINISHPAGE_BITMAP "..\Icons\Merkaartor_splash.bmp"
+  !define MUI_WELCOMEFINISHPAGE_BITMAP "..\Icons\Merkaartor_installer.bmp"
 
 ;--------------------------------
 ;Pages
