@@ -1,3 +1,10 @@
+This document is about compiling Merkaartor from source. It's useful if you want
+to tinker with it, want newest version, report bugs, or there is no premade
+package for your distribution. It's not meant as the primary source for regular
+users; please, refer to the README.md on how to get a premade package.
+
+If you still want to build your own Merkaartor, here is how, it's pretty simple:
+
 Prerequisites:
 ==============
 
@@ -6,30 +13,32 @@ Prerequisites:
  * Proj.4
  * GDAL (2.0.0 or newer for GDAL exports)
  * spatialite-4.2.0 or newer for GDAL exports
+ * (For Windows Installer) NSIS-3
 
-On (K)ubuntu Edgy it is sufficient to install the qt4-dev package
-to satisfy these requirements.
+Linux
+-----
 
+Do install the packages in question, and if your distribution uses -dev packages
+for development tools, install them too. As there is way too many distributions,
+I won't go into details.
 
-Windows (32bit)
----------------
+Windows (32bit/64bit)
+---------------------
 
-Not tested recently. Try the same as in 64bit case, just use the 32bit packages instead:
+In both cases, you will need to download MSYS2 for your architecture, and
+install some packages from msys shell (msys2_shell.bat).
+
+For 32bit, they are (the w64 is not a bug!):
 
 $ pacman -S base-devel \
 	msys/git \
-	mingw32/mingw-w32-i686-qt5 \
-	mingw32/mingw-w32-i686-gdal \
-	mingw32/mingw-w32-i686-proj \
-	mingw32/mingw-w32-i686-openjpeg2 \
-	mingw32/mingw-w32-i686-json-c
+	mingw32/mingw-w64-i686-qt5 \
+	mingw32/mingw-w64-i686-gdal \
+	mingw32/mingw-w64-i686-proj \
+	mingw32/mingw-w64-i686-openjpeg2 \
+	mingw32/mingw-w64-i686-json-c
 
-Windows (64bit)
----------------
-
-On Windows, download MSYS2, run the mingw64 shell install the dependencies with
-(it seems openjpeg and json-c is also needed, but not installed correctly by
-their users):
+For 64bit, they are:
 
 $ pacman -S base-devel \
 	msys/git \
@@ -39,13 +48,17 @@ $ pacman -S base-devel \
 	mingw64/mingw-w64-x86_64-openjpeg2 \
 	mingw64/mingw-w64-x86_64-json-c
 
+Done? Continue to the next step, but run a different msys shell, the mingw32 or
+mingw64, based on your architecture. Note that if you'll run mingw32 shell from
+64bit msys installtion, strange stuff will happen, so don't do it.
+
 
 Instructions:
 =============
 
 0. Get the sources, either tarball or git:
 
-$ git clone git@github.com:openstreetmap/merkaartor.git
+$ git clone https://github.com/openstreetmap/merkaartor.git
 
  !  By default, this is the latest development version. If you want to use an older
  !  one, you have to checkout the commit/tag:
@@ -63,11 +76,11 @@ $ cd /home/me/src/Merkaartor-0.xx
 
 2. Run qmake
 
-$ qmake
+$ qmake -r
 
-Note that you need the Qt4 version of qmake - running the Qt3 version
-will generate incorrect makefiles.  If both are installed, take care
-to run the correct version.  For example, on Fedora run
+Note that you need the Qt4 or Qt5 version of qmake - running the Qt3 version
+will generate incorrect makefiles.  If both are installed, take care to run the
+correct version.  For example, on Fedora/Debian run
 
 $ qmake-qt4
 
@@ -86,14 +99,15 @@ SYSTEM_QTSA                 - use system copy of qtsingleapplication instead of 
 SYSTEM_QUAZIP               - use system copy of quazip instead of internal
 
 
-3. Run your build tool, make for posix like systems (including MSYS2), nmake for
-Windows C++ Build system
+3. Run make.
 
-$ make release
-or
-$ nmake release
+On Windows:           $ make release
+On other platforms:   $ make
+Debug build:          $ make debug
 
-Substitute release with debug, if you want to debug the code or report bugs.
+On Linux, make release fails, as the qmake does not generate proper goal in
+Makefiles, but release is the default. On most Windows installations, the debug
+is the default and we need to specify the release manually. Sorry about that.
 
 4. If you are lucky, you'll find an executable in the binaries subdirectory.
 Otherwise, check our github page [1], especially check the issues and possibly
@@ -101,6 +115,20 @@ report yours.
 
 [1] https://github.com/openstreetmap/merkaartor
 
+5. (Optional: Building Windows Bundle/Installer)
+
+You first have to copy all dependencies of merkaartor to the binaries/bin
+directory. The windows/copydeps.sh script does just that:
+
+$ ./windows/copydeps.sh
+
+You can now copy the directory to a flash drive and carry it with you
+everywhere. Yey! If you need an installer, you'll have to install NSIS 3 and
+compile the windows/installer.nsi
+
+Note that if you made a debug build, all the debug libraries will end up in
+binaries/bin, and there they take almost 1.1G (that's why I'm not publishing
+installer with debug symbols).
 
 
 Bart Vanhauwaert, Ladislav Láska, and others
