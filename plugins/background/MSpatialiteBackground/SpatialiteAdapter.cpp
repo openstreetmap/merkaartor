@@ -73,18 +73,6 @@ inline uint qHash(IFeature::FId id)
 
 SpatialiteAdapter::SpatialiteAdapter()
 {
-    /*
-    VERY IMPORTANT:
-    you must initialize the SpatiaLite extension [and related]
-    BEFORE attempting to perform any other SQLite call
-    */
-    spatialite_init (0);
-
-    /* showing the SQLite version */
-    qDebug ("SQLite version: %s", sqlite3_libversion ());
-    /* showing the SpatiaLite version */
-    qDebug ("SpatiaLite version: %s", spatialite_version ());
-
     QAction* loadFile = new QAction(tr("Load Spatialite db..."), this);
     loadFile->setData(theUid.toString());
     connect(loadFile, SIGNAL(triggered()), SLOT(onLoadFile()));
@@ -105,8 +93,10 @@ SpatialiteAdapter::SpatialiteAdapter()
 
 SpatialiteAdapter::~SpatialiteAdapter()
 {
-    if (m_loaded)
+    if (m_loaded) {
         sqlite3_close(m_handle);
+        spatialite_cleanup_ex(s_handle);
+    }
 }
 
 void SpatialiteAdapter::onLoadFile()
@@ -155,10 +145,13 @@ void SpatialiteAdapter::initTable(const QString& table)
 
 void SpatialiteAdapter::setFile(const QString& fn)
 {
-    if (m_loaded)
+    if (m_loaded) {
         sqlite3_close(m_handle);
+        spatialite_cleanup_ex(s_handle);
+    }
     m_loaded = false;
 
+    s_handle = spatialite_alloc_connection();
     int ret = sqlite3_open_v2 (fn.toUtf8().data(), &m_handle, SQLITE_OPEN_READONLY, NULL);
     if (ret != SQLITE_OK)
     {
@@ -166,6 +159,7 @@ void SpatialiteAdapter::setFile(const QString& fn)
         sqlite3_close (m_handle);
         return;
     }
+    spatialite_init_ex(m_handle, s_handle, 0);
     QString q = QString("SELECT f_table_name FROM geometry_columns;");
     sqlite3_stmt *pStmt;
     ret = sqlite3_prepare_v2(m_handle, q.toUtf8().data(), q.size(), &pStmt, NULL);
@@ -181,6 +175,7 @@ void SpatialiteAdapter::setFile(const QString& fn)
     if (!m_tables.size()) {
         QMessageBox::critical(0,QCoreApplication::translate("SpatialiteBackground","No valid file"),QCoreApplication::translate("SpatialiteBackground","geometry_columns table absent or invalid"));
         sqlite3_close (m_handle);
+        spatialite_cleanup_ex(s_handle);
         return;
     }
     m_dbName = fn;
