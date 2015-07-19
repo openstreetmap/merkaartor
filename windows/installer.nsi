@@ -21,7 +21,7 @@
   OutFile "merkaartor-${VER}.exe"
 
   ;Default installation folder
-  InstallDir "$PROGRAMFILES\Merkaartor"
+  InstallDir "$PROGRAMFILES${BITS}\Merkaartor"
   
   ;Get installation folder from registry if available
   InstallDirRegKey HKCU "Software\Merkaartor" ""

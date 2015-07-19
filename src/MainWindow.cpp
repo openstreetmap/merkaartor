@@ -131,7 +131,7 @@ class MainWindowPrivate
     #endif
             , numImages(0)
         {
-            title = QString("%1 v%2%3(%4)").arg(STRINGIFY(PRODUCT)).arg(STRINGIFY(VERSION)).arg(STRINGIFY(REVISION)).arg(STRINGIFY(SVNREV));
+            title = QString("%1 v%2").arg(STRINGIFY(PRODUCT)).arg(STRINGIFY(REVISION));
         }
 
         QString FILTER_OPEN_SUPPORTED;
@@ -2145,7 +2145,7 @@ void MainWindow::on_helpAboutAction_triggered()
     About.setupUi(&dlg);
     dlg.setWindowFlags(dlg.windowFlags() & ~Qt::WindowContextHelpButtonHint);
     dlg.setWindowFlags(dlg.windowFlags() | Qt::MSWindowsFixedSizeDialogHint);
-    About.Version->setText(About.Version->text().arg(STRINGIFY(VERSION)).arg(STRINGIFY(REVISION)).arg(STRINGIFY(SVNREV)));
+    About.Version->setText(About.Version->text().arg(STRINGIFY(REVISION)));
     About.QTVersion->setText(About.QTVersion->text().arg(qVersion()).arg(QT_VERSION_STR));
     QString projVer = QString(STRINGIFY(PJ_VERSION));
     About.Proj4Version->setText(About.Proj4Version->text().arg(QString("%1.%2.%3").arg(projVer.left(1)).arg(projVer.mid(1, 1)).arg(projVer.right(1))));

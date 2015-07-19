@@ -16,7 +16,7 @@ CONFIG += debug_and_release
 include ($$MERKAARTOR_SRC_DIR/src/Config.pri)
 
 DEFINES += VERSION=\"\\\"$$VERSION\\\"\"
-DEFINES += REVISION=\"\\\"$$REVISION\\\"\"
+#DEFINES += REVISION=\"\\\"$$REVISION\\\"\"
 
 win32-msvc* {
     DEFINES += _USE_MATH_DEFINES

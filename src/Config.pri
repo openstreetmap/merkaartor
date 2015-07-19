@@ -1,30 +1,24 @@
 # see http://merkaartor.be/wiki/merkaartor/Compiling
 
-isEmpty(VERSION): VERSION="0.18"
-
-CONFIG += debug_and_release
-
-CONFIG(release,debug|release) {
-    DEFINES += RELEASE
-    SVNREV="release"
-} else {
-    isEmpty(SVNREV) {
-        SVNREV = $$system(git describe --tags)
-        REVISION="-git"
-    } else {
-        REVISION=
-    }
+REVISION = $$system(git describe --tags)
+VERSION = $$system(git describe --tags | sed 's/-g.*//;s/-/./g')
+ARCH=""
+BITS=""
+win32 {
+	ARCH="-$$QMAKE_HOST.arch"
+	win32-g++:contains(QMAKE_HOST.arch, x86_64):{
+		BITS=64
+		REVISION=$${REVISION}-64bit
+	} else {
+		BITS=32
+		REVISION=$${REVISION}-32bit
+	}
 }
+
 
 win32 {
-system(echo "!define VER $${SVNREV}" > ../windows/version.nch )
-
-}
-
-win32|macx {
-    system(echo $${LITERAL_HASH}define SVNREV $${SVNREV} > revision.h )
-} else {
-    system('printf "%s" "$${LITERAL_HASH}define SVNREV $${SVNREV}" > revision.h')
+	system(echo "!define VER $${REVISION}" > ../windows/version.nch )
+	system(echo "!define BITS $${BITS}" >> ../windows/version.nch )
 }
 
 QMAKE_CXXFLAGS_WARN_ON += -Wno-reorder

@@ -76,7 +76,7 @@ void myMessageOutput(QtMsgType msgType, const char *buf) {
 void showVersion()
 {
     QString o;
-    o = QString("%1 %2%3(%4)\n").arg(STRINGIFY(PRODUCT)).arg(STRINGIFY(VERSION)).arg(STRINGIFY(REVISION)).arg(STRINGIFY(SVNREV));
+    o = QString("%1 %2\n").arg(STRINGIFY(PRODUCT)).arg(STRINGIFY(REVISION));
     fprintf(stdout, "%s", o.toLatin1().data());
     o = QString("using Qt version %1 (built with %2)\n").arg(qVersion()).arg(QT_VERSION_STR);
     fprintf(stdout, "%s", o.toLatin1().data());
@@ -231,7 +231,7 @@ int main(int argc, char** argv)
     splash.show();
     instance.processEvents();
 
-    splash.showMessage(QString(instance.translate("Main", "%1 v%2%3(%4)\nLoading plugins...")).arg(qApp->applicationName()).arg(STRINGIFY(VERSION)).arg(STRINGIFY(REVISION)).arg(STRINGIFY(SVNREV)), Qt::AlignBottom | Qt::AlignHCenter, Qt::black);
+    splash.showMessage(QString(instance.translate("Main", "%1 v%2\nLoading plugins...")).arg(qApp->applicationName()).arg(STRINGIFY(REVISION)), Qt::AlignBottom | Qt::AlignHCenter, Qt::black);
     instance.processEvents();
 
     /* Create configuration directory for non-portable build. */
@@ -269,7 +269,7 @@ int main(int argc, char** argv)
     pluginsDir.cd("background");
     loadPluginsFromDir(pluginsDir);
 
-    splash.showMessage(QString(instance.translate("Main", "%1 v%2%3(%4)\nInitializing...")).arg(qApp->applicationName()).arg(STRINGIFY(VERSION)).arg(STRINGIFY(REVISION)).arg(STRINGIFY(SVNREV)), Qt::AlignBottom | Qt::AlignHCenter, Qt::black);
+    splash.showMessage(QString(instance.translate("Main", "%1 v%2\nInitializing...")).arg(qApp->applicationName()).arg(STRINGIFY(REVISION)), Qt::AlignBottom | Qt::AlignHCenter, Qt::black);
     instance.processEvents();
 
 //    QFatFsHandler* fatHandler = new QFatFsHandler(50000, 8192);
@@ -307,7 +307,7 @@ int main(int argc, char** argv)
         x = 255;
     }
 
-    qDebug() << "**** " << QDateTime::currentDateTime().toString(Qt::ISODate) << " -- Ending " << QString("%1 %2%3(%4)").arg(qApp->applicationName()).arg(STRINGIFY(VERSION)).arg(STRINGIFY(REVISION)).arg(STRINGIFY(SVNREV));
+    qDebug() << "**** " << QDateTime::currentDateTime().toString(Qt::ISODate) << " -- Ending " << QString("%1 %2").arg(qApp->applicationName()).arg(STRINGIFY(VERSION));
     if(pLogFile) {
         fclose(pLogFile);
         pLogFile = NULL;
