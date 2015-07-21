@@ -69,6 +69,7 @@ Section "Merkaartor" SecMerkaartor
   
   ;ADD YOUR OWN FILES HERE...
   File ..\binaries\bin\*
+  File /r ..\binaries\bin\platforms
 
   ; Menu shortcut
   CreateDirectory "$SMPROGRAMS\Merkaartor"
