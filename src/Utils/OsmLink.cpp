@@ -107,6 +107,13 @@ QString OsmLink::parseUrl(QUrl theUrl)
         qreal spanLon = spn[1].toDouble(&parseOk);                  PARSE_ERROR(spn[1]);
 
         setMinMax(lat-spanLat, lon-spanLon/2, lat+spanLat, lon+spanLon/2);
+    } else if (theUrl.host().contains("mapy.cz")) {
+
+        qreal zoom = theQuery.queryItemValue("z").toInt(&parseOk);   ARG_VALID(zoom);
+        qreal lat = theQuery.queryItemValue("y").toDouble(&parseOk); ARG_VALID(lat);
+        qreal lon = theQuery.queryItemValue("x").toDouble(&parseOk); ARG_VALID(lon);
+
+        setLatLonZoom(lat, lon, zoom);
     }
 #undef theQuery
     return QString("Unrecognised URL: %1").arg(theUrl.toString());
