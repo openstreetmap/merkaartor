@@ -180,6 +180,7 @@ win32-msvc* {
 }
 
 TRANSLATIONS += \
+    ../translations/merkaartor_en.ts \
     ../translations/merkaartor_ar.ts \
     ../translations/merkaartor_cs.ts \
     ../translations/merkaartor_de.ts \
@@ -200,6 +201,7 @@ TRANSLATIONS += \
     ../translations/merkaartor_pt_BR.ts \
 
 BINTRANSLATIONS += \
+    ../translations/merkaartor_en.qm \
     ../translations/merkaartor_ar.qm \
     ../translations/merkaartor_cs.qm \
     ../translations/merkaartor_de.qm \
