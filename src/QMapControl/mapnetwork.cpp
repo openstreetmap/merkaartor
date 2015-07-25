@@ -60,16 +60,16 @@ void MapNetwork::launchRequest()
         return;
     LoadingRequest* R = loadingRequests.dequeue();
 
-    QUrl U;
-    if (!R->host.contains("://")) {
-        U.setUrl("http://" + QString(R->host).append(R->url));
+    QUrl theUrl;
+    if (R->host.contains("://")) {
+        theUrl.setUrl(QString(R->host).append(R->url));
     } else {
-        U.setUrl(QString(R->host).append(R->url));
+        theUrl.setUrl("http://" + QString(R->host).append(R->url));
     }
 
-    qDebug() << "getting: " << U.toString();
+    qDebug() << "getting: " << theUrl.toString();
 
-    launchRequest(U, R);
+    launchRequest(theUrl, R);
 }
 
 void MapNetwork::launchRequest(QUrl url, LoadingRequest* R)
@@ -80,15 +80,15 @@ void MapNetwork::launchRequest(QUrl url, LoadingRequest* R)
     req.setRawHeader("Accept", "image/*");
     req.setRawHeader("User-Agent", USER_AGENT.toLatin1());
 
-    QNetworkReply* rply = m_networkManager->get(req);
-    loadingMap[rply] = R;
+    QNetworkReply* reply = m_networkManager->get(req);
+    loadingMap[reply] = R;
 
     QTimer* timeoutTimer = new QTimer();
     connect(timeoutTimer, SIGNAL(timeout()), this, SLOT(timeout()));
     timeoutTimer->setInterval(M_PREFS->getNetworkTimeout());
     timeoutTimer->setSingleShot(true);
 
-    timeoutMap[timeoutTimer] = rply;
+    timeoutMap[timeoutTimer] = reply;
     timeoutTimer->start();
 }
 
