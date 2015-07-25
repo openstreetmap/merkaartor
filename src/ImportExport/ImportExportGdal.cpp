@@ -487,16 +487,15 @@ bool ImportExportGdal::import(Layer* aLayer)
 #ifdef GDAL2
     GDALAllRegister();
     GDALDataset *poDS;
-    poDS = (GDALDataset *) GDALOpen( FileName.toUtf8().constData(), GA_ReadOnly );
+    poDS = (GDALDataset *) GDALOpenEx( FileName.toUtf8().constData(), GDAL_OF_VECTOR | GDAL_OF_RASTER | GDAL_OF_VERBOSE_ERROR, NULL, NULL, NULL );
 #else
     OGRRegisterAll();
     OGRDataSource *poDS;
     poDS = OGRSFDriverRegistrar::Open( FileName.toUtf8().constData(), FALSE );
 #endif
 
-    if( poDS == NULL )
-    {
-        qDebug( "GDAL Open failed.\n" );
+    if( poDS == NULL ) {
+        //qDebug() << "GDAL Open failed from file " << FileName.toUtf8().constData();
         return false;
     }
 

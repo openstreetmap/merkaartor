@@ -736,9 +736,6 @@ bool Document::importKML(const QString& filename, TrackLayer* NewLayer)
 #ifndef _MOBILE
 bool Document::importGDAL(const QString& filename, DrawingLayer* NewLayer)
 {
-    Q_UNUSED(filename)
-    Q_UNUSED(NewLayer)
-
     ImportExportGdal imp(this);
     if (!imp.loadFile(filename))
         return false;

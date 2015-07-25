@@ -1739,7 +1739,7 @@ MainWindow::ImportStatus MainWindow::importFile(Document * mapDocument, const QS
         newLayer = new DrawingLayer( baseFileName );
         newLayer->setUploadable(false);
         mapDocument->add(newLayer);
-        return mapDocument->importGDAL(baseFileName, (DrawingLayer*)newLayer) ? IMPORT_OK : IMPORT_ERROR;
+        return mapDocument->importGDAL(fileName, (DrawingLayer*)newLayer) ? IMPORT_OK : IMPORT_ERROR;
     }
 }
 
