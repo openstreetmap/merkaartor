@@ -511,6 +511,8 @@ void WMSPreferencesDialog::httpRequestFinished(QNetworkReply * reply)
     if (!vendorElem.isNull()) {
         parseVendorSpecific(vendorElem);
     }
+
+    tvWmsLayers->setCurrentItem(tvWmsLayers->topLevelItem(0));
 }
 
 void WMSPreferencesDialog::parseVendorSpecific(QDomElement &vendorElem)
@@ -574,23 +576,30 @@ QTreeWidgetItem * WMSPreferencesDialog::parseLayer(const QDomElement& aLayerElem
     QDomElement title = aLayerElem.firstChildElement("Title");
     QDomElement name = aLayerElem.firstChildElement("Name");
 
+    QString theTitle, theName;
+    if (!name.isNull())
+        theName = name.firstChild().nodeValue();
+    if (!title.isNull()) {
+        theTitle = title.firstChild().nodeValue();
+        if (!name.isNull()) {
+            theTitle += " ["+ theName + "]";
+        }
+    } else theTitle = theName;
+
+
     QTreeWidgetItem *newItem = new QTreeWidgetItem;
     newItem->setFlags(Qt::NoItemFlags |Qt::ItemIsEnabled);
-    if (!name.isNull())
-        newItem->setText(0,name.firstChild().nodeValue());
-    else {
-        if (!title.isNull())
-            newItem->setText(0,title.firstChild().nodeValue());
-        else
-            newItem->setText(0,tr("Unnamed"));
+
+
+    newItem->setText(0,title.firstChild().nodeValue());
+
+    if (!title.isNull()) {
+        newItem->setToolTip(0, title.firstChild().nodeValue());
+    } else {
+        newItem->setToolTip(0, "Untitled");
     }
 
-    if (!title.isNull())
-        newItem->setToolTip(0, title.firstChild().nodeValue());
-
-    QString theName;
     if (!name.isNull()) {
-        theName = name.firstChild().nodeValue();
         newItem->setFlags(Qt::ItemIsUserCheckable | Qt::ItemIsSelectable | Qt::ItemIsEnabled);
         newItem->setData(0, Qt::UserRole, theName);
         newItem->setCheckState(0, Qt::Unchecked);
