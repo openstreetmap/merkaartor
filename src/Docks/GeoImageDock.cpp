@@ -458,7 +458,7 @@ void GeoImageDock::loadImages(QStringList fileNames)
 
     Exiv2::Image::AutoPtr image;
     Exiv2::ExifData exifData;
-    bool positionValid = FALSE;
+    bool positionValid = false;
 
     Layer *theLayer;
     if (photoLayer == NULL) {
@@ -894,7 +894,7 @@ Coord GeoImageDock::getGeoDataFromImage(const QString & file)
     double lat = 0.0, lon = 0.0;
     Exiv2::Image::AutoPtr image;
     Exiv2::ExifData exifData;
-    bool positionValid = FALSE;
+    bool positionValid = false;
 
     if (!QFile::exists(file)) {
         return pos;

@@ -9,6 +9,7 @@
 #include <QtWidgets/QShortcut>
 #include <exiv2/image.hpp>
 #include <exiv2/exif.hpp>
+#include <QDrag>
 
 class ImageView;
 
