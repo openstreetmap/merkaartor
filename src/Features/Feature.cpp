@@ -162,7 +162,7 @@ public:
 };
 
 Feature::Feature()
-: MetaUpToDate(false), m_references(0), ReadOnly(false)
+: MetaUpToDate(false), ReadOnly(false)
 {
     p = new FeaturePrivate(this);
     p->Id = IFeature::FId(IFeature::Uninitialized, 0);
@@ -171,7 +171,7 @@ Feature::Feature()
 }
 
 Feature::Feature(const Feature& other)
-: IFeature(other), MetaUpToDate(false), m_references(0), ReadOnly(other.ReadOnly)
+: IFeature(other), MetaUpToDate(false), ReadOnly(other.ReadOnly)
 {
     p = new FeaturePrivate(*other.p);
     p->Id = IFeature::FId(IFeature::Uninitialized, 0);

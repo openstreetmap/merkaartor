@@ -337,7 +337,9 @@ public:
     static QString stripToOSMId(const IFeature::FId& id);
 
 public:
+#ifdef USE_SPATIALITE
     quint32 internal_id;
+#endif
 
 private:
     FeaturePrivate* p;
@@ -351,8 +353,6 @@ protected:
 
     bool tagsToXML(QXmlStreamWriter& stream, bool strict);
     static void tagsFromXML(Document* d, Feature* f, QXmlStreamReader& stream);
-
-    long    m_references;
 
     QPainterPath thePath;
 };
