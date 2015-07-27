@@ -1253,7 +1253,7 @@ M_PARAM_IMPLEMENT_BOOL(AutoSourceTag, backgroundImage, true)
 /* Data */
 M_PARAM_IMPLEMENT_STRING(OpenStreetBugsUrl, data, "http://openstreetbugs.schokokeks.org/api/0.1/")
 M_PARAM_IMPLEMENT_STRING(MapdustUrl, data, "http://www.mapdust.com/feed?lang=en&ft=wrong_turn,bad_routing,oneway_road,blocked_street,missing_street,wrong_roundabout,missing_speedlimit,other&fd=1&minR=&maxR=")
-M_PARAM_IMPLEMENT_BOOL(GdalConfirmProjection, data, false)
+M_PARAM_IMPLEMENT_BOOL(GdalConfirmProjection, data, true)
 M_PARAM_IMPLEMENT_BOOL(HasAutoLoadDocument, data, false)
 M_PARAM_IMPLEMENT_STRING(AutoLoadDocumentFilename, data, "")
 
