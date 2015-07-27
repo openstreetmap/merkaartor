@@ -1,7 +1,12 @@
 # see http://merkaartor.be/wiki/merkaartor/Compiling
 
-REVISION = $$system(git describe --tags)
-VERSION = $$system(git describe --tags | sed "'s/-g.*//;s/-/./g'")
+REVISION = $$system(git describe --tags 2> /dev/null)
+VERSION = $$system(git describe --tags 2> /dev/null | sed "'s/-g.*//;s/-/./g'")
+isEmpty( REVISION ) {
+	REVISION = $$system(head -n 1 ../CHANGELOG | sed "'s/^v//'")
+	VERSION = $$REVISION
+}
+
 ARCH=""
 BITS=""
 win32 {
