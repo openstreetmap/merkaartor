@@ -651,7 +651,11 @@ QTreeWidgetItem * WMSPreferencesDialog::parseLayer(const QDomElement& aLayerElem
 
     tvWmsLayers->expandItem(newItem);
     tvWmsLayers->header()->setStretchLastSection(false);
+#ifdef QT5
+    tvWmsLayers->header()->setSectionResizeMode(QHeaderView::ResizeToContents);
+#else
     tvWmsLayers->header()->setResizeMode(QHeaderView::ResizeToContents);
+#endif
     return newItem;
 }
 
