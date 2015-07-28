@@ -109,6 +109,14 @@ public slots:
     void on_tvWmsLayers_currentItemChanged ( QTreeWidgetItem * current, QTreeWidgetItem * previous );
 
 private:
+    enum WMSStatus {
+       Empty,
+       Caching,
+       Error,
+       ErrorNetwork,
+       ErrorGetCapabilities,
+    };
+
     void updateUrl();
     void loadPrefs();
     void savePrefs();
@@ -118,7 +126,11 @@ private:
     void parseVendorSpecific(QDomElement& vendorElem);
     void parseTileSet(QDomElement& tilesetElem, WmscLayer& aLayer);
 
+    void setTreeCheckState(Qt::CheckState state, QTreeWidgetItem *twi);
+    void setStatus( WMSStatus status, QString message = "" );
+
     void refreshStyles();
+
 
 public:
     QList<WmsServer> theWmsServers;

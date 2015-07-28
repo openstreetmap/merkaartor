@@ -35,15 +35,13 @@ WMSPreferencesDialog::WMSPreferencesDialog(QWidget* parent)
     loadPrefs();
 
     edWmsLayers->setVisible(false);
-    lblWMSC->setVisible(false);
     frWmsSettings->setVisible(true);
     isTiled = 0;
     frTileIt->setEnabled(false);
     edWmsUrl->setValidator(&wmsValid);
 
     connect(tvWmsLayers, SIGNAL(itemChanged(QTreeWidgetItem *, int)), this, SLOT(on_tvWmsLayers_itemChanged(QTreeWidgetItem *, int)));
-    connect (&m_networkManager, SIGNAL(finished(QNetworkReply *)), this, SLOT(httpRequestFinished(QNetworkReply *)));
-
+    connect(&m_networkManager, SIGNAL(finished(QNetworkReply *)), this, SLOT(httpRequestFinished(QNetworkReply *)));
 }
 
 WMSPreferencesDialog::~WMSPreferencesDialog()
@@ -219,7 +217,7 @@ void WMSPreferencesDialog::on_lvWmsServers_itemSelectionChanged()
     frTileIt->setEnabled(false);
     cbTileIt->setChecked(false);
     sbZoomLevels->setValue(0);
-    lblWMSC->setVisible(false);
+    setStatus( Empty );
     frWmsSettings->setVisible(true);
     isTiled = 0;
     selWmscLayer = WmscLayer();
@@ -416,10 +414,13 @@ void WMSPreferencesDialog::httpRequestFinished(QNetworkReply * reply)
     if (reply != curReply)
         return;
 
+    setStatus( Empty );
+
     int statusCode = reply->attribute(QNetworkRequest::HttpStatusCodeAttribute).toInt();
     if (reply->error() != QNetworkReply::NoError) {
         if (reply->error() != QNetworkReply::OperationCanceledError)
-            QMessageBox::critical(this, tr("Merkaartor: GetCapabilities"), tr("Error reading capabilities.\n") + reply->errorString(), QMessageBox::Ok);
+            setStatus( ErrorGetCapabilities, reply->errorString() );
+            //QMessageBox::critical(this, tr("Merkaartor: GetCapabilities"), tr("Error reading capabilities.\n") + reply->errorString(), QMessageBox::Ok);
     } else {
         switch (statusCode) {
             case 200:
@@ -433,16 +434,18 @@ void WMSPreferencesDialog::httpRequestFinished(QNetworkReply * reply)
                 curReply = NULL;
                 return;
             default:
+                QString reason = reply->attribute(QNetworkRequest::HttpReasonPhraseAttribute).toString();
+                setStatus( ErrorGetCapabilities, reason);
+                /*
                 QMessageBox::information(this, tr("Merkaartor: GetCapabilities"),
                                   tr("Download failed: %1.")
-                                  .arg(statusCode));
+                                  .arg(statusCode)); */
                 curReply->deleteLater();
                 curReply = NULL;
                 return;
         }
     }
 
-    lblWMSC->setVisible(false);
     frWmsSettings->setVisible(true);
     isTiled = 0;
 
@@ -531,7 +534,7 @@ void WMSPreferencesDialog::parseVendorSpecific(QDomElement &vendorElem)
 
 void WMSPreferencesDialog::parseTileSet(QDomElement &tilesetElem, WmscLayer &aLayer)
 {
-    lblWMSC->setVisible(true);
+    setStatus( Caching );
     frWmsSettings->setVisible(false);
     isTiled = 1;
 
@@ -581,22 +584,20 @@ QTreeWidgetItem * WMSPreferencesDialog::parseLayer(const QDomElement& aLayerElem
         theName = name.firstChild().nodeValue();
     if (!title.isNull()) {
         theTitle = title.firstChild().nodeValue();
-        if (!name.isNull()) {
-            theTitle += " ["+ theName + "]";
-        }
-    } else theTitle = theName;
+    } else theTitle = tr("Unnamed layer");
 
 
     QTreeWidgetItem *newItem = new QTreeWidgetItem;
     newItem->setFlags(Qt::NoItemFlags |Qt::ItemIsEnabled);
 
 
-    newItem->setText(0,title.firstChild().nodeValue());
+    newItem->setText(0,theTitle);
+    newItem->setText(1,theName);
 
     if (!title.isNull()) {
         newItem->setToolTip(0, title.firstChild().nodeValue());
     } else {
-        newItem->setToolTip(0, "Untitled");
+        newItem->setToolTip(0, tr("Untitled"));
     }
 
     if (!name.isNull()) {
@@ -649,13 +650,46 @@ QTreeWidgetItem * WMSPreferencesDialog::parseLayer(const QDomElement& aLayerElem
     }
 
     tvWmsLayers->expandItem(newItem);
+    tvWmsLayers->header()->setStretchLastSection(false);
+    tvWmsLayers->header()->setResizeMode(QHeaderView::ResizeToContents);
     return newItem;
+}
+
+void WMSPreferencesDialog::setStatus( WMSStatus status, QString message ) {
+    switch (status) {
+        case Caching:
+            lblStatus->setText(tr("This is a caching WMS server."));
+            break;
+        case ErrorNetwork:
+            lblStatus->setText(tr("Could not contact WMS server: %1").arg(message));
+            break;
+        case ErrorGetCapabilities:
+            lblStatus->setText(tr("Could not get capabilities: %1").arg(message));
+            break;
+        default:
+            lblStatus->setText("");
+    }
+
+    if (status > Error) {
+        lblStatus->setStyleSheet("QLabel { color : red; }");
+    } else {
+        lblStatus->setStyleSheet("");
+    }
+}
+
+void WMSPreferencesDialog::setTreeCheckState(Qt::CheckState state, QTreeWidgetItem *twi) {
+    twi->setCheckState(0, state);
+    for (int i = 0; i < twi->childCount(); i++)
+        setTreeCheckState(state, twi->child(i));
 }
 
 void WMSPreferencesDialog::on_tvWmsLayers_itemChanged(QTreeWidgetItem *twi, int)
 {
     QStringList theLayers;
     bool hasSelection = false;
+
+    /* Set the checkbox status recursively for the whole subtree */
+    setTreeCheckState(twi->checkState(0), twi);
 
     if (isTiled == 1 && twi->checkState(0) == Qt::Checked) {
         theLayers.append(twi->data(0, Qt::UserRole).toString());
