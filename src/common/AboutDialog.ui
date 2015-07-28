@@ -36,7 +36,7 @@
           <string notr="true">QLabel { font-size:small; font-weight:bold; }</string>
          </property>
          <property name="text">
-          <string>%1</string>
+          <string notr="true">%1</string>
          </property>
         </widget>
        </item>
@@ -46,7 +46,7 @@
           <string notr="true">QLabel { font-size:small; font-weight:bold; }</string>
          </property>
          <property name="text">
-          <string>%1</string>
+          <string notr="true">%1</string>
          </property>
         </widget>
        </item>
@@ -66,7 +66,7 @@
           <string notr="true">QLabel { font-size:small; font-weight:bold; }</string>
          </property>
          <property name="text">
-          <string>%1 (%2)</string>
+          <string notr="true">%1 (%2)</string>
          </property>
         </widget>
        </item>
@@ -76,7 +76,7 @@
           <string notr="true">QLabel { font-size:small; font-weight:bold; }</string>
          </property>
          <property name="text">
-          <string>%1</string>
+          <string notr="true">%1</string>
          </property>
         </widget>
        </item>
@@ -140,7 +140,7 @@
         </size>
        </property>
        <property name="text">
-        <string>TextLabel</string>
+        <string notr="true">TextLabel</string>
        </property>
       </widget>
      </item>
@@ -163,7 +163,7 @@
    <item>
     <widget class="QLabel" name="lblUrl">
      <property name="text">
-      <string>&lt;a href=&quot;http://merkaartor.be/&quot;&gt;http://merkaartor.be/&lt;/a&gt;</string>
+      <string notr="true">&lt;a href=&quot;http://merkaartor.be/&quot;&gt;http://merkaartor.be/&lt;/a&gt;</string>
      </property>
      <property name="openExternalLinks">
       <bool>true</bool>
