@@ -114,6 +114,40 @@ QString OsmLink::parseUrl(QUrl theUrl)
         qreal lon = theQuery.queryItemValue("x").toDouble(&parseOk); ARG_VALID(lon);
 
         setLatLonZoom(lat, lon, zoom);
+    } else if (theUrl.toString().contains("/#map=")) {
+        // http://www.openstreetmap.org/#map=<zoom>/<lat>/<lon>
+        QRegExp rx("/#map=([0-9]+)/([0-9.]+)/([0-9.]+)$");
+        if (rx.indexIn(theUrl.toString()) >= 0) {
+            qreal zoom = rx.cap(1).toUInt(&parseOk); PARSE_ERROR(rx.cap(1));
+            qreal lat = rx.cap(2).toDouble(&parseOk); PARSE_ERROR(rx.cap(2));
+            qreal lon = rx.cap(3).toDouble(&parseOk); PARSE_ERROR(rx.cap(3));
+
+            setLatLonZoom(lat, lon, zoom);
+      }
+    } else if (theUrl.toString().contains("/maps/@")) {
+        // https://www.google.de/maps/@<lat>,<lon>,<zoom>z
+        QRegExp rx("/maps/@([0-9.]+),([0-9.]+),([0-9.]+)z$");
+        if (rx.indexIn(theUrl.toString()) >= 0) {
+            qreal lat = rx.cap(1).toDouble(&parseOk); PARSE_ERROR(rx.cap(1));
+            qreal lon = rx.cap(2).toDouble(&parseOk); PARSE_ERROR(rx.cap(2));
+            qreal zoom = rx.cap(3).toDouble(&parseOk); PARSE_ERROR(rx.cap(3));
+
+            setLatLonZoom(lat, lon, zoom);
+        }
+    } else if (theUrl.toString().startsWith("geo:")) {
+        // geo:<lat>,<lon>?z=<zoom>
+        QRegExp rx("^geo:([0-9.]+),([0-9.]+)");
+        if (rx.indexIn(theUrl.toString()) >= 0) {
+            qreal lat = rx.cap(1).toDouble(&parseOk); PARSE_ERROR(rx.cap(1));
+            qreal lon = rx.cap(2).toDouble(&parseOk); PARSE_ERROR(rx.cap(2));
+            qreal zoom = 16; // default value
+
+            rx.setPattern("\\?z=([0-9]+)$");
+            if (rx.indexIn(theUrl.toString()) >= 0)
+                zoom = rx.cap(1).toUInt(&parseOk); PARSE_ERROR(rx.cap(1));
+
+            setLatLonZoom(lat, lon, zoom);
+        }
     }
 #undef theQuery
     return QString("Unrecognised URL: %1").arg(theUrl.toString());
