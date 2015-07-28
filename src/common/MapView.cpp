@@ -543,6 +543,11 @@ void MapView::drawLatLonGrid(QPainter & P)
     P.restore();
 }
 
+void MapView::drawFeaturesSync(QPainter & P) {
+    while (!p->osmLayer->isRenderingDone());
+    p->osmLayer->drawImage(&P);
+}
+
 void MapView::drawFeatures(QPainter & P)
 {
     p->osmLayer->drawImage(&P);

@@ -38,6 +38,7 @@ public:
     void setInteraction(Interaction* anInteraction);
 
     void drawFeatures(QPainter & painter);
+    void drawFeaturesSync(QPainter & P);
     void drawLatLonGrid(QPainter & painter);
     void drawDownloadAreas(QPainter & painter);
     void drawScale(QPainter & painter);

@@ -148,7 +148,7 @@ void NativeRenderDialog::render(QPainter& P, QRect theR, RendererOptions opt)
     mapview->setViewport(boundingBox(), theR);
     mapview->setRenderOptions(opt);
     mapview->invalidate(true, true, false);
-    mapview->drawFeatures(P);
+    mapview->drawFeaturesSync(P);
     if (opt.options & RendererOptions::ScaleVisible)
         mapview->drawScale(P);
     if (opt.options & RendererOptions::LatLonGridVisible)
@@ -171,17 +171,12 @@ void NativeRenderDialog::exportPDF()
     if (s.isNull())
         return;
 
-#if QT_VERSION >= 0x040500
-    QPrinter* prt = preview->printer();
-#else
-    QPrinter* prt = thePrinter;
-#endif
-    prt->setOutputFormat(QPrinter::PdfFormat);
-    prt->setOutputFileName(s);
+    thePrinter->setOutputFormat(QPrinter::PdfFormat);
+    thePrinter->setOutputFileName(s);
 
-    QPainter P(prt);
+    QPainter P(thePrinter);
     P.setRenderHint(QPainter::Antialiasing);
-    QRect theR = prt->pageRect();
+    QRect theR = thePrinter->pageRect();
     theR.moveTo(0, 0);
     RendererOptions opt = options();
     opt.options |= RendererOptions::PrintAllLabels;
@@ -203,11 +198,8 @@ void NativeRenderDialog::exportRaster()
 //    QString s = QFileDialog::getSaveFileName(NULL,tr("Output filename"),"",tr("Image files (*.png *.jpg)"));
     if (s.isNull())
         return;
-#if QT_VERSION >= 0x040500
-    QRect theR = preview->printer()->pageRect();
-#else
+
     QRect theR = thePrinter->pageRect();
-#endif
     theR.moveTo(0, 0);
 
     QPixmap pix(theR.size());
@@ -242,11 +234,7 @@ void NativeRenderDialog::exportSVG()
         return;
 
     QSvgGenerator svgg;
-#if QT_VERSION >= 0x040500
-    QRect theR = preview->printer()->pageRect();
-#else
     QRect theR = thePrinter->pageRect();
-#endif
     theR.moveTo(0, 0);
     svgg.setSize(theR.size());
     svgg.setFileName(s);
