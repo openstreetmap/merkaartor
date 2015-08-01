@@ -6,6 +6,8 @@ include (Config.pri)
 #Custom config
 include(Custom.pri)
 
+CONFIG += debug_and_release
+
 isEmpty(SYSTEM_QTSA) {
   include(../3rdparty/qtsingleapplication-2.6_1-opensource/src/qtsingleapplication.pri)
 } else {
