@@ -211,140 +211,6 @@ MapRenderer::MapRenderer()
     lbllayer = LabelStyleLayer(this);
 }
 
-#if 0
-void MapRenderer::render(
-        QPainter* P,
-        QMap<RenderPriority, QSet <Feature*> > theFeatures,
-        const RendererOptions& options,
-        MapView* aView
-)
-{
-    #ifndef NDEBUG
-        QTime Start(QTime::currentTime());
-    #endif
-
-    theView = aView;
-    theOptions = options;
-
-    QMap<RenderPriority, QSet<Feature*> >::const_iterator itm;
-    QSet<Feature*>::const_iterator it;
-
-    bool bgLayerVisible = TEST_RFLAGS(RendererOptions::BackgroundVisible);
-    bool fgLayerVisible = TEST_RFLAGS(RendererOptions::ForegroundVisible);
-    bool tchpLayerVisible = TEST_RFLAGS(RendererOptions::TouchupVisible);
-    bool lblLayerVisible = TEST_RFLAGS(RendererOptions::NamesVisible);
-
-    Way * R = NULL;
-    Node * Pt = NULL;
-    Relation * RR = NULL;
-
-    QPixmap pix(theView->size());
-    thePainter = new QPainter();
-
-    itm = theFeatures.constBegin();
-    while (itm != theFeatures.constEnd())
-    {
-        pix.fill(Qt::transparent);
-        thePainter->begin(&pix);
-        if (M_PREFS->getUseAntiAlias())
-            thePainter->setRenderHint(QPainter::Antialiasing);
-        int curLayer = (itm.key()).layer();
-        while (itm != theFeatures.constEnd() && (itm.key()).layer() == curLayer)
-        {
-            for (it = itm.value().constBegin(); it != itm.value().constEnd(); ++it)
-            {
-                qreal alpha = (*it)->getAlpha();
-                thePainter->setOpacity(alpha);
-
-                R = NULL;
-                Pt = NULL;
-                RR = NULL;
-
-                if (!(R = CAST_WAY(*it)))
-                    if (!(Pt = CAST_NODE(*it)))
-                        RR = CAST_RELATION(*it);
-
-                if (R) {
-                    // If there is painter at the relation level, don't paint at the way level
-                    bool draw = true;
-                    for (int i=0; i<R->sizeParents(); ++i) {
-                        if (!R->getParent(i)->isDeleted() && R->getParent(i)->hasPainter(PixelPerM))
-                            draw = false;
-                    }
-                    if (!draw)
-                        continue;
-                }
-
-                if (!Pt) {
-                    if (bgLayerVisible)
-                    {
-                        thePainter->save();
-                        if (R && R->area() == 0)
-                            thePainter->setCompositionMode(QPainter::CompositionMode_DestinationOver);
-
-                        if (R)
-                            bglayer.draw(R);
-                        else if (Pt)
-                            bglayer.draw(Pt);
-                        else if (RR)
-                            bglayer.draw(RR);
-
-                        thePainter->restore();
-                    }
-                    if (fgLayerVisible)
-                    {
-                        thePainter->save();
-
-                        if (R)
-                            fglayer.draw(R);
-                        else if (Pt)
-                            fglayer.draw(Pt);
-                        else if (RR)
-                            fglayer.draw(RR);
-
-                        thePainter->restore();
-                    }
-                }
-                if (tchpLayerVisible)
-                {
-                    thePainter->save();
-
-                    if (R)
-                        tchuplayer.draw(R);
-                    else if (Pt)
-                        tchuplayer.draw(Pt);
-                    else if (RR)
-                        tchuplayer.draw(RR);
-
-                    thePainter->restore();
-                }
-                if (lblLayerVisible) {
-                    thePainter->save();
-
-                    if (R)
-                        lbllayer.draw(R);
-                    else if (Pt)
-                        lbllayer.draw(Pt);
-                    else if (RR)
-                        lbllayer.draw(RR);
-
-                    thePainter->restore();
-                }
-
-                (*it)->draw(*thePainter, aView);
-            }
-            ++itm;
-        }
-        thePainter->end();
-        P->drawPixmap(0, 0, pix);
-#ifndef NDEBUG
-    QTime Stop(QTime::currentTime());
-    qDebug() << Start.msecsTo(Stop) << "ms";
-#endif
-    }
-}
-#else
-
 QPoint MapRenderer::toView(Node* aPt) const
 {
     return theTransform.map(aPt->projected()).toPoint();
@@ -360,10 +226,6 @@ void MapRenderer::render(
         const RendererOptions& options
 )
 {
-//    #ifndef NDEBUG
-//        QTime Start(QTime::currentTime());
-//    #endif
-
     theViewport = pViewport;
     theScreen = screen;
     thePixelPerM = pixelPerM;
@@ -385,7 +247,6 @@ void MapRenderer::render(
     theTransform.reset();
     theTransform.scale(ScaleLon, -ScaleLat);
     theTransform.translate(-pViewport.topLeft().x(), -pViewport.topLeft().y());
-//    qDebug() << "render transform: " << theTransform;
 
     theOptions = options;
     theGlobalPainter = M_STYLE->getGlobalPainter();
@@ -531,11 +392,4 @@ void MapRenderer::render(
         }
     }
     thePainter->restore();
-
-//    #ifndef NDEBUG
-//        QTime Stop(QTime::currentTime());
-//        qDebug() << Start.msecsTo(Stop) << "ms";
-//    #endif
 }
-#endif
-
