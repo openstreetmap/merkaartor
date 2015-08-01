@@ -992,7 +992,7 @@ void MerkaartorPreferences::setOsmWebsite(const QString & theValue)
         Sets->setValue("osm/Website", theValue);
 }
 
-M_PARAM_IMPLEMENT_STRING(XapiUrl, osm, "http://www.informationfreeway.org/api/0.6")
+M_PARAM_IMPLEMENT_STRING(XapiUrl, osm, "http://www.overpass-api.de/api/xapi_meta?")
 M_PARAM_IMPLEMENT_STRING(NominatimUrl, osm, "http://nominatim.openstreetmap.org/search")
 M_PARAM_IMPLEMENT_BOOL(AutoHistoryCleanup, data, true);
 

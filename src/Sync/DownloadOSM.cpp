@@ -747,7 +747,7 @@ bool downloadOSM(MainWindow* Main, const CoordBox& aBox , Document* theDocument)
             {
                 directAPI = true;
                 directUrl = M_PREFS->getXapiUrl();
-                if (!directUrl.endsWith("/")) directUrl += "/";
+                //if (!directUrl.endsWith("/")) directUrl += "/";
                 directUrl += ui.edXapiUrl->text();
             }
             else if (ui.FromMap->isChecked())
