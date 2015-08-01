@@ -183,6 +183,8 @@ public:
     qreal apiVersionNum() const;
 
     M_PARAM_DECLARE_BOOL(rightsidedriving);
+    M_PARAM_DECLARE_DOUBLE(RoundaboutPrecision);
+    M_PARAM_DECLARE_INT(RoundaboutType);
     M_PARAM_DECLARE_DOUBLE(doubleroaddistance);
     M_PARAM_DECLARE_STRING(workingdir);
 

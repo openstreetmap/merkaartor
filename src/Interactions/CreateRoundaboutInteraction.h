@@ -23,11 +23,15 @@ class CreateRoundaboutInteraction : public Interaction
 #ifndef _MOBILE
         virtual QCursor cursor() const;
 #endif
+    private slots:
+        void on_typeChanged(int newType);
 
     private:
+        void calculatePoints();
         QDockWidget* theDock;
         Ui::CreateRoundaboutDock DockData;
         Coord Center;
+        QList<QPointF> Points;
         QPointF LastCursor;
         bool HaveCenter;
 };

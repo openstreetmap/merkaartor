@@ -657,6 +657,8 @@ void MerkaartorPreferences::setUse06Api(bool b)
 
 M_PARAM_IMPLEMENT_BOOL(rightsidedriving, roadstructure, true);
 M_PARAM_IMPLEMENT_DOUBLE(doubleroaddistance, roadstructure, 20.);
+M_PARAM_IMPLEMENT_DOUBLE(RoundaboutPrecision, roadstructure, 10.);
+M_PARAM_IMPLEMENT_INT(RoundaboutType, misc, 0);
 M_PARAM_IMPLEMENT_STRING(workingdir, general, "");
 
 BookmarkList* MerkaartorPreferences::getBookmarks()

@@ -28,15 +28,24 @@ CreateRoundaboutInteraction::CreateRoundaboutInteraction(MainWindow* aMain)
     theDock->setAllowedAreas(Qt::LeftDockWidgetArea);
     theMain->addDockWidget(Qt::LeftDockWidgetArea, theDock);
     theDock->show();
-    DockData.DriveRight->setChecked(M_PREFS->getrightsidedriving());
+    connect(DockData.type, SIGNAL(currentIndexChanged(int)), this, SLOT(on_typeChanged(int)));
+    DockData.drivingSide->setCurrentIndex(M_PREFS->getrightsidedriving());
+    DockData.precision->setValue(M_PREFS->getRoundaboutPrecision());
+    DockData.type->setCurrentIndex(M_PREFS->getRoundaboutType());
 
     theMain->view()->setCursor(cursor());
 #endif
 }
 
+void CreateRoundaboutInteraction::on_typeChanged(int newType) {
+    DockData.drivingSide->setEnabled(newType == 0);
+}
+
 CreateRoundaboutInteraction::~CreateRoundaboutInteraction()
 {
-    M_PREFS->setrightsidedriving(DockData.DriveRight->isChecked());
+    M_PREFS->setrightsidedriving(DockData.drivingSide->currentIndex()); /* 0 is left, 1 is right */
+    M_PREFS->setRoundaboutType(DockData.type->currentIndex());
+    M_PREFS->setRoundaboutPrecision(DockData.precision->value());
     delete theDock;
     view()->update();
 }
@@ -71,19 +80,10 @@ void CreateRoundaboutInteraction::mousePressEvent(QMouseEvent * event)
         }
         else
         {
-            QPointF CenterF(COORD_TO_XY(Center));
-            qreal Radius = distance(CenterF,LastCursor)/view()->pixelPerM();
-            qreal Precision = 2.49;
-            if (Radius<2.5)
-                Radius = 2.5;
-            qreal Angle = 2*acos(1-Precision/Radius);
-            qreal Steps = ceil(2*M_PI/Angle);
-            Angle = 2*M_PI/Steps;
-            Radius *= view()->pixelPerM();
-            qreal Modifier = DockData.DriveRight->isChecked()?-1:1;
-            QBrush SomeBrush(QColor(0xff,0x77,0x11,128));
-            QPen TP(SomeBrush,view()->pixelPerM()*4+1);
-            QPointF Prev(CenterF.x()+cos(Modifier*Angle/2)*Radius,CenterF.y()+sin(Modifier*Angle/2)*Radius);
+            calculatePoints();
+            if (Points.size() == 0) return;
+
+            QPointF Prev = Points[0];
             Node* First = g_backend.allocNode(theMain->document()->getDirtyOrOriginLayer(), XY_TO_COORD(Prev.toPoint()));
             Way* R = g_backend.allocWay(theMain->document()->getDirtyOrOriginLayer());
             CommandList* L  = new CommandList(MainWindow::tr("Create Roundabout %1").arg(R->id().numId), R);
@@ -97,17 +97,16 @@ void CreateRoundaboutInteraction::mousePressEvent(QMouseEvent * event)
             }
             // "oneway" is implied on roundabouts
             //R->setTag("oneway","yes");
-            R->setTag("junction","roundabout");
-            for (qreal a = Angle*3/2; a<2*M_PI; a+=Angle)
-            {
-                QPointF Next(CenterF.x()+cos(Modifier*a)*Radius,CenterF.y()+sin(Modifier*a)*Radius);
+            if (DockData.type->currentIndex() == 0)
+                R->setTag("junction","roundabout");
+            for (int i = 1; i < Points.size(); i++ ) {
+                QPointF Next = Points[i];
                 Node* New = g_backend.allocNode(theMain->document()->getDirtyOrOriginLayer(), XY_TO_COORD(Next.toPoint()));
                 L->add(new AddFeatureCommand(theMain->document()->getDirtyOrOriginLayer(),New,true));
                 R->add(New);
             }
             R->add(First);
-            for (FeatureIterator it(document()); !it.isEnd(); ++it)
-            {
+            for (FeatureIterator it(document()); !it.isEnd(); ++it) {
                 Way* W1 = CAST_WAY(it.get());
                 if (W1 && (W1 != R))
                     Way::createJunction(theMain->document(), L, R, W1, true);
@@ -141,31 +140,45 @@ void CreateRoundaboutInteraction::mouseReleaseEvent(QMouseEvent* anEvent)
     Interaction::mouseReleaseEvent(anEvent);
 }
 
-void CreateRoundaboutInteraction::paintEvent(QPaintEvent* , QPainter& thePainter)
-{
-    if (HaveCenter)
-    {
+void CreateRoundaboutInteraction::calculatePoints() {
+    Points.clear();
+    if (HaveCenter) {
         QPointF CenterF(COORD_TO_XY(Center));
         qreal Radius = distance(CenterF,LastCursor)/view()->pixelPerM();
-        qreal Precision = 1.99;
-        if (Radius<2)
-            Radius = 2;
-        qreal Angle = 2*acos(1-Precision/Radius);
-        qreal Steps = ceil(2*M_PI/Angle);
-        Angle = 2*M_PI/Steps;
+        qreal Precision = DockData.precision->value(); //2.49;
+        /* Let the precision be the approximate number of meters per arc */
+
+        qreal Circumference = 2*M_PI*Radius;
+        qreal Steps = Circumference/Precision;
+        if (Steps < 3) Steps = 3;
+        qreal Angle = 2*M_PI/Steps;
+
+        /* Normalize the radius for drawing */
         Radius *= view()->pixelPerM();
-        qreal Modifier = DockData.DriveRight->isChecked()?-1:1;
-        QBrush SomeBrush(QColor(0xff,0x77,0x11,128));
-        QPen TP(SomeBrush,view()->pixelPerM()*4);
-        QPointF Prev(CenterF.x()+cos(Modifier*Angle/2)*Radius,CenterF.y()+sin(Modifier*Angle/2)*Radius);
-        for (qreal a = Angle*3/2; a<2*M_PI; a+=Angle)
-        {
-            QPointF Next(CenterF.x()+cos(Modifier*a)*Radius,CenterF.y()+sin(Modifier*a)*Radius);
-            ::draw(thePainter,TP,Feature::OneWay, Prev,Next,4,view()->projection());
-            Prev = Next;
+
+        qreal Modifier = DockData.drivingSide->currentIndex() == 1 ? -1:1;
+        for (qreal a = 0; a<2*M_PI; a+=Angle) {
+            QPointF point(CenterF.x()+cos(Modifier*a)*Radius,CenterF.y()+sin(Modifier*a)*Radius);
+            Points.append(point);
         }
-        QPointF Next(CenterF.x()+cos(Modifier*Angle/2)*Radius,CenterF.y()+sin(Modifier*Angle/2)*Radius);
-        ::draw(thePainter,TP,Feature::OneWay, Prev,Next,4,view()->projection());
+    }
+}
+
+void CreateRoundaboutInteraction::paintEvent(QPaintEvent* , QPainter& thePainter)
+{
+    calculatePoints();
+
+    if (Points.size() == 0) return;
+
+    qreal Precision = DockData.precision->value(); //2.49;
+    QBrush SomeBrush(QColor(0xff,0x77,0x11,128));
+    QPen TP(SomeBrush,view()->pixelPerM()*Precision/2);
+
+    for (int i = 0; i < Points.size(); i++) {
+        QPointF Prev = Points[i];
+        QPointF Next = Points[ (i+1)%Points.size() ];
+        ::draw(thePainter, TP, (DockData.type->currentIndex() == 0) ? Feature::OneWay : Feature::BothWays, Prev, Next, Precision, view()->projection());
+        Prev = Next;
     }
 }
 
