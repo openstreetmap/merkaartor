@@ -125,6 +125,8 @@ public slots:
     virtual void zoomIn();
     virtual void zoomOut();
 
+    virtual void renderingDone();
+
 signals:
     void viewportChanged();
 

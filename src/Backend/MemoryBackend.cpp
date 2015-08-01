@@ -1,6 +1,8 @@
 #include "MemoryBackend.h"
 #include "RTree.h"
 
+#include <QReadWriteLock>
+
 RenderPriority NodePri(RenderPriority::IsSingular,0., 0);
 RenderPriority SegmentPri(RenderPriority::IsLinear,0.,99);
 
@@ -23,6 +25,8 @@ typedef RTree<Feature*, qreal, 2, qreal, 32> CoordTree;
 class MemoryBackendPrivate
 {
 public:
+    QReadWriteLock delayedDeletesLock;
+    QList<Feature*> toBeDeleted;
     QHash<Feature*, CoordBox> AllocFeatures;
     QHash<ILayer*, CoordTree*> theRTree;
     QList<Feature*> findResult;
@@ -378,12 +382,33 @@ void MemoryBackend::deallocFeature(ILayer* l, Feature *f)
     if (p->AllocFeatures.contains(f)) {
         indexRemove(l, p->AllocFeatures[f], f);
         p->AllocFeatures.remove(f);
+        p->toBeDeleted.append(f);
     }
+}
+
+void MemoryBackend::purge()
+{
+    if (!p->delayedDeletesLock.tryLockForWrite()) return;
+    QList<Feature*>::iterator it = p->toBeDeleted.begin();
+    while (it != p->toBeDeleted.end()) {
+        delete *(it++);
+    }
+    p->toBeDeleted.clear();
+    p->delayedDeletesLock.unlock();
+}
+
+void MemoryBackend::delayDeletes() {
+    p->delayedDeletesLock.lockForRead();
+}
+
+void MemoryBackend::resumeDeletes() {
+    p->delayedDeletesLock.unlock();
+    purge();
 }
 
 void MemoryBackend::deallocVirtualNode(Feature *f)
 {
-    delete f;
+    p->toBeDeleted.append(f);
 }
 
 void MemoryBackend::sync(Feature *f)

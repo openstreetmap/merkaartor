@@ -93,6 +93,7 @@ public:
 
         QMap<RenderPriority, QSet <Feature*> > theFeatures;
 
+        g_backend.delayDeletes();
         for (int i=0; i<p->theDocument->layerSize(); ++i)
             g_backend.getFeatureSet(p->theDocument->getLayer(i), theFeatures, invalidRect, p->theProjection);
 
@@ -105,6 +106,7 @@ public:
         MapRenderer r;
         r.render(&P, theFeatures, projR, /*QRect(0, 0, TILE_SIZE, TILE_SIZE)*/QRect(-((TILE_SIZE*TILE_SURROUND)-TILE_SIZE)/2, -((TILE_SIZE*TILE_SURROUND)-TILE_SIZE)/2, TILE_SIZE*TILE_SURROUND, TILE_SIZE*TILE_SURROUND), p->PixelPerM, p->ROptions);
         P.end();
+        g_backend.resumeDeletes();
         p->theDocument->unlockPainters();
         tileLock.lockForWrite();
         tileCache->insert(tile, img);

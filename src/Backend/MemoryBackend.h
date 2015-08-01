@@ -42,6 +42,9 @@ public:
     virtual void deallocVirtualNode(Feature* f);
 
     virtual void sync(Feature* f);
+    virtual void purge();
+    virtual void delayDeletes();
+    virtual void resumeDeletes();
 
     virtual const QList<Feature*>& indexFind(ILayer* l, const QRectF& vp);
     virtual void indexFind(ILayer* l, const QRectF& bb, const IndexFindContext& findResult);

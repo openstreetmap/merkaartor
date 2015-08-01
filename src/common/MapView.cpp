@@ -136,7 +136,7 @@ MapView::MapView(QWidget* parent) :
 
 
     p->osmLayer = new OsmRenderLayer(this);
-    connect(p->osmLayer, SIGNAL(renderingDone()), SLOT(update()));
+    connect(p->osmLayer, SIGNAL(renderingDone()), SLOT(renderingDone()));
 }
 
 MapView::~MapView()
@@ -887,6 +887,10 @@ void MapView::zoomIn()
 void MapView::zoomOut()
 {
     zoom(M_PREFS->getZoomOut()/100., rect().center());
+}
+
+void MapView::renderingDone() {
+    update();
 }
 
 bool MapView::isSelectionLocked()

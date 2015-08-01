@@ -772,7 +772,7 @@ bool MainWindow::eventFilter(QObject */* watched */, QEvent *event)
         QMouseEvent* mevent = static_cast<QMouseEvent*>(event);
         updateSegmentMode(mevent);
 
-        theView->interaction()->updateSnap(mevent);
+        theView->interaction()->mouseEvent(mevent);
 
         if (M_PREFS->getSelectModeCreation()) {
             MoveNodeInteraction* MI = NULL;
@@ -781,10 +781,10 @@ bool MainWindow::eventFilter(QObject */* watched */, QEvent *event)
             }
             EditInteraction* EI = dynamic_cast<EditInteraction*>(theView->interaction());
             if ((EI && EI->isIdle()) || (MI && MI->isIdle())) {
-                if ((theView->interaction()->lastSnap() && theView->interaction()->lastSnap()->getType() & IFeature::LineString) || !theView->interaction()->lastSnap())
-                    CreateNodeInteraction::createNode(theView->fromView(mevent->pos()), theView->interaction()->lastSnap());
-                else if (theView->interaction()->lastSnap() && theView->interaction()->lastSnap()->getType() == IFeature::Point) {
-                    Node* N = CAST_NODE(theView->interaction()->lastSnap());
+                if ((EI->lastSnap() && EI->lastSnap()->getType() & IFeature::LineString) || !EI->lastSnap())
+                    CreateNodeInteraction::createNode(theView->fromView(mevent->pos()), EI->lastSnap());
+                else if (EI->lastSnap() && EI->lastSnap()->getType() == IFeature::Point) {
+                    Node* N = CAST_NODE(EI->lastSnap());
                     CreateSingleWayInteraction* CI = new CreateSingleWayInteraction(this, N, false);
                     N->invalidatePainter();
                     launchInteraction(CI);
@@ -811,7 +811,7 @@ bool MainWindow::eventFilter(QObject */* watched */, QEvent *event)
         QMouseEvent* mevent = static_cast<QMouseEvent*>(event);
         updateSegmentMode(mevent);
 
-        theView->interaction()->updateSnap(mevent);
+        theView->interaction()->mouseEvent(mevent);
         if (theInfo)
             theInfo->setHtml(theView->interaction()->toHtml());
 
@@ -828,7 +828,7 @@ bool MainWindow::eventFilter(QObject */* watched */, QEvent *event)
         QMouseEvent* mevent = static_cast<QMouseEvent*>(event);
         updateSegmentMode(mevent);
 
-        theView->interaction()->updateSnap(mevent);
+        theView->interaction()->mouseEvent(mevent);
 
         return false;
     }
@@ -846,7 +846,7 @@ bool MainWindow::eventFilter(QObject */* watched */, QEvent *event)
         QMouseEvent* mevent = static_cast<QMouseEvent*>(event);
         updateSegmentMode(mevent);
 
-        theView->interaction()->updateSnap(mevent);
+        theView->interaction()->mouseEvent(mevent);
 
         if (!M_PREFS->getSeparateMoveMode()) {
             EditInteraction* EI = dynamic_cast<EditInteraction*>(theView->interaction());

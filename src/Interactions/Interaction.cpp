@@ -25,7 +25,7 @@
 
 Interaction::Interaction(MainWindow* aMain)
     : QObject(aMain), theMain(aMain), Panning(false)
-    , LastSnap(0), SnapActive(true)
+    , SnapActive(true)
     , NoSelectPoints(false), NoSelectRoads(false), NoSelectVirtuals(true)
     , Dragging(false)
     , StartDrag(0,0), EndDrag(0,0)
@@ -195,17 +195,28 @@ void Interaction::paintEvent(QPaintEvent*, QPainter& thePainter)
     }
 }
 
-void Interaction::updateSnap(QMouseEvent* event)
+void Interaction::mouseEvent(QMouseEvent*) {
+
+}
+
+void FeatureSnapInteraction::mouseEvent(QMouseEvent* event) {
+    updateSnap(event);
+}
+
+void FeatureSnapInteraction::updateSnap(QMouseEvent* event)
 {
     if (panning())
     {
-        LastSnap = 0;
+        clearLastSnap();
         return;
     }
     bool NoRoads =
         ( (QApplication::keyboardModifiers() & Qt::AltModifier) &&  (QApplication::keyboardModifiers() &Qt::ControlModifier) );
-    Feature* Prev = LastSnap;
-    LastSnap = 0;
+
+    /* Beware: Prev shall not be dereferenced after clearLastSnap! */
+    Feature* Prev = lastSnap();
+    clearLastSnap();
+
     Feature* ReadOnlySnap = 0;
     if (!SnapActive) return;
     //QTime Start(QTime::currentTime());
@@ -263,7 +274,7 @@ void Interaction::updateSnap(QMouseEvent* event)
                 if (Distance < BestDistance && !F->isReadonly())
                 {
                     BestDistance = Distance;
-                    LastSnap = F;
+                    setLastSnap( F );
                 } else if (Distance < BestReadonlyDistance && F->isReadonly())
                 {
                     BestReadonlyDistance = Distance;
@@ -273,28 +284,28 @@ void Interaction::updateSnap(QMouseEvent* event)
         }
     }
     if (areNodesSelectable) {
-        R = CAST_WAY(LastSnap);
+        R = CAST_WAY(lastSnap());
         if (R) {
             Node* N = R->pixelDistanceNode(event->pos(), CLEAR_DISTANCE, view(), NoSnap, NoSelectVirtuals);
             if (N)
-                LastSnap = N;
+                setLastSnap( N );
         }
     }
 
-    if (Prev != LastSnap) {
-        curStackSnap = SnapList.indexOf(LastSnap);
+    if (Prev != lastSnap()) {
+        curStackSnap = SnapList.indexOf(lastSnap());
         view()->update();
     }
 
     if (M_PREFS->getMapTooltip()) {
-        if (LastSnap)
-            view()->setToolTip(LastSnap->toHtml());
+        if (lastSnap())
+            view()->setToolTip(lastSnap()->toHtml());
         else
             view()->setToolTip("");
     }
     if (M_PREFS->getInfoOnHover() && main() && theMain->info() && theMain->info()->isVisible()) {
-        if (LastSnap) {
-            theMain->info()->setHoverHtml(LastSnap->toHtml());
+        if (lastSnap()) {
+            theMain->info()->setHoverHtml(lastSnap()->toHtml());
         } else
             if (ReadOnlySnap)
                 theMain->info()->setHoverHtml(ReadOnlySnap->toHtml());
@@ -302,19 +313,14 @@ void Interaction::updateSnap(QMouseEvent* event)
                 theMain->info()->unsetHoverHtml();
     }
 
-    emit featureSnap(LastSnap);
-}
-
-Feature* Interaction::lastSnap()
-{
-    return LastSnap;
+    emit featureSnap(lastSnap());
 }
 
 
 /***************/
 
 FeatureSnapInteraction::FeatureSnapInteraction(MainWindow* aMain)
-        : Interaction(aMain)
+        : Interaction(aMain), LastSnap(0)
 {
 //    handCursor = QCursor(QPixmap(":/Icons/grab.png"));
 //    grabCursor = QCursor(QPixmap(":/Icons/grabbing.png"));
@@ -347,9 +353,9 @@ void FeatureSnapInteraction::paintEvent(QPaintEvent* anEvent, QPainter& thePaint
         theMain->properties()->highlighted(i)->drawHighlight(thePainter, view());
     }
 
-    if (LastSnap) {
-        LastSnap->drawHover(thePainter, view());
-        view()->setToolTip(LastSnap->toHtml());
+    if (lastSnap()) {
+        lastSnap()->drawHover(thePainter, view());
+        view()->setToolTip(lastSnap()->toHtml());
     } else {
         view()->setToolTip("");
     }
@@ -359,8 +365,8 @@ void FeatureSnapInteraction::paintEvent(QPaintEvent* anEvent, QPainter& thePaint
 void FeatureSnapInteraction::mousePressEvent(QMouseEvent * event)
 {
     if (event->button() == Qt::LeftButton)
-        snapMousePressEvent(event,LastSnap);
-    if (!(M_PREFS->getMouseSingleButton() && LastSnap))
+        snapMousePressEvent(event,lastSnap());
+    if (!(M_PREFS->getMouseSingleButton() && lastSnap()))
         Interaction::mousePressEvent(event);
 }
 
@@ -369,8 +375,8 @@ void FeatureSnapInteraction::mouseReleaseEvent(QMouseEvent * event)
     if (event->button() == Qt::RightButton && !Panning && !Dragging)
         emit(requestCustomContextMenu(event->pos()));
 
-    snapMouseReleaseEvent(event,LastSnap);
-    if (!(M_PREFS->getMouseSingleButton() && LastSnap))
+    snapMouseReleaseEvent(event,lastSnap());
+    if (!(M_PREFS->getMouseSingleButton() && lastSnap()))
         Interaction::mouseReleaseEvent(event);
 }
 
@@ -382,8 +388,8 @@ void FeatureSnapInteraction::mouseMoveEvent(QMouseEvent* event)
 //    else
         view()->setCursor(cursor());
 #endif
-    snapMouseMoveEvent(event, LastSnap);
-    if (!(M_PREFS->getMouseSingleButton() && LastSnap))
+    snapMouseMoveEvent(event, lastSnap());
+    if (!(M_PREFS->getMouseSingleButton() && lastSnap()))
         Interaction::mouseMoveEvent(event);
 }
 
@@ -395,8 +401,8 @@ void FeatureSnapInteraction::mouseDoubleClickEvent(QMouseEvent* event)
 #ifndef _MOBILE
         view()->setCursor(cursor());
 #endif
-    snapMouseDoubleClickEvent(event, LastSnap);
-    if (!(M_PREFS->getMouseSingleButton() && LastSnap))
+    snapMouseDoubleClickEvent(event, lastSnap());
+    if (!(M_PREFS->getMouseSingleButton() && lastSnap()))
         Interaction::mouseDoubleClickEvent(event);
 }
 
@@ -444,7 +450,20 @@ void FeatureSnapInteraction::clearSnap()
 void FeatureSnapInteraction::clearLastSnap()
 {
     LastSnap = 0;
+    g_backend.resumeDeletes();
 }
+
+void FeatureSnapInteraction::setLastSnap(Feature *f)
+{
+    if (!LastSnap) g_backend.delayDeletes();
+    LastSnap = f;
+}
+
+Feature* FeatureSnapInteraction::lastSnap()
+{
+    return LastSnap;
+}
+
 
 QList<Feature*> FeatureSnapInteraction::snapList()
 {

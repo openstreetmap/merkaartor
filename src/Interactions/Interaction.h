@@ -41,6 +41,7 @@ public:
     virtual void mouseMoveEvent(QMouseEvent* event);
     virtual void mouseDoubleClickEvent(QMouseEvent* event);
     virtual void wheelEvent(QWheelEvent* ev);
+    virtual void mouseEvent(QMouseEvent* ev);
 
     virtual void paintEvent(QPaintEvent* anEvent, QPainter& thePainter);
     virtual QString toHtml() = 0;
@@ -50,16 +51,12 @@ public:
     MainWindow* main();
     bool panning() const;
 
-    virtual void updateSnap(QMouseEvent* event);
-    Feature* lastSnap();
-
 protected:
     MainWindow* theMain;
     bool Panning;
     QPoint FirstPan;
     QPoint LastPan;
 
-    Feature* LastSnap;
     QList<Feature*> NoSnap;
     bool SnapActive;
     bool NoSelectPoints;
@@ -73,7 +70,6 @@ protected:
 
 signals:
     void requestCustomContextMenu(const QPoint & pos);
-    void featureSnap(Feature*);
 
 protected:
     bool Dragging;
@@ -83,6 +79,7 @@ protected:
 
 class FeatureSnapInteraction : public Interaction
 {
+    Q_OBJECT
 public:
     FeatureSnapInteraction(MainWindow* aMain);
 
@@ -98,17 +95,23 @@ public:
     virtual void snapMouseMoveEvent(QMouseEvent* , Feature*);
     virtual void snapMouseDoubleClickEvent(QMouseEvent* , Feature*);
 
+    virtual void mouseEvent(QMouseEvent* event);
+
     void activateSnap(bool b);
     void addToNoSnap(Feature* F);
     void addToNoSnap(QList<Feature *> Fl);
     void clearNoSnap();
     void clearSnap();
-    void clearLastSnap();
     QList<Feature*> snapList();
     void addSnap(Feature* aSnap);
     void setSnap(QList<Feature*> aSnapList);
     void nextSnap();
     void previousSnap();
+    void updateSnap(QMouseEvent* event);
+
+    void setLastSnap(Feature *f);
+    void clearLastSnap();
+    Feature* lastSnap();
 
     void setDontSelectPoints(bool b);
     void setDontSelectRoads(bool b);
@@ -117,13 +120,15 @@ public:
 #ifndef _MOBILE
     virtual QCursor cursor() const;
 #endif
+protected:
+    Feature* LastSnap;
 private:
     QCursor handCursor;
     QCursor grabCursor;
     QCursor defaultCursor;
     QCursor warningCursor;
-
-protected:
+signals:
+    void featureSnap(Feature*);
 };
 
 #endif
