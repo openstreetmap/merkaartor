@@ -1,9 +1,9 @@
 # see http://merkaartor.be/wiki/merkaartor/Compiling
 
-#Static config
-include (Config.pri)
+# Static config
+include(Config.pri)
 
-#Custom config
+# Custom config
 include(Custom.pri)
 
 CONFIG += debug_and_release
@@ -278,9 +278,9 @@ contains (PROTOBUF, 1) {
 }
 
 !isEmpty(SANITIZE) {
-    QMAKE_CXXFLAGS+=-fsanitize=address -fno-omit-frame-pointer
-    QMAKE_CFLAGS+=-fsanitize=address -fno-omit-frame-pointer
-    QMAKE_LFLAGS+=-fsanitize=address
+    QMAKE_CXXFLAGS += -fsanitize=address -fno-omit-frame-pointer
+    QMAKE_CFLAGS += -fsanitize=address -fno-omit-frame-pointer
+    QMAKE_LFLAGS += -fsanitize=address
 }
 
 unix:!macx {
@@ -290,5 +290,3 @@ unix:!macx {
     desktopicons.files = $$PWD/../Icons/48x48/merkaartor.png
     INSTALLS += desktop desktopicons
 }
-
-

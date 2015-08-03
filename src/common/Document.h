@@ -174,13 +174,12 @@ protected:
 
 class VisibleFeatureIterator: public FeatureIterator
 {
-
 public:
     VisibleFeatureIterator(Document* aDoc);
-    virtual ~VisibleFeatureIterator();
+    ~VisibleFeatureIterator() override;
 
 protected:
-    virtual bool check();
+    bool check() override;
 };
 
 
