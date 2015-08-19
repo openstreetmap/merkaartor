@@ -14,7 +14,12 @@ p, li { white-space: pre-wrap; }
 &lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-size:small; font-weight:400; font-style:normal;&quot;&gt;
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:small; font-style:italic;&quot;&gt;Merkaartor version&lt;/span&gt;&lt;span style=&quot; font-size:8pt;&quot;&gt; &lt;/span&gt;&lt;/p&gt;
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:small; font-weight:600;&quot;&gt;%1&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation type="unfinished"/>
+        <translation>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
+p, li { white-space: pre-wrap; }
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-size:small; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:small; font-style:italic;&quot;&gt;Merkaartor version&lt;/span&gt;&lt;span style=&quot; font-size:8pt;&quot;&gt; &lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:small; font-weight:600;&quot;&gt;%1&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
         <location filename="../src/common/AboutDialog.ui" line="42"/>
@@ -212,7 +217,7 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="../src/Interactions/BuildBridgeInteraction.cpp" line="138"/>
         <source>Unsupported action: The bridge does not seem to be a single way.</source>
-        <translation type="unfinished"/>
+        <translation>Aktion nicht unterstützt: Die Brücke schein kein einzelner Weg zu sein.</translation>
     </message>
 </context>
 <context>
@@ -1970,7 +1975,8 @@ Wollen Sie sie wirklich schließen? (Kann nicht rückgängig gemacht werden!)</t
         <location filename="../src/Main.cpp" line="242"/>
         <source>%1 v%2
 Loading plugins...</source>
-        <translation type="unfinished"/>
+        <translation>%1 v%2
+Lade plugins...</translation>
     </message>
     <message>
         <location filename="../src/Main.cpp" line="280"/>
@@ -4077,7 +4083,7 @@ Sind Sie sicher, dass diese KML-Daten legal in OSM importiert werden dürfen?</t
     <message>
         <location filename="../src/MainWindow.cpp" line="1915"/>
         <source>Incoming Remote Control Request</source>
-        <translation type="unfinished"/>
+        <translation>Eingehende &quot;Remote Control&quot; Anfrage</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.cpp" line="1916"/>
@@ -6518,7 +6524,7 @@ Wählen Sie einen anderen Namen oder klicken Sie auf &lt;Übernehmen&gt;, um das
     <message>
         <location filename="../3rdparty/quazip-0.7/quazip/quagzipfile.cpp" line="80"/>
         <source>Could not gzopen() file</source>
-        <translation type="unfinished"/>
+        <translation>Datei konnte mit gzopen() nicht geöffnet werden</translation>
     </message>
 </context>
 <context>
