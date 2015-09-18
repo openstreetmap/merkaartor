@@ -85,7 +85,7 @@ void showVersion()
     o = QString("using Qt version %1 (built with %2)\n").arg(qVersion()).arg(QT_VERSION_STR);
     fprintf(stdout, "%s", o.toLatin1().data());
     fprintf(stdout, "Copyright Bart Vanhauwaert, Chris Browet and others, 2006-2010\n");
-    fprintf(stdout, "This program is licensed under the Version 2 of the GNU Public License or any later version\n");
+    fprintf(stdout, "This program is licensed under the Version 2 of the GNU General Public License or any later version\n");
 }
 
 void showHelp()

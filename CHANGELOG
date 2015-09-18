@@ -74,7 +74,7 @@ v0.18
     * ADD : Self-contained style packages (*.msz)
     * FIX : mutex deadlock (refs #3319)
     * FIX : Protect updatemeta (fixes #3317)
-    * ADD : Allow to show/hide the toolbars labels (toolbar context menu)
+    * ADD : Allow showing/hiding the toolbars labels (toolbar context menu)
     * ADD : "Select parent(s)" & "Download missing children" to the Feature menu (refs #3314)
     * FIX : force redrawing the osm map when zooming (fixes #3316)
     * FIX : Mutex-lock update of the painters (fixes #3315)
@@ -122,9 +122,9 @@ v0.18
     * FIX : do not create  ~/.merkaartor in portable mode
     * FIX : Handle UTF8 in GDAL fields
     * CHG : When doing GDAL imports, always confirm input projection
-    * ADD : Allow to use projection chooser in projection editor
-    * ADD : Allow to enter WKT in projection chooser
-    * ADD : Goto dialog: Allow to show/edit coordinates in projected units
+    * ADD : Allow using projection chooser in projection editor
+    * ADD : Allow entering WKT in projection chooser
+    * ADD : Goto dialog: Allow showing/editing coordinates in projected units
     * FIX : Only check styles for POI nodes
     * FIX : Feature dock: Relations not shown in "All' tab
     * FIX : log2 not available on FreeBSD (fixes #3211)
@@ -136,17 +136,17 @@ v0.18
 v0.17
     * FIX : Problem importing OSM comprising new features
     * ADD : Move "validation" style rules to a new "Validation.mas" style
-    * ADD : Allow to align background image with <SPACE>+pan
+    * ADD : Allow aligning background image with <SPACE>+pan
     * CHG : Rename "Create rectangle" to "Create rectangular building" and automatically add "building=yes"
     * ADD : Remember "Create polygon" last number of sides
-    * ADD : "Relation->Add to Multipolygon"; allows to create or add to a multipolygon relation (closes 2889)
+    * ADD : "Relation->Add to Multipolygon"; allows creating or adding to a multipolygon relation (closes 2889)
     * ADD : Network timeout preference
     * CHG : Paste Tags : Allow any<->any pasting but only takes top level features into account (fixes #3174)
     * FIX : When loading history from MDC, do not import the command if the layer is not found + save layers dirty level in MDC (fixes #3176)
     * FIX : Locked zoom was bugged since passage to real pixel per Meter (fixes #3175)
     * FIX : Allow creating a way in non-separate move mode with a virtual node selected (fixes #3172)
     * FIX : Revert to custom icon for move interaction on MAC (fixes #3170)
-    * FIX : GeoTIFF + GDAL backgrounds: Allow to specify an automatic "source" tag via the plugin menu
+    * FIX : GeoTIFF + GDAL backgrounds: Allow specifying an automatic "source" tag via the plugin menu
     * ADD : Bing Maps plugin
     * FIX : GDAL + GeoTIFF : if a ESRI World File (.tfw, *.wld) is present, override file geotransform
     * FIX : GDAL + GeoTIFF : if the projection cannot be determined, ask for it rather than fail
@@ -154,15 +154,15 @@ v0.17
     * FIX : Cannot access TMS servers that Min-zoom equals Max-zoom (fixes #3157)
     * ADD : GDAL raster background plugin
     * FIX : WMS Editor - Handle Styles properly
-    * ADD : Explicitely add GML to the list of supported format (via GDAL)
+    * ADD : Explicitly add GML to the list of supported format (via GDAL)
     * ADD : Bicycle style by Markus Straub
-    * ADD : Styles : allow to texture areas with an icon
-    * CHG : When opening/importing, always fallback to GDAL if available. Allows to open most GDAL supported geomtery files.
+    * ADD : Styles : allow texturing areas with an icon
+    * CHG : When opening/importing, always fallback to GDAL if available. Allows opening most GDAL supported geomtery files.
     * ADD : Vector map layers
     * ADD : Allow "[*] is xxx" (or "*=xxx") construct in tag selection. Means a feature match if any of its tags has xxx as a value (fixes #3146)
-    * ADD : Do not allow to delete OSM nodes in non-downloaded areas (refs #3083)
+    * ADD : Do not allow deleting OSM nodes in non-downloaded areas (refs #3083)
     * ADD : Save the downloaded areas in the MDC. Expired after 12h.
-    * ADD : Allow to specify the Nominatim url in preferences
+    * ADD : Allow specifying the Nominatim url in preferences
     * ADD : French Cadastre plugin
     * FIX : Infloop on next/previous image when none visible (fixes #3135)
     * CHG : Do not wait for "CLOSE changeset" response
@@ -171,7 +171,7 @@ v0.17
     * ADD : Auto-add "source" tag when drawing over a background map; define the value in the WMS and TMS editors
     * FIX : Filter out invalid value for first Tag list column width (fixes #3129)
     * FIX : Remove tags from autocomplete suggestions when cleared from features (fixes #3113)
-    * ADD : Allow to start merkaartor with a document template specified in preferences
+    * ADD : Allow starting merkaartor with a document template specified in preferences
     * CHG : Layers & View settings are now saved in a $HOME/Startup.mdc document rather than thru QSettings
     * ADD : New CL options: "--ignore-preferences" && "--reset-preferences"
     * FIX : Re-enable PgUp/PgDown in Geoimage dock (dock must be focused) (fixes #3126); coincidentaly, PgUp/PgDown for zooming only works when the map view is focused.
@@ -183,7 +183,7 @@ v0.17
     * FIX : remove dependency on GDAL data files when importing OSGB36 shapefiles + correct projection (closes #3119)
     * ADD : New preference: "Allow node/way creation in select mode". When checked, allows double-click to create a node and double-click on a node to start a way in select mode.
     * ADD : When drawing ways, double-clicking finishes the current way (Potlach/JOSM style)
-    * ADD : Way segments: Keeping ALT depressed allows to move way segment
+    * ADD : Way segments: Keeping ALT depressed allows moving a way segment
     * ADD : In Road creation mode, double-click creates a new node
     * ADD : Hardcoded PgUp/PgDown for Zoom in/Zoom out (Potlach style)
     * ADD : Snap to angle functionality when creating way: keeping "o" pressed snap to 45° angles, "h" snap to 30° angles
@@ -193,13 +193,13 @@ v0.17
     * ADD : Cut functionality
     * ADD : double-clicking a feature selects the feature and its children
     * CHG : style update
-    * ADD : Style Editor: allow to filter the style list
+    * ADD : Style Editor: allow filtering the style list
     * FIX : Styles: draw icons for ways, too
-    * FIX : allow to shrink properties dock
+    * FIX : allow shrinking properties dock
     * ADD : Support for XAPI
     * ADD : ":dirty" and ":uploaded" pseudo tags for finding/filtering
     * CHG : Remove builtin "Dirty" and "Uploaded" layers. Those are now managed at feature level.
-    * ADD : Allow to rename a layer by double-clicking on its name
+    * ADD : Allow renaming a layer by double-clicking on its name
     * FIX : Initial viewport issue
     * ADD : View menu item allowing to highlight "dirty" features, i.e., features ready for upload
     * FIX : Do not export incomplete features
@@ -226,14 +226,14 @@ v0.17
     * FIX : problem with "Bottom-left standard" TMS
     * ADD : Printing
     * ADD : Hungarian translation by Peter Sulyok
-    * CHG : Allow to pan with middle mouse button
+    * CHG : Allow panning with middle mouse button
     * ADD : Toolbar editor (create/modify tollbars)
     * FIX : OSX fix
     * FIX : Draw relations children dashed to avoid multiple parent drawing
     * FIX : Fix several issues with features dock.
     * FIX : Fix reappearance of deleted features.
     * FIX : Fix WayRemoveNodeCommand reversibility.
-    * ADD : Allow to move complete relations
+    * ADD : Allow moving complete relations
     * FIX : WMS'es in EPSG:4326 not showing
     * FIX : Don't overzoom on layer zoom (and don't allow if the bbox is null). fixes #3046
     * ADD : Add a "portable" mode to merkaartor via command-line ("-p") or build setting ("PORTABLE=1")
@@ -257,12 +257,12 @@ v0.16
     * FIX : Make JOSM happy about our .osm export (fixes #2952)
     * ADD : Preliminary support for OpenStreetBugs (Refs #983)
     * ADD : POC of a Gosmore map adapter
-    * FIX : Allow to "Force Upload" relations, too (fixes #2926)
+    * FIX : Allow one to "Force Upload" relations, too (fixes #2926)
     * FIX : Update Feature dock when document content changes (fixes #2923)
     * CHG : Change way the virtual nodes are handled
     * CHG : Allow tag pasting between different classes of features
     * CHG : Use a different spatial index provider
-    * ADD : Allow to delete features from the context menu of the Features dock
+    * ADD : Allow deleting features from the context menu of the Features dock
     * ADD : Accept mlon/mlat URLs as emitted by mkgmap logging
     * ADD : Walking Papers backgound plugin + load WP scans as geotagged images
     * ADD : Import from OSC (osmChange format)
@@ -272,10 +272,10 @@ v0.16
     * ADD : CSV POI import
     * FIX : crash when closing layer with virtual nodes (fixes #2858)
     * ADD : OSGB36 to the default list of projections
-    * CHG : Allow to add images to a GeoTIFF layer
+    * CHG : Allow adding images to a GeoTIFF layer
     * ADD : Add SHP feature attributes as not uploadable OSM Feature tags
-    * FIX : Allow to load OS VectorMap District shapefiles
-    * ADD : Allow to save geotagged images
+    * FIX : Allow loading OS VectorMap District shapefiles
+    * ADD : Allow saving geotagged images
     * CHG : Enhanced support for geotagged images drag&drop
     * CHG : Geotag support enhancements
     * FIX : use gpsd api and implement gpsd-ng
@@ -284,12 +284,12 @@ v0.16
     * FIX : crash when closing layers containing photos (fixes #2828)
     * CHG : Allow importing geotagged photos when no track layer is present (closes #2827)
     * ADD : Templates xsd (by Jonathan Bennett) (closes #2809; closes #2707)
-    * ADD : allow to re-order relation members (closes #2759)
+    * ADD : allow re-ordering relation members (closes #2759)
     * FIX : solves a problem when hovering large relations
     * ADD : add a projection editor
     * ADD : allow google maps links in goto and download dialogs
     * FIX : abort tile downloading when zooming
-    * ADD : Allow to tile (and cache) arbitrary WMS'es (only EPSG:4326 and google projection supported)
+    * ADD : Allow tiling (and caching) arbitrary WMS'es (only EPSG:4326 and google projection supported)
     * CHG : rework "Zoom lock" and move it to the view menu
     * ADD : support for WMS-C servers (see http://wiki.openstreetmap.org/wiki/Merkaartor/Documentation#WMS-C_Servers) (closes #2598)
     * FIX : problem when joining ways
@@ -304,7 +304,7 @@ v0.16
     * FIX : OSX Qt system translations location (by Aleksandar)
     * FIX : Update language of language combo after language change (by Alaeksandar)
     * FIX : Only allow virtual node updates after relations resolution (by Trav)(closes #2782)
-    * ADD : Allow to zoom on the location of a GeoTIFF image
+    * ADD : Allow zooming on the location of a GeoTIFF image
     * FIX : Do not updateindex() if the feature is deleted
     * FIX : roads not always refreshed when changing type or properties (fixes #2773)
     * FIX : Cannot cleanly copy tags from one relation to another (fixes #2746)
@@ -335,7 +335,7 @@ v0.15
     * ADD : GeoTIFF background plugin (closes #1025)
     * ADD : Grabbing hand icon in signle mouse mode
     * FIX : Layers menu entry for background layer is wrong at startup. Patch by Trav (closes #2641)
-    * ADD : When in "single mouse button" mode, allow to cancel most operation with a right-click
+    * ADD : When in "single mouse button" mode, allow canceling most operation with a right-click
     * ADD : "Zoom lock" mode. Zoom steps are locked to TMS ones and projection is locked to Mercator
     * FIX : get sharper Yahoo images (closes #2623)
     * FIX : tag value "Fast food" should be "fast_food" (closes #2625)
@@ -345,7 +345,7 @@ v0.15
     * FIX : URL's in about dialog (fixes #2606)
     * FIX : Export trackpoints time when exporting GPX (fixes #2594)
     * ADD : Virtual nodes allow fast creation of intermediary nodes (closes #821)
-    * ADD : Allow to move node in Node creation mode (closes #1910)
+    * ADD : Allow moving node in Node creation mode (closes #1910)
     * CHG : Only generate log files on request (--log) on release builds
     * FIX : speedup epsg:4326 projection
     * FIX : WMS projection related bugfixes
@@ -362,7 +362,7 @@ v0.15
     * ADD : Mac OS X icon (closes #2254)
     * FIX : Force custom Qt style if Qt runtime version < 4.5.1 (fixes #2204)
     * ADD : Allow all platforms to connect to a gpsd backend
-    * FIX : Set gpsd output to NMEA; allow to save log
+    * FIX : Set gpsd output to NMEA; allow saving log
     * FIX : Do not draw background if saved pixmap is null as a copy of a null pixmap seems to crash on Mac (fixes #2262)
     * FIX : Fixes MacOSX plugin dir (fixes #2253)
     * FIX : Handle latlong projection in SHP files (fixes #2183)
@@ -384,12 +384,12 @@ v0.14
     * ADD : Add a Features dock displaying the features in the current viewport
     * ADD : Add a case-sensitiveness option to the search + search by ID (closes #1509)
     * CHG : Remove support for osmarender (fixes #1966)
-    * ADD : Allow multi-selection of layers; allow to show/hide or readonly several layers at once (closes #1798)
+    * ADD : Allow multi-selection of layers; allow one to show/hide or readonly several layers at once (closes #1798)
     * ADD : Also export routes in GPX
     * ADD : Paste features as a whole (closes #1807)
     * ADD : Spatial indexing of features for faster display with large downloaded areas.
     * ADD : Built-in list of epsg projections (from proj4)
-    * CHG : Replaced "Commit..." command by "Force Upload". Allows to force update of existing features or to upload imported features (such as SHP, KML, ...)
+    * CHG : Replaced "Commit..." command by "Force Upload". Allows forcing update of existing features or to upload imported features (such as SHP, KML, ...)
     * FIX : User preferences thru OSM preferences system works again
     * FIX : Support projections when importing SHP files
     * ADD : Drag & drop re-ordering of the layers
@@ -413,7 +413,7 @@ v0.14
     * ADD : log file for debugging output
     * ADD : standard command-line arguments (-h, -v, ...) (fixes #1712)
     * FIX : Use application-wide proxy (fixes #1763)
-    * ADD : Allow to specify a user/password for the proxy (untested by me)
+    * ADD : Allow specifying a user/password for the proxy (untested by me)
     * FIX : Photo localization patch from Toby Speight.
     * FIX : Set version of newly uploaded objects at 1.
     * FIX : Graphical corruption on Intel chipsets when "Show downloaded areas" was enabled
@@ -423,7 +423,7 @@ v0.14
     * FIX : API 0.6: Error when deleting a road with no nodes (fixes #1732)
     * FIX : Correctly handle plural forms in MapLayer information
     * FIX : API 0.6: Do not add "created_by" to changed features (fixes #1728)
-    * FIX : API 0.6: Allow to define a comment on a changeset (fixes #1731)
+    * FIX : API 0.6: Allow defining a comment on a changeset (fixes #1731)
     * FIX : API 0.6 fixes
     * FIX : Nodes fetched by relations are incomplete and not completed by "download more" (fixes #1715)
     * ADD : Initial support for Symbian S60v5
@@ -435,9 +435,9 @@ v0.14
     * FIX : OSM/GPX import optimisations (by Trav)
     * FIX : <Esc> in Name property inspector causes AV (fixes #1672)
     * CHG : Move vector background from SHP to OSB
-    * CHG : Preferences are uploaded to OSM in binary, base-64 encoded, 254 char slice. Allow to bypass the 255 char per preference limitation.
+    * CHG : Preferences are uploaded to OSM in binary, base-64 encoded, 254 char slice. Allow bypassing the 255 char per preference limitation.
     * CHG : Preferences lists (Bookmarks, WMS servers, ...) are now distributed and saved as XML in ~/.merkaartor. Allow proper merging (fixes #1401)
-    * ADD : Allow to choose which Qt style to use via a combobox
+    * ADD : Allow choosing which Qt style to use via a combobox
     * CHG : Implement the custom styles as plugins
     * FIX : English language warning
     * ADD : Switch to template-based projection handling; remove dependency on libproj
@@ -461,7 +461,7 @@ v0.13
     * FIX : Crash on layer close
     * FIX : Hardening upload process
     * FIX : Remove the deleted road from parent when joining
-    * FIX : allow to split/join roads belonging to not-completely-downloaded relations
+    * FIX : allow spliting/joining roads belonging to not-completely-downloaded relations
     * FIX : Avert crashes by using guarded pointers
     * FIX : In case of a failed "Download more", do not delete layer if it was a previously existing one.
     * FIX : GeoTagged images are drawn to the full size of GeoImageDock
@@ -477,7 +477,7 @@ v0.13
     * FIX : Handle Undoes while creating single/double roads (fixes #1621)
     * FIX : Re-apply custom shortcuts after retranslateUI (fixes #1620)
     * FIX : Insufficent precision for WMS bbox requests at high zoom (fixes #1618)
-    * ADD : Allow to force the custom Qt style thru Config.pri
+    * ADD : Allow forcing the custom Qt style thru Config.pri
     * FIX : Do not remove incomplete downloaded relation; make them readonly and display them in red (temporary)
     * FIX : Painting slowdowns (+ memory consumption) when relations are involved (fixes #1528)
     * FIX : Split roads not added to Relation (fixes #1586)
@@ -501,10 +501,10 @@ v0.13
     * FIX : Add missing tr() calls in render dialogs.
     * FIX : Messagebox-Cancel after deleting a line did not work (fixes #1392)
     * ADD : Native SVG renderer
-    * ADD : Allow to break roads (and areas) with a single node (fixes #1505)
+    * ADD : Allow breaking roads (and areas) with a single node (fixes #1505)
     * ADD : Relation member context menu for center and zoom on the properties
     dock
-    * ADD : Allow to remove a member from a relation thru the properties dock.
+    * ADD : Allow removing a member from a relation thru the properties dock.
     * FIX : switch to skulpture 2.2 custom style by default
     * FIX : Don't allow templates combo to grow depending on content (fixes #1482)
     * FIX : Allow disabling "Don't connect GPX nodes separated more than.." by setting it to 0. (fixes #1488)
@@ -603,7 +603,7 @@ v0.12
     * FIX : Upload of a modified single GPX track node was not working anymore (fixes #1141)
     * ADD : Support for GeoTagged images. qmake GEOIMAGE=1 to activate. requires exiv2 (by Timo Schlüßler)
     * ADD : Move to the next field on enter in properties dock tags (by Travers Carter) (Refs #1137)
-    * ADD : revised OSB format. Allows to use large map files directly from disk with low memory footprint.
+    * ADD : revised OSB format. Allows using large map files directly from disk with low memory footprint.
     * FIX : Native render doesn't render anything at high lat/long values(by Travers Carter)  (Closes #1135)
     * FIX : Expand tables in the properties dock to the available width by default (by Travers Carter) (Closes #1136)
     * FIX : make download dialog a less cluttered

@@ -156,7 +156,7 @@
    <item>
     <widget class="QLabel" name="label_3">
      <property name="text">
-      <string>This program is licensed under the GNU Public License v2</string>
+      <string>This program is licensed under the GNU General Public License v2</string>
      </property>
     </widget>
    </item>

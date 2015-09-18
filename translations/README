@@ -3,7 +3,7 @@ templates. Translations can be done using linguist and hand written XML directly
 in SVN or using Launchpad (preferred way) at
 https://translations.launchpad.net/merkaartor/trunk
 
-The script in this directory allows to convert between the two XML file types
+The script in this directory allows converting between the two XML file types
 and the standard gettext .po files.
 
 The templates and the main translations are separated in two different sets

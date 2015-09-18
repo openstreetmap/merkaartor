@@ -74,8 +74,8 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <location filename="../src/common/AboutDialog.ui" line="119"/>
-        <source>This program is licensed under the GNU Public License v2</source>
-        <translation>Dieses Programm ist unter der GNU Public License v2 lizenziert</translation>
+        <source>This program is licensed under the GNU General Public License v2</source>
+        <translation>Dieses Programm ist unter der GNU General Public License v2 lizenziert</translation>
     </message>
     <message>
         <location filename="../src/common/AboutDialog.ui" line="126"/>

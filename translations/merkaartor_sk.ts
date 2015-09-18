@@ -56,8 +56,8 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <location filename="../src/common/AboutDialog.ui" line="119"/>
-        <source>This program is licensed under the GNU Public License v2</source>
-        <translation>Tento program je šírený pod licenciou GNU Public License v2</translation>
+        <source>This program is licensed under the GNU General Public License v2</source>
+        <translation>Tento program je šírený pod licenciou GNU General Public License v2</translation>
     </message>
     <message>
         <location filename="../src/common/AboutDialog.ui" line="126"/>
