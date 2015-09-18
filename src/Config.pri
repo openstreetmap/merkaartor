@@ -36,3 +36,10 @@ win32 {
 }
 
 QMAKE_CXXFLAGS_WARN_ON += -Wno-reorder
+
+# Append buildflags set in the environment
+QMAKE_CPPFLAGS += $$(CPPFLAGS)
+QMAKE_CFLAGS   += $$(CFLAGS) $$(CPPFLAGS)
+QMAKE_CXXFLAGS += $$(CXXFLAGS) $$(CPPFLAGS)
+QMAKE_LFLAGS   += $$(LDFLAGS)
+
