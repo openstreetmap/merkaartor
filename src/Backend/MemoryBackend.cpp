@@ -381,8 +381,11 @@ void MemoryBackend::deallocFeature(ILayer* l, Feature *f)
 {
     if (p->AllocFeatures.contains(f)) {
         indexRemove(l, p->AllocFeatures[f], f);
-        p->AllocFeatures.remove(f);
-        p->toBeDeleted.append(f);
+        if (!p->AllocFeatures.remove(f)) {
+            qWarning() << "Feature, that is not in a list is being removed.";
+        } else {
+            p->toBeDeleted.append(f);
+        }
     }
 }
 

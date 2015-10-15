@@ -820,7 +820,7 @@ QRect ImageMapLayer::drawFull(MapView& theView, QRect& rect)
         } else if (p->theMapAdapter->getType() == IMapAdapter::NetworkBackground || p->theMapAdapter->getType() == IMapAdapter::BrowserBackground) {
             QString url (p->theMapAdapter->getQuery(wgs84vp, vp, rect));
             if (!url.isEmpty()) {
-                qDebug() << "ImageMapLayer::drawFull: getting: " << url;
+                //qDebug() << "ImageMapLayer::drawFull: getting: " << url;
                 QPixmap pm = QPixmap::fromImage(p->theMapAdapter->getImageManager()->getImage(p->theMapAdapter,url));
                 if (!pm.isNull()) {
                     p->curPix = QPixmap();
@@ -916,11 +916,11 @@ QRect ImageMapLayer::drawTiled(MapView& theView, QRect& rect)
     QPointF vpCenter0 = QPointF(vpCenter.x()-p->theMapAdapter->getBoundingbox().left(), p->theMapAdapter->getBoundingbox().bottom()-vpCenter.y());
     qreal mapmiddle_tile_x = qRound(vpCenter0.x()/tileWidth);
     qreal mapmiddle_tile_y = qRound(vpCenter0.y()/tileHeight);
-    qDebug() << "z: " << p->theMapAdapter->getAdaptedZoom() << "; t_x: " << mapmiddle_tile_x << "; t_y: " << mapmiddle_tile_y ;
+    //qDebug() << "z: " << p->theMapAdapter->getAdaptedZoom() << "; t_x: " << mapmiddle_tile_x << "; t_y: " << mapmiddle_tile_y ;
 
     qreal cross_x = vpCenter0.x() - mapmiddle_tile_x*tileWidth;		// position on middle tile
     qreal cross_y = vpCenter0.y() - mapmiddle_tile_y*tileHeight;
-    qDebug() << "cross_x: " << cross_x << "; cross_y: " << cross_y;
+    //qDebug() << "cross_x: " << cross_x << "; cross_y: " << cross_y;
 
         // calculate how many surrounding tiles have to be drawn to fill the display
     qreal space_left = vp0Center.x() - cross_x;
@@ -994,7 +994,7 @@ QRect ImageMapLayer::drawTiled(MapView& theView, QRect& rect)
 //    qDebug() << "tl: " << tl << "; br: " << br;
 //    qDebug() << "vp: " << projVp;
     //    qDebug() << "vlm: " << vlm;
-    qDebug() << "retRect: " << retRect;
+    //qDebug() << "retRect: " << retRect;
 //    QRect expR = QRect(-retRect.left(), -retRect.top(), retRect.width()+retRect.left(), retRect.height()+retRect.top());
 //    p->newPix.save("c:/tmp.png");
 //    p->newPix.copy(expR).save("c:/tmp2.png");
