@@ -17,7 +17,11 @@ isEmpty(SYSTEM_QUAZIP) {
   DEFINES += QUAZIP_STATIC
   include(../3rdparty/quazip-0.7/quazip.pri)
 } else {
-  LIBS += -lquazip
+  isEmpty(SYSTEM_QUAZIP_LDFLAGS) {
+      LIBS += -lquazip
+  } else {
+      LIBS += $$SYSTEM_QUAZIP_LDFLAGS
+  }
 }
 
 #Qt Version
