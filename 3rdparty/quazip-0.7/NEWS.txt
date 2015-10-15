@@ -12,7 +12,7 @@ QuaZIP changes
           need more precise dates and times than default ones.
         * QuaZipNewInfo may now be initialized from QuaZipFileInfo64.
         * No more crashes when using QSaveFile as QIODevice for ZIP.
-        * The new QuaZip::setAutoClose() method allows to leave the
+        * The new QuaZip::setAutoClose() method allows leaving the
           QIODevice open when you close the QuaZip instance.
         * qztest now depends on quazip, no longer breaking the build.
 

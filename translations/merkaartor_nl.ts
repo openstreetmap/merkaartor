@@ -56,7 +56,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <location filename="../src/common/AboutDialog.ui" line="119"/>
-        <source>This program is licensed under the GNU Public License v2</source>
+        <source>This program is licensed under the GNU General Public License v2</source>
         <translation>Dit programma valt onder de GNU Public Licentie v2</translation>
     </message>
     <message>

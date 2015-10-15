@@ -173,7 +173,7 @@ class QUAZIP_EXPORT QuaZip {
      * set explicitly via setIoDevice() or the QuaZip(QIODevice*)
      * constructor, or it is created internally when opening the archive
      * by its file name. The default API (qioapi.cpp) just delegates
-     * everything to the QIODevice API. Not only this allows to use a
+     * everything to the QIODevice API. Not only this allows using a
      * QIODevice instead of file name, but also has a nice side effect
      * of raising the file size limit from 2G to 4G (in non-zip64 archives).
      *

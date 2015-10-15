@@ -70,7 +70,7 @@ class QuaZipFilePrivate {
     /// Sets the zip error.
     /**
       This function is marked as const although it changes one field.
-      This allows to call it from const functions that don't change
+      This allows calling it from const functions that don't change
       anything by themselves.
       */
     void setZipError(int zipError) const;

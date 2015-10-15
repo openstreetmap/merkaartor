@@ -157,7 +157,7 @@ class MapControl : public QWidget
 		 * The MouesMode Dragging draws an rectangular in the map while the MouseButton is pressed.
 		 * When the Button is released a draggedRect() signal is emitted.
 		 * 
-		 * The second MouseMode (the default) is Panning, which allows to drag the map around.
+		 * The second MouseMode (the default) is Panning, which allows dragging the map around.
 		 * @param mousemode the MouseMode
 		 */
 		void setMouseMode(MouseMode mousemode);
@@ -204,7 +204,7 @@ class MapControl : public QWidget
 		
 		//! Emitted AFTER a MouseEvent occured
 		/*!
-		 * This signals allows to receive click events within the MapWidget together with the world coordinate.
+		 * This signals allows receiving click events within the MapWidget together with the world coordinate.
 		 * It is emitted on MousePressEvents and MouseReleaseEvents.
 		 * The kind of the event can be obtained by checking the events type.
 		 * @param  evnt the QMouseEvent that occured
