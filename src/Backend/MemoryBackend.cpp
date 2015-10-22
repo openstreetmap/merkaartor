@@ -379,6 +379,7 @@ TrackSegment * MemoryBackend::allocSegment(ILayer* /*l*/)
 
 void MemoryBackend::deallocFeature(ILayer* l, Feature *f)
 {
+    p->delayedDeletesLock.lockForRead();
     if (p->AllocFeatures.contains(f)) {
         indexRemove(l, p->AllocFeatures[f], f);
         if (!p->AllocFeatures.remove(f)) {
@@ -387,11 +388,13 @@ void MemoryBackend::deallocFeature(ILayer* l, Feature *f)
             p->toBeDeleted.append(f);
         }
     }
+    p->delayedDeletesLock.unlock();
 }
 
 void MemoryBackend::purge()
 {
-    if (!p->delayedDeletesLock.tryLockForWrite()) return;
+    if (p->toBeDeleted.empty()) return; /* Don't bother if there is nothing to delete */
+    if (!p->delayedDeletesLock.tryLockForWrite()) return; /* If locked, deletes need to be delayed */
     QList<Feature*>::iterator it = p->toBeDeleted.begin();
     while (it != p->toBeDeleted.end()) {
         delete *(it++);
