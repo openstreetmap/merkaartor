@@ -24,59 +24,6 @@
 
 FILE* pLogFile = NULL;
 
-#ifdef QT5
-void myMessageOutput(QtMsgType msgType, const QMessageLogContext &, const QString & str) {
-    const char * buf = str.toStdString().c_str();
-#else
-void myMessageOutput(QtMsgType msgType, const char *buf) {
-#endif
-// From corelib/global/qglobal.cpp : qt_message_output
-
-#if defined(Q_CC_MWERKS) && !defined(Q_OS_SYMBIAN)
-    mac_default_handler(buf);
-#elif defined(Q_OS_WINCE)
-    QString fstr = QString::fromLatin1(buf);
-    fstr += QLatin1String("\n");
-    OutputDebugString(reinterpret_cast<const wchar_t *> (fstr.utf16()));
-#else
-#ifndef NDEBUG
-    fprintf(stderr, "%s\n", buf);
-    fflush(stderr);
-#endif
-    if (pLogFile && msgType == QtDebugMsg) {
-        fprintf(pLogFile, "%s\n", buf);
-        fflush(pLogFile);
-    }
-#endif
-
-    if (msgType == QtFatalMsg
-        || (msgType == QtWarningMsg
-        && (!qgetenv("QT_FATAL_WARNINGS").isNull())) ) {
-
-#if defined(Q_CC_MSVC) && defined(QT_DEBUG) && defined(_DEBUG) && defined(_CRT_ERROR)
-            // get the current report mode
-            int reportMode = _CrtSetReportMode(_CRT_ERROR, _CRTDBG_MODE_WNDW);
-            _CrtSetReportMode(_CRT_ERROR, reportMode);
-#if !defined(Q_OS_WINCE)
-            int ret = _CrtDbgReport(_CRT_ERROR, __FILE__, __LINE__, QT_VERSION_STR, buf);
-#else
-            int ret = _CrtDbgReportW(_CRT_ERROR, _CRT_WIDE(__FILE__),
-                __LINE__, _CRT_WIDE(QT_VERSION_STR), reinterpret_cast<const wchar_t *> (QString::fromLatin1(buf).utf16()));
-#endif
-            if (ret == 0  && reportMode & _CRTDBG_MODE_WNDW)
-                return; // ignore
-            else if (ret == 1)
-                _CrtDbgBreak();
-#endif
-
-#if (defined(Q_OS_UNIX) || defined(Q_CC_MINGW))
-            abort(); // trap; generates core dump
-#else
-            exit(1); // goodbye cruel world
-#endif
-    }
-}
-
 void showVersion()
 {
     QString o;
@@ -193,11 +140,7 @@ int main(int argc, char** argv)
 
     if (!logFilename.isNull())
         pLogFile = fopen(logFilename.toLatin1(), "a");
-#ifdef QT5
-    qInstallMessageHandler(myMessageOutput);
-#else
-    qInstallMsgHandler(myMessageOutput);
-#endif
+    /* FIXME: use the file for logging. */
 
     qDebug() << "**** " << QDateTime::currentDateTime().toString(Qt::ISODate) << " -- Starting " << USER_AGENT;
     qDebug() <<	"-------" << QString("using Qt version %1 (built with %2)").arg(qVersion()).arg(QT_VERSION_STR);
