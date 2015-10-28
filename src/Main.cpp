@@ -142,7 +142,7 @@ int main(int argc, char** argv)
         pLogFile = fopen(logFilename.toLatin1(), "a");
     /* FIXME: use the file for logging. */
 
-    qDebug() << "**** " << QDateTime::currentDateTime().toString(Qt::ISODate) << " -- Starting " << USER_AGENT;
+    qDebug() << "**** " << QDateTime::currentDateTime().toString(Qt::ISODate) << " -- Starting " << QString("%1 %2").arg(qApp->applicationName()).arg(STRINGIFY(VERSION));
     qDebug() <<	"-------" << QString("using Qt version %1 (built with %2)").arg(qVersion()).arg(QT_VERSION_STR);
     QString projVer = QString(STRINGIFY(PJ_VERSION));
     qDebug() <<	"-------" << QString("using PROJ4 version %1.%2.%3").arg(projVer.left(1)).arg(projVer.mid(1, 1)).arg(projVer.right(1));
