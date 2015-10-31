@@ -1932,6 +1932,49 @@ void MainWindow::loadUrl(const QUrl& theUrl)
         properties()->setSelection(0);
         properties()->addSelection(F);
         emit content_changed();
+    } else if (theUrl.path() == "/add_node") {
+        qreal lat = theQuery.queryItemValue("lat").toDouble();
+        qreal lon = theQuery.queryItemValue("lon").toDouble();
+	QString addtagsstring=theQuery.queryItemValue("addtags");
+	Coord pos=Coord(lon,lat);
+	Node* N;
+	CommandList* theList;
+	Layer* l=document()->getDirtyOrOriginLayer();
+        N = g_backend.allocNode(g_Merk_MainWindow->document()->getDirtyOrOriginLayer(), pos);
+	N->setDirtyLevel(1);
+	QString poiName=".";
+	if (addtagsstring.size()>0) {
+	  QStringList addtags = QUrl::fromPercentEncoding(addtagsstring.toUtf8()).split("|");
+	  foreach (const QString &tag, addtags) {
+	    QStringList kv = tag.split("=");
+	    QString k=kv[0];
+	    QString v="";
+	    if (kv.size()>0) {
+	      v=kv[1];
+	      if (k=="name") poiName=v;
+	    }
+	    N->setTag(k,v);
+	    qDebug() << QString(" [%1] ").arg(tag);
+	    qDebug() << "remote: got add_node " << pos.x() << pos.y() << " tags= " << addtags;
+	  }
+	}
+	theList  = new CommandList(MainWindow::tr("Remote add POI %1 %2").arg(N->id().numId).arg(poiName), N);
+	theList->add(new AddFeatureCommand(l,N,true));
+	g_Merk_MainWindow->properties()->setSelection(0);
+	N->updateMeta();		
+	document()->addHistory(theList);
+        properties()->setSelection(0);
+	properties()->addSelection(N);
+	theView->invalidate(true, true, false);
+	CoordBox cb;
+	cb = N->boundingBox();
+	if (!cb.isNull()) {
+	  CoordBox mini(cb.center()-COORD_ENLARGE, cb.center()+COORD_ENLARGE);
+	  cb.merge(mini);
+	  cb = cb.zoomed(1.1);
+	  theView->setViewport(cb, theView->rect());
+	}
+        emit content_changed();
     } else if (theUrl.path() == "/load_and_zoom") {
         qreal t = theQuery.queryItemValue("top").toDouble();
         qreal b = theQuery.queryItemValue("bottom").toDouble();
