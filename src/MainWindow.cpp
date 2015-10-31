@@ -1954,8 +1954,6 @@ void MainWindow::loadUrl(const QUrl& theUrl)
 	      if (k=="name") poiName=v;
 	    }
 	    N->setTag(k,v);
-	    qDebug() << QString(" [%1] ").arg(tag);
-	    qDebug() << "remote: got add_node " << pos.x() << pos.y() << " tags= " << addtags;
 	  }
 	}
 	theList  = new CommandList(MainWindow::tr("Remote add POI %1 %2").arg(N->id().numId).arg(poiName), N);
