@@ -1056,10 +1056,17 @@ void QGPSDDevice::onDataAvailable()
         satArray[i][0] = satArray[i][1] = satArray[i][2] = 0;
     for (int i=0; i<num_sat; ++i)
     {
+#if GPSD_API_MAJOR_VERSION > 5
+        int id = gpsdata->skyview[i].PRN;
+        satArray[id][0] = gpsdata->skyview[i].elevation;
+        satArray[id][1] = gpsdata->skyview[i].azimuth;
+        satArray[id][2] = gpsdata->skyview[i].ss;
+#else
         int id = gpsdata->PRN[i];
         satArray[id][0] = gpsdata->elevation[i];
         satArray[id][1] = gpsdata->azimuth[i];
         satArray[id][2] = gpsdata->ss[i];
+#endif
     }
     setNumSatellites(num_sat);
 
