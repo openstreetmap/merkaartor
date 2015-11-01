@@ -10,4 +10,4 @@ Exec=merkaartor
 Terminal=false
 StartupNotify=false
 Categories=Education;Geography;Network;Qt;
-Keywords=OSM;GIS;Map;Geo
+Keywords=OSM;GIS;Map;Geo;
