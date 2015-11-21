@@ -334,7 +334,9 @@ void SlippyMapCache::preload(const Coord& C, const QString& Filename)
 
 void SlippyMapCache::on_requestFinished(QNetworkReply *reply)
 {
-    qDebug() << "Finished with error code" << reply->error();
+    if (reply->error() != QNetworkReply::NoError) {
+        qWarning() << "SlippyMap: Finished with error code " << reply->error() << ": " << reply->errorString();
+    }
     if (reply == DownloadReply)
     {
         DownloadBusy = false;
@@ -413,7 +415,7 @@ void SlippyMapCache::startDownload()
             Queue.erase(Queue.begin());
             QUrl reqUrl(baseUrl);
             reqUrl.setPath(QString("/%1/%2/%3.png").arg(DownloadCoord.Zoom).arg(DownloadCoord.X).arg(DownloadCoord.Y));
-            qDebug() << "Starting download with url: " << reqUrl;
+            //qDebug() << "Starting download with url: " << reqUrl;
             QNetworkRequest req(reqUrl);
             req.setRawHeader(QByteArray("User-Agent"), USER_AGENT.toLatin1());
             DownloadReply = Download.get(req);
