@@ -278,7 +278,7 @@ MerkaartorPreferences::~MerkaartorPreferences()
 
 void MerkaartorPreferences::save(bool UserPwdChanged)
 {
-    if (g_Merk_Ignore_Preferences)
+    if (g_Merk_Ignore_Preferences || !saveOnline)
         return;
 
     Sets->setValue("version/version", QString("%1").arg(STRINGIFY(VERSION)));
@@ -295,13 +295,12 @@ void MerkaartorPreferences::save(bool UserPwdChanged)
     saveTagListFirstColumnWidth();
     Sets->sync();
 
-    // TODO: There is either some misnaming here or a bug. Why would settings
-    // be pulled from OSM only if the password changed, and pushed to OSM
-    // only otherwise?
+    /* If OSM login info has been changed, it might be a good idea to load new
+     * preferences from that user account. */
     if (UserPwdChanged)
         fromOsmPref();
-    else
-        toOsmPref();
+
+    toOsmPref();
 }
 
 void MerkaartorPreferences::toOsmPref()
@@ -387,6 +386,7 @@ void MerkaartorPreferences::on_authenticationRequired( QNetworkReply *reply, QAu
 }
 
 void MerkaartorPreferences::on_sslErrors(QNetworkReply *reply, const QList<QSslError>& errors) {
+    Q_UNUSED(reply);
     qDebug() << "We stumbled upon some SSL errors: ";
     foreach ( QSslError error, errors ) {
         qDebug() << "1:";
@@ -398,8 +398,13 @@ void MerkaartorPreferences::on_requestFinished ( QNetworkReply *reply )
 {
     int error = reply->error();
     if (error != QNetworkReply::NoError) {
-        qDebug() << "Received response with code " << error << "(" << reply->errorString() << ")";
+        //qDebug() << "Received response with code " << error << "(" << reply->errorString() << ")";
         switch (error) {
+            case QNetworkReply::HostNotFoundError:
+                qWarning() << "MerkaartorPreferences: Host not found, preferences won't be synchronized with your profile.";
+                /* We don't want to save local changes online, and possibly corrupt the store */
+                saveOnline = false;
+                break;
             case 406:
                 QMessageBox::critical(NULL,QApplication::translate("MerkaartorPreferences","Preferences upload failed"), QApplication::translate("MerkaartorPreferences","Duplicate key"));
                 return;
@@ -410,14 +415,12 @@ void MerkaartorPreferences::on_requestFinished ( QNetworkReply *reply )
                 QMessageBox::critical(NULL,QApplication::translate("MerkaartorPreferences","Preferences communication failed"), QApplication::translate("MerkaartorPreferences", "Communication error")+":\n"+reply->errorString());
                 return;
         }
-    } else {
-        qDebug() << "Received response.";
     }
 
     if (reply != OsmPrefLoadReply)
         return;
 
-    qDebug() << "Reading preferences.";
+    qDebug() << "Reading preferences from online profile.";
 
     QDomDocument aOsmPrefDoc;
     aOsmPrefDoc.setContent(reply, false);
@@ -530,6 +533,7 @@ void MerkaartorPreferences::initialize()
 {
 //  Use06Api = Sets->value("osm/use06api", "true").toBool();
     Use06Api = true;
+    saveOnline = true;
 
     // Proxy upgrade
     if (!g_Merk_Ignore_Preferences && !g_Merk_Reset_Preferences) {

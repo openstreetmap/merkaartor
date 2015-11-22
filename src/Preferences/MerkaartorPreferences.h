@@ -458,6 +458,7 @@ private:
 
     bool Use06Api;
     QString version;
+    bool saveOnline;
 
     // TODO: These network objects shouldn't be shared between methods
     // of MerkaartorPreferences.
