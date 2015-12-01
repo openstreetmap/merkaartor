@@ -1156,6 +1156,7 @@ void MainWindow::createProgressDialog()
     theProgressDialog->setLabel(theProgressLabel);
 
     theProgressDialog->setMaximum(11);
+    theProgressDialog->reset();
 }
 
 void MainWindow::deleteProgressDialog()
