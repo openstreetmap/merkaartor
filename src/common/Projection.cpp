@@ -26,6 +26,7 @@ Projection::Projection(void)
     pj_set_searchpath(1, &proj_dir);
 #endif // Q_OS_WIN
 
+
 #ifndef _MOBILE
     theProj = NULL;
     theWGS84Proj = Projection::getProjection("+proj=longlat +ellps=WGS84 +datum=WGS84");
@@ -35,8 +36,17 @@ Projection::Projection(void)
 
 Projection::~Projection(void)
 {
+    /* TODO: pj_free should be called, but it segfaults if two of the same
+     * Projection objects have the same projPJ. A better machinism, perhaps
+     * projPJ caching, should be provided.
+     *
+     * In the meantime, pj_free is not called, which does little harm as it's
+     * usually called at exit only.
+     * */
 #ifndef _MOBILE
-    pj_free(theProj);
+    if (theProj) {
+        //pj_free(theProj);
+    }
 #endif // _MOBILE
 }
 
