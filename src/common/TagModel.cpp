@@ -6,6 +6,7 @@
 #include "Document.h"
 #include "Feature.h"
 #include "Layer.h"
+#include <QMessageBox>
 
 TagModel::TagModel(MainWindow* aMain)
 : Main(aMain)
@@ -121,6 +122,16 @@ bool TagModel::setData(const QModelIndex &index, const QVariant &value, int role
     if (!theFeatures.size()) return false;
     if (index.isValid() && role == Qt::EditRole)
     {
+        /* Check if one of the same name already exists */
+        if (index.column() == 0) {
+            for (int i = 0; i < Tags.size(); i++) {
+                if ((i != index.row()) && (Tags[i].first == value.toString())) {
+                    QMessageBox::warning(NULL, tr("Tag editor"), tr("Tag with this name already exists."));
+                    return false;
+                }
+            }
+        }
+
         if ((int)index.row() == Tags.size())
         {
             if (index.column() == 0)
