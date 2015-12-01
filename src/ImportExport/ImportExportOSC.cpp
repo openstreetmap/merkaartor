@@ -66,7 +66,7 @@ bool ImportExportOSC::import(Layer* aLayer)
     }
 
     QList<IFeature::FId> featIdList;
-    Feature* F;
+    Feature* F = NULL;
     stream.readNext();
     while(!stream.atEnd() && !stream.isEndElement()) {
         if (stream.name() == "create") {

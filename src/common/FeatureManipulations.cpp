@@ -398,7 +398,7 @@ static void handleWaysplitRelations(Document* theDocument, CommandList* theList,
 
 static void splitRoad(Document* theDocument, CommandList* theList, Way* In, const QList<Node*>& Points, QList<Way*>& Result)
 {
-    int pos;
+    int pos = 0;
     if (In->isClosed()) {  // Special case: If area, rotate the area so that the start node is the first point of splitting
 
         QList<Node*> Target;
@@ -1544,6 +1544,7 @@ void terraceArea(Document* theDocument, CommandList* theList, PropertiesDock* th
 
     qreal longestLen = 0.0f;
     unsigned int sides[2];
+    sides[0] = 0;
     for (int i = 0; i < theArea->size()-1; ++i) {
         const Coord p1(theArea->getNode(i)->position());
         const Coord p2(theArea->getNode(i+1)->position());
