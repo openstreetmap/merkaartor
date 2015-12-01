@@ -109,7 +109,7 @@ void EditCompleterDelegate::setModelData(QWidget* editor, QAbstractItemModel* mo
             newVal = edit->text();
 
     if (newVal == index.model()->data(index).toString()) return;
-    if (!newVal.isEmpty())
+    if (!newVal.isEmpty() || index.column() == 1)
         model->setData(index, newVal);
 }
 
