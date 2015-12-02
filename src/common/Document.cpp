@@ -154,7 +154,7 @@ void Document::lockPainters() {
 }
 
 void Document::lockPaintersForWrite() {
-    qDebug() << "LockW";
+    p->theFeaturePaintersLock.lockForWrite();
 }
 
 const Painter* Document::getPainter(int i)
