@@ -25,8 +25,14 @@ typedef RTree<Feature*, qreal, 2, qreal, 32> CoordTree;
 class MemoryBackendPrivate
 {
 public:
+
+    /* If locked, deletes are delayed. */
     QReadWriteLock delayedDeletesLock;
+
+    /* Protects the toBeDeleted */
+    QMutex toBeDeletedLock;
     QList<Feature*> toBeDeleted;
+
     QHash<Feature*, CoordBox> AllocFeatures;
     QHash<ILayer*, CoordTree*> theRTree;
     QList<Feature*> findResult;
@@ -380,6 +386,7 @@ TrackSegment * MemoryBackend::allocSegment(ILayer* /*l*/)
 void MemoryBackend::deallocFeature(ILayer* l, Feature *f)
 {
     p->delayedDeletesLock.lockForRead();
+    p->toBeDeletedLock.lock();
     if (p->AllocFeatures.contains(f)) {
         indexRemove(l, p->AllocFeatures[f], f);
         if (!p->AllocFeatures.remove(f)) {
@@ -388,6 +395,7 @@ void MemoryBackend::deallocFeature(ILayer* l, Feature *f)
             p->toBeDeleted.append(f);
         }
     }
+    p->toBeDeletedLock.unlock();
     p->delayedDeletesLock.unlock();
 }
 
@@ -395,11 +403,13 @@ void MemoryBackend::purge()
 {
     if (p->toBeDeleted.empty()) return; /* Don't bother if there is nothing to delete */
     if (!p->delayedDeletesLock.tryLockForWrite()) return; /* If locked, deletes need to be delayed */
+    p->toBeDeletedLock.lock();
     QList<Feature*>::iterator it = p->toBeDeleted.begin();
     while (it != p->toBeDeleted.end()) {
         delete *(it++);
     }
     p->toBeDeleted.clear();
+    p->toBeDeletedLock.unlock();
     p->delayedDeletesLock.unlock();
 }
 
