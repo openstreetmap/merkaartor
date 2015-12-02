@@ -236,6 +236,7 @@ void MoveNodeInteraction::snapMouseReleaseEvent(QMouseEvent * event, Feature* Cl
 
         if (theList)
             document()->addHistory(theList);
+        theList = NULL;
         view()->setInteracting(false);
         view()->invalidate(true, true, false);
     } else
