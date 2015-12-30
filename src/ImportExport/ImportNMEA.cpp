@@ -209,8 +209,11 @@ TrackNode* ImportNMEA::importRMC (QString line)
 
     QString strDate = tokens[9] + tokens[1];
     QDateTime date = QDateTime::fromString(strDate, "ddMMyyHHmmss.zzz");
-    if (!date.isValid())
+    if (!date.isValid()) date = QDateTime::fromString(strDate, "ddMMyyHHmmss.z");
+    if (!date.isValid()) date = QDateTime::fromString(strDate, "ddMMyyHHmmss");
+    if (!date.isValid()) {
         return NULL;
+    }
 
     if (date.date().year() < 1970)
         date = date.addYears(100);
