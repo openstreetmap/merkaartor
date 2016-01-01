@@ -1638,7 +1638,7 @@ MainWindow::ImportStatus MainWindow::importFile(Document * mapDocument, const QS
         newLayer = new TrackLayer( baseFileName + " - " + tr("Waypoints"), baseFileName);
         mapDocument->add(newLayer);
         theTracklayers.append((TrackLayer*) newLayer);
-        bool importOK = importGPX(this, baseFileName, mapDocument, theTracklayers);
+        bool importOK = importGPX(this, fileName, mapDocument, theTracklayers);
         if (!importOK) {
             for (int i=0; i<theTracklayers.size(); i++) {
                 mapDocument->remove(theTracklayers[i]);
@@ -1662,7 +1662,7 @@ MainWindow::ImportStatus MainWindow::importFile(Document * mapDocument, const QS
     else if (fileName.toLower().endsWith(".osm")) {
         newLayer = new DrawingLayer( baseFileName );
         mapDocument->add(newLayer);
-        return importOSM(this, baseFileName, mapDocument, newLayer) ? IMPORT_OK : IMPORT_ERROR;
+        return importOSM(this, fileName, mapDocument, newLayer) ? IMPORT_OK : IMPORT_ERROR;
     }
 #ifndef FRISIUS_BUILD
     else if (fileName.toLower().endsWith(".osc")) {
@@ -1679,7 +1679,7 @@ MainWindow::ImportStatus MainWindow::importFile(Document * mapDocument, const QS
         newLayer = new TrackLayer( baseFileName );
         newLayer->setUploadable(false);
         mapDocument->add(newLayer);
-        bool importOK = importNGT(this, baseFileName, mapDocument, newLayer);
+        bool importOK = importNGT(this, fileName, mapDocument, newLayer);
         if (importOK && M_PREFS->getAutoExtractTracks()) {
             ((TrackLayer *)newLayer)->extractLayer();
         }
@@ -1689,7 +1689,7 @@ MainWindow::ImportStatus MainWindow::importFile(Document * mapDocument, const QS
         newLayer = new TrackLayer( baseFileName );
         newLayer->setUploadable(false);
         mapDocument->add(newLayer);
-        bool importOK = mapDocument->importNMEA(baseFileName, (TrackLayer *)newLayer);
+        bool importOK = mapDocument->importNMEA(fileName, (TrackLayer *)newLayer);
         if (importOK && M_PREFS->getAutoExtractTracks()) {
             ((TrackLayer *)newLayer)->extractLayer();
         }
@@ -1716,7 +1716,7 @@ MainWindow::ImportStatus MainWindow::importFile(Document * mapDocument, const QS
             newLayer = new DrawingLayer( baseFileName );
             newLayer->setUploadable(false);
             mapDocument->add(newLayer);
-            return mapDocument->importKML(baseFileName, (TrackLayer *)newLayer) ? IMPORT_OK : IMPORT_ERROR;
+            return mapDocument->importKML(fileName, (TrackLayer *)newLayer) ? IMPORT_OK : IMPORT_ERROR;
         } else
             return IMPORT_ABORTED;
     }
@@ -1727,13 +1727,13 @@ MainWindow::ImportStatus MainWindow::importFile(Document * mapDocument, const QS
         newLayer = new DrawingLayer( baseFileName );
         newLayer->setUploadable(false);
         mapDocument->add(newLayer);
-        return mapDocument->importCSV(baseFileName, (DrawingLayer*)newLayer) ? IMPORT_OK : IMPORT_ERROR;
+        return mapDocument->importCSV(fileName, (DrawingLayer*)newLayer) ? IMPORT_OK : IMPORT_ERROR;
     }
 #ifdef USE_PROTOBUF
     else if (fileName.toLower().endsWith(".pbf")) {
         newLayer = new DrawingLayer( baseFileName );
         mapDocument->add(newLayer);
-        return mapDocument->importPBF(baseFileName, (DrawingLayer*)newLayer) ? IMPORT_OK : IMPORT_ERROR;
+        return mapDocument->importPBF(fileName, (DrawingLayer*)newLayer) ? IMPORT_OK : IMPORT_ERROR;
     }
 #endif
     else { // Fallback to GDAL
@@ -1811,7 +1811,7 @@ void MainWindow::loadFiles(const QStringList & fileList)
     theLayers->setUpdatesEnabled(false);
     view()->setUpdatesEnabled(false);
 
-        // Load only the first merkaartor document
+    // Load only the first merkaartor document
     bool skipImport = false;
     QMutableStringListIterator it(fileNames);
     while (it.hasNext())
