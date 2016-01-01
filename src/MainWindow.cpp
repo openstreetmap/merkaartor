@@ -1568,6 +1568,7 @@ void MainWindow::on_editReverseAction_triggered()
 
 static void changeCurrentDirToFile(const QString& s)
 {
+    qDebug() << "Changing CWD to: " << s;
     QFileInfo info(s);
     QDir::setCurrent(info.absolutePath());
     M_PREFS->setworkingdir(QDir::currentPath());
@@ -1757,7 +1758,6 @@ bool MainWindow::importFiles(Document * mapDocument, const QStringList & fileNam
     while (it.hasNext())
     {
         const QString & fn = it.next();
-        changeCurrentDirToFile(fn);  // TODO: Whyyyyy?!
 
         Layer* newLayer = NULL;
 	// TODO: The passing mechanism of newLayer is evil black magic.
@@ -1823,7 +1823,6 @@ void MainWindow::loadFiles(const QStringList & fileList)
 
         if (skipImport == false)
         {
-            changeCurrentDirToFile(fn);
             loadDocument(fn);
             skipImport = true;
         }
