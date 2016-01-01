@@ -1787,6 +1787,7 @@ bool MainWindow::importFiles(Document * mapDocument, const QStringList & fileNam
     }
     endBusyCursor();
     deleteProgressDialog();
+    invalidateView(false);
 
     return foundImport;
 }
