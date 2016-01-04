@@ -830,9 +830,7 @@ LayerWidget* SpecialLayer::newWidget(void)
 
 void SpecialLayer::refreshLayer()
 {
-    if (m_type == Layer::OsmBugsLayer) {
-        g_Merk_MainWindow->on_layersOpenstreetbugsAction_triggered();
-    } else if (m_type == Layer::MapDustLayer) {
+    if (m_type == Layer::MapDustLayer) {
         g_Merk_MainWindow->on_layersMapdustAction_triggered();
     }
 }

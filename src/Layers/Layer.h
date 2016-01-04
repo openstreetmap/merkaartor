@@ -48,7 +48,7 @@ public:
         TrackLayerType,
         UploadedLayerType,
         FilterLayerType,
-        OsmBugsLayer,
+        OsmBugsLayer, /* Obsolete */
         MapDustLayer
     } LayerType;
 

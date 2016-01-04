@@ -245,12 +245,6 @@
     <property name="title">
      <string>Fea&amp;ture</string>
     </property>
-    <widget class="QMenu" name="menuOpenStreetBugs">
-     <property name="title">
-      <string>OpenStreetBugs</string>
-     </property>
-     <addaction name="featureOsbClose"/>
-    </widget>
     <addaction name="featureSelectChildrenAction"/>
     <addaction name="featureSelectParentsAction"/>
     <addaction name="separator"/>
@@ -258,8 +252,6 @@
     <addaction name="featureCommitAction"/>
     <addaction name="separator"/>
     <addaction name="featureDownloadMissingChildrenAction"/>
-    <addaction name="separator"/>
-    <addaction name="menuOpenStreetBugs"/>
    </widget>
    <widget class="QMenu" name="menuLayers">
     <property name="title">
@@ -268,7 +260,6 @@
     <addaction name="layersNewImageAction"/>
     <addaction name="layersNewDrawingAction"/>
     <addaction name="layersNewFilterAction"/>
-    <addaction name="layersOpenstreetbugsAction"/>
     <addaction name="layersMapdustAction"/>
     <addaction name="separator"/>
    </widget>
@@ -395,6 +386,9 @@
    <property name="text">
     <string>&amp;Quit</string>
    </property>
+   <property name="shortcut">
+    <string notr="true"/>
+   </property>
    <property name="menuRole">
     <enum>QAction::QuitRole</enum>
    </property>
@@ -402,6 +396,9 @@
   <action name="helpAboutAction">
    <property name="text">
     <string>&amp;About</string>
+   </property>
+   <property name="shortcut">
+    <string notr="true"/>
    </property>
    <property name="menuRole">
     <enum>QAction::AboutRole</enum>
@@ -419,7 +416,7 @@
     <string>Create a new document and import a file</string>
    </property>
    <property name="shortcut">
-    <string>Ctrl+O</string>
+    <string notr="true">Ctrl+O</string>
    </property>
   </action>
   <action name="viewZoomAllAction">
@@ -431,7 +428,7 @@
     <string>Zoom &amp;all</string>
    </property>
    <property name="shortcut">
-    <string>F2</string>
+    <string notr="true">F2</string>
    </property>
   </action>
   <action name="viewZoomWindowAction">
@@ -445,7 +442,7 @@
     <string>Zoom window</string>
    </property>
    <property name="shortcut">
-    <string>F3</string>
+    <string notr="true">F3</string>
    </property>
   </action>
   <action name="viewZoomOutAction">
@@ -457,7 +454,7 @@
     <string>Zoom &amp;out</string>
    </property>
    <property name="shortcut">
-    <string>-</string>
+    <string notr="true">-</string>
    </property>
   </action>
   <action name="viewZoomInAction">
@@ -475,7 +472,7 @@
     <string>Zoom in</string>
    </property>
    <property name="shortcut">
-    <string>+</string>
+    <string notr="true">+</string>
    </property>
   </action>
   <action name="createWayAction">
@@ -501,7 +498,7 @@
     <string>&amp;Undo</string>
    </property>
    <property name="shortcut">
-    <string>Ctrl+Z</string>
+    <string notr="true">Ctrl+Z</string>
    </property>
   </action>
   <action name="editRedoAction">
@@ -513,7 +510,7 @@
     <string>&amp;Redo</string>
    </property>
    <property name="shortcut">
-    <string>Ctrl+Y</string>
+    <string notr="true">Ctrl+Y</string>
    </property>
   </action>
   <action name="editMoveAction">
@@ -528,7 +525,7 @@
     <string>&amp;Move</string>
    </property>
    <property name="shortcut">
-    <string>Ctrl+M</string>
+    <string notr="true">Ctrl+M</string>
    </property>
   </action>
   <action name="fileImportAction">
@@ -541,6 +538,9 @@
    </property>
    <property name="statusTip">
     <string>Import a file into the current document</string>
+   </property>
+   <property name="shortcut">
+    <string notr="true"/>
    </property>
   </action>
   <action name="fileDownloadAction">
@@ -555,7 +555,7 @@
     <string>Download map data for a new area</string>
    </property>
    <property name="shortcut">
-    <string>Ctrl+D</string>
+    <string notr="true">Ctrl+D</string>
    </property>
   </action>
   <action name="createLinearWayAction">
@@ -584,7 +584,7 @@
     <string>&amp;Select</string>
    </property>
    <property name="shortcut">
-    <string>Esc</string>
+    <string notr="true">Esc</string>
    </property>
   </action>
   <action name="fileUploadAction">
@@ -599,7 +599,7 @@
     <string>Upload changes to the server</string>
    </property>
    <property name="shortcut">
-    <string>Ctrl+U</string>
+    <string notr="true">Ctrl+U</string>
    </property>
   </action>
   <action name="editRemoveAction">
@@ -617,7 +617,7 @@
     <string>Remove selected features</string>
    </property>
    <property name="shortcut">
-    <string>Del</string>
+    <string notr="true">Del</string>
    </property>
   </action>
   <action name="createRoadAction">
@@ -635,7 +635,7 @@
     <string>Create new road</string>
    </property>
    <property name="shortcut">
-    <string>Ctrl+R</string>
+    <string notr="true">Ctrl+R</string>
    </property>
   </action>
   <action name="createNodeAction">
@@ -653,7 +653,7 @@
     <string>Create new node</string>
    </property>
    <property name="shortcut">
-    <string>Ctrl+N</string>
+    <string notr="true">Ctrl+N</string>
    </property>
   </action>
   <action name="editReverseAction">
@@ -670,6 +670,9 @@
    <property name="toolTip">
     <string>Reverse road direction</string>
    </property>
+   <property name="shortcut">
+    <string notr="true"/>
+   </property>
   </action>
   <action name="viewGotoAction">
    <property name="icon">
@@ -680,7 +683,7 @@
     <string>&amp;Go To...</string>
    </property>
    <property name="shortcut">
-    <string>Ctrl+G</string>
+    <string notr="true">Ctrl+G</string>
    </property>
   </action>
   <action name="createDoubleWayAction">
@@ -690,6 +693,9 @@
    <property name="toolTip">
     <string>Create Double carriage way</string>
    </property>
+   <property name="shortcut">
+    <string notr="true"/>
+   </property>
   </action>
   <action name="createRoundaboutAction">
    <property name="text">
@@ -697,6 +703,9 @@
    </property>
    <property name="toolTip">
     <string>Create Roundabout</string>
+   </property>
+   <property name="shortcut">
+    <string notr="true"/>
    </property>
    <property name="menuRole">
     <enum>QAction::NoRole</enum>
@@ -713,6 +722,9 @@
    <property name="statusTip">
     <string>Create a new document</string>
    </property>
+   <property name="shortcut">
+    <string notr="true"/>
+   </property>
   </action>
   <action name="roadSplitAction">
    <property name="icon">
@@ -726,7 +738,7 @@
     <string>Split road into separate (connected) roads</string>
    </property>
    <property name="shortcut">
-    <string>Alt+S</string>
+    <string notr="true">Alt+S</string>
    </property>
   </action>
   <action name="roadJoinAction">
@@ -741,7 +753,7 @@
     <string>Join connected roads to a single road</string>
    </property>
    <property name="shortcut">
-    <string>Alt+J</string>
+    <string notr="true">Alt+J</string>
    </property>
   </action>
   <action name="roadBreakAction">
@@ -759,7 +771,7 @@
     <string>Break apart connected roads</string>
    </property>
    <property name="shortcut">
-    <string>Alt+B</string>
+    <string notr="true">Alt+B</string>
    </property>
   </action>
   <action name="createRelationAction">
@@ -768,6 +780,9 @@
    </property>
    <property name="toolTip">
     <string>Create Relation</string>
+   </property>
+   <property name="shortcut">
+    <string notr="true"/>
    </property>
   </action>
   <action name="createAreaAction">
@@ -784,20 +799,32 @@
    <property name="toolTip">
     <string>Create new area</string>
    </property>
+   <property name="shortcut">
+    <string notr="true"/>
+   </property>
   </action>
   <action name="editMapStyleAction">
    <property name="text">
     <string>&amp;Edit...</string>
+   </property>
+   <property name="shortcut">
+    <string notr="true"/>
    </property>
   </action>
   <action name="mapStyleSaveAsAction">
    <property name="text">
     <string>Save &amp;As...</string>
    </property>
+   <property name="shortcut">
+    <string notr="true"/>
+   </property>
   </action>
   <action name="mapStyleLoadAction">
    <property name="text">
     <string>&amp;Load...</string>
+   </property>
+   <property name="shortcut">
+    <string notr="true"/>
    </property>
   </action>
   <action name="createCurvedRoadAction">
@@ -812,6 +839,9 @@
    </property>
    <property name="text">
     <string>&amp;Preferences...</string>
+   </property>
+   <property name="shortcut">
+    <string notr="true"/>
    </property>
    <property name="menuRole">
     <enum>QAction::PreferencesRole</enum>
@@ -847,6 +877,9 @@
    <property name="statusTip">
     <string>Find and select items</string>
    </property>
+   <property name="shortcut">
+    <string notr="true"/>
+   </property>
   </action>
   <action name="exportOSMViewportAction">
    <property name="text">
@@ -868,10 +901,16 @@
    <property name="text">
     <string>&amp;Add...</string>
    </property>
+   <property name="shortcut">
+    <string notr="true"/>
+   </property>
   </action>
   <action name="bookmarkRemoveAction">
    <property name="text">
     <string>&amp;Remove...</string>
+   </property>
+   <property name="shortcut">
+    <string notr="true"/>
    </property>
   </action>
   <action name="nodeMergeAction">
@@ -885,12 +924,15 @@
     <string>Merge the selected nodes (first selected will remain)</string>
    </property>
    <property name="shortcut">
-    <string>Alt+M</string>
+    <string notr="true">Alt+M</string>
    </property>
   </action>
   <action name="fileSaveAsAction">
    <property name="text">
     <string>Save &amp;As...</string>
+   </property>
+   <property name="shortcut">
+    <string notr="true"/>
    </property>
   </action>
   <action name="fileSaveAction">
@@ -905,7 +947,7 @@
     <string>Save to file</string>
    </property>
    <property name="shortcut">
-    <string>Ctrl+S</string>
+    <string notr="true">Ctrl+S</string>
    </property>
   </action>
   <action name="fileDownloadMoreAction">
@@ -926,7 +968,7 @@
     <string>Download the current view to the previous download layer</string>
    </property>
    <property name="shortcut">
-    <string>Ctrl+Shift+D</string>
+    <string notr="true">Ctrl+Shift+D</string>
    </property>
   </action>
   <action name="action_Docks">
@@ -948,7 +990,7 @@
     <string>Hide/Show the Properties dock</string>
    </property>
    <property name="shortcut">
-    <string>Ctrl+P</string>
+    <string notr="true">Ctrl+P</string>
    </property>
   </action>
   <action name="windowLayersAction">
@@ -965,7 +1007,7 @@
     <string>Hide/Show the Layers dock</string>
    </property>
    <property name="shortcut">
-    <string>Ctrl+L</string>
+    <string notr="true">Ctrl+L</string>
    </property>
   </action>
   <action name="windowInfoAction">
@@ -982,7 +1024,7 @@
     <string>Hide/Show the Info dock</string>
    </property>
    <property name="shortcut">
-    <string>Ctrl+I</string>
+    <string notr="true">Ctrl+I</string>
    </property>
   </action>
   <action name="nodeAlignAction">
@@ -1000,7 +1042,7 @@
     <string>Align selected nodes. First two selected give the line.</string>
    </property>
    <property name="shortcut">
-    <string>Alt+A</string>
+    <string notr="true">Alt+A</string>
    </property>
   </action>
   <action name="nodeSpreadAction">
@@ -1017,6 +1059,9 @@
    <property name="statusTip">
     <string>Align and spread selected nodes equally.</string>
    </property>
+   <property name="shortcut">
+    <string notr="true"/>
+   </property>
   </action>
   <action name="windowDirtyAction">
    <property name="checkable">
@@ -1032,7 +1077,7 @@
     <string>Hide/Show the Undo dock</string>
    </property>
    <property name="shortcut">
-    <string>Ctrl+T</string>
+    <string notr="true">Ctrl+T</string>
    </property>
   </action>
   <action name="viewDownloadedAction">
@@ -1043,7 +1088,7 @@
     <string>Show &amp;downloaded areas</string>
    </property>
    <property name="shortcut">
-    <string>Ctrl+Alt+A</string>
+    <string notr="true">Ctrl+Alt+A</string>
    </property>
   </action>
   <action name="editCopyAction">
@@ -1061,7 +1106,7 @@
     <string>Copy the selected feature's tags to the clipboard; if the feature is a trackpoint, copy the coordinates, too.</string>
    </property>
    <property name="shortcut">
-    <string>Ctrl+C</string>
+    <string notr="true">Ctrl+C</string>
    </property>
   </action>
   <action name="editPasteOverwriteAction">
@@ -1072,7 +1117,7 @@
     <string>Paste (and overwrite) the tags in the clipboard to the selected feature.</string>
    </property>
    <property name="shortcut">
-    <string>Ctrl+V, O</string>
+    <string notr="true">Ctrl+V, O</string>
    </property>
   </action>
   <action name="editPasteMergeAction">
@@ -1093,7 +1138,7 @@
     <string>Merge the tags in the clipboard with the ones of the selected feature.</string>
    </property>
    <property name="shortcut">
-    <string>Ctrl+V, M</string>
+    <string notr="true">Ctrl+V, M</string>
    </property>
   </action>
   <action name="exportOSMSelectedAction">
@@ -1124,12 +1169,15 @@
     <string>Paste the features in the clipboard; If the features'id are already in the document, overwrite them.</string>
    </property>
    <property name="shortcut">
-    <string>Ctrl+V, F</string>
+    <string notr="true">Ctrl+V, F</string>
    </property>
   </action>
   <action name="exportOSMAction">
    <property name="text">
     <string>OSM (XML)</string>
+   </property>
+   <property name="shortcut">
+    <string notr="true"/>
    </property>
   </action>
   <action name="exportOSMBinAction">
@@ -1150,15 +1198,24 @@
    <property name="whatsThis">
     <string>Commit the selected feature from a non-uploadable layer (e.g.Track or Extract) to the dirty layer, ready for upload</string>
    </property>
+   <property name="shortcut">
+    <string notr="true"/>
+   </property>
   </action>
   <action name="exportGPXAction">
    <property name="text">
     <string>GPX</string>
    </property>
+   <property name="shortcut">
+    <string notr="true"/>
+   </property>
   </action>
   <action name="exportKMLAction">
    <property name="text">
     <string>KML</string>
+   </property>
+   <property name="shortcut">
+    <string notr="true"/>
    </property>
   </action>
   <action name="windowToolbarAction">
@@ -1171,13 +1228,16 @@
    <property name="statusTip">
     <string>Hide/Show the Toolbar</string>
    </property>
+   <property name="shortcut">
+    <string notr="true"/>
+   </property>
   </action>
   <action name="windowHideAllAction">
    <property name="text">
     <string>Hide All</string>
    </property>
    <property name="shortcut">
-    <string>Ctrl+F</string>
+    <string notr="true">Ctrl+F</string>
    </property>
   </action>
   <action name="windowShowAllAction">
@@ -1185,7 +1245,7 @@
     <string>Show All</string>
    </property>
    <property name="shortcut">
-    <string>Ctrl+F</string>
+    <string notr="true">Ctrl+F</string>
    </property>
    <property name="visible">
     <bool>false</bool>
@@ -1209,7 +1269,7 @@
     <string>Show &amp;nodes</string>
    </property>
    <property name="shortcut">
-    <string>Ctrl+Alt+P</string>
+    <string notr="true">Ctrl+Alt+P</string>
    </property>
   </action>
   <action name="viewNamesAction">
@@ -1220,7 +1280,7 @@
     <string>Show na&amp;mes</string>
    </property>
    <property name="shortcut">
-    <string>Ctrl+Alt+N</string>
+    <string notr="true">Ctrl+Alt+N</string>
    </property>
   </action>
   <action name="gpsConnectAction">
@@ -1230,6 +1290,9 @@
    <property name="toolTip">
     <string>Start GPS</string>
    </property>
+   <property name="shortcut">
+    <string notr="true"/>
+   </property>
   </action>
   <action name="gpsReplayAction">
    <property name="text">
@@ -1237,6 +1300,9 @@
    </property>
    <property name="toolTip">
     <string>Replay GPS</string>
+   </property>
+   <property name="shortcut">
+    <string notr="true"/>
    </property>
   </action>
   <action name="windowGPSAction">
@@ -1253,7 +1319,7 @@
     <string>Hide/Show the GPS dock</string>
    </property>
    <property name="shortcut">
-    <string>Ctrl+W</string>
+    <string notr="true">Ctrl+W</string>
    </property>
   </action>
   <action name="gpsDisconnectAction">
@@ -1266,6 +1332,9 @@
    <property name="toolTip">
     <string>Stop GPS</string>
    </property>
+   <property name="shortcut">
+    <string notr="true"/>
+   </property>
   </action>
   <action name="gpsCenterAction">
    <property name="checkable">
@@ -1273,6 +1342,9 @@
    </property>
    <property name="text">
     <string>&amp;Center on GPS</string>
+   </property>
+   <property name="shortcut">
+    <string notr="true"/>
    </property>
   </action>
   <action name="viewTrackSegmentsAction">
@@ -1283,7 +1355,7 @@
     <string>Show track &amp;segments</string>
    </property>
    <property name="shortcut">
-    <string>Ctrl+Alt+T</string>
+    <string notr="true">Ctrl+Alt+T</string>
    </property>
   </action>
   <action name="viewScaleAction">
@@ -1294,7 +1366,7 @@
     <string>Show &amp;scale</string>
    </property>
    <property name="shortcut">
-    <string>Ctrl+Alt+S</string>
+    <string notr="true">Ctrl+Alt+S</string>
    </property>
   </action>
   <action name="viewRelationsAction">
@@ -1305,7 +1377,7 @@
     <string>Show &amp;relations</string>
    </property>
    <property name="shortcut">
-    <string>Ctrl+Alt+R</string>
+    <string notr="true">Ctrl+Alt+R</string>
    </property>
   </action>
   <action name="viewStyleForegroundAction">
@@ -1315,6 +1387,9 @@
    <property name="text">
     <string>Show roads background</string>
    </property>
+   <property name="shortcut">
+    <string notr="true"/>
+   </property>
   </action>
   <action name="viewStyleBackgroundAction">
    <property name="checkable">
@@ -1323,6 +1398,9 @@
    <property name="text">
     <string>Show roads boundary</string>
    </property>
+   <property name="shortcut">
+    <string notr="true"/>
+   </property>
   </action>
   <action name="viewStyleTouchupAction">
    <property name="checkable">
@@ -1330,6 +1408,9 @@
    </property>
    <property name="text">
     <string>Show touchup</string>
+   </property>
+   <property name="shortcut">
+    <string notr="true"/>
    </property>
   </action>
   <action name="gpsRecordAction">
@@ -1348,6 +1429,9 @@
    <property name="toolTip">
     <string>Record GPS</string>
    </property>
+   <property name="shortcut">
+    <string notr="true"/>
+   </property>
   </action>
   <action name="gpsPauseAction">
    <property name="checkable">
@@ -1361,6 +1445,9 @@
    </property>
    <property name="toolTip">
     <string>Pause GPS</string>
+   </property>
+   <property name="shortcut">
+    <string notr="true"/>
    </property>
   </action>
   <action name="windowGeoimageAction">
@@ -1377,12 +1464,15 @@
     <string>Hide/Show the GeoImage dock</string>
    </property>
    <property name="shortcut">
-    <string>Ctrl+E</string>
+    <string notr="true">Ctrl+E</string>
    </property>
   </action>
   <action name="toolsWorldOsbAction">
    <property name="text">
     <string>World OSB manager...</string>
+   </property>
+   <property name="shortcut">
+    <string notr="true"/>
    </property>
    <property name="visible">
     <bool>false</bool>
@@ -1392,30 +1482,48 @@
    <property name="text">
     <string>&amp;Shortcut Editor...</string>
    </property>
+   <property name="shortcut">
+    <string notr="true"/>
+   </property>
   </action>
   <action name="toolTemplatesLoadAction">
    <property name="text">
     <string>&amp;Load...</string>
+   </property>
+   <property name="shortcut">
+    <string notr="true"/>
    </property>
   </action>
   <action name="toolTemplatesMergeAction">
    <property name="text">
     <string>&amp;Merge...</string>
    </property>
+   <property name="shortcut">
+    <string notr="true"/>
+   </property>
   </action>
   <action name="toolTemplatesSaveAction">
    <property name="text">
     <string>&amp;Save...</string>
+   </property>
+   <property name="shortcut">
+    <string notr="true"/>
    </property>
   </action>
   <action name="relationAddMemberAction">
    <property name="text">
     <string>&amp;Add member</string>
    </property>
+   <property name="shortcut">
+    <string notr="true"/>
+   </property>
   </action>
   <action name="relationRemoveMemberAction">
    <property name="text">
     <string>&amp;Remove member</string>
+   </property>
+   <property name="shortcut">
+    <string notr="true"/>
    </property>
   </action>
   <action name="viewArrowsNeverAction">
@@ -1425,6 +1533,9 @@
    <property name="text">
     <string>&amp;Never</string>
    </property>
+   <property name="shortcut">
+    <string notr="true"/>
+   </property>
   </action>
   <action name="viewArrowsOnewayAction">
    <property name="checkable">
@@ -1433,6 +1544,9 @@
    <property name="text">
     <string>for &amp;Oneway roads</string>
    </property>
+   <property name="shortcut">
+    <string notr="true"/>
+   </property>
   </action>
   <action name="viewArrowsAlwaysAction">
    <property name="checkable">
@@ -1440,6 +1554,9 @@
    </property>
    <property name="text">
     <string>&amp;Always</string>
+   </property>
+   <property name="shortcut">
+    <string notr="true"/>
    </property>
   </action>
   <action name="nodeDetachAction">
@@ -1456,6 +1573,9 @@
    <property name="statusTip">
     <string>Detach a node from a Road</string>
    </property>
+   <property name="shortcut">
+    <string notr="true"/>
+   </property>
   </action>
   <action name="fileWorkOfflineAction">
    <property name="checkable">
@@ -1467,6 +1587,9 @@
    </property>
    <property name="text">
     <string>&amp;Work Offline</string>
+   </property>
+   <property name="shortcut">
+    <string notr="true"/>
    </property>
   </action>
   <action name="renderSVGAction">
@@ -1488,22 +1611,31 @@
     <string>Hide/Show the Styles dock</string>
    </property>
    <property name="shortcut">
-    <string>Ctrl+B</string>
+    <string notr="true">Ctrl+B</string>
    </property>
   </action>
   <action name="toolsWMSServersAction">
    <property name="text">
     <string>&amp;WMS Servers Editor...</string>
    </property>
+   <property name="shortcut">
+    <string notr="true"/>
+   </property>
   </action>
   <action name="toolsTMSServersAction">
    <property name="text">
     <string>&amp;TMS Servers Editor...</string>
    </property>
+   <property name="shortcut">
+    <string notr="true"/>
+   </property>
   </action>
   <action name="toolsResetDiscardableAction">
    <property name="text">
     <string>&amp;Reset Discardable dialogs status</string>
+   </property>
+   <property name="shortcut">
+    <string notr="true"/>
    </property>
   </action>
   <action name="gpsPopupAction">
@@ -1528,6 +1660,9 @@
    <property name="text">
     <string>Create &amp;Junction</string>
    </property>
+   <property name="shortcut">
+    <string notr="true"/>
+   </property>
   </action>
   <action name="editRotateAction">
    <property name="checkable">
@@ -1541,22 +1676,31 @@
     <string>Rotate</string>
    </property>
    <property name="shortcut">
-    <string>Ctrl+A</string>
+    <string notr="true">Ctrl+A</string>
    </property>
   </action>
   <action name="createPolygonAction">
    <property name="text">
     <string>&amp;Polygon</string>
    </property>
+   <property name="shortcut">
+    <string notr="true"/>
+   </property>
   </action>
   <action name="createRectangleAction">
    <property name="text">
     <string>Rectangular &amp;building</string>
    </property>
+   <property name="shortcut">
+    <string notr="true"/>
+   </property>
   </action>
   <action name="layersNewImageAction">
    <property name="text">
     <string>Add new &amp;Image layer</string>
+   </property>
+   <property name="shortcut">
+    <string notr="true"/>
    </property>
   </action>
   <action name="windowFeatsAction">
@@ -1566,10 +1710,16 @@
    <property name="text">
     <string>Features</string>
    </property>
+   <property name="shortcut">
+    <string notr="true"/>
+   </property>
   </action>
   <action name="roadAddStreetNumbersAction">
    <property name="text">
     <string>Add street &amp;numbers (Karlsruhe scheme)</string>
+   </property>
+   <property name="shortcut">
+    <string notr="true"/>
    </property>
   </action>
   <action name="roadSubdivideAction">
@@ -1586,6 +1736,9 @@
    <property name="statusTip">
     <string>Subdivide a selected way segment (the way and two adjacent nodes) into segments of equal length.</string>
    </property>
+   <property name="shortcut">
+    <string notr="true"/>
+   </property>
   </action>
   <action name="viewVirtualNodesAction">
    <property name="checkable">
@@ -1593,6 +1746,9 @@
    </property>
    <property name="text">
     <string>Show &amp;virtual nodes</string>
+   </property>
+   <property name="shortcut">
+    <string notr="true"/>
    </property>
   </action>
   <action name="viewShowLatLonGridAction">
@@ -1602,6 +1758,9 @@
    <property name="text">
     <string>Show lat/lon &amp;grid</string>
    </property>
+   <property name="shortcut">
+    <string notr="true"/>
+   </property>
   </action>
   <action name="viewLockZoomAction">
    <property name="checkable">
@@ -1610,10 +1769,16 @@
    <property name="text">
     <string>&amp;Lock zoom to tiled background</string>
    </property>
+   <property name="shortcut">
+    <string notr="true"/>
+   </property>
   </action>
   <action name="toolsProjectionsAction">
    <property name="text">
     <string>&amp;Projections Editor...</string>
+   </property>
+   <property name="shortcut">
+    <string notr="true"/>
    </property>
   </action>
   <action name="viewPhotosAction">
@@ -1623,15 +1788,24 @@
    <property name="text">
     <string>Show &amp;Photos on map</string>
    </property>
+   <property name="shortcut">
+    <string notr="true"/>
+   </property>
   </action>
   <action name="exportOSCAction">
    <property name="text">
     <string>OsmChange (OSC)</string>
    </property>
+   <property name="shortcut">
+    <string notr="true"/>
+   </property>
   </action>
   <action name="featureDeleteAction">
    <property name="text">
     <string>Force Delete</string>
+   </property>
+   <property name="shortcut">
+    <string notr="true"/>
    </property>
   </action>
   <action name="layersOpenstreetbugsAction">
@@ -1654,10 +1828,16 @@
    <property name="statusTip">
     <string>Simplify way by removing unnecessary child nodes</string>
    </property>
+   <property name="shortcut">
+    <string notr="true"/>
+   </property>
   </action>
   <action name="toolsFiltersAction">
    <property name="text">
     <string>&amp;Filters Editor...</string>
+   </property>
+   <property name="shortcut">
+    <string notr="true"/>
    </property>
   </action>
   <action name="filterNoneAction">
@@ -1682,6 +1862,9 @@
    <property name="statusTip">
     <string>Join areas which are touching.</string>
    </property>
+   <property name="shortcut">
+    <string notr="true"/>
+   </property>
   </action>
   <action name="areaSplitAction">
    <property name="icon">
@@ -1696,6 +1879,9 @@
    </property>
    <property name="statusTip">
     <string>Split a selected area between two selected nodes into two separate areas.</string>
+   </property>
+   <property name="shortcut">
+    <string notr="true"/>
    </property>
   </action>
   <action name="areaTerraceAction">
@@ -1712,10 +1898,16 @@
    <property name="statusTip">
     <string>Split a selected area into terraced residences.</string>
    </property>
+   <property name="shortcut">
+    <string notr="true"/>
+   </property>
   </action>
   <action name="toolsToolbarsAction">
    <property name="text">
     <string>Toolbar Editor...</string>
+   </property>
+   <property name="shortcut">
+    <string notr="true"/>
    </property>
   </action>
   <action name="roadAxisAlignAction">
@@ -1732,10 +1924,16 @@
    <property name="statusTip">
     <string>Align edges to a certain number of regularly spaced axes.</string>
    </property>
+   <property name="shortcut">
+    <string notr="true"/>
+   </property>
   </action>
   <action name="filePrintAction">
    <property name="text">
     <string>&amp;Print...</string>
+   </property>
+   <property name="shortcut">
+    <string notr="true"/>
    </property>
   </action>
   <action name="filePrintPreviewAction">
@@ -1747,6 +1945,9 @@
    <property name="text">
     <string>Properties...</string>
    </property>
+   <property name="shortcut">
+    <string notr="true"/>
+   </property>
   </action>
   <action name="viewDirtyAction">
    <property name="checkable">
@@ -1755,10 +1956,16 @@
    <property name="text">
     <string>Highlight dirt&amp;y features</string>
    </property>
+   <property name="shortcut">
+    <string notr="true"/>
+   </property>
   </action>
   <action name="layersNewDrawingAction">
    <property name="text">
     <string>Add new &amp;Drawing layer</string>
+   </property>
+   <property name="shortcut">
+    <string notr="true"/>
    </property>
   </action>
   <action name="editCutAction">
@@ -1770,12 +1977,15 @@
     <string>Cu&amp;t</string>
    </property>
    <property name="shortcut">
-    <string>Ctrl+X</string>
+    <string notr="true">Ctrl+X</string>
    </property>
   </action>
   <action name="layersNewFilterAction">
    <property name="text">
     <string>Add new &amp;Filter layer</string>
+   </property>
+   <property name="shortcut">
+    <string notr="true"/>
    </property>
   </action>
   <action name="roadExtrudeAction">
@@ -1789,7 +1999,7 @@
     <string>Extrude interaction for ways (JOSM style)</string>
    </property>
    <property name="shortcut">
-    <string>Alt+X</string>
+    <string notr="true">Alt+X</string>
    </property>
   </action>
   <action name="featureSelectAction">
@@ -1800,6 +2010,9 @@
   <action name="featureSelectChildrenAction">
    <property name="text">
     <string>Include children in selection</string>
+   </property>
+   <property name="shortcut">
+    <string notr="true"/>
    </property>
   </action>
   <action name="editScaleAction">
@@ -1813,10 +2026,16 @@
    <property name="text">
     <string>Scale</string>
    </property>
+   <property name="shortcut">
+    <string notr="true"/>
+   </property>
   </action>
   <action name="fileSaveAsTemplateAction">
    <property name="text">
     <string>Save as Template Document...</string>
+   </property>
+   <property name="shortcut">
+    <string notr="true"/>
    </property>
   </action>
   <action name="actionCreate_Multipolygon">
@@ -1828,30 +2047,48 @@
    <property name="text">
     <string>Add to Multi&amp;polygon</string>
    </property>
+   <property name="shortcut">
+    <string notr="true"/>
+   </property>
   </action>
   <action name="mapStyleSaveAction">
    <property name="text">
     <string>&amp;Save</string>
+   </property>
+   <property name="shortcut">
+    <string notr="true"/>
    </property>
   </action>
   <action name="exportGDALAction">
    <property name="text">
     <string>GDAL SQLite/SpatiLite</string>
    </property>
+   <property name="shortcut">
+    <string notr="true"/>
+   </property>
   </action>
   <action name="roadBingExtractAction">
    <property name="text">
     <string>Bing Road Detector</string>
+   </property>
+   <property name="shortcut">
+    <string notr="true"/>
    </property>
   </action>
   <action name="toolsRebuildHistoryAction">
    <property name="text">
     <string>Rebuild &amp;History</string>
    </property>
+   <property name="shortcut">
+    <string notr="true"/>
+   </property>
   </action>
   <action name="layersMapdustAction">
    <property name="text">
     <string>Add Map&amp;Dust layer</string>
+   </property>
+   <property name="shortcut">
+    <string notr="true"/>
    </property>
   </action>
   <action name="viewWireframeAction">
@@ -1862,17 +2099,23 @@
     <string>Wireframe</string>
    </property>
    <property name="shortcut">
-    <string>Ctrl+Alt+W</string>
+    <string notr="true">Ctrl+Alt+W</string>
    </property>
   </action>
   <action name="featureSelectParentsAction">
    <property name="text">
     <string>Select parent(s)</string>
    </property>
+   <property name="shortcut">
+    <string notr="true"/>
+   </property>
   </action>
   <action name="featureDownloadMissingChildrenAction">
    <property name="text">
     <string>Download missing children</string>
+   </property>
+   <property name="shortcut">
+    <string notr="true"/>
    </property>
   </action>
   <action name="markBridgeAction">

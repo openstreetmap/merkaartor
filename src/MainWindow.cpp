@@ -1115,7 +1115,6 @@ void MainWindow::createToolBarManager()
     AddActionsIntoManager(toolBarManager, ui->menuLayers, tr("Layers"));
     AddActionsIntoManager(toolBarManager, ui->menuCreate, tr("Create"));
     AddActionsIntoManager(toolBarManager, ui->menu_Feature, tr("Feature"));
-    AddActionsIntoManager(toolBarManager, ui->menuOpenStreetBugs, tr("OpenStreetBugs"));
     AddActionsIntoManager(toolBarManager, ui->menu_Node, tr("Node"));
     AddActionsIntoManager(toolBarManager, ui->menuRoad, tr("Way"));
     AddActionsIntoManager(toolBarManager, ui->menuRelation, tr("Relation"));
@@ -2093,28 +2092,6 @@ void MainWindow::on_fileDownloadMoreAction_triggered()
     emit content_changed();
 }
 
-void MainWindow::on_layersOpenstreetbugsAction_triggered()
-{
-    SpecialLayer* sl = NULL;
-    for (int i=0; i<theDocument->layerSize(); ++i) {
-        if (theDocument->getLayer(i)->classType() == Layer::OsmBugsLayer) {
-            sl = dynamic_cast<SpecialLayer*>(theDocument->getLayer(i));
-            while (sl->size())
-            {
-                sl->deleteFeature(sl->get(0));
-            }
-        }
-    }
-
-    createProgressDialog();
-
-    if (!::downloadOpenstreetbugs(this, theView->viewport(), theDocument, sl)) {
-        QMessageBox::warning(this, tr("Error downloading OpenStreetBugs"), tr("The OpenStreetBugs could not be downloaded"));
-    }
-
-    deleteProgressDialog();
-}
-
 void MainWindow::on_layersMapdustAction_triggered()
 {
     SpecialLayer* sl = NULL;
@@ -2650,41 +2627,6 @@ void MainWindow::on_featureCommitAction_triggered()
     }
 }
 
-void MainWindow::on_featureOsbClose_triggered()
-{
-    Feature* bugNd = p->theProperties->selection(0);
-
-    QUrl osbUrl;
-    osbUrl.setUrl(M_PREFS->getOpenStreetBugsUrl());
-    osbUrl.setPath(osbUrl.path() + "closePOIexec");
-#ifdef QT5
-    QUrlQuery theQuery(osbUrl);
-    theQuery.addQueryItem("id", Feature::stripToOSMId(bugNd->id()));
-    osbUrl.setQuery(theQuery);
-#else
-    osbUrl.addQueryItem("id", Feature::stripToOSMId(bugNd->id()));
-#endif
-    qDebug() << osbUrl.toString();
-
-    QString rply;
-    bool ret = Utils::sendBlockingNetRequest(osbUrl, rply);
-
-    if (!ret) {
-        QMessageBox::warning(0, tr("Network timeout"), tr("Cannot contact OpenStreetBugs."), QMessageBox::Ok);
-        return;
-    }
-
-    qDebug() << "openStreetBugs reply: " << rply;
-    if (rply.contains("ok")) {
-        bugNd->layer()->deleteFeature(bugNd);
-        p->theProperties->setSelection(0);
-        invalidateView();
-    } else
-        QMessageBox::warning(this, tr("Error closing bug"), tr("Cannot delete bug. Server message is:\n%1").arg(rply), QMessageBox::Ok);
-
-    return;
-}
-
 void MainWindow::on_roadCreateJunctionAction_triggered()
 {
     CommandList* theList = new CommandList(MainWindow::tr("Create Junction"), NULL);
@@ -3156,7 +3098,6 @@ void MainWindow::on_toolsShortcutsAction_triggered()
     CollectActions(theActions, ui->menuLayers);
     CollectActions(theActions, ui->menuCreate);
     CollectActions(theActions, ui->menu_Feature);
-    CollectActions(theActions, ui->menuOpenStreetBugs);
     CollectActions(theActions, ui->menu_Node);
     CollectActions(theActions, ui->menuRoad);
     CollectActions(theActions, ui->menuRelation);

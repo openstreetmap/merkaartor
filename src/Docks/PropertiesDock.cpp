@@ -211,7 +211,6 @@ void PropertiesDock::checkMenuStatus()
     Main->ui->relationAddMemberAction->setEnabled(NumRelation && Selection.size() > 1);
     Main->ui->relationRemoveMemberAction->setEnabled((NumRelation && Selection.size() > 1 && NumRelationChild) || IsParentRelation);
     Main->ui->relationAddToMultipolygonAction->setEnabled((NumAreas > 1) || (NumAreas >0 && NumRelation == 1));
-    Main->ui->menuOpenStreetBugs->setEnabled(IsOpenStreetBug);
 
     Main->ui->editCopyAction->setEnabled(Selection.size());
     Main->clipboardChanged();
