@@ -424,7 +424,9 @@ void MemoryBackend::resumeDeletes() {
 
 void MemoryBackend::deallocVirtualNode(Feature *f)
 {
+    p->delayedDeletesLock.tryLockForRead();
     p->toBeDeleted.append(f);
+    p->delayedDeletesLock.unlock();
 }
 
 void MemoryBackend::sync(Feature *f)

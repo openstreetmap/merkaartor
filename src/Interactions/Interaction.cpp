@@ -449,8 +449,10 @@ void FeatureSnapInteraction::clearSnap()
 
 void FeatureSnapInteraction::clearLastSnap()
 {
-    LastSnap = 0;
-    g_backend.resumeDeletes();
+    if (LastSnap) {
+        LastSnap = 0;
+        g_backend.resumeDeletes();
+    }
 }
 
 void FeatureSnapInteraction::setLastSnap(Feature *f)
