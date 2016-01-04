@@ -1631,6 +1631,8 @@ void MainWindow::endBusyCursor() {
 }
 
 MainWindow::ImportStatus MainWindow::importFile(Document * mapDocument, const QString& fileName, Layer*& newLayer) {
+    MainWindow::ImportStatus result;
+
     QString baseFileName = fileName.section('/', - 1);
     if (fileName.toLower().endsWith(".gpx")) {
         QList<TrackLayer*> theTracklayers;
@@ -1641,12 +1643,13 @@ MainWindow::ImportStatus MainWindow::importFile(Document * mapDocument, const QS
         if (!importOK) {
             for (int i=0; i<theTracklayers.size(); i++) {
                 mapDocument->remove(theTracklayers[i]);
-                delete theTracklayers[i];
+                SAFE_DELETE(theTracklayers[i]);
             }
+            newLayer = NULL;
         } else {
             if (!newLayer->size()) {
                 mapDocument->remove(newLayer);
-                delete newLayer;
+                SAFE_DELETE(newLayer);
             }
             for (int i=1; i<theTracklayers.size(); i++) {
                 if (theTracklayers[i]->name().isEmpty())
@@ -1656,12 +1659,12 @@ MainWindow::ImportStatus MainWindow::importFile(Document * mapDocument, const QS
                 }
             }
         }
-	return importOK ? IMPORT_OK : IMPORT_ERROR;
+	    result = importOK ? IMPORT_OK : IMPORT_ERROR;
     }
     else if (fileName.toLower().endsWith(".osm")) {
         newLayer = new DrawingLayer( baseFileName );
         mapDocument->add(newLayer);
-        return importOSM(this, fileName, mapDocument, newLayer) ? IMPORT_OK : IMPORT_ERROR;
+        result = importOSM(this, fileName, mapDocument, newLayer) ? IMPORT_OK : IMPORT_ERROR;
     }
 #ifndef FRISIUS_BUILD
     else if (fileName.toLower().endsWith(".osc")) {
@@ -1671,7 +1674,7 @@ MainWindow::ImportStatus MainWindow::importFile(Document * mapDocument, const QS
         } else {
             newLayer = mapDocument->getDirtyOrOriginLayer();
         }
-        return mapDocument->importOSC(fileName, (DrawingLayer*)newLayer) ? IMPORT_OK : IMPORT_ERROR;
+        result = mapDocument->importOSC(fileName, (DrawingLayer*)newLayer) ? IMPORT_OK : IMPORT_ERROR;
     }
 #endif
     else if (fileName.toLower().endsWith(".ngt")) {
@@ -1682,7 +1685,7 @@ MainWindow::ImportStatus MainWindow::importFile(Document * mapDocument, const QS
         if (importOK && M_PREFS->getAutoExtractTracks()) {
             ((TrackLayer *)newLayer)->extractLayer();
         }
-        return importOK ? IMPORT_OK : IMPORT_ERROR;
+        result = importOK ? IMPORT_OK : IMPORT_ERROR;
     }
     else if (fileName.toLower().endsWith(".nmea") || (fileName.toLower().endsWith(".nma"))) {
         newLayer = new TrackLayer( baseFileName );
@@ -1692,7 +1695,7 @@ MainWindow::ImportStatus MainWindow::importFile(Document * mapDocument, const QS
         if (importOK && M_PREFS->getAutoExtractTracks()) {
             ((TrackLayer *)newLayer)->extractLayer();
         }
-        return importOK ? IMPORT_OK : IMPORT_ERROR;
+        result = importOK ? IMPORT_OK : IMPORT_ERROR;
     }
     else if (fileName.toLower().endsWith(".kml")) {
         if (QMessageBox::warning(this, MainWindow::tr("Big Fat Copyright Warning"),
@@ -1715,9 +1718,9 @@ MainWindow::ImportStatus MainWindow::importFile(Document * mapDocument, const QS
             newLayer = new DrawingLayer( baseFileName );
             newLayer->setUploadable(false);
             mapDocument->add(newLayer);
-            return mapDocument->importKML(fileName, (TrackLayer *)newLayer) ? IMPORT_OK : IMPORT_ERROR;
+            result = mapDocument->importKML(fileName, (TrackLayer *)newLayer) ? IMPORT_OK : IMPORT_ERROR;
         } else
-            return IMPORT_ABORTED;
+            result = IMPORT_ABORTED;
     }
     else if (fileName.toLower().endsWith(".csv")) {
 #ifndef Q_OS_SYMBIAN
@@ -1726,13 +1729,13 @@ MainWindow::ImportStatus MainWindow::importFile(Document * mapDocument, const QS
         newLayer = new DrawingLayer( baseFileName );
         newLayer->setUploadable(false);
         mapDocument->add(newLayer);
-        return mapDocument->importCSV(fileName, (DrawingLayer*)newLayer) ? IMPORT_OK : IMPORT_ERROR;
+        result = mapDocument->importCSV(fileName, (DrawingLayer*)newLayer) ? IMPORT_OK : IMPORT_ERROR;
     }
 #ifdef USE_PROTOBUF
     else if (fileName.toLower().endsWith(".pbf")) {
         newLayer = new DrawingLayer( baseFileName );
         mapDocument->add(newLayer);
-        return mapDocument->importPBF(fileName, (DrawingLayer*)newLayer) ? IMPORT_OK : IMPORT_ERROR;
+        result = mapDocument->importPBF(fileName, (DrawingLayer*)newLayer) ? IMPORT_OK : IMPORT_ERROR;
     }
 #endif
     else { // Fallback to GDAL
@@ -1740,8 +1743,18 @@ MainWindow::ImportStatus MainWindow::importFile(Document * mapDocument, const QS
         newLayer = new DrawingLayer( baseFileName );
         newLayer->setUploadable(false);
         mapDocument->add(newLayer);
-        return mapDocument->importGDAL(fileName, (DrawingLayer*)newLayer) ? IMPORT_OK : IMPORT_ERROR;
+        result = mapDocument->importGDAL(fileName, (DrawingLayer*)newLayer) ? IMPORT_OK : IMPORT_ERROR;
+        if (result == IMPORT_ERROR) {
+            SAFE_DELETE(newLayer);
+        }
     }
+
+    if (result == IMPORT_ERROR && newLayer) {
+        mapDocument->remove(newLayer);
+        SAFE_DELETE(newLayer);
+    }
+
+    return result;
 }
 
 bool MainWindow::importFiles(Document * mapDocument, const QStringList & fileNames, QStringList * importedFileNames )
@@ -1759,29 +1772,23 @@ bool MainWindow::importFiles(Document * mapDocument, const QStringList & fileNam
         const QString & fn = it.next();
 
         Layer* newLayer = NULL;
-	// TODO: The passing mechanism of newLayer is evil black magic.
-	ImportStatus fileImportResult = importFile(mapDocument, fn, newLayer);
+        // TODO: The passing mechanism of newLayer is evil black magic.
+        ImportStatus fileImportResult = importFile(mapDocument, fn, newLayer);
 
-	// TODO: Cleaning up after an unsuccessful import should be done
-	// in importFile.
-        if (fileImportResult != IMPORT_OK && newLayer)
-            mapDocument->remove(newLayer);
-
-	switch (fileImportResult) {
-	    case IMPORT_OK:
+        switch (fileImportResult) {
+            case IMPORT_OK:
                 foundImport = true;
 
                 if (importedFileNames)
                     importedFileNames->append(fn);
 
                 emit content_changed();
-		break;
-	    case IMPORT_ERROR:
-                delete newLayer;
+                break;
+            case IMPORT_ERROR:
                 QMessageBox::warning(this, tr("No valid file"), tr("%1 could not be opened.").arg(fn));
-	    case IMPORT_ABORTED:
-		// noop
-		break;
+            case IMPORT_ABORTED:
+                // noop
+                break;
         }
     }
     endBusyCursor();
