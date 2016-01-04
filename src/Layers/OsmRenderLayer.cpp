@@ -17,7 +17,8 @@ inline uint qHash(const QPoint& p)
 
 #define TILE_SIZE 256
 QList<TILE_TYPE> tiles;
-QReadWriteLock tileLock;
+QReadWriteLock tileLock; /* Protects 'tiles' variable */
+QReadWriteLock renderLock; /* Read locks indicate rendering threads, Write lock blocks them */
 #define TILE_CONSTRUCTOR(x, y) QPoint(x, y)
 #define TILE_X(t) t.x()
 #define TILE_Y(t) t.y()
@@ -70,6 +71,7 @@ public:
         if (!p->theDocument)
             return;
 
+        if (!renderLock.tryLockForRead()) return;
         p->theDocument->lockPainters();
 
         TILE_TYPE tile = theTile;
@@ -108,6 +110,7 @@ public:
         P.end();
         g_backend.resumeDeletes();
         p->theDocument->unlockPainters();
+        renderLock.unlock();
         tileLock.lockForWrite();
         tileCache->insert(tile, img);
 
@@ -155,6 +158,8 @@ void OsmRenderLayer::forceRedraw(const Projection& aProjection, const QTransform
     if (!theDocument)
         return;
 
+    if (!renderLock.tryLockForRead()) return;
+
     setProjection(aProjection);
     setTransform(aTransform);
 
@@ -191,6 +196,8 @@ void OsmRenderLayer::forceRedraw(const Projection& aProjection, const QTransform
         renderGathering = QtConcurrent::map(tiles, RenderTile(this));
         renderGatheringWatcher.setFuture(renderGathering);
     }
+
+    renderLock.unlock();
 }
 
 void OsmRenderLayer::pan(QPoint delta)
@@ -246,3 +253,10 @@ bool OsmRenderLayer::isRenderingDone()
     return renderGathering.isFinished();
 }
 
+void OsmRenderLayer::stopRendering() {
+    renderLock.lockForWrite();
+}
+
+void OsmRenderLayer::resumeRendering() {
+    renderLock.unlock();
+}

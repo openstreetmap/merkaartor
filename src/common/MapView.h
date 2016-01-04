@@ -89,6 +89,9 @@ public:
     RendererOptions renderOptions();
     void setRenderOptions(const RendererOptions& opt);
 
+    void stopRendering();
+    void resumeRendering();
+
     qreal nodeWidth();
 
     QString toPropertiesHtml();

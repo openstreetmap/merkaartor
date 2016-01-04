@@ -3386,6 +3386,7 @@ void MainWindow::loadDocument(QString fn)
     file.close();
 
     if (newDoc) {
+        theView->stopRendering();
         p->theProperties->setSelection(0);
         p->theFeats->invalidate();
         delete theDocument;
@@ -3405,6 +3406,7 @@ void MainWindow::loadDocument(QString fn)
         currentProjectFile = fn;
         setWindowTitle(QString("%1 - %2").arg(theDocument->title()).arg(p->title));
         p->latSaveDirtyLevel = theDocument->getDirtySize();
+        theView->resumeRendering();
     }
 
     M_PREFS->addRecentOpen(fn);

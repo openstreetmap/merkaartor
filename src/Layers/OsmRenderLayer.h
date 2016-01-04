@@ -32,6 +32,9 @@ public:
 
     bool isRenderingDone();
 
+    void stopRendering();
+    void resumeRendering();
+
 signals:
     void renderingDone();
 

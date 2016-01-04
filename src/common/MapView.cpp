@@ -1143,6 +1143,14 @@ void MapView::setRenderOptions(const RendererOptions &opt)
     p->ROptions = opt;
 }
 
+void MapView::stopRendering() {
+    p->osmLayer->stopRendering();
+}
+
+void MapView::resumeRendering() {
+    p->osmLayer->resumeRendering();
+}
+
 qreal MapView::nodeWidth()
 {
     return p->NodeWidth;
