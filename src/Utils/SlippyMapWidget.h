@@ -84,7 +84,6 @@ class SlippyMapWidget :	public QWidget
         void ZoomTo(const QPoint & NewCenter, int NewZoom);
 
     private slots:
-        virtual void on_customContextMenuRequested(const QPoint & pos);
         virtual void on_resetViewAction_triggered(bool);
 };
 
