@@ -354,10 +354,30 @@ bool downloadOSM(QWidget* aParent, const QString& aWeb, const QString& aUser, co
     }
     Downloader Rcv(aUser, aPassword);
     QString URL = Rcv.getURLToMap();
-    URL = URL.arg(aBox.bottomLeft().x(), 0, 'f').arg(aBox.bottomLeft().y(), 0, 'f').arg(aBox.topRight().x(), 0, 'f').arg(aBox.topRight().y(), 0, 'f');
 
-    QUrl theUrl(aWeb+URL);
-    return downloadOSM(aParent, theUrl, aUser, aPassword, theDocument, theLayer);
+    if ((fabs(aBox.bottomLeft().x()) < 180.0 && fabs(aBox.topRight().x()) > 180.0) 
+     || (fabs(aBox.bottomLeft().x()) > 180.0 && fabs(aBox.topRight().x()) < 180.0)) {
+        /* Check for +-180 meridian, and split query in two if necessary */
+        int sign = (aBox.bottomLeft().x() > 0) ? 1 : -1;
+        CoordBox q1 = aBox, q2 = aBox;
+        if (aBox.bottomLeft().x() > 0) {
+            q1.setRight(180*sign);
+            q2.setLeft(-180*sign);
+            q2.setRight(q2.right()-360);
+        } else {
+            q1.setLeft(180*sign);
+            q2.setRight(-180*sign);
+            q2.setLeft(q2.left()+360);
+        }
+        return downloadOSM(aParent, aWeb, aUser, aPassword, q1, theDocument, theLayer)
+            && downloadOSM(aParent, aWeb, aUser, aPassword, q2, theDocument, theLayer);
+
+    } else {
+        /* Normal code path */
+        URL = URL.arg(aBox.bottomLeft().x(), 0, 'f').arg(aBox.bottomLeft().y(), 0, 'f').arg(aBox.topRight().x(), 0, 'f').arg(aBox.topRight().y(), 0, 'f');
+        QUrl theUrl(aWeb+URL);
+        return downloadOSM(aParent, theUrl, aUser, aPassword, theDocument, theLayer);
+    }
 }
 
 bool downloadTracksFromOSM(QWidget* Main, const QString& aWeb, const QString& aUser, const QString& aPassword, const CoordBox& aBox , Document* theDocument)
