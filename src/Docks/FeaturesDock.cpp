@@ -62,6 +62,8 @@ FeaturesDock::FeaturesDock(MainWindow* aParent)
     connect(ui.btFind, SIGNAL(clicked(bool)), SLOT(on_btFind_clicked(bool)));
     connect(ui.btReset, SIGNAL(clicked(bool)), SLOT(on_btReset_clicked(bool)));
 
+    connect(Main->properties(), SIGNAL(selectionChanged()), this, SLOT(updateList()));
+
     centerAction = new QAction(NULL, this);
     connect(centerAction, SIGNAL(triggered()), this, SLOT(on_centerAction_triggered()));
     centerZoomAction = new QAction(NULL, this);
@@ -319,9 +321,24 @@ void FeaturesDock::addItem(MapFeaturePtr F)
 
     if (curFeatType == IFeature::OsmRelation || curFeatType == Feature::All)
     {
-        if (Relation* L = CAST_RELATION(F)) {
-            QListWidgetItem* anItem = new QListWidgetItem(L->description(), ui.FeaturesList);
-            anItem->setData(Qt::UserRole, QVariant::fromValue(F));
+        if (Relation* R = CAST_RELATION(F)) {
+            /* Include all relations if nothing is selected, otherwisde only the
+             * intersection of selected items and relations */
+            bool includeThis;
+            if (Main->properties()->selection().size() > 0) {
+                includeThis = false;
+                foreach (Feature* sel, Main->properties()->selection()) {
+                    if (R->find(sel) < R->size()) {
+                        includeThis = true;
+                        break;
+                    }
+                }
+            } else includeThis = true;
+
+            if (includeThis) {
+                QListWidgetItem* anItem = new QListWidgetItem(R->description(), ui.FeaturesList);
+                anItem->setData(Qt::UserRole, QVariant::fromValue(F));
+            }
         }
     }
     if (curFeatType == IFeature::LineString || curFeatType == IFeature::Polygon || curFeatType == Feature::All)

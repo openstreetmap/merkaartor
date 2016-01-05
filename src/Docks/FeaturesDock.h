@@ -30,13 +30,14 @@ public:
 
     ~FeaturesDock();
 
-    void updateList();
 
     Feature* highlighted(int idx);
     QList<Feature*> highlighted();
     int highlightedSize() const;
 
 public slots:
+    void updateList();
+
     void on_FeaturesList_itemSelectionChanged();
     void on_FeaturesList_itemDoubleClicked(QListWidgetItem* item);
     void on_FeaturesList_customContextMenuRequested(const QPoint & pos);

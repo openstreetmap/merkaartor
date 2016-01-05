@@ -72,6 +72,9 @@ class PropertiesDock : public MDockAncestor
         void on_template_changed(TagTemplate* aNewTemplate);
         void adjustSelection();
 
+    signals:
+        void selectionChanged();
+
     private:
         void cleanUpUi();
         void switchUi();

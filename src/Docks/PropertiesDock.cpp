@@ -243,6 +243,7 @@ void PropertiesDock::setSelection(Feature*aFeature)
     FullSelection = Selection;
     switchUi();
     fillMultiUiSelectionBox();
+    emit selectionChanged();
 }
 
 void PropertiesDock::setMultiSelection(const QList<Feature*>& aFeatureList)
@@ -266,6 +267,7 @@ void PropertiesDock::setMultiSelection(const QList<Feature*>& aFeatureList)
     theModel->setFeature(Current);
     Selection = Current;
     fillMultiUiSelectionBox();
+    emit selectionChanged();
 }
 
 void PropertiesDock::toggleSelection(Feature* S)
@@ -279,6 +281,7 @@ void PropertiesDock::toggleSelection(Feature* S)
     FullSelection = Selection;
     switchUi();
     fillMultiUiSelectionBox();
+    emit selectionChanged();
 }
 
 void PropertiesDock::addSelection(Feature* S)
@@ -290,6 +293,7 @@ void PropertiesDock::addSelection(Feature* S)
     FullSelection = Selection;
     switchUi();
     fillMultiUiSelectionBox();
+    emit selectionChanged();
 }
 
 void PropertiesDock::adjustSelection()
@@ -310,6 +314,7 @@ void PropertiesDock::adjustSelection()
     FullSelection = aSelection;
     if (Selection.size() != cnt)
         switchUi();
+    emit selectionChanged();
 }
 
 bool PropertiesDock::isSelected(Feature *aFeature)
@@ -360,6 +365,7 @@ void PropertiesDock::on_SelectionList_itemSelectionChanged()
         theModel->setFeature(Selection);
         MultiUi.lbStatus->setText(tr("%1/%2 selected item(s)").arg(Selection.size()).arg(FullSelection.size()));
         Main->view()->update();
+        emit selectionChanged();
     }
 }
 
@@ -608,6 +614,7 @@ void PropertiesDock::resetValues()
     theModel->setFeature(Current);
     Selection = Current;
     checkMenuStatus();
+    emit selectionChanged();
 
     /* If we have standard TableViews in the current UI, set it so that the */
     /* first column is the width of the default text (Edit this to add...)  */
