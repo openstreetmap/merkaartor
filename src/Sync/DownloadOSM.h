@@ -30,7 +30,7 @@ class Downloader : public QObject
     public:
         Downloader(const QString& aUser, const QString& aPwd);
 
-        bool request(const QString& theMethod, const QUrl& URL, const QString& Out, bool FireForget=false);
+        bool request(const QString& theMethod, const QUrl& URL, const QString& Out);
         bool go(const QUrl& url);
         QByteArray& content();
         int resultCode();

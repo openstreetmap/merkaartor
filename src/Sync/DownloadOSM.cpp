@@ -77,10 +77,10 @@ void Downloader::on_Cancel_clicked()
 #include "QTextBrowser"
 
 bool Downloader::go(const QUrl& url) {
-    return request("GET", url, QString(), false);
+    return request("GET", url, QString());
 }
 
-bool Downloader::request(const QString& theMethod, const QUrl& url, const QString& theData, bool FireForget) {
+bool Downloader::request(const QString& theMethod, const QUrl& url, const QString& theData) {
     if (Error) return false;
 
     qDebug() << "Downloader::request: " << url;
@@ -100,9 +100,6 @@ bool Downloader::request(const QString& theMethod, const QUrl& url, const QStrin
         connect(currentReply,SIGNAL(downloadProgress(qint64, qint64)), this,SLOT(progress(qint64, qint64)));
     }
 
-    if (FireForget)
-        return true;
-
     if (Loop.exec() == QDialog::Rejected)
         return false;
 
@@ -115,7 +112,7 @@ bool Downloader::request(const QString& theMethod, const QUrl& url, const QStrin
         LocationText = redir.toString();
         if (!LocationText.isEmpty()) {
             QUrl newUrl(LocationText);
-            return request(theMethod, newUrl, theData, FireForget);
+            return request(theMethod, newUrl, theData);
         }
     }
 
