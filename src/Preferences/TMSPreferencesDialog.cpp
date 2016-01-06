@@ -115,7 +115,7 @@ void TMSPreferencesDialog::on_btDelTmsServer_clicked(void)
         return;
 
     theTmsServers[idx].deleted = true;
-    delete lvTmsServers->takeItem(idx);
+    delete lvTmsServers->takeItem(lvTmsServers->currentRow());
     on_lvTmsServers_itemSelectionChanged();
 }
 
