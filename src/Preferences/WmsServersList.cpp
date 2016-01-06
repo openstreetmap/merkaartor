@@ -208,7 +208,7 @@ void WmsServersList::toXml(QDomElement parent)
 {
     QDomElement rt = parent.ownerDocument().createElement("WmsServers");
     parent.appendChild(rt);
-    rt.setAttribute("creator", QString("%1 v%2%3").arg(STRINGIFY(PRODUCT)).arg(STRINGIFY(VERSION)).arg(STRINGIFY(REVISION)));
+    rt.setAttribute("creator", QString("%1 v%2").arg(STRINGIFY(PRODUCT)).arg(STRINGIFY(VERSION)));
 
     WmsServerListIterator it(theServers);
     while (it.hasNext()) {
