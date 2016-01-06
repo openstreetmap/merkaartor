@@ -316,8 +316,7 @@ void FeaturesDock::addItem(MapFeaturePtr F)
     if (ui.FeaturesList->count() > MAX_FEATS)
         return;
 
-    if (Highlighted.contains(F))
-        return;
+    QListWidgetItem* newItem = NULL;
 
     if (curFeatType == IFeature::OsmRelation || curFeatType == Feature::All)
     {
@@ -336,24 +335,23 @@ void FeaturesDock::addItem(MapFeaturePtr F)
             } else includeThis = true;
 
             if (includeThis) {
-                QListWidgetItem* anItem = new QListWidgetItem(R->description(), ui.FeaturesList);
-                anItem->setData(Qt::UserRole, QVariant::fromValue(F));
+                newItem = new QListWidgetItem(R->description(), ui.FeaturesList);
             }
         }
     }
     if (curFeatType == IFeature::LineString || curFeatType == IFeature::Polygon || curFeatType == Feature::All)
     {
-        if (Way* R = CAST_WAY(F)) {
-            QListWidgetItem* anItem = new QListWidgetItem(R->description(), ui.FeaturesList);
-            anItem->setData(Qt::UserRole, QVariant::fromValue(F));
-        }
+        if (Way* R = CAST_WAY(F))
+            newItem = new QListWidgetItem(R->description(), ui.FeaturesList);
     }
     if (curFeatType == IFeature::Point || curFeatType == Feature::All)
     {
-        if (Node* N = CAST_NODE(F)) {
-            QListWidgetItem* anItem = new QListWidgetItem(N->description(), ui.FeaturesList);
-            anItem->setData(Qt::UserRole, QVariant::fromValue(F));
-        }
+        if (Node* N = CAST_NODE(F))
+            newItem = new QListWidgetItem(N->description(), ui.FeaturesList);
+    }
+    if (newItem) {
+        newItem->setData(Qt::UserRole, QVariant::fromValue(F));
+        if (Highlighted.contains(F)) newItem->setSelected(true);
     }
 }
 
@@ -375,8 +373,7 @@ void FeaturesDock::clearItems()
                 Highlighted.removeOne(F);
             }
         }
-        if (!item->isSelected())
-            delete item;
+        delete item;
     }
 }
 
