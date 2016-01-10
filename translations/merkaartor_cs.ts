@@ -4038,7 +4038,7 @@ Pokud si nejste jisti , prosím požádejte o radu v &quot;legal&quot; nebo &quo
     </message>
     <message>
         <location filename="../src/MainWindow.cpp" line="1973"/>
-        <source>Unknow action url: %1</source>
+        <source>Unknown action url: %1</source>
         <translation type="unfinished"/>
     </message>
     <message>

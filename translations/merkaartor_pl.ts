@@ -4080,7 +4080,7 @@ Na pewno można legalnie zaimportować ten plik do OSM?</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.cpp" line="1973"/>
-        <source>Unknow action url: %1</source>
+        <source>Unknown action url: %1</source>
         <translation>Nieznany url działania: %1</translation>
     </message>
     <message>

@@ -2018,7 +2018,7 @@ void MainWindow::loadUrl(const QUrl& theUrl)
             }
         }
     } else {
-        QMessageBox::critical(this, tr("Incoming Remote control request"), tr("Unknow action url: %1").arg(theUrl.toString()));
+        QMessageBox::critical(this, tr("Incoming Remote control request"), tr("Unknown action url: %1").arg(theUrl.toString()));
     }
 #undef theQuery
 }

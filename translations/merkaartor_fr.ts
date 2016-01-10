@@ -4073,7 +4073,7 @@ En cas de doute, demandez un avis sur les listes de diffusion OSM &quot;legal&qu
     </message>
     <message>
         <location filename="../src/MainWindow.cpp" line="1973"/>
-        <source>Unknow action url: %1</source>
+        <source>Unknown action url: %1</source>
         <translation type="unfinished"/>
     </message>
     <message>

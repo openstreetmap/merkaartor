@@ -4013,7 +4013,7 @@ Are you absolutely sure this KML can legally be imported in OSM?</source>
     </message>
     <message>
         <location filename="../src/MainWindow.cpp" line="1973"/>
-        <source>Unknow action url: %1</source>
+        <source>Unknown action url: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
