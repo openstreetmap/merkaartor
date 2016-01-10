@@ -4096,7 +4096,7 @@ Anda yakin bahwa KML ini boleh di impor ke OSM?</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.cpp" line="1973"/>
-        <source>Unknow action url: %1</source>
+        <source>Unknown action url: %1</source>
         <translation>URL Aksi tidak diketahui: %1</translation>
     </message>
     <message>

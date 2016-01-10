@@ -4051,7 +4051,7 @@ Weet je absoluut zeker dat deze KML legaal geïmporteerd kan worden in OSM?</tra
     </message>
     <message>
         <location filename="../src/MainWindow.cpp" line="1973"/>
-        <source>Unknow action url: %1</source>
+        <source>Unknown action url: %1</source>
         <translation type="unfinished"/>
     </message>
     <message>

@@ -4034,7 +4034,7 @@ Teljesen biztos ön abban, hogy e KML-t van joga bevinni OSM-be?</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.cpp" line="1973"/>
-        <source>Unknow action url: %1</source>
+        <source>Unknown action url: %1</source>
         <translation type="unfinished"/>
     </message>
     <message>

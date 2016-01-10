@@ -4097,7 +4097,7 @@ Sind Sie sicher, dass diese KML-Daten legal in OSM importiert werden dürfen?</t
     </message>
     <message>
         <location filename="../src/MainWindow.cpp" line="1973"/>
-        <source>Unknow action url: %1</source>
+        <source>Unknown action url: %1</source>
         <translation>Unbekannte Aktions-URL: %1</translation>
     </message>
     <message>
