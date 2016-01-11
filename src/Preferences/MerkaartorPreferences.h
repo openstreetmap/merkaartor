@@ -392,6 +392,7 @@ public:
 
     /* FeaturesDock */
     M_PARAM_DECLARE_BOOL(FeaturesWithin)
+    M_PARAM_DECLARE_BOOL(FeaturesSelectionFilter)
 
     /* Plugins */
     void addBackgroundPlugin(IMapAdapterFactory* aPlugin);

@@ -59,6 +59,7 @@ FeaturesDock::FeaturesDock(MainWindow* aParent)
     connect(ui.FeaturesList, SIGNAL(customContextMenuRequested(const QPoint &)), this, SLOT(on_FeaturesList_customContextMenuRequested(const QPoint &)));
 
     connect(ui.cbWithin, SIGNAL(stateChanged(int)), this, SLOT(on_rbWithin_stateChanged(int)));
+    connect(ui.cbSelectionFilter, SIGNAL(stateChanged(int)), this, SLOT(on_rbSelectionFilter_stateChanged(int)));
     connect(ui.btFind, SIGNAL(clicked(bool)), SLOT(on_btFind_clicked(bool)));
     connect(ui.btReset, SIGNAL(clicked(bool)), SLOT(on_btReset_clicked(bool)));
 
@@ -168,6 +169,13 @@ void FeaturesDock::on_FeaturesList_delete()
 void FeaturesDock::on_rbWithin_stateChanged ( int state )
 {
     M_PREFS->setFeaturesWithin((state == Qt::Checked));
+
+    updateList();
+}
+
+void FeaturesDock::on_rbSelectionFilter_stateChanged ( int state )
+{
+    M_PREFS->setFeaturesSelectionFilter((state == Qt::Checked));
 
     updateList();
 }
@@ -301,6 +309,11 @@ void FeaturesDock::tabChanged(int idx)
     ui.FeaturesList->clear();
     Highlighted.clear();
 
+    if (curFeatType == IFeature::OsmRelation)
+        ui.cbSelectionFilter->setEnabled(true);
+    else
+        ui.cbSelectionFilter->setEnabled(false);
+
     updateList();
 }
 
@@ -324,7 +337,7 @@ void FeaturesDock::addItem(MapFeaturePtr F)
             /* Include all relations if nothing is selected, otherwisde only the
              * intersection of selected items and relations */
             bool includeThis;
-            if (Main->properties()->selection().size() > 0) {
+            if ((Main->properties()->selection().size() > 0) && (ui.cbSelectionFilter->isChecked())) {
                 includeThis = false;
                 foreach (Feature* sel, Main->properties()->selection()) {
                     if (R->find(sel) < R->size()) {

@@ -44,6 +44,7 @@ public slots:
     void on_FeaturesList_delete();
 
     void on_rbWithin_stateChanged ( int state );
+    void on_rbSelectionFilter_stateChanged ( int state );
 
     void on_centerAction_triggered();
     void on_centerZoomAction_triggered();

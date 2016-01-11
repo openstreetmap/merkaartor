@@ -1346,6 +1346,7 @@ M_PARAM_IMPLEMENT_BOOL(ReadonlyTracksDefault, data, false)
 
 /* FeaturesDock */
 M_PARAM_IMPLEMENT_BOOL(FeaturesWithin, FeaturesDock, true)
+M_PARAM_IMPLEMENT_BOOL(FeaturesSelectionFilter, FeaturesDock, true)
 
 namespace {
 
