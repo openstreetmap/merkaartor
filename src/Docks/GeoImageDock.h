@@ -3,10 +3,10 @@
 #include "MainWindow.h"
 #include "Document.h"
 
-#include <QtGui/QPainter>
-#include <QtWidgets/QDockWidget>
-#include <QtGui/QMouseEvent>
-#include <QtWidgets/QShortcut>
+#include <QPainter>
+#include <QDockWidget>
+#include <QMouseEvent>
+#include <QShortcut>
 #include <exiv2/image.hpp>
 #include <exiv2/exif.hpp>
 #include <QDrag>
