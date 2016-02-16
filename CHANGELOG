@@ -839,7 +839,7 @@ v0.07 18 aug 2007
     * ADD : nice painting for water
     * ADD : file->new menu option to start a new map
     * FIX : change current directory when opening a file
-    * FIX : surpress drawing artefact when creating a new segment
+    * FIX : suppress drawing artefact when creating a new segment
     * FIX : avoid Qt to have to process download notifications recursively
     * ADD : scripts to create the windows installation package
     * ADD : create way from selected segments tool
@@ -855,7 +855,7 @@ v0.06 5 dec 2006
     * ADD : type combobox to set highway tag
     * FIX : no busy waiting for OSM download
     * ADD : progress dialog while downloading from OSM
-    * FIX : refresh view immediatly after download
+    * FIX : refresh view immediately after download
     * FIX : download segments outside original bounding box for roads
     * FIX : don't call QStatusbar methods from a paintEvent
     * FIX : speed up drawing of roads when zoomed out
