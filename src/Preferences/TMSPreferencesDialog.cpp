@@ -268,8 +268,10 @@ void TMSPreferencesDialog::httpRequestFinished( QNetworkReply *reply)
     qDebug() << "TMS: request finished.";
     reply->deleteLater();
     if (reply->error()) {
-        if (reply->error() != QNetworkReply::OperationCanceledError)
-            QMessageBox::critical(this, tr("Merkaartor: GetServices"), tr("Error reading services.\n") + reply->errorString(), QMessageBox::Ok);
+        if (reply->error() != QNetworkReply::OperationCanceledError) {
+            QMessageBox::critical(this, tr("Merkaartor: GetServices"), tr("Error reading services. The server probably does not support this feature.\n"), QMessageBox::Ok);
+            qDebug() << "TMS GetServices error: " << reply->errorString();
+        }
         return;
     }
 
