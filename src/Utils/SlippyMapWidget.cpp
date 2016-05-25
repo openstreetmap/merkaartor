@@ -198,7 +198,19 @@ void SlippyMapWidget::ZoomTo(const QPoint & NewCenter, int NewZoom)
     p->Lat = (p->Lat + dx) * (1 << NewZoom) / (1 << p->Zoom) - dx;
     p->Lon = (p->Lon + dy) * (1 << NewZoom) / (1 << p->Zoom) - dy;
     p->Zoom = NewZoom;
+    normalizeCoordinates();
     update();
+}
+
+/* The Lat and Lon coordinates are in fact tile coordinates. The valid range for
+ * world is 0 to 2^zoom-1. Make sure it's so!
+ */
+void SlippyMapWidget::normalizeCoordinates(void) {
+    unsigned limit = (1 << p->Zoom);
+    if (p->Lat < 0) p->Lat = 0;
+    if (p->Lon < 0) p->Lon = 0;
+    if (p->Lat > limit) p->Lat = limit;
+    if (p->Lon > limit) p->Lon = limit;
 }
 
 void SlippyMapWidget::wheelEvent(QWheelEvent* ev)
@@ -232,6 +244,7 @@ void SlippyMapWidget::mousePressEvent(QMouseEvent* ev)
                 p->Lat = p->VpLon;
                 p->Lon = p->VpLat;
                 p->Zoom = p->VpZoom;
+                normalizeCoordinates();
                 update();
                 emit redraw();
                 return;

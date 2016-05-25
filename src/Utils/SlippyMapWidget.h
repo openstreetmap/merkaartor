@@ -82,6 +82,7 @@ class SlippyMapWidget :	public QWidget
     private:
         SlippyMapWidgetPrivate* p;
         void ZoomTo(const QPoint & NewCenter, int NewZoom);
+        void normalizeCoordinates(void);
 
     private slots:
         virtual void on_resetViewAction_triggered(bool);
