@@ -1565,15 +1565,6 @@ void MainWindow::on_editReverseAction_triggered()
     emit reverse_triggered();
 }
 
-static void changeCurrentDirToFile(const QString& s)
-{
-    qDebug() << "Changing CWD to: " << s;
-    QFileInfo info(s);
-    QDir::setCurrent(info.absolutePath());
-    M_PREFS->setworkingdir(QDir::currentPath());
-}
-
-
 void MainWindow::on_fileImportAction_triggered()
 {
     QStringList fileNames = QFileDialog::getOpenFileNames(
