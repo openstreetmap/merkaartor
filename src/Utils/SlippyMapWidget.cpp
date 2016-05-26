@@ -115,10 +115,10 @@ static int lat2tile(qreal lat, int z)
 
 QRectF SlippyMapWidget::viewArea() const
 {
-    qreal X1 = p->Lat - (width()/2.0)/TILESIZE;
-    qreal Y1 = p->Lon - (height()/2.0)/TILESIZE;
-    qreal X2 = p->Lat + (width()/2.0)/TILESIZE;
-    qreal Y2 = p->Lon + (height()/2.0)/TILESIZE;
+    qreal X1 = p->Lon - (width()/2.0)/TILESIZE;
+    qreal Y1 = p->Lat - (height()/2.0)/TILESIZE;
+    qreal X2 = p->Lon + (width()/2.0)/TILESIZE;
+    qreal Y2 = p->Lat + (height()/2.0)/TILESIZE;
 
     qreal Lon1 = tile2lon(X1, p->Zoom);
     qreal Lat1 = tile2lat(Y1, p->Zoom);
@@ -147,22 +147,24 @@ void SlippyMapWidget::paintEvent(QPaintEvent*)
 {
     QPainter Painter(this);
     Painter.fillRect(QRect(0,0,width(),height()),QColor(255,255,255));
-    int LatRect = int(floor(p->Lat));
-    int LatPixel = int(-(p->Lat - LatRect ) * TILESIZE + width()/2);
     int LonRect = int(floor(p->Lon));
-    int LonPixel = int(-(p->Lon - LonRect ) * TILESIZE + height()/2);
+    int LonPixel = int(-(p->Lon - LonRect ) * TILESIZE + width()/2);
+    int LatRect = int(floor(p->Lat));
+    int LatPixel = int(-(p->Lat - LatRect ) * TILESIZE + height()/2);
+
     while (LatPixel > 0)
         LatPixel -=TILESIZE, --LatRect;
     while (LonPixel > 0)
         LonPixel -= TILESIZE, --LonRect;
-    for (int x=LatPixel; x<width(); x += TILESIZE)
-        for (int y=LonPixel; y<height(); y+= TILESIZE)
+
+    for (int x=LonPixel; x<width(); x += TILESIZE)
+        for (int y=LatPixel; y<height(); y+= TILESIZE)
         {
-            int ThisLatRect = LatRect + (x-LatPixel)/TILESIZE;
-            int ThisLonRect = LonRect + (y-LonPixel)/TILESIZE;
-            QPixmap* img = p->getImage(ThisLatRect,ThisLonRect);
+            int ThisLonRect = LonRect + (x-LonPixel)/TILESIZE;
+            int ThisLatRect = LatRect + (y-LatPixel)/TILESIZE;
+            QPixmap* img = p->getImage(ThisLonRect,ThisLatRect);
             if (img)
-                Painter.drawPixmap(x,y,*img);
+                Painter.drawPixmap(x,y,*img); /* FIXME? */
             delete img;
         }
     Painter.setPen(QPen(Qt::NoPen));
@@ -195,8 +197,8 @@ void SlippyMapWidget::ZoomTo(const QPoint & NewCenter, int NewZoom)
     qreal dx = (NewCenter.x()-width()/2)/(TILESIZE*1.0);
     qreal dy = (NewCenter.y()-height()/2)/(TILESIZE*1.0);
 
-    p->Lat = (p->Lat + dx) * (1 << NewZoom) / (1 << p->Zoom) - dx;
-    p->Lon = (p->Lon + dy) * (1 << NewZoom) / (1 << p->Zoom) - dy;
+    p->Lon = (p->Lon + dx) * (1 << NewZoom) / (1 << p->Zoom) - dx;
+    p->Lat = (p->Lat + dy) * (1 << NewZoom) / (1 << p->Zoom) - dy;
     p->Zoom = NewZoom;
     normalizeCoordinates();
     update();
@@ -207,10 +209,10 @@ void SlippyMapWidget::ZoomTo(const QPoint & NewCenter, int NewZoom)
  */
 void SlippyMapWidget::normalizeCoordinates(void) {
     unsigned limit = (1 << p->Zoom);
-    if (p->Lat < 0) p->Lat = 0;
     if (p->Lon < 0) p->Lon = 0;
-    if (p->Lat > limit) p->Lat = limit;
+    if (p->Lat < 0) p->Lat = 0;
     if (p->Lon > limit) p->Lon = limit;
+    if (p->Lat > limit) p->Lat = limit;
 }
 
 void SlippyMapWidget::wheelEvent(QWheelEvent* ev)
@@ -241,8 +243,8 @@ void SlippyMapWidget::mousePressEvent(QMouseEvent* ev)
             }
             else if ((ev->pos().y() > (height()/2)-20) && (ev->pos().y() < (height()/2)))
             {
-                p->Lat = p->VpLon;
-                p->Lon = p->VpLat;
+                p->Lon = p->VpLon;
+                p->Lat = p->VpLat;
                 p->Zoom = p->VpZoom;
                 normalizeCoordinates();
                 update();
@@ -266,8 +268,8 @@ void SlippyMapWidget::mouseMoveEvent(QMouseEvent* ev)
     if (!Delta.isNull())
     {
         p->InDrag = true;
-        p->Lat -= Delta.x()/(TILESIZE*1.);
-        p->Lon -= Delta.y()/(TILESIZE*1.);
+        p->Lon -= Delta.x()/(TILESIZE*1.);
+        p->Lat -= Delta.y()/(TILESIZE*1.);
         p->PreviousDrag = ev->pos();
         update();
         emit redraw();
@@ -276,8 +278,8 @@ void SlippyMapWidget::mouseMoveEvent(QMouseEvent* ev)
 
 void SlippyMapWidget::on_resetViewAction_triggered(bool)
 {
-    p->Lat = 1.0;
     p->Lon = 1.0;
+    p->Lat = 1.0;
     p->Zoom = 1;
     update();
 }
