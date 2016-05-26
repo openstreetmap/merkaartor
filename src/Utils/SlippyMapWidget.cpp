@@ -22,7 +22,7 @@ class SlippyMapWidgetPrivate
 {
     public:
         SlippyMapWidgetPrivate(SlippyMapWidget* w)
-            : theWidget(w), InDrag(false)
+            : theWidget(w), InDrag(false), InSelection(false)
         {
             Sets = M_PREFS->getQSettings();
             Sets->beginGroup("SlippyMapWidget");
@@ -50,6 +50,13 @@ class SlippyMapWidgetPrivate
         int Zoom, VpZoom;
         qreal Lat,Lon, VpLat, VpLon;
         QPoint PreviousDrag;
+        /* Used only during selection */
+        bool InSelection;
+        QPoint SelectionStart, SelectionEnd;
+
+        /* Current selection in coordinates */
+        QRectF CurrentSelectionCoord;
+
         bool InDrag;
         QSettings* Sets;
 };
@@ -112,21 +119,22 @@ static int lat2tile(qreal lat, int z)
     return (int)(floor((1.0 - log( tan(lat * M_PI/180.0) + 1.0 / cos(lat * M_PI/180.0)) / M_PI) / 2.0 * pow(2.0, z)));
 }
 
-
-QRectF SlippyMapWidget::viewArea() const
+static qreal long2tileF(qreal lon, int z)
 {
-    qreal X1 = p->Lon - (width()/2.0)/TILESIZE;
-    qreal Y1 = p->Lat - (height()/2.0)/TILESIZE;
-    qreal X2 = p->Lon + (width()/2.0)/TILESIZE;
-    qreal Y2 = p->Lat + (height()/2.0)/TILESIZE;
+    return (lon + 180.0) / 360.0 * pow(2.0, z);
+}
 
-    qreal Lon1 = tile2lon(X1, p->Zoom);
-    qreal Lat1 = tile2lat(Y1, p->Zoom);
+static qreal lat2tileF(qreal lat, int z)
+{
+    return (1.0 - log( tan(lat * M_PI/180.0) + 1.0 / cos(lat * M_PI/180.0)) / M_PI) / 2.0 * pow(2.0, z);
+}
 
-    qreal Lon2 = tile2lon(X2, p->Zoom);
-    qreal Lat2 = tile2lat(Y2, p->Zoom);
 
-    return QRectF(Lon1, Lat2, Lon2-Lon1, Lat1-Lat2);
+QRectF SlippyMapWidget::selectedArea()
+{
+    if (p->CurrentSelectionCoord.isNull())
+        makeSelection(QRect(0,0,width(),height()));
+    return p->CurrentSelectionCoord;
 }
 
 void SlippyMapWidget::setViewportArea(QRectF theRect)
@@ -164,7 +172,7 @@ void SlippyMapWidget::paintEvent(QPaintEvent*)
             int ThisLatRect = LatRect + (y-LatPixel)/TILESIZE;
             QPixmap* img = p->getImage(ThisLonRect,ThisLatRect);
             if (img)
-                Painter.drawPixmap(x,y,*img); /* FIXME? */
+                Painter.drawPixmap(x,y,*img);
             delete img;
         }
     Painter.setPen(QPen(Qt::NoPen));
@@ -183,6 +191,16 @@ void SlippyMapWidget::paintEvent(QPaintEvent*)
     Painter.setPen(QPen(Qt::black, 3));
     Painter.setBrush(Qt::NoBrush);
     Painter.drawText(QPoint(width()-21,(height()/2)+10), "V");
+
+    if (p->InSelection) {
+        Painter.setPen(QPen(Qt::blue, 1, Qt::DashLine));
+        Painter.drawRect(QRect(p->SelectionStart, p->SelectionEnd));
+    } else if (!p->CurrentSelectionCoord.isNull()) {
+        Painter.setPen(QPen(Qt::blue, 1));
+        QPoint topLeft     = coord2relative(p->CurrentSelectionCoord.topLeft());
+        QPoint bottomRight = coord2relative(p->CurrentSelectionCoord.bottomRight());
+        Painter.drawRect(QRect(topLeft, bottomRight));
+    }
 }
 
 void SlippyMapWidget::ZoomTo(const QPoint & NewCenter, int NewZoom)
@@ -226,7 +244,7 @@ void SlippyMapWidget::mousePressEvent(QMouseEvent* ev)
 {
     if (ev->button() == Qt::MidButton) {
         on_resetViewAction_triggered(true);
-    } else {
+    } else if (ev->button() == Qt::LeftButton) {
         if (ev->pos().x() > width()-20)
         {
             if (ev->pos().y() < 20)
@@ -252,27 +270,100 @@ void SlippyMapWidget::mousePressEvent(QMouseEvent* ev)
                 return;
             }
         }
+
+        /* No special place, start selection */
+        p->InSelection = true;
+        p->SelectionStart = p->SelectionEnd = ev->pos();
+        qDebug() << "Enter selection";
+    } else {
+        /* RightButton, start drag */
         p->PreviousDrag = ev->pos();
+        p->InDrag = true;
     }
     emit redraw();
 }
 
+/* TODO: relative2coord could be split off this */
+void SlippyMapWidget::makeSelection(const QRect& relative) {
+    /* Compute viewport boundingbox */
+    qreal X1 = p->Lon - (width()/2.0)/TILESIZE;
+    qreal Y1 = p->Lat - (height()/2.0)/TILESIZE;
+    qreal X2 = p->Lon + (width()/2.0)/TILESIZE;
+    qreal Y2 = p->Lat + (height()/2.0)/TILESIZE;
+
+    /* Actual difference per pixel */
+    qreal xpixel = (X2-X1)/width();
+    qreal ypixel = (Y2-Y1)/height();
+
+    /* Shift the border according to relative */
+    X1 += xpixel * relative.topLeft().x();
+    Y1 += ypixel * relative.topLeft().y();
+    X2 -= xpixel * (width() - relative.bottomRight().x());
+    Y2 -= ypixel * (height() - relative.bottomRight().y());
+
+    qreal Lon1 = tile2lon(X1, p->Zoom);
+    qreal Lat1 = tile2lat(Y1, p->Zoom);
+
+    qreal Lon2 = tile2lon(X2, p->Zoom);
+    qreal Lat2 = tile2lat(Y2, p->Zoom);
+
+    /* Save the selection */
+    p->CurrentSelectionCoord =  QRectF(Lon1, Lat2, Lon2-Lon1, Lat1-Lat2);
+
+    qDebug() << "Selection rectangle: " << p->CurrentSelectionCoord;
+}
+
+/* Convert absolute coordinates to relative (to the widget) */
+QPoint SlippyMapWidget::coord2relative(const QPointF& coord) const {
+    /* Convert into local coordinate */
+    qreal X = long2tileF(coord.x(), p->Zoom);
+    qreal Y = lat2tileF(coord.y(), p->Zoom);
+
+    /* p->Lon and p->Lat are the center, but in the same units as X and Y. */
+    X -= p->Lon;
+    Y -= p->Lat;
+
+    /* Now, the p->Lon and p->Lat is equal to width()/2 and height()/2, and X
+     * and Y are the distance in multiples of TILESIZE */
+    QPoint pt(X*TILESIZE, Y*TILESIZE);
+
+    /* Finally shift it relative to topLeft */
+    return pt+QPoint(width()/2, height()/2);
+}
+
 void SlippyMapWidget::mouseReleaseEvent(QMouseEvent*)
 {
+    if (p->InSelection) {
+        QRect SelectionRect(p->SelectionStart, p->SelectionEnd);
+        if (SelectionRect.width() && SelectionRect.height()) {
+            makeSelection(SelectionRect);
+            update();
+            emit redraw();
+        } else {
+            /* Default to full viewport */
+            makeSelection(QRect(0, 0, width(), height()));
+        }
+    }
     p->InDrag = false;
+    p->InSelection = false;
 }
 
 void SlippyMapWidget::mouseMoveEvent(QMouseEvent* ev)
 {
-    QPoint Delta = ev->pos()-p->PreviousDrag;
-    if (!Delta.isNull())
-    {
-        p->InDrag = true;
-        p->Lon -= Delta.x()/(TILESIZE*1.);
-        p->Lat -= Delta.y()/(TILESIZE*1.);
-        p->PreviousDrag = ev->pos();
-        update();
-        emit redraw();
+    if (p->InDrag) {
+        QPoint Delta = ev->pos()-p->PreviousDrag;
+        if (!Delta.isNull())
+        {
+            p->Lon -= Delta.x()/(TILESIZE*1.);
+            p->Lat -= Delta.y()/(TILESIZE*1.);
+            p->PreviousDrag = ev->pos();
+            update();
+            emit redraw();
+        }
+    } else if (p->InSelection) {
+       p->SelectionEnd = ev->pos();
+       update();
+       emit redraw();
     }
 }
 
