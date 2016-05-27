@@ -18,6 +18,10 @@ include ($$MERKAARTOR_SRC_DIR/src/Config.pri)
 DEFINES += VERSION=\"\\\"$$VERSION\\\"\"
 #DEFINES += REVISION=\"\\\"$$REVISION\\\"\"
 
+# Drop the version for now. If it contains anything else than numbers split by
+# dots, the qt stuff generates invalid *.rc files for plugins.
+VERSION=""
+
 win32-msvc* {
     DEFINES += _USE_MATH_DEFINES
 }
