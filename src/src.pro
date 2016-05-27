@@ -290,9 +290,58 @@ contains (PROTOBUF, 1) {
 unix:!macx {
     desktop.path = $${PREFIX}/share/applications
     desktop.files = merkaartor.desktop
-    desktopicons.path = $${PREFIX}/share/icons/hicolor/48x48/apps/
-    desktopicons.files = $$PWD/../Icons/48x48/merkaartor.png
-    INSTALLS += desktop desktopicons
+    desktopicon8x8.path = $${PREFIX}/share/icons/hicolor/8x8/apps/
+    desktopicon8x8.files = $$PWD/../Icons/8x8/merkaartor.png
+    desktopicon16x16.path = $${PREFIX}/share/icons/hicolor/16x16/apps/
+    desktopicon16x16.files = $$PWD/../Icons/16x16/merkaartor.png
+    desktopicon22x22.path = $${PREFIX}/share/icons/hicolor/22x22/apps/
+    desktopicon22x22.files = $$PWD/../Icons/22x22/merkaartor.png
+    desktopicon24x24.path = $${PREFIX}/share/icons/hicolor/24x24/apps/
+    desktopicon24x24.files = $$PWD/../Icons/24x24/merkaartor.png
+    desktopicon32x32.path = $${PREFIX}/share/icons/hicolor/32x32/apps/
+    desktopicon32x32.files = $$PWD/../Icons/32x32/merkaartor.png
+    desktopicon36x36.path = $${PREFIX}/share/icons/hicolor/36x36/apps/
+    desktopicon36x36.files = $$PWD/../Icons/36x36/merkaartor.png
+    desktopicon40x40.path = $${PREFIX}/share/icons/hicolor/40x40/apps/
+    desktopicon40x40.files = $$PWD/../Icons/40x40/merkaartor.png
+    desktopicon42x42.path = $${PREFIX}/share/icons/hicolor/42x42/apps/
+    desktopicon42x42.files = $$PWD/../Icons/42x42/merkaartor.png
+    desktopicon48x48.path = $${PREFIX}/share/icons/hicolor/48x48/apps/
+    desktopicon48x48.files = $$PWD/../Icons/48x48/merkaartor.png
+    desktopicon64x64.path = $${PREFIX}/share/icons/hicolor/64x64/apps/
+    desktopicon64x64.files = $$PWD/../Icons/64x64/merkaartor.png
+    desktopicon72x72.path = $${PREFIX}/share/icons/hicolor/72x72/apps/
+    desktopicon72x72.files = $$PWD/../Icons/72x72/merkaartor.png
+    desktopicon80x80.path = $${PREFIX}/share/icons/hicolor/80x80/apps/
+    desktopicon80x80.files = $$PWD/../Icons/80x80/merkaartor.png
+    desktopicon96x96.path = $${PREFIX}/share/icons/hicolor/96x96/apps/
+    desktopicon96x96.files = $$PWD/../Icons/96x96/merkaartor.png
+    desktopicon128x128.path = $${PREFIX}/share/icons/hicolor/128x128/apps/
+    desktopicon128x128.files = $$PWD/../Icons/128x128/merkaartor.png
+    desktopicon192x192.path = $${PREFIX}/share/icons/hicolor/192x192/apps/
+    desktopicon192x192.files = $$PWD/../Icons/192x192/merkaartor.png
+    desktopicon256x256.path = $${PREFIX}/share/icons/hicolor/256x256/apps/
+    desktopicon256x256.files = $$PWD/../Icons/256x256/merkaartor.png
+    desktopicon512x512.path = $${PREFIX}/share/icons/hicolor/512x512/apps/
+    desktopicon512x512.files = $$PWD/../Icons/512x512/merkaartor.png
+    INSTALLS += desktop \
+                desktopicon8x8 \
+                desktopicon16x16 \
+                desktopicon22x22 \
+                desktopicon24x24 \
+                desktopicon32x32 \
+                desktopicon36x36 \
+                desktopicon40x40 \
+                desktopicon42x42 \
+                desktopicon48x48 \
+                desktopicon64x64 \
+                desktopicon72x72 \
+                desktopicon80x80 \
+                desktopicon96x96 \
+                desktopicon128x128 \
+                desktopicon192x192 \
+                desktopicon256x256 \
+                desktopicon512x512
 }
 
 
