@@ -853,14 +853,14 @@ void MapView::on_MoveLeft_activated()
     QPoint p(rect().width()/4,0);
     panScreen(p);
 
-//    invalidate(true, true, true);
+    invalidate(true, true, true);
 }
 void MapView::on_MoveRight_activated()
 {
     QPoint p(-rect().width()/4,0);
     panScreen(p);
 
-//    invalidate(true, true, true);
+    invalidate(true, true, true);
 }
 
 void MapView::on_MoveUp_activated()
@@ -868,7 +868,7 @@ void MapView::on_MoveUp_activated()
     QPoint p(0,rect().height()/4);
     panScreen(p);
 
-//    invalidate(true, true, true);
+    invalidate(true, true, true);
 }
 
 void MapView::on_MoveDown_activated()
@@ -876,7 +876,7 @@ void MapView::on_MoveDown_activated()
     QPoint p(0,-rect().height()/4);
     panScreen(p);
 
-//    invalidate(true, true, true);
+    invalidate(true, true, true);
 }
 
 void MapView::zoomIn()
