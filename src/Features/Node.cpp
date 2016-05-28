@@ -676,7 +676,7 @@ PhotoNode::PhotoNode(const TrackNode& other)
 
 PhotoNode::~PhotoNode(void)
 {
-    SAFE_DELETE(Photo)
+    delete Photo;
 }
 
 QPixmap PhotoNode::photo() const
@@ -689,7 +689,7 @@ QPixmap PhotoNode::photo() const
 
 void PhotoNode::setPhoto(QPixmap thePhoto)
 {
-    SAFE_DELETE(Photo)
+    delete Photo;
     Photo = new QPixmap(thePhoto.scaled(M_PREFS->getMaxGeoPicWidth(), M_PREFS->getMaxGeoPicWidth(), Qt::KeepAspectRatio));
 }
 

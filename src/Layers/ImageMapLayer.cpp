@@ -65,8 +65,8 @@ public:
     }
     ~ImageMapLayerPrivate()
     {
-        SAFE_DELETE(theMapAdapter)
-        SAFE_DELETE(theImageManager)
+        delete theMapAdapter;
+        delete theImageManager;
     }
 };
 
@@ -84,7 +84,7 @@ ImageMapLayer::ImageMapLayer(const QString & aName)
 
 ImageMapLayer::~ ImageMapLayer()
 {
-    SAFE_DELETE(p)
+    delete p;
 }
 
 CoordBox ImageMapLayer::boundingBox()
