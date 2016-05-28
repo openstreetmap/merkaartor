@@ -45,23 +45,24 @@ TagTemplateWidget* TagTemplateWidget::fromXml(const QDomElement& e)
     }
 
     TagTemplateWidget* aTW = NULL;
-    if (e.attribute("type") == "combo") {
+    const QString tp = e.attribute("type");
+    if (tp == "combo") {
         aTW = TagTemplateWidgetCombo::fromXml(e);
     } else
-    if (e.attribute("type") == "yesno") {
+    if (tp == "yesno") {
         aTW = TagTemplateWidgetYesno::fromXml(e);
     } else
-    if (e.attribute("type") == "constant") {
+    if (tp == "constant") {
         aTW = TagTemplateWidgetConstant::fromXml(e);
     } else
-    if (e.attribute("type") == "edit") {
+    if (tp == "edit") {
         aTW = TagTemplateWidgetEdit::fromXml(e);
     } else
         Q_ASSERT(false);
 
     if (aTW) {
         aTW->theId = e.attribute("id");
-        aTW->theType = e.attribute("type");
+        aTW->theType = tp;
         aTW->theTag = e.attribute("tag");
     }
 
