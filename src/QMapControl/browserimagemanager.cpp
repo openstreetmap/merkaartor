@@ -125,7 +125,7 @@ BrowserImageManager::BrowserImageManager(QObject* parent)
 }
 #else
 BrowserImageManager::BrowserImageManager(QObject* parent)
-    :QObject(parent), emptyPixmap(QPixmap(1,1)), errorPixmap(QPixmap(512,512)), page(0)
+    :QObject(parent), emptyPixmap(QPixmap(1,1)), errorPixmap(QPixmap(512,512)), page(0), timeoutTimer(new QTimer(this))
 {
     errorPixmap.fill(Qt::gray);
     QPainter P(&errorPixmap);
@@ -143,7 +143,6 @@ BrowserImageManager::BrowserImageManager(QObject* parent)
 
     connect(page, SIGNAL(loadFinished(bool)), this, SLOT(pageLoadFinished(bool)));
 
-    timeoutTimer = new QTimer();
     connect(timeoutTimer, SIGNAL(timeout()), this, SLOT(timeout()));
     timeoutTimer->setInterval(M_PREFS->getNetworkTimeout());
 
@@ -156,7 +155,6 @@ BrowserImageManager::BrowserImageManager(QObject* parent)
 
 BrowserImageManager::~BrowserImageManager()
 {
-    delete timeoutTimer;
 }
 
 QByteArray BrowserImageManager::getData(IMapAdapter* anAdapter, const QString &url)
