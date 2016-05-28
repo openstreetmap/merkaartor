@@ -307,10 +307,7 @@ QImage BrowserImageManager::prefetchImage(IMapAdapter* anAdapter, int x, int y, 
 
 void BrowserImageManager::receivedData(const QByteArray& /* ba */, const QHash<QString, QString>& /* headers */, const QString& hash)
 {
-    if (prefetch.contains(hash))
-    {
-        prefetch.removeAt(prefetch.indexOf(hash));
-    }
+    prefetch.removeOne(hash);
     emit(dataReceived());
 }
 

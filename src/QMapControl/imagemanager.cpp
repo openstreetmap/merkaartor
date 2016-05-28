@@ -154,10 +154,7 @@ void ImageManager::receivedData(const QByteArray& ba, const QHash<QString, QStri
         }
     }
 
-    if (prefetch.contains(hash))
-    {
-        prefetch.removeAt(prefetch.indexOf(hash));
-    }
+    prefetch.removeOne(hash);
     emit(dataReceived());
 }
 
