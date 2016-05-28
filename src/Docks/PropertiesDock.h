@@ -41,8 +41,8 @@ class PropertiesDock : public MDockAncestor
         int selectionSize() const;
         void resetValues();
         void checkMenuStatus();
-        bool loadTemplates(const QString& filename = "");
-        bool mergeTemplates(const QString& filename = "");
+        bool loadTemplates(const QString& filename = QString());
+        bool mergeTemplates(const QString& filename = QString());
         bool saveTemplates(const QString& filename);
 
         Feature* highlighted(int idx);

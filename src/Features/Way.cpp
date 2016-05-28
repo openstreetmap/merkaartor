@@ -219,7 +219,7 @@ void Way::partChanged(Feature* /*F*/, int ChangeId)
 
 QString Way::description() const
 {
-    QString s(tagValue("name",""));
+    QString s(tagValue("name",QString()));
     if (!s.isEmpty())
         return QString("%1 (%2)").arg(s).arg(id().numId);
     return QString("%1").arg(id().numId);
@@ -416,7 +416,7 @@ void Way::updateMeta()
         return;
 
     bool isArea = false;
-    if (tagValue("highway", "") == "" || tagValue("area", "") != "")
+    if (tagValue("highway", QString()).isEmpty() || !tagValue("area", QString()).isEmpty())
         isArea = (p->Nodes[0] == p->Nodes[p->Nodes.size()-1]);
 
     for (int i=0; (i+1)<p->Nodes.size(); ++i)
@@ -721,15 +721,15 @@ bool Way::toGPX(QXmlStreamWriter& stream, QProgressDialog * progress, bool forEx
 
     if (!forExport)
         stream.writeAttribute("xml:id", xmlId());
-    QString s = tagValue("name","");
+    QString s = tagValue("name",QString());
     if (!s.isEmpty()) {
         stream.writeTextElement("name", s);
     }
-    s = tagValue("_comment_","");
+    s = tagValue("_comment_",QString());
     if (!s.isEmpty()) {
         stream.writeTextElement("cmt", s);
     }
-    s = tagValue("_description_","");
+    s = tagValue("_description_",QString());
     if (!s.isEmpty()) {
         stream.writeTextElement("desc", s);
     }

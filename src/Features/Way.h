@@ -83,7 +83,7 @@ public:
     void buildPath(Projection const &theProjection);
 
     virtual bool toGPX(QXmlStreamWriter& stream, QProgressDialog * progress, bool forExport=false);
-    virtual bool toXML(QXmlStreamWriter& stream, QProgressDialog * progress, bool strict=false, QString changetsetid="");
+    virtual bool toXML(QXmlStreamWriter& stream, QProgressDialog * progress, bool strict=false, QString changetsetid = QString());
     static Way* fromXML(Document* d, Layer* L, QXmlStreamReader& stream);
 
     virtual QString toHtml();

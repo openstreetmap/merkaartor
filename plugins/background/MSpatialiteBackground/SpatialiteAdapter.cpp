@@ -189,7 +189,7 @@ void SpatialiteAdapter::setFile(const QString& fn)
 
 QString	SpatialiteAdapter::getHost() const
 {
-    return "";
+    return QString();
 }
 
 QUuid SpatialiteAdapter::getId() const

@@ -384,7 +384,7 @@ void GosmoreAdapter::onLoadFile()
 
 QString	GosmoreAdapter::getHost() const
 {
-    return "";
+    return QString();
 }
 
 QUuid GosmoreAdapter::getId() const

@@ -20,7 +20,7 @@
 #include <QList>
 
 Command::Command(Feature* aF)
-    : mainFeature(aF), commandDirtyLevel(0), oldCreated(""), isUndone(false)
+    : mainFeature(aF), commandDirtyLevel(0), isUndone(false)
 {
     description = QApplication::translate("Command", "No description");
 }
@@ -36,7 +36,7 @@ void Command::setId(const QString& id)
 
 const QString& Command::id() const
 {
-    if (Id == "")
+    if (Id.isEmpty())
         Id = QUuid::createUuid().toString();
     return Id;
 }

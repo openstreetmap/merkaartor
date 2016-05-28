@@ -338,7 +338,7 @@ void PrimitivePainter::drawPointLabel(QPointF C, QString str, QString strBg, QPa
 
     if (!str.isEmpty()) {
         modX = - (metrics.width(str)/2);
-        if (DrawIcon && (IconName != "") )
+        if (DrawIcon && !IconName.isEmpty() )
         {
             QImage pm(IconName);
             modY = - pm.height();
@@ -350,7 +350,7 @@ void PrimitivePainter::drawPointLabel(QPointF C, QString str, QString strBg, QPa
     }
     if (DrawLabelBackground && !strBg.isEmpty()) {
         modX = - (metrics.width(strBg)/2);
-        if (DrawIcon && (IconName != "") )
+        if (DrawIcon && !IconName.isEmpty() )
         {
             QImage pm(IconName);
             modY = - pm.height();

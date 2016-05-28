@@ -215,7 +215,7 @@ void TMSPreferencesDialog::savePrefs()
 void TMSPreferencesDialog::on_btGetServices_clicked()
 {
     QUrl theUrl(edTmsUrl->text());
-    if ((theUrl.host() == "") || (theUrl.path() == "")) {
+    if (theUrl.host().isEmpty() || theUrl.path().isEmpty()) {
         QMessageBox::critical(this, tr("Merkaartor: GetServices"), tr("Address and Path cannot be blank."), QMessageBox::Ok);
     }
 

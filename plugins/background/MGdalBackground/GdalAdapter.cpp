@@ -501,7 +501,7 @@ QString GdalAdapter::getSourceTag() const
 
 QString	GdalAdapter::getHost() const
 {
-    return "";
+    return QString();
 }
 
 IMapAdapter::Type GdalAdapter::getType() const

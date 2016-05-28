@@ -34,10 +34,10 @@ QString stripToOSMId(const IFeature::FId& id)
 
 QString userName(const Feature* F)
 {
-    QString s(F->tagValue("name",""));
+    QString s(F->tagValue("name", QString()));
     if (!s.isEmpty())
         return " ("+s+")";
-    return "";
+    return QString();
 }
 
 DirtyList::~DirtyList()
@@ -510,7 +510,7 @@ bool DirtyListExecutor::executeChanges(QWidget* aParent)
 
 bool DirtyListExecutor::start()
 {
-    ChangeSetId = "";
+    ChangeSetId.clear();
     Progress->setValue(++Done);
 
     qDebug() << QString("OPEN changeset");
@@ -549,7 +549,7 @@ bool DirtyListExecutor::stop()
     QString DataIn, DataOut;
     if (sendRequest("PUT",URL,DataIn,DataOut))
     {
-        ChangeSetId = "";
+        ChangeSetId.clear();
         return true;
     }
 

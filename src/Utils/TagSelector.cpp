@@ -24,7 +24,7 @@ bool canParseSymbol(const QString& Expression, int& idx, char Symbol)
 
 bool canParseString(const QString& Expression, int& idx, QString& Key)
 {
-    Key = "";
+    Key.clear();
     skipWhite(Expression,idx);
     if (idx >= Expression.length())
         return false;
@@ -49,7 +49,7 @@ bool canParseString(const QString& Expression, int& idx, QString& Key)
 
 bool canParseValue(const QString& Expression, int& idx, QString& Key)
 {
-    Key = "";
+    Key.clear();
     skipWhite(Expression,idx);
     if (idx >= Expression.length())
         return false;
@@ -1069,7 +1069,7 @@ TagSelectorMatchResult TagSelectorNot::matches(const IFeature* F, qreal PixelPer
 QString TagSelectorNot::asExpression(bool /* Precedence */) const
 {
     if (!Term)
-        return "";
+        return QString();
     QString R;
     R += "not(";
     R += Term->asExpression(true);
@@ -1114,7 +1114,7 @@ TagSelectorMatchResult TagSelectorParent::matches(const IFeature* F, qreal Pixel
 QString TagSelectorParent::asExpression(bool /* Precedence */) const
 {
     if (!Term)
-        return "";
+        return QString();
     QString R;
     R += " parent(";
     R += Term->asExpression(true);

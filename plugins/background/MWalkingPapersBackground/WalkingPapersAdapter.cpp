@@ -286,7 +286,7 @@ void WalkingPapersAdapter::onLoadImage()
 
 QString	WalkingPapersAdapter::getHost() const
 {
-    return "";
+    return QString();
 }
 
 IMapAdapter::Type WalkingPapersAdapter::getType() const

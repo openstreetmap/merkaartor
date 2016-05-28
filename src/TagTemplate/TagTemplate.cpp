@@ -475,7 +475,7 @@ QWidget* TagTemplateWidgetConstant::getWidget(const Feature* F, const MapView* V
         else
             aLabel->setText(theDescription);
     } else
-        aValue->setText(QString("<b>%1</b>").arg(F->tagValue(theTag, "")));
+        aValue->setText(QString("<b>%1</b>").arg(F->tagValue(theTag, QString())));
 
     theMainWidget = aValue;
     theLabelWidget = aLabel;
@@ -486,7 +486,7 @@ QWidget* TagTemplateWidgetConstant::getWidget(const Feature* F, const MapView* V
 void TagTemplateWidgetConstant::apply(const Feature* F)
 {
     if (!theValues.count()) {
-        ((QLabel*)theMainWidget)->setText(QString("<b>%1</b>").arg(F->tagValue(theTag, "")));
+        ((QLabel*)theMainWidget)->setText(QString("<b>%1</b>").arg(F->tagValue(theTag, QString())));
         return;
     }
     bool Regexp = false;
@@ -512,7 +512,7 @@ void TagTemplateWidgetConstant::apply(const Feature* F)
             emit tagChanged(theTag, newVal);
         }
     } else
-        ((QLabel*)theMainWidget)->setText(QString("<b>%1</b>").arg(F->tagValue(theTag, "")));
+        ((QLabel*)theMainWidget)->setText(QString("<b>%1</b>").arg(F->tagValue(theTag, QString())));
 }
 
 TagTemplateWidgetConstant* TagTemplateWidgetConstant::fromXml(const QDomElement& e)
@@ -700,7 +700,7 @@ TagSelectorMatchResult TagTemplate::matchesTag(const Feature* F, const MapView* 
         {
             if (const Relation* Parent = dynamic_cast<const Relation*>(R->getParent(i)))
                 if (!Parent->isDeleted())
-                    if (Parent->tagValue("type","") == "multipolygon")
+                    if (Parent->tagValue("type",QString()) == "multipolygon")
                         return TagSelect_NoMatch;
         }
     }
@@ -709,7 +709,7 @@ TagSelectorMatchResult TagTemplate::matchesTag(const Feature* F, const MapView* 
     // Special casing for multipolygon relations
     if (const Relation* R = dynamic_cast<const Relation*>(F))
     {
-        if (R->tagValue("type","") == "multipolygon") {
+        if (R->tagValue("type",QString()) == "multipolygon") {
             for (int i=0; i<R->size(); ++i)
                 if (!R->get(i)->isDeleted())
                     if ((res = theSelector->matches(R->get(i),V->pixelPerM())))

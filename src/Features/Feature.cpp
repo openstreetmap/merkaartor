@@ -834,7 +834,7 @@ QString Feature::toXML(int lvl, QProgressDialog * progress)
         stream.writeEndDocument();
         return xml;
     } else
-        return "";
+        return QString();
 }
 
 void Feature::fromXML(QXmlStreamReader& stream, Feature* F)

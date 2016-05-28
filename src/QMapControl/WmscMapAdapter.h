@@ -86,7 +86,7 @@ public:
 
     virtual bool isValid(int x, int y, int z) const;
     virtual QString getQuery(int x, int y, int z) const;
-    virtual QString getQuery(const QRectF& , const QRectF& , const QRect& ) const { return ""; }
+    virtual QString getQuery(const QRectF& , const QRectF& , const QRect& ) const { return QString(); }
     virtual QPixmap getPixmap(const QRectF& /* wgs84Bbox */, const QRectF& /* projBbox */, const QRect& /* size */) const { return QPixmap(); }
 
     virtual QString projection() const;
@@ -100,7 +100,7 @@ public:
 
     virtual bool toXML(QXmlStreamWriter& /*stream*/) { return true; }
     virtual void fromXML(QXmlStreamReader& /*xParent*/) {}
-    virtual QString toPropertiesHtml() {return "";}
+    virtual QString toPropertiesHtml() {return QString();}
 
     virtual void setSettings(QSettings* /*aSet*/) {}
 

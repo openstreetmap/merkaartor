@@ -552,7 +552,7 @@ void NavitAdapter::setFile(const QString& fn)
 
 QString	NavitAdapter::getHost() const
 {
-    return "";
+    return QString();
 }
 
 QUuid NavitAdapter::getId() const

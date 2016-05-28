@@ -177,7 +177,7 @@ bool DirtyListExecutorOSC::executeChanges(QWidget* aParent)
 
 bool DirtyListExecutorOSC::start()
 {
-    ChangeSetId = "";
+    ChangeSetId.clear();
     Progress->setValue(++Done);
     qDebug() << QString("OPEN changeset");
 

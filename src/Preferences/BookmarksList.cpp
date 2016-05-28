@@ -23,7 +23,7 @@ Bookmark::Bookmark()
 Bookmark::Bookmark(QString aName, CoordBox aCoord, bool Deleted)
     : Name(aName), Coordinates(aCoord), deleted(Deleted)
 {
-    if (Name == "") {
+    if (Name.isEmpty()) {
         Name = QApplication::translate("MerkaartorPreferences","New Bookmark");
     }
 }

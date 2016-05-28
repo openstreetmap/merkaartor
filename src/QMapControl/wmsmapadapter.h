@@ -107,7 +107,7 @@ public:
     virtual void	zoom_out() {}
 
     virtual bool	isValid(int, int, int) const { return true; }
-    virtual QString getQuery(int, int, int)  const { return ""; }
+    virtual QString getQuery(int, int, int)  const { return QString(); }
     virtual QString getQuery(const QRectF& wgs84Bbox, const QRectF& projBbox, const QRect& size) const ;
     virtual QPixmap getPixmap(const QRectF& /* wgs84Bbox */, const QRectF& /* projBbox */, const QRect& /* size */) const { return QPixmap(); }
 
@@ -127,7 +127,7 @@ public:
 
     virtual bool toXML(QXmlStreamWriter& /*stream*/) { return true; }
     virtual void fromXML(QXmlStreamReader& /*xParent*/) {}
-    virtual QString toPropertiesHtml() {return "";}
+    virtual QString toPropertiesHtml() {return QString();}
 
     virtual void setSettings(QSettings* /*aSet*/) {}
 

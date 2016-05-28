@@ -71,7 +71,7 @@ QVariant TagModel::data(const QModelIndex &index, int role) const
             if (index.column() == 0)
                 return newKeyText();
             else
-                return "";
+                return QString();
         }
         else
         {
@@ -84,7 +84,7 @@ QVariant TagModel::data(const QModelIndex &index, int role) const
     else if (role == Qt::EditRole)
     {
         if (index.row() >= Tags.size())
-            return "";
+            return QString();
         else
         {
             if (index.column() == 0)

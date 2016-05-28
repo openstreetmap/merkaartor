@@ -154,7 +154,7 @@ QString ImageMapLayer::projection() const
     if (p->theMapAdapter)
         return p->theMapAdapter->projection();
 
-    return "";
+    return QString();
 }
 
 IImageManager* ImageMapLayer::getImageManger()

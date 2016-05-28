@@ -179,7 +179,7 @@
             if (g_Merk_Ignore_Preferences || g_Merk_Reset_Preferences) \
                 m_##Param = Default; \
             else { \
-                QString sColor = Sets->value(#Category"/"#Param, "").toString(); \
+                QString sColor = Sets->value(#Category"/"#Param, QString()).toString(); \
                 if (sColor.isEmpty() || !QColor(sColor).isValid()) \
                     m_##Param = Default; \
                 else \
@@ -216,7 +216,6 @@ Tool::Tool(QString Name, QString Path)
 }
 
 Tool::Tool()
-    : ToolName(""), ToolPath("")
 {
 }
 
@@ -593,7 +592,7 @@ void MerkaartorPreferences::initialize()
         }
     }
     if (!theToolList.contains("Inkscape")) {
-        Tool t("Inkscape", "");
+        Tool t("Inkscape", QString());
         theToolList.insert("Inkscape", t);
     }
 
@@ -605,7 +604,7 @@ void MerkaartorPreferences::initialize()
 	// about what do the fields mean. Same with TMS/servers.
         if (Servers.size()) {
             for (int i=0; i<Servers.size(); i+=7) {
-                WmsServer S(Servers[i], Servers[i+1], Servers[i+2], Servers[i+3], Servers[i+4], Servers[i+5], Servers[i+6], "", "");
+                WmsServer S(Servers[i], Servers[i+1], Servers[i+2], Servers[i+3], Servers[i+4], Servers[i+5], Servers[i+6], QString(), QString());
                 theWmsServerList.addServer(S);
             }
             save();
@@ -615,7 +614,7 @@ void MerkaartorPreferences::initialize()
         Servers = Sets->value("TMS/servers").toStringList();
         if (Servers.size()) {
             for (int i=0; i<Servers.size(); i+=6) {
-                TmsServer S(Servers[i], Servers[i+1], Servers[i+2], "EPSG:900913", Servers[i+3].toInt(), Servers[i+4].toInt(), Servers[i+5].toInt(), "", "");
+                TmsServer S(Servers[i], Servers[i+1], Servers[i+2], "EPSG:900913", Servers[i+3].toInt(), Servers[i+4].toInt(), Servers[i+5].toInt(), QString(), QString());
                 theTmsServerList.addServer(S);
             }
             save();
@@ -663,7 +662,7 @@ M_PARAM_IMPLEMENT_BOOL(rightsidedriving, roadstructure, true);
 M_PARAM_IMPLEMENT_DOUBLE(doubleroaddistance, roadstructure, 20.);
 M_PARAM_IMPLEMENT_DOUBLE(RoundaboutPrecision, roadstructure, 10.);
 M_PARAM_IMPLEMENT_INT(RoundaboutType, misc, 0);
-M_PARAM_IMPLEMENT_STRING(workingdir, general, "");
+M_PARAM_IMPLEMENT_STRING(workingdir, general, QString());
 
 BookmarkList* MerkaartorPreferences::getBookmarks()
 {
@@ -694,7 +693,7 @@ TmsServerList* MerkaartorPreferences::getTmsServers()
 
 /* */
 
-M_PARAM_IMPLEMENT_STRING(SelectedServer, backgroundImage, "");
+M_PARAM_IMPLEMENT_STRING(SelectedServer, backgroundImage, QString());
 
 bool MerkaartorPreferences::getBgVisible() const
 {
@@ -735,7 +734,7 @@ QUuid MerkaartorPreferences::getBackgroundPlugin() const
 {
     QString s;
     if (!g_Merk_Ignore_Preferences && !g_Merk_Reset_Preferences) {
-        s = Sets->value("backgroundImage/BackgroundPlugin", "").toString();
+        s = Sets->value("backgroundImage/BackgroundPlugin", QString()).toString();
     }
     return QUuid(s);
 }
@@ -750,10 +749,10 @@ M_PARAM_IMPLEMENT_INT(CacheSize, backgroundImage, 0);
 
 /* Search */
 M_PARAM_IMPLEMENT_INT(LastMaxSearchResults, search, 999);
-M_PARAM_IMPLEMENT_STRING(LastSearchName, search, "");
-M_PARAM_IMPLEMENT_STRING(LastSearchKey, search, "");
-M_PARAM_IMPLEMENT_STRING(LastSearchValue, search, "");
-M_PARAM_IMPLEMENT_STRING(LastSearchTagSelector, search, "");
+M_PARAM_IMPLEMENT_STRING(LastSearchName, search, QString());
+M_PARAM_IMPLEMENT_STRING(LastSearchKey, search, QString());
+M_PARAM_IMPLEMENT_STRING(LastSearchValue, search, QString());
+M_PARAM_IMPLEMENT_STRING(LastSearchTagSelector, search, QString());
 /* Visuals */
 
 void MerkaartorPreferences::saveMainWindowState(const MainWindow * mainWindow)
@@ -872,9 +871,9 @@ ProjectionItem MerkaartorPreferences::getProjection(QString aProj)
 QString MerkaartorPreferences::getCurrentFilter()
 {
     if (!g_Merk_Ignore_Preferences && !g_Merk_Reset_Preferences)
-        return Sets->value("filter/Type", "").toString();
+        return Sets->value("filter/Type", QString()).toString();
     else
-        return "";
+        return QString();
 }
 
 FiltersList* MerkaartorPreferences::getFiltersList()
@@ -975,7 +974,7 @@ QString MerkaartorPreferences::getOsmWebsite() const
 #endif
 
     if (!u.path().isEmpty())
-        u.setPath("");
+        u.setPath(QString());
 
     return u.toString();
 }
@@ -1005,7 +1004,7 @@ QString MerkaartorPreferences::getOsmUser() const
     if (!g_Merk_Ignore_Preferences && !g_Merk_Reset_Preferences)
         return Sets->value("osm/User").toString();
     else
-        return "";
+        return QString();
 }
 
 void MerkaartorPreferences::setOsmUser(const QString & theValue)
@@ -1019,7 +1018,7 @@ QString MerkaartorPreferences::getOsmPassword() const
     if (!g_Merk_Ignore_Preferences && !g_Merk_Reset_Preferences)
         return Sets->value("osm/Password").toString();
     else
-        return "";
+        return QString();
 }
 
 void MerkaartorPreferences::setOsmPassword(const QString & theValue)
@@ -1187,7 +1186,7 @@ M_PARAM_IMPLEMENT_BOOL(UseAntiAlias, style, true)
 M_PARAM_IMPLEMENT_BOOL(AntiAliasWhilePanning, style, false)
 M_PARAM_IMPLEMENT_BOOL(UseStyledWireframe, style, false)
 M_PARAM_IMPLEMENT_STRING(DefaultStyle, style, ":/Styles/Mapnik.mas")
-M_PARAM_IMPLEMENT_STRING(CustomStyle, style, "")
+M_PARAM_IMPLEMENT_STRING(CustomStyle, style, QString())
 M_PARAM_IMPLEMENT_BOOL(DisableStyleForTracks, style, true)
 M_PARAM_IMPLEMENT_STRINGLIST(TechnicalTags, style, TECHNICAL_TAGS)
 M_PARAM_IMPLEMENT_INT(EditRendering, style, 0)
@@ -1226,7 +1225,7 @@ M_PARAM_IMPLEMENT_BOOL(WireframeView, visual, false)
 
 /* Templates */
 M_PARAM_IMPLEMENT_STRING(DefaultTemplate, templates, ":/Templates/default.mat")
-M_PARAM_IMPLEMENT_STRING(CustomTemplate, templates, "")
+M_PARAM_IMPLEMENT_STRING(CustomTemplate, templates, QString())
 
 /* GPS */
 #ifdef Q_OS_WIN
@@ -1240,7 +1239,7 @@ M_PARAM_IMPLEMENT_STRING(GpsdHost, gps, "localhost")
 M_PARAM_IMPLEMENT_INT(GpsdPort, gps, 2947)
 M_PARAM_IMPLEMENT_BOOL(GpsSaveLog, gps, false)
 M_PARAM_IMPLEMENT_BOOL(GpsMapCenter, gps, false)
-M_PARAM_IMPLEMENT_STRING(GpsLogDir, gps, "")
+M_PARAM_IMPLEMENT_STRING(GpsLogDir, gps, QString())
 M_PARAM_IMPLEMENT_BOOL(GpsSyncTime, gps, false)
 
 M_PARAM_IMPLEMENT_BOOL(ResolveRelations, downloadosm, false)
@@ -1260,7 +1259,7 @@ M_PARAM_IMPLEMENT_BOOL(AutoSourceTag, backgroundImage, true)
 M_PARAM_IMPLEMENT_STRING(MapdustUrl, data, "http://www.mapdust.com/feed?lang=en&ft=wrong_turn,bad_routing,oneway_road,blocked_street,missing_street,wrong_roundabout,missing_speedlimit,other&fd=1&minR=&maxR=")
 M_PARAM_IMPLEMENT_BOOL(GdalConfirmProjection, data, true)
 M_PARAM_IMPLEMENT_BOOL(HasAutoLoadDocument, data, false)
-M_PARAM_IMPLEMENT_STRING(AutoLoadDocumentFilename, data, "")
+M_PARAM_IMPLEMENT_STRING(AutoLoadDocumentFilename, data, QString())
 
 /* Mouse bevaviour */
 #ifdef _MOBILE
@@ -1336,10 +1335,10 @@ QNetworkProxy MerkaartorPreferences::getProxy(const QUrl & requestUrl)
 }
 
 M_PARAM_IMPLEMENT_BOOL(ProxyUse, proxy, false)
-M_PARAM_IMPLEMENT_STRING(ProxyHost, proxy, "")
+M_PARAM_IMPLEMENT_STRING(ProxyHost, proxy, QString())
 M_PARAM_IMPLEMENT_INT(ProxyPort, proxy, 8080)
-M_PARAM_IMPLEMENT_STRING(ProxyUser, proxy, "")
-M_PARAM_IMPLEMENT_STRING(ProxyPassword, proxy, "")
+M_PARAM_IMPLEMENT_STRING(ProxyUser, proxy, QString())
+M_PARAM_IMPLEMENT_STRING(ProxyPassword, proxy, QString())
 
 /* Track */
 M_PARAM_IMPLEMENT_BOOL(ReadonlyTracksDefault, data, false)
@@ -1690,7 +1689,7 @@ QString getDefaultLanguage(bool returnDefault)
         QSettings* sets = getSettings();
         QString lang = sets->value("locale/language").toString();
         delete sets;
-        if (lang == "")
+        if (lang.isEmpty())
             if (returnDefault)
                 lang = QLocale::system().name().split("_")[0];
         return lang;
@@ -1698,7 +1697,7 @@ QString getDefaultLanguage(bool returnDefault)
         if (returnDefault)
             return QLocale::system().name().split("_")[0];
         else
-            return "";
+            return QString();
     }
 }
 

@@ -77,7 +77,7 @@ public:
     Coord position() const;
     void setPosition(const Coord& aCoord);
 
-    bool toXML(QXmlStreamWriter& stream, QProgressDialog * progress, bool strict=false, QString changetsetid="");
+    bool toXML(QXmlStreamWriter& stream, QProgressDialog * progress, bool strict=false, QString changetsetid = QString());
     static Node* fromXML(Document* d, Layer* L, QXmlStreamReader& stream);
 
     bool toGPX(QXmlStreamWriter& stream, QProgressDialog * progress, QString element, bool forExport=false);

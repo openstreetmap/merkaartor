@@ -328,7 +328,7 @@ void CadastreFranceAdapter::fromXML(QXmlStreamReader& stream)
 
 QString CadastreFranceAdapter::toPropertiesHtml()
 {
-    return "";
+    return QString();
 }
 
 bool CadastreFranceAdapter::isTiled() const

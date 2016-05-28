@@ -109,7 +109,7 @@ void ImportCSVDialog::analyze()
             m_quote = "'";
             ui->rbStringSingle->setChecked(true);
         } else {
-            m_quote = "";
+            m_quote.clear();
             ui->rbStringNone->setChecked(true);
         }
 
@@ -319,7 +319,7 @@ void ImportCSVDialog::on_edCustomDelim_textEdited()
 
 void ImportCSVDialog::on_rbStringNone_clicked()
 {
-    m_quote = "";
+    m_quote.clear();
     generatePreview();
 }
 
@@ -430,7 +430,7 @@ bool ImportCSVDialog::import(Layer *aLayer)
 
 void ImportCSVDialog::on_btLoad_clicked()
 {
-    QString f = QFileDialog::getOpenFileName(this, tr("Load CSV import settings"), "", tr("Merkaartor import settings (*.mis)"));
+    QString f = QFileDialog::getOpenFileName(this, tr("Load CSV import settings"), QString(), tr("Merkaartor import settings (*.mis)"));
     if (f.isEmpty())
         return;
 
@@ -500,7 +500,7 @@ void ImportCSVDialog::on_btLoad_clicked()
         item->setData(Qt::UserRole, i);
         ui->lvFields->addItem(item);
     }
-    ui->edFieldName->setText("");
+    ui->edFieldName->setText(QString());
 
     on_edProjection_editingFinished();
 }
