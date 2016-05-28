@@ -34,8 +34,7 @@ TagTemplateWidget::~TagTemplateWidget()
 {
     // No need to delete; will be destroyed automatically by parent + crash if no active widget.
     // delete theMainWidget;
-    for (int i=0; i<theValues.size(); ++i)
-        delete theValues[i];
+    qDeleteAll(theValues);
     delete theSelector;
 }
 
@@ -857,10 +856,8 @@ TagTemplates::TagTemplates()
 
 TagTemplates::~TagTemplates()
 {
-    for (int i=0; i< widgets.size(); ++i)
-        delete widgets[i];
-    for (int i=0; i< items.size(); ++i)
-        delete items[i];
+    qDeleteAll(widgets);
+    qDeleteAll(items);
 }
 
 QWidget* TagTemplates::getWidget(const Feature* F, const MapView* V)

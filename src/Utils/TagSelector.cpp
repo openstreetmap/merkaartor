@@ -964,8 +964,7 @@ TagSelectorOr::TagSelectorOr(const QList<TagSelector*> terms)
 
 TagSelectorOr::~TagSelectorOr()
 {
-    for (int i=0; i<Terms.size(); ++i)
-        delete Terms[i];
+    qDeleteAll(Terms);
 }
 
 TagSelector* TagSelectorOr::copy() const
@@ -1010,8 +1009,7 @@ TagSelectorAnd::TagSelectorAnd(const QList<TagSelector*> terms)
 
 TagSelectorAnd::~TagSelectorAnd()
 {
-    for (int i=0; i<Terms.size(); ++i)
-        delete Terms[i];
+    qDeleteAll(Terms);
 }
 
 TagSelector* TagSelectorAnd::copy() const

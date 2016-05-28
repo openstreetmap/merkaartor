@@ -156,8 +156,7 @@ CommandList::CommandList(QString aDesc, Feature* aFeat)
 
 CommandList::~CommandList(void)
 {
-    for (int i=0; i<Subs.size(); ++i)
-        delete Subs[i];
+    qDeleteAll(Subs);
 }
 
 void CommandList::setReversed(bool val)
@@ -348,8 +347,7 @@ void CommandHistory::cleanup()
     //FIXME Is there a point to this?
     //for (int i=Index; i<Subs.size(); ++i)
     //	Subs[i]->redo();
-    for (int i=0; i<Subs.size(); ++i)
-        delete Subs[i];
+    qDeleteAll(Subs);
     Subs.clear();
     Index = 0;
     Size = 0;
