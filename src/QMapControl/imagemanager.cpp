@@ -47,7 +47,7 @@ ImageManager::~ImageManager()
 QByteArray ImageManager::getData(IMapAdapter* anAdapter, const QString &url)
 {
     QString host = anAdapter->getHost();
-    QString strHash = QString("%1%2").arg(anAdapter->getName()).arg(url);
+    QString strHash = anAdapter->getName() + url;
     QString hash = QString(strHash.toLatin1().toBase64());
     if (hash.size() > 255) {
         QCryptographicHash crypt(QCryptographicHash::Md5);
@@ -77,7 +77,7 @@ QImage ImageManager::getImage(IMapAdapter* anAdapter, const QString &url)
 // 	qDebug() << "ImageManager::getImage";
 
     QString host = anAdapter->getHost();
-    QString strHash = QString("%1%2").arg(anAdapter->getName()).arg(url);
+    QString strHash = anAdapter->getName() + url;
     QString hash = QString(strHash.toLatin1().toBase64());
     if (hash.size() > 255) {
         QCryptographicHash crypt(QCryptographicHash::Md5);
