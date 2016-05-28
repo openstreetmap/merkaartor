@@ -348,8 +348,7 @@ GosmoreAdapter::~GosmoreAdapter()
 
 void GosmoreAdapter::setFile(const QString& fn)
 {
-    if (pak)
-        delete pak;
+    delete pak;
     pak = new QFile(fn, this);
     if (!pak->open(QIODevice::ReadOnly)) {
         QMessageBox::critical(0,QCoreApplication::translate("GosmoreAdapter","No valid file"),QCoreApplication::translate("GosmoreAdapter","File not found."));

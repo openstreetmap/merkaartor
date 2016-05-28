@@ -48,8 +48,7 @@ void Downloader::animate()
 
 void Downloader::setAnimator(QProgressDialog *anAnimator, QLabel* anAnimatorLabel, QProgressBar* anAnimatorBar, bool anAnimate)
 {
-    if (AnimationTimer)
-        delete AnimationTimer;
+    delete AnimationTimer;
 
     AnimatorLabel = anAnimatorLabel;
     AnimatorBar = anAnimatorBar;
