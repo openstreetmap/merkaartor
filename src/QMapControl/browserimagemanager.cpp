@@ -159,7 +159,7 @@ BrowserImageManager::~BrowserImageManager()
     delete timeoutTimer;
 }
 
-QByteArray BrowserImageManager::getData(IMapAdapter* anAdapter, QString url)
+QByteArray BrowserImageManager::getData(IMapAdapter* anAdapter, const QString &url)
 {
     QImage pm = getImage(anAdapter, url);
     QBuffer buf;
@@ -167,7 +167,7 @@ QByteArray BrowserImageManager::getData(IMapAdapter* anAdapter, QString url)
     return buf.buffer();
 }
 
-QImage BrowserImageManager::getImage(IMapAdapter* anAdapter, QString url)
+QImage BrowserImageManager::getImage(IMapAdapter* anAdapter, const QString &url)
 {
 //	QPixmap pm(emptyPixmap);
     QPixmap pm;

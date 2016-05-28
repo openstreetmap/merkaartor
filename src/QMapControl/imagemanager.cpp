@@ -44,7 +44,7 @@ ImageManager::~ImageManager()
     delete net;
 }
 
-QByteArray ImageManager::getData(IMapAdapter* anAdapter, QString url)
+QByteArray ImageManager::getData(IMapAdapter* anAdapter, const QString &url)
 {
     QString host = anAdapter->getHost();
     QString strHash = QString("%1%2").arg(anAdapter->getName()).arg(url);
@@ -72,7 +72,7 @@ QByteArray ImageManager::getData(IMapAdapter* anAdapter, QString url)
     return ba;
 }
 
-QImage ImageManager::getImage(IMapAdapter* anAdapter, QString url)
+QImage ImageManager::getImage(IMapAdapter* anAdapter, const QString &url)
 {
 // 	qDebug() << "ImageManager::getImage";
 
