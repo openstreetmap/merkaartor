@@ -102,6 +102,13 @@ Section "Background plugins" SecBackgroundPlugins
 
 SectionEnd
 
+Section "Translations" SecTranslations
+
+  SetOutPath "$INSTDIR"
+  File /r ..\binaries\bin\translations
+
+SectionEnd
+
 ;--------------------------------
 ;Languages
  
@@ -113,11 +120,13 @@ SectionEnd
   ;Language strings
   LangString DESC_SecMerkaartor ${LANG_ENGLISH} "The program and necessary libraries."
   LangString DESC_SecBackgroundPlugins ${LANG_ENGLISH} "Access to some background layers, including Bing."
+  LangString DESC_SecTranslations ${LANG_ENGLISH} "Install translations for various languages."
 
   ;Assign language strings to sections
   !insertmacro MUI_FUNCTION_DESCRIPTION_BEGIN
     !insertmacro MUI_DESCRIPTION_TEXT ${SecMerkaartor} $(DESC_SecMerkaartor)
     !insertmacro MUI_DESCRIPTION_TEXT ${SecBackgroundPlugins} $(DESC_SecBackgroundPlugins)
+    !insertmacro MUI_DESCRIPTION_TEXT ${SecTranslations} $(DESC_SecTranslations)
   !insertmacro MUI_FUNCTION_DESCRIPTION_END
 
 ;--------------------------------
