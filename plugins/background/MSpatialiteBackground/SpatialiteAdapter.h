@@ -172,7 +172,7 @@ private:
 
     mutable QCache<IFeature::FId, IFeature> m_cache;
 
-    QList<QString> m_tables;
+    QStringList m_tables;
 };
 
 class SpatialiteAdapterFactory : public QObject, public IMapAdapterFactory

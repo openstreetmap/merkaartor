@@ -106,7 +106,7 @@ class BrowserImageManager : public QObject, public IImageManager
     private:
         QPixmap emptyPixmap;
         QPixmap errorPixmap;
-        QList<QString> prefetch;
+        QStringList prefetch;
 
         QQueue<LoadingRequest> loadingRequests;
         bool requestActive;

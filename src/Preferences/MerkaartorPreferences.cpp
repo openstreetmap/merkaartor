@@ -1353,7 +1353,7 @@ namespace {
 // on the platform. This method returns the list of directories to load
 // preference XMLs from.
 QStringList getPreferenceDirectories() {
-    QList<QString> directories;
+    QStringList directories;
     directories << HOMEDIR;
     // TODO: Some files are loaded without this override for Q_OS_MAC. Why?
 #if defined(Q_OS_MAC)
@@ -1373,7 +1373,7 @@ QStringList getPreferenceDirectories() {
 // Returns the list of all alternative locations of the given preference
 // file.
 QStringList getPreferenceFilePaths(QString fileName) {
-    QList<QString> paths;
+    QStringList paths;
     const QStringList directories = getPreferenceDirectories();
     for (QStringList::const_iterator i = directories.begin(); i != directories.end(); ++i) {
 	paths << (*i) + "/" + fileName;

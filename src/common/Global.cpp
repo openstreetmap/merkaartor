@@ -74,12 +74,12 @@ void g_removeFromTagList(quint32 k, quint32 v)
         tagList.remove(k);
 }
 
-QList<QString> g_getTagKeys()
+QStringList g_getTagKeys()
 {
     return tagKeys;
 }
 
-QList<QString> g_getTagValues()
+QStringList g_getTagValues()
 {
     return tagValues;
 }

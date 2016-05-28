@@ -81,7 +81,7 @@ class ImageManager : public QObject, public IImageManager
     private:
         QPixmap emptyPixmap;
         MapNetwork* net;
-        QList<QString> prefetch;
+        QStringList prefetch;
 
         static ImageManager* m_ImageManagerInstance;
 

@@ -168,7 +168,7 @@ TagSelectorIsOneOf* parseTagSelectorIsOneOf(const QString& Expression, int& idx)
         return 0;
     if (!canParseSymbol(Expression, idx, '('))
         return 0;
-    QList<QString> Values;
+    QStringList Values;
     while (true)
     {
         QString Value;
@@ -784,7 +784,7 @@ QString TagSelectorOperator::asExpression(bool) const
 
 /* TAGSELECTORISONEOF */
 
-TagSelectorIsOneOf::TagSelectorIsOneOf(const QString& key, const QList<QString>& values)
+TagSelectorIsOneOf::TagSelectorIsOneOf(const QString& key, const QStringList& values)
     : Key(key), Values(values)
     , specialKey(TagSelectKey_None)
     , specialValue(TagSelectValue_None)
@@ -879,12 +879,7 @@ QString TagSelectorIsOneOf::asExpression(bool) const
     R += "[";
     R += Key;
     R += "] isoneof (";
-    for (int i=0; i<Values.size(); ++i)
-    {
-        if (i)
-            R += " , ";
-        R += Values[i];
-    }
+    R += Values.join(" , ");
     R += ")";
     return R;
 }

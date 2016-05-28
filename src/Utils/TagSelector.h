@@ -83,7 +83,7 @@ class TagSelectorOperator : public TagSelector
 class TagSelectorIsOneOf : public TagSelector
 {
     public:
-        TagSelectorIsOneOf(const QString& key, const QList<QString>& values);
+        TagSelectorIsOneOf(const QString& key, const QStringList& values);
 
         virtual TagSelector* copy() const;
         virtual TagSelectorMatchResult matches(const IFeature* F, qreal PixelPerM) const;
@@ -91,9 +91,9 @@ class TagSelectorIsOneOf : public TagSelector
 
     private:
         QList<QRegExp> rxv;
-        QList<QString> exactMatchv;
+        QStringList exactMatchv;
         QString Key;
-        QList<QString> Values;
+        QStringList Values;
         TagSelectorSpecialKey specialKey;
         TagSelectorSpecialValue specialValue;
 };
