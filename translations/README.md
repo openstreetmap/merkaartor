@@ -20,4 +20,6 @@ terrible happens to Transifex.
     $ tx pull
     $ git commit translations/*.ts
 
-2) During release, the regular qt tools are used to bundle translations.
+2) During release, the regular qt tools are used to bundle translations. Care
+should be taken to include new translations in Merkaartor.pro, so the .qm files
+get generated properly.

@@ -1,5 +1,0 @@
-- Implement printing (with barcode reference)
-- Implement generalization of Walking Paper plugin to own system
-- Implement GDAL writing
-- Implement GeoTIFF writing
-- Implement transaction log to allow replay after a crash
