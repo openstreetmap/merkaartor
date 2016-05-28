@@ -2,6 +2,9 @@
 clone:
     tags: true
     depth: 200
+branches:
+  - master
+  - tea-ci
 build:
   image: teaci/msys$$arch
   pull: true
