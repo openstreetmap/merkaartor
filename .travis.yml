@@ -3,6 +3,7 @@ env:
  - QT=5
 
 install:
+ - sudo add-apt-repository -y universe
  - sudo apt-add-repository -y ppa:ubuntu-sdk-team/ppa
  - sudo apt-get update -qq
  - sudo apt-cache search qt
