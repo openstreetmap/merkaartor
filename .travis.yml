@@ -1,21 +1,30 @@
 sudo: required
 dist: trusty
 env:
- - QT=4
- - QT=5
+    - QT=4
+    - QT=5
+os:
+    - linux
+    - osx
+git:
+    depth: 9999999
 
 install:
- - sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 1397BC53640DB551
- - sudo echo "deb http://archive.ubuntu.com/ubuntu trusty main universe restricted multiverse" \> /etc/apt/sources.list
- - sudo apt-add-repository -y ppa:ubuntu-sdk-team/ppa
- - sudo apt-get update -qq
- - sudo apt-cache search qt
- - sudo apt-get -qq install gdb libgdal-dev libproj-dev
- - sudo apt-get -qq install libqt4-xml libqt4-network libqt4-gui libqt4-svg libqt4-webkit libqt4-dev qt4-qmake
- - sudo apt-get -qq install libqt5xml5* libqt5network5* libqt5gui5* libqt5svg5* libqt5webkit5* libqt5quick5* qtdeclarative5-dev qttools5-dev qtbase5-dev qt5-qmake qtchooser
- - qtchooser -list-versions
-
+    - if [ "${TRAVIS_OS_NAME}" = "linux" ]; then ./ci/travis-linux-install.sh; fi
+    - if [ "${TRAVIS_OS_NAME}" = "osx" ];   then ./ci/travis-osx-install.sh;   fi
 
 script:
-  - qtchooser -qt=qt$QT -run-tool=qmake
-  - make
+    - if [ "${TRAVIS_OS_NAME}" = "linux" ]; then ./ci/travis-linux-script.sh; fi
+    - if [ "${TRAVIS_OS_NAME}" = "osx" ];   then ./ci/travis-osx-script.sh;   fi
+
+deploy:
+    on:
+        branch:
+            - travis-ci
+            - master
+        condition: $TRAVIS_OS_NAME = osx
+    provider: bintray
+    file: binaries/bin/deploy.json
+    user: krakonos
+    key:
+      secure: CMTTCxFAUirt3f+LOOC3ngJKzyqNuLO1il4Vmd8Jq5isAfiiShzs0Qj+8vvsdl7ebyVBQ5srTmwOY1z6B/Jzl5gpHPR3Y2oYt4hFaAkKU6nnlCELX7N/pS1TAXgX8NZjjod0xlfV2700eWDDBRs7gjGWQKhKzRVlMByWYeWV68c=

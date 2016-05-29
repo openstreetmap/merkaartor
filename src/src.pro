@@ -88,6 +88,9 @@ macx {
     QMAKE_INFO_PLIST = $$PWD/../macos/Info.plist
     # This is where we get the the ports from
     INCLUDEPATH += /opt/local/include
+    # Stuff from homebrew comes from here
+    INCLUDEPATH += /usr/local/include
+    LIBS += -L/usr/local/lib
 }
 
 contains(NVIDIA_HACK,1) {
@@ -175,13 +178,6 @@ win32 {
 }
 
 
-unix {
-    CONFIG += link_pkgconfig
-    PKGCONFIG += sqlite3
-}
-win32 {
-    LIBS += -lsqlite3
-}
 
 DEFINES += SHARE_DIR=$${SHARE_DIR}
 INSTALLS += target
@@ -270,16 +266,20 @@ unix {
     QMAKE_CFLAGS += $$system(gdal-config --cflags)
 }
 
+# Setup the PROJ.4
 LIBS += -lproj
+PKGCONFIG += proj
 
 contains (SPATIALITE, 1) {
     DEFINES += USE_SPATIALITE
     unix {
         CONFIG += link_pkgconfig
         PKGCONFIG += spatialite
+        PKGCONFIG += sqlite3
     }
     win32 {
         LIBS += -lspatialite
+        LIBS += -lsqlite3
     }
 }
 contains (PROTOBUF, 1) {
