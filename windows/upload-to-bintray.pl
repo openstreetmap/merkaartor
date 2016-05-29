@@ -14,19 +14,17 @@ for my $file (@ARGV) {
         print "Arch = '$arch'\n";
         my $repo = "";
         my $vstring = "";
+        my $q = "";
         if (length $tag) {
             $repo = "nightly";
             $vstring = "$version-$tag";
+            $q = "?publish=1";
         } else {
             $repo = "release";
             $vstring = "$version";
         }
-        my $cmd = "curl -T '$file' -ukrakonos:$ENV{BINTRAY_TOKEN} https://api.bintray.com/content/krakonos/$repo/Merkaartor/$vstring/$short";
+        my $cmd = "curl -T '$file' -ukrakonos:$ENV{BINTRAY_TOKEN} 'https://api.bintray.com/content/krakonos/$repo/Merkaartor/$vstring/$short$q'";
         system($cmd) and die "Failed to upload file $file."; # And means or... if exit code wasn't 0
-        if ($repo eq "nightly") {
-            #Autopublish nightly builds
-            system "curl -T '$file' -ukrakonos:$ENV{BINTRAY_TOKEN} https://api.bintray.com/content/krakonos/$repo/Merkaartor/$vstring/publish";
-        }
         print "\n";
     } else {
         print "Filename '$file' does not match!\n";
