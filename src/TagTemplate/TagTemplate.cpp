@@ -79,7 +79,7 @@ void TagTemplateWidget::parseCommonElements(const QDomElement& e)
     } else
     if (e.tagName() == "selector") {
         theSelector = TagSelector::parse(e.attribute("expr"));
-    }
+    } else
     if (e.tagName() == "value") {
         TagTemplateWidgetValue* aTCV = TagTemplateWidgetValue::fromXml(e);
         if (aTCV)
