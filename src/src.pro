@@ -8,6 +8,11 @@ include(Custom.pri)
 
 CONFIG += debug_and_release
 
+# This is a workaround to get qDebug() to stdout on Windows
+win32 {
+	CONFIG += console
+}
+
 isEmpty(SYSTEM_QTSA) {
   include(../3rdparty/qtsingleapplication-2.6_1-opensource/src/qtsingleapplication.pri)
 } else {
