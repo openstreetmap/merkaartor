@@ -155,7 +155,7 @@ bool WalkingPapersAdapter::getWalkingPapersDetails(const QUrl& reqUrl, QRectF& b
 
     QString center = QString::fromLatin1(reply->rawHeader("X-Print-Bounds"));
     QStringList sl = center.split(" ");
-    if (!sl.size() == 4)
+    if (sl.size() != 4)
         return false;
 
     QPointF tl(sl[1].toDouble(), sl[0].toDouble());
