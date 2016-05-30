@@ -1,5 +1,5 @@
 #ifndef MERKATOR_ROTATEINTERACTION_H_
-#define MERKATOR_ROTATEINTINTERACTION_H_
+#define MERKATOR_ROTATEINTERACTION_H_
 
 #include "Interaction.h"
 #include "Coord.h"
