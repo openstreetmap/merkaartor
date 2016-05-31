@@ -34,8 +34,7 @@ TagTemplateWidget::~TagTemplateWidget()
 {
     // No need to delete; will be destroyed automatically by parent + crash if no active widget.
     // delete theMainWidget;
-    for (int i=0; i<theValues.size(); ++i)
-        delete theValues[i];
+    qDeleteAll(theValues);
     delete theSelector;
 }
 
@@ -46,23 +45,24 @@ TagTemplateWidget* TagTemplateWidget::fromXml(const QDomElement& e)
     }
 
     TagTemplateWidget* aTW = NULL;
-    if (e.attribute("type") == "combo") {
+    const QString tp = e.attribute("type");
+    if (tp == "combo") {
         aTW = TagTemplateWidgetCombo::fromXml(e);
     } else
-    if (e.attribute("type") == "yesno") {
+    if (tp == "yesno") {
         aTW = TagTemplateWidgetYesno::fromXml(e);
     } else
-    if (e.attribute("type") == "constant") {
+    if (tp == "constant") {
         aTW = TagTemplateWidgetConstant::fromXml(e);
     } else
-    if (e.attribute("type") == "edit") {
+    if (tp == "edit") {
         aTW = TagTemplateWidgetEdit::fromXml(e);
     } else
         Q_ASSERT(false);
 
     if (aTW) {
         aTW->theId = e.attribute("id");
-        aTW->theType = e.attribute("type");
+        aTW->theType = tp;
         aTW->theTag = e.attribute("tag");
     }
 
@@ -79,7 +79,7 @@ void TagTemplateWidget::parseCommonElements(const QDomElement& e)
     } else
     if (e.tagName() == "selector") {
         theSelector = TagSelector::parse(e.attribute("expr"));
-    }
+    } else
     if (e.tagName() == "value") {
         TagTemplateWidgetValue* aTCV = TagTemplateWidgetValue::fromXml(e);
         if (aTCV)
@@ -475,7 +475,7 @@ QWidget* TagTemplateWidgetConstant::getWidget(const Feature* F, const MapView* V
         else
             aLabel->setText(theDescription);
     } else
-        aValue->setText(QString("<b>%1</b>").arg(F->tagValue(theTag, "")));
+        aValue->setText(QString("<b>%1</b>").arg(F->tagValue(theTag, QString())));
 
     theMainWidget = aValue;
     theLabelWidget = aLabel;
@@ -486,7 +486,7 @@ QWidget* TagTemplateWidgetConstant::getWidget(const Feature* F, const MapView* V
 void TagTemplateWidgetConstant::apply(const Feature* F)
 {
     if (!theValues.count()) {
-        ((QLabel*)theMainWidget)->setText(QString("<b>%1</b>").arg(F->tagValue(theTag, "")));
+        ((QLabel*)theMainWidget)->setText(QString("<b>%1</b>").arg(F->tagValue(theTag, QString())));
         return;
     }
     bool Regexp = false;
@@ -512,7 +512,7 @@ void TagTemplateWidgetConstant::apply(const Feature* F)
             emit tagChanged(theTag, newVal);
         }
     } else
-        ((QLabel*)theMainWidget)->setText(QString("<b>%1</b>").arg(F->tagValue(theTag, "")));
+        ((QLabel*)theMainWidget)->setText(QString("<b>%1</b>").arg(F->tagValue(theTag, QString())));
 }
 
 TagTemplateWidgetConstant* TagTemplateWidgetConstant::fromXml(const QDomElement& e)
@@ -700,7 +700,7 @@ TagSelectorMatchResult TagTemplate::matchesTag(const Feature* F, const MapView* 
         {
             if (const Relation* Parent = dynamic_cast<const Relation*>(R->getParent(i)))
                 if (!Parent->isDeleted())
-                    if (Parent->tagValue("type","") == "multipolygon")
+                    if (Parent->tagValue("type",QString()) == "multipolygon")
                         return TagSelect_NoMatch;
         }
     }
@@ -709,7 +709,7 @@ TagSelectorMatchResult TagTemplate::matchesTag(const Feature* F, const MapView* 
     // Special casing for multipolygon relations
     if (const Relation* R = dynamic_cast<const Relation*>(F))
     {
-        if (R->tagValue("type","") == "multipolygon") {
+        if (R->tagValue("type",QString()) == "multipolygon") {
             for (int i=0; i<R->size(); ++i)
                 if (!R->get(i)->isDeleted())
                     if ((res = theSelector->matches(R->get(i),V->pixelPerM())))
@@ -857,10 +857,8 @@ TagTemplates::TagTemplates()
 
 TagTemplates::~TagTemplates()
 {
-    for (int i=0; i< widgets.size(); ++i)
-        delete widgets[i];
-    for (int i=0; i< items.size(); ++i)
-        delete items[i];
+    qDeleteAll(widgets);
+    qDeleteAll(items);
 }
 
 QWidget* TagTemplates::getWidget(const Feature* F, const MapView* V)

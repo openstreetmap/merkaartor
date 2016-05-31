@@ -164,7 +164,7 @@ class TrackLayer : public Layer
 {
     Q_OBJECT
 public:
-    TrackLayer(const QString& aName="", const QString& filaname="");
+    TrackLayer(const QString& aName = QString(), const QString& filaname = QString());
     virtual ~TrackLayer();
 
     virtual LayerWidget* newWidget(void);
@@ -190,7 +190,7 @@ class SpecialLayer : public TrackLayer
 {
     Q_OBJECT
 public:
-    SpecialLayer(const QString& aName="", LayerType type=Layer::UndefinedType, const QString& filename="");
+    SpecialLayer(const QString& aName = QString(), LayerType type=Layer::UndefinedType, const QString& filename = QString());
 
     virtual LayerWidget* newWidget(void);
 

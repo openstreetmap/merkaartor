@@ -128,7 +128,7 @@ private:
     void parseTileSet(QDomElement& tilesetElem, WmscLayer& aLayer);
 
     void setTreeCheckState(Qt::CheckState state, QTreeWidgetItem *twi);
-    void setStatus( WMSStatus status, QString message = "" );
+    void setStatus( WMSStatus status, QString message = QString() );
 
     void refreshStyles();
 

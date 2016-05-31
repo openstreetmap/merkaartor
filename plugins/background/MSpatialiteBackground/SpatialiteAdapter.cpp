@@ -181,7 +181,7 @@ void SpatialiteAdapter::setFile(const QString& fn)
     m_dbName = fn;
     m_loaded = true;
 
-    foreach (QString s, m_tables)
+    foreach (const QString &s, m_tables)
         initTable(s);
 
     emit (forceRefresh());
@@ -189,7 +189,7 @@ void SpatialiteAdapter::setFile(const QString& fn)
 
 QString	SpatialiteAdapter::getHost() const
 {
-    return "";
+    return QString();
 }
 
 QUuid SpatialiteAdapter::getId() const

@@ -24,7 +24,7 @@ bool canParseSymbol(const QString& Expression, int& idx, char Symbol)
 
 bool canParseString(const QString& Expression, int& idx, QString& Key)
 {
-    Key = "";
+    Key.clear();
     skipWhite(Expression,idx);
     if (idx >= Expression.length())
         return false;
@@ -49,7 +49,7 @@ bool canParseString(const QString& Expression, int& idx, QString& Key)
 
 bool canParseValue(const QString& Expression, int& idx, QString& Key)
 {
-    Key = "";
+    Key.clear();
     skipWhite(Expression,idx);
     if (idx >= Expression.length())
         return false;
@@ -168,7 +168,7 @@ TagSelectorIsOneOf* parseTagSelectorIsOneOf(const QString& Expression, int& idx)
         return 0;
     if (!canParseSymbol(Expression, idx, '('))
         return 0;
-    QList<QString> Values;
+    QStringList Values;
     while (true)
     {
         QString Value;
@@ -773,18 +773,12 @@ TagSelectorMatchResult TagSelectorOperator::matches(const IFeature* F, qreal Pix
 
 QString TagSelectorOperator::asExpression(bool) const
 {
-    QString R;
-    R += "[";
-    R += Key;
-    R += "]";
-    R += Oper;
-    R += Value;
-    return R;
+    return "[" + Key + "]" + Oper + Value;
 }
 
 /* TAGSELECTORISONEOF */
 
-TagSelectorIsOneOf::TagSelectorIsOneOf(const QString& key, const QList<QString>& values)
+TagSelectorIsOneOf::TagSelectorIsOneOf(const QString& key, const QStringList& values)
     : Key(key), Values(values)
     , specialKey(TagSelectKey_None)
     , specialValue(TagSelectValue_None)
@@ -875,18 +869,7 @@ TagSelectorMatchResult TagSelectorIsOneOf::matches(const IFeature* F, qreal /*Pi
 
 QString TagSelectorIsOneOf::asExpression(bool) const
 {
-    QString R;
-    R += "[";
-    R += Key;
-    R += "] isoneof (";
-    for (int i=0; i<Values.size(); ++i)
-    {
-        if (i)
-            R += " , ";
-        R += Values[i];
-    }
-    R += ")";
-    return R;
+    return "[" + Key + "] isoneof (" + Values.join(" , ") + ")";
 }
 
 /* TAGSELECTORTYPEIS */
@@ -920,10 +903,7 @@ TagSelectorMatchResult TagSelectorTypeIs::matches(const IFeature* F, qreal /*Pix
 
 QString TagSelectorTypeIs::asExpression(bool) const
 {
-    QString R;
-    R += "Type is ";
-    R += Type;
-    return R;
+    return "Type is " + Type;
 }
 
 /* TAGSELECTORHASTAGS */
@@ -950,9 +930,7 @@ TagSelectorMatchResult TagSelectorHasTags::matches(const IFeature* F, qreal /*Pi
 
 QString TagSelectorHasTags::asExpression(bool) const
 {
-    QString R;
-    R += "HasTags";
-    return R;
+    return "HasTags";
 }
 
 /* TAGSELECTOROR */
@@ -964,8 +942,7 @@ TagSelectorOr::TagSelectorOr(const QList<TagSelector*> terms)
 
 TagSelectorOr::~TagSelectorOr()
 {
-    for (int i=0; i<Terms.size(); ++i)
-        delete Terms[i];
+    qDeleteAll(Terms);
 }
 
 TagSelector* TagSelectorOr::copy() const
@@ -1010,8 +987,7 @@ TagSelectorAnd::TagSelectorAnd(const QList<TagSelector*> terms)
 
 TagSelectorAnd::~TagSelectorAnd()
 {
-    for (int i=0; i<Terms.size(); ++i)
-        delete Terms[i];
+    qDeleteAll(Terms);
 }
 
 TagSelector* TagSelectorAnd::copy() const
@@ -1071,12 +1047,8 @@ TagSelectorMatchResult TagSelectorNot::matches(const IFeature* F, qreal PixelPer
 QString TagSelectorNot::asExpression(bool /* Precedence */) const
 {
     if (!Term)
-        return "";
-    QString R;
-    R += "not(";
-    R += Term->asExpression(true);
-    R += ")";
-    return R;
+        return QString();
+    return "not(" + Term->asExpression(true) + ")";
 }
 
 /* TAGSELECTORPARENT */
@@ -1116,12 +1088,8 @@ TagSelectorMatchResult TagSelectorParent::matches(const IFeature* F, qreal Pixel
 QString TagSelectorParent::asExpression(bool /* Precedence */) const
 {
     if (!Term)
-        return "";
-    QString R;
-    R += " parent(";
-    R += Term->asExpression(true);
-    R += ")";
-    return R;
+        return QString();
+    return " parent(" + Term->asExpression(true) + ")";
 }
 
 /* TAGSELECTORFALSE */
@@ -1142,9 +1110,7 @@ TagSelectorMatchResult TagSelectorFalse::matches(const IFeature* /* F */, qreal 
 
 QString TagSelectorFalse::asExpression(bool /* Precedence */) const
 {
-    QString R;
-    R += " false ";
-    return R;
+    return " false ";
 }
 
 /* TAGSELECTORTRUE */
@@ -1165,9 +1131,7 @@ TagSelectorMatchResult TagSelectorTrue::matches(const IFeature* /* F */, qreal /
 
 QString TagSelectorTrue::asExpression(bool /* Precedence */) const
 {
-    QString R;
-    R += " true ";
-    return R;
+    return " true ";
 }
 
 /* TAGSELECTORDEFAULT */
@@ -1198,9 +1162,6 @@ TagSelectorMatchResult TagSelectorDefault::matches(const IFeature* F, qreal Pixe
 
 QString TagSelectorDefault::asExpression(bool /* Precedence */) const
 {
-    QString R;
-    R += " [Default] ";
-    R += Term->asExpression(true);
-    return R;
+    return " [Default] " + Term->asExpression(true);
 }
 

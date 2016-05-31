@@ -51,7 +51,7 @@ Layer* MapControl::getLayer(const QString& layername) const
 	return layermanager->getLayer(layername);
 }
 
-QList<QString> MapControl::getLayers() const
+QStringList MapControl::getLayers() const
 {
 	return layermanager->getLayers();
 }

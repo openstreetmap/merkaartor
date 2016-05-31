@@ -57,7 +57,7 @@ public:
     const QPainterPath& getPath() const;
     void buildPath(Projection const &theProjection);
 
-    virtual bool toXML(QXmlStreamWriter& stream, QProgressDialog * progress, bool strict=false, QString changetsetid="");
+    virtual bool toXML(QXmlStreamWriter& stream, QProgressDialog * progress, bool strict=false, QString changetsetid = QString());
     static Relation* fromXML(Document* d, Layer* L, QXmlStreamReader& stream);
 
     virtual QString toHtml();

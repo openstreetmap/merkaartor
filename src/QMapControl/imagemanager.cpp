@@ -44,10 +44,10 @@ ImageManager::~ImageManager()
     delete net;
 }
 
-QByteArray ImageManager::getData(IMapAdapter* anAdapter, QString url)
+QByteArray ImageManager::getData(IMapAdapter* anAdapter, const QString &url)
 {
     QString host = anAdapter->getHost();
-    QString strHash = QString("%1%2").arg(anAdapter->getName()).arg(url);
+    QString strHash = anAdapter->getName() + url;
     QString hash = QString(strHash.toLatin1().toBase64());
     if (hash.size() > 255) {
         QCryptographicHash crypt(QCryptographicHash::Md5);
@@ -72,12 +72,12 @@ QByteArray ImageManager::getData(IMapAdapter* anAdapter, QString url)
     return ba;
 }
 
-QImage ImageManager::getImage(IMapAdapter* anAdapter, QString url)
+QImage ImageManager::getImage(IMapAdapter* anAdapter, const QString &url)
 {
 // 	qDebug() << "ImageManager::getImage";
 
     QString host = anAdapter->getHost();
-    QString strHash = QString("%1%2").arg(anAdapter->getName()).arg(url);
+    QString strHash = anAdapter->getName() + url;
     QString hash = QString(strHash.toLatin1().toBase64());
     if (hash.size() > 255) {
         QCryptographicHash crypt(QCryptographicHash::Md5);
@@ -154,10 +154,7 @@ void ImageManager::receivedData(const QByteArray& ba, const QHash<QString, QStri
         }
     }
 
-    if (prefetch.contains(hash))
-    {
-        prefetch.removeAt(prefetch.indexOf(hash));
-    }
+    prefetch.removeOne(hash);
     emit(dataReceived());
 }
 

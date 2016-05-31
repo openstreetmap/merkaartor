@@ -52,7 +52,7 @@ YahooTiledMapAdapter::YahooTiledMapAdapter()
     : theImageManager(0)
 
 {
-    host = "";
+    host.clear();
     serverPath = "qrc:/Html/ymap.html?";
     tilesize = 512;
     max_zoom = 17;
@@ -69,7 +69,7 @@ YahooTiledMapAdapter::~YahooTiledMapAdapter()
 
 QString	YahooTiledMapAdapter::getHost() const
 {
-    return "";
+    return QString();
 }
 
 QUuid YahooTiledMapAdapter::getId() const

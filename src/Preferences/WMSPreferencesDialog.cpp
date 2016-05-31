@@ -363,7 +363,7 @@ void WMSPreferencesDialog::showCapabilities(void)
 #else
 #define theQuery theUrl
 #endif
-    if ((theUrl.host() == "") || (theUrl.path() == "")) {
+    if (theUrl.host().isEmpty() || theUrl.path().isEmpty()) {
         QMessageBox::critical(this, tr("Merkaartor: GetCapabilities"), tr("Address and Path cannot be blank."), QMessageBox::Ok);
     }
 
@@ -671,13 +671,13 @@ void WMSPreferencesDialog::setStatus( WMSStatus status, QString message ) {
             lblStatus->setText(tr("Could not get capabilities: %1").arg(message));
             break;
         default:
-            lblStatus->setText("");
+            lblStatus->setText(QString());
     }
 
     if (status > Error) {
         lblStatus->setStyleSheet("QLabel { color : red; }");
     } else {
-        lblStatus->setStyleSheet("");
+        lblStatus->setStyleSheet(QString());
     }
 }
 

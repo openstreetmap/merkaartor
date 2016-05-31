@@ -85,9 +85,9 @@ class MapControl : public QWidget
 		
 		//! returns the names of all layers
 		/*!
-		 * @return returns a QList with the names of all layers
+		 * @return returns a QStringList with the names of all layers
 		 */
-		QList<QString> getLayers() const;
+		QStringList getLayers() const;
 		
 		//! returns the number of existing layers
 		/*!

@@ -51,7 +51,7 @@ YahooLegalMapAdapter::~YahooLegalMapAdapter()
 
 QString	YahooLegalMapAdapter::getHost() const
 {
-    return "";
+    return QString();
 }
 
 QUuid YahooLegalMapAdapter::getId() const
@@ -77,7 +77,7 @@ QString YahooLegalMapAdapter::projection() const
 QString YahooLegalMapAdapter::getQuery(const QRectF& wgs84Bbox, const QRectF& /*projBbox*/, const QRect& size) const
 {
     if (size.width() < 150 || size.height() < 150)
-        return "";
+        return QString();
 
     return QString()
                         .append("qrc:/Html/ymap.html?")

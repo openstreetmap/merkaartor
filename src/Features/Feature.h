@@ -311,13 +311,13 @@ public:
     void notifyParents(int Id);
 
     static void fromXML(QXmlStreamReader& stream, Feature* F);
-    virtual void toXML(QXmlStreamWriter& stream, bool strict, QString changetsetid="");
+    virtual void toXML(QXmlStreamWriter& stream, bool strict, QString changetsetid = QString());
 
     virtual QString toXML(int lvl=0, QProgressDialog * progress=NULL);
-    virtual bool toXML(QXmlStreamWriter& stream, QProgressDialog * progress=NULL, bool strict=false, QString changetsetid="") = 0;
+    virtual bool toXML(QXmlStreamWriter& stream, QProgressDialog * progress=NULL, bool strict=false, QString changetsetid = QString()) = 0;
 
     QString toMainHtml(QString type, QString systemtype);
-    virtual QString toHtml() { return ""; }
+    virtual QString toHtml() { return QString(); }
 
     virtual QString getClass() const = 0;
     virtual char getType() const = 0;

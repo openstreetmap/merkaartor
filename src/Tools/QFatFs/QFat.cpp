@@ -288,7 +288,7 @@ FatError QFat::setCurrentTocs(const QString &path)
         m_curTocsPath = path;
         return FatNoError;
     } else {
-        m_curTocsPath = "";
+        m_curTocsPath.clear();
         return FatDirNotFound;
     }
 }

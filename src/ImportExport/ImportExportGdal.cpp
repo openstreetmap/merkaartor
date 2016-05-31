@@ -473,8 +473,7 @@ bool ImportExportGdal::importGDALDataset(GDALDataset* poDS, Layer* aLayer, bool 
     QApplication::restoreOverrideCursor();
 #endif
 
-    if (toWGS84)
-        delete toWGS84;
+    delete toWGS84;
 
     if (progress.wasCanceled())
         return false;

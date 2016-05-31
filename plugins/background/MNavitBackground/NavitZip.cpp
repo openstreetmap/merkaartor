@@ -27,14 +27,12 @@ NavitZip::NavitZip()
 
 NavitZip::~NavitZip()
 {
-    if (zipFile)
-        delete zipFile;
+    delete zipFile;
 }
 
 void* NavitZip::setZip(QString fn)
 {
-    if (zipFile)
-        delete zipFile;
+    delete zipFile;
     zipFile = new QFile(fn);
     if (!zipFile->open(QIODevice::ReadOnly)) {
         return NULL;

@@ -269,7 +269,7 @@ QString GeoTiffAdapter::getSourceTag() const
 
 QString	GeoTiffAdapter::getHost() const
 {
-    return "";
+    return QString();
 }
 
 IMapAdapter::Type GeoTiffAdapter::getType() const

@@ -77,8 +77,8 @@ class BrowserImageManager : public QObject, public IImageManager
          * @param path the path to the image
          * @return the pixmap of the asked image
          */
-        QImage getImage(IMapAdapter* anAdapter, QString url);
-        QByteArray getData(IMapAdapter* anAdapter, QString url);
+        QImage getImage(IMapAdapter* anAdapter, const QString &url);
+        QByteArray getData(IMapAdapter* anAdapter, const QString &url);
 
         //QPixmap prefetchImage(const QString& host, const QString& path);
         QImage prefetchImage(IMapAdapter* anAdapter, int x, int y, int z);
@@ -106,7 +106,7 @@ class BrowserImageManager : public QObject, public IImageManager
     private:
         QPixmap emptyPixmap;
         QPixmap errorPixmap;
-        QList<QString> prefetch;
+        QStringList prefetch;
 
         QQueue<LoadingRequest> loadingRequests;
         bool requestActive;

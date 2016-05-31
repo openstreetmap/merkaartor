@@ -29,10 +29,7 @@ NavitBin::NavitBin()
 
 NavitBin::~NavitBin()
 {
-    if (zip) {
-        delete zip;
-        zip = NULL;
-    }
+    delete zip;
 }
 
 bool NavitBin::setFilename(const QString& filename)

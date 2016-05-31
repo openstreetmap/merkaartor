@@ -270,7 +270,7 @@ Painter Painter::fromXML(const QDomElement& e, QString filename)
             QDomElement t = n.toElement();
             if (t.tagName() == "selector")
             {
-                if (t.attribute("key") != "")
+                if (!t.attribute("key").isEmpty())
                     Pairs.push_back(qMakePair(t.attribute("key"),t.attribute("value")));
                 else
                 {

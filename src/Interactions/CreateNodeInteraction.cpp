@@ -21,7 +21,7 @@ CreateNodeInteraction::CreateNodeInteraction(MainWindow* aMain)
 
 CreateNodeInteraction::~CreateNodeInteraction(void)
 {
-    SAFE_DELETE(theMoveInteraction);
+    delete theMoveInteraction;
 }
 
 QString CreateNodeInteraction::toHtml()

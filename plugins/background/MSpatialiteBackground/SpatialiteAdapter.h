@@ -100,14 +100,14 @@ public:
     /*!
      * @return the source tag
      */
-    virtual QString	getSourceTag		() const { return ""; }
+    virtual QString	getSourceTag		() const { return QString(); }
     virtual void setSourceTag (const QString& ) {};
 
     //! returns the Url of the usage license
     /*!
      * @return the Url of the usage license
      */
-    virtual QString	getLicenseUrl() const {return "";}
+    virtual QString	getLicenseUrl() const {return QString();}
 
 
     virtual int		getAdaptedZoom() const { return -1; }
@@ -118,8 +118,8 @@ public:
     virtual void	zoom_out() {}
 
     virtual bool	isValid(int, int, int) const { return true; }
-    virtual QString getQuery(int, int, int)  const { return ""; }
-    virtual QString getQuery(const QRectF& , const QRectF& , const QRect& ) const { return ""; }
+    virtual QString getQuery(int, int, int)  const { return QString(); }
+    virtual QString getQuery(const QRectF& , const QRectF& , const QRect& ) const { return QString(); }
     virtual QPixmap getPixmap(const QRectF& wgs84Bbox, const QRectF& projBbox, const QRect& size) const ;
     virtual const QList<IFeature*>* getPaths(const QRectF& wgs84Bbox, const IProjection* projection) const;
 
@@ -172,7 +172,7 @@ private:
 
     mutable QCache<IFeature::FId, IFeature> m_cache;
 
-    QList<QString> m_tables;
+    QStringList m_tables;
 };
 
 class SpatialiteAdapterFactory : public QObject, public IMapAdapterFactory

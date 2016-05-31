@@ -198,13 +198,9 @@ MemoryBackend::~MemoryBackend()
 Node * MemoryBackend::allocNode(ILayer* l, const Node& other)
 {
     Node* f;
-    try {
-        f = new Node(other);
-        if (!f)
-            return NULL;
-    } catch (...) { // Out-of-memory?
+    f = new (std::nothrow) Node(other);
+    if (!f)
         return NULL;
-    }
 
     p->AllocFeatures[f] = f->BBox;
     if (!f->BBox.isNull()) {
@@ -216,13 +212,10 @@ Node * MemoryBackend::allocNode(ILayer* l, const Node& other)
 Node * MemoryBackend::allocNode(ILayer* l, const QPointF& aCoord)
 {
     Node* f;
-    try {
-        f = new Node(aCoord);
-        if (!f)
-            return NULL;
-    } catch (...) { // Out-of-memory?
+    f = new (std::nothrow) Node(aCoord);
+    if (!f)
         return NULL;
-    }
+
     p->AllocFeatures[f] = f->BBox;
     if (!f->BBox.isNull()) {
         indexAdd(l, f->BBox, f);
@@ -233,13 +226,10 @@ Node * MemoryBackend::allocNode(ILayer* l, const QPointF& aCoord)
 TrackNode * MemoryBackend::allocTrackNode(ILayer* l, const QPointF& aCoord)
 {
     TrackNode* f;
-    try {
-        f = new TrackNode(aCoord);
-        if (!f)
-            return NULL;
-    } catch (...) { // Out-of-memory?
+    f = new (std::nothrow) TrackNode(aCoord);
+    if (!f)
         return NULL;
-    }
+
     p->AllocFeatures[f] = f->BBox;
     if (!f->BBox.isNull()) {
         indexAdd(l, f->BBox, f);
@@ -250,13 +240,10 @@ TrackNode * MemoryBackend::allocTrackNode(ILayer* l, const QPointF& aCoord)
 PhotoNode * MemoryBackend::allocPhotoNode(ILayer* l, const QPointF& aCoord)
 {
     PhotoNode* f;
-    try {
-        f = new PhotoNode(aCoord);
-        if (!f)
-            return NULL;
-    } catch (...) { // Out-of-memory?
+    f = new (std::nothrow) PhotoNode(aCoord);
+    if (!f)
         return NULL;
-    }
+
     p->AllocFeatures[f] = f->BBox;
     if (!f->BBox.isNull()) {
         indexAdd(l, f->BBox, f);
@@ -267,13 +254,9 @@ PhotoNode * MemoryBackend::allocPhotoNode(ILayer* l, const QPointF& aCoord)
 PhotoNode * MemoryBackend::allocPhotoNode(ILayer* l, const Node& other)
 {
     PhotoNode* f;
-    try {
-        f = new PhotoNode(other);
-        if (!f)
-            return NULL;
-    } catch (...) { // Out-of-memory?
+    f = new (std::nothrow) PhotoNode(other);
+    if (!f)
         return NULL;
-    }
 
     p->AllocFeatures[f] = f->BBox;
     if (!f->BBox.isNull()) {
@@ -285,13 +268,9 @@ PhotoNode * MemoryBackend::allocPhotoNode(ILayer* l, const Node& other)
 PhotoNode * MemoryBackend::allocPhotoNode(ILayer* l, const TrackNode& other)
 {
     PhotoNode* f;
-    try {
-        f = new PhotoNode(other);
-        if (!f)
-            return NULL;
-    } catch (...) { // Out-of-memory?
+    f = new (std::nothrow) PhotoNode(other);
+    if (!f)
         return NULL;
-    }
 
     p->AllocFeatures[f] = f->BBox;
     if (!f->BBox.isNull()) {
@@ -302,27 +281,16 @@ PhotoNode * MemoryBackend::allocPhotoNode(ILayer* l, const TrackNode& other)
 
 Node * MemoryBackend::allocVirtualNode(const QPointF& aCoord)
 {
-    Node* f;
-    try {
-        f = new Node(aCoord);
-        if (!f)
-            return NULL;
-    } catch (...) { // Out-of-memory?
-        return NULL;
-    }
-    return f;
+    return new (std::nothrow) Node(aCoord);
 }
 
 Way * MemoryBackend::allocWay(ILayer* /*l*/)
 {
     Way* f;
-    try {
-        f = new Way();
-        if (!f)
-            return NULL;
-    } catch (...) { // Out-of-memory?
+    f = new (std::nothrow) Way();
+    if (!f)
         return NULL;
-    }
+
     p->AllocFeatures[f] = CoordBox();
     return f;
 }
@@ -330,13 +298,10 @@ Way * MemoryBackend::allocWay(ILayer* /*l*/)
 Way * MemoryBackend::allocWay(ILayer* /*l*/, const Way& other)
 {
     Way* f;
-    try {
-        f = new Way(other);
-        if (!f)
-            return NULL;
-    } catch (...) { // Out-of-memory?
+    f = new (std::nothrow) Way(other);
+    if (!f)
         return NULL;
-    }
+
     p->AllocFeatures[f] = CoordBox();
     return f;
 }
@@ -344,13 +309,10 @@ Way * MemoryBackend::allocWay(ILayer* /*l*/, const Way& other)
 Relation * MemoryBackend::allocRelation(ILayer* /*l*/)
 {
     Relation* f;
-    try {
-        f = new Relation();
-        if (!f)
-            return NULL;
-    } catch (...) { // Out-of-memory?
+    f = new (std::nothrow) Relation();
+    if (!f)
         return NULL;
-    }
+
     p->AllocFeatures[f] = CoordBox();
     return f;
 }
@@ -358,13 +320,10 @@ Relation * MemoryBackend::allocRelation(ILayer* /*l*/)
 Relation * MemoryBackend::allocRelation(ILayer* /*l*/, const Relation& other)
 {
     Relation* f;
-    try {
-        f = new Relation(other);
-        if (!f)
-            return NULL;
-    } catch (...) { // Out-of-memory?
+    f = new (std::nothrow) Relation(other);
+    if (!f)
         return NULL;
-    }
+
     p->AllocFeatures[f] = CoordBox();
     return f;
 }
@@ -372,13 +331,10 @@ Relation * MemoryBackend::allocRelation(ILayer* /*l*/, const Relation& other)
 TrackSegment * MemoryBackend::allocSegment(ILayer* /*l*/)
 {
     TrackSegment* f;
-    try {
-        f = new TrackSegment();
-        if (!f)
-            return NULL;
-    } catch (...) { // Out-of-memory?
+    f = new (std::nothrow) TrackSegment();
+    if (!f)
         return NULL;
-    }
+
     p->AllocFeatures[f] = CoordBox();
     return f;
 }

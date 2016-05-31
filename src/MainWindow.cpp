@@ -166,7 +166,6 @@ void SetOptionValue(RendererOptions& options,
 MainWindow::MainWindow(QWidget *parent)
         : QMainWindow(parent)
         , ui(new Ui::MainWindow)
-        , currentProjectFile("")
         , theDocument(0)
         , gpsRecLayer(0)
         , curGpsTrackSegment(0)
@@ -1122,7 +1121,7 @@ void MainWindow::createToolBarManager()
     AddActionsIntoManager(toolBarManager, ui->menuWindow, tr("Windows"));
     AddActionsIntoManager(toolBarManager, ui->menuHelp, tr("Help"));
 
-    toolBarManager->addToolBar(ui->toolBar, "");
+    toolBarManager->addToolBar(ui->toolBar, QString());
 
     QSettings* Sets = M_PREFS->getQSettings();
     if (!g_Merk_Ignore_Preferences && !g_Merk_Reset_Preferences)
@@ -1570,7 +1569,7 @@ void MainWindow::on_fileImportAction_triggered()
     QStringList fileNames = QFileDialog::getOpenFileNames(
                     this,
                     tr("Import file"),
-                    "", p->FILTER_IMPORT_SUPPORTED);
+                    QString(), p->FILTER_IMPORT_SUPPORTED);
 
     if (fileNames.isEmpty())
         return;
@@ -1946,7 +1945,7 @@ void MainWindow::loadUrl(const QUrl& theUrl)
 	  foreach (const QString &tag, addtags) {
 	    QStringList kv = tag.split("=");
 	    QString k=kv[0];
-	    QString v="";
+	    QString v;
 	    if (kv.size()>0) {
 	      v=kv[1];
 	      if (k=="name") poiName=v;
@@ -2022,7 +2021,7 @@ void MainWindow::on_fileOpenAction_triggered()
     QStringList fileNames = QFileDialog::getOpenFileNames(
                     this,
                     tr("Open files"),
-                    "", p->FILTER_OPEN_SUPPORTED);
+                    QString(), p->FILTER_OPEN_SUPPORTED);
 
     loadFiles(fileNames);
 }
@@ -2401,7 +2400,7 @@ void MainWindow::on_fileNewAction_triggered()
                 this, SLOT(onLoadingfinished(ImageMapLayer*)), Qt::QueuedConnection);
         theDirty->updateList();
 
-        currentProjectFile = "";
+        currentProjectFile.clear();
         setWindowTitle(QString("%1 - %2").arg(theDocument->title()).arg(p->title));
 
         updateProjectionMenu();
@@ -2911,7 +2910,7 @@ void MainWindow::on_createRelationAction_triggered()
     theList->add(
         new AddFeatureCommand(document()->getDirtyOrOriginLayer(), R, true));
     for (int i = 0; i < p->theProperties->selectionSize(); ++i)
-        theList->add(new RelationAddFeatureCommand(R, "", p->theProperties->selection(i)));
+        theList->add(new RelationAddFeatureCommand(R, QString(), p->theProperties->selection(i)));
     theDocument->addHistory(theList);
     p->theProperties->setSelection(R);
     invalidateView();
@@ -3120,7 +3119,7 @@ void MainWindow::toolsPreferencesAction_triggered(bool focusData)
 
 void MainWindow::preferencesChanged(PreferencesDialog* prefs)
 {
-    QString qVer = QString(qVersion()).replace(".", "");
+    QString qVer = QString(qVersion()).replace('.', QChar());
     int iQVer = qVer.toInt();
     if (iQVer < 451) {
         QApplication::setStyle(QStyleFactory::create("skulpture"));
@@ -3201,7 +3200,7 @@ void MainWindow::on_fileSaveAsTemplateAction_triggered()
 
 void MainWindow::on_fileSaveAction_triggered()
 {
-    if (currentProjectFile != "") {
+    if (!currentProjectFile.isEmpty()) {
         saveDocument(currentProjectFile);
     } else {
         on_fileSaveAsAction_triggered();

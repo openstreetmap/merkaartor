@@ -607,7 +607,7 @@ void FeaturePainter::drawPointLabel(QPointF C, QString str, QString strBg, QPain
 
     if (!str.isEmpty()) {
         modX = - (metrics.width(str)/2);
-        if (DrawIcon && (IconName != "") )
+        if (DrawIcon && !IconName.isEmpty() )
         {
             QImage pm(IconName);
             modY = - pm.height();
@@ -619,7 +619,7 @@ void FeaturePainter::drawPointLabel(QPointF C, QString str, QString strBg, QPain
     }
     if (DrawLabelBackground && !strBg.isEmpty()) {
         modX = - (metrics.width(strBg)/2);
-        if (DrawIcon && (IconName != "") )
+        if (DrawIcon && !IconName.isEmpty() )
         {
             QImage pm(IconName);
             modY = - pm.height();
@@ -656,8 +656,8 @@ void FeaturePainter::drawLabel(Node* Pt, QPainter* thePainter, MapRenderer* theR
     if (!DrawLabel)
         return;
 
-    QString str = Pt->tagValue(getLabelTag(), "");
-    QString strBg = Pt->tagValue(getLabelBackgroundTag(), "");
+    QString str = Pt->tagValue(getLabelTag(), QString());
+    QString strBg = Pt->tagValue(getLabelBackgroundTag(), QString());
 
     if (str.isEmpty() && strBg.isEmpty())
         return;
@@ -671,8 +671,8 @@ void FeaturePainter::drawLabel(Way* R, QPainter* thePainter, MapRenderer* theRen
     if (!DrawLabel)
         return;
 
-    QString str = R->tagValue(getLabelTag(), "");
-    QString strBg = R->tagValue(getLabelBackgroundTag(), "");
+    QString str = R->tagValue(getLabelTag(), QString());
+    QString strBg = R->tagValue(getLabelBackgroundTag(), QString());
     if (str.isEmpty() && strBg.isEmpty())
         return;
 

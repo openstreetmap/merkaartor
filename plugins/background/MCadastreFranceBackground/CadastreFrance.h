@@ -96,7 +96,7 @@ public:
     /*!
      * @return the Url of the usage license
      */
-    virtual QString	getLicenseUrl() const {return "";}
+    virtual QString	getLicenseUrl() const {return QString();}
 
     virtual int		getAdaptedZoom() const;
     virtual int 	getAdaptedMinZoom(const QRectF &) const;

@@ -17,7 +17,7 @@
 
 TmsServer::TmsServer()
 {
-    TmsServer(QApplication::translate("MerkaartorPreferences","New Server"), "", "", "EPSG:3857", 256, 0, 17, "", "");
+    TmsServer(QApplication::translate("MerkaartorPreferences","New Server"), QString(), QString(), "EPSG:3857", 256, 0, 17, QString(), QString());
 }
 
 TmsServer::TmsServer(QString Name, QString Adress, QString Path, QString Projection, int tileSize, int minZoom, int maxZoom, QString SourceTag, QString LicenseUrl, QString baseUrl, bool Origin, bool Deleted)
@@ -34,7 +34,7 @@ TmsServer::TmsServer(QString Name, QString Adress, QString Path, QString Project
     , TmsBlOrigin(Origin)
     , deleted(Deleted)
 {
-    if (Name == "") {
+    if (Name.isEmpty()) {
         TmsName = QApplication::translate("MerkaartorPreferences","New Server");
     }
 }

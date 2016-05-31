@@ -100,7 +100,7 @@ public:
     virtual int 	getAdaptedMinZoom(const QRectF &bbox) const;
     virtual int		getAdaptedMaxZoom(const QRectF &bbox) const;
 
-    virtual QString getQuery(const QRectF& , const QRectF& , const QRect&) const { return ""; }
+    virtual QString getQuery(const QRectF& , const QRectF& , const QRect&) const { return QString(); }
     virtual bool isTiled() const { return true; }
 
     virtual QRectF	getBoundingbox() const;
@@ -111,7 +111,7 @@ public:
 
     virtual bool toXML(QXmlStreamWriter& /*stream*/) { return true; }
     virtual void fromXML(QXmlStreamReader& /*xParent*/) {}
-    virtual QString toPropertiesHtml() {return "";}
+    virtual QString toPropertiesHtml() {return QString();}
 
     virtual void setSettings(QSettings* aSet) {theSets = aSet;}
 

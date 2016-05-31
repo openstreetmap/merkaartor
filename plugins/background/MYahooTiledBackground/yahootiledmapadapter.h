@@ -103,7 +103,7 @@ public:
     /*!
      * @return the Url of the usage license
      */
-    virtual QString	getLicenseUrl() const {return "";}
+    virtual QString	getLicenseUrl() const {return QString();}
 
     virtual int		getAdaptedZoom()   const;
     virtual int 	getAdaptedMinZoom	(const QRectF &) const;
@@ -114,7 +114,7 @@ public:
 
     virtual bool	isValid(int x, int y, int z) const;
     virtual QString getQuery(int x, int y, int z) const;
-    virtual QString getQuery(const QRectF& /* wgs84Bbox */, const QRectF& /* projBbox */, const QRect& /* size */) const  { return ""; }
+    virtual QString getQuery(const QRectF& /* wgs84Bbox */, const QRectF& /* projBbox */, const QRect& /* size */) const  { return QString(); }
     virtual QPixmap getPixmap(const QRectF& /* wgs84Bbox */, const QRectF& /* projBbox */, const QRect& /* size */) const { return QPixmap(); }
 
     virtual QRectF	getBoundingbox() const;
@@ -133,7 +133,7 @@ public:
 
     virtual bool toXML(QXmlStreamWriter& /*stream*/) { return true; }
     virtual void fromXML(QXmlStreamReader& /*xParent*/) {}
-    virtual QString toPropertiesHtml() {return "";}
+    virtual QString toPropertiesHtml() {return QString();}
 
     virtual void setSettings(QSettings* /*aSet*/) {}
 

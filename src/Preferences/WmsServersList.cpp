@@ -17,7 +17,7 @@
 
 WmsServer::WmsServer()
 {
-    WmsServer(QApplication::translate("MerkaartorPreferences","New Server"), "", "", "", "", "", "", "", "");
+    WmsServer(QApplication::translate("MerkaartorPreferences","New Server"), QString(), QString(), QString(), QString(), QString(), QString(), QString(), QString());
 }
 
 WmsServer::WmsServer(QString Name, QString Adress, QString Path, QString Layers
@@ -36,7 +36,7 @@ WmsServer::WmsServer(QString Name, QString Adress, QString Path, QString Layers
     , WmsCLayer(CLayer)
     , deleted(Deleted)
 {
-    if (Name == "") {
+    if (Name.isEmpty()) {
         WmsName = QApplication::translate("MerkaartorPreferences","New Server");
     }
 }

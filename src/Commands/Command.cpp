@@ -20,7 +20,7 @@
 #include <QList>
 
 Command::Command(Feature* aF)
-    : mainFeature(aF), commandDirtyLevel(0), oldCreated(""), isUndone(false)
+    : mainFeature(aF), commandDirtyLevel(0), isUndone(false)
 {
     description = QApplication::translate("Command", "No description");
 }
@@ -36,7 +36,7 @@ void Command::setId(const QString& id)
 
 const QString& Command::id() const
 {
-    if (Id == "")
+    if (Id.isEmpty())
         Id = QUuid::createUuid().toString();
     return Id;
 }
@@ -156,8 +156,7 @@ CommandList::CommandList(QString aDesc, Feature* aFeat)
 
 CommandList::~CommandList(void)
 {
-    for (int i=0; i<Subs.size(); ++i)
-        delete Subs[i];
+    qDeleteAll(Subs);
 }
 
 void CommandList::setReversed(bool val)
@@ -348,8 +347,7 @@ void CommandHistory::cleanup()
     //FIXME Is there a point to this?
     //for (int i=Index; i<Subs.size(); ++i)
     //	Subs[i]->redo();
-    for (int i=0; i<Subs.size(); ++i)
-        delete Subs[i];
+    qDeleteAll(Subs);
     Subs.clear();
     Index = 0;
     Size = 0;

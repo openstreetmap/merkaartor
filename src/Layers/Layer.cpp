@@ -51,7 +51,7 @@ Layer::Layer(const Layer&)
 Layer::~Layer()
 {
     clear();
-    SAFE_DELETE(p);
+    delete p;
 }
 
 void Layer::setName(const QString& s)
