@@ -9,7 +9,7 @@ Prerequisites:
 ==============
 
  * Working C++ compiler
- * Qt 4.4.0 or later development environment (for Qt 5.x.y, use qt5 branch)
+ * Qt 4.4.0 or later development environment (both Qt4 and Qt5 work)
  * Proj.4
  * GDAL (2.0.0 or newer for GDAL exports)
  * spatialite-4.1.0 or newer for GDAL exports
