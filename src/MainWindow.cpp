@@ -4205,9 +4205,6 @@ void MainWindow::on_toolTemplatesLoadAction_triggered()
     p->theProperties->resetValues();
 }
 
-QString MainWindow::translationsPath() {
-    return QCoreApplication::applicationDirPath() + "/translations";
-}
 
 #if defined(Q_OS_MAC)
 QString MainWindow::macOsTranslationsPath() {
@@ -4218,48 +4215,41 @@ QString MainWindow::macOsTranslationsPath() {
 }
 #endif
 
-bool MainWindow::tryLoadQtTranslator(const QString& languagePrefix)
-{
-    if (g_Merk_Portable) {
-        return qtTranslator->load("qt_" + languagePrefix, translationsPath());
-    } else {
-#ifdef TRANSDIR_SYSTEM
-        if (!QDir::isAbsolutePath(STRINGIFY(TRANSDIR_SYSTEM)))
-            return qtTranslator->load("qt_" + languagePrefix, QCoreApplication::applicationDirPath() + "/" + STRINGIFY(TRANSDIR_SYSTEM));
-        else
-            return qtTranslator->load("qt_" + languagePrefix, STRINGIFY(TRANSDIR_SYSTEM));
-#else
-#if defined(Q_OS_MAC)
-        return qtTranslator->load("qt_" + languagePrefix, macOsTranslationsPath());
-#else
-        return qtTranslator->load("qt_" + languagePrefix, QLibraryInfo::location(QLibraryInfo::TranslationsPath));
-#endif // Q_OS_MAC
-#endif // TRANSDIR_SYSTEM
-    }
+QString MainWindow::makeAbsolute(const QString& path) {
+    if (QDir::isAbsolutePath(path))
+        return path;
+    else
+        return QCoreApplication::applicationDirPath() + "/" + path;
 }
 
-bool MainWindow::tryLoadMerkaartorTranslator(const QString& language)
-{
-    if (g_Merk_Portable) {
-        return merkaartorTranslator->load("merkaartor_" + language, translationsPath());
-    } else {
-	bool success;
+/* Compose the list of translation paths. */
+QStringList MainWindow::translationPaths() {
+    QStringList paths;
+    /* Try the macros first, as they are defined by the user. */
+    paths << makeAbsolute(STRINGIFY(TRANSDIR_SYSTEM));
+    paths << makeAbsolute(STRINGIFY(TRANSDIR_MERKAARTOR));
+    paths << QCoreApplication::applicationDirPath();
+    paths << QCoreApplication::applicationDirPath() + "/translations";
 #if defined(Q_OS_MAC)
-        success = merkaartorTranslator->load("merkaartor_" + language, macOsTranslationsPath());
-#else
-        success = merkaartorTranslator->load("merkaartor_" + language, QCoreApplication::applicationDirPath());
+    paths << macOsTranslationsPath();
 #endif
-#ifdef TRANSDIR_MERKAARTOR
-        if (!success) {
-            // Next, try the TRANSDIR_MERKAARTOR, if defined
-            if (!QDir::isAbsolutePath(STRINGIFY(TRANSDIR_MERKAARTOR)))
-                return merkaartorTranslator->load("merkaartor_" + language, QCoreApplication::applicationDirPath() + "/" + STRINGIFY(TRANSDIR_MERKAARTOR));
-            else
-                return merkaartorTranslator->load("merkaartor_" + language, STRINGIFY(TRANSDIR_MERKAARTOR));
+    paths << QLibraryInfo::location(QLibraryInfo::TranslationsPath);
+    return paths;
+}
+
+bool MainWindow::tryLoadTranslator(const QString& languageFile, QTranslator* theTranslator)
+{
+    qDebug() << "Looking for translations file: " << languageFile;
+    QStringList paths = translationPaths();
+    foreach (const QString &path, paths) {
+        qDebug() << "  Trying directory " << path;
+        if (theTranslator->load(languageFile, path)) {
+            qDebug() << "  Found it.";
+            return true;
         }
-#endif
-	return success;
     }
+    qDebug() << "  Not found.";
+    return false;
 }
 
 void MainWindow::updateLanguage()
@@ -4274,12 +4264,12 @@ void MainWindow::updateLanguage()
     if (language != "-" && language != "en") {
         qtTranslator = new QTranslator;
         const QString languagePrefix = language.left(2);
-        if (tryLoadQtTranslator(languagePrefix))
+        if (tryLoadTranslator("qt_"+languagePrefix, qtTranslator))
             QCoreApplication::installTranslator(qtTranslator);
 
         // Do not prevent Merkaartor translations to be loaded, even if there is no Qt translation for the language.
         merkaartorTranslator = new QTranslator;
-        if (tryLoadMerkaartorTranslator(language))
+        if (tryLoadTranslator("merkaartor_"+language, merkaartorTranslator))
             QCoreApplication::installTranslator(merkaartorTranslator);
         else
             statusBar()->showMessage(tr("Warning! Could not load the Merkaartor translations for the \"%1\" language. Switching to default English.").arg(language), 15000);
