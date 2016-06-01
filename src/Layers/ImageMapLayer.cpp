@@ -644,7 +644,6 @@ void ImageMapLayer::draw(MapView& theView, QRect& rect)
 
     if (p->curPix.size() != rect.size()) {
         p->curPix = QPixmap(rect.size());
-        p->curPix.fill(Qt::transparent);
     }
 
     if (p->newPix.isNull())
@@ -670,6 +669,9 @@ void ImageMapLayer::draw(MapView& theView, QRect& rect)
         else
             pms = p->newPix.copy(drawingRect);
     }
+
+    /* We need to clear the pixmap in case we're painting transparent stuff over */
+    p->curPix.fill(Qt::transparent);
 
     QPainter P(&p->curPix);
     P.drawPixmap((pmSize.width()-pms.width())/2, (pmSize.height()-pms.height())/2, pms);
@@ -947,8 +949,6 @@ QRect ImageMapLayer::drawTiled(MapView& theView, QRect& rect)
     int cross_scr_y = cross_y * tilesizeH / tileHeight;
 
     QSize pmSize = fRect.size().toSize();
-//    QSize pmSize((tiles_right+tiles_left+1)*tilesizeW, (tiles_bottom+tiles_above+1)*tilesizeH);
-//    QPixmap tmpPm = p->pm.scaled(retRect.size(), Qt::IgnoreAspectRatio);
     p->newPix = QPixmap(pmSize);
     p->newPix.fill(Qt::transparent);
     QPainter painter(&p->newPix);
@@ -977,16 +977,14 @@ QRect ImageMapLayer::drawTiled(MapView& theView, QRect& rect)
     for (QList<Tile>::const_iterator tile = tiles.begin(); tile != tiles.end() && n<100; ++tile)
     {
         QImage pm = p->theMapAdapter->getImageManager()->getImage(p->theMapAdapter, p->theMapAdapter->getQuery(mapmiddle_tile_x+tile->i, mapmiddle_tile_y+tile->j, p->theMapAdapter->getZoom()));
+        int x = (tile->i*tilesizeW)+pmSize.width()/2 -cross_scr_x;
+        int y = (tile->j*tilesizeH)+pmSize.height()/2-cross_scr_y;
         if (!pm.isNull())
-            painter.drawImage((tile->i*tilesizeW)+pmSize.width()/2 -cross_scr_x,
-                               (tile->j*tilesizeH)+pmSize.height()/2-cross_scr_y,
-                               pm);
+            painter.drawImage(x, y, pm);
 
-        if (M_PREFS->getDrawTileBoundary()) {
-            painter.drawRect((tile->i*tilesizeW)+pmSize.width()/2 -cross_scr_x,
-                             (tile->j*tilesizeH)+pmSize.height()/2-cross_scr_y,
-                             tilesizeW, tilesizeH);
-        }
+        if (M_PREFS->getDrawTileBoundary())
+            painter.drawRect(x, y, tilesizeW, tilesizeH);
+
         ++n;
     }
     painter.end();
