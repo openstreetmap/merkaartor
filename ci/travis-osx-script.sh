@@ -6,6 +6,7 @@ git tag
 QMAKE=`find /usr/local -name "qmake" | head -n 1`
 $QMAKE SPATIALITE=0
 make
+lrelease src/src.pro
 
 find ./binaries
 

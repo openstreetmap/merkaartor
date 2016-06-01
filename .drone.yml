@@ -21,6 +21,7 @@ build:
     - pacman -S --noconfirm --needed --noprogressbar mingw-w64-${target}-netcdf mingw-w64-${target}-nspr mingw-w64-${target}-nss mingw-w64-${target}-postgresql
     - qmake -r
     - make -j8 release
+    - lrelease src/src.pro
     - sh windows/copydeps.sh
     - makensis.exe windows/installer.nsi
     - windows/upload-to-bintray.pl windows/merkaartor-*.exe
