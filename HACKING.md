@@ -44,3 +44,18 @@ mind these are not our responsibilities for the most case. Usually all the bugs
 detected are severe and should be reported. Even running Merkaartor with
 sanitizer enabled and reporting bugs is a huge benefit, though there is severe
 performance hit involved.
+
+## Variable naming convention
+
+You might have noticed the strange naming convention for variables. They are
+often prefixed with a definite or indefinite article, like aLayer and theLayer.
+It's been in Merkaartor since the very beginning of git history. I know nothing
+about it, so if you have seen it elsewhere, let me know!
+
+My best bet, based on some observation and common sense is that theVariable
+would represent the same object during it's lifetime. aVariable could change
+objects, for example if it's used in a loop, iterating over layers.
+
+I don't expect anyone to keep this notation in new code, but it might be a good
+idea in some cases. However, I will not accept commits that try to change this
+notation just for the sake of changing.

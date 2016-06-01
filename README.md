@@ -1,6 +1,5 @@
 # Merkaartor
 
-
 An opensource OSM editor, written in C++ and Qt.
 
 ## Health status
@@ -36,3 +35,11 @@ https://bintray.com/krakonos/nightly/Merkaartor .
 There are currently no nightlies for Linux. It's usually easy to compile from
 source, and the vast amount of distributions doesn't make it easy. I'm
 considering making Ubuntu PPA. Let us know if you're interested!
+
+## Hacking the code
+
+I'm always happy to see improvements done by other people. Feel free to
+contribute by sending pull requests for big or small stuff! There is some (very
+little, but it'll grow) useful stuff in [HACKING.md](HACKING.md), but if you
+have questions, contacts us on merkaartor@openstreetmap.org to have them
+answered!
