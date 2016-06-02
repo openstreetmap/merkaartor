@@ -7,7 +7,7 @@ cp `cygcheck.exe binaries/bin/merkaartor.exe  | grep mingw.*dll$ | sed -e 's/^ *
 # Run Windeployqt, mostly to copy all the plugins required by qt, and some more libs
 # The ICU hack is there due to a bug in windeployqt, that won't find the lib
 # with "lib" prefix. We later delete it not to have it twice.
-ICU=/mingw64/bin/libicudt[0-9][0-9].dll
+ICU=`echo /mingw64/bin/libicudt[0-9][0-9].dll`
 cp "$ICU" "${ICU/libicudt/icudt}"
 windeployqt binaries/bin/merkaartor.exe
 rm binaries/bin/icudt[0-9][0-9].dll
