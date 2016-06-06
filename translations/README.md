@@ -13,7 +13,7 @@ The regular workflow is:
    This pushes the original english strings to Transifex, updating the database and
    allowing new strings to be downloaded.
 
-1) Before release, Transifex data should be pulled and commited into the
+1) Before release, Transifex data should be pulled and committed into the
 repository. This is not necessary, but serves as a backup in case something
 terrible happens to Transifex.
 
