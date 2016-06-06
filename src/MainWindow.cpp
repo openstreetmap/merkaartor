@@ -132,6 +132,7 @@ class MainWindowPrivate
             title = QString("%1 v%2").arg(STRINGIFY(PRODUCT)).arg(STRINGIFY(REVISION));
         }
 
+        QString FILTER_OPEN_NATIVE;
         QString FILTER_OPEN_SUPPORTED;
         QString FILTER_IMPORT_SUPPORTED;
         int lastPrefTabIndex;
@@ -202,6 +203,8 @@ MainWindow::MainWindow(QWidget *parent)
 #ifdef USE_PROTOBUF
     supported_import_formats_desc += tr("Protobuf Binary Format (*.pbf)\n");
 #endif
+
+    p->FILTER_OPEN_NATIVE = tr("Merkaartor document (*.mdc)\n");
 
     p->FILTER_OPEN_SUPPORTED = QString(tr("Supported formats") + " (*.mdc %1)\n").arg(supported_import_formats);
     p->FILTER_OPEN_SUPPORTED += tr("Merkaartor document (*.mdc)\n") + supported_import_formats_desc;
@@ -497,14 +500,16 @@ void MainWindow::handleMessage(const QString &msg)
                 loadUrl(u);
                 continue;
             }
-            fileNames.append(args[i]);
+            if (args[i].endsWith(".mdc", Qt::CaseInsensitive))
+                loadDocument(args[i]);
+            else
+                fileNames.append(args[i]);
         }
     }
 
-    if (fileNames.isEmpty())
-        QDir::setCurrent(M_PREFS->getworkingdir());
-    else
-        loadFiles(fileNames);
+    if (fileNames.size() > 0) {
+        importFiles(theDocument, fileNames, NULL);
+    }
 }
 
 MainWindow::~MainWindow(void)
@@ -2018,12 +2023,10 @@ void MainWindow::on_fileOpenAction_triggered()
     if (hasUnsavedChanges() && !mayDiscardUnsavedChanges(this))
         return;
 
-    QStringList fileNames = QFileDialog::getOpenFileNames(
-                    this,
-                    tr("Open files"),
-                    QString(), p->FILTER_OPEN_SUPPORTED);
+    QString fileName = QFileDialog::getOpenFileName(this, tr("Open file"), QString(), p->FILTER_OPEN_NATIVE );
 
-    loadFiles(fileNames);
+    if (!fileName.isNull())
+        loadDocument(fileName);
 }
 
 void MainWindow::on_fileUploadAction_triggered()
@@ -3876,8 +3879,8 @@ void MainWindow::recentOpenTriggered(QAction* anAction)
     if (hasUnsavedChanges() && !mayDiscardUnsavedChanges(this))
         return;
 
-    QStringList fileNames(anAction->text());
-    loadFiles(fileNames);
+    QString fileName(anAction->text());
+    loadDocument(fileName);
 }
 
 void MainWindow::recentImportTriggered(QAction* anAction)
