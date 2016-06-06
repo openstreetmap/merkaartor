@@ -6,7 +6,7 @@ for my $file (@ARGV) {
     print "Processing $file...\n";
     # File looks like this:
     # merkaartor-0.18.2-105-g9071144-64bit.exe
-    if ($file =~ m!merkaartor-([0-9.]*)-([0-9]+-[a-z0-9]{8})?-?([0-9]+bit).exe!) {
+    if ($file =~ m!merkaartor-([0-9.]*)-(.*?)?-?([0-9]+bit).exe!) {
         my ($short, $version, $tag, $arch) = ($&, $1, $2, $3);
         print "Short name = '$short'\n";
         print "Version = '$version'\n";
