@@ -257,7 +257,6 @@ public slots:
 
 public:
     bool importFiles(Document * mapDocument, const QStringList & filesNames, QStringList * importedFileNames = NULL);
-    void loadFiles(const QStringList & fileNames);
     void loadUrl(const QUrl& u);
     void loadDocument(QString fn);
     void loadTemplateDocument(QString fn);
