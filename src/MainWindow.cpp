@@ -1761,7 +1761,21 @@ bool MainWindow::importFiles(Document * mapDocument, const QStringList & fileNam
 
     bool foundImport = false;
 
-    QStringListIterator it(fileNames);
+    QStringList filesToProcess = fileNames;
+
+#ifdef GEOIMAGE
+    /* Geotagged images should be imported as a group, let's do it first. */
+    QStringList images = fileNames.filter(".jpg", Qt::CaseInsensitive);
+    if (!images.isEmpty()) {
+        theGeoImage->loadImages(images);
+        QString cur;
+        foreach (cur, images)
+            filesToProcess.removeAll(cur);
+        foundImport = true;
+    }
+#endif
+
+    QStringListIterator it(filesToProcess);
     while (it.hasNext())
     {
         const QString & fn = it.next();
