@@ -1569,8 +1569,27 @@ void MainWindow::on_editReverseAction_triggered()
     emit reverse_triggered();
 }
 
-void MainWindow::on_fileImportAction_triggered()
-{
+void MainWindow::on_fileImportGDALAction_triggered() {
+    if (QMessageBox::warning(this,
+        MainWindow::tr("GDAL import warning"),
+        MainWindow::tr(
+            "You are about to import file(s) using GDAL. This feature is rather experimental, and may or may NOT work, possibly causing a crash. Make sure you won't loose any data in case it doesn't work out.\n"
+            "Please do report bugs in case of a crash, but don't be surprised about it.\n"
+            "\n"
+            "Continue with import?\n"
+            ),
+            QMessageBox::Yes | QMessageBox::No, QMessageBox::No) == QMessageBox::Yes)
+    {
+        importAction(true);
+    }
+}
+
+void MainWindow::on_fileImportAction_triggered() {
+    importAction(false);
+
+}
+
+void MainWindow::importAction( bool useGdal ) {
     QStringList fileNames = QFileDialog::getOpenFileNames(
                     this,
                     tr("Import file"),
@@ -1583,7 +1602,7 @@ void MainWindow::on_fileImportAction_triggered()
     theLayers->setUpdatesEnabled(false);
 
     QStringList importedFiles;
-    importFiles(theDocument, fileNames, &importedFiles);
+    importFiles(theDocument, fileNames, &importedFiles, useGdal);
 
     foreach (QString currentFileName, importedFiles)
         M_PREFS->addRecentImport(currentFileName);
@@ -1627,6 +1646,8 @@ void MainWindow::endBusyCursor() {
 
 MainWindow::ImportStatus MainWindow::importFile(Document * mapDocument, const QString& fileName, Layer*& newLayer) {
     MainWindow::ImportStatus result;
+
+    qDebug() << "Importing file" << fileName << "using native parsers.";
 
     QString baseFileName = fileName.section('/', - 1);
     if (fileName.toLower().endsWith(".gpx")) {
@@ -1733,15 +1754,9 @@ MainWindow::ImportStatus MainWindow::importFile(Document * mapDocument, const QS
         result = mapDocument->importPBF(fileName, (DrawingLayer*)newLayer) ? IMPORT_OK : IMPORT_ERROR;
     }
 #endif
-    else { // Fallback to GDAL
-        qDebug() << "Trying GDAL";
-        newLayer = new DrawingLayer( baseFileName );
-        newLayer->setUploadable(false);
-        mapDocument->add(newLayer);
-        result = mapDocument->importGDAL(fileName, (DrawingLayer*)newLayer) ? IMPORT_OK : IMPORT_ERROR;
-        if (result == IMPORT_ERROR) {
-            SAFE_DELETE(newLayer);
-        }
+    else {
+        qDebug() << "File type not recognized. If this file was recognized by previous versions, use Import GDAL function.";
+        result = IMPORT_ERROR;
     }
 
     if (result == IMPORT_ERROR && newLayer) {
@@ -1752,7 +1767,24 @@ MainWindow::ImportStatus MainWindow::importFile(Document * mapDocument, const QS
     return result;
 }
 
-bool MainWindow::importFiles(Document * mapDocument, const QStringList & fileNames, QStringList * importedFileNames )
+MainWindow::ImportStatus MainWindow::importFileUsingGDAL( Document* mapDocument, const QString& fileName, Layer*& newLayer ) {
+    MainWindow::ImportStatus result;
+
+    qDebug() << "Importing file" << fileName << "using GDAL.";
+
+    QString baseFileName = fileName.section('/', - 1);
+    newLayer = new DrawingLayer( baseFileName );
+    newLayer->setUploadable(false);
+    mapDocument->add(newLayer);
+    result = mapDocument->importGDAL(fileName, (DrawingLayer*)newLayer) ? IMPORT_OK : IMPORT_ERROR;
+    if (result == IMPORT_ERROR) {
+        SAFE_DELETE(newLayer);
+    }
+
+    return result;
+}
+
+bool MainWindow::importFiles(Document * mapDocument, const QStringList & fileNames, QStringList * importedFileNames, bool useGdal )
 {
     createProgressDialog();
 #ifndef Q_OS_SYMBIAN
@@ -1782,7 +1814,11 @@ bool MainWindow::importFiles(Document * mapDocument, const QStringList & fileNam
 
         Layer* newLayer = NULL;
         // TODO: The passing mechanism of newLayer is evil black magic.
-        ImportStatus fileImportResult = importFile(mapDocument, fn, newLayer);
+        ImportStatus fileImportResult;
+        if (useGdal)
+            fileImportResult = importFileUsingGDAL(mapDocument, fn, newLayer);
+        else
+            fileImportResult = importFile(mapDocument, fn, newLayer);
 
         switch (fileImportResult) {
             case IMPORT_OK:

@@ -149,6 +149,7 @@
     <addaction name="fileNewAction"/>
     <addaction name="fileOpenAction"/>
     <addaction name="fileImportAction"/>
+    <addaction name="fileImportGDALAction"/>
     <addaction name="menuRecentOpen"/>
     <addaction name="menuRecentImport"/>
     <addaction name="separator"/>
@@ -526,6 +527,21 @@
    </property>
    <property name="shortcut">
     <string notr="true">Ctrl+M</string>
+   </property>
+  </action>
+  <action name="fileImportGDALAction">
+   <property name="icon">
+    <iconset resource="../Icons/AllIcons.qrc">
+     <normaloff>:/Icons/actions/document_import.png</normaloff>:/Icons/actions/document_import.png</iconset>
+   </property>
+   <property name="text">
+    <string>&amp;Import using GDAL</string>
+   </property>
+   <property name="statusTip">
+    <string>Import a file into the current document using GDAL</string>
+   </property>
+   <property name="shortcut">
+    <string notr="true"/>
    </property>
   </action>
   <action name="fileImportAction">

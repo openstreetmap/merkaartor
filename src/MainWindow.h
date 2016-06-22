@@ -84,6 +84,7 @@ public slots:
     virtual void on_fileDownloadMoreAction_triggered();
     virtual void on_fileUploadAction_triggered();
     virtual void on_fileImportAction_triggered();
+    virtual void on_fileImportGDALAction_triggered();
     virtual void on_fileOpenAction_triggered();
     virtual void on_fileSaveAsAction_triggered();
     virtual void on_fileSaveAsTemplateAction_triggered();
@@ -256,7 +257,7 @@ public slots:
     void applyPainters(GlobalPainter* theGlobalPainter, QList<Painter>* thePainters);
 
 public:
-    bool importFiles(Document * mapDocument, const QStringList & filesNames, QStringList * importedFileNames = NULL);
+    bool importFiles(Document * mapDocument, const QStringList & filesNames, QStringList * importedFileNames = NULL, bool useGdal = false);
     void loadUrl(const QUrl& u);
     void loadDocument(QString fn);
     void loadTemplateDocument(QString fn);
@@ -308,7 +309,9 @@ private slots:
     void on_viewWireframeAction_toggled(bool arg1);
 
 private:
+    void importAction( bool useGdal = false );
     ImportStatus importFile(Document* mapDocument, const QString& fileName, Layer*& newLayer);
+    ImportStatus importFileUsingGDAL(Document* mapDocument, const QString& fileName, Layer*& newLayer);
     void updateMenu();
     void updateRecentOpenMenu();
     void updateRecentImportMenu();
