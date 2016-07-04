@@ -333,7 +333,7 @@ v0.15
     * FIX : No name in for gpx track layer in Layers menu after File -> Import. Patch by Trav (closes #2661)
     * CHG : Keep directional arrows blue for oneway roads in "Show directional arrows - Always" mode.
     * ADD : GeoTIFF background plugin (closes #1025)
-    * ADD : Grabbing hand icon in signle mouse mode
+    * ADD : Grabbing hand icon in single mouse mode
     * FIX : Layers menu entry for background layer is wrong at startup. Patch by Trav (closes #2641)
     * ADD : When in "single mouse button" mode, allow canceling most operation with a right-click
     * ADD : "Zoom lock" mode. Zoom steps are locked to TMS ones and projection is locked to Mercator
