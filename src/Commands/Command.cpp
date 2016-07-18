@@ -557,7 +557,7 @@ CommandHistory* CommandHistory::fromXML(Document* d, QXmlStreamReader& stream, Q
     }
 
     if (!OK) {
-        qDebug() << "!! File history is corrupted. Reseting...";
+        qDebug() << "!! File history is corrupted. Resetting...";
         qDebug() << "-- Size: " << h->Size;
         qDebug() << "-- Index: " << h->Index;
         delete h;
