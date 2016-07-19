@@ -286,10 +286,18 @@ contains (PROTOBUF, 1) {
     DEFINES += USE_PROTOBUF
 }
 
+contains(SANITIZE, 1) {
+    SANITIZE=address,undefined
+}
+
+contains(SANITIZE, 2) {
+    SANITIZE=thread
+}
+
 !isEmpty(SANITIZE) {
-    QMAKE_CXXFLAGS+=-fsanitize=address -fno-omit-frame-pointer
-    QMAKE_CFLAGS+=-fsanitize=address -fno-omit-frame-pointer
-    QMAKE_LFLAGS+=-fsanitize=address
+    QMAKE_CXXFLAGS+=-fsanitize=$${SANITIZE} -fno-omit-frame-pointer
+    QMAKE_CFLAGS+=-fsanitize=$${SANITIZE} -fno-omit-frame-pointer
+    QMAKE_LFLAGS+=-fsanitize=$${SANITIZE}
 }
 
 unix:!macx {

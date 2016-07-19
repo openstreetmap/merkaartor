@@ -31,19 +31,34 @@ a minimum, so the overall look, fell and rendering speed won't change much.
 I would be very happy if someone made a comprehensive style suited for editing
 POIs, yet easy to navigate.
 
-## Address sanitizer
+## Sanitizers
 
-Can be enabled by:
+Can be enabled by the SANITIZE option:
 
 ```
 qmake -r SANITIZE=1
+qmake -r SANITIZE=2
+qmake -r SANITIZE=custom_sanitizer
 ```
+
+The option =1 enables the address and undefined sanitizers. The option =2
+enables thread sanitizer. Enything else will be just passed to the compiler, so
+you can specify your own. It might be useful to run compile with clang instead
+of GCC for different options/implementations.
 
 It might complain about some stuff in other libraries (gdal, qt), so keep in
 mind these are not our responsibilities for the most case. Usually all the bugs
 detected are severe and should be reported. Even running Merkaartor with
 sanitizer enabled and reporting bugs is a huge benefit, though there is severe
 performance hit involved.
+
+## Compiling with Clang
+
+You can compile Merkaartor with Clang, using standard Qt approach:
+
+```
+qmake -spec linux-clang
+```
 
 ## Variable naming convention
 
