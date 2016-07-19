@@ -6,20 +6,6 @@
 RenderPriority NodePri(RenderPriority::IsSingular,0., 0);
 RenderPriority SegmentPri(RenderPriority::IsLinear,0.,99);
 
-inline void* operator new (std::size_t sz) throw(std::bad_alloc)
-{
-  // fixme: throw bad_alloc on error
-    void *p = (void *) malloc(sz);
-    if (!p)
-        qDebug() << "Alloc error";
-    return p;
-}
-
-void operator delete (void *p) throw()
-{
-    free(p);
-}
-
 typedef RTree<Feature*, qreal, 2, qreal, 32> CoordTree;
 
 class MemoryBackendPrivate
