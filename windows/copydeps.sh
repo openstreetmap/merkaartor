@@ -9,8 +9,11 @@ cp `cygcheck.exe binaries/bin/merkaartor.exe  | grep mingw.*dll$ | sed -e 's/^ *
 # with "lib" prefix. We later delete it not to have it twice.
 ICU=`echo /mingw64/bin/libicudt[0-9][0-9].dll`
 cp "$ICU" "${ICU/libicudt/icudt}"
+ICU=`echo /mingw64/bin/libicuuc[0-9][0-9].dll`
+cp "$ICU" "${ICU/libicudt/icuuc}"
 windeployqt binaries/bin/merkaartor.exe
 rm binaries/bin/icudt[0-9][0-9].dll
+rm binaries/bin/icuuc[0-9][0-9].dll
 
 # Copy translations, qt ones are already copied by windeployqt
 mkdir binaries/bin/translations
