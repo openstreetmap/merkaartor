@@ -3,7 +3,7 @@
 REVISION = $$system( git describe --tags )
 VERSION = $$system( git describe --tags HEAD | sed "'s/-g.*//;s/-/./g'" )
 isEmpty( REVISION ) {
-	REVISION = $$system(head -n 1 ../CHANGELOG | sed "'s/^v//'")
+	REVISION = $$system(head -n 3 ../CHANGELOG | tail -n 1 | sed "'s/^v//'")
 	VERSION = $$REVISION
 }
 
