@@ -1,3 +1,25 @@
+This is a shortened changelog. See git commits for full list of changes.
+
+v0.18.3
+    * ADD : Updated slippy map to allow selection.
+    * ADD : Implemented relation filter, based on current selection.
+    * ADD : Implement /add_node command in JOSM Remote control.
+    * ADD : Tuned the "Create roundabout" tool.
+    * ADD : Added support for mapy.cz address parser.
+    * CHG : Reworked upload dialog to include some statistics and encourage description.
+    * CHG : Changed semantics of Open and Import, separated GDAL Import.
+    * CHG : Increased max zoom in slippy map to 19.
+    * FIX : Various crash fixes and code cleanup.
+    * FIX : Fixed drawing of transparent background imagery.
+    * FIX : Fix qDebug() output on Windows.
+    * FIX : Fixed screen update while panning with keys.
+    * FIX : Fixed segfault on loading non-existent file.
+    * FIX : Fixed import of some NMEA formats (Garmin GLO).
+    * FIX : Fix gpsdata handling for gpsd >= 3.12
+    * FIX : Partially fixed printing.
+    * FIX : Fixed GDAL imports for GDAL 2.0.
+    * DEL : Removed OpenStreetBugs references (service no longer exists).
+
 v0.18.2
     * CHG : Updated spatialite API to 4.1.0 version using spatialite_init_ex().
     * FIX : Updated the INSTALL file with current instructions both for Linux and Windows.
