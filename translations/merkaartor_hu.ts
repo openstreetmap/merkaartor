@@ -1,4 +1,6 @@
-<?xml version="1.0" ?><!DOCTYPE TS><TS language="hu" version="2.0">
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE TS>
+<TS version="2.0" language="hu">
 <context>
     <name>AboutDialog</name>
     <message>
@@ -28,8 +30,8 @@
     </message>
     <message utf8="true">
         <location filename="../src/common/AboutDialog.ui" line="152"/>
-        <source>Copyright Bart Vanhauwaert, Chris Browet, Ladislav Láska and others, 2006-2015</source>
-        <translation>Copyright Bart Vanhauwaert, Chris Browet, Ladislav Láska és mások, 2006-2015</translation>
+        <source>Copyright Bart Vanhauwaert, Chris Browet, Ladislav Láska and others, 2006-2016</source>
+        <translation type="unfinished">Copyright Bart Vanhauwaert, Chris Browet, Ladislav Láska és mások, 2006-2016</translation>
     </message>
     <message>
         <location filename="../src/common/AboutDialog.ui" line="159"/>
@@ -250,7 +252,9 @@
     <message numerus="yes">
         <location filename="../src/Docks/DirtyDock.cpp" line="74"/>
         <source>There are &lt;b&gt;%n&lt;/b&gt; dirty objects</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation type="unfinished">
+            <numerusform></numerusform>
+        </translation>
     </message>
     <message>
         <location filename="../src/Docks/DirtyDock.cpp" line="194"/>
@@ -743,12 +747,16 @@ Mielőtt feltölthetnéd a változtatásaidat, saját kezűleg kell összevonnod
     <message numerus="yes">
         <location filename="../src/Sync/DownloadOSM.cpp" line="162"/>
         <source>Downloading from OSM (%n bytes)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation type="unfinished">
+            <numerusform></numerusform>
+        </translation>
     </message>
     <message numerus="yes">
         <location filename="../src/Sync/DownloadOSM.cpp" line="164"/>
         <source>Downloading from OSM (%n kBytes)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation type="unfinished">
+            <numerusform></numerusform>
+        </translation>
     </message>
     <message>
         <location filename="../src/Sync/DownloadOSM.cpp" line="284"/>
@@ -1489,7 +1497,7 @@ Még mindig szeretnéd használni?</translation>
     <message>
         <location filename="../src/Layers/ImageMapLayer.cpp" line="272"/>
         <source>You have not ticked the checkbox expressing your agreement with the licensing terms.
-As such, you won't be able to use this source as a map layer.
+As such, you won&apos;t be able to use this source as a map layer.
 Is it really what you meant?</source>
         <translation>Nem jelölted be a jelölőnégyzetet, amely jelzi, hogy elfogadod a licencfeltételeket.
 Így nem használhatod ezt a forrást térképrétegként.
@@ -3744,8 +3752,8 @@ Vedd figyelembe, hogy a letöltött területen kívül lévő OSM pontok megtart
     </message>
     <message>
         <location filename="../src/MainWindow.cpp" line="1575"/>
-        <source>You are about to import file(s) using GDAL. This feature is rather experimental, and may or may NOT work, possibly causing a crash. Make sure you won't loose any data in case it doesn't work out.
-Please do report bugs in case of a crash, but don't be surprised about it.
+        <source>You are about to import file(s) using GDAL. This feature is rather experimental, and may or may NOT work, possibly causing a crash. Make sure you won&apos;t loose any data in case it doesn&apos;t work out.
+Please do report bugs in case of a crash, but don&apos;t be surprised about it.
 
 Continue with import?
 </source>
@@ -3884,7 +3892,7 @@ További tudnivalókért lásd: http://wiki.openstreetmap.org/index.php/Problem_
     </message>
     <message>
         <location filename="../src/MainWindow.cpp" line="2002"/>
-        <source>You don't seem to have specified your
+        <source>You don&apos;t seem to have specified your
 OpenStreetMap username and password.
 Do you want to do this now?</source>
         <translation>Úgy tűnik nem adtad meg
@@ -5987,7 +5995,7 @@ Kérlek, válassz más nevet, vagy kattints az &lt;Alkalmazás&gt; gombra, ha a 
     </message>
     <message>
         <location filename="../src/Sync/DirtyList.cpp" line="330"/>
-        <source>The changeset comment is empty. It's considered a courtesy to your fellow mappers to provide a good comment, so everyone knows what your change does and with what intention.
+        <source>The changeset comment is empty. It&apos;s considered a courtesy to your fellow mappers to provide a good comment, so everyone knows what your change does and with what intention.
 Do you still wish to commit empty changeset comment?</source>
         <translation>A módosításcsomag megjegyzése üres. Egy jó megjegyzés megadása udvariasságnak tekinthető a térképezőtársaid felé, így mindenki tudja, mire szolgál a változtatásod, és milyen szándékkal.
 Még mindig üres megjegyzéssel szeretnéd beküldeni a módosításcsomagot?</translation>
