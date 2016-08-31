@@ -328,8 +328,16 @@ bool GdalAdapter::loadImage(const QString& fn)
     //every row loop
     for (int row = 0; row < theImgSize.height(); row++) {
         py = row;
-        poDataset->RasterIO( GF_Read, 0, row, theImgSize.width(), 1, lineBuf, theImgSize.width(), 1, GDT_Float32,
-                            bandCount, NULL, sizeof(float) * bandCount, 0, sizeof(float) );
+        CPLErr err = poDataset->RasterIO( GF_Read, 0, row, theImgSize.width(),
+                1, lineBuf, theImgSize.width(), 1, GDT_Float32, bandCount,
+                NULL, sizeof(float) * bandCount, 0, sizeof(float) );
+        /* FIXME: Perhaps break, or check if more work needs to be done
+         * (filling with an error pattern? */
+        if (err != CE_None) {
+            qDebug() << "RasterIO failed to read row. Skipping.";
+            continue;
+        }
+
         // every pixel in row.
         for (int col = 0; col < theImgSize.width(); col++){
             px = col;
