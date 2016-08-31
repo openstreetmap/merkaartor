@@ -103,8 +103,8 @@ static bool isChildOfSingleRelation(Feature *mapFeature)
         bool isParentRelation = dynamic_cast<Relation*>(parent) != 0;
         if (isParentRelation)
             parentRelations++;
-            if (parentRelations > 1)
-                return false;
+        if (parentRelations > 1)
+            return false;
     }
 
     return (parentRelations == 1);
@@ -128,10 +128,10 @@ void PropertiesDock::checkMenuStatus()
     bool IsRoad = false;
     bool IsRelation = false;
     bool IsParentRoad = false;
+    Q_UNUSED(IsParentRoad);
     bool IsParentRoadInner = false;
     bool IsParentRelation = false;
     bool IsParentArea = false;
-    bool IsOpenStreetBug = false;
     int NumRoads = 0;
     int NumCommitableFeature = 0;
     int NumPoints = 0;
@@ -150,8 +150,6 @@ void PropertiesDock::checkMenuStatus()
         IsParentRoadInner = IsPoint && isChildOfSingleRoadInner(Selection[0]);
         IsParentRelation = isChildOfSingleRelation(Selection[0]);
         IsParentArea = isChildOfArea(Selection[0]);
-        IsOpenStreetBug = isChildOfArea(Selection[0]);
-        IsOpenStreetBug = IsPoint && (Selection[0]->id().type & IFeature::Special);
     }
     for (int i=0; i<Selection.size(); ++i)
     {
