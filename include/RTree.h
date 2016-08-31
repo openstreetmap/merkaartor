@@ -1243,7 +1243,8 @@ void RTREE_QUAL::ChoosePartition(PartitionVars* a_parVars, int a_minFill)
   ASSERT(a_parVars);
 
   ELEMTYPEREAL biggestDiff;
-  int group, chosen, betterGroup;
+  /* group,bettergroup,chosen \in {0,1} */
+  int group = -1, chosen = -1, betterGroup = -1;
 
   InitParVars(a_parVars, a_parVars->m_branchCount, a_minFill);
   PickSeeds(a_parVars);
@@ -1288,6 +1289,11 @@ void RTREE_QUAL::ChoosePartition(PartitionVars* a_parVars, int a_minFill)
     }
     Classify(chosen, betterGroup, a_parVars);
   }
+
+  /* Check if they were assigned. */
+  ASSERT(group > -1);
+  ASSERT(chosen > -1);
+  ASSERT(betterGroup > -1);
 
   // If one group too full, put remaining rects in the other
   if((a_parVars->m_count[0] + a_parVars->m_count[1]) < a_parVars->m_total)
