@@ -503,26 +503,26 @@ Way *cutoutRoad(Document* theDocument, CommandList* theList, PropertiesDock* /* 
     for (int i=0; i<Roads.size(); ++i)
         splitRoad(theDocument, theList, Roads[i], Points, Result);
 
-	for (int i = 0; i < Result.size(); ++i) {
-		if (Result[i]->isExtrimity(N1) && Result[i]->isExtrimity(N2))
-			return Result[i];
-	}
-	return NULL;
+    for (int i = 0; i < Result.size(); ++i) {
+        if (Result[i]->isExtrimity(N1) && Result[i]->isExtrimity(N2))
+            return Result[i];
+    }
+    return NULL;
 }
 
 static void breakRoad(Document* theDocument, CommandList* theList, Way* R, Node* Pt)
 {
-    for (int i=0; i<R->size(); ++i)
-        if (R->get(i) == Pt)
-        {
+    for (int i=0; i<R->size(); ++i) {
+        if (R->get(i) == Pt) {
             Node* New = g_backend.allocNode(theDocument->getDirtyOrOriginLayer(R->layer()), *Pt);
             theList->add(new AddFeatureCommand(theDocument->getDirtyOrOriginLayer(R->layer()),New,true));
             copyTags(New,Pt);
             theList->add(new WayRemoveNodeCommand(R,i,theDocument->getDirtyOrOriginLayer(R->layer())));
             theList->add(new WayAddNodeCommand(R,New,i,theDocument->getDirtyOrOriginLayer(R->layer())));
         }
-        if (!Pt->sizeParents())
-            theList->add(new RemoveFeatureCommand(theDocument,Pt));
+    }
+    if (!Pt->sizeParents())
+        theList->add(new RemoveFeatureCommand(theDocument,Pt));
 }
 
 void breakRoads(Document* theDocument, CommandList* theList, PropertiesDock* theDock)
