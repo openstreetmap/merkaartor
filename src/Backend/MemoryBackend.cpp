@@ -24,13 +24,13 @@ public:
     QList<Feature*> findResult;
 };
 
-bool __cdecl indexFindCallbackList(Feature* F, void* ctxt)
+bool indexFindCallbackList(Feature* F, void* ctxt)
 {
     ((QList<Feature*>*)(ctxt))->append(F);
     return true;
 }
 
-bool __cdecl indexFindCallback(Feature* F, void* ctxt)
+bool indexFindCallback(Feature* F, void* ctxt)
 {
     IndexFindContext* pCtxt = (IndexFindContext*)ctxt;
 
