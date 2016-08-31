@@ -849,10 +849,11 @@ QPair<bool,CoordBox> Document::boundingBox()
         return qMakePair(false,CoordBox(Coord(0,0),Coord(0,0)));
     Layer* aLayer = getLayer(First);
     CoordBox BBox = aLayer->boundingBox();
-    for (int i=First+1; i<layerSize(); ++i)
+    for (int i=First+1; i<layerSize(); ++i) {
         aLayer = getLayer(i);
         if (aLayer->size() && !aLayer->boundingBox().isNull())
             BBox.merge(aLayer->boundingBox());
+    }
     return qMakePair(true,BBox);
 }
 
