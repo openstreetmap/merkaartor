@@ -22,4 +22,9 @@ terrible happens to Transifex.
 
 2) During release, the regular qt tools are used to bundle translations. Care
 should be taken to include new translations in Merkaartor.pro, so the .qm files
-get generated properly.
+get generated properly. A language list should be also updated in [1] to
+reflect newly added language and translation status (poorly translated
+languages are marked).
+
+
+[1] src/Preferences/PreferencesDialog.cpp

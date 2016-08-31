@@ -159,24 +159,31 @@ void PreferencesDialog::on_buttonBox_clicked(QAbstractButton * button)
 
 void PreferencesDialog::initLanguages(QComboBox* aBox)
 {
-    aBox->addItem(tr("English"),"-");
     aBox->addItem(tr("Arabic"),"ar");
+    aBox->addItem(tr("Chinese (Taiwan)"),"zh_TW");
     aBox->addItem(tr("Croatian"),"hr");
     aBox->addItem(tr("Czech"),"cs");
     aBox->addItem(tr("Dutch"),"nl");
-    aBox->addItem(tr("German"),"de");
+    aBox->addItem(tr("English"),"-");
     aBox->addItem(tr("French"),"fr");
+    aBox->addItem(tr("German"),"de");
     aBox->addItem(tr("Hungarian"),"hu");
+    aBox->addItem(tr("Indonesian (Indonesia)"),"in_ID");
     aBox->addItem(tr("Italian"),"it");
     aBox->addItem(tr("Japanese"),"ja");
     aBox->addItem(tr("Polish"),"pl");
-    aBox->addItem(tr("Portuguese"),"pt");
-    aBox->addItem(tr("Brazilian Portuguese"),"pt_BR");
+    aBox->addItem(tr("Portuguese (Brazil)"),"pt_BR");
     aBox->addItem(tr("Russian"),"ru");
-    aBox->addItem(tr("Slovak"),"sk");
     aBox->addItem(tr("Spanish"),"es");
     aBox->addItem(tr("Swedish"),"sv");
     aBox->addItem(tr("Ukrainian"),"uk");
+
+    aBox->addItem(tr("[less than 50% complete] Chinese (China)"),"zh_CN");
+    aBox->addItem(tr("[less than 50% complete] Estonian"),"et");
+    aBox->addItem(tr("[less than 50% complete] German (Austria)"),"de_AT");
+    aBox->addItem(tr("[less than 50% complete] Portuguese"),"pt");
+    aBox->addItem(tr("[less than 50% complete] Slovak"),"sk");
+    aBox->addItem(tr("[less than 50% complete] Vietnamese"),"vi");
 }
 
 void PreferencesDialog::loadPrefs()

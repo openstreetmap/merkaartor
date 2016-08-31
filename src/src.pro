@@ -206,6 +206,11 @@ TRANSLATIONS += \
     ../translations/merkaartor_sv.ts \
     ../translations/merkaartor_uk.ts \
     ../translations/merkaartor_pt_BR.ts \
+    ../translations/merkaartor_de_AT.ts \
+    ../translations/merkaartor_vi.ts    \
+    ../translations/merkaartor_zh_CN.ts \
+    ../translations/merkaartor_zh_TW.ts \
+
 
 BINTRANSLATIONS += \
     ../translations/merkaartor_en.qm \
@@ -227,6 +232,10 @@ BINTRANSLATIONS += \
     ../translations/merkaartor_sv.qm \
     ../translations/merkaartor_uk.qm \
     ../translations/merkaartor_pt_BR.qm \
+    ../translations/merkaartor_de_AT.qm \
+    ../translations/merkaartor_vi.qm    \
+    ../translations/merkaartor_zh_CN.qm \
+    ../translations/merkaartor_zh_TW.qm \
 
 translations.path =  $${TRANSDIR_MERKAARTOR}
 translations.files = $${BINTRANSLATIONS}
