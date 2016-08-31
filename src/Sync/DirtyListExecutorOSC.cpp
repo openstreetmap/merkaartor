@@ -52,7 +52,7 @@ int DirtyListExecutorOSC::sendRequest(const QString& Method, const QString& URL,
     if (inError())
         return false;
 
-    int rCode;
+    int rCode = -1;
 
     QMessageBox::StandardButton theChoice = QMessageBox::Retry;
     while (theChoice == QMessageBox::Retry) {
@@ -221,13 +221,16 @@ bool DirtyListExecutorOSC::stop()
                 QDomElement resRoot = nl.at(0).toElement();
                 QDomElement c = resRoot.firstChildElement();
                 while (!c.isNull()) {
-                    IFeature::FeatureType aType;
+                    IFeature::FeatureType aType = IFeature::FeatureType::Uninitialized;
                     if (c.tagName() == "node")
                         aType = IFeature::Point;
                     else if (c.tagName() == "way")
                         aType = IFeature::LineString;
                     else if (c.tagName() == "relation")
                         aType = IFeature::OsmRelation;
+                    else {
+                        qDebug() << "Unknown element found in response.";
+                    }
 
                     Feature* F = theDocument->getFeature(IFeature::FId(aType, c.attribute("old_id").toLongLong()));
                     if (F) {
