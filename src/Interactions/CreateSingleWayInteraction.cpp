@@ -133,9 +133,9 @@ void CreateSingleWayInteraction::snapMouseMoveEvent(QMouseEvent* ev, Feature* la
         CoordBox HotZone(XY_TO_COORD(ev->pos()-QPoint(CLEAR_DISTANCE, CLEAR_DISTANCE)),XY_TO_COORD(ev->pos()+QPoint(CLEAR_DISTANCE, CLEAR_DISTANCE)));
         qreal BestDistanceNW = 9999, AngleNW = 0;
         qreal BestDistanceNE = 9999, AngleNE = 0;
-        qreal* BestDistance;
-        qreal* BestAngle;
-        qreal curAngle;
+        qreal* BestDistance = &BestDistanceNW;
+        qreal* BestAngle = &BestDistanceNE;
+        qreal curAngle = 666;
 
         Way* R;
         for (int j=0; j<document()->layerSize(); ++j) {
@@ -184,6 +184,9 @@ void CreateSingleWayInteraction::snapMouseMoveEvent(QMouseEvent* ev, Feature* la
                 qDebug() << BestDistanceNE << BestDistanceNW << AngleNE << AngleNW;
             }
         }
+
+        /* Check if for some reason not a single angle was found. */
+        Q_ASSERT(curAngle >= -360 && curAngle <= 360);
 
         QLineF l(PreviousPoint, ev->pos());
         qreal a = l.angle();
