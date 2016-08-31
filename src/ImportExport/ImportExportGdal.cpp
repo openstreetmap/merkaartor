@@ -508,7 +508,7 @@ bool ImportExportGdal::import(Layer* aLayer)
 bool ImportExportGdal::import(Layer* aLayer, const QByteArray& ba, bool confirmProjection)
 {
     GByte* content = (GByte*)(ba.constData());
-    /*FILE* f = */VSIFileFromMemBuffer("/vsimem/temp", content, ba.size(), FALSE);
+    VSILFILE* f = VSIFileFromMemBuffer("/vsimem/temp", content, ba.size(), FALSE);
 
 #ifdef GDAL2
     GDALAllRegister();
@@ -528,6 +528,7 @@ bool ImportExportGdal::import(Layer* aLayer, const QByteArray& ba, bool confirmP
     importGDALDataset(poDS, aLayer, confirmProjection);
 
     GDALClose( (GDALDatasetH) poDS );
+    VSIFCloseL(f);
 
     return true;
 }
