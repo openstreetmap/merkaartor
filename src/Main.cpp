@@ -11,8 +11,6 @@
 #include "Preferences/MerkaartorPreferences.h"
 #include "proj_api.h"
 #include "gdal_version.h"
-//#include "QFatFs.h"
-//#include "ZipEngine.h"
 #include "Global.h"
 
 #ifdef USE_SPATIALITE

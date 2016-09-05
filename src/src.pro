@@ -18,16 +18,6 @@ isEmpty(SYSTEM_QTSA) {
 } else {
   CONFIG += qtsingleapplication
 }
-isEmpty(SYSTEM_QUAZIP) {
-  DEFINES += QUAZIP_STATIC
-  include(../3rdparty/quazip-0.7/quazip.pri)
-} else {
-  isEmpty(SYSTEM_QUAZIP_LDFLAGS) {
-      LIBS += -lquazip
-  } else {
-      LIBS += $$SYSTEM_QUAZIP_LDFLAGS
-  }
-}
 
 #Qt Version
 QT_VERSION = $$[QT_VERSION]

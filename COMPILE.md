@@ -154,8 +154,6 @@ There are some parameters you can pass to qmake to customize build:
 | NODEBUG=1                   | release target |
 | NOUSEWEBKIT                 | disable use of WebKit (Yahoo adapter) |
 | SYSTEM_QTSA                 | use system copy of qtsingleapplication instead of internal |
-| SYSTEM_QUAZIP               | use system copy of quazip instead of internal |
-| SYSTEM_QUAZIP_LDFLAGS       | custom flags instead of the default "-lquazip", if your library has different name |
 | SPATIALITE=1                | compile spatialite backend (not working) and SpatialiteBackground plugin (state unknown). Use at your own risk. |
 
 
