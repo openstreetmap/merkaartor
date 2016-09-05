@@ -535,7 +535,7 @@
      <normaloff>:/Icons/actions/document_import.png</normaloff>:/Icons/actions/document_import.png</iconset>
    </property>
    <property name="text">
-    <string>&amp;Import using GDAL</string>
+    <string>Import using &amp;GDAL</string>
    </property>
    <property name="statusTip">
     <string>Import a file into the current document using GDAL</string>
