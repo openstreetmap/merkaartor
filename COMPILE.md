@@ -62,6 +62,7 @@ For 32bit, they are (the w64 is not a bug!):
 ```
 $ pacman -S base-devel \
 	msys/git \
+	mingw32/mingw-w64-i686-gcc \
 	mingw32/mingw-w64-i686-qt5 \
 	mingw32/mingw-w64-i686-gdal \
 	mingw32/mingw-w64-i686-proj \
@@ -74,6 +75,7 @@ For 64bit, they are:
 ```
 $ pacman -S base-devel \
 	msys/git \
+	mingw64/mingw-w64-x86_64-gcc \
 	mingw64/mingw-w64-x86_64-qt5 \
 	mingw64/mingw-w64-x86_64-gdal \
 	mingw64/mingw-w64-x86_64-proj \
