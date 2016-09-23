@@ -44,7 +44,9 @@ void BackgroundStyleLayer::draw(Way* R)
         }
 
         r->thePainter->setPen(thePen);
+        R->getLock();
         r->thePainter->drawPath(r->theTransform.map(R->getPath()));
+        R->releaseLock();
     }
 }
 

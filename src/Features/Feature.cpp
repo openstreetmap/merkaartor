@@ -1091,3 +1091,13 @@ QString Feature::toMainHtml(QString type, QString systemtype)
 
     return S;
 }
+
+void Feature::getLock()
+{
+	featMutex.lock();
+}
+
+void Feature::releaseLock()
+{
+	featMutex.unlock();
+}
