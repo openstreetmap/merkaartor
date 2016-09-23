@@ -336,6 +336,9 @@ public:
 
     static QString stripToOSMId(const IFeature::FId& id);
 
+    void getLock();
+    void releaseLock();
+
 public:
 #ifdef USE_SPATIALITE
     quint32 internal_id;
