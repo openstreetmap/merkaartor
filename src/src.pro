@@ -6,7 +6,7 @@ include (Config.pri)
 #Custom config
 include(Custom.pri)
 
-CONFIG += debug_and_release
+CONFIG += debug_and_release c++11
 
 # This is a workaround to get qDebug() to stdout on Windows
 win32 {
