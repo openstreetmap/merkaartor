@@ -12,8 +12,6 @@ QT_VER_MIN = $$member(QT_VERSION, 1)
     SUBDIRS += \
 #        MNavitBackground \
 #        MCadastreFranceBackground \
-#        MYahooTiledBackground \
-#        MYahooBackground \
         MMsBingMapBackground \
         MWalkingPapersBackground \
         MGeoTiffBackground \
