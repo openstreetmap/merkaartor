@@ -1,7 +1,6 @@
 sudo: required
 dist: trusty
 env:
-    - QT=4
     - QT=5
 os:
     - linux
