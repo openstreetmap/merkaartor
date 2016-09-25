@@ -10,7 +10,6 @@ QT_VER_MIN = $$member(QT_VERSION, 1)
 
 !symbian {
     SUBDIRS += \
-#        MNavitBackground \
 #        MCadastreFranceBackground \
         MMsBingMapBackground \
         MWalkingPapersBackground \
