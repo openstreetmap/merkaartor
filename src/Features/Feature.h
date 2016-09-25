@@ -88,7 +88,6 @@ class Feature : public IFeature
 {
     friend class FeaturePrivate;
     friend class MemoryBackend;
-    friend class SpatialiteBackend;
 
 public:
     typedef enum { User, UserResolved, OSMServer, OSMServerConflict, NotYetDownloaded, Log } ActorType;
@@ -338,11 +337,6 @@ public:
 
     void getLock();
     void releaseLock();
-
-public:
-#ifdef USE_SPATIALITE
-    quint32 internal_id;
-#endif
 
 private:
     FeaturePrivate* p;

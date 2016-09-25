@@ -269,18 +269,6 @@ unix {
 LIBS += -lproj
 PKGCONFIG += proj
 
-contains (SPATIALITE, 1) {
-    DEFINES += USE_SPATIALITE
-    unix {
-        CONFIG += link_pkgconfig
-        PKGCONFIG += spatialite
-        PKGCONFIG += sqlite3
-    }
-    win32 {
-        LIBS += -lspatialite
-        LIBS += -lsqlite3
-    }
-}
 contains (PROTOBUF, 1) {
     DEFINES += USE_PROTOBUF
 }

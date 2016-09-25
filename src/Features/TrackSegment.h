@@ -11,7 +11,6 @@ class QProgressDialog;
 class TrackSegment : public Feature
 {
     friend class MemoryBackend;
-    friend class SpatialiteBackend;
 
 protected:
     TrackSegment(void);

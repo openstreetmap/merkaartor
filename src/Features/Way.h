@@ -16,7 +16,6 @@ class Way : public Feature
 {
     friend class WayPrivate;
     friend class MemoryBackend;
-    friend class SpatialiteBackend;
 
 protected:
     Way(void);

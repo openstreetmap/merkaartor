@@ -19,7 +19,4 @@ QT_VER_MIN = $$member(QT_VERSION, 1)
         MGeoTiffBackground \
         MGdalBackground
 
-    contains (SPATIALITE, 1) {
-        SUBDIRS += MSpatialiteBackground
-    }
 }

@@ -16,7 +16,6 @@ class QProgressDialog;
 class Node : public Feature
 {
     friend class MemoryBackend;
-    friend class SpatialiteBackend;
 
 public:
     Node()
@@ -88,7 +87,6 @@ public:
 class TrackNode : public Node
 {
     friend class MemoryBackend;
-    friend class SpatialiteBackend;
 
 protected:
     TrackNode(const Coord& aCoord);
@@ -124,7 +122,6 @@ private:
 class PhotoNode : public TrackNode
 {
     friend class MemoryBackend;
-    friend class SpatialiteBackend;
 
 protected:
     PhotoNode(const Coord& aCoord);

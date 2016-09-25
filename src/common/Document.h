@@ -26,7 +26,6 @@ class DirtyLayer;
 class UploadedLayer;
 class DeletedLayer;
 class FeaturePainter;
-class SpatialiteBackend;
 
 class Document : public QObject, public IDocument
 {

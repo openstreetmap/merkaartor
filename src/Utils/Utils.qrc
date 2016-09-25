@@ -2,7 +2,4 @@
     <qresource prefix="/Utils">
         <file alias="CHANGELOG">../../CHANGELOG</file>
     </qresource>
-    <qresource prefix="/Utils/Spatialite">
-        <file>init_spatialite-2.3.sql</file>
-    </qresource>
 </RCC>

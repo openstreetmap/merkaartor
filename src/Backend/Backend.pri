@@ -6,13 +6,3 @@ HEADERS += \
 
 SOURCES += \
     MemoryBackend.cpp
-
-contains (SPATIALITE, 1) {
-    HEADERS += \
-        SpatialiteBase.h \
-        SpatialiteBackend.h
-
-    SOURCES += \
-        SpatialiteBase.cpp \
-        SpatialiteBackend.cpp
-}

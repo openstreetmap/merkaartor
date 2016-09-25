@@ -13,11 +13,6 @@
 #include "gdal_version.h"
 #include "Global.h"
 
-#ifdef USE_SPATIALITE
-#include <sqlite3.h>
-#include <spatialite.h>
-#endif
-
 #include "IMapAdapterFactory.h"
 
 FILE* pLogFile = NULL;
@@ -145,10 +140,6 @@ int main(int argc, char** argv)
     QString projVer = QString(STRINGIFY(PJ_VERSION));
     qDebug() <<	"-------" << QString("using PROJ4 version %1.%2.%3").arg(projVer.left(1)).arg(projVer.mid(1, 1)).arg(projVer.right(1));
     qDebug() <<	"-------" << QString("using GDAL version %1").arg(GDAL_RELEASE_NAME);
-#ifdef USE_SPATIALITE
-    qDebug() <<	"-------" << QString("using Spatialite version %1").arg(spatialite_version());
-    qDebug() <<	"-------" << QString("using SQLite version %1").arg(sqlite3_libversion());
-#endif
     qDebug() << "-------" << "with arguments: " << QCoreApplication::arguments();
 
 #ifdef _MOBILE

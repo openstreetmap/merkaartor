@@ -26,7 +26,6 @@ You will need the following packages installed:
  - Qt 4.x (4.4.0 or newer) or Qt 5.x (5.3.1 or later)
  - Proj.4
  - GDAL (2.0.0 or newer for GDAL exports)
- - spatialite-4.1.0 or newer for GDAL exports
  - (For Windows Installer) NSIS-3
 
 The OS specifics will be explained further down.
@@ -154,7 +153,6 @@ There are some parameters you can pass to qmake to customize build:
 | NODEBUG=1                   | release target |
 | NOUSEWEBKIT                 | disable use of WebKit (Yahoo adapter) |
 | SYSTEM_QTSA                 | use system copy of qtsingleapplication instead of internal |
-| SPATIALITE=1                | compile spatialite backend (not working) and SpatialiteBackground plugin (state unknown). Use at your own risk. |
 
 
 ### Run make
