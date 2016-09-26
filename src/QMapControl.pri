@@ -26,7 +26,7 @@ QT += network
         DEFINES += USE_WEBKIT
         SOURCES += browserimagemanager.cpp
         HEADERS += browserimagemanager.h
-        QT += webkit
+        QT += webenginewidgets
         contains(THREADED_BROWSERIMAGEMANAGER,1): DEFINES += BROWSERIMAGEMANAGER_IS_THREADED
     }
 }
