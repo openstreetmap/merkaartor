@@ -19,7 +19,7 @@ inline QString Coord2Sexa(qreal c)
     qreal min = fabs((c - deg)*60);
     qreal sec = (min - int(min)) *60;
 
-    return QString("%1° %2' %3\"").arg(deg).arg(int(min)).arg(sec, 0, 'f', 2);
+    return QString::fromUtf8("%1Â° %2' %3\"").arg(deg).arg(int(min)).arg(sec, 0, 'f', 2);
 }
 
 
