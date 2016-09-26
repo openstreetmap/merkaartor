@@ -7,7 +7,8 @@ brew update
 if [ $QT == 4 ]; then
     QT_PKG=qt
 else
-    QT_PKG=homebrew/versions/qt52
+    #QT_PKG=homebrew/versions/qt52
+    QT_PKG=qt5
 fi
 
 # Uninstall ALL the GDAL. By default, there are more versions and macdeployqt
