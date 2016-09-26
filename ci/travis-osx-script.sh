@@ -19,7 +19,7 @@ DEPLOY=`find /usr/local -name "macdeployqt" | head -n 1`
 $DEPLOY merkaartor.app -verbose=3
 
 du -s -h merkaartor.app
-hdiutil create "merkaartor.dmg" -srcfolder merkaartor.app -format UDZO -volname merkaartor -verbose -size 130m
+hdiutil create "merkaartor.dmg" -srcfolder merkaartor.app -format UDZO -volname merkaartor -verbose -size 200m
 
 VERSION=`git describe --tags`
 mv merkaartor.dmg "merkaartor-${VERSION}-qt${QT}.dmg"
