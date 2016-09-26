@@ -24,14 +24,10 @@
 #include <QPixmap>
 
 #include <QtNetwork/QtNetwork>
-#include <QWebFrame>
-#include "qwebhistory.h"
-#include "qwebhistoryinterface.h"
-#include "qwebkitglobal.h"
-#include "qwebpage.h"
-#include "qwebpluginfactory.h"
-#include "qwebsettings.h"
-#include "qwebview.h"
+#include <QWebEnginePage>
+#include <QWebEngineHistory>
+#include <QWebEngineSettings>
+#include <QWebEngineView>
 
 #include <QThread>
 
@@ -41,13 +37,13 @@
     @author Chris Browet <cbro@semperpax.com>
 */
 
-class BrowserWebPage : public QWebPage
+class BrowserWebPage : public QWebEnginePage
 {
     friend class BrowserImageManager;
 
     protected:
         virtual void javaScriptConsoleMessage ( const QString & message, int lineNumber, const QString & sourceID );
-        virtual void javaScriptAlert ( QWebFrame * frame, const QString & msg ) ;
+        virtual void javaScriptAlert ( const QString & msg ) ;
         void launchRequest ( const QUrl & url );
 
     private:
@@ -116,7 +112,6 @@ class BrowserImageManager : public QObject, public IImageManager
         static BrowserImageManager* m_BrowserImageManagerInstance;
 
         BrowserWebPage* page;
-        QWebFrame *frame;
         QNetworkAccessManager* qnam;
 
     signals:

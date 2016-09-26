@@ -34,7 +34,7 @@ TEMPLATE = app
 
 CONFIG += rtti stl exceptions
 #CONFIG -= exceptions
-QT += svg network xml core gui webkitwidgets concurrent printsupport
+QT += svg network xml core gui webenginewidgets concurrent printsupport
 win32-msvc* {
     LIBS += -lzlib
 } else {

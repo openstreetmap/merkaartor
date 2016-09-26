@@ -47,9 +47,8 @@ void BrowserWebPage::javaScriptConsoleMessage ( const QString & message, int lin
     //printf("%s\n", s);
 }
 
-void BrowserWebPage::javaScriptAlert ( QWebFrame * frame, const QString & msg )
+void BrowserWebPage::javaScriptAlert ( const QString & msg )
 {
-    Q_UNUSED(frame)
     //QMessageBox::information(NULL, tr("Javascript alert"), msg);
 
     if (msg.startsWith("Coord")) {
@@ -105,8 +104,10 @@ void BrowserWebPage::javaScriptAlert ( QWebFrame * frame, const QString & msg )
 
 void BrowserWebPage::launchRequest ( const QUrl & url )
 {
+    qDebug() << "Warning: you are using BrowserWebPage to render background imagery. "<<
+        "This code is not tested and may not work as expected. If you experience issues, please let us know.";
     sw = sh = 0;
-    mainFrame()->load(url);
+    load(url);
 }
 
 BrowserImageManager* BrowserImageManager::m_BrowserImageManagerInstance = 0;
@@ -138,8 +139,6 @@ BrowserImageManager::BrowserImageManager(QObject* parent)
     }
 
     page = new BrowserWebPage();
-    page->setNetworkAccessManager(m_networkManager);
-    page->setViewportSize(QSize(1024, 1024));
 
     connect(page, SIGNAL(loadFinished(bool)), this, SLOT(pageLoadFinished(bool)));
 
@@ -220,7 +219,6 @@ void BrowserImageManager::launchRequest()
 
     QUrl u = QUrl( R.url);
 
-    page->networkAccessManager()->setProxy(M_PREFS->getProxy(u));
     page->launchRequest(u);
     requestActive = true;
 #ifndef BROWSERIMAGEMANAGER_IS_THREADED
@@ -246,7 +244,7 @@ void BrowserImageManager::pageLoadFinished(bool ok)
         qDebug() << "BrowserImageManager::pageLoadFinished: " << " Hash: " << R.hash;
         QPixmap pt(page->sw, page->sh);
         QPainter P(&pt);
-        page->mainFrame()->render(&P, QRegion(0,0,page->sw,page->sh));
+        page->view()->render(&P, QPoint(), QRegion(0,0,page->sw,page->sh));
         P.end();
 
 //        if (page->sw != BROWSER_TILE_SIZE || page->sh != BROWSER_TILE_SIZE) {
@@ -319,7 +317,7 @@ void BrowserImageManager::loadingQueueEmpty()
 void BrowserImageManager::abortLoading()
 {
     //qDebug() << "BrowserImageManager::abortLoading";
-    page->triggerAction(QWebPage::Stop);
+    page->triggerAction(QWebEnginePage::Stop);
     if (!loadingRequests.isEmpty()) {
         LoadingRequest R = loadingRequests.dequeue();
         loadingRequests.clear();
@@ -331,7 +329,7 @@ void BrowserImageManager::abortLoading()
 #ifdef BROWSERIMAGEMANAGER_IS_THREADED
 void BrowserImageManager::run()
 {
-    page = new BrowserWebPage();
+    page = new BrowserWebEnginePage();
     page->setViewportSize(QSize(1024, 1024));
 
     QTimer theTimer;
@@ -354,7 +352,7 @@ void BrowserImageManager::checkRequests()
     } else {
         if ((requestDuration++) > 100) {
             requestDuration = 0;
-            page->triggerAction(QWebPage::Stop);
+            page->triggerAction(QWebEnginePage::Stop);
             qDebug() << "BrowserImageManager Timeout";
         }
     }
@@ -365,7 +363,7 @@ void BrowserImageManager::checkRequests()
 void BrowserImageManager::timeout()
 {
     qDebug() << "BrowserImageManager::timeout";
-    page->triggerAction(QWebPage::Stop);
+    page->triggerAction(QWebEnginePage::Stop);
     pageLoadFinished(false);
 }
 #endif // BROWSERIMAGEMANAGER_IS_THREADED
