@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>650</width>
-    <height>400</height>
+    <width>786</width>
+    <height>171</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -15,11 +15,19 @@
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <item>
-    <widget class="QWebEngineView" name="webView">
-     <property name="url">
-      <url>
-       <string>about:blank</string>
-      </url>
+    <widget class="QLabel" name="label">
+     <property name="text">
+      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;The content selected is shared under a non-standard license agreement. The full text is available on the following URL. It is your reponsibility to read, understand and agree to the license.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+     </property>
+     <property name="wordWrap">
+      <bool>true</bool>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QLabel" name="urlLabel">
+     <property name="text">
+      <string>TextLabel</string>
      </property>
     </widget>
    </item>
@@ -39,13 +47,6 @@
    </item>
   </layout>
  </widget>
- <customwidgets>
-  <customwidget>
-   <class>QWebEngineView</class>
-   <extends>QWidget</extends>
-   <header>QWebEngineView</header>
-  </customwidget>
- </customwidgets>
  <resources/>
  <connections>
   <connection>

@@ -21,13 +21,11 @@ SOURCES += \
 
 QT += network
 
-!contains(NOUSEWEBKIT,1) {
-    greaterThan(QT_VER_MAJ, 3) : greaterThan(QT_VER_MIN, 3) {
-        DEFINES += USE_WEBKIT
-        SOURCES += browserimagemanager.cpp
-        HEADERS += browserimagemanager.h
-        QT += webenginewidgets
-        contains(THREADED_BROWSERIMAGEMANAGER,1): DEFINES += BROWSERIMAGEMANAGER_IS_THREADED
-    }
+contains(USEWEBENGINE,1) {
+    DEFINES += USE_WEBKIT
+    SOURCES += browserimagemanager.cpp
+    HEADERS += browserimagemanager.h
+    QT += webenginewidgets
+    contains(THREADED_BROWSERIMAGEMANAGER,1): DEFINES += BROWSERIMAGEMANAGER_IS_THREADED
 }
 

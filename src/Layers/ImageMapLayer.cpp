@@ -263,7 +263,7 @@ void ImageMapLayer::setMapAdapter(const QUuid& theAdapterUid, const QString& ser
                     QDialog dlg;
                     ui.setupUi(&dlg);
                     dlg.setWindowTitle(tr("Licensing Terms: %1").arg(name()));
-                    ui.webView->load(u);
+                    ui.urlLabel->setText(QString("<a href='%1'>%2</a>").arg(u.toString()).arg(u.toString()));
 
                     bool OK = false;
                     while (!OK) {

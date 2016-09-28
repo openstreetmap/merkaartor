@@ -151,7 +151,7 @@ There are some parameters you can pass to qmake to customize build:
 | TRANSDIR_MERKAARTOR=<path>  | where will the Merkaartor translations be installed |
 | TRANSDIR_SYSTEM=<path>      | where your global Qt translation directory is | 
 | NODEBUG=1                   | release target |
-| NOUSEWEBKIT                 | disable use of WebKit (Yahoo adapter) |
+| USEWEBENGINE=1              | enable use of WebEngine (required for some external plugins) |
 | SYSTEM_QTSA                 | use system copy of qtsingleapplication instead of internal |
 
 
