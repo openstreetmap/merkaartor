@@ -252,7 +252,7 @@ bool Downloader::request(const QString& Method, const QUrl& url, const QString& 
 
     QString sReq = url.toString(QUrl::RemoveScheme | QUrl::RemoveAuthority);
     QHttpRequestHeader Header(Method,sReq);
-    Header.setValue("Host",url.host()+':'+url.port(80));
+    Header.setValue("Host",url.host()+':'+QString::number(url.port(80)));
     Header.setValue("User-Agent", USER_AGENT);
 
     QString auth = QString("%1:%2").arg(User).arg(Password);
