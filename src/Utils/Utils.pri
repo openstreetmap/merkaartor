@@ -15,7 +15,8 @@ HEADERS += \
     Utils.h \
     TagSelector.h \
     TagSelectorWidget.h \
-    CheckBoxList.h
+    CheckBoxList.h \
+    MessageLogger.h
 
 SOURCES += \
     ShortcutOverrideFilter.cpp \
@@ -30,7 +31,8 @@ SOURCES += \
     Utils.cpp \
     TagSelector.cpp \
     TagSelectorWidget.cpp \
-    CheckBoxList.cpp
+    CheckBoxList.cpp \
+    MessageLogger.cpp
 
 FORMS += \
     PictureViewerDialog.ui \

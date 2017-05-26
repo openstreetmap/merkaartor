@@ -71,6 +71,8 @@ int main(int argc, char** argv)
 {
     QtSingleApplication instance(argc,argv);
 
+    MessageLogger::GetInstance().installHandler();
+
     bool reuse = true;
     QStringList argsIn = QCoreApplication::arguments();
     QStringList argsOut;
