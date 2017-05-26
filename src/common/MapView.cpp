@@ -443,9 +443,6 @@ void floodFill(QImage& theImage, const QPoint& P, const QRgb& targetColor, const
     }
 }
 
-#define PARALLEL_LINES_NUM 5
-#define MEDIAN_LINES_NUM 5
-
 void MapView::drawLatLonGrid(QPainter & P)
 {
     if (!TEST_RFLAGS(RendererOptions::LatLonGridVisible))
