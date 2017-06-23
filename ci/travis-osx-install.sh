@@ -14,7 +14,7 @@ fi
 # Uninstall ALL the GDAL. By default, there are more versions and macdeployqt
 # tried to embed an older one, that relies upon libspatialite.5, that is no
 # longer installed.
-brew uninstall --force gdal
+brew uninstall --ignore-dependencies --force gdal
 
 # To get GDAL 2.0: http://gis.stackexchange.com/questions/155403/install-gdal-2-0-on-a-macosx
 #brew install gdal --HEAD

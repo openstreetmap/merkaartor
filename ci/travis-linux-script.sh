@@ -1,6 +1,6 @@
 #!/bin/bash
 
-source /opt/qt57/bin/qt57-env.sh
+source /opt/qt59/bin/qt59-env.sh
 
 set -ev
 
