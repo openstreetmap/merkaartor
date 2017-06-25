@@ -911,7 +911,7 @@ v0.05 15 nov 2006
     * FIX : use the same step to zoom in and out
     * FIX : calculate correct bounding box
     * FIX : always update tagview and fix memory leak
-    * FIX : performace improvements
+    * FIX : performance improvements
     * ADD : oneway markers
     * ADD : reverse way/road action
     * ADD : traffic direction combobox in road properties
