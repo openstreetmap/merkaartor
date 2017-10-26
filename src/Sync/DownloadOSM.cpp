@@ -301,7 +301,8 @@ bool downloadOSM(QWidget* aParent, const QUrl& theUrl, const QString& aUser, con
     if (!Rcv.go(theUrl))
     {
 #ifndef _MOBILE
-        aParent->setCursor(QCursor(Qt::ArrowCursor));
+        if (aParent)
+            aParent->setCursor(QCursor(Qt::ArrowCursor));
 #endif
         return false;
     }
