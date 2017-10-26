@@ -676,7 +676,9 @@ void Way::buildPath(const Projection &theProjection)
 
         p->thePath.moveTo(p->Nodes.at(0)->projected(theProjection));
         for (int i=1; i<p->Nodes.size(); ++i) {
-            p->thePath.lineTo((p->Nodes.at(i)->projected(theProjection)));
+            if (!p->Nodes.at(i)->notEverythingDownloaded()) {
+                p->thePath.lineTo((p->Nodes.at(i)->projected(theProjection)));
+            }
         }
         for (int i=0; i<p->virtualNodes.size(); ++i) {
             p->virtualNodes[i]->buildPath(theProjection);
