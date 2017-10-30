@@ -11,5 +11,5 @@ sudo apt-cache search qt
 sudo apt-get -qq install gdb libgdal-dev libproj-dev
 #sudo apt-get -qq install qt56xml qt56network qt56gui qt56svg qt56webengine qt56quick qt57declarative qt57tools qtbase56-dev qt56-qmake qtchooser
 sudo apt-cache search qt59
-sudo apt-get -qq install qt59-meta-full
+sudo apt-get -y install qt59-meta-full
 qtchooser -list-versions
