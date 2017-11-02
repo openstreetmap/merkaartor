@@ -674,9 +674,16 @@ void Way::buildPath(const Projection &theProjection)
             return;
         }
 
-        p->thePath.moveTo(p->Nodes.at(0)->projected(theProjection));
-        for (int i=1; i<p->Nodes.size(); ++i) {
-            p->thePath.lineTo((p->Nodes.at(i)->projected(theProjection)));
+        bool hasMoved = 0;
+        for (int i=0; i<p->Nodes.size(); ++i) {
+            if (!p->Nodes.at(i)->notEverythingDownloaded()) {
+                if (hasMoved) {
+                    p->thePath.lineTo(p->Nodes.at(i)->projected(theProjection));
+                } else {
+                    p->thePath.moveTo(p->Nodes.at(i)->projected(theProjection));
+                    hasMoved = 1;
+                }
+            }
         }
         for (int i=0; i<p->virtualNodes.size(); ++i) {
             p->virtualNodes[i]->buildPath(theProjection);
