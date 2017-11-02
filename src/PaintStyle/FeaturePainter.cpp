@@ -238,7 +238,9 @@ void FeaturePainter::drawBackground(Way* R, QPainter* thePainter, MapRenderer* t
                 thePen.setJoinStyle(Qt::BevelJoin);
                 thePainter->setPen(thePen);
 
+                R->getLock();
                 QPainterPath thePath = theRenderer->theTransform.map(R->getPath());
+                R->releaseLock();
                 QPainterPath aPath;
 
                 for (int j=1; j < thePath.elementCount(); j++) {
@@ -295,7 +297,9 @@ void FeaturePainter::drawBackground(Way* R, QPainter* thePainter, MapRenderer* t
         }
     }
 
+    R->getLock();
     thePainter->drawPath(theRenderer->theTransform.map(R->getPath()));
+    R->releaseLock();
 }
 
 void FeaturePainter::drawBackground(Relation* R, QPainter* thePainter, MapRenderer* theRenderer) const
@@ -318,7 +322,9 @@ void FeaturePainter::drawBackground(Relation* R, QPainter* thePainter, MapRender
                 thePen.setJoinStyle(Qt::BevelJoin);
                 thePainter->setPen(thePen);
 
+                R->getLock();
                 QPainterPath thePath = theRenderer->theTransform.map(R->getPath());
+                R->releaseLock();
                 QPainterPath aPath;
 
                 for (int j=1; j < thePath.elementCount(); j++) {
@@ -373,7 +379,9 @@ void FeaturePainter::drawBackground(Relation* R, QPainter* thePainter, MapRender
         thePainter->setBrush(ForegroundFillFillColor);
     }
 
+    R->getLock();
     thePainter->drawPath(theRenderer->theTransform.map(R->getPath()));
+    R->releaseLock();
 }
 
 void FeaturePainter::drawForeground(Node* N, QPainter* thePainter, MapRenderer* theRenderer) const
@@ -417,7 +425,9 @@ void FeaturePainter::drawForeground(Way* R, QPainter* thePainter, MapRenderer* t
 
     thePainter->setBrush(Qt::NoBrush);
 
+    R->getLock();
     thePainter->drawPath(theRenderer->theTransform.map(R->getPath()));
+    R->releaseLock();
 }
 
 void FeaturePainter::drawForeground(Relation* R, QPainter* thePainter, MapRenderer* theRenderer) const
@@ -446,7 +456,9 @@ void FeaturePainter::drawForeground(Relation* R, QPainter* thePainter, MapRender
 
     thePainter->setBrush(Qt::NoBrush);
 
+    R->getLock();
     thePainter->drawPath(theRenderer->theTransform.map(R->getPath()));
+    R->releaseLock();
 }
 
 
@@ -512,7 +524,9 @@ void FeaturePainter::drawTouchup(Way* R, QPainter* thePainter, MapRenderer* theR
                 Pattern << TouchupDash << TouchupWhite;
                 thePen.setDashPattern(Pattern);
             }
+            R->getLock();
             thePainter->strokePath(theRenderer->theTransform.map(R->getPath()),thePen);
+            R->releaseLock();
         }
     }
     if (DrawIcon && !ForegroundFillUseIcon)
@@ -523,7 +537,9 @@ void FeaturePainter::drawTouchup(Way* R, QPainter* thePainter, MapRenderer* theR
 
             QImage* pm = getSVGImageFromFile(IconName,int(WW));
             if (pm && !pm->isNull()) {
+                R->getLock();
                 QPointF C(theRenderer->theTransform.map(R->getPath().boundingRect().center()));
+                R->releaseLock();
                 thePainter->drawImage( int(C.x()-pm->width()/2), int(C.y()-pm->height()/2) , *pm);
             }
         }
@@ -677,7 +693,9 @@ void FeaturePainter::drawLabel(Way* R, QPainter* thePainter, MapRenderer* theRen
         return;
 
     if (getLabelArea()) {
+        R->getLock();
         QPointF C(theRenderer->theTransform.map(R->getPath().boundingRect().center()));
+        R->releaseLock();
 //        if (rg.contains(C.toPoint())) {
             drawPointLabel(C, str, strBg, thePainter, theRenderer);
 //        }
@@ -690,7 +708,9 @@ void FeaturePainter::drawLabel(Way* R, QPainter* thePainter, MapRenderer* theRen
     if (WW < 10 && !TEST_RFLAGS(RendererOptions::PrintAllLabels)) return;
     //qreal WWR = qMax(PixelPerM*R->widthOf()*BackgroundScale+BackgroundOffset, PixelPerM*R->widthOf()*ForegroundScale+ForegroundOffset);
 
+    R->getLock();
     QPainterPath tranformedRoadPath = theRenderer->theTransform.map(R->getPath());
+    R->releaseLock();
     QFont font = getLabelFont();
 //#if QT_VERSION >= 0x040700 || defined(FORCE_46)
 //    qreal pathSurface = tranformedRoadPath.controlPointRect().width() * tranformedRoadPath.controlPointRect().height();
