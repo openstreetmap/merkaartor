@@ -1882,13 +1882,15 @@ void MainWindow::loadUrl(const QUrl& theUrl)
             F = theDocument->getFeature(mId);
         }
         /* The feature is on our map, just select it. */
-        if (theView) {
+        if (F) { /* If F existed, e.g., was not deleted*/
+          if (theView) {
             theView->setViewport(F->boundingBox(), theView->rect());
             on_fileDownloadMoreAction_triggered();
+          }
+          properties()->setSelection(0);
+          properties()->addSelection(F);
+          emit content_changed();
         }
-        properties()->setSelection(0);
-        properties()->addSelection(F);
-        emit content_changed();
     } else if (theUrl.path() == "/add_node") {
         qreal lat = theQuery.queryItemValue("lat").toDouble();
         qreal lon = theQuery.queryItemValue("lon").toDouble();
