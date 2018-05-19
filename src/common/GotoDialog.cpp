@@ -63,7 +63,7 @@ GotoDialog::GotoDialog(MapView* aView, QWidget *parent)
     connect(searchWidget, SIGNAL(done()), this, SLOT(searchWidget_done()));
     verticalLayout_4->addWidget(searchWidget);
 
-    coordLink->setText( QString("http://www.openstreetmap.org/?lat=%1&lon=%2&zoom=%3")
+    coordLink->setText( QString("https://www.openstreetmap.org/#map=%3/%1/%2")
         .arg(COORD2STRING(theViewport.center().y()))
         .arg(COORD2STRING(theViewport.center().x()))
         .arg(QString::number(OsmZoom))
