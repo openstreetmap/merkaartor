@@ -289,7 +289,7 @@ contains(SANITIZE, 2) {
 
 unix:!macx {
     desktop.path = $${PREFIX}/share/applications
-    desktop.files = merkaartor.desktop
+    desktop.files = org.merkaartor.merkaartor.desktop 
     desktopicon8x8.path = $${PREFIX}/share/icons/hicolor/8x8/apps/
     desktopicon8x8.files = $$PWD/../Icons/8x8/merkaartor.png
     desktopicon16x16.path = $${PREFIX}/share/icons/hicolor/16x16/apps/
