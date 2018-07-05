@@ -262,7 +262,7 @@ dashed blue-red (with a lot of red): pedestrian street/way where cycling is allo
 <painter
  fillColor="#999933cd"
  drawTrafficDirectionMarks="no" labelColor="#333333ff" labelScale="1.5" labelOffset="6"
- labelFont="DejaVu Sans Condensed,12,-1,5,50,0,0,0,0,0" labelTag="name"labelHalo="yes" labelArea="yes">
+ labelFont="DejaVu Sans Condensed,12,-1,5,50,0,0,0,0,0" labelTag="name" labelHalo="yes" labelArea="yes">
   <selector expr="not [building] is _NULL_"/>
 </painter>
 <painter
