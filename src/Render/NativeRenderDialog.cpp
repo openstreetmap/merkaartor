@@ -54,6 +54,11 @@ NativeRenderDialog::NativeRenderDialog(Document *aDoc, const CoordBox& aCoordBox
     dpiValidator->setBottom( 0 );
     ui.fieldDpi->setValidator( dpiValidator );
 
+    /* Set the UI parameters first, before we tie in the updatePreview signal/slot. */
+    setBoundingBox(aCoordBox);
+    setOptions(M_PREFS->getRenderOptions());
+
+    /* Tie in the updatePreview slot to the UI. */
     connect(ui.cbShowNodes, SIGNAL(toggled(bool)), prtW, SLOT(updatePreview()));
     connect(ui.cbShowRelations, SIGNAL(toggled(bool)), prtW, SLOT(updatePreview()));
     connect(ui.cbShowGrid, SIGNAL(toggled(bool)), prtW, SLOT(updatePreview()));
@@ -70,9 +75,6 @@ NativeRenderDialog::NativeRenderDialog(Document *aDoc, const CoordBox& aCoordBox
 
     connect( preview, &QPrintPreviewDialog::paintRequested,
              this,    &NativeRenderDialog::renderPreview );
-
-    setBoundingBox(aCoordBox);
-    setOptions(M_PREFS->getRenderOptions());
 }
 
 RendererOptions NativeRenderDialog::options()
