@@ -49,6 +49,11 @@ NativeRenderDialog::NativeRenderDialog(Document *aDoc, const CoordBox& aCoordBox
     ui.verticalLayout->addWidget(prtW);
     mw->setCentralWidget(myWidget);
 
+    /* Set the DPI validator to accept positive values only.  */
+    dpiValidator = new QIntValidator( ui.fieldDpi );
+    dpiValidator->setBottom( 0 );
+    ui.fieldDpi->setValidator( dpiValidator );
+
     connect(ui.cbShowNodes, SIGNAL(toggled(bool)), prtW, SLOT(updatePreview()));
     connect(ui.cbShowRelations, SIGNAL(toggled(bool)), prtW, SLOT(updatePreview()));
     connect(ui.cbShowGrid, SIGNAL(toggled(bool)), prtW, SLOT(updatePreview()));
@@ -63,7 +68,9 @@ NativeRenderDialog::NativeRenderDialog(Document *aDoc, const CoordBox& aCoordBox
     connect(ui.btExportSVG, SIGNAL(clicked()), SLOT(exportSVG()));
     connect(ui.btExportRaster, SIGNAL(clicked()), SLOT(exportRaster()));
 
-    connect( preview, SIGNAL(paintRequested(QPrinter*)), SLOT(print(QPrinter*)) );
+    connect( preview, &QPrintPreviewDialog::paintRequested,
+             this,    &NativeRenderDialog::renderPreview );
+
     setBoundingBox(aCoordBox);
     setOptions(M_PREFS->getRenderOptions());
 }
@@ -129,11 +136,15 @@ int NativeRenderDialog::exec()
     return preview->exec();
 }
 
-void NativeRenderDialog::print(QPrinter* prt)
+void NativeRenderDialog::renderPreview(QPrinter* printer)
 {
-    QPainter P(prt);
+    /* Set the preview resolution. Having full resolution just for preview
+     * could result in huge delay when opening the dialog the first time. */
+    printer->setResolution(96);
+    QPainter P(printer);
     P.setRenderHint(QPainter::Antialiasing);
-    QRect theR = prt->pageRect();
+    QRect theR = printer->pageRect();
+    qDebug() << "Rendering preview to: " << theR;
     theR.moveTo(0, 0);
     render(P, theR, options());
 }
@@ -155,6 +166,11 @@ void NativeRenderDialog::render(QPainter& P, QRect theR, RendererOptions opt)
         mapview->drawLatLonGrid(P);
 }
 
+void NativeRenderDialog::setPrinterOptions() {
+    int userDpi = ui.fieldDpi->currentText().toInt();
+    thePrinter->setResolution(userDpi);
+}
+
 void NativeRenderDialog::exportPDF()
 {
     QString s;
@@ -173,6 +189,7 @@ void NativeRenderDialog::exportPDF()
 
     thePrinter->setOutputFormat(QPrinter::PdfFormat);
     thePrinter->setOutputFileName(s);
+    setPrinterOptions();
 
     QPainter P(thePrinter);
     P.setRenderHint(QPainter::Antialiasing);
@@ -198,6 +215,8 @@ void NativeRenderDialog::exportRaster()
 //    QString s = QFileDialog::getSaveFileName(NULL,tr("Output filename"),"",tr("Image files (*.png *.jpg)"));
     if (s.isNull())
         return;
+
+    setPrinterOptions();
 
     QRect theR = thePrinter->pageRect();
     theR.moveTo(0, 0);
@@ -232,6 +251,8 @@ void NativeRenderDialog::exportSVG()
 //    QString s = QFileDialog::getSaveFileName(NULL,tr("Output filename"),"",tr("SVG files (*.svg)"));
     if (s.isNull())
         return;
+
+    setPrinterOptions();
 
     QSvgGenerator svgg;
     QRect theR = thePrinter->pageRect();
