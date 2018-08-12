@@ -16,36 +16,55 @@ inline uint qHash(const QPoint& p)
 }
 
 #define TILE_SIZE 256
-QList<TILE_TYPE> tiles;
-QReadWriteLock tileLock; /* Protects 'tiles' variable */
-QReadWriteLock renderLock; /* Read locks indicate rendering threads, Write lock blocks them */
 #define TILE_CONSTRUCTOR(x, y) QPoint(x, y)
 #define TILE_X(t) t.x()
 #define TILE_Y(t) t.y()
 
-class TileCache : public QObject
+/* Static member declaration. */
+QReadWriteLock OsmRenderLayer::renderLock;
+
+/**
+ * This is a helper class to manage rendered tiles and their lifecycle. Any
+ * reference to the images here can vanish at any point in time. Do not escape
+ * the pointers!
+ */
+class TileContainer : public QObject
 {
 public:
-    TileCache(QObject* parent) : QObject(parent) {}
+    TileContainer(QObject* parent) : QObject(parent) {}
+    /**
+     * Insert and take ownership of the image contained. Replaced entries will
+     * be automatically deleted.
+     */
     void insert(const TILE_TYPE& k, QImage* v)
     {
-        m_tileCache.insert(k, v);
+        if (m_container.contains(k)) {
+            delete m_container.value(k);
+        }
+        m_container.insert(k, v);
     }
     bool contains(const TILE_TYPE& k)
     {
-        return m_tileCache.contains(k);
+        return m_container.contains(k);
     }
     QImage* get(const TILE_TYPE& k)
     {
-        return m_tileCache[k];
+        return m_container.value(k, nullptr);
     }
-
+    void clear() {
+        for ( auto value : m_container ) {
+            delete value;
+        }
+        m_container.clear();
+    }
 private:
-    QCache<const TILE_TYPE, QImage> m_tileCache;
+    QHash<const TILE_TYPE, QImage*> m_container;
 };
 
-TileCache* tileCache;
-
+/**
+ * A helper class for QtConcurrent::map(). An instance is created and the
+ * operator() is called for each element that needs processing.
+ */
 class RenderTile
 {
 public:
@@ -56,22 +75,10 @@ public:
 
     void operator()(const TILE_TYPE& theTile)
     {
-#if 0
-#if defined(__MINGW32__)
-        // Workaround for QTBUG-19886
-        asm volatile ("mov %esp, %eax");
-        asm volatile ("and $0xf, %eax");
-        asm volatile ("je alignmentok");
-        asm volatile ("push %eax");
-        asm volatile ("push %eax");
-        asm volatile ("alignmentok:");
-#endif
-#endif
-
         if (!p->theDocument)
             return;
 
-        if (!renderLock.tryLockForRead()) return;
+        if (!p->renderLock.tryLockForRead()) return;
         p->theDocument->lockPainters();
 
         TILE_TYPE tile = theTile;
@@ -110,13 +117,12 @@ public:
         P.end();
         g_backend.resumeDeletes();
         p->theDocument->unlockPainters();
-        renderLock.unlock();
-        tileLock.lockForWrite();
-        tileCache->insert(tile, img);
+        p->renderLock.unlock();
 
-        //            if (theFeatures.size())
-        //                img->save(QString("c:/temp/%1-%2.png").arg(tile.x()).arg(tile.y()));
-        tileLock.unlock();
+        /* Insert the tile into the results map. Take care to remove the original item first. */
+        p->tileLock.lockForWrite();
+        p->tiles->insert(tile,img);
+        p->tileLock.unlock();
     }
 
     OsmRenderLayer* p;
@@ -127,8 +133,8 @@ public:
 OsmRenderLayer::OsmRenderLayer(QObject *parent)
     : QObject(parent)
     , theDocument(0)
+    , tiles(new TileContainer(this))
 {
-    tileCache = new TileCache(this);
     connect(&(renderGatheringWatcher), SIGNAL(finished()), SIGNAL(renderingDone()));
 }
 
@@ -166,9 +172,11 @@ void OsmRenderLayer::forceRedraw(const Projection& aProjection, const QTransform
     PixelPerM = ppm;
     ROptions = roptions;
 
+    /* Clear the cache and rendered tiles. Any settings could have changed. */
     tileLock.lockForWrite();
-    tileCache->deleteLater();
-    tileCache = new TileCache(this);
+    tiles->clear();
+    tileLock.unlock();
+
     tileOriginCoord = theInvertedTransform.map(QPointF(rect.topLeft()));
 
     QPointF tl = theInvertedTransform.map(QPointF(rect.topLeft()));
@@ -184,16 +192,16 @@ void OsmRenderLayer::forceRedraw(const Projection& aProjection, const QTransform
     tileViewport.setRight(((projRect.right()-tileOriginCoord.x()) / tileSizeCoordW) + 1);
     tileViewport.setBottom(((projRect.bottom()-tileOriginCoord.y()) / tileSizeCoordH) + 1);
 
-    tiles.clear();
-    for (int i=tileViewport.top(); i<=tileViewport.bottom(); ++i)
+    tilesToRender.clear();
+    for (int i=tileViewport.top(); i<=tileViewport.bottom(); ++i) {
         for (int j=tileViewport.left(); j<=tileViewport.right(); ++j) {
             TILE_TYPE tile = TILE_CONSTRUCTOR(j, i);
-            tiles << tile;
+            tilesToRender << tile;
         }
-    tileLock.unlock();
+    }
 
-    if (tiles.size()) {
-        renderGathering = QtConcurrent::map(tiles, RenderTile(this));
+    if (tilesToRender.size()) {
+        renderGathering = QtConcurrent::map(tilesToRender, RenderTile(this));
         renderGatheringWatcher.setFuture(renderGathering);
     }
 
@@ -217,35 +225,40 @@ void OsmRenderLayer::pan(QPoint delta)
     tileViewport.setRight(((projRect.right()-tileOriginCoord.x()) / tileSizeCoordW) + 1);
     tileViewport.setBottom(((projRect.bottom()-tileOriginCoord.y()) / tileSizeCoordH) + 1);
 
-    tileLock.lockForRead();
-    tiles.clear();
+    tileLock.lockForWrite();
+    tilesToRender.clear();
     for (int i=tileViewport.top(); i<=tileViewport.bottom(); ++i)
         for (int j=tileViewport.left(); j<=tileViewport.right(); ++j) {
             TILE_TYPE tile = TILE_CONSTRUCTOR(j, i);
-            if (!tileCache->contains(tile))
-                tiles << tile;
+            if (!tiles->contains(tile)) {
+                tilesToRender << tile;
+            }
         }
     tileLock.unlock();
 
-    if (tiles.size()) {
-        renderGathering = QtConcurrent::map(tiles, RenderTile(this));
+    if (tilesToRender.size()) {
+        renderGathering = QtConcurrent::map(tilesToRender, RenderTile(this));
         renderGatheringWatcher.setFuture(renderGathering);
     }
 }
 
 void OsmRenderLayer::drawImage(QPainter *P)
 {
+    tileLock.lockForRead();
     QPointF origin = theTransform.map(tileOriginCoord);
-    for (int i=tileViewport.top(); i<=tileViewport.bottom(); ++i)
+    for (int i=tileViewport.top(); i<=tileViewport.bottom(); ++i) {
         for (int j=tileViewport.left(); j<=tileViewport.right(); ++j) {
-            tileLock.lockForRead();
-            if (tileCache->contains(TILE_CONSTRUCTOR(j, i))) {
+            if (tiles->contains(TILE_CONSTRUCTOR(j, i))) {
                 QPointF tl = QPointF((j*TILE_SIZE)+origin.x(), (i*TILE_SIZE)+origin.y());
-                P->drawImage(tl, *(tileCache->get(TILE_CONSTRUCTOR(j, i))));
+                P->drawImage(tl, *(tiles->get(TILE_CONSTRUCTOR(j, i))));
             }
-            tileLock.unlock();
-            //            qDebug() << QPoint(j, i) << tl;
+            /* In some cases, the image is not accessible. This is OK if we are
+             * drawing on screen and not everything is ready yet. It might
+             * cause trouble when printing, but the code should wait until the
+             * rendering is done in that case. */
         }
+    }
+    tileLock.unlock();
 }
 
 bool OsmRenderLayer::isRenderingDone()
