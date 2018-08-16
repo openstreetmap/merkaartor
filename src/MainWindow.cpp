@@ -49,6 +49,7 @@
 #include "Utils/Utils.h"
 #include "DirtyList.h"
 #include "DirtyListExecutorOSC.h"
+#include "RemoteControlServer.hpp"
 
 #include <ui_MainWindow.h>
 #include <ui_AboutDialog.h>
@@ -116,6 +117,8 @@ const QString MIME_MERKAARTOR_UNDO_XML = "application/x-merkaartor-undo+xml";
 
 }  // namespace
 
+using namespace Merkaartor;
+
 class MainWindowPrivate
 {
     public:
@@ -141,7 +144,7 @@ class MainWindowPrivate
         FeaturesDock* theFeats;
         QString title;
         QActionGroup* projActgrp;
-        QTcpServer* theListeningServer;
+        RemoteControlServerNs::RemoteControlServer* theListeningServer;
         PropertiesDock* theProperties;
         RendererOptions renderOptions;
         int latSaveDirtyLevel;
@@ -469,11 +472,12 @@ void MainWindow::delayedInit()
 
     updateWindowMenu();
 
+    p->theListeningServer = new RemoteControlServerNs::RemoteControlServer(this);
+    connect( p->theListeningServer, &RemoteControlServerNs::RemoteControlServer::requestReceived,
+            this, [this](QString url) { loadUrl(url); } );
+
     if (M_PREFS->getLocalServer()) {
-        p->theListeningServer = new QTcpServer(this);
-        connect(p->theListeningServer, SIGNAL(newConnection()), this, SLOT(incomingLocalConnection()));
-        if (!p->theListeningServer->listen(QHostAddress::LocalHost, 8111))
-            qDebug() << "Remote control: Unable to listen on 8111";
+        p->theListeningServer->listen();
     }
 
     if (M_PREFS->getHideToolbarLabels()) {
@@ -1060,37 +1064,6 @@ bool MainWindow::eventFilter(QObject */* watched */, QEvent *event)
     }
 
     return false;
-}
-
-void MainWindow::incomingLocalConnection()
-{
-    QTcpSocket *clientConnection = p->theListeningServer->nextPendingConnection();
-    connect(clientConnection, SIGNAL(disconnected()),
-            clientConnection, SLOT(deleteLater()));
-    connect(clientConnection, SIGNAL(readyRead()), this, SLOT(readLocalConnection()) );
-}
-
-void MainWindow::readLocalConnection()
-{
-    QTcpSocket* socket = (QTcpSocket*)sender();
-    if ( socket->canReadLine() ) {
-        QString ln = socket->readLine();
-        QStringList tokens = ln.split( QRegExp("[ \r\n][ \r\n]*"), QString::SkipEmptyParts );
-        if ( tokens[0] == "GET" ) {
-            QTextStream resultStream(socket);
-            resultStream << "HTTP/1.1 200 OK\r\n";
-            resultStream << "Date: " << QDateTime::currentDateTime().toString(Qt::TextDate);
-            resultStream << "Server: Merkaartor RemoteControl\r\n";
-            resultStream << "Content-type: text/plain\r\n";
-            resultStream << "Access-Control-Allow-Origin: *\r\n";
-            resultStream << "Content-length: 4\r\n\r\n";
-            resultStream << "OK\r\n";
-            socket->disconnectFromHost();
-
-            QUrl u = QUrl(tokens[1]);
-            loadUrl(u);
-        }
-    }
 }
 
 namespace {
@@ -1841,6 +1814,12 @@ bool MainWindow::importFiles(Document * mapDocument, const QStringList & fileNam
     invalidateView(false);
 
     return foundImport;
+}
+
+void MainWindow::loadUrl(const QString& urlString)
+{
+    qDebug() << "Loading url: " << urlString;
+    loadUrl(QUrl(urlString));
 }
 
 void MainWindow::loadUrl(const QUrl& theUrl)
@@ -3105,17 +3084,9 @@ void MainWindow::preferencesChanged(PreferencesDialog* prefs)
         }
     }
     if (M_PREFS->getLocalServer()) {
-        if (!p->theListeningServer) {
-            p->theListeningServer = new QTcpServer(this);
-            connect(p->theListeningServer, SIGNAL(newConnection()), this, SLOT(incomingLocalConnection()));
-            if (!p->theListeningServer->listen(QHostAddress::LocalHost, 8111))
-                qDebug() << "Remote control: Unable to listen on 8111";
-        }
+        p->theListeningServer->listen();
     } else {
-        if (p->theListeningServer) {
-            delete p->theListeningServer;
-            p->theListeningServer = NULL;
-        }
+        p->theListeningServer->close();
     }
 
     applyStyles(prefs->cbStyles->itemData(prefs->cbStyles->currentIndex()).toString());

@@ -258,6 +258,7 @@ public slots:
 
 public:
     bool importFiles(Document * mapDocument, const QStringList & filesNames, QStringList * importedFileNames = NULL, bool useGdal = false);
+    void loadUrl(const QString& urlString);
     void loadUrl(const QUrl& u);
     void loadDocument(QString fn);
     void loadTemplateDocument(QString fn);
@@ -303,8 +304,6 @@ private slots:
     void setAreaOpacity(QAction*);
     void updateBookmarksMenu();
     void updateWindowMenu(bool b=false);
-    void incomingLocalConnection();
-    void readLocalConnection();
 
     void on_viewWireframeAction_toggled(bool arg1);
 

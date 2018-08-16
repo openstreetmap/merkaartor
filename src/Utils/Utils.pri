@@ -8,6 +8,7 @@ HEADERS += \
     EditCompleterDelegate.h \
     PictureViewerDialog.h \
     PixmapWidget.h \
+    RemoteControlServer.hpp \
     SelectionDialog.h \
     SvgCache.h \
     MDiscardableDialog.h \
@@ -23,6 +24,7 @@ SOURCES += \
     EditCompleterDelegate.cpp \
     PictureViewerDialog.cpp \
     PixmapWidget.cpp \
+    RemoteControlServer.cpp \
     SelectionDialog.cpp \
     SvgCache.cpp \
     MDiscardableDialog.cpp \
