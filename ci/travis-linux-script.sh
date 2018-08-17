@@ -6,4 +6,4 @@ set -ev
 
 #qtchooser -qt=qt$QT -run-tool=qmake
 qmake
-make
+make -j3
