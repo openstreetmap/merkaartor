@@ -17,8 +17,10 @@ script:
     - if [ "${TRAVIS_OS_NAME}" = "osx" ];   then ./ci/travis-osx-script.sh;   fi
 
 deploy:
+    skip_cleanup: true
     on:
         branch:
+            - ci-fixes
             - travis-ci
             - master
         condition: $TRAVIS_OS_NAME = osx
