@@ -1253,7 +1253,7 @@ M_PARAM_IMPLEMENT_INT_DELAYED(TagListFirstColumnWidth, visual, 20)
 M_PARAM_IMPLEMENT_BOOL(TranslateTags, locale, true)
 
 /* Background */
-M_PARAM_IMPLEMENT_BOOL(AutoSourceTag, backgroundImage, true)
+M_PARAM_IMPLEMENT_BOOL(AutoSourceTag, backgroundImage, false)
 
 /* Data */
 M_PARAM_IMPLEMENT_STRING(MapdustUrl, data, "http://www.mapdust.com/feed?lang=en&ft=wrong_turn,bad_routing,oneway_road,blocked_street,missing_street,wrong_roundabout,missing_speedlimit,other&fd=1&minR=&maxR=")
