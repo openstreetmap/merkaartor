@@ -9,8 +9,6 @@
 #include <QShortcut>
 #include <QLabel>
 
-#define TILE_TYPE QPoint
-
 class MainWindow;
 class Feature;
 class Way;
