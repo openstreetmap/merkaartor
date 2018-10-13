@@ -184,14 +184,21 @@ bool DirtyListExecutorOSC::start()
     Progress->setLabelText(tr("OPEN changeset"));
     QEventLoop L; L.processEvents(QEventLoop::ExcludeUserInputEvents);
 
+    QStringList sl = theDocument->getCurrentSourceTags();
+
     QString DataIn(
         "<osm>"
         "<changeset>"
         "<tag k=\"created_by\" v=\"Merkaartor %1 (%2)\"/>"
-        "<tag k=\"comment\" v=\"%3\"/>"
+        "<tag k=\"comment\" v=\"%3\"/>%4"
         "</changeset>"
         "</osm>");
-    DataIn = DataIn.arg(STRINGIFY(VERSION)).arg(QLocale::system().name().split("_")[0]).arg(Utils::encodeAttributes(glbChangeSetComment));
+    DataIn = DataIn
+        .arg(STRINGIFY(VERSION))
+        .arg(QLocale::system().name().split("_")[0])
+        .arg(Utils::encodeAttributes(glbChangeSetComment))
+        .arg((sl.size() ? "<tag k=\"source\" v=\""+ Utils::encodeAttributes(sl.join(";")) +"\"/>" : ""));
+
     QString DataOut;
     QString URL = theDownloader->getURLToOpenChangeSet();
     if (sendRequest("PUT",URL,DataIn, DataOut) != 200)
