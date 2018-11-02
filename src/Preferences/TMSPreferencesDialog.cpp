@@ -66,7 +66,7 @@ void TMSPreferencesDialog::on_btApplyTmsServer_clicked(void)
 
     WS.TmsName = edTmsName->text();
     WS.TmsAdress = theAdress;
-    WS.TmsPath = theUrl.toString(QUrl::RemoveScheme | QUrl::RemoveAuthority);
+    WS.TmsPath = theUrl.toString(QUrl::RemoveScheme | QUrl::RemoveAuthority).replace(QRegExp("%25([123])"), "%\\1");
     WS.TmsTileSize = sbTileSize->value();
     WS.TmsMinZoom = sbMinZoom->value();
     WS.TmsMaxZoom = sbMaxZoom->value();
@@ -103,7 +103,19 @@ void TMSPreferencesDialog::on_btAddTmsServer_clicked(void)
     else
         proj = "EPSG:900913";
 
-    addServer(TmsServer(edTmsName->text(), theAdress, theUrl.toString(QUrl::RemoveScheme | QUrl::RemoveAuthority), proj, sbTileSize->value(), sbMinZoom->value(), sbMaxZoom->value(), edSourceTag->text(), edLicenseUrl->text(), theBaseUrl, cbBotLeftOrigin->isChecked()));
+    addServer(
+        TmsServer(edTmsName->text(),
+        theAdress,
+        theUrl.toString(QUrl::RemoveScheme | QUrl::RemoveAuthority).replace(QRegExp("%25([123])"), "%\\1"),
+        proj,
+        sbTileSize->value(),
+        sbMinZoom->value(),
+        sbMaxZoom->value(),
+        edSourceTag->text(),
+        edLicenseUrl->text(),
+        theBaseUrl,
+        cbBotLeftOrigin->isChecked())
+    );
     lvTmsServers->setCurrentRow(lvTmsServers->count() - 1);
     on_lvTmsServers_itemSelectionChanged();
 }
