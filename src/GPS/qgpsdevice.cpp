@@ -978,6 +978,11 @@ void QGPSDDevice::run()
 #else
     Server = new gpsmm(M_PREFS->getGpsdHost().toLatin1().data(),QString::number(M_PREFS->getGpsdPort()).toLatin1().data());
 #endif
+
+    if (! Server->is_open()) {
+       qDebug() << "GPSD connection not open. Is the daemon running?";
+    }
+
     onLinkReady();
     l.processEvents();
 
@@ -986,10 +991,16 @@ void QGPSDDevice::run()
 #if GPSD_API_MAJOR_VERSION < 5
         if (Server->waiting())
 #else
-        if (Server->waiting(0))
+        /* Wait time in microseconds, 25000 = 25ms */
+        if (Server->waiting(25000))
 #endif
 #endif
-            onDataAvailable();
+        {
+            /* Only process data if there is a chance the server is actually working. */
+            if (Server->is_open() && serverOk) {
+                onDataAvailable();
+            }
+        }
         l.processEvents();
     }
 
@@ -1008,6 +1019,7 @@ void QGPSDDevice::onDataAvailable()
            {
            QString msg( (errno==0) ? "socket to gpsd was closed" : strerror(errno) );
            qDebug() << "gpsmm::read() failed: " << msg;
+           serverOk = false;
            return;
            }
     #endif
