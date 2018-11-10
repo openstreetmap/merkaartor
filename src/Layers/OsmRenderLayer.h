@@ -14,6 +14,10 @@
 class Document;
 class Projection;
 
+/* Private containers, defined in .cpp */
+class TileContainer;
+#define TILE_TYPE QPoint
+
 class OsmRenderLayer : public QObject
 {
     Q_OBJECT
@@ -56,6 +60,15 @@ protected:
 
     qreal PixelPerM;
     RendererOptions ROptions;
+
+    TileContainer* tiles;
+    /* Contains a list of tiles to be rendered using QtConcurrent. */
+    QList<TILE_TYPE> tilesToRender;
+    QReadWriteLock tileLock; /* Protects 'tiles' variable */
+
+    /* Read locks indicate rendering threads, Write lock blocks them. This is a
+     * global object used to block all rendering used in some workarounds.  */
+    static QReadWriteLock renderLock;
 };
 
 #endif // OSMRENDERLAYER_H

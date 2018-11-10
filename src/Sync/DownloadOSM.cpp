@@ -115,9 +115,11 @@ bool Downloader::request(const QString& theMethod, const QUrl& url, const QStrin
         }
     }
 
-    /* Handler error? */
-    if (currentReply->error())
-        QMessageBox::information(0,tr("error"), currentReply->errorString());
+    /* We will log the error, but reporting shall be done at the call site. */
+    if (currentReply->error()) {
+        qDebug() << "Downloader::request: received response with code "
+            << currentReply->error() << ", message " << currentReply->errorString();
+    }
 
 
     /* Read the data */
@@ -301,15 +303,18 @@ bool downloadOSM(QWidget* aParent, const QUrl& theUrl, const QString& aUser, con
     if (!Rcv.go(theUrl))
     {
 #ifndef _MOBILE
-        if (aParent)
-            aParent->setCursor(QCursor(Qt::ArrowCursor));
+        /** TODO: Let the caller set the cursor. */
+        aParent->setCursor(QCursor(Qt::ArrowCursor));
 #endif
-        return false;
     }
     int x = Rcv.resultCode();
+    qDebug() << "DownloadOSM: Received OSM API response code: " << x << ", processing.";
+
+    /** We will parse the error codes and display the appropriate messages. */
     switch (x)
     {
     case 200:
+        qDebug() << "DownloadOSM: Response OK, processing.";
         break;
     case 301:
     case 302:

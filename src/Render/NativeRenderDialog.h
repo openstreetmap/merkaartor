@@ -49,9 +49,11 @@ public slots:
     int exec();
 
 private slots:
-    void print(QPrinter* prt);
+    void renderPreview(QPrinter* prt);
 
 private:
+    void setPrinterOptions();
+
     Ui::NativeRenderWidget ui;
     Document* theDoc;
     MapView* mapview;
@@ -61,6 +63,8 @@ private:
     QPrinter* thePrinter;
     QPrintPreviewDialog*  preview;
     QPrintPreviewWidget* prtW;
+    QIntValidator* dpiValidator;
+    int dpiMinimumValue;
 
 };
 
