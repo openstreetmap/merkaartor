@@ -35,7 +35,7 @@ v0.18.2
     * DEL : Removed reference to qWinMsgHandler.
     * CHG : Updated install instructions to reflect debug/release.
     * FIX : Removed the Win32 assembly in Layers/OsmRenderLayer.cpp
-    * FIX : Fixed some plugin interfaces for Qt5.
+    * FIX : Fixed some plugin interfaces for Qt 5.
     * DEL : Removed plugins/qtstyle.
     * FIX : Fixed file saving.
     * CHG : Clean up DownloadOSM a bit.
@@ -67,7 +67,7 @@ v0.18.2
     * ADD : The openstreetmap.org/#map= URL parsing.
     * FIX : Re-enable virtual node movement.
     * FIX : After layer is closed, all of its features are deleted.
-    * FIX : Define QT_WA macro on QT5 to always use unicode.
+    * FIX : Define QT_WA macro on Qt 5 to always use unicode.
     * FIX : Conflict sometimes create Nodes without layers.
     * FIX : Fix building markaartor on arm.
     * FIX : Fix building with gcc 4.7 and later.
@@ -77,9 +77,9 @@ v0.18.2
     * FIX : Removed 3 memory leaks
     * FIX : Splitting of roads containing duplicate nodes
     * FIX : Fixed SlippyMap (bad requests caused by a typo).
-    * FIX : Minor fixes in the Qt4/Qt5 usage.
+    * FIX : Minor fixes in the Qt 4/Qt 5 usage.
     * DEL : Removed the qtstyle plugins from compilation.
-    * FIX : Updated the plugin interface for Qt5.
+    * FIX : Updated the plugin interface for Qt 5.
     * FIX : Removed deprecated call to ::translate.
     * FIX : Added locking to Way::add and Way::remove.
     * ADD : Implemented jOSM-like load_objects feature.
