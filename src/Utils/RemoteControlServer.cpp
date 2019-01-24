@@ -62,8 +62,22 @@ void RemoteControlServer::newConnection() {
     }
     /* The RemoteControlconnection will handle it's own destruction when the connection is broken. */
     auto connHandler = new RemoteControlConnection(socket);
+    /* Note:
+     * Qt::QueueConnection is a workaround for a problem hit in issue #147.
+     * When this signal is called, it triggers a long sequence of events, some
+     * of them opening it's own QEventLoop (dialogs). This seems to cause
+     * issues in deleting the RemoteControlConnection objects, specifically the
+     * QTcpSocket inside is destroyed, and after that a signal is called on it.
+     * This seems to be a bug in Qt, as we correctly use deleteLater().
+     * However, there might be more to it, as I have been unable to put
+     * together a minimal testcase.
+     *
+     * For now, we make sure the main EventLoop is executing the download
+     * dialogs and hopefully avoid this problem.
+     */
     connect( connHandler, &RemoteControlConnection::requestReceived, 
-            this, [this](QString requestUrl) { emit requestReceived(requestUrl); });
+            this, [this](QString requestUrl) { emit requestReceived(requestUrl); }, Qt::QueuedConnection);
+
 }
 
 void RemoteControlServer::listen() { 
