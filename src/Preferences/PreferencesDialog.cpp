@@ -184,6 +184,7 @@ void PreferencesDialog::initLanguages(QComboBox* aBox)
     aBox->addItem(tr("[less than 50% complete] Portuguese"),"pt");
     aBox->addItem(tr("[less than 50% complete] Slovak"),"sk");
     aBox->addItem(tr("[less than 50% complete] Vietnamese"),"vi");
+    aBox->addItem(tr("[less than 50% complete] Finnish"),"fi");
 }
 
 void PreferencesDialog::loadPrefs()

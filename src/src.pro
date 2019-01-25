@@ -200,6 +200,7 @@ TRANSLATIONS += \
     ../translations/merkaartor_vi.ts    \
     ../translations/merkaartor_zh_CN.ts \
     ../translations/merkaartor_zh_TW.ts \
+    ../translations/merkaartor_fi.ts \
 
 
 BINTRANSLATIONS += \
@@ -226,6 +227,7 @@ BINTRANSLATIONS += \
     ../translations/merkaartor_vi.qm    \
     ../translations/merkaartor_zh_CN.qm \
     ../translations/merkaartor_zh_TW.qm \
+    ../translations/merkaartor_fi.qm \
 
 translations.path =  $${TRANSDIR_MERKAARTOR}
 translations.files = $${BINTRANSLATIONS}
