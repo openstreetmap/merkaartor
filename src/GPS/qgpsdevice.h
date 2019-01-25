@@ -288,6 +288,8 @@ private:
     struct gps_data_t* gpsdata;
     QByteArray Buffer;
 
+    bool serverOk = true;
+
     friend class GPSSlotForwarder;
 };
 #else /*USE_GPSD_LIB*/
