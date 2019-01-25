@@ -717,7 +717,7 @@ v0.11
     * FIX : upload order when merging nodes
     * FIX : warn when using wrong credentials
     * ADD : drag the map around with control key for poor Mac owners
-    * FIX : We can now select the move tool everytime
+    * FIX : We can now select the move tool every time
     * FIX : Reverse on an area doesn't open it anymore
     * FIX : Select dialog : fix the size of elements
     * FIX : Roundabout creation. Add tag junction=roundabout
