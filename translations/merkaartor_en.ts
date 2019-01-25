@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
-<TS version="2.1">
+<TS version="2.1" language="en" sourcelanguage="en">
 <context>
     <name>AboutDialog</name>
     <message>
@@ -252,8 +252,9 @@
     <message numerus="yes">
         <location filename="../src/Docks/DirtyDock.cpp" line="74"/>
         <source>There are &lt;b&gt;%n&lt;/b&gt; dirty objects</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>There is &lt;b&gt;%n&lt;/b&gt; dirty object</numerusform>
+            <numerusform>There are &lt;b&gt;%n&lt;/b&gt; dirty objects</numerusform>
         </translation>
     </message>
     <message>
@@ -733,15 +734,17 @@ Before being able to upload your changes, you will have to manually merge the tw
     <message numerus="yes">
         <location filename="../src/Sync/DownloadOSM.cpp" line="164"/>
         <source>Downloading from OSM (%n bytes)</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>Downloading from OSM (%n byte)</numerusform>
+            <numerusform>Downloading from OSM (%n bytes)</numerusform>
         </translation>
     </message>
     <message numerus="yes">
         <location filename="../src/Sync/DownloadOSM.cpp" line="166"/>
         <source>Downloading from OSM (%n kBytes)</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>Downloading from OSM (%n kByte)</numerusform>
+            <numerusform>Downloading from OSM (%n kBytes)</numerusform>
         </translation>
     </message>
     <message>
@@ -1758,7 +1761,7 @@ Do you really want to exit?</source>
     <message>
         <location filename="../src/Layers/Layer.cpp" line="416"/>
         <source>%n features</source>
-        <translation type="unfinished"></translation>
+        <translation>%n features</translation>
     </message>
     <message>
         <location filename="../src/Layers/Layer.cpp" line="433"/>

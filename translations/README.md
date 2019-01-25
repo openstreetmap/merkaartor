@@ -13,6 +13,10 @@ The regular workflow is:
    This pushes the original english strings to Transifex, updating the database and
    allowing new strings to be downloaded.
 
+   If transifex complains about numerous forms, you need to open linguist,
+   search for all strings with %n and fill in the appropriate english forms.
+   Then repeat the push.
+
 1) Before release, Transifex data should be pulled and committed into the
 repository. This is not necessary, but serves as a backup in case something
 terrible happens to Transifex.
