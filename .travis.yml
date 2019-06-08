@@ -5,25 +5,28 @@ env:
 os:
     - linux
     - osx
+    - windows
 git:
     depth: 9999999
+language: sh
 
 install:
     - if [ "${TRAVIS_OS_NAME}" = "linux" ]; then ./ci/travis-linux-install.sh; fi
     - if [ "${TRAVIS_OS_NAME}" = "osx" ];   then ./ci/travis-osx-install.sh;   fi
+    - if [ "${TRAVIS_OS_NAME}" = "windows" ]; then  powershell -executionpolicy bypass -file ci\\travis-windows-install.ps1;   fi
 
 script:
     - if [ "${TRAVIS_OS_NAME}" = "linux" ]; then ./ci/travis-linux-script.sh; fi
     - if [ "${TRAVIS_OS_NAME}" = "osx" ];   then ./ci/travis-osx-script.sh;   fi
+    - if [ "${TRAVIS_OS_NAME}" = "windows" ]; then  powershell -executionpolicy bypass -file ci\\travis-windows-script.ps1;   fi
 
 deploy:
     skip_cleanup: true
     on:
         branch:
-            - ci-fixes
-            - travis-ci
+            - ci-test
             - master
-        condition: $TRAVIS_OS_NAME = osx
+        condition: $TRAVIS_OS_NAME != linux
     provider: bintray
     file: binaries/bin/deploy.json
     user: krakonos
