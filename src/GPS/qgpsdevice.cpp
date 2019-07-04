@@ -1136,10 +1136,10 @@ void QGPSDDevice::run()
     GPSSlotForwarder Forward(this);
     QTcpSocket Link;
     Server = &Link;
-    Link.connectToHost(M_PREFS->getGpsdHost(),M_PREFS->getGpsdPort());
     connect(Server,SIGNAL(connected()),&Forward,SLOT(onLinkReady()));
     connect(Server,SIGNAL(readyRead()),&Forward,SLOT(onDataAvailable()));
     connect(this,SIGNAL(doStopDevice()),&Forward,SLOT(onStop()));
+    Link.connectToHost(M_PREFS->getGpsdHost(),M_PREFS->getGpsdPort());
     exec();
 }
 
@@ -1252,9 +1252,7 @@ void QGPSDDevice::parseO(const QString& s)
 void QGPSDDevice::onLinkReady()
 {
     if (!Server) return;
-    Server->write("w+");
-    Server->write("r+");
-    Server->write("j=1");
+    Server->write("?WATCH={\"enable\":true,\"nmea\":true}");
 }
 #endif /*USE_GPSD_LIB*/
 
