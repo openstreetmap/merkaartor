@@ -7,8 +7,7 @@
 #include <QDockWidget>
 #include <QMouseEvent>
 #include <QShortcut>
-#include <exiv2/image.hpp>
-#include <exiv2/exif.hpp>
+#include <exiv2/exiv2.hpp>
 #include <QDrag>
 
 class ImageView;
