@@ -2,6 +2,12 @@ cmake_minimum_required(VERSION 3.1.0)
 
 project(merkaartor)
 
+message(WARNING "
+
+CMake build is experimental and missing quite a few features (no plugins, no version string, no configurable features, etc...). Please use qmake for production builds.
+
+")
+
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 # Find includes in corresponding build directories
