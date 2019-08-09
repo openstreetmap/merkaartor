@@ -2,8 +2,10 @@
 #ifndef _QEXTSERIALPORT_H_
 #define _QEXTSERIALPORT_H_
 
+#include <QtGlobal>
+
 /*POSIX CODE*/
-#ifdef _TTY_POSIX_
+#ifdef Q_OS_UNIX
 #include "posix_qextserialport.h"
 #define QextBaseType Posix_QextSerialPort
 
