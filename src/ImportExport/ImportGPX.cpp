@@ -120,8 +120,13 @@ static void importTrkSeg(const QDomElement& Root, Document* theDocument, Layer* 
 
             if (M_PREFS->getMaxDistNodes() != 0.0 && kilometer > M_PREFS->getMaxDistNodes())
             {
-                if (!S->size())
+                /* FIXME: This code should never trigger, as we always add a point to each created
+                 * segment (and we won't execute in the first pass due to lastPoint == nullptr).
+                 * Add Q_ASSERT(S.size()) instead?) */
+                if (!S->size()) {
+                    theLayer->remove(S);
                     g_backend.deallocFeature(theLayer, S);
+                }
 
                 S = g_backend.allocSegment(theLayer);
                 theLayer->add(S);
@@ -132,8 +137,10 @@ static void importTrkSeg(const QDomElement& Root, Document* theDocument, Layer* 
         lastPoint = Pt;
     }
 
-    if (!S->size())
+    if (!S->size()) {
+        theLayer->remove(S);
         g_backend.deallocFeature(theLayer, S);
+    }
 }
 
 static void importRte(const QDomElement& Root, Document* theDocument, Layer* theLayer, bool MakeSegment, QProgressDialog & progress)
