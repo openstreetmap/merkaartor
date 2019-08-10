@@ -423,7 +423,7 @@ bool downloadTracksFromOSM(QWidget* Main, const QString& aWeb, const QString& aU
             return false;
         int Before = theTracklayers.size();
         QByteArray Ar(theDownloader.content());
-        bool OK = importGPX(Main, Ar, theDocument, theTracklayers, true);
+        bool OK = ImportGPX::import(Main, Ar, theDocument, theTracklayers, ImportGPX::Option::MakeSegmented | ImportGPX::Option::DetectAnonymizedSegments);
         if (!OK)
             return false;
         if (Before == theTracklayers.size())
