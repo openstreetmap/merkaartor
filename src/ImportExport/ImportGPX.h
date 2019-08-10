@@ -19,6 +19,7 @@ class ImportGPX : public QObject {
         NoOptions = 0x0,
         MakeSegmented = 0x1,
         DetectAnonymizedSegments = 0x2,
+        ForceWaypoints = 0x4,
     };
     Q_DECLARE_FLAGS(Options,Option)
 

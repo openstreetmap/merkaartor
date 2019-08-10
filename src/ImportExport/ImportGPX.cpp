@@ -30,6 +30,7 @@ static TrackNode* importTrkPt(const QDomElement& Root, Document* /* theDocument 
     if (Root.tagName() == "wpt")
         Pt->setTag("_waypoint_", "yes");
 
+    bool hasTimestamp = false;
     for(QDomNode n = Root.firstChild(); !n.isNull(); n = n.nextSibling())
     {
         QDomElement t = n.toElement();
@@ -51,6 +52,7 @@ static TrackNode* importTrkPt(const QDomElement& Root, Document* /* theDocument 
                 QDateTime dt(QDateTime::fromString(Value.left(19), Qt::ISODate));
                 dt.setTimeSpec(Qt::UTC);
                 Pt->setTime(dt);
+                hasTimestamp = true;
             }
         }
         else if (t.tagName() == "ele")
@@ -84,6 +86,9 @@ static TrackNode* importTrkPt(const QDomElement& Root, Document* /* theDocument 
             }
         }
     }
+    if (!hasTimestamp) {
+        Pt->setTag("_anonymized_", "yes");
+    }
 
     return Pt;
 }
@@ -111,10 +116,7 @@ static void importTrkSeg(const QDomElement& Root, Document* theDocument, Layer* 
 
         TrackNode* Pt = importTrkPt(t,theDocument, theLayer);
 
-        if (! importOptions.testFlag( ImportGPX::Option::MakeSegmented ))
-            continue;
-
-        if (lastPoint)
+        if (importOptions.testFlag( ImportGPX::Option::MakeSegmented ) && lastPoint)
         {
             qreal kilometer = Pt->position().distanceFrom( lastPoint->position() );
 
@@ -132,15 +134,28 @@ static void importTrkSeg(const QDomElement& Root, Document* theDocument, Layer* 
                 theLayer->add(S);
             }
         }
-
-        S->add(Pt);
-        lastPoint = Pt;
+        if ( importOptions.testFlag(ImportGPX::Option::DetectAnonymizedSegments)
+             && ! Pt->tagValue("_anonymized_", QString()).isNull()
+        ) {
+            theLayer->add(Pt);
+        } else {
+            S->add(Pt);
+            lastPoint = Pt;
+        }
     }
 
     if (!S->size()) {
         theLayer->remove(S);
         g_backend.deallocFeature(theLayer, S);
     }
+
+
+    /*
+    if (importOptions.testFlag(ImportGPX::Option::DetectAnonymizedSegments) && (hasNameOrDesc == false)) {
+        importOptions |= ImportGPX::Option::ForceWaypoints;
+        theLayer->setName("Anonymized trackpoints");
+    }
+    */
 }
 
 static void importRte(const QDomElement& Root, Document* theDocument, Layer* theLayer, ImportGPX::Options importOptions, QProgressDialog & progress)
@@ -196,13 +211,12 @@ static void importRte(const QDomElement& Root, Document* theDocument, Layer* the
 
 static void importTrk(const QDomElement& Root, Document* theDocument, Layer* theLayer, ImportGPX::Options importOptions, QProgressDialog & progress)
 {
+    QDomElement trkSegElement;
     for(QDomNode n = Root.firstChild(); !n.isNull(); n = n.nextSibling())
     {
         QDomElement t = n.toElement();
         if (!t.isNull() && t.tagName() == "trkseg") {
-            importTrkSeg(t,theDocument, theLayer, importOptions, progress);
-            if (progress.wasCanceled())
-                return;
+            trkSegElement = t;
         } else
         if (!t.isNull() && t.tagName() == "name") {
             theLayer->setName(t.text());
@@ -210,6 +224,12 @@ static void importTrk(const QDomElement& Root, Document* theDocument, Layer* the
         if (!t.isNull() && t.tagName() == "desc") {
             theLayer->setDescription(t.text());
         }
+    }
+
+    if (!trkSegElement.isNull()) {
+        importTrkSeg(trkSegElement, theDocument, theLayer, importOptions, progress);
+        if (progress.wasCanceled())
+            return;
     }
 }
 
