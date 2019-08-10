@@ -37,9 +37,12 @@ QString OsmLink::parseUrl(QUrl theUrl)
 
     if (!theUrl.isValid()) return QString("Invalid URL: %1").arg(theUrl.toString());;
 
-    if (theUrl.toString().contains("openstreetmap.org/#map=")) {
+    if (theUrl.toString().contains("openstreetmap.org/") && theUrl.toString().contains("#map=")) {
         // first is 'map', zoom, lat and lon follows
-        QStringList list = theUrl.fragment().split(QRegExp("[/=]"));
+        // afterwards, optionally &layers= may follow
+        QStringList list = theUrl.fragment().split(QRegExp("[/=&]"));
+        if(list[0] != "map")
+            return QString("Unexpected fragment parameter %1").arg(list[0]);
         qreal zoom = list[1].toInt(&parseOk);   ARG_VALID(zoom);
         qreal lat = list[2].toDouble(&parseOk); ARG_VALID(lat);
         qreal lon = list[3].toDouble(&parseOk); ARG_VALID(lon);
