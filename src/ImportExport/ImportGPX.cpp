@@ -87,7 +87,11 @@ static TrackNode* importTrkPt(const QDomElement& Root, Document* /* theDocument 
         }
     }
     if (!hasTimestamp) {
-        Pt->setTag("_anonymized_", "yes");
+        /* If a point does not have timestamp, make sure this is reflected in
+         * our representation (by default, a Feature has time of creation as a
+         * timestamp).
+         */
+        Pt->setTime(0);
     }
 
     return Pt;
@@ -103,6 +107,9 @@ static void importTrkSeg(const QDomElement& Root, Document* theDocument, Layer* 
         S->setId(IFeature::FId(IFeature::GpxSegment, Root.attribute("xml:id").toLongLong()));
 
     Node* lastPoint = NULL;
+
+    /* Counters to keep the number of found normal and anonymized (if detection is enabled) points. */
+    int nAnon = 0, nNormal = 0;
 
     for(QDomNode n = Root.firstChild(); !n.isNull(); n = n.nextSibling())
     {
@@ -134,13 +141,18 @@ static void importTrkSeg(const QDomElement& Root, Document* theDocument, Layer* 
                 theLayer->add(S);
             }
         }
+
+        /* If the point is marked as anonymized, don't add it to a segment.
+         * These are sorted by coordinates and are not proper segments. */
         if ( importOptions.testFlag(ImportGPX::Option::DetectAnonymizedSegments)
-             && ! Pt->tagValue("_anonymized_", QString()).isNull()
+             && (Pt->time().toTime_t() == 0)
         ) {
             theLayer->add(Pt);
+            nAnon++;
         } else {
             S->add(Pt);
             lastPoint = Pt;
+            nNormal++;
         }
     }
 
@@ -149,13 +161,20 @@ static void importTrkSeg(const QDomElement& Root, Document* theDocument, Layer* 
         g_backend.deallocFeature(theLayer, S);
     }
 
-
-    /*
-    if (importOptions.testFlag(ImportGPX::Option::DetectAnonymizedSegments) && (hasNameOrDesc == false)) {
-        importOptions |= ImportGPX::Option::ForceWaypoints;
-        theLayer->setName("Anonymized trackpoints");
+    /* If some anonymized points were found, mark the layer as "Anonymized
+     * trackpoints". If some non-anonymized points were found as well, report a
+     * warning, because that means our heuristicks failed on these points.
+     *
+     * Can only trigger if anonymization detection was enabled using the
+     * Option::DetectAnonymizedSegments (otherwise, nAnon always stays 0,
+     * regardless of the data).
+     * */
+    if (nAnon) {
+        theLayer->setName(ImportGPX::tr("Anonymized trackpoints", "OSM trackpoints import"));
+        if (nNormal) {
+            qWarning() << "BUG: Mixed anonymized ( " << nAnon << ") and non-anonymized points (" << nNormal << ") found. Please report a bug.";
+        }
     }
-    */
 }
 
 static void importRte(const QDomElement& Root, Document* theDocument, Layer* theLayer, ImportGPX::Options importOptions, QProgressDialog & progress)

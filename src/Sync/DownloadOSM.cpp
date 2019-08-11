@@ -428,7 +428,6 @@ bool downloadTracksFromOSM(QWidget* Main, const QString& aWeb, const QString& aU
             return false;
         if (Before == theTracklayers.size())
             break;
-        theTracklayers[theTracklayers.size()-1]->setName(QApplication::translate("Downloader", "Downloaded track - nodes %1-%2").arg(Page*5000+1).arg(Page*5000+5000));
     }
     return true;
 }
