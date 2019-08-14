@@ -15,9 +15,18 @@
 
 
 namespace Merkaartor {
-namespace RemoteControlServerNs {
-namespace Priv {
+namespace RemoteControlServerPriv {
 
+/**
+ * Instance is spawned for each connection to the remote control port. Once a
+ * request is received, it emits requestReceived signal and closes the
+ * connection gracefully.
+ *
+ * This object shall not be used outside of RemoteControlServer. The server
+ * proxies the requestReceived() signal.
+ *
+ * The object destroys itself after the connection is closed.
+ */
 class RemoteControlConnection : public QObject {
     Q_OBJECT
     public: 
@@ -39,7 +48,9 @@ class RemoteControlServer : public QObject {
     public:
         RemoteControlServer(QObject* parent = nullptr);
 
-        /** Start listening for remote requests. */
+        /** Start listening for remote requests. Request is automatically
+         * accepted and appropriate requestReceived signal is emitted. This
+         * includes invalid requests as well. */
         void listen();
 
         /** 
@@ -48,6 +59,9 @@ class RemoteControlServer : public QObject {
         void close();
 
     signals:
+        /**
+         * Emitted every time a new remote control request is received.
+         */
         void requestReceived(QString requestUrl);
 
     private slots:
@@ -58,6 +72,6 @@ class RemoteControlServer : public QObject {
         QTcpServer* m_tcpServer;
 };
 
-}} /* namespace Merkaartor::RemoteControlServer */
+} /* namespace Merkaartor */
 
 #endif

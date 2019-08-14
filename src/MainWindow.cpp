@@ -147,7 +147,7 @@ class MainWindowPrivate
         FeaturesDock* theFeats;
         QString title;
         QActionGroup* projActgrp;
-        RemoteControlServerNs::RemoteControlServer* theListeningServer;
+        RemoteControlServer* theListeningServer;
         PropertiesDock* theProperties;
         RendererOptions renderOptions;
         int latSaveDirtyLevel;
@@ -475,8 +475,8 @@ void MainWindow::delayedInit()
 
     updateWindowMenu();
 
-    p->theListeningServer = new RemoteControlServerNs::RemoteControlServer(this);
-    connect( p->theListeningServer, &RemoteControlServerNs::RemoteControlServer::requestReceived,
+    p->theListeningServer = new RemoteControlServer(this);
+    connect( p->theListeningServer, &RemoteControlServer::requestReceived,
             this, [this](QString url) { loadUrl(url); } );
 
     if (M_PREFS->getLocalServer()) {

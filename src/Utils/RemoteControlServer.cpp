@@ -12,8 +12,8 @@
 
 #include "RemoteControlServer.hpp"
 
-using namespace Merkaartor::RemoteControlServerNs;
-using namespace Merkaartor::RemoteControlServerNs::Priv;
+using namespace Merkaartor;
+using namespace Merkaartor::RemoteControlServerPriv;
 
 void RemoteControlConnection::readyRead() {
     qDebug() << "RemoteControlConnection: readyRead.";
@@ -63,7 +63,7 @@ void RemoteControlServer::newConnection() {
     /* The RemoteControlconnection will handle it's own destruction when the connection is broken. */
     auto connHandler = new RemoteControlConnection(socket);
     /* Note:
-     * Qt::QueueConnection is a workaround for a problem hit in issue #147.
+     * Qt::QueuedConnection is a workaround for a problem hit in issue #147.
      * When this signal is called, it triggers a long sequence of events, some
      * of them opening it's own QEventLoop (dialogs). This seems to cause
      * issues in deleting the RemoteControlConnection objects, specifically the
