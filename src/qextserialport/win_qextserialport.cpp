@@ -150,7 +150,7 @@ bool Win_QextSerialPort::open(OpenMode mode) {
         return isOpen();
     if (!isOpen()) {
         /*open the port*/
-        Win_Handle=CreateFile((LPCWSTR)port.utf16(), GENERIC_READ|GENERIC_WRITE,
+        Win_Handle=CreateFileW((LPCWSTR)port.utf16(), GENERIC_READ|GENERIC_WRITE,
                               0, NULL, OPEN_EXISTING, 0, NULL);
         if (Win_Handle!=INVALID_HANDLE_VALUE) {
             /*set open mode*/

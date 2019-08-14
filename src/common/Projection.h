@@ -9,7 +9,12 @@
 #ifndef _MOBILE
 #include "MerkaartorPreferences.h"
 
+/* TODO: Proj.4 version 6.0.0 introduces new API changes, but is not widely
+ * available yet. Until it is available on most distros, we will keep using the legacy API.
+ * A migration will eventually be necessary (more research is needed). */
+#define ACCEPT_USE_OF_DEPRECATED_PROJ_API_H 1
 #include <proj_api.h>
+
 typedef projPJ ProjProjection;
 
 #endif // _MOBILE

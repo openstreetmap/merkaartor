@@ -114,7 +114,7 @@ QByteArray DirtyListExecutorOSC::getChanges()
     OscStream.writeStartDocument();
 
     OscStream.writeStartElement("osmChange ");
-    OscStream.writeAttribute("version", "0.3");
+    OscStream.writeAttribute("version", "0.6");
     OscStream.writeAttribute("generator", QString("Merkaartor %1").arg(STRINGIFY(VERSION)));
 
     runVisit();
@@ -160,7 +160,7 @@ bool DirtyListExecutorOSC::executeChanges(QWidget* aParent)
         OscStream.writeStartDocument();
 
         OscStream.writeStartElement("osmChange ");
-        OscStream.writeAttribute("version", "0.3");
+        OscStream.writeAttribute("version", "0.6");
         OscStream.writeAttribute("generator", QString("Merkaartor %1").arg(STRINGIFY(VERSION)));
 
         Lbl->setText(QApplication::translate("Downloader","Preparing changes"));

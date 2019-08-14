@@ -26,6 +26,7 @@ You will need the following packages installed:
  - Qt 4.x (4.4.0 or newer) or Qt 5.x (5.3.1 or later)
  - Proj.4
  - GDAL (2.0.0 or newer for GDAL exports)
+ - Exiv2 (for geoimage support)
  - (For Windows Installer) NSIS-3
 
 The OS specifics will be explained further down.
@@ -66,7 +67,8 @@ $ pacman -S base-devel \
 	mingw32/mingw-w64-i686-gdal \
 	mingw32/mingw-w64-i686-proj \
 	mingw32/mingw-w64-i686-openjpeg2 \
-	mingw32/mingw-w64-i686-json-c
+	mingw32/mingw-w64-i686-json-c \
+	mingw64/mingw-w64-i686-exiv2
 ```
 
 For 64bit, they are:
@@ -79,7 +81,8 @@ $ pacman -S base-devel \
 	mingw64/mingw-w64-x86_64-gdal \
 	mingw64/mingw-w64-x86_64-proj \
 	mingw64/mingw-w64-x86_64-openjpeg2 \
-	mingw64/mingw-w64-x86_64-json-c
+	mingw64/mingw-w64-x86_64-json-c \
+	mingw64/mingw-w64-x86_64-exiv2
 ```
 
 Done? Continue to the next step, but run a different msys shell, the mingw32 or

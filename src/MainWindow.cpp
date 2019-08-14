@@ -103,6 +103,9 @@
 #include <limits.h>
 
 //For About
+#ifndef ACCEPT_USE_OF_DEPRECATED_PROJ_API_H
+#define ACCEPT_USE_OF_DEPRECATED_PROJ_API_H
+#endif
 #include "proj_api.h"
 #include "gdal_version.h"
 
@@ -3965,8 +3968,8 @@ void MainWindow::on_gpsConnectAction_triggered()
     QGPSS60Device* aGps = new QGPSS60Device();
 #endif
     if (aGps->openDevice()) {
-        connect(aGps, SIGNAL(updatePosition(float, float, QDateTime, float, float, float)),
-            this, SLOT(updateGpsPosition(float, float, QDateTime, float, float, float)));
+        connect(aGps, SIGNAL(updatePosition(qreal, qreal, QDateTime, qreal, qreal, qreal)),
+            this, SLOT(updateGpsPosition(qreal, qreal, QDateTime, qreal, qreal, qreal)));
 
         ui->gpsConnectAction->setEnabled(false);
         ui->gpsReplayAction->setEnabled(false);
@@ -4020,8 +4023,8 @@ void MainWindow::on_gpsDisconnectAction_triggered()
     ui->gpsRecordAction->setChecked(false);
     ui->gpsPauseAction->setChecked(false);
 
-    disconnect(theGPS->getGpsDevice(), SIGNAL(updatePosition(float, float, QDateTime, float, float, float)),
-        this, SLOT(updateGpsPosition(float, float, QDateTime, float, float, float)));
+    disconnect(theGPS->getGpsDevice(), SIGNAL(updatePosition(qreal, qreal, QDateTime, qreal, qreal, qreal)),
+        this, SLOT(updateGpsPosition(qreal, qreal, QDateTime, qreal, qreal, qreal)));
     theGPS->stopGps();
     theGPS->resetGpsStatus();
 }
