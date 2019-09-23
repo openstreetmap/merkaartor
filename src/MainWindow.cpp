@@ -1631,7 +1631,7 @@ MainWindow::ImportStatus MainWindow::importFile(Document * mapDocument, const QS
         newLayer = new TrackLayer( baseFileName + " - " + tr("Waypoints"), baseFileName);
         mapDocument->add(newLayer);
         theTracklayers.append((TrackLayer*) newLayer);
-        bool importOK = importGPX(this, fileName, mapDocument, theTracklayers);
+        bool importOK = ImportGPX::import(this, fileName, mapDocument, theTracklayers);
         if (!importOK) {
             for (int i=0; i<theTracklayers.size(); i++) {
                 mapDocument->remove(theTracklayers[i]);

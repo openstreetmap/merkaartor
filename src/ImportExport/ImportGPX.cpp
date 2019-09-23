@@ -30,6 +30,7 @@ static TrackNode* importTrkPt(const QDomElement& Root, Document* /* theDocument 
     if (Root.tagName() == "wpt")
         Pt->setTag("_waypoint_", "yes");
 
+    bool hasTimestamp = false;
     for(QDomNode n = Root.firstChild(); !n.isNull(); n = n.nextSibling())
     {
         QDomElement t = n.toElement();
@@ -51,6 +52,7 @@ static TrackNode* importTrkPt(const QDomElement& Root, Document* /* theDocument 
                 QDateTime dt(QDateTime::fromString(Value.left(19), Qt::ISODate));
                 dt.setTimeSpec(Qt::UTC);
                 Pt->setTime(dt);
+                hasTimestamp = true;
             }
         }
         else if (t.tagName() == "ele")
@@ -84,12 +86,19 @@ static TrackNode* importTrkPt(const QDomElement& Root, Document* /* theDocument 
             }
         }
     }
+    if (!hasTimestamp) {
+        /* If a point does not have timestamp, make sure this is reflected in
+         * our representation (by default, a Feature has time of creation as a
+         * timestamp).
+         */
+        Pt->setTime(0);
+    }
 
     return Pt;
 }
 
 
-static void importTrkSeg(const QDomElement& Root, Document* theDocument, Layer* theLayer, bool MakeSegment, QProgressDialog & progress)
+static void importTrkSeg(const QDomElement& Root, Document* theDocument, Layer* theLayer, ImportGPX::Options importOptions, QProgressDialog & progress)
 {
     TrackSegment* S = g_backend.allocSegment(theLayer);
     theLayer->add(S);
@@ -98,6 +107,9 @@ static void importTrkSeg(const QDomElement& Root, Document* theDocument, Layer* 
         S->setId(IFeature::FId(IFeature::GpxSegment, Root.attribute("xml:id").toLongLong()));
 
     Node* lastPoint = NULL;
+
+    /* Counters to keep the number of found normal and anonymized (if detection is enabled) points. */
+    int nAnon = 0, nNormal = 0;
 
     for(QDomNode n = Root.firstChild(); !n.isNull(); n = n.nextSibling())
     {
@@ -111,10 +123,7 @@ static void importTrkSeg(const QDomElement& Root, Document* theDocument, Layer* 
 
         TrackNode* Pt = importTrkPt(t,theDocument, theLayer);
 
-        if (MakeSegment == false)
-            continue;
-
-        if (lastPoint)
+        if (importOptions.testFlag( ImportGPX::Option::MakeSegmented ) && lastPoint)
         {
             qreal kilometer = Pt->position().distanceFrom( lastPoint->position() );
 
@@ -133,17 +142,42 @@ static void importTrkSeg(const QDomElement& Root, Document* theDocument, Layer* 
             }
         }
 
-        S->add(Pt);
-        lastPoint = Pt;
+        /* If the point is marked as anonymized, don't add it to a segment.
+         * These are sorted by coordinates and are not proper segments. */
+        if ( importOptions.testFlag(ImportGPX::Option::DetectAnonymizedSegments)
+             && (Pt->time().toTime_t() == 0)
+        ) {
+            theLayer->add(Pt);
+            nAnon++;
+        } else {
+            S->add(Pt);
+            lastPoint = Pt;
+            nNormal++;
+        }
     }
 
     if (!S->size()) {
         theLayer->remove(S);
         g_backend.deallocFeature(theLayer, S);
     }
+
+    /* If some anonymized points were found, mark the layer as "Anonymized
+     * trackpoints". If some non-anonymized points were found as well, report a
+     * warning, because that means our heuristicks failed on these points.
+     *
+     * Can only trigger if anonymization detection was enabled using the
+     * Option::DetectAnonymizedSegments (otherwise, nAnon always stays 0,
+     * regardless of the data).
+     * */
+    if (nAnon) {
+        theLayer->setName(ImportGPX::tr("Anonymized trackpoints", "OSM trackpoints import"));
+        if (nNormal) {
+            qWarning() << "BUG: Mixed anonymized ( " << nAnon << ") and non-anonymized points (" << nNormal << ") found. Please report a bug.";
+        }
+    }
 }
 
-static void importRte(const QDomElement& Root, Document* theDocument, Layer* theLayer, bool MakeSegment, QProgressDialog & progress)
+static void importRte(const QDomElement& Root, Document* theDocument, Layer* theLayer, ImportGPX::Options importOptions, QProgressDialog & progress)
 {
     TrackSegment* S = g_backend.allocSegment(theLayer);
     theLayer->add(S);
@@ -170,7 +204,7 @@ static void importRte(const QDomElement& Root, Document* theDocument, Layer* the
 
             TrackNode* Pt = importTrkPt(t,theDocument, theLayer);
 
-            if (MakeSegment == false)
+            if (! importOptions.testFlag( ImportGPX::Option::MakeSegmented ))
                 continue;
 
             if (lastPoint)
@@ -194,15 +228,14 @@ static void importRte(const QDomElement& Root, Document* theDocument, Layer* the
         g_backend.deallocFeature(theLayer, S);
 }
 
-static void importTrk(const QDomElement& Root, Document* theDocument, Layer* theLayer, bool MakeSegment, QProgressDialog & progress)
+static void importTrk(const QDomElement& Root, Document* theDocument, Layer* theLayer, ImportGPX::Options importOptions, QProgressDialog & progress)
 {
+    QDomElement trkSegElement;
     for(QDomNode n = Root.firstChild(); !n.isNull(); n = n.nextSibling())
     {
         QDomElement t = n.toElement();
         if (!t.isNull() && t.tagName() == "trkseg") {
-            importTrkSeg(t,theDocument, theLayer, MakeSegment, progress);
-            if (progress.wasCanceled())
-                return;
+            trkSegElement = t;
         } else
         if (!t.isNull() && t.tagName() == "name") {
             theLayer->setName(t.text());
@@ -211,9 +244,15 @@ static void importTrk(const QDomElement& Root, Document* theDocument, Layer* the
             theLayer->setDescription(t.text());
         }
     }
+
+    if (!trkSegElement.isNull()) {
+        importTrkSeg(trkSegElement, theDocument, theLayer, importOptions, progress);
+        if (progress.wasCanceled())
+            return;
+    }
 }
 
-static void importGPX(const QDomElement& Root, Document* theDocument, QList<TrackLayer*>& theTracklayers, bool MakeSegment, QProgressDialog & progress)
+static void importGPX(const QDomElement& Root, Document* theDocument, QList<TrackLayer*>& theTracklayers, ImportGPX::Options importOptions, QProgressDialog & progress)
 {
     for(QDomNode n = Root.firstChild(); !n.isNull(); n = n.nextSibling())
     {
@@ -225,7 +264,7 @@ static void importGPX(const QDomElement& Root, Document* theDocument, QList<Trac
         {
             TrackLayer* newLayer = new TrackLayer();
             theDocument->add(newLayer);
-            importTrk(t,theDocument, newLayer, MakeSegment, progress);
+            importTrk(t,theDocument, newLayer, importOptions, progress);
             if (!newLayer->size()) {
                 theDocument->remove(newLayer);
                 delete newLayer;
@@ -237,7 +276,7 @@ static void importGPX(const QDomElement& Root, Document* theDocument, QList<Trac
         {
             TrackLayer* newLayer = new TrackLayer();
             theDocument->add(newLayer);
-            importRte(t,theDocument, newLayer, MakeSegment, progress);
+            importRte(t,theDocument, newLayer, importOptions, progress);
             if (!newLayer->size()) {
                 theDocument->remove(newLayer);
                 delete newLayer;
@@ -255,7 +294,7 @@ static void importGPX(const QDomElement& Root, Document* theDocument, QList<Trac
     }
 }
 
-bool importGPX(QWidget* aParent, QIODevice& File, Document* theDocument, QList<TrackLayer*>& theTracklayers, bool MakeSegment)
+static bool importGPX(QWidget* aParent, QIODevice& File, Document* theDocument, QList<TrackLayer*>& theTracklayers, ImportGPX::Options importOptions)
 {
     // TODO remove debug messageboxes
     QDomDocument DomDoc;
@@ -284,7 +323,7 @@ bool importGPX(QWidget* aParent, QIODevice& File, Document* theDocument, QList<T
     progress.setMaximum(progress.maximum() + DomDoc.elementsByTagName("trkpt").count());
     progress.setMaximum(progress.maximum() + DomDoc.elementsByTagName("wpt").count());
 
-    importGPX(root, theDocument, theTracklayers, MakeSegment, progress);
+    importGPX(root, theDocument, theTracklayers, importOptions, progress);
 
     progress.setValue(progress.maximum());
     if (progress.wasCanceled())
@@ -294,18 +333,18 @@ bool importGPX(QWidget* aParent, QIODevice& File, Document* theDocument, QList<T
 }
 
 
-bool importGPX(QWidget* aParent, const QString& aFilename, Document* theDocument, QList<TrackLayer*>& theTracklayers)
+bool ImportGPX::import(QWidget* aParent, const QString& aFilename, Document* theDocument, QList<TrackLayer*>& theTracklayers)
 {
     QFile File(aFilename);
     if (!File.open(QIODevice::ReadOnly))
     {
         return false;
     }
-    return importGPX(aParent, File, theDocument, theTracklayers, true);
+    return importGPX(aParent, File, theDocument, theTracklayers, Option::MakeSegmented);
 }
 
-bool importGPX(QWidget* aParent, QByteArray& aFile, Document* theDocument, QList<TrackLayer*>& theTracklayers, bool MakeSegment)
+bool ImportGPX::import(QWidget* aParent, QByteArray& aFile, Document* theDocument, QList<TrackLayer*>& theTracklayers, ImportGPX::Options importOptions)
 {
     QBuffer buf(&aFile);
-    return importGPX(aParent,buf, theDocument, theTracklayers, MakeSegment);
+    return importGPX(aParent,buf, theDocument, theTracklayers, importOptions);
 }
