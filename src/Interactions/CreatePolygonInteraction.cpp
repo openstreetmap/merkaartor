@@ -161,6 +161,8 @@ void CreatePolygonInteraction::paintEvent(QPaintEvent* , QPainter& thePainter)
 void CreatePolygonInteraction::mouseMoveEvent(QMouseEvent* event)
 {
     if (HaveOrigin) {
+        OriginF = COORD_TO_XY(Origin);
+
         QMatrix m;
         m.translate(OriginF.x(), OriginF.y());
         m.rotate(bAngle);
