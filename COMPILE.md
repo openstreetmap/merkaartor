@@ -33,23 +33,23 @@ The OS specifics will be explained further down.
 
 ### Linux
 
-Install the above packages using your package manager. For Ubuntu, this would
+Install the above packages using your package manager. For Debian/Ubuntu, this would
 look like this:
 
 ```
- $ sudo apt-get -qq install libgdal-dev libproj-dev
+ $ sudo apt-get install build-essential libgdal-dev libproj-dev
 ```
 
 For Qt4:
 
 ```
- $ sudo apt-get -qq install libqt4-xml libqt4-network libqt4-gui libqt4-svg libqt4-webkit libqt4-dev qt4-qmake
+ $ sudo apt-get install qt4-default libqt4-xml libqt4-network libqt4-gui libqt4-svg libqt4-webkit libqt4-dev qt4-qmake
 ```
 
 Or for Qt5: 
 
 ```
- $ sudo apt-get -qq install libqt5xml5* libqt5network5* libqt5gui5* libqt5svg5* libqt5webkit5* libqt5quick5* qtdeclarative5-dev qttools5-dev qtbase5-dev qt5-qmake qtchooser
+ $ sudo apt-get install qt5-default libqt5xml5* libqt5network5* libqt5gui5* libqt5svg5* libqt5webkit5* libqt5quick5* qtdeclarative5-dev qttools5-dev qtbase5-dev qt5-qmake qtchooser
 ```
 
 ### Windows (32bit/64bit)
