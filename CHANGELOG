@@ -1,5 +1,22 @@
 This is a shortened changelog. See git commits for full list of changes.
 
+v0.18.4
+    * FIX: Fixed "Create rectangular building" when panning (issue 125).
+    * FIX: Fixed wrong GPS track rendering of anonymized tracks (issue 181).
+    * FIX: Fixed a few bugs in gpsd handling.
+    * FIX: Fixed remote control not to trigger multiple downloads (issue 147).
+    * FIX: Fixed parsing of some OSM links.
+    * FIX: Fixed import of some GPX files.
+    * FIX: Updated GDAL, Proj.4 and Exiv2 code to support newer versions.
+    * FIX: Fixed wrong DPI when printing and exporting map.
+    * FIX: Fixed OSM renderer caching mechanism.
+    * FIX: Fixed wheel zooming speeds.
+    * FIX: Various stability issues.
+    * FIX: Various typos.
+    * DEL: Removed broken plugins: gosmore, NavigBackground, Yahoo imagery.
+    * DEL: Removed mobilemerk (unused and unusable build profile).
+    * DEL: Spatialite backend (unused and unusable data backend).
+
 v0.18.3
     * ADD : Updated slippy map to allow selection.
     * ADD : Implemented relation filter, based on current selection.
