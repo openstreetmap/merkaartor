@@ -35,7 +35,7 @@
     </message>
     <message utf8="true">
         <location filename="../src/common/AboutDialog.ui" line="152"/>
-        <source>Copyright Bart Vanhauwaert, Chris Browet, Ladislav Láska and others, 2006-2016</source>
+        <source>Copyright Bart Vanhauwaert, Chris Browet, Ladislav Láska and others, 2006-2019</source>
         <translation type="unfinished"></translation>
     </message>
     <message>

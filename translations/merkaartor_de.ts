@@ -35,8 +35,8 @@
     </message>
     <message utf8="true">
         <location filename="../src/common/AboutDialog.ui" line="152"/>
-        <source>Copyright Bart Vanhauwaert, Chris Browet, Ladislav Láska and others, 2006-2016</source>
-        <translation type="unfinished">Urheberrechte bei Bart Vanhauwaert, Chris Browet, Ladislav Láska und weiteren, 2006-2016</translation>
+        <source>Copyright Bart Vanhauwaert, Chris Browet, Ladislav Láska and others, 2006-2019</source>
+        <translation type="unfinished">Urheberrechte bei Bart Vanhauwaert, Chris Browet, Ladislav Láska und weiteren, 2006-2019</translation>
     </message>
     <message>
         <location filename="../src/common/AboutDialog.ui" line="185"/>
