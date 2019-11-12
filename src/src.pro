@@ -8,9 +8,9 @@ include(Custom.pri)
 
 CONFIG += debug_and_release c++11
 
-# This is a workaround to get qDebug() to stdout on Windows
+# This is a workaround to get qDebug() to stdout on Windows. Uncomment if needed.
 win32 {
-	CONFIG += console
+#	CONFIG += console
 }
 
 isEmpty(SYSTEM_QTSA) {
