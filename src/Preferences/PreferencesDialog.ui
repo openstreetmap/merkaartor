@@ -39,7 +39,7 @@
             <item>
              <widget class="QLabel" name="label_5">
               <property name="text">
-               <string>Zoom Out/in (%)</string>
+               <string>Zoom out/in (%)</string>
               </property>
              </widget>
             </item>
@@ -115,14 +115,14 @@
             <item row="1" column="0">
              <widget class="QCheckBox" name="cbSeparateMoveMode">
               <property name="text">
-               <string>Separate Move mode</string>
+               <string>Separate move mode</string>
               </property>
              </widget>
             </item>
             <item row="2" column="0">
              <widget class="QCheckBox" name="cbVirtualNodes">
               <property name="text">
-               <string>Use Virtual nodes (new session required)</string>
+               <string>Use virtual nodes (new session required)</string>
               </property>
              </widget>
             </item>
@@ -183,7 +183,7 @@
             </size>
            </property>
            <property name="text">
-            <string>...</string>
+            <string>…</string>
            </property>
            <property name="iconSize">
             <size>
@@ -233,7 +233,7 @@
             </size>
            </property>
            <property name="text">
-            <string>...</string>
+            <string>…</string>
            </property>
            <property name="iconSize">
             <size>
@@ -256,7 +256,7 @@
          <item>
           <widget class="QCheckBox" name="cbSimpleGpxTrack">
            <property name="text">
-            <string>Use simple GPX track appearance</string>
+            <string>Simple GPX track appearance</string>
            </property>
           </widget>
          </item>
@@ -298,7 +298,7 @@
                </size>
               </property>
               <property name="text">
-               <string>...</string>
+               <string>…</string>
               </property>
               <property name="iconSize">
                <size>
@@ -344,7 +344,7 @@
                </size>
               </property>
               <property name="text">
-               <string>...</string>
+               <string>…</string>
               </property>
               <property name="iconSize">
                <size>
@@ -390,7 +390,7 @@
                </size>
               </property>
               <property name="text">
-               <string>...</string>
+               <string>…</string>
               </property>
               <property name="iconSize">
                <size>
@@ -443,7 +443,7 @@
                </size>
               </property>
               <property name="text">
-               <string>...</string>
+               <string>…</string>
               </property>
               <property name="iconSize">
                <size>
@@ -510,7 +510,7 @@
                </size>
               </property>
               <property name="text">
-               <string>...</string>
+               <string>…</string>
               </property>
               <property name="iconSize">
                <size>
@@ -578,7 +578,7 @@
        <item>
         <widget class="QLabel" name="label_16">
          <property name="text">
-          <string>You may need to restart the program for these changes to take effect</string>
+          <string>A restart of the program may be needed for these changes to take effect.</string>
          </property>
         </widget>
        </item>
@@ -655,14 +655,14 @@
           <item row="0" column="0">
            <widget class="QCheckBox" name="cbAntiAlias">
             <property name="text">
-             <string>Use Anti-aliasing</string>
+             <string>Anti-aliasing</string>
             </property>
            </widget>
           </item>
           <item row="0" column="1">
            <widget class="QCheckBox" name="cbDisableAntialiasInPanning">
             <property name="text">
-             <string>Disable Anti-alisaing while panning</string>
+             <string>No anti-alisaing while panning</string>
             </property>
            </widget>
           </item>
@@ -720,7 +720,7 @@
             <item>
              <widget class="QLabel" name="label_17">
               <property name="text">
-               <string>Custom styles directory</string>
+               <string>Custom styles folder</string>
               </property>
              </widget>
             </item>
@@ -743,7 +743,7 @@
                </size>
               </property>
               <property name="text">
-               <string>...</string>
+               <string>…</string>
               </property>
              </widget>
             </item>
@@ -776,7 +776,7 @@
           <item>
            <widget class="QCheckBox" name="cbDisableStyleForTracks">
             <property name="text">
-             <string>Disable styles for track layers</string>
+             <string>No styles for track layers</string>
             </property>
            </widget>
           </item>
@@ -806,7 +806,7 @@
        <item>
         <widget class="QGroupBox" name="MapStyle_2">
          <property name="title">
-          <string>Tag Template</string>
+          <string>Tag template</string>
          </property>
          <layout class="QVBoxLayout" name="_9">
           <item>
@@ -861,7 +861,7 @@
                </size>
               </property>
               <property name="text">
-               <string>...</string>
+               <string>…</string>
               </property>
              </widget>
             </item>
@@ -899,7 +899,7 @@
           </size>
          </property>
          <property name="title">
-          <string>OSM API (URL is, e.g., &quot;http://www.openstreetmap.org/api/0.6&quot;</string>
+          <string>OSM API (URL is, e.g., &quot;https://www.openstreetmap.org/api/0.6&quot;</string>
          </property>
          <layout class="QVBoxLayout" name="OsmServersLayout"/>
         </widget>
@@ -942,7 +942,7 @@
           </size>
          </property>
          <property name="title">
-          <string>Nominatim (Geo Search)</string>
+          <string>Nominatim (geo search)</string>
          </property>
          <layout class="QVBoxLayout" name="_6">
           <item>
@@ -992,7 +992,7 @@
                </size>
               </property>
               <property name="text">
-               <string>...</string>
+               <string>…</string>
               </property>
              </widget>
             </item>
@@ -1019,14 +1019,14 @@
             <item>
              <widget class="QCheckBox" name="cbAutoExtractTracks">
               <property name="text">
-               <string>Automatically extract tracks on open</string>
+               <string>Automatically extract opened tracks</string>
               </property>
              </widget>
             </item>
             <item>
              <widget class="QCheckBox" name="cbReadonlyTracksDefault">
               <property name="text">
-               <string>Track layers readonly by default</string>
+               <string>Track layers read-only by default</string>
               </property>
              </widget>
             </item>
@@ -1037,7 +1037,7 @@
             <item>
              <widget class="QLabel" name="label_25">
               <property name="text">
-               <string>Don't connect GPX nodes separated by more than (in km; 0 to disable)</string>
+               <string>Don't connect GPX nodes separated by more than (in km; 0 to turn off)</string>
               </property>
              </widget>
             </item>
@@ -1216,7 +1216,7 @@
             </size>
            </property>
            <property name="text">
-            <string>...</string>
+            <string>…</string>
            </property>
            <property name="iconSize">
             <size>
@@ -1267,7 +1267,7 @@
           <item row="0" column="0" colspan="3">
            <widget class="QCheckBox" name="bbUseProxy">
             <property name="text">
-             <string>Use Proxy</string>
+             <string>Use proxy</string>
             </property>
            </widget>
           </item>
@@ -1362,7 +1362,7 @@
          <item>
           <widget class="QLabel" name="label_12">
            <property name="text">
-            <string>Network Timeout (sec)</string>
+            <string>Network Timeout (sec):</string>
            </property>
           </widget>
          </item>
@@ -1400,7 +1400,7 @@
        <item>
         <widget class="QCheckBox" name="cbLocalServer">
          <property name="text">
-          <string>Enable JOSM-compatible local server on port 8111</string>
+          <string>JOSM-compatible local server on port 8111</string>
          </property>
         </widget>
        </item>
@@ -1421,19 +1421,19 @@
      </widget>
      <widget class="QWidget" name="tab_2">
       <attribute name="title">
-       <string>Background Image</string>
+       <string>Background image</string>
       </attribute>
       <layout class="QVBoxLayout">
        <item>
         <widget class="QGroupBox" name="grpCaching">
          <property name="title">
-          <string>Tiles Caching (not active for Yahoo! due to legal restrictions)</string>
+          <string>Tile caching (not active for Yahoo! due to legal restrictions)</string>
          </property>
          <layout class="QGridLayout">
           <item row="0" column="0">
            <widget class="QLabel" name="label_3">
             <property name="text">
-             <string>Cache directory</string>
+             <string>Cache folder</string>
             </property>
            </widget>
           </item>
@@ -1443,7 +1443,7 @@
           <item row="1" column="0">
            <widget class="QLabel" name="label_15">
             <property name="text">
-             <string>Cache size (in Mb; 0 to disable)</string>
+             <string>Cache size (in MB; 0 to turn off)</string>
             </property>
            </widget>
           </item>
@@ -1552,7 +1552,7 @@
               </size>
              </property>
              <property name="text">
-              <string>...</string>
+              <string>…</string>
              </property>
             </widget>
            </item>
