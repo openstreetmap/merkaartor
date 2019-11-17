@@ -64,13 +64,29 @@ qmake -spec linux-clang
 
 You might have noticed the strange naming convention for variables. They are
 often prefixed with a definite or indefinite article, like aLayer and theLayer.
-It's been in Merkaartor since the very beginning of the Git history. I know nothing
-about it, so if you have seen it elsewhere, let me know!
+It's been in Merkaartor since the very beginning of the Git history.
 
-My best bet, based on some observation and common sense is that theVariable
-would represent the same object during its lifetime. aVariable could change
-objects, for example if it's used in a loop, iterating over layers.
+The exact meaning in Merkaartor is still a bit cloudy, and I don't expect
+anyone to keep this notation in new code, but it might be a good idea in some
+cases. However, I will not accept commits that try to change this notation just
+for the sake of changing.
 
-I don't expect anyone to keep this notation in new code, but it might be a good
-idea in some cases. However, I will not accept commits that try to change this
-notation just for the sake of changing.
+A possible representation was given by @PeterMortensen (see [issue #184 on github](https://github.com/openstreetmap/merkaartor/issues/184) for a bit more details)
+
+One example was in the commercial C++ framework Think Class Library (TCL),
+bundled with the THINK C compiler. TCL was similar to Qt, for creating
+GUI-based applications, etc. This was in the early 1990s for MacOS (before both
+Mac OS X and PowerPC).
+
+It used the definite or indefinite article prefix, the indefinite for parameter
+names of a function and the definite for scalar member variables (not class
+instances). It also used the "its" prefix for members that were class instances
+(this was before references in C++, so all access to class instances were
+through pointers). If I remember correctly, this was to indicate ownership
+(responsibility for destruction, etc.).
+
+The TCL framework also had the convention of "I" for second-level
+initialisation of objects after creation (possibly due to limitations in the
+compiler support of C++ features - I don't remember).
+
+
