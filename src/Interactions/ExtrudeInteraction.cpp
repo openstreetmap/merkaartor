@@ -40,7 +40,7 @@ QString ExtrudeInteraction::toHtml()
     //help = (MainWindow::tr("LEFT-CLICK to select; LEFT-DRAG to move"));
 
     QString desc;
-    desc = QString("<big><b>%1</b></big><br/>").arg(MainWindow::tr("Create way Interaction"));
+    desc = QString("<big><b>%1</b></big><br/>").arg(MainWindow::tr("Extrude interaction"));
     desc += QString("<b>%1</b><br/>").arg(help);
 
     QString S =
@@ -130,7 +130,7 @@ void ExtrudeInteraction::snapMouseReleaseEvent(QMouseEvent* anEvent, Feature* la
         QLineF s2 = QLineF::fromPolar(OrigSegment.length(), OrigSegment.angle());
         s2.translate(pb);
 
-        CommandList* theList  = new CommandList(MainWindow::tr("Extrude Road %1").arg(theRoad->description()), theRoad);
+        CommandList* theList  = new CommandList(MainWindow::tr("Extrude way %1").arg(theRoad->description()), theRoad);
         if (theRoad->segmentCount() == 1) {
             int pos = 0;
             Node* N = g_backend.allocNode(theRoad->layer(), XY_TO_COORD(s2.p1().toPoint()));

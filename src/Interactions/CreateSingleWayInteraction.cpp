@@ -56,7 +56,7 @@ QString CreateSingleWayInteraction::toHtml()
     //help = (MainWindow::tr("LEFT-CLICK to select; LEFT-DRAG to move"));
 
     QString desc;
-    desc = QString("<big><b>%1</b></big><br/>").arg(MainWindow::tr("Create way Interaction"));
+    desc = QString("<big><b>%1</b></big><br/>").arg(MainWindow::tr("Create Way interaction"));
     desc += QString("<b>%1</b><br/>").arg(help);
 
     QString S =
@@ -238,7 +238,7 @@ void CreateSingleWayInteraction::snapMouseReleaseEvent(QMouseEvent* anEvent, Fea
                 Coord P(XY_TO_COORD(LastCursor));
                 int SnapIdx = findSnapPointIndex(aRoad, P);
                 Node* N = g_backend.allocNode(theMain->document()->getDirtyOrOriginLayer(), P);
-                CommandList* theList  = new CommandList(MainWindow::tr("Create Node %1 in Road %2").arg(N->description()).arg(aRoad->description()), N);
+                CommandList* theList  = new CommandList(MainWindow::tr("Create node %1 in way %2").arg(N->description()).arg(aRoad->description()), N);
                 theList->add(new AddFeatureCommand(theMain->document()->getDirtyOrOriginLayer(),N,true));
                 theList->add(new WayAddNodeCommand(aRoad,N,SnapIdx,theMain->document()->getDirtyOrOriginLayer(aRoad)));
                 document()->addHistory(theList);
@@ -282,7 +282,7 @@ void CreateSingleWayInteraction::snapMouseReleaseEvent(QMouseEvent* anEvent, Fea
                 if (IsCurved)
                     theRoad->setTag("smooth","yes");
                 L->add(new WayAddNodeCommand(theRoad,From));
-                L->setDescription(MainWindow::tr("Create Road: %1").arg(theRoad->description()));
+                L->setDescription(MainWindow::tr("Create way %1").arg(theRoad->description()));
                 L->setFeature(theRoad);
             }
             Node* To = 0;
@@ -290,7 +290,7 @@ void CreateSingleWayInteraction::snapMouseReleaseEvent(QMouseEvent* anEvent, Fea
                 To = Pt;
                 if (!To->isDirty() && !To->hasOSMId() && To->isUploadable()) {
                     L->add(new AddFeatureCommand(theMain->document()->getDirtyOrOriginLayer(),To,true));
-                    L->setDescription(MainWindow::tr("Create Node: %1").arg(To->description()));
+                    L->setDescription(MainWindow::tr("Create node: %1").arg(To->description()));
                 }
             }
             else if (Way* aRoad = dynamic_cast<Way*>(lastSnap))
@@ -298,7 +298,7 @@ void CreateSingleWayInteraction::snapMouseReleaseEvent(QMouseEvent* anEvent, Fea
                 Coord P(XY_TO_COORD(LastCursor));
                 int SnapIdx = findSnapPointIndex(aRoad, P);
                 Node* N = g_backend.allocNode(theMain->document()->getDirtyOrOriginLayer(), P);
-                CommandList* theList  = new CommandList(MainWindow::tr("Create Node %1 in Road %2").arg(N->description()).arg(aRoad->description()), N);
+                CommandList* theList  = new CommandList(MainWindow::tr("Create node %1 in way %2").arg(N->description()).arg(aRoad->description()), N);
                 theList->add(new AddFeatureCommand(theMain->document()->getDirtyOrOriginLayer(),N,true));
                 theList->add(new WayAddNodeCommand(aRoad,N,SnapIdx,theMain->document()->getDirtyOrOriginLayer(aRoad)));
                 document()->addHistory(theList);
@@ -309,10 +309,10 @@ void CreateSingleWayInteraction::snapMouseReleaseEvent(QMouseEvent* anEvent, Fea
             {
                 To = g_backend.allocNode(theMain->document()->getDirtyOrOriginLayer(), XY_TO_COORD(LastCursor));
                 L->add(new AddFeatureCommand(theMain->document()->getDirtyOrOriginLayer(),To,true));
-                L->setDescription(MainWindow::tr("Create Node %1 in Road %2").arg(To->description()).arg(theRoad->description()));
+                L->setDescription(MainWindow::tr("Create node %1 in way %2").arg(To->description()).arg(theRoad->description()));
                 L->setFeature(To);
             }
-            L->setDescription(MainWindow::tr("Add Node %1 to Road %2").arg(To->description()).arg(theRoad->description()));
+            L->setDescription(MainWindow::tr("Add node %1 to way %2").arg(To->description()).arg(theRoad->description()));
             if (Prepend)
                 L->add(new WayAddNodeCommand(theRoad,To,(int)0,theMain->document()->getDirtyOrOriginLayer(theRoad)));
             else

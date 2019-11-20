@@ -622,7 +622,7 @@ void MainWindow::onCustomcontextmenurequested(const QPoint & pos)
         if (nodeMenu.actions().size())
             menu.addMenu(&nodeMenu);
 
-        QMenu roadMenu(tr("Road"));
+        QMenu roadMenu(tr("Way"));
         for(int i=0; i<ui->menuRoad->actions().size(); ++i) {
             if (ui->menuRoad->actions()[i]->isEnabled())
                 roadMenu.addAction(ui->menuRoad->actions()[i]);
@@ -2440,7 +2440,7 @@ void MainWindow::on_markBridgeAction_triggered()
 
 void MainWindow::on_roadJoinAction_triggered()
 {
-    CommandList* theList = new CommandList(MainWindow::tr("Join Roads"), NULL);
+    CommandList* theList = new CommandList(MainWindow::tr("Join Ways"), NULL);
     joinRoads(theDocument, theList, p->theProperties);
     if (theList->empty())
         delete theList;
@@ -2454,7 +2454,7 @@ void MainWindow::on_roadJoinAction_triggered()
 
 void MainWindow::on_roadSplitAction_triggered()
 {
-    CommandList* theList = new CommandList(MainWindow::tr("Split Roads"), NULL);
+    CommandList* theList = new CommandList(MainWindow::tr("Split Ways"), NULL);
     splitRoads(theDocument, theList, p->theProperties);
     if (theList->empty())
         delete theList;
@@ -2468,7 +2468,7 @@ void MainWindow::on_roadSplitAction_triggered()
 
 void MainWindow::on_roadBreakAction_triggered()
 {
-    CommandList* theList = new CommandList(MainWindow::tr("Break Roads"), NULL);
+    CommandList* theList = new CommandList(MainWindow::tr("Break Ways"), NULL);
     breakRoads(theDocument, theList, p->theProperties);
     if (theList->empty())
         delete theList;
@@ -2482,7 +2482,7 @@ void MainWindow::on_roadBreakAction_triggered()
 
 void MainWindow::on_roadSimplifyAction_triggered()
 {
-    CommandList* theList = new CommandList(MainWindow::tr("Simplify Roads"), NULL);
+    CommandList* theList = new CommandList(MainWindow::tr("Simplify Ways"), NULL);
     qreal threshold = 3.0; // in metres; TODO: allow user-specified threshold
     simplifyRoads(theDocument, theList, p->theProperties, threshold);
     if (theList->empty())
@@ -2616,7 +2616,7 @@ void MainWindow::on_roadSubdivideAction_triggered()
     if (Dlg->exec() == QDialog::Accepted) {
         int divisions = Dlg->intValue();
 #endif
-        CommandList* theList = new CommandList(MainWindow::tr("Subdivide road into %1").arg(divisions), NULL);
+        CommandList* theList = new CommandList(MainWindow::tr("Subdivide way into %1").arg(divisions), NULL);
         subdivideRoad(theDocument, theList, p->theProperties, divisions);
         if (theList->empty())
             delete theList;

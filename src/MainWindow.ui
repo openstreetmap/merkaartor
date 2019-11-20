@@ -48,7 +48,7 @@
    </widget>
    <widget class="QMenu" name="menuRoad">
     <property name="title">
-     <string>&amp;Road</string>
+     <string>Wa&amp;y</string>
     </property>
     <addaction name="roadSplitAction"/>
     <addaction name="roadBreakAction"/>
@@ -101,12 +101,12 @@
     </widget>
     <widget class="QMenu" name="mnuProjections">
      <property name="title">
-      <string>Set &amp;projection</string>
+      <string>&amp;Projection</string>
      </property>
     </widget>
     <widget class="QMenu" name="mnuAreaOpacity">
      <property name="title">
-      <string>Set Areas &amp;opacity</string>
+      <string>Area &amp;opacity</string>
      </property>
     </widget>
     <addaction name="viewZoomAllAction"/>
@@ -328,6 +328,7 @@
    <addaction name="menuRelation"/>
    <addaction name="menuTools"/>
    <addaction name="menuWindow"/>
+   <addaction name="separator"/>
    <addaction name="menuHelp"/>
   </widget>
   <widget class="QStatusBar" name="StatusBar"/>
@@ -645,10 +646,10 @@
      <normaloff>:/Icons/actions/create_road.png</normaloff>:/Icons/actions/create_road.png</iconset>
    </property>
    <property name="text">
-    <string>&amp;Road</string>
+    <string>&amp;Way</string>
    </property>
    <property name="toolTip">
-    <string>Create new road</string>
+    <string>Create new way</string>
    </property>
    <property name="shortcut">
     <string notr="true">Ctrl+R</string>
@@ -684,7 +685,7 @@
     <string>&amp;Reverse</string>
    </property>
    <property name="toolTip">
-    <string>Reverse road direction</string>
+    <string>Reverse way direction</string>
    </property>
    <property name="shortcut">
     <string notr="true"/>
@@ -704,10 +705,10 @@
   </action>
   <action name="createDoubleWayAction">
    <property name="text">
-    <string>&amp;Double carriage way</string>
+    <string>&amp;Parallel way</string>
    </property>
    <property name="toolTip">
-    <string>Create Double carriage way</string>
+    <string>Create a parallel way</string>
    </property>
    <property name="shortcut">
     <string notr="true"/>
@@ -751,7 +752,7 @@
     <string>&amp;Split</string>
    </property>
    <property name="toolTip">
-    <string>Split road into separate (connected) roads</string>
+    <string>Split way into separate (connected) ways</string>
    </property>
    <property name="shortcut">
     <string notr="true">Alt+S</string>
@@ -766,7 +767,7 @@
     <string>&amp;Join</string>
    </property>
    <property name="toolTip">
-    <string>Join connected roads into a single road</string>
+    <string>Join connected ways into a single way</string>
    </property>
    <property name="shortcut">
     <string notr="true">Alt+J</string>
@@ -784,7 +785,7 @@
     <string>Break</string>
    </property>
    <property name="toolTip">
-    <string>Break apart connected roads</string>
+    <string>Break apart connected ways</string>
    </property>
    <property name="shortcut">
     <string notr="true">Alt+B</string>
@@ -813,7 +814,7 @@
     <string>&amp;Area</string>
    </property>
    <property name="toolTip">
-    <string>New area</string>
+    <string>Create new area</string>
    </property>
    <property name="shortcut">
     <string notr="true"/>
@@ -845,7 +846,7 @@
   </action>
   <action name="createCurvedRoadAction">
    <property name="text">
-    <string>&amp;Curved road</string>
+    <string>&amp;Curved way</string>
    </property>
   </action>
   <action name="toolsPreferencesAction">
@@ -1101,7 +1102,7 @@
     <bool>true</bool>
    </property>
    <property name="text">
-    <string>Show &amp;downloaded areas</string>
+    <string>&amp;Downloaded areas</string>
    </property>
    <property name="shortcut">
     <string notr="true">Ctrl+Alt+A</string>
@@ -1282,7 +1283,7 @@
     <bool>true</bool>
    </property>
    <property name="text">
-    <string>Show &amp;nodes</string>
+    <string>&amp;Nodes</string>
    </property>
    <property name="shortcut">
     <string notr="true">Ctrl+Alt+P</string>
@@ -1293,7 +1294,7 @@
     <bool>true</bool>
    </property>
    <property name="text">
-    <string>Show na&amp;mes</string>
+    <string>Na&amp;mes</string>
    </property>
    <property name="shortcut">
     <string notr="true">Ctrl+Alt+N</string>
@@ -1368,7 +1369,7 @@
     <bool>true</bool>
    </property>
    <property name="text">
-    <string>Show track &amp;segments</string>
+    <string>Track &amp;segments</string>
    </property>
    <property name="shortcut">
     <string notr="true">Ctrl+Alt+T</string>
@@ -1379,7 +1380,7 @@
     <bool>true</bool>
    </property>
    <property name="text">
-    <string>Show &amp;scale</string>
+    <string>&amp;Scale</string>
    </property>
    <property name="shortcut">
     <string notr="true">Ctrl+Alt+S</string>
@@ -1390,7 +1391,7 @@
     <bool>true</bool>
    </property>
    <property name="text">
-    <string>Show &amp;relations</string>
+    <string>&amp;Relations</string>
    </property>
    <property name="shortcut">
     <string notr="true">Ctrl+Alt+R</string>
@@ -1558,7 +1559,7 @@
     <bool>true</bool>
    </property>
    <property name="text">
-    <string>for &amp;oneway roads</string>
+    <string>For 'oneway' ways</string>
    </property>
    <property name="shortcut">
     <string notr="true"/>
@@ -1584,10 +1585,10 @@
     <string>&amp;Detach</string>
    </property>
    <property name="toolTip">
-    <string>Detach node from a road</string>
+    <string>Detach node from a way</string>
    </property>
    <property name="statusTip">
-    <string>Detach a node from a Road</string>
+    <string>Detach a node from a way</string>
    </property>
    <property name="shortcut">
     <string notr="true"/>
@@ -1713,7 +1714,7 @@
   </action>
   <action name="layersNewImageAction">
    <property name="text">
-    <string>Add &amp;image layer</string>
+    <string>Add new &amp;image layer</string>
    </property>
    <property name="shortcut">
     <string notr="true"/>
@@ -1772,7 +1773,7 @@
     <bool>true</bool>
    </property>
    <property name="text">
-    <string>Lat/lon &amp;grid</string>
+    <string>Lat/Lon &amp;grid</string>
    </property>
    <property name="shortcut">
     <string notr="true"/>
@@ -1826,7 +1827,7 @@
   </action>
   <action name="layersOpenstreetbugsAction">
    <property name="text">
-    <string>Add OpenStreet&amp;Bugs layer</string>
+    <string>Add new OpenStreet&amp;Bugs layer</string>
    </property>
   </action>
   <action name="featureOsbClose">
@@ -1920,7 +1921,7 @@
   </action>
   <action name="toolsToolbarsAction">
    <property name="text">
-    <string>Toolbar Editor…</string>
+    <string>Toolbar editor…</string>
    </property>
    <property name="shortcut">
     <string notr="true"/>
@@ -1998,7 +1999,7 @@
   </action>
   <action name="layersNewFilterAction">
    <property name="text">
-    <string>Add new &amp;Filter layer</string>
+    <string>Add new &amp;filter layer</string>
    </property>
    <property name="shortcut">
     <string notr="true"/>
@@ -2101,7 +2102,7 @@
   </action>
   <action name="layersMapdustAction">
    <property name="text">
-    <string>Add Map&amp;dust layer</string>
+    <string>Add new Map&amp;dust layer</string>
    </property>
    <property name="shortcut">
     <string notr="true"/>

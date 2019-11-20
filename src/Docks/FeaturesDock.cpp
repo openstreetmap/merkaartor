@@ -467,8 +467,8 @@ void FeaturesDock::retranslateUi()
 void FeaturesDock::retranslateTabBar()
 {
     ui.tabBar->setTabText(0, tr("Relations"));
-    ui.tabBar->setTabText(1, tr("Roads"));
-    ui.tabBar->setTabText(2, tr("POI's"));
+    ui.tabBar->setTabText(1, tr("Ways"));
+    ui.tabBar->setTabText(2, tr("Nodes"));
     ui.tabBar->setTabText(3, tr("All"));
 }
 

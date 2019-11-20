@@ -30,7 +30,7 @@ QString CreateNodeInteraction::toHtml()
     //help = (MainWindow::tr("LEFT-CLICK to select; LEFT-DRAG to move"));
 
     QString desc;
-    desc = QString("<big><b>%1</b></big><br/>").arg(MainWindow::tr("Create node Interaction"));
+    desc = QString("<big><b>%1</b></big><br/>").arg(MainWindow::tr("Create Node interaction"));
     desc += QString("<b>%1</b><br/>").arg(help);
 
     QString S =
@@ -109,7 +109,7 @@ void CreateNodeInteraction::createNode(Coord P, Feature* aFeat)
     if (aRoad)
     {
         g_Merk_MainWindow->properties()->setSelection(0);
-        theList  = new CommandList(MainWindow::tr("Create node in Road: %1").arg(aRoad->id().numId), aRoad);
+        theList  = new CommandList(MainWindow::tr("Create node in way %1").arg(aRoad->id().numId), aRoad);
         int SnapIdx = findSnapPointIndex(aRoad, P);
         N = g_backend.allocNode(g_Merk_MainWindow->document()->getDirtyOrOriginLayer(aRoad->layer()), P);
         theList->add(new AddFeatureCommand(g_Merk_MainWindow->document()->getDirtyOrOriginLayer(aRoad->layer()),N,true));
@@ -118,7 +118,7 @@ void CreateNodeInteraction::createNode(Coord P, Feature* aFeat)
     else
     {
         N = g_backend.allocNode(g_Merk_MainWindow->document()->getDirtyOrOriginLayer(), P);
-        theList  = new CommandList(MainWindow::tr("Create POI %1").arg(N->id().numId), N);
+        theList  = new CommandList(MainWindow::tr("Create node %1").arg(N->id().numId), N);
         theList->add(new AddFeatureCommand(g_Merk_MainWindow->document()->getDirtyOrOriginLayer(),N,true));
         if (M_PREFS->getAutoSourceTag()) {
             QStringList sl = g_Merk_MainWindow->document()->getCurrentSourceTags();

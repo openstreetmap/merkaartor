@@ -46,7 +46,7 @@ QString CreateDoubleWayInteraction::toHtml()
     //help = (MainWindow::tr("LEFT-CLICK to select; LEFT-DRAG to move"));
 
     QString desc;
-    desc = QString("<big><b>%1</b></big><br/>").arg(MainWindow::tr("Create double way Interaction"));
+    desc = QString("<big><b>%1</b></big><br/>").arg(MainWindow::tr("Create Parallel Way interaction"));
     desc += QString("<b>%1</b><br/>").arg(help);
 
     QString S =
@@ -170,7 +170,7 @@ void CreateDoubleWayInteraction::mousePressEvent(QMouseEvent* anEvent)
 
                 Node* A1;
                 Node* A2;
-                CommandList* L  = new CommandList(MainWindow::tr("Add nodes to double-way Road %1").arg(R1->id().numId), R1);
+                CommandList* L  = new CommandList(MainWindow::tr("Add nodes to parallel way %1").arg(R1->id().numId), R1);
                 A1 = R1->getNode(i1);
                 A2 = R2->getNode(i2-1);
                 L->add(new MoveNodeCommand(A1,XY_TO_COORD(
@@ -221,7 +221,7 @@ void CreateDoubleWayInteraction::mousePressEvent(QMouseEvent* anEvent)
                 R1 = g_backend.allocWay(theMain->document()->getDirtyOrOriginLayer());
                 R2 = g_backend.allocWay(theMain->document()->getDirtyOrOriginLayer());
 
-                CommandList* L  = new CommandList(MainWindow::tr("Create double-way Road %1").arg(R1->id().numId), R1);
+                CommandList* L  = new CommandList(MainWindow::tr("Create parallel way %1").arg(R1->id().numId), R1);
                 L->add(new AddFeatureCommand(theMain->document()->getDirtyOrOriginLayer(),A1,true));
                 L->add(new AddFeatureCommand(theMain->document()->getDirtyOrOriginLayer(),A2,true));
                 L->add(new AddFeatureCommand(theMain->document()->getDirtyOrOriginLayer(),B1,true));

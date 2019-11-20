@@ -38,7 +38,7 @@ QString CreatePolygonInteraction::toHtml()
     QStringList helpList = help.split(";");
 
     QString desc;
-    desc = QString("<big><b>%1</b></big>").arg(MainWindow::tr("Create Polygon Interaction"));
+    desc = QString("<big><b>%1</b></big>").arg(MainWindow::tr("Create Polygon interaction"));
 
     QString S =
     "<html><head/><body>"
@@ -87,7 +87,7 @@ void CreatePolygonInteraction::mousePressEvent(QMouseEvent * event)
             QPointF Prev(CenterF.x()+cos(-Angle/2)*Radius,CenterF.y()+sin(-Angle/2)*Radius);
             Node* First = g_backend.allocNode(theMain->document()->getDirtyOrOriginLayer(), XY_TO_COORD(m.map(Prev).toPoint()));
             Way* R = g_backend.allocWay(theMain->document()->getDirtyOrOriginLayer());
-            CommandList* L  = new CommandList(MainWindow::tr("Create Polygon %1").arg(R->id().numId), R);
+            CommandList* L  = new CommandList(MainWindow::tr("Create polygon %1").arg(R->id().numId), R);
             L->add(new AddFeatureCommand(theMain->document()->getDirtyOrOriginLayer(),R,true));
             R->add(First);
             L->add(new AddFeatureCommand(theMain->document()->getDirtyOrOriginLayer(),First,true));
