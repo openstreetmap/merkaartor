@@ -466,7 +466,7 @@ void PropertiesDock::switchToWayUi()
     CurrentUi = NewUi;
     connect(RoadUi.RemoveTagButton,SIGNAL(clicked()),this, SLOT(on_RemoveTagButton_clicked()));
     connect(RoadUi.SourceTagButton,SIGNAL(clicked()),this, SLOT(on_SourceTagButton_clicked()));
-    setWindowTitle(tr("Properties - Road"));
+    setWindowTitle(tr("Properties - Way"));
 }
 
 void PropertiesDock::switchToRelationUi()

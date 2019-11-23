@@ -22,7 +22,7 @@
    <item>
     <widget class="QCheckBox" name="DriveRight" >
      <property name="text" >
-      <string>Driving at the right side of the road</string>
+      <string>Road driving on the right</string>
      </property>
     </widget>
    </item>
@@ -37,7 +37,7 @@
      <item>
       <widget class="QLabel" name="label" >
        <property name="text" >
-        <string>Distance between two roads</string>
+        <string>Separation distance</string>
        </property>
       </widget>
      </item>

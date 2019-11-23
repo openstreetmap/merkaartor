@@ -41,7 +41,7 @@ QString ScaleInteraction::toHtml()
     QStringList helpList = help.split(";");
 
     QString desc;
-    desc = QString("<big><b>%1</b></big>").arg(MainWindow::tr("Scale Interaction"));
+    desc = QString("<big><b>%1</b></big>").arg(MainWindow::tr("Scale interaction"));
 
     QString S =
     "<html><head/><body>"

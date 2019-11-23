@@ -56,7 +56,7 @@ QString EditInteraction::toHtml()
     QStringList helpList = help.split(";");
 
     QString desc;
-    desc = QString("<big><b>%1</b></big>").arg(MainWindow::tr("Edit Interaction"));
+    desc = QString("<big><b>%1</b></big>").arg(MainWindow::tr("Edit interaction"));
 
     QString S =
     "<html><head/><body>"

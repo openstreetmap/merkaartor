@@ -27,7 +27,7 @@ QString ZoomInteraction::toHtml()
     help = (MainWindow::tr("LEFT-CLICK to first corner -> LEFT-DRAG to specify area -> LEFT-CLICK to zoom"));
 
     QString desc;
-    desc = QString("<big><b>%1</b></big><br/>").arg(MainWindow::tr("Zoom Interaction"));
+    desc = QString("<big><b>%1</b></big><br/>").arg(MainWindow::tr("Zoom interaction"));
     desc += QString("<b>%1</b><br/>").arg(help);
 
     QString S =

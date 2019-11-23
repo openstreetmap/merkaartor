@@ -33,7 +33,7 @@ QString BuildBridgeInteraction::toHtml()
     //help = (MainWindow::tr("LEFT-CLICK to select; LEFT-DRAG to move"));
 
     QString desc;
-    desc = QString("<big><b>%1</b></big><br/>").arg(MainWindow::tr("Create node Interaction"));
+    desc = QString("<big><b>%1</b></big><br/>").arg(MainWindow::tr("Build Bridge interaction"));
     desc += QString("<b>%1</b><br/>").arg(help);
 
     QString S =
@@ -155,7 +155,7 @@ Node *BuildBridgeInteraction::createNode(Coord P, Feature* aFeat)
 	/* Bridge can be only created from existing roads */
     if (aRoad)
     {
-        theList  = new CommandList(MainWindow::tr("Create node in Road: %1").arg(aRoad->id().numId), aRoad);
+        theList  = new CommandList(MainWindow::tr("Create node in way %1").arg(aRoad->id().numId), aRoad);
         int SnapIdx = findSnapPointIndex(aRoad, P);
         N = g_backend.allocNode(g_Merk_MainWindow->document()->getDirtyOrOriginLayer(aRoad->layer()), P);
         theList->add(new AddFeatureCommand(g_Merk_MainWindow->document()->getDirtyOrOriginLayer(aRoad->layer()),N,true));

@@ -63,7 +63,7 @@ SetTagCommand::SetTagCommand(Feature* aF)
 SetTagCommand::SetTagCommand(Feature* aF, int idx, const QString& k, const QString& v, Layer* aLayer)
 : TagCommand(aF, aLayer), theIdx(idx), theK(k), theV(v)
 {
-    description = QApplication::tr("Set Tag '%1=%2' on %3").arg(k).arg(v).arg(aF->description());
+    description = QApplication::tr("Set tag '%1=%2' on %3").arg(k).arg(v).arg(aF->description());
     oldLayer = theFeature->layer();
     redo();
 }
@@ -71,7 +71,7 @@ SetTagCommand::SetTagCommand(Feature* aF, int idx, const QString& k, const QStri
 SetTagCommand::SetTagCommand(Feature* aF, const QString& k, const QString& v, Layer* aLayer)
 : TagCommand(aF, aLayer), theIdx(-1), theK(k), theV(v)
 {
-    description = QApplication::tr("Set Tag '%1=%2' on %3").arg(k).arg(v).arg(aF->description());
+    description = QApplication::tr("Set tag '%1=%2' on %3").arg(k).arg(v).arg(aF->description());
     oldLayer = theFeature->layer();
     redo();
 }
@@ -185,7 +185,7 @@ SetTagCommand * SetTagCommand::fromXML(Document * d, QXmlStreamReader& stream)
     else
         a->oldLayer = NULL;
 
-    a->description = QApplication::tr("Set Tag '%1=%2' on %3").arg(a->theK).arg(a->theV).arg(a->theFeature->description());
+    a->description = QApplication::tr("Set tag '%1=%2' on %3").arg(a->theK).arg(a->theV).arg(a->theFeature->description());
 
     stream.readNext();
     while(!stream.atEnd() && !stream.isEndElement()) {
@@ -311,7 +311,7 @@ ClearTagCommand::ClearTagCommand(Feature* F)
 ClearTagCommand::ClearTagCommand(Feature* F, const QString& k, Layer* aLayer)
 : TagCommand(F, aLayer), theIdx(F->findKey(k)), theK(k), theV(F->tagValue(k, ""))
 {
-    description = QApplication::tr("Clear Tag '%1' on %2").arg(k).arg(F->description());
+    description = QApplication::tr("Remove tag '%1' from %2").arg(k).arg(F->description());
     oldLayer = theFeature->layer();
     redo();
 }
@@ -397,7 +397,7 @@ ClearTagCommand * ClearTagCommand::fromXML(Document * d, QXmlStreamReader& strea
     else
         a->oldLayer = NULL;
 
-    a->description = QApplication::tr("Clear Tag '%1' on %2").arg(a->theK).arg(a->theFeature->description());
+    a->description = QApplication::tr("Remove tag '%1' from %2").arg(a->theK).arg(a->theFeature->description());
 
     stream.readNext();
     while(!stream.atEnd() && !stream.isEndElement()) {

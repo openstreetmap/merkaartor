@@ -41,7 +41,7 @@ QString RotateInteraction::toHtml()
     QStringList helpList = help.split(";");
 
     QString desc;
-    desc = QString("<big><b>%1</b></big>").arg(MainWindow::tr("Rotate Interaction"));
+    desc = QString("<big><b>%1</b></big>").arg(MainWindow::tr("Rotate interaction"));
 
     QString S =
     "<html><head/><body>"
