@@ -265,6 +265,7 @@ src/Utils/SelectionDialog.h
 src/Utils/PixmapWidget.cpp
 src/Utils/TagSelector.cpp
 src/Utils/SvgCache.h
+src/Utils/RemoteControlServer.cpp
 src/QToolBarDialog/qttoolbardialog.h
 src/QToolBarDialog/qttoolbardialog.cpp
 src/QToolBarDialog/qttoolbardialog.ui
