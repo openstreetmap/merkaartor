@@ -1052,8 +1052,13 @@ void QGPSDDevice::onDataAvailable()
     qreal Heading = gpsdata->fix.track;
     if (!__isnan(Heading))
         setHeading(Heading);
-    if (gpsdata->fix.time)
-        cur_datetime = QDateTime::fromTime_t(gpsdata->fix.time);
+#if GPSD_API_MAJOR_VERSION >= 9
+#define FIX_TIME fix.time.tv_sec
+#else
+#define FIX_TIME fix.time
+#endif
+    if (gpsdata->FIX_TIME)
+        cur_datetime = QDateTime::fromTime_t(gpsdata->FIX_TIME);
     emit updatePosition(gpsdata->fix.latitude,
                         gpsdata->fix.longitude,
                         cur_datetime,
