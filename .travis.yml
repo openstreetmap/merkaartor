@@ -1,11 +1,16 @@
 sudo: required
-dist: trusty
 env:
     - QT=5
-os:
-    - linux
-    - osx
-    - windows
+jobs:
+    include:
+        - os: linux
+          dist: trusty
+          env: QT_REPO=ppa:beineri/opt-qt591-trusty QT_PREFIX=59
+        - os: linux
+          dist: bionic
+          env: QT_REPO=ppa:beineri/opt-qt-5.14.0-bionic QT_PREFIX=514
+        - os: osx
+        - os: windows
 git:
     depth: 9999999
 language: sh
