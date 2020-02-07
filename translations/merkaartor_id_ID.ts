@@ -1905,7 +1905,7 @@ Anda yakin akan keluar? (tidak dapat dikembalikan)</translation>
     </message>
     <message>
         <location filename="../src/Layers/LicenseDisplayDialog.ui" line="20"/>
-        <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;The content selected is shared under a non-standard license agreement. The full text is available on the following URL. It is your reponsibility to read, understand and agree to the license.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
+        <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;The content selected is shared under a non-standard license agreement. The full text is available on the following URL. It is your responsibility to read, understand and agree to the license.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
         <translation type="unfinished"/>
     </message>
     <message>
