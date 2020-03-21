@@ -23,7 +23,7 @@ void RemoteControlConnection::readyRead() {
         QStringList tokens = ln.split( QRegExp("[ \r\n][ \r\n]*"), QString::SkipEmptyParts );
         if ( tokens[0] == "GET" ) {
             m_responseStream << "HTTP/1.1 200 OK\r\n";
-            m_responseStream << "Date: " << QDateTime::currentDateTime().toString(Qt::TextDate);
+            m_responseStream << "Date: " << QDateTime::currentDateTime().toString(Qt::RFC2822Date) << "\r\n";
             m_responseStream << "Server: Merkaartor RemoteControl\r\n";
             m_responseStream << "Content-type: text/plain\r\n";
             m_responseStream << "Access-Control-Allow-Origin: *\r\n";
