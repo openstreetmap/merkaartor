@@ -141,7 +141,7 @@ bool TagModel::setData(const QModelIndex &index, const QVariant &value, int role
                 if (theFeatures.size() > 1)
                     L = new CommandList(MainWindow::tr("Set tags on multiple features"), NULL);
                 else
-                    L = new CommandList(MainWindow::tr("Set tags on %1").arg(theFeatures[0]->id().numId), theFeatures[0]);
+                    L = new CommandList(MainWindow::tr("Set tag '%1=' on %2").arg(value.toString()).arg(theFeatures[0]->description()), theFeatures[0]);
                 for (int i=0; i<theFeatures.size(); ++i)
                 {
                     if (theFeatures[i]->isVirtual())
@@ -172,7 +172,7 @@ bool TagModel::setData(const QModelIndex &index, const QVariant &value, int role
             if (theFeatures.size() > 1)
                 L = new CommandList(MainWindow::tr("Set tags on multiple features"), NULL);
             else
-                L = new CommandList(MainWindow::tr("Set tags on %1").arg(theFeatures[0]->id().numId), theFeatures[0]);
+                L = new CommandList(MainWindow::tr("Set tag '%1=%2' on %3").arg(Tags[index.row()].first).arg(Tags[index.row()].second).arg(theFeatures[0]->description()), theFeatures[0]);
             for (int i=0; i<theFeatures.size(); ++i)
             {
                 if (theFeatures[i]->isVirtual())
