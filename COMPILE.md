@@ -164,9 +164,8 @@ On Windows:           $ make release
 On other platforms:   $ make
 Debug build:          $ make debug
 
-On Linux, make release fails, as the qmake does not generate proper goal in
-Makefiles, but release is the default. On most Windows installations, the debug
-is the default and we need to specify the release manually. Sorry about that.
+On most Windows installations, debug is the default and we need to specify
+the release manually. Sorry about that.
 
 ### Done!
 
