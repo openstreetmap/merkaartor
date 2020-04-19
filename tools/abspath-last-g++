@@ -1,0 +1,39 @@
+#! /bin/bash
+
+# qmake insits on using relative paths for the source files given to the
+# compiler. Even setting
+# QMAKE_PROJECT_DEPTH = 0
+# in the *.pro file of the sources directory only leads to absolute paths
+# to files above the current directory, those in or below it remain relative.
+#
+# Luckily the source file is always the last argument, so we can wrap the
+# compiler with this and make the last argument an absolute path.
+#
+# This will make the compiler output the references to files with absolute
+# paths as well, allowing CLion to make them clickable. Only those with a
+# line number are recognized, the column number is ignored.
+#
+# To activate, make this available in the path and put in the *.pro file of
+# the sources directory:
+# QMAKE_CXX = abspath-last-g++
+# Then run qmake to recreate the Makefiles. If there are multiple distinct
+# sources directories the change must be made in all of them.
+
+# Get the value of the last argument
+src="${@: -1}"
+
+# Make it absolute in case it isn't yet
+case "$src" in
+    /*) ;;
+    *) src="$PWD/$src" ;;
+esac
+
+# Keep all the previous arguments and replace the last one
+second_but_last_idx=$(($#-1))
+set -- "${@:1:$second_but_last_idx}" "$src"
+
+# Invoke the real compiler
+#exec g++ "$@"
+
+# As above, but have the messages on stdout, so CLion prints them in black
+exec g++ 2>&1 "$@"

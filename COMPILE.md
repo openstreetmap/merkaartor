@@ -173,6 +173,43 @@ If you are lucky, you'll find an executable in the binaries subdirectory.
 Otherwise, check our [github page](http://github.com/openstreetmap/merkaartor), especially check the issues and possibly
 report yours.
 
+### Setting up CLion
+
+There are [instructions from JetBrains](https://www.jetbrains.com/help/clion/managing-makefile-projects.html).
+Additional hints:
+
+Remove the automatically created CMake profile, it doesn't work. That removes
+the attempt to execute it on every start of CLion.
+
+It seems the File Watcher to automatically recreate the compiledb on a
+Makefile change can't be used since something touches the Makefiles during
+that process and thus creates an infinite loop.
+
+`cd` to the project root.
+```
+$ compiledb -n make debug
+```
+
+In case there are problems make sure that the directories `src/release` and
+`src/debug` exist, sometimes they don't appear automatically.
+
+Don't forget to follow the link at the bottom of the page on how to setup
+custom build targets and custom Run/Debug configurations.
+
+The Build/Build Project menu item doesn't seem to work, it only complains
+about a missing CMake profile. It's also not possible to recompile the
+current file alone. It seems that, contrary to the description, you can only
+build after finishing the Run/Debug configuration. That provides a
+"Build (your build target name)" menu item and toolbar button which works.
+Funnily enough you can't set the name of the binary until you build it manually
+or at least touch the file.
+
+The Makefile Run/Debug configuration works as well, maybe even better. Use
+the green run button to start a build, not the build button.
+
+In order to have file names mentioned by the compiler clickable in the CLion
+console install `tools/abspath-last-g++` as described there.
+
 ## Packaging
 
 If you want to create installer package, read further.
