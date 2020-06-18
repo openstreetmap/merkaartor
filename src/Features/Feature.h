@@ -8,8 +8,10 @@ class Feature;
 #include "MapView.h"
 #include "FeaturePainter.h"
 
-#include <QtCore/QString>
 #include <QList>
+#include <QPainter>
+#include <QPainterPath>
+#include <QString>
 
 #define CAST_FEATURE(x) (dynamic_cast<Feature*>(x))
 #define CAST_NODE(x) (dynamic_cast<Node*>(x))
