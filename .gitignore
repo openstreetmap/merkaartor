@@ -2,6 +2,8 @@
 # Lines that start with '#' are comments.
 # For a project mostly in C, the following would be a good set of
 # exclude patterns (uncomment them if you want to use them):
+/.idea
+*.swp
 *.[oa]
 *~
 *.qm
@@ -16,3 +18,9 @@ Makefile*.*
 *.po
 *.orig
 *.rej
+/.qmake.stash
+/binaries
+tmp
+/src/debug
+/src/release
+/compile_commands.json
