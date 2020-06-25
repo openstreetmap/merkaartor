@@ -1,10 +1,14 @@
 cmake_minimum_required(VERSION 3.1.0)
 
-project(merkaartor)
+project(merkaartor VERSION 0.18.4)
+
+include(cmake/vcs.cmake)
+add_definitions(-DVERSION=${PROJECT_VERSION} -DREVISION=${VCS_DESCRIBE})
+add_definitions(-DPRODUCT=Merkaartor)
 
 message(WARNING "
 
-CMake build is experimental and missing quite a few features (no plugins, no version string, no configurable features, etc...). Please use qmake for production builds.
+CMake build is experimental and missing quite a few features (no plugins, no configurable features, etc...). Please use qmake for production builds.
 
 ")
 
