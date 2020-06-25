@@ -5,6 +5,7 @@ project(merkaartor VERSION 0.18.4)
 include(cmake/vcs.cmake)
 add_definitions(-DVERSION=${PROJECT_VERSION} -DREVISION=${VCS_DESCRIBE})
 add_definitions(-DPRODUCT=Merkaartor)
+add_definitions(-DPLUGINS_DIR=.)
 
 message(WARNING "
 
@@ -434,3 +435,5 @@ ${CMAKE_CURRENT_SOURCE_DIR}/src/QMapControl
 ${CMAKE_CURRENT_SOURCE_DIR}/src/TagTemplate
 ${CMAKE_CURRENT_SOURCE_DIR}/3rdparty/qtsingleapplication-2.6_1-opensource/src
     )
+
+include(plugins/plugins.cmake)
