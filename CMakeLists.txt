@@ -451,3 +451,14 @@ ${CMAKE_CURRENT_SOURCE_DIR}/3rdparty/qtsingleapplication-2.6_1-opensource/src
     )
 
 include(plugins/plugins.cmake)
+
+set (CPACK_PACKAGE_NAME "Merkaartor")
+set (CPACK_PACKAGE_VENDOR "Merkaartor.org")
+set (CPACK_PACKAGE_DESCRIPTION_SUMMARY "Merkaartor, OpenStreetMap editor.")
+set (CPACK_PACKAGE_VERSION "${PROJECT_VERSION}")
+set (CPACK_PACKAGE_VERSION_MAJOR "${PROJECT_VERSION_MAJOR}")
+set (CPACK_PACKAGE_VERSION_MINOR "${PROJECT_VERSION_MINOR}")
+set (CPACK_PACKAGE_VERSION_PATCH "${PROJECT_VERSION_PATCH}")
+set (CPACK_PACKAGE_INSTALL_DIRECTORY "Merkaartor")
+
+include(CPack)
