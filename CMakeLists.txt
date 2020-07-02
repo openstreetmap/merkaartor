@@ -15,7 +15,7 @@ add_definitions(-DPLUGINS_DIR=.)
 
 message(WARNING "
 
-CMake build is experimental and missing quite a few features (no plugins, no configurable features, etc...). Please use qmake for production builds.
+CMake build is experimental and missing quite a few features (no configurable features, etc...). Please use qmake for production builds.
 
 ")
 
