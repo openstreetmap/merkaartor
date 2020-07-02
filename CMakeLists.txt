@@ -11,7 +11,6 @@ include(cmake/vcs.cmake)
 # only rebuilding that one and linking.
 add_definitions(-DVERSION=${PROJECT_VERSION} -DREVISION=${VCS_DESCRIBE})
 add_definitions(-DPRODUCT=Merkaartor)
-add_definitions(-DPLUGINS_DIR=.)
 
 message(WARNING "
 

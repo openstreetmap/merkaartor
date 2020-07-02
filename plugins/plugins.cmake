@@ -1,4 +1,6 @@
 
+set(PLUGINS_INSTALL_POSTFIX "lib/merkaartor/plugins")
+
 function(MerkaartorAddPlugin)
     # Parse the arguments using CMake built-in function
     cmake_parse_arguments(PARSE_ARGV 0 PLUGIN "" "NAME" "SOURCES")
@@ -15,8 +17,10 @@ function(MerkaartorAddPlugin)
         ${PROJECT_SOURCE_DIR}/src/common
     )
     target_link_libraries(${PLUGIN_NAME} Qt5::Svg Qt5::Network Qt5::Xml Qt5::Core Qt5::Gui Qt5::Concurrent Qt5::PrintSupport Qt5::Widgets ${EXIV2_LIBRARIES} )
+    install(TARGETS ${PLUGIN_NAME} LIBRARY DESTINATION ${PLUGINS_INSTALL_POSTFIX})
 endfunction()
 
+add_definitions("-DPLUGINS_DIR=${CMAKE_INSTALL_PREFIX}/${PLUGINS_INSTALL_POSTFIX}")
 
 MerkaartorAddPlugin(NAME MGdalBackground SOURCES
     ${PROJECT_SOURCE_DIR}/plugins/background/MGdalBackground/GdalAdapter.cpp
