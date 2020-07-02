@@ -3,6 +3,12 @@ cmake_minimum_required(VERSION 3.1.0)
 project(merkaartor VERSION 0.18.4)
 
 include(cmake/vcs.cmake)
+# TODO: Use configure_file() instead of definitions when qmake is deprecated.
+# Using definitions causes unnecessary rebuilds, as with each commit the hash
+# changes compile flags for each and every file. However, it is kept for qmake
+# compatibility.
+# Using configure_file() allows us to store the metadata in a .cpp file, thus
+# only rebuilding that one and linking.
 add_definitions(-DVERSION=${PROJECT_VERSION} -DREVISION=${VCS_DESCRIBE})
 add_definitions(-DPRODUCT=Merkaartor)
 add_definitions(-DPLUGINS_DIR=.)
