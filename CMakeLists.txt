@@ -15,9 +15,18 @@ add_definitions(-DPLUGINS_DIR=.)
 
 message(WARNING "
 
-CMake build is experimental and missing quite a few features (no configurable features, etc...). Please use qmake for production builds.
+CMake build is experimental and may be missing some features. Please use qmake for production builds.
 
 ")
+
+# TODO: Add support for sanitizers
+
+add_definitions(-DZBAR=1) # MWalkingPapersBackground, Geoimage
+# TODO: Check and remove or implement defines from code: PORTABLE, FRISIUS, NVIDIA_HACK, MOBILE, LIBPROXY, SYSTEM_QTSA
+add_definitions(-DGEOIMAGE=1)
+add_definitions(-DGPSDLIB=1)
+add_definitions(-DUSEWEBENGINE=1)
+# add_definitions(-DTHREADED_BROWSERIMAGEMANAGER=1) # TODO: Check if that even does something/works
 
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
