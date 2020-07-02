@@ -33,3 +33,22 @@ execute_process(
     OUTPUT_STRIP_TRAILING_WHITESPACE
 )
 
+execute_process(
+    COMMAND ${GIT_EXECUTABLE} diff-index --quiet HEAD --
+    WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}
+    RESULT_VARIABLE  VCS_DIRTY
+)
+
+# Workaround to update dirty flag when anything changes, as CMake can not
+# depend on a command that would check it the git way. This check is only used
+# in not dirty state to avoid unnecessary reconfigures during development.
+# There are a few drawbacks:
+#  - reconfigure is not triggered by any other change than in cpp/h file (or
+#    CMakeLists files, that is the default)
+#  - When changes are manually reverted from dirty to non-dirty state (without
+#    touching index/HEAD, for example editor undo), the flag is not updated
+#    properly
+# This workaround shall be replaced if a better way is found.
+if (NOT ${VCS_DIRTY})
+    file(GLOB_RECURSE DEP_FILES CONFIGURE_DEPENDS "${PROJECT_SOURCE_DIR}/*.cpp" "${PROJECT_SOURCE_DIR}/*.h")
+endif()
