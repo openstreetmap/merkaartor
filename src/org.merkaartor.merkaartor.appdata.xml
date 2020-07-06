@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component type="desktop-application">
+  <id>org.merkaartor.merkaartor</id>
+  <launchable type="desktop-id">org.merkaartor.merkaartor.desktop</launchable>
+  <name>Merkaartor</name>
+  <summary>OpenStreetMap editor</summary>
+  <metadata_license>CC0-1.0</metadata_license>
+  <project_license>GPL-2.0</project_license>
+  <description>
+    <p>Merkaartor is a map editor for OpenStreetMap.org, the free editable map of the whole world. Features:</p>
+    <ul>
+      <li>Download from and upload to the OpenStreetMap server</li>
+      <li>Open .osm and .gpx files</li>
+      <li>Create and move trackpoints, ways, and areas</li>
+      <li>Add tags, delete features</li>
+      <li>Reverse, split and join ways</li>
+      <li>Visualize some leisure/landuse areas and road types</li>
+      <li>Displaying GPS information</li>
+    </ul>
+  </description>
+  <screenshots>
+    <screenshot type="default">
+      <caption>Merkaartor 0.15.3 with Mapnik style</caption>
+​      <image>https://wiki.openstreetmap.org/w/images/0/04/Merkaartor_0.15.3.png</image>
+    </screenshot>
+    <screenshot>
+      <caption>Merkaartor 0.15.3 with Maxspeed style</caption>
+​      <image>https://wiki.openstreetmap.org/w/images/b/b4/Merkaartor_0.15.3_maxspeed.png</image>
+    </screenshot>
+    <screenshot>
+      <caption>Merkaartor 0.15.3 showing the fully localized GUI</caption>
+​      <image>https://wiki.openstreetmap.org/w/images/4/48/Merkaartor_0.15.3_i18n.png</image>
+    </screenshot>
+    <screenshot>
+      <caption>Merkaartor 0.15.3 with WMS background and semi-transparent map layer</caption>
+​      <image>https://wiki.openstreetmap.org/w/images/c/c9/Merkaartor_0.15.3_wms.png</image>
+    </screenshot>
+  </screenshots>
+  <url type="bugtracker">https://github.com/openstreetmap/merkaartor/issues</url>
+  <url type="homepage">http://merkaartor.be/</url>
+  <update_contact>merkaartor@openstreetmap.org</update_contact>
+  <translation type="qt">merkaartor</translation>
+</component>
