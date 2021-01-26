@@ -16,6 +16,10 @@
 #include "gdal_version.h"
 #include "Global.h"
 
+#if defined(Q_OS_UNIX)
+# include <signal.h>
+#endif
+
 #include "IMapAdapterFactory.h"
 
 FILE* pLogFile = NULL;
@@ -85,6 +89,10 @@ void debugMessageHandler(QtMsgType, const QMessageLogContext&, const QString &ms
     }
 }
 
+void HandleSIGTERM(int) {
+    g_Merk_MainWindow->close();
+}
+
 int main(int argc, char** argv)
 {
     QtSingleApplication instance(argc,argv);
@@ -131,6 +139,16 @@ int main(int argc, char** argv)
     if (reuse)
         if (instance.sendMessage(message))
             return 0;
+
+#if defined(Q_OS_UNIX)
+    struct sigaction sa;
+    sa.sa_handler = HandleSIGTERM;
+    sigemptyset(&sa.sa_mask);
+    sa.sa_flags = 0;
+    sigaction(SIGTERM, &sa, NULL);
+    sigaction(SIGINT, &sa, NULL);
+#endif
+
 
     QString logFilename;
 #ifndef NDEBUG
