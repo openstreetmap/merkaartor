@@ -10,6 +10,7 @@ jobs:
           dist: bionic
           env: QT_REPO=ppa:beineri/opt-qt-5.14.0-bionic QT_PREFIX=514
         - os: osx
+          osx_image: xcode11.3
         - os: windows
 git:
     depth: 9999999
