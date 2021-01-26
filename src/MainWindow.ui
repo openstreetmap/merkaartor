@@ -389,7 +389,7 @@
     <string>&amp;Quit</string>
    </property>
    <property name="shortcut">
-    <string notr="true"/>
+    <string>Ctrl+Q</string>
    </property>
    <property name="menuRole">
     <enum>QAction::QuitRole</enum>
