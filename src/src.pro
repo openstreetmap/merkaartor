@@ -7,6 +7,8 @@ include (Config.pri)
 include(Custom.pri)
 
 CONFIG += debug_and_release c++11
+# avoid deprecation warnings which 5.15 introduced.
+DEFINES += QT_NO_DEPRECATED_WARNINGS
 
 # This is a workaround to get qDebug() to stdout on Windows. Uncomment if needed.
 win32 {
