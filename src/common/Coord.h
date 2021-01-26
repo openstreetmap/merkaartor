@@ -58,6 +58,9 @@ class Coord : public QPointF
         bool toXML(QString elName, QDomElement& xParent) const;
         static Coord fromXML(QDomElement e);
         static Coord fromXML(QXmlStreamReader& stream);
+
+
+        Coord& operator=(const Coord&) = default;
 };
 
 uint qHash(const Coord &c);
@@ -191,6 +194,8 @@ class CoordBox : public QRectF
         bool toXML(QString elName, QDomElement& xParent) const;
         static CoordBox fromXML(QDomElement e);
         static CoordBox fromXML(QXmlStreamReader& stream);
+
+        CoordBox& operator=(const CoordBox&) = default;
 };
 
 Q_DECLARE_METATYPE( CoordBox );
