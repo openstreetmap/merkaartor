@@ -1014,6 +1014,7 @@ bool MainWindow::eventFilter(QObject */* watched */, QEvent *event)
 
             }
         }
+        break;
 
     case QEvent::KeyRelease: {
             QKeyEvent *ke = static_cast< QKeyEvent* >( event );
@@ -1052,6 +1053,7 @@ bool MainWindow::eventFilter(QObject */* watched */, QEvent *event)
                 break;
             }
         }
+        break;
 
     case QEvent::Leave: {
             if (theInfo)
