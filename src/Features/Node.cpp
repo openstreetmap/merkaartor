@@ -16,7 +16,7 @@ Node::Node(const Coord& aCoord)
     , ProjectionRevision(0)
 {
     BBox = CoordBox(aCoord, aCoord);
-//    qDebug() << "Node size: " << sizeof(Node) << sizeof(PhotoNode);
+//    qDebug() << "Node size:" << sizeof(Node) << sizeof(PhotoNode);
 
 }
 
@@ -170,7 +170,7 @@ void Node::drawSimple(QPainter &P, MapView *theView)
         //        if (!Pt->isReadonly() && Pt->isSelectable(r))
     {
         if (!layer()) {
-            qDebug() << "Node without layer: " << id().numId << xmlId();
+            qDebug() << "Node without layer:" << id().numId << xmlId();
             return;
         }
         qreal WW = theView->nodeWidth();

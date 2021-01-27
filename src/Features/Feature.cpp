@@ -101,7 +101,7 @@ public:
     {
 #ifndef FRISIUS_BUILD
         initVersionNumber();
-        //            qDebug() << "MapFeaturePrivate size: " << sizeof(FeaturePrivate) << sizeof(IFeature::FId) << sizeof(RenderPriority);
+        //            qDebug() << "MapFeaturePrivate size:" << sizeof(FeaturePrivate) << sizeof(IFeature::FId) << sizeof(RenderPriority);
 #endif
     }
     FeaturePrivate(const FeaturePrivate& other)
@@ -167,7 +167,7 @@ Feature::Feature()
     p = new FeaturePrivate(this);
     p->Id = IFeature::FId(IFeature::Uninitialized, 0);
 
-    //     qDebug() << "Feature size: " << sizeof(Feature);
+    //     qDebug() << "Feature size:" << sizeof(Feature);
 }
 
 Feature::Feature(const Feature& other)

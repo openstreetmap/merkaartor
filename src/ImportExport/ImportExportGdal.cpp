@@ -459,12 +459,12 @@ bool ImportExportGdal::importGDALDataset(GDALDataset* poDS, Layer* aLayer, bool 
             }
             else
             {
-                qDebug( "no geometry\n" );
+                qDebug( "no geometry" );
             }
 //            if (progress.maximum() != 0)
 //                progress.setValue(progress.value()+1);
         }
-        qDebug() << "Layer #" << l << " Features#: " << curImported;
+        qDebug() << "Layer #" << l << "Features#:" << curImported;
     }
 
     pointHash.clear();
@@ -494,7 +494,7 @@ bool ImportExportGdal::import(Layer* aLayer)
 #endif
 
     if( poDS == NULL ) {
-        //qDebug() << "GDAL Open failed from file " << FileName.toUtf8().constData();
+        //qDebug() << "GDAL Open failed from file" << FileName.toUtf8().constData();
         return false;
     }
 
@@ -522,7 +522,7 @@ bool ImportExportGdal::import(Layer* aLayer, const QByteArray& ba, bool confirmP
 
     if( poDS == NULL )
     {
-        qDebug( "GDAL Open failed.\n" );
+        qDebug( "GDAL Open failed." );
         return false;
     }
     importGDALDataset(poDS, aLayer, confirmProjection);

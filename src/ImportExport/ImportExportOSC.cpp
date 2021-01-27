@@ -82,7 +82,7 @@ bool ImportExportOSC::import(Layer* aLayer)
                     F = Relation::fromXML(theDoc, aLayer, stream);
                     theList->add(new AddFeatureCommand(aLayer, F, true));
                 } else if (!stream.isWhitespace()) {
-                    qDebug() << "OSC: logic error: " << stream.name() << " : " << stream.tokenType() << " (" << stream.lineNumber() << ")";
+                    qDebug() << "OSC: logic error:" << stream.name() << ":" << stream.tokenType() << "(" << stream.lineNumber() << ")";
                     stream.skipCurrentElement();
                 }
                 if (F) {
@@ -120,7 +120,7 @@ bool ImportExportOSC::import(Layer* aLayer)
                     F = Relation::fromXML(theDoc, aLayer, stream);
                     theList->add(new AddFeatureCommand(aLayer, F, true));
                 } else if (!stream.isWhitespace()) {
-                    qDebug() << "OSC: logic error: " << stream.name() << " : " << stream.tokenType() << " (" << stream.lineNumber() << ")";
+                    qDebug() << "OSC: logic error:" << stream.name() << ":" << stream.tokenType() << "(" << stream.lineNumber() << ")";
                     stream.skipCurrentElement();
                 }
                 if (F) {
@@ -144,7 +144,7 @@ bool ImportExportOSC::import(Layer* aLayer)
                     Relation* R = Relation::fromXML(theDoc, aLayer, stream);
                     theList->add(new RemoveFeatureCommand(theDoc, R));
                 } else if (!stream.isWhitespace()) {
-                    qDebug() << "OSC: logic error: " << stream.name() << " : " << stream.tokenType() << " (" << stream.lineNumber() << ")";
+                    qDebug() << "OSC: logic error:" << stream.name() << ":" << stream.tokenType() << "(" << stream.lineNumber() << ")";
                     stream.skipCurrentElement();
                 }
                 stream.readNext();

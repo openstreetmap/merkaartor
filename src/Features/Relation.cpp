@@ -687,7 +687,7 @@ Relation * Relation::fromXML(Document * d, Layer * L, QXmlStreamReader& stream)
             hasBbox = true;
             stream.readNext();
         } else if (!stream.isWhitespace()) {
-            qDebug() << "Relation: logic error: " << stream.name() << " : " << stream.tokenType() << " (" << stream.lineNumber() << ")";
+            qDebug() << "Relation: logic error:" << stream.name() << ":" << stream.tokenType() << "(" << stream.lineNumber() << ")";
             stream.skipCurrentElement();
         }
         stream.readNext();

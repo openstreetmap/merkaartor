@@ -22,10 +22,10 @@
 ImagePoint::ImagePoint(double x, double y, QString filename, QString name, Alignment alignment)
  : Point(x, y, name, alignment)
 {
-// 	qDebug() << "loading image: " << filename;
+// 	qDebug() << "loading image:" << filename;
 	mypixmap = new QPixmap(filename);
 	size = mypixmap->size();
-// 	qDebug() << "image size: " << size;
+// 	qDebug() << "image size:" << size;
 }
 
 ImagePoint::ImagePoint(double x, double y, QPixmap* pixmap, QString name, Alignment alignment)
