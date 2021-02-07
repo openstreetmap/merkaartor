@@ -42,7 +42,7 @@ MapNetwork::~MapNetwork()
 
 void MapNetwork::load(const QString& hash, const QString& host, const QString& url)
 {
-    qDebug() << "requesting: " << QString(host).append(url);
+    qDebug() << "requesting:" << QString(host).append(url);
 // 	http->setHost(host);
 // 	int getId = http->get(url);
 
@@ -67,7 +67,7 @@ void MapNetwork::launchRequest()
         theUrl.setUrl("http://" + QString(R->host).append(R->url));
     }
 
-    qDebug() << "getting: " << theUrl.toString();
+    qDebug() << "getting:" << theUrl.toString();
 
     launchRequest(theUrl, R);
 }
@@ -111,27 +111,27 @@ void MapNetwork::requestFinished(QNetworkReply* reply)
 
     if (reply->error() != QNetworkReply::NoError) {
         if (reply->error() != QNetworkReply::OperationCanceledError)
-            qDebug() << "network error: " << statusCode << " " << reply->errorString();
+            qDebug() << "network error:" << statusCode << reply->errorString();
     } else
         switch (statusCode) {
             case 301:
             case 302:
             case 307:
-                qDebug() << "redirected: " << R->host << R->url;
+                qDebug() << "redirected:" << R->host << R->url;
                 launchRequest(reply->attribute(QNetworkRequest::RedirectionTargetAttribute).toUrl(), new LoadingRequest(R->hash, R->host, R->url));
                 return;
             case 404:
-                qDebug() << "404 error: " << R->host << R->url;
+                qDebug() << "404 error:" << R->host << R->url;
                 break;
             case 500:
-                qDebug() << "500 error: " << R->host << R->url;
+                qDebug() << "500 error:" << R->host << R->url;
                 break;
                 // Redirected
             default:
                 if (statusCode != 200)
-                    qDebug() << "Other http code (" << statusCode << "): "  << R->host << R->url;
+                    qDebug() << "Other http code (" << statusCode << "):"  << R->host << R->url;
                 QString hash = R->hash;
-                // 		qDebug() << "request finished for id: " << id;
+                // 		qDebug() << "request finished for id:" << id;
                 QByteArray ax;
                 QHash<QString, QString> headers;
 
@@ -189,7 +189,7 @@ void MapNetwork::timeout()
         return;
 
     LoadingRequest* R = loadingMap[rply];
-    qDebug() << "MapNetwork::timeout: " << R->host << R->url;
+    qDebug() << "MapNetwork::timeout:" << R->host << R->url;
     loadingMap.remove(rply);
     loadingRequests.enqueue(R);
 

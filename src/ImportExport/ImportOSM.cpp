@@ -106,7 +106,7 @@ void OSMHandler::parseNode(const QXmlAttributes& atts)
                 NewFeature = false;
             }
         } else {
-            qDebug() << "Node conflicted, but already is tagged as Feature::UserResolved. Ignoring " << Pt->xmlId();
+            qDebug() << "Node conflicted, but already is tagged as Feature::UserResolved. Ignoring" << Pt->xmlId();
             g_backend.deallocFeature(theLayer, Pt);
             Pt = userPt;
             NewFeature = false;

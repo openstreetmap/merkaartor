@@ -82,7 +82,7 @@ bool Downloader::go(const QUrl& url) {
 bool Downloader::request(const QString& theMethod, const QUrl& url, const QString& theData) {
     if (Error) return false;
 
-    qDebug() << "Downloader::request: " << url;
+    qDebug() << "Downloader::request:" << url;
 
     netManager.setProxy(M_PREFS->getProxy(url));
     QNetworkRequest req(url);
@@ -117,8 +117,8 @@ bool Downloader::request(const QString& theMethod, const QUrl& url, const QStrin
 
     /* We will log the error, but reporting shall be done at the call site. */
     if (currentReply->error()) {
-        qDebug() << "Downloader::request: received response with code "
-            << currentReply->error() << ", message " << currentReply->errorString();
+        qDebug() << "Downloader::request: received response with code"
+            << currentReply->error() << ", message" << currentReply->errorString();
     }
 
 
@@ -308,7 +308,7 @@ bool downloadOSM(QWidget* aParent, const QUrl& theUrl, const QString& aUser, con
 #endif
     }
     int x = Rcv.resultCode();
-    qDebug() << "DownloadOSM: Received OSM API response code: " << x << ", processing.";
+    qDebug() << "DownloadOSM: Received OSM API response code:" << x << ", processing.";
 
     /** We will parse the error codes and display the appropriate messages. */
     switch (x)

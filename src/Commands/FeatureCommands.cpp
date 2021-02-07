@@ -162,7 +162,7 @@ SetTagCommand * SetTagCommand::fromXML(Document * d, QXmlStreamReader& stream)
 {
     Feature* F;
     if (!(F = d->getFeature(IFeature::FId(IFeature::All, stream.attributes().value("feature").toString().toLongLong())))) {
-        qDebug() << "SetTagCommand::fromXML: Undefined feature: " << stream.attributes().value("feature").toString();
+        qDebug() << "SetTagCommand::fromXML: Undefined feature:" << stream.attributes().value("feature").toString();
         return NULL;
     }
 

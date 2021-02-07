@@ -636,9 +636,9 @@ void GeoImageDock::loadImages(QStringList fileNames)
                 // extract results
                 for(zbar::Image::SymbolIterator symbol = image.symbol_begin(); symbol != image.symbol_end(); ++symbol) {
                     // do something useful with results
-                    qDebug() << "decoded " << QString::fromStdString(symbol->get_type_name())
+                    qDebug() << "decoded" << QString::fromStdString(symbol->get_type_name())
                             << " symbol \"" << QString::fromStdString(symbol->get_data()) << '"';
-                    qDebug() << "x;y: " << symbol->get_location_x(0) << ", " << symbol->get_location_y(0);
+                    qDebug() << "x;y:" << symbol->get_location_x(0) << "," << symbol->get_location_y(0);
 
                     url = QUrl(QString::fromStdString(symbol->get_data()));
                     if (url.host().contains("walking-papers.org")) {

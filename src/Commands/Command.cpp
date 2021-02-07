@@ -314,7 +314,7 @@ CommandList* CommandList::fromXML(Document* d, QXmlStreamReader& stream)
         } else if (stream.name() == "CommandList") {
             l->add(CommandList::fromXML(d, stream));
         } else if (!stream.isWhitespace()) {
-                qDebug() << "CList: logic error: " << stream.name() << " : " << stream.tokenType() << " (" << stream.lineNumber() << ")";
+                qDebug() << "CList: logic error:" << stream.name() << ":" << stream.tokenType() << "(" << stream.lineNumber() << ")";
                 QString el = stream.readElementText(QXmlStreamReader::IncludeChildElements);
         }
         stream.readNext();
@@ -545,7 +545,7 @@ CommandHistory* CommandHistory::fromXML(Document* d, QXmlStreamReader& stream, Q
             else
                 OK = false;
         } else if (!stream.isWhitespace()) {
-            qDebug() << "CHist: logic error: " << stream.name() << " : " << stream.tokenType() << " (" << stream.lineNumber() << ")";
+            qDebug() << "CHist: logic error:" << stream.name() << ":" << stream.tokenType() << "(" << stream.lineNumber() << ")";
             QString el = stream.readElementText(QXmlStreamReader::IncludeChildElements);
         }
 
@@ -558,8 +558,8 @@ CommandHistory* CommandHistory::fromXML(Document* d, QXmlStreamReader& stream, Q
 
     if (!OK) {
         qDebug() << "!! File history is corrupted. Resetting...";
-        qDebug() << "-- Size: " << h->Size;
-        qDebug() << "-- Index: " << h->Index;
+        qDebug() << "-- Size:" << h->Size;
+        qDebug() << "-- Index:" << h->Index;
         delete h;
         h = new CommandHistory();
     } else

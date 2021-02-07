@@ -248,7 +248,7 @@ bool DirtyListExecutorOSC::stop()
                         F->setDirtyLevel(0);
 
                     } else
-                        qDebug() << "Feature not found in diff upload result: " << c.attribute("old_id");
+                        qDebug() << "Feature not found in diff upload result:" << c.attribute("old_id");
 
                     c = c.nextSiblingElement();
                 }

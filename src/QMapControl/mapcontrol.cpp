@@ -173,7 +173,7 @@ void MapControl::mousePressEvent(QMouseEvent* evnt)
 	
 // 	QMouseEvent* me = new QMouseEvent(evnt->type(), qm.map(QPoint(evnt->x(),evnt->y())), evnt->button(), evnt->buttons(), evnt->modifiers());
 // 	evnt = me;
-// 	qDebug() << "evnt: " << evnt->x() << ", " << evnt->y() << ", " << evnt->pos();
+// 	qDebug() << "evnt:" << evnt->x() << "," << evnt->y() << "," << evnt->pos();
 
 	
 	layermanager->mouseEvent(evnt);

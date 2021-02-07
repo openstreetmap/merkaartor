@@ -572,7 +572,7 @@ DrawingLayer * DrawingLayer::doFromXML(DrawingLayer* l, Document* d, QXmlStreamR
                 } else if (stream.name() == "bound") {
                     stream.skipCurrentElement();
                 } else if (!stream.isWhitespace()) {
-                    qDebug() << "osm: logic error: " << stream.name() << " : " << stream.tokenType() << " (" << stream.lineNumber() << ")";
+                    qDebug() << "osm: logic error:" << stream.name() << ":" << stream.tokenType() << "(" << stream.lineNumber() << ")";
                     QString el = stream.readElementText(QXmlStreamReader::IncludeChildElements);
                 }
 
@@ -597,7 +597,7 @@ DrawingLayer * DrawingLayer::doFromXML(DrawingLayer* l, Document* d, QXmlStreamR
             } else
                 stream.skipCurrentElement();
         } else if (!stream.isWhitespace()) {
-            qDebug() << "DrLayer: logic error: " << stream.name() << " : " << stream.tokenType() << " (" << stream.lineNumber() << ")";
+            qDebug() << "DrLayer: logic error:" << stream.name() << ":" << stream.tokenType() << "(" << stream.lineNumber() << ")";
             stream.skipCurrentElement();
         }
 
@@ -792,7 +792,7 @@ TrackLayer * TrackLayer::fromXML(Document* d, QXmlStreamReader& stream, QProgres
                     //l->add(N);
                     progress->setValue(progress->value()+1);
                 } else if (!stream.isWhitespace()) {
-                    qDebug() << "gpx: logic error: " << stream.name() << " : " << stream.tokenType() << " (" << stream.lineNumber() << ")";
+                    qDebug() << "gpx: logic error:" << stream.name() << ":" << stream.tokenType() << "(" << stream.lineNumber() << ")";
                     stream.skipCurrentElement();
                 }
 
@@ -805,7 +805,7 @@ TrackLayer * TrackLayer::fromXML(Document* d, QXmlStreamReader& stream, QProgres
                 qApp->processEvents();
             }
         } else if (!stream.isWhitespace()) {
-            qDebug() << "TrLayer: logic error: " << stream.name() << " : " << stream.tokenType() << " (" << stream.lineNumber() << ")";
+            qDebug() << "TrLayer: logic error:" << stream.name() << ":" << stream.tokenType() << "(" << stream.lineNumber() << ")";
             stream.skipCurrentElement();
         }
 

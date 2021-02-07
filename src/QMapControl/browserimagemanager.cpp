@@ -66,7 +66,7 @@ void BrowserWebPage::javaScriptAlert ( const QString & msg )
         brlat = tokens[3].toDouble();
         brlon = tokens[4].toDouble();
 
-        qDebug() << "Coord: " << tllat << ", " << tllon << ", " << brlat << "," << brlon;
+        qDebug() << "Coord:" << tllat << "," << tllon << "," << brlat << "," << brlon;
     } else
     if (msg.startsWith("Size")) {
 
@@ -82,12 +82,12 @@ void BrowserWebPage::javaScriptAlert ( const QString & msg )
         x1 = int(tokens[3].toDouble());
         y1 = int(tokens[4].toDouble());
 
-        qDebug() << "Size: " << ox << ", " << oy << ", " << x1 << "," << y1;
+        qDebug() << "Size:" << ox << "," << oy << "," << x1 << "," << y1;
 
         sw = x1 - ox;
         sh = y1 - oy;
 
-        qDebug() << "---- " << sw << ", " << sh;
+        qDebug() << "----" << sw << "," << sh;
 
     }
     if (msg.startsWith("ReqSize")) {
@@ -98,13 +98,13 @@ void BrowserWebPage::javaScriptAlert ( const QString & msg )
         w = int(tokens[1].toDouble());
         h = int(tokens[2].toDouble());
 
-        qDebug() << "ReqSize: " << w << ", " << h ;
+        qDebug() << "ReqSize:" << w << "," << h ;
     }
 }
 
 void BrowserWebPage::launchRequest ( const QUrl & url )
 {
-    qDebug() << "Warning: you are using BrowserWebPage to render background imagery. "<<
+    qDebug() << "Warning: you are using BrowserWebPage to render background imagery. "
         "This code is not tested and may not work as expected. If you experience issues, please let us know.";
     sw = sh = 0;
     load(url);
@@ -215,7 +215,7 @@ void BrowserImageManager::launchRequest()
         return;
 //	LoadingRequest* R = loadingRequests.dequeue();
     LoadingRequest R = loadingRequests.head();
-    qDebug() << "BrowserImageManager::launchRequest: " << QString(R.host).append(R.url) << " Hash: " << R.hash;
+    qDebug() << "BrowserImageManager::launchRequest:" << QString(R.host).append(R.url) << "Hash:" << R.hash;
 
     QUrl u = QUrl( R.url);
 
@@ -241,7 +241,7 @@ void BrowserImageManager::pageLoadFinished(bool ok)
     requestActive = false;
 
     if (ok && page->sw && page->sh) {
-        qDebug() << "BrowserImageManager::pageLoadFinished: " << " Hash: " << R.hash;
+        qDebug() << "BrowserImageManager::pageLoadFinished:" << " Hash:" << R.hash;
         QPixmap pt(page->sw, page->sh);
         QPainter P(&pt);
         page->view()->render(&P, QPoint(), QRegion(0,0,page->sw,page->sh));
@@ -272,7 +272,7 @@ void BrowserImageManager::pageLoadFinished(bool ok)
         receivedData(ba, headers, R.hash);
     } else {
         loadingRequests.enqueue(R);
-        qDebug() << "BrowserImageManager::pageLoadFinished - Error: " << " Hash: " << R.hash;
+        qDebug() << "BrowserImageManager::pageLoadFinished - Error:" << "Hash:" << R.hash;
     }
 
     mutex.unlock();

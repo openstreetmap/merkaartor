@@ -386,7 +386,7 @@ void MerkaartorPreferences::on_authenticationRequired( QNetworkReply *reply, QAu
 
 void MerkaartorPreferences::on_sslErrors(QNetworkReply *reply, const QList<QSslError>& errors) {
     Q_UNUSED(reply);
-    qDebug() << "We stumbled upon some SSL errors: ";
+    qDebug() << "We stumbled upon some SSL errors:";
     foreach ( QSslError error, errors ) {
         qDebug() << "1:";
         qDebug() << error.errorString();
@@ -397,7 +397,7 @@ void MerkaartorPreferences::on_requestFinished ( QNetworkReply *reply )
 {
     int error = reply->error();
     if (error != QNetworkReply::NoError) {
-        //qDebug() << "Received response with code " << error << "(" << reply->errorString() << ")";
+        //qDebug() << "Received response with code" << error << "(" << reply->errorString() << ")";
         switch (error) {
             case QNetworkReply::HostNotFoundError:
                 qWarning() << "MerkaartorPreferences: Host not found, preferences won't be synchronized with your profile.";
@@ -466,7 +466,7 @@ void MerkaartorPreferences::on_requestFinished ( QNetworkReply *reply )
 
     QDomElement docElem = theXmlDoc.documentElement();
     if (docElem.tagName() != "MerkaartorLists") {
-        qDebug() << "Invalid OSM Prefs XML root element: " << docElem.tagName();
+        qDebug() << "Invalid OSM Prefs XML root element:" << docElem.tagName();
         return;
     }
 
@@ -504,7 +504,7 @@ void MerkaartorPreferences::on_requestFinished ( QNetworkReply *reply )
 
 void MerkaartorPreferences::putOsmPref(const QString& k, const QString& v)
 {
-    qDebug() << "Saving OSM preference online: " << k << "=" << v;
+    qDebug() << "Saving OSM preference online:" << k << "=" << v;
     QUrl osmWeb(getOsmApiUrl()+QString("/user/preferences/%1").arg(k));
 
     QByteArray ba(v.toUtf8());
@@ -518,7 +518,7 @@ void MerkaartorPreferences::putOsmPref(const QString& k, const QString& v)
 
 void MerkaartorPreferences::deleteOsmPref(const QString& k)
 {
-    qDebug() << "Deleting OSM preference online: " << k;
+    qDebug() << "Deleting OSM preference online:" << k;
 
     QUrl osmWeb(getOsmApiUrl()+QString("/user/preferences/%1").arg(k));
 
@@ -1309,7 +1309,7 @@ QNetworkProxy MerkaartorPreferences::getProxy(const QUrl & requestUrl)
                     theProxy.setPort(proxyUrl.port());
                     theProxy.setUser(proxyUrl.userName());
                     theProxy.setPassword(proxyUrl.password());
-                    //qDebug() << "Using proxy " << proxyUrl << " from libproxy for " << requestUrl;
+                    //qDebug() << "Using proxy" << proxyUrl << "from libproxy for" << requestUrl;
                 }
             }
             for (int i=0 ; proxies[i] ; i++) {
@@ -1389,10 +1389,11 @@ void MerkaartorPreferences::loadProjectionsFromFile(QString fileName)
     if (QDir::isRelativePath(fileName))
         fileName = QCoreApplication::applicationDirPath() + "/" + fileName;
 
-    qDebug() << "loadProjection " << fileName;
+    qDebug() << "loadProjection" << fileName;
     QFile file(fileName);
     if (!file.open(QIODevice::ReadOnly)) {
 //      QMessageBox::critical(this, tr("Invalid file"), tr("%1 could not be opened.").arg(fileName));
+        qDebug() << "  missing";
         return;
     }
 
@@ -1400,6 +1401,7 @@ void MerkaartorPreferences::loadProjectionsFromFile(QString fileName)
     if (!theXmlDoc.setContent(&file)) {
 //		QMessageBox::critical(this, tr("Invalid file"), tr("%1 is not a valid XML file.").arg(fileName));
         file.close();
+        qDebug() << "  not proper XML";
         return;
     }
     file.close();
@@ -1413,7 +1415,7 @@ void MerkaartorPreferences::loadProjections()
 {
     const QStringList paths = getPreferenceFilePaths("Projections.xml");
     for (QStringList::const_iterator i = paths.begin(); i != paths.end(); ++i) {
-	loadProjectionsFromFile(*i);
+        loadProjectionsFromFile(*i);
     }
 }
 
@@ -1442,15 +1444,17 @@ void MerkaartorPreferences::loadFiltersFromFile(QString fileName)
     if (QDir::isRelativePath(fileName))
         fileName = QCoreApplication::applicationDirPath() + "/" + fileName;
 
-    qDebug() << "loadFiltersFromFile " << fileName;
+    qDebug() << "loadFiltersFromFile" << fileName;
     QFile file(fileName);
     if (!file.open(QIODevice::ReadOnly)) {
+        qDebug() << "  missing";
         return;
     }
 
     QDomDocument theXmlDoc;
     if (!theXmlDoc.setContent(&file)) {
         file.close();
+        qDebug() << "  not proper XML";
         return;
     }
     file.close();

@@ -65,7 +65,7 @@ namespace NameFinder
         url.setEncodedQuery(myService.encodedQuery());
 #endif
 
-        qDebug() << "HttpQuery: getting " << url;
+        qDebug() << "HttpQuery: getting" << url;
         QNetworkRequest req(url);
 
         req.setRawHeader(QByteArray("User-Agent"), USER_AGENT.toLatin1());
@@ -83,7 +83,7 @@ namespace NameFinder
                 qDebug() << "HttpQuery: request completed without error.";
                 emit done(reply);
             } else {
-                qDebug() << "HttpQuery: request returned with error " << reply->error() << ": " << reply->errorString();
+                qDebug() << "HttpQuery: request returned with error" << reply->error() << ":" << reply->errorString();
                 emit doneWithError(reply->error());
             }
         } else {
