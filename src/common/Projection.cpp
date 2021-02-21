@@ -14,10 +14,11 @@
 
 #include "Node.h"
 
-Projection::Projection(void)
+ProjectionBackend::ProjectionBackend(QString initProjection, std::function<QString(QString)> mapProjectionName)
     : ProjectionRevision(0)
     , IsMercator(false)
     , IsLatLong(false)
+    , mapProjectionName(mapProjectionName)
 {
 #if defined(Q_OS_WIN) && !defined(_MOBILE)
     QString pdir(QDir::toNativeSeparators(qApp->applicationDirPath() + "/" STRINGIFY(SHARE_DIR) "/proj"));
@@ -29,12 +30,12 @@ Projection::Projection(void)
 
 #ifndef _MOBILE
     theProj = NULL;
-    theWGS84Proj = Projection::getProjection("+proj=longlat +ellps=WGS84 +datum=WGS84");
-    setProjectionType(M_PREFS->getProjectionType());
+    theWGS84Proj = ProjectionBackend::getProjection("+proj=longlat +ellps=WGS84 +datum=WGS84");
+    setProjectionType(initProjection);
 #endif
 }
 
-Projection::~Projection(void)
+ProjectionBackend::~ProjectionBackend(void)
 {
     /* TODO: pj_free should be called, but it segfaults if two of the same
      * Projection objects have the same projPJ. A better machinism, perhaps
@@ -50,7 +51,7 @@ Projection::~Projection(void)
 #endif // _MOBILE
 }
 
-QPointF Projection::inverse2Point(const QPointF & Map) const
+QPointF ProjectionBackend::inverse2Point(const QPointF & Map) const
 {
     if  (IsLatLong)
         return latlonInverse(Map);
@@ -64,7 +65,7 @@ QPointF Projection::inverse2Point(const QPointF & Map) const
     return QPointF();
 }
 
-QPointF Projection::project(const QPointF & Map) const
+QPointF ProjectionBackend::project(const QPointF & Map) const
 {
     if  (IsMercator)
         return mercatorProject(Map);
@@ -78,12 +79,7 @@ QPointF Projection::project(const QPointF & Map) const
     return QPointF();
 }
 
-QPointF Projection::project(Node* aNode) const
-{
-    return project(aNode->position());
-}
-
-QLineF Projection::project(const QLineF & Map) const
+QLineF ProjectionBackend::project(const QLineF & Map) const
 {
     if  (IsMercator)
         return QLineF (mercatorProject(Map.p1()), mercatorProject(Map.p2()));
@@ -98,7 +94,7 @@ QLineF Projection::project(const QLineF & Map) const
 }
 
 
-Coord Projection::inverse2Coord(const QPointF & projPoint) const
+Coord ProjectionBackend::inverse2Coord(const QPointF & projPoint) const
 {
     if  (IsLatLong)
         return latlonInverse(projPoint);
@@ -112,7 +108,7 @@ Coord Projection::inverse2Coord(const QPointF & projPoint) const
     return Coord();
 }
 
-QRectF Projection::toProjectedRectF(const QRectF& Viewport, const QRect& screen) const
+QRectF ProjectionBackend::toProjectedRectF(const QRectF& Viewport, const QRect& screen) const
 {
     QPointF tl, br;
     QRectF pViewport;
@@ -143,7 +139,7 @@ QRectF Projection::toProjectedRectF(const QRectF& Viewport, const QRect& screen)
     return pViewport;
 }
 
-CoordBox Projection::fromProjectedRectF(const QRectF& Viewport) const
+CoordBox ProjectionBackend::fromProjectedRectF(const QRectF& Viewport) const
 {
     Coord tl, br;
     CoordBox bbox;
@@ -157,24 +153,24 @@ CoordBox Projection::fromProjectedRectF(const QRectF& Viewport) const
 
 #ifndef _MOBILE
 
-void Projection::projTransform(ProjProjection srcdefn,
+void ProjectionBackend::projTransform(ProjProjection srcdefn,
                                ProjProjection dstdefn,
                                long point_count, int point_offset, qreal *x, qreal *y, qreal *z )
 {
     pj_transform(srcdefn, dstdefn, point_count, point_offset, (double *)x, (double *)y, (double *)z);
 }
 
-void Projection::projTransformFromWGS84(long point_count, int point_offset, qreal *x, qreal *y, qreal *z ) const
+void ProjectionBackend::projTransformFromWGS84(long point_count, int point_offset, qreal *x, qreal *y, qreal *z ) const
 {
     pj_transform (theWGS84Proj, theProj, point_count, point_offset, (double *)x, (double *)y, (double *)z);
 }
 
-void Projection::projTransformToWGS84(long point_count, int point_offset, qreal *x, qreal *y, qreal *z ) const
+void ProjectionBackend::projTransformToWGS84(long point_count, int point_offset, qreal *x, qreal *y, qreal *z ) const
 {
     pj_transform(theProj, theWGS84Proj, point_count, point_offset, (double *)x, (double *)y, (double *)z);
 }
 
-QPointF Projection::projProject(const QPointF & Map) const
+QPointF ProjectionBackend::projProject(const QPointF & Map) const
 {
     qreal x = angToRad(Map.x());
     qreal y = angToRad(Map.y());
@@ -184,7 +180,7 @@ QPointF Projection::projProject(const QPointF & Map) const
     return QPointF(x, y);
 }
 
-Coord Projection::projInverse(const QPointF & pProj) const
+Coord ProjectionBackend::projInverse(const QPointF & pProj) const
 {
     qreal x = pProj.x();
     qreal y = pProj.y();
@@ -195,26 +191,26 @@ Coord Projection::projInverse(const QPointF & pProj) const
 }
 #endif // _MOBILE
 
-bool Projection::projIsLatLong() const
+bool ProjectionBackend::projIsLatLong() const
 {
     return IsLatLong;
 }
 
-//bool Projection::projIsMercator()
+//bool ProjectionBackend::projIsMercator()
 //{
 //    return IsMercator;
 //}
 
 
 #ifndef _MOBILE
-ProjProjection Projection::getProjection(QString projString)
+ProjProjection ProjectionBackend::getProjection(QString projString)
 {
     ProjProjection theProj = pj_init_plus(QString("%1 +over").arg(projString).toLatin1());
     return theProj;
 }
 #endif // _MOBILE
 
-bool Projection::setProjectionType(QString aProjectionType)
+bool ProjectionBackend::setProjectionType(QString aProjectionType)
 {
     if (aProjectionType == projType)
         return true;
@@ -257,7 +253,7 @@ bool Projection::setProjectionType(QString aProjectionType)
 
 #ifndef _MOBILE
     try {
-        projProj4 = M_PREFS->getProjection(aProjectionType).projection;
+        projProj4 = mapProjectionName(aProjectionType);
         theProj = getProjection(projProj4);
         if (!theProj) {
             projType = "EPSG:3857";
@@ -278,12 +274,12 @@ bool Projection::setProjectionType(QString aProjectionType)
 #endif // _MOBILE
 }
 
-QString Projection::getProjectionType() const
+QString ProjectionBackend::getProjectionType() const
 {
     return projType;
 }
 
-QString Projection::getProjectionProj4() const
+QString ProjectionBackend::getProjectionProj4() const
 {
     if  (IsLatLong)
         return "+init=EPSG:4326";
@@ -296,27 +292,27 @@ QString Projection::getProjectionProj4() const
     return QString();
 }
 
-int Projection::projectionRevision() const
+int ProjectionBackend::projectionRevision() const
 {
     return ProjectionRevision;
 }
 
 // Common routines
 
-qreal Projection::latAnglePerM() const
+qreal ProjectionBackend::latAnglePerM() const
 {
     qreal LengthOfOneDegreeLat = EQUATORIALRADIUS * M_PI / 180;
     return 1 / LengthOfOneDegreeLat;
 }
 
-qreal Projection::lonAnglePerM(qreal Lat) const
+qreal ProjectionBackend::lonAnglePerM(qreal Lat) const
 {
     qreal LengthOfOneDegreeLat = EQUATORIALRADIUS * M_PI / 180;
     qreal LengthOfOneDegreeLon = LengthOfOneDegreeLat * fabs(cos(Lat));
     return 1 / LengthOfOneDegreeLon;
 }
 
-bool Projection::toXML(QXmlStreamWriter& stream)
+bool ProjectionBackend::toXML(QXmlStreamWriter& stream)
 {
     bool OK = true;
 
@@ -331,7 +327,7 @@ bool Projection::toXML(QXmlStreamWriter& stream)
     return OK;
 }
 
-void Projection::fromXML(QXmlStreamReader& stream)
+void ProjectionBackend::fromXML(QXmlStreamReader& stream)
 {
     if (stream.name() == "Projection") {
         QString proj;
@@ -349,7 +345,7 @@ void Projection::fromXML(QXmlStreamReader& stream)
     }
 }
 
-QPointF Projection::mercatorProject(const QPointF& c) const
+QPointF ProjectionBackend::mercatorProject(const QPointF& c) const
 {
     qreal x = c.x() / 180. * EQUATORIALMETERHALFCIRCUMFERENCE;
     qreal y = log(tan(angToRad(c.y())) + 1/cos(angToRad(c.y()))) / M_PI * (EQUATORIALMETERHALFCIRCUMFERENCE);
@@ -357,7 +353,7 @@ QPointF Projection::mercatorProject(const QPointF& c) const
     return QPointF(x, y);
 }
 
-Coord Projection::mercatorInverse(const QPointF& point) const
+Coord ProjectionBackend::mercatorInverse(const QPointF& point) const
 {
     qreal longitude = point.x()*180.0/EQUATORIALMETERHALFCIRCUMFERENCE;
     qreal latitude = radToAng(atan(sinh(point.y()/EQUATORIALMETERHALFCIRCUMFERENCE*M_PI)));

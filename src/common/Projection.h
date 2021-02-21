@@ -5,6 +5,7 @@
 #include "Coord.h"
 
 #include <QPointF>
+#include <functional>
 
 #ifndef _MOBILE
 #include "MerkaartorPreferences.h"
@@ -22,11 +23,11 @@ typedef projPJ ProjProjection;
 class QRect;
 class Node;
 
-class Projection : public IProjection
+class ProjectionBackend : public IProjection
 {
 public:
-    Projection(void);
-    virtual ~Projection(void);
+    ProjectionBackend(QString initProjection, std::function<QString(QString)> mapProjectionName);
+    virtual ~ProjectionBackend(void);
 
     qreal latAnglePerM() const;
     qreal lonAnglePerM(qreal Lat) const;
@@ -39,7 +40,6 @@ public:
     QString getProjectionType() const;
     bool projIsLatLong() const;
 
-    QPointF project(Node* aNode) const;
     QRectF toProjectedRectF(const QRectF& Viewport, const QRect& screen) const;
     CoordBox fromProjectedRectF(const QRectF& Viewport) const;
 
@@ -74,7 +74,7 @@ protected:
     int ProjectionRevision;
     bool IsMercator;
     bool IsLatLong;
-
+    std::function<QString(QString)> mapProjectionName;
 protected:
     QPointF mercatorProject(const QPointF& c) const;
     Coord mercatorInverse(const QPointF& point) const;
@@ -88,7 +88,21 @@ protected:
     {
         return Coord(point.x()/*/EQUATORIALMETERPERDEGREE*/, point.y()/*/EQUATORIALMETERPERDEGREE*/);
     }
+};
 
+/**
+ * Proxy class to inject M_PREFS externally and allow unit testing of ProjectionBackend itself.
+ */
+class Projection : public ProjectionBackend {
+  public:
+    static QString mapProjectionName(QString projName) {
+        return M_PREFS->getProjection(projName).projection;
+    }
+
+    Projection(void) :
+      ProjectionBackend(M_PREFS->getProjectionType(), mapProjectionName)
+    {
+    }
 };
 
 

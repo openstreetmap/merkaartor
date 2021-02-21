@@ -160,7 +160,7 @@ void buildPolygonFromRoad(Way *R, Projection const &theProjection, QPolygonF &Po
 {
     for (int i=0; i<R->size(); ++i)
         if (R->getNode(i)->isVisible() && !R->getNode(i)->isVirtual())
-            Polygon.append(theProjection.project(R->getNode(i)));
+            Polygon.append(theProjection.project(R->getNode(i)->position()));
 }
 
 /// draws way with oneway markers
