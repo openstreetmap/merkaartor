@@ -21,34 +21,16 @@ ProjectionBackend::ProjectionBackend(QString initProjection, std::function<QStri
 
 
 #ifndef _MOBILE
-    projCtx = proj_context_create();
+    projCtx = std::shared_ptr<PJ_CONTEXT>(proj_context_create(), proj_context_destroy);
 #if defined(Q_OS_WIN)
     QString pdir(QDir::toNativeSeparators(qApp->applicationDirPath() + "/" STRINGIFY(SHARE_DIR) "/proj"));
     const char* proj_dir = pdir.toUtf8().constData();
     proj_context_set_search_paths(projCtx, 1, &proj_dir);
 #endif // Q_OS_WIN
-    projTransform = NULL;
-    projMutex = new QMutex();
+    projTransform = std::shared_ptr<PJ>(nullptr);
+    projMutex = std::shared_ptr<QMutex>(new QMutex());
     setProjectionType(initProjection);
 #endif
-}
-
-ProjectionBackend::~ProjectionBackend(void)
-{
-    /* TODO: pj_free should be called, but it segfaults if two of the same
-     * Projection objects have the same projPJ. A better machinism, perhaps
-     * projPJ caching, should be provided.
-     *
-     * In the meantime, pj_free is not called, which does little harm as it's
-     * usually called at exit only.
-     * */
-#ifndef _MOBILE
-    if (projTransform) {
-      //proj_destroy(projTransform);
-      //delete projMutex;
-    }
-    //proj_context_destroy(projCtx);
-#endif // _MOBILE
 }
 
 QPointF ProjectionBackend::inverse2Point(const QPointF & Map) const
@@ -155,16 +137,16 @@ CoordBox ProjectionBackend::fromProjectedRectF(const QRectF& Viewport) const
 
 QPointF ProjectionBackend::projProject(const QPointF & Map) const
 {
-    QMutexLocker locker(projMutex);
-    auto trans = proj_trans(projTransform, PJ_DIRECTION::PJ_FWD, {{Map.x(), Map.y(), 0}});
+    QMutexLocker locker(projMutex.get());
+    auto trans = proj_trans(projTransform.get(), PJ_DIRECTION::PJ_FWD, {{Map.x(), Map.y(), 0}});
     //qDebug() << "Project(fromWSG84, " << getProjectionType() << "): " << Map << " -> " << qSetRealNumberPrecision(20) << x << "," << y;
     return QPointF(trans.xy.x, trans.xy.y);
 }
 
 Coord ProjectionBackend::projInverse(const QPointF & pProj) const
 {
-    QMutexLocker locker(projMutex);
-    auto trans = proj_trans(projTransform, PJ_DIRECTION::PJ_INV, {{pProj.x(), pProj.y(), 0}});
+    QMutexLocker locker(projMutex.get());
+    auto trans = proj_trans(projTransform.get(), PJ_DIRECTION::PJ_INV, {{pProj.x(), pProj.y(), 0}});
     return Coord(trans.xy.x, trans.xy.y);
 }
 #endif // _MOBILE
@@ -178,7 +160,7 @@ bool ProjectionBackend::projIsLatLong() const
 PJ* ProjectionBackend::getProjection(QString projString)
 {
     QString WGS84("+proj=longlat +ellps=WGS84 +datum=WGS84 +xy_in=deg");
-    PJ* proj = proj_create_crs_to_crs(projCtx, WGS84.toLatin1(), projString.toLatin1(), 0);
+    PJ* proj = proj_create_crs_to_crs(projCtx.get(), WGS84.toLatin1(), projString.toLatin1(), 0);
     if (!proj) {
             qDebug() << "Failed to initialize projection" << WGS84 << "to" << projString << "with error:" << proj_errno_string(proj_errno(nullptr));
     }
@@ -188,15 +170,12 @@ PJ* ProjectionBackend::getProjection(QString projString)
 
 bool ProjectionBackend::setProjectionType(QString aProjectionType)
 {
-    QMutexLocker locker(projMutex);
+    QMutexLocker locker(projMutex.get());
     if (aProjectionType == projType)
         return true;
 
 #ifndef _MOBILE
-    if (projTransform) {
-        proj_destroy(projTransform);
-        projTransform = nullptr;
-    }
+    projTransform = nullptr;
 #endif // _MOBILE
 
     ProjectionRevision++;
@@ -229,7 +208,7 @@ bool ProjectionBackend::setProjectionType(QString aProjectionType)
 #ifndef _MOBILE
     try {
         projProj4 = mapProjectionName(aProjectionType);
-        projTransform = getProjection(projProj4);
+        projTransform = std::shared_ptr<PJ>(getProjection(projProj4), proj_destroy);
         if (!projTransform) {
             // Fall back to the EPSG:3857 and return false. getProjection already logged the error into qDebug().
             projType = "EPSG:3857";
@@ -252,14 +231,14 @@ QString ProjectionBackend::getProjectionType() const
 
 QString ProjectionBackend::getProjectionProj4() const
 {
-  QMutexLocker locker(projMutex);
+  QMutexLocker locker(projMutex.get());
     if  (IsLatLong)
         return "+init=EPSG:4326";
     else if  (IsMercator)
         return "+init=EPSG:3857";
 #ifndef _MOBILE
     else
-        return QString(proj_pj_info(projTransform).definition);
+        return QString(proj_pj_info(projTransform.get()).definition);
 #endif
     return QString();
 }

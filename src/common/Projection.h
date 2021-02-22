@@ -15,6 +15,8 @@
  * A migration will eventually be necessary (more research is needed). */
 #include <proj.h>
 
+#include <memory>
+
 #endif // _MOBILE
 
 class QRect;
@@ -24,7 +26,7 @@ class ProjectionBackend : public IProjection
 {
 public:
     ProjectionBackend(QString initProjection, std::function<QString(QString)> mapProjectionName);
-    virtual ~ProjectionBackend(void);
+    virtual ~ProjectionBackend(void) {};
 
     qreal latAnglePerM() const;
     qreal lonAnglePerM(qreal Lat) const;
@@ -74,12 +76,14 @@ protected:
         return Coord(point.x()/*/EQUATORIALMETERPERDEGREE*/, point.y()/*/EQUATORIALMETERPERDEGREE*/);
     }
 private:
-    PJ_CONTEXT* projCtx;
-    PJ* projTransform;
-    QMutex* projMutex; // TODO: projTransform is not thread-safe by itself, so we need to protect it by a mutex.
-                       // In theory, each thread could have it's own projection
-                       // object, but currently the object is copied around.
-                       // Until this changes, the mutex stays here.
+    // Note: keep the order of projCtx and projTransform, as projTransform depends on projCtx.
+    std::shared_ptr<PJ_CONTEXT> projCtx;
+    std::shared_ptr<PJ> projTransform;
+    std::shared_ptr<QMutex> projMutex;
+    // TODO: projTransform is not thread-safe by itself, so we need to protect
+    // it by a mutex.  In theory, each thread could have it's own projection
+    // object, but currently the object is copied around.  Until this changes,
+    // the mutex stays here.
 };
 
 /**
