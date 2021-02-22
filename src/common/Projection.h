@@ -49,10 +49,6 @@ public:
 
 #ifndef _MOBILE
 
-    static ProjProjection getProjection(QString projString);
-    static void projTransform(ProjProjection srcdefn,
-                              ProjProjection dstdefn,
-                              long point_count, int point_offset, qreal *x, qreal *y, qreal *z );
     void projTransformToWGS84(long point_count, int point_offset, qreal *x, qreal *y, qreal *z ) const;
     void projTransformFromWGS84(long point_count, int point_offset, qreal *x, qreal *y, qreal *z ) const;
 
@@ -61,6 +57,7 @@ public:
     void fromXML(QXmlStreamReader& stream);
 
 protected:
+    static ProjProjection getProjection(QString projString);
 #ifndef _MOBILE
     ProjProjection theProj;
     QPointF projProject(const QPointF& Map) const;

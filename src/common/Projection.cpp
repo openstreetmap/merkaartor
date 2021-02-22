@@ -153,13 +153,6 @@ CoordBox ProjectionBackend::fromProjectedRectF(const QRectF& Viewport) const
 
 #ifndef _MOBILE
 
-void ProjectionBackend::projTransform(ProjProjection srcdefn,
-                               ProjProjection dstdefn,
-                               long point_count, int point_offset, qreal *x, qreal *y, qreal *z )
-{
-    pj_transform(srcdefn, dstdefn, point_count, point_offset, (double *)x, (double *)y, (double *)z);
-}
-
 void ProjectionBackend::projTransformFromWGS84(long point_count, int point_offset, qreal *x, qreal *y, qreal *z ) const
 {
     pj_transform (theWGS84Proj, theProj, point_count, point_offset, (double *)x, (double *)y, (double *)z);
