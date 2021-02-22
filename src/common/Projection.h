@@ -24,8 +24,7 @@ public:
     qreal lonAnglePerM(qreal Lat) const;
     QLineF project(const QLineF & Map) const;
     QPointF project(const QPointF& Map) const;
-    Coord inverse2Coord(const QPointF& Screen) const;
-    QPointF inverse2Point(const QPointF& Map) const;
+    QPointF inverse(const QPointF& Map) const;
 
     bool setProjectionType(QString aProjectionType);
     QString getProjectionType() const;

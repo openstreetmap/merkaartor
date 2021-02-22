@@ -42,30 +42,17 @@ QPointF ProjectionBackend::project(const QPointF & Map) const
 
 QLineF ProjectionBackend::project(const QLineF & Map) const
 {
-    if (IsMercator)
-        return QLineF (mercatorProject(Map.p1()), mercatorProject(Map.p2()));
-    if (IsLatLong)
-        return QLineF (latlonProject(Map.p1()), latlonProject(Map.p2()));
-    return QLineF(projProject(Map.p1()), projProject(Map.p2()));
+    return QLineF(project(Map.p1()), project(Map.p2()));
 }
 
 
-Coord ProjectionBackend::inverse2Coord(const QPointF & projPoint) const
+QPointF ProjectionBackend::inverse(const QPointF & projPoint) const
 {
     if (IsLatLong)
         return latlonInverse(projPoint);
     if (IsMercator)
         return mercatorInverse(projPoint);
     return projInverse(projPoint);
-}
-
-QPointF ProjectionBackend::inverse2Point(const QPointF & Map) const
-{
-    if  (IsLatLong)
-        return latlonInverse(Map);
-    if  (IsMercator)
-        return mercatorInverse(Map);
-    return projInverse(Map);
 }
 
 QRectF ProjectionBackend::toProjectedRectF(const QRectF& Viewport, const QRect& screen) const
@@ -104,8 +91,8 @@ CoordBox ProjectionBackend::fromProjectedRectF(const QRectF& Viewport) const
     Coord tl, br;
     CoordBox bbox;
 
-    tl = inverse2Coord(Viewport.topLeft());
-    br = inverse2Coord(Viewport.bottomRight());
+    tl = inverse(Viewport.topLeft());
+    br = inverse(Viewport.bottomRight());
     bbox = CoordBox(tl, br);
 
     return bbox;

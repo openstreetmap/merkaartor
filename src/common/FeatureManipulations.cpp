@@ -1983,7 +1983,7 @@ AxisAlignResult axisAlignRoads(Document* theDocument, CommandList* theList, Prop
     foreach (Way *theWay, theWays) {
         for (int i = 0; i < theWay->size(); ++i) {
             Node *N = theWay->getNode(i);
-            theList->add(new MoveNodeCommand(N, proj.inverse2Coord(node_pos[N]), theDocument->getDirtyOrOriginLayer(N->layer())));
+            theList->add(new MoveNodeCommand(N, proj.inverse(node_pos[N]), theDocument->getDirtyOrOriginLayer(N->layer())));
         }
     }
     return AxisAlignSuccess;

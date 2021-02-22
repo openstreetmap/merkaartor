@@ -41,7 +41,7 @@ class TestProjection: public QObject
     };
     for(auto& pair : list) {
       QCOMPARE(proj.project(pair.first), pair.second);
-      //QCOMPARE(proj.inverse2Point(pair.second), pair.first); // TODO: This projection does not seem to converge very well.
+      //QCOMPARE(proj.inverse(pair.second), pair.first); // TODO: This projection does not seem to converge very well.
     }
     QBENCHMARK(proj.project(QPointF(14.4157,50.1038)));
   }
@@ -53,7 +53,7 @@ class TestProjection: public QObject
     ProjectionBackend proj("EPSG:4326", [](QString x) {return x;});
     QPointF point(14.4157,50.1038);
     QCOMPARE(proj.project(point), point);
-    QCOMPARE(proj.inverse2Point(point), point);
+    QCOMPARE(proj.inverse(point), point);
     QBENCHMARK(proj.project(point));
   }
 
@@ -64,7 +64,7 @@ class TestProjection: public QObject
     ProjectionBackend proj("+proj=longlat +datum=WGS84", [](QString x) {return x;});
     QPointF point(14.4157,50.1038);
     QCOMPARE(proj.project(point), point);
-    QCOMPARE(proj.inverse2Point(point), point);
+    QCOMPARE(proj.inverse(point), point);
     QBENCHMARK(proj.project(point));
   }
 
@@ -76,7 +76,7 @@ class TestProjection: public QObject
     QPointF point(14.4157,50.1038);
     QPointF projected(1604748.38320521079,6464271.615268512629);
     QCOMPARE(proj.project(point),  projected);
-    QCOMPARE(proj.inverse2Point(projected), point);
+    QCOMPARE(proj.inverse(projected), point);
     QBENCHMARK(proj.project(point));
   }
 };
