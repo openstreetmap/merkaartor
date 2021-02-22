@@ -12,25 +12,23 @@
 #define EQUATORIALMETERHALFCIRCUMFERENCE  20037508.34
 #define EQUATORIALMETERPERDEGREE    222638.981555556
 
-#include "Node.h"
-
 ProjectionBackend::ProjectionBackend(QString initProjection, std::function<QString(QString)> mapProjectionName)
     : ProjectionRevision(0)
     , IsMercator(false)
     , IsLatLong(false)
     , mapProjectionName(mapProjectionName)
 {
-#if defined(Q_OS_WIN) && !defined(_MOBILE)
-    QString pdir(QDir::toNativeSeparators(qApp->applicationDirPath() + "/" STRINGIFY(SHARE_DIR) "/proj"));
-    const char* proj_dir = pdir.toUtf8().constData();
-    //    const char* proj_dir = "E:\\cbro\\src\\merkaartor-devel\\binaries\\bin\\share\\proj";
-    pj_set_searchpath(1, &proj_dir);
-#endif // Q_OS_WIN
 
 
 #ifndef _MOBILE
-    theProj = NULL;
-    theWGS84Proj = ProjectionBackend::getProjection("+proj=longlat +ellps=WGS84 +datum=WGS84");
+    projCtx = proj_context_create();
+#if defined(Q_OS_WIN)
+    QString pdir(QDir::toNativeSeparators(qApp->applicationDirPath() + "/" STRINGIFY(SHARE_DIR) "/proj"));
+    const char* proj_dir = pdir.toUtf8().constData();
+    proj_context_set_search_paths(projCtx, 1, &proj_dir);
+#endif // Q_OS_WIN
+    projTransform = NULL;
+    projMutex = new QMutex();
     setProjectionType(initProjection);
 #endif
 }
@@ -45,9 +43,11 @@ ProjectionBackend::~ProjectionBackend(void)
      * usually called at exit only.
      * */
 #ifndef _MOBILE
-    if (theProj) {
-        //pj_free(theProj);
+    if (projTransform) {
+      //proj_destroy(projTransform);
+      //delete projMutex;
     }
+    //proj_context_destroy(projCtx);
 #endif // _MOBILE
 }
 
@@ -153,34 +153,19 @@ CoordBox ProjectionBackend::fromProjectedRectF(const QRectF& Viewport) const
 
 #ifndef _MOBILE
 
-void ProjectionBackend::projTransformFromWGS84(long point_count, int point_offset, qreal *x, qreal *y, qreal *z ) const
-{
-    pj_transform (theWGS84Proj, theProj, point_count, point_offset, (double *)x, (double *)y, (double *)z);
-}
-
-void ProjectionBackend::projTransformToWGS84(long point_count, int point_offset, qreal *x, qreal *y, qreal *z ) const
-{
-    pj_transform(theProj, theWGS84Proj, point_count, point_offset, (double *)x, (double *)y, (double *)z);
-}
-
 QPointF ProjectionBackend::projProject(const QPointF & Map) const
 {
-    qreal x = angToRad(Map.x());
-    qreal y = angToRad(Map.y());
-
-    projTransformFromWGS84(1, 0, &x, &y, NULL);
-
-    return QPointF(x, y);
+    QMutexLocker locker(projMutex);
+    auto trans = proj_trans(projTransform, PJ_DIRECTION::PJ_FWD, {{Map.x(), Map.y(), 0}});
+    //qDebug() << "Project(fromWSG84, " << getProjectionType() << "): " << Map << " -> " << qSetRealNumberPrecision(20) << x << "," << y;
+    return QPointF(trans.xy.x, trans.xy.y);
 }
 
 Coord ProjectionBackend::projInverse(const QPointF & pProj) const
 {
-    qreal x = pProj.x();
-    qreal y = pProj.y();
-
-    projTransformToWGS84(1, 0, &x, &y, NULL);
-
-    return Coord(radToAng(x), radToAng(y));
+    QMutexLocker locker(projMutex);
+    auto trans = proj_trans(projTransform, PJ_DIRECTION::PJ_INV, {{pProj.x(), pProj.y(), 0}});
+    return Coord(trans.xy.x, trans.xy.y);
 }
 #endif // _MOBILE
 
@@ -189,33 +174,28 @@ bool ProjectionBackend::projIsLatLong() const
     return IsLatLong;
 }
 
-//bool ProjectionBackend::projIsMercator()
-//{
-//    return IsMercator;
-//}
-
-
 #ifndef _MOBILE
-ProjProjection ProjectionBackend::getProjection(QString projString)
+PJ* ProjectionBackend::getProjection(QString projString)
 {
-    QString actualString = QString("%1 +over").arg(projString);
-    ProjProjection theProj = pj_init_plus(actualString.toLatin1());
-    if (!theProj) {
-            qDebug() << "Failed to initialize projection" << actualString << "with error:" << proj_errno_string(proj_errno(nullptr));
+    QString WGS84("+proj=longlat +ellps=WGS84 +datum=WGS84 +xy_in=deg");
+    PJ* proj = proj_create_crs_to_crs(projCtx, WGS84.toLatin1(), projString.toLatin1(), 0);
+    if (!proj) {
+            qDebug() << "Failed to initialize projection" << WGS84 << "to" << projString << "with error:" << proj_errno_string(proj_errno(nullptr));
     }
-    return theProj;
+    return proj;
 }
 #endif // _MOBILE
 
 bool ProjectionBackend::setProjectionType(QString aProjectionType)
 {
+    QMutexLocker locker(projMutex);
     if (aProjectionType == projType)
         return true;
 
 #ifndef _MOBILE
-    if (theProj) {
-        pj_free(theProj);
-        theProj = NULL;
+    if (projTransform) {
+        proj_destroy(projTransform);
+        projTransform = nullptr;
     }
 #endif // _MOBILE
 
@@ -239,9 +219,7 @@ bool ProjectionBackend::setProjectionType(QString aProjectionType)
         return true;
     }
     // Hardcode "lat/long " projection
-    if (
-            projType.toUpper() == "EPSG:4326"
-            )
+    if ( projType.toUpper() == "EPSG:4326" )
     {
         IsLatLong = true;
         projType = "EPSG:4326";
@@ -251,21 +229,17 @@ bool ProjectionBackend::setProjectionType(QString aProjectionType)
 #ifndef _MOBILE
     try {
         projProj4 = mapProjectionName(aProjectionType);
-        theProj = getProjection(projProj4);
-        if (!theProj) {
+        projTransform = getProjection(projProj4);
+        if (!projTransform) {
+            // Fall back to the EPSG:3857 and return false. getProjection already logged the error into qDebug().
             projType = "EPSG:3857";
             IsMercator = true;
             return false;
         }
-        //        else {
-        //            if (pj_is_latlong(theProj))
-        //                projType = "EPSG:4326";
-        //                IsLatLong = true;
-        //        }
     } catch (...) {
         return false;
     }
-    return (theProj != NULL || IsLatLong || IsMercator);
+    return (projTransform != NULL || IsLatLong || IsMercator);
 #else
     return false;
 #endif // _MOBILE
@@ -278,13 +252,14 @@ QString ProjectionBackend::getProjectionType() const
 
 QString ProjectionBackend::getProjectionProj4() const
 {
+  QMutexLocker locker(projMutex);
     if  (IsLatLong)
         return "+init=EPSG:4326";
     else if  (IsMercator)
         return "+init=EPSG:3857";
 #ifndef _MOBILE
     else
-        return QString(pj_get_def(theProj, 0));
+        return QString(proj_pj_info(projTransform).definition);
 #endif
     return QString();
 }

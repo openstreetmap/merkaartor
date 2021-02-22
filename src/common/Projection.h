@@ -14,10 +14,6 @@
  * available yet. Until it is available on most distros, we will keep using the legacy API.
  * A migration will eventually be necessary (more research is needed). */
 #include <proj.h>
-#define ACCEPT_USE_OF_DEPRECATED_PROJ_API_H 1
-#include <proj_api.h>
-
-typedef projPJ ProjProjection;
 
 #endif // _MOBILE
 
@@ -47,23 +43,14 @@ public:
     int projectionRevision() const;
     QString getProjectionProj4() const;
 
-#ifndef _MOBILE
-
-    void projTransformToWGS84(long point_count, int point_offset, qreal *x, qreal *y, qreal *z ) const;
-    void projTransformFromWGS84(long point_count, int point_offset, qreal *x, qreal *y, qreal *z ) const;
-
-#endif
     bool toXML(QXmlStreamWriter& stream);
     void fromXML(QXmlStreamReader& stream);
 
 protected:
-    static ProjProjection getProjection(QString projString);
+    PJ* getProjection(QString projString);
 #ifndef _MOBILE
-    ProjProjection theProj;
     QPointF projProject(const QPointF& Map) const;
     Coord projInverse(const QPointF& Screen) const;
-
-    ProjProjection theWGS84Proj;
 #endif
 
     QString projType;
@@ -86,6 +73,13 @@ protected:
     {
         return Coord(point.x()/*/EQUATORIALMETERPERDEGREE*/, point.y()/*/EQUATORIALMETERPERDEGREE*/);
     }
+private:
+    PJ_CONTEXT* projCtx;
+    PJ* projTransform;
+    QMutex* projMutex; // TODO: projTransform is not thread-safe by itself, so we need to protect it by a mutex.
+                       // In theory, each thread could have it's own projection
+                       // object, but currently the object is copied around.
+                       // Until this changes, the mutex stays here.
 };
 
 /**
