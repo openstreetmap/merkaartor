@@ -20,7 +20,6 @@ ProjectionBackend::ProjectionBackend(QString initProjection, std::function<QStri
 {
 
 
-#ifndef _MOBILE
     projCtx = std::shared_ptr<PJ_CONTEXT>(proj_context_create(), proj_context_destroy);
 #if defined(Q_OS_WIN)
     QString pdir(QDir::toNativeSeparators(qApp->applicationDirPath() + "/" STRINGIFY(SHARE_DIR) "/proj"));
@@ -30,64 +29,43 @@ ProjectionBackend::ProjectionBackend(QString initProjection, std::function<QStri
     projTransform = std::shared_ptr<PJ>(nullptr);
     projMutex = std::shared_ptr<QMutex>(new QMutex());
     setProjectionType(initProjection);
-#endif
-}
-
-QPointF ProjectionBackend::inverse2Point(const QPointF & Map) const
-{
-    if  (IsLatLong)
-        return latlonInverse(Map);
-    else
-        if  (IsMercator)
-            return mercatorInverse(Map);
-#ifndef _MOBILE
-        else
-            return projInverse(Map);
-#endif
-    return QPointF();
 }
 
 QPointF ProjectionBackend::project(const QPointF & Map) const
 {
     if  (IsMercator)
         return mercatorProject(Map);
-    else
-        if  (IsLatLong)
-            return latlonProject(Map);
-#ifndef _MOBILE
-        else
-            return projProject(Map);
-#endif
-    return QPointF();
+    if  (IsLatLong)
+        return latlonProject(Map);
+    return projProject(Map);
 }
 
 QLineF ProjectionBackend::project(const QLineF & Map) const
 {
-    if  (IsMercator)
+    if (IsMercator)
         return QLineF (mercatorProject(Map.p1()), mercatorProject(Map.p2()));
-    else
-        if  (IsLatLong)
-            return QLineF (latlonProject(Map.p1()), latlonProject(Map.p2()));
-#ifndef _MOBILE
-        else
-            return QLineF(projProject(Map.p1()), projProject(Map.p2()));
-#endif
-    return QLineF();
+    if (IsLatLong)
+        return QLineF (latlonProject(Map.p1()), latlonProject(Map.p2()));
+    return QLineF(projProject(Map.p1()), projProject(Map.p2()));
 }
 
 
 Coord ProjectionBackend::inverse2Coord(const QPointF & projPoint) const
 {
-    if  (IsLatLong)
+    if (IsLatLong)
         return latlonInverse(projPoint);
-    else
-        if  (IsMercator)
-            return mercatorInverse(projPoint);
-#ifndef _MOBILE
-        else
-            return projInverse(projPoint);
-#endif
-    return Coord();
+    if (IsMercator)
+        return mercatorInverse(projPoint);
+    return projInverse(projPoint);
+}
+
+QPointF ProjectionBackend::inverse2Point(const QPointF & Map) const
+{
+    if  (IsLatLong)
+        return latlonInverse(Map);
+    if  (IsMercator)
+        return mercatorInverse(Map);
+    return projInverse(Map);
 }
 
 QRectF ProjectionBackend::toProjectedRectF(const QRectF& Viewport, const QRect& screen) const
@@ -133,8 +111,6 @@ CoordBox ProjectionBackend::fromProjectedRectF(const QRectF& Viewport) const
     return bbox;
 }
 
-#ifndef _MOBILE
-
 QPointF ProjectionBackend::projProject(const QPointF & Map) const
 {
     QMutexLocker locker(projMutex.get());
@@ -149,14 +125,12 @@ Coord ProjectionBackend::projInverse(const QPointF & pProj) const
     auto trans = proj_trans(projTransform.get(), PJ_DIRECTION::PJ_INV, {{pProj.x(), pProj.y(), 0}});
     return Coord(trans.xy.x, trans.xy.y);
 }
-#endif // _MOBILE
 
 bool ProjectionBackend::projIsLatLong() const
 {
     return IsLatLong;
 }
 
-#ifndef _MOBILE
 PJ* ProjectionBackend::getProjection(QString projString)
 {
     QString WGS84("+proj=longlat +ellps=WGS84 +datum=WGS84 +xy_in=deg");
@@ -166,7 +140,6 @@ PJ* ProjectionBackend::getProjection(QString projString)
     }
     return proj;
 }
-#endif // _MOBILE
 
 bool ProjectionBackend::setProjectionType(QString aProjectionType)
 {
@@ -174,9 +147,7 @@ bool ProjectionBackend::setProjectionType(QString aProjectionType)
     if (aProjectionType == projType)
         return true;
 
-#ifndef _MOBILE
     projTransform = nullptr;
-#endif // _MOBILE
 
     ProjectionRevision++;
     projType = aProjectionType;
@@ -205,7 +176,6 @@ bool ProjectionBackend::setProjectionType(QString aProjectionType)
         return true;
     }
 
-#ifndef _MOBILE
     projProj4 = mapProjectionName(aProjectionType);
     projTransform = std::shared_ptr<PJ>(getProjection(projProj4), proj_destroy);
     if (!projTransform) {
@@ -215,9 +185,6 @@ bool ProjectionBackend::setProjectionType(QString aProjectionType)
         return false;
     }
     return (projTransform != NULL || IsLatLong || IsMercator);
-#else
-    return false;
-#endif // _MOBILE
 }
 
 QString ProjectionBackend::getProjectionType() const
@@ -228,15 +195,11 @@ QString ProjectionBackend::getProjectionType() const
 QString ProjectionBackend::getProjectionProj4() const
 {
   QMutexLocker locker(projMutex.get());
-    if  (IsLatLong)
+    if (IsLatLong)
         return "+init=EPSG:4326";
-    else if  (IsMercator)
+    if (IsMercator)
         return "+init=EPSG:3857";
-#ifndef _MOBILE
-    else
-        return QString(proj_pj_info(projTransform.get()).definition);
-#endif
-    return QString();
+    return QString(proj_pj_info(projTransform.get()).definition);
 }
 
 int ProjectionBackend::projectionRevision() const

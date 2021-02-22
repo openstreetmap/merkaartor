@@ -4,20 +4,13 @@
 #include "IProjection.h"
 #include "Coord.h"
 
-#include <QPointF>
-#include <functional>
-
-#ifndef _MOBILE
 #include "MerkaartorPreferences.h"
 
-/* TODO: Proj.4 version 6.0.0 introduces new API changes, but is not widely
- * available yet. Until it is available on most distros, we will keep using the legacy API.
- * A migration will eventually be necessary (more research is needed). */
+
+#include <QPointF>
 #include <proj.h>
-
+#include <functional>
 #include <memory>
-
-#endif // _MOBILE
 
 class QRect;
 class Node;
@@ -26,7 +19,6 @@ class ProjectionBackend : public IProjection
 {
 public:
     ProjectionBackend(QString initProjection, std::function<QString(QString)> mapProjectionName);
-    virtual ~ProjectionBackend(void) {};
 
     qreal latAnglePerM() const;
     qreal lonAnglePerM(qreal Lat) const;
@@ -50,10 +42,8 @@ public:
 
 protected:
     PJ* getProjection(QString projString);
-#ifndef _MOBILE
     QPointF projProject(const QPointF& Map) const;
     Coord projInverse(const QPointF& Screen) const;
-#endif
 
     QString projType;
     QString projProj4;
