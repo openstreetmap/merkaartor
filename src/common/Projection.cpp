@@ -206,16 +206,12 @@ bool ProjectionBackend::setProjectionType(QString aProjectionType)
     }
 
 #ifndef _MOBILE
-    try {
-        projProj4 = mapProjectionName(aProjectionType);
-        projTransform = std::shared_ptr<PJ>(getProjection(projProj4), proj_destroy);
-        if (!projTransform) {
-            // Fall back to the EPSG:3857 and return false. getProjection already logged the error into qDebug().
-            projType = "EPSG:3857";
-            IsMercator = true;
-            return false;
-        }
-    } catch (...) {
+    projProj4 = mapProjectionName(aProjectionType);
+    projTransform = std::shared_ptr<PJ>(getProjection(projProj4), proj_destroy);
+    if (!projTransform) {
+        // Fall back to the EPSG:3857 and return false. getProjection already logged the error into qDebug().
+        projType = "EPSG:3857";
+        IsMercator = true;
         return false;
     }
     return (projTransform != NULL || IsLatLong || IsMercator);
