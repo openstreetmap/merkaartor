@@ -26,6 +26,11 @@ class TestProjection: public QObject
   }
 
 
+  void projectionWGS84toEPSG3031() {
+    ProjectionBackend proj("+init=epsg:3031", [](QString x) {return x;});
+    qDebug() << proj.getProjectionProj4();
+  }
+
   /**
    * This test verifies proj4 library is able to project correctly from WGS84 to a non-standard projection.
    */
@@ -34,6 +39,37 @@ class TestProjection: public QObject
 
     QCOMPARE(proj.project(QPointF(14.4157,50.1038)), QPointF(-742955.5923625092255,-1041158.8852684112499));
     QCOMPARE(proj.project(QPointF(18.9816,50.1259)), QPointF(-418013.62494312302442,-1073425.9725897577591));
+    QBENCHMARK(proj.project(QPointF(14.4157,50.1038)));
+  }
+
+  /**
+   * Use default "LatLong" projection, which is in fact identity.
+   */
+  void projectionWGS84toLatLong() {
+    ProjectionBackend proj("EPSG:4326", [](QString x) {return x;});
+    QPointF point(14.4157,50.1038);
+    QCOMPARE(proj.project(point), point);
+    QBENCHMARK(proj.project(point));
+  }
+
+  /**
+   * This test uses proj4 to do the identity projection. In process, it converts to radians from decimal degrees.
+   */
+  void projectionWGS84toWGS84() {
+    ProjectionBackend proj("+init=epsg:4326", [](QString x) {return x;});
+    QPointF point(14.4157,50.1038);
+    QCOMPARE(proj.project(point), point*M_PI/180);
+    QBENCHMARK(proj.project(point));
+  }
+
+  /**
+   * Test the internal Mercator projection.
+   */
+  void projectionWGS84toMercator() {
+    ProjectionBackend proj("EPSG:3857", [](QString x) {return x;});
+    QPointF point(14.4157,50.1038);
+    QCOMPARE(proj.project(point),  QPointF(1604748.38320521079,6464271.615268512629));
+    QBENCHMARK(proj.project(point));
   }
 };
 

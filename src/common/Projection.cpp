@@ -205,7 +205,11 @@ bool ProjectionBackend::projIsLatLong() const
 #ifndef _MOBILE
 ProjProjection ProjectionBackend::getProjection(QString projString)
 {
-    ProjProjection theProj = pj_init_plus(QString("%1 +over").arg(projString).toLatin1());
+    QString actualString = QString("%1 +over").arg(projString);
+    ProjProjection theProj = pj_init_plus(actualString.toLatin1());
+    if (!theProj) {
+            qDebug() << "Failed to initialize projection" << actualString << "with error:" << proj_errno_string(proj_errno(nullptr));
+    }
     return theProj;
 }
 #endif // _MOBILE
@@ -243,7 +247,7 @@ bool ProjectionBackend::setProjectionType(QString aProjectionType)
     }
     // Hardcode "lat/long " projection
     if (
-            projType.toUpper().contains("EPSG:4326")
+            projType.toUpper() == "EPSG:4326"
             )
     {
         IsLatLong = true;
