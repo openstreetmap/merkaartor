@@ -5,8 +5,11 @@ function(MerkaartorAddPlugin)
     # Parse the arguments using CMake built-in function
     cmake_parse_arguments(PARSE_ARGV 0 PLUGIN "" "NAME" "SOURCES")
 
-    add_library(${PLUGIN_NAME} SHARED ${PLUGIN_SOURCES})
+    # Note: Adding IMapAdapter hints AUTOMOC to run the moc on there and include the qt metaclass in the library.
+    # This appears to be only necessary on windows, due to linker differences.
+    add_library(${PLUGIN_NAME} SHARED ${PLUGIN_SOURCES} ${PROJECT_SOURCE_DIR}/interfaces/IMapAdapter.h)
     target_compile_options(${PLUGIN_NAME} PRIVATE ${COMPILE_OPTIONS})
+    target_compile_definitions(${PLUGIN_NAME} PRIVATE NO_PREFS)
     target_include_directories(${PLUGIN_NAME} PRIVATE 
         ${PKGCONFIG_DEPS_INCLUDE_DIRS}
         ${PROJECT_SOURCE_DIR}/interfaces
