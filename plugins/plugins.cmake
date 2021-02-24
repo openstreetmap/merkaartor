@@ -8,6 +8,7 @@ function(MerkaartorAddPlugin)
     add_library(${PLUGIN_NAME} SHARED ${PLUGIN_SOURCES})
     target_compile_options(${PLUGIN_NAME} PRIVATE ${COMPILE_OPTIONS})
     target_include_directories(${PLUGIN_NAME} PRIVATE 
+        ${PKGCONFIG_DEPS_INCLUDE_DIRS}
         ${PROJECT_SOURCE_DIR}/interfaces
         # TODO: The rest of includes are necessary for ProjectionChooser.cpp
         # used in MGdalBackground and MGeoTiffBackground. This probably needs
@@ -16,7 +17,7 @@ function(MerkaartorAddPlugin)
         ${PROJECT_SOURCE_DIR}/src/Preferences
         ${PROJECT_SOURCE_DIR}/src/common
     )
-    target_link_libraries(${PLUGIN_NAME} Qt5::Svg Qt5::Network Qt5::Xml Qt5::Core Qt5::Gui Qt5::Concurrent Qt5::PrintSupport Qt5::Widgets ${EXIV2_LIBRARIES} )
+    target_link_libraries(${PLUGIN_NAME} Qt5::Svg Qt5::Network Qt5::Xml Qt5::Core Qt5::Gui Qt5::Concurrent Qt5::PrintSupport Qt5::Widgets ${PKGCONFIG_DEPS_LIBRARIES} )
     install(TARGETS ${PLUGIN_NAME} LIBRARY DESTINATION ${PLUGINS_INSTALL_POSTFIX})
 endfunction()
 

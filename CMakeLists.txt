@@ -417,7 +417,7 @@ interfaces/IMapAdapter.h
 # Find the QtWidgets library
 find_package(Qt5 COMPONENTS Svg Network Xml Core Gui Concurrent PrintSupport Widgets Test CONFIG REQUIRED)
 find_package(PkgConfig REQUIRED)
-pkg_check_modules(EXIV2 REQUIRED exiv2 gdal proj)
+pkg_check_modules(PKGCONFIG_DEPS REQUIRED exiv2 gdal proj)
 
 
 
@@ -425,13 +425,13 @@ pkg_check_modules(EXIV2 REQUIRED exiv2 gdal proj)
 # Tell CMake to create the helloworld executable
 add_executable(merkaartor ${merkaartor_SRCS} src/Main.cpp)
 # Use the Widgets module from Qt 5
-set(MERKAARTOR_LINK_LIBS Qt5::Svg Qt5::Network Qt5::Xml Qt5::Core Qt5::Gui Qt5::Concurrent Qt5::PrintSupport Qt5::Widgets ${EXIV2_LIBRARIES})
+set(MERKAARTOR_LINK_LIBS Qt5::Svg Qt5::Network Qt5::Xml Qt5::Core Qt5::Gui Qt5::Concurrent Qt5::PrintSupport Qt5::Widgets ${PKGCONFIG_DEPS_LIBRARIES})
 target_link_libraries(merkaartor ${MERKAARTOR_LINK_LIBS} )
-target_compile_options(merkaartor PUBLIC ${EXIV2_CFLAGS_OTHER})
+target_compile_options(merkaartor PUBLIC ${PKGCONFIG_DEPS_CFLAGS_OTHER})
 install( TARGETS merkaartor RUNTIME DESTINATION bin )
 
 set(MERKAARTOR_INCLUDE_DIRECTORIES
-  ${EXIV2_INCLUDE_DIRS}
+  ${PKGCONFIG_DEPS_INCLUDE_DIRS}
   ${CMAKE_CURRENT_SOURCE_DIR}/interfaces
   ${CMAKE_CURRENT_SOURCE_DIR}/include
   ${CMAKE_CURRENT_SOURCE_DIR}/src
