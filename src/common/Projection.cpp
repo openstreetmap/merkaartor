@@ -24,7 +24,7 @@ ProjectionBackend::ProjectionBackend(QString initProjection, std::function<QStri
 #if defined(Q_OS_WIN)
     QString pdir(QDir::toNativeSeparators(qApp->applicationDirPath() + "/" STRINGIFY(SHARE_DIR) "/proj"));
     const char* proj_dir = pdir.toUtf8().constData();
-    proj_context_set_search_paths(projCtx, 1, &proj_dir);
+    proj_context_set_search_paths(projCtx.get(), 1, &proj_dir);
 #endif // Q_OS_WIN
     projTransform = std::shared_ptr<PJ>(nullptr);
     projMutex = std::shared_ptr<QMutex>(new QMutex());
