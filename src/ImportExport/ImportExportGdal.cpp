@@ -367,11 +367,11 @@ bool ImportExportGdal::importGDALDataset(GDALDataset* poDS, Layer* aLayer, bool 
         char* cTheProj;
         if (theSrs->exportToProj4(&cTheProj) == OGRERR_NONE) {
             sPrj = QString(cTheProj);
-            OGRFree(cTheProj);
+            CPLFree(cTheProj);
         } else {
             if (theSrs->exportToWkt(&cTheProj) == OGRERR_NONE) {
                 sPrj = QString(cTheProj);
-                OGRFree(cTheProj);
+                CPLFree(cTheProj);
             }
         }
         projTitle = QCoreApplication::translate("ImportExportGdal", "Confirm projection");
