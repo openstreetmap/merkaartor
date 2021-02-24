@@ -2,12 +2,14 @@
 
 set -e
 
-qmake.exe -r
-make -j4 release
+mkdir build && cd build
+cmake ..
+make -j4
 
-lrelease src/src.pro
-sh windows/copydeps.sh
-makensis.exe windows/installer.nsi
+#TODO: lrelease src/src.pro
+
+#TODO: sh windows/copydeps.sh
+#TODO: makensis.exe windows/installer.nsi
 #windows/upload-to-bintray.pl windows/merkaartor-*.exe
 
 # Prepare deployment description
