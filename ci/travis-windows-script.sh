@@ -3,7 +3,7 @@
 set -e
 
 mkdir build && cd build
-cmake ..
+cmake .. -G"Unix Makefiles"
 make -j4
 
 #TODO: lrelease src/src.pro
