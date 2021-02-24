@@ -23,8 +23,8 @@ If this is not enough, here are more detailed instructions:
 You will need the following packages installed:
 
  - Working C++ compiler
- - Qt 4.x (4.4.0 or newer) or Qt 5.x (5.3.1 or later)
- - Proj.4
+ - Qt 5.9 or newer
+ - Proj 6.x or newer
  - GDAL (2.0.0 or newer for GDAL exports)
  - Exiv2 (for geoimage support)
  - (For Windows Installer) NSIS-3
@@ -37,13 +37,7 @@ Install the above packages using your package manager. For Debian/Ubuntu, this w
 look like this:
 
 ```
- $ sudo apt-get install build-essential libgdal-dev libproj-dev
-```
-
-For Qt4:
-
-```
- $ sudo apt-get install qt4-default libqt4-xml libqt4-network libqt4-gui libqt4-svg libqt4-webkit libqt4-dev qt4-qmake
+ $ sudo apt-get install build-essential libgdal-dev libproj-dev libexiv2-dev
 ```
 
 Or for Qt5: 

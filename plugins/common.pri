@@ -11,6 +11,8 @@ QT_VER_MIN = $$member(QT_VERSION, 1)
 MERKAARTOR_SRC_DIR = $$PWD/..
 
 CONFIG += debug_and_release
+# avoid deprecation warnings which 5.15 introduced.
+DEFINES += QT_NO_DEPRECATED_WARNINGS
 
 #Static config
 include ($$MERKAARTOR_SRC_DIR/src/Config.pri)

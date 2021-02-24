@@ -12,6 +12,8 @@ include(cmake/vcs.cmake)
 add_definitions(-DVERSION=${PROJECT_VERSION} -DREVISION=${VCS_DESCRIBE})
 add_definitions(-DPRODUCT=Merkaartor)
 
+enable_testing()
+
 message(WARNING "
 
 CMake build is experimental and may be missing some features. Please use qmake for production builds.
@@ -57,6 +59,11 @@ ${CMAKE_CURRENT_SOURCE_DIR}/src/Sync
 ${CMAKE_CURRENT_SOURCE_DIR}/src/Docks
 )
 
+# starting with Qt5.15 we have a lot of deprecation warnings,
+# likely to make porting to Qt6 easier.
+# as long as we require linking to older Qt versions those warnings
+# are clutter. Remove this define when we start porting to Qt6.
+add_definitions(-DQT_NO_DEPRECATED_WARNINGS)
 
 if (UNIX)
 	set(merkaartor_SRCS_PLATFORM
@@ -208,7 +215,6 @@ src/ImportExport/ExportGPX.cpp
 src/ImportExport/ImportGPX.cpp
 src/ImportExport/ImportExportGdal.cpp
 src/MainWindow.h
-src/Main.cpp
 src/common/UploadMapDialog.ui
 src/common/GotoDialog.ui
 src/common/PropertiesDialog.ui
@@ -409,7 +415,7 @@ interfaces/IMapAdapter.h
 )
 
 # Find the QtWidgets library
-find_package(Qt5 COMPONENTS Svg Network Xml Core Gui Concurrent PrintSupport Widgets CONFIG REQUIRED)
+find_package(Qt5 COMPONENTS Svg Network Xml Core Gui Concurrent PrintSupport Widgets Test CONFIG REQUIRED)
 find_package(PkgConfig REQUIRED)
 pkg_check_modules(EXIV2 REQUIRED exiv2 gdal proj)
 
@@ -417,41 +423,50 @@ pkg_check_modules(EXIV2 REQUIRED exiv2 gdal proj)
 
 
 # Tell CMake to create the helloworld executable
-add_executable(merkaartor ${merkaartor_SRCS})
+add_executable(merkaartor ${merkaartor_SRCS} src/Main.cpp)
 # Use the Widgets module from Qt 5
-target_link_libraries(merkaartor Qt5::Svg Qt5::Network Qt5::Xml Qt5::Core Qt5::Gui Qt5::Concurrent Qt5::PrintSupport Qt5::Widgets ${EXIV2_LIBRARIES} )
+set(MERKAARTOR_LINK_LIBS Qt5::Svg Qt5::Network Qt5::Xml Qt5::Core Qt5::Gui Qt5::Concurrent Qt5::PrintSupport Qt5::Widgets ${EXIV2_LIBRARIES})
+target_link_libraries(merkaartor ${MERKAARTOR_LINK_LIBS} )
 target_compile_options(merkaartor PUBLIC ${EXIV2_CFLAGS_OTHER})
 install( TARGETS merkaartor RUNTIME DESTINATION bin )
 
-target_include_directories( merkaartor PUBLIC
-${EXIV2_INCLUDE_DIRS}
-${CMAKE_CURRENT_SOURCE_DIR}/interfaces
-${CMAKE_CURRENT_SOURCE_DIR}/include
-${CMAKE_CURRENT_SOURCE_DIR}/src
-${CMAKE_CURRENT_SOURCE_DIR}/src/GPS
-${CMAKE_CURRENT_SOURCE_DIR}/src/Backend
-${CMAKE_CURRENT_SOURCE_DIR}/src/Preferences
-${CMAKE_CURRENT_SOURCE_DIR}/src/Render
-${CMAKE_CURRENT_SOURCE_DIR}/src/PaintStyle
-${CMAKE_CURRENT_SOURCE_DIR}/src/ImportExport
-${CMAKE_CURRENT_SOURCE_DIR}/src/common
-${CMAKE_CURRENT_SOURCE_DIR}/src/Layers
-${CMAKE_CURRENT_SOURCE_DIR}/src/Utils
-${CMAKE_CURRENT_SOURCE_DIR}/src/QToolBarDialog
-${CMAKE_CURRENT_SOURCE_DIR}/src/NameFinder
-${CMAKE_CURRENT_SOURCE_DIR}/src/Interactions
-${CMAKE_CURRENT_SOURCE_DIR}/src/Sync
-${CMAKE_CURRENT_SOURCE_DIR}/src/Docks
-${CMAKE_CURRENT_SOURCE_DIR}/src/Features
-${CMAKE_CURRENT_SOURCE_DIR}/src/Commands
-${CMAKE_CURRENT_SOURCE_DIR}/src/qextserialport
-${CMAKE_CURRENT_SOURCE_DIR}/src/QMapControl
-${CMAKE_CURRENT_SOURCE_DIR}/src/TagTemplate
-${CMAKE_CURRENT_SOURCE_DIR}/3rdparty/qtsingleapplication-2.6_1-opensource/src
-    )
+set(MERKAARTOR_INCLUDE_DIRECTORIES
+  ${EXIV2_INCLUDE_DIRS}
+  ${CMAKE_CURRENT_SOURCE_DIR}/interfaces
+  ${CMAKE_CURRENT_SOURCE_DIR}/include
+  ${CMAKE_CURRENT_SOURCE_DIR}/src
+  ${CMAKE_CURRENT_SOURCE_DIR}/src/GPS
+  ${CMAKE_CURRENT_SOURCE_DIR}/src/Backend
+  ${CMAKE_CURRENT_SOURCE_DIR}/src/Preferences
+  ${CMAKE_CURRENT_SOURCE_DIR}/src/Render
+  ${CMAKE_CURRENT_SOURCE_DIR}/src/PaintStyle
+  ${CMAKE_CURRENT_SOURCE_DIR}/src/ImportExport
+  ${CMAKE_CURRENT_SOURCE_DIR}/src/common
+  ${CMAKE_CURRENT_SOURCE_DIR}/src/Layers
+  ${CMAKE_CURRENT_SOURCE_DIR}/src/Utils
+  ${CMAKE_CURRENT_SOURCE_DIR}/src/QToolBarDialog
+  ${CMAKE_CURRENT_SOURCE_DIR}/src/NameFinder
+  ${CMAKE_CURRENT_SOURCE_DIR}/src/Interactions
+  ${CMAKE_CURRENT_SOURCE_DIR}/src/Sync
+  ${CMAKE_CURRENT_SOURCE_DIR}/src/Docks
+  ${CMAKE_CURRENT_SOURCE_DIR}/src/Features
+  ${CMAKE_CURRENT_SOURCE_DIR}/src/Commands
+  ${CMAKE_CURRENT_SOURCE_DIR}/src/qextserialport
+  ${CMAKE_CURRENT_SOURCE_DIR}/src/QMapControl
+  ${CMAKE_CURRENT_SOURCE_DIR}/src/TagTemplate
+  ${CMAKE_CURRENT_SOURCE_DIR}/3rdparty/qtsingleapplication-2.6_1-opensource/src
+)
+target_include_directories( merkaartor PUBLIC ${MERKAARTOR_INCLUDE_DIRECTORIES})
 
+
+##############################################
+# Build plugins
+##############################################
 include(plugins/plugins.cmake)
 
+##############################################
+# Setup packaging
+##############################################
 set (CPACK_PACKAGE_NAME "Merkaartor")
 set (CPACK_PACKAGE_VENDOR "Merkaartor.org")
 set (CPACK_PACKAGE_DESCRIPTION_SUMMARY "Merkaartor, OpenStreetMap editor.")
@@ -462,3 +477,17 @@ set (CPACK_PACKAGE_VERSION_PATCH "${PROJECT_VERSION_PATCH}")
 set (CPACK_PACKAGE_INSTALL_DIRECTORY "Merkaartor")
 
 include(CPack)
+
+##############################################
+# Tests
+##############################################
+
+# The test shall be placed in file "tests/<test_name>.cpp" file, followed by required includes
+function(MERK_ADD_TEST test_name)
+  add_executable(${test_name} tests/${test_name}.cpp ${ARGN})
+  target_link_libraries(${test_name} ${MERKAARTOR_LINK_LIBS} Qt5::Test )
+  add_test(${test_name} ${test_name})
+  target_include_directories(${test_name} PUBLIC ${MERKAARTOR_INCLUDE_DIRECTORIES})
+endfunction()
+
+MERK_ADD_TEST(test-projection src/common/Projection.cpp src/common/Coord.cpp)

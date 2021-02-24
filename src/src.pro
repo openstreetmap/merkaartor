@@ -7,6 +7,8 @@ include (Config.pri)
 include(Custom.pri)
 
 CONFIG += debug_and_release c++11
+# avoid deprecation warnings which 5.15 introduced.
+DEFINES += QT_NO_DEPRECATED_WARNINGS
 
 # This is a workaround to get qDebug() to stdout on Windows. Uncomment if needed.
 win32 {
@@ -288,6 +290,8 @@ contains(SANITIZE, 2) {
 }
 
 unix:!macx {
+    appdata.path = $${PREFIX}/share/metainfo
+    appdata.files = org.merkaartor.merkaartor.appdata.xml
     desktop.path = $${PREFIX}/share/applications
     desktop.files = org.merkaartor.merkaartor.desktop 
     desktopicon8x8.path = $${PREFIX}/share/icons/hicolor/8x8/apps/
@@ -324,7 +328,8 @@ unix:!macx {
     desktopicon256x256.files = $$PWD/../Icons/256x256/merkaartor.png
     desktopicon512x512.path = $${PREFIX}/share/icons/hicolor/512x512/apps/
     desktopicon512x512.files = $$PWD/../Icons/512x512/merkaartor.png
-    INSTALLS += desktop \
+    INSTALLS += appdata \
+                desktop \
                 desktopicon8x8 \
                 desktopicon16x16 \
                 desktopicon22x22 \

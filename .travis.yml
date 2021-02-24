@@ -4,12 +4,10 @@ env:
 jobs:
     include:
         - os: linux
-          dist: trusty
-          env: QT_REPO=ppa:beineri/opt-qt591-trusty QT_PREFIX=59
-        - os: linux
-          dist: bionic
-          env: QT_REPO=ppa:beineri/opt-qt-5.14.0-bionic QT_PREFIX=514
+          dist: focal
+          env: QT_REPO=ppa:beineri/opt-qt-5.15.2-focal QT_PREFIX=515
         - os: osx
+          osx_image: xcode11.3
         - os: windows
 git:
     depth: 9999999

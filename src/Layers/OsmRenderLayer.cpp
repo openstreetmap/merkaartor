@@ -96,8 +96,8 @@ public:
         projR.setTop(projR.top()+dlat);
         projR.setRight(projR.right()+dlon);
 
-        Coord tl = p->theProjection.inverse2Coord(projR.topLeft());
-        Coord br = p->theProjection.inverse2Coord(projR.bottomRight());
+        Coord tl = p->theProjection.inverse(projR.topLeft());
+        Coord br = p->theProjection.inverse(projR.bottomRight());
         CoordBox invalidRect(tl, br);
 
         QMap<RenderPriority, QSet <Feature*> > theFeatures;

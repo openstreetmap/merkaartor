@@ -3,7 +3,7 @@
 set -e
 
 qmake.exe -r
-make -j8 release
+make -j4 release
 
 lrelease src/src.pro
 sh windows/copydeps.sh
