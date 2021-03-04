@@ -5,6 +5,7 @@ set -e
 mkdir build && cd build
 cmake .. -G"Unix Makefiles"
 make -j4
+make VERBOSE=1 package
 
 #TODO: lrelease src/src.pro
 
