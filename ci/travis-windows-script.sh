@@ -15,7 +15,7 @@ make VERBOSE=1 package
 
 # Prepare deployment description
 VERSION=`git describe --tags`
-cat > binaries/bin/deploy.json <<EOF
+cat > deploy.json <<EOF
 {
     "package": {
         "name": "Merkaartor",
@@ -29,7 +29,7 @@ cat > binaries/bin/deploy.json <<EOF
 
     "files":
         [
-        {"includePattern": "windows/(merkaartor-.*.exe)", "uploadPattern":"\$1"}
+        {"includePattern": "merkaartor-*.exe", "uploadPattern":"\$1"}
         ],
     "publish": true
 }

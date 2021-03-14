@@ -31,7 +31,7 @@ deploy:
             - master
         condition: $TRAVIS_OS_NAME != linux
     provider: bintray
-    file: binaries/bin/deploy.json
+    file: build/deploy.json
     user: krakonos
     key:
       secure: CMTTCxFAUirt3f+LOOC3ngJKzyqNuLO1il4Vmd8Jq5isAfiiShzs0Qj+8vvsdl7ebyVBQ5srTmwOY1z6B/Jzl5gpHPR3Y2oYt4hFaAkKU6nnlCELX7N/pS1TAXgX8NZjjod0xlfV2700eWDDBRs7gjGWQKhKzRVlMByWYeWV68c=
