@@ -1,6 +1,3 @@
-sudo: required
-env:
-    - QT=5
 jobs:
     include:
         - os: linux
