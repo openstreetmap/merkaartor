@@ -13,8 +13,12 @@ make VERBOSE=1 package
 #TODO: makensis.exe windows/installer.nsi
 #windows/upload-to-bintray.pl windows/merkaartor-*.exe
 
+git status
+git describe --tags --dirty
+git diff
+
 # Prepare deployment description
-VERSION=`git describe --tags`
+VERSION=`git describe --tags --dirty`
 cat > deploy.json <<EOF
 {
     "package": {
