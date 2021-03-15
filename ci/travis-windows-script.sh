@@ -2,6 +2,9 @@
 
 set -e
 
+git describe --tags --dirty
+git status
+
 mkdir build && cd build
 cmake .. -G"Unix Makefiles"
 make -j4
@@ -13,9 +16,8 @@ make VERBOSE=1 package
 #TODO: makensis.exe windows/installer.nsi
 #windows/upload-to-bintray.pl windows/merkaartor-*.exe
 
-git status
 git describe --tags --dirty
-git diff
+git status
 
 # Prepare deployment description
 VERSION=`git describe --tags --dirty`
