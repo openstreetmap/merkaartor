@@ -29,7 +29,7 @@ cat > deploy.json <<EOF
 
     "files":
         [
-        {"includePattern": "build/merkaartor-*.exe", "uploadPattern":"\$1"}
+        {"includePattern": "build/merkaartor-*.exe", "uploadPattern":"\$1"},
         {"includePattern": "build/merkaartor-*.zip", "uploadPattern":"\$1"}
         ],
     "publish": true
