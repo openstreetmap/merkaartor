@@ -476,6 +476,18 @@ set (CPACK_PACKAGE_VERSION_PATCH "${PROJECT_VERSION_PATCH}")
 set (CPACK_PACKAGE_VERSION "${VCS_DESCRIBE}")
 set (CPACK_PACKAGE_INSTALL_DIRECTORY "Merkaartor")
 set (CPACK_PACKAGE_EXECUTABLES "merkaartor;Merkaartor")
+set (CPACK_RESOURCE_FILE_LICENSE "${CMAKE_SOURCE_DIR}/LICENSE")
+
+##############################################
+# Mac OS X specific deploy scripts
+##############################################
+if (APPLE)
+set (CPACK_PRE_BUILD_SCRIPTS "${PROJECT_SOURCE_DIR}/cmake/deploy-osx.cmake")
+endif()
+
+##############################################
+# Windows specific deploy scripts
+##############################################
 if (WIN32)
 set (CPACK_VERBATIM_VARIABLES ON)
 set (CPACK_NSIS_MUI_ICON "${CMAKE_SOURCE_DIR}/Icons/Merkaartor_48x48.ico")
@@ -484,7 +496,6 @@ string(REGEX REPLACE "/" "\\\\" CPACK_NSIS_MUI_ICON "${CPACK_NSIS_MUI_ICON}")
 string(REGEX REPLACE "/" "\\\\" CPACK_NSIS_MUI_WELCOMEFINISHPAGE_BITMAP "${CPACK_NSIS_MUI_WELCOMEFINISHPAGE_BITMAP}")
 set (CPACK_NSIS_ENABLE_UNINSTALL_BEFORE_INSTALL ON)
 set (CPACK_NSIS_URL_INFO_ABOUT "http://merkaartor.be")
-set (CPACK_RESOURCE_FILE_LICENSE "${CMAKE_SOURCE_DIR}/LICENSE")
 set (CPACK_PRE_BUILD_SCRIPTS "${PROJECT_SOURCE_DIR}/cmake/deploy-windows.cmake")
 
 set (CPACK_GENERATOR "ZIP;NSIS")
