@@ -418,8 +418,15 @@ interfaces/IMapAdapter.h
 find_package(Qt5 COMPONENTS Svg Network Xml Core Gui Concurrent PrintSupport Widgets Test CONFIG REQUIRED)
 find_package(PkgConfig REQUIRED)
 pkg_check_modules(PKGCONFIG_DEPS REQUIRED exiv2 gdal proj)
+message("pkg-config dependencies require the following flags:")
+message("LDFLAGS:          ${PKGCONFIG_DEPS_LDFLAGS}")
+message("LDFLAGS_OTHER:    ${PKGCONFIG_DEPS_LDFLAGS_OTHER}")
+message("CFLAGS:           ${PKGCONFIG_DEPS_CFLAGS}")
+message("CFLAGS_OTHER:     ${PKGCONFIG_DEPS_CFLAGS_OTHER}")
+message("LINK DIRECTORIES: ${PKGCONFIG_DEPS_LIBRARY_DIRS}")
 
 
+link_directories(${PKGCONFIG_DEPS_LIBRARY_DIRS})
 
 
 # Tell CMake to create the helloworld executable
