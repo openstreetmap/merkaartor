@@ -25,5 +25,6 @@ brew info cmake
 # Moreover, we will ignore the results as homebrew fails as it wishes.  The
 # build will fail later anyway if something doesn't install properly.
 #brew install Dylibbundler proj exiv2 gdal qt5 || echo "Install might have failed. Ignoring"
-brew install exiv2 cmake || echo "Install might have failed. Ignoring"
+brew install exiv2 || echo "Install might have failed. Ignoring"
+brew upgrade cmake
 #brew link --force qt5 || echo "Link might have failed. Ignoring."
