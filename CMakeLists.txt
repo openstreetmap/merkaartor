@@ -498,6 +498,7 @@ set (CPACK_RESOURCE_FILE_LICENSE "${CMAKE_SOURCE_DIR}/LICENSE")
 ##############################################
 if (APPLE)
 set (CPACK_PRE_BUILD_SCRIPTS "${PROJECT_SOURCE_DIR}/cmake/deploy-osx.cmake")
+set (CPACK_GENERATOR "ZIP;DMG")
 endif()
 
 ##############################################
