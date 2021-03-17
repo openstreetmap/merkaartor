@@ -440,7 +440,8 @@ install( TARGETS merkaartor RUNTIME DESTINATION bin )
 if (APPLE)
   # Additionally, we need to find libssh and add that include, as exiv2 depends on it.
   # Caused by: https://gitlab.kitware.com/cmake/cmake/-/issues/19120 (not fixed and probably won't be anytime soon)
-  find_path(LIBSSH_INCLUDE_DIR NAMES libssh.h)
+  #find_path(LIBSSH_INCLUDE_DIR NAMES libssh.h)
+  set(LIBSSH_INCLUDE_DIR "/usr/local/include")
 endif()
 
 set(MERKAARTOR_INCLUDE_DIRECTORIES
