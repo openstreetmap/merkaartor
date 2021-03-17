@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.1.0)
+cmake_minimum_required(VERSION 3.19.0)
 
 project(merkaartor VERSION 0.18.4)
 
