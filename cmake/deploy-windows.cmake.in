@@ -1,6 +1,6 @@
 message("Running Windows deploy script.")
-find_program(WINDEPLOYQT windeployqt)
-find_program(CYGCHECK cygcheck)
+set(WINDEPLOYQT "@WINDEPLOYQT@")
+set(CYGCHECK "@CYGCHECK@")
 message("Found windeployqt: ${WINDEPLOYQT}")
 set(MERKAARTOR_BINARY "${CPACK_TEMPORARY_INSTALL_DIRECTORY}/bin/merkaartor.exe")
 message("Working on binary: ${MERKAARTOR_BINARY}")

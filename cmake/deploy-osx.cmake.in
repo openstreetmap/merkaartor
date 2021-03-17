@@ -1,6 +1,5 @@
 message("Running OSX deploy script.")
-find_program(MACDEPLOYQT macdeployqt)
-message("Found macdeployqt: ${MACDEPLOYQT}")
+set(MACDEPLOYQT "@MACDEPLOYQT@")
 set(MERKAARTOR_BINARY "${CPACK_TEMPORARY_INSTALL_DIRECTORY}/merkaartor.app")
 
 # Remove when done debugging

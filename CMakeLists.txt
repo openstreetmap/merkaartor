@@ -497,8 +497,11 @@ set (CPACK_RESOURCE_FILE_LICENSE "${CMAKE_SOURCE_DIR}/LICENSE")
 # Mac OS X specific deploy scripts
 ##############################################
 if (APPLE)
-set (CPACK_PRE_BUILD_SCRIPTS "${PROJECT_SOURCE_DIR}/cmake/deploy-osx.cmake")
-set (CPACK_GENERATOR "ZIP;DMG")
+  find_program(MACDEPLOYQT macdeployqt)
+  message("Found macdeployqt: ${MACDEPLOYQT}")
+  configure_file("${PROJECT_SOURCE_DIR}/cmake/deploy-osx.cmake.in" "${PROJECT_BINARY_DIR}/deploy-osx.cmake")
+  set (CPACK_PRE_BUILD_SCRIPTS "${PROJECT_BINARY_DIR}/deploy-osx.cmake")
+  set (CPACK_GENERATOR "ZIP;DMG")
 endif()
 
 ##############################################
@@ -512,7 +515,11 @@ string(REGEX REPLACE "/" "\\\\" CPACK_NSIS_MUI_ICON "${CPACK_NSIS_MUI_ICON}")
 string(REGEX REPLACE "/" "\\\\" CPACK_NSIS_MUI_WELCOMEFINISHPAGE_BITMAP "${CPACK_NSIS_MUI_WELCOMEFINISHPAGE_BITMAP}")
 set (CPACK_NSIS_ENABLE_UNINSTALL_BEFORE_INSTALL ON)
 set (CPACK_NSIS_URL_INFO_ABOUT "http://merkaartor.be")
-set (CPACK_PRE_BUILD_SCRIPTS "${PROJECT_SOURCE_DIR}/cmake/deploy-windows.cmake")
+
+find_program(WINDEPLOYQT windeployqt)
+find_program(CYGCHECK cygcheck)
+configure_file("${PROJECT_SOURCE_DIR}/cmake/deploy-windows.cmake.in" "${CMAKE_BINARY_DIR}/deploy-windows.cmake")
+set (CPACK_PRE_BUILD_SCRIPTS "${CMAKE_BINARY_DIR}/deploy-windows.cmake")
 
 set (CPACK_GENERATOR "ZIP;NSIS")
 
