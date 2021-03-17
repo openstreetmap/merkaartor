@@ -434,7 +434,7 @@ add_executable(merkaartor WIN32 ${merkaartor_SRCS} src/Main.cpp)
 # Use the Widgets module from Qt 5
 set(MERKAARTOR_LINK_LIBS Qt5::Svg Qt5::Network Qt5::Xml Qt5::Core Qt5::Gui Qt5::Concurrent Qt5::PrintSupport Qt5::Widgets ${PKGCONFIG_DEPS_LIBRARIES})
 target_link_libraries(merkaartor ${MERKAARTOR_LINK_LIBS} )
-target_compile_options(merkaartor PUBLIC ${PKGCONFIG_DEPS_CFLAGS_OTHER})
+target_compile_options(merkaartor PUBLIC ${PKGCONFIG_DEPS_CFLAGS})
 install( TARGETS merkaartor RUNTIME DESTINATION bin )
 
 if (APPLE)
