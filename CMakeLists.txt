@@ -501,7 +501,7 @@ if (APPLE)
   message("Found macdeployqt: ${MACDEPLOYQT}")
   configure_file("${PROJECT_SOURCE_DIR}/cmake/deploy-osx.cmake.in" "${PROJECT_BINARY_DIR}/deploy-osx.cmake")
   set (CPACK_PRE_BUILD_SCRIPTS "${PROJECT_BINARY_DIR}/deploy-osx.cmake")
-  set (CPACK_GENERATOR "ZIP;DMG")
+  set (CPACK_GENERATOR "ZIP;DragNDrop")
 endif()
 
 ##############################################
