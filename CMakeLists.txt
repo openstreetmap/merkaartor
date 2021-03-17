@@ -437,8 +437,15 @@ target_link_libraries(merkaartor ${MERKAARTOR_LINK_LIBS} )
 target_compile_options(merkaartor PUBLIC ${PKGCONFIG_DEPS_CFLAGS_OTHER})
 install( TARGETS merkaartor RUNTIME DESTINATION bin )
 
+if (APPLE)
+  # Additionally, we need to find libssh and add that include, as exiv2 depends on it.
+  # Caused by: https://gitlab.kitware.com/cmake/cmake/-/issues/19120 (not fixed and probably won't be anytime soon)
+  find_path(LIBSSH_INCLUDE_DIR NAMES libssh.h)
+endif()
+
 set(MERKAARTOR_INCLUDE_DIRECTORIES
   ${PKGCONFIG_DEPS_INCLUDE_DIRS}
+  ${LIBSSH_INCLUDE_DIR}
   ${CMAKE_CURRENT_SOURCE_DIR}/interfaces
   ${CMAKE_CURRENT_SOURCE_DIR}/include
   ${CMAKE_CURRENT_SOURCE_DIR}/src
