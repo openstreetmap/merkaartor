@@ -430,7 +430,7 @@ link_directories(${PKGCONFIG_DEPS_LIBRARY_DIRS})
 
 
 # Tell CMake to create the helloworld executable
-add_executable(merkaartor WIN32 ${merkaartor_SRCS} src/Main.cpp)
+add_executable(merkaartor WIN32 MACOSX_BUNDLE ${merkaartor_SRCS} src/Main.cpp)
 # Use the Widgets module from Qt 5
 set(MERKAARTOR_LINK_LIBS Qt5::Svg Qt5::Network Qt5::Xml Qt5::Core Qt5::Gui Qt5::Concurrent Qt5::PrintSupport Qt5::Widgets ${PKGCONFIG_DEPS_LIBRARIES})
 target_link_libraries(merkaartor ${MERKAARTOR_LINK_LIBS} )
@@ -482,8 +482,8 @@ include(plugins/plugins.cmake)
 ##############################################
 # Setup packaging
 ##############################################
-set (CPACK_PACKAGE_NAME "Merkaartor")
-set (CPACK_PACKAGE_VENDOR "Merkaartor.org")
+set (CPACK_PACKAGE_NAME "merkaartor")
+set (CPACK_PACKAGE_VENDOR "merkaartor.org")
 set (CPACK_PACKAGE_DESCRIPTION_SUMMARY "Merkaartor, OpenStreetMap editor.")
 set (CPACK_PACKAGE_VERSION_MAJOR "${PROJECT_VERSION_MAJOR}")
 set (CPACK_PACKAGE_VERSION_MINOR "${PROJECT_VERSION_MINOR}")
