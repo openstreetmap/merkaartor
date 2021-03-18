@@ -498,6 +498,11 @@ set (CPACK_PACKAGE_EXECUTABLES "merkaartor;Merkaartor")
 set (CPACK_RESOURCE_FILE_LICENSE "${CMAKE_SOURCE_DIR}/LICENSE")
 
 ##############################################
+# Prepare deployment script
+##############################################
+configure_file("${PROJECT_SOURCE_DIR}/cmake/deploy.json.in" "${PROJECT_BINARY_DIR}/deploy.json" @ONLY)
+
+##############################################
 # Mac OS X specific deploy scripts
 ##############################################
 if (APPLE)
