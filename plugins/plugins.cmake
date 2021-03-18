@@ -1,9 +1,13 @@
 
+if (APPLE)
+set(PLUGINS_INSTALL_POSTFIX "merkaartor.app/Contents/plugins")
+else()
 set(PLUGINS_INSTALL_POSTFIX "lib/merkaartor/plugins")
+endif()
 
 function(MerkaartorAddPlugin)
     # Parse the arguments using CMake built-in function
-    cmake_parse_arguments(PARSE_ARGV 0 PLUGIN "" "NAME" "SOURCES")
+    cmake_parse_arguments(PARSE_ARGV 0 PLUGIN "" "NAME;DESTINATION" "SOURCES")
 
     # Note: Adding IMapAdapter hints AUTOMOC to run the moc on there and include the qt metaclass in the library.
     # This appears to be only necessary on windows, due to linker differences.
@@ -21,31 +25,31 @@ function(MerkaartorAddPlugin)
         ${PROJECT_SOURCE_DIR}/src/common
     )
     target_link_libraries(${PLUGIN_NAME} Qt5::Svg Qt5::Network Qt5::Xml Qt5::Core Qt5::Gui Qt5::Concurrent Qt5::PrintSupport Qt5::Widgets ${PKGCONFIG_DEPS_LIBRARIES} )
-    install(TARGETS ${PLUGIN_NAME} LIBRARY DESTINATION ${PLUGINS_INSTALL_POSTFIX})
+    install(TARGETS ${PLUGIN_NAME} LIBRARY DESTINATION ${PLUGINS_INSTALL_POSTFIX}/${PLUGIN_DESTINATION})
 endfunction()
 
 add_definitions("-DPLUGINS_DIR=${CMAKE_INSTALL_PREFIX}/${PLUGINS_INSTALL_POSTFIX}")
 
-MerkaartorAddPlugin(NAME MGdalBackground SOURCES
+MerkaartorAddPlugin(NAME MGdalBackground DESTINATION background SOURCES
     ${PROJECT_SOURCE_DIR}/plugins/background/MGdalBackground/GdalAdapter.cpp
     ${PROJECT_SOURCE_DIR}/src/Utils/ProjectionChooser.cpp
     #${PROJECT_SOURCE_DIR}/plugins/background/MGdalBackground/GdalAdapter.json
 )
 
-MerkaartorAddPlugin(NAME MGeoTiffBackground SOURCES
+MerkaartorAddPlugin(NAME MGeoTiffBackground DESTINATION background SOURCES
     ${PROJECT_SOURCE_DIR}/plugins/background/MGeoTiffBackground/GeoTiffAdapter.cpp
     ${PROJECT_SOURCE_DIR}/src/Utils/ProjectionChooser.cpp
     #${PROJECT_SOURCE_DIR}/plugins/background/MGeoTiffBackground/GeoTiffAdapter.json
 )
 
-MerkaartorAddPlugin(NAME MMsBingMapBackground SOURCES
+MerkaartorAddPlugin(NAME MMsBingMapBackground DESTINATION background SOURCES
     ${PROJECT_SOURCE_DIR}/plugins/background/MMsBingMapBackground/Resources.qrc
     ${PROJECT_SOURCE_DIR}/plugins/background/MMsBingMapBackground/msbingmapadapter.cpp
     ${PROJECT_SOURCE_DIR}/plugins/background/MMsBingMapBackground/mapadapter.cpp
 )
 
 # Plugin not maintained for a long time.
-# MerkaartorAddPlugin(NAME MCadastreFranceBackground SOURCES
+# MerkaartorAddPlugin(NAME MCadastreFranceBackground DESTINATION background SOURCES
 #     ${PROJECT_SOURCE_DIR}/plugins/background/MCadastreFranceBackground/qadastre
 #     ${PROJECT_SOURCE_DIR}/plugins/background/MCadastreFranceBackground/qadastre/cadastrewrapper.cpp
 #     ${PROJECT_SOURCE_DIR}/plugins/background/MCadastreFranceBackground/qadastre/COPYING.txt
@@ -59,7 +63,7 @@ MerkaartorAddPlugin(NAME MMsBingMapBackground SOURCES
 #     ${PROJECT_SOURCE_DIR}/plugins/background/MCadastreFranceBackground/CadastreFrance.cpp
 # )
 
-MerkaartorAddPlugin(NAME MWalkingPapersBackground SOURCES
+MerkaartorAddPlugin(NAME MWalkingPapersBackground DESTINATION background SOURCES
     #${PROJECT_SOURCE_DIR}/plugins/background/MWalkingPapersBackground/WalkingPapersAdapter.json
     ${PROJECT_SOURCE_DIR}/plugins/background/MWalkingPapersBackground/WalkingPapersAdapter.cpp
 )
