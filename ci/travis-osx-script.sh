@@ -24,7 +24,8 @@ cat > deploy.json <<EOF
 
     "files":
         [
-        {"includePattern": "build/(merkaartor-.*.dmg)", "uploadPattern":"\$1"}
+        {"includePattern": "build/(merkaartor-.*.dmg)", "uploadPattern":"\$1"},
+        {"includePattern": "build/(merkaartor-.*.zip)", "uploadPattern":"\$1"}
         ],
     "publish": true
 }
