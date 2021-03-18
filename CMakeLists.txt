@@ -428,14 +428,18 @@ message("LINK DIRECTORIES: ${PKGCONFIG_DEPS_LIBRARY_DIRS}")
 
 link_directories(${PKGCONFIG_DEPS_LIBRARY_DIRS})
 
+set(MERKAARTOR_OSX_ICON_FILE "${CMAKE_SOURCE_DIR}/Icons/merkaartor.icns")
+set_source_files_properties(${MERKAARTOR_OSX_ICON_FILE} PROPERTIES MACOSX_PACKAGE_LOCATION "Resources")
+#set_target_properties(${PROJECT_NAME} PROPERTIES RESOURCE ${MERKAARTOR_OSX_ICON_FILE})
+
 
 # Tell CMake to create the helloworld executable
-add_executable(merkaartor WIN32 MACOSX_BUNDLE ${merkaartor_SRCS} src/Main.cpp)
+add_executable(${PROJECT_NAME} WIN32 MACOSX_BUNDLE ${merkaartor_SRCS} src/Main.cpp ${MERKAARTOR_OSX_ICON_FILE})
 # Use the Widgets module from Qt 5
 set(MERKAARTOR_LINK_LIBS Qt5::Svg Qt5::Network Qt5::Xml Qt5::Core Qt5::Gui Qt5::Concurrent Qt5::PrintSupport Qt5::Widgets ${PKGCONFIG_DEPS_LIBRARIES})
 target_link_libraries(merkaartor ${MERKAARTOR_LINK_LIBS} )
 target_compile_options(merkaartor PUBLIC ${PKGCONFIG_DEPS_CFLAGS})
-install( TARGETS merkaartor RUNTIME DESTINATION bin )
+install( TARGETS merkaartor RUNTIME DESTINATION bin BUNDLE DESTINATION .)
 
 if (APPLE)
   # Additionally, we need to find libssh and add that include, as exiv2 depends on it.
@@ -506,7 +510,7 @@ if (APPLE)
   set (MACOSX_BUNDLE_BUNDLE_VERSION "${VCS_DESCRIBE}")
   set (MACOSX_BUNDLE_COPYRIGHT 2021)
   set (MACOSX_BUNDLE_GUI_IDENTIFIER "be.merkaartor")
-  set (MACOSX_BUNDLE_ICON_FILE "${CMAKE_SOURCE_DIR}/Icons/Merkaartor_48x48.ico")
+  set (MACOSX_BUNDLE_ICON_FILE "merkaartor.icns")
   set (MACOSX_BUNDLE_INFO_STRING "Merkaartor, OpenStreetMap editor.")
   set (MACOSX_BUNDLE_LONG_VERSION_STRING "${VCS_DESCRIBE} (${VCS_COMMIT})")
   set (MACOSX_BUNDLE_SHORT_VERSION_STRING "${VCS_DESCRIBE} (short)")
