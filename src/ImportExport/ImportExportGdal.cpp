@@ -10,23 +10,16 @@
 //
 //
 
-#include "Global.h"
-
-#include <QtGui>
-#include <QApplication>
-
-#include "../ImportExport/ImportExportGdal.h"
+#include "ImportExportGdal.h"
 #include "Projection.h"
 #include "Features.h"
 #include "ProjectionChooser.h"
 #include "Global.h"
 
-#include <cpl_vsi.h>
+#include <QtGui>
+#include <QApplication>
 #include <gdal.h>
-#include <gdal_priv.h>
-
-#include <QDir>
-
+#include <cpl_vsi.h>
 
 bool parseContainer(QDomElement& e, Layer* aLayer);
 
