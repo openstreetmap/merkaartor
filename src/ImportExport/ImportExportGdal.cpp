@@ -332,7 +332,7 @@ bool ImportExportGdal::importGDALDataset(GDALDataset* poDS, Layer* aLayer, bool 
     qDebug() << "Layers #" << poDS->GetLayerCount();
     OGRLayer  *poLayer = poDS->GetLayer(0);
 
-    OGRSpatialReference * theSrs = poLayer->GetSpatialRef();
+    OGRSpatialReference * theSrs = poLayer->GetSpatialRef(); // Note: Contrary to other OGR objects, the spatial ref must NOT be released by our code!
     toWGS84 = NULL;
 
     if (theSrs) {
@@ -387,8 +387,6 @@ bool ImportExportGdal::importGDALDataset(GDALDataset* poDS, Layer* aLayer, bool 
         }
     }
 
-    if (theSrs)
-        theSrs->Release();
     theSrs = new OGRSpatialReference();
     theSrs->importFromProj4(sPrj.toLatin1().data());
     toWGS84 = OGRCreateCoordinateTransformation(theSrs, &wgs84srs);
@@ -410,7 +408,6 @@ bool ImportExportGdal::importGDALDataset(GDALDataset* poDS, Layer* aLayer, bool 
             progress.setMaximum(progress.maximum()+sz);
 
         int curImported = 0;
-//        poLayer->ResetReading();
         while( (poFeature = poLayer->GetNextFeature()) != NULL && !progress.wasCanceled())
         {
             OGRGeometry *poGeometry;
