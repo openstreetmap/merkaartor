@@ -30,10 +30,10 @@ ProjectionBackend::ProjectionBackend(QString initProjection, std::function<QStri
     QString projDirMingwTravis(QDir::toNativeSeparators("c:/tools/msys64/mingw64/share/proj")); // Travis-CI msys2 installation
     const char* const projDirs[] = {
         projDirRelative.toUtf8().constData(),
-	projDirMingwStd.toUtf8().constData(),
-	projDirMingwTravis.toUtf8().constData()
+        projDirMingwStd.toUtf8().constData(),
+        projDirMingwTravis.toUtf8().constData()
     };
-    proj_context_set_search_paths(projCtx.get(), 2, projDirs);
+    proj_context_set_search_paths(projCtx.get(), 3, projDirs);
 #endif // Q_OS_WIN
     projTransform = std::shared_ptr<PJ>(nullptr);
     projMutex = std::shared_ptr<QMutex>(new QMutex());
