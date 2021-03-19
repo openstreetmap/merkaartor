@@ -5,7 +5,7 @@
         "subject": "krakonos"
     },
     "version": {
-        "name": "@VCS_VERSION@"
+        "name": "@VCS_DESCRIBE@"
     },
     "files":
         [
