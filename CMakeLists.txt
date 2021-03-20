@@ -20,6 +20,8 @@ include(cmake/vcs.cmake)
 # only rebuilding that one and linking.
 add_definitions(-DVERSION=${PROJECT_VERSION} -DREVISION=${VCS_DESCRIBE})
 add_definitions(-DPRODUCT=Merkaartor)
+add_definitions(-DSHARE_DIR=${CMAKE_INSTALL_PREFIX}/share/merkaartor)
+add_definitions(-DTRANSDIR_MERKAARTOR=${CMAKE_INSTALL_PREFIX}/share/merkaartor)
 
 enable_testing()
 
@@ -423,6 +425,59 @@ interfaces/IMapAdapter.h
 
 )
 
+install( FILES ${CMAKE_SOURCE_DIR}/src/org.merkaartor.merkaartor.desktop          DESTINATION share/applications     )
+install( FILES ${CMAKE_SOURCE_DIR}/src/org.merkaartor.merkaartor.appdata.xml      DESTINATION share/metainfo     )
+install( FILES ${CMAKE_SOURCE_DIR}/Icons/8x8/merkaartor.png      DESTINATION share/icons/hicolor/8x8/apps     )
+install( FILES ${CMAKE_SOURCE_DIR}/Icons/16x16/merkaartor.png    DESTINATION share/icons/hicolor/16x16/apps   )
+install( FILES ${CMAKE_SOURCE_DIR}/Icons/22x22/merkaartor.png    DESTINATION share/icons/hicolor/22x22/apps   )
+install( FILES ${CMAKE_SOURCE_DIR}/Icons/24x24/merkaartor.png    DESTINATION share/icons/hicolor/24x24/apps   )
+install( FILES ${CMAKE_SOURCE_DIR}/Icons/32x32/merkaartor.png    DESTINATION share/icons/hicolor/32x32/apps   )
+install( FILES ${CMAKE_SOURCE_DIR}/Icons/36x36/merkaartor.png    DESTINATION share/icons/hicolor/36x36/apps   )
+install( FILES ${CMAKE_SOURCE_DIR}/Icons/40x40/merkaartor.png    DESTINATION share/icons/hicolor/40x40/apps   )
+install( FILES ${CMAKE_SOURCE_DIR}/Icons/42x42/merkaartor.png    DESTINATION share/icons/hicolor/42x42/apps   )
+install( FILES ${CMAKE_SOURCE_DIR}/Icons/48x48/merkaartor.png    DESTINATION share/icons/hicolor/48x48/apps   )
+install( FILES ${CMAKE_SOURCE_DIR}/Icons/64x64/merkaartor.png    DESTINATION share/icons/hicolor/64x64/apps   )
+install( FILES ${CMAKE_SOURCE_DIR}/Icons/72x72/merkaartor.png    DESTINATION share/icons/hicolor/72x72/apps   )
+install( FILES ${CMAKE_SOURCE_DIR}/Icons/80x80/merkaartor.png    DESTINATION share/icons/hicolor/80x80/apps   )
+install( FILES ${CMAKE_SOURCE_DIR}/Icons/96x96/merkaartor.png    DESTINATION share/icons/hicolor/96x96/apps   )
+install( FILES ${CMAKE_SOURCE_DIR}/Icons/128x128/merkaartor.png  DESTINATION share/icons/hicolor/128x128/apps )
+install( FILES ${CMAKE_SOURCE_DIR}/Icons/192x192/merkaartor.png  DESTINATION share/icons/hicolor/192x192/apps )
+install( FILES ${CMAKE_SOURCE_DIR}/Icons/256x256/merkaartor.png  DESTINATION share/icons/hicolor/256x256/apps )
+install( FILES ${CMAKE_SOURCE_DIR}/Icons/512x512/merkaartor.png  DESTINATION share/icons/hicolor/512x512/apps )
+
+find_package(Qt5LinguistTools)
+install( DIRECTORY ${CMAKE_SOURCE_DIR}/share/ DESTINATION share/merkaartor)
+qt5_create_translation(QM_FILES
+  ${CMAKE_SOURCE_DIR}
+  merkaartor_ar.ts
+  merkaartor_cs.ts
+  merkaartor_de_AT.ts
+  merkaartor_de.ts
+  merkaartor_en.ts
+  merkaartor_es.ts
+  merkaartor_et.ts
+  merkaartor_fi_FI.ts
+  merkaartor_fi.ts
+  merkaartor_fr.ts
+  merkaartor_hr.ts
+  merkaartor_hu.ts
+  merkaartor_id_ID.ts
+  merkaartor_it.ts
+  merkaartor_ja.ts
+  merkaartor_nl.ts
+  merkaartor_pl.ts
+  merkaartor_pt_BR.ts
+  merkaartor_pt.ts
+  merkaartor_ru.ts
+  merkaartor_sk.ts
+  merkaartor_sv.ts
+  merkaartor_uk.ts
+  merkaartor_vi.ts
+  merkaartor_zh_CN.ts
+  merkaartor_zh_TW.ts
+)
+install( FILES ${QM_FILES} DESTINATION share/merkaartor/translations )
+
 # Find the QtWidgets library
 find_package(Qt5 COMPONENTS Svg Network Xml Core Gui Concurrent PrintSupport Widgets Test CONFIG REQUIRED)
 find_package(PkgConfig REQUIRED)
@@ -443,7 +498,7 @@ set_source_files_properties(${MERKAARTOR_OSX_ICON_FILE} PROPERTIES MACOSX_PACKAG
 
 
 # Tell CMake to create the helloworld executable
-add_executable(${PROJECT_NAME} WIN32 MACOSX_BUNDLE ${merkaartor_SRCS} src/Main.cpp ${MERKAARTOR_OSX_ICON_FILE})
+add_executable(${PROJECT_NAME} WIN32 MACOSX_BUNDLE ${merkaartor_SRCS} src/Main.cpp ${MERKAARTOR_OSX_ICON_FILE} ${QM_FILES})
 # Use the Widgets module from Qt 5
 set(MERKAARTOR_LINK_LIBS Qt5::Svg Qt5::Network Qt5::Xml Qt5::Core Qt5::Gui Qt5::Concurrent Qt5::PrintSupport Qt5::Widgets ${PKGCONFIG_DEPS_LIBRARIES})
 target_link_libraries(merkaartor ${MERKAARTOR_LINK_LIBS} )
