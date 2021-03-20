@@ -29,6 +29,10 @@
 #include "IPaintStyle.h"
 #include "MasPaintStyle.h"
 
+#include <QLoggingCategory>
+
+QLoggingCategory lc_MerkaartorPreferences("merk.MerkaartorPreferences");
+
 
 // TODO: Replace 'g_Merk_Ignore_Preferences' by having two implementations
 // of the "preferences API": one that behaves as if
@@ -304,7 +308,7 @@ void MerkaartorPreferences::save(bool UserPwdChanged)
 
 void MerkaartorPreferences::toOsmPref()
 {
-    qDebug() << "MerkaartorPreferences::toOsmPref";
+    qDebug(lc_MerkaartorPreferences) << "MerkaartorPreferences::toOsmPref";
     if (getOfflineMode()) return;
 
     if (getOsmUser().isEmpty() || getOsmPassword().isEmpty()) return;
@@ -358,7 +362,7 @@ void MerkaartorPreferences::fromOsmPref()
 {
     if (getOfflineMode()) return;
 
-    qDebug() << "Requesting preferences from OSM server.";
+    qDebug(lc_MerkaartorPreferences) << "Requesting preferences from OSM server.";
 
     if (getOsmUser().isEmpty() || getOsmPassword().isEmpty()) return;
 
@@ -378,7 +382,7 @@ void MerkaartorPreferences::on_authenticationRequired( QNetworkReply *reply, QAu
      * infinite loop providing the same credentials. */
     if (lastReply != reply) {
         lastReply = reply;
-        qDebug() << "Authentication required and provided.";
+        qDebug(lc_MerkaartorPreferences) << "Authentication required and provided.";
         auth->setUser(getOsmUser());
         auth->setPassword(getOsmPassword());
     }
@@ -386,10 +390,10 @@ void MerkaartorPreferences::on_authenticationRequired( QNetworkReply *reply, QAu
 
 void MerkaartorPreferences::on_sslErrors(QNetworkReply *reply, const QList<QSslError>& errors) {
     Q_UNUSED(reply);
-    qDebug() << "We stumbled upon some SSL errors: ";
+    qDebug(lc_MerkaartorPreferences) << "We stumbled upon some SSL errors: ";
     foreach ( QSslError error, errors ) {
-        qDebug() << "1:";
-        qDebug() << error.errorString();
+        qDebug(lc_MerkaartorPreferences) << "1:";
+        qDebug(lc_MerkaartorPreferences) << error.errorString();
     }
 }
 
@@ -397,7 +401,7 @@ void MerkaartorPreferences::on_requestFinished ( QNetworkReply *reply )
 {
     int error = reply->error();
     if (error != QNetworkReply::NoError) {
-        //qDebug() << "Received response with code " << error << "(" << reply->errorString() << ")";
+        //qDebug(lc_MerkaartorPreferences) << "Received response with code " << error << "(" << reply->errorString() << ")";
         switch (error) {
             case QNetworkReply::HostNotFoundError:
                 qWarning() << "MerkaartorPreferences: Host not found, preferences won't be synchronized with your profile.";
@@ -419,7 +423,7 @@ void MerkaartorPreferences::on_requestFinished ( QNetworkReply *reply )
     if (reply != OsmPrefLoadReply)
         return;
 
-    qDebug() << "Reading preferences from online profile.";
+    qDebug(lc_MerkaartorPreferences) << "Reading preferences from online profile.";
 
     QDomDocument aOsmPrefDoc;
     aOsmPrefDoc.setContent(reply, false);
@@ -455,22 +459,22 @@ void MerkaartorPreferences::on_requestFinished ( QNetworkReply *reply )
     for (int i=0; i<sz; i++)
         PrefsXML.append(slicedPrefs[i].toLatin1());
 
-    //qDebug() << "Size: " << PrefsXML.size();
+    //qDebug(lc_MerkaartorPreferences) << "Size: " << PrefsXML.size();
 
     QDomDocument theXmlDoc;
     QByteArray ba = QByteArray::fromBase64(PrefsXML);
     if (!theXmlDoc.setContent(qUncompress(ba))) {
-        qDebug() << "Invalid OSM Prefs XML";
+        qDebug(lc_MerkaartorPreferences) << "Invalid OSM Prefs XML";
         return;
     }
 
     QDomElement docElem = theXmlDoc.documentElement();
     if (docElem.tagName() != "MerkaartorLists") {
-        qDebug() << "Invalid OSM Prefs XML root element: " << docElem.tagName();
+        qDebug(lc_MerkaartorPreferences) << "Invalid OSM Prefs XML root element: " << docElem.tagName();
         return;
     }
 
-    //qDebug() << theXmlDoc.toString();
+    //qDebug(lc_MerkaartorPreferences) << theXmlDoc.toString();
 
     QDomElement c = docElem.firstChildElement();
     while(!c.isNull()) {
@@ -504,7 +508,7 @@ void MerkaartorPreferences::on_requestFinished ( QNetworkReply *reply )
 
 void MerkaartorPreferences::putOsmPref(const QString& k, const QString& v)
 {
-    qDebug() << "Saving OSM preference online: " << k << "=" << v;
+    qDebug(lc_MerkaartorPreferences) << "Saving OSM preference online: " << k << "=" << v;
     QUrl osmWeb(getOsmApiUrl()+QString("/user/preferences/%1").arg(k));
 
     QByteArray ba(v.toUtf8());
@@ -518,7 +522,7 @@ void MerkaartorPreferences::putOsmPref(const QString& k, const QString& v)
 
 void MerkaartorPreferences::deleteOsmPref(const QString& k)
 {
-    qDebug() << "Deleting OSM preference online: " << k;
+    qDebug(lc_MerkaartorPreferences) << "Deleting OSM preference online: " << k;
 
     QUrl osmWeb(getOsmApiUrl()+QString("/user/preferences/%1").arg(k));
 
@@ -1309,7 +1313,7 @@ QNetworkProxy MerkaartorPreferences::getProxy(const QUrl & requestUrl)
                     theProxy.setPort(proxyUrl.port());
                     theProxy.setUser(proxyUrl.userName());
                     theProxy.setPassword(proxyUrl.password());
-                    //qDebug() << "Using proxy " << proxyUrl << " from libproxy for " << requestUrl;
+                    //qDebug(lc_MerkaartorPreferences) << "Using proxy " << proxyUrl << " from libproxy for " << requestUrl;
                 }
             }
             for (int i=0 ; proxies[i] ; i++) {
@@ -1389,7 +1393,7 @@ void MerkaartorPreferences::loadProjectionsFromFile(QString fileName)
     if (QDir::isRelativePath(fileName))
         fileName = QCoreApplication::applicationDirPath() + "/" + fileName;
 
-    qDebug() << "loadProjection " << fileName;
+    qDebug(lc_MerkaartorPreferences) << "loadProjection " << fileName;
     QFile file(fileName);
     if (!file.open(QIODevice::ReadOnly)) {
 //      QMessageBox::critical(this, tr("Invalid file"), tr("%1 could not be opened.").arg(fileName));
@@ -1442,7 +1446,7 @@ void MerkaartorPreferences::loadFiltersFromFile(QString fileName)
     if (QDir::isRelativePath(fileName))
         fileName = QCoreApplication::applicationDirPath() + "/" + fileName;
 
-    qDebug() << "loadFiltersFromFile " << fileName;
+    qDebug(lc_MerkaartorPreferences) << "loadFiltersFromFile " << fileName;
     QFile file(fileName);
     if (!file.open(QIODevice::ReadOnly)) {
         return;

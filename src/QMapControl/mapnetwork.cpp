@@ -26,6 +26,8 @@
 
 #define MAX_REQ 8
 
+QLoggingCategory lc_MapNetwork("merk.MapNetwork");
+
 MapNetwork::MapNetwork(IImageManager* parent)
         : parent(parent)
 {
@@ -42,7 +44,7 @@ MapNetwork::~MapNetwork()
 
 void MapNetwork::load(const QString& hash, const QString& host, const QString& url)
 {
-    qDebug() << "requesting: " << QString(host).append(url);
+    qDebug(lc_MapNetwork) << "requesting: " << QString(host).append(url);
 // 	http->setHost(host);
 // 	int getId = http->get(url);
 
@@ -51,7 +53,7 @@ void MapNetwork::load(const QString& hash, const QString& host, const QString& u
     if (loadingMap.size() < MAX_REQ)
         launchRequest();
     else
-        qDebug() << "queue full";
+        qDebug(lc_MapNetwork) << "queue full, will fetch later";
 }
 
 void MapNetwork::launchRequest()
@@ -67,7 +69,7 @@ void MapNetwork::launchRequest()
         theUrl.setUrl("http://" + QString(R->host).append(R->url));
     }
 
-    qDebug() << "getting: " << theUrl.toString();
+    qDebug(lc_MapNetwork) << "getting: " << theUrl.toString();
 
     launchRequest(theUrl, R);
 }
@@ -111,27 +113,27 @@ void MapNetwork::requestFinished(QNetworkReply* reply)
 
     if (reply->error() != QNetworkReply::NoError) {
         if (reply->error() != QNetworkReply::OperationCanceledError)
-            qDebug() << "network error: " << statusCode << " " << reply->errorString();
+            qWarning(lc_MapNetwork) << "network error: " << statusCode << " " << reply->errorString();
     } else
         switch (statusCode) {
             case 301:
             case 302:
             case 307:
-                qDebug() << "redirected: " << R->host << R->url;
+                qDebug(lc_MapNetwork) << "redirected: " << R->host << R->url;
                 launchRequest(reply->attribute(QNetworkRequest::RedirectionTargetAttribute).toUrl(), new LoadingRequest(R->hash, R->host, R->url));
                 return;
             case 404:
-                qDebug() << "404 error: " << R->host << R->url;
+                qDebug(lc_MapNetwork) << "404 error: " << R->host << R->url;
                 break;
             case 500:
-                qDebug() << "500 error: " << R->host << R->url;
+                qDebug(lc_MapNetwork) << "500 error: " << R->host << R->url;
                 break;
                 // Redirected
             default:
                 if (statusCode != 200)
-                    qDebug() << "Other http code (" << statusCode << "): "  << R->host << R->url;
+                    qDebug(lc_MapNetwork) << "Other http code (" << statusCode << "): "  << R->host << R->url;
                 QString hash = R->hash;
-                // 		qDebug() << "request finished for id: " << id;
+                // 		qDebug(lc_MapNetwork) << "request finished for id: " << id;
                 QByteArray ax;
                 QHash<QString, QString> headers;
 
@@ -149,7 +151,7 @@ void MapNetwork::requestFinished(QNetworkReply* reply)
 
     launchRequest();
     if (loadingMap.isEmpty() && loadingRequests.isEmpty()) {
-// 		qDebug () << "all loaded";
+        qDebug(lc_MapNetwork) << "all loaded";
         parent->loadingQueueEmpty();
     }
 }
@@ -189,7 +191,7 @@ void MapNetwork::timeout()
         return;
 
     LoadingRequest* R = loadingMap[rply];
-    qDebug() << "MapNetwork::timeout: " << R->host << R->url;
+    qWarning(lc_MapNetwork) << "MapNetwork::timeout: " << R->host << R->url;
     loadingMap.remove(rply);
     loadingRequests.enqueue(R);
 

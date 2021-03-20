@@ -21,6 +21,11 @@
 #include <gdal.h>
 #include <cpl_vsi.h>
 
+#include <QDebug>
+#include <QLoggingCategory>
+
+QLoggingCategory lc_importExportGdal("merk.ImportExport.GDAL");
+
 bool parseContainer(QDomElement& e, Layer* aLayer);
 
 ImportExportGdal::ImportExportGdal(Document* doc)
@@ -61,7 +66,7 @@ bool ImportExportGdal::export_(const QList<Feature *>& featList)
     poDriver = driverManager->GetDriverByName(pszDriverName);
     if( poDriver == NULL )
     {
-        qDebug( "%s driver not available.", pszDriverName );
+        qDebug(lc_importExportGdal) << pszDriverName <<  "driver not available.";
         return false;
     }
 
@@ -76,7 +81,7 @@ bool ImportExportGdal::export_(const QList<Feature *>& featList)
     poDS = poDriver->Create( fileName.toUtf8().constData(), 0, 0, 0, GDT_Unknown, createOptions );
     if( poDS == NULL )
     {
-        qDebug( "Creation of output file failed." );
+        qDebug(lc_importExportGdal) << "Creation of output file failed.";
         return false;
     }
     poDS->ExecuteSQL("PRAGMA synchronous = OFF", NULL, NULL);
@@ -323,13 +328,14 @@ bool ImportExportGdal::importGDALDataset(GDALDataset* poDS, Layer* aLayer, bool 
 {
     int ogrError;
 
+    qDebug("GDAL: couldn't initialise WGS84: %s", CPLGetLastErrorMsg());
     OGRSpatialReference wgs84srs;
     if (wgs84srs.SetWellKnownGeogCS("WGS84") != OGRERR_NONE) {
         qDebug("GDAL: couldn't initialise WGS84: %s", CPLGetLastErrorMsg());
         return false;
     }
 
-    qDebug() << "Layers #" << poDS->GetLayerCount();
+    qDebug(lc_importExportGdal) << "Layers #" << poDS->GetLayerCount();
     OGRLayer  *poLayer = poDS->GetLayer(0);
 
     OGRSpatialReference * theSrs = poLayer->GetSpatialRef(); // Note: Contrary to other OGR objects, the spatial ref must NOT be released by our code!
@@ -339,7 +345,7 @@ bool ImportExportGdal::importGDALDataset(GDALDataset* poDS, Layer* aLayer, bool 
         // Workaround for OSGB - otherwise its datum is ignored (TODO: why?)
         QString gcs = theSrs->GetAttrValue("GEOGCS");
         if (gcs == "GCS_OSGB_1936" || gcs == "OSGB 1936") {
-            qDebug() << "GDAL: substituting GCS_OSGB_1936 with EPSG:27700";
+            qDebug(lc_importExportGdal) << "GDAL: substituting GCS_OSGB_1936 with EPSG:27700";
             OGRSpatialReference * the27700Srs = new OGRSpatialReference();
             if ((ogrError = the27700Srs->importFromEPSG(27700)) != OGRERR_NONE) {
                 qDebug("GDAL: couldn't initialise EPSG:27700: %d: %s", ogrError, CPLGetLastErrorMsg());
