@@ -227,7 +227,7 @@ Node *ImportExportGdal::nodeFor(Layer* aLayer, const OGRPoint p)
         return pointHash[p];
     }
 
-    pointHash[p] = g_backend.allocNode(aLayer, Coord(p.getX(), p.getY()));
+    pointHash[p] = g_backend.allocNode(aLayer, Coord(p.getY(), p.getX()));
     aLayer->add(pointHash[p]);
     return pointHash[p];
 }
