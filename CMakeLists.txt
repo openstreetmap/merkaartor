@@ -420,7 +420,6 @@ interfaces/IMapAdapter.h
 ./Icons/AllIcons.qrc
 ./Icons/QToolBarDialog/qttoolbardialog.qrc
 ./Templates/Templates.qrc
-./share/share.qrc
 ./Styles/Styles.qrc
 
 )
@@ -446,7 +445,7 @@ install( FILES ${CMAKE_SOURCE_DIR}/Icons/256x256/merkaartor.png  DESTINATION sha
 install( FILES ${CMAKE_SOURCE_DIR}/Icons/512x512/merkaartor.png  DESTINATION share/icons/hicolor/512x512/apps )
 
 find_package(Qt5LinguistTools)
-install( DIRECTORY ${CMAKE_SOURCE_DIR}/share/ DESTINATION share/merkaartor)
+install( DIRECTORY ${CMAKE_SOURCE_DIR}/share/ DESTINATION share/merkaartor PATTERN "*.qrc" EXCLUDE)
 qt5_create_translation(QM_FILES
   ${CMAKE_SOURCE_DIR}/src
   ${CMAKE_SOURCE_DIR}/translations/merkaartor_ar.ts
