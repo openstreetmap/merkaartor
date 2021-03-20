@@ -448,33 +448,33 @@ install( FILES ${CMAKE_SOURCE_DIR}/Icons/512x512/merkaartor.png  DESTINATION sha
 find_package(Qt5LinguistTools)
 install( DIRECTORY ${CMAKE_SOURCE_DIR}/share/ DESTINATION share/merkaartor)
 qt5_create_translation(QM_FILES
-  ${CMAKE_SOURCE_DIR}
-  merkaartor_ar.ts
-  merkaartor_cs.ts
-  merkaartor_de_AT.ts
-  merkaartor_de.ts
-  merkaartor_en.ts
-  merkaartor_es.ts
-  merkaartor_et.ts
-  merkaartor_fi_FI.ts
-  merkaartor_fi.ts
-  merkaartor_fr.ts
-  merkaartor_hr.ts
-  merkaartor_hu.ts
-  merkaartor_id_ID.ts
-  merkaartor_it.ts
-  merkaartor_ja.ts
-  merkaartor_nl.ts
-  merkaartor_pl.ts
-  merkaartor_pt_BR.ts
-  merkaartor_pt.ts
-  merkaartor_ru.ts
-  merkaartor_sk.ts
-  merkaartor_sv.ts
-  merkaartor_uk.ts
-  merkaartor_vi.ts
-  merkaartor_zh_CN.ts
-  merkaartor_zh_TW.ts
+  ${CMAKE_SOURCE_DIR}/src
+  ${CMAKE_SOURCE_DIR}/translations/merkaartor_ar.ts
+  ${CMAKE_SOURCE_DIR}/translations/merkaartor_cs.ts
+  ${CMAKE_SOURCE_DIR}/translations/merkaartor_de_AT.ts
+  ${CMAKE_SOURCE_DIR}/translations/merkaartor_de.ts
+  ${CMAKE_SOURCE_DIR}/translations/merkaartor_en.ts
+  ${CMAKE_SOURCE_DIR}/translations/merkaartor_es.ts
+  ${CMAKE_SOURCE_DIR}/translations/merkaartor_et.ts
+  ${CMAKE_SOURCE_DIR}/translations/merkaartor_fi_FI.ts
+  ${CMAKE_SOURCE_DIR}/translations/merkaartor_fi.ts
+  ${CMAKE_SOURCE_DIR}/translations/merkaartor_fr.ts
+  ${CMAKE_SOURCE_DIR}/translations/merkaartor_hr.ts
+  ${CMAKE_SOURCE_DIR}/translations/merkaartor_hu.ts
+  ${CMAKE_SOURCE_DIR}/translations/merkaartor_id_ID.ts
+  ${CMAKE_SOURCE_DIR}/translations/merkaartor_it.ts
+  ${CMAKE_SOURCE_DIR}/translations/merkaartor_ja.ts
+  ${CMAKE_SOURCE_DIR}/translations/merkaartor_nl.ts
+  ${CMAKE_SOURCE_DIR}/translations/merkaartor_pl.ts
+  ${CMAKE_SOURCE_DIR}/translations/merkaartor_pt_BR.ts
+  ${CMAKE_SOURCE_DIR}/translations/merkaartor_pt.ts
+  ${CMAKE_SOURCE_DIR}/translations/merkaartor_ru.ts
+  ${CMAKE_SOURCE_DIR}/translations/merkaartor_sk.ts
+  ${CMAKE_SOURCE_DIR}/translations/merkaartor_sv.ts
+  ${CMAKE_SOURCE_DIR}/translations/merkaartor_uk.ts
+  ${CMAKE_SOURCE_DIR}/translations/merkaartor_vi.ts
+  ${CMAKE_SOURCE_DIR}/translations/merkaartor_zh_CN.ts
+  ${CMAKE_SOURCE_DIR}/translations/merkaartor_zh_TW.ts
 )
 install( FILES ${QM_FILES} DESTINATION share/merkaartor/translations )
 
