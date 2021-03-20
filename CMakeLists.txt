@@ -2,6 +2,15 @@ cmake_minimum_required(VERSION 3.19.0)
 
 project(merkaartor VERSION 0.18.4)
 
+# Set a default build type if none was specified
+if(NOT CMAKE_BUILD_TYPE AND NOT CMAKE_CONFIGURATION_TYPES)
+    set(MERK_DEFAULT_BUILD_TYPE "Debug")
+  message(STATUS "Setting build type to '${MERK_DEFAULT_BUILD_TYPE}' as none was specified.")
+  set(CMAKE_BUILD_TYPE "${MERK_DEFAULT_BUILD_TYPE}" CACHE STRING "Choose the type of build." FORCE)
+  # Set the possible values of build type for cmake-gui
+  set_property(CACHE CMAKE_BUILD_TYPE PROPERTY STRINGS "Debug" "Release" "MinSizeRel" "RelWithDebInfo")
+endif()
+
 include(cmake/vcs.cmake)
 # TODO: Use configure_file() instead of definitions when qmake is deprecated.
 # Using definitions causes unnecessary rebuilds, as with each commit the hash
