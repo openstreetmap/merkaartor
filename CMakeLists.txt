@@ -1,6 +1,7 @@
 cmake_minimum_required(VERSION 3.19.0)
 
-project(merkaartor VERSION 0.18.4)
+include(cmake/vcs.cmake)
+message(STATUS "Configuring Merkaartor ${VCS_VERSION}, commit: ${VCS_COMMIT}, dirty: ${VCS_DIRTY}.")
 
 # Set a default build type if none was specified
 if(NOT CMAKE_BUILD_TYPE AND NOT CMAKE_CONFIGURATION_TYPES)
@@ -11,7 +12,8 @@ if(NOT CMAKE_BUILD_TYPE AND NOT CMAKE_CONFIGURATION_TYPES)
   set_property(CACHE CMAKE_BUILD_TYPE PROPERTY STRINGS "Debug" "Release" "MinSizeRel" "RelWithDebInfo")
 endif()
 
-include(cmake/vcs.cmake)
+
+project(merkaartor VERSION ${VCS_VERSION})
 # TODO: Use configure_file() instead of definitions when qmake is deprecated.
 # Using definitions causes unnecessary rebuilds, as with each commit the hash
 # changes compile flags for each and every file. However, it is kept for qmake
