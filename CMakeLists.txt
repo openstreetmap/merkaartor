@@ -31,11 +31,11 @@ CMake build is experimental and may be missing some features. Please use qmake f
 
 # TODO: Add support for sanitizers
 
-add_definitions(-DZBAR=1) # MWalkingPapersBackground, Geoimage
+add_definitions(-DZBAR=1) # MWalkingPapersBackground, Geoimage; actual macro is USE_ZBAR
 # TODO: Check and remove or implement defines from code: PORTABLE, FRISIUS, NVIDIA_HACK, MOBILE, LIBPROXY, SYSTEM_QTSA
 add_definitions(-DGEOIMAGE=1)
-add_definitions(-DGPSDLIB=1)
-add_definitions(-DUSEWEBENGINE=1)
+add_definitions(-DGPSDLIB=1) # Actual macro is USE_GPS
+add_definitions(-DUSEWEBENGINE=1) # Actual macro is USE_WEBKIT
 # add_definitions(-DTHREADED_BROWSERIMAGEMANAGER=1) # TODO: Check if that even does something/works
 
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
