@@ -54,7 +54,7 @@ void loadPluginsFromDir( QDir & pluginsDir ) {
     foreach (QString fileName, pluginsDir.entryList(QDir::Files)) {
         QPluginLoader loader(pluginsDir.absoluteFilePath(fileName));
         QObject *plugin = loader.instance();
-        qInfo(lc_Main) << "  Loading" << fileName << "as plugin.";
+        qDebug(lc_Main) << "  Loading" << fileName << "as plugin.";
         if (plugin) {
             IMapAdapterFactory *fac = qobject_cast<IMapAdapterFactory *>(plugin);
             if (fac) {
@@ -64,7 +64,7 @@ void loadPluginsFromDir( QDir & pluginsDir ) {
                 qWarning(lc_Main) << "  Failed to load plugin: " << fileName << ".";
             }
         } else {
-            qWarning(lc_Main) << "  Not a plugin: " << fileName << ".";
+            qDebug(lc_Main) << "  Not a plugin: " << fileName << ".";
         }
     }
 }
