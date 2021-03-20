@@ -194,7 +194,6 @@ int main(int argc, char** argv)
 
     /* Load plugins if executed from build directory and in debug build. */
     QDir buildPluginsDir = QDir(qApp->applicationDirPath());
-    qInfo() << buildPluginsDir;
     if (buildPluginsDir.exists("CMakeCache.txt")) {
         qWarning() << "Build directory detected. Looking for plugins in application directory first.";
         QCoreApplication::addLibraryPath(buildPluginsDir.path());
