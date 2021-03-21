@@ -448,8 +448,7 @@ install( FILES ${CMAKE_SOURCE_DIR}/Icons/512x512/merkaartor.png  DESTINATION sha
 
 find_package(Qt5LinguistTools)
 install( DIRECTORY ${CMAKE_SOURCE_DIR}/share/ DESTINATION share/merkaartor PATTERN "*.qrc" EXCLUDE)
-qt5_create_translation(QM_FILES
-  ${CMAKE_SOURCE_DIR}/src
+qt5_add_translation(QM_FILES
   ${CMAKE_SOURCE_DIR}/translations/merkaartor_ar.ts
   ${CMAKE_SOURCE_DIR}/translations/merkaartor_cs.ts
   ${CMAKE_SOURCE_DIR}/translations/merkaartor_de_AT.ts
@@ -457,8 +456,6 @@ qt5_create_translation(QM_FILES
   ${CMAKE_SOURCE_DIR}/translations/merkaartor_en.ts
   ${CMAKE_SOURCE_DIR}/translations/merkaartor_es.ts
   ${CMAKE_SOURCE_DIR}/translations/merkaartor_et.ts
-  ${CMAKE_SOURCE_DIR}/translations/merkaartor_fi_FI.ts
-  ${CMAKE_SOURCE_DIR}/translations/merkaartor_fi.ts
   ${CMAKE_SOURCE_DIR}/translations/merkaartor_fr.ts
   ${CMAKE_SOURCE_DIR}/translations/merkaartor_hr.ts
   ${CMAKE_SOURCE_DIR}/translations/merkaartor_hu.ts
