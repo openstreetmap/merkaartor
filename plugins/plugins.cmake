@@ -30,26 +30,26 @@ endfunction()
 
 add_definitions("-DPLUGINS_DIR=${CMAKE_INSTALL_PREFIX}/${PLUGINS_INSTALL_POSTFIX}")
 
-MerkaartorAddPlugin(NAME MGdalBackground DESTINATION background SOURCES
+MerkaartorAddPlugin(NAME MGdalBackgroundPlugin DESTINATION background SOURCES
     ${PROJECT_SOURCE_DIR}/plugins/background/MGdalBackground/GdalAdapter.cpp
     ${PROJECT_SOURCE_DIR}/src/Utils/ProjectionChooser.cpp
     #${PROJECT_SOURCE_DIR}/plugins/background/MGdalBackground/GdalAdapter.json
 )
 
-MerkaartorAddPlugin(NAME MGeoTiffBackground DESTINATION background SOURCES
+MerkaartorAddPlugin(NAME MGeoTiffBackgroundPlugin DESTINATION background SOURCES
     ${PROJECT_SOURCE_DIR}/plugins/background/MGeoTiffBackground/GeoTiffAdapter.cpp
     ${PROJECT_SOURCE_DIR}/src/Utils/ProjectionChooser.cpp
     #${PROJECT_SOURCE_DIR}/plugins/background/MGeoTiffBackground/GeoTiffAdapter.json
 )
 
-MerkaartorAddPlugin(NAME MMsBingMapBackground DESTINATION background SOURCES
+MerkaartorAddPlugin(NAME MMsBingMapBackgroundPlugin DESTINATION background SOURCES
     ${PROJECT_SOURCE_DIR}/plugins/background/MMsBingMapBackground/Resources.qrc
     ${PROJECT_SOURCE_DIR}/plugins/background/MMsBingMapBackground/msbingmapadapter.cpp
     ${PROJECT_SOURCE_DIR}/plugins/background/MMsBingMapBackground/mapadapter.cpp
 )
 
 # Plugin not maintained for a long time.
-# MerkaartorAddPlugin(NAME MCadastreFranceBackground DESTINATION background SOURCES
+# MerkaartorAddPlugin(NAME MCadastreFranceBackgroundPlugin DESTINATION background SOURCES
 #     ${PROJECT_SOURCE_DIR}/plugins/background/MCadastreFranceBackground/qadastre
 #     ${PROJECT_SOURCE_DIR}/plugins/background/MCadastreFranceBackground/qadastre/cadastrewrapper.cpp
 #     ${PROJECT_SOURCE_DIR}/plugins/background/MCadastreFranceBackground/qadastre/COPYING.txt
@@ -63,7 +63,7 @@ MerkaartorAddPlugin(NAME MMsBingMapBackground DESTINATION background SOURCES
 #     ${PROJECT_SOURCE_DIR}/plugins/background/MCadastreFranceBackground/CadastreFrance.cpp
 # )
 
-MerkaartorAddPlugin(NAME MWalkingPapersBackground DESTINATION background SOURCES
+MerkaartorAddPlugin(NAME MWalkingPapersBackgroundPlugin DESTINATION background SOURCES
     #${PROJECT_SOURCE_DIR}/plugins/background/MWalkingPapersBackground/WalkingPapersAdapter.json
     ${PROJECT_SOURCE_DIR}/plugins/background/MWalkingPapersBackground/WalkingPapersAdapter.cpp
 )
