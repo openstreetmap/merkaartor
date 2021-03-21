@@ -22,6 +22,7 @@
 #include <QProgressDialog>
 #include <QPainter>
 #include <QPainterPath>
+#include <QLocale>
 
 #include <algorithm>
 
@@ -1055,10 +1056,14 @@ QString Feature::toMainHtml(QString type, QString systemtype)
     "<small>";
 #ifndef FRISIUS_BUILD
     S += QApplication::translate("MapFeature", "<i>V: </i><b>%1</b> ").arg(QString::number(versionNumber()));
-    if (!user().isEmpty())
-        S += QApplication::translate("MapFeature", "<i>last: </i><b>%1</b> by <b>%2</b>").arg(time().toString(Qt::SystemLocaleDate)).arg(user());
-    else
-        S += QApplication::translate("MapFeature", "<i>last: </i><b>%1</b>").arg(time().toString(Qt::SystemLocaleDate));
+    {
+      QLocale locale;
+      QString lastModTime = time().toString(locale.dateTimeFormat(QLocale::FormatType::ShortFormat));
+      if (!user().isEmpty())
+          S += QApplication::translate("MapFeature", "<i>last: </i><b>%1</b> by <b>%2</b>").arg(lastModTime).arg(user());
+      else
+          S += QApplication::translate("MapFeature", "<i>last: </i><b>%1</b>").arg(lastModTime);
+    }
 #endif
     if (layer())
         S += QApplication::translate("MapFeature", "<br/><i>layer: </i><b>%1</b> ").arg(layer()->name());

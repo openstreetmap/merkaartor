@@ -242,7 +242,7 @@ void SlippyMapWidget::wheelEvent(QWheelEvent* ev)
 
 void SlippyMapWidget::mousePressEvent(QMouseEvent* ev)
 {
-    if (ev->button() == Qt::MidButton) {
+    if (ev->button() == Qt::MiddleButton) {
         on_resetViewAction_triggered(true);
     } else if (ev->button() == Qt::LeftButton) {
         if (ev->pos().x() > width()-20)
