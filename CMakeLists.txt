@@ -448,7 +448,7 @@ install( FILES ${CMAKE_SOURCE_DIR}/Icons/512x512/merkaartor.png  DESTINATION sha
 
 find_package(Qt5LinguistTools)
 install( DIRECTORY ${CMAKE_SOURCE_DIR}/share/ DESTINATION share/merkaartor PATTERN "*.qrc" EXCLUDE)
-qt5_add_translation(QM_FILES
+set(TS_FILES
   ${CMAKE_SOURCE_DIR}/translations/merkaartor_ar.ts
   ${CMAKE_SOURCE_DIR}/translations/merkaartor_cs.ts
   ${CMAKE_SOURCE_DIR}/translations/merkaartor_de_AT.ts
@@ -474,7 +474,13 @@ qt5_add_translation(QM_FILES
   ${CMAKE_SOURCE_DIR}/translations/merkaartor_zh_CN.ts
   ${CMAKE_SOURCE_DIR}/translations/merkaartor_zh_TW.ts
 )
+qt5_add_translation(QM_FILES
+    ${TS_FILES}
+)
 install( FILES ${QM_FILES} DESTINATION share/merkaartor/translations )
+
+find_program(LUPDATE lupdate)
+add_custom_target(update-translations COMMAND ${LUPDATE} ${CMAKE_SOURCE_DIR}/src ${CMAKE_SOURCE_DIR}/plugins -ts ${TS_FILES})
 
 # Find the QtWidgets library
 find_package(Qt5 COMPONENTS Svg Network Xml Core Gui Concurrent PrintSupport Widgets Test CONFIG REQUIRED)

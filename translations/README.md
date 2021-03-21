@@ -7,7 +7,7 @@ The regular workflow is:
 
 0) From time to time, update translation files on Transifex:
     
-    $ lupdate -no-obsolete Merkaartor.pro
+    $ lupdate src plugins -ts translations/*.ts
     $ tx push -s
 
    This pushes the original english strings to Transifex, updating the database and
