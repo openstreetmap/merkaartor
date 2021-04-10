@@ -162,8 +162,8 @@ void ImageManager::loadingQueueEmpty()
 {
     emit(loadingFinished());
 // 	((Layer*)this->parent())->removeZoomImage();
-// 	qDebug() << "size of image-map: " << images.size();
-// 	qDebug() << "size: " << QPixmapCache::cacheLimit();
+// 	qDebug() << "size of image-map:" << images.size();
+// 	qDebug() << "size:" << QPixmapCache::cacheLimit();
 }
 
 void ImageManager::abortLoading()

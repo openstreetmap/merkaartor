@@ -266,7 +266,7 @@ Document* Document::fromXML(QString title, QXmlStreamReader& stream, qreal versi
             if (version > 1.0)
                 h = CommandHistory::fromXML(NewDoc, stream, progress);
         } else if (!stream.isWhitespace()) {
-            qDebug() << "Doc: logic error: " << stream.name() << " : " << stream.tokenType() << " (" << stream.lineNumber() << ")";
+            qDebug() << "Doc: logic error:" << stream.name() << ":" << stream.tokenType() << "(" << stream.lineNumber() << ")";
             stream.skipCurrentElement();
         }
 
@@ -951,7 +951,7 @@ Document* Document::getDocumentFromXml(QDomDocument* theXmlDoc)
                     } else if (stream.name() == "node") {
                         Node::fromXML(NewDoc, l, stream);
                     } else if (!stream.isWhitespace()) {
-                        qDebug() << "Doc::clipboard logic error: " << stream.name() << " : " << stream.tokenType() << " (" << stream.lineNumber() << ")";
+                        qDebug() << "Doc::clipboard logic error:" << stream.name() << ":" << stream.tokenType() << "(" << stream.lineNumber() << ")";
                         stream.skipCurrentElement();
                     }
                     stream.readNext();

@@ -462,7 +462,7 @@ ImageMapLayer * ImageMapLayer::fromXML(Document* d, QXmlStreamReader& stream, QP
                     l->p->AlignementTransformList[z] = QTransformFomXml(stream);
                     stream.readNext();
                 } else if (!stream.isWhitespace()) {
-                    qDebug() << "ImgLay: logic error: " << stream.name() << " : " << stream.tokenType() << " (" << stream.lineNumber() << ")";
+                    qDebug() << "ImgLay: logic error:" << stream.name() << ":" << stream.tokenType() << "(" << stream.lineNumber() << ")";
                     stream.skipCurrentElement();
                 }
                 stream.readNext();
@@ -481,7 +481,7 @@ ImageMapLayer * ImageMapLayer::fromXML(Document* d, QXmlStreamReader& stream, QP
             if (l->getMapAdapter())
                 l->getMapAdapter()->fromXML(stream);
         } else if (!stream.isWhitespace()) {
-            qDebug() << "ImgLay: logic error: " << stream.name() << " : " << stream.tokenType() << " (" << stream.lineNumber() << ")";
+            qDebug() << "ImgLay: logic error:" << stream.name() << ":" << stream.tokenType() << "(" << stream.lineNumber() << ")";
             stream.skipCurrentElement();
         }
         stream.readNext();
@@ -652,10 +652,10 @@ void ImageMapLayer::draw(MapView& theView, QRect& rect)
     const QSize ps = p->pr.size();
     const QSize pmSize = p->newPix.size();
     const qreal ratio = qMax<const qreal>((qreal)pmSize.width()/ps.width()*1.0, (qreal)pmSize.height()/ps.height()*1.0);
-//    qDebug() << "Bg image ratio " << ratio;
+//    qDebug() << "Bg image ratio" << ratio;
     QPixmap pms;
     if (ratio >= 1.0) {
-//        qDebug() << "Bg image scale 1 " << ps << " : " << p->newPix.size();
+//        qDebug() << "Bg image scale 1" << ps << ":" << p->newPix.size();
         pms = p->newPix.scaled(ps);
     } else {
         const QSizeF drawingSize = pmSize * ratio;
@@ -663,7 +663,7 @@ void ImageMapLayer::draw(MapView& theView, QRect& rect)
         const QPointF drawingOrigin = QPointF(originSize.width(), originSize.height());
         const QRect drawingRect = QRect(drawingOrigin.toPoint(), drawingSize.toSize());
 
-//        qDebug() << "Bg image scale 2 " << ps << " : " << p->newPix.size();
+//        qDebug() << "Bg image scale 2" << ps << ":" << p->newPix.size();
         if (ps*ratio != drawingRect.size())
             pms = p->newPix.copy(drawingRect).scaled(ps*ratio);
         else
@@ -762,7 +762,7 @@ QRect ImageMapLayer::drawFull(MapView& theView, QRect& rect)
         } else if (p->theMapAdapter->getType() == IMapAdapter::NetworkDataBackground) {
 //            QString url (p->theMapAdapter->getQuery(wgs84vp, vp, rect));
 //            if (!url.isEmpty()) {
-//                qDebug() << "ImageMapLayer::drawFull: getting: " << url;
+//                qDebug() << "ImageMapLayer::drawFull: getting:" << url;
 //                QByteArray ba = p->theMapAdapter->getImageManager()->getData(p->theMapAdapter,url);
 //                QDomDocument* theXmlDoc = new QDomDocument();
 //                theXmlDoc->setContent(ba);
@@ -822,7 +822,7 @@ QRect ImageMapLayer::drawFull(MapView& theView, QRect& rect)
         } else if (p->theMapAdapter->getType() == IMapAdapter::NetworkBackground || p->theMapAdapter->getType() == IMapAdapter::BrowserBackground) {
             QString url (p->theMapAdapter->getQuery(wgs84vp, vp, rect));
             if (!url.isEmpty()) {
-                //qDebug() << "ImageMapLayer::drawFull: getting: " << url;
+                //qDebug() << "ImageMapLayer::drawFull: getting:" << url;
                 QPixmap pm = QPixmap::fromImage(p->theMapAdapter->getImageManager()->getImage(p->theMapAdapter,url));
                 if (!pm.isNull()) {
                     p->curPix = QPixmap();
@@ -918,11 +918,11 @@ QRect ImageMapLayer::drawTiled(MapView& theView, QRect& rect)
     QPointF vpCenter0 = QPointF(vpCenter.x()-p->theMapAdapter->getBoundingbox().left(), p->theMapAdapter->getBoundingbox().bottom()-vpCenter.y());
     qreal mapmiddle_tile_x = qRound(vpCenter0.x()/tileWidth);
     qreal mapmiddle_tile_y = qRound(vpCenter0.y()/tileHeight);
-    //qDebug() << "z: " << p->theMapAdapter->getAdaptedZoom() << "; t_x: " << mapmiddle_tile_x << "; t_y: " << mapmiddle_tile_y ;
+    //qDebug() << "z:" << p->theMapAdapter->getAdaptedZoom() << "; t_x:" << mapmiddle_tile_x << "; t_y:" << mapmiddle_tile_y ;
 
     qreal cross_x = vpCenter0.x() - mapmiddle_tile_x*tileWidth;		// position on middle tile
     qreal cross_y = vpCenter0.y() - mapmiddle_tile_y*tileHeight;
-    //qDebug() << "cross_x: " << cross_x << "; cross_y: " << cross_y;
+    //qDebug() << "cross_x:" << cross_x << "; cross_y:" << cross_y;
 
         // calculate how many surrounding tiles have to be drawn to fill the display
     qreal space_left = vp0Center.x() - cross_x;
@@ -954,7 +954,7 @@ QRect ImageMapLayer::drawTiled(MapView& theView, QRect& rect)
     QPainter painter(&p->newPix);
 //    painter.drawPixmap(0, 0, tmpPm);
 
-//    qDebug() << "Tiles: " << tiles_right+tiles_left+1 << "x" << tiles_bottom+tiles_above+1;
+//    qDebug() << "Tiles:" << tiles_right+tiles_left+1 << "x" << tiles_bottom+tiles_above+1;
     for (i=-tiles_left; i<=tiles_right; i++)
     {
         for (j=-tiles_above; j<=tiles_bottom; j++)
@@ -989,10 +989,10 @@ QRect ImageMapLayer::drawTiled(MapView& theView, QRect& rect)
     }
     painter.end();
 
-//    qDebug() << "tl: " << tl << "; br: " << br;
-//    qDebug() << "vp: " << projVp;
-    //    qDebug() << "vlm: " << vlm;
-    //qDebug() << "retRect: " << retRect;
+//    qDebug() << "tl:" << tl << "; br:" << br;
+//    qDebug() << "vp:" << projVp;
+    //    qDebug() << "vlm:" << vlm;
+    //qDebug() << "retRect:" << retRect;
 //    QRect expR = QRect(-retRect.left(), -retRect.top(), retRect.width()+retRect.left(), retRect.height()+retRect.top());
 //    p->newPix.save("c:/tmp.png");
 //    p->newPix.copy(expR).save("c:/tmp2.png");

@@ -241,7 +241,7 @@ void TMSPreferencesDialog::on_btGetServices_clicked()
 
 QNetworkReply* TMSPreferencesDialog::sendRequest(QUrl url)
 {
-    qDebug() << "TMS: Sending request to " << url;
+    qDebug() << "TMS: Sending request to" << url;
     QNetworkRequest req(url);
     req.setRawHeader(QByteArray("User-Agent"), USER_AGENT.toLatin1());
 
@@ -282,7 +282,7 @@ void TMSPreferencesDialog::httpRequestFinished( QNetworkReply *reply)
     if (reply->error()) {
         if (reply->error() != QNetworkReply::OperationCanceledError) {
             QMessageBox::critical(this, tr("Merkaartor: GetServices"), tr("Error reading services. The server probably does not support this feature.\n"), QMessageBox::Ok);
-            qDebug() << "TMS GetServices error: " << reply->errorString();
+            qDebug() << "TMS GetServices error:" << reply->errorString();
         }
         return;
     }

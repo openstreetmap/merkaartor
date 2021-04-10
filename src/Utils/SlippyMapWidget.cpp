@@ -501,7 +501,7 @@ void SlippyMapCache::startDownload()
             Queue.erase(Queue.begin());
             QUrl reqUrl(baseUrl);
             reqUrl.setPath(QString("/%1/%2/%3.png").arg(DownloadCoord.Zoom).arg(DownloadCoord.X).arg(DownloadCoord.Y));
-            //qDebug() << "Starting download with url: " << reqUrl;
+            //qDebug() << "Starting download with url:" << reqUrl;
             QNetworkRequest req(reqUrl);
             req.setRawHeader(QByteArray("User-Agent"), USER_AGENT.toLatin1());
             DownloadReply = Download.get(req);

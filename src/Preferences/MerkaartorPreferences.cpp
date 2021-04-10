@@ -1397,6 +1397,7 @@ void MerkaartorPreferences::loadProjectionsFromFile(QString fileName)
     QFile file(fileName);
     if (!file.open(QIODevice::ReadOnly)) {
 //      QMessageBox::critical(this, tr("Invalid file"), tr("%1 could not be opened.").arg(fileName));
+        qDebug() << "  missing";
         return;
     }
 
@@ -1404,6 +1405,7 @@ void MerkaartorPreferences::loadProjectionsFromFile(QString fileName)
     if (!theXmlDoc.setContent(&file)) {
 //		QMessageBox::critical(this, tr("Invalid file"), tr("%1 is not a valid XML file.").arg(fileName));
         file.close();
+        qDebug() << "  not proper XML";
         return;
     }
     file.close();
@@ -1417,7 +1419,7 @@ void MerkaartorPreferences::loadProjections()
 {
     const QStringList paths = getPreferenceFilePaths("Projections.xml");
     for (QStringList::const_iterator i = paths.begin(); i != paths.end(); ++i) {
-	loadProjectionsFromFile(*i);
+        loadProjectionsFromFile(*i);
     }
 }
 
@@ -1449,12 +1451,14 @@ void MerkaartorPreferences::loadFiltersFromFile(QString fileName)
     qDebug(lc_MerkaartorPreferences) << "loadFiltersFromFile " << fileName;
     QFile file(fileName);
     if (!file.open(QIODevice::ReadOnly)) {
+        qDebug() << "  missing";
         return;
     }
 
     QDomDocument theXmlDoc;
     if (!theXmlDoc.setContent(&file)) {
         file.close();
+        qDebug() << "  not proper XML";
         return;
     }
     file.close();

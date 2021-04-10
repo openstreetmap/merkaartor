@@ -589,8 +589,8 @@ bool QGPSDevice::parseGSV(const char *gsvString)
     currentSentence = tokens[2].toInt();
     totalSatellites = tokens[3].toInt();
 
-    qDebug() << "Parsing GSV string " << gsvString;
-    qDebug() << " --> sentence " << currentSentence << " of " << totalSentences << ", " << totalSatellites << " total satellites in view";
+    qDebug() << "Parsing GSV string" << gsvString;
+    qDebug() << " --> sentence" << currentSentence << "of " << totalSentences << "," << totalSatellites << "total satellites in view";
 
     for(int i = 0; (i < 4) && ((i*4)+4+3 < tokens.size()); i ++) {
         prn = tokens[(i*4)+4].toInt();
@@ -1018,7 +1018,7 @@ void QGPSDDevice::onDataAvailable()
        if (!gpsdata)
            {
            QString msg( (errno==0) ? "socket to gpsd was closed" : strerror(errno) );
-           qDebug() << "gpsmm::read() failed: " << msg;
+           qDebug() << "gpsmm::read() failed:" << msg;
            serverOk = false;
            return;
            }
@@ -1098,7 +1098,7 @@ void QGPSDDevice::onLinkReady()
     gpsdata = Server->stream(WATCH_ENABLE);
 #ifndef Q_OS_WIN32
     if ( gpsdata == 0 )
-        qDebug() << "gpsmm::stream() failed: " << gps_errstr(errno) << '\n';
+        qDebug() << "gpsmm::stream() failed:" << gps_errstr(errno) << '\n';
 #endif
 #else
     gpsdata = Server->query("w+x\n");
@@ -1190,7 +1190,7 @@ void QGPSDDevice::onDataAvailable()
 
 void QGPSDDevice::parse(const QString& s)
 {
-    qDebug() << "parsing " << s.toUtf8().data() << "*";
+    qDebug() << "parsing" << s.toUtf8().data() << "*";
     QStringList Args(s.split(',',QString::SkipEmptyParts));
     for (int i=0; i<Args.count(); ++i)
     {

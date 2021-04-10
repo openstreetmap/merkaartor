@@ -146,7 +146,7 @@ void NativeRenderDialog::renderPreview(QPrinter* printer)
     QPainter P(printer);
     P.setRenderHint(QPainter::Antialiasing);
     QRect theR = printer->pageRect();
-    qDebug() << "Rendering preview to: " << theR;
+    qDebug() << "Rendering preview to:" << theR;
     theR.moveTo(0, 0);
     render(P, theR, options());
 }

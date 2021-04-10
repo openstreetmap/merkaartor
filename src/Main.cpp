@@ -69,6 +69,21 @@ void loadPluginsFromDir( QDir & pluginsDir ) {
     }
 }
 
+void debugMessageHandler(QtMsgType, const QMessageLogContext&, const QString &msg)
+{
+    if (pLogFile) {
+        const auto bytes = msg.toUtf8();
+        fwrite(bytes.constData(), 1, bytes.size(), pLogFile);
+#if defined(Q_OS_UNIX)
+        constexpr const char * newline = " \n";
+#else
+        constexpr const char * newline = "\r\n";
+#endif
+        fwrite(newline, 1, 2, pLogFile);
+        fflush(pLogFile);
+    }
+}
+
 int main(int argc, char** argv)
 {
     QtSingleApplication instance(argc,argv);
@@ -137,9 +152,10 @@ int main(int argc, char** argv)
             fileNames.append(argsOut[i]);
     }
 
-    if (!logFilename.isNull())
+    if (!logFilename.isNull()) {
         pLogFile = fopen(logFilename.toLatin1(), "a");
-    /* FIXME: use the file for logging. */
+        qInstallMessageHandler(debugMessageHandler);
+    }
 
     qInfo(lc_Main) << "**** " << QDateTime::currentDateTime().toString(Qt::ISODate) << " -- Starting " << QString("%1 %2").arg(qApp->applicationName()).arg(STRINGIFY(VERSION));
     qInfo(lc_Main) <<	"-------" << QString("using Qt version %1 (built with %2)").arg(qVersion()).arg(QT_VERSION_STR);
