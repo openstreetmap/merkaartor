@@ -10,7 +10,7 @@ public:
     virtual ~IProjection(void) {};
 
     virtual QPointF project(const QPointF& pt) const = 0;
-    virtual QPointF inverse2Point(const QPointF& pt) const = 0;
+    virtual QPointF inverse(const QPointF& pt) const = 0;
 
     virtual QString getProjectionType() const = 0;
 };
