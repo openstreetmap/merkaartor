@@ -35,13 +35,6 @@ CMake build is experimental and may be missing some features. Please use qmake f
 
 # TODO: Add support for sanitizers
 
-add_definitions(-DZBAR=1) # MWalkingPapersBackground, Geoimage; actual macro is USE_ZBAR
-# TODO: Check and remove or implement defines from code: PORTABLE, FRISIUS, NVIDIA_HACK, MOBILE, LIBPROXY, SYSTEM_QTSA
-add_definitions(-DGEOIMAGE=1)
-add_definitions(-DGPSDLIB=1) # Actual macro is USE_GPS
-add_definitions(-DUSEWEBENGINE=1) # Actual macro is USE_WEBKIT
-# add_definitions(-DTHREADED_BROWSERIMAGEMANAGER=1) # TODO: Check if that even does something/works
-
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 # Find includes in corresponding build directories
@@ -482,10 +475,50 @@ install( FILES ${QM_FILES} DESTINATION share/merkaartor/translations )
 find_program(LUPDATE lupdate)
 add_custom_target(update-translations COMMAND ${LUPDATE} ${CMAKE_SOURCE_DIR}/src ${CMAKE_SOURCE_DIR}/plugins -ts ${TS_FILES})
 
-# Find the QtWidgets library
-find_package(Qt5 COMPONENTS Svg Network Xml Core Gui Concurrent PrintSupport Widgets Test CONFIG REQUIRED)
+
+##############################################
+# Find 3rd party libraries, depending on options provided
+##############################################
+
+# We need GDAL and proj for core functionality
+set(PKGCONFIG_REQUIRED_LIBS gdal proj)
+
+option(ZBAR     "Enable ZBar usage in MWalkingPapersBackground and Geoimage."  OFF)
+option(GEOIMAGE "Enable Geoimage Dock (requires exiv2 library)."               ON )
+option(GPSD     "Enable GPS Dock (requires gpsd library)."                     OFF)
+option(WEBENGINE "Enable the use of QtWeb engine (not supported on all platforms)" OFF)
+
+message(STATUS "Build options:")
+message(STATUS " * ZBAR        ${ZBAR}")
+message(STATUS " * GEOIMAGE    ${GEOIMAGE}")
+message(STATUS " * GPSD        ${GPSD}")
+message(STATUS " * WEBENGINE   ${WEBENGINE}")
+message(STATUS "")
+
+if (ZBAR)
+    list(APPEND PKGCONFIG_REQUIRED_LIBS zbar)
+    add_definitions(-DUSE_ZBAR=1) # MWalkingPapersBackground, Geoimage; actual macro is USE_ZBAR
+endif()
+
+if (GEOIMAGE)
+    list(APPEND PKGCONFIG_REQUIRED_LIBS exiv2)
+    add_definitions(-DGEOIMAGE=1)
+endif()
+
+if (GPSD)
+    list(APPEND PKGCONFIG_REQUIRED_LIBS gpsd)
+    add_definitions(-DUSE_GPS=1)
+endif()
+
+if (WEBENGINE)
+    add_definitions(-DUSEWEBENGINE=1) # Actual macro is USE_WEBKIT
+    # add_definitions(-DTHREADED_BROWSERIMAGEMANAGER=1) # TODO: Check if that even does something/works
+endif()
+
+
+# TODO: Check and remove or implement defines from code: PORTABLE, FRISIUS, NVIDIA_HACK, MOBILE, LIBPROXY, SYSTEM_QTSA
 find_package(PkgConfig REQUIRED)
-pkg_check_modules(PKGCONFIG_DEPS REQUIRED exiv2 gdal proj)
+pkg_check_modules(PKGCONFIG_DEPS REQUIRED ${PKGCONFIG_REQUIRED_LIBS})
 message("pkg-config dependencies require the following flags:")
 message("LDFLAGS:          ${PKGCONFIG_DEPS_LDFLAGS}")
 message("LDFLAGS_OTHER:    ${PKGCONFIG_DEPS_LDFLAGS_OTHER}")
@@ -496,15 +529,20 @@ message("LINK DIRECTORIES: ${PKGCONFIG_DEPS_LIBRARY_DIRS}")
 
 link_directories(${PKGCONFIG_DEPS_LIBRARY_DIRS})
 
+
+
+##############################################
+# Find Qt dependencies
+##############################################
+find_package(Qt5 COMPONENTS Svg Network Xml Core Gui Concurrent PrintSupport Widgets Test CONFIG REQUIRED)
+set(MERKAARTOR_LINK_LIBS Qt5::Svg Qt5::Network Qt5::Xml Qt5::Core Qt5::Gui Qt5::Concurrent Qt5::PrintSupport Qt5::Widgets ${PKGCONFIG_DEPS_LIBRARIES})
+
+##############################################
+# Create the Merkaartor binary
+##############################################
 set(MERKAARTOR_OSX_ICON_FILE "${CMAKE_SOURCE_DIR}/Icons/merkaartor.icns")
 set_source_files_properties(${MERKAARTOR_OSX_ICON_FILE} PROPERTIES MACOSX_PACKAGE_LOCATION "Resources")
-#set_target_properties(${PROJECT_NAME} PROPERTIES RESOURCE ${MERKAARTOR_OSX_ICON_FILE})
-
-
-# Tell CMake to create the helloworld executable
 add_executable(${PROJECT_NAME} WIN32 MACOSX_BUNDLE ${merkaartor_SRCS} src/Main.cpp ${MERKAARTOR_OSX_ICON_FILE} ${QM_FILES})
-# Use the Widgets module from Qt 5
-set(MERKAARTOR_LINK_LIBS Qt5::Svg Qt5::Network Qt5::Xml Qt5::Core Qt5::Gui Qt5::Concurrent Qt5::PrintSupport Qt5::Widgets ${PKGCONFIG_DEPS_LIBRARIES})
 target_link_libraries(merkaartor ${MERKAARTOR_LINK_LIBS} )
 target_compile_options(merkaartor PUBLIC ${PKGCONFIG_DEPS_CFLAGS})
 install( TARGETS merkaartor RUNTIME DESTINATION bin BUNDLE DESTINATION .)
