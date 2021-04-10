@@ -21,7 +21,6 @@ foreach(DLL_FILE IN LISTS MERKAARTOR_DLL_DEPS_LIST)
     file( COPY ${DLL_FILE} DESTINATION ${DLL_FILE_DEST} )
   endif()
 endforeach()
-endif()
 
 # Remove when done debugging
 get_cmake_property(_variableNames VARIABLES)
