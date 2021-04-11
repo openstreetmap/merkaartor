@@ -328,7 +328,6 @@ bool ImportExportGdal::importGDALDataset(GDALDataset* poDS, Layer* aLayer, bool 
 {
     int ogrError;
 
-    qDebug("GDAL: couldn't initialise WGS84: %s", CPLGetLastErrorMsg());
     OGRSpatialReference wgs84srs;
     if (wgs84srs.SetWellKnownGeogCS("WGS84") != OGRERR_NONE) {
         qDebug("GDAL: couldn't initialise WGS84: %s", CPLGetLastErrorMsg());
@@ -343,6 +342,7 @@ bool ImportExportGdal::importGDALDataset(GDALDataset* poDS, Layer* aLayer, bool 
 
     if (theSrs) {
         // Workaround for OSGB - otherwise its datum is ignored (TODO: why?)
+        // TODO: Is it necessary with current GDAL versions? The hack is pretty ancient.
         QString gcs = theSrs->GetAttrValue("GEOGCS");
         if (gcs == "GCS_OSGB_1936" || gcs == "OSGB 1936") {
             qDebug(lc_importExportGdal) << "GDAL: substituting GCS_OSGB_1936 with EPSG:27700";
@@ -357,44 +357,7 @@ bool ImportExportGdal::importGDALDataset(GDALDataset* poDS, Layer* aLayer, bool 
         }
     }
 
-    QString sPrj;
-    QString projTitle;
-
-    if (theSrs) {
-        theSrs->morphFromESRI();
-
-        char* cTheProj;
-        if (theSrs->exportToProj4(&cTheProj) == OGRERR_NONE) {
-            sPrj = QString(cTheProj);
-            CPLFree(cTheProj);
-        } else {
-            if (theSrs->exportToWkt(&cTheProj) == OGRERR_NONE) {
-                sPrj = QString(cTheProj);
-                CPLFree(cTheProj);
-            }
-        }
-        projTitle = QCoreApplication::translate("ImportExportGdal", "Confirm projection");
-    } else {
-        projTitle = QCoreApplication::translate("ImportExportGdal", "Unable to set projection; please specify one");
-    }
-
-    if (!theSrs || confirmProjection) {
-#ifndef _MOBILE
-        QApplication::restoreOverrideCursor();
-#endif
-        sPrj = ProjectionChooser::getProjection(projTitle, true, sPrj);
-        qDebug() << sPrj;
-#ifndef _MOBILE
-        QApplication::setOverrideCursor(Qt::BusyCursor);
-#endif
-
-        if (sPrj.isEmpty()) {
-            return false;
-        }
-    }
-
-    theSrs = new OGRSpatialReference();
-    theSrs->importFromProj4(sPrj.toLatin1().data());
+    theSrs = poLayer->GetSpatialRef();
     toWGS84 = OGRCreateCoordinateTransformation(theSrs, &wgs84srs);
     if (!toWGS84)
         return false;

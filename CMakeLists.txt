@@ -681,3 +681,21 @@ function(MERK_ADD_TEST test_name)
 endfunction()
 
 MERK_ADD_TEST(test-projection src/common/Projection.cpp src/common/Coord.cpp)
+
+
+# Additional tests that use the main executable
+add_test(NAME "import-geojson" COMMAND ${PROJECT_NAME} --test-import ${CMAKE_SOURCE_DIR}/tests/data/sample.geojson)
+add_test(NAME "import-shapefile-point" COMMAND ${PROJECT_NAME} --test-import ${CMAKE_SOURCE_DIR}/tests/data/sample-shapefile/POINT.shp)
+add_test(NAME "import-shapefile-polygon" COMMAND ${PROJECT_NAME} --test-import ${CMAKE_SOURCE_DIR}/tests/data/sample-shapefile/POLYGON.shp)
+add_test(NAME "import-shapefile-polyline" COMMAND ${PROJECT_NAME} --test-import ${CMAKE_SOURCE_DIR}/tests/data/sample-shapefile/POLYLINE.shp)
+
+if (CMAKE_SYSTEM_NAME MATCHES "Linux")
+# Use the offscreen platform for tests with GUI to avoid opening/closing the windows. However, the platform is only supported by Qt on Linux
+set_tests_properties(
+    import-geojson
+    import-shapefile-point
+    import-shapefile-polygon
+    import-shapefile-polyline
+    PROPERTIES ENVIRONMENT QT_QPA_PLATFORM=offscreen
+    )
+endif()
