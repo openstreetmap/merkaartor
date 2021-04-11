@@ -643,6 +643,15 @@ if (WIN32)
   set (CPACK_NSIS_ENABLE_UNINSTALL_BEFORE_INSTALL ON)
   set (CPACK_NSIS_URL_INFO_ABOUT "http://merkaartor.be")
 
+  # Workaround for NSIS bug in CMake that creates and checks only 32bit keys even for 64bit installers.
+  # https://gitlab.kitware.com/cmake/cmake/-/issues/21960
+  # Will be fixed by PR:
+  # https://gitlab.kitware.com/cmake/cmake/-/merge_requests/5952
+  set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake/ModulesOverride")
+  set(CPACK_NSIS_REGISTRY_VIEW 64)
+  set(CPACK_NSIS_ENABLE_UNINSTALL_DONT_CHECK_32 ON)
+  # End of workaround
+
   find_program(WINDEPLOYQT windeployqt)
   find_program(CYGCHECK cygcheck)
   configure_file("${PROJECT_SOURCE_DIR}/cmake/deploy-windows.cmake.in" "${CMAKE_BINARY_DIR}/deploy-windows.cmake" @ONLY)
