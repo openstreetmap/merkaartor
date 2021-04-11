@@ -649,22 +649,6 @@ if (WIN32)
   set (CPACK_PRE_BUILD_SCRIPTS "${CMAKE_BINARY_DIR}/deploy-windows.cmake")
 
   set (CPACK_GENERATOR "ZIP;NSIS")
-
-# Copy some dependencies
-execute_process(COMMAND pacman -Qlq mingw-w64-x86_64-gdal mingw-w64-x86_64-proj mingw-w64-x86_64-exiv2 OUTPUT_VARIABLE GDAL_FILES OUTPUT_STRIP_TRAILING_WHITESPACE)
-string(REPLACE "\n" ";" GDAL_FILES_LIST ${GDAL_FILES})
-foreach(GDAL_FILE IN LISTS GDAL_FILES_LIST)
-  if (${GDAL_FILE} MATCHES "/include/|/man/|/$|.a$|.pc$|.cmake$")
-    message("skipping file '${GDAL_FILE}'")
-  else()
-    string(REGEX REPLACE "^/mingw64/" "" GDAL_FILE_DEST "${GDAL_FILE}")
-    string(REGEX REPLACE "/[^/]*$" "" GDAL_FILE_DEST "${GDAL_FILE_DEST}")
-    execute_process(COMMAND cygpath -w "${GDAL_FILE}" OUTPUT_VARIABLE GDAL_FILE_W OUTPUT_STRIP_TRAILING_WHITESPACE)
-    string(REGEX REPLACE "\\\\" "/" GDAL_FILE_W "${GDAL_FILE_W}")
-    message("installing file '${GDAL_FILE}' (${GDAL_FILE_W}) into ${GDAL_FILE_DEST}")
-    install( FILES ${GDAL_FILE_W} DESTINATION ${GDAL_FILE_DEST} )
-  endif()
-endforeach()
 endif()
 
 include(CPack)
