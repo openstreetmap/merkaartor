@@ -5,7 +5,7 @@ message(STATUS "Configuring Merkaartor ${VCS_VERSION}, commit: ${VCS_COMMIT}, di
 
 # Set a default build type if none was specified
 if(NOT CMAKE_BUILD_TYPE AND NOT CMAKE_CONFIGURATION_TYPES)
-    set(MERK_DEFAULT_BUILD_TYPE "Debug")
+  set(MERK_DEFAULT_BUILD_TYPE "Debug")
   message(STATUS "Setting build type to '${MERK_DEFAULT_BUILD_TYPE}' as none was specified.")
   set(CMAKE_BUILD_TYPE "${MERK_DEFAULT_BUILD_TYPE}" CACHE STRING "Choose the type of build." FORCE)
   # Set the possible values of build type for cmake-gui
