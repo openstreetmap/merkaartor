@@ -4,9 +4,28 @@ set(CYGCHECK "@CYGCHECK@")
 message("Found windeployqt: ${WINDEPLOYQT}")
 set(MERKAARTOR_BINARY "${CPACK_TEMPORARY_INSTALL_DIRECTORY}/bin/merkaartor.exe")
 message("Working on binary: ${MERKAARTOR_BINARY}")
-execute_process(COMMAND ${WINDEPLOYQT} --compiler-runtime ${MERKAARTOR_BINARY})
-execute_process(COMMAND ${CYGCHECK} ${MERKAARTOR_BINARY} OUTPUT_VARIABLE MERKAARTOR_DLL_DEPS OUTPUT_STRIP_TRAILING_WHITESPACE)
 
+# Copy whole packages of gdal and proj, as they need other files than dlls to work!
+execute_process(COMMAND pacman -Qlq mingw-w64-x86_64-gdal mingw-w64-x86_64-proj OUTPUT_VARIABLE DEP_PKGS_FILES OUTPUT_STRIP_TRAILING_WHITESPACE)
+string(REPLACE "\n" ";" DEP_PKGS_FILES_LIST ${DEP_PKGS_FILES})
+foreach(DEP_PKGS_FILE IN LISTS DEP_PKGS_FILES_LIST)
+  if (${DEP_PKGS_FILE} MATCHES "/include/|/man/|/$|.a$|.pc$|.cmake$")
+    message("skipping file '${DEP_PKGS_FILE}'")
+  else()
+    string(REGEX REPLACE "^/mingw64/" "" DEP_PKGS_FILE_DEST "${DEP_PKGS_FILE}")
+    string(REGEX REPLACE "/[^/]*$" "" DEP_PKGS_FILE_DEST "${DEP_PKGS_FILE_DEST}")
+    execute_process(COMMAND cygpath -w "${DEP_PKGS_FILE}" OUTPUT_VARIABLE DEP_PKGS_FILE_W OUTPUT_STRIP_TRAILING_WHITESPACE)
+    string(REGEX REPLACE "\\\\" "/" DEP_PKGS_FILE_W "${DEP_PKGS_FILE_W}")
+    message("installing file '${DEP_PKGS_FILE}' (${DEP_PKGS_FILE_W}) into ${DEP_PKGS_FILE_DEST}")
+    file(COPY ${DEP_PKGS_FILE_W} DESTINATION ${CPACK_TEMPORARY_INSTALL_DIRECTORY}/${DEP_PKGS_FILE_DEST})
+  endif()
+endforeach()
+
+# Run Windeployqt to handle Qt libraries, including plugins
+execute_process(COMMAND ${WINDEPLOYQT} --compiler-runtime ${MERKAARTOR_BINARY})
+
+# Copy all required dlls into the package, skipping those residing in Windows installation
+execute_process(COMMAND ${CYGCHECK} ${MERKAARTOR_BINARY} OUTPUT_VARIABLE MERKAARTOR_DLL_DEPS OUTPUT_STRIP_TRAILING_WHITESPACE)
 string(REPLACE "\n" ";" MERKAARTOR_DLL_DEPS_LIST ${MERKAARTOR_DLL_DEPS})
 message("Dependencies: ${MERKAARTOR_DLL_DEPS_LIST}")
 foreach(DLL_FILE IN LISTS MERKAARTOR_DLL_DEPS_LIST)

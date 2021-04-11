@@ -489,7 +489,7 @@ option(GPSD        "Enable GPS Dock (requires gpsd library)."                   
 option(WEBENGINE   "Enable the use of QtWeb engine (not supported on all platforms)"  OFF)
 option(EXTRA_TESTS "Enable extra tests that cannot be run automatically on CI build." ON )
 
-message(STATUS "Build options:")
+message(STATUS "Build options (use -DOPT=ON/OFF to enable/disable):")
 message(STATUS " * ZBAR        ${ZBAR}")
 message(STATUS " * GEOIMAGE    ${GEOIMAGE}")
 message(STATUS " * GPSD        ${GPSD}")
@@ -521,12 +521,13 @@ endif()
 # TODO: Check and remove or implement defines from code: PORTABLE, FRISIUS, NVIDIA_HACK, MOBILE, LIBPROXY, SYSTEM_QTSA
 find_package(PkgConfig REQUIRED)
 pkg_check_modules(PKGCONFIG_DEPS REQUIRED ${PKGCONFIG_REQUIRED_LIBS})
-message("pkg-config dependencies require the following flags:")
-message("LDFLAGS:          ${PKGCONFIG_DEPS_LDFLAGS}")
-message("LDFLAGS_OTHER:    ${PKGCONFIG_DEPS_LDFLAGS_OTHER}")
-message("CFLAGS:           ${PKGCONFIG_DEPS_CFLAGS}")
-message("CFLAGS_OTHER:     ${PKGCONFIG_DEPS_CFLAGS_OTHER}")
-message("LINK DIRECTORIES: ${PKGCONFIG_DEPS_LIBRARY_DIRS}")
+message(STATUS "pkg-config dependencies require the following flags:")
+message(STATUS " * LDFLAGS:          ${PKGCONFIG_DEPS_LDFLAGS}")
+message(STATUS " * LDFLAGS_OTHER:    ${PKGCONFIG_DEPS_LDFLAGS_OTHER}")
+message(STATUS " * CFLAGS:           ${PKGCONFIG_DEPS_CFLAGS}")
+message(STATUS " * CFLAGS_OTHER:     ${PKGCONFIG_DEPS_CFLAGS_OTHER}")
+message(STATUS " * LINK DIRECTORIES: ${PKGCONFIG_DEPS_LIBRARY_DIRS}")
+message(STATUS "")
 
 
 link_directories(${PKGCONFIG_DEPS_LIBRARY_DIRS})
@@ -636,36 +637,29 @@ endif()
 # Windows specific deploy scripts
 ##############################################
 if (WIN32)
-set (CPACK_VERBATIM_VARIABLES ON)
-set (CPACK_NSIS_MUI_ICON "${CMAKE_SOURCE_DIR}/Icons/Merkaartor_48x48.ico")
-set (CPACK_NSIS_MUI_WELCOMEFINISHPAGE_BITMAP "${CMAKE_SOURCE_DIR}/Icons/Merkaartor_installer.bmp")
-string(REGEX REPLACE "/" "\\\\" CPACK_NSIS_MUI_ICON "${CPACK_NSIS_MUI_ICON}")
-string(REGEX REPLACE "/" "\\\\" CPACK_NSIS_MUI_WELCOMEFINISHPAGE_BITMAP "${CPACK_NSIS_MUI_WELCOMEFINISHPAGE_BITMAP}")
-set (CPACK_NSIS_ENABLE_UNINSTALL_BEFORE_INSTALL ON)
-set (CPACK_NSIS_URL_INFO_ABOUT "http://merkaartor.be")
+  set (CPACK_VERBATIM_VARIABLES ON)
+  set (CPACK_NSIS_MUI_ICON "${CMAKE_SOURCE_DIR}/Icons/Merkaartor_48x48.ico")
+  set (CPACK_NSIS_MUI_WELCOMEFINISHPAGE_BITMAP "${CMAKE_SOURCE_DIR}/Icons/Merkaartor_installer.bmp")
+  string(REGEX REPLACE "/" "\\\\" CPACK_NSIS_MUI_ICON "${CPACK_NSIS_MUI_ICON}")
+  string(REGEX REPLACE "/" "\\\\" CPACK_NSIS_MUI_WELCOMEFINISHPAGE_BITMAP "${CPACK_NSIS_MUI_WELCOMEFINISHPAGE_BITMAP}")
+  set (CPACK_NSIS_ENABLE_UNINSTALL_BEFORE_INSTALL ON)
+  set (CPACK_NSIS_URL_INFO_ABOUT "http://merkaartor.be")
 
-find_program(WINDEPLOYQT windeployqt)
-find_program(CYGCHECK cygcheck)
-configure_file("${PROJECT_SOURCE_DIR}/cmake/deploy-windows.cmake.in" "${CMAKE_BINARY_DIR}/deploy-windows.cmake" @ONLY)
-set (CPACK_PRE_BUILD_SCRIPTS "${CMAKE_BINARY_DIR}/deploy-windows.cmake")
+  # Workaround for NSIS bug in CMake that creates and checks only 32bit keys even for 64bit installers.
+  # https://gitlab.kitware.com/cmake/cmake/-/issues/21960
+  # Will be fixed by PR:
+  # https://gitlab.kitware.com/cmake/cmake/-/merge_requests/5952
+  set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake/ModulesOverride")
+  set(CPACK_NSIS_REGISTRY_VIEW 64)
+  set(CPACK_NSIS_ENABLE_UNINSTALL_DONT_CHECK_32 ON)
+  # End of workaround
 
-set (CPACK_GENERATOR "ZIP;NSIS")
+  find_program(WINDEPLOYQT windeployqt)
+  find_program(CYGCHECK cygcheck)
+  configure_file("${PROJECT_SOURCE_DIR}/cmake/deploy-windows.cmake.in" "${CMAKE_BINARY_DIR}/deploy-windows.cmake" @ONLY)
+  set (CPACK_PRE_BUILD_SCRIPTS "${CMAKE_BINARY_DIR}/deploy-windows.cmake")
 
-# Copy some dependencies
-execute_process(COMMAND pacman -Qlq mingw-w64-x86_64-gdal mingw-w64-x86_64-proj mingw-w64-x86_64-exiv2 OUTPUT_VARIABLE GDAL_FILES OUTPUT_STRIP_TRAILING_WHITESPACE)
-string(REPLACE "\n" ";" GDAL_FILES_LIST ${GDAL_FILES})
-foreach(GDAL_FILE IN LISTS GDAL_FILES_LIST)
-  if (${GDAL_FILE} MATCHES "/include/|/man/|/$|.a$|.pc$|.cmake$")
-    message("skipping file '${GDAL_FILE}'")
-  else()
-    string(REGEX REPLACE "^/mingw64/" "" GDAL_FILE_DEST "${GDAL_FILE}")
-    string(REGEX REPLACE "/[^/]*$" "" GDAL_FILE_DEST "${GDAL_FILE_DEST}")
-    execute_process(COMMAND cygpath -w "${GDAL_FILE}" OUTPUT_VARIABLE GDAL_FILE_W OUTPUT_STRIP_TRAILING_WHITESPACE)
-    string(REGEX REPLACE "\\\\" "/" GDAL_FILE_W "${GDAL_FILE_W}")
-    message("installing file '${GDAL_FILE}' (${GDAL_FILE_W}) into ${GDAL_FILE_DEST}")
-    install( FILES ${GDAL_FILE_W} DESTINATION ${GDAL_FILE_DEST} )
-  endif()
-endforeach()
+  set (CPACK_GENERATOR "ZIP;NSIS")
 endif()
 
 include(CPack)
