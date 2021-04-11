@@ -6,6 +6,6 @@ set -ev
 
 mkdir build && cd build
 # Note: We need to specify the system cmake, as travis has older version in PATH before the system paths for some reason.
-/usr/bin/cmake .. -DCMAKE_BUILD_TYPE=Release
+/usr/bin/cmake .. -DCMAKE_BUILD_TYPE=Release -DEXTRA_TESTS=OFF
 make -j3
 QT_QPA_PLATFORM=offscreen ctest --verbose
