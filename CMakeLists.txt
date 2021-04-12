@@ -541,9 +541,16 @@ set(MERKAARTOR_LINK_LIBS Qt5::Svg Qt5::Network Qt5::Xml Qt5::Core Qt5::Gui Qt5::
 ##############################################
 # Create the Merkaartor binary
 ##############################################
-set(MERKAARTOR_OSX_ICON_FILE "${CMAKE_SOURCE_DIR}/Icons/merkaartor.icns")
-set_source_files_properties(${MERKAARTOR_OSX_ICON_FILE} PROPERTIES MACOSX_PACKAGE_LOCATION "Resources")
-add_executable(${PROJECT_NAME} WIN32 MACOSX_BUNDLE ${merkaartor_SRCS} src/Main.cpp ${MERKAARTOR_OSX_ICON_FILE} ${QM_FILES})
+if (APPLE)
+  set(MERKAARTOR_ICON_FILE "${CMAKE_SOURCE_DIR}/Icons/merkaartor.icns")
+  set_source_files_properties(${MERKAARTOR_ICON_FILE} PROPERTIES MACOSX_PACKAGE_LOCATION "Resources")
+endif()
+
+if (WIN32)
+  set(MERKAARTOR_ICON_FILE "${CMAKE_SOURCE_DIR}/Icons/merkaartor-win32.rc")
+endif()
+
+add_executable(${PROJECT_NAME} WIN32 MACOSX_BUNDLE ${merkaartor_SRCS} src/Main.cpp ${MERKAARTOR_ICON_FILE} ${QM_FILES})
 target_link_libraries(merkaartor ${MERKAARTOR_LINK_LIBS} )
 target_compile_options(merkaartor PUBLIC ${PKGCONFIG_DEPS_CFLAGS})
 install( TARGETS merkaartor RUNTIME DESTINATION bin BUNDLE DESTINATION .)
