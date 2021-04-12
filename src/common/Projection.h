@@ -90,6 +90,29 @@ class Projection : public ProjectionBackend {
     }
 };
 
+/**
+ * This is a helper class that composes the proj search path. It is shared between this module and GDAL code.
+ *
+ * Note: qApp must be called after QApplication is instanciated - this must not be static, as that would call that earlier.
+ */
+struct ProjDirs {
+  private:
+    /* FIXME: Proj >= 7.0 supports relative path lookup natively, we can remove
+     * the relative path here once that gets into msys2. */
+    QString projDirRelative = QDir::toNativeSeparators(qApp->applicationDirPath() + "/../share/proj");
+    /* The following are hardcoded paths, as if search paths are set, proj no longer searches the default. Can be safely removed with proj7.*/
+    QString projDirMingwStd = QDir::toNativeSeparators("c:/msys64/mingw64/share/proj");       // Standard msys2 path
+    QString projDirMingwTravis = QDir::toNativeSeparators("c:/tools/msys64/mingw64/share/proj"); // Travis-CI msys2 installation
+  public:
+    const char* const dirs[4] = {
+        projDirRelative.toUtf8().constData(),
+        projDirMingwStd.toUtf8().constData(),
+        projDirMingwTravis.toUtf8().constData(),
+	NULL
+    };
+    static const int count = 3;
+};
+
 
 #endif
 
