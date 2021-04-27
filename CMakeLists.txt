@@ -27,12 +27,6 @@ add_definitions(-DTRANSDIR_MERKAARTOR=${CMAKE_INSTALL_PREFIX}/share/merkaartor)
 
 enable_testing()
 
-message(WARNING "
-
-CMake build is experimental and may be missing some features. Please use qmake for production builds.
-
-")
-
 # TODO: Add support for sanitizers
 
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)

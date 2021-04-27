@@ -70,7 +70,7 @@ endif()
 string(REGEX REPLACE "(-rc[0-9]+|-SNAPSHOT)" "" VCS_VERSION ${VCS_DESCRIBE})
 
 # Replace the -N-gXXX-dirty with .N for the patchlevel
-string(REGEX REPLACE "-([0-9]*)-g[0-9a-z]*(-dirty)?" ".\\2" VCS_VERSION ${VCS_VERSION})
+string(REGEX REPLACE "-([0-9]*)-g[0-9a-z]*" ".\\1" VCS_VERSION ${VCS_VERSION})
 string(REGEX REPLACE "-dirty" "" VCS_VERSION ${VCS_VERSION})
 
 if (NOT VCS_VERSION MATCHES "^[0-9]+\.[0-9]+\.[0-9]+(\.[0-9]+)?$")
