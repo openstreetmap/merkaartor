@@ -11,7 +11,11 @@ if ("$Format:YES$" STREQUAL "YES")
   set(VCS_BRANCH "SNAPSHOT")
   set(VCS_DIRTY 0)
   string(SUBSTRING "$Format:%H$" 0 12 VCS_COMMIT)
-  set(VCS_DESCRIBE "0.0.0-SNAPSHOT-1-g$Format:%h$")
+  if (DEFINED VCS_FALLBACK_VERSION)
+    set(VCS_DESCRIBE "${VCS_FALLBACK_VERSION}-SNAPSHOT-99999-g$Format:%h$")
+  else()
+    message(FATAL_ERROR "Snapshot VCS information in use, but VCS_FALLBACK_VERSION not defined by root CMakeLists.txt.")
+  endif()
 
   # Here, we do some magic to extract tags on this commit. The %D will result in a string in form:
   # HEAD -> master, tag: mytag1, mytag2

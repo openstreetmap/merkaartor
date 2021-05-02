@@ -2,7 +2,10 @@ jobs:
     include:
         - os: linux
           dist: focal
-          env: QT_REPO=ppa:beineri/opt-qt-5.15.2-focal QT_PREFIX=515
+          env: QT_REPO=ppa:beineri/opt-qt-5.15.2-focal QT_PREFIX=515 SNAPSHOT=0
+        - os: linux
+          dist: focal
+          env: QT_REPO=ppa:beineri/opt-qt-5.15.2-focal QT_PREFIX=515 SNAPSHOT=1
         - os: osx
           osx_image: xcode11.3
         - os: windows
