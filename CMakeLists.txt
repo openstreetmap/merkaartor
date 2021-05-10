@@ -609,7 +609,7 @@ set (CPACK_RESOURCE_FILE_LICENSE "${CMAKE_SOURCE_DIR}/LICENSE")
 ##############################################
 # Prepare deployment script
 ##############################################
-configure_file("${PROJECT_SOURCE_DIR}/cmake/deploy.json.in" "${PROJECT_BINARY_DIR}/deploy.json" @ONLY)
+configure_file("${PROJECT_SOURCE_DIR}/cmake/upload-artifacts.sh.in" "${PROJECT_BINARY_DIR}/upload-artifacts.sh" @ONLY)
 
 ##############################################
 # Mac OS X specific deploy scripts
