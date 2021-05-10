@@ -1,0 +1,15 @@
+message("Running OSX deploy script.")
+set(MACDEPLOYQT "@MACDEPLOYQT@")
+
+# Remove when done debugging
+get_cmake_property(_variableNames VARIABLES)
+list (SORT _variableNames)
+foreach (_variableName ${_variableNames})
+    message(STATUS "${_variableName}=${${_variableName}}")
+endforeach()
+#message("Prefix is: ${CMAKE_INSTALL_PREFIX}")
+#execute_process(COMMAND ls ${CMAKE_INSTALL_PREFIX})
+
+execute_process(COMMAND find "${CPACK_TEMPORARY_INSTALL_DIRECTORY}")
+execute_process(COMMAND ${MACDEPLOYQT} "${CPACK_TEMPORARY_INSTALL_DIRECTORY}/@PROJECT_NAME@.app")
+execute_process(COMMAND find "${CPACK_TEMPORARY_INSTALL_DIRECTORY}")

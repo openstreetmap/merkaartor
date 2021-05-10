@@ -10,23 +10,21 @@
 //
 //
 
-#include "Global.h"
-
-#include <QtGui>
-#include <QApplication>
-
-#include "../ImportExport/ImportExportGdal.h"
+#include "ImportExportGdal.h"
 #include "Projection.h"
 #include "Features.h"
 #include "ProjectionChooser.h"
 #include "Global.h"
 
-#include <cpl_vsi.h>
+#include <QtGui>
+#include <QApplication>
 #include <gdal.h>
-#include <gdal_priv.h>
+#include <cpl_vsi.h>
 
-#include <QDir>
+#include <QDebug>
+#include <QLoggingCategory>
 
+QLoggingCategory lc_importExportGdal("merk.ImportExport.GDAL");
 
 bool parseContainer(QDomElement& e, Layer* aLayer);
 
@@ -68,7 +66,7 @@ bool ImportExportGdal::export_(const QList<Feature *>& featList)
     poDriver = driverManager->GetDriverByName(pszDriverName);
     if( poDriver == NULL )
     {
-        qDebug( "%s driver not available.", pszDriverName );
+        qDebug(lc_importExportGdal) << pszDriverName <<  "driver not available.";
         return false;
     }
 
@@ -83,7 +81,7 @@ bool ImportExportGdal::export_(const QList<Feature *>& featList)
     poDS = poDriver->Create( fileName.toUtf8().constData(), 0, 0, 0, GDT_Unknown, createOptions );
     if( poDS == NULL )
     {
-        qDebug( "Creation of output file failed." );
+        qDebug(lc_importExportGdal) << "Creation of output file failed.";
         return false;
     }
     poDS->ExecuteSQL("PRAGMA synchronous = OFF", NULL, NULL);
@@ -229,7 +227,7 @@ Node *ImportExportGdal::nodeFor(Layer* aLayer, const OGRPoint p)
         return pointHash[p];
     }
 
-    pointHash[p] = g_backend.allocNode(aLayer, Coord(p.getX(), p.getY()));
+    pointHash[p] = g_backend.allocNode(aLayer, Coord(p.getY(), p.getX()));
     aLayer->add(pointHash[p]);
     return pointHash[p];
 }
@@ -330,23 +328,24 @@ bool ImportExportGdal::importGDALDataset(GDALDataset* poDS, Layer* aLayer, bool 
 {
     int ogrError;
 
+    qDebug("GDAL: couldn't initialise WGS84: %s", CPLGetLastErrorMsg());
     OGRSpatialReference wgs84srs;
     if (wgs84srs.SetWellKnownGeogCS("WGS84") != OGRERR_NONE) {
         qDebug("GDAL: couldn't initialise WGS84: %s", CPLGetLastErrorMsg());
         return false;
     }
 
-    qDebug() << "Layers #" << poDS->GetLayerCount();
+    qDebug(lc_importExportGdal) << "Layers #" << poDS->GetLayerCount();
     OGRLayer  *poLayer = poDS->GetLayer(0);
 
-    OGRSpatialReference * theSrs = poLayer->GetSpatialRef();
+    OGRSpatialReference * theSrs = poLayer->GetSpatialRef(); // Note: Contrary to other OGR objects, the spatial ref must NOT be released by our code!
     toWGS84 = NULL;
 
     if (theSrs) {
         // Workaround for OSGB - otherwise its datum is ignored (TODO: why?)
         QString gcs = theSrs->GetAttrValue("GEOGCS");
         if (gcs == "GCS_OSGB_1936" || gcs == "OSGB 1936") {
-            qDebug() << "GDAL: substituting GCS_OSGB_1936 with EPSG:27700";
+            qDebug(lc_importExportGdal) << "GDAL: substituting GCS_OSGB_1936 with EPSG:27700";
             OGRSpatialReference * the27700Srs = new OGRSpatialReference();
             if ((ogrError = the27700Srs->importFromEPSG(27700)) != OGRERR_NONE) {
                 qDebug("GDAL: couldn't initialise EPSG:27700: %d: %s", ogrError, CPLGetLastErrorMsg());
@@ -367,11 +366,11 @@ bool ImportExportGdal::importGDALDataset(GDALDataset* poDS, Layer* aLayer, bool 
         char* cTheProj;
         if (theSrs->exportToProj4(&cTheProj) == OGRERR_NONE) {
             sPrj = QString(cTheProj);
-            OGRFree(cTheProj);
+            CPLFree(cTheProj);
         } else {
             if (theSrs->exportToWkt(&cTheProj) == OGRERR_NONE) {
                 sPrj = QString(cTheProj);
-                OGRFree(cTheProj);
+                CPLFree(cTheProj);
             }
         }
         projTitle = QCoreApplication::translate("ImportExportGdal", "Confirm projection");
@@ -394,8 +393,6 @@ bool ImportExportGdal::importGDALDataset(GDALDataset* poDS, Layer* aLayer, bool 
         }
     }
 
-    if (theSrs)
-        theSrs->Release();
     theSrs = new OGRSpatialReference();
     theSrs->importFromProj4(sPrj.toLatin1().data());
     toWGS84 = OGRCreateCoordinateTransformation(theSrs, &wgs84srs);
@@ -417,7 +414,6 @@ bool ImportExportGdal::importGDALDataset(GDALDataset* poDS, Layer* aLayer, bool 
             progress.setMaximum(progress.maximum()+sz);
 
         int curImported = 0;
-//        poLayer->ResetReading();
         while( (poFeature = poLayer->GetNextFeature()) != NULL && !progress.wasCanceled())
         {
             OGRGeometry *poGeometry;

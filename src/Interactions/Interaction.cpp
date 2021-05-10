@@ -59,7 +59,7 @@ Document* Interaction::document()
 
 void Interaction::mousePressEvent(QMouseEvent * anEvent)
 {
-    if (anEvent->buttons() & Qt::MidButton) {
+    if (anEvent->buttons() & Qt::MiddleButton) {
         Panning = true;
         FirstPan = LastPan = anEvent->pos();
     } else
@@ -113,7 +113,7 @@ void Interaction::mouseReleaseEvent(QMouseEvent * anEvent)
 
 void Interaction::mouseMoveEvent(QMouseEvent* anEvent)
 {
-    if (anEvent->buttons() & Qt::MidButton) {
+    if (anEvent->buttons() & Qt::MiddleButton) {
         if (Panning)
         {
             QPoint Delta = LastPan;

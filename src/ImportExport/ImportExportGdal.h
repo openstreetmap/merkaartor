@@ -16,7 +16,6 @@
 
 #include <ogrsf_frmts.h>
 #include <gdal.h>
-#include <gdal_priv.h>
 #include <gdal_version.h>
 
 #if GDAL_VERSION_MAJOR >= 2

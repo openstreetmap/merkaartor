@@ -92,7 +92,7 @@ QString ProjectionChooser::getProjection(QString title, bool bShowPredefined, QS
             QByteArray ba = dlg->ui->txWkt->toPlainText().toLatin1();
             char* pszInput = ba.data();
             char** ppszInput = &pszInput;
-            if (poSRS->importFromWkt(ppszInput) != OGRERR_NONE) {
+            if (poSRS->importFromWkt((const char **)ppszInput) != OGRERR_NONE) {
                 if (poSRS->importFromESRI(ppszInput) != OGRERR_NONE) {
                     QMessageBox::critical(parent, tr("Error in WKT string"), tr("Invalid WKT string"));
                     poSRS->Release();

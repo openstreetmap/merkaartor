@@ -1,14 +1,34 @@
-cmake_minimum_required(VERSION 3.1.0)
+cmake_minimum_required(VERSION 3.19.0)
 
-project(merkaartor)
+set(VCS_FALLBACK_VERSION 0.18.4)
+include(cmake/vcs.cmake)
+message(STATUS "Configuring Merkaartor ${VCS_VERSION}, commit: ${VCS_COMMIT}, dirty: ${VCS_DIRTY}.")
+
+# Set a default build type if none was specified
+if(NOT CMAKE_BUILD_TYPE AND NOT CMAKE_CONFIGURATION_TYPES)
+  set(MERK_DEFAULT_BUILD_TYPE "Debug")
+  message(STATUS "Setting build type to '${MERK_DEFAULT_BUILD_TYPE}' as none was specified.")
+  set(CMAKE_BUILD_TYPE "${MERK_DEFAULT_BUILD_TYPE}" CACHE STRING "Choose the type of build." FORCE)
+  # Set the possible values of build type for cmake-gui
+  set_property(CACHE CMAKE_BUILD_TYPE PROPERTY STRINGS "Debug" "Release" "MinSizeRel" "RelWithDebInfo")
+endif()
+
+
+project(merkaartor VERSION ${VCS_VERSION})
+# TODO: Use configure_file() instead of definitions when qmake is deprecated.
+# Using definitions causes unnecessary rebuilds, as with each commit the hash
+# changes compile flags for each and every file. However, it is kept for qmake
+# compatibility.
+# Using configure_file() allows us to store the metadata in a .cpp file, thus
+# only rebuilding that one and linking.
+add_definitions(-DVERSION=${PROJECT_VERSION} -DREVISION=${VCS_DESCRIBE})
+add_definitions(-DPRODUCT=Merkaartor)
+add_definitions(-DSHARE_DIR=${CMAKE_INSTALL_PREFIX}/share/merkaartor)
+add_definitions(-DTRANSDIR_MERKAARTOR=${CMAKE_INSTALL_PREFIX}/share/merkaartor)
 
 enable_testing()
 
-message(WARNING "
-
-CMake build is experimental and missing quite a few features (no plugins, no version string, no configurable features, etc...). Please use qmake for production builds.
-
-")
+# TODO: Add support for sanitizers
 
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
@@ -390,29 +410,156 @@ interfaces/IMapAdapter.h
 ./Icons/AllIcons.qrc
 ./Icons/QToolBarDialog/qttoolbardialog.qrc
 ./Templates/Templates.qrc
-./share/share.qrc
 ./Styles/Styles.qrc
 
 )
 
-# Find the QtWidgets library
-find_package(Qt5 COMPONENTS Svg Network Xml Core Gui Concurrent PrintSupport Widgets Test CONFIG REQUIRED)
+install( FILES ${CMAKE_SOURCE_DIR}/src/org.merkaartor.merkaartor.desktop          DESTINATION share/applications     )
+install( FILES ${CMAKE_SOURCE_DIR}/src/org.merkaartor.merkaartor.appdata.xml      DESTINATION share/metainfo     )
+install( FILES ${CMAKE_SOURCE_DIR}/Icons/8x8/merkaartor.png      DESTINATION share/icons/hicolor/8x8/apps     )
+install( FILES ${CMAKE_SOURCE_DIR}/Icons/16x16/merkaartor.png    DESTINATION share/icons/hicolor/16x16/apps   )
+install( FILES ${CMAKE_SOURCE_DIR}/Icons/22x22/merkaartor.png    DESTINATION share/icons/hicolor/22x22/apps   )
+install( FILES ${CMAKE_SOURCE_DIR}/Icons/24x24/merkaartor.png    DESTINATION share/icons/hicolor/24x24/apps   )
+install( FILES ${CMAKE_SOURCE_DIR}/Icons/32x32/merkaartor.png    DESTINATION share/icons/hicolor/32x32/apps   )
+install( FILES ${CMAKE_SOURCE_DIR}/Icons/36x36/merkaartor.png    DESTINATION share/icons/hicolor/36x36/apps   )
+install( FILES ${CMAKE_SOURCE_DIR}/Icons/40x40/merkaartor.png    DESTINATION share/icons/hicolor/40x40/apps   )
+install( FILES ${CMAKE_SOURCE_DIR}/Icons/42x42/merkaartor.png    DESTINATION share/icons/hicolor/42x42/apps   )
+install( FILES ${CMAKE_SOURCE_DIR}/Icons/48x48/merkaartor.png    DESTINATION share/icons/hicolor/48x48/apps   )
+install( FILES ${CMAKE_SOURCE_DIR}/Icons/64x64/merkaartor.png    DESTINATION share/icons/hicolor/64x64/apps   )
+install( FILES ${CMAKE_SOURCE_DIR}/Icons/72x72/merkaartor.png    DESTINATION share/icons/hicolor/72x72/apps   )
+install( FILES ${CMAKE_SOURCE_DIR}/Icons/80x80/merkaartor.png    DESTINATION share/icons/hicolor/80x80/apps   )
+install( FILES ${CMAKE_SOURCE_DIR}/Icons/96x96/merkaartor.png    DESTINATION share/icons/hicolor/96x96/apps   )
+install( FILES ${CMAKE_SOURCE_DIR}/Icons/128x128/merkaartor.png  DESTINATION share/icons/hicolor/128x128/apps )
+install( FILES ${CMAKE_SOURCE_DIR}/Icons/192x192/merkaartor.png  DESTINATION share/icons/hicolor/192x192/apps )
+install( FILES ${CMAKE_SOURCE_DIR}/Icons/256x256/merkaartor.png  DESTINATION share/icons/hicolor/256x256/apps )
+install( FILES ${CMAKE_SOURCE_DIR}/Icons/512x512/merkaartor.png  DESTINATION share/icons/hicolor/512x512/apps )
+
+find_package(Qt5LinguistTools)
+install( DIRECTORY ${CMAKE_SOURCE_DIR}/share/ DESTINATION share/merkaartor PATTERN "*.qrc" EXCLUDE)
+set(TS_FILES
+  ${CMAKE_SOURCE_DIR}/translations/merkaartor_ar.ts
+  ${CMAKE_SOURCE_DIR}/translations/merkaartor_cs.ts
+  ${CMAKE_SOURCE_DIR}/translations/merkaartor_de_AT.ts
+  ${CMAKE_SOURCE_DIR}/translations/merkaartor_de.ts
+  ${CMAKE_SOURCE_DIR}/translations/merkaartor_en.ts
+  ${CMAKE_SOURCE_DIR}/translations/merkaartor_es.ts
+  ${CMAKE_SOURCE_DIR}/translations/merkaartor_et.ts
+  ${CMAKE_SOURCE_DIR}/translations/merkaartor_fr.ts
+  ${CMAKE_SOURCE_DIR}/translations/merkaartor_hr.ts
+  ${CMAKE_SOURCE_DIR}/translations/merkaartor_hu.ts
+  ${CMAKE_SOURCE_DIR}/translations/merkaartor_id_ID.ts
+  ${CMAKE_SOURCE_DIR}/translations/merkaartor_it.ts
+  ${CMAKE_SOURCE_DIR}/translations/merkaartor_ja.ts
+  ${CMAKE_SOURCE_DIR}/translations/merkaartor_nl.ts
+  ${CMAKE_SOURCE_DIR}/translations/merkaartor_pl.ts
+  ${CMAKE_SOURCE_DIR}/translations/merkaartor_pt_BR.ts
+  ${CMAKE_SOURCE_DIR}/translations/merkaartor_pt.ts
+  ${CMAKE_SOURCE_DIR}/translations/merkaartor_ru.ts
+  ${CMAKE_SOURCE_DIR}/translations/merkaartor_sk.ts
+  ${CMAKE_SOURCE_DIR}/translations/merkaartor_sv.ts
+  ${CMAKE_SOURCE_DIR}/translations/merkaartor_uk.ts
+  ${CMAKE_SOURCE_DIR}/translations/merkaartor_vi.ts
+  ${CMAKE_SOURCE_DIR}/translations/merkaartor_zh_CN.ts
+  ${CMAKE_SOURCE_DIR}/translations/merkaartor_zh_TW.ts
+)
+qt5_add_translation(QM_FILES
+    ${TS_FILES}
+)
+install( FILES ${QM_FILES} DESTINATION share/merkaartor/translations )
+
+find_program(LUPDATE lupdate)
+add_custom_target(update-translations COMMAND ${LUPDATE} ${CMAKE_SOURCE_DIR}/src ${CMAKE_SOURCE_DIR}/plugins -ts ${TS_FILES})
+
+
+##############################################
+# Find 3rd party libraries, depending on options provided
+##############################################
+
+# We need GDAL and proj for core functionality
+set(PKGCONFIG_REQUIRED_LIBS gdal proj)
+
+option(ZBAR     "Enable ZBar usage in MWalkingPapersBackground and Geoimage."  OFF)
+option(GEOIMAGE "Enable Geoimage Dock (requires exiv2 library)."               ON )
+option(GPSD     "Enable GPS Dock (requires gpsd library)."                     OFF)
+option(WEBENGINE "Enable the use of QtWeb engine (not supported on all platforms)" OFF)
+
+message(STATUS "Build options (use -DOPT=ON/OFF to enable/disable):")
+message(STATUS " * ZBAR        ${ZBAR}")
+message(STATUS " * GEOIMAGE    ${GEOIMAGE}")
+message(STATUS " * GPSD        ${GPSD}")
+message(STATUS " * WEBENGINE   ${WEBENGINE}")
+message(STATUS "")
+
+if (ZBAR)
+    list(APPEND PKGCONFIG_REQUIRED_LIBS zbar)
+    add_definitions(-DUSE_ZBAR=1) # MWalkingPapersBackground, Geoimage; actual macro is USE_ZBAR
+endif()
+
+if (GEOIMAGE)
+    list(APPEND PKGCONFIG_REQUIRED_LIBS exiv2)
+    add_definitions(-DGEOIMAGE=1)
+endif()
+
+if (GPSD)
+    list(APPEND PKGCONFIG_REQUIRED_LIBS gpsd)
+    add_definitions(-DUSE_GPS=1)
+endif()
+
+if (WEBENGINE)
+    add_definitions(-DUSEWEBENGINE=1) # Actual macro is USE_WEBKIT
+    # add_definitions(-DTHREADED_BROWSERIMAGEMANAGER=1) # TODO: Check if that even does something/works
+endif()
+
+
+# TODO: Check and remove or implement defines from code: PORTABLE, FRISIUS, NVIDIA_HACK, MOBILE, LIBPROXY, SYSTEM_QTSA
 find_package(PkgConfig REQUIRED)
-pkg_check_modules(EXIV2 REQUIRED exiv2 gdal proj)
+pkg_check_modules(PKGCONFIG_DEPS REQUIRED ${PKGCONFIG_REQUIRED_LIBS})
+message(STATUS "pkg-config dependencies require the following flags:")
+message(STATUS " * LDFLAGS:          ${PKGCONFIG_DEPS_LDFLAGS}")
+message(STATUS " * LDFLAGS_OTHER:    ${PKGCONFIG_DEPS_LDFLAGS_OTHER}")
+message(STATUS " * CFLAGS:           ${PKGCONFIG_DEPS_CFLAGS}")
+message(STATUS " * CFLAGS_OTHER:     ${PKGCONFIG_DEPS_CFLAGS_OTHER}")
+message(STATUS " * LINK DIRECTORIES: ${PKGCONFIG_DEPS_LIBRARY_DIRS}")
+message(STATUS "")
+
+
+link_directories(${PKGCONFIG_DEPS_LIBRARY_DIRS})
 
 
 
+##############################################
+# Find Qt dependencies
+##############################################
+find_package(Qt5 COMPONENTS Svg Network Xml Core Gui Concurrent PrintSupport Widgets Test CONFIG REQUIRED)
+set(MERKAARTOR_LINK_LIBS Qt5::Svg Qt5::Network Qt5::Xml Qt5::Core Qt5::Gui Qt5::Concurrent Qt5::PrintSupport Qt5::Widgets ${PKGCONFIG_DEPS_LIBRARIES})
 
-# Tell CMake to create the helloworld executable
-add_executable(merkaartor ${merkaartor_SRCS} src/Main.cpp)
-# Use the Widgets module from Qt 5
-set(MERKAARTOR_LINK_LIBS Qt5::Svg Qt5::Network Qt5::Xml Qt5::Core Qt5::Gui Qt5::Concurrent Qt5::PrintSupport Qt5::Widgets ${EXIV2_LIBRARIES})
+##############################################
+# Create the Merkaartor binary
+##############################################
+if (APPLE)
+  set(MERKAARTOR_ICON_FILE "${CMAKE_SOURCE_DIR}/Icons/merkaartor.icns")
+  set_source_files_properties(${MERKAARTOR_ICON_FILE} PROPERTIES MACOSX_PACKAGE_LOCATION "Resources")
+endif()
+
+if (WIN32)
+  set(MERKAARTOR_ICON_FILE "${CMAKE_SOURCE_DIR}/Icons/merkaartor-win32.rc")
+endif()
+
+add_executable(${PROJECT_NAME} WIN32 MACOSX_BUNDLE ${merkaartor_SRCS} src/Main.cpp ${MERKAARTOR_ICON_FILE} ${QM_FILES})
 target_link_libraries(merkaartor ${MERKAARTOR_LINK_LIBS} )
-target_compile_options(merkaartor PUBLIC ${EXIV2_CFLAGS_OTHER})
-install( TARGETS merkaartor RUNTIME DESTINATION bin )
+target_compile_options(merkaartor PUBLIC ${PKGCONFIG_DEPS_CFLAGS})
+install( TARGETS merkaartor RUNTIME DESTINATION bin BUNDLE DESTINATION .)
+
+if (APPLE)
+  # Additionally, we need to find libssh and add that include, as exiv2 depends on it.
+  # Caused by: https://gitlab.kitware.com/cmake/cmake/-/issues/19120 (not fixed and probably won't be anytime soon)
+  #find_path(LIBSSH_INCLUDE_DIR NAMES libssh.h)
+  set(LIBSSH_INCLUDE_DIR "/usr/local/include")
+endif()
 
 set(MERKAARTOR_INCLUDE_DIRECTORIES
-  ${EXIV2_INCLUDE_DIRS}
+  ${PKGCONFIG_DEPS_INCLUDE_DIRS}
+  ${LIBSSH_INCLUDE_DIR}
   ${CMAKE_CURRENT_SOURCE_DIR}/interfaces
   ${CMAKE_CURRENT_SOURCE_DIR}/include
   ${CMAKE_CURRENT_SOURCE_DIR}/src
@@ -437,12 +584,88 @@ set(MERKAARTOR_INCLUDE_DIRECTORIES
   ${CMAKE_CURRENT_SOURCE_DIR}/src/TagTemplate
   ${CMAKE_CURRENT_SOURCE_DIR}/3rdparty/qtsingleapplication-2.6_1-opensource/src
 )
-
 target_include_directories( merkaartor PUBLIC ${MERKAARTOR_INCLUDE_DIRECTORIES})
 
 
 ##############################################
-# Only test handling goes here
+# Build plugins
+##############################################
+include(plugins/plugins.cmake)
+
+##############################################
+# Setup packaging
+##############################################
+set (CPACK_PACKAGE_NAME "merkaartor")
+set (CPACK_PACKAGE_VENDOR "merkaartor.org")
+set (CPACK_PACKAGE_DESCRIPTION_SUMMARY "Merkaartor, OpenStreetMap editor.")
+set (CPACK_PACKAGE_VERSION_MAJOR "${PROJECT_VERSION_MAJOR}")
+set (CPACK_PACKAGE_VERSION_MINOR "${PROJECT_VERSION_MINOR}")
+set (CPACK_PACKAGE_VERSION_PATCH "${PROJECT_VERSION_PATCH}")
+set (CPACK_PACKAGE_VERSION "${VCS_DESCRIBE}")
+set (CPACK_PACKAGE_INSTALL_DIRECTORY "Merkaartor")
+set (CPACK_PACKAGE_EXECUTABLES "merkaartor;Merkaartor")
+set (CPACK_RESOURCE_FILE_LICENSE "${CMAKE_SOURCE_DIR}/LICENSE")
+
+##############################################
+# Prepare deployment script
+##############################################
+configure_file("${PROJECT_SOURCE_DIR}/cmake/deploy.json.in" "${PROJECT_BINARY_DIR}/deploy.json" @ONLY)
+
+##############################################
+# Mac OS X specific deploy scripts
+##############################################
+if (APPLE)
+  find_program(MACDEPLOYQT macdeployqt)
+  message("Found macdeployqt: ${MACDEPLOYQT}")
+  configure_file("${PROJECT_SOURCE_DIR}/cmake/deploy-osx.cmake.in" "${PROJECT_BINARY_DIR}/deploy-osx.cmake" @ONLY)
+  set (CPACK_PRE_BUILD_SCRIPTS "${PROJECT_BINARY_DIR}/deploy-osx.cmake")
+  set (CPACK_GENERATOR "DragNDrop")
+  set (CPACK_DMG_BACKGROUND_IMAGE       "${PROJECT_SOURCE_DIR}/cmake/CMakeDMGBackground.tif")
+  set (CPACK_DMG_DS_STORE               "${PROJECT_SOURCE_DIR}/cmake/DS_Store.bin")
+  #set (CPACK_DMG_DS_STORE_SETUP_SCRIPT "${PROJECT_SOURCE_DIR}/cmake/CMakeDMGSetup.scpt")
+  set (MACOSX_BUNDLE_BUNDLE_NAME "merkaartor")
+  set (MACOSX_BUNDLE_BUNDLE_VERSION "${VCS_DESCRIBE}")
+  set (MACOSX_BUNDLE_COPYRIGHT 2021)
+  set (MACOSX_BUNDLE_GUI_IDENTIFIER "be.merkaartor")
+  set (MACOSX_BUNDLE_ICON_FILE "merkaartor.icns")
+  set (MACOSX_BUNDLE_INFO_STRING "Merkaartor, OpenStreetMap editor.")
+  set (MACOSX_BUNDLE_LONG_VERSION_STRING "${VCS_DESCRIBE} (${VCS_COMMIT})")
+  set (MACOSX_BUNDLE_SHORT_VERSION_STRING "${VCS_DESCRIBE} (short)")
+endif()
+
+##############################################
+# Windows specific deploy scripts
+##############################################
+if (WIN32)
+  set (CPACK_VERBATIM_VARIABLES ON)
+  set (CPACK_NSIS_MUI_ICON "${CMAKE_SOURCE_DIR}/Icons/Merkaartor_48x48.ico")
+  set (CPACK_NSIS_MUI_WELCOMEFINISHPAGE_BITMAP "${CMAKE_SOURCE_DIR}/Icons/Merkaartor_installer.bmp")
+  string(REGEX REPLACE "/" "\\\\" CPACK_NSIS_MUI_ICON "${CPACK_NSIS_MUI_ICON}")
+  string(REGEX REPLACE "/" "\\\\" CPACK_NSIS_MUI_WELCOMEFINISHPAGE_BITMAP "${CPACK_NSIS_MUI_WELCOMEFINISHPAGE_BITMAP}")
+  set (CPACK_NSIS_ENABLE_UNINSTALL_BEFORE_INSTALL ON)
+  set (CPACK_NSIS_URL_INFO_ABOUT "http://merkaartor.be")
+
+  # Workaround for NSIS bug in CMake that creates and checks only 32bit keys even for 64bit installers.
+  # https://gitlab.kitware.com/cmake/cmake/-/issues/21960
+  # Will be fixed by PR:
+  # https://gitlab.kitware.com/cmake/cmake/-/merge_requests/5952
+  set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake/ModulesOverride")
+  set(CPACK_NSIS_REGISTRY_VIEW 64)
+  set(CPACK_NSIS_ENABLE_UNINSTALL_DONT_CHECK_32 ON)
+  # End of workaround
+
+  find_program(WINDEPLOYQT windeployqt)
+  find_program(CYGCHECK cygcheck)
+  configure_file("${PROJECT_SOURCE_DIR}/cmake/deploy-windows.cmake.in" "${CMAKE_BINARY_DIR}/deploy-windows.cmake" @ONLY)
+  set (CPACK_PRE_BUILD_SCRIPTS "${CMAKE_BINARY_DIR}/deploy-windows.cmake")
+
+  set (CPACK_GENERATOR "ZIP;NSIS")
+endif()
+
+include(CPack)
+
+##############################################
+# Tests
 ##############################################
 
 # The test shall be placed in file "tests/<test_name>.cpp" file, followed by required includes

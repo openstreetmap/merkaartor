@@ -1,0 +1,17 @@
+{
+    "package": {
+        "name": "Merkaartor",
+        "repo": "nightly",
+        "subject": "krakonos"
+    },
+    "version": {
+        "name": "@VCS_DESCRIBE@"
+    },
+    "files":
+        [
+        {"includePattern": "build/(merkaartor-.*.dmg)", "uploadPattern":"\$1"},
+        {"includePattern": "build/(merkaartor-.*.zip)", "uploadPattern":"\$1"},
+        {"includePattern": "build/(merkaartor-.*.exe)", "uploadPattern":"\$1"}
+        ],
+    "publish": true
+}

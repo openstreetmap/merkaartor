@@ -2,32 +2,8 @@
 
 set -e
 
-qmake.exe -r
-make -j4 release
-
-lrelease src/src.pro
-sh windows/copydeps.sh
-makensis.exe windows/installer.nsi
-#windows/upload-to-bintray.pl windows/merkaartor-*.exe
-
-# Prepare deployment description
-VERSION=`git describe --tags`
-cat > binaries/bin/deploy.json <<EOF
-{
-    "package": {
-        "name": "Merkaartor",
-        "repo": "nightly",
-        "subject": "krakonos"
-    },
-
-    "version": {
-        "name": "$VERSION"
-    },
-
-    "files":
-        [
-        {"includePattern": "windows/(merkaartor-.*.exe)", "uploadPattern":"\$1"}
-        ],
-    "publish": true
-}
-EOF
+mkdir build && cd build
+cmake .. -G"Unix Makefiles" -DCMAKE_BUILD_TYPE=Release
+make -j4
+make test
+make package

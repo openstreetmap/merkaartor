@@ -4,10 +4,7 @@ An opensource OSM editor, written in C++ and Qt.
 
 ## Health status
 
-| Platform | Status |
-| -------- | ------ |
-| Windows (Tea-CI) | [![Build Status](https://tea-ci.org/api/badges/openstreetmap/merkaartor/status.svg)](https://tea-ci.org/openstreetmap/merkaartor) 
-| Linux and Mac OS X (Travis-CI) | [![Build Status](https://travis-ci.org/openstreetmap/merkaartor.svg?branch=master)](https://travis-ci.org/openstreetmap/merkaartor) |
+Travis-CI (Linux, Windows and Mac OS X) [![Build Status](https://travis-ci.org/openstreetmap/merkaartor.svg?branch=master)](https://travis-ci.org/openstreetmap/merkaartor)
 
 ## Installation
 

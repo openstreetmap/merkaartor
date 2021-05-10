@@ -15,6 +15,8 @@
 
 #include "IMapAdapterFactory.h"
 
+QLoggingCategory lc_Main("merk.Main");
+
 FILE* pLogFile = NULL;
 
 void showVersion()
@@ -48,21 +50,21 @@ void showHelp()
 }
 
 void loadPluginsFromDir( QDir & pluginsDir ) {
-    qDebug() << "Loading plugins from directory" << pluginsDir.dirName();
+    qInfo(lc_Main) << "Loading plugins from directory " << pluginsDir.absolutePath();
     foreach (QString fileName, pluginsDir.entryList(QDir::Files)) {
         QPluginLoader loader(pluginsDir.absoluteFilePath(fileName));
         QObject *plugin = loader.instance();
-        qDebug() << "  Loading" << fileName << "as plugin.";
+        qDebug(lc_Main) << "  Loading" << fileName << "as plugin.";
         if (plugin) {
             IMapAdapterFactory *fac = qobject_cast<IMapAdapterFactory *>(plugin);
             if (fac) {
                 M_PREFS->addBackgroundPlugin(fac);
-                qDebug() << "  Plugin loaded:" << fileName;
+                qInfo(lc_Main) << "  Plugin loaded: " << fileName << ".";
             } else {
-                qWarning() << "  Failed to load plugin:" << fileName;
+                qWarning(lc_Main) << "  Failed to load plugin: " << fileName << ".";
             }
         } else {
-            qWarning() << "  Not a plugin:" << fileName;
+            qDebug(lc_Main) << "  Not a plugin: " << fileName << ".";
         }
     }
 }
@@ -85,6 +87,10 @@ void debugMessageHandler(QtMsgType, const QMessageLogContext&, const QString &ms
 int main(int argc, char** argv)
 {
     QtSingleApplication instance(argc,argv);
+
+    // Set logging message pattern early.
+    qSetMessagePattern("%{time process} (%{if-debug}DD%{endif}%{if-info}II%{endif}%{if-warning}WW%{endif}%{if-critical}CC%{endif}%{if-fatal}FF%{endif}) [ %{category} ] %{message}%{if-critical}%{backtrace}%{endif}");
+    QLoggingCategory::setFilterRules("merk.*.debug=false");
 
     bool reuse = true;
     QStringList argsIn = QCoreApplication::arguments();
@@ -151,12 +157,12 @@ int main(int argc, char** argv)
         qInstallMessageHandler(debugMessageHandler);
     }
 
-    qDebug() << "**** " << QDateTime::currentDateTime().toString(Qt::ISODate) << " -- Starting" << QString("%1 %2").arg(qApp->applicationName()).arg(STRINGIFY(VERSION));
-    qDebug() <<	"-------" << QString("using Qt version %1 (built with %2)").arg(qVersion()).arg(QT_VERSION_STR);
+    qInfo(lc_Main) << "**** " << QDateTime::currentDateTime().toString(Qt::ISODate) << " -- Starting " << QString("%1 %2").arg(qApp->applicationName()).arg(STRINGIFY(VERSION));
+    qInfo(lc_Main) <<	"-------" << QString("using Qt version %1 (built with %2)").arg(qVersion()).arg(QT_VERSION_STR);
     PJ_INFO projVer = proj_info();
-    qDebug() <<	"-------" << QString("using PROJ version %1.%2.%3").arg(projVer.major).arg(projVer.minor).arg(projVer.patch);
-    qDebug() <<	"-------" << QString("using GDAL version %1").arg(GDAL_RELEASE_NAME);
-    qDebug() << "-------" << "with arguments: " << QCoreApplication::arguments();
+    qInfo(lc_Main) <<	"-------" << QString("using PROJ version %1.%2.%3").arg(projVer.major).arg(projVer.minor).arg(projVer.patch);
+    qInfo(lc_Main) <<	"-------" << QString("using GDAL version %1").arg(GDAL_RELEASE_NAME);
+    qInfo(lc_Main) << "-------" << "with arguments: " << QCoreApplication::arguments();
 
 #ifdef _MOBILE
     QFont appFont = QApplication::font();
@@ -201,6 +207,15 @@ int main(int argc, char** argv)
 #endif
     }
 
+
+    /* Load plugins if executed from build directory and in debug build. */
+    QDir buildPluginsDir = QDir(qApp->applicationDirPath());
+    if (buildPluginsDir.exists("CMakeCache.txt")) {
+        qWarning() << "Build directory detected. Looking for plugins in application directory first.";
+        QCoreApplication::addLibraryPath(buildPluginsDir.path());
+        loadPluginsFromDir(buildPluginsDir);
+    }
+
     /* Load plugins; this handles different OS habits. */
 #if defined(Q_OS_WIN32)
     QDir pluginsDir = QDir(qApp->applicationDirPath() + "/" + STRINGIFY(PLUGINS_DIR));
@@ -218,7 +233,6 @@ int main(int argc, char** argv)
         pluginsDir = QDir(STRINGIFY(PLUGINS_DIR));
 #endif
 
-    qDebug() << "PluginsDir:" << pluginsDir.path();
     QCoreApplication::addLibraryPath(pluginsDir.path());
     loadPluginsFromDir(pluginsDir);
 
@@ -256,14 +270,14 @@ int main(int argc, char** argv)
     try {
         x = instance.exec();
     } catch (const std::bad_alloc &) {
-        qDebug() << "Out of memory";
+        qDebug(lc_Main) << "Out of memory";
         x = 254;
     } catch (...) {
-        qDebug() << "Exception";
+        qDebug(lc_Main) << "Exception";
         x = 255;
     }
 
-    qDebug() << "**** " << QDateTime::currentDateTime().toString(Qt::ISODate) << " -- Ending" << QString("%1 %2").arg(qApp->applicationName()).arg(STRINGIFY(VERSION));
+    qDebug(lc_Main) << "**** " << QDateTime::currentDateTime().toString(Qt::ISODate) << " -- Ending " << QString("%1 %2").arg(qApp->applicationName()).arg(STRINGIFY(VERSION));
     if(pLogFile) {
         fclose(pLogFile);
         pLogFile = NULL;
