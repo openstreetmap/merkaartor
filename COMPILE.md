@@ -6,14 +6,14 @@ build environment:
 
 ```
 $ git clone https://github.com/openstreetmap/merkaartor.git && cd merkaartor
-$ qmake -r
-$ make -j8 release
+$ mkdir build && cd build && cmake ..
+$ make -j8
 ```
 
 And run it using:
 
 ```
-$ binaries/bin/merkaartor
+$ ./merkaartor
 ```
 
 If this is not enough, here are more detailed instructions:
@@ -28,6 +28,7 @@ You will need the following packages installed:
  - GDAL (2.0.0 or newer for GDAL exports)
  - Exiv2 (for geoimage support)
  - (For Windows Installer) NSIS-3
+ - CMake 3.19.0 or newer
 
 The OS specifics will be explained further down.
 
@@ -37,13 +38,13 @@ Install the above packages using your package manager. For Debian/Ubuntu, this w
 look like this:
 
 ```
- $ sudo apt-get install build-essential libgdal-dev libproj-dev libexiv2-dev
+ $ sudo apt-get install build-essential libgdal-dev libproj-dev libexiv2-dev cmake
 ```
 
 Or for Qt5: 
 
 ```
- $ sudo apt-get install qt5-default libqt5xml5* libqt5network5* libqt5gui5* libqt5svg5* libqt5webkit5* libqt5quick5* qtdeclarative5-dev qttools5-dev qtbase5-dev qt5-qmake qtchooser
+ $ sudo apt-get install qt5-default libqt5xml5* libqt5network5* libqt5gui5* libqt5svg5* libqt5webkit5* libqt5quick5* qtdeclarative5-dev qttools5-dev qtbase5-dev qtchooser
 ```
 
 ### Windows (32bit/64bit)
@@ -62,7 +63,8 @@ $ pacman -S base-devel \
 	mingw32/mingw-w64-i686-proj \
 	mingw32/mingw-w64-i686-openjpeg2 \
 	mingw32/mingw-w64-i686-json-c \
-	mingw64/mingw-w64-i686-exiv2
+	mingw64/mingw-w64-i686-exiv2 \
+    mingw64/mingw-w64-i686-cmake
 ```
 
 For 64bit, they are:
@@ -76,7 +78,8 @@ $ pacman -S base-devel \
 	mingw64/mingw-w64-x86_64-proj \
 	mingw64/mingw-w64-x86_64-openjpeg2 \
 	mingw64/mingw-w64-x86_64-json-c \
-	mingw64/mingw-w64-x86_64-exiv2
+	mingw64/mingw-w64-x86_64-exiv2 \
+    mingw64/mingw-w64-x86_64-cmake
 ```
 
 Done? Continue to the next step, but run a different msys shell, the mingw32 or
@@ -96,7 +99,7 @@ If you want to use qt5, you need to force link it, as homebrew guys consider Qt4
 the default:
 
 ```
-brew install qt5
+brew install qt5 gdal proj exiv2 cmake
 brew link --force qt5
 ```
 
@@ -120,7 +123,34 @@ $ git clone https://github.com/openstreetmap/merkaartor.git && cd merkaartor
 >  work, but it did in older release and you want to check which one), never
 >  report bugs for older versions.
 
+### Run cmake
+
+```
+$ mkdir build && cd build && cmake ..
+$ make -jX
+```
+
+There are a few build options that can be passed to cmake to configure features
+compiled-in. See the cmake output for a full list (or use CMake GUI to
+configure it):
+
+```
+-- Build options (use -DOPT=ON/OFF to enable/disable):
+--  * ZBAR        OFF
+--  * GEOIMAGE    ON
+--  * GPSD        OFF
+--  * WEBENGINE   OFF
+```
+
+For example, compiling in support for GPSD would be:
+
+```
+cmake .. -DGPSD=ON
+```
+
 ### Run qmake
+
+Note: qmake support is deprecatd and will be removed in the next release. Please use cmake instructions above whenever possible.
 
 ```
 $ qmake -r
@@ -169,48 +199,9 @@ report yours.
 
 ## Packaging
 
-If you want to create installer package, read further.
-
-### Linux
-
-Nothing special here, just follow your distribution's guidelines.
-
-### Windows
-
-You first have to copy all dependencies of merkaartor to the binaries/bin
-directory. The windows/copydeps.sh script does just that:
+The project uses CPack to generate binary packages. In the build directory, invoke the `package` build target:
 
 ```
-$ ./windows/copydeps.sh
-```
-Note that if you made a debug build, all the debug libraries will end up in
-binaries/bin, and there they take almost 1.1G (that's why I'm not publishing
-installer with debug symbols).
-
-You can take the binaries/bin and distribute it as a zip, or create an
-executable installer by invoking NSIS:
-
-```
-$ makensis windows/installer.nsi
+$ make package
 ```
 
-### Mac OS X
-
-Running `macdeployqt` should be enough, but for now, there is a bit more work to
-do:
-
-```
-$ cd binaries/bin
-mv plugins merkaartor.app/Contents
-macdeployqt merkaartor.app -dmg
-```
-
-This should give you merkaartor.dmg. Due to a [bug in
-macdeployqt](https://bugreports.qt.io/browse/QTBUG-53738), you might need to
-create the archive manually:
-
-```
-$ hdiutil create "merkaartor.dmg" -srcfolder merkaartor.app -format UDZO -volname merkaartor -verbose -size 130m
-```
-
-But you still need to run `macdeployqt` to copy all the dependencies.

@@ -1,5 +1,6 @@
 cmake_minimum_required(VERSION 3.19.0)
 
+set(VCS_FALLBACK_VERSION 0.18.4)
 include(cmake/vcs.cmake)
 message(STATUS "Configuring Merkaartor ${VCS_VERSION}, commit: ${VCS_COMMIT}, dirty: ${VCS_DIRTY}.")
 
@@ -26,12 +27,6 @@ add_definitions(-DSHARE_DIR=${CMAKE_INSTALL_PREFIX}/share/merkaartor)
 add_definitions(-DTRANSDIR_MERKAARTOR=${CMAKE_INSTALL_PREFIX}/share/merkaartor)
 
 enable_testing()
-
-message(WARNING "
-
-CMake build is experimental and may be missing some features. Please use qmake for production builds.
-
-")
 
 # TODO: Add support for sanitizers
 
