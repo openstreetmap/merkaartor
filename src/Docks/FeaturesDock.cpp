@@ -47,7 +47,7 @@ FeaturesDock::FeaturesDock(MainWindow* aParent)
     ui.cbWithin->setChecked(M_PREFS->getFeaturesWithin());
     ui.FeaturesList->sortItems();
 
-    connect(this, SIGNAL(visibilityChanged(bool)), this, SLOT(on_Viewport_changed()));
+    connect(this, SIGNAL(visibilityChanged(bool)), this, SLOT(on_Viewport_changed(bool)));
 
     deleteAction = new QAction(NULL, this);
 //    deleteAction->setShortcut(QKeySequence::Delete);
@@ -203,7 +203,7 @@ void FeaturesDock::on_centerAction_triggered()
     }
     Main->view()->blockSignals(false);
 
-    QTimer::singleShot(10, this, SLOT(on_Viewport_changed()));
+    QTimer::singleShot(10, this, SLOT(on_Viewport_changed(true)));
 }
 
 void FeaturesDock::on_centerZoomAction_triggered()
@@ -231,7 +231,7 @@ void FeaturesDock::on_centerZoomAction_triggered()
     }
     Main->view()->blockSignals(false);
 
-    QTimer::singleShot(10, this, SLOT(on_Viewport_changed()));
+    QTimer::singleShot(10, this, SLOT(on_Viewport_changed(true)));
 }
 
 void FeaturesDock::on_downloadAction_triggered()
@@ -317,11 +317,19 @@ void FeaturesDock::tabChanged(int idx)
     updateList();
 }
 
-void FeaturesDock::on_Viewport_changed()
+void FeaturesDock::on_Viewport_changed(bool visible)
 {
-    theViewport = Main->view()->viewport();
+    // Note: This is a bit of a hack. It appers the signal visibilityChanged()
+    // is called AFTER parent windows are destroyed, and the Main object is no
+    // longer valid. This manifests itself on OSX during automated tests, where
+    // the MainWindow is closed rapidly and may be worth a bit more
+    // investigation. We avoid this problem by only updating the data when the
+    // dock is shown, which is good enough for normal operation.
+    if (visible) {
+        theViewport = Main->view()->viewport();
 
-    updateList();
+        updateList();
+    }
 }
 
 void FeaturesDock::addItem(MapFeaturePtr F)
