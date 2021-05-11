@@ -26,8 +26,9 @@ You can clone this repository to obtain the current development version, or chec
 
 ## Nightly builds
 
-For Windows and Mac OS X, nightly builds are automatically generated using Tea-CI and Travis-CI, uploaded to bintray:
-https://bintray.com/krakonos/nightly/Merkaartor .
+For Windows and Mac OS X, nightly builds are automatically generated using Travis-CI, uploaded to cloudsmith:
+
+https://cloudsmith.io/~merkaartor/repos/merkaartor-nightly/packages/
 
 There are currently no nightlies for Linux. It's usually easy to compile from
 source, and the vast amount of distributions doesn't make it easy. I'm
@@ -40,3 +41,11 @@ contribute by sending pull requests for big or small stuff! There is some (very
 little, but it'll grow) useful stuff in [HACKING.md](HACKING.md), but if you
 have questions, contacts us on merkaartor@openstreetmap.org to have them
 answered!
+
+## Thank you!
+
+The following projects provide valuable services for Merkaartor (and other opensource projects) for free:
+
+ - [github.com](https://github.com) free repository hosting and issue tracking
+ - [travis-ci.org](https://travis-ci.org) free continuous integration and testing on Linux, Windows and MacOS
+ - [![cloudsmith.io](https://img.shields.io/badge/OSS%20hosting%20by-cloudsmith-blue?logo=cloudsmith&style=flat)](https://cloudsmith.com) free binary hosting for nightly builds
