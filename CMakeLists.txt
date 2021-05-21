@@ -414,6 +414,7 @@ interfaces/IMapAdapter.h
 
 )
 
+if (NOT APPLE)
 install( FILES ${CMAKE_SOURCE_DIR}/src/org.merkaartor.merkaartor.desktop          DESTINATION share/applications     )
 install( FILES ${CMAKE_SOURCE_DIR}/src/org.merkaartor.merkaartor.appdata.xml      DESTINATION share/metainfo     )
 install( FILES ${CMAKE_SOURCE_DIR}/Icons/8x8/merkaartor.png      DESTINATION share/icons/hicolor/8x8/apps     )
@@ -433,9 +434,19 @@ install( FILES ${CMAKE_SOURCE_DIR}/Icons/128x128/merkaartor.png  DESTINATION sha
 install( FILES ${CMAKE_SOURCE_DIR}/Icons/192x192/merkaartor.png  DESTINATION share/icons/hicolor/192x192/apps )
 install( FILES ${CMAKE_SOURCE_DIR}/Icons/256x256/merkaartor.png  DESTINATION share/icons/hicolor/256x256/apps )
 install( FILES ${CMAKE_SOURCE_DIR}/Icons/512x512/merkaartor.png  DESTINATION share/icons/hicolor/512x512/apps )
+endif()
+
+set(MERKAARTOR_SHARE_FILES
+  ${CMAKE_SOURCE_DIR}/share/BookmarksList.xml
+  ${CMAKE_SOURCE_DIR}/share/Projections.xml
+  ${CMAKE_SOURCE_DIR}/share/TmsServersList.xml
+  ${CMAKE_SOURCE_DIR}/share/WmsServersList.xml
+)
+
+install( FILES ${MERKAARTOR_SHARE_FILES} DESTINATION share/merkaartor)
+set_source_files_properties(${MEKAARTOR_SHARE_FILES} PROPERTIES MACOSX_PACKAGE_LOCATION "Resources")
 
 find_package(Qt5LinguistTools)
-install( DIRECTORY ${CMAKE_SOURCE_DIR}/share/ DESTINATION share/merkaartor PATTERN "*.qrc" EXCLUDE)
 set(TS_FILES
   ${CMAKE_SOURCE_DIR}/translations/merkaartor_ar.ts
   ${CMAKE_SOURCE_DIR}/translations/merkaartor_cs.ts

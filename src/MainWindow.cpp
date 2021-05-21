@@ -422,12 +422,9 @@ MainWindow::MainWindow(QWidget *parent)
     createToolBarManager();  // has to be before restorestate
     M_PREFS->restoreMainWindowState( this );
 
-#ifndef _MOBILE
     if (!M_PREFS->getProjectionsList()->getProjections()->size()) {
-        QMessageBox::critical(this, tr("Cannot load Projections file"), tr("\"Projections.xml\" could not be opened anywhere. Aborting."));
-        exit(1);
+        qWarning() << "Projection list empty. (Projections.xml file could not be opened?).";
     }
-#endif
 
 #define NUMOP 3
     static const char *opStr[NUMOP] = {
