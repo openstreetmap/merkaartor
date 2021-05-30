@@ -12,6 +12,7 @@
 #include "DocumentCommands.h"
 #include "FeatureCommands.h"
 #include "RelationCommands.h"
+#include "WayCommands.h"
 #include "ImportExportOSC.h"
 #include "ExportGPX.h"
 #include "ImportExportKML.h"
@@ -1405,14 +1406,44 @@ void MainWindow::on_editPasteOverwriteAction_triggered()
     CommandList* theList = new CommandList();
     theList->setDescription("Paste tags (overwrite)");
 
+    // We need to keep our own tracking of virtual node index changes as Way virtual nodes can't be changed here
+    QHash<Way *, QList<Node*> > wayVirtualNodeIndex;
+    QList<Node *> addSelectNodes;
+
     for(int i=0; i < sel.size(); ++i) {
-        theList->add(new ClearTagsCommand(sel[i], theDocument->getDirtyOrOriginLayer(sel[i]->layer())));
-        for (FeatureIterator k(doc); !k.isEnd(); ++k) {
-            // Allow any<->any pasting but only takes top level feature into account
-            if (k.get()->sizeParents())
-                continue;
-            Feature::mergeTags(theDocument, theList, sel[i], k.get());
+        if (sel[i]->isVirtual()) {
+            Node* v = CAST_NODE(sel[i]);
+            Way* aRoad = CAST_WAY(v->getParent(0));
+            QHash<Way *, QList<Node*> >::iterator wayVirtualNodeIndexIt = wayVirtualNodeIndex.find(aRoad);
+            if (wayVirtualNodeIndexIt == wayVirtualNodeIndex.end()) {
+                wayVirtualNodeIndexIt = wayVirtualNodeIndex.insert(aRoad, aRoad->getVirtuals());
+            }
+            int SnapIdx = wayVirtualNodeIndexIt->indexOf(v)+1;
+            Node* N = g_backend.allocNode(theDocument->getDirtyOrOriginLayer(aRoad->layer()), *v);
+            N->setVirtual(false);
+
+            addSelectNodes.push_back(N);
+            theList->add(new AddFeatureCommand(theDocument->getDirtyOrOriginLayer(aRoad->layer()),N,true));
+            theList->add(new WayAddNodeCommand(aRoad,N,SnapIdx,theDocument->getDirtyOrOriginLayer(aRoad->layer())));
+            wayVirtualNodeIndexIt->insert(SnapIdx, NULL);
+            for (FeatureIterator k(doc); !k.isEnd(); ++k) {
+                // Allow any<->any pasting but only takes top level feature into account
+                if (k.get()->sizeParents())
+                    continue;
+                Feature::mergeTags(theDocument, theList, N, k.get());
+            }
+        } else {
+            theList->add(new ClearTagsCommand(sel[i], theDocument->getDirtyOrOriginLayer(sel[i]->layer())));
+            for (FeatureIterator k(doc); !k.isEnd(); ++k) {
+                // Allow any<->any pasting but only takes top level feature into account
+                if (k.get()->sizeParents())
+                    continue;
+                Feature::mergeTags(theDocument, theList, sel[i], k.get());
+            }
         }
+    }
+    for(int i=0; i < addSelectNodes.size(); ++i) {
+        properties()->toggleSelection(addSelectNodes[i]);
     }
 
     if (theList->size())
@@ -1439,13 +1470,43 @@ void MainWindow::on_editPasteMergeAction_triggered()
     CommandList* theList = new CommandList();
     theList->setDescription("Paste tags (merge)");
 
+    // We need to keep our own tracking of virtual node index changes as Way virtual nodes can't be changed here
+    QHash<Way *, QList<Node*> > wayVirtualNodeIndex;
+    QList<Node *> addSelectNodes;
+
     for(int i=0; i < sel.size(); ++i) {
-        for (FeatureIterator k(doc); !k.isEnd(); ++k) {
-            // Allow any<->any pasting but only takes top level feature into account
-            if (k.get()->sizeParents())
-                continue;
-            Feature::mergeTags(theDocument, theList, sel[i], k.get());
+        if (sel[i]->isVirtual()) {
+            Node* v = CAST_NODE(sel[i]);
+            Way* aRoad = CAST_WAY(v->getParent(0));
+            QHash<Way *, QList<Node*> >::iterator wayVirtualNodeIndexIt = wayVirtualNodeIndex.find(aRoad);
+            if (wayVirtualNodeIndexIt == wayVirtualNodeIndex.end()) {
+                wayVirtualNodeIndexIt = wayVirtualNodeIndex.insert(aRoad, aRoad->getVirtuals());
+            }
+            int SnapIdx = wayVirtualNodeIndexIt->indexOf(v)+1;
+            Node* N = g_backend.allocNode(theDocument->getDirtyOrOriginLayer(aRoad->layer()), *v);
+            N->setVirtual(false);
+
+            addSelectNodes.push_back(N);
+            theList->add(new AddFeatureCommand(theDocument->getDirtyOrOriginLayer(aRoad->layer()),N,true));
+            theList->add(new WayAddNodeCommand(aRoad,N,SnapIdx,theDocument->getDirtyOrOriginLayer(aRoad->layer())));
+            wayVirtualNodeIndexIt->insert(SnapIdx, NULL);
+            for (FeatureIterator k(doc); !k.isEnd(); ++k) {
+                // Allow any<->any pasting but only takes top level feature into account
+                if (k.get()->sizeParents())
+                    continue;
+                Feature::mergeTags(theDocument, theList, N, k.get());
+            }
+        } else {
+            for (FeatureIterator k(doc); !k.isEnd(); ++k) {
+                // Allow any<->any pasting but only takes top level feature into account
+                if (k.get()->sizeParents())
+                    continue;
+                Feature::mergeTags(theDocument, theList, sel[i], k.get());
+            }
         }
+    }
+    for(int i=0; i < addSelectNodes.size(); ++i) {
+        properties()->toggleSelection(addSelectNodes[i]);
     }
 
     if (theList->size())
