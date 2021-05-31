@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.19.0)
 
-set(VCS_FALLBACK_VERSION 0.18.4)
+set(VCS_FALLBACK_VERSION 0.19.0)
 include(cmake/vcs.cmake)
 message(STATUS "Configuring Merkaartor ${VCS_VERSION}, commit: ${VCS_COMMIT}, dirty: ${VCS_DIRTY}.")
 

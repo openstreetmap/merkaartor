@@ -1,7 +1,12 @@
 This is a shortened changelog. See the Git commits for a full list of changes.
-next
+
+v0.19.0
+    * FIX: Fixed various GDAL import issues on all platforms.
     * CHG: Projection engine no longer enables coordinate wrapping by default.
     * CHG: Projection no longer guesses some EPSG projections only based on string contained, but rather requires it being an exact match.
+    * CHG: Added support for newer Proj.4 versions.
+    * CHG: Improved logging output.
+    * CHG: Added support for gpsd 3.20 and newer
 
 v0.18.4
     * FIX: Fixed "Create rectangular building" when panning (issue 125).
