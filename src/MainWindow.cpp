@@ -1467,10 +1467,13 @@ void MainWindow::clipboardChanged()
     //qDebug() << "Clipboard mime: " << clipboard->mimeData()->formats();
     QDomDocument theXmlDoc;
     bool ok = false;
-    if (clipboard->mimeData()->hasFormat(MIME_OPENSTREETMAP_XML))
-        ok = theXmlDoc.setContent(clipboard->mimeData()->data(MIME_OPENSTREETMAP_XML));
-    else if (clipboard->mimeData()->hasText())
-        ok = theXmlDoc.setContent(clipboard->text());
+    // mimeData() returns nullptr if not supported by the platform
+    if (clipboard->mimeData()) {
+        if (clipboard->mimeData()->hasFormat(MIME_OPENSTREETMAP_XML))
+            ok = theXmlDoc.setContent(clipboard->mimeData()->data(MIME_OPENSTREETMAP_XML));
+        else if (clipboard->mimeData()->hasText())
+            ok = theXmlDoc.setContent(clipboard->text());
+    }
 
     if (!ok) {
         return;
@@ -1752,11 +1755,35 @@ MainWindow::ImportStatus MainWindow::importFileUsingGDAL( Document* mapDocument,
     mapDocument->add(newLayer);
     result = mapDocument->importGDAL(fileName, (DrawingLayer*)newLayer) ? IMPORT_OK : IMPORT_ERROR;
     if (result == IMPORT_ERROR) {
+        mapDocument->remove(newLayer);
         SAFE_DELETE(newLayer);
     }
 
     return result;
 }
+
+/**
+ * Auxilary function to test the import functionality. May be removed when the
+ * import is decoupled from the whole app, but as of now that is too much work.
+ */
+bool MainWindow::testImport(const QString filePath)
+{
+    qDebug() << "Testing import with file: " << filePath;
+    Layer* newLayer = nullptr;
+    importFileUsingGDAL(theDocument, filePath, newLayer);
+    if (newLayer == nullptr) {
+        qDebug() << "FAILED";
+        return false;
+    } else {
+        QRectF bbox = newLayer->boundingBox();
+        int elements = newLayer->size();
+        // Our test data are contained in this rectangle; only rough location is tested, mostly to check for swapper coordinates
+        QRectF testRect = QRectF(QPointF(4,50) ,  QPointF(5,51) );
+        // Return true if nonzero elements were imported and they are contained in our testRect
+        return (elements > 0) && testRect.contains(bbox);
+    }
+}
+
 
 bool MainWindow::importFiles(Document * mapDocument, const QStringList & fileNames, QStringList * importedFileNames, bool useGdal )
 {

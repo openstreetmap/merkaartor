@@ -22,18 +22,8 @@ ProjectionBackend::ProjectionBackend(QString initProjection, std::function<QStri
 
     projCtx = std::shared_ptr<PJ_CONTEXT>(proj_context_create(), proj_context_destroy);
 #if defined(Q_OS_WIN)
-    /* FIXME: Proj >= 7.0 supports relative path lookup natively, we can remove
-     * the relative path here once that gets into msys2. */
-    QString projDirRelative(QDir::toNativeSeparators(qApp->applicationDirPath() + "/../share/proj"));
-    /* The following are hardcoded paths, as if search paths are set, proj no longer searches the default. Can be safely removed with proj7.*/
-    QString projDirMingwStd(QDir::toNativeSeparators("c:/msys64/mingw64/share/proj"));       // Standard msys2 path
-    QString projDirMingwTravis(QDir::toNativeSeparators("c:/tools/msys64/mingw64/share/proj")); // Travis-CI msys2 installation
-    const char* const projDirs[] = {
-        projDirRelative.toUtf8().constData(),
-        projDirMingwStd.toUtf8().constData(),
-        projDirMingwTravis.toUtf8().constData()
-    };
-    proj_context_set_search_paths(projCtx.get(), 3, projDirs);
+    ProjDirs dirs;
+    proj_context_set_search_paths(projCtx.get(), dirs.count, dirs.dirs);
 #endif // Q_OS_WIN
     projTransform = std::shared_ptr<PJ>(nullptr);
     projMutex = std::shared_ptr<QMutex>(new QMutex());

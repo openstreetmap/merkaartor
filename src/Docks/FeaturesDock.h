@@ -54,7 +54,7 @@ public slots:
     void on_btFind_clicked(bool);
     void on_btReset_clicked(bool);
 
-    void on_Viewport_changed();
+    void on_Viewport_changed(bool visible);
 
     void tabChanged(int idx);
 

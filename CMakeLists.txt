@@ -478,16 +478,18 @@ add_custom_target(update-translations COMMAND ${LUPDATE} ${CMAKE_SOURCE_DIR}/src
 # We need GDAL and proj for core functionality
 set(PKGCONFIG_REQUIRED_LIBS gdal proj)
 
-option(ZBAR     "Enable ZBar usage in MWalkingPapersBackground and Geoimage."  OFF)
-option(GEOIMAGE "Enable Geoimage Dock (requires exiv2 library)."               ON )
-option(GPSD     "Enable GPS Dock (requires gpsd library)."                     OFF)
-option(WEBENGINE "Enable the use of QtWeb engine (not supported on all platforms)" OFF)
+option(ZBAR        "Enable ZBar usage in MWalkingPapersBackground and Geoimage."      OFF)
+option(GEOIMAGE    "Enable Geoimage Dock (requires exiv2 library)."                   ON )
+option(GPSD        "Enable GPS Dock (requires gpsd library)."                         OFF)
+option(WEBENGINE   "Enable the use of QtWeb engine (not supported on all platforms)"  OFF)
+option(EXTRA_TESTS "Enable extra tests that cannot be run automatically on CI build." ON )
 
 message(STATUS "Build options (use -DOPT=ON/OFF to enable/disable):")
 message(STATUS " * ZBAR        ${ZBAR}")
 message(STATUS " * GEOIMAGE    ${GEOIMAGE}")
 message(STATUS " * GPSD        ${GPSD}")
 message(STATUS " * WEBENGINE   ${WEBENGINE}")
+message(STATUS " * EXTRA_TESTS ${EXTRA_TESTS}")
 message(STATUS "")
 
 if (ZBAR)
@@ -677,3 +679,22 @@ function(MERK_ADD_TEST test_name)
 endfunction()
 
 MERK_ADD_TEST(test-projection src/common/Projection.cpp src/common/Coord.cpp)
+
+# Additional tests that use the main executable
+if (EXTRA_TESTS)
+add_test(NAME "import-geojson" COMMAND ${PROJECT_NAME} --test-import ${CMAKE_SOURCE_DIR}/tests/data/sample.geojson)
+add_test(NAME "import-shapefile-point" COMMAND ${PROJECT_NAME} --test-import ${CMAKE_SOURCE_DIR}/tests/data/sample-shapefile/POINT.shp)
+add_test(NAME "import-shapefile-polygon" COMMAND ${PROJECT_NAME} --test-import ${CMAKE_SOURCE_DIR}/tests/data/sample-shapefile/POLYGON.shp)
+add_test(NAME "import-shapefile-polyline" COMMAND ${PROJECT_NAME} --test-import ${CMAKE_SOURCE_DIR}/tests/data/sample-shapefile/POLYLINE.shp)
+
+if (CMAKE_SYSTEM_NAME MATCHES "Linux")
+# Use the offscreen platform for tests with GUI to avoid opening/closing the windows. However, the platform is only supported by Qt on Linux
+set_tests_properties(
+    import-geojson
+    import-shapefile-point
+    import-shapefile-polygon
+    import-shapefile-polyline
+    PROPERTIES ENVIRONMENT QT_QPA_PLATFORM=offscreen
+    )
+endif()
+endif()

@@ -93,6 +93,7 @@ int main(int argc, char** argv)
     QLoggingCategory::setFilterRules("merk.*.debug=false");
 
     bool reuse = true;
+    bool testImport = false;
     QStringList argsIn = QCoreApplication::arguments();
     QStringList argsOut;
     argsIn.removeFirst();
@@ -117,6 +118,8 @@ int main(int argc, char** argv)
             g_Merk_Reset_Preferences = true;
         } else if (argsIn[i] == "--ignore-startup-template") {
             g_Merk_IgnoreStartupTemplate = true;
+        } else if (argsIn[i] == "--test-import") {
+            testImport = true;
         } else if (argsIn[i] == "--selfclip") {
             g_Merk_SelfClip = true;
         } else
@@ -136,13 +139,6 @@ int main(int argc, char** argv)
             return 0;
 
     QString logFilename;
-#ifndef NDEBUG
-#if defined(Q_OS_UNIX)
-    logFilename = QString(QDir::homePath() + "/" + qApp->applicationName().toLower() + ".log");
-#else
-    logFilename = QString(qApp->applicationDirPath() + "/" + qApp->applicationName().toLower() + ".log");
-#endif
-#endif
     QStringList fileNames;
     for (int i=0; i < argsOut.size(); ++i) {
         if (argsOut[i] == "-l" || argsOut[i] == "--log") {
@@ -262,9 +258,24 @@ int main(int argc, char** argv)
     Main.show();
 #endif
     instance.processEvents();
-    Main.handleMessage(message);
+    if (!testImport) {
+        Main.handleMessage(message);
+    }
 
     splash.finish(&Main);
+
+    if (testImport) {
+        int testsFailed = 0;
+        for (auto& file : fileNames) {
+            bool ret = Main.testImport(file);
+            qDebug() << "Testing import of file" << file << "result:" << (ret ? "PASSED" : "FAILED");
+            if (!ret) {
+                testsFailed++;
+            }
+        }
+        qDebug() << "All tests done, " << testsFailed << " tests failed.";
+        return testsFailed;
+    }
 
     int x;
     try {
