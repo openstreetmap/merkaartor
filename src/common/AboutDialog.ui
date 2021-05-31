@@ -149,7 +149,7 @@
    <item>
     <widget class="QLabel" name="label">
      <property name="text">
-      <string>Copyright Bart Vanhauwaert, Chris Browet, Ladislav Láska and others, 2006-2016</string>
+      <string>Copyright Bart Vanhauwaert, Chris Browet, Ladislav Láska and others, 2006-2021</string>
      </property>
     </widget>
    </item>

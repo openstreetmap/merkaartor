@@ -479,7 +479,7 @@ qt5_add_translation(QM_FILES
 install( FILES ${QM_FILES} DESTINATION share/merkaartor/translations )
 
 find_program(LUPDATE lupdate)
-add_custom_target(update-translations COMMAND ${LUPDATE} ${CMAKE_SOURCE_DIR}/src ${CMAKE_SOURCE_DIR}/plugins -ts ${TS_FILES})
+add_custom_target(update-translations COMMAND ${LUPDATE} ${CMAKE_SOURCE_DIR}/src ${CMAKE_SOURCE_DIR}/plugins -source-language en -target-language en -ts ${CMAKE_SOURCE_DIR}/translations/merkaartor_en.ts)
 
 
 ##############################################
