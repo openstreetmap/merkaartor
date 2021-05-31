@@ -36,7 +36,7 @@ deploy:
         branch:
             - ci-test
             - master
-            - migrate-bintray-to-cloudsmith
+            - fix-osx-projections.xml
         condition: $TRAVIS_OS_NAME != linux
     provider: script
     script: bash -x build/upload-artifacts.sh
