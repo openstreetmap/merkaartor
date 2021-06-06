@@ -662,7 +662,7 @@
           <item row="0" column="1">
            <widget class="QCheckBox" name="cbDisableAntialiasInPanning">
             <property name="text">
-             <string>No anti-alisaing while panning</string>
+             <string>No anti-aliasing while panning</string>
             </property>
            </widget>
           </item>
@@ -899,7 +899,7 @@
           </size>
          </property>
          <property name="title">
-          <string>OSM API (URL is, e.g., &quot;https://www.openstreetmap.org/api/0.6&quot;</string>
+          <string>OSM API (URL is, e.g., &quot;https://www.openstreetmap.org/api/0.6&quot;)</string>
          </property>
          <layout class="QVBoxLayout" name="OsmServersLayout"/>
         </widget>
