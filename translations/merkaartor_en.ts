@@ -187,11 +187,6 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../plugins/background/MCadastreFranceBackground/qadastre/cadastrebrowser.ui" line="83"/>
-        <source>Ctrl+Q</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="../plugins/background/MCadastreFranceBackground/qadastre/cadastrebrowser.ui" line="88"/>
         <source>Load</source>
         <translation type="unfinished"></translation>
@@ -199,11 +194,6 @@
     <message>
         <location filename="../plugins/background/MCadastreFranceBackground/qadastre/cadastrebrowser.ui" line="91"/>
         <source>Load a city from the cadastre</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../plugins/background/MCadastreFranceBackground/qadastre/cadastrebrowser.ui" line="94"/>
-        <source>Ctrl+O</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -2244,11 +2234,6 @@ Initializing...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="392"/>
-        <source>Ctrl+Q</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="../src/MainWindow.ui" line="400"/>
         <source>&amp;About</source>
         <translation type="unfinished"></translation>
@@ -2352,11 +2337,6 @@ Initializing...</source>
         <location filename="../src/MainWindow.ui" line="583"/>
         <location filename="../src/MainWindow.ui" line="586"/>
         <source>Create link</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/MainWindow.ui" line="589"/>
-        <source>L</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -3200,11 +3180,6 @@ Initializing...</source>
     <message>
         <location filename="../src/MainWindow.ui" line="1622"/>
         <source>&amp;Styles</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/MainWindow.ui" line="2153"/>
-        <source>Ctrl+B</source>
         <translation type="unfinished"></translation>
     </message>
     <message>

@@ -49,7 +49,7 @@
      <x>0</x>
      <y>0</y>
      <width>596</width>
-     <height>22</height>
+     <height>20</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">
@@ -80,7 +80,7 @@
     <string>Quit</string>
    </property>
    <property name="shortcut">
-    <string>Ctrl+Q</string>
+    <string notr="true">Ctrl+Q</string>
    </property>
   </action>
   <action name="actionLoad">
@@ -91,7 +91,7 @@
     <string>Load a city from the cadastre</string>
    </property>
    <property name="shortcut">
-    <string>Ctrl+O</string>
+    <string notr="true">Ctrl+O</string>
    </property>
   </action>
  </widget>

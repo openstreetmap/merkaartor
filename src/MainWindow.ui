@@ -389,7 +389,7 @@
     <string>&amp;Quit</string>
    </property>
    <property name="shortcut">
-    <string>Ctrl+Q</string>
+    <string notr="true">Ctrl+Q</string>
    </property>
    <property name="menuRole">
     <enum>QAction::QuitRole</enum>
@@ -586,7 +586,7 @@
     <string>Create link</string>
    </property>
    <property name="shortcut">
-    <string>L</string>
+    <string notr="true">L</string>
    </property>
   </action>
   <action name="editPropertiesAction">
@@ -2150,7 +2150,7 @@
     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Transform way to a bridge&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
    </property>
    <property name="shortcut">
-    <string>Ctrl+B</string>
+    <string notr="true">Ctrl+B</string>
    </property>
   </action>
  </widget>
