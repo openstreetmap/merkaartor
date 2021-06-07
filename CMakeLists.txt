@@ -455,6 +455,7 @@ set(TS_FILES
   ${CMAKE_SOURCE_DIR}/translations/merkaartor_en.ts
   ${CMAKE_SOURCE_DIR}/translations/merkaartor_es.ts
   ${CMAKE_SOURCE_DIR}/translations/merkaartor_et.ts
+  ${CMAKE_SOURCE_DIR}/translations/merkaartor_fi.ts
   ${CMAKE_SOURCE_DIR}/translations/merkaartor_fr.ts
   ${CMAKE_SOURCE_DIR}/translations/merkaartor_hr.ts
   ${CMAKE_SOURCE_DIR}/translations/merkaartor_hu.ts
