@@ -72,7 +72,7 @@ void ImportCSVDialog::analyze()
 
     QStringList slc = l.split(",");
     int best = slc.size();
-    ui->rbColonDelim->setChecked(true);
+    ui->rbCommaDelim->setChecked(true);
     m_delim = ",";
 
     QStringList sls = l.split(";");
@@ -293,7 +293,7 @@ void ImportCSVDialog::on_lvFields_itemSelectionChanged()
     m_selField = idx;
 }
 
-void ImportCSVDialog::on_rbColonDelim_clicked()
+void ImportCSVDialog::on_rbCommaDelim_clicked()
 {
     m_delim = ",";
     generatePreview();
@@ -455,7 +455,7 @@ void ImportCSVDialog::on_btLoad_clicked()
 
     m_delim = docElem.attribute("delimiter");
     if (m_delim == ",")
-        ui->rbColonDelim->setChecked(true);
+        ui->rbCommaDelim->setChecked(true);
     else if (m_delim == ";")
         ui->rbSemiDelim->setChecked(true);
     else if (m_delim == "tab") {

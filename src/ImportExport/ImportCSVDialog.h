@@ -52,7 +52,7 @@ public:
 protected slots:
     void initialize();
 
-    void on_rbColonDelim_clicked();
+    void on_rbCommaDelim_clicked();
     void on_rbSemiDelim_clicked();
     void on_rbTabDelim_clicked();
     void on_edCustomDelim_textEdited();

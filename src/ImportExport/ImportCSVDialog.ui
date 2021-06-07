@@ -119,9 +119,9 @@ p, li { white-space: pre-wrap; }
           <number>4</number>
          </property>
          <item>
-          <widget class="QRadioButton" name="rbColonDelim">
+          <widget class="QRadioButton" name="rbCommaDelim">
            <property name="text">
-            <string>Colon (,)</string>
+            <string>Comma (,)</string>
            </property>
           </widget>
          </item>
