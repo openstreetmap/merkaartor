@@ -311,6 +311,9 @@ ClearTagCommand::ClearTagCommand(Feature* F)
 ClearTagCommand::ClearTagCommand(Feature* F, const QString& k, Layer* aLayer)
 : TagCommand(F, aLayer), theIdx(F->findKey(k)), theK(k), theV(F->tagValue(k, ""))
 {
+    if (theIdx < 0) {
+        qCritical() << "ClearTagCommand required to remove a non-existent tag.";
+    }
     description = QApplication::tr("Remove tag '%1' from %2").arg(k).arg(F->description());
     oldLayer = theFeature->layer();
     redo();

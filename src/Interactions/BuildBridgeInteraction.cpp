@@ -123,10 +123,14 @@ void BuildBridgeInteraction::splitAndMark() {
 				layer--;
 			}
 
-			if (layer == 0)
-				theList->add(new ClearTagCommand(R, "layer"));
-			else 
+			if (layer == 0) {
+				/* Remove the layer tag if it exists and would become 0. */
+				if (R->findKey("level") != -1) {
+					theList->add(new ClearTagCommand(R, "layer"));
+				}
+			} else {
 				theList->add(new SetTagCommand(R, "layer", QString::number(layer)));
+			}
 		} else {
 			QMessageBox::critical(g_Merk_MainWindow, tr("BridgeBuilder"), tr("Selected segment is already tagged as bridge/tunnel. Please, make sure you know what you're doing."));
 		}
