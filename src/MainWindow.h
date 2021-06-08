@@ -280,6 +280,8 @@ public:
     enum ImportStatus { IMPORT_OK, IMPORT_ABORTED, IMPORT_ERROR };
     bool getPathToSave(const QString& title, const QString& extension, const QString& allowedTypes, QString* path);
 
+    QStringList translationPaths();
+
 protected:
     MapView* theView;
     Document* theDocument;
@@ -323,7 +325,6 @@ private:
     void doSaveDocument(QFile* fn, bool asTemplate=false);
 
     QString makeAbsolute(const QString& path);
-    QStringList translationPaths();
 #if defined(Q_OS_MAC)
     QString macOsTranslationsPath();
 #endif
