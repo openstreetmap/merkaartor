@@ -260,7 +260,7 @@ v0.17
     * ADD : Add a "Properties" dialog to display various info about the current document
     * ADD : Save projection in .MDC files
     * CHG : Do not save the projection in preferences unless the projection is specified thru the menu
-    * ADD : Re-introduce PROJ4 as a build-time optional dependency for projections. It is probably neede for exotic projections...
+    * ADD : Re-introduce PROJ4 as a build-time optional dependency for projections. It is probably needed for exotic projections...
     * FIX : Implement new ID's as global incremented 64-bits integer (fixes #3082)
     * FIX : Lat/lon grid fixes for non-othogonal projections
     * FIX : For non-rthogonal projections, maximize the viewport in lat/lon
