@@ -1,10 +1,20 @@
-<?xml version="1.0" ?><!DOCTYPE TS><TS language="zh_TW" version="2.0">
+<?xml version="1.0" ?><!DOCTYPE TS><TS language="zh_TW" version="2.1">
 <context>
     <name>AboutDialog</name>
     <message>
         <location filename="../src/common/AboutDialog.ui" line="14"/>
         <source>About Merkaartor</source>
         <translation>關於 Merkaartor</translation>
+    </message>
+    <message>
+        <location filename="../src/common/AboutDialog.ui" line="99"/>
+        <source>PROJ version</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/common/AboutDialog.ui" line="159"/>
+        <source>This program is licensed under the GNU General Public License v2</source>
+        <translation>本程式以GNU通用公共授權條款第二版授權</translation>
     </message>
     <message>
         <location filename="../src/common/AboutDialog.ui" line="59"/>
@@ -17,24 +27,14 @@
         <translation>Qt 版本</translation>
     </message>
     <message>
-        <location filename="../src/common/AboutDialog.ui" line="99"/>
-        <source>PROJ.4 version</source>
-        <translation>PROJ.4 版本</translation>
-    </message>
-    <message>
         <location filename="../src/common/AboutDialog.ui" line="109"/>
         <source>GDAL version</source>
         <translation>GDAL 版本</translation>
     </message>
-    <message utf8="true">
-        <location filename="../src/common/AboutDialog.ui" line="152"/>
-        <source>Copyright Bart Vanhauwaert, Chris Browet, Ladislav Láska and others, 2006-2015</source>
-        <translation>Copyright Bart Vanhauwaert, Chris Browet, Ladislav Láska 與其他人，2006-2015</translation>
-    </message>
     <message>
-        <location filename="../src/common/AboutDialog.ui" line="159"/>
-        <source>This program is licensed under the GNU General Public License v2</source>
-        <translation>本程式以GNU通用公共授權條款第二版授權</translation>
+        <location filename="../src/common/AboutDialog.ui" line="152"/>
+        <source>Copyright Bart Vanhauwaert, Chris Browet, Ladislav Láska and others, 2006-2021</source>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/common/AboutDialog.ui" line="185"/>
@@ -167,6 +167,78 @@
     </message>
 </context>
 <context>
+    <name>CadastreBrowser</name>
+    <message>
+        <location filename="../plugins/background/MCadastreFranceBackground/qadastre/cadastrebrowser.ui" line="14"/>
+        <source>CadastreBrowser</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../plugins/background/MCadastreFranceBackground/qadastre/cadastrebrowser.ui" line="57"/>
+        <source>File</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../plugins/background/MCadastreFranceBackground/qadastre/cadastrebrowser.ui" line="77"/>
+        <location filename="../plugins/background/MCadastreFranceBackground/qadastre/cadastrebrowser.ui" line="80"/>
+        <source>Quit</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../plugins/background/MCadastreFranceBackground/qadastre/cadastrebrowser.ui" line="88"/>
+        <source>Load</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../plugins/background/MCadastreFranceBackground/qadastre/cadastrebrowser.ui" line="91"/>
+        <source>Load a city from the cadastre</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
+    <name>CadastreFranceAdapter</name>
+    <message>
+        <location filename="../plugins/background/MCadastreFranceBackground/CadastreFrance.cpp" line="132"/>
+        <source>Grab City...</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../plugins/background/MCadastreFranceBackground/CadastreFrance.cpp" line="135"/>
+        <source>Tiled</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../plugins/background/MCadastreFranceBackground/CadastreFrance.cpp" line="210"/>
+        <source>The city cannot be loaded</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../plugins/background/MCadastreFranceBackground/CadastreFrance.cpp" line="210"/>
+        <source>Only vectorized cities can be handled by this plugin and the selected one is still in &quot;Image&quot; format.</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
+    <name>CadastreWrapper</name>
+    <message>
+        <location filename="../plugins/background/MCadastreFranceBackground/qadastre/cadastrewrapper.cpp" line="209"/>
+        <source>Downloaded: %1/%2
+Remaining time: %3:%4</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../plugins/background/MCadastreFranceBackground/qadastre/cadastrewrapper.cpp" line="211"/>
+        <source>Downloaded: %1/%2
+Remaining time: %3:%4:%5</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../plugins/background/MCadastreFranceBackground/qadastre/cadastrewrapper.cpp" line="214"/>
+        <source>Downloaded: %1/%2</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
     <name>Command</name>
     <message>
         <location filename="../src/Commands/Command.cpp" line="25"/>
@@ -183,13 +255,13 @@
     </message>
     <message>
         <location filename="../src/Interactions/CreateDoubleWayDock.ui" line="25"/>
-        <source>Driving at the right side of the road</source>
-        <translation>靠路的右側行駛</translation>
+        <source>Road driving on the right</source>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/Interactions/CreateDoubleWayDock.ui" line="40"/>
-        <source>Distance between two roads</source>
-        <translation>兩條路之間的距離</translation>
+        <source>Separation distance</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -441,62 +513,62 @@ Please redownload the problematic feature to handle the conflict.</source>
         <translation>開啟變更集</translation>
     </message>
     <message>
-        <location filename="../src/Sync/DirtyListExecutorOSC.cpp" line="301"/>
+        <location filename="../src/Sync/DirtyListExecutorOSC.cpp" line="304"/>
         <source>CLOSE changeset</source>
         <translation>關閉變更集</translation>
     </message>
     <message>
-        <location filename="../src/Sync/DirtyListExecutorOSC.cpp" line="308"/>
+        <location filename="../src/Sync/DirtyListExecutorOSC.cpp" line="311"/>
         <source>Changeset could not be closed.</source>
         <translation>變更集無法關閉。</translation>
     </message>
     <message>
-        <location filename="../src/Sync/DirtyListExecutorOSC.cpp" line="308"/>
+        <location filename="../src/Sync/DirtyListExecutorOSC.cpp" line="311"/>
         <source>An unknown error has occurred. It might already be closed, or will be closed automatically. If you want to be sure, please, check manually on the osm.org website.</source>
         <translation>發生未知的錯誤。它可能已關閉，或是將要自動關閉。若您想要確認，請在 osm.org 網頁上手動檢查。</translation>
     </message>
     <message>
-        <location filename="../src/Sync/DirtyListExecutorOSC.cpp" line="356"/>
+        <location filename="../src/Sync/DirtyListExecutorOSC.cpp" line="359"/>
         <source>ADD relation %1</source>
         <translation>新增關係 %1</translation>
     </message>
     <message>
-        <location filename="../src/Sync/DirtyListExecutorOSC.cpp" line="370"/>
+        <location filename="../src/Sync/DirtyListExecutorOSC.cpp" line="373"/>
         <source>ADD road %1</source>
         <translation>新增道路%1</translation>
     </message>
     <message>
-        <location filename="../src/Sync/DirtyListExecutorOSC.cpp" line="385"/>
+        <location filename="../src/Sync/DirtyListExecutorOSC.cpp" line="388"/>
         <source>ADD trackpoint %1</source>
         <translation>新增軌跡點 %1</translation>
     </message>
     <message>
-        <location filename="../src/Sync/DirtyListExecutorOSC.cpp" line="401"/>
+        <location filename="../src/Sync/DirtyListExecutorOSC.cpp" line="404"/>
         <source>UPDATE relation %1</source>
         <translation>更新關係 %1</translation>
     </message>
     <message>
-        <location filename="../src/Sync/DirtyListExecutorOSC.cpp" line="416"/>
+        <location filename="../src/Sync/DirtyListExecutorOSC.cpp" line="419"/>
         <source>UPDATE road %1</source>
         <translation>更新道路 %1</translation>
     </message>
     <message>
-        <location filename="../src/Sync/DirtyListExecutorOSC.cpp" line="430"/>
+        <location filename="../src/Sync/DirtyListExecutorOSC.cpp" line="433"/>
         <source>UPDATE trackpoint %1</source>
         <translation>更新軌跡點 %1</translation>
     </message>
     <message>
-        <location filename="../src/Sync/DirtyListExecutorOSC.cpp" line="444"/>
+        <location filename="../src/Sync/DirtyListExecutorOSC.cpp" line="447"/>
         <source>REMOVE trackpoint %1</source>
         <translation>移除軌跡點 %1</translation>
     </message>
     <message>
-        <location filename="../src/Sync/DirtyListExecutorOSC.cpp" line="458"/>
+        <location filename="../src/Sync/DirtyListExecutorOSC.cpp" line="461"/>
         <source>REMOVE road %1</source>
         <translation>移除道路 %1</translation>
     </message>
     <message>
-        <location filename="../src/Sync/DirtyListExecutorOSC.cpp" line="472"/>
+        <location filename="../src/Sync/DirtyListExecutorOSC.cpp" line="475"/>
         <source>REMOVE relation %1</source>
         <translation>移除關係 %1</translation>
     </message>
@@ -547,52 +619,52 @@ Please redownload the problematic feature to handle the conflict.</source>
         <translation>正在匯出 OSM...</translation>
     </message>
     <message>
-        <location filename="../src/common/Document.cpp" line="896"/>
+        <location filename="../src/common/Document.cpp" line="897"/>
         <source>Document</source>
         <translation>文件</translation>
     </message>
     <message>
-        <location filename="../src/common/Document.cpp" line="1226"/>
+        <location filename="../src/common/Document.cpp" line="1227"/>
         <source>History rebuild: Create node %1</source>
         <translation>歷史重建：建立節點 %1</translation>
     </message>
     <message>
-        <location filename="../src/common/Document.cpp" line="1232"/>
+        <location filename="../src/common/Document.cpp" line="1233"/>
         <source>History rebuild: Update node %1</source>
         <translation>歷史重建：更新節點 %1</translation>
     </message>
     <message>
-        <location filename="../src/common/Document.cpp" line="1238"/>
+        <location filename="../src/common/Document.cpp" line="1239"/>
         <source>History rebuild: Delete node %1</source>
         <translation>歷史重建：刪除節點 %1</translation>
     </message>
     <message>
-        <location filename="../src/common/Document.cpp" line="1244"/>
+        <location filename="../src/common/Document.cpp" line="1245"/>
         <source>History rebuild: Create way %1</source>
         <translation>歷史重建：建立路徑 %1</translation>
     </message>
     <message>
-        <location filename="../src/common/Document.cpp" line="1250"/>
+        <location filename="../src/common/Document.cpp" line="1251"/>
         <source>History rebuild: Update way %1</source>
         <translation>歷史重建：更新路徑 %1</translation>
     </message>
     <message>
-        <location filename="../src/common/Document.cpp" line="1256"/>
+        <location filename="../src/common/Document.cpp" line="1257"/>
         <source>History rebuild: Delete way %1</source>
         <translation>歷史重建：刪除路徑 %1</translation>
     </message>
     <message>
-        <location filename="../src/common/Document.cpp" line="1262"/>
+        <location filename="../src/common/Document.cpp" line="1263"/>
         <source>History rebuild: Create relation %1</source>
         <translation>歷史重建：建立關係 %1</translation>
     </message>
     <message>
-        <location filename="../src/common/Document.cpp" line="1268"/>
+        <location filename="../src/common/Document.cpp" line="1269"/>
         <source>History rebuild: Update relation %1</source>
         <translation>歷史重建：更新關係 %1</translation>
     </message>
     <message>
-        <location filename="../src/common/Document.cpp" line="1274"/>
+        <location filename="../src/common/Document.cpp" line="1275"/>
         <source>History rebuild: Delete relation %1</source>
         <translation>歷史重建：刪除關係 %1</translation>
     </message>
@@ -649,9 +721,9 @@ Please redownload the problematic feature to handle the conflict.</source>
     <name>Downloader</name>
     <message>
         <location filename="../src/ImportExport/ImportExportOSC.cpp" line="64"/>
-        <location filename="../src/Sync/DownloadOSM.cpp" line="465"/>
-        <location filename="../src/Sync/DownloadOSM.cpp" line="580"/>
-        <location filename="../src/Sync/DownloadOSM.cpp" line="703"/>
+        <location filename="../src/Sync/DownloadOSM.cpp" line="470"/>
+        <location filename="../src/Sync/DownloadOSM.cpp" line="585"/>
+        <location filename="../src/Sync/DownloadOSM.cpp" line="708"/>
         <source>%1 download</source>
         <translation>%1 下載</translation>
     </message>
@@ -672,15 +744,15 @@ Please redownload the problematic feature to handle the conflict.</source>
     </message>
     <message>
         <location filename="../src/ImportExport/ImportOSM.cpp" line="460"/>
-        <location filename="../src/Sync/DownloadOSM.cpp" line="391"/>
-        <location filename="../src/Sync/DownloadOSM.cpp" line="529"/>
+        <location filename="../src/Sync/DownloadOSM.cpp" line="397"/>
+        <location filename="../src/Sync/DownloadOSM.cpp" line="534"/>
         <source>Parsing...</source>
         <translation>正在解析...</translation>
     </message>
     <message>
         <location filename="../src/ImportExport/ImportOSM.cpp" line="466"/>
-        <location filename="../src/Sync/DownloadOSM.cpp" line="398"/>
-        <location filename="../src/Sync/DownloadOSM.cpp" line="536"/>
+        <location filename="../src/Sync/DownloadOSM.cpp" line="404"/>
+        <location filename="../src/Sync/DownloadOSM.cpp" line="541"/>
         <source>Parsing XML</source>
         <translation>正在解析 XML</translation>
     </message>
@@ -735,86 +807,76 @@ Before being able to upload your changes, you will have to manually merge the tw
         <source>Waiting for server response</source>
         <translation>正在等待伺服器回應</translation>
     </message>
-    <message>
-        <location filename="../src/Sync/DownloadOSM.cpp" line="120"/>
-        <source>error</source>
-        <translation>錯誤</translation>
-    </message>
     <message numerus="yes">
-        <location filename="../src/Sync/DownloadOSM.cpp" line="162"/>
+        <location filename="../src/Sync/DownloadOSM.cpp" line="164"/>
         <source>Downloading from OSM (%n bytes)</source>
         <translation type="unfinished"><numerusform></numerusform></translation>
     </message>
     <message numerus="yes">
-        <location filename="../src/Sync/DownloadOSM.cpp" line="164"/>
+        <location filename="../src/Sync/DownloadOSM.cpp" line="166"/>
         <source>Downloading from OSM (%n kBytes)</source>
         <translation type="unfinished"><numerusform></numerusform></translation>
     </message>
     <message>
-        <location filename="../src/Sync/DownloadOSM.cpp" line="284"/>
+        <location filename="../src/Sync/DownloadOSM.cpp" line="286"/>
         <source>Downloading...</source>
         <translation>正在下載...</translation>
     </message>
     <message>
-        <location filename="../src/Sync/DownloadOSM.cpp" line="294"/>
+        <location filename="../src/Sync/DownloadOSM.cpp" line="296"/>
         <source>Downloading from OSM (connecting)</source>
         <translation>正在從 OSM 下載（正在連線）</translation>
     </message>
     <message>
-        <location filename="../src/Sync/DownloadOSM.cpp" line="321"/>
-        <location filename="../src/Sync/DownloadOSM.cpp" line="333"/>
+        <location filename="../src/Sync/DownloadOSM.cpp" line="327"/>
+        <location filename="../src/Sync/DownloadOSM.cpp" line="339"/>
         <source>Unexpected http status code (%1)
 Server message is &apos;%2&apos;</source>
         <translation>未預期的 http 狀態碼 (%1)
 伺服器訊息為「%2」</translation>
     </message>
     <message>
-        <location filename="../src/Sync/DownloadOSM.cpp" line="323"/>
-        <location filename="../src/Sync/DownloadOSM.cpp" line="335"/>
+        <location filename="../src/Sync/DownloadOSM.cpp" line="329"/>
+        <location filename="../src/Sync/DownloadOSM.cpp" line="341"/>
         <source>
 API message is &apos;%1&apos;</source>
         <translation>
 API 訊息為「%1」</translation>
     </message>
     <message>
-        <location filename="../src/Sync/DownloadOSM.cpp" line="324"/>
         <location filename="../src/Sync/DownloadOSM.cpp" line="330"/>
         <location filename="../src/Sync/DownloadOSM.cpp" line="336"/>
+        <location filename="../src/Sync/DownloadOSM.cpp" line="342"/>
         <source>Download failed</source>
         <translation>下載失敗</translation>
     </message>
     <message>
-        <location filename="../src/Sync/DownloadOSM.cpp" line="330"/>
+        <location filename="../src/Sync/DownloadOSM.cpp" line="336"/>
         <source>Username/password invalid</source>
         <translation>使用者名稱／密碼無效</translation>
     </message>
     <message>
-        <location filename="../src/Sync/DownloadOSM.cpp" line="348"/>
+        <location filename="../src/Sync/DownloadOSM.cpp" line="354"/>
         <source>Unresolved conflicts</source>
         <translation>未解決的衝突</translation>
     </message>
     <message>
-        <location filename="../src/Sync/DownloadOSM.cpp" line="348"/>
+        <location filename="../src/Sync/DownloadOSM.cpp" line="354"/>
         <source>Please resolve existing conflicts first</source>
         <translation>請先解決已有的衝突</translation>
     </message>
     <message>
-        <location filename="../src/Sync/DownloadOSM.cpp" line="406"/>
+        <location filename="../src/Sync/DownloadOSM.cpp" line="412"/>
         <source>Downloading trackpoints %1-%2</source>
         <translation>正在下載軌跡點 %1-%2</translation>
     </message>
     <message>
-        <location filename="../src/Sync/DownloadOSM.cpp" line="425"/>
-        <source>Downloaded track - nodes %1-%2</source>
-        <translation>已下載軌跡 - 節點 %1-%2</translation>
-    </message>
-    <message>
-        <location filename="../src/Sync/DownloadOSM.cpp" line="519"/>
+        <location filename="../src/Sync/DownloadOSM.cpp" line="524"/>
         <source>MapDust</source>
         <translation>MapDust</translation>
     </message>
     <message>
-        <location filename="../src/Sync/DownloadOSM.cpp" line="542"/>
+        <location filename="../src/Sync/DownloadOSM.cpp" line="547"/>
         <source>Downloading points</source>
         <translation>正在下載點</translation>
     </message>
@@ -903,52 +965,52 @@ Delete what can be?</source>
 <context>
     <name>FeaturesDock</name>
     <message>
-        <location filename="../src/Docks/FeaturesDock.cpp" line="457"/>
+        <location filename="../src/Docks/FeaturesDock.cpp" line="465"/>
         <source>Features</source>
         <translation>圖徵</translation>
     </message>
     <message>
-        <location filename="../src/Docks/FeaturesDock.cpp" line="458"/>
+        <location filename="../src/Docks/FeaturesDock.cpp" line="466"/>
         <source>Center map</source>
         <translation>地圖置中</translation>
     </message>
     <message>
-        <location filename="../src/Docks/FeaturesDock.cpp" line="459"/>
+        <location filename="../src/Docks/FeaturesDock.cpp" line="467"/>
         <source>Center &amp;&amp; Zoom map</source>
         <translation>置中 &amp;&amp; 縮放地圖</translation>
     </message>
     <message>
-        <location filename="../src/Docks/FeaturesDock.cpp" line="460"/>
+        <location filename="../src/Docks/FeaturesDock.cpp" line="468"/>
         <source>Download missing children</source>
         <translation>下載遺失的子代</translation>
     </message>
     <message>
-        <location filename="../src/Docks/FeaturesDock.cpp" line="461"/>
+        <location filename="../src/Docks/FeaturesDock.cpp" line="469"/>
         <source>Add to selection</source>
         <translation>加入選取集</translation>
     </message>
     <message>
-        <location filename="../src/Docks/FeaturesDock.cpp" line="462"/>
+        <location filename="../src/Docks/FeaturesDock.cpp" line="470"/>
         <source>Delete</source>
         <translation>刪除</translation>
     </message>
     <message>
-        <location filename="../src/Docks/FeaturesDock.cpp" line="469"/>
+        <location filename="../src/Docks/FeaturesDock.cpp" line="477"/>
         <source>Relations</source>
         <translation>關係</translation>
     </message>
     <message>
-        <location filename="../src/Docks/FeaturesDock.cpp" line="470"/>
-        <source>Roads</source>
-        <translation>道路</translation>
+        <location filename="../src/Docks/FeaturesDock.cpp" line="478"/>
+        <source>Ways</source>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/Docks/FeaturesDock.cpp" line="471"/>
-        <source>POI&apos;s</source>
-        <translation>興趣點</translation>
+        <location filename="../src/Docks/FeaturesDock.cpp" line="479"/>
+        <source>Nodes</source>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/Docks/FeaturesDock.cpp" line="472"/>
+        <location filename="../src/Docks/FeaturesDock.cpp" line="480"/>
         <source>All</source>
         <translation>所有</translation>
     </message>
@@ -1068,6 +1130,52 @@ Delete what can be?</source>
         <location filename="../src/Preferences/FilterPreferencesDialog.ui" line="141"/>
         <source>Remove</source>
         <translation>移除</translation>
+    </message>
+</context>
+<context>
+    <name>GdalAdapter</name>
+    <message>
+        <location filename="../plugins/background/MGdalBackground/GdalAdapter.cpp" line="65"/>
+        <source>Load file(s)...</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../plugins/background/MGdalBackground/GdalAdapter.cpp" line="68"/>
+        <source>Specify &quot;source&quot; tag...</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../plugins/background/MGdalBackground/GdalAdapter.cpp" line="473"/>
+        <source>Open GDAL files</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../plugins/background/MGdalBackground/GdalAdapter.cpp" line="499"/>
+        <source>Please specify automatic &quot;source&quot; tag value</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../plugins/background/MGdalBackground/GdalAdapter.cpp" line="500"/>
+        <source>Value:</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../plugins/background/MGdalBackground/GdalAdapter.cpp" line="660"/>
+        <source>Filename(s)</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
+    <name>GdalBackground</name>
+    <message>
+        <location filename="../plugins/background/MGdalBackground/GdalAdapter.cpp" line="487"/>
+        <source>No valid file</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../plugins/background/MGdalBackground/GdalAdapter.cpp" line="487"/>
+        <source>No valid GDAL file could be found.</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -1307,6 +1415,52 @@ Do you still want to use it?</source>
 %2</source>
         <translation>當開啟「%1」時發生錯誤:
 %2</translation>
+    </message>
+</context>
+<context>
+    <name>GeoTiffAdapter</name>
+    <message>
+        <location filename="../plugins/background/MGeoTiffBackground/GeoTiffAdapter.cpp" line="67"/>
+        <source>Load image(s)...</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../plugins/background/MGeoTiffBackground/GeoTiffAdapter.cpp" line="70"/>
+        <source>Specify &quot;source&quot; tag...</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../plugins/background/MGeoTiffBackground/GeoTiffAdapter.cpp" line="232"/>
+        <source>Open GeoTIFF files</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../plugins/background/MGeoTiffBackground/GeoTiffAdapter.cpp" line="259"/>
+        <source>Please specify automatic &quot;source&quot; tag value</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../plugins/background/MGeoTiffBackground/GeoTiffAdapter.cpp" line="260"/>
+        <source>Value:</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../plugins/background/MGeoTiffBackground/GeoTiffAdapter.cpp" line="421"/>
+        <source>Filename(s)</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
+    <name>GeoTiffBackground</name>
+    <message>
+        <location filename="../plugins/background/MGeoTiffBackground/GeoTiffAdapter.cpp" line="246"/>
+        <source>No valid file</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../plugins/background/MGeoTiffBackground/GeoTiffAdapter.cpp" line="246"/>
+        <source>No valid GeoTIFF file could be found.</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -1550,8 +1704,8 @@ Is it really what you meant?</source>
     </message>
     <message>
         <location filename="../src/ImportExport/ImportCSVDialog.ui" line="124"/>
-        <source>Colon (,)</source>
-        <translation>逗號 (,)</translation>
+        <source>Comma (,)</source>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/ImportExport/ImportCSVDialog.ui" line="131"/>
@@ -1746,14 +1900,19 @@ Do you really want to exit?</source>
 <context>
     <name>ImportExportGdal</name>
     <message>
-        <location filename="../src/ImportExport/ImportExportGdal.cpp" line="377"/>
-        <source>Confirm projection</source>
-        <translation>確認投影</translation>
-    </message>
-    <message>
-        <location filename="../src/ImportExport/ImportExportGdal.cpp" line="379"/>
+        <location filename="../plugins/background/MGdalBackground/GdalAdapter.cpp" line="200"/>
+        <location filename="../plugins/background/MGeoTiffBackground/GeoTiffAdapter.cpp" line="202"/>
         <source>Unable to set projection; please specify one</source>
         <translation>無法設定投影；請指定一個</translation>
+    </message>
+</context>
+<context>
+    <name>ImportGPX</name>
+    <message>
+        <location filename="../src/ImportExport/ImportGPX.cpp" line="173"/>
+        <source>Anonymized trackpoints</source>
+        <comment>OSM trackpoints import</comment>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -1911,12 +2070,17 @@ Are you sure you want to close it? (no Undo possible)</source>
         <translation>授權條款</translation>
     </message>
     <message>
-        <location filename="../src/Layers/LicenseDisplayDialog.ui" line="21"/>
-        <source>about:blank</source>
-        <translation>about:blank</translation>
+        <location filename="../src/Layers/LicenseDisplayDialog.ui" line="20"/>
+        <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;The content selected is shared under a non-standard license agreement. The full text is available on the following URL. It is your responsibility to read, understand and agree to the license.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/Layers/LicenseDisplayDialog.ui" line="29"/>
+        <location filename="../src/Layers/LicenseDisplayDialog.ui" line="30"/>
+        <source>TextLabel</source>
+        <translation>文字標籤</translation>
+    </message>
+    <message>
+        <location filename="../src/Layers/LicenseDisplayDialog.ui" line="37"/>
         <source>I have read and agree to the licensing terms</source>
         <translation>我已經讀過且同意這份授權條款</translation>
     </message>
@@ -1932,14 +2096,14 @@ Are you sure you want to close it? (no Undo possible)</source>
 <context>
     <name>Main</name>
     <message>
-        <location filename="../src/Main.cpp" line="185"/>
+        <location filename="../src/Main.cpp" line="192"/>
         <source>%1 v%2
 Loading plugins...</source>
         <translation>%1 v%2
 正在載入外掛程式...</translation>
     </message>
     <message>
-        <location filename="../src/Main.cpp" line="223"/>
+        <location filename="../src/Main.cpp" line="238"/>
         <source>%1 v%2
 Initializing...</source>
         <translation>%1 v%2
@@ -1964,12 +2128,6 @@ Initializing...</source>
         <translation>建立(&amp;C)</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="51"/>
-        <location filename="../src/MainWindow.ui" line="648"/>
-        <source>&amp;Road</source>
-        <translation>道路(&amp;R)</translation>
-    </message>
-    <message>
         <location filename="../src/MainWindow.ui" line="70"/>
         <source>&amp;Edit</source>
         <translation>編輯(&amp;E)</translation>
@@ -1985,16 +2143,6 @@ Initializing...</source>
         <translation>書籤(&amp;B)</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="104"/>
-        <source>Set &amp;projection</source>
-        <translation>設定投影(&amp;P)</translation>
-    </message>
-    <message>
-        <location filename="../src/MainWindow.ui" line="109"/>
-        <source>Set Areas &amp;opacity</source>
-        <translation>設定區域不透明度(&amp;O)</translation>
-    </message>
-    <message>
         <location filename="../src/MainWindow.ui" line="127"/>
         <source>&amp;File</source>
         <translation>檔案(&amp;F)</translation>
@@ -2003,16 +2151,6 @@ Initializing...</source>
         <location filename="../src/MainWindow.ui" line="131"/>
         <source>&amp;Export</source>
         <translation>匯出(&amp;E)</translation>
-    </message>
-    <message>
-        <location filename="../src/MainWindow.ui" line="141"/>
-        <source>Re&amp;cent open</source>
-        <translation>最近開啟(&amp;C)</translation>
-    </message>
-    <message>
-        <location filename="../src/MainWindow.ui" line="146"/>
-        <source>Recen&amp;t import</source>
-        <translation>最近匯入(&amp;T)</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.ui" line="175"/>
@@ -2031,7 +2169,7 @@ Initializing...</source>
     </message>
     <message>
         <location filename="../src/MainWindow.ui" line="215"/>
-        <location filename="../src/MainWindow.ui" line="666"/>
+        <location filename="../src/MainWindow.ui" line="667"/>
         <source>&amp;Node</source>
         <translation>節點(&amp;N)</translation>
     </message>
@@ -2042,7 +2180,7 @@ Initializing...</source>
     </message>
     <message>
         <location filename="../src/MainWindow.ui" line="228"/>
-        <location filename="../src/MainWindow.ui" line="992"/>
+        <location filename="../src/MainWindow.ui" line="993"/>
         <source>&amp;Docks</source>
         <translation>Docks(&amp;D)</translation>
     </message>
@@ -2053,14 +2191,9 @@ Initializing...</source>
     </message>
     <message>
         <location filename="../src/MainWindow.ui" line="259"/>
-        <location filename="../src/MainWindow.ui" line="1017"/>
+        <location filename="../src/MainWindow.ui" line="1018"/>
         <source>&amp;Layers</source>
         <translation>圖層(&amp;L)</translation>
-    </message>
-    <message>
-        <location filename="../src/MainWindow.ui" line="269"/>
-        <source>&amp;Gps</source>
-        <translation>GPS(&amp;G)</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.ui" line="282"/>
@@ -2073,1154 +2206,1187 @@ Initializing...</source>
         <translation>顯示(&amp;H)</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="294"/>
-        <source>Show directional &amp;Arrows</source>
-        <translation>顯示方向箭頭(&amp;A)</translation>
+        <location filename="../src/MainWindow.ui" line="51"/>
+        <source>Wa&amp;y</source>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="339"/>
+        <location filename="../src/MainWindow.ui" line="104"/>
+        <source>&amp;Projection</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/MainWindow.ui" line="109"/>
+        <source>Area &amp;opacity</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/MainWindow.ui" line="141"/>
+        <source>Re&amp;cently opened</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/MainWindow.ui" line="146"/>
+        <source>Recen&amp;tly imported</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/MainWindow.ui" line="294"/>
+        <source>Directional &amp;arrows</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/MainWindow.ui" line="340"/>
         <source>Main toolbar</source>
         <translation>主工具列</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="388"/>
+        <location filename="../src/MainWindow.ui" line="389"/>
         <source>&amp;Quit</source>
         <translation>結束(&amp;Q)</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="399"/>
+        <location filename="../src/MainWindow.ui" line="400"/>
         <source>&amp;About</source>
         <translation>關於(&amp;A)</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="414"/>
+        <location filename="../src/MainWindow.ui" line="415"/>
         <source>&amp;Open</source>
         <translation>開啟(&amp;O)</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="417"/>
+        <location filename="../src/MainWindow.ui" line="418"/>
         <source>Create a new document and import a file</source>
         <translation>建立新文件並匯入檔案</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="429"/>
+        <location filename="../src/MainWindow.ui" line="430"/>
         <source>Zoom &amp;all</source>
         <translation>縮放所有(&amp;A)</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="437"/>
+        <location filename="../src/MainWindow.ui" line="438"/>
         <source>Zoom &amp;window</source>
         <translation>縮放視窗(&amp;W)</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="440"/>
-        <location filename="../src/MainWindow.ui" line="443"/>
+        <location filename="../src/MainWindow.ui" line="441"/>
+        <location filename="../src/MainWindow.ui" line="444"/>
         <source>Zoom window</source>
         <translation>縮放視窗</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="455"/>
+        <location filename="../src/MainWindow.ui" line="456"/>
         <source>Zoom &amp;out</source>
         <translation>縮小(&amp;O)</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="467"/>
+        <location filename="../src/MainWindow.ui" line="468"/>
         <source>Zoom &amp;in</source>
         <translation>放大(&amp;I)</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="470"/>
-        <location filename="../src/MainWindow.ui" line="473"/>
+        <location filename="../src/MainWindow.ui" line="471"/>
+        <location filename="../src/MainWindow.ui" line="474"/>
         <source>Zoom in</source>
         <translation>放大</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="481"/>
-        <location filename="../src/MainWindow.ui" line="484"/>
-        <location filename="../src/MainWindow.ui" line="487"/>
+        <location filename="../src/MainWindow.ui" line="482"/>
+        <location filename="../src/MainWindow.ui" line="485"/>
+        <location filename="../src/MainWindow.ui" line="488"/>
         <source>Curved link</source>
         <translation>曲線連結</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="499"/>
-        <location filename="../src/MainWindow.ui" line="1087"/>
+        <location filename="../src/MainWindow.ui" line="500"/>
+        <location filename="../src/MainWindow.ui" line="1088"/>
         <source>&amp;Undo</source>
         <translation>復原(&amp;U)</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="511"/>
+        <location filename="../src/MainWindow.ui" line="512"/>
         <source>&amp;Redo</source>
         <translation>重做(&amp;R)</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="526"/>
+        <location filename="../src/MainWindow.ui" line="527"/>
         <source>&amp;Move</source>
         <translation>移動(&amp;M)</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="553"/>
+        <location filename="../src/MainWindow.ui" line="539"/>
+        <source>Import using &amp;GDAL</source>
+        <translation>使用 GDAL 匯入(&amp;G)</translation>
+    </message>
+    <message>
+        <location filename="../src/MainWindow.ui" line="554"/>
         <source>&amp;Import</source>
         <translation>匯入(&amp;I)</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="556"/>
+        <location filename="../src/MainWindow.ui" line="557"/>
         <source>Import a file into the current document</source>
         <translation>匯入檔案到目前的文件中</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="568"/>
+        <location filename="../src/MainWindow.ui" line="569"/>
         <source>&amp;Download</source>
         <translation>下載(&amp;D)</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="571"/>
+        <location filename="../src/MainWindow.ui" line="572"/>
         <source>Download map data for a new area</source>
         <translation>為新區域下載地圖資料</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="579"/>
+        <location filename="../src/MainWindow.ui" line="580"/>
         <source>Link</source>
         <translation>連結</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="582"/>
-        <location filename="../src/MainWindow.ui" line="585"/>
+        <location filename="../src/MainWindow.ui" line="583"/>
+        <location filename="../src/MainWindow.ui" line="586"/>
         <source>Create link</source>
         <translation>建立連結</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="588"/>
-        <source>L</source>
-        <translation>L</translation>
-    </message>
-    <message>
-        <location filename="../src/MainWindow.ui" line="600"/>
+        <location filename="../src/MainWindow.ui" line="601"/>
         <source>&amp;Select</source>
         <translation>選取(&amp;S)</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="612"/>
+        <location filename="../src/MainWindow.ui" line="613"/>
         <source>&amp;Upload</source>
         <translation>上傳(&amp;U)</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="615"/>
+        <location filename="../src/MainWindow.ui" line="616"/>
         <source>Upload changes to the server</source>
         <translation>上傳變更到伺服器</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="630"/>
+        <location filename="../src/MainWindow.ui" line="631"/>
         <source>R&amp;emove</source>
         <translation>移除(&amp;E)</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="633"/>
+        <location filename="../src/MainWindow.ui" line="634"/>
         <source>Remove selected features</source>
         <translation>移除選定的圖徵</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="651"/>
-        <source>Create new road</source>
-        <translation>建立新道路</translation>
+        <location filename="../src/MainWindow.ui" line="649"/>
+        <source>&amp;Way</source>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="669"/>
+        <location filename="../src/MainWindow.ui" line="652"/>
+        <source>Create new way</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/MainWindow.ui" line="688"/>
+        <source>Reverse way direction</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/MainWindow.ui" line="700"/>
+        <source>&amp;Go to…</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/MainWindow.ui" line="708"/>
+        <source>&amp;Parallel way</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/MainWindow.ui" line="711"/>
+        <source>Create a parallel way</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/MainWindow.ui" line="740"/>
+        <source>New document</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/MainWindow.ui" line="755"/>
+        <source>Split way into separate (connected) ways</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/MainWindow.ui" line="770"/>
+        <source>Join connected ways into a single way</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/MainWindow.ui" line="788"/>
+        <source>Break apart connected ways</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/MainWindow.ui" line="825"/>
+        <source>&amp;Edit…</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/MainWindow.ui" line="833"/>
+        <location filename="../src/MainWindow.ui" line="949"/>
+        <source>Save &amp;as…</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/MainWindow.ui" line="841"/>
+        <location filename="../src/MainWindow.ui" line="1508"/>
+        <source>&amp;Load…</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/MainWindow.ui" line="849"/>
+        <source>&amp;Curved way</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/MainWindow.ui" line="858"/>
+        <source>&amp;Preferences…</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/MainWindow.ui" line="869"/>
+        <location filename="../src/MainWindow.ui" line="877"/>
+        <source>&amp;All…</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/MainWindow.ui" line="889"/>
+        <source>&amp;Find…</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/MainWindow.ui" line="903"/>
+        <location filename="../src/MainWindow.ui" line="911"/>
+        <source>&amp;Viewport…</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/MainWindow.ui" line="919"/>
+        <source>&amp;Add…</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/MainWindow.ui" line="927"/>
+        <source>&amp;Remove…</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/MainWindow.ui" line="964"/>
+        <source>Save as file</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/MainWindow.ui" line="982"/>
+        <location filename="../src/MainWindow.ui" line="985"/>
+        <source>Download the current view into the previous download layer</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/MainWindow.ui" line="1004"/>
+        <source>Hide/show property dock</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/MainWindow.ui" line="1007"/>
+        <source>Hide/Show the property dock</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/MainWindow.ui" line="1021"/>
+        <location filename="../src/MainWindow.ui" line="1024"/>
+        <source>Hide/show layer dock</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/MainWindow.ui" line="1038"/>
+        <location filename="../src/MainWindow.ui" line="1041"/>
+        <source>Hide/show info dock</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/MainWindow.ui" line="1091"/>
+        <location filename="../src/MainWindow.ui" line="1094"/>
+        <source>Hide/show undo dock</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/MainWindow.ui" line="1105"/>
+        <source>&amp;Downloaded areas</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/MainWindow.ui" line="1163"/>
+        <location filename="../src/MainWindow.ui" line="1168"/>
+        <source>Selected…</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/MainWindow.ui" line="1177"/>
+        <source>Paste feature(s)</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/MainWindow.ui" line="1202"/>
+        <source>OSM (binary)</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/MainWindow.ui" line="1207"/>
+        <source>&amp;Force upload</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/MainWindow.ui" line="1213"/>
+        <location filename="../src/MainWindow.ui" line="1216"/>
+        <source>Commit the selected feature from a non-uploadable layer (e.g. \&quot;Track\&quot; or \&quot;Extract\&quot;) to the dirty layer, ready for upload.</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/MainWindow.ui" line="1240"/>
+        <source>Toggle toolbar</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/MainWindow.ui" line="1243"/>
+        <source>Hide/show Toolbar</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/MainWindow.ui" line="1246"/>
+        <source>Hide/Show toolbar</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/MainWindow.ui" line="1254"/>
+        <source>Hide all</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/MainWindow.ui" line="1262"/>
+        <source>Show all</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/MainWindow.ui" line="1286"/>
+        <source>&amp;Nodes</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/MainWindow.ui" line="1297"/>
+        <source>Na&amp;mes</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/MainWindow.ui" line="1316"/>
+        <source>&amp;Replay…</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/MainWindow.ui" line="1333"/>
+        <location filename="../src/MainWindow.ui" line="1336"/>
+        <source>Hide/show GPS dock</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/MainWindow.ui" line="1372"/>
+        <source>Track &amp;segments</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/MainWindow.ui" line="1383"/>
+        <source>&amp;Scale</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/MainWindow.ui" line="1394"/>
+        <source>&amp;Relations</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/MainWindow.ui" line="1405"/>
+        <source>Show road backgrounds</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/MainWindow.ui" line="1416"/>
+        <source>Show road boundaries</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/MainWindow.ui" line="1478"/>
+        <location filename="../src/MainWindow.ui" line="1481"/>
+        <source>Hide/show GeoImage dock</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/MainWindow.ui" line="1489"/>
+        <source>World OSB manager…</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/MainWindow.ui" line="1500"/>
+        <source>&amp;Shortcut editor…</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/MainWindow.ui" line="1516"/>
+        <source>&amp;Merge…</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/MainWindow.ui" line="1524"/>
+        <source>&amp;Save…</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/MainWindow.ui" line="1562"/>
+        <source>For &apos;oneway&apos; ways</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/MainWindow.ui" line="1588"/>
+        <source>Detach node from a way</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/MainWindow.ui" line="1591"/>
+        <source>Detach a node from a way</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/MainWindow.ui" line="1606"/>
+        <source>&amp;Work offline</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/MainWindow.ui" line="1625"/>
+        <location filename="../src/MainWindow.ui" line="1628"/>
+        <source>Hide/show style dock</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/MainWindow.ui" line="1636"/>
+        <source>&amp;WMS servers editor…</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/MainWindow.ui" line="1644"/>
+        <source>&amp;TMS servers editor…</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/MainWindow.ui" line="1652"/>
+        <source>&amp;Reset discardable dialog status</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/MainWindow.ui" line="1664"/>
+        <source>GPS menu</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/MainWindow.ui" line="1678"/>
+        <source>Create &amp;junction</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/MainWindow.ui" line="1709"/>
+        <source>Equiangular &amp;building</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/MainWindow.ui" line="1717"/>
+        <source>Add new &amp;image layer</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/MainWindow.ui" line="1736"/>
+        <source>Add street &amp;numbers (Karlsruhe schema)</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/MainWindow.ui" line="1754"/>
+        <source>Subdivide a selected way segment (the way and two adjacent nodes) into equidistant segments.</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/MainWindow.ui" line="1765"/>
+        <source>&amp;Virtual nodes</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/MainWindow.ui" line="1776"/>
+        <source>Lat/Lon &amp;grid</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/MainWindow.ui" line="1795"/>
+        <source>&amp;Projection editor…</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/MainWindow.ui" line="1806"/>
+        <source>&amp;Photos on map</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/MainWindow.ui" line="1822"/>
+        <source>Force delete</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/MainWindow.ui" line="1830"/>
+        <source>Add new OpenStreet&amp;Bugs layer</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/MainWindow.ui" line="1854"/>
+        <source>&amp;Filter editor…</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/MainWindow.ui" line="1874"/>
+        <source>&amp;Join areas</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/MainWindow.ui" line="1877"/>
+        <source>Join adjacent areas</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/MainWindow.ui" line="1880"/>
+        <source>Join areas that touch each-other.</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/MainWindow.ui" line="1892"/>
+        <source>&amp;Split area</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/MainWindow.ui" line="1898"/>
+        <source>Split selected area between two selected nodes into two separate areas.</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/MainWindow.ui" line="1924"/>
+        <source>Toolbar editor…</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/MainWindow.ui" line="1942"/>
+        <source>Align edges to a certain number of regularly spaced axis.</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/MainWindow.ui" line="1950"/>
+        <source>&amp;Print…</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/MainWindow.ui" line="1958"/>
+        <source>Print preview…</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/MainWindow.ui" line="1963"/>
+        <source>Properties…</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/MainWindow.ui" line="1982"/>
+        <source>Add new &amp;drawing layer</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/MainWindow.ui" line="2002"/>
+        <source>Add new &amp;filter layer</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/MainWindow.ui" line="2052"/>
+        <source>Save as template document…</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/MainWindow.ui" line="2060"/>
+        <source>Create multipolygon</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/MainWindow.ui" line="2065"/>
+        <source>Add to multi&amp;polygon</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/MainWindow.ui" line="2089"/>
+        <source>Bing road detector</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/MainWindow.ui" line="2097"/>
+        <source>Rebuild &amp;history</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/MainWindow.ui" line="2105"/>
+        <source>Add new Map&amp;dust layer</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/MainWindow.ui" line="670"/>
         <source>Create new node</source>
         <translation>建立新節點</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="684"/>
+        <location filename="../src/MainWindow.ui" line="685"/>
         <source>&amp;Reverse</source>
         <translation>反轉(&amp;R)</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="687"/>
-        <source>Reverse road direction</source>
-        <translation>反轉道路方向</translation>
-    </message>
-    <message>
-        <location filename="../src/MainWindow.ui" line="699"/>
-        <source>&amp;Go To...</source>
-        <translation>到... (&amp;G)</translation>
-    </message>
-    <message>
-        <location filename="../src/MainWindow.ui" line="707"/>
-        <source>&amp;Double carriage way</source>
-        <translation>雙向車徑(&amp;D)</translation>
-    </message>
-    <message>
-        <location filename="../src/MainWindow.ui" line="710"/>
-        <source>Create Double carriage way</source>
-        <translation>建立雙向車徑</translation>
-    </message>
-    <message>
-        <location filename="../src/MainWindow.ui" line="718"/>
+        <location filename="../src/MainWindow.ui" line="719"/>
         <source>R&amp;oundabout</source>
         <translation>圓環(&amp;O)</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="721"/>
+        <location filename="../src/MainWindow.ui" line="722"/>
         <source>Create Roundabout</source>
         <translation>建立圓環</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="736"/>
+        <location filename="../src/MainWindow.ui" line="737"/>
         <source>&amp;New</source>
         <translation>新的(&amp;N)</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="739"/>
-        <source>Create a new document</source>
-        <translation>建立新文件</translation>
-    </message>
-    <message>
-        <location filename="../src/MainWindow.ui" line="751"/>
+        <location filename="../src/MainWindow.ui" line="752"/>
         <source>&amp;Split</source>
         <translation>分離(&amp;S)</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="754"/>
-        <source>Split road into separate (connected) roads</source>
-        <translation>將道路分離為獨立（但相連）的道路</translation>
-    </message>
-    <message>
-        <location filename="../src/MainWindow.ui" line="766"/>
+        <location filename="../src/MainWindow.ui" line="767"/>
         <source>&amp;Join</source>
         <translation>加入(&amp;J)</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="769"/>
-        <source>Join connected roads to a single road</source>
-        <translation>將相連的道路相黏為單一道路</translation>
-    </message>
-    <message>
-        <location filename="../src/MainWindow.ui" line="781"/>
+        <location filename="../src/MainWindow.ui" line="782"/>
         <source>&amp;Break apart</source>
         <translation>分開(&amp;B)</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="784"/>
+        <location filename="../src/MainWindow.ui" line="785"/>
         <source>Break</source>
         <translation>分開</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="787"/>
-        <source>Break apart connected roads</source>
-        <translation>分開相連的道路</translation>
-    </message>
-    <message>
-        <location filename="../src/MainWindow.ui" line="795"/>
+        <location filename="../src/MainWindow.ui" line="796"/>
         <source>Re&amp;lation</source>
         <translation>關係(&amp;L)</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="798"/>
+        <location filename="../src/MainWindow.ui" line="799"/>
         <source>Create Relation</source>
         <translation>建立關係</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="813"/>
+        <location filename="../src/MainWindow.ui" line="814"/>
         <source>&amp;Area</source>
         <translation>區域(&amp;A)</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="816"/>
+        <location filename="../src/MainWindow.ui" line="817"/>
         <source>Create new area</source>
         <translation>建立新區域</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="824"/>
-        <source>&amp;Edit...</source>
-        <translation>編輯... (&amp;E)</translation>
-    </message>
-    <message>
-        <location filename="../src/MainWindow.ui" line="832"/>
-        <location filename="../src/MainWindow.ui" line="948"/>
-        <source>Save &amp;As...</source>
-        <translation>另存為... (&amp;A)</translation>
-    </message>
-    <message>
-        <location filename="../src/MainWindow.ui" line="840"/>
-        <location filename="../src/MainWindow.ui" line="1507"/>
-        <source>&amp;Load...</source>
-        <translation>載入... (&amp;L)</translation>
-    </message>
-    <message>
-        <location filename="../src/MainWindow.ui" line="848"/>
-        <source>&amp;Curved road</source>
-        <translation>彎道(&amp;C)</translation>
-    </message>
-    <message>
-        <location filename="../src/MainWindow.ui" line="857"/>
-        <source>&amp;Preferences...</source>
-        <translation>偏好設定... (&amp;P)</translation>
-    </message>
-    <message>
-        <location filename="../src/MainWindow.ui" line="868"/>
-        <location filename="../src/MainWindow.ui" line="876"/>
-        <source>&amp;All...</source>
-        <translation>所有... (&amp;A)</translation>
-    </message>
-    <message>
-        <location filename="../src/MainWindow.ui" line="871"/>
-        <location filename="../src/MainWindow.ui" line="879"/>
+        <location filename="../src/MainWindow.ui" line="872"/>
+        <location filename="../src/MainWindow.ui" line="880"/>
         <source>Export all visible layers to a file</source>
         <translation>將所有可見圖層匯出到檔案</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="888"/>
-        <source>&amp;Find...</source>
-        <translation>尋找... (&amp;F)</translation>
-    </message>
-    <message>
-        <location filename="../src/MainWindow.ui" line="891"/>
+        <location filename="../src/MainWindow.ui" line="892"/>
         <source>Find</source>
         <translation>尋找</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="894"/>
+        <location filename="../src/MainWindow.ui" line="895"/>
         <source>Find and select items</source>
         <translation>尋找並選取項目</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="902"/>
-        <location filename="../src/MainWindow.ui" line="910"/>
-        <source>&amp;Viewport...</source>
-        <translation>檢視區域... (&amp;V)</translation>
-    </message>
-    <message>
-        <location filename="../src/MainWindow.ui" line="905"/>
-        <location filename="../src/MainWindow.ui" line="913"/>
+        <location filename="../src/MainWindow.ui" line="906"/>
+        <location filename="../src/MainWindow.ui" line="914"/>
         <source>Export the features in the viewport to a file</source>
         <translation>將在檢視區域中的圖徽匯出到檔案</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="918"/>
-        <source>&amp;Add...</source>
-        <translation>新增... (&amp;A)</translation>
-    </message>
-    <message>
-        <location filename="../src/MainWindow.ui" line="926"/>
-        <source>&amp;Remove...</source>
-        <translation>移除... (&amp;R)</translation>
-    </message>
-    <message>
-        <location filename="../src/MainWindow.ui" line="934"/>
+        <location filename="../src/MainWindow.ui" line="935"/>
         <source>&amp;Merge</source>
         <translation>合併(&amp;M)</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="937"/>
+        <location filename="../src/MainWindow.ui" line="938"/>
         <source>Node Merge</source>
         <translation>節點合併</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="940"/>
+        <location filename="../src/MainWindow.ui" line="941"/>
         <source>Merge the selected nodes (first selected will remain)</source>
         <translation>合併選定的節點（第一個選取的將會保留）</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="960"/>
-        <location filename="../src/MainWindow.ui" line="2072"/>
+        <location filename="../src/MainWindow.ui" line="961"/>
+        <location filename="../src/MainWindow.ui" line="2073"/>
         <source>&amp;Save</source>
         <translation>儲存(&amp;S)</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="963"/>
-        <source>Save to file</source>
-        <translation>儲存到檔案</translation>
-    </message>
-    <message>
-        <location filename="../src/MainWindow.ui" line="975"/>
+        <location filename="../src/MainWindow.ui" line="976"/>
         <source>Download more</source>
         <translation>下載更多</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="978"/>
+        <location filename="../src/MainWindow.ui" line="979"/>
         <source>Download more map data for the current area</source>
         <translation>下載目前區域的更多地圖資料</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="981"/>
-        <location filename="../src/MainWindow.ui" line="984"/>
-        <source>Download the current view to the previous download layer</source>
-        <translation>下載目前檢視的部份到先前下載的圖層</translation>
-    </message>
-    <message>
-        <location filename="../src/MainWindow.ui" line="1000"/>
+        <location filename="../src/MainWindow.ui" line="1001"/>
         <source>&amp;Properties</source>
         <translation>屬性(&amp;P)</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1003"/>
-        <location filename="../src/MainWindow.ui" line="1006"/>
-        <source>Hide/Show the Properties dock</source>
-        <translation>隱藏／顯示屬性 dock</translation>
-    </message>
-    <message>
-        <location filename="../src/MainWindow.ui" line="1020"/>
-        <location filename="../src/MainWindow.ui" line="1023"/>
-        <source>Hide/Show the Layers dock</source>
-        <translation>隱藏／顯示圖層 dock</translation>
-    </message>
-    <message>
-        <location filename="../src/MainWindow.ui" line="1034"/>
+        <location filename="../src/MainWindow.ui" line="1035"/>
         <source>&amp;Info</source>
         <translation>資訊(&amp;I)</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1037"/>
-        <location filename="../src/MainWindow.ui" line="1040"/>
-        <source>Hide/Show the Info dock</source>
-        <translation>隱藏／顯示資訊 dock</translation>
-    </message>
-    <message>
-        <location filename="../src/MainWindow.ui" line="1052"/>
+        <location filename="../src/MainWindow.ui" line="1053"/>
         <source>&amp;Align</source>
         <translation>對齊(&amp;A)</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1055"/>
+        <location filename="../src/MainWindow.ui" line="1056"/>
         <source>Align nodes</source>
         <translation>對齊節點</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1058"/>
+        <location filename="../src/MainWindow.ui" line="1059"/>
         <source>Align selected nodes. First two selected give the line.</source>
         <translation>對齊選定的節點。前兩個選定的會繪出要對齊的線。</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1070"/>
+        <location filename="../src/MainWindow.ui" line="1071"/>
         <source>&amp;Spread</source>
         <translation>展開(&amp;S)</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1073"/>
+        <location filename="../src/MainWindow.ui" line="1074"/>
         <source>Spread nodes</source>
         <translation>展開節點</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1076"/>
+        <location filename="../src/MainWindow.ui" line="1077"/>
         <source>Align and spread selected nodes equally.</source>
         <translation>對齊並平均展開選定的節點。</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1090"/>
-        <location filename="../src/MainWindow.ui" line="1093"/>
-        <source>Hide/Show the Undo dock</source>
-        <translation>隱藏／顯示復原 dock</translation>
-    </message>
-    <message>
-        <location filename="../src/MainWindow.ui" line="1104"/>
-        <source>Show &amp;downloaded areas</source>
-        <translation>顯示已下載的區域(&amp;D)</translation>
-    </message>
-    <message>
-        <location filename="../src/MainWindow.ui" line="1116"/>
+        <location filename="../src/MainWindow.ui" line="1117"/>
         <source>&amp;Copy</source>
         <translation>複製(&amp;C)</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1119"/>
+        <location filename="../src/MainWindow.ui" line="1120"/>
         <source>Copy selected features and tags to the clipboard</source>
         <translation>複製選定的圖徽及標籤到剪貼簿中</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1122"/>
+        <location filename="../src/MainWindow.ui" line="1123"/>
         <source>Copy the selected feature&apos;s tags to the clipboard; if the feature is a trackpoint, copy the coordinates, too.</source>
         <translation>複製選定圖徽的標籤到剪貼簿；若該圖徽為軌跡點，也會複製其座標。</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1130"/>
+        <location filename="../src/MainWindow.ui" line="1131"/>
         <source>Paste Tags (&amp;Overwrite)</source>
         <translation>貼上標籤（覆寫）(&amp;O)</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1133"/>
+        <location filename="../src/MainWindow.ui" line="1134"/>
         <source>Paste (and overwrite) the tags in the clipboard to the selected feature.</source>
         <translation>將在剪貼簿中的標籤貼上（並覆寫）至選定的圖徽中</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1145"/>
+        <location filename="../src/MainWindow.ui" line="1146"/>
         <source>Paste Tags (&amp;Merge)</source>
         <translation>貼上標籤（合併）(&amp;M)</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1148"/>
+        <location filename="../src/MainWindow.ui" line="1149"/>
         <source>Paste tags</source>
         <translation>貼上標籤</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1151"/>
+        <location filename="../src/MainWindow.ui" line="1152"/>
         <source>Paste tags from the clipboard (Merge with existing tags)</source>
         <translation>從剪貼簿貼上標籤（與已有的標籤合併）</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1154"/>
+        <location filename="../src/MainWindow.ui" line="1155"/>
         <source>Merge the tags in the clipboard with the ones of the selected feature.</source>
         <translation>將剪貼簿中的標籤與選定圖徽中的標籤合併。</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1162"/>
-        <location filename="../src/MainWindow.ui" line="1167"/>
-        <source>Selected...</source>
-        <translation>已選取...</translation>
-    </message>
-    <message>
-        <location filename="../src/MainWindow.ui" line="1176"/>
-        <source>Paste Feature(s)</source>
-        <translation>貼上圖徽</translation>
-    </message>
-    <message>
-        <location filename="../src/MainWindow.ui" line="1179"/>
+        <location filename="../src/MainWindow.ui" line="1180"/>
         <source>Paste</source>
         <translation>貼上</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1182"/>
+        <location filename="../src/MainWindow.ui" line="1183"/>
         <source>Paste features from the clipboard</source>
         <translation>從剪貼簿貼上圖徽</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1185"/>
+        <location filename="../src/MainWindow.ui" line="1186"/>
         <source>Paste the features in the clipboard; If the features&apos;id are already in the document, overwrite them.</source>
         <translation>貼上在減貼簿中的圖徽；若圖徽的 ID 已經在文件裡面了，覆寫它們。</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1193"/>
+        <location filename="../src/MainWindow.ui" line="1194"/>
         <source>OSM (XML)</source>
         <translation>OSM (XML)</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1201"/>
-        <source>OSM (Binary)</source>
-        <translation>OSM（二進位檔）</translation>
-    </message>
-    <message>
-        <location filename="../src/MainWindow.ui" line="1206"/>
-        <source>&amp;Force Upload</source>
-        <translation>強制上傳(&amp;F)</translation>
-    </message>
-    <message>
-        <location filename="../src/MainWindow.ui" line="1209"/>
+        <location filename="../src/MainWindow.ui" line="1210"/>
         <source>Commit feature to the dirty layer</source>
         <translation>遞交圖徽到有問題的圖層</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1212"/>
-        <location filename="../src/MainWindow.ui" line="1215"/>
-        <source>Commit the selected feature from a non-uploadable layer (e.g.Track or Extract) to the dirty layer, ready for upload</source>
-        <translation>從無法上傳的圖層中遞交選定的圖徽（例如軌跡或摘錄）到準備好上傳的有問題的圖層</translation>
-    </message>
-    <message>
-        <location filename="../src/MainWindow.ui" line="1223"/>
+        <location filename="../src/MainWindow.ui" line="1224"/>
         <source>GPX</source>
         <translation>GPX</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1231"/>
+        <location filename="../src/MainWindow.ui" line="1232"/>
         <source>KML</source>
         <translation>KML</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1239"/>
-        <source>Toggle Toolbar</source>
-        <translation>切換工具列</translation>
-    </message>
-    <message>
-        <location filename="../src/MainWindow.ui" line="1242"/>
-        <location filename="../src/MainWindow.ui" line="1245"/>
-        <source>Hide/Show the Toolbar</source>
-        <translation>隱藏／顯示工具列</translation>
-    </message>
-    <message>
-        <location filename="../src/MainWindow.ui" line="1253"/>
-        <source>Hide All</source>
-        <translation>隱藏所有</translation>
-    </message>
-    <message>
-        <location filename="../src/MainWindow.ui" line="1261"/>
-        <source>Show All</source>
-        <translation>顯示所有</translation>
-    </message>
-    <message>
-        <location filename="../src/MainWindow.ui" line="1272"/>
+        <location filename="../src/MainWindow.ui" line="1273"/>
         <source>&amp;Image layer</source>
         <translation>圖片圖層(&amp;I)</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1277"/>
+        <location filename="../src/MainWindow.ui" line="1278"/>
         <source>&amp;Raster/SVG</source>
         <translation>Raster/SVG(&amp;R)</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1285"/>
-        <source>Show &amp;nodes</source>
-        <translation>顯示節點(&amp;N)</translation>
-    </message>
-    <message>
-        <location filename="../src/MainWindow.ui" line="1296"/>
-        <source>Show na&amp;mes</source>
-        <translation>顯示名稱(&amp;M)</translation>
-    </message>
-    <message>
-        <location filename="../src/MainWindow.ui" line="1304"/>
+        <location filename="../src/MainWindow.ui" line="1305"/>
         <source>&amp;Start</source>
         <translation>啟動(&amp;S)</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1307"/>
+        <location filename="../src/MainWindow.ui" line="1308"/>
         <source>Start GPS</source>
         <translation>啟動 GPS</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1315"/>
-        <source>&amp;Replay...</source>
-        <translation>重播... (&amp;R)</translation>
-    </message>
-    <message>
-        <location filename="../src/MainWindow.ui" line="1318"/>
+        <location filename="../src/MainWindow.ui" line="1319"/>
         <source>Replay GPS</source>
         <translation>重播 GPS</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1329"/>
+        <location filename="../src/MainWindow.ui" line="269"/>
+        <location filename="../src/MainWindow.ui" line="1330"/>
         <source>&amp;GPS</source>
         <translation>GPS(&amp;G)</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1332"/>
-        <location filename="../src/MainWindow.ui" line="1335"/>
-        <source>Hide/Show the GPS dock</source>
-        <translation>隱藏／顯示 GPS dock</translation>
-    </message>
-    <message>
-        <location filename="../src/MainWindow.ui" line="1346"/>
+        <location filename="../src/MainWindow.ui" line="1347"/>
         <source>S&amp;top</source>
         <translation>停止(&amp;T)</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1349"/>
+        <location filename="../src/MainWindow.ui" line="1350"/>
         <source>Stop GPS</source>
         <translation>停止 GPS</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1360"/>
+        <location filename="../src/MainWindow.ui" line="1361"/>
         <source>&amp;Center on GPS</source>
         <translation>在 GPS 上置中(&amp;C)</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1371"/>
-        <source>Show track &amp;segments</source>
-        <translation>顯示軌跡區段(&amp;S)</translation>
-    </message>
-    <message>
-        <location filename="../src/MainWindow.ui" line="1382"/>
-        <source>Show &amp;scale</source>
-        <translation>顯示比例尺(&amp;S)</translation>
-    </message>
-    <message>
-        <location filename="../src/MainWindow.ui" line="1393"/>
-        <source>Show &amp;relations</source>
-        <translation>顯示關係(&amp;R)</translation>
-    </message>
-    <message>
-        <location filename="../src/MainWindow.ui" line="1404"/>
-        <source>Show roads background</source>
-        <translation>顯示道路背景</translation>
-    </message>
-    <message>
-        <location filename="../src/MainWindow.ui" line="1415"/>
-        <source>Show roads boundary</source>
-        <translation>顯示道路範圍</translation>
-    </message>
-    <message>
-        <location filename="../src/MainWindow.ui" line="1426"/>
+        <location filename="../src/MainWindow.ui" line="1427"/>
         <source>Show touchup</source>
         <translation>顯示修改</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1440"/>
-        <location filename="../src/MainWindow.ui" line="1443"/>
+        <location filename="../src/MainWindow.ui" line="1441"/>
+        <location filename="../src/MainWindow.ui" line="1444"/>
         <source>Record</source>
         <translation>紀錄</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1446"/>
+        <location filename="../src/MainWindow.ui" line="1447"/>
         <source>Record GPS</source>
         <translation>記錄 GPS</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1460"/>
+        <location filename="../src/MainWindow.ui" line="1461"/>
         <source>Pause</source>
         <translation>暫停</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1463"/>
+        <location filename="../src/MainWindow.ui" line="1464"/>
         <source>Pause GPS</source>
         <translation>暫停 GPS</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1474"/>
+        <location filename="../src/MainWindow.ui" line="1475"/>
         <source>G&amp;eoImage</source>
         <translation>地理圖片(&amp;E)</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1477"/>
-        <location filename="../src/MainWindow.ui" line="1480"/>
-        <source>Hide/Show the GeoImage dock</source>
-        <translation>隱藏／顯示地理圖片 dock</translation>
-    </message>
-    <message>
-        <location filename="../src/MainWindow.ui" line="1488"/>
-        <source>World OSB manager...</source>
-        <translation>世界 OSB 管理員...</translation>
-    </message>
-    <message>
-        <location filename="../src/MainWindow.ui" line="1499"/>
-        <source>&amp;Shortcut Editor...</source>
-        <translation>快捷鍵編輯器... (&amp;S)</translation>
-    </message>
-    <message>
-        <location filename="../src/MainWindow.ui" line="1515"/>
-        <source>&amp;Merge...</source>
-        <translation>合併... (&amp;M)</translation>
-    </message>
-    <message>
-        <location filename="../src/MainWindow.ui" line="1523"/>
-        <source>&amp;Save...</source>
-        <translation>儲存... (&amp;S)</translation>
-    </message>
-    <message>
-        <location filename="../src/MainWindow.ui" line="1531"/>
+        <location filename="../src/MainWindow.ui" line="1532"/>
         <source>&amp;Add member</source>
         <translation>加入成員(&amp;A)</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1539"/>
+        <location filename="../src/MainWindow.ui" line="1540"/>
         <source>&amp;Remove member</source>
         <translation>移除成員(&amp;R)</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1550"/>
+        <location filename="../src/MainWindow.ui" line="1551"/>
         <source>&amp;Never</source>
         <translation>從不(&amp;N)</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1561"/>
-        <source>for &amp;Oneway roads</source>
-        <translation>單行道(&amp;O)</translation>
-    </message>
-    <message>
-        <location filename="../src/MainWindow.ui" line="1572"/>
+        <location filename="../src/MainWindow.ui" line="1573"/>
         <source>&amp;Always</source>
         <translation>總是(&amp;A)</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1584"/>
+        <location filename="../src/MainWindow.ui" line="1585"/>
         <source>&amp;Detach</source>
         <translation>分離(&amp;D)</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1587"/>
-        <source>Detach node from a road</source>
-        <translation>從道路分離節點</translation>
-    </message>
-    <message>
-        <location filename="../src/MainWindow.ui" line="1590"/>
-        <source>Detach a node from a Road</source>
-        <translation>從道路分離節點</translation>
-    </message>
-    <message>
-        <location filename="../src/MainWindow.ui" line="1605"/>
-        <source>&amp;Work Offline</source>
-        <translation>離線工作(&amp;W)</translation>
-    </message>
-    <message>
-        <location filename="../src/MainWindow.ui" line="1613"/>
+        <location filename="../src/MainWindow.ui" line="1614"/>
         <source>SVG</source>
         <translation>SVG</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1621"/>
+        <location filename="../src/MainWindow.ui" line="1622"/>
         <source>&amp;Styles</source>
         <translation>樣式(&amp;S)</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1624"/>
-        <location filename="../src/MainWindow.ui" line="1627"/>
-        <source>Hide/Show the Styles dock</source>
-        <translation>隱藏／顯示樣式 dock</translation>
-    </message>
-    <message>
-        <location filename="../src/MainWindow.ui" line="2152"/>
-        <source>Ctrl+B</source>
-        <translation>Ctrl+B</translation>
-    </message>
-    <message>
-        <location filename="../src/MainWindow.ui" line="1635"/>
-        <source>&amp;WMS Servers Editor...</source>
-        <translation>WMS 服務編輯器... (&amp;W)</translation>
-    </message>
-    <message>
-        <location filename="../src/MainWindow.ui" line="538"/>
-        <source>&amp;Import using GDAL</source>
-        <translation>使用 GDAL 匯入(&amp;I)</translation>
-    </message>
-    <message>
-        <location filename="../src/MainWindow.ui" line="541"/>
+        <location filename="../src/MainWindow.ui" line="542"/>
         <source>Import a file into the current document using GDAL</source>
         <translation>使用 GDAL 匯入檔案到目前的文件中</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1643"/>
-        <source>&amp;TMS Servers Editor...</source>
-        <translation>TMS 服務編輯器... (&amp;T)</translation>
-    </message>
-    <message>
-        <location filename="../src/MainWindow.ui" line="1651"/>
-        <source>&amp;Reset Discardable dialogs status</source>
-        <translation>重置丟棄對話框的狀態(&amp;R)</translation>
-    </message>
-    <message>
-        <location filename="../src/MainWindow.ui" line="1663"/>
-        <source>GPS Menu</source>
-        <translation>GPS 選單</translation>
-    </message>
-    <message>
-        <location filename="../src/MainWindow.ui" line="1672"/>
+        <location filename="../src/MainWindow.ui" line="1673"/>
         <source>Camera</source>
         <translation>攝影機</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1677"/>
-        <source>Create &amp;Junction</source>
-        <translation>建立交點(&amp;J)</translation>
-    </message>
-    <message>
-        <location filename="../src/MainWindow.ui" line="1692"/>
+        <location filename="../src/MainWindow.ui" line="1693"/>
         <source>Rotate</source>
         <translation>旋轉</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1700"/>
+        <location filename="../src/MainWindow.ui" line="1701"/>
         <source>&amp;Polygon</source>
         <translation>多邊形(&amp;P)</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1708"/>
-        <source>Rectangular &amp;building</source>
-        <translation>長方形建築物(&amp;B)</translation>
-    </message>
-    <message>
-        <location filename="../src/MainWindow.ui" line="1716"/>
-        <source>Add new &amp;Image layer</source>
-        <translation>加入新的圖片圖層(&amp;I)</translation>
-    </message>
-    <message>
-        <location filename="../src/MainWindow.ui" line="1727"/>
+        <location filename="../src/MainWindow.ui" line="1728"/>
         <source>Features</source>
         <translation>特徵</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1735"/>
-        <source>Add street &amp;numbers (Karlsruhe scheme)</source>
-        <translation>加入門牌號碼（卡爾斯魯爾方案）(&amp;N)</translation>
-    </message>
-    <message>
-        <location filename="../src/MainWindow.ui" line="1747"/>
+        <location filename="../src/MainWindow.ui" line="1748"/>
         <source>&amp;Subdivide</source>
         <translation>細分(&amp;S)</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1750"/>
+        <location filename="../src/MainWindow.ui" line="1751"/>
         <source>Subdivide segment equally</source>
         <translation>平均細分區段</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1753"/>
-        <source>Subdivide a selected way segment (the way and two adjacent nodes) into segments of equal length.</source>
-        <translation>將選定的路徑區段（路徑及兩個相鄰的節點）細分為等長的區段。</translation>
-    </message>
-    <message>
-        <location filename="../src/MainWindow.ui" line="1764"/>
-        <source>Show &amp;virtual nodes</source>
-        <translation>顯示虛擬節點(&amp;V)</translation>
-    </message>
-    <message>
-        <location filename="../src/MainWindow.ui" line="1775"/>
-        <source>Show lat/lon &amp;grid</source>
-        <translation>顯示緯度／經度網格(&amp;G)</translation>
-    </message>
-    <message>
-        <location filename="../src/MainWindow.ui" line="1786"/>
+        <location filename="../src/MainWindow.ui" line="1787"/>
         <source>&amp;Lock zoom to tiled background</source>
         <translation>將已平鋪的背景鎖定縮放(&amp;L)</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1794"/>
-        <source>&amp;Projections Editor...</source>
-        <translation>投影編輯器... (&amp;P)</translation>
-    </message>
-    <message>
-        <location filename="../src/MainWindow.ui" line="1805"/>
-        <source>Show &amp;Photos on map</source>
-        <translation>在地圖上顯示照片(&amp;P)</translation>
-    </message>
-    <message>
-        <location filename="../src/MainWindow.ui" line="1813"/>
+        <location filename="../src/MainWindow.ui" line="1814"/>
         <source>OsmChange (OSC)</source>
         <translation>OsmChange (OSC)</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1821"/>
-        <source>Force Delete</source>
-        <translation>強制刪除</translation>
-    </message>
-    <message>
-        <location filename="../src/MainWindow.ui" line="1829"/>
-        <source>Add OpenStreet&amp;Bugs layer</source>
-        <translation>加入 OpenStreetBugs 圖層(&amp;B)</translation>
-    </message>
-    <message>
-        <location filename="../src/MainWindow.ui" line="1834"/>
+        <location filename="../src/MainWindow.ui" line="1835"/>
         <source>Close</source>
         <translation>關閉</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1839"/>
+        <location filename="../src/MainWindow.ui" line="1840"/>
         <source>S&amp;implify</source>
         <translation>簡化(&amp;I)</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1842"/>
+        <location filename="../src/MainWindow.ui" line="1843"/>
         <source>Simplify road(s)</source>
         <translation>簡化道路</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1845"/>
+        <location filename="../src/MainWindow.ui" line="1846"/>
         <source>Simplify way by removing unnecessary child nodes</source>
         <translation>透過移除非必要的子節點來簡化路徑</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1853"/>
-        <source>&amp;Filters Editor...</source>
-        <translation>過濾器編輯器... (&amp;F)</translation>
-    </message>
-    <message>
-        <location filename="../src/MainWindow.ui" line="1864"/>
+        <location filename="../src/MainWindow.ui" line="1865"/>
         <source>&amp;None</source>
         <translation>無(&amp;N)</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1873"/>
-        <source>&amp;Join Areas</source>
-        <translation>加入區域(&amp;J)</translation>
-    </message>
-    <message>
-        <location filename="../src/MainWindow.ui" line="1876"/>
-        <source>Join touching areas</source>
-        <translation>加入感人的區域</translation>
-    </message>
-    <message>
-        <location filename="../src/MainWindow.ui" line="1879"/>
-        <source>Join areas which are touching.</source>
-        <translation>加入感人的區域</translation>
-    </message>
-    <message>
-        <location filename="../src/MainWindow.ui" line="1891"/>
-        <source>&amp;Split Area</source>
-        <translation>分離區域(&amp;S)</translation>
-    </message>
-    <message>
-        <location filename="../src/MainWindow.ui" line="1894"/>
+        <location filename="../src/MainWindow.ui" line="1895"/>
         <source>Split area between two nodes</source>
         <translation>分離在兩個節點間的區域</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1897"/>
-        <source>Split a selected area between two selected nodes into two separate areas.</source>
-        <translation>在兩個選定的節點間分離選定的區域為獨立的區域。</translation>
-    </message>
-    <message>
-        <location filename="../src/MainWindow.ui" line="1909"/>
+        <location filename="../src/MainWindow.ui" line="1910"/>
         <source>&amp;Terrace</source>
         <translation>梯形化(&amp;T)</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1912"/>
+        <location filename="../src/MainWindow.ui" line="1913"/>
         <source>Terrace area into residences</source>
         <translation>將住宅區梯形化</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1915"/>
+        <location filename="../src/MainWindow.ui" line="1916"/>
         <source>Split a selected area into terraced residences.</source>
         <translation>將選定的區域分離為梯形住宅。</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1923"/>
-        <source>Toolbar Editor...</source>
-        <translation>工具列編輯器...</translation>
-    </message>
-    <message>
-        <location filename="../src/MainWindow.ui" line="1935"/>
+        <location filename="../src/MainWindow.ui" line="1936"/>
         <source>A&amp;xis Align</source>
         <translation>對齊軸(&amp;X)</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1938"/>
+        <location filename="../src/MainWindow.ui" line="1939"/>
         <source>Align edges to regular axes</source>
         <translation>將邊緣對齊常規軸</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1941"/>
-        <source>Align edges to a certain number of regularly spaced axes.</source>
-        <translation>將邊緣對齊至規律隔開的一定數量的軸。</translation>
-    </message>
-    <message>
-        <location filename="../src/MainWindow.ui" line="1949"/>
-        <source>&amp;Print...</source>
-        <translation>列印... (&amp;P)</translation>
-    </message>
-    <message>
-        <location filename="../src/MainWindow.ui" line="1957"/>
-        <source>Print preview...</source>
-        <translation>預覽列印...</translation>
-    </message>
-    <message>
-        <location filename="../src/MainWindow.ui" line="1962"/>
-        <location filename="../src/MainWindow.cpp" line="402"/>
+        <location filename="../src/MainWindow.cpp" line="404"/>
         <source>Properties...</source>
         <translation>屬性...</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1973"/>
+        <location filename="../src/MainWindow.ui" line="1974"/>
         <source>Highlight dirt&amp;y features</source>
         <translation>突顯有問題的圖徽(&amp;Y)</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1981"/>
-        <source>Add new &amp;Drawing layer</source>
-        <translation>加入新的繪製圖層(&amp;D)</translation>
-    </message>
-    <message>
-        <location filename="../src/MainWindow.ui" line="1993"/>
+        <location filename="../src/MainWindow.ui" line="1994"/>
         <source>Cu&amp;t</source>
         <translation>剪下(&amp;T)</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="2001"/>
-        <source>Add new &amp;Filter layer</source>
-        <translation>加入新的過濾器圖層(&amp;F)</translation>
-    </message>
-    <message>
-        <location filename="../src/MainWindow.ui" line="2012"/>
+        <location filename="../src/MainWindow.ui" line="2013"/>
         <source>E&amp;xtrude</source>
         <translation>擠壓(&amp;X)</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="2015"/>
+        <location filename="../src/MainWindow.ui" line="2016"/>
         <source>Extrude interaction for ways (JOSM style)</source>
         <translation>擠壓路徑的交互關係（JOSM 風格）</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="2023"/>
+        <location filename="../src/MainWindow.ui" line="2024"/>
         <source>Select toggle</source>
         <translation>選取開關</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="2028"/>
+        <location filename="../src/MainWindow.ui" line="2029"/>
         <source>Include children in selection</source>
         <translation>包含選取的子代</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="2043"/>
+        <location filename="../src/MainWindow.ui" line="2044"/>
         <source>Scale</source>
         <translation>比例尺</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="2051"/>
-        <source>Save as Template Document...</source>
-        <translation>另存為範本文件...</translation>
-    </message>
-    <message>
-        <location filename="../src/MainWindow.ui" line="2059"/>
-        <source>Create Multipolygon</source>
-        <translation>建立多邊形</translation>
-    </message>
-    <message>
-        <location filename="../src/MainWindow.ui" line="2064"/>
-        <source>Add to Multi&amp;polygon</source>
-        <translation>加入到多邊形(&amp;P)</translation>
-    </message>
-    <message>
-        <location filename="../src/MainWindow.ui" line="2080"/>
+        <location filename="../src/MainWindow.ui" line="2081"/>
         <source>GDAL SQLite/SpatiLite</source>
         <translation>GDAL SQLite/SpatiLite</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="2088"/>
-        <source>Bing Road Detector</source>
-        <translation>Bing 道路探測器</translation>
-    </message>
-    <message>
-        <location filename="../src/MainWindow.ui" line="2096"/>
-        <source>Rebuild &amp;History</source>
-        <translation>重建歷史(&amp;H)</translation>
-    </message>
-    <message>
-        <location filename="../src/MainWindow.ui" line="2104"/>
-        <source>Add Map&amp;Dust layer</source>
-        <translation>加入 MapDust 圖層(&amp;D)</translation>
-    </message>
-    <message>
-        <location filename="../src/MainWindow.ui" line="2115"/>
+        <location filename="../src/MainWindow.ui" line="2116"/>
         <source>Wireframe</source>
         <translation>線框</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="2123"/>
+        <location filename="../src/MainWindow.ui" line="2124"/>
         <source>Select parent(s)</source>
         <translation>選取親代</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="2131"/>
+        <location filename="../src/MainWindow.ui" line="2132"/>
         <source>Download missing children</source>
         <translation>下載遺失的子代</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="2146"/>
+        <location filename="../src/MainWindow.ui" line="2147"/>
         <source>&amp;Bridge</source>
         <translation>橋樑(&amp;B)</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="2149"/>
+        <location filename="../src/MainWindow.ui" line="2150"/>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Transform way to a bridge&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
         <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;將路徑轉變為橋樑&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
-        <location filename="../src/Docks/PropertiesDock.cpp" line="718"/>
+        <location filename="../src/Docks/PropertiesDock.cpp" line="716"/>
         <source>Clear Tag &apos;%1&apos; on %2</source>
         <translation>在 %2 上清除標籤「%1」</translation>
     </message>
     <message>
-        <location filename="../src/Docks/PropertiesDock.cpp" line="726"/>
+        <location filename="../src/Docks/PropertiesDock.cpp" line="724"/>
         <source>Clear %1 tags on %2</source>
         <translation>在 %2 上清除 %1 標籤</translation>
     </message>
     <message>
-        <location filename="../src/Docks/PropertiesDock.cpp" line="759"/>
+        <location filename="../src/Docks/PropertiesDock.cpp" line="757"/>
         <source>Set &quot;source&quot; tag on %1</source>
         <translation>在 %1 上設定「source」標籤</translation>
     </message>
     <message>
-        <location filename="../src/Docks/PropertiesDock.cpp" line="782"/>
+        <location filename="../src/Docks/PropertiesDock.cpp" line="780"/>
         <source>Remove member &apos;%1&apos; on %2</source>
         <translation>在 %2 上移除成員「%1」</translation>
     </message>
     <message>
-        <location filename="../src/Docks/PropertiesDock.cpp" line="859"/>
-        <location filename="../src/Docks/PropertiesDock.cpp" line="904"/>
+        <location filename="../src/Docks/PropertiesDock.cpp" line="857"/>
+        <location filename="../src/Docks/PropertiesDock.cpp" line="902"/>
         <source>Reorder members in relation %1</source>
         <translation>重新排列在關係 %1 中的成員</translation>
     </message>
@@ -3230,22 +3396,9 @@ Initializing...</source>
         <translation>關係已修改 %1</translation>
     </message>
     <message>
-        <location filename="../src/Interactions/BuildBridgeInteraction.cpp" line="36"/>
-        <location filename="../src/Interactions/CreateNodeInteraction.cpp" line="33"/>
-        <source>Create node Interaction</source>
-        <translation>建立節點交互關係</translation>
-    </message>
-    <message>
-        <location filename="../src/Interactions/BuildBridgeInteraction.cpp" line="158"/>
-        <location filename="../src/Interactions/CreateNodeInteraction.cpp" line="112"/>
-        <location filename="../src/Interactions/MoveNodeInteraction.cpp" line="261"/>
-        <source>Create node in Road: %1</source>
-        <translation>在道路：%1 中建立節點</translation>
-    </message>
-    <message>
         <location filename="../src/Interactions/CreateAreaInteraction.cpp" line="37"/>
-        <source>Create Area Interaction</source>
-        <translation>建立區域交互關係</translation>
+        <source>Create Area interaction</source>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/Interactions/CreateAreaInteraction.cpp" line="105"/>
@@ -3284,44 +3437,24 @@ Initializing...</source>
         <translation>關閉區域 %1</translation>
     </message>
     <message>
-        <location filename="../src/Interactions/CreateDoubleWayInteraction.cpp" line="49"/>
-        <source>Create double way Interaction</source>
-        <translation>建立雙向路徑交互關係</translation>
-    </message>
-    <message>
-        <location filename="../src/Interactions/CreateDoubleWayInteraction.cpp" line="173"/>
-        <source>Add nodes to double-way Road %1</source>
-        <translation>新增節點到雙向道路 %1</translation>
-    </message>
-    <message>
-        <location filename="../src/Interactions/CreateDoubleWayInteraction.cpp" line="224"/>
-        <source>Create double-way Road %1</source>
-        <translation>建立雙向道路 %1</translation>
-    </message>
-    <message>
-        <location filename="../src/Interactions/CreateNodeInteraction.cpp" line="121"/>
-        <source>Create POI %1</source>
-        <translation>建立 POI %1</translation>
-    </message>
-    <message>
         <location filename="../src/Interactions/CreatePolygonInteraction.cpp" line="36"/>
         <source>LEFT-CLICK to start;DRAG to scale;SHIFT-DRAG to rotate;LEFT-CLICK to end</source>
         <translation>左鍵點選以啟動；拖曳以縮放；Shift + 拖曳以旋轉；左鍵點選以結束</translation>
     </message>
     <message>
         <location filename="../src/Interactions/CreatePolygonInteraction.cpp" line="41"/>
-        <source>Create Polygon Interaction</source>
-        <translation>建立多邊形交互關係</translation>
+        <source>Create Polygon interaction</source>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/Interactions/CreatePolygonInteraction.cpp" line="90"/>
-        <source>Create Polygon %1</source>
-        <translation>建立多邊形 %1</translation>
+        <source>Create polygon %1</source>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/Interactions/CreateRoundaboutInteraction.cpp" line="59"/>
-        <source>Create roundabout Interaction</source>
-        <translation>建立圓環交互關係</translation>
+        <source>Create Roundabout interaction</source>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/Interactions/CreateRoundaboutInteraction.cpp" line="89"/>
@@ -3330,34 +3463,33 @@ Initializing...</source>
     </message>
     <message>
         <location filename="../src/Interactions/CreateSingleWayInteraction.cpp" line="59"/>
-        <location filename="../src/Interactions/ExtrudeInteraction.cpp" line="43"/>
-        <source>Create way Interaction</source>
-        <translation>建立路徑交互關係</translation>
+        <source>Create Way interaction</source>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/Interactions/CreateSingleWayInteraction.cpp" line="238"/>
-        <location filename="../src/Interactions/CreateSingleWayInteraction.cpp" line="298"/>
-        <location filename="../src/Interactions/CreateSingleWayInteraction.cpp" line="309"/>
-        <source>Create Node %1 in Road %2</source>
-        <translation>在道路 %2 中建立節點 %1</translation>
-    </message>
-    <message>
-        <location filename="../src/Interactions/CreateSingleWayInteraction.cpp" line="282"/>
-        <source>Create Road: %1</source>
-        <translation>建立道路：%1</translation>
-    </message>
-    <message>
-        <location filename="../src/Interactions/CreateSingleWayInteraction.cpp" line="290"/>
-        <source>Create Node: %1</source>
-        <translation>建立節點：%1</translation>
-    </message>
-    <message>
+        <location filename="../src/Interactions/CreateSingleWayInteraction.cpp" line="241"/>
+        <location filename="../src/Interactions/CreateSingleWayInteraction.cpp" line="301"/>
         <location filename="../src/Interactions/CreateSingleWayInteraction.cpp" line="312"/>
-        <source>Add Node %1 to Road %2</source>
-        <translation>新增節點 %1 到道路 %2</translation>
+        <source>Create node %1 in way %2</source>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/Interactions/CreateSingleWayInteraction.cpp" line="351"/>
+        <location filename="../src/Interactions/CreateSingleWayInteraction.cpp" line="285"/>
+        <source>Create way %1</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/Interactions/CreateSingleWayInteraction.cpp" line="293"/>
+        <source>Create node: %1</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/Interactions/CreateSingleWayInteraction.cpp" line="315"/>
+        <source>Add node %1 to way %2</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/Interactions/CreateSingleWayInteraction.cpp" line="354"/>
         <source>Close Road %1</source>
         <translation>關閉道路 %1</translation>
     </message>
@@ -3373,8 +3505,8 @@ Initializing...</source>
     </message>
     <message>
         <location filename="../src/Interactions/EditInteraction.cpp" line="59"/>
-        <source>Edit Interaction</source>
-        <translation>編輯交互關係</translation>
+        <source>Edit interaction</source>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/Interactions/EditInteraction.cpp" line="291"/>
@@ -3404,29 +3536,24 @@ Note that OSM nodes outside the downloaded area will be kept.</source>
         <translation>反轉 %1 條路徑</translation>
     </message>
     <message>
-        <location filename="../src/Interactions/ExtrudeInteraction.cpp" line="133"/>
-        <source>Extrude Road %1</source>
-        <translation>擠壓道路 %1</translation>
-    </message>
-    <message>
         <location filename="../src/Interactions/MoveNodeInteraction.cpp" line="42"/>
         <source>LEFT-CLICK to select;LEFT-DRAG to move</source>
         <translation>左鍵點選以選取；左鍵拖曳以移動</translation>
     </message>
     <message>
         <location filename="../src/Interactions/MoveNodeInteraction.cpp" line="47"/>
-        <source>Move node Interaction</source>
-        <translation>移動節點交互關係</translation>
+        <source>Move Node interaction</source>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/Interactions/MoveNodeInteraction.cpp" line="154"/>
-        <source>Move Nodes</source>
-        <translation>移動節點</translation>
+        <source>Move nodes</source>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/Interactions/MoveNodeInteraction.cpp" line="158"/>
-        <source>Move Node %1</source>
-        <translation>移動節點 %1</translation>
+        <source>Move node %1</source>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/Interactions/MoveNodeInteraction.cpp" line="211"/>
@@ -3440,7 +3567,11 @@ Note that OSM nodes outside the downloaded area will be kept.</source>
     </message>
     <message>
         <location filename="../src/Interactions/MoveNodeInteraction.cpp" line="221"/>
-        <location filename="../src/MainWindow.cpp" line="2747"/>
+        <source>Merge nodes into %1</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/MainWindow.cpp" line="2753"/>
         <source>Merge Nodes into %1</source>
         <translation>合併節點到 %1 中</translation>
     </message>
@@ -3451,8 +3582,8 @@ Note that OSM nodes outside the downloaded area will be kept.</source>
     </message>
     <message>
         <location filename="../src/Interactions/RotateInteraction.cpp" line="44"/>
-        <source>Rotate Interaction</source>
-        <translation>旋轉交互關係</translation>
+        <source>Rotate interaction</source>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/Interactions/RotateInteraction.cpp" line="139"/>
@@ -3466,8 +3597,8 @@ Note that OSM nodes outside the downloaded area will be kept.</source>
     </message>
     <message>
         <location filename="../src/Interactions/ScaleInteraction.cpp" line="44"/>
-        <source>Scale Interaction</source>
-        <translation>比例尺交互關係</translation>
+        <source>Scale interaction</source>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/Interactions/ScaleInteraction.cpp" line="139"/>
@@ -3481,164 +3612,149 @@ Note that OSM nodes outside the downloaded area will be kept.</source>
     </message>
     <message>
         <location filename="../src/Interactions/ZoomInteraction.cpp" line="30"/>
-        <source>Zoom Interaction</source>
-        <translation>縮放交互關係</translation>
+        <source>Zoom interaction</source>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="191"/>
+        <location filename="../src/MainWindow.cpp" line="193"/>
         <source>GPS Exchange format (*.gpx)
 </source>
         <translation>GPS 交換格式 (*.gpx)
 </translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="192"/>
+        <location filename="../src/MainWindow.cpp" line="194"/>
         <source>OpenStreetMap format (*.osm)
 </source>
         <translation>OpenStreetMap 格式 (*.osm)
 </translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="193"/>
+        <location filename="../src/MainWindow.cpp" line="195"/>
         <source>OpenStreetMap change format (*.osc)
 </source>
         <translation>OpenStreetMap 變動格式 (*.osc)
 </translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="194"/>
+        <location filename="../src/MainWindow.cpp" line="196"/>
         <source>Noni GPSPlot format (*.ngt)
 </source>
         <translation>Noni GPSPlot 格式 (*.ngt)
 </translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="195"/>
+        <location filename="../src/MainWindow.cpp" line="197"/>
         <source>NMEA GPS log format (*.nmea *.nma)
 </source>
         <translation>NMEA GPS 日誌格式 (*.nmea *.nma)
 </translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="196"/>
+        <location filename="../src/MainWindow.cpp" line="198"/>
         <source>KML file (*.kml)
 </source>
         <translation>KML 檔案 (*.kml)
 </translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="197"/>
+        <location filename="../src/MainWindow.cpp" line="199"/>
         <source>Comma delimited format (*.csv)
 </source>
         <translation>逗號分隔格式 (*.csv)
 </translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="200"/>
+        <location filename="../src/MainWindow.cpp" line="202"/>
         <source>Geotagged images (*.jpg)
 </source>
         <translation>包含地理標記的圖片 (*.jpg)
 </translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="202"/>
+        <location filename="../src/MainWindow.cpp" line="204"/>
         <source>ESRI Shapefile (*.shp)
 </source>
         <translation>ESRI 外形檔案 (*.shp)
 </translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="202"/>
+        <location filename="../src/MainWindow.cpp" line="204"/>
         <source>Geography Markup Language (*.gml)
 </source>
         <translation>地理標記語言 (*.gml)
 </translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="204"/>
+        <location filename="../src/MainWindow.cpp" line="206"/>
         <source>Protobuf Binary Format (*.pbf)
 </source>
         <translation>Protobuf 二進位格式 (*.pbf)
 </translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="209"/>
-        <location filename="../src/MainWindow.cpp" line="213"/>
-        <location filename="../src/MainWindow.cpp" line="2963"/>
+        <location filename="../src/MainWindow.cpp" line="211"/>
+        <location filename="../src/MainWindow.cpp" line="215"/>
+        <location filename="../src/MainWindow.cpp" line="2969"/>
         <source>Supported formats</source>
         <translation>支援的格式</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="207"/>
-        <location filename="../src/MainWindow.cpp" line="210"/>
+        <location filename="../src/MainWindow.cpp" line="209"/>
+        <location filename="../src/MainWindow.cpp" line="212"/>
         <source>Merkaartor document (*.mdc)
 </source>
         <translation>Merkaartor 文件 (*.mdc)
 </translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="211"/>
-        <location filename="../src/MainWindow.cpp" line="215"/>
-        <location filename="../src/MainWindow.cpp" line="3144"/>
-        <location filename="../src/MainWindow.cpp" line="3154"/>
-        <location filename="../src/MainWindow.cpp" line="3338"/>
-        <location filename="../src/MainWindow.cpp" line="3353"/>
-        <location filename="../src/MainWindow.cpp" line="3374"/>
-        <location filename="../src/MainWindow.cpp" line="3409"/>
-        <location filename="../src/MainWindow.cpp" line="4133"/>
+        <location filename="../src/MainWindow.cpp" line="213"/>
+        <location filename="../src/MainWindow.cpp" line="217"/>
+        <location filename="../src/MainWindow.cpp" line="3142"/>
+        <location filename="../src/MainWindow.cpp" line="3152"/>
+        <location filename="../src/MainWindow.cpp" line="3336"/>
+        <location filename="../src/MainWindow.cpp" line="3351"/>
+        <location filename="../src/MainWindow.cpp" line="3372"/>
+        <location filename="../src/MainWindow.cpp" line="3407"/>
+        <location filename="../src/MainWindow.cpp" line="4131"/>
         <source>All Files (*)</source>
         <translation>所有檔案 (*)</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="248"/>
+        <location filename="../src/MainWindow.cpp" line="250"/>
         <source>tile %v / %m</source>
         <translation>圖磚 %v / %m</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="425"/>
-        <source>Cannot load Projections file</source>
-        <translation>無法載入投影檔案</translation>
-    </message>
-    <message>
-        <location filename="../src/MainWindow.cpp" line="425"/>
-        <source>&quot;Projections.xml&quot; could not be opened anywhere. Aborting.</source>
-        <translation>「Projections.xml」無法在任何地方開啟。放棄。</translation>
-    </message>
-    <message>
-        <location filename="../src/MainWindow.cpp" line="432"/>
+        <location filename="../src/MainWindow.cpp" line="431"/>
         <source>Low</source>
         <translation>低</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="432"/>
+        <location filename="../src/MainWindow.cpp" line="431"/>
         <source>High</source>
         <translation>高</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="432"/>
+        <location filename="../src/MainWindow.cpp" line="431"/>
         <source>Opaque</source>
         <translation>不透明</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.cpp" line="601"/>
-        <location filename="../src/MainWindow.cpp" line="1121"/>
+        <location filename="../src/MainWindow.cpp" line="1092"/>
         <source>Feature</source>
         <translation>圖徽</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.cpp" line="610"/>
-        <location filename="../src/MainWindow.cpp" line="1122"/>
+        <location filename="../src/MainWindow.cpp" line="1093"/>
         <source>Node</source>
         <translation>節點</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="618"/>
-        <source>Road</source>
-        <translation>道路</translation>
-    </message>
-    <message>
         <location filename="../src/MainWindow.cpp" line="626"/>
-        <location filename="../src/MainWindow.cpp" line="1124"/>
+        <location filename="../src/MainWindow.cpp" line="1095"/>
         <source>Relation</source>
         <translation>關係</translation>
     </message>
@@ -3663,87 +3779,88 @@ Note that OSM nodes outside the downloaded area will be kept.</source>
         <translation>取消</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1113"/>
+        <location filename="../src/MainWindow.cpp" line="1084"/>
         <source>File</source>
         <translation>檔案</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1114"/>
+        <location filename="../src/MainWindow.cpp" line="1085"/>
         <source>Edit</source>
         <translation>編輯</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1115"/>
+        <location filename="../src/MainWindow.cpp" line="1086"/>
         <source>View</source>
         <translation>檢視</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1116"/>
+        <location filename="../src/MainWindow.cpp" line="1087"/>
         <source>Show</source>
         <translation>顯示</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1117"/>
+        <location filename="../src/MainWindow.cpp" line="1088"/>
         <source>Directional Arrows</source>
         <translation>方向箭頭</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1118"/>
+        <location filename="../src/MainWindow.cpp" line="1089"/>
         <source>GPS</source>
         <translation>GPS</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1119"/>
+        <location filename="../src/MainWindow.cpp" line="1090"/>
         <source>Layers</source>
         <translation>圖層</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1120"/>
+        <location filename="../src/MainWindow.cpp" line="1091"/>
         <source>Create</source>
         <translation>建立</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1123"/>
+        <location filename="../src/MainWindow.cpp" line="618"/>
+        <location filename="../src/MainWindow.cpp" line="1094"/>
         <source>Way</source>
         <translation>路徑</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1125"/>
+        <location filename="../src/MainWindow.cpp" line="1096"/>
         <source>Tools</source>
         <translation>工具</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1126"/>
+        <location filename="../src/MainWindow.cpp" line="1097"/>
         <source>Windows</source>
         <translation>視窗</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1127"/>
+        <location filename="../src/MainWindow.cpp" line="1098"/>
         <source>Help</source>
         <translation>說明</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1284"/>
+        <location filename="../src/MainWindow.cpp" line="1255"/>
         <source>Cut Features</source>
         <translation>剪下圖徽</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1416"/>
+        <location filename="../src/MainWindow.cpp" line="1387"/>
         <source>Clipboard invalid</source>
         <translation>剪貼簿無效</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1416"/>
+        <location filename="../src/MainWindow.cpp" line="1387"/>
         <source>Clipboard do not contain valid data.</source>
         <translation>剪貼簿不包含有效資料。</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1574"/>
+        <location filename="../src/MainWindow.cpp" line="1548"/>
         <source>GDAL import warning</source>
         <translation>GDAL 匯入警告</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1575"/>
+        <location filename="../src/MainWindow.cpp" line="1549"/>
         <source>You are about to import file(s) using GDAL. This feature is rather experimental, and may or may NOT work, possibly causing a crash. Make sure you won't loose any data in case it doesn't work out.
 Please do report bugs in case of a crash, but don't be surprised about it.
 
@@ -3756,52 +3873,52 @@ Continue with import?
 </translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1595"/>
+        <location filename="../src/MainWindow.cpp" line="1569"/>
         <source>Import file</source>
         <translation>匯入檔案</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1621"/>
-        <location filename="../src/MainWindow.cpp" line="4311"/>
+        <location filename="../src/MainWindow.cpp" line="1595"/>
+        <location filename="../src/MainWindow.cpp" line="4309"/>
         <source>Unsaved changes</source>
         <translation>未儲存的變更</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1622"/>
+        <location filename="../src/MainWindow.cpp" line="1596"/>
         <source>The current map contains unsaved changes that will be lost when starting a new one.
 Do you want to cancel starting a new map or continue and discard the old changes?</source>
         <translation>目前的地圖包含未儲存的變更，當啟動一個新的地圖的時候將會遺失。
 您想要取消啟動新地圖或是繼續並丟棄舊的變更？</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1629"/>
+        <location filename="../src/MainWindow.cpp" line="1603"/>
         <source>Unsaved Style changes</source>
         <translation>未儲存的樣式變更</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1630"/>
+        <location filename="../src/MainWindow.cpp" line="1604"/>
         <source>You have modified the current style.
 Do you want to save your changes?</source>
         <translation>您已經修改了目前的樣式。
 您想要儲存您的變更嗎？</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1655"/>
+        <location filename="../src/MainWindow.cpp" line="1629"/>
         <source>Waypoints</source>
         <translation>路徑點</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1672"/>
+        <location filename="../src/MainWindow.cpp" line="1646"/>
         <source>Track %1</source>
         <translation>軌跡 %1</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1717"/>
+        <location filename="../src/MainWindow.cpp" line="1691"/>
         <source>Big Fat Copyright Warning</source>
         <translation>超大的版權警告！</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1718"/>
+        <location filename="../src/MainWindow.cpp" line="1692"/>
         <source>You are trying to import a KML file. Please be aware that:
 
  - You cannot import to OSM a KML file created from Google Earth. While you might
@@ -3830,60 +3947,60 @@ Are you absolutely sure this KML can legally be imported in OSM?</source>
 您確定這個 KML 可以合法地匯入到 OSM 中嗎？</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1833"/>
+        <location filename="../src/MainWindow.cpp" line="1831"/>
         <source>No valid file</source>
         <translation>沒有有效的檔案</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1833"/>
-        <location filename="../src/MainWindow.cpp" line="3277"/>
+        <location filename="../src/MainWindow.cpp" line="1831"/>
+        <location filename="../src/MainWindow.cpp" line="3275"/>
         <source>%1 could not be opened.</source>
         <translation>%1 無法開啟</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1872"/>
+        <location filename="../src/MainWindow.cpp" line="1876"/>
         <source>Incoming Remote Control Request</source>
         <translation>收到遠端控制請求</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1873"/>
+        <location filename="../src/MainWindow.cpp" line="1877"/>
         <source>Wanted to load object &apos;%1&apos;, but don&apos;t know how to do that. Sorry.</source>
         <translation>想要載入物件「%1」，但是不知道要怎麼做。抱歉。</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1916"/>
+        <location filename="../src/MainWindow.cpp" line="1922"/>
         <source>Remote add POI %1 %2</source>
         <translation>遠端新增 POI %1 %2</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1971"/>
+        <location filename="../src/MainWindow.cpp" line="1977"/>
         <source>Incoming Remote control request</source>
         <translation>收到遠端控制請求</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1971"/>
+        <location filename="../src/MainWindow.cpp" line="1977"/>
         <source>Unknown action url: %1</source>
         <translation>未知的動作 URL：%1</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1993"/>
+        <location filename="../src/MainWindow.cpp" line="1999"/>
         <source>Old Qt version detected</source>
         <translation>偵測到舊版的 Qt</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1994"/>
+        <location filename="../src/MainWindow.cpp" line="2000"/>
         <source>Your setup uses Qt %1, which contains various known errors in uploading data to OpenStreetMap leading to 401 server response codes. Are you sure you want to continue (which is not recommended).
 For more information see http://wiki.openstreetmap.org/index.php/Problem_uploading_with_Merkaartor</source>
         <translation>您設定時使用 Qt %1，其有許多已知的錯誤，在上傳資料到 OpenStreetMap 時會導致 401 伺服器回應碼。您確定您想要繼續嗎（不建議）。
 更多資訊請見 http://wiki.openstreetmap.org/index.php/Problem_uploading_with_Merkaartor</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2002"/>
+        <location filename="../src/MainWindow.cpp" line="2008"/>
         <source>Upload OSM</source>
         <translation>上傳 OSM</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2002"/>
+        <location filename="../src/MainWindow.cpp" line="2008"/>
         <source>You don't seem to have specified your
 OpenStreetMap username and password.
 Do you want to do this now?</source>
@@ -3892,260 +4009,260 @@ OpenStreetMap 使用者名稱與密碼。
 您想要現在做這件事嗎？</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2018"/>
-        <location filename="../src/MainWindow.cpp" line="2077"/>
+        <location filename="../src/MainWindow.cpp" line="2024"/>
+        <location filename="../src/MainWindow.cpp" line="2083"/>
         <source>Error downloading</source>
         <translation>下載錯誤</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2018"/>
-        <location filename="../src/MainWindow.cpp" line="2077"/>
+        <location filename="../src/MainWindow.cpp" line="2024"/>
+        <location filename="../src/MainWindow.cpp" line="2083"/>
         <source>The map could not be downloaded</source>
         <translation>地圖無法被下載</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2066"/>
+        <location filename="../src/MainWindow.cpp" line="2072"/>
         <source>Error downloading MapDust</source>
         <translation>下載 MapDust 錯誤</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2066"/>
+        <location filename="../src/MainWindow.cpp" line="2072"/>
         <source>The MapDust bugs could not be downloaded</source>
         <translation>MapDust 臭蟲無法被下載</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2405"/>
+        <location filename="../src/MainWindow.cpp" line="2411"/>
         <source>Create Polygon</source>
         <translation>建立多邊形</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2405"/>
+        <location filename="../src/MainWindow.cpp" line="2411"/>
         <source>Specify the number of sides</source>
         <translation>指定邊的數量</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2459"/>
-        <source>Join Roads</source>
-        <translation>加入道路</translation>
-    </message>
-    <message>
-        <location filename="../src/MainWindow.cpp" line="2473"/>
-        <source>Split Roads</source>
-        <translation>分離道路</translation>
-    </message>
-    <message>
-        <location filename="../src/MainWindow.cpp" line="2487"/>
-        <source>Break Roads</source>
-        <translation>分開道路</translation>
-    </message>
-    <message>
-        <location filename="../src/MainWindow.cpp" line="2501"/>
-        <source>Simplify Roads</source>
-        <translation>簡化道路</translation>
-    </message>
-    <message>
-        <location filename="../src/MainWindow.cpp" line="2574"/>
+        <location filename="../src/MainWindow.cpp" line="2580"/>
         <source>Force Feature upload</source>
         <translation>強制圖徽上傳</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1981"/>
+        <location filename="../src/MainWindow.cpp" line="1987"/>
         <source>Open file</source>
         <translation>開啟檔案</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2587"/>
+        <location filename="../src/MainWindow.cpp" line="2465"/>
+        <source>Join Ways</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/MainWindow.cpp" line="2479"/>
+        <source>Split Ways</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/MainWindow.cpp" line="2493"/>
+        <source>Break Ways</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/MainWindow.cpp" line="2507"/>
+        <source>Simplify Ways</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/MainWindow.cpp" line="2593"/>
         <source>Create Junction</source>
         <translation>建立交點</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2591"/>
+        <location filename="../src/MainWindow.cpp" line="2597"/>
         <source>Multiple intersection.</source>
         <translation>多重路口。</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2592"/>
+        <location filename="../src/MainWindow.cpp" line="2598"/>
         <source>Those roads have multiple intersections.
 Do you still want to create a junction for each one (Unwanted junctions can still be deleted afterhand)?</source>
         <translation>這些道路有多重路口。
 您仍想要為每個都建立路口（稍後仍可刪除不要的路口）？</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2609"/>
+        <location filename="../src/MainWindow.cpp" line="2615"/>
         <source>Add Street Numbers</source>
         <translation>加入門牌號碼</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2626"/>
-        <location filename="../src/MainWindow.cpp" line="2631"/>
+        <location filename="../src/MainWindow.cpp" line="2632"/>
+        <location filename="../src/MainWindow.cpp" line="2637"/>
         <source>Number of segments to divide into</source>
         <translation>要分割成的區段數量</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2626"/>
+        <location filename="../src/MainWindow.cpp" line="2632"/>
         <source>Specify the number of segments</source>
         <translation>指定區段的數量</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2635"/>
-        <source>Subdivide road into %1</source>
-        <translation>細分道路為 %1</translation>
+        <location filename="../src/MainWindow.cpp" line="2641"/>
+        <source>Subdivide way into %1</source>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2658"/>
+        <location filename="../src/MainWindow.cpp" line="2664"/>
         <source>Axis Align</source>
         <translation>軸對齊</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2659"/>
+        <location filename="../src/MainWindow.cpp" line="2665"/>
         <source>Specify the number of regular axes to align edges on (e.g. 4 for rectangular)</source>
         <translation>指定常規軸的數量以供邊緣對齊（例如矩形為 4）</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2666"/>
+        <location filename="../src/MainWindow.cpp" line="2672"/>
         <source>triangular</source>
         <translation>三角形</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2667"/>
+        <location filename="../src/MainWindow.cpp" line="2673"/>
         <source>rectangular</source>
         <translation>矩形</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2668"/>
+        <location filename="../src/MainWindow.cpp" line="2674"/>
         <source>pentagonal</source>
         <translation>五邊形</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2669"/>
+        <location filename="../src/MainWindow.cpp" line="2675"/>
         <source>hexagonal</source>
         <translation>六邊形</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2670"/>
+        <location filename="../src/MainWindow.cpp" line="2676"/>
         <source>heptagonal</source>
         <translation>七邊形</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2671"/>
+        <location filename="../src/MainWindow.cpp" line="2677"/>
         <source>octagonal</source>
         <translation>八邊形</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2675"/>
+        <location filename="../src/MainWindow.cpp" line="2681"/>
         <source>Align onto %1 axes</source>
         <translation>在 %1 軸上對齊</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2677"/>
+        <location filename="../src/MainWindow.cpp" line="2683"/>
         <source>Align onto %1 regular axes</source>
         <translation>在 %1 常規軸上對齊</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2684"/>
-        <location filename="../src/MainWindow.cpp" line="2687"/>
+        <location filename="../src/MainWindow.cpp" line="2690"/>
+        <location filename="../src/MainWindow.cpp" line="2693"/>
         <source>Unable to align to axes</source>
         <translation>無法對齊至軸</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2685"/>
+        <location filename="../src/MainWindow.cpp" line="2691"/>
         <source>Align to axes operation failed. Please adjust any sharp corners and try again.</source>
         <translation>對齊至軸操作失敗。請調整任意尖角，然後再試一次。</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2688"/>
+        <location filename="../src/MainWindow.cpp" line="2694"/>
         <source>Align to axes operation failed and did not converge on a solution.</source>
         <translation>對齊至軸操作失敗，解法並不收斂。</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2704"/>
+        <location filename="../src/MainWindow.cpp" line="2710"/>
         <source>Bing Extract</source>
         <translation>Bing 摘錄</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2719"/>
+        <location filename="../src/MainWindow.cpp" line="2725"/>
         <source>Align Nodes</source>
         <translation>對齊節點</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2733"/>
+        <location filename="../src/MainWindow.cpp" line="2739"/>
         <source>Spread Nodes</source>
         <translation>展開節點</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2762"/>
+        <location filename="../src/MainWindow.cpp" line="2768"/>
         <source>Detach Node %1</source>
         <translation>分離節點 %1</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2776"/>
+        <location filename="../src/MainWindow.cpp" line="2782"/>
         <source>Add member to relation</source>
         <translation>加入成員至關係</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2788"/>
+        <location filename="../src/MainWindow.cpp" line="2794"/>
         <source>Remove member from relation</source>
         <translation>從關係中移除成員</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2800"/>
+        <location filename="../src/MainWindow.cpp" line="2806"/>
         <source>Add to Multipolygon</source>
         <translation>新增到多重多邊形</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2812"/>
+        <location filename="../src/MainWindow.cpp" line="2818"/>
         <source>Join areas</source>
         <translation>加入區域</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2824"/>
+        <location filename="../src/MainWindow.cpp" line="2830"/>
         <source>Split area</source>
         <translation>分離區域</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2839"/>
+        <location filename="../src/MainWindow.cpp" line="2845"/>
         <source>Terrace area into %1</source>
         <translation>將區域梯形化為 %1</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2867"/>
+        <location filename="../src/MainWindow.cpp" line="2873"/>
         <source>Create Relation %1</source>
         <translation>建立關係 %1</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2941"/>
+        <location filename="../src/MainWindow.cpp" line="2947"/>
         <source>Save map style</source>
         <translation>儲存地圖樣式</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2941"/>
+        <location filename="../src/MainWindow.cpp" line="2947"/>
         <source>Merkaartor map style (*.mas)</source>
         <translation>Merkaartor 地圖樣式 (*.mas)</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2962"/>
+        <location filename="../src/MainWindow.cpp" line="2968"/>
         <source>Load map style</source>
         <translation>載入地圖樣式</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2964"/>
+        <location filename="../src/MainWindow.cpp" line="2970"/>
         <source>Merkaartor map style (*.mas)
 </source>
         <translation>Merkaartor 地圖樣式 (*.mas)
 </translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2965"/>
+        <location filename="../src/MainWindow.cpp" line="2971"/>
         <source>MapCSS stylesheet (*.css)</source>
         <translation>MapCSS 樣式表 (*.css)</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="3024"/>
+        <location filename="../src/MainWindow.cpp" line="3030"/>
         <source>Rebuild History</source>
         <translation>重建歷史</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="3024"/>
+        <location filename="../src/MainWindow.cpp" line="3030"/>
         <source>An attempt will be made to rebuild the history.
 No guarantee, though, and no Undo.
 Are you sure you want to try this? </source>
@@ -4154,215 +4271,215 @@ Are you sure you want to try this? </source>
 您確定您想要嘗試這個嗎？</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="3128"/>
-        <location filename="../src/MainWindow.cpp" line="3325"/>
+        <location filename="../src/MainWindow.cpp" line="3126"/>
+        <location filename="../src/MainWindow.cpp" line="3323"/>
         <source>untitled</source>
         <translation>未命名</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="3144"/>
+        <location filename="../src/MainWindow.cpp" line="3142"/>
         <source>Save Merkaartor document</source>
         <translation>儲存 Merkaartor 文件</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="3144"/>
-        <location filename="../src/MainWindow.cpp" line="3154"/>
+        <location filename="../src/MainWindow.cpp" line="3142"/>
+        <location filename="../src/MainWindow.cpp" line="3152"/>
         <source>Merkaartor documents Files (*.mdc)</source>
         <translation>Merkaartor 文件檔案 (*.mdc)
 </translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="3154"/>
+        <location filename="../src/MainWindow.cpp" line="3152"/>
         <source>Save Merkaartor template document</source>
         <translation>儲存 Merkaartor 範本文件</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="3199"/>
+        <location filename="../src/MainWindow.cpp" line="3197"/>
         <source>Unable to open save file</source>
         <translation>無法開啟儲存的檔案</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="3199"/>
-        <location filename="../src/MainWindow.cpp" line="3215"/>
+        <location filename="../src/MainWindow.cpp" line="3197"/>
+        <location filename="../src/MainWindow.cpp" line="3213"/>
         <source>%1 could not be opened for writing.</source>
         <translation>%1 無法被開啟用來寫入</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="3215"/>
+        <location filename="../src/MainWindow.cpp" line="3213"/>
         <source>Unable to open save template document</source>
         <translation>無法開啟儲存的範本文件</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="3232"/>
-        <location filename="../src/MainWindow.cpp" line="3277"/>
+        <location filename="../src/MainWindow.cpp" line="3230"/>
+        <location filename="../src/MainWindow.cpp" line="3275"/>
         <source>Invalid file</source>
         <translation>無效的檔案</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="3232"/>
+        <location filename="../src/MainWindow.cpp" line="3230"/>
         <source>%1 is not a valid Merkaartor document.</source>
         <translation>%1 不是有效的 Merkaartor 文件。</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="3338"/>
+        <location filename="../src/MainWindow.cpp" line="3336"/>
         <source>Export OSM</source>
         <translation>匯出 OSM</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="3338"/>
+        <location filename="../src/MainWindow.cpp" line="3336"/>
         <source>OSM Files (*.osm)</source>
         <translation>OSM 檔案 (*.osm)</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="3353"/>
+        <location filename="../src/MainWindow.cpp" line="3351"/>
         <source>Export osmChange</source>
         <translation>匯出 osmChange</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="3353"/>
+        <location filename="../src/MainWindow.cpp" line="3351"/>
         <source>osmChange Files (*.osc)</source>
         <translation>osmChange 檔案 (*.osc)</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="3374"/>
+        <location filename="../src/MainWindow.cpp" line="3372"/>
         <source>Export GPX</source>
         <translation>匯出 GPX</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="3374"/>
+        <location filename="../src/MainWindow.cpp" line="3372"/>
         <source>GPX Files (*.gpx)</source>
         <translation>GPX 檔案 (*.gpx)</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="3409"/>
+        <location filename="../src/MainWindow.cpp" line="3407"/>
         <source>Export KML</source>
         <translation>匯出 KML</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="3409"/>
+        <location filename="../src/MainWindow.cpp" line="3407"/>
         <source>KML Files (*.kml)</source>
         <translation>KML 檔案 (*.kml)</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="3501"/>
+        <location filename="../src/MainWindow.cpp" line="3499"/>
         <source>Feature extraction</source>
         <translation>抽出圖徽</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="3511"/>
+        <location filename="../src/MainWindow.cpp" line="3509"/>
         <source>Extracting features...</source>
         <translation>正在抽出圖徽...</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="3594"/>
+        <location filename="../src/MainWindow.cpp" line="3592"/>
         <source>Hide tool buttons labels</source>
         <translation>隱藏按鈕標籤</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="3705"/>
+        <location filename="../src/MainWindow.cpp" line="3703"/>
         <source>%1 (int)</source>
         <translation>%1 (int)</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="3757"/>
+        <location filename="../src/MainWindow.cpp" line="3755"/>
         <source>Add Bookmark</source>
         <translation>加入書籤</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="3758"/>
+        <location filename="../src/MainWindow.cpp" line="3756"/>
         <source>Specify the name of the bookmark.</source>
         <translation>指定書籤名稱。</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="3761"/>
+        <location filename="../src/MainWindow.cpp" line="3759"/>
         <source>Invalid bookmark name</source>
         <translation>無效的書籤名稱</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="3762"/>
+        <location filename="../src/MainWindow.cpp" line="3760"/>
         <source>Bookmark cannot be blank.</source>
         <translation>書籤不能為空白。</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="3766"/>
+        <location filename="../src/MainWindow.cpp" line="3764"/>
         <source>Warning: Bookmark name already exists</source>
         <translation>警告：書籤名稱已存在</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="3767"/>
+        <location filename="../src/MainWindow.cpp" line="3765"/>
         <source>Enter a new one, keep the same to overwrite or cancel.</source>
         <translation>輸入新的名稱、保持原樣以覆寫或是取消。</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="3805"/>
+        <location filename="../src/MainWindow.cpp" line="3803"/>
         <source>Remove Bookmark</source>
         <translation>移除書籤</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="3806"/>
+        <location filename="../src/MainWindow.cpp" line="3804"/>
         <source>Select the bookmark to remove.</source>
         <translation>選取要移除的書籤。</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="3866"/>
-        <location filename="../src/MainWindow.cpp" line="3875"/>
+        <location filename="../src/MainWindow.cpp" line="3864"/>
+        <location filename="../src/MainWindow.cpp" line="3873"/>
         <source>Invalid projection</source>
         <translation>無效的投影</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="3866"/>
-        <location filename="../src/MainWindow.cpp" line="3875"/>
+        <location filename="../src/MainWindow.cpp" line="3864"/>
+        <location filename="../src/MainWindow.cpp" line="3873"/>
         <source>Unable to set projection &quot;%1&quot;.</source>
         <translation>無法設定投影「%1」。</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="4007"/>
+        <location filename="../src/MainWindow.cpp" line="4005"/>
         <source>GPS error</source>
         <translation>GPS 錯誤</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="4008"/>
+        <location filename="../src/MainWindow.cpp" line="4006"/>
         <source>Unable to open GPS port.</source>
         <translation>無法開啟 GPS 埠。</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="4017"/>
+        <location filename="../src/MainWindow.cpp" line="4015"/>
         <source>Open NMEA log file</source>
         <translation>開啟 NMEA 日誌檔案</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="4133"/>
+        <location filename="../src/MainWindow.cpp" line="4131"/>
         <source>Save Tag Templates</source>
         <translation>儲存標籤範本</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="4133"/>
+        <location filename="../src/MainWindow.cpp" line="4131"/>
         <source>Merkaartor tag templates (*.mat)</source>
         <translation>Merkaartor 標籤範本 (*.mat)</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="4142"/>
-        <location filename="../src/MainWindow.cpp" line="4156"/>
+        <location filename="../src/MainWindow.cpp" line="4140"/>
+        <location filename="../src/MainWindow.cpp" line="4154"/>
         <source>Open Tag Templates</source>
         <translation>開啟標籤範本</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="4233"/>
+        <location filename="../src/MainWindow.cpp" line="4231"/>
         <source>Warning! Could not load the Merkaartor translations for the &quot;%1&quot; language. Switching to default English.</source>
         <translation>警告！無法載入「%1」語言的 Merkaartor 翻譯。切換為預設的英文。</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="4291"/>
+        <location filename="../src/MainWindow.cpp" line="4289"/>
         <source>Unresolved conflicts</source>
         <translation>未解決的衝突</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="4291"/>
+        <location filename="../src/MainWindow.cpp" line="4289"/>
         <source>Please resolve existing conflicts first</source>
         <translation>請先解決已有的衝突</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="4312"/>
+        <location filename="../src/MainWindow.cpp" line="4310"/>
         <source>It is strongly recommended to save the changes to your document after an upload.
 Do you want to do this now?</source>
         <translation>強烈建議在上傳放儲存變更到您的文件中。
@@ -4371,80 +4488,140 @@ Do you want to do this now?</source>
     <message>
         <location filename="../src/common/TagModel.cpp" line="142"/>
         <location filename="../src/common/TagModel.cpp" line="173"/>
-        <source>Set Tags on multiple features</source>
-        <translation>在多個圖徽上設定標籤</translation>
+        <source>Set tags on multiple features</source>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/common/TagModel.cpp" line="144"/>
+        <source>Set tag &apos;%1=&apos; on %2</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
         <location filename="../src/common/TagModel.cpp" line="175"/>
-        <source>Set Tags on %1</source>
-        <translation>在 %1 上設定標籤</translation>
+        <source>Set tag &apos;%1=%2&apos; on %3</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/Interactions/BuildBridgeInteraction.cpp" line="36"/>
+        <source>Build Bridge interaction</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/Interactions/BuildBridgeInteraction.cpp" line="158"/>
+        <location filename="../src/Interactions/CreateNodeInteraction.cpp" line="112"/>
+        <location filename="../src/Interactions/MoveNodeInteraction.cpp" line="261"/>
+        <source>Create node in way %1</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/Interactions/CreateDoubleWayInteraction.cpp" line="49"/>
+        <source>Create Parallel Way interaction</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/Interactions/CreateDoubleWayInteraction.cpp" line="173"/>
+        <source>Add nodes to parallel way %1</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/Interactions/CreateDoubleWayInteraction.cpp" line="224"/>
+        <source>Create parallel way %1</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/Interactions/CreateNodeInteraction.cpp" line="33"/>
+        <source>Create Node interaction</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/Interactions/CreateNodeInteraction.cpp" line="121"/>
+        <source>Create node %1</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/Interactions/ExtrudeInteraction.cpp" line="43"/>
+        <source>Extrude interaction</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/Interactions/ExtrudeInteraction.cpp" line="133"/>
+        <source>Extrude way %1</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
     <name>MapFeature</name>
     <message>
-        <location filename="../src/Features/Feature.cpp" line="1057"/>
+        <location filename="../src/Features/Feature.cpp" line="1058"/>
         <source>&lt;i&gt;V: &lt;/i&gt;&lt;b&gt;%1&lt;/b&gt; </source>
         <translation>&lt;i&gt;V: &lt;/i&gt;&lt;b&gt;%1&lt;/b&gt; </translation>
     </message>
     <message>
-        <location filename="../src/Features/Feature.cpp" line="1059"/>
+        <location filename="../src/Features/Feature.cpp" line="1063"/>
         <source>&lt;i&gt;last: &lt;/i&gt;&lt;b&gt;%1&lt;/b&gt; by &lt;b&gt;%2&lt;/b&gt;</source>
         <translation>&lt;i&gt;前次：&lt;/i&gt;&lt;b&gt;%1&lt;/b&gt; 由 &lt;b&gt;%2&lt;/b&gt;</translation>
     </message>
     <message>
-        <location filename="../src/Features/Feature.cpp" line="1061"/>
+        <location filename="../src/Features/Feature.cpp" line="1065"/>
         <source>&lt;i&gt;last: &lt;/i&gt;&lt;b&gt;%1&lt;/b&gt;</source>
         <translation>&lt;i&gt;前次：&lt;/i&gt;&lt;b&gt;%1&lt;/b&gt;</translation>
     </message>
     <message>
-        <location filename="../src/Features/Feature.cpp" line="1064"/>
+        <location filename="../src/Features/Feature.cpp" line="1069"/>
         <source>&lt;br/&gt;&lt;i&gt;layer: &lt;/i&gt;&lt;b&gt;%1&lt;/b&gt; </source>
         <translation>&lt;br/&gt;&lt;i&gt;圖層： &lt;/i&gt;&lt;b&gt;%1&lt;/b&gt; </translation>
     </message>
     <message>
-        <location filename="../src/Features/Feature.cpp" line="1088"/>
+        <location filename="../src/Features/Feature.cpp" line="1093"/>
         <source>Browse</source>
         <translation>瀏覽</translation>
     </message>
     <message>
         <location filename="../src/Features/Node.cpp" line="375"/>
-        <location filename="../src/Features/Node.cpp" line="638"/>
+        <location filename="../src/Features/Node.cpp" line="639"/>
         <source>Waypoint</source>
         <translation>路徑點</translation>
     </message>
     <message>
-        <location filename="../src/Features/Node.cpp" line="376"/>
-        <location filename="../src/Features/Node.cpp" line="639"/>
+        <location filename="../src/Features/Node.cpp" line="640"/>
         <source>coord</source>
         <translation>座標</translation>
     </message>
     <message>
-        <location filename="../src/Features/Node.cpp" line="379"/>
-        <location filename="../src/Features/Node.cpp" line="646"/>
+        <location filename="../src/Features/Node.cpp" line="380"/>
+        <location filename="../src/Features/Node.cpp" line="647"/>
         <source>description</source>
         <translation>描述</translation>
     </message>
     <message>
-        <location filename="../src/Features/Node.cpp" line="381"/>
-        <location filename="../src/Features/Node.cpp" line="648"/>
+        <location filename="../src/Features/Node.cpp" line="376"/>
+        <source>WGS84 coordinates</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/Features/Node.cpp" line="377"/>
+        <source>Projected coordinates</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/Features/Node.cpp" line="382"/>
+        <location filename="../src/Features/Node.cpp" line="649"/>
         <source>comment</source>
         <translation>評論</translation>
     </message>
     <message>
-        <location filename="../src/Features/Node.cpp" line="383"/>
-        <location filename="../src/Features/Node.cpp" line="650"/>
+        <location filename="../src/Features/Node.cpp" line="384"/>
+        <location filename="../src/Features/Node.cpp" line="651"/>
         <source>Node</source>
         <translation>節點</translation>
     </message>
     <message>
-        <location filename="../src/Features/Node.cpp" line="642"/>
+        <location filename="../src/Features/Node.cpp" line="643"/>
         <source>elevation</source>
         <translation>海拔</translation>
     </message>
     <message>
-        <location filename="../src/Features/Node.cpp" line="644"/>
+        <location filename="../src/Features/Node.cpp" line="645"/>
         <source>speed</source>
         <translation>速度</translation>
     </message>
@@ -4460,13 +4637,13 @@ Do you want to do this now?</source>
     </message>
     <message>
         <location filename="../src/Features/Relation.cpp" line="708"/>
-        <location filename="../src/Features/Way.cpp" line="911"/>
+        <location filename="../src/Features/Way.cpp" line="918"/>
         <source>Topleft</source>
         <translation>左上</translation>
     </message>
     <message>
         <location filename="../src/Features/Relation.cpp" line="710"/>
-        <location filename="../src/Features/Way.cpp" line="913"/>
+        <location filename="../src/Features/Way.cpp" line="920"/>
         <source>Botright</source>
         <translation>右下</translation>
     </message>
@@ -4486,32 +4663,32 @@ Do you want to do this now?</source>
         <translation>成員</translation>
     </message>
     <message>
-        <location filename="../src/Features/Way.cpp" line="903"/>
+        <location filename="../src/Features/Way.cpp" line="910"/>
         <source>Closed way</source>
         <translation>已關閉的路徑</translation>
     </message>
     <message>
-        <location filename="../src/Features/Way.cpp" line="906"/>
+        <location filename="../src/Features/Way.cpp" line="913"/>
         <source>Length</source>
         <translation>長度</translation>
     </message>
     <message>
-        <location filename="../src/Features/Way.cpp" line="908"/>
+        <location filename="../src/Features/Way.cpp" line="915"/>
         <source>Size</source>
         <translation>大小</translation>
     </message>
     <message>
-        <location filename="../src/Features/Way.cpp" line="908"/>
+        <location filename="../src/Features/Way.cpp" line="915"/>
         <source>%1 nodes</source>
         <translation>%1 個節點</translation>
     </message>
     <message>
-        <location filename="../src/Features/Way.cpp" line="915"/>
+        <location filename="../src/Features/Way.cpp" line="922"/>
         <source>Area</source>
         <translation>區域</translation>
     </message>
     <message>
-        <location filename="../src/Features/Way.cpp" line="915"/>
+        <location filename="../src/Features/Way.cpp" line="922"/>
         <source>Way</source>
         <translation>路徑</translation>
     </message>
@@ -4544,17 +4721,17 @@ Do you want to do this now?</source>
         <translation>%1 公里</translation>
     </message>
     <message>
-        <location filename="../src/common/MapView.cpp" line="1163"/>
+        <location filename="../src/common/MapView.cpp" line="1160"/>
         <source>View</source>
         <translation>檢視</translation>
     </message>
     <message>
-        <location filename="../src/common/MapView.cpp" line="1164"/>
+        <location filename="../src/common/MapView.cpp" line="1161"/>
         <source>Bounding Box</source>
         <translation>邊界框</translation>
     </message>
     <message>
-        <location filename="../src/common/MapView.cpp" line="1176"/>
+        <location filename="../src/common/MapView.cpp" line="1173"/>
         <source>Projection</source>
         <translation>投影</translation>
     </message>
@@ -4568,28 +4745,28 @@ Do you want to do this now?</source>
         <translation>新書籤</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/MerkaartorPreferences.cpp" line="408"/>
-        <location filename="../src/Preferences/MerkaartorPreferences.cpp" line="411"/>
+        <location filename="../src/Preferences/MerkaartorPreferences.cpp" line="412"/>
+        <location filename="../src/Preferences/MerkaartorPreferences.cpp" line="415"/>
         <source>Preferences upload failed</source>
         <translation>偏好設定上傳失敗</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/MerkaartorPreferences.cpp" line="408"/>
+        <location filename="../src/Preferences/MerkaartorPreferences.cpp" line="412"/>
         <source>Duplicate key</source>
         <translation>複製金鑰</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/MerkaartorPreferences.cpp" line="411"/>
+        <location filename="../src/Preferences/MerkaartorPreferences.cpp" line="415"/>
         <source>More than 150 preferences</source>
         <translation>多於 150 個偏好設定</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/MerkaartorPreferences.cpp" line="414"/>
+        <location filename="../src/Preferences/MerkaartorPreferences.cpp" line="418"/>
         <source>Preferences communication failed</source>
         <translation>偏好設定傳達失敗</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/MerkaartorPreferences.cpp" line="414"/>
+        <location filename="../src/Preferences/MerkaartorPreferences.cpp" line="418"/>
         <source>Communication error</source>
         <translation>傳達錯誤</translation>
     </message>
@@ -4600,6 +4777,14 @@ Do you want to do this now?</source>
         <location filename="../src/Preferences/WmsServersList.cpp" line="40"/>
         <source>New Server</source>
         <translation>新伺服器</translation>
+    </message>
+</context>
+<context>
+    <name>MsBingMapAdapter</name>
+    <message>
+        <location filename="../plugins/background/MMsBingMapBackground/msbingmapadapter.cpp" line="243"/>
+        <source>Terms of Use</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -4667,38 +4852,38 @@ Do you want to do this now?</source>
 <context>
     <name>NativeRenderDialog</name>
     <message>
-        <location filename="../src/Render/NativeRenderDialog.cpp" line="161"/>
-        <location filename="../src/Render/NativeRenderDialog.cpp" line="189"/>
-        <location filename="../src/Render/NativeRenderDialog.cpp" line="223"/>
+        <location filename="../src/Render/NativeRenderDialog.cpp" line="179"/>
+        <location filename="../src/Render/NativeRenderDialog.cpp" line="208"/>
+        <location filename="../src/Render/NativeRenderDialog.cpp" line="244"/>
         <source>Output filename</source>
         <translation>輸出檔案名稱</translation>
     </message>
     <message>
-        <location filename="../src/Render/NativeRenderDialog.cpp" line="161"/>
-        <location filename="../src/Render/NativeRenderDialog.cpp" line="189"/>
-        <location filename="../src/Render/NativeRenderDialog.cpp" line="223"/>
+        <location filename="../src/Render/NativeRenderDialog.cpp" line="179"/>
+        <location filename="../src/Render/NativeRenderDialog.cpp" line="208"/>
+        <location filename="../src/Render/NativeRenderDialog.cpp" line="244"/>
         <source>untitled</source>
         <translation>未命名</translation>
     </message>
     <message>
-        <location filename="../src/Render/NativeRenderDialog.cpp" line="161"/>
+        <location filename="../src/Render/NativeRenderDialog.cpp" line="179"/>
         <source>PDF files (*.pdf)</source>
         <translation>PDF 檔案 (*.pdf)</translation>
     </message>
     <message>
-        <location filename="../src/Render/NativeRenderDialog.cpp" line="161"/>
-        <location filename="../src/Render/NativeRenderDialog.cpp" line="189"/>
-        <location filename="../src/Render/NativeRenderDialog.cpp" line="223"/>
+        <location filename="../src/Render/NativeRenderDialog.cpp" line="179"/>
+        <location filename="../src/Render/NativeRenderDialog.cpp" line="208"/>
+        <location filename="../src/Render/NativeRenderDialog.cpp" line="244"/>
         <source>All Files (*)</source>
         <translation>所有檔案 (*)</translation>
     </message>
     <message>
-        <location filename="../src/Render/NativeRenderDialog.cpp" line="189"/>
+        <location filename="../src/Render/NativeRenderDialog.cpp" line="208"/>
         <source>Image files (*.png *.jpg)</source>
         <translation>圖片檔案 (*.png *.jpg)</translation>
     </message>
     <message>
-        <location filename="../src/Render/NativeRenderDialog.cpp" line="223"/>
+        <location filename="../src/Render/NativeRenderDialog.cpp" line="244"/>
         <source>SVG files (*.svg)</source>
         <translation>SVG 檔案 (*.svg)</translation>
     </message>
@@ -4711,57 +4896,82 @@ Do you want to do this now?</source>
         <translation>Raster/SVG 匯出</translation>
     </message>
     <message>
-        <location filename="../src/Render/NativeRenderDialog.ui" line="26"/>
+        <location filename="../src/Render/NativeRenderDialog.ui" line="35"/>
         <source>Options</source>
         <translation>選項</translation>
     </message>
     <message>
-        <location filename="../src/Render/NativeRenderDialog.ui" line="49"/>
+        <location filename="../src/Render/NativeRenderDialog.ui" line="58"/>
         <source>min lat/Lon</source>
         <translation>最小緯度／經度</translation>
     </message>
     <message>
-        <location filename="../src/Render/NativeRenderDialog.ui" line="90"/>
+        <location filename="../src/Render/NativeRenderDialog.ui" line="99"/>
         <source>max lat/Lon</source>
         <translation>最大緯度／經度</translation>
     </message>
     <message>
-        <location filename="../src/Render/NativeRenderDialog.ui" line="174"/>
+        <location filename="../src/Render/NativeRenderDialog.ui" line="183"/>
         <source>Show Nodes</source>
         <translation>顯示節點</translation>
     </message>
     <message>
-        <location filename="../src/Render/NativeRenderDialog.ui" line="181"/>
+        <location filename="../src/Render/NativeRenderDialog.ui" line="190"/>
         <source>Show Relations</source>
         <translation>顯示關係</translation>
     </message>
     <message>
-        <location filename="../src/Render/NativeRenderDialog.ui" line="191"/>
+        <location filename="../src/Render/NativeRenderDialog.ui" line="200"/>
         <source>Show Scale</source>
         <translation>顯示比例尺</translation>
     </message>
     <message>
-        <location filename="../src/Render/NativeRenderDialog.ui" line="204"/>
+        <location filename="../src/Render/NativeRenderDialog.ui" line="213"/>
         <source>Show Lat/Lon Grid</source>
         <translation>顯示緯度／經度網格</translation>
     </message>
     <message>
-        <location filename="../src/Render/NativeRenderDialog.ui" line="214"/>
+        <location filename="../src/Render/NativeRenderDialog.ui" line="223"/>
         <source>Show unstyled features</source>
         <translation>顯示無樣式的特徵</translation>
     </message>
     <message>
-        <location filename="../src/Render/NativeRenderDialog.ui" line="232"/>
+        <location filename="../src/Render/NativeRenderDialog.ui" line="241"/>
+        <source>Print resolution</source>
+        <translation>列印解析度</translation>
+    </message>
+    <message>
+        <location filename="../src/Render/NativeRenderDialog.ui" line="255"/>
+        <source>300</source>
+        <translation>300</translation>
+    </message>
+    <message>
+        <location filename="../src/Render/NativeRenderDialog.ui" line="260"/>
+        <source>600</source>
+        <translation>600</translation>
+    </message>
+    <message>
+        <location filename="../src/Render/NativeRenderDialog.ui" line="265"/>
+        <source>1200</source>
+        <translation>1200</translation>
+    </message>
+    <message>
+        <location filename="../src/Render/NativeRenderDialog.ui" line="273"/>
+        <source>dpi</source>
+        <translation>dpi</translation>
+    </message>
+    <message>
+        <location filename="../src/Render/NativeRenderDialog.ui" line="304"/>
         <source>Export to PDF...</source>
         <translation>匯出為 PDF...</translation>
     </message>
     <message>
-        <location filename="../src/Render/NativeRenderDialog.ui" line="239"/>
+        <location filename="../src/Render/NativeRenderDialog.ui" line="311"/>
         <source>Export to SVG...</source>
         <translation>匯出為 SVG...</translation>
     </message>
     <message>
-        <location filename="../src/Render/NativeRenderDialog.ui" line="246"/>
+        <location filename="../src/Render/NativeRenderDialog.ui" line="318"/>
         <source>Export to Raster...</source>
         <translation>匯出為 Raster...</translation>
     </message>
@@ -5113,11 +5323,6 @@ What do you want to do next?</source>
         <translation>一般</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="42"/>
-        <source>Zoom Out/in (%)</source>
-        <translation>縮放 (%)</translation>
-    </message>
-    <message>
         <location filename="../src/Preferences/PreferencesDialog.ui" line="66"/>
         <source>Opacity low/high</source>
         <translation>不透明度低／高</translation>
@@ -5138,16 +5343,6 @@ What do you want to do next?</source>
         <translation>允許在選取模式時建立節點／路徑</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="118"/>
-        <source>Separate Move mode</source>
-        <translation>獨立移動模式</translation>
-    </message>
-    <message>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="125"/>
-        <source>Use Virtual nodes (new session required)</source>
-        <translation>使用虛擬節點（需要新的工作階段）</translation>
-    </message>
-    <message>
         <location filename="../src/Preferences/PreferencesDialog.ui" line="132"/>
         <source>Relations selectable while hidden</source>
         <translation>當隱藏時可選取的關係</translation>
@@ -5161,22 +5356,6 @@ What do you want to do next?</source>
         <location filename="../src/Preferences/PreferencesDialog.ui" line="171"/>
         <source>Background</source>
         <translation>背景</translation>
-    </message>
-    <message>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="186"/>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="236"/>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="301"/>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="347"/>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="393"/>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="446"/>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="513"/>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="746"/>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="864"/>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="995"/>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="1219"/>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="1555"/>
-        <source>...</source>
-        <translation>...</translation>
     </message>
     <message>
         <location filename="../src/Preferences/PreferencesDialog.ui" line="199"/>
@@ -5197,11 +5376,6 @@ What do you want to do next?</source>
         <location filename="../src/Preferences/PreferencesDialog.ui" line="529"/>
         <source>Pixels</source>
         <translation>像素</translation>
-    </message>
-    <message>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="259"/>
-        <source>Use simple GPX track appearance</source>
-        <translation>使用簡潔的 GPX 軌跡外觀</translation>
     </message>
     <message>
         <location filename="../src/Preferences/PreferencesDialog.ui" line="287"/>
@@ -5239,11 +5413,6 @@ What do you want to do next?</source>
         <translation>語系</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="581"/>
-        <source>You may need to restart the program for these changes to take effect</source>
-        <translation>您必須重新啟動程式來讓這些變動生效</translation>
-    </message>
-    <message>
         <location filename="../src/Preferences/PreferencesDialog.ui" line="590"/>
         <source>Use language</source>
         <translation>使用語言</translation>
@@ -5264,14 +5433,9 @@ What do you want to do next?</source>
         <translation>選項</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="658"/>
-        <source>Use Anti-aliasing</source>
-        <translation>使用反鋸齒</translation>
-    </message>
-    <message>
         <location filename="../src/Preferences/PreferencesDialog.ui" line="665"/>
-        <source>Disable Anti-alisaing while panning</source>
-        <translation>當平移時停用反鋸齒</translation>
+        <source>No anti-aliasing while panning</source>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/Preferences/PreferencesDialog.ui" line="672"/>
@@ -5309,8 +5473,7 @@ What do you want to do next?</source>
         <translation>地圖樣式</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="723"/>
-        <location filename="../src/Preferences/PreferencesDialog.cpp" line="503"/>
+        <location filename="../src/Preferences/PreferencesDialog.cpp" line="511"/>
         <source>Custom styles directory</source>
         <translation>自訂樣式目錄</translation>
     </message>
@@ -5320,18 +5483,12 @@ What do you want to do next?</source>
         <translation>目前樣式</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="779"/>
-        <source>Disable styles for track layers</source>
-        <translation>停用軌跡層的樣式</translation>
-    </message>
-    <message>
         <location filename="../src/Preferences/PreferencesDialog.ui" line="803"/>
         <source>Template</source>
         <translation>範本</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="809"/>
-        <location filename="../src/Preferences/PreferencesDialog.cpp" line="512"/>
+        <location filename="../src/Preferences/PreferencesDialog.cpp" line="520"/>
         <source>Tag Template</source>
         <translation>標籤範本</translation>
     </message>
@@ -5351,11 +5508,6 @@ What do you want to do next?</source>
         <translation>資料</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="902"/>
-        <source>OSM API (URL is, e.g., &quot;http://www.openstreetmap.org/api/0.6&quot;</source>
-        <translation>OSM API（URL 網址可能會像是「http://www.openstreetmap.org/api/0.6」）</translation>
-    </message>
-    <message>
         <location filename="../src/Preferences/PreferencesDialog.ui" line="916"/>
         <source>XAPI</source>
         <translation>XAPI</translation>
@@ -5365,11 +5517,6 @@ What do you want to do next?</source>
         <location filename="../src/Preferences/PreferencesDialog.ui" line="956"/>
         <source>URL:</source>
         <translation>URL：</translation>
-    </message>
-    <message>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="945"/>
-        <source>Nominatim (Geo Search)</source>
-        <translation>Nominatim（地理搜尋）</translation>
     </message>
     <message>
         <location filename="../src/Preferences/PreferencesDialog.ui" line="968"/>
@@ -5392,19 +5539,85 @@ What do you want to do next?</source>
         <translation>軌跡</translation>
     </message>
     <message>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="42"/>
+        <source>Zoom out/in (%)</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="118"/>
+        <source>Separate move mode</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="125"/>
+        <source>Use virtual nodes (new session required)</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="186"/>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="236"/>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="301"/>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="347"/>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="393"/>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="446"/>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="513"/>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="746"/>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="864"/>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="995"/>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="1219"/>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="1555"/>
+        <source>…</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="259"/>
+        <source>Simple GPX track appearance</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="581"/>
+        <source>A restart of the program may be needed for these changes to take effect.</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="658"/>
+        <source>Anti-aliasing</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="723"/>
+        <source>Custom styles folder</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="779"/>
+        <source>No styles for track layers</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="809"/>
+        <source>Tag template</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="945"/>
+        <source>Nominatim (geo search)</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
         <location filename="../src/Preferences/PreferencesDialog.ui" line="1022"/>
-        <source>Automatically extract tracks on open</source>
-        <translation>在開啟時自動抽出軌跡</translation>
+        <source>Automatically extract opened tracks</source>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/Preferences/PreferencesDialog.ui" line="1029"/>
-        <source>Track layers readonly by default</source>
-        <translation>軌跡圖層預設是唯讀的</translation>
+        <source>Track layers read-only by default</source>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/Preferences/PreferencesDialog.ui" line="1040"/>
-        <source>Don&apos;t connect GPX nodes separated by more than (in km; 0 to disable)</source>
-        <translation>不要連接 GPX 節點，以多於（設為 0 以停用）公里分離的</translation>
+        <source>Don&apos;t connect GPX nodes separated by more than (in km; 0 to turn off)</source>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/Preferences/PreferencesDialog.ui" line="1059"/>
@@ -5469,13 +5682,48 @@ What do you want to do next?</source>
     </message>
     <message>
         <location filename="../src/Preferences/PreferencesDialog.ui" line="1270"/>
-        <source>Use Proxy</source>
-        <translation>使用代理伺服器</translation>
+        <source>Use proxy</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="1365"/>
+        <source>Network Timeout (sec):</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="1403"/>
+        <source>JOSM-compatible local server on port 8111</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="1424"/>
+        <source>Background image</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="1430"/>
+        <source>Tile caching (not active for Yahoo! due to legal restrictions)</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="1436"/>
+        <source>Cache folder</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="1446"/>
+        <source>Cache size (in MB; 0 to turn off)</source>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/Preferences/PreferencesDialog.ui" line="1277"/>
         <source>Password:</source>
         <translation>密碼：</translation>
+    </message>
+    <message>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="902"/>
+        <source>OSM API (URL is, e.g., &quot;https://www.openstreetmap.org/api/0.6&quot;)</source>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/Preferences/PreferencesDialog.ui" line="1300"/>
@@ -5491,36 +5739,6 @@ What do you want to do next?</source>
         <location filename="../src/Preferences/PreferencesDialog.ui" line="1314"/>
         <source>Host:</source>
         <translation>主機：</translation>
-    </message>
-    <message>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="1365"/>
-        <source>Network Timeout (sec)</source>
-        <translation>網路逾時（秒）</translation>
-    </message>
-    <message>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="1403"/>
-        <source>Enable JOSM-compatible local server on port 8111</source>
-        <translation>在 8111 埠上啟用相容於 JOSM 的本機伺服器</translation>
-    </message>
-    <message>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="1424"/>
-        <source>Background Image</source>
-        <translation>背景圖片</translation>
-    </message>
-    <message>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="1430"/>
-        <source>Tiles Caching (not active for Yahoo! due to legal restrictions)</source>
-        <translation>圖磚快取（因為法律限制，不會對 Yahoo! 啟用）</translation>
-    </message>
-    <message>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="1436"/>
-        <source>Cache directory</source>
-        <translation>快取目錄</translation>
-    </message>
-    <message>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="1446"/>
-        <source>Cache size (in Mb; 0 to disable)</source>
-        <translation>快取大小（以 Mb 計；設定為 0 以停用）</translation>
     </message>
     <message>
         <location filename="../src/Preferences/PreferencesDialog.ui" line="1465"/>
@@ -5563,14 +5781,19 @@ What do you want to do next?</source>
         <translation>移除</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.cpp" line="162"/>
+        <location filename="../src/Preferences/PreferencesDialog.cpp" line="167"/>
         <source>English</source>
         <translation>英文</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.cpp" line="163"/>
+        <location filename="../src/Preferences/PreferencesDialog.cpp" line="162"/>
         <source>Arabic</source>
         <translation>阿拉伯文</translation>
+    </message>
+    <message>
+        <location filename="../src/Preferences/PreferencesDialog.cpp" line="163"/>
+        <source>Chinese (Taiwan)</source>
+        <translation>中文（台灣）</translation>
     </message>
     <message>
         <location filename="../src/Preferences/PreferencesDialog.cpp" line="164"/>
@@ -5588,7 +5811,7 @@ What do you want to do next?</source>
         <translation>荷蘭語</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.cpp" line="167"/>
+        <location filename="../src/Preferences/PreferencesDialog.cpp" line="169"/>
         <source>German</source>
         <translation>德文</translation>
     </message>
@@ -5598,44 +5821,39 @@ What do you want to do next?</source>
         <translation>法文</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.cpp" line="169"/>
+        <location filename="../src/Preferences/PreferencesDialog.cpp" line="170"/>
         <source>Hungarian</source>
         <translation>匈牙利語</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.cpp" line="170"/>
+        <location filename="../src/Preferences/PreferencesDialog.cpp" line="171"/>
+        <source>Indonesian (Indonesia)</source>
+        <translation>印尼文（印度尼西亞）</translation>
+    </message>
+    <message>
+        <location filename="../src/Preferences/PreferencesDialog.cpp" line="172"/>
         <source>Italian</source>
         <translation>義大利文</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.cpp" line="171"/>
+        <location filename="../src/Preferences/PreferencesDialog.cpp" line="173"/>
         <source>Japanese</source>
         <translation>日文</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.cpp" line="172"/>
+        <location filename="../src/Preferences/PreferencesDialog.cpp" line="174"/>
         <source>Polish</source>
         <translation>波蘭語</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.cpp" line="173"/>
-        <source>Portuguese</source>
-        <translation>葡萄牙語</translation>
-    </message>
-    <message>
-        <location filename="../src/Preferences/PreferencesDialog.cpp" line="174"/>
-        <source>Brazilian Portuguese</source>
-        <translation>巴西式葡萄牙語</translation>
-    </message>
-    <message>
-        <location filename="../src/Preferences/PreferencesDialog.cpp" line="175"/>
+        <location filename="../src/Preferences/PreferencesDialog.cpp" line="176"/>
         <source>Russian</source>
         <translation>俄文</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.cpp" line="176"/>
-        <source>Slovak</source>
-        <translation>斯洛伐克語</translation>
+        <location filename="../src/Preferences/PreferencesDialog.cpp" line="175"/>
+        <source>Portuguese (Brazil)</source>
+        <translation>葡萄牙文（巴西）</translation>
     </message>
     <message>
         <location filename="../src/Preferences/PreferencesDialog.cpp" line="177"/>
@@ -5653,64 +5871,99 @@ What do you want to do next?</source>
         <translation>烏克蘭文</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.cpp" line="512"/>
+        <location filename="../src/Preferences/PreferencesDialog.cpp" line="181"/>
+        <source>[less than 50% complete] Chinese (China)</source>
+        <translation>[完成度少於 50%] 中文（中國）</translation>
+    </message>
+    <message>
+        <location filename="../src/Preferences/PreferencesDialog.cpp" line="182"/>
+        <source>[less than 50% complete] Estonian</source>
+        <translation>[完成度少於 50%] 愛沙尼亞文</translation>
+    </message>
+    <message>
+        <location filename="../src/Preferences/PreferencesDialog.cpp" line="183"/>
+        <source>[less than 50% complete] Finnish</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/Preferences/PreferencesDialog.cpp" line="184"/>
+        <source>[less than 50% complete] German (Austria)</source>
+        <translation>[完成度少於 50%] 德文（奧地利）</translation>
+    </message>
+    <message>
+        <location filename="../src/Preferences/PreferencesDialog.cpp" line="185"/>
+        <source>[less than 50% complete] Portuguese</source>
+        <translation>[完成度少於 50%] 葡萄牙文</translation>
+    </message>
+    <message>
+        <location filename="../src/Preferences/PreferencesDialog.cpp" line="186"/>
+        <source>[less than 50% complete] Slovak</source>
+        <translation>[完成度少於 50%] 斯洛伐克文</translation>
+    </message>
+    <message>
+        <location filename="../src/Preferences/PreferencesDialog.cpp" line="187"/>
+        <source>[less than 50% complete] Vietnamese</source>
+        <translation>[完成度少於 50%] 越南文</translation>
+    </message>
+    <message>
+        <location filename="../src/Preferences/PreferencesDialog.cpp" line="520"/>
         <source>Merkaartor tag template (*.mat)</source>
         <translation>Merkaartor 標籤範本 (*.mat)</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.cpp" line="520"/>
+        <location filename="../src/Preferences/PreferencesDialog.cpp" line="528"/>
         <source>Select Color</source>
         <translation>選取顏色</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.cpp" line="593"/>
+        <location filename="../src/Preferences/PreferencesDialog.cpp" line="601"/>
         <source>Tool already exists</source>
         <translation>工具已存在</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.cpp" line="594"/>
+        <location filename="../src/Preferences/PreferencesDialog.cpp" line="602"/>
         <source>A tool of this name already exists.
 Please select another name or click the &lt;Apply&gt; button if you want to modify the existing one</source>
         <translation>這個名稱的工具已存在。
 請選擇另一個名稱，或是若您想要修改已有的工具名稱就請點選&lt;套用&gt;按鈕。</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.cpp" line="613"/>
+        <location filename="../src/Preferences/PreferencesDialog.cpp" line="621"/>
         <source>Cannot delete preset tool</source>
         <translation>無法刪除預先設定的工具</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.cpp" line="614"/>
+        <location filename="../src/Preferences/PreferencesDialog.cpp" line="622"/>
         <source>Cannot delete preset tool &quot;%1&quot;</source>
         <translation>無法刪除預先設定的工具「%1」</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.cpp" line="632"/>
+        <location filename="../src/Preferences/PreferencesDialog.cpp" line="640"/>
         <source>Cannot modify preset tool name</source>
         <translation>無法修改預先設定的工具名稱</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.cpp" line="633"/>
+        <location filename="../src/Preferences/PreferencesDialog.cpp" line="641"/>
         <source>Cannot modify preset tool &quot;%1&quot;&apos;s name</source>
         <translation>無法修改預先設定的工具「%1」的名稱</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.cpp" line="658"/>
+        <location filename="../src/Preferences/PreferencesDialog.cpp" line="666"/>
         <source>Select tool executable</source>
         <translation>選取工具可執行檔</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.cpp" line="666"/>
+        <location filename="../src/Preferences/PreferencesDialog.cpp" line="674"/>
         <source>Select template document</source>
         <translation>選取範本檔</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.cpp" line="666"/>
+        <location filename="../src/Preferences/PreferencesDialog.cpp" line="674"/>
         <source>Merkaartor document (*.mdc)</source>
         <translation>Merkaartor 文件 (*.mdc)</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.cpp" line="674"/>
+        <location filename="../src/Preferences/PreferencesDialog.cpp" line="682"/>
         <source>Select Log directory</source>
         <translation>選取日誌目錄</translation>
     </message>
@@ -5771,7 +6024,7 @@ Please select another name or click the &lt;Apply&gt; button if you want to modi
 <context>
     <name>Projection</name>
     <message>
-        <location filename="../src/common/Projection.cpp" line="341"/>
+        <location filename="../src/common/Projection.cpp" line="233"/>
         <source>Document</source>
         <translation>文件</translation>
     </message>
@@ -5833,63 +6086,63 @@ Please select another name or click the &lt;Apply&gt; button if you want to modi
 <context>
     <name>PropertiesDock</name>
     <message>
-        <location filename="../src/Docks/PropertiesDock.cpp" line="343"/>
+        <location filename="../src/Docks/PropertiesDock.cpp" line="341"/>
         <source>%1/%1 selected item(s)</source>
         <translation>%1/%1 個選定的項目</translation>
     </message>
     <message>
-        <location filename="../src/Docks/PropertiesDock.cpp" line="366"/>
+        <location filename="../src/Docks/PropertiesDock.cpp" line="364"/>
         <source>%1/%2 selected item(s)</source>
         <translation>%1/%2 個選定的項目</translation>
     </message>
     <message>
-        <location filename="../src/Docks/PropertiesDock.cpp" line="430"/>
+        <location filename="../src/Docks/PropertiesDock.cpp" line="428"/>
         <source>Selected items</source>
         <translation>選定的項目</translation>
     </message>
     <message>
-        <location filename="../src/Docks/PropertiesDock.cpp" line="439"/>
+        <location filename="../src/Docks/PropertiesDock.cpp" line="437"/>
         <source>Properties - Multiple elements</source>
         <translation>屬性 - 多重元素</translation>
     </message>
     <message>
-        <location filename="../src/Docks/PropertiesDock.cpp" line="456"/>
+        <location filename="../src/Docks/PropertiesDock.cpp" line="454"/>
         <source>Properties - Node</source>
         <translation>屬性 - 節點</translation>
     </message>
     <message>
-        <location filename="../src/Docks/PropertiesDock.cpp" line="471"/>
-        <source>Properties - Road</source>
-        <translation>屬性 - 道路</translation>
+        <location filename="../src/Docks/PropertiesDock.cpp" line="469"/>
+        <source>Properties - Way</source>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/Docks/PropertiesDock.cpp" line="492"/>
+        <location filename="../src/Docks/PropertiesDock.cpp" line="490"/>
         <source>Properties - Relation</source>
         <translation>屬性 - 關係</translation>
     </message>
     <message>
-        <location filename="../src/Docks/PropertiesDock.cpp" line="504"/>
-        <location filename="../src/Docks/PropertiesDock.cpp" line="1163"/>
+        <location filename="../src/Docks/PropertiesDock.cpp" line="502"/>
+        <location filename="../src/Docks/PropertiesDock.cpp" line="1161"/>
         <source>Properties</source>
         <translation>屬性</translation>
     </message>
     <message>
-        <location filename="../src/Docks/PropertiesDock.cpp" line="1054"/>
+        <location filename="../src/Docks/PropertiesDock.cpp" line="1052"/>
         <source>Error reading template file</source>
         <translation>讀取範本檔錯誤</translation>
     </message>
     <message>
-        <location filename="../src/Docks/PropertiesDock.cpp" line="1164"/>
+        <location filename="../src/Docks/PropertiesDock.cpp" line="1162"/>
         <source>Center map</source>
         <translation>地圖置中</translation>
     </message>
     <message>
-        <location filename="../src/Docks/PropertiesDock.cpp" line="1165"/>
+        <location filename="../src/Docks/PropertiesDock.cpp" line="1163"/>
         <source>Center &amp;&amp; Zoom map</source>
         <translation>置中 &amp;&amp; 縮放地圖</translation>
     </message>
     <message>
-        <location filename="../src/Docks/PropertiesDock.cpp" line="1166"/>
+        <location filename="../src/Docks/PropertiesDock.cpp" line="1164"/>
         <source>Select member</source>
         <translation>選取成員</translation>
     </message>
@@ -5900,19 +6153,6 @@ Please select another name or click the &lt;Apply&gt; button if you want to modi
         <location filename="../src/Commands/DocumentCommands.cpp" line="132"/>
         <source>Cascaded cleanup</source>
         <translation>層疊清除</translation>
-    </message>
-    <message>
-        <location filename="../src/Commands/FeatureCommands.cpp" line="66"/>
-        <location filename="../src/Commands/FeatureCommands.cpp" line="74"/>
-        <location filename="../src/Commands/FeatureCommands.cpp" line="188"/>
-        <source>Set Tag &apos;%1=%2&apos; on %3</source>
-        <translation>在 %3 上設定標籤「%1=%2」</translation>
-    </message>
-    <message>
-        <location filename="../src/Commands/FeatureCommands.cpp" line="314"/>
-        <location filename="../src/Commands/FeatureCommands.cpp" line="400"/>
-        <source>Clear Tag &apos;%1&apos; on %2</source>
-        <translation>在 %2 上清除標籤「%1」</translation>
     </message>
     <message>
         <location filename="../src/Commands/NodeCommands.cpp" line="17"/>
@@ -5928,19 +6168,19 @@ Please select another name or click the &lt;Apply&gt; button if you want to modi
     </message>
     <message>
         <location filename="../src/ImportExport/ExportGPX.cpp" line="46"/>
-        <location filename="../src/ImportExport/ImportExportGdal.cpp" line="405"/>
+        <location filename="../src/ImportExport/ImportExportGdal.cpp" line="370"/>
         <location filename="../src/ImportExport/ImportExportPBF.cpp" line="565"/>
         <source>Cancel</source>
         <translation>取消</translation>
     </message>
     <message>
-        <location filename="../src/ImportExport/ImportExportGdal.cpp" line="405"/>
+        <location filename="../src/ImportExport/ImportExportGdal.cpp" line="370"/>
         <location filename="../src/ImportExport/ImportExportPBF.cpp" line="565"/>
         <source>Importing...</source>
         <translation>正在匯入...</translation>
     </message>
     <message>
-        <location filename="../src/ImportExport/ImportExportGdal.cpp" line="455"/>
+        <location filename="../src/ImportExport/ImportExportGdal.cpp" line="419"/>
         <source>Imported: %1</source>
         <translation>已匯入：%1</translation>
     </message>
@@ -5992,6 +6232,24 @@ Please select another name or click the &lt;Apply&gt; button if you want to modi
 Do you still wish to commit empty changeset comment?</source>
         <translation>變更集評論是空的。提供一份好的評論是對其他製圖者的尊重，這樣其他人才能知道您的變更與意圖。
 您仍然想要遞交空的變更集評論嗎？</translation>
+    </message>
+    <message>
+        <location filename="../src/Commands/FeatureCommands.cpp" line="66"/>
+        <location filename="../src/Commands/FeatureCommands.cpp" line="74"/>
+        <location filename="../src/Commands/FeatureCommands.cpp" line="188"/>
+        <source>Set tag &apos;%1=%2&apos; on %3</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/Commands/FeatureCommands.cpp" line="314"/>
+        <location filename="../src/Commands/FeatureCommands.cpp" line="400"/>
+        <source>Remove tag &apos;%1&apos; from %2</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../plugins/background/MCadastreFranceBackground/qadastre/cadastrewrapper.cpp" line="114"/>
+        <source>Downloading tiles...</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -6073,12 +6331,12 @@ Do you still wish to commit empty changeset comment?</source>
         <translation>無法連線至 %1：%2</translation>
     </message>
     <message>
-        <location filename="../src/GPS/qgpsdevice.cpp" line="1102"/>
+        <location filename="../src/GPS/qgpsdevice.cpp" line="1120"/>
         <source>GPS log error</source>
         <translation>GPS 日誌錯誤</translation>
     </message>
     <message>
-        <location filename="../src/GPS/qgpsdevice.cpp" line="1103"/>
+        <location filename="../src/GPS/qgpsdevice.cpp" line="1121"/>
         <source>Unable to create GPS log file: %1.</source>
         <translation>無法建立 GPS 日誌檔：%1。</translation>
     </message>
@@ -6253,57 +6511,20 @@ Do you still wish to commit empty changeset comment?</source>
     </message>
 </context>
 <context>
-    <name>QuaGzipFile</name>
-    <message>
-        <location filename="../3rdparty/quazip-0.7/quazip/quagzipfile.cpp" line="60"/>
-        <source>QIODevice::Append is not supported for GZIP</source>
-        <translation>QIODevice::Append 不支援 GZIP</translation>
-    </message>
-    <message>
-        <location filename="../3rdparty/quazip-0.7/quazip/quagzipfile.cpp" line="66"/>
-        <source>Opening gzip for both reading and writing is not supported</source>
-        <translation>不支援開啟 gzip 用來讀取及寫入</translation>
-    </message>
-    <message>
-        <location filename="../3rdparty/quazip-0.7/quazip/quagzipfile.cpp" line="74"/>
-        <source>You can open a gzip either for reading or for writing. Which is it?</source>
-        <translation>您可以開啟 gzip 供讀取或寫入。這是什麼呢？</translation>
-    </message>
-    <message>
-        <location filename="../3rdparty/quazip-0.7/quazip/quagzipfile.cpp" line="80"/>
-        <source>Could not gzopen() file</source>
-        <translation>無法 gzopen() 檔案</translation>
-    </message>
-</context>
-<context>
-    <name>QuaZIODevice</name>
-    <message>
-        <location filename="../3rdparty/quazip-0.7/quazip/quaziodevice.cpp" line="145"/>
-        <source>QIODevice::Append is not supported for QuaZIODevice</source>
-        <translation>QIODevice::Append 不支援 QuaZIODevice</translation>
-    </message>
-    <message>
-        <location filename="../3rdparty/quazip-0.7/quazip/quaziodevice.cpp" line="150"/>
-        <source>QIODevice::ReadWrite is not supported for QuaZIODevice</source>
-        <translation>QIODevice::ReadWrite 不支援 QuaZIODevice</translation>
-    </message>
-</context>
-<context>
-    <name>QuaZipFile</name>
-    <message>
-        <location filename="../3rdparty/quazip-0.7/quazip/quazipfile.cpp" line="218"/>
-        <source>ZIP/UNZIP API error %1</source>
-        <translation>ZIP/UNZIP API 錯誤 %1</translation>
-    </message>
-</context>
-<context>
     <name>RelationProperties</name>
     <message>
+        <location filename="../src/common/RelationProperties.ui" line="13"/>
         <location filename="../src/Docks/MinimumRelationProperties.ui" line="14"/>
         <source>Form</source>
         <translation>外形</translation>
     </message>
     <message>
+        <location filename="../src/common/RelationProperties.ui" line="27"/>
+        <source>Landuse</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/common/RelationProperties.ui" line="46"/>
         <location filename="../src/Docks/MinimumRelationProperties.ui" line="31"/>
         <source>Members</source>
         <translation>成員</translation>
@@ -6314,6 +6535,7 @@ Do you still wish to commit empty changeset comment?</source>
         <translation>移除選定的成員</translation>
     </message>
     <message>
+        <location filename="../src/common/RelationProperties.ui" line="88"/>
         <location filename="../src/Docks/MinimumRelationProperties.ui" line="54"/>
         <location filename="../src/Docks/MinimumRelationProperties.ui" line="84"/>
         <location filename="../src/Docks/MinimumRelationProperties.ui" line="100"/>
@@ -6322,6 +6544,7 @@ Do you still wish to commit empty changeset comment?</source>
         <translation>...</translation>
     </message>
     <message>
+        <location filename="../src/common/RelationProperties.ui" line="68"/>
         <location filename="../src/Docks/MinimumRelationProperties.ui" line="122"/>
         <source>Tags</source>
         <translation>標籤</translation>
@@ -6391,6 +6614,44 @@ Do you still wish to commit empty changeset comment?</source>
         <location filename="../src/GPS/SatelliteStrengthView.cpp" line="50"/>
         <source>No satellites</source>
         <translation>沒有衛星</translation>
+    </message>
+</context>
+<context>
+    <name>SearchDialog</name>
+    <message>
+        <location filename="../plugins/background/MCadastreFranceBackground/qadastre/searchdialog.ui" line="14"/>
+        <source>Search city</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../plugins/background/MCadastreFranceBackground/qadastre/searchdialog.ui" line="22"/>
+        <source>Department</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../plugins/background/MCadastreFranceBackground/qadastre/searchdialog.ui" line="56"/>
+        <source>Name</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../plugins/background/MCadastreFranceBackground/qadastre/searchdialog.ui" line="83"/>
+        <source>Search</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../plugins/background/MCadastreFranceBackground/qadastre/searchdialog.ui" line="97"/>
+        <source>Results</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../plugins/background/MCadastreFranceBackground/qadastre/searchdialog.cpp" line="84"/>
+        <source>No result</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../plugins/background/MCadastreFranceBackground/qadastre/searchdialog.cpp" line="84"/>
+        <source>Your search gave no result.</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -6636,18 +6897,18 @@ Do you still wish to commit empty changeset comment?</source>
         <translation>移除</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/TMSPreferencesDialog.cpp" line="219"/>
-        <location filename="../src/Preferences/TMSPreferencesDialog.cpp" line="272"/>
+        <location filename="../src/Preferences/TMSPreferencesDialog.cpp" line="231"/>
+        <location filename="../src/Preferences/TMSPreferencesDialog.cpp" line="284"/>
         <source>Merkaartor: GetServices</source>
         <translation>Merkaartor：取得服務</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/TMSPreferencesDialog.cpp" line="219"/>
+        <location filename="../src/Preferences/TMSPreferencesDialog.cpp" line="231"/>
         <source>Address and Path cannot be blank.</source>
         <translation>地址與路徑不能為空。</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/TMSPreferencesDialog.cpp" line="272"/>
+        <location filename="../src/Preferences/TMSPreferencesDialog.cpp" line="284"/>
         <source>Error reading services. The server probably does not support this feature.
 </source>
         <translation>讀取服務錯誤。伺服器可能不支援此功能。
@@ -7075,6 +7336,57 @@ Do you still wish to commit empty changeset comment?</source>
         <location filename="../src/Preferences/WMSPreferencesDialog.cpp" line="671"/>
         <source>Could not get capabilities: %1</source>
         <translation>無法取得功能：%1</translation>
+    </message>
+</context>
+<context>
+    <name>WalkingPapersAdapter</name>
+    <message>
+        <location filename="../plugins/background/MWalkingPapersBackground/WalkingPapersAdapter.cpp" line="81"/>
+        <source>Load image...</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../plugins/background/MWalkingPapersBackground/WalkingPapersAdapter.cpp" line="152"/>
+        <source>Network timeout</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../plugins/background/MWalkingPapersBackground/WalkingPapersAdapter.cpp" line="152"/>
+        <source>Cannot read the photo&apos;s details from the Walking Papers server.</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../plugins/background/MWalkingPapersBackground/WalkingPapersAdapter.cpp" line="174"/>
+        <source>Please specify Walking Papers URL</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../plugins/background/MWalkingPapersBackground/WalkingPapersAdapter.cpp" line="175"/>
+        <source>URL:</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../plugins/background/MWalkingPapersBackground/WalkingPapersAdapter.cpp" line="265"/>
+        <source>Open Walking Papers scan</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../plugins/background/MWalkingPapersBackground/WalkingPapersAdapter.cpp" line="438"/>
+        <source>Filename(s)</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
+    <name>WalkingPapersBackground</name>
+    <message>
+        <location filename="../plugins/background/MWalkingPapersBackground/WalkingPapersAdapter.cpp" line="277"/>
+        <source>No valid file</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../plugins/background/MWalkingPapersBackground/WalkingPapersAdapter.cpp" line="277"/>
+        <source>Cannot load file.</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 </TS>

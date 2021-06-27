@@ -179,56 +179,44 @@ win32-msvc* {
 }
 
 TRANSLATIONS += \
-    ../translations/merkaartor_en.ts \
-    ../translations/merkaartor_ar.ts \
     ../translations/merkaartor_cs.ts \
     ../translations/merkaartor_de.ts \
+    ../translations/merkaartor_en.ts \
     ../translations/merkaartor_es.ts \
-    ../translations/merkaartor_et.ts \
     ../translations/merkaartor_fi.ts \
     ../translations/merkaartor_fr.ts \
     ../translations/merkaartor_hr.ts \
     ../translations/merkaartor_hu.ts \
+    ../translations/merkaartor_id_ID.ts \
     ../translations/merkaartor_it.ts \
     ../translations/merkaartor_ja.ts \
     ../translations/merkaartor_nl.ts \
     ../translations/merkaartor_pl.ts \
-    ../translations/merkaartor_pt.ts \
+    ../translations/merkaartor_pt_BR.ts \
     ../translations/merkaartor_ru.ts \
-    ../translations/merkaartor_sk.ts \
     ../translations/merkaartor_sv.ts \
     ../translations/merkaartor_uk.ts \
-    ../translations/merkaartor_pt_BR.ts \
-    ../translations/merkaartor_de_AT.ts \
-    ../translations/merkaartor_vi.ts    \
-    ../translations/merkaartor_zh_CN.ts \
     ../translations/merkaartor_zh_TW.ts \
 
 
 BINTRANSLATIONS += \
-    ../translations/merkaartor_en.qm \
-    ../translations/merkaartor_ar.qm \
     ../translations/merkaartor_cs.qm \
     ../translations/merkaartor_de.qm \
+    ../translations/merkaartor_en.qm \
     ../translations/merkaartor_es.qm \
-    ../translations/merkaartor_et.qm \
     ../translations/merkaartor_fi.qm \
     ../translations/merkaartor_fr.qm \
     ../translations/merkaartor_hr.qm \
     ../translations/merkaartor_hu.qm \
+    ../translations/merkaartor_id_ID.qm \
     ../translations/merkaartor_it.qm \
     ../translations/merkaartor_ja.qm \
     ../translations/merkaartor_nl.qm \
     ../translations/merkaartor_pl.qm \
-    ../translations/merkaartor_pt.qm \
+    ../translations/merkaartor_pt_BR.qm \
     ../translations/merkaartor_ru.qm \
-    ../translations/merkaartor_sk.qm \
     ../translations/merkaartor_sv.qm \
     ../translations/merkaartor_uk.qm \
-    ../translations/merkaartor_pt_BR.qm \
-    ../translations/merkaartor_de_AT.qm \
-    ../translations/merkaartor_vi.qm    \
-    ../translations/merkaartor_zh_CN.qm \
     ../translations/merkaartor_zh_TW.qm \
 
 translations.path =  $${TRANSDIR_MERKAARTOR}
