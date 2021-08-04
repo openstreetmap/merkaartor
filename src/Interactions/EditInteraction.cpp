@@ -35,10 +35,6 @@ EditInteraction::EditInteraction(MainWindow* aMain)
     connect(main(),SIGNAL(remove_triggered()),this,SLOT(on_remove_triggered()));
     connect(main(),SIGNAL(reverse_triggered()), this,SLOT(on_reverse_triggered()));
     PROPERTIES(checkMenuStatus());
-
-    if (!M_PREFS->getSeparateMoveMode()) {
-        setDontSelectVirtual(false);
-    }
 }
 
 EditInteraction::~EditInteraction(void)
