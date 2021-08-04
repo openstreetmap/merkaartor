@@ -448,13 +448,10 @@ set_source_files_properties(${MEKAARTOR_SHARE_FILES} PROPERTIES MACOSX_PACKAGE_L
 
 find_package(Qt5LinguistTools)
 set(TS_FILES
-  ${CMAKE_SOURCE_DIR}/translations/merkaartor_ar.ts
   ${CMAKE_SOURCE_DIR}/translations/merkaartor_cs.ts
-  ${CMAKE_SOURCE_DIR}/translations/merkaartor_de_AT.ts
   ${CMAKE_SOURCE_DIR}/translations/merkaartor_de.ts
   ${CMAKE_SOURCE_DIR}/translations/merkaartor_en.ts
   ${CMAKE_SOURCE_DIR}/translations/merkaartor_es.ts
-  ${CMAKE_SOURCE_DIR}/translations/merkaartor_et.ts
   ${CMAKE_SOURCE_DIR}/translations/merkaartor_fi.ts
   ${CMAKE_SOURCE_DIR}/translations/merkaartor_fr.ts
   ${CMAKE_SOURCE_DIR}/translations/merkaartor_hr.ts
@@ -465,13 +462,9 @@ set(TS_FILES
   ${CMAKE_SOURCE_DIR}/translations/merkaartor_nl.ts
   ${CMAKE_SOURCE_DIR}/translations/merkaartor_pl.ts
   ${CMAKE_SOURCE_DIR}/translations/merkaartor_pt_BR.ts
-  ${CMAKE_SOURCE_DIR}/translations/merkaartor_pt.ts
   ${CMAKE_SOURCE_DIR}/translations/merkaartor_ru.ts
-  ${CMAKE_SOURCE_DIR}/translations/merkaartor_sk.ts
   ${CMAKE_SOURCE_DIR}/translations/merkaartor_sv.ts
   ${CMAKE_SOURCE_DIR}/translations/merkaartor_uk.ts
-  ${CMAKE_SOURCE_DIR}/translations/merkaartor_vi.ts
-  ${CMAKE_SOURCE_DIR}/translations/merkaartor_zh_CN.ts
   ${CMAKE_SOURCE_DIR}/translations/merkaartor_zh_TW.ts
 )
 qt5_add_translation(QM_FILES

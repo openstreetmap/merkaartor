@@ -159,32 +159,15 @@ void PreferencesDialog::on_buttonBox_clicked(QAbstractButton * button)
 
 void PreferencesDialog::initLanguages(QComboBox* aBox)
 {
-    aBox->addItem(tr("Arabic"),"ar");
-    aBox->addItem(tr("Chinese (Taiwan)"),"zh_TW");
-    aBox->addItem(tr("Croatian"),"hr");
-    aBox->addItem(tr("Czech"),"cs");
-    aBox->addItem(tr("Dutch"),"nl");
-    aBox->addItem(tr("English"),"-");
-    aBox->addItem(tr("French"),"fr");
-    aBox->addItem(tr("German"),"de");
-    aBox->addItem(tr("Hungarian"),"hu");
-    aBox->addItem(tr("Indonesian (Indonesia)"),"in_ID");
-    aBox->addItem(tr("Italian"),"it");
-    aBox->addItem(tr("Japanese"),"ja");
-    aBox->addItem(tr("Polish"),"pl");
-    aBox->addItem(tr("Portuguese (Brazil)"),"pt_BR");
-    aBox->addItem(tr("Russian"),"ru");
-    aBox->addItem(tr("Spanish"),"es");
-    aBox->addItem(tr("Swedish"),"sv");
-    aBox->addItem(tr("Ukrainian"),"uk");
-
-    aBox->addItem(tr("[less than 50% complete] Chinese (China)"),"zh_CN");
-    aBox->addItem(tr("[less than 50% complete] Estonian"),"et");
-    aBox->addItem(tr("[less than 50% complete] Finnish"),"fi");
-    aBox->addItem(tr("[less than 50% complete] German (Austria)"),"de_AT");
-    aBox->addItem(tr("[less than 50% complete] Portuguese"),"pt");
-    aBox->addItem(tr("[less than 50% complete] Slovak"),"sk");
-    aBox->addItem(tr("[less than 50% complete] Vietnamese"),"vi");
+    const QString& baseName = QLatin1String("merkaartor_");
+    const QStringList nameFilter = { baseName + QLatin1String("*.qm") };
+    for (const auto& translationDir : ((MainWindow*)parent())->translationPaths()) {
+        const auto translationFiles = QDir(translationDir).entryList(nameFilter, QDir::Files);
+        for (const auto& filename : translationFiles) {
+            auto code = filename.mid(baseName.length(), filename.length() - baseName.length() - 3);
+            aBox->addItem(QLocale(code).nativeLanguageName(), code);
+        }
+    }
 }
 
 void PreferencesDialog::loadPrefs()

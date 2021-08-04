@@ -1,4 +1,4 @@
-<?xml version="1.0" ?><!DOCTYPE TS><TS language="id_ID" sourcelanguage="en" version="2.1">
+<?xml version="1.0" ?><!DOCTYPE TS><TS language="id_ID" version="2.1">
 <context>
     <name>AboutDialog</name>
     <message>
@@ -7,8 +7,8 @@
         <translation>Tentang Merkaartor</translation>
     </message>
     <message>
-        <location filename="../src/common/AboutDialog.ui" line="152"/>
-        <source>Copyright Bart Vanhauwaert, Chris Browet, Ladislav Láska and others, 2006-2019</source>
+        <location filename="../src/common/AboutDialog.ui" line="99"/>
+        <source>PROJ version</source>
         <translation type="unfinished"/>
     </message>
     <message>
@@ -27,14 +27,14 @@
         <translation>Versi Qt</translation>
     </message>
     <message>
-        <location filename="../src/common/AboutDialog.ui" line="99"/>
-        <source>PROJ.4 version</source>
-        <translation>Versi PROJ.4</translation>
-    </message>
-    <message>
         <location filename="../src/common/AboutDialog.ui" line="109"/>
         <source>GDAL version</source>
         <translation>Versi GDAL</translation>
+    </message>
+    <message>
+        <location filename="../src/common/AboutDialog.ui" line="152"/>
+        <source>Copyright Bart Vanhauwaert, Chris Browet, Ladislav Láska and others, 2006-2021</source>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/common/AboutDialog.ui" line="185"/>
@@ -167,6 +167,78 @@
     </message>
 </context>
 <context>
+    <name>CadastreBrowser</name>
+    <message>
+        <location filename="../plugins/background/MCadastreFranceBackground/qadastre/cadastrebrowser.ui" line="14"/>
+        <source>CadastreBrowser</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../plugins/background/MCadastreFranceBackground/qadastre/cadastrebrowser.ui" line="57"/>
+        <source>File</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../plugins/background/MCadastreFranceBackground/qadastre/cadastrebrowser.ui" line="77"/>
+        <location filename="../plugins/background/MCadastreFranceBackground/qadastre/cadastrebrowser.ui" line="80"/>
+        <source>Quit</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../plugins/background/MCadastreFranceBackground/qadastre/cadastrebrowser.ui" line="88"/>
+        <source>Load</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../plugins/background/MCadastreFranceBackground/qadastre/cadastrebrowser.ui" line="91"/>
+        <source>Load a city from the cadastre</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
+    <name>CadastreFranceAdapter</name>
+    <message>
+        <location filename="../plugins/background/MCadastreFranceBackground/CadastreFrance.cpp" line="132"/>
+        <source>Grab City...</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../plugins/background/MCadastreFranceBackground/CadastreFrance.cpp" line="135"/>
+        <source>Tiled</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../plugins/background/MCadastreFranceBackground/CadastreFrance.cpp" line="210"/>
+        <source>The city cannot be loaded</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../plugins/background/MCadastreFranceBackground/CadastreFrance.cpp" line="210"/>
+        <source>Only vectorized cities can be handled by this plugin and the selected one is still in &quot;Image&quot; format.</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
+    <name>CadastreWrapper</name>
+    <message>
+        <location filename="../plugins/background/MCadastreFranceBackground/qadastre/cadastrewrapper.cpp" line="209"/>
+        <source>Downloaded: %1/%2
+Remaining time: %3:%4</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../plugins/background/MCadastreFranceBackground/qadastre/cadastrewrapper.cpp" line="211"/>
+        <source>Downloaded: %1/%2
+Remaining time: %3:%4:%5</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../plugins/background/MCadastreFranceBackground/qadastre/cadastrewrapper.cpp" line="214"/>
+        <source>Downloaded: %1/%2</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
     <name>Command</name>
     <message>
         <location filename="../src/Commands/Command.cpp" line="25"/>
@@ -183,13 +255,13 @@
     </message>
     <message>
         <location filename="../src/Interactions/CreateDoubleWayDock.ui" line="25"/>
-        <source>Driving at the right side of the road</source>
-        <translation>Berkendara pada posisi yang benar di jalan</translation>
+        <source>Road driving on the right</source>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/Interactions/CreateDoubleWayDock.ui" line="40"/>
-        <source>Distance between two roads</source>
-        <translation>Jarak antar dua jalan</translation>
+        <source>Separation distance</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -649,9 +721,9 @@ Silahkan unduh-ulang fasilitas permasalahan untuk mengatasi hal ini.</translatio
     <name>Downloader</name>
     <message>
         <location filename="../src/ImportExport/ImportExportOSC.cpp" line="64"/>
-        <location filename="../src/Sync/DownloadOSM.cpp" line="471"/>
-        <location filename="../src/Sync/DownloadOSM.cpp" line="586"/>
-        <location filename="../src/Sync/DownloadOSM.cpp" line="709"/>
+        <location filename="../src/Sync/DownloadOSM.cpp" line="470"/>
+        <location filename="../src/Sync/DownloadOSM.cpp" line="585"/>
+        <location filename="../src/Sync/DownloadOSM.cpp" line="708"/>
         <source>%1 download</source>
         <translation>Unduh %1</translation>
     </message>
@@ -673,14 +745,14 @@ Silahkan unduh-ulang fasilitas permasalahan untuk mengatasi hal ini.</translatio
     <message>
         <location filename="../src/ImportExport/ImportOSM.cpp" line="460"/>
         <location filename="../src/Sync/DownloadOSM.cpp" line="397"/>
-        <location filename="../src/Sync/DownloadOSM.cpp" line="535"/>
+        <location filename="../src/Sync/DownloadOSM.cpp" line="534"/>
         <source>Parsing...</source>
         <translation>Menguraikan...</translation>
     </message>
     <message>
         <location filename="../src/ImportExport/ImportOSM.cpp" line="466"/>
         <location filename="../src/Sync/DownloadOSM.cpp" line="404"/>
-        <location filename="../src/Sync/DownloadOSM.cpp" line="542"/>
+        <location filename="../src/Sync/DownloadOSM.cpp" line="541"/>
         <source>Parsing XML</source>
         <translation>Mengurai XML</translation>
     </message>
@@ -798,17 +870,12 @@ API message is &apos;%1&apos;</source>
         <translation>Mengunduh trackpoint %1-%2</translation>
     </message>
     <message>
-        <location filename="../src/Sync/DownloadOSM.cpp" line="431"/>
-        <source>Downloaded track - nodes %1-%2</source>
-        <translation>Mengunduh jalur - titik %1-%2</translation>
-    </message>
-    <message>
-        <location filename="../src/Sync/DownloadOSM.cpp" line="525"/>
+        <location filename="../src/Sync/DownloadOSM.cpp" line="524"/>
         <source>MapDust</source>
         <translation>MapDust</translation>
     </message>
     <message>
-        <location filename="../src/Sync/DownloadOSM.cpp" line="548"/>
+        <location filename="../src/Sync/DownloadOSM.cpp" line="547"/>
         <source>Downloading points</source>
         <translation>Mengunduh titik</translation>
     </message>
@@ -896,52 +963,52 @@ Delete what can be?</source>
 <context>
     <name>FeaturesDock</name>
     <message>
-        <location filename="../src/Docks/FeaturesDock.cpp" line="457"/>
+        <location filename="../src/Docks/FeaturesDock.cpp" line="465"/>
         <source>Features</source>
         <translation>Ciri</translation>
     </message>
     <message>
-        <location filename="../src/Docks/FeaturesDock.cpp" line="458"/>
+        <location filename="../src/Docks/FeaturesDock.cpp" line="466"/>
         <source>Center map</source>
         <translation>Tengah peta</translation>
     </message>
     <message>
-        <location filename="../src/Docks/FeaturesDock.cpp" line="459"/>
+        <location filename="../src/Docks/FeaturesDock.cpp" line="467"/>
         <source>Center &amp;&amp; Zoom map</source>
         <translation>Tengah &amp;&amp; Perbesar peta</translation>
     </message>
     <message>
-        <location filename="../src/Docks/FeaturesDock.cpp" line="460"/>
+        <location filename="../src/Docks/FeaturesDock.cpp" line="468"/>
         <source>Download missing children</source>
         <translation>Unduh anak yang hilang</translation>
     </message>
     <message>
-        <location filename="../src/Docks/FeaturesDock.cpp" line="461"/>
+        <location filename="../src/Docks/FeaturesDock.cpp" line="469"/>
         <source>Add to selection</source>
         <translation>Tambahkan ke yang terpilih</translation>
     </message>
     <message>
-        <location filename="../src/Docks/FeaturesDock.cpp" line="462"/>
+        <location filename="../src/Docks/FeaturesDock.cpp" line="470"/>
         <source>Delete</source>
         <translation>Hapus</translation>
     </message>
     <message>
-        <location filename="../src/Docks/FeaturesDock.cpp" line="469"/>
+        <location filename="../src/Docks/FeaturesDock.cpp" line="477"/>
         <source>Relations</source>
         <translation>Relasi</translation>
     </message>
     <message>
-        <location filename="../src/Docks/FeaturesDock.cpp" line="470"/>
-        <source>Roads</source>
-        <translation>Jalan</translation>
+        <location filename="../src/Docks/FeaturesDock.cpp" line="478"/>
+        <source>Ways</source>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/Docks/FeaturesDock.cpp" line="471"/>
-        <source>POI&apos;s</source>
-        <translation>POI</translation>
+        <location filename="../src/Docks/FeaturesDock.cpp" line="479"/>
+        <source>Nodes</source>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/Docks/FeaturesDock.cpp" line="472"/>
+        <location filename="../src/Docks/FeaturesDock.cpp" line="480"/>
         <source>All</source>
         <translation>Semua</translation>
     </message>
@@ -1061,6 +1128,52 @@ Delete what can be?</source>
         <location filename="../src/Preferences/FilterPreferencesDialog.ui" line="141"/>
         <source>Remove</source>
         <translation>Hapus</translation>
+    </message>
+</context>
+<context>
+    <name>GdalAdapter</name>
+    <message>
+        <location filename="../plugins/background/MGdalBackground/GdalAdapter.cpp" line="65"/>
+        <source>Load file(s)...</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../plugins/background/MGdalBackground/GdalAdapter.cpp" line="68"/>
+        <source>Specify &quot;source&quot; tag...</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../plugins/background/MGdalBackground/GdalAdapter.cpp" line="473"/>
+        <source>Open GDAL files</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../plugins/background/MGdalBackground/GdalAdapter.cpp" line="499"/>
+        <source>Please specify automatic &quot;source&quot; tag value</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../plugins/background/MGdalBackground/GdalAdapter.cpp" line="500"/>
+        <source>Value:</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../plugins/background/MGdalBackground/GdalAdapter.cpp" line="660"/>
+        <source>Filename(s)</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
+    <name>GdalBackground</name>
+    <message>
+        <location filename="../plugins/background/MGdalBackground/GdalAdapter.cpp" line="487"/>
+        <source>No valid file</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../plugins/background/MGdalBackground/GdalAdapter.cpp" line="487"/>
+        <source>No valid GDAL file could be found.</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -1300,6 +1413,52 @@ Anda tetap ingin menggunakannya?</translation>
 %2</source>
         <translation>Kesalahan ketika membuka &quot;%1&quot;:
 %2</translation>
+    </message>
+</context>
+<context>
+    <name>GeoTiffAdapter</name>
+    <message>
+        <location filename="../plugins/background/MGeoTiffBackground/GeoTiffAdapter.cpp" line="67"/>
+        <source>Load image(s)...</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../plugins/background/MGeoTiffBackground/GeoTiffAdapter.cpp" line="70"/>
+        <source>Specify &quot;source&quot; tag...</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../plugins/background/MGeoTiffBackground/GeoTiffAdapter.cpp" line="232"/>
+        <source>Open GeoTIFF files</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../plugins/background/MGeoTiffBackground/GeoTiffAdapter.cpp" line="259"/>
+        <source>Please specify automatic &quot;source&quot; tag value</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../plugins/background/MGeoTiffBackground/GeoTiffAdapter.cpp" line="260"/>
+        <source>Value:</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../plugins/background/MGeoTiffBackground/GeoTiffAdapter.cpp" line="421"/>
+        <source>Filename(s)</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
+    <name>GeoTiffBackground</name>
+    <message>
+        <location filename="../plugins/background/MGeoTiffBackground/GeoTiffAdapter.cpp" line="246"/>
+        <source>No valid file</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../plugins/background/MGeoTiffBackground/GeoTiffAdapter.cpp" line="246"/>
+        <source>No valid GeoTIFF file could be found.</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -1543,8 +1702,8 @@ Apakah anda bermaksud demikian?</translation>
     </message>
     <message>
         <location filename="../src/ImportExport/ImportCSVDialog.ui" line="124"/>
-        <source>Colon (,)</source>
-        <translation>Koma (,)</translation>
+        <source>Comma (,)</source>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/ImportExport/ImportCSVDialog.ui" line="131"/>
@@ -1739,14 +1898,19 @@ Anda yakin akan keluar?</translation>
 <context>
     <name>ImportExportGdal</name>
     <message>
-        <location filename="../src/ImportExport/ImportExportGdal.cpp" line="377"/>
-        <source>Confirm projection</source>
-        <translation>Konfirmasi proyeksi</translation>
-    </message>
-    <message>
-        <location filename="../src/ImportExport/ImportExportGdal.cpp" line="379"/>
+        <location filename="../plugins/background/MGdalBackground/GdalAdapter.cpp" line="200"/>
+        <location filename="../plugins/background/MGeoTiffBackground/GeoTiffAdapter.cpp" line="202"/>
         <source>Unable to set projection; please specify one</source>
         <translation>Tidak dapat menetapkan proyeksi; silahkan tetapkan satu</translation>
+    </message>
+</context>
+<context>
+    <name>ImportGPX</name>
+    <message>
+        <location filename="../src/ImportExport/ImportGPX.cpp" line="173"/>
+        <source>Anonymized trackpoints</source>
+        <comment>OSM trackpoints import</comment>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -1930,13 +2094,13 @@ Anda yakin akan keluar? (tidak dapat dikembalikan)</translation>
 <context>
     <name>Main</name>
     <message>
-        <location filename="../src/Main.cpp" line="174"/>
+        <location filename="../src/Main.cpp" line="192"/>
         <source>%1 v%2
 Loading plugins...</source>
         <translation>%1 v%2 Memuat plugin</translation>
     </message>
     <message>
-        <location filename="../src/Main.cpp" line="212"/>
+        <location filename="../src/Main.cpp" line="238"/>
         <source>%1 v%2
 Initializing...</source>
         <translation>%1 v%2 Memulai...</translation>
@@ -1960,12 +2124,6 @@ Initializing...</source>
         <translation>&amp;Membuat</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="51"/>
-        <location filename="../src/MainWindow.ui" line="648"/>
-        <source>&amp;Road</source>
-        <translation>&amp;Jalan</translation>
-    </message>
-    <message>
         <location filename="../src/MainWindow.ui" line="70"/>
         <source>&amp;Edit</source>
         <translation>&amp;Ubah</translation>
@@ -1981,16 +2139,6 @@ Initializing...</source>
         <translation>&amp;Penanda</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="104"/>
-        <source>Set &amp;projection</source>
-        <translation>Tetapkan &amp;proyeksi</translation>
-    </message>
-    <message>
-        <location filename="../src/MainWindow.ui" line="109"/>
-        <source>Set Areas &amp;opacity</source>
-        <translation>Tetapkan &amp;kegelapan Area</translation>
-    </message>
-    <message>
         <location filename="../src/MainWindow.ui" line="127"/>
         <source>&amp;File</source>
         <translation>&amp;Berkas</translation>
@@ -1999,16 +2147,6 @@ Initializing...</source>
         <location filename="../src/MainWindow.ui" line="131"/>
         <source>&amp;Export</source>
         <translation>&amp;Ekspor</translation>
-    </message>
-    <message>
-        <location filename="../src/MainWindow.ui" line="141"/>
-        <source>Re&amp;cent open</source>
-        <translation>Buka &amp;Sering</translation>
-    </message>
-    <message>
-        <location filename="../src/MainWindow.ui" line="146"/>
-        <source>Recen&amp;t import</source>
-        <translation>Im&amp;por sering</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.ui" line="175"/>
@@ -2027,7 +2165,7 @@ Initializing...</source>
     </message>
     <message>
         <location filename="../src/MainWindow.ui" line="215"/>
-        <location filename="../src/MainWindow.ui" line="666"/>
+        <location filename="../src/MainWindow.ui" line="667"/>
         <source>&amp;Node</source>
         <translation>&amp;Titik</translation>
     </message>
@@ -2038,7 +2176,7 @@ Initializing...</source>
     </message>
     <message>
         <location filename="../src/MainWindow.ui" line="228"/>
-        <location filename="../src/MainWindow.ui" line="992"/>
+        <location filename="../src/MainWindow.ui" line="993"/>
         <source>&amp;Docks</source>
         <translation>&amp;Wadah</translation>
     </message>
@@ -2049,14 +2187,9 @@ Initializing...</source>
     </message>
     <message>
         <location filename="../src/MainWindow.ui" line="259"/>
-        <location filename="../src/MainWindow.ui" line="1017"/>
+        <location filename="../src/MainWindow.ui" line="1018"/>
         <source>&amp;Layers</source>
         <translation>&amp;Lapisan</translation>
-    </message>
-    <message>
-        <location filename="../src/MainWindow.ui" line="269"/>
-        <source>&amp;Gps</source>
-        <translation>&amp;Gps</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.ui" line="282"/>
@@ -2069,1128 +2202,1161 @@ Initializing...</source>
         <translation>&amp;Tampilkan</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="294"/>
-        <source>Show directional &amp;Arrows</source>
-        <translation>Tampilkan &amp;Arah panah</translation>
+        <location filename="../src/MainWindow.ui" line="51"/>
+        <source>Wa&amp;y</source>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="339"/>
+        <location filename="../src/MainWindow.ui" line="104"/>
+        <source>&amp;Projection</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/MainWindow.ui" line="109"/>
+        <source>Area &amp;opacity</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/MainWindow.ui" line="141"/>
+        <source>Re&amp;cently opened</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/MainWindow.ui" line="146"/>
+        <source>Recen&amp;tly imported</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/MainWindow.ui" line="294"/>
+        <source>Directional &amp;arrows</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/MainWindow.ui" line="340"/>
         <source>Main toolbar</source>
         <translation>Baris-alat Utama</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="388"/>
+        <location filename="../src/MainWindow.ui" line="389"/>
         <source>&amp;Quit</source>
         <translation>&amp;Keluar</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="399"/>
+        <location filename="../src/MainWindow.ui" line="400"/>
         <source>&amp;About</source>
         <translation>&amp;Tentang</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="414"/>
+        <location filename="../src/MainWindow.ui" line="415"/>
         <source>&amp;Open</source>
         <translation>&amp;Buka</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="417"/>
+        <location filename="../src/MainWindow.ui" line="418"/>
         <source>Create a new document and import a file</source>
         <translation>Buat dokumen baru dan impor berkas</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="429"/>
+        <location filename="../src/MainWindow.ui" line="430"/>
         <source>Zoom &amp;all</source>
         <translation>Perbesar &amp;semua</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="437"/>
+        <location filename="../src/MainWindow.ui" line="438"/>
         <source>Zoom &amp;window</source>
         <translation>&amp;Jendela perbesaran</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="440"/>
-        <location filename="../src/MainWindow.ui" line="443"/>
+        <location filename="../src/MainWindow.ui" line="441"/>
+        <location filename="../src/MainWindow.ui" line="444"/>
         <source>Zoom window</source>
         <translation>Jendela perbesaran</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="455"/>
+        <location filename="../src/MainWindow.ui" line="456"/>
         <source>Zoom &amp;out</source>
         <translation>Per&amp;kecil</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="467"/>
+        <location filename="../src/MainWindow.ui" line="468"/>
         <source>Zoom &amp;in</source>
         <translation>Per&amp;besar</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="470"/>
-        <location filename="../src/MainWindow.ui" line="473"/>
+        <location filename="../src/MainWindow.ui" line="471"/>
+        <location filename="../src/MainWindow.ui" line="474"/>
         <source>Zoom in</source>
         <translation>Perbesar</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="481"/>
-        <location filename="../src/MainWindow.ui" line="484"/>
-        <location filename="../src/MainWindow.ui" line="487"/>
+        <location filename="../src/MainWindow.ui" line="482"/>
+        <location filename="../src/MainWindow.ui" line="485"/>
+        <location filename="../src/MainWindow.ui" line="488"/>
         <source>Curved link</source>
         <translation>Tautan menikung</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="499"/>
-        <location filename="../src/MainWindow.ui" line="1087"/>
+        <location filename="../src/MainWindow.ui" line="500"/>
+        <location filename="../src/MainWindow.ui" line="1088"/>
         <source>&amp;Undo</source>
         <translation>&amp;Kembalikan</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="511"/>
+        <location filename="../src/MainWindow.ui" line="512"/>
         <source>&amp;Redo</source>
         <translation>&amp;Ulangi</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="526"/>
+        <location filename="../src/MainWindow.ui" line="527"/>
         <source>&amp;Move</source>
         <translation>&amp;Pindah</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="538"/>
+        <location filename="../src/MainWindow.ui" line="539"/>
         <source>Import using &amp;GDAL</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="553"/>
+        <location filename="../src/MainWindow.ui" line="554"/>
         <source>&amp;Import</source>
         <translation>&amp;Impor</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="556"/>
+        <location filename="../src/MainWindow.ui" line="557"/>
         <source>Import a file into the current document</source>
         <translation>Impor berkas kedalam dokumen ini</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="568"/>
+        <location filename="../src/MainWindow.ui" line="569"/>
         <source>&amp;Download</source>
         <translation>&amp;Unduh</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="571"/>
+        <location filename="../src/MainWindow.ui" line="572"/>
         <source>Download map data for a new area</source>
         <translation>Unduh data peta untuk area baru</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="579"/>
+        <location filename="../src/MainWindow.ui" line="580"/>
         <source>Link</source>
         <translation>Tautan</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="582"/>
-        <location filename="../src/MainWindow.ui" line="585"/>
+        <location filename="../src/MainWindow.ui" line="583"/>
+        <location filename="../src/MainWindow.ui" line="586"/>
         <source>Create link</source>
         <translation>Membuat tautan</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="588"/>
-        <source>L</source>
-        <translation>L</translation>
-    </message>
-    <message>
-        <location filename="../src/MainWindow.ui" line="600"/>
+        <location filename="../src/MainWindow.ui" line="601"/>
         <source>&amp;Select</source>
         <translation>&amp;Pilih</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="612"/>
+        <location filename="../src/MainWindow.ui" line="613"/>
         <source>&amp;Upload</source>
         <translation>&amp;Unggah</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="615"/>
+        <location filename="../src/MainWindow.ui" line="616"/>
         <source>Upload changes to the server</source>
         <translation>Unggah perubahan ke penyedia</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="630"/>
+        <location filename="../src/MainWindow.ui" line="631"/>
         <source>R&amp;emove</source>
         <translation>&amp;Hapus</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="633"/>
+        <location filename="../src/MainWindow.ui" line="634"/>
         <source>Remove selected features</source>
         <translation>Hapus ciri terpilih</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="651"/>
-        <source>Create new road</source>
-        <translation>Membuat jalan baru</translation>
+        <location filename="../src/MainWindow.ui" line="649"/>
+        <source>&amp;Way</source>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="669"/>
+        <location filename="../src/MainWindow.ui" line="652"/>
+        <source>Create new way</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/MainWindow.ui" line="688"/>
+        <source>Reverse way direction</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/MainWindow.ui" line="700"/>
+        <source>&amp;Go to…</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/MainWindow.ui" line="708"/>
+        <source>&amp;Parallel way</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/MainWindow.ui" line="711"/>
+        <source>Create a parallel way</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/MainWindow.ui" line="740"/>
+        <source>New document</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/MainWindow.ui" line="755"/>
+        <source>Split way into separate (connected) ways</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/MainWindow.ui" line="770"/>
+        <source>Join connected ways into a single way</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/MainWindow.ui" line="788"/>
+        <source>Break apart connected ways</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/MainWindow.ui" line="825"/>
+        <source>&amp;Edit…</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/MainWindow.ui" line="833"/>
+        <location filename="../src/MainWindow.ui" line="949"/>
+        <source>Save &amp;as…</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/MainWindow.ui" line="841"/>
+        <location filename="../src/MainWindow.ui" line="1508"/>
+        <source>&amp;Load…</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/MainWindow.ui" line="849"/>
+        <source>&amp;Curved way</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/MainWindow.ui" line="858"/>
+        <source>&amp;Preferences…</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/MainWindow.ui" line="869"/>
+        <location filename="../src/MainWindow.ui" line="877"/>
+        <source>&amp;All…</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/MainWindow.ui" line="889"/>
+        <source>&amp;Find…</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/MainWindow.ui" line="903"/>
+        <location filename="../src/MainWindow.ui" line="911"/>
+        <source>&amp;Viewport…</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/MainWindow.ui" line="919"/>
+        <source>&amp;Add…</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/MainWindow.ui" line="927"/>
+        <source>&amp;Remove…</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/MainWindow.ui" line="964"/>
+        <source>Save as file</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/MainWindow.ui" line="982"/>
+        <location filename="../src/MainWindow.ui" line="985"/>
+        <source>Download the current view into the previous download layer</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/MainWindow.ui" line="1004"/>
+        <source>Hide/show property dock</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/MainWindow.ui" line="1007"/>
+        <source>Hide/Show the property dock</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/MainWindow.ui" line="1021"/>
+        <location filename="../src/MainWindow.ui" line="1024"/>
+        <source>Hide/show layer dock</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/MainWindow.ui" line="1038"/>
+        <location filename="../src/MainWindow.ui" line="1041"/>
+        <source>Hide/show info dock</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/MainWindow.ui" line="1091"/>
+        <location filename="../src/MainWindow.ui" line="1094"/>
+        <source>Hide/show undo dock</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/MainWindow.ui" line="1105"/>
+        <source>&amp;Downloaded areas</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/MainWindow.ui" line="1163"/>
+        <location filename="../src/MainWindow.ui" line="1168"/>
+        <source>Selected…</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/MainWindow.ui" line="1177"/>
+        <source>Paste feature(s)</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/MainWindow.ui" line="1202"/>
+        <source>OSM (binary)</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/MainWindow.ui" line="1207"/>
+        <source>&amp;Force upload</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/MainWindow.ui" line="1213"/>
+        <location filename="../src/MainWindow.ui" line="1216"/>
+        <source>Commit the selected feature from a non-uploadable layer (e.g. \&quot;Track\&quot; or \&quot;Extract\&quot;) to the dirty layer, ready for upload.</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/MainWindow.ui" line="1240"/>
+        <source>Toggle toolbar</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/MainWindow.ui" line="1243"/>
+        <source>Hide/show Toolbar</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/MainWindow.ui" line="1246"/>
+        <source>Hide/Show toolbar</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/MainWindow.ui" line="1254"/>
+        <source>Hide all</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/MainWindow.ui" line="1262"/>
+        <source>Show all</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/MainWindow.ui" line="1286"/>
+        <source>&amp;Nodes</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/MainWindow.ui" line="1297"/>
+        <source>Na&amp;mes</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/MainWindow.ui" line="1316"/>
+        <source>&amp;Replay…</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/MainWindow.ui" line="1333"/>
+        <location filename="../src/MainWindow.ui" line="1336"/>
+        <source>Hide/show GPS dock</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/MainWindow.ui" line="1372"/>
+        <source>Track &amp;segments</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/MainWindow.ui" line="1383"/>
+        <source>&amp;Scale</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/MainWindow.ui" line="1394"/>
+        <source>&amp;Relations</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/MainWindow.ui" line="1405"/>
+        <source>Show road backgrounds</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/MainWindow.ui" line="1416"/>
+        <source>Show road boundaries</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/MainWindow.ui" line="1478"/>
+        <location filename="../src/MainWindow.ui" line="1481"/>
+        <source>Hide/show GeoImage dock</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/MainWindow.ui" line="1489"/>
+        <source>World OSB manager…</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/MainWindow.ui" line="1500"/>
+        <source>&amp;Shortcut editor…</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/MainWindow.ui" line="1516"/>
+        <source>&amp;Merge…</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/MainWindow.ui" line="1524"/>
+        <source>&amp;Save…</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/MainWindow.ui" line="1562"/>
+        <source>For &apos;oneway&apos; ways</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/MainWindow.ui" line="1588"/>
+        <source>Detach node from a way</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/MainWindow.ui" line="1591"/>
+        <source>Detach a node from a way</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/MainWindow.ui" line="1606"/>
+        <source>&amp;Work offline</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/MainWindow.ui" line="1625"/>
+        <location filename="../src/MainWindow.ui" line="1628"/>
+        <source>Hide/show style dock</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/MainWindow.ui" line="1636"/>
+        <source>&amp;WMS servers editor…</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/MainWindow.ui" line="1644"/>
+        <source>&amp;TMS servers editor…</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/MainWindow.ui" line="1652"/>
+        <source>&amp;Reset discardable dialog status</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/MainWindow.ui" line="1664"/>
+        <source>GPS menu</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/MainWindow.ui" line="1678"/>
+        <source>Create &amp;junction</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/MainWindow.ui" line="1709"/>
+        <source>Equiangular &amp;building</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/MainWindow.ui" line="1717"/>
+        <source>Add new &amp;image layer</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/MainWindow.ui" line="1736"/>
+        <source>Add street &amp;numbers (Karlsruhe schema)</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/MainWindow.ui" line="1754"/>
+        <source>Subdivide a selected way segment (the way and two adjacent nodes) into equidistant segments.</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/MainWindow.ui" line="1765"/>
+        <source>&amp;Virtual nodes</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/MainWindow.ui" line="1776"/>
+        <source>Lat/Lon &amp;grid</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/MainWindow.ui" line="1795"/>
+        <source>&amp;Projection editor…</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/MainWindow.ui" line="1806"/>
+        <source>&amp;Photos on map</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/MainWindow.ui" line="1822"/>
+        <source>Force delete</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/MainWindow.ui" line="1830"/>
+        <source>Add new OpenStreet&amp;Bugs layer</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/MainWindow.ui" line="1854"/>
+        <source>&amp;Filter editor…</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/MainWindow.ui" line="1874"/>
+        <source>&amp;Join areas</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/MainWindow.ui" line="1877"/>
+        <source>Join adjacent areas</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/MainWindow.ui" line="1880"/>
+        <source>Join areas that touch each-other.</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/MainWindow.ui" line="1892"/>
+        <source>&amp;Split area</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/MainWindow.ui" line="1898"/>
+        <source>Split selected area between two selected nodes into two separate areas.</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/MainWindow.ui" line="1924"/>
+        <source>Toolbar editor…</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/MainWindow.ui" line="1942"/>
+        <source>Align edges to a certain number of regularly spaced axis.</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/MainWindow.ui" line="1950"/>
+        <source>&amp;Print…</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/MainWindow.ui" line="1958"/>
+        <source>Print preview…</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/MainWindow.ui" line="1963"/>
+        <source>Properties…</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/MainWindow.ui" line="1982"/>
+        <source>Add new &amp;drawing layer</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/MainWindow.ui" line="2002"/>
+        <source>Add new &amp;filter layer</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/MainWindow.ui" line="2052"/>
+        <source>Save as template document…</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/MainWindow.ui" line="2060"/>
+        <source>Create multipolygon</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/MainWindow.ui" line="2065"/>
+        <source>Add to multi&amp;polygon</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/MainWindow.ui" line="2089"/>
+        <source>Bing road detector</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/MainWindow.ui" line="2097"/>
+        <source>Rebuild &amp;history</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/MainWindow.ui" line="2105"/>
+        <source>Add new Map&amp;dust layer</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/MainWindow.ui" line="670"/>
         <source>Create new node</source>
         <translation>Membuat titik baru</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="684"/>
+        <location filename="../src/MainWindow.ui" line="685"/>
         <source>&amp;Reverse</source>
         <translation>&amp;Balikan</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="687"/>
-        <source>Reverse road direction</source>
-        <translation>Balikan arah jalan</translation>
-    </message>
-    <message>
-        <location filename="../src/MainWindow.ui" line="699"/>
-        <source>&amp;Go To...</source>
-        <translation>&amp;Pergi ke...</translation>
-    </message>
-    <message>
-        <location filename="../src/MainWindow.ui" line="707"/>
-        <source>&amp;Double carriage way</source>
-        <translation>&amp;Jalan jalur ganda</translation>
-    </message>
-    <message>
-        <location filename="../src/MainWindow.ui" line="710"/>
-        <source>Create Double carriage way</source>
-        <translation>Membuat jalan jalur ganda</translation>
-    </message>
-    <message>
-        <location filename="../src/MainWindow.ui" line="718"/>
+        <location filename="../src/MainWindow.ui" line="719"/>
         <source>R&amp;oundabout</source>
         <translation>&amp;Bundaran</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="721"/>
+        <location filename="../src/MainWindow.ui" line="722"/>
         <source>Create Roundabout</source>
         <translation>Membuat Bundaran</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="736"/>
+        <location filename="../src/MainWindow.ui" line="737"/>
         <source>&amp;New</source>
         <translation>&amp;Baru</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="739"/>
-        <source>Create a new document</source>
-        <translation>Membuat dokumen baru</translation>
-    </message>
-    <message>
-        <location filename="../src/MainWindow.ui" line="751"/>
+        <location filename="../src/MainWindow.ui" line="752"/>
         <source>&amp;Split</source>
         <translation>&amp;Bagi</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="754"/>
-        <source>Split road into separate (connected) roads</source>
-        <translation>Pecah jalan menjadi beberapa jalan (terhubung)</translation>
-    </message>
-    <message>
-        <location filename="../src/MainWindow.ui" line="766"/>
+        <location filename="../src/MainWindow.ui" line="767"/>
         <source>&amp;Join</source>
         <translation>&amp;Gabung</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="769"/>
-        <source>Join connected roads to a single road</source>
-        <translation>Gabung jalan yang terhubung menjadi satu jalan</translation>
-    </message>
-    <message>
-        <location filename="../src/MainWindow.ui" line="781"/>
+        <location filename="../src/MainWindow.ui" line="782"/>
         <source>&amp;Break apart</source>
         <translation>&amp;Pisahkan</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="784"/>
+        <location filename="../src/MainWindow.ui" line="785"/>
         <source>Break</source>
         <translation>Pisah</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="787"/>
-        <source>Break apart connected roads</source>
-        <translation>Pisahkan jalan yang terhubung</translation>
-    </message>
-    <message>
-        <location filename="../src/MainWindow.ui" line="795"/>
+        <location filename="../src/MainWindow.ui" line="796"/>
         <source>Re&amp;lation</source>
         <translation>Re&amp;lasi</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="798"/>
+        <location filename="../src/MainWindow.ui" line="799"/>
         <source>Create Relation</source>
         <translation>Membuat Relasi</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="813"/>
+        <location filename="../src/MainWindow.ui" line="814"/>
         <source>&amp;Area</source>
         <translation>&amp;Area</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="816"/>
+        <location filename="../src/MainWindow.ui" line="817"/>
         <source>Create new area</source>
         <translation>Membuat area baru</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="824"/>
-        <source>&amp;Edit...</source>
-        <translation>&amp;Ubah...</translation>
-    </message>
-    <message>
-        <location filename="../src/MainWindow.ui" line="832"/>
-        <location filename="../src/MainWindow.ui" line="948"/>
-        <source>Save &amp;As...</source>
-        <translation>Simpan &amp;Sebagai...</translation>
-    </message>
-    <message>
-        <location filename="../src/MainWindow.ui" line="840"/>
-        <location filename="../src/MainWindow.ui" line="1507"/>
-        <source>&amp;Load...</source>
-        <translation>&amp;Memuat...</translation>
-    </message>
-    <message>
-        <location filename="../src/MainWindow.ui" line="848"/>
-        <source>&amp;Curved road</source>
-        <translation>Jalan &amp;menikung</translation>
-    </message>
-    <message>
-        <location filename="../src/MainWindow.ui" line="857"/>
-        <source>&amp;Preferences...</source>
-        <translation>&amp;Pengaturan...</translation>
-    </message>
-    <message>
-        <location filename="../src/MainWindow.ui" line="868"/>
-        <location filename="../src/MainWindow.ui" line="876"/>
-        <source>&amp;All...</source>
-        <translation>&amp;Semua...</translation>
-    </message>
-    <message>
-        <location filename="../src/MainWindow.ui" line="871"/>
-        <location filename="../src/MainWindow.ui" line="879"/>
+        <location filename="../src/MainWindow.ui" line="872"/>
+        <location filename="../src/MainWindow.ui" line="880"/>
         <source>Export all visible layers to a file</source>
         <translation>Export semua lapisan yang terlihat ke berkas</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="888"/>
-        <source>&amp;Find...</source>
-        <translation>&amp;Cari</translation>
-    </message>
-    <message>
-        <location filename="../src/MainWindow.ui" line="891"/>
+        <location filename="../src/MainWindow.ui" line="892"/>
         <source>Find</source>
         <translation>Cari</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="894"/>
+        <location filename="../src/MainWindow.ui" line="895"/>
         <source>Find and select items</source>
         <translation>Cari dan pilih objek</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="902"/>
-        <location filename="../src/MainWindow.ui" line="910"/>
-        <source>&amp;Viewport...</source>
-        <translation>&amp;Pandangan...</translation>
-    </message>
-    <message>
-        <location filename="../src/MainWindow.ui" line="905"/>
-        <location filename="../src/MainWindow.ui" line="913"/>
+        <location filename="../src/MainWindow.ui" line="906"/>
+        <location filename="../src/MainWindow.ui" line="914"/>
         <source>Export the features in the viewport to a file</source>
         <translation>Expor ciri pada tampilan ke berkas</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="918"/>
-        <source>&amp;Add...</source>
-        <translation>&amp;Tambah...</translation>
-    </message>
-    <message>
-        <location filename="../src/MainWindow.ui" line="926"/>
-        <source>&amp;Remove...</source>
-        <translation>&amp;Hapus...</translation>
-    </message>
-    <message>
-        <location filename="../src/MainWindow.ui" line="934"/>
+        <location filename="../src/MainWindow.ui" line="935"/>
         <source>&amp;Merge</source>
         <translation>%Gabung</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="937"/>
+        <location filename="../src/MainWindow.ui" line="938"/>
         <source>Node Merge</source>
         <translation>Gabung Titik</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="940"/>
+        <location filename="../src/MainWindow.ui" line="941"/>
         <source>Merge the selected nodes (first selected will remain)</source>
         <translation>Gabung titik terpilih (pilihan pertama akan tetap)</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="960"/>
-        <location filename="../src/MainWindow.ui" line="2072"/>
+        <location filename="../src/MainWindow.ui" line="961"/>
+        <location filename="../src/MainWindow.ui" line="2073"/>
         <source>&amp;Save</source>
         <translation>&amp;Simpan</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="963"/>
-        <source>Save to file</source>
-        <translation>Simpan ke berkas</translation>
-    </message>
-    <message>
-        <location filename="../src/MainWindow.ui" line="975"/>
+        <location filename="../src/MainWindow.ui" line="976"/>
         <source>Download more</source>
         <translation>Unduh yang lain</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="978"/>
+        <location filename="../src/MainWindow.ui" line="979"/>
         <source>Download more map data for the current area</source>
         <translation>Unduh data peta lain untuk area ini</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="981"/>
-        <location filename="../src/MainWindow.ui" line="984"/>
-        <source>Download the current view to the previous download layer</source>
-        <translation>Unduh tampilan ini ke lapisan unduh sebelumnya</translation>
-    </message>
-    <message>
-        <location filename="../src/MainWindow.ui" line="1000"/>
+        <location filename="../src/MainWindow.ui" line="1001"/>
         <source>&amp;Properties</source>
         <translation>&amp;Sifat</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1003"/>
-        <location filename="../src/MainWindow.ui" line="1006"/>
-        <source>Hide/Show the Properties dock</source>
-        <translation>Sembunyikan/Tampilkan wadah Sifat</translation>
-    </message>
-    <message>
-        <location filename="../src/MainWindow.ui" line="1020"/>
-        <location filename="../src/MainWindow.ui" line="1023"/>
-        <source>Hide/Show the Layers dock</source>
-        <translation>Sembunyikan/Tampilkan wadah Lapisan</translation>
-    </message>
-    <message>
-        <location filename="../src/MainWindow.ui" line="1034"/>
+        <location filename="../src/MainWindow.ui" line="1035"/>
         <source>&amp;Info</source>
         <translation>&amp;Info</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1037"/>
-        <location filename="../src/MainWindow.ui" line="1040"/>
-        <source>Hide/Show the Info dock</source>
-        <translation>Sembunyikan/Tampilkan wadah Info</translation>
-    </message>
-    <message>
-        <location filename="../src/MainWindow.ui" line="1052"/>
+        <location filename="../src/MainWindow.ui" line="1053"/>
         <source>&amp;Align</source>
         <translation>&amp;Meluruskan</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1055"/>
+        <location filename="../src/MainWindow.ui" line="1056"/>
         <source>Align nodes</source>
         <translation>Sejajarkan titik</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1058"/>
+        <location filename="../src/MainWindow.ui" line="1059"/>
         <source>Align selected nodes. First two selected give the line.</source>
         <translation>Sejajarkan titik terpilih. Dua yang terpilih diawal menggambarkan garis.</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1070"/>
+        <location filename="../src/MainWindow.ui" line="1071"/>
         <source>&amp;Spread</source>
         <translation>&amp;Penyebaran</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1073"/>
+        <location filename="../src/MainWindow.ui" line="1074"/>
         <source>Spread nodes</source>
         <translation>Penyebaran titik</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1076"/>
+        <location filename="../src/MainWindow.ui" line="1077"/>
         <source>Align and spread selected nodes equally.</source>
         <translation>Sejajarkan dan sebarkan titik terpilih secara seimbang</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1090"/>
-        <location filename="../src/MainWindow.ui" line="1093"/>
-        <source>Hide/Show the Undo dock</source>
-        <translation>Sembunyikan/Tampilkan wadah Pengulangan</translation>
-    </message>
-    <message>
-        <location filename="../src/MainWindow.ui" line="1104"/>
-        <source>Show &amp;downloaded areas</source>
-        <translation>Tampilkan area &amp;unduhan</translation>
-    </message>
-    <message>
-        <location filename="../src/MainWindow.ui" line="1116"/>
+        <location filename="../src/MainWindow.ui" line="1117"/>
         <source>&amp;Copy</source>
         <translation>&amp;Salin</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1119"/>
+        <location filename="../src/MainWindow.ui" line="1120"/>
         <source>Copy selected features and tags to the clipboard</source>
         <translation>Salin ciri terpilih dan beri label pada clipboard</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1122"/>
+        <location filename="../src/MainWindow.ui" line="1123"/>
         <source>Copy the selected feature&apos;s tags to the clipboard; if the feature is a trackpoint, copy the coordinates, too.</source>
         <translation>Salin label ciri terpilih ke clipboard; jika cirinya adalah sebuah trackpoint, salin koordinatnya juga.</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1130"/>
+        <location filename="../src/MainWindow.ui" line="1131"/>
         <source>Paste Tags (&amp;Overwrite)</source>
         <translation>Tempel Label (&amp;Timpa)</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1133"/>
+        <location filename="../src/MainWindow.ui" line="1134"/>
         <source>Paste (and overwrite) the tags in the clipboard to the selected feature.</source>
         <translation>Tempel (dan timpa) label pada clipboard ke sifat terpilih.</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1145"/>
+        <location filename="../src/MainWindow.ui" line="1146"/>
         <source>Paste Tags (&amp;Merge)</source>
         <translation>Tempel Label (&amp;Gabung)</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1148"/>
+        <location filename="../src/MainWindow.ui" line="1149"/>
         <source>Paste tags</source>
         <translation>Tempel label</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1151"/>
+        <location filename="../src/MainWindow.ui" line="1152"/>
         <source>Paste tags from the clipboard (Merge with existing tags)</source>
         <translation>Tempel label dari clipboard (Gabung dengan label yang ada)</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1154"/>
+        <location filename="../src/MainWindow.ui" line="1155"/>
         <source>Merge the tags in the clipboard with the ones of the selected feature.</source>
         <translation>Gabung label pada clipboard dengan sifat yang sedang dipilih.</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1162"/>
-        <location filename="../src/MainWindow.ui" line="1167"/>
-        <source>Selected...</source>
-        <translation>Terpilih...</translation>
-    </message>
-    <message>
-        <location filename="../src/MainWindow.ui" line="1176"/>
-        <source>Paste Feature(s)</source>
-        <translation>Tempel Ciri-(ciri)</translation>
-    </message>
-    <message>
-        <location filename="../src/MainWindow.ui" line="1179"/>
+        <location filename="../src/MainWindow.ui" line="1180"/>
         <source>Paste</source>
         <translation>Tempel</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1182"/>
+        <location filename="../src/MainWindow.ui" line="1183"/>
         <source>Paste features from the clipboard</source>
         <translation>Tempel ciri dari clipboard</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1185"/>
+        <location filename="../src/MainWindow.ui" line="1186"/>
         <source>Paste the features in the clipboard; If the features&apos;id are already in the document, overwrite them.</source>
         <translation>Tempel ciri pada clipboard; Jika identitas ciri sudah ada pada dokumen, timpa saja.</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1193"/>
+        <location filename="../src/MainWindow.ui" line="1194"/>
         <source>OSM (XML)</source>
         <translation>OSM (XML)</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1201"/>
-        <source>OSM (Binary)</source>
-        <translation>OSM (Biner)</translation>
-    </message>
-    <message>
-        <location filename="../src/MainWindow.ui" line="1206"/>
-        <source>&amp;Force Upload</source>
-        <translation>&amp;Paksa mengunggah</translation>
-    </message>
-    <message>
-        <location filename="../src/MainWindow.ui" line="1209"/>
+        <location filename="../src/MainWindow.ui" line="1210"/>
         <source>Commit feature to the dirty layer</source>
         <translation>Memasukkan ciri ke lapisan kotor</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1212"/>
-        <location filename="../src/MainWindow.ui" line="1215"/>
-        <source>Commit the selected feature from a non-uploadable layer (e.g.Track or Extract) to the dirty layer, ready for upload</source>
-        <translation>Memasukkan ciri terpilih dari lapisan yang tak dapat terunggah (seperti Jalur atau Ekstrak) ke lapisan kotor, siap untuk unggah</translation>
-    </message>
-    <message>
-        <location filename="../src/MainWindow.ui" line="1223"/>
+        <location filename="../src/MainWindow.ui" line="1224"/>
         <source>GPX</source>
         <translation>GPX</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1231"/>
+        <location filename="../src/MainWindow.ui" line="1232"/>
         <source>KML</source>
         <translation>KML</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1239"/>
-        <source>Toggle Toolbar</source>
-        <translation>Tombol Baris-Perangkat</translation>
-    </message>
-    <message>
-        <location filename="../src/MainWindow.ui" line="1242"/>
-        <location filename="../src/MainWindow.ui" line="1245"/>
-        <source>Hide/Show the Toolbar</source>
-        <translation>Sembunyikan/Tampilkan baris-peralatan</translation>
-    </message>
-    <message>
-        <location filename="../src/MainWindow.ui" line="1253"/>
-        <source>Hide All</source>
-        <translation>Sembunyikan semua</translation>
-    </message>
-    <message>
-        <location filename="../src/MainWindow.ui" line="1261"/>
-        <source>Show All</source>
-        <translation>Tampilkan semua</translation>
-    </message>
-    <message>
-        <location filename="../src/MainWindow.ui" line="1272"/>
+        <location filename="../src/MainWindow.ui" line="1273"/>
         <source>&amp;Image layer</source>
         <translation>Lapisan &amp;Gambar</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1277"/>
+        <location filename="../src/MainWindow.ui" line="1278"/>
         <source>&amp;Raster/SVG</source>
         <translation>&amp;Raster/SVG</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1285"/>
-        <source>Show &amp;nodes</source>
-        <translation>Tampilkan &amp;titik</translation>
-    </message>
-    <message>
-        <location filename="../src/MainWindow.ui" line="1296"/>
-        <source>Show na&amp;mes</source>
-        <translation>Tampilkan &amp;Nama</translation>
-    </message>
-    <message>
-        <location filename="../src/MainWindow.ui" line="1304"/>
+        <location filename="../src/MainWindow.ui" line="1305"/>
         <source>&amp;Start</source>
         <translation>&amp;Mulai</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1307"/>
+        <location filename="../src/MainWindow.ui" line="1308"/>
         <source>Start GPS</source>
         <translation>Mulai GPS</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1315"/>
-        <source>&amp;Replay...</source>
-        <translation>&amp;Ulangi...</translation>
-    </message>
-    <message>
-        <location filename="../src/MainWindow.ui" line="1318"/>
+        <location filename="../src/MainWindow.ui" line="1319"/>
         <source>Replay GPS</source>
         <translation>Ulangi GPS</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1329"/>
+        <location filename="../src/MainWindow.ui" line="269"/>
+        <location filename="../src/MainWindow.ui" line="1330"/>
         <source>&amp;GPS</source>
         <translation>&amp;GPS</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1332"/>
-        <location filename="../src/MainWindow.ui" line="1335"/>
-        <source>Hide/Show the GPS dock</source>
-        <translation>Sembunyikan/Tampilkan wadah GPS</translation>
-    </message>
-    <message>
-        <location filename="../src/MainWindow.ui" line="1346"/>
+        <location filename="../src/MainWindow.ui" line="1347"/>
         <source>S&amp;top</source>
         <translation>&amp;Berhenti</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1349"/>
+        <location filename="../src/MainWindow.ui" line="1350"/>
         <source>Stop GPS</source>
         <translation>Hentikan GPS</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1360"/>
+        <location filename="../src/MainWindow.ui" line="1361"/>
         <source>&amp;Center on GPS</source>
         <translation>&amp;Tengahkan ke GPS</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1371"/>
-        <source>Show track &amp;segments</source>
-        <translation>Tampilkan jalur &amp;ruas</translation>
-    </message>
-    <message>
-        <location filename="../src/MainWindow.ui" line="1382"/>
-        <source>Show &amp;scale</source>
-        <translation>Tampilkan &amp;skala</translation>
-    </message>
-    <message>
-        <location filename="../src/MainWindow.ui" line="1393"/>
-        <source>Show &amp;relations</source>
-        <translation>Perlihatkan &amp;relasi</translation>
-    </message>
-    <message>
-        <location filename="../src/MainWindow.ui" line="1404"/>
-        <source>Show roads background</source>
-        <translation>Tampilkan latar jalan</translation>
-    </message>
-    <message>
-        <location filename="../src/MainWindow.ui" line="1415"/>
-        <source>Show roads boundary</source>
-        <translation>Tampilkan batas jalan</translation>
-    </message>
-    <message>
-        <location filename="../src/MainWindow.ui" line="1426"/>
+        <location filename="../src/MainWindow.ui" line="1427"/>
         <source>Show touchup</source>
         <translation>Tampilkan perbaikan</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1440"/>
-        <location filename="../src/MainWindow.ui" line="1443"/>
+        <location filename="../src/MainWindow.ui" line="1441"/>
+        <location filename="../src/MainWindow.ui" line="1444"/>
         <source>Record</source>
         <translation>Rekam</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1446"/>
+        <location filename="../src/MainWindow.ui" line="1447"/>
         <source>Record GPS</source>
         <translation>Rekam GPS</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1460"/>
+        <location filename="../src/MainWindow.ui" line="1461"/>
         <source>Pause</source>
         <translation>Tunda</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1463"/>
+        <location filename="../src/MainWindow.ui" line="1464"/>
         <source>Pause GPS</source>
         <translation>Tunda GPS</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1474"/>
+        <location filename="../src/MainWindow.ui" line="1475"/>
         <source>G&amp;eoImage</source>
         <translation>G&amp;eoImage</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1477"/>
-        <location filename="../src/MainWindow.ui" line="1480"/>
-        <source>Hide/Show the GeoImage dock</source>
-        <translation>Sembunyikan/Tampilkan wadah GeoImage</translation>
-    </message>
-    <message>
-        <location filename="../src/MainWindow.ui" line="1488"/>
-        <source>World OSB manager...</source>
-        <translation>Manajer OSB Dunia...</translation>
-    </message>
-    <message>
-        <location filename="../src/MainWindow.ui" line="1499"/>
-        <source>&amp;Shortcut Editor...</source>
-        <translation>Penyusun &amp;Shortcut...</translation>
-    </message>
-    <message>
-        <location filename="../src/MainWindow.ui" line="1515"/>
-        <source>&amp;Merge...</source>
-        <translation>&amp;Gabung</translation>
-    </message>
-    <message>
-        <location filename="../src/MainWindow.ui" line="1523"/>
-        <source>&amp;Save...</source>
-        <translation>&amp;Simpan...</translation>
-    </message>
-    <message>
-        <location filename="../src/MainWindow.ui" line="1531"/>
+        <location filename="../src/MainWindow.ui" line="1532"/>
         <source>&amp;Add member</source>
         <translation>&amp;Tambah anggota</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1539"/>
+        <location filename="../src/MainWindow.ui" line="1540"/>
         <source>&amp;Remove member</source>
         <translation>&amp;Hapus anggota</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1550"/>
+        <location filename="../src/MainWindow.ui" line="1551"/>
         <source>&amp;Never</source>
         <translation>&amp;Tidak pernah</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1561"/>
-        <source>for &amp;Oneway roads</source>
-        <translation>untuk Jalan &amp;Satu arah</translation>
-    </message>
-    <message>
-        <location filename="../src/MainWindow.ui" line="1572"/>
+        <location filename="../src/MainWindow.ui" line="1573"/>
         <source>&amp;Always</source>
         <translation>&amp;Selalu</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1584"/>
+        <location filename="../src/MainWindow.ui" line="1585"/>
         <source>&amp;Detach</source>
         <translation>&amp;Lepaskan</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1587"/>
-        <source>Detach node from a road</source>
-        <translation>Lepaskan titik dari jalan</translation>
-    </message>
-    <message>
-        <location filename="../src/MainWindow.ui" line="1590"/>
-        <source>Detach a node from a Road</source>
-        <translation>Lepaskan titik dari jalan</translation>
-    </message>
-    <message>
-        <location filename="../src/MainWindow.ui" line="1605"/>
-        <source>&amp;Work Offline</source>
-        <translation>&amp;Kerjakan Lokal</translation>
-    </message>
-    <message>
-        <location filename="../src/MainWindow.ui" line="1613"/>
+        <location filename="../src/MainWindow.ui" line="1614"/>
         <source>SVG</source>
         <translation>SVG</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1621"/>
+        <location filename="../src/MainWindow.ui" line="1622"/>
         <source>&amp;Styles</source>
         <translation>&amp;Gaya</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1624"/>
-        <location filename="../src/MainWindow.ui" line="1627"/>
-        <source>Hide/Show the Styles dock</source>
-        <translation>Sembunyikan/Tampilkan wadah Gaya</translation>
-    </message>
-    <message>
-        <location filename="../src/MainWindow.ui" line="2152"/>
-        <source>Ctrl+B</source>
-        <translation>Ctrl+B</translation>
-    </message>
-    <message>
-        <location filename="../src/MainWindow.ui" line="1635"/>
-        <source>&amp;WMS Servers Editor...</source>
-        <translation>Penyusun Penyedia &amp;WMS</translation>
-    </message>
-    <message>
-        <location filename="../src/MainWindow.ui" line="541"/>
+        <location filename="../src/MainWindow.ui" line="542"/>
         <source>Import a file into the current document using GDAL</source>
         <translation>Import file kedalam dokumen terkini menggunakan GDAL</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1643"/>
-        <source>&amp;TMS Servers Editor...</source>
-        <translation>Penyusun  Penyedia &amp;TMS</translation>
-    </message>
-    <message>
-        <location filename="../src/MainWindow.ui" line="1651"/>
-        <source>&amp;Reset Discardable dialogs status</source>
-        <translation>&amp;Kembalikan status dialog dapat-dibuang</translation>
-    </message>
-    <message>
-        <location filename="../src/MainWindow.ui" line="1663"/>
-        <source>GPS Menu</source>
-        <translation>Menu GPS</translation>
-    </message>
-    <message>
-        <location filename="../src/MainWindow.ui" line="1672"/>
+        <location filename="../src/MainWindow.ui" line="1673"/>
         <source>Camera</source>
         <translation>Kamera</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1677"/>
-        <source>Create &amp;Junction</source>
-        <translation>Membuat &amp;Persimpangan</translation>
-    </message>
-    <message>
-        <location filename="../src/MainWindow.ui" line="1692"/>
+        <location filename="../src/MainWindow.ui" line="1693"/>
         <source>Rotate</source>
         <translation>Putar</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1700"/>
+        <location filename="../src/MainWindow.ui" line="1701"/>
         <source>&amp;Polygon</source>
         <translation>&amp;Poligon</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1708"/>
-        <source>Rectangular &amp;building</source>
-        <translation>&amp;Bangunan Persegi</translation>
-    </message>
-    <message>
-        <location filename="../src/MainWindow.ui" line="1716"/>
-        <source>Add new &amp;Image layer</source>
-        <translation>Tambah lapisan &amp;Gambar baru</translation>
-    </message>
-    <message>
-        <location filename="../src/MainWindow.ui" line="1727"/>
+        <location filename="../src/MainWindow.ui" line="1728"/>
         <source>Features</source>
         <translation>Ciri</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1735"/>
-        <source>Add street &amp;numbers (Karlsruhe scheme)</source>
-        <translation>Tambah &amp;nomor jalan (skema Karlsruhe)</translation>
-    </message>
-    <message>
-        <location filename="../src/MainWindow.ui" line="1747"/>
+        <location filename="../src/MainWindow.ui" line="1748"/>
         <source>&amp;Subdivide</source>
         <translation>&amp;Membagi-lagi</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1750"/>
+        <location filename="../src/MainWindow.ui" line="1751"/>
         <source>Subdivide segment equally</source>
         <translation>Bagi-lagi ruas secara seimbang</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1753"/>
-        <source>Subdivide a selected way segment (the way and two adjacent nodes) into segments of equal length.</source>
-        <translation>Bagi ruas jalan terpilih (jalan dan dua titik berdekatan) menjadi ruas yang sama panjang.</translation>
-    </message>
-    <message>
-        <location filename="../src/MainWindow.ui" line="1764"/>
-        <source>Show &amp;virtual nodes</source>
-        <translation>Tampilkan titik &amp;virtual</translation>
-    </message>
-    <message>
-        <location filename="../src/MainWindow.ui" line="1775"/>
-        <source>Show lat/lon &amp;grid</source>
-        <translation>Tampilkan &amp;kotak lintang/bujur</translation>
-    </message>
-    <message>
-        <location filename="../src/MainWindow.ui" line="1786"/>
+        <location filename="../src/MainWindow.ui" line="1787"/>
         <source>&amp;Lock zoom to tiled background</source>
         <translation>&amp;Kunci perbesaran ke latar persegi</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1794"/>
-        <source>&amp;Projections Editor...</source>
-        <translation>Penyusun &amp;Proyeksi...</translation>
-    </message>
-    <message>
-        <location filename="../src/MainWindow.ui" line="1805"/>
-        <source>Show &amp;Photos on map</source>
-        <translation>Tampilkan &amp;Foto pada peta</translation>
-    </message>
-    <message>
-        <location filename="../src/MainWindow.ui" line="1813"/>
+        <location filename="../src/MainWindow.ui" line="1814"/>
         <source>OsmChange (OSC)</source>
         <translation>OsmChange (OCS)</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1821"/>
-        <source>Force Delete</source>
-        <translation>Paksa Hapus</translation>
-    </message>
-    <message>
-        <location filename="../src/MainWindow.ui" line="1829"/>
-        <source>Add OpenStreet&amp;Bugs layer</source>
-        <translation>Tambah lapisan OpenStreet&amp;Bugs</translation>
-    </message>
-    <message>
-        <location filename="../src/MainWindow.ui" line="1834"/>
+        <location filename="../src/MainWindow.ui" line="1835"/>
         <source>Close</source>
         <translation>Tutup</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1839"/>
+        <location filename="../src/MainWindow.ui" line="1840"/>
         <source>S&amp;implify</source>
         <translation>&amp;Sederhanakan</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1842"/>
+        <location filename="../src/MainWindow.ui" line="1843"/>
         <source>Simplify road(s)</source>
         <translation>Sederhanakan jalan</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1845"/>
+        <location filename="../src/MainWindow.ui" line="1846"/>
         <source>Simplify way by removing unnecessary child nodes</source>
         <translation>Sederhanakan jalan dengan menghapus beberapa titik yang tidak penting</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1853"/>
-        <source>&amp;Filters Editor...</source>
-        <translation>Penyusun &amp;Saringan...</translation>
-    </message>
-    <message>
-        <location filename="../src/MainWindow.ui" line="1864"/>
+        <location filename="../src/MainWindow.ui" line="1865"/>
         <source>&amp;None</source>
         <translation>&amp;Tidak ada</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1873"/>
-        <source>&amp;Join Areas</source>
-        <translation>&amp;Gabung Area</translation>
-    </message>
-    <message>
-        <location filename="../src/MainWindow.ui" line="1876"/>
-        <source>Join touching areas</source>
-        <translation>Gabung area yang bersebelahan</translation>
-    </message>
-    <message>
-        <location filename="../src/MainWindow.ui" line="1879"/>
-        <source>Join areas which are touching.</source>
-        <translation>Gabung area yang bersebelahan.</translation>
-    </message>
-    <message>
-        <location filename="../src/MainWindow.ui" line="1891"/>
-        <source>&amp;Split Area</source>
-        <translation>&amp;Pisah Area</translation>
-    </message>
-    <message>
-        <location filename="../src/MainWindow.ui" line="1894"/>
+        <location filename="../src/MainWindow.ui" line="1895"/>
         <source>Split area between two nodes</source>
         <translation>Pisah area antar dua titik</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1897"/>
-        <source>Split a selected area between two selected nodes into two separate areas.</source>
-        <translation>Pisah area terpilih antara dua titik terpilih ke dalam dua area terpisah.</translation>
-    </message>
-    <message>
-        <location filename="../src/MainWindow.ui" line="1909"/>
+        <location filename="../src/MainWindow.ui" line="1910"/>
         <source>&amp;Terrace</source>
         <translation>&amp;Petak</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1912"/>
+        <location filename="../src/MainWindow.ui" line="1913"/>
         <source>Terrace area into residences</source>
         <translation>Petak area ke tempat tinggal</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1915"/>
+        <location filename="../src/MainWindow.ui" line="1916"/>
         <source>Split a selected area into terraced residences.</source>
         <translation>Pisahkan area terpilih ke beberapa petak pemukiman.</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1923"/>
-        <source>Toolbar Editor...</source>
-        <translation>Penyusun Baris-Alat...</translation>
-    </message>
-    <message>
-        <location filename="../src/MainWindow.ui" line="1935"/>
+        <location filename="../src/MainWindow.ui" line="1936"/>
         <source>A&amp;xis Align</source>
         <translation>Meluruskan A&amp;xis</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1938"/>
+        <location filename="../src/MainWindow.ui" line="1939"/>
         <source>Align edges to regular axes</source>
         <translation>Sejajarkan tepi ke sumbu biasa</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1941"/>
-        <source>Align edges to a certain number of regularly spaced axes.</source>
-        <translation>Sejajarkan tepi ke beberapa sumbu yang berdekatan.</translation>
-    </message>
-    <message>
-        <location filename="../src/MainWindow.ui" line="1949"/>
-        <source>&amp;Print...</source>
-        <translation>&amp;Cetak</translation>
-    </message>
-    <message>
-        <location filename="../src/MainWindow.ui" line="1957"/>
-        <source>Print preview...</source>
-        <translation>Pratinjau Cetak...</translation>
-    </message>
-    <message>
-        <location filename="../src/MainWindow.ui" line="1962"/>
-        <location filename="../src/MainWindow.cpp" line="402"/>
+        <location filename="../src/MainWindow.cpp" line="404"/>
         <source>Properties...</source>
         <translation>Properti...</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1973"/>
+        <location filename="../src/MainWindow.ui" line="1974"/>
         <source>Highlight dirt&amp;y features</source>
         <translation>Perjelas ciri ko&amp;tor</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1981"/>
-        <source>Add new &amp;Drawing layer</source>
-        <translation>Tambah lapisan &amp;Gambar baru</translation>
-    </message>
-    <message>
-        <location filename="../src/MainWindow.ui" line="1993"/>
+        <location filename="../src/MainWindow.ui" line="1994"/>
         <source>Cu&amp;t</source>
         <translation>&amp;Potong</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="2001"/>
-        <source>Add new &amp;Filter layer</source>
-        <translation>Tambah lapisan &amp;Penyaring baru</translation>
-    </message>
-    <message>
-        <location filename="../src/MainWindow.ui" line="2012"/>
+        <location filename="../src/MainWindow.ui" line="2013"/>
         <source>E&amp;xtrude</source>
         <translation>&amp;Tolak</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="2015"/>
+        <location filename="../src/MainWindow.ui" line="2016"/>
         <source>Extrude interaction for ways (JOSM style)</source>
         <translation>Tolak interaksi untuk jalan (gaya JOSM)</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="2023"/>
+        <location filename="../src/MainWindow.ui" line="2024"/>
         <source>Select toggle</source>
         <translation>Pilih tombol</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="2028"/>
+        <location filename="../src/MainWindow.ui" line="2029"/>
         <source>Include children in selection</source>
         <translation>Masukan anak kedalam objek terpilih</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="2043"/>
+        <location filename="../src/MainWindow.ui" line="2044"/>
         <source>Scale</source>
         <translation>Skala</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="2051"/>
-        <source>Save as Template Document...</source>
-        <translation>Simpan sebagai Model Dokumen...</translation>
-    </message>
-    <message>
-        <location filename="../src/MainWindow.ui" line="2059"/>
-        <source>Create Multipolygon</source>
-        <translation>Buat multi-poligon</translation>
-    </message>
-    <message>
-        <location filename="../src/MainWindow.ui" line="2064"/>
-        <source>Add to Multi&amp;polygon</source>
-        <translation>Tambahkan ke Multi&amp;poligon</translation>
-    </message>
-    <message>
-        <location filename="../src/MainWindow.ui" line="2080"/>
+        <location filename="../src/MainWindow.ui" line="2081"/>
         <source>GDAL SQLite/SpatiLite</source>
         <translation>GDAL SQLite/SpatiLite</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="2088"/>
-        <source>Bing Road Detector</source>
-        <translation>Pendeteksi Jalan Bing</translation>
-    </message>
-    <message>
-        <location filename="../src/MainWindow.ui" line="2096"/>
-        <source>Rebuild &amp;History</source>
-        <translation>Bangun-kembali &amp;Sejarah</translation>
-    </message>
-    <message>
-        <location filename="../src/MainWindow.ui" line="2104"/>
-        <source>Add Map&amp;Dust layer</source>
-        <translation>Tampahkan lapisan Map&amp;Dust</translation>
-    </message>
-    <message>
-        <location filename="../src/MainWindow.ui" line="2115"/>
+        <location filename="../src/MainWindow.ui" line="2116"/>
         <source>Wireframe</source>
         <translation>Wireframe</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="2123"/>
+        <location filename="../src/MainWindow.ui" line="2124"/>
         <source>Select parent(s)</source>
         <translation>Pilih pendahulu-(pendahulu)</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="2131"/>
+        <location filename="../src/MainWindow.ui" line="2132"/>
         <source>Download missing children</source>
         <translation>Unduh turunan yang hilang</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="2146"/>
+        <location filename="../src/MainWindow.ui" line="2147"/>
         <source>&amp;Bridge</source>
         <translation>&amp;Jembatan</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="2149"/>
+        <location filename="../src/MainWindow.ui" line="2150"/>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Transform way to a bridge&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
         <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Ubah jalan menjadi jembatan&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
@@ -3226,22 +3392,9 @@ Initializing...</source>
         <translation>Mengubah relasi %1</translation>
     </message>
     <message>
-        <location filename="../src/Interactions/BuildBridgeInteraction.cpp" line="36"/>
-        <location filename="../src/Interactions/CreateNodeInteraction.cpp" line="33"/>
-        <source>Create node Interaction</source>
-        <translation>Membuat interaksi titik</translation>
-    </message>
-    <message>
-        <location filename="../src/Interactions/BuildBridgeInteraction.cpp" line="158"/>
-        <location filename="../src/Interactions/CreateNodeInteraction.cpp" line="112"/>
-        <location filename="../src/Interactions/MoveNodeInteraction.cpp" line="261"/>
-        <source>Create node in Road: %1</source>
-        <translation>Membuat titik pada Jalan: %1</translation>
-    </message>
-    <message>
         <location filename="../src/Interactions/CreateAreaInteraction.cpp" line="37"/>
-        <source>Create Area Interaction</source>
-        <translation>Membuat Interaksi Area</translation>
+        <source>Create Area interaction</source>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/Interactions/CreateAreaInteraction.cpp" line="105"/>
@@ -3280,44 +3433,24 @@ Initializing...</source>
         <translation>Tutup Area %1</translation>
     </message>
     <message>
-        <location filename="../src/Interactions/CreateDoubleWayInteraction.cpp" line="49"/>
-        <source>Create double way Interaction</source>
-        <translation>Membuat Interaksi jalan ganda</translation>
-    </message>
-    <message>
-        <location filename="../src/Interactions/CreateDoubleWayInteraction.cpp" line="173"/>
-        <source>Add nodes to double-way Road %1</source>
-        <translation>Tambah titik ke Jalan ganda %1</translation>
-    </message>
-    <message>
-        <location filename="../src/Interactions/CreateDoubleWayInteraction.cpp" line="224"/>
-        <source>Create double-way Road %1</source>
-        <translation>Membuat Jalan ganda %1</translation>
-    </message>
-    <message>
-        <location filename="../src/Interactions/CreateNodeInteraction.cpp" line="121"/>
-        <source>Create POI %1</source>
-        <translation>Buat POI %1</translation>
-    </message>
-    <message>
         <location filename="../src/Interactions/CreatePolygonInteraction.cpp" line="36"/>
         <source>LEFT-CLICK to start;DRAG to scale;SHIFT-DRAG to rotate;LEFT-CLICK to end</source>
         <translation>KLIK-KIRI untuk memulai; TAHAN-KLIK untuk skala; SHIFT-TAHAN-KLIK untuk memutar; KLIK-KIRI untuk mengakhiri</translation>
     </message>
     <message>
         <location filename="../src/Interactions/CreatePolygonInteraction.cpp" line="41"/>
-        <source>Create Polygon Interaction</source>
-        <translation>Membuat Interaksi Poligon</translation>
+        <source>Create Polygon interaction</source>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/Interactions/CreatePolygonInteraction.cpp" line="90"/>
-        <source>Create Polygon %1</source>
-        <translation>Membuat Poligon %1</translation>
+        <source>Create polygon %1</source>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/Interactions/CreateRoundaboutInteraction.cpp" line="59"/>
-        <source>Create roundabout Interaction</source>
-        <translation>Membuat Interaksi bundaran</translation>
+        <source>Create Roundabout interaction</source>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/Interactions/CreateRoundaboutInteraction.cpp" line="89"/>
@@ -3326,31 +3459,30 @@ Initializing...</source>
     </message>
     <message>
         <location filename="../src/Interactions/CreateSingleWayInteraction.cpp" line="59"/>
-        <location filename="../src/Interactions/ExtrudeInteraction.cpp" line="43"/>
-        <source>Create way Interaction</source>
-        <translation>Membuat Interaksi jalan</translation>
+        <source>Create Way interaction</source>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/Interactions/CreateSingleWayInteraction.cpp" line="241"/>
         <location filename="../src/Interactions/CreateSingleWayInteraction.cpp" line="301"/>
         <location filename="../src/Interactions/CreateSingleWayInteraction.cpp" line="312"/>
-        <source>Create Node %1 in Road %2</source>
-        <translation>Membuat Titik %1 pada Jalan %2</translation>
+        <source>Create node %1 in way %2</source>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/Interactions/CreateSingleWayInteraction.cpp" line="285"/>
-        <source>Create Road: %1</source>
-        <translation>Membuat Jalan: %1</translation>
+        <source>Create way %1</source>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/Interactions/CreateSingleWayInteraction.cpp" line="293"/>
-        <source>Create Node: %1</source>
-        <translation>Membuat titik: %1</translation>
+        <source>Create node: %1</source>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/Interactions/CreateSingleWayInteraction.cpp" line="315"/>
-        <source>Add Node %1 to Road %2</source>
-        <translation>Menambah Titik %1 ke Jalan %2</translation>
+        <source>Add node %1 to way %2</source>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/Interactions/CreateSingleWayInteraction.cpp" line="354"/>
@@ -3369,8 +3501,8 @@ Initializing...</source>
     </message>
     <message>
         <location filename="../src/Interactions/EditInteraction.cpp" line="59"/>
-        <source>Edit Interaction</source>
-        <translation>Ubah Interaksi</translation>
+        <source>Edit interaction</source>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/Interactions/EditInteraction.cpp" line="291"/>
@@ -3399,29 +3531,24 @@ Note that OSM nodes outside the downloaded area will be kept.</source>
         <translation>Balikan %1 jalan</translation>
     </message>
     <message>
-        <location filename="../src/Interactions/ExtrudeInteraction.cpp" line="133"/>
-        <source>Extrude Road %1</source>
-        <translation>Membuang Jalan %1</translation>
-    </message>
-    <message>
         <location filename="../src/Interactions/MoveNodeInteraction.cpp" line="42"/>
         <source>LEFT-CLICK to select;LEFT-DRAG to move</source>
         <translation>KLIK-KIRI untuk memilih; TAHAN-KIRI untuk memindah</translation>
     </message>
     <message>
         <location filename="../src/Interactions/MoveNodeInteraction.cpp" line="47"/>
-        <source>Move node Interaction</source>
-        <translation>Interaksi memindahkan titik</translation>
+        <source>Move Node interaction</source>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/Interactions/MoveNodeInteraction.cpp" line="154"/>
-        <source>Move Nodes</source>
-        <translation>Pindah Titik</translation>
+        <source>Move nodes</source>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/Interactions/MoveNodeInteraction.cpp" line="158"/>
-        <source>Move Node %1</source>
-        <translation>Pindah Titik %1</translation>
+        <source>Move node %1</source>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/Interactions/MoveNodeInteraction.cpp" line="211"/>
@@ -3435,7 +3562,11 @@ Note that OSM nodes outside the downloaded area will be kept.</source>
     </message>
     <message>
         <location filename="../src/Interactions/MoveNodeInteraction.cpp" line="221"/>
-        <location filename="../src/MainWindow.cpp" line="2749"/>
+        <source>Merge nodes into %1</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/MainWindow.cpp" line="2753"/>
         <source>Merge Nodes into %1</source>
         <translation>Gabungkan Titik kedalam %1</translation>
     </message>
@@ -3446,8 +3577,8 @@ Note that OSM nodes outside the downloaded area will be kept.</source>
     </message>
     <message>
         <location filename="../src/Interactions/RotateInteraction.cpp" line="44"/>
-        <source>Rotate Interaction</source>
-        <translation>Interaksi Perputaran</translation>
+        <source>Rotate interaction</source>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/Interactions/RotateInteraction.cpp" line="139"/>
@@ -3461,8 +3592,8 @@ Note that OSM nodes outside the downloaded area will be kept.</source>
     </message>
     <message>
         <location filename="../src/Interactions/ScaleInteraction.cpp" line="44"/>
-        <source>Scale Interaction</source>
-        <translation>Interaksi Skala</translation>
+        <source>Scale interaction</source>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/Interactions/ScaleInteraction.cpp" line="139"/>
@@ -3476,164 +3607,149 @@ Note that OSM nodes outside the downloaded area will be kept.</source>
     </message>
     <message>
         <location filename="../src/Interactions/ZoomInteraction.cpp" line="30"/>
-        <source>Zoom Interaction</source>
-        <translation>Interaksi Perbesaran</translation>
+        <source>Zoom interaction</source>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="191"/>
+        <location filename="../src/MainWindow.cpp" line="193"/>
         <source>GPS Exchange format (*.gpx)
 </source>
         <translation>Bentuk Pertukaran GPS (*.gpx)
 </translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="192"/>
+        <location filename="../src/MainWindow.cpp" line="194"/>
         <source>OpenStreetMap format (*.osm)
 </source>
         <translation>Bentuk OpenStreetMap (*.osm)
 </translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="193"/>
+        <location filename="../src/MainWindow.cpp" line="195"/>
         <source>OpenStreetMap change format (*.osc)
 </source>
         <translation>Format perubahan OpenStreetMap (*.osc)
 </translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="194"/>
+        <location filename="../src/MainWindow.cpp" line="196"/>
         <source>Noni GPSPlot format (*.ngt)
 </source>
         <translation>Bentuk Noni GPSPlot (*.ngt)
 </translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="195"/>
+        <location filename="../src/MainWindow.cpp" line="197"/>
         <source>NMEA GPS log format (*.nmea *.nma)
 </source>
         <translation>Bentuk catatan GPS NMEA (*.nmea *.nma)
 </translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="196"/>
+        <location filename="../src/MainWindow.cpp" line="198"/>
         <source>KML file (*.kml)
 </source>
         <translation>Berkas KML (*.kml)
 </translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="197"/>
+        <location filename="../src/MainWindow.cpp" line="199"/>
         <source>Comma delimited format (*.csv)
 </source>
         <translation>Bentul pemisah koma (*.csv)
 </translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="200"/>
+        <location filename="../src/MainWindow.cpp" line="202"/>
         <source>Geotagged images (*.jpg)
 </source>
         <translation>Gambar geotag (*.jpg)
 </translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="202"/>
+        <location filename="../src/MainWindow.cpp" line="204"/>
         <source>ESRI Shapefile (*.shp)
 </source>
         <translation>Shapefile ESRI (*.shp)
 </translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="202"/>
+        <location filename="../src/MainWindow.cpp" line="204"/>
         <source>Geography Markup Language (*.gml)
 </source>
         <translation>Bahasa Markup Geography (*.gml)
 </translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="204"/>
+        <location filename="../src/MainWindow.cpp" line="206"/>
         <source>Protobuf Binary Format (*.pbf)
 </source>
         <translation>Bentuk Biner Protobuf (*.pbf)
 </translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="209"/>
-        <location filename="../src/MainWindow.cpp" line="213"/>
-        <location filename="../src/MainWindow.cpp" line="2965"/>
+        <location filename="../src/MainWindow.cpp" line="211"/>
+        <location filename="../src/MainWindow.cpp" line="215"/>
+        <location filename="../src/MainWindow.cpp" line="2969"/>
         <source>Supported formats</source>
         <translation>Bentuk yang didukung</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="207"/>
-        <location filename="../src/MainWindow.cpp" line="210"/>
+        <location filename="../src/MainWindow.cpp" line="209"/>
+        <location filename="../src/MainWindow.cpp" line="212"/>
         <source>Merkaartor document (*.mdc)
 </source>
         <translation>Dokumen Merkaartor (*.mdc)
 </translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="211"/>
-        <location filename="../src/MainWindow.cpp" line="215"/>
-        <location filename="../src/MainWindow.cpp" line="3146"/>
-        <location filename="../src/MainWindow.cpp" line="3156"/>
-        <location filename="../src/MainWindow.cpp" line="3340"/>
-        <location filename="../src/MainWindow.cpp" line="3355"/>
-        <location filename="../src/MainWindow.cpp" line="3376"/>
-        <location filename="../src/MainWindow.cpp" line="3411"/>
-        <location filename="../src/MainWindow.cpp" line="4135"/>
+        <location filename="../src/MainWindow.cpp" line="213"/>
+        <location filename="../src/MainWindow.cpp" line="217"/>
+        <location filename="../src/MainWindow.cpp" line="3142"/>
+        <location filename="../src/MainWindow.cpp" line="3152"/>
+        <location filename="../src/MainWindow.cpp" line="3336"/>
+        <location filename="../src/MainWindow.cpp" line="3351"/>
+        <location filename="../src/MainWindow.cpp" line="3372"/>
+        <location filename="../src/MainWindow.cpp" line="3407"/>
+        <location filename="../src/MainWindow.cpp" line="4131"/>
         <source>All Files (*)</source>
         <translation>Semua Berkas (*)</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="248"/>
+        <location filename="../src/MainWindow.cpp" line="250"/>
         <source>tile %v / %m</source>
         <translation>Kotak %v / %m</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="425"/>
-        <source>Cannot load Projections file</source>
-        <translation>Tidak dapat membuat berkas Proyeksi</translation>
-    </message>
-    <message>
-        <location filename="../src/MainWindow.cpp" line="425"/>
-        <source>&quot;Projections.xml&quot; could not be opened anywhere. Aborting.</source>
-        <translation>&quot;Projections.xml&quot; tdak dapat dibuka dimanapun. Batalkan.</translation>
-    </message>
-    <message>
-        <location filename="../src/MainWindow.cpp" line="432"/>
+        <location filename="../src/MainWindow.cpp" line="431"/>
         <source>Low</source>
         <translation>Rendah</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="432"/>
+        <location filename="../src/MainWindow.cpp" line="431"/>
         <source>High</source>
         <translation>Tinggi</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="432"/>
+        <location filename="../src/MainWindow.cpp" line="431"/>
         <source>Opaque</source>
         <translation>Buram</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.cpp" line="601"/>
-        <location filename="../src/MainWindow.cpp" line="1121"/>
+        <location filename="../src/MainWindow.cpp" line="1092"/>
         <source>Feature</source>
         <translation>Ciri</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.cpp" line="610"/>
-        <location filename="../src/MainWindow.cpp" line="1122"/>
+        <location filename="../src/MainWindow.cpp" line="1093"/>
         <source>Node</source>
         <translation>Titik</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="618"/>
-        <source>Road</source>
-        <translation>Jalan</translation>
-    </message>
-    <message>
         <location filename="../src/MainWindow.cpp" line="626"/>
-        <location filename="../src/MainWindow.cpp" line="1124"/>
+        <location filename="../src/MainWindow.cpp" line="1095"/>
         <source>Relation</source>
         <translation>Relasi</translation>
     </message>
@@ -3658,87 +3774,88 @@ Note that OSM nodes outside the downloaded area will be kept.</source>
         <translation>Batal</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1113"/>
+        <location filename="../src/MainWindow.cpp" line="1084"/>
         <source>File</source>
         <translation>Berkas</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1114"/>
+        <location filename="../src/MainWindow.cpp" line="1085"/>
         <source>Edit</source>
         <translation>Ubah</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1115"/>
+        <location filename="../src/MainWindow.cpp" line="1086"/>
         <source>View</source>
         <translation>Pandangan</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1116"/>
+        <location filename="../src/MainWindow.cpp" line="1087"/>
         <source>Show</source>
         <translation>Perlihatkan</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1117"/>
+        <location filename="../src/MainWindow.cpp" line="1088"/>
         <source>Directional Arrows</source>
         <translation>Arah Panah</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1118"/>
+        <location filename="../src/MainWindow.cpp" line="1089"/>
         <source>GPS</source>
         <translation>GPS</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1119"/>
+        <location filename="../src/MainWindow.cpp" line="1090"/>
         <source>Layers</source>
         <translation>Lapisan</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1120"/>
+        <location filename="../src/MainWindow.cpp" line="1091"/>
         <source>Create</source>
         <translation>Membuat</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1123"/>
+        <location filename="../src/MainWindow.cpp" line="618"/>
+        <location filename="../src/MainWindow.cpp" line="1094"/>
         <source>Way</source>
         <translation>Jalan</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1125"/>
+        <location filename="../src/MainWindow.cpp" line="1096"/>
         <source>Tools</source>
         <translation>Peralatan</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1126"/>
+        <location filename="../src/MainWindow.cpp" line="1097"/>
         <source>Windows</source>
         <translation>Jendela</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1127"/>
+        <location filename="../src/MainWindow.cpp" line="1098"/>
         <source>Help</source>
         <translation>Tolong</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1284"/>
+        <location filename="../src/MainWindow.cpp" line="1255"/>
         <source>Cut Features</source>
         <translation>Ciri Potong</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1416"/>
+        <location filename="../src/MainWindow.cpp" line="1387"/>
         <source>Clipboard invalid</source>
         <translation>Clipboard tidak benar</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1416"/>
+        <location filename="../src/MainWindow.cpp" line="1387"/>
         <source>Clipboard do not contain valid data.</source>
         <translation>Clipboard tidak berisi data yang benar.</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1574"/>
+        <location filename="../src/MainWindow.cpp" line="1548"/>
         <source>GDAL import warning</source>
         <translation>Peringatan Import GDAL</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1575"/>
+        <location filename="../src/MainWindow.cpp" line="1549"/>
         <source>You are about to import file(s) using GDAL. This feature is rather experimental, and may or may NOT work, possibly causing a crash. Make sure you won't loose any data in case it doesn't work out.
 Please do report bugs in case of a crash, but don't be surprised about it.
 
@@ -3751,52 +3868,52 @@ Lanjutkan import?
 </translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1595"/>
+        <location filename="../src/MainWindow.cpp" line="1569"/>
         <source>Import file</source>
         <translation>Impor berkas</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1621"/>
-        <location filename="../src/MainWindow.cpp" line="4313"/>
+        <location filename="../src/MainWindow.cpp" line="1595"/>
+        <location filename="../src/MainWindow.cpp" line="4309"/>
         <source>Unsaved changes</source>
         <translation>Perubahan belum disimpan</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1622"/>
+        <location filename="../src/MainWindow.cpp" line="1596"/>
         <source>The current map contains unsaved changes that will be lost when starting a new one.
 Do you want to cancel starting a new map or continue and discard the old changes?</source>
         <translation>Peta ini berisi perubahan yang belum disimpan yang akan hilang ketika memulai yang baru.
 Anda ingin membatalkan memulai peta baru atau melanjutkan dan menggagalkan perubahan yang sebelumnya?</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1629"/>
+        <location filename="../src/MainWindow.cpp" line="1603"/>
         <source>Unsaved Style changes</source>
         <translation>Gaya yang belum tersimpan berubah</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1630"/>
+        <location filename="../src/MainWindow.cpp" line="1604"/>
         <source>You have modified the current style.
 Do you want to save your changes?</source>
         <translation>Anda telah merubah gaya saat ini.
 Anda tetap ingin menyimpan perubahan?</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1655"/>
+        <location filename="../src/MainWindow.cpp" line="1629"/>
         <source>Waypoints</source>
         <translation>Titik tuju</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1672"/>
+        <location filename="../src/MainWindow.cpp" line="1646"/>
         <source>Track %1</source>
         <translation>Jalur %1</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1717"/>
+        <location filename="../src/MainWindow.cpp" line="1691"/>
         <source>Big Fat Copyright Warning</source>
         <translation>Peringatan hak cipta Big Fat</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1718"/>
+        <location filename="../src/MainWindow.cpp" line="1692"/>
         <source>You are trying to import a KML file. Please be aware that:
 
  - You cannot import to OSM a KML file created from Google Earth. While you might
@@ -3823,60 +3940,60 @@ Jika tidak yakin, silahkan baca petunjuknya pada &quot;legal&quot; atau &quot;ta
 Anda yakin bahwa KML ini boleh di impor ke OSM?</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1833"/>
+        <location filename="../src/MainWindow.cpp" line="1831"/>
         <source>No valid file</source>
         <translation>Tidak ada berkas yang benar</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1833"/>
-        <location filename="../src/MainWindow.cpp" line="3279"/>
+        <location filename="../src/MainWindow.cpp" line="1831"/>
+        <location filename="../src/MainWindow.cpp" line="3275"/>
         <source>%1 could not be opened.</source>
         <translation>%1 tidak dapat dibuka.</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1872"/>
+        <location filename="../src/MainWindow.cpp" line="1876"/>
         <source>Incoming Remote Control Request</source>
         <translation>Permintaan Kontrol Asing masuk</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1873"/>
+        <location filename="../src/MainWindow.cpp" line="1877"/>
         <source>Wanted to load object &apos;%1&apos;, but don&apos;t know how to do that. Sorry.</source>
         <translation>Ingin memuat objek &apos;%1&apos;, tapi tidak tahu caranya. Maaf.</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1918"/>
+        <location filename="../src/MainWindow.cpp" line="1922"/>
         <source>Remote add POI %1 %2</source>
         <translation>Remote menambahkan POI %1 %2</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1973"/>
+        <location filename="../src/MainWindow.cpp" line="1977"/>
         <source>Incoming Remote control request</source>
         <translation>Permintaan kontrol asing masuk</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1973"/>
+        <location filename="../src/MainWindow.cpp" line="1977"/>
         <source>Unknown action url: %1</source>
         <translation>Tindakan tidak diketahui url: %1</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1995"/>
+        <location filename="../src/MainWindow.cpp" line="1999"/>
         <source>Old Qt version detected</source>
         <translation>Versi Qt tua terdeteksi</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1996"/>
+        <location filename="../src/MainWindow.cpp" line="2000"/>
         <source>Your setup uses Qt %1, which contains various known errors in uploading data to OpenStreetMap leading to 401 server response codes. Are you sure you want to continue (which is not recommended).
 For more information see http://wiki.openstreetmap.org/index.php/Problem_uploading_with_Merkaartor</source>
         <translation>Pengaturan anda menggunakan Qt %1, yang berisi beragam kesalahan saat mengunggah data ke OpenStreetMap menyebabkan kode respon penyedia 401 muncul. Anda yakin untuk melanjutkan (tidak disarankan).
 Untuk informasi lebih lanjut silahkan kunjungi http://wiki.openstreetmap.org/index.php/Problem_uploading_with_Merkaartor</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2004"/>
+        <location filename="../src/MainWindow.cpp" line="2008"/>
         <source>Upload OSM</source>
         <translation>Mengunggah OSM</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2004"/>
+        <location filename="../src/MainWindow.cpp" line="2008"/>
         <source>You don't seem to have specified your
 OpenStreetMap username and password.
 Do you want to do this now?</source>
@@ -3884,260 +4001,260 @@ Do you want to do this now?</source>
 Anda ingin melakukannya sekarang?</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2020"/>
-        <location filename="../src/MainWindow.cpp" line="2079"/>
+        <location filename="../src/MainWindow.cpp" line="2024"/>
+        <location filename="../src/MainWindow.cpp" line="2083"/>
         <source>Error downloading</source>
         <translation>Kesalahan mengunduh</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2020"/>
-        <location filename="../src/MainWindow.cpp" line="2079"/>
+        <location filename="../src/MainWindow.cpp" line="2024"/>
+        <location filename="../src/MainWindow.cpp" line="2083"/>
         <source>The map could not be downloaded</source>
         <translation>Peta tidak dapat diunduh</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2068"/>
+        <location filename="../src/MainWindow.cpp" line="2072"/>
         <source>Error downloading MapDust</source>
         <translation>Kesalahan mengunduh MapDust</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2068"/>
+        <location filename="../src/MainWindow.cpp" line="2072"/>
         <source>The MapDust bugs could not be downloaded</source>
         <translation>Bugs MapDust tidak dapat diunduh</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2407"/>
+        <location filename="../src/MainWindow.cpp" line="2411"/>
         <source>Create Polygon</source>
         <translation>Membuat Poligon</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2407"/>
+        <location filename="../src/MainWindow.cpp" line="2411"/>
         <source>Specify the number of sides</source>
         <translation>Tentukan jumlah sisi</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2461"/>
-        <source>Join Roads</source>
-        <translation>Penggabungan Jalan</translation>
-    </message>
-    <message>
-        <location filename="../src/MainWindow.cpp" line="2475"/>
-        <source>Split Roads</source>
-        <translation>Pemisahan Jalan</translation>
-    </message>
-    <message>
-        <location filename="../src/MainWindow.cpp" line="2489"/>
-        <source>Break Roads</source>
-        <translation>Pemutusan Jalan</translation>
-    </message>
-    <message>
-        <location filename="../src/MainWindow.cpp" line="2503"/>
-        <source>Simplify Roads</source>
-        <translation>Sederhanakan Jalan</translation>
-    </message>
-    <message>
-        <location filename="../src/MainWindow.cpp" line="2576"/>
+        <location filename="../src/MainWindow.cpp" line="2580"/>
         <source>Force Feature upload</source>
         <translation>Paksa mengunggah Ciri</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1983"/>
+        <location filename="../src/MainWindow.cpp" line="1987"/>
         <source>Open file</source>
         <translation>Buka file</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2589"/>
+        <location filename="../src/MainWindow.cpp" line="2465"/>
+        <source>Join Ways</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/MainWindow.cpp" line="2479"/>
+        <source>Split Ways</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/MainWindow.cpp" line="2493"/>
+        <source>Break Ways</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/MainWindow.cpp" line="2507"/>
+        <source>Simplify Ways</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/MainWindow.cpp" line="2593"/>
         <source>Create Junction</source>
         <translation>Membuat Persimpangan</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2593"/>
+        <location filename="../src/MainWindow.cpp" line="2597"/>
         <source>Multiple intersection.</source>
         <translation>Beberapa persimpangan.</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2594"/>
+        <location filename="../src/MainWindow.cpp" line="2598"/>
         <source>Those roads have multiple intersections.
 Do you still want to create a junction for each one (Unwanted junctions can still be deleted afterhand)?</source>
         <translation>Jalan itu memiliki banyak persimpangan.
 Anda tetap akan membuat persimpangan untuk tiap jalan (Persimpangan yang salah tetap dapat dihapus setelahnya)?</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2611"/>
+        <location filename="../src/MainWindow.cpp" line="2615"/>
         <source>Add Street Numbers</source>
         <translation>Tambahkan Nomor Jalan</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2628"/>
-        <location filename="../src/MainWindow.cpp" line="2633"/>
+        <location filename="../src/MainWindow.cpp" line="2632"/>
+        <location filename="../src/MainWindow.cpp" line="2637"/>
         <source>Number of segments to divide into</source>
         <translation>Jumlah ruas dibagi dalam</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2628"/>
+        <location filename="../src/MainWindow.cpp" line="2632"/>
         <source>Specify the number of segments</source>
         <translation>Tentukan jumlah ruas</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2637"/>
-        <source>Subdivide road into %1</source>
-        <translation>Membagi lagi jalan ke %1</translation>
+        <location filename="../src/MainWindow.cpp" line="2641"/>
+        <source>Subdivide way into %1</source>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2660"/>
+        <location filename="../src/MainWindow.cpp" line="2664"/>
         <source>Axis Align</source>
         <translation>Sejajarkan sumbu</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2661"/>
+        <location filename="../src/MainWindow.cpp" line="2665"/>
         <source>Specify the number of regular axes to align edges on (e.g. 4 for rectangular)</source>
         <translation>Tentukan jumlah sumbu normal untuk mensejajarkan tepian (contoh 4 untuk persegi)</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2668"/>
+        <location filename="../src/MainWindow.cpp" line="2672"/>
         <source>triangular</source>
         <translation>segitiga</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2669"/>
+        <location filename="../src/MainWindow.cpp" line="2673"/>
         <source>rectangular</source>
         <translation>segi-empat</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2670"/>
+        <location filename="../src/MainWindow.cpp" line="2674"/>
         <source>pentagonal</source>
         <translation>segi-lima</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2671"/>
+        <location filename="../src/MainWindow.cpp" line="2675"/>
         <source>hexagonal</source>
         <translation>segi-enam</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2672"/>
+        <location filename="../src/MainWindow.cpp" line="2676"/>
         <source>heptagonal</source>
         <translation>segi-tujuh</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2673"/>
+        <location filename="../src/MainWindow.cpp" line="2677"/>
         <source>octagonal</source>
         <translation>segi-delapan</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2677"/>
+        <location filename="../src/MainWindow.cpp" line="2681"/>
         <source>Align onto %1 axes</source>
         <translation>Sejajarkan ke %1 sumbu</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2679"/>
+        <location filename="../src/MainWindow.cpp" line="2683"/>
         <source>Align onto %1 regular axes</source>
         <translation>Sejajarkan ke %1 sumbu normal</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2686"/>
-        <location filename="../src/MainWindow.cpp" line="2689"/>
+        <location filename="../src/MainWindow.cpp" line="2690"/>
+        <location filename="../src/MainWindow.cpp" line="2693"/>
         <source>Unable to align to axes</source>
         <translation>Tidak dapat mensejajarkan ke sumbu</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2687"/>
+        <location filename="../src/MainWindow.cpp" line="2691"/>
         <source>Align to axes operation failed. Please adjust any sharp corners and try again.</source>
         <translation>Pensejajaran ke sumbu gagal. Silahkan sesuaikan sudut lancip dan coba lagi.</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2690"/>
+        <location filename="../src/MainWindow.cpp" line="2694"/>
         <source>Align to axes operation failed and did not converge on a solution.</source>
         <translation>Pensejajaran ke sumbu gagal dan tidak menemukan solusinya.</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2706"/>
+        <location filename="../src/MainWindow.cpp" line="2710"/>
         <source>Bing Extract</source>
         <translation>Ekstrak Bing</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2721"/>
+        <location filename="../src/MainWindow.cpp" line="2725"/>
         <source>Align Nodes</source>
         <translation>Sejajarkan Titik</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2735"/>
+        <location filename="../src/MainWindow.cpp" line="2739"/>
         <source>Spread Nodes</source>
         <translation>Sebarkan Titik</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2764"/>
+        <location filename="../src/MainWindow.cpp" line="2768"/>
         <source>Detach Node %1</source>
         <translation>Lepaskan Titik %1</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2778"/>
+        <location filename="../src/MainWindow.cpp" line="2782"/>
         <source>Add member to relation</source>
         <translation>Tambahkan anggota ke relasi</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2790"/>
+        <location filename="../src/MainWindow.cpp" line="2794"/>
         <source>Remove member from relation</source>
         <translation>Hapus anggota dari relasi</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2802"/>
+        <location filename="../src/MainWindow.cpp" line="2806"/>
         <source>Add to Multipolygon</source>
         <translation>Tambahkan ke Multipoligon</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2814"/>
+        <location filename="../src/MainWindow.cpp" line="2818"/>
         <source>Join areas</source>
         <translation>Gabung area</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2826"/>
+        <location filename="../src/MainWindow.cpp" line="2830"/>
         <source>Split area</source>
         <translation>Pisahkan area</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2841"/>
+        <location filename="../src/MainWindow.cpp" line="2845"/>
         <source>Terrace area into %1</source>
         <translation>Petak area ke %1</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2869"/>
+        <location filename="../src/MainWindow.cpp" line="2873"/>
         <source>Create Relation %1</source>
         <translation>Membuat relasi %1</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2943"/>
+        <location filename="../src/MainWindow.cpp" line="2947"/>
         <source>Save map style</source>
         <translation>Simpan gaya peta</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2943"/>
+        <location filename="../src/MainWindow.cpp" line="2947"/>
         <source>Merkaartor map style (*.mas)</source>
         <translation>Gaya peta Merkaartor (*.mas)</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2964"/>
+        <location filename="../src/MainWindow.cpp" line="2968"/>
         <source>Load map style</source>
         <translation>Memuat gaya peta</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2966"/>
+        <location filename="../src/MainWindow.cpp" line="2970"/>
         <source>Merkaartor map style (*.mas)
 </source>
         <translation>Gaya peta Merkaartor (*.mas)
 </translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2967"/>
+        <location filename="../src/MainWindow.cpp" line="2971"/>
         <source>MapCSS stylesheet (*.css)</source>
         <translation>MapCSS stylesheet (*.css)</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="3026"/>
+        <location filename="../src/MainWindow.cpp" line="3030"/>
         <source>Rebuild History</source>
         <translation>Bangun-kembali Sejarah</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="3026"/>
+        <location filename="../src/MainWindow.cpp" line="3030"/>
         <source>An attempt will be made to rebuild the history.
 No guarantee, though, and no Undo.
 Are you sure you want to try this? </source>
@@ -4146,214 +4263,214 @@ Tidak bisa dipastikan juga, dan tidak ada pengembalian aksi.
 Anda yakin akan mencoba ini?</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="3130"/>
-        <location filename="../src/MainWindow.cpp" line="3327"/>
+        <location filename="../src/MainWindow.cpp" line="3126"/>
+        <location filename="../src/MainWindow.cpp" line="3323"/>
         <source>untitled</source>
         <translation>Tanpa Judul</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="3146"/>
+        <location filename="../src/MainWindow.cpp" line="3142"/>
         <source>Save Merkaartor document</source>
         <translation>Simpan dokumen Merkaartor</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="3146"/>
-        <location filename="../src/MainWindow.cpp" line="3156"/>
+        <location filename="../src/MainWindow.cpp" line="3142"/>
+        <location filename="../src/MainWindow.cpp" line="3152"/>
         <source>Merkaartor documents Files (*.mdc)</source>
         <translation>Berkas dokumen Merkaartor (*.mdc)</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="3156"/>
+        <location filename="../src/MainWindow.cpp" line="3152"/>
         <source>Save Merkaartor template document</source>
         <translation>Simpan dokumen model Merkaartor</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="3201"/>
+        <location filename="../src/MainWindow.cpp" line="3197"/>
         <source>Unable to open save file</source>
         <translation>Tidak dapat membuka berkas tersimpan</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="3201"/>
-        <location filename="../src/MainWindow.cpp" line="3217"/>
+        <location filename="../src/MainWindow.cpp" line="3197"/>
+        <location filename="../src/MainWindow.cpp" line="3213"/>
         <source>%1 could not be opened for writing.</source>
         <translation>%1 tidak dapat dibuka untuk diubah.</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="3217"/>
+        <location filename="../src/MainWindow.cpp" line="3213"/>
         <source>Unable to open save template document</source>
         <translation>Tidak dapat membuka dokumen model tersimpan</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="3234"/>
-        <location filename="../src/MainWindow.cpp" line="3279"/>
+        <location filename="../src/MainWindow.cpp" line="3230"/>
+        <location filename="../src/MainWindow.cpp" line="3275"/>
         <source>Invalid file</source>
         <translation>Berkas tidak benar</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="3234"/>
+        <location filename="../src/MainWindow.cpp" line="3230"/>
         <source>%1 is not a valid Merkaartor document.</source>
         <translation>%1 bukan dokumen Merkaartor yang benar.</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="3340"/>
+        <location filename="../src/MainWindow.cpp" line="3336"/>
         <source>Export OSM</source>
         <translation>Ekspor OSM</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="3340"/>
+        <location filename="../src/MainWindow.cpp" line="3336"/>
         <source>OSM Files (*.osm)</source>
         <translation>Berkas OSM (*.osm)</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="3355"/>
+        <location filename="../src/MainWindow.cpp" line="3351"/>
         <source>Export osmChange</source>
         <translation>Ekspor osmChange</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="3355"/>
+        <location filename="../src/MainWindow.cpp" line="3351"/>
         <source>osmChange Files (*.osc)</source>
         <translation>Berkas osmChange (*.osc)</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="3376"/>
+        <location filename="../src/MainWindow.cpp" line="3372"/>
         <source>Export GPX</source>
         <translation>Ekspor GPX</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="3376"/>
+        <location filename="../src/MainWindow.cpp" line="3372"/>
         <source>GPX Files (*.gpx)</source>
         <translation>Berkas GPX (*.gpx)</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="3411"/>
+        <location filename="../src/MainWindow.cpp" line="3407"/>
         <source>Export KML</source>
         <translation>Ekspor KML</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="3411"/>
+        <location filename="../src/MainWindow.cpp" line="3407"/>
         <source>KML Files (*.kml)</source>
         <translation>Berkas KML (*.kml)</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="3503"/>
+        <location filename="../src/MainWindow.cpp" line="3499"/>
         <source>Feature extraction</source>
         <translation>Pencabutan ciri</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="3513"/>
+        <location filename="../src/MainWindow.cpp" line="3509"/>
         <source>Extracting features...</source>
         <translation>Mencabut ciri...</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="3596"/>
+        <location filename="../src/MainWindow.cpp" line="3592"/>
         <source>Hide tool buttons labels</source>
         <translation>Sembunyikan label tombol alat</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="3707"/>
+        <location filename="../src/MainWindow.cpp" line="3703"/>
         <source>%1 (int)</source>
         <translation>%1 (int)</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="3759"/>
+        <location filename="../src/MainWindow.cpp" line="3755"/>
         <source>Add Bookmark</source>
         <translation>Tambahkan Penanda</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="3760"/>
+        <location filename="../src/MainWindow.cpp" line="3756"/>
         <source>Specify the name of the bookmark.</source>
         <translation>Tentukan nama dari penanda.</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="3763"/>
+        <location filename="../src/MainWindow.cpp" line="3759"/>
         <source>Invalid bookmark name</source>
         <translation>Nama penanda tidak benar</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="3764"/>
+        <location filename="../src/MainWindow.cpp" line="3760"/>
         <source>Bookmark cannot be blank.</source>
         <translation>Penanda tidak boleh kosong.</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="3768"/>
+        <location filename="../src/MainWindow.cpp" line="3764"/>
         <source>Warning: Bookmark name already exists</source>
         <translation>Peringatan: Nama Penanda sudah ada</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="3769"/>
+        <location filename="../src/MainWindow.cpp" line="3765"/>
         <source>Enter a new one, keep the same to overwrite or cancel.</source>
         <translation>Isikan yang baru, biarkan sama untuk menimpa atau gagalkan.</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="3807"/>
+        <location filename="../src/MainWindow.cpp" line="3803"/>
         <source>Remove Bookmark</source>
         <translation>Menghapus Penanda</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="3808"/>
+        <location filename="../src/MainWindow.cpp" line="3804"/>
         <source>Select the bookmark to remove.</source>
         <translation>Pilih penanda yang akan dibuang.</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="3868"/>
-        <location filename="../src/MainWindow.cpp" line="3877"/>
+        <location filename="../src/MainWindow.cpp" line="3864"/>
+        <location filename="../src/MainWindow.cpp" line="3873"/>
         <source>Invalid projection</source>
         <translation>Proyeksi tidak benar</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="3868"/>
-        <location filename="../src/MainWindow.cpp" line="3877"/>
+        <location filename="../src/MainWindow.cpp" line="3864"/>
+        <location filename="../src/MainWindow.cpp" line="3873"/>
         <source>Unable to set projection &quot;%1&quot;.</source>
         <translation>Tidak dapat menetapkan proyeksi &quot;%1&quot;.</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="4009"/>
+        <location filename="../src/MainWindow.cpp" line="4005"/>
         <source>GPS error</source>
         <translation>Kesalahan GPS</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="4010"/>
+        <location filename="../src/MainWindow.cpp" line="4006"/>
         <source>Unable to open GPS port.</source>
         <translation>Tidak dapat membuka pintu GPS.</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="4019"/>
+        <location filename="../src/MainWindow.cpp" line="4015"/>
         <source>Open NMEA log file</source>
         <translation>Membuka berkas catatan NMEA</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="4135"/>
+        <location filename="../src/MainWindow.cpp" line="4131"/>
         <source>Save Tag Templates</source>
         <translation>Simpan Model Label</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="4135"/>
+        <location filename="../src/MainWindow.cpp" line="4131"/>
         <source>Merkaartor tag templates (*.mat)</source>
         <translation>Model label Merkaartor (*.mat)</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="4144"/>
-        <location filename="../src/MainWindow.cpp" line="4158"/>
+        <location filename="../src/MainWindow.cpp" line="4140"/>
+        <location filename="../src/MainWindow.cpp" line="4154"/>
         <source>Open Tag Templates</source>
         <translation>Buka Model Label</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="4235"/>
+        <location filename="../src/MainWindow.cpp" line="4231"/>
         <source>Warning! Could not load the Merkaartor translations for the &quot;%1&quot; language. Switching to default English.</source>
         <translation>Perhatian! tidak dapat membuka terjemahan Merkaartor untuk bahasa &quot;%1&quot;. Mengganti ke pengaturan awal Bahasa Inggris.</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="4293"/>
+        <location filename="../src/MainWindow.cpp" line="4289"/>
         <source>Unresolved conflicts</source>
         <translation>Konflik yang belum diperbaiki</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="4293"/>
+        <location filename="../src/MainWindow.cpp" line="4289"/>
         <source>Please resolve existing conflicts first</source>
         <translation>Silahkan perbaiki konflik yang ada terlebih dahulu</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="4314"/>
+        <location filename="../src/MainWindow.cpp" line="4310"/>
         <source>It is strongly recommended to save the changes to your document after an upload.
 Do you want to do this now?</source>
         <translation>Disarankan dengan sangat untuk menyimpan perubahan ke dokumen setelah mengunggah.
@@ -4362,80 +4479,140 @@ Anda akan melakukannya sekarang?</translation>
     <message>
         <location filename="../src/common/TagModel.cpp" line="142"/>
         <location filename="../src/common/TagModel.cpp" line="173"/>
-        <source>Set Tags on multiple features</source>
-        <translation>Atur Label pada banyak ciri</translation>
+        <source>Set tags on multiple features</source>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/common/TagModel.cpp" line="144"/>
+        <source>Set tag &apos;%1=&apos; on %2</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
         <location filename="../src/common/TagModel.cpp" line="175"/>
-        <source>Set Tags on %1</source>
-        <translation>Tetapkan Label pada %1</translation>
+        <source>Set tag &apos;%1=%2&apos; on %3</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/Interactions/BuildBridgeInteraction.cpp" line="36"/>
+        <source>Build Bridge interaction</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/Interactions/BuildBridgeInteraction.cpp" line="158"/>
+        <location filename="../src/Interactions/CreateNodeInteraction.cpp" line="112"/>
+        <location filename="../src/Interactions/MoveNodeInteraction.cpp" line="261"/>
+        <source>Create node in way %1</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/Interactions/CreateDoubleWayInteraction.cpp" line="49"/>
+        <source>Create Parallel Way interaction</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/Interactions/CreateDoubleWayInteraction.cpp" line="173"/>
+        <source>Add nodes to parallel way %1</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/Interactions/CreateDoubleWayInteraction.cpp" line="224"/>
+        <source>Create parallel way %1</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/Interactions/CreateNodeInteraction.cpp" line="33"/>
+        <source>Create Node interaction</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/Interactions/CreateNodeInteraction.cpp" line="121"/>
+        <source>Create node %1</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/Interactions/ExtrudeInteraction.cpp" line="43"/>
+        <source>Extrude interaction</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/Interactions/ExtrudeInteraction.cpp" line="133"/>
+        <source>Extrude way %1</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
     <name>MapFeature</name>
     <message>
-        <location filename="../src/Features/Feature.cpp" line="1057"/>
+        <location filename="../src/Features/Feature.cpp" line="1058"/>
         <source>&lt;i&gt;V: &lt;/i&gt;&lt;b&gt;%1&lt;/b&gt; </source>
         <translation>&lt;i&gt;V: &lt;/i&gt;&lt;b&gt;%1&lt;/b&gt;</translation>
     </message>
     <message>
-        <location filename="../src/Features/Feature.cpp" line="1059"/>
+        <location filename="../src/Features/Feature.cpp" line="1063"/>
         <source>&lt;i&gt;last: &lt;/i&gt;&lt;b&gt;%1&lt;/b&gt; by &lt;b&gt;%2&lt;/b&gt;</source>
         <translation>&lt;i&gt;terakhir: &lt;/i&gt;&lt;b&gt;%1&lt;/b&gt; dari  &lt;b&gt;%2&lt;/b&gt;</translation>
     </message>
     <message>
-        <location filename="../src/Features/Feature.cpp" line="1061"/>
+        <location filename="../src/Features/Feature.cpp" line="1065"/>
         <source>&lt;i&gt;last: &lt;/i&gt;&lt;b&gt;%1&lt;/b&gt;</source>
         <translation>&lt;i&gt;terakhir: &lt;/i&gt;&lt;b&gt;%1&lt;/b&gt;</translation>
     </message>
     <message>
-        <location filename="../src/Features/Feature.cpp" line="1064"/>
+        <location filename="../src/Features/Feature.cpp" line="1069"/>
         <source>&lt;br/&gt;&lt;i&gt;layer: &lt;/i&gt;&lt;b&gt;%1&lt;/b&gt; </source>
         <translation>&lt;br/&gt;&lt;i&gt;lapisan: &lt;/i&gt;&lt;b&gt;%1&lt;/b&gt; </translation>
     </message>
     <message>
-        <location filename="../src/Features/Feature.cpp" line="1088"/>
+        <location filename="../src/Features/Feature.cpp" line="1093"/>
         <source>Browse</source>
         <translation>Telusuri</translation>
     </message>
     <message>
         <location filename="../src/Features/Node.cpp" line="375"/>
-        <location filename="../src/Features/Node.cpp" line="638"/>
+        <location filename="../src/Features/Node.cpp" line="639"/>
         <source>Waypoint</source>
         <translation>Titik tuju</translation>
     </message>
     <message>
-        <location filename="../src/Features/Node.cpp" line="376"/>
-        <location filename="../src/Features/Node.cpp" line="639"/>
+        <location filename="../src/Features/Node.cpp" line="640"/>
         <source>coord</source>
         <translation>koord</translation>
     </message>
     <message>
-        <location filename="../src/Features/Node.cpp" line="379"/>
-        <location filename="../src/Features/Node.cpp" line="646"/>
+        <location filename="../src/Features/Node.cpp" line="380"/>
+        <location filename="../src/Features/Node.cpp" line="647"/>
         <source>description</source>
         <translation>penjelasan</translation>
     </message>
     <message>
-        <location filename="../src/Features/Node.cpp" line="381"/>
-        <location filename="../src/Features/Node.cpp" line="648"/>
+        <location filename="../src/Features/Node.cpp" line="376"/>
+        <source>WGS84 coordinates</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/Features/Node.cpp" line="377"/>
+        <source>Projected coordinates</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/Features/Node.cpp" line="382"/>
+        <location filename="../src/Features/Node.cpp" line="649"/>
         <source>comment</source>
         <translation>komentar</translation>
     </message>
     <message>
-        <location filename="../src/Features/Node.cpp" line="383"/>
-        <location filename="../src/Features/Node.cpp" line="650"/>
+        <location filename="../src/Features/Node.cpp" line="384"/>
+        <location filename="../src/Features/Node.cpp" line="651"/>
         <source>Node</source>
         <translation>Titik</translation>
     </message>
     <message>
-        <location filename="../src/Features/Node.cpp" line="642"/>
+        <location filename="../src/Features/Node.cpp" line="643"/>
         <source>elevation</source>
         <translation>ketinggian</translation>
     </message>
     <message>
-        <location filename="../src/Features/Node.cpp" line="644"/>
+        <location filename="../src/Features/Node.cpp" line="645"/>
         <source>speed</source>
         <translation>kecepatan</translation>
     </message>
@@ -4559,28 +4736,28 @@ Anda akan melakukannya sekarang?</translation>
         <translation>Tanda Baru</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/MerkaartorPreferences.cpp" line="408"/>
-        <location filename="../src/Preferences/MerkaartorPreferences.cpp" line="411"/>
+        <location filename="../src/Preferences/MerkaartorPreferences.cpp" line="412"/>
+        <location filename="../src/Preferences/MerkaartorPreferences.cpp" line="415"/>
         <source>Preferences upload failed</source>
         <translation>Mengunggah Pilihan gagal</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/MerkaartorPreferences.cpp" line="408"/>
+        <location filename="../src/Preferences/MerkaartorPreferences.cpp" line="412"/>
         <source>Duplicate key</source>
         <translation>Duplikasi kunci</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/MerkaartorPreferences.cpp" line="411"/>
+        <location filename="../src/Preferences/MerkaartorPreferences.cpp" line="415"/>
         <source>More than 150 preferences</source>
         <translation>Lebih dari 150 pilihan</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/MerkaartorPreferences.cpp" line="414"/>
+        <location filename="../src/Preferences/MerkaartorPreferences.cpp" line="418"/>
         <source>Preferences communication failed</source>
         <translation>Komunikasi Pilihan gagal</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/MerkaartorPreferences.cpp" line="414"/>
+        <location filename="../src/Preferences/MerkaartorPreferences.cpp" line="418"/>
         <source>Communication error</source>
         <translation>Kesalahan Komunikasi</translation>
     </message>
@@ -4591,6 +4768,14 @@ Anda akan melakukannya sekarang?</translation>
         <location filename="../src/Preferences/WmsServersList.cpp" line="40"/>
         <source>New Server</source>
         <translation>Penyedia Baru</translation>
+    </message>
+</context>
+<context>
+    <name>MsBingMapAdapter</name>
+    <message>
+        <location filename="../plugins/background/MMsBingMapBackground/msbingmapadapter.cpp" line="243"/>
+        <source>Terms of Use</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -5129,11 +5314,6 @@ Apa yang ingin anda lakukan berikutnya?</translation>
         <translation>Umum</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="42"/>
-        <source>Zoom Out/in (%)</source>
-        <translation>Perbesaran Keluar/masuk (%)</translation>
-    </message>
-    <message>
         <location filename="../src/Preferences/PreferencesDialog.ui" line="66"/>
         <source>Opacity low/high</source>
         <translation>Kegelapan rendah/tinggi</translation>
@@ -5154,16 +5334,6 @@ Apa yang ingin anda lakukan berikutnya?</translation>
         <translation>Perbolehkan pembuatan titik/jalan pada moda terpilih</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="118"/>
-        <source>Separate Move mode</source>
-        <translation>Moda Pindah Terpisah</translation>
-    </message>
-    <message>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="125"/>
-        <source>Use Virtual nodes (new session required)</source>
-        <translation>Gunakan titik Virtual (sesi baru dibutuhkan)</translation>
-    </message>
-    <message>
         <location filename="../src/Preferences/PreferencesDialog.ui" line="132"/>
         <source>Relations selectable while hidden</source>
         <translation>Relasi dapat dipilih ketika disembunyikan</translation>
@@ -5177,22 +5347,6 @@ Apa yang ingin anda lakukan berikutnya?</translation>
         <location filename="../src/Preferences/PreferencesDialog.ui" line="171"/>
         <source>Background</source>
         <translation>Latar</translation>
-    </message>
-    <message>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="186"/>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="236"/>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="301"/>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="347"/>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="393"/>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="446"/>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="513"/>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="746"/>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="864"/>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="995"/>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="1219"/>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="1555"/>
-        <source>...</source>
-        <translation>...</translation>
     </message>
     <message>
         <location filename="../src/Preferences/PreferencesDialog.ui" line="199"/>
@@ -5213,11 +5367,6 @@ Apa yang ingin anda lakukan berikutnya?</translation>
         <location filename="../src/Preferences/PreferencesDialog.ui" line="529"/>
         <source>Pixels</source>
         <translation>Pixel</translation>
-    </message>
-    <message>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="259"/>
-        <source>Use simple GPX track appearance</source>
-        <translation>Menggunakan jalur sederhana GPX yang kelihatan</translation>
     </message>
     <message>
         <location filename="../src/Preferences/PreferencesDialog.ui" line="287"/>
@@ -5255,11 +5404,6 @@ Apa yang ingin anda lakukan berikutnya?</translation>
         <translation>Lokal</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="581"/>
-        <source>You may need to restart the program for these changes to take effect</source>
-        <translation>Anda mungkin perlu jalankan-ulang program agar perubahan memberikan hasil</translation>
-    </message>
-    <message>
         <location filename="../src/Preferences/PreferencesDialog.ui" line="590"/>
         <source>Use language</source>
         <translation>Menggunakan bahasa</translation>
@@ -5280,14 +5424,9 @@ Apa yang ingin anda lakukan berikutnya?</translation>
         <translation>Pilihan</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="658"/>
-        <source>Use Anti-aliasing</source>
-        <translation>Menggunakan Anti-aliasing</translation>
-    </message>
-    <message>
         <location filename="../src/Preferences/PreferencesDialog.ui" line="665"/>
-        <source>Disable Anti-alisaing while panning</source>
-        <translation>Matikan Anti-aliasing ketika menggeser</translation>
+        <source>No anti-aliasing while panning</source>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/Preferences/PreferencesDialog.ui" line="672"/>
@@ -5325,8 +5464,7 @@ Apa yang ingin anda lakukan berikutnya?</translation>
         <translation>Gaya peta</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="723"/>
-        <location filename="../src/Preferences/PreferencesDialog.cpp" line="512"/>
+        <location filename="../src/Preferences/PreferencesDialog.cpp" line="511"/>
         <source>Custom styles directory</source>
         <translation>Kandar gaya variasi</translation>
     </message>
@@ -5336,18 +5474,12 @@ Apa yang ingin anda lakukan berikutnya?</translation>
         <translation>Gaya saat ini</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="779"/>
-        <source>Disable styles for track layers</source>
-        <translation>Matikan gaya untuk lapisan jalur</translation>
-    </message>
-    <message>
         <location filename="../src/Preferences/PreferencesDialog.ui" line="803"/>
         <source>Template</source>
         <translation>Model</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="809"/>
-        <location filename="../src/Preferences/PreferencesDialog.cpp" line="521"/>
+        <location filename="../src/Preferences/PreferencesDialog.cpp" line="520"/>
         <source>Tag Template</source>
         <translation>Model label</translation>
     </message>
@@ -5367,11 +5499,6 @@ Apa yang ingin anda lakukan berikutnya?</translation>
         <translation>Data</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="902"/>
-        <source>OSM API (URL is, e.g., &quot;http://www.openstreetmap.org/api/0.6&quot;</source>
-        <translation>API OSM (URL is, e.g., &quot;http://www.openstreetmap.org/api/0.6&quot;</translation>
-    </message>
-    <message>
         <location filename="../src/Preferences/PreferencesDialog.ui" line="916"/>
         <source>XAPI</source>
         <translation>XAPI</translation>
@@ -5381,11 +5508,6 @@ Apa yang ingin anda lakukan berikutnya?</translation>
         <location filename="../src/Preferences/PreferencesDialog.ui" line="956"/>
         <source>URL:</source>
         <translation>URL:</translation>
-    </message>
-    <message>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="945"/>
-        <source>Nominatim (Geo Search)</source>
-        <translation>Nominatif (Mencari Geo)</translation>
     </message>
     <message>
         <location filename="../src/Preferences/PreferencesDialog.ui" line="968"/>
@@ -5408,19 +5530,85 @@ Apa yang ingin anda lakukan berikutnya?</translation>
         <translation>Jalur</translation>
     </message>
     <message>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="42"/>
+        <source>Zoom out/in (%)</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="118"/>
+        <source>Separate move mode</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="125"/>
+        <source>Use virtual nodes (new session required)</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="186"/>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="236"/>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="301"/>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="347"/>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="393"/>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="446"/>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="513"/>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="746"/>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="864"/>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="995"/>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="1219"/>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="1555"/>
+        <source>…</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="259"/>
+        <source>Simple GPX track appearance</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="581"/>
+        <source>A restart of the program may be needed for these changes to take effect.</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="658"/>
+        <source>Anti-aliasing</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="723"/>
+        <source>Custom styles folder</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="779"/>
+        <source>No styles for track layers</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="809"/>
+        <source>Tag template</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="945"/>
+        <source>Nominatim (geo search)</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
         <location filename="../src/Preferences/PreferencesDialog.ui" line="1022"/>
-        <source>Automatically extract tracks on open</source>
-        <translation>Pecahkan jalur secara otomatis pada saat membuka</translation>
+        <source>Automatically extract opened tracks</source>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/Preferences/PreferencesDialog.ui" line="1029"/>
-        <source>Track layers readonly by default</source>
-        <translation>Lapisan Jalur hanya baca-saja secara normal</translation>
+        <source>Track layers read-only by default</source>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/Preferences/PreferencesDialog.ui" line="1040"/>
-        <source>Don&apos;t connect GPX nodes separated by more than (in km; 0 to disable)</source>
-        <translation>Jangan sambungkan titik GPX yang dipisahkan oleh lebih dari (dalam km; 0 untuk mematikan)</translation>
+        <source>Don&apos;t connect GPX nodes separated by more than (in km; 0 to turn off)</source>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/Preferences/PreferencesDialog.ui" line="1059"/>
@@ -5485,13 +5673,48 @@ Apa yang ingin anda lakukan berikutnya?</translation>
     </message>
     <message>
         <location filename="../src/Preferences/PreferencesDialog.ui" line="1270"/>
-        <source>Use Proxy</source>
-        <translation>Gunakan Proxy</translation>
+        <source>Use proxy</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="1365"/>
+        <source>Network Timeout (sec):</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="1403"/>
+        <source>JOSM-compatible local server on port 8111</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="1424"/>
+        <source>Background image</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="1430"/>
+        <source>Tile caching (not active for Yahoo! due to legal restrictions)</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="1436"/>
+        <source>Cache folder</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="1446"/>
+        <source>Cache size (in MB; 0 to turn off)</source>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/Preferences/PreferencesDialog.ui" line="1277"/>
         <source>Password:</source>
         <translation>Password:</translation>
+    </message>
+    <message>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="902"/>
+        <source>OSM API (URL is, e.g., &quot;https://www.openstreetmap.org/api/0.6&quot;)</source>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/Preferences/PreferencesDialog.ui" line="1300"/>
@@ -5507,36 +5730,6 @@ Apa yang ingin anda lakukan berikutnya?</translation>
         <location filename="../src/Preferences/PreferencesDialog.ui" line="1314"/>
         <source>Host:</source>
         <translation>Host:</translation>
-    </message>
-    <message>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="1365"/>
-        <source>Network Timeout (sec)</source>
-        <translation>Jaringan kehabisan waktu (detik)</translation>
-    </message>
-    <message>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="1403"/>
-        <source>Enable JOSM-compatible local server on port 8111</source>
-        <translation>Nyalakan penyedia lokal kecocokan-JOSM  pada port 8111</translation>
-    </message>
-    <message>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="1424"/>
-        <source>Background Image</source>
-        <translation>Gambar latar</translation>
-    </message>
-    <message>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="1430"/>
-        <source>Tiles Caching (not active for Yahoo! due to legal restrictions)</source>
-        <translation>Cache persegi (tidak aktif untuk Yahoo! mengingat adanya pembatasan resmi)</translation>
-    </message>
-    <message>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="1436"/>
-        <source>Cache directory</source>
-        <translation>Kandar cache</translation>
-    </message>
-    <message>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="1446"/>
-        <source>Cache size (in Mb; 0 to disable)</source>
-        <translation>Ukuran cache (dalam Mb; 0 untuk mematikan)</translation>
     </message>
     <message>
         <location filename="../src/Preferences/PreferencesDialog.ui" line="1465"/>
@@ -5680,93 +5873,88 @@ Apa yang ingin anda lakukan berikutnya?</translation>
     </message>
     <message>
         <location filename="../src/Preferences/PreferencesDialog.cpp" line="183"/>
-        <source>[less than 50% complete] German (Austria)</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../src/Preferences/PreferencesDialog.cpp" line="184"/>
-        <source>[less than 50% complete] Portuguese</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../src/Preferences/PreferencesDialog.cpp" line="185"/>
-        <source>[less than 50% complete] Slovak</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../src/Preferences/PreferencesDialog.cpp" line="186"/>
-        <source>[less than 50% complete] Vietnamese</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../src/Preferences/PreferencesDialog.cpp" line="187"/>
         <source>[less than 50% complete] Finnish</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.cpp" line="188"/>
-        <source>[less than 50% complete] Finnish (Finland)</source>
+        <location filename="../src/Preferences/PreferencesDialog.cpp" line="184"/>
+        <source>[less than 50% complete] German (Austria)</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.cpp" line="521"/>
+        <location filename="../src/Preferences/PreferencesDialog.cpp" line="185"/>
+        <source>[less than 50% complete] Portuguese</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/Preferences/PreferencesDialog.cpp" line="186"/>
+        <source>[less than 50% complete] Slovak</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/Preferences/PreferencesDialog.cpp" line="187"/>
+        <source>[less than 50% complete] Vietnamese</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/Preferences/PreferencesDialog.cpp" line="520"/>
         <source>Merkaartor tag template (*.mat)</source>
         <translation>Model label Merkaartor (*.mat)</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.cpp" line="529"/>
+        <location filename="../src/Preferences/PreferencesDialog.cpp" line="528"/>
         <source>Select Color</source>
         <translation>Pilih Warna</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.cpp" line="602"/>
+        <location filename="../src/Preferences/PreferencesDialog.cpp" line="601"/>
         <source>Tool already exists</source>
         <translation>Alat sudah ada</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.cpp" line="603"/>
+        <location filename="../src/Preferences/PreferencesDialog.cpp" line="602"/>
         <source>A tool of this name already exists.
 Please select another name or click the &lt;Apply&gt; button if you want to modify the existing one</source>
         <translation>Nama alat yang ini sudah ada.
 Silahkan pilih nama lain atau klik tombol &lt;Apply&gt; jika anda ingin mengubah yang sudah ada</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.cpp" line="622"/>
+        <location filename="../src/Preferences/PreferencesDialog.cpp" line="621"/>
         <source>Cannot delete preset tool</source>
         <translation>Tidak dapat menghapus alat yang sudah ditetapkan</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.cpp" line="623"/>
+        <location filename="../src/Preferences/PreferencesDialog.cpp" line="622"/>
         <source>Cannot delete preset tool &quot;%1&quot;</source>
         <translation>Tidak dapat menghapus alat &quot;%1&quot; yang sudah ditetapkan </translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.cpp" line="641"/>
+        <location filename="../src/Preferences/PreferencesDialog.cpp" line="640"/>
         <source>Cannot modify preset tool name</source>
         <translation>Tidak dapat mengubah nama alat yang sudah ditetapkan</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.cpp" line="642"/>
+        <location filename="../src/Preferences/PreferencesDialog.cpp" line="641"/>
         <source>Cannot modify preset tool &quot;%1&quot;&apos;s name</source>
         <translation>Tidak dapat mengubah nama alat &quot;%1&quot; yang sudah ditetapkan</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.cpp" line="667"/>
+        <location filename="../src/Preferences/PreferencesDialog.cpp" line="666"/>
         <source>Select tool executable</source>
         <translation>Pilih alat yang dapat dieksekusi</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.cpp" line="675"/>
+        <location filename="../src/Preferences/PreferencesDialog.cpp" line="674"/>
         <source>Select template document</source>
         <translation>Pilih dokumen model</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.cpp" line="675"/>
+        <location filename="../src/Preferences/PreferencesDialog.cpp" line="674"/>
         <source>Merkaartor document (*.mdc)</source>
         <translation>Dokumen Markaartor (*.mdc)</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.cpp" line="683"/>
+        <location filename="../src/Preferences/PreferencesDialog.cpp" line="682"/>
         <source>Select Log directory</source>
         <translation>Pilih kandar Catatan</translation>
     </message>
@@ -5827,7 +6015,7 @@ Silahkan pilih nama lain atau klik tombol &lt;Apply&gt; jika anda ingin mengubah
 <context>
     <name>Projection</name>
     <message>
-        <location filename="../src/common/Projection.cpp" line="341"/>
+        <location filename="../src/common/Projection.cpp" line="233"/>
         <source>Document</source>
         <translation>Dokumen</translation>
     </message>
@@ -5915,8 +6103,8 @@ Silahkan pilih nama lain atau klik tombol &lt;Apply&gt; jika anda ingin mengubah
     </message>
     <message>
         <location filename="../src/Docks/PropertiesDock.cpp" line="469"/>
-        <source>Properties - Road</source>
-        <translation>Properti - Jalan</translation>
+        <source>Properties - Way</source>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/Docks/PropertiesDock.cpp" line="490"/>
@@ -5958,19 +6146,6 @@ Silahkan pilih nama lain atau klik tombol &lt;Apply&gt; jika anda ingin mengubah
         <translation>Bersihkan total</translation>
     </message>
     <message>
-        <location filename="../src/Commands/FeatureCommands.cpp" line="66"/>
-        <location filename="../src/Commands/FeatureCommands.cpp" line="74"/>
-        <location filename="../src/Commands/FeatureCommands.cpp" line="188"/>
-        <source>Set Tag &apos;%1=%2&apos; on %3</source>
-        <translation>Tetapkan label &apos;%1=%2&apos; pada %3</translation>
-    </message>
-    <message>
-        <location filename="../src/Commands/FeatureCommands.cpp" line="314"/>
-        <location filename="../src/Commands/FeatureCommands.cpp" line="400"/>
-        <source>Clear Tag &apos;%1&apos; on %2</source>
-        <translation>Bersihkan Label &apos;%1&apos; pada %2</translation>
-    </message>
-    <message>
         <location filename="../src/Commands/NodeCommands.cpp" line="17"/>
         <location filename="../src/Commands/NodeCommands.cpp" line="25"/>
         <location filename="../src/Commands/NodeCommands.cpp" line="111"/>
@@ -5984,19 +6159,19 @@ Silahkan pilih nama lain atau klik tombol &lt;Apply&gt; jika anda ingin mengubah
     </message>
     <message>
         <location filename="../src/ImportExport/ExportGPX.cpp" line="46"/>
-        <location filename="../src/ImportExport/ImportExportGdal.cpp" line="405"/>
+        <location filename="../src/ImportExport/ImportExportGdal.cpp" line="370"/>
         <location filename="../src/ImportExport/ImportExportPBF.cpp" line="565"/>
         <source>Cancel</source>
         <translation>Batal</translation>
     </message>
     <message>
-        <location filename="../src/ImportExport/ImportExportGdal.cpp" line="405"/>
+        <location filename="../src/ImportExport/ImportExportGdal.cpp" line="370"/>
         <location filename="../src/ImportExport/ImportExportPBF.cpp" line="565"/>
         <source>Importing...</source>
         <translation>Mengimpor...</translation>
     </message>
     <message>
-        <location filename="../src/ImportExport/ImportExportGdal.cpp" line="455"/>
+        <location filename="../src/ImportExport/ImportExportGdal.cpp" line="419"/>
         <source>Imported: %1</source>
         <translation>Mengimpor: %1</translation>
     </message>
@@ -6048,6 +6223,24 @@ Silahkan pilih nama lain atau klik tombol &lt;Apply&gt; jika anda ingin mengubah
 Do you still wish to commit empty changeset comment?</source>
         <translation>Komentar perubahan kosong. Ini dianggap sopan kepada sesama pembuat peta untuk memberikan komentar yang baik, sehingga semua orang tahu apa yang dilakukan perubahan Anda dan dengan niat apa.
 Apakah anda akan tetap mengosongkan komentar?</translation>
+    </message>
+    <message>
+        <location filename="../src/Commands/FeatureCommands.cpp" line="66"/>
+        <location filename="../src/Commands/FeatureCommands.cpp" line="74"/>
+        <location filename="../src/Commands/FeatureCommands.cpp" line="188"/>
+        <source>Set tag &apos;%1=%2&apos; on %3</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/Commands/FeatureCommands.cpp" line="314"/>
+        <location filename="../src/Commands/FeatureCommands.cpp" line="400"/>
+        <source>Remove tag &apos;%1&apos; from %2</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../plugins/background/MCadastreFranceBackground/qadastre/cadastrewrapper.cpp" line="114"/>
+        <source>Downloading tiles...</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -6129,12 +6322,12 @@ Apakah anda akan tetap mengosongkan komentar?</translation>
         <translation>Tidak dapat terhubung ke %1:%2</translation>
     </message>
     <message>
-        <location filename="../src/GPS/qgpsdevice.cpp" line="1114"/>
+        <location filename="../src/GPS/qgpsdevice.cpp" line="1120"/>
         <source>GPS log error</source>
         <translation>Kesalahan catatan GPS</translation>
     </message>
     <message>
-        <location filename="../src/GPS/qgpsdevice.cpp" line="1115"/>
+        <location filename="../src/GPS/qgpsdevice.cpp" line="1121"/>
         <source>Unable to create GPS log file: %1.</source>
         <translation>Tidak dapat membuat berkas catatan GPS: %1</translation>
     </message>
@@ -6311,11 +6504,18 @@ Apakah anda akan tetap mengosongkan komentar?</translation>
 <context>
     <name>RelationProperties</name>
     <message>
+        <location filename="../src/common/RelationProperties.ui" line="13"/>
         <location filename="../src/Docks/MinimumRelationProperties.ui" line="14"/>
         <source>Form</source>
         <translation>Bentuk</translation>
     </message>
     <message>
+        <location filename="../src/common/RelationProperties.ui" line="27"/>
+        <source>Landuse</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/common/RelationProperties.ui" line="46"/>
         <location filename="../src/Docks/MinimumRelationProperties.ui" line="31"/>
         <source>Members</source>
         <translation>Anggota</translation>
@@ -6326,6 +6526,7 @@ Apakah anda akan tetap mengosongkan komentar?</translation>
         <translation>Hapus anggota(-anggota) terpilih</translation>
     </message>
     <message>
+        <location filename="../src/common/RelationProperties.ui" line="88"/>
         <location filename="../src/Docks/MinimumRelationProperties.ui" line="54"/>
         <location filename="../src/Docks/MinimumRelationProperties.ui" line="84"/>
         <location filename="../src/Docks/MinimumRelationProperties.ui" line="100"/>
@@ -6334,6 +6535,7 @@ Apakah anda akan tetap mengosongkan komentar?</translation>
         <translation>...</translation>
     </message>
     <message>
+        <location filename="../src/common/RelationProperties.ui" line="68"/>
         <location filename="../src/Docks/MinimumRelationProperties.ui" line="122"/>
         <source>Tags</source>
         <translation>Label</translation>
@@ -6403,6 +6605,44 @@ Apakah anda akan tetap mengosongkan komentar?</translation>
         <location filename="../src/GPS/SatelliteStrengthView.cpp" line="50"/>
         <source>No satellites</source>
         <translation>Tidak ada satelit</translation>
+    </message>
+</context>
+<context>
+    <name>SearchDialog</name>
+    <message>
+        <location filename="../plugins/background/MCadastreFranceBackground/qadastre/searchdialog.ui" line="14"/>
+        <source>Search city</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../plugins/background/MCadastreFranceBackground/qadastre/searchdialog.ui" line="22"/>
+        <source>Department</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../plugins/background/MCadastreFranceBackground/qadastre/searchdialog.ui" line="56"/>
+        <source>Name</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../plugins/background/MCadastreFranceBackground/qadastre/searchdialog.ui" line="83"/>
+        <source>Search</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../plugins/background/MCadastreFranceBackground/qadastre/searchdialog.ui" line="97"/>
+        <source>Results</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../plugins/background/MCadastreFranceBackground/qadastre/searchdialog.cpp" line="84"/>
+        <source>No result</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../plugins/background/MCadastreFranceBackground/qadastre/searchdialog.cpp" line="84"/>
+        <source>Your search gave no result.</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -7087,6 +7327,57 @@ Apakah anda akan tetap mengosongkan komentar?</translation>
         <location filename="../src/Preferences/WMSPreferencesDialog.cpp" line="671"/>
         <source>Could not get capabilities: %1</source>
         <translation>Tidak dapat mengambil kemampuan: %1</translation>
+    </message>
+</context>
+<context>
+    <name>WalkingPapersAdapter</name>
+    <message>
+        <location filename="../plugins/background/MWalkingPapersBackground/WalkingPapersAdapter.cpp" line="81"/>
+        <source>Load image...</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../plugins/background/MWalkingPapersBackground/WalkingPapersAdapter.cpp" line="152"/>
+        <source>Network timeout</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../plugins/background/MWalkingPapersBackground/WalkingPapersAdapter.cpp" line="152"/>
+        <source>Cannot read the photo&apos;s details from the Walking Papers server.</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../plugins/background/MWalkingPapersBackground/WalkingPapersAdapter.cpp" line="174"/>
+        <source>Please specify Walking Papers URL</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../plugins/background/MWalkingPapersBackground/WalkingPapersAdapter.cpp" line="175"/>
+        <source>URL:</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../plugins/background/MWalkingPapersBackground/WalkingPapersAdapter.cpp" line="265"/>
+        <source>Open Walking Papers scan</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../plugins/background/MWalkingPapersBackground/WalkingPapersAdapter.cpp" line="438"/>
+        <source>Filename(s)</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
+    <name>WalkingPapersBackground</name>
+    <message>
+        <location filename="../plugins/background/MWalkingPapersBackground/WalkingPapersAdapter.cpp" line="277"/>
+        <source>No valid file</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../plugins/background/MWalkingPapersBackground/WalkingPapersAdapter.cpp" line="277"/>
+        <source>Cannot load file.</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 </TS>

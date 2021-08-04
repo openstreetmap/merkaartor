@@ -34,7 +34,7 @@
     <message>
         <location filename="../src/common/AboutDialog.ui" line="152"/>
         <source>Copyright Bart Vanhauwaert, Chris Browet, Ladislav Láska and others, 2006-2021</source>
-        <translation type="unfinished"/>
+        <translation>Tekijänoikeus Bart Vanhauwaert, Chris Browet, Ladislav Láska ja muut, 2006-2021</translation>
     </message>
     <message>
         <location filename="../src/common/AboutDialog.ui" line="185"/>
@@ -98,7 +98,7 @@
         <location filename="../src/Tools/ActionsDialog.cpp" line="121"/>
         <location filename="../src/Tools/ActionsDialog.cpp" line="148"/>
         <source>Merkaartor shortcut scheme (*.mss)</source>
-        <translation type="unfinished"/>
+        <translation>Merkaartor shortcut scheme (*.mss)</translation>
     </message>
     <message>
         <location filename="../src/Tools/ActionsDialog.cpp" line="125"/>
@@ -171,7 +171,7 @@
     <message>
         <location filename="../plugins/background/MCadastreFranceBackground/qadastre/cadastrebrowser.ui" line="14"/>
         <source>CadastreBrowser</source>
-        <translation type="unfinished"/>
+        <translation>CadastreBrowser</translation>
     </message>
     <message>
         <location filename="../plugins/background/MCadastreFranceBackground/qadastre/cadastrebrowser.ui" line="57"/>
@@ -182,12 +182,7 @@
         <location filename="../plugins/background/MCadastreFranceBackground/qadastre/cadastrebrowser.ui" line="77"/>
         <location filename="../plugins/background/MCadastreFranceBackground/qadastre/cadastrebrowser.ui" line="80"/>
         <source>Quit</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../plugins/background/MCadastreFranceBackground/qadastre/cadastrebrowser.ui" line="83"/>
-        <source>Ctrl+Q</source>
-        <translation>Ctrl+Q</translation>
+        <translation>Lopeta</translation>
     </message>
     <message>
         <location filename="../plugins/background/MCadastreFranceBackground/qadastre/cadastrebrowser.ui" line="88"/>
@@ -198,11 +193,6 @@
         <location filename="../plugins/background/MCadastreFranceBackground/qadastre/cadastrebrowser.ui" line="91"/>
         <source>Load a city from the cadastre</source>
         <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../plugins/background/MCadastreFranceBackground/qadastre/cadastrebrowser.ui" line="94"/>
-        <source>Ctrl+O</source>
-        <translation>Ctrl+O</translation>
     </message>
 </context>
 <context>
@@ -234,18 +224,20 @@
         <location filename="../plugins/background/MCadastreFranceBackground/qadastre/cadastrewrapper.cpp" line="209"/>
         <source>Downloaded: %1/%2
 Remaining time: %3:%4</source>
-        <translation type="unfinished"/>
+        <translation>Ladattu: %1/%2
+Jäljellä oleva aika: %3:%4</translation>
     </message>
     <message>
         <location filename="../plugins/background/MCadastreFranceBackground/qadastre/cadastrewrapper.cpp" line="211"/>
         <source>Downloaded: %1/%2
 Remaining time: %3:%4:%5</source>
-        <translation type="unfinished"/>
+        <translation>Ladattu: %1/%2
+Jäljellä oleva aika: %3:%4:%5</translation>
     </message>
     <message>
         <location filename="../plugins/background/MCadastreFranceBackground/qadastre/cadastrewrapper.cpp" line="214"/>
         <source>Downloaded: %1/%2</source>
-        <translation type="unfinished"/>
+        <translation>Ladattu: %1/%2</translation>
     </message>
 </context>
 <context>
@@ -261,8 +253,7 @@ Remaining time: %3:%4:%5</source>
     <message>
         <location filename="../src/Interactions/CreateDoubleWayDock.ui" line="13"/>
         <source>Form</source>
-        <translation>
-</translation>
+        <translation>Form</translation>
     </message>
     <message>
         <location filename="../src/Interactions/CreateDoubleWayDock.ui" line="25"/>
@@ -280,12 +271,12 @@ Remaining time: %3:%4:%5</source>
     <message>
         <location filename="../src/Interactions/CreateRoundaboutDock.ui" line="14"/>
         <source>Form</source>
-        <translation type="unfinished"/>
+        <translation>Form</translation>
     </message>
     <message>
         <location filename="../src/Interactions/CreateRoundaboutDock.ui" line="28"/>
         <source>Precision (meters/segment)</source>
-        <translation type="unfinished"/>
+        <translation>Tarkkuus (metriä/segmentti)</translation>
     </message>
     <message>
         <location filename="../src/Interactions/CreateRoundaboutDock.ui" line="35"/>
@@ -343,7 +334,7 @@ Remaining time: %3:%4:%5</source>
     <message>
         <location filename="../src/Docks/DirtyDock.cpp" line="195"/>
         <source>Center map</source>
-        <translation type="unfinished"/>
+        <translation>Keskitä kartta</translation>
     </message>
     <message>
         <location filename="../src/Docks/DirtyDock.cpp" line="196"/>
@@ -389,7 +380,7 @@ Remaining time: %3:%4:%5</source>
         <location filename="../src/Sync/DirtyList.cpp" line="354"/>
         <location filename="../src/Sync/DirtyList.cpp" line="632"/>
         <source>ADD trackpoint %1</source>
-        <translation type="unfinished"/>
+        <translation>LISÄÄ piste %1</translation>
     </message>
     <message>
         <location filename="../src/Sync/DirtyList.cpp" line="363"/>
@@ -401,7 +392,7 @@ Remaining time: %3:%4:%5</source>
         <location filename="../src/Sync/DirtyList.cpp" line="372"/>
         <location filename="../src/Sync/DirtyList.cpp" line="729"/>
         <source>UPDATE trackpoint %1</source>
-        <translation type="unfinished"/>
+        <translation>PÄIVITÄ piste %1</translation>
     </message>
     <message>
         <location filename="../src/Sync/DirtyList.cpp" line="381"/>
@@ -589,7 +580,7 @@ Lataa ongelmallinen kohde uudelleen selvittääksesi konfliktin.</translation>
         <location filename="../src/common/Document.cpp" line="103"/>
         <location filename="../src/common/Document.cpp" line="113"/>
         <source>untitled</source>
-        <translation type="unfinished"/>
+        <translation>nimetön</translation>
     </message>
     <message>
         <location filename="../src/common/Document.cpp" line="173"/>
@@ -630,7 +621,7 @@ Lataa ongelmallinen kohde uudelleen selvittääksesi konfliktin.</translation>
     <message>
         <location filename="../src/common/Document.cpp" line="897"/>
         <source>Document</source>
-        <translation type="unfinished"/>
+        <translation>Dokumentti</translation>
     </message>
     <message>
         <location filename="../src/common/Document.cpp" line="1227"/>
@@ -816,12 +807,12 @@ Before being able to upload your changes, you will have to manually merge the tw
     <message numerus="yes">
         <location filename="../src/Sync/DownloadOSM.cpp" line="164"/>
         <source>Downloading from OSM (%n bytes)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Ladataan OSM:stä (%n tavu)</numerusform><numerusform>Ladataan OSM:stä (%n tavua)</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../src/Sync/DownloadOSM.cpp" line="166"/>
         <source>Downloading from OSM (%n kBytes)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Ladataan OSM:stä (%n kt)</numerusform><numerusform>Ladataan OSM:stä (%n kt)</numerusform></translation>
     </message>
     <message>
         <location filename="../src/Sync/DownloadOSM.cpp" line="286"/>
@@ -872,12 +863,12 @@ API message is &apos;%1&apos;</source>
     <message>
         <location filename="../src/Sync/DownloadOSM.cpp" line="412"/>
         <source>Downloading trackpoints %1-%2</source>
-        <translation type="unfinished"/>
+        <translation>Ladataan pisteitä %1-%2</translation>
     </message>
     <message>
         <location filename="../src/Sync/DownloadOSM.cpp" line="524"/>
         <source>MapDust</source>
-        <translation type="unfinished"/>
+        <translation>MapDust</translation>
     </message>
     <message>
         <location filename="../src/Sync/DownloadOSM.cpp" line="547"/>
@@ -943,12 +934,12 @@ Poistetaanko se, mitä voidaan?</translation>
     <message>
         <location filename="../src/ImportExport/ExportDialog.ui" line="13"/>
         <source>Export</source>
-        <translation type="unfinished"/>
+        <translation>Vie</translation>
     </message>
     <message>
         <location filename="../src/ImportExport/ExportDialog.ui" line="25"/>
         <source>What do you want to export?</source>
-        <translation type="unfinished"/>
+        <translation>Mitä haluat viedä?</translation>
     </message>
     <message>
         <location filename="../src/ImportExport/ExportDialog.ui" line="38"/>
@@ -963,7 +954,7 @@ Poistetaanko se, mitä voidaan?</translation>
     <message>
         <location filename="../src/ImportExport/ExportDialog.ui" line="52"/>
         <source>Selected</source>
-        <translation type="unfinished"/>
+        <translation>Valittu</translation>
     </message>
 </context>
 <context>
@@ -1001,7 +992,7 @@ Poistetaanko se, mitä voidaan?</translation>
     <message>
         <location filename="../src/Docks/FeaturesDock.cpp" line="477"/>
         <source>Relations</source>
-        <translation type="unfinished"/>
+        <translation>Relaatiot</translation>
     </message>
     <message>
         <location filename="../src/Docks/FeaturesDock.cpp" line="478"/>
@@ -1011,7 +1002,7 @@ Poistetaanko se, mitä voidaan?</translation>
     <message>
         <location filename="../src/Docks/FeaturesDock.cpp" line="479"/>
         <source>Nodes</source>
-        <translation type="unfinished"/>
+        <translation>Pisteet</translation>
     </message>
     <message>
         <location filename="../src/Docks/FeaturesDock.cpp" line="480"/>
@@ -1039,7 +1030,7 @@ Poistetaanko se, mitä voidaan?</translation>
     <message>
         <location filename="../src/Docks/FeaturesDock.ui" line="104"/>
         <source>Find...</source>
-        <translation type="unfinished"/>
+        <translation>Hae...</translation>
     </message>
     <message>
         <location filename="../src/Docks/FeaturesDock.ui" line="122"/>
@@ -1123,12 +1114,12 @@ Poistetaanko se, mitä voidaan?</translation>
     <message>
         <location filename="../src/Preferences/FilterPreferencesDialog.ui" line="127"/>
         <source>Apply</source>
-        <translation type="unfinished"/>
+        <translation>Käytä</translation>
     </message>
     <message>
         <location filename="../src/Preferences/FilterPreferencesDialog.ui" line="134"/>
         <source>Add</source>
-        <translation type="unfinished"/>
+        <translation>Lisää</translation>
     </message>
     <message>
         <location filename="../src/Preferences/FilterPreferencesDialog.ui" line="141"/>
@@ -1161,12 +1152,12 @@ Poistetaanko se, mitä voidaan?</translation>
     <message>
         <location filename="../plugins/background/MGdalBackground/GdalAdapter.cpp" line="500"/>
         <source>Value:</source>
-        <translation type="unfinished"/>
+        <translation>Arvo:</translation>
     </message>
     <message>
         <location filename="../plugins/background/MGdalBackground/GdalAdapter.cpp" line="660"/>
         <source>Filename(s)</source>
-        <translation type="unfinished"/>
+        <translation>Tiedostonimi</translation>
     </message>
 </context>
 <context>
@@ -1300,7 +1291,7 @@ If not, you can&apos;t load images that belong to it.</source>
     <message>
         <location filename="../src/Docks/GeoImageDock.cpp" line="531"/>
         <source>Abort loading</source>
-        <translation type="unfinished"/>
+        <translation>Keskeytä lataus</translation>
     </message>
     <message>
         <location filename="../src/Docks/GeoImageDock.cpp" line="543"/>
@@ -1318,7 +1309,7 @@ If not, you can&apos;t load images that belong to it.</source>
         <location filename="../src/Docks/GeoImageDock.cpp" line="941"/>
         <location filename="../src/Docks/GeoImageDock.cpp" line="945"/>
         <source>Exiv2</source>
-        <translation type="unfinished"/>
+        <translation>Exiv2</translation>
     </message>
     <message>
         <location filename="../src/Docks/GeoImageDock.cpp" line="551"/>
@@ -1355,7 +1346,7 @@ If not, you can&apos;t load images that belong to it.</source>
     <message>
         <location filename="../src/Docks/GeoImageDock.cpp" line="734"/>
         <source>hh:mm:ss</source>
-        <translation type="unfinished"/>
+        <translation>tt:mm:ss</translation>
     </message>
     <message>
         <location filename="../src/Docks/GeoImageDock.cpp" line="792"/>
@@ -1370,7 +1361,7 @@ If not, you can&apos;t load images that belong to it.</source>
     <message>
         <location filename="../src/Docks/GeoImageDock.cpp" line="799"/>
         <source>ss &apos;seconds&apos;</source>
-        <translation type="unfinished"/>
+        <translation>ss &apos;sekuntia&apos;</translation>
     </message>
     <message>
         <location filename="../src/Docks/GeoImageDock.cpp" line="801"/>
@@ -1385,7 +1376,7 @@ If not, you can&apos;t load images that belong to it.</source>
     <message>
         <location filename="../src/Docks/GeoImageDock.cpp" line="804"/>
         <source>Wrong image?</source>
-        <translation type="unfinished"/>
+        <translation>Väärä kuva?</translation>
     </message>
     <message>
         <location filename="../src/Docks/GeoImageDock.cpp" line="805"/>
@@ -1407,13 +1398,14 @@ Do you still want to use it?</source>
     <message>
         <location filename="../src/Docks/GeoImageDock.cpp" line="859"/>
         <source>JPEG Images (*.jpg)</source>
-        <translation type="unfinished"/>
+        <translation>JPEG-kuvat (*.jpg)</translation>
     </message>
     <message>
         <location filename="../src/Docks/GeoImageDock.cpp" line="941"/>
         <source>Error while opening &quot;%1&quot;:
 %2</source>
-        <translation type="unfinished"/>
+        <translation>Virhe avattaessa &quot;%1&quot;:
+%2</translation>
     </message>
 </context>
 <context>
@@ -1431,7 +1423,7 @@ Do you still want to use it?</source>
     <message>
         <location filename="../plugins/background/MGeoTiffBackground/GeoTiffAdapter.cpp" line="232"/>
         <source>Open GeoTIFF files</source>
-        <translation type="unfinished"/>
+        <translation>Avaa GeoTIFF-tiedostot</translation>
     </message>
     <message>
         <location filename="../plugins/background/MGeoTiffBackground/GeoTiffAdapter.cpp" line="259"/>
@@ -1446,7 +1438,7 @@ Do you still want to use it?</source>
     <message>
         <location filename="../plugins/background/MGeoTiffBackground/GeoTiffAdapter.cpp" line="421"/>
         <source>Filename(s)</source>
-        <translation type="unfinished"/>
+        <translation>Tiedostonimi</translation>
     </message>
 </context>
 <context>
@@ -1482,7 +1474,7 @@ Do you still want to use it?</source>
     <message>
         <location filename="../src/common/GotoDialog.ui" line="80"/>
         <source>Coordinates</source>
-        <translation type="unfinished"/>
+        <translation>Koordinaatit</translation>
     </message>
     <message>
         <location filename="../src/common/GotoDialog.ui" line="92"/>
@@ -1492,12 +1484,12 @@ Do you still want to use it?</source>
     <message>
         <location filename="../src/common/GotoDialog.ui" line="107"/>
         <source>lonMin, latMin, lonMax, latMax</source>
-        <translation type="unfinished"/>
+        <translation>lonMin, latMin, lonMax, latMax</translation>
     </message>
     <message>
         <location filename="../src/common/GotoDialog.ui" line="134"/>
         <source>latCent, lonCent, latSpan, lonSpan</source>
-        <translation type="unfinished"/>
+        <translation>latCent, lonCent, latSpan, lonSpan</translation>
     </message>
     <message>
         <location filename="../src/common/GotoDialog.ui" line="156"/>
@@ -1507,7 +1499,7 @@ Do you still want to use it?</source>
     <message>
         <location filename="../src/common/GotoDialog.ui" line="176"/>
         <source>OSM API Url</source>
-        <translation type="unfinished"/>
+        <translation>OSM API Url-osoite</translation>
     </message>
     <message>
         <location filename="../src/common/GotoDialog.ui" line="203"/>
@@ -1552,7 +1544,7 @@ Do you still want to use it?</source>
     <message>
         <location filename="../src/Layers/LayerWidget.cpp" line="318"/>
         <source>None</source>
-        <translation type="unfinished"/>
+        <translation>Ei mitään</translation>
     </message>
     <message>
         <location filename="../src/Layers/LayerWidget.cpp" line="325"/>
@@ -1684,7 +1676,7 @@ Onko tämä se, mitä halusit tehdä?</translation>
     <message>
         <location filename="../src/ImportExport/ImportCSVDialog.ui" line="75"/>
         <source>OSM Preview</source>
-        <translation type="unfinished"/>
+        <translation>OSM-esikatselu</translation>
     </message>
     <message>
         <location filename="../src/ImportExport/ImportCSVDialog.ui" line="93"/>
@@ -1703,23 +1695,23 @@ Onko tämä se, mitä halusit tehdä?</translation>
     </message>
     <message>
         <location filename="../src/ImportExport/ImportCSVDialog.ui" line="124"/>
-        <source>Colon (,)</source>
-        <translation type="unfinished"/>
+        <source>Comma (,)</source>
+        <translation>Pilkku (,)</translation>
     </message>
     <message>
         <location filename="../src/ImportExport/ImportCSVDialog.ui" line="131"/>
         <source>Semicolon (;)</source>
-        <translation type="unfinished"/>
+        <translation>Puolipiste (;)</translation>
     </message>
     <message>
         <location filename="../src/ImportExport/ImportCSVDialog.ui" line="138"/>
         <source>Tab</source>
-        <translation type="unfinished"/>
+        <translation>Välilehti</translation>
     </message>
     <message>
         <location filename="../src/ImportExport/ImportCSVDialog.ui" line="145"/>
         <source>Other:</source>
-        <translation type="unfinished"/>
+        <translation>Muu:</translation>
     </message>
     <message>
         <location filename="../src/ImportExport/ImportCSVDialog.ui" line="171"/>
@@ -1729,7 +1721,7 @@ Onko tämä se, mitä halusit tehdä?</translation>
     <message>
         <location filename="../src/ImportExport/ImportCSVDialog.ui" line="177"/>
         <source>None</source>
-        <translation type="unfinished"/>
+        <translation>Ei mitään</translation>
     </message>
     <message>
         <location filename="../src/ImportExport/ImportCSVDialog.ui" line="184"/>
@@ -1769,7 +1761,7 @@ Onko tämä se, mitä halusit tehdä?</translation>
     <message>
         <location filename="../src/ImportExport/ImportCSVDialog.ui" line="310"/>
         <source>Import</source>
-        <translation type="unfinished"/>
+        <translation>Tuo</translation>
     </message>
     <message>
         <location filename="../src/ImportExport/ImportCSVDialog.ui" line="336"/>
@@ -1878,7 +1870,7 @@ Haluatko varmasti lopettaa?</translation>
     <message>
         <location filename="../src/ImportExport/ImportCSVDialog.cpp" line="544"/>
         <source>untitled</source>
-        <translation type="unfinished"/>
+        <translation>nimetön</translation>
     </message>
     <message>
         <location filename="../src/ImportExport/ImportCSVDialog.cpp" line="544"/>
@@ -2006,7 +1998,7 @@ Haluatko varmasti lopettaa?</translation>
     <message>
         <location filename="../src/Layers/LayerWidget.ui" line="14"/>
         <source>Form</source>
-        <translation type="unfinished"/>
+        <translation>Form</translation>
     </message>
     <message>
         <location filename="../src/Layers/LayerWidget.cpp" line="173"/>
@@ -2076,7 +2068,7 @@ Oletko varma että haluat sulkea sen? (Kumoaminen ei ole mahdollista.)</translat
     <message>
         <location filename="../src/Layers/LicenseDisplayDialog.ui" line="30"/>
         <source>TextLabel</source>
-        <translation type="unfinished"/>
+        <translation>TextLabel</translation>
     </message>
     <message>
         <location filename="../src/Layers/LicenseDisplayDialog.ui" line="37"/>
@@ -2149,7 +2141,7 @@ Käynnistetään…</translation>
     <message>
         <location filename="../src/MainWindow.ui" line="131"/>
         <source>&amp;Export</source>
-        <translation type="unfinished"/>
+        <translation>&amp;Vie</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.ui" line="175"/>
@@ -2159,7 +2151,7 @@ Käynnistetään…</translation>
     <message>
         <location filename="../src/MainWindow.ui" line="179"/>
         <source>&amp;Style</source>
-        <translation type="unfinished"/>
+        <translation>&amp;Tyyli</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.ui" line="190"/>
@@ -2170,7 +2162,7 @@ Käynnistetään…</translation>
         <location filename="../src/MainWindow.ui" line="215"/>
         <location filename="../src/MainWindow.ui" line="667"/>
         <source>&amp;Node</source>
-        <translation>&amp;Solmu</translation>
+        <translation>&amp;Piste</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.ui" line="224"/>
@@ -2212,7 +2204,7 @@ Käynnistetään…</translation>
     <message>
         <location filename="../src/MainWindow.ui" line="104"/>
         <source>&amp;Projection</source>
-        <translation type="unfinished"/>
+        <translation>&amp;Projektio</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.ui" line="109"/>
@@ -2243,11 +2235,6 @@ Käynnistetään…</translation>
         <location filename="../src/MainWindow.ui" line="389"/>
         <source>&amp;Quit</source>
         <translation>Lopeta</translation>
-    </message>
-    <message>
-        <location filename="../src/MainWindow.ui" line="392"/>
-        <source>Ctrl+Q</source>
-        <translation>Ctrl+Q</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.ui" line="400"/>
@@ -2317,7 +2304,7 @@ Käynnistetään…</translation>
     <message>
         <location filename="../src/MainWindow.ui" line="527"/>
         <source>&amp;Move</source>
-        <translation type="unfinished"/>
+        <translation>&amp;Siirrä</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.ui" line="539"/>
@@ -2327,7 +2314,7 @@ Käynnistetään…</translation>
     <message>
         <location filename="../src/MainWindow.ui" line="554"/>
         <source>&amp;Import</source>
-        <translation>&amp;Vie</translation>
+        <translation>&amp;Tuo</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.ui" line="557"/>
@@ -2347,18 +2334,13 @@ Käynnistetään…</translation>
     <message>
         <location filename="../src/MainWindow.ui" line="580"/>
         <source>Link</source>
-        <translation type="unfinished"/>
+        <translation>Linkki</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.ui" line="583"/>
         <location filename="../src/MainWindow.ui" line="586"/>
         <source>Create link</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../src/MainWindow.ui" line="589"/>
-        <source>L</source>
-        <translation type="unfinished"/>
+        <translation>Luo linkki</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.ui" line="601"/>
@@ -2378,7 +2360,7 @@ Käynnistetään…</translation>
     <message>
         <location filename="../src/MainWindow.ui" line="631"/>
         <source>R&amp;emove</source>
-        <translation type="unfinished"/>
+        <translation>Poista</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.ui" line="634"/>
@@ -2418,7 +2400,7 @@ Käynnistetään…</translation>
     <message>
         <location filename="../src/MainWindow.ui" line="740"/>
         <source>New document</source>
-        <translation type="unfinished"/>
+        <translation>Uusi dokumentti</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.ui" line="755"/>
@@ -2438,13 +2420,13 @@ Käynnistetään…</translation>
     <message>
         <location filename="../src/MainWindow.ui" line="825"/>
         <source>&amp;Edit…</source>
-        <translation type="unfinished"/>
+        <translation>&amp;Muokkaa…</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.ui" line="833"/>
         <location filename="../src/MainWindow.ui" line="949"/>
         <source>Save &amp;as…</source>
-        <translation type="unfinished"/>
+        <translation>Tallenna &amp;nimellä…</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.ui" line="841"/>
@@ -2460,13 +2442,13 @@ Käynnistetään…</translation>
     <message>
         <location filename="../src/MainWindow.ui" line="858"/>
         <source>&amp;Preferences…</source>
-        <translation type="unfinished"/>
+        <translation>&amp;Asetukset…</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.ui" line="869"/>
         <location filename="../src/MainWindow.ui" line="877"/>
         <source>&amp;All…</source>
-        <translation type="unfinished"/>
+        <translation>&amp;Kaikki…</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.ui" line="889"/>
@@ -2482,12 +2464,12 @@ Käynnistetään…</translation>
     <message>
         <location filename="../src/MainWindow.ui" line="919"/>
         <source>&amp;Add…</source>
-        <translation type="unfinished"/>
+        <translation>&amp;Lisää…</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.ui" line="927"/>
         <source>&amp;Remove…</source>
-        <translation type="unfinished"/>
+        <translation>&amp;Poista…</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.ui" line="964"/>
@@ -2531,13 +2513,13 @@ Käynnistetään…</translation>
     <message>
         <location filename="../src/MainWindow.ui" line="1105"/>
         <source>&amp;Downloaded areas</source>
-        <translation type="unfinished"/>
+        <translation>&amp;Ladatut alueet</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.ui" line="1163"/>
         <location filename="../src/MainWindow.ui" line="1168"/>
         <source>Selected…</source>
-        <translation type="unfinished"/>
+        <translation>Valittu…</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.ui" line="1177"/>
@@ -2547,7 +2529,7 @@ Käynnistetään…</translation>
     <message>
         <location filename="../src/MainWindow.ui" line="1202"/>
         <source>OSM (binary)</source>
-        <translation type="unfinished"/>
+        <translation>OSM (binaarinen)</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.ui" line="1207"/>
@@ -2568,32 +2550,32 @@ Käynnistetään…</translation>
     <message>
         <location filename="../src/MainWindow.ui" line="1243"/>
         <source>Hide/show Toolbar</source>
-        <translation type="unfinished"/>
+        <translation>Piilota/näytä työkalupalkki</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.ui" line="1246"/>
         <source>Hide/Show toolbar</source>
-        <translation type="unfinished"/>
+        <translation>Piilota/näytä työkalupalkki</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.ui" line="1254"/>
         <source>Hide all</source>
-        <translation type="unfinished"/>
+        <translation>Piilota kaikki</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.ui" line="1262"/>
         <source>Show all</source>
-        <translation type="unfinished"/>
+        <translation>Näytä kaikki</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.ui" line="1286"/>
         <source>&amp;Nodes</source>
-        <translation type="unfinished"/>
+        <translation>&amp;Pisteet</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.ui" line="1297"/>
         <source>Na&amp;mes</source>
-        <translation type="unfinished"/>
+        <translation>Nimet</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.ui" line="1316"/>
@@ -2619,7 +2601,7 @@ Käynnistetään…</translation>
     <message>
         <location filename="../src/MainWindow.ui" line="1394"/>
         <source>&amp;Relations</source>
-        <translation type="unfinished"/>
+        <translation>&amp;Relaatiot</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.ui" line="1405"/>
@@ -2655,7 +2637,7 @@ Käynnistetään…</translation>
     <message>
         <location filename="../src/MainWindow.ui" line="1524"/>
         <source>&amp;Save…</source>
-        <translation type="unfinished"/>
+        <translation>&amp;Tallenna…</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.ui" line="1562"/>
@@ -2746,7 +2728,7 @@ Käynnistetään…</translation>
     <message>
         <location filename="../src/MainWindow.ui" line="1806"/>
         <source>&amp;Photos on map</source>
-        <translation type="unfinished"/>
+        <translation>&amp;Kuvat kartalla</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.ui" line="1822"/>
@@ -2801,12 +2783,12 @@ Käynnistetään…</translation>
     <message>
         <location filename="../src/MainWindow.ui" line="1950"/>
         <source>&amp;Print…</source>
-        <translation type="unfinished"/>
+        <translation>&amp;Tulosta…</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.ui" line="1958"/>
         <source>Print preview…</source>
-        <translation type="unfinished"/>
+        <translation>Tulostuksen esikatselu…</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.ui" line="1963"/>
@@ -2826,7 +2808,7 @@ Käynnistetään…</translation>
     <message>
         <location filename="../src/MainWindow.ui" line="2052"/>
         <source>Save as template document…</source>
-        <translation type="unfinished"/>
+        <translation>Tallenna mallinetiedostoksi…</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.ui" line="2060"/>
@@ -2856,7 +2838,7 @@ Käynnistetään…</translation>
     <message>
         <location filename="../src/MainWindow.ui" line="670"/>
         <source>Create new node</source>
-        <translation type="unfinished"/>
+        <translation>Luo uusi piste</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.ui" line="685"/>
@@ -2876,7 +2858,7 @@ Käynnistetään…</translation>
     <message>
         <location filename="../src/MainWindow.ui" line="737"/>
         <source>&amp;New</source>
-        <translation type="unfinished"/>
+        <translation>&amp;Uusi</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.ui" line="752"/>
@@ -2886,7 +2868,7 @@ Käynnistetään…</translation>
     <message>
         <location filename="../src/MainWindow.ui" line="767"/>
         <source>&amp;Join</source>
-        <translation type="unfinished"/>
+        <translation>&amp;Yhdistä</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.ui" line="782"/>
@@ -2901,12 +2883,12 @@ Käynnistetään…</translation>
     <message>
         <location filename="../src/MainWindow.ui" line="796"/>
         <source>Re&amp;lation</source>
-        <translation type="unfinished"/>
+        <translation>Relaatio</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.ui" line="799"/>
         <source>Create Relation</source>
-        <translation type="unfinished"/>
+        <translation>Luo relaatio</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.ui" line="814"/>
@@ -3104,7 +3086,7 @@ Käynnistetään…</translation>
     <message>
         <location filename="../src/MainWindow.ui" line="1305"/>
         <source>&amp;Start</source>
-        <translation type="unfinished"/>
+        <translation>&amp;Aloita</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.ui" line="1308"/>
@@ -3171,7 +3153,7 @@ Käynnistetään…</translation>
     <message>
         <location filename="../src/MainWindow.ui" line="1532"/>
         <source>&amp;Add member</source>
-        <translation type="unfinished"/>
+        <translation>&amp;Lisää jäsen</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.ui" line="1540"/>
@@ -3201,12 +3183,7 @@ Käynnistetään…</translation>
     <message>
         <location filename="../src/MainWindow.ui" line="1622"/>
         <source>&amp;Styles</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../src/MainWindow.ui" line="2153"/>
-        <source>Ctrl+B</source>
-        <translation>Ctrl+B</translation>
+        <translation>Tyylit</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.ui" line="542"/>
@@ -3216,7 +3193,7 @@ Käynnistetään…</translation>
     <message>
         <location filename="../src/MainWindow.ui" line="1673"/>
         <source>Camera</source>
-        <translation type="unfinished"/>
+        <translation>Kamera</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.ui" line="1693"/>
@@ -3226,12 +3203,12 @@ Käynnistetään…</translation>
     <message>
         <location filename="../src/MainWindow.ui" line="1701"/>
         <source>&amp;Polygon</source>
-        <translation type="unfinished"/>
+        <translation>&amp;Monikulmio</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.ui" line="1728"/>
         <source>Features</source>
-        <translation type="unfinished"/>
+        <translation>Kohteet</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.ui" line="1748"/>
@@ -3251,7 +3228,7 @@ Käynnistetään…</translation>
     <message>
         <location filename="../src/MainWindow.ui" line="1814"/>
         <source>OsmChange (OSC)</source>
-        <translation type="unfinished"/>
+        <translation>OsmChange (OSC)</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.ui" line="1835"/>
@@ -3309,7 +3286,7 @@ Käynnistetään…</translation>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="405"/>
+        <location filename="../src/MainWindow.cpp" line="404"/>
         <source>Properties...</source>
         <translation>Ominaisuudet…</translation>
     </message>
@@ -3351,7 +3328,7 @@ Käynnistetään…</translation>
     <message>
         <location filename="../src/MainWindow.ui" line="2081"/>
         <source>GDAL SQLite/SpatiLite</source>
-        <translation type="unfinished"/>
+        <translation>GDAL SQLite/SpatiLite</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.ui" line="2116"/>
@@ -3463,7 +3440,7 @@ Käynnistetään…</translation>
     <message>
         <location filename="../src/Interactions/CreatePolygonInteraction.cpp" line="90"/>
         <source>Create polygon %1</source>
-        <translation type="unfinished"/>
+        <translation>Luo monikulmio %1</translation>
     </message>
     <message>
         <location filename="../src/Interactions/CreateRoundaboutInteraction.cpp" line="59"/>
@@ -3495,7 +3472,7 @@ Käynnistetään…</translation>
     <message>
         <location filename="../src/Interactions/CreateSingleWayInteraction.cpp" line="293"/>
         <source>Create node: %1</source>
-        <translation type="unfinished"/>
+        <translation>Luo piste: %1</translation>
     </message>
     <message>
         <location filename="../src/Interactions/CreateSingleWayInteraction.cpp" line="315"/>
@@ -3585,7 +3562,7 @@ Huomaa, että ladatun alueen ulkopuolella olevat OSM-solmut säilyvät.</transla
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2814"/>
+        <location filename="../src/MainWindow.cpp" line="2753"/>
         <source>Merge Nodes into %1</source>
         <translation type="unfinished"/>
     </message>
@@ -3630,245 +3607,249 @@ Huomaa, että ladatun alueen ulkopuolella olevat OSM-solmut säilyvät.</transla
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="194"/>
+        <location filename="../src/MainWindow.cpp" line="193"/>
         <source>GPS Exchange format (*.gpx)
 </source>
         <translation>GPS Exchange -muoto (*.gpx)
 </translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="195"/>
+        <location filename="../src/MainWindow.cpp" line="194"/>
         <source>OpenStreetMap format (*.osm)
 </source>
         <translation>OpenStreetMap-muoto (*.osm)
 </translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="196"/>
+        <location filename="../src/MainWindow.cpp" line="195"/>
         <source>OpenStreetMap change format (*.osc)
 </source>
         <translation>OpenStreetMap muutosmuoto (*.osc)
 </translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="197"/>
+        <location filename="../src/MainWindow.cpp" line="196"/>
         <source>Noni GPSPlot format (*.ngt)
 </source>
         <translation>Noni GPSPlot -muoto (*.ngt)
 </translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="198"/>
+        <location filename="../src/MainWindow.cpp" line="197"/>
         <source>NMEA GPS log format (*.nmea *.nma)
 </source>
         <translation>NMEA GPS -logimuoto (*.nmea *.nma)
 </translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="199"/>
+        <location filename="../src/MainWindow.cpp" line="198"/>
         <source>KML file (*.kml)
 </source>
-        <translation type="unfinished"/>
+        <translation>KML-tiedostot (*.kml)</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="200"/>
+        <location filename="../src/MainWindow.cpp" line="199"/>
         <source>Comma delimited format (*.csv)
 </source>
-        <translation type="unfinished"/>
+        <translation>Pilkuilla erotettu (*.csv)
+</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="203"/>
+        <location filename="../src/MainWindow.cpp" line="202"/>
         <source>Geotagged images (*.jpg)
 </source>
         <translation>Paikkamerkityt kuvat (*.jpg)
 </translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="205"/>
+        <location filename="../src/MainWindow.cpp" line="204"/>
         <source>ESRI Shapefile (*.shp)
 </source>
-        <translation type="unfinished"/>
+        <translation>ESRI Shapefile (*.shp)
+</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="205"/>
+        <location filename="../src/MainWindow.cpp" line="204"/>
         <source>Geography Markup Language (*.gml)
 </source>
-        <translation type="unfinished"/>
+        <translation>Geography Markup Language (*.gml)
+</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="207"/>
+        <location filename="../src/MainWindow.cpp" line="206"/>
         <source>Protobuf Binary Format (*.pbf)
 </source>
-        <translation type="unfinished"/>
+        <translation>Protobuf Binary Format (*.pbf)
+</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="212"/>
-        <location filename="../src/MainWindow.cpp" line="216"/>
-        <location filename="../src/MainWindow.cpp" line="3030"/>
+        <location filename="../src/MainWindow.cpp" line="211"/>
+        <location filename="../src/MainWindow.cpp" line="215"/>
+        <location filename="../src/MainWindow.cpp" line="2969"/>
         <source>Supported formats</source>
-        <translation type="unfinished"/>
+        <translation>Tuetut muodot</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="210"/>
-        <location filename="../src/MainWindow.cpp" line="213"/>
+        <location filename="../src/MainWindow.cpp" line="209"/>
+        <location filename="../src/MainWindow.cpp" line="212"/>
         <source>Merkaartor document (*.mdc)
 </source>
-        <translation type="unfinished"/>
+        <translation>Merkaartor-tiedosto (*.mdc)</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="214"/>
-        <location filename="../src/MainWindow.cpp" line="218"/>
-        <location filename="../src/MainWindow.cpp" line="3203"/>
-        <location filename="../src/MainWindow.cpp" line="3213"/>
-        <location filename="../src/MainWindow.cpp" line="3397"/>
-        <location filename="../src/MainWindow.cpp" line="3412"/>
-        <location filename="../src/MainWindow.cpp" line="3433"/>
-        <location filename="../src/MainWindow.cpp" line="3468"/>
-        <location filename="../src/MainWindow.cpp" line="4192"/>
+        <location filename="../src/MainWindow.cpp" line="213"/>
+        <location filename="../src/MainWindow.cpp" line="217"/>
+        <location filename="../src/MainWindow.cpp" line="3142"/>
+        <location filename="../src/MainWindow.cpp" line="3152"/>
+        <location filename="../src/MainWindow.cpp" line="3336"/>
+        <location filename="../src/MainWindow.cpp" line="3351"/>
+        <location filename="../src/MainWindow.cpp" line="3372"/>
+        <location filename="../src/MainWindow.cpp" line="3407"/>
+        <location filename="../src/MainWindow.cpp" line="4131"/>
         <source>All Files (*)</source>
         <translation>Kaikki tiedostot (*)</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="251"/>
+        <location filename="../src/MainWindow.cpp" line="250"/>
         <source>tile %v / %m</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="432"/>
+        <location filename="../src/MainWindow.cpp" line="431"/>
         <source>Low</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="432"/>
+        <location filename="../src/MainWindow.cpp" line="431"/>
         <source>High</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="432"/>
+        <location filename="../src/MainWindow.cpp" line="431"/>
         <source>Opaque</source>
-        <translation type="unfinished"/>
+        <translation>Läpinäkymätön</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="602"/>
-        <location filename="../src/MainWindow.cpp" line="1093"/>
+        <location filename="../src/MainWindow.cpp" line="601"/>
+        <location filename="../src/MainWindow.cpp" line="1092"/>
         <source>Feature</source>
         <translation>Kohde</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="611"/>
-        <location filename="../src/MainWindow.cpp" line="1094"/>
+        <location filename="../src/MainWindow.cpp" line="610"/>
+        <location filename="../src/MainWindow.cpp" line="1093"/>
         <source>Node</source>
-        <translation type="unfinished"/>
+        <translation>Piste</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="627"/>
-        <location filename="../src/MainWindow.cpp" line="1096"/>
+        <location filename="../src/MainWindow.cpp" line="626"/>
+        <location filename="../src/MainWindow.cpp" line="1095"/>
         <source>Relation</source>
-        <translation type="unfinished"/>
+        <translation>Relaatio</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="743"/>
+        <location filename="../src/MainWindow.cpp" line="742"/>
         <source>Load image</source>
-        <translation type="unfinished"/>
+        <translation>Lataa kuva</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="745"/>
+        <location filename="../src/MainWindow.cpp" line="744"/>
         <source>Add node position to image</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="747"/>
+        <location filename="../src/MainWindow.cpp" line="746"/>
         <source>Geotag image with this position</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="749"/>
+        <location filename="../src/MainWindow.cpp" line="748"/>
         <source>Cancel</source>
         <translation>Peruuta</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1085"/>
+        <location filename="../src/MainWindow.cpp" line="1084"/>
         <source>File</source>
         <translation>Tiedosto</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1086"/>
+        <location filename="../src/MainWindow.cpp" line="1085"/>
         <source>Edit</source>
         <translation>Muokkaa</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1087"/>
+        <location filename="../src/MainWindow.cpp" line="1086"/>
         <source>View</source>
         <translation>Näkymä</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1088"/>
+        <location filename="../src/MainWindow.cpp" line="1087"/>
         <source>Show</source>
-        <translation type="unfinished"/>
+        <translation>Näytä</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1089"/>
+        <location filename="../src/MainWindow.cpp" line="1088"/>
         <source>Directional Arrows</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1090"/>
+        <location filename="../src/MainWindow.cpp" line="1089"/>
         <source>GPS</source>
         <translation>GPS</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1091"/>
+        <location filename="../src/MainWindow.cpp" line="1090"/>
         <source>Layers</source>
         <translation>Tasot</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1092"/>
+        <location filename="../src/MainWindow.cpp" line="1091"/>
         <source>Create</source>
-        <translation type="unfinished"/>
+        <translation>Luo</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="619"/>
-        <location filename="../src/MainWindow.cpp" line="1095"/>
+        <location filename="../src/MainWindow.cpp" line="618"/>
+        <location filename="../src/MainWindow.cpp" line="1094"/>
         <source>Way</source>
         <translation>Polku</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1097"/>
+        <location filename="../src/MainWindow.cpp" line="1096"/>
         <source>Tools</source>
-        <translation type="unfinished"/>
+        <translation>Työkalut</translation>
+    </message>
+    <message>
+        <location filename="../src/MainWindow.cpp" line="1097"/>
+        <source>Windows</source>
+        <translation>Ikkunat</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.cpp" line="1098"/>
-        <source>Windows</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../src/MainWindow.cpp" line="1099"/>
         <source>Help</source>
         <translation>Ohje</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1256"/>
+        <location filename="../src/MainWindow.cpp" line="1255"/>
         <source>Cut Features</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1388"/>
+        <location filename="../src/MainWindow.cpp" line="1387"/>
         <source>Clipboard invalid</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1388"/>
+        <location filename="../src/MainWindow.cpp" line="1387"/>
         <source>Clipboard do not contain valid data.</source>
         <translation>Leikepöytä ei sisällä kelvollista tietoa.</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1609"/>
+        <location filename="../src/MainWindow.cpp" line="1548"/>
         <source>GDAL import warning</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1610"/>
+        <location filename="../src/MainWindow.cpp" line="1549"/>
         <source>You are about to import file(s) using GDAL. This feature is rather experimental, and may or may NOT work, possibly causing a crash. Make sure you won't loose any data in case it doesn't work out.
 Please do report bugs in case of a crash, but don't be surprised about it.
 
@@ -3877,52 +3858,52 @@ Continue with import?
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1630"/>
+        <location filename="../src/MainWindow.cpp" line="1569"/>
         <source>Import file</source>
-        <translation type="unfinished"/>
+        <translation>Tuo tiedosto</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1656"/>
-        <location filename="../src/MainWindow.cpp" line="4370"/>
+        <location filename="../src/MainWindow.cpp" line="1595"/>
+        <location filename="../src/MainWindow.cpp" line="4309"/>
         <source>Unsaved changes</source>
         <translation>Tallentamattomat muutokset</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1657"/>
+        <location filename="../src/MainWindow.cpp" line="1596"/>
         <source>The current map contains unsaved changes that will be lost when starting a new one.
 Do you want to cancel starting a new map or continue and discard the old changes?</source>
         <translation>Nykyinen kartta sisältää tallentamattomia muutoksia, jotka häviävät uutta aloitettaessa.
 Haluatko peruuttaa uuden kartan aloittamisen vai jatkaa ja hylätä aiemmat muutokset?</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1664"/>
+        <location filename="../src/MainWindow.cpp" line="1603"/>
         <source>Unsaved Style changes</source>
         <translation>Tallentamattomat tyylimuutokset</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1665"/>
+        <location filename="../src/MainWindow.cpp" line="1604"/>
         <source>You have modified the current style.
 Do you want to save your changes?</source>
         <translation>Olet muokannut nykyistä tyyliä.
 Haluatko tallentaa muutokset?</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1690"/>
+        <location filename="../src/MainWindow.cpp" line="1629"/>
         <source>Waypoints</source>
-        <translation type="unfinished"/>
+        <translation>Reittipisteet</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1707"/>
+        <location filename="../src/MainWindow.cpp" line="1646"/>
         <source>Track %1</source>
-        <translation type="unfinished"/>
+        <translation>Jälki %1</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1752"/>
+        <location filename="../src/MainWindow.cpp" line="1691"/>
         <source>Big Fat Copyright Warning</source>
         <translation>Tosi iso tekijänoikeusvaroitus</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1753"/>
+        <location filename="../src/MainWindow.cpp" line="1692"/>
         <source>You are trying to import a KML file. Please be aware that:
 
  - You cannot import to OSM a KML file created from Google Earth. While you might
@@ -3951,59 +3932,59 @@ Jos olet epävarma, kysy neuvoa OpenStreetMapin legal- tai talk-postituslistoilt
 Oletko ehdottoman varma, että tämä KML-tiedosto voidaan laillisesti tuoda OSM:ään?</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1892"/>
+        <location filename="../src/MainWindow.cpp" line="1831"/>
         <source>No valid file</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1892"/>
-        <location filename="../src/MainWindow.cpp" line="3336"/>
+        <location filename="../src/MainWindow.cpp" line="1831"/>
+        <location filename="../src/MainWindow.cpp" line="3275"/>
         <source>%1 could not be opened.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1937"/>
+        <location filename="../src/MainWindow.cpp" line="1876"/>
         <source>Incoming Remote Control Request</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1938"/>
+        <location filename="../src/MainWindow.cpp" line="1877"/>
         <source>Wanted to load object &apos;%1&apos;, but don&apos;t know how to do that. Sorry.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1983"/>
+        <location filename="../src/MainWindow.cpp" line="1922"/>
         <source>Remote add POI %1 %2</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2038"/>
+        <location filename="../src/MainWindow.cpp" line="1977"/>
         <source>Incoming Remote control request</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2038"/>
+        <location filename="../src/MainWindow.cpp" line="1977"/>
         <source>Unknown action url: %1</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2060"/>
+        <location filename="../src/MainWindow.cpp" line="1999"/>
         <source>Old Qt version detected</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2061"/>
+        <location filename="../src/MainWindow.cpp" line="2000"/>
         <source>Your setup uses Qt %1, which contains various known errors in uploading data to OpenStreetMap leading to 401 server response codes. Are you sure you want to continue (which is not recommended).
 For more information see http://wiki.openstreetmap.org/index.php/Problem_uploading_with_Merkaartor</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2069"/>
+        <location filename="../src/MainWindow.cpp" line="2008"/>
         <source>Upload OSM</source>
         <translation>Lähetä OSM:ään</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2069"/>
+        <location filename="../src/MainWindow.cpp" line="2008"/>
         <source>You don't seem to have specified your
 OpenStreetMap username and password.
 Do you want to do this now?</source>
@@ -4012,472 +3993,472 @@ käyttäjätunnustasi ja salasanaasi.
 Haluatko tehdä tämän nyt?</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2085"/>
-        <location filename="../src/MainWindow.cpp" line="2144"/>
+        <location filename="../src/MainWindow.cpp" line="2024"/>
+        <location filename="../src/MainWindow.cpp" line="2083"/>
         <source>Error downloading</source>
         <translation>Virhe ladattaessa</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2085"/>
-        <location filename="../src/MainWindow.cpp" line="2144"/>
+        <location filename="../src/MainWindow.cpp" line="2024"/>
+        <location filename="../src/MainWindow.cpp" line="2083"/>
         <source>The map could not be downloaded</source>
         <translation>Kartan lataaminen epäonnistui</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2133"/>
+        <location filename="../src/MainWindow.cpp" line="2072"/>
         <source>Error downloading MapDust</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2133"/>
+        <location filename="../src/MainWindow.cpp" line="2072"/>
         <source>The MapDust bugs could not be downloaded</source>
         <translation>MapDustin virheiden lataaminen epäonnistui</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2472"/>
+        <location filename="../src/MainWindow.cpp" line="2411"/>
         <source>Create Polygon</source>
-        <translation type="unfinished"/>
+        <translation>Luo monikulmio</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2472"/>
+        <location filename="../src/MainWindow.cpp" line="2411"/>
         <source>Specify the number of sides</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2641"/>
+        <location filename="../src/MainWindow.cpp" line="2580"/>
         <source>Force Feature upload</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2048"/>
+        <location filename="../src/MainWindow.cpp" line="1987"/>
         <source>Open file</source>
         <translation>Avaa tiedosto</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2526"/>
+        <location filename="../src/MainWindow.cpp" line="2465"/>
         <source>Join Ways</source>
         <translation>Yhdistä polut</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2540"/>
+        <location filename="../src/MainWindow.cpp" line="2479"/>
         <source>Split Ways</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2554"/>
+        <location filename="../src/MainWindow.cpp" line="2493"/>
         <source>Break Ways</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2568"/>
+        <location filename="../src/MainWindow.cpp" line="2507"/>
         <source>Simplify Ways</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2654"/>
+        <location filename="../src/MainWindow.cpp" line="2593"/>
         <source>Create Junction</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2658"/>
+        <location filename="../src/MainWindow.cpp" line="2597"/>
         <source>Multiple intersection.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2659"/>
+        <location filename="../src/MainWindow.cpp" line="2598"/>
         <source>Those roads have multiple intersections.
 Do you still want to create a junction for each one (Unwanted junctions can still be deleted afterhand)?</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2676"/>
+        <location filename="../src/MainWindow.cpp" line="2615"/>
         <source>Add Street Numbers</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2693"/>
-        <location filename="../src/MainWindow.cpp" line="2698"/>
+        <location filename="../src/MainWindow.cpp" line="2632"/>
+        <location filename="../src/MainWindow.cpp" line="2637"/>
         <source>Number of segments to divide into</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2693"/>
+        <location filename="../src/MainWindow.cpp" line="2632"/>
         <source>Specify the number of segments</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2702"/>
+        <location filename="../src/MainWindow.cpp" line="2641"/>
         <source>Subdivide way into %1</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2725"/>
+        <location filename="../src/MainWindow.cpp" line="2664"/>
         <source>Axis Align</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2726"/>
+        <location filename="../src/MainWindow.cpp" line="2665"/>
         <source>Specify the number of regular axes to align edges on (e.g. 4 for rectangular)</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2733"/>
+        <location filename="../src/MainWindow.cpp" line="2672"/>
         <source>triangular</source>
-        <translation type="unfinished"/>
+        <translation>kolmikulmainen</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2734"/>
+        <location filename="../src/MainWindow.cpp" line="2673"/>
         <source>rectangular</source>
-        <translation type="unfinished"/>
+        <translation>suorakulmainen</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2735"/>
+        <location filename="../src/MainWindow.cpp" line="2674"/>
         <source>pentagonal</source>
-        <translation type="unfinished"/>
+        <translation>viisikulmainen</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2736"/>
+        <location filename="../src/MainWindow.cpp" line="2675"/>
         <source>hexagonal</source>
-        <translation type="unfinished"/>
+        <translation>kuusikulmainen</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2737"/>
+        <location filename="../src/MainWindow.cpp" line="2676"/>
         <source>heptagonal</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2738"/>
+        <location filename="../src/MainWindow.cpp" line="2677"/>
         <source>octagonal</source>
-        <translation type="unfinished"/>
+        <translation>kahdeksankulmainen</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2742"/>
+        <location filename="../src/MainWindow.cpp" line="2681"/>
         <source>Align onto %1 axes</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2744"/>
+        <location filename="../src/MainWindow.cpp" line="2683"/>
         <source>Align onto %1 regular axes</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2751"/>
-        <location filename="../src/MainWindow.cpp" line="2754"/>
+        <location filename="../src/MainWindow.cpp" line="2690"/>
+        <location filename="../src/MainWindow.cpp" line="2693"/>
         <source>Unable to align to axes</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2752"/>
+        <location filename="../src/MainWindow.cpp" line="2691"/>
         <source>Align to axes operation failed. Please adjust any sharp corners and try again.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2755"/>
+        <location filename="../src/MainWindow.cpp" line="2694"/>
         <source>Align to axes operation failed and did not converge on a solution.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2771"/>
+        <location filename="../src/MainWindow.cpp" line="2710"/>
         <source>Bing Extract</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2786"/>
+        <location filename="../src/MainWindow.cpp" line="2725"/>
         <source>Align Nodes</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2800"/>
+        <location filename="../src/MainWindow.cpp" line="2739"/>
         <source>Spread Nodes</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2829"/>
+        <location filename="../src/MainWindow.cpp" line="2768"/>
         <source>Detach Node %1</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2843"/>
+        <location filename="../src/MainWindow.cpp" line="2782"/>
         <source>Add member to relation</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2855"/>
+        <location filename="../src/MainWindow.cpp" line="2794"/>
         <source>Remove member from relation</source>
         <translation>Poista jäsen relaatiosta</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2867"/>
+        <location filename="../src/MainWindow.cpp" line="2806"/>
         <source>Add to Multipolygon</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2879"/>
+        <location filename="../src/MainWindow.cpp" line="2818"/>
         <source>Join areas</source>
         <translation>Liitä alueita</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2891"/>
+        <location filename="../src/MainWindow.cpp" line="2830"/>
         <source>Split area</source>
         <translation>Erota alue</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2906"/>
+        <location filename="../src/MainWindow.cpp" line="2845"/>
         <source>Terrace area into %1</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2934"/>
+        <location filename="../src/MainWindow.cpp" line="2873"/>
         <source>Create Relation %1</source>
         <translation>Luo relaatio %1</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="3008"/>
+        <location filename="../src/MainWindow.cpp" line="2947"/>
         <source>Save map style</source>
         <translation>Tallenna karttatyyli</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="3008"/>
+        <location filename="../src/MainWindow.cpp" line="2947"/>
         <source>Merkaartor map style (*.mas)</source>
         <translation>Merkaartorin karttatyyli (*.mas)</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="3029"/>
+        <location filename="../src/MainWindow.cpp" line="2968"/>
         <source>Load map style</source>
         <translation>Lataa karttatyyli</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="3031"/>
+        <location filename="../src/MainWindow.cpp" line="2970"/>
         <source>Merkaartor map style (*.mas)
 </source>
         <translation>Merkaartorin karttatyyli (*.mas)</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="3032"/>
+        <location filename="../src/MainWindow.cpp" line="2971"/>
         <source>MapCSS stylesheet (*.css)</source>
         <translation>MapCSS-tyylitiedosto (*.css)</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="3091"/>
+        <location filename="../src/MainWindow.cpp" line="3030"/>
         <source>Rebuild History</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="3091"/>
+        <location filename="../src/MainWindow.cpp" line="3030"/>
         <source>An attempt will be made to rebuild the history.
 No guarantee, though, and no Undo.
 Are you sure you want to try this? </source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="3187"/>
-        <location filename="../src/MainWindow.cpp" line="3384"/>
+        <location filename="../src/MainWindow.cpp" line="3126"/>
+        <location filename="../src/MainWindow.cpp" line="3323"/>
         <source>untitled</source>
         <translation>nimetön</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="3203"/>
+        <location filename="../src/MainWindow.cpp" line="3142"/>
         <source>Save Merkaartor document</source>
         <translation>Tallenna Merkaartor-tiedosto</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="3203"/>
-        <location filename="../src/MainWindow.cpp" line="3213"/>
+        <location filename="../src/MainWindow.cpp" line="3142"/>
+        <location filename="../src/MainWindow.cpp" line="3152"/>
         <source>Merkaartor documents Files (*.mdc)</source>
-        <translation type="unfinished"/>
+        <translation>Merkaartor-tiedosto (*.mdc)</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="3213"/>
+        <location filename="../src/MainWindow.cpp" line="3152"/>
         <source>Save Merkaartor template document</source>
         <translation>Tallenna Merkaartor-mallinetiedosto</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="3258"/>
+        <location filename="../src/MainWindow.cpp" line="3197"/>
         <source>Unable to open save file</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="3258"/>
-        <location filename="../src/MainWindow.cpp" line="3274"/>
+        <location filename="../src/MainWindow.cpp" line="3197"/>
+        <location filename="../src/MainWindow.cpp" line="3213"/>
         <source>%1 could not be opened for writing.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="3274"/>
+        <location filename="../src/MainWindow.cpp" line="3213"/>
         <source>Unable to open save template document</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="3291"/>
-        <location filename="../src/MainWindow.cpp" line="3336"/>
+        <location filename="../src/MainWindow.cpp" line="3230"/>
+        <location filename="../src/MainWindow.cpp" line="3275"/>
         <source>Invalid file</source>
         <translation>Virheellinen tiedosto</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="3291"/>
+        <location filename="../src/MainWindow.cpp" line="3230"/>
         <source>%1 is not a valid Merkaartor document.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="3397"/>
+        <location filename="../src/MainWindow.cpp" line="3336"/>
         <source>Export OSM</source>
-        <translation type="unfinished"/>
+        <translation>Vie OSM</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="3397"/>
+        <location filename="../src/MainWindow.cpp" line="3336"/>
         <source>OSM Files (*.osm)</source>
         <translation>OSM-tiedostot (*.osm)</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="3412"/>
+        <location filename="../src/MainWindow.cpp" line="3351"/>
         <source>Export osmChange</source>
-        <translation type="unfinished"/>
+        <translation>Vie osmChange</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="3412"/>
+        <location filename="../src/MainWindow.cpp" line="3351"/>
         <source>osmChange Files (*.osc)</source>
         <translation>osmChange-tiedostot (*.osc)</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="3433"/>
+        <location filename="../src/MainWindow.cpp" line="3372"/>
         <source>Export GPX</source>
-        <translation type="unfinished"/>
+        <translation>Vie GPX</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="3433"/>
+        <location filename="../src/MainWindow.cpp" line="3372"/>
         <source>GPX Files (*.gpx)</source>
         <translation>GPX-tiedostot (*.gpx)</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="3468"/>
+        <location filename="../src/MainWindow.cpp" line="3407"/>
         <source>Export KML</source>
-        <translation type="unfinished"/>
+        <translation>Vie KML</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="3468"/>
+        <location filename="../src/MainWindow.cpp" line="3407"/>
         <source>KML Files (*.kml)</source>
         <translation>KML-tiedostot (*.kml)</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="3560"/>
+        <location filename="../src/MainWindow.cpp" line="3499"/>
         <source>Feature extraction</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="3570"/>
+        <location filename="../src/MainWindow.cpp" line="3509"/>
         <source>Extracting features...</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="3653"/>
+        <location filename="../src/MainWindow.cpp" line="3592"/>
         <source>Hide tool buttons labels</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="3764"/>
+        <location filename="../src/MainWindow.cpp" line="3703"/>
         <source>%1 (int)</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="3816"/>
+        <location filename="../src/MainWindow.cpp" line="3755"/>
         <source>Add Bookmark</source>
         <translation>Lisää kirjanmerkki</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="3817"/>
+        <location filename="../src/MainWindow.cpp" line="3756"/>
         <source>Specify the name of the bookmark.</source>
         <translation>Määritä kirjanmerkin nimi.</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="3820"/>
+        <location filename="../src/MainWindow.cpp" line="3759"/>
         <source>Invalid bookmark name</source>
         <translation>Virheellinen kirjanmerkin nimi</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="3821"/>
+        <location filename="../src/MainWindow.cpp" line="3760"/>
         <source>Bookmark cannot be blank.</source>
         <translation>Kirjanmerkki ei voi olla tyhjä.</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="3825"/>
+        <location filename="../src/MainWindow.cpp" line="3764"/>
         <source>Warning: Bookmark name already exists</source>
         <translation>Varoitus: Kirjanmerkin nimi on jo käytössä</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="3826"/>
+        <location filename="../src/MainWindow.cpp" line="3765"/>
         <source>Enter a new one, keep the same to overwrite or cancel.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="3864"/>
+        <location filename="../src/MainWindow.cpp" line="3803"/>
         <source>Remove Bookmark</source>
         <translation>Poista kirjanmerkki</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="3865"/>
+        <location filename="../src/MainWindow.cpp" line="3804"/>
         <source>Select the bookmark to remove.</source>
         <translation>Valitse poistettava kirjanmerkki</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="3925"/>
-        <location filename="../src/MainWindow.cpp" line="3934"/>
+        <location filename="../src/MainWindow.cpp" line="3864"/>
+        <location filename="../src/MainWindow.cpp" line="3873"/>
         <source>Invalid projection</source>
         <translation>Virheellinen projektio</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="3925"/>
-        <location filename="../src/MainWindow.cpp" line="3934"/>
+        <location filename="../src/MainWindow.cpp" line="3864"/>
+        <location filename="../src/MainWindow.cpp" line="3873"/>
         <source>Unable to set projection &quot;%1&quot;.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="4066"/>
+        <location filename="../src/MainWindow.cpp" line="4005"/>
         <source>GPS error</source>
         <translation>GPS-virhe</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="4067"/>
+        <location filename="../src/MainWindow.cpp" line="4006"/>
         <source>Unable to open GPS port.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="4076"/>
+        <location filename="../src/MainWindow.cpp" line="4015"/>
         <source>Open NMEA log file</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="4192"/>
+        <location filename="../src/MainWindow.cpp" line="4131"/>
         <source>Save Tag Templates</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="4192"/>
+        <location filename="../src/MainWindow.cpp" line="4131"/>
         <source>Merkaartor tag templates (*.mat)</source>
-        <translation type="unfinished"/>
+        <translation>Merkaartor tag templates (*.mat)</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="4201"/>
-        <location filename="../src/MainWindow.cpp" line="4215"/>
+        <location filename="../src/MainWindow.cpp" line="4140"/>
+        <location filename="../src/MainWindow.cpp" line="4154"/>
         <source>Open Tag Templates</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="4292"/>
+        <location filename="../src/MainWindow.cpp" line="4231"/>
         <source>Warning! Could not load the Merkaartor translations for the &quot;%1&quot; language. Switching to default English.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="4350"/>
+        <location filename="../src/MainWindow.cpp" line="4289"/>
         <source>Unresolved conflicts</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="4350"/>
+        <location filename="../src/MainWindow.cpp" line="4289"/>
         <source>Please resolve existing conflicts first</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="4371"/>
+        <location filename="../src/MainWindow.cpp" line="4310"/>
         <source>It is strongly recommended to save the changes to your document after an upload.
 Do you want to do this now?</source>
         <translation>Tiedoston muutosten tallentaminen lähettämisen jälkeen on erittäin suositeltavaa.
@@ -4534,7 +4515,7 @@ Haluatko tehdä tämän nyt?</translation>
     <message>
         <location filename="../src/Interactions/CreateNodeInteraction.cpp" line="121"/>
         <source>Create node %1</source>
-        <translation type="unfinished"/>
+        <translation>Luo piste %1</translation>
     </message>
     <message>
         <location filename="../src/Interactions/ExtrudeInteraction.cpp" line="43"/>
@@ -4552,7 +4533,7 @@ Haluatko tehdä tämän nyt?</translation>
     <message>
         <location filename="../src/Features/Feature.cpp" line="1058"/>
         <source>&lt;i&gt;V: &lt;/i&gt;&lt;b&gt;%1&lt;/b&gt; </source>
-        <translation type="unfinished"/>
+        <translation>&lt;i&gt;V: &lt;/i&gt;&lt;b&gt;%1&lt;/b&gt; </translation>
     </message>
     <message>
         <location filename="../src/Features/Feature.cpp" line="1063"/>
@@ -4578,7 +4559,7 @@ Haluatko tehdä tämän nyt?</translation>
         <location filename="../src/Features/Node.cpp" line="375"/>
         <location filename="../src/Features/Node.cpp" line="639"/>
         <source>Waypoint</source>
-        <translation type="unfinished"/>
+        <translation>Reittipiste</translation>
     </message>
     <message>
         <location filename="../src/Features/Node.cpp" line="640"/>
@@ -4589,12 +4570,12 @@ Haluatko tehdä tämän nyt?</translation>
         <location filename="../src/Features/Node.cpp" line="380"/>
         <location filename="../src/Features/Node.cpp" line="647"/>
         <source>description</source>
-        <translation type="unfinished"/>
+        <translation>kuvaus</translation>
     </message>
     <message>
         <location filename="../src/Features/Node.cpp" line="376"/>
         <source>WGS84 coordinates</source>
-        <translation type="unfinished"/>
+        <translation>WGS84-koordinaatit</translation>
     </message>
     <message>
         <location filename="../src/Features/Node.cpp" line="377"/>
@@ -4611,12 +4592,12 @@ Haluatko tehdä tämän nyt?</translation>
         <location filename="../src/Features/Node.cpp" line="384"/>
         <location filename="../src/Features/Node.cpp" line="651"/>
         <source>Node</source>
-        <translation type="unfinished"/>
+        <translation>Piste</translation>
     </message>
     <message>
         <location filename="../src/Features/Node.cpp" line="643"/>
         <source>elevation</source>
-        <translation type="unfinished"/>
+        <translation>korkeus</translation>
     </message>
     <message>
         <location filename="../src/Features/Node.cpp" line="645"/>
@@ -4626,12 +4607,12 @@ Haluatko tehdä tämän nyt?</translation>
     <message>
         <location filename="../src/Features/Relation.cpp" line="705"/>
         <source>size</source>
-        <translation type="unfinished"/>
+        <translation>koko</translation>
     </message>
     <message>
         <location filename="../src/Features/Relation.cpp" line="705"/>
         <source>members</source>
-        <translation type="unfinished"/>
+        <translation>jäsenet</translation>
     </message>
     <message>
         <location filename="../src/Features/Relation.cpp" line="708"/>
@@ -4648,17 +4629,17 @@ Haluatko tehdä tämän nyt?</translation>
     <message>
         <location filename="../src/Features/Relation.cpp" line="712"/>
         <source>Relation</source>
-        <translation type="unfinished"/>
+        <translation>Relaatio</translation>
     </message>
     <message>
         <location filename="../src/Features/Relation.cpp" line="774"/>
         <source>Role</source>
-        <translation type="unfinished"/>
+        <translation>Rooli</translation>
     </message>
     <message>
         <location filename="../src/Features/Relation.cpp" line="776"/>
         <source>Member</source>
-        <translation type="unfinished"/>
+        <translation>Jäsen</translation>
     </message>
     <message>
         <location filename="../src/Features/Way.cpp" line="910"/>
@@ -4706,7 +4687,7 @@ Haluatko tehdä tämän nyt?</translation>
     <message>
         <location filename="../src/common/MapView.cpp" line="351"/>
         <source>%1ms</source>
-        <translation type="unfinished"/>
+        <translation>%1ms</translation>
     </message>
     <message>
         <location filename="../src/common/MapView.cpp" line="384"/>
@@ -4721,7 +4702,7 @@ Haluatko tehdä tämän nyt?</translation>
     <message>
         <location filename="../src/common/MapView.cpp" line="1160"/>
         <source>View</source>
-        <translation type="unfinished"/>
+        <translation>Näytä</translation>
     </message>
     <message>
         <location filename="../src/common/MapView.cpp" line="1161"/>
@@ -4790,7 +4771,7 @@ Haluatko tehdä tämän nyt?</translation>
     <message>
         <location filename="../src/common/MultiProperties.ui" line="13"/>
         <source>Form</source>
-        <translation type="unfinished"/>
+        <translation>Form</translation>
     </message>
     <message>
         <location filename="../src/common/MultiProperties.ui" line="33"/>
@@ -4800,7 +4781,7 @@ Haluatko tehdä tämän nyt?</translation>
     <message>
         <location filename="../src/common/MultiProperties.ui" line="53"/>
         <source>...</source>
-        <translation type="unfinished"/>
+        <translation>...</translation>
     </message>
     <message>
         <location filename="../src/common/MultiProperties.ui" line="73"/>
@@ -4818,12 +4799,12 @@ Haluatko tehdä tämän nyt?</translation>
     <message>
         <location filename="../src/NameFinder/namefindertablemodel.cpp" line="72"/>
         <source>Name</source>
-        <translation type="unfinished"/>
+        <translation>Nimi</translation>
     </message>
     <message>
         <location filename="../src/NameFinder/namefindertablemodel.cpp" line="75"/>
         <source>Unknown field</source>
-        <translation type="unfinished"/>
+        <translation>Tuntematon kenttä</translation>
     </message>
 </context>
 <context>
@@ -4831,7 +4812,7 @@ Haluatko tehdä tämän nyt?</translation>
     <message>
         <location filename="../src/NameFinder/namefinderwidget.cpp" line="91"/>
         <source>Error!</source>
-        <translation type="unfinished"/>
+        <translation>Virhe!</translation>
     </message>
     <message>
         <location filename="../src/NameFinder/namefinderwidget.cpp" line="93"/>
@@ -4844,7 +4825,7 @@ Haluatko tehdä tämän nyt?</translation>
     <message>
         <location filename="../src/NameFinder/namefinderwidget.ui" line="14"/>
         <source>Form</source>
-        <translation type="unfinished"/>
+        <translation>Form</translation>
     </message>
 </context>
 <context>
@@ -4861,29 +4842,29 @@ Haluatko tehdä tämän nyt?</translation>
         <location filename="../src/Render/NativeRenderDialog.cpp" line="208"/>
         <location filename="../src/Render/NativeRenderDialog.cpp" line="244"/>
         <source>untitled</source>
-        <translation type="unfinished"/>
+        <translation>nimetön</translation>
     </message>
     <message>
         <location filename="../src/Render/NativeRenderDialog.cpp" line="179"/>
         <source>PDF files (*.pdf)</source>
-        <translation type="unfinished"/>
+        <translation>PDF-tiedostot (*.pdf)</translation>
     </message>
     <message>
         <location filename="../src/Render/NativeRenderDialog.cpp" line="179"/>
         <location filename="../src/Render/NativeRenderDialog.cpp" line="208"/>
         <location filename="../src/Render/NativeRenderDialog.cpp" line="244"/>
         <source>All Files (*)</source>
-        <translation type="unfinished"/>
+        <translation>Kaikki tiedostot (*)</translation>
     </message>
     <message>
         <location filename="../src/Render/NativeRenderDialog.cpp" line="208"/>
         <source>Image files (*.png *.jpg)</source>
-        <translation type="unfinished"/>
+        <translation>Kuvatiedostot (*.png *.jpg)</translation>
     </message>
     <message>
         <location filename="../src/Render/NativeRenderDialog.cpp" line="244"/>
         <source>SVG files (*.svg)</source>
-        <translation type="unfinished"/>
+        <translation>SVG-tiedostot (*.svg)</translation>
     </message>
 </context>
 <context>
@@ -4911,12 +4892,12 @@ Haluatko tehdä tämän nyt?</translation>
     <message>
         <location filename="../src/Render/NativeRenderDialog.ui" line="183"/>
         <source>Show Nodes</source>
-        <translation type="unfinished"/>
+        <translation>Näytä pisteet</translation>
     </message>
     <message>
         <location filename="../src/Render/NativeRenderDialog.ui" line="190"/>
         <source>Show Relations</source>
-        <translation type="unfinished"/>
+        <translation>Näytä relaatiot</translation>
     </message>
     <message>
         <location filename="../src/Render/NativeRenderDialog.ui" line="200"/>
@@ -4956,17 +4937,17 @@ Haluatko tehdä tämän nyt?</translation>
     <message>
         <location filename="../src/Render/NativeRenderDialog.ui" line="273"/>
         <source>dpi</source>
-        <translation type="unfinished"/>
+        <translation>dpi</translation>
     </message>
     <message>
         <location filename="../src/Render/NativeRenderDialog.ui" line="304"/>
         <source>Export to PDF...</source>
-        <translation type="unfinished"/>
+        <translation>Vie PDF-tiedostoon...</translation>
     </message>
     <message>
         <location filename="../src/Render/NativeRenderDialog.ui" line="311"/>
         <source>Export to SVG...</source>
-        <translation type="unfinished"/>
+        <translation>Vie SVG-tiedostoon...</translation>
     </message>
     <message>
         <location filename="../src/Render/NativeRenderDialog.ui" line="318"/>
@@ -4979,7 +4960,7 @@ Haluatko tehdä tämän nyt?</translation>
     <message>
         <location filename="../src/Preferences/OsmServerWidget.ui" line="14"/>
         <source>Form</source>
-        <translation type="unfinished"/>
+        <translation>Form</translation>
     </message>
     <message>
         <location filename="../src/Preferences/OsmServerWidget.ui" line="25"/>
@@ -4995,7 +4976,7 @@ Haluatko tehdä tämän nyt?</translation>
     <message>
         <location filename="../src/Preferences/OsmServerWidget.ui" line="74"/>
         <source>User:</source>
-        <translation type="unfinished"/>
+        <translation>Käyttäjä:</translation>
     </message>
     <message>
         <location filename="../src/Preferences/OsmServerWidget.ui" line="84"/>
@@ -5040,7 +5021,7 @@ Haluatko tehdä tämän nyt?</translation>
     <message>
         <location filename="../src/PaintStyle/PaintStyleEditor.ui" line="80"/>
         <source>Nodes</source>
-        <translation type="unfinished"/>
+        <translation>Pisteet</translation>
     </message>
     <message>
         <location filename="../src/PaintStyle/PaintStyleEditor.ui" line="142"/>
@@ -5175,7 +5156,7 @@ Haluatko tehdä tämän nyt?</translation>
     <message>
         <location filename="../src/PaintStyle/PaintStyleEditor.ui" line="1370"/>
         <source>Font</source>
-        <translation type="unfinished"/>
+        <translation>Kirjasinlaji</translation>
     </message>
     <message>
         <location filename="../src/PaintStyle/PaintStyleEditor.ui" line="1417"/>
@@ -5232,7 +5213,7 @@ Haluatko tehdä tämän nyt?</translation>
     <message>
         <location filename="../src/Docks/PhotoLoadErrorDialog.ui" line="20"/>
         <source>TextLabel</source>
-        <translation type="unfinished"/>
+        <translation>TextLabel</translation>
     </message>
     <message>
         <location filename="../src/Docks/PhotoLoadErrorDialog.ui" line="27"/>
@@ -5307,7 +5288,7 @@ What do you want to do next?</source>
     <message>
         <location filename="../src/Preferences/PreferencesDialog.ui" line="15"/>
         <source>Preferences</source>
-        <translation type="unfinished"/>
+        <translation>Asetukset</translation>
     </message>
     <message>
         <location filename="../src/Preferences/PreferencesDialog.ui" line="28"/>
@@ -5362,7 +5343,7 @@ What do you want to do next?</source>
     <message>
         <location filename="../src/Preferences/PreferencesDialog.ui" line="221"/>
         <source>GPX track</source>
-        <translation type="unfinished"/>
+        <translation>GPX-jälki</translation>
     </message>
     <message>
         <location filename="../src/Preferences/PreferencesDialog.ui" line="252"/>
@@ -5412,7 +5393,7 @@ What do you want to do next?</source>
     <message>
         <location filename="../src/Preferences/PreferencesDialog.ui" line="590"/>
         <source>Use language</source>
-        <translation type="unfinished"/>
+        <translation>Käytä kieli</translation>
     </message>
     <message>
         <location filename="../src/Preferences/PreferencesDialog.ui" line="625"/>
@@ -5427,6 +5408,11 @@ What do you want to do next?</source>
     <message>
         <location filename="../src/Preferences/PreferencesDialog.ui" line="652"/>
         <source>Options</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="665"/>
+        <source>No anti-aliasing while panning</source>
         <translation type="unfinished"/>
     </message>
     <message>
@@ -5465,22 +5451,22 @@ What do you want to do next?</source>
         <translation>Karttatyyli</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.cpp" line="510"/>
+        <location filename="../src/Preferences/PreferencesDialog.cpp" line="511"/>
         <source>Custom styles directory</source>
         <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/Preferences/PreferencesDialog.ui" line="757"/>
         <source>Current style</source>
-        <translation type="unfinished"/>
+        <translation>Nykyinen tyyli</translation>
     </message>
     <message>
         <location filename="../src/Preferences/PreferencesDialog.ui" line="803"/>
         <source>Template</source>
-        <translation type="unfinished"/>
+        <translation>Malli</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.cpp" line="519"/>
+        <location filename="../src/Preferences/PreferencesDialog.cpp" line="520"/>
         <source>Tag Template</source>
         <translation type="unfinished"/>
     </message>
@@ -5577,11 +5563,6 @@ What do you want to do next?</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="665"/>
-        <source>No anti-alisaing while panning</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
         <location filename="../src/Preferences/PreferencesDialog.ui" line="723"/>
         <source>Custom styles folder</source>
         <translation type="unfinished"/>
@@ -5594,11 +5575,6 @@ What do you want to do next?</source>
     <message>
         <location filename="../src/Preferences/PreferencesDialog.ui" line="809"/>
         <source>Tag template</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="902"/>
-        <source>OSM API (URL is, e.g., &quot;https://www.openstreetmap.org/api/0.6&quot;</source>
         <translation type="unfinished"/>
     </message>
     <message>
@@ -5655,7 +5631,7 @@ What do you want to do next?</source>
         <location filename="../src/Preferences/PreferencesDialog.ui" line="1130"/>
         <location filename="../src/Preferences/PreferencesDialog.ui" line="1168"/>
         <source>Port</source>
-        <translation type="unfinished"/>
+        <translation>Portti</translation>
     </message>
     <message>
         <location filename="../src/Preferences/PreferencesDialog.ui" line="1158"/>
@@ -5675,17 +5651,17 @@ What do you want to do next?</source>
     <message>
         <location filename="../src/Preferences/PreferencesDialog.ui" line="1258"/>
         <source>Network</source>
-        <translation type="unfinished"/>
+        <translation>Verkko</translation>
     </message>
     <message>
         <location filename="../src/Preferences/PreferencesDialog.ui" line="1264"/>
         <source>Proxy settings</source>
-        <translation type="unfinished"/>
+        <translation>Välityspalvelimen asetukset</translation>
     </message>
     <message>
         <location filename="../src/Preferences/PreferencesDialog.ui" line="1270"/>
         <source>Use proxy</source>
-        <translation type="unfinished"/>
+        <translation>Käytä välityspalvelinta</translation>
     </message>
     <message>
         <location filename="../src/Preferences/PreferencesDialog.ui" line="1365"/>
@@ -5723,14 +5699,19 @@ What do you want to do next?</source>
         <translation>Salasana:</translation>
     </message>
     <message>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="902"/>
+        <source>OSM API (URL is, e.g., &quot;https://www.openstreetmap.org/api/0.6&quot;)</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
         <location filename="../src/Preferences/PreferencesDialog.ui" line="1300"/>
         <source>User:</source>
-        <translation type="unfinished"/>
+        <translation>Käyttäjä:</translation>
     </message>
     <message>
         <location filename="../src/Preferences/PreferencesDialog.ui" line="1307"/>
         <source>Port:</source>
-        <translation type="unfinished"/>
+        <translation>Portti:</translation>
     </message>
     <message>
         <location filename="../src/Preferences/PreferencesDialog.ui" line="1314"/>
@@ -5750,7 +5731,7 @@ What do you want to do next?</source>
     <message>
         <location filename="../src/Preferences/PreferencesDialog.ui" line="1500"/>
         <source>Tools</source>
-        <translation type="unfinished"/>
+        <translation>Työkalut</translation>
     </message>
     <message>
         <location filename="../src/Preferences/PreferencesDialog.ui" line="1518"/>
@@ -5765,7 +5746,7 @@ What do you want to do next?</source>
     <message>
         <location filename="../src/Preferences/PreferencesDialog.ui" line="1577"/>
         <source>Apply</source>
-        <translation type="unfinished"/>
+        <translation>Käytä</translation>
     </message>
     <message>
         <location filename="../src/Preferences/PreferencesDialog.ui" line="1584"/>
@@ -5790,7 +5771,7 @@ What do you want to do next?</source>
     <message>
         <location filename="../src/Preferences/PreferencesDialog.cpp" line="163"/>
         <source>Chinese (Taiwan)</source>
-        <translation type="unfinished"/>
+        <translation>Kiina (Taiwan)</translation>
     </message>
     <message>
         <location filename="../src/Preferences/PreferencesDialog.cpp" line="164"/>
@@ -5825,7 +5806,7 @@ What do you want to do next?</source>
     <message>
         <location filename="../src/Preferences/PreferencesDialog.cpp" line="171"/>
         <source>Indonesian (Indonesia)</source>
-        <translation type="unfinished"/>
+        <translation>Indonesia</translation>
     </message>
     <message>
         <location filename="../src/Preferences/PreferencesDialog.cpp" line="172"/>
@@ -5870,91 +5851,96 @@ What do you want to do next?</source>
     <message>
         <location filename="../src/Preferences/PreferencesDialog.cpp" line="181"/>
         <source>[less than 50% complete] Chinese (China)</source>
-        <translation type="unfinished"/>
+        <translation>[less than 50% complete] Kiina</translation>
     </message>
     <message>
         <location filename="../src/Preferences/PreferencesDialog.cpp" line="182"/>
         <source>[less than 50% complete] Estonian</source>
-        <translation type="unfinished"/>
+        <translation>[less than 50% complete] Viro</translation>
     </message>
     <message>
         <location filename="../src/Preferences/PreferencesDialog.cpp" line="183"/>
-        <source>[less than 50% complete] German (Austria)</source>
-        <translation type="unfinished"/>
+        <source>[less than 50% complete] Finnish</source>
+        <translation>[less than 50% complete] Suomi</translation>
     </message>
     <message>
         <location filename="../src/Preferences/PreferencesDialog.cpp" line="184"/>
-        <source>[less than 50% complete] Portuguese</source>
-        <translation type="unfinished"/>
+        <source>[less than 50% complete] German (Austria)</source>
+        <translation>[less than 50% complete] Saksa (Itävalta)</translation>
     </message>
     <message>
         <location filename="../src/Preferences/PreferencesDialog.cpp" line="185"/>
-        <source>[less than 50% complete] Slovak</source>
-        <translation type="unfinished"/>
+        <source>[less than 50% complete] Portuguese</source>
+        <translation>[less than 50% complete] Portugali</translation>
     </message>
     <message>
         <location filename="../src/Preferences/PreferencesDialog.cpp" line="186"/>
+        <source>[less than 50% complete] Slovak</source>
+        <translation>[less than 50% complete] Slovakki</translation>
+    </message>
+    <message>
+        <location filename="../src/Preferences/PreferencesDialog.cpp" line="187"/>
         <source>[less than 50% complete] Vietnamese</source>
-        <translation type="unfinished"/>
+        <translation>[less than 50% complete] Vietnami</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.cpp" line="519"/>
+        <location filename="../src/Preferences/PreferencesDialog.cpp" line="520"/>
         <source>Merkaartor tag template (*.mat)</source>
-        <translation type="unfinished"/>
+        <translation>Merkaartor tag template (*.mat)</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.cpp" line="527"/>
+        <location filename="../src/Preferences/PreferencesDialog.cpp" line="528"/>
         <source>Select Color</source>
         <translation>Valitse väri</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.cpp" line="600"/>
+        <location filename="../src/Preferences/PreferencesDialog.cpp" line="601"/>
         <source>Tool already exists</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.cpp" line="601"/>
+        <location filename="../src/Preferences/PreferencesDialog.cpp" line="602"/>
         <source>A tool of this name already exists.
 Please select another name or click the &lt;Apply&gt; button if you want to modify the existing one</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.cpp" line="620"/>
+        <location filename="../src/Preferences/PreferencesDialog.cpp" line="621"/>
         <source>Cannot delete preset tool</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.cpp" line="621"/>
+        <location filename="../src/Preferences/PreferencesDialog.cpp" line="622"/>
         <source>Cannot delete preset tool &quot;%1&quot;</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.cpp" line="639"/>
+        <location filename="../src/Preferences/PreferencesDialog.cpp" line="640"/>
         <source>Cannot modify preset tool name</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.cpp" line="640"/>
+        <location filename="../src/Preferences/PreferencesDialog.cpp" line="641"/>
         <source>Cannot modify preset tool &quot;%1&quot;&apos;s name</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.cpp" line="665"/>
+        <location filename="../src/Preferences/PreferencesDialog.cpp" line="666"/>
         <source>Select tool executable</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.cpp" line="673"/>
+        <location filename="../src/Preferences/PreferencesDialog.cpp" line="674"/>
         <source>Select template document</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.cpp" line="673"/>
+        <location filename="../src/Preferences/PreferencesDialog.cpp" line="674"/>
         <source>Merkaartor document (*.mdc)</source>
         <translation>Merkaartor-tiedosto (*.mdc)</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.cpp" line="681"/>
+        <location filename="../src/Preferences/PreferencesDialog.cpp" line="682"/>
         <source>Select Log directory</source>
         <translation type="unfinished"/>
     </message>
@@ -5994,7 +5980,7 @@ Please select another name or click the &lt;Apply&gt; button if you want to modi
     <message>
         <location filename="../src/Preferences/ProjPreferencesDialog.ui" line="127"/>
         <source>Apply</source>
-        <translation type="unfinished"/>
+        <translation>Käytä</translation>
     </message>
     <message>
         <location filename="../src/Preferences/ProjPreferencesDialog.ui" line="134"/>
@@ -6135,7 +6121,7 @@ Please select another name or click the &lt;Apply&gt; button if you want to modi
     <message>
         <location filename="../src/Docks/PropertiesDock.cpp" line="1164"/>
         <source>Select member</source>
-        <translation type="unfinished"/>
+        <translation>Valitse jäsen</translation>
     </message>
 </context>
 <context>
@@ -6162,7 +6148,7 @@ Please select another name or click the &lt;Apply&gt; button if you want to modi
         <location filename="../src/ImportExport/ImportExportGdal.cpp" line="370"/>
         <location filename="../src/ImportExport/ImportExportPBF.cpp" line="565"/>
         <source>Cancel</source>
-        <translation type="unfinished"/>
+        <translation>Peruuta</translation>
     </message>
     <message>
         <location filename="../src/ImportExport/ImportExportGdal.cpp" line="370"/>
@@ -6178,17 +6164,17 @@ Please select another name or click the &lt;Apply&gt; button if you want to modi
     <message>
         <location filename="../src/ImportExport/ImportExportOSC.cpp" line="60"/>
         <source>Import osmChange</source>
-        <translation type="unfinished"/>
+        <translation>Tuo osmChange</translation>
     </message>
     <message>
         <location filename="../src/ImportExport/ImportNGT.cpp" line="21"/>
         <source>Import NGT</source>
-        <translation type="unfinished"/>
+        <translation>Tuo NGT</translation>
     </message>
     <message>
         <location filename="../src/ImportExport/ImportNMEA.cpp" line="46"/>
         <source>Import NMEA</source>
-        <translation type="unfinished"/>
+        <translation>Tuo NMEA</translation>
     </message>
     <message>
         <location filename="../src/common/FeatureManipulations.cpp" line="794"/>
@@ -6273,7 +6259,7 @@ Haluatko silti tallentaa tyhjän muutosjoukon kommentin?</translation>
     <message>
         <location filename="../src/GPS/qgps.cpp" line="140"/>
         <source>km/h</source>
-        <translation type="unfinished"/>
+        <translation>km/t</translation>
     </message>
     <message>
         <location filename="../src/GPS/qgps.cpp" line="147"/>
@@ -6283,12 +6269,12 @@ Haluatko silti tallentaa tyhjän muutosjoukon kommentin?</translation>
     <message>
         <location filename="../src/GPS/qgps.cpp" line="153"/>
         <source>2D</source>
-        <translation type="unfinished"/>
+        <translation>2D</translation>
     </message>
     <message>
         <location filename="../src/GPS/qgps.cpp" line="156"/>
         <source>3D</source>
-        <translation type="unfinished"/>
+        <translation>3D</translation>
     </message>
     <message>
         <location filename="../src/GPS/qgps.cpp" line="162"/>
@@ -6298,7 +6284,7 @@ Haluatko silti tallentaa tyhjän muutosjoukon kommentin?</translation>
     <message>
         <location filename="../src/GPS/qgps.cpp" line="221"/>
         <source>GPS</source>
-        <translation type="unfinished"/>
+        <translation>GPS</translation>
     </message>
 </context>
 <context>
@@ -6343,23 +6329,23 @@ Haluatko silti tallentaa tyhjän muutosjoukon kommentin?</translation>
         <location filename="../src/GPS/qgpsmainwindowui.ui" line="22"/>
         <location filename="../src/GPS/qgpsmainwindowui.ui" line="29"/>
         <source>TextLabel</source>
-        <translation type="unfinished"/>
+        <translation>TextLabel</translation>
     </message>
     <message>
         <location filename="../src/GPS/qgpsmainwindowui.ui" line="63"/>
         <location filename="../src/GPS/qgpsmainwindowui.ui" line="80"/>
         <source>99 99&apos; 99&quot;</source>
-        <translation type="unfinished"/>
+        <translation>99 99&apos; 99&quot;</translation>
     </message>
     <message>
         <location filename="../src/GPS/qgpsmainwindowui.ui" line="70"/>
         <source>Longitude</source>
-        <translation type="unfinished"/>
+        <translation>Pituuspiiri</translation>
     </message>
     <message>
         <location filename="../src/GPS/qgpsmainwindowui.ui" line="87"/>
         <source>Altitude</source>
-        <translation type="unfinished"/>
+        <translation>Korkeus</translation>
     </message>
     <message>
         <location filename="../src/GPS/qgpsmainwindowui.ui" line="97"/>
@@ -6394,12 +6380,12 @@ Haluatko silti tallentaa tyhjän muutosjoukon kommentin?</translation>
     <message>
         <location filename="../src/GPS/qgpsmainwindowui.ui" line="148"/>
         <source>000 km/h</source>
-        <translation type="unfinished"/>
+        <translation>000 km/t</translation>
     </message>
     <message>
         <location filename="../src/GPS/qgpsmainwindowui.ui" line="155"/>
         <source>Latitude</source>
-        <translation type="unfinished"/>
+        <translation>Leveysaste</translation>
     </message>
 </context>
 <context>
@@ -6425,7 +6411,7 @@ Haluatko silti tallentaa tyhjän muutosjoukon kommentin?</translation>
     <message>
         <location filename="../src/QToolBarDialog/qttoolbardialog.ui" line="46"/>
         <source>Toolbars</source>
-        <translation type="unfinished"/>
+        <translation>Työkalurivit</translation>
     </message>
     <message>
         <location filename="../src/QToolBarDialog/qttoolbardialog.ui" line="53"/>
@@ -6445,7 +6431,7 @@ Haluatko silti tallentaa tyhjän muutosjoukon kommentin?</translation>
     <message>
         <location filename="../src/QToolBarDialog/qttoolbardialog.ui" line="84"/>
         <source>Restore All</source>
-        <translation type="unfinished"/>
+        <translation>Palauta kaikki</translation>
     </message>
     <message>
         <location filename="../src/QToolBarDialog/qttoolbardialog.ui" line="104"/>
@@ -6455,7 +6441,7 @@ Haluatko silti tallentaa tyhjän muutosjoukon kommentin?</translation>
     <message>
         <location filename="../src/QToolBarDialog/qttoolbardialog.ui" line="111"/>
         <source>Apply</source>
-        <translation type="unfinished"/>
+        <translation>Käytä</translation>
     </message>
     <message>
         <location filename="../src/QToolBarDialog/qttoolbardialog.ui" line="118"/>
@@ -6507,7 +6493,7 @@ Haluatko silti tallentaa tyhjän muutosjoukon kommentin?</translation>
         <location filename="../src/common/RelationProperties.ui" line="13"/>
         <location filename="../src/Docks/MinimumRelationProperties.ui" line="14"/>
         <source>Form</source>
-        <translation type="unfinished"/>
+        <translation>Form</translation>
     </message>
     <message>
         <location filename="../src/common/RelationProperties.ui" line="27"/>
@@ -6518,7 +6504,7 @@ Haluatko silti tallentaa tyhjän muutosjoukon kommentin?</translation>
         <location filename="../src/common/RelationProperties.ui" line="46"/>
         <location filename="../src/Docks/MinimumRelationProperties.ui" line="31"/>
         <source>Members</source>
-        <translation type="unfinished"/>
+        <translation>Jäsenet</translation>
     </message>
     <message>
         <location filename="../src/Docks/MinimumRelationProperties.ui" line="51"/>
@@ -6538,12 +6524,12 @@ Haluatko silti tallentaa tyhjän muutosjoukon kommentin?</translation>
         <location filename="../src/common/RelationProperties.ui" line="68"/>
         <location filename="../src/Docks/MinimumRelationProperties.ui" line="122"/>
         <source>Tags</source>
-        <translation type="unfinished"/>
+        <translation>Tagit</translation>
     </message>
     <message>
         <location filename="../src/Docks/MinimumRelationProperties.ui" line="148"/>
         <source>Add &quot;source&quot; tag</source>
-        <translation type="unfinished"/>
+        <translation>Lisää &quot;source&quot; -tagi</translation>
     </message>
     <message>
         <location filename="../src/Docks/MinimumRelationProperties.ui" line="151"/>
@@ -6561,12 +6547,12 @@ Haluatko silti tallentaa tyhjän muutosjoukon kommentin?</translation>
     <message>
         <location filename="../src/Docks/MinimumRoadProperties.ui" line="14"/>
         <source>Form</source>
-        <translation type="unfinished"/>
+        <translation>Form</translation>
     </message>
     <message>
         <location filename="../src/Docks/MinimumRoadProperties.ui" line="34"/>
         <source>xxx</source>
-        <translation type="unfinished"/>
+        <translation>xxx</translation>
     </message>
     <message>
         <location filename="../src/Docks/MinimumRoadProperties.ui" line="41"/>
@@ -6576,12 +6562,12 @@ Haluatko silti tallentaa tyhjän muutosjoukon kommentin?</translation>
     <message>
         <location filename="../src/Docks/MinimumRoadProperties.ui" line="61"/>
         <source>Tags</source>
-        <translation type="unfinished"/>
+        <translation>Tagit</translation>
     </message>
     <message>
         <location filename="../src/Docks/MinimumRoadProperties.ui" line="87"/>
         <source>Add &quot;source&quot; tag</source>
-        <translation type="unfinished"/>
+        <translation>Lisää &quot;source&quot; -tagi</translation>
     </message>
     <message>
         <location filename="../src/Docks/MinimumRoadProperties.ui" line="90"/>
@@ -6660,17 +6646,17 @@ Haluatko silti tallentaa tyhjän muutosjoukon kommentin?</translation>
     <message>
         <location filename="../src/Utils/SelectionDialog.ui" line="32"/>
         <source>Value</source>
-        <translation type="unfinished"/>
+        <translation>Arvo</translation>
     </message>
     <message>
         <location filename="../src/Utils/SelectionDialog.ui" line="45"/>
         <source>=</source>
-        <translation type="unfinished"/>
+        <translation>=</translation>
     </message>
     <message>
         <location filename="../src/Utils/SelectionDialog.ui" line="55"/>
         <source>Name</source>
-        <translation type="unfinished"/>
+        <translation>Nimi</translation>
     </message>
     <message>
         <location filename="../src/Utils/SelectionDialog.ui" line="81"/>
@@ -6698,7 +6684,7 @@ Haluatko silti tallentaa tyhjän muutosjoukon kommentin?</translation>
     <message>
         <location filename="../src/Layers/LayerWidget.cpp" line="612"/>
         <source>Close</source>
-        <translation type="unfinished"/>
+        <translation>Sulje</translation>
     </message>
 </context>
 <context>
@@ -6706,7 +6692,7 @@ Haluatko silti tallentaa tyhjän muutosjoukon kommentin?</translation>
     <message>
         <location filename="../src/Docks/StyleDock.cpp" line="102"/>
         <source>Styles</source>
-        <translation type="unfinished"/>
+        <translation>Tyylit</translation>
     </message>
 </context>
 <context>
@@ -6714,7 +6700,7 @@ Haluatko silti tallentaa tyhjän muutosjoukon kommentin?</translation>
     <message>
         <location filename="../src/Docks/StyleDock.ui" line="14"/>
         <source>Styles</source>
-        <translation type="unfinished"/>
+        <translation>Tyylit</translation>
     </message>
 </context>
 <context>
@@ -6742,7 +6728,7 @@ Haluatko silti tallentaa tyhjän muutosjoukon kommentin?</translation>
     <message>
         <location filename="../src/Sync/SyncListDialog.ui" line="81"/>
         <source>Added</source>
-        <translation type="unfinished"/>
+        <translation>Lisätty</translation>
     </message>
     <message>
         <location filename="../src/Sync/SyncListDialog.ui" line="94"/>
@@ -6752,7 +6738,7 @@ Haluatko silti tallentaa tyhjän muutosjoukon kommentin?</translation>
     <message>
         <location filename="../src/Sync/SyncListDialog.ui" line="107"/>
         <source>Deleted</source>
-        <translation type="unfinished"/>
+        <translation>Poistettu</translation>
     </message>
     <message>
         <location filename="../src/Sync/SyncListDialog.ui" line="120"/>
@@ -6762,12 +6748,12 @@ Haluatko silti tallentaa tyhjän muutosjoukon kommentin?</translation>
     <message>
         <location filename="../src/Sync/SyncListDialog.ui" line="133"/>
         <source>Nodes</source>
-        <translation type="unfinished"/>
+        <translation>Pisteet</translation>
     </message>
     <message>
         <location filename="../src/Sync/SyncListDialog.ui" line="146"/>
         <source>Relations</source>
-        <translation type="unfinished"/>
+        <translation>Relaatiot</translation>
     </message>
     <message>
         <location filename="../src/Sync/SyncListDialog.ui" line="215"/>
@@ -6777,12 +6763,12 @@ Haluatko silti tallentaa tyhjän muutosjoukon kommentin?</translation>
     <message>
         <location filename="../src/Sync/SyncListDialog.ui" line="269"/>
         <source>OK</source>
-        <translation type="unfinished"/>
+        <translation>OK</translation>
     </message>
     <message>
         <location filename="../src/Sync/SyncListDialog.ui" line="276"/>
         <source>Cancel</source>
-        <translation type="unfinished"/>
+        <translation>Peruuta</translation>
     </message>
 </context>
 <context>
@@ -6795,7 +6781,7 @@ Haluatko silti tallentaa tyhjän muutosjoukon kommentin?</translation>
     <message>
         <location filename="../src/Preferences/TMSPreferencesDialog.ui" line="20"/>
         <source>TMS Servers</source>
-        <translation type="unfinished"/>
+        <translation>TMS-palvelimet</translation>
     </message>
     <message>
         <location filename="../src/Preferences/TMSPreferencesDialog.ui" line="47"/>
@@ -6805,7 +6791,7 @@ Haluatko silti tallentaa tyhjän muutosjoukon kommentin?</translation>
     <message>
         <location filename="../src/Preferences/TMSPreferencesDialog.ui" line="78"/>
         <source>Name:</source>
-        <translation type="unfinished"/>
+        <translation>Nimi:</translation>
     </message>
     <message>
         <location filename="../src/Preferences/TMSPreferencesDialog.ui" line="99"/>
@@ -6830,12 +6816,12 @@ Haluatko silti tallentaa tyhjän muutosjoukon kommentin?</translation>
     <message>
         <location filename="../src/Preferences/TMSPreferencesDialog.ui" line="167"/>
         <source>Projection:</source>
-        <translation type="unfinished"/>
+        <translation>Projektio:</translation>
     </message>
     <message>
         <location filename="../src/Preferences/TMSPreferencesDialog.ui" line="175"/>
         <source>Mercator (EPSG:900913)</source>
-        <translation type="unfinished"/>
+        <translation>Mercator (EPSG:900913)</translation>
     </message>
     <message>
         <location filename="../src/Preferences/TMSPreferencesDialog.ui" line="180"/>
@@ -6870,17 +6856,17 @@ Haluatko silti tallentaa tyhjän muutosjoukon kommentin?</translation>
     <message>
         <location filename="../src/Preferences/TMSPreferencesDialog.ui" line="261"/>
         <source>License URL:</source>
-        <translation type="unfinished"/>
+        <translation>Lisenssin URL-osoite:</translation>
     </message>
     <message>
         <location filename="../src/Preferences/TMSPreferencesDialog.ui" line="288"/>
         <source>Apply</source>
-        <translation type="unfinished"/>
+        <translation>Käytä</translation>
     </message>
     <message>
         <location filename="../src/Preferences/TMSPreferencesDialog.ui" line="295"/>
         <source>Add</source>
-        <translation type="unfinished"/>
+        <translation>Lisää</translation>
     </message>
     <message>
         <location filename="../src/Preferences/TMSPreferencesDialog.ui" line="302"/>
@@ -6891,7 +6877,7 @@ Haluatko silti tallentaa tyhjän muutosjoukon kommentin?</translation>
         <location filename="../src/Preferences/TMSPreferencesDialog.cpp" line="231"/>
         <location filename="../src/Preferences/TMSPreferencesDialog.cpp" line="284"/>
         <source>Merkaartor: GetServices</source>
-        <translation type="unfinished"/>
+        <translation>Merkaartor: GetServices</translation>
     </message>
     <message>
         <location filename="../src/Preferences/TMSPreferencesDialog.cpp" line="231"/>
@@ -6910,12 +6896,12 @@ Haluatko silti tallentaa tyhjän muutosjoukon kommentin?</translation>
     <message>
         <location filename="../src/common/TagModel.cpp" line="106"/>
         <source>Key</source>
-        <translation type="unfinished"/>
+        <translation>Avain</translation>
     </message>
     <message>
         <location filename="../src/common/TagModel.cpp" line="108"/>
         <source>Value</source>
-        <translation type="unfinished"/>
+        <translation>Arvo</translation>
     </message>
     <message>
         <location filename="../src/common/TagModel.cpp" line="129"/>
@@ -6938,7 +6924,7 @@ Haluatko silti tallentaa tyhjän muutosjoukon kommentin?</translation>
     <message>
         <location filename="../src/Utils/TagSelectorWidget.ui" line="14"/>
         <source>Form</source>
-        <translation type="unfinished"/>
+        <translation>Form</translation>
     </message>
     <message>
         <location filename="../src/Utils/TagSelectorWidget.ui" line="34"/>
@@ -6958,7 +6944,7 @@ Haluatko silti tallentaa tyhjän muutosjoukon kommentin?</translation>
     <message>
         <location filename="../src/Utils/TagSelectorWidget.ui" line="64"/>
         <source>...</source>
-        <translation type="unfinished"/>
+        <translation>...</translation>
     </message>
     <message>
         <location filename="../src/Utils/TagSelectorWidget.ui" line="76"/>
@@ -7017,7 +7003,7 @@ Haluatko silti tallentaa tyhjän muutosjoukon kommentin?</translation>
     <message>
         <location filename="../src/common/TerraceDialog.ui" line="81"/>
         <source>For example &quot;1-9;15-17;19,19A&quot;</source>
-        <translation type="unfinished"/>
+        <translation>Esimerkiksi &quot;1-9;15-17;19,19A&quot;</translation>
     </message>
     <message>
         <location filename="../src/common/TerraceDialog.ui" line="88"/>
@@ -7027,17 +7013,17 @@ Haluatko silti tallentaa tyhjän muutosjoukon kommentin?</translation>
     <message>
         <location filename="../src/common/TerraceDialog.ui" line="99"/>
         <source>All numbers</source>
-        <translation type="unfinished"/>
+        <translation>Kaikki numerot</translation>
     </message>
     <message>
         <location filename="../src/common/TerraceDialog.ui" line="104"/>
         <source>Odd numbers</source>
-        <translation type="unfinished"/>
+        <translation>Parittomat luvut</translation>
     </message>
     <message>
         <location filename="../src/common/TerraceDialog.ui" line="109"/>
         <source>Even numbers</source>
-        <translation type="unfinished"/>
+        <translation>Parilliset luvut</translation>
     </message>
     <message>
         <location filename="../src/common/TerraceDialog.ui" line="123"/>
@@ -7075,7 +7061,7 @@ Haluatko silti tallentaa tyhjän muutosjoukon kommentin?</translation>
     <message>
         <location filename="../src/Layers/Layer.cpp" line="726"/>
         <source>Total duration</source>
-        <translation type="unfinished"/>
+        <translation>Kokonaiskesto</translation>
     </message>
     <message>
         <location filename="../src/Layers/Layer.cpp" line="726"/>
@@ -7126,17 +7112,17 @@ Haluatko silti tallentaa tyhjän muutosjoukon kommentin?</translation>
     <message>
         <location filename="../src/Docks/MinimumTrackPointProperties.ui" line="58"/>
         <source>xxx</source>
-        <translation type="unfinished"/>
+        <translation>xxx</translation>
     </message>
     <message>
         <location filename="../src/Docks/MinimumTrackPointProperties.ui" line="81"/>
         <source>Tags</source>
-        <translation type="unfinished"/>
+        <translation>Tagit</translation>
     </message>
     <message>
         <location filename="../src/Docks/MinimumTrackPointProperties.ui" line="107"/>
         <source>Add &quot;source&quot; tag</source>
-        <translation type="unfinished"/>
+        <translation>Lisää &quot;source&quot; -tagi</translation>
     </message>
     <message>
         <location filename="../src/Docks/MinimumTrackPointProperties.ui" line="110"/>
@@ -7179,12 +7165,12 @@ Haluatko silti tallentaa tyhjän muutosjoukon kommentin?</translation>
     <message>
         <location filename="../src/common/UploadMapDialog.ui" line="63"/>
         <source>Use proxy</source>
-        <translation type="unfinished"/>
+        <translation>Käytä välityspalvelinta</translation>
     </message>
     <message>
         <location filename="../src/common/UploadMapDialog.ui" line="88"/>
         <source>Port</source>
-        <translation type="unfinished"/>
+        <translation>Portti</translation>
     </message>
     <message>
         <location filename="../src/common/UploadMapDialog.ui" line="104"/>
@@ -7215,7 +7201,7 @@ Haluatko silti tallentaa tyhjän muutosjoukon kommentin?</translation>
     <message>
         <location filename="../src/Preferences/WMSPreferencesDialog.ui" line="20"/>
         <source>WMS Servers</source>
-        <translation type="unfinished"/>
+        <translation>WMS-palvelimet</translation>
     </message>
     <message>
         <location filename="../src/Preferences/WMSPreferencesDialog.ui" line="47"/>
@@ -7275,12 +7261,12 @@ Haluatko silti tallentaa tyhjän muutosjoukon kommentin?</translation>
     <message>
         <location filename="../src/Preferences/WMSPreferencesDialog.ui" line="308"/>
         <source>License URL:</source>
-        <translation type="unfinished"/>
+        <translation>Lisenssin URL-osoite:</translation>
     </message>
     <message>
         <location filename="../src/Preferences/WMSPreferencesDialog.ui" line="322"/>
         <source>Apply</source>
-        <translation type="unfinished"/>
+        <translation>Käytä</translation>
     </message>
     <message>
         <location filename="../src/Preferences/WMSPreferencesDialog.ui" line="329"/>
@@ -7295,7 +7281,7 @@ Haluatko silti tallentaa tyhjän muutosjoukon kommentin?</translation>
     <message>
         <location filename="../src/Preferences/WMSPreferencesDialog.cpp" line="367"/>
         <source>Merkaartor: GetCapabilities</source>
-        <translation type="unfinished"/>
+        <translation>Merkaartor: GetCapabilities</translation>
     </message>
     <message>
         <location filename="../src/Preferences/WMSPreferencesDialog.cpp" line="367"/>
@@ -7333,7 +7319,7 @@ Haluatko silti tallentaa tyhjän muutosjoukon kommentin?</translation>
     <message>
         <location filename="../plugins/background/MWalkingPapersBackground/WalkingPapersAdapter.cpp" line="81"/>
         <source>Load image...</source>
-        <translation type="unfinished"/>
+        <translation>Lataa kuva...</translation>
     </message>
     <message>
         <location filename="../plugins/background/MWalkingPapersBackground/WalkingPapersAdapter.cpp" line="152"/>
@@ -7363,7 +7349,7 @@ Haluatko silti tallentaa tyhjän muutosjoukon kommentin?</translation>
     <message>
         <location filename="../plugins/background/MWalkingPapersBackground/WalkingPapersAdapter.cpp" line="438"/>
         <source>Filename(s)</source>
-        <translation type="unfinished"/>
+        <translation>Tiedostonimi</translation>
     </message>
 </context>
 <context>
@@ -7376,7 +7362,7 @@ Haluatko silti tallentaa tyhjän muutosjoukon kommentin?</translation>
     <message>
         <location filename="../plugins/background/MWalkingPapersBackground/WalkingPapersAdapter.cpp" line="277"/>
         <source>Cannot load file.</source>
-        <translation type="unfinished"/>
+        <translation>Tiedostoa ei voi ladata.</translation>
     </message>
 </context>
 </TS>
