@@ -1,0 +1,72 @@
+name: Merkaartor build
+on: [push, pull_request]
+
+jobs:
+  windows:
+    runs-on: windows-latest
+    steps:
+      - run: git config --global core.autocrlf input
+        shell: bash
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+      - uses: msys2/setup-msys2@v2
+        name: Install dependencies
+        with:
+          msystem: MINGW64
+          update: true
+          install: git mingw-w64-x86_64-toolchain mingw-w64-x86_64-python-pip msys/make msys/git mingw64/mingw-w64-x86_64-gcc mingw64/mingw-w64-x86_64-qt5 mingw64/mingw-w64-x86_64-gdal mingw64/mingw-w64-x86_64-proj mingw64/mingw-w64-x86_64-openjpeg2 mingw64/mingw-w64-x86_64-json-c mingw64/mingw-w64-x86_64-cmake mingw64/mingw-w64-x86_64-exiv2 mingw64/mingw-w64-x86_64-nsis mingw64/mingw-w64-x86_64-mesa
+      - name: Build
+        shell: msys2 {0}
+        run: |
+          ./ci/travis-windows-script.sh
+      - name: Upload artifacts
+        env:
+          CLOUDSMITH_API_KEY: ${{ secrets.CLOUDSMITH_API_KEY }}
+        if: contains('refs/heads/master refs/heads/gh-actions', github.ref)
+        shell: bash
+        run: |
+          pip3 install cloudsmith-cli
+          ./build/upload-artifacts.sh
+
+  macosx:
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+      - name: Install dependencies
+        run: |
+          brew install gdal exiv2 proj exiv2 qt5 cmake
+      - name: Build
+        run: |
+          ./ci/travis-osx-script.sh
+      - name: Upload artifacts
+        env:
+          CLOUDSMITH_API_KEY: ${{ secrets.CLOUDSMITH_API_KEY }}
+        if: contains('refs/heads/master refs/heads/gh-actions', github.ref)
+        run: |
+          pip3 install cloudsmith-cli
+          ./build/upload-artifacts.sh
+
+  linux:
+    runs-on: ubuntu-20.04
+    strategy:
+      matrix:
+        SNAPSHOT: [0, 1]
+    name: linux-build (SNAPSHOT=${{ matrix.SNAPSHOT }})
+    env:
+      QT_PREFIX: 515
+      QT_REPO: ppa:beineri/opt-qt-5.15.2-focal
+      TRAVIS_DIST: focal
+      SNAPSHOT: ${{ matrix.SNAPSHOT }}
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+      - name: Install dependencies
+        run: |
+          ./ci/travis-linux-install.sh
+      - name: Build
+        run: |
+          ./ci/travis-linux-script.sh
