@@ -1,0 +1,20 @@
+name: Windows build
+on: [push, pull_request]
+
+jobs:
+  build:
+    runs-on: windows-latest
+    defaults:
+      run:
+        shell: msys2 {0}
+    steps:
+      - uses: actions/checkout@v2
+      - uses: msys2/setup-msys2@v2
+        with:
+          msystem: MINGW64
+          update: true
+          install: git mingw-w64-x86_64-toolchain  msys/make msys/git mingw64/mingw-w64-x86_64-gcc mingw64/mingw-w64-x86_64-qt5 mingw64/mingw-w64-x86_64-gdal mingw64/mingw-w64-x86_64-proj mingw64/mingw-w64-x86_64-openjpeg2 mingw64/mingw-w64-x86_64-json-c mingw64/mingw-w64-x86_64-cmake mingw64/mingw-w64-x86_64-exiv2 mingw64/mingw-w64-x86_64-nsis mingw64/mingw-w64-x86_64-mesa
+      - name: CI-Build
+        run: |
+          ./ci/travis-windows-script.sh
+
