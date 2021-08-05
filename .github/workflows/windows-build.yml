@@ -2,13 +2,15 @@ name: Windows build
 on: [push, pull_request]
 
 jobs:
-  build:
+  win-build:
     runs-on: windows-latest
     defaults:
       run:
         shell: msys2 {0}
     steps:
       - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
       - uses: msys2/setup-msys2@v2
         with:
           msystem: MINGW64
@@ -18,3 +20,15 @@ jobs:
         run: |
           ./ci/travis-windows-script.sh
 
+  osx-build:
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+      - name: Install Homebrew dependencies
+        run: |
+          ./ci/travis-osx-install.sh
+      - name: Build
+        run: |
+          ./ci/travis-osx-script.sh
