@@ -103,14 +103,16 @@ struct ProjDirs {
     /* The following are hardcoded paths, as if search paths are set, proj no longer searches the default. Can be safely removed with proj7.*/
     QString projDirMingwStd = QDir::toNativeSeparators("c:/msys64/mingw64/share/proj");       // Standard msys2 path
     QString projDirMingwTravis = QDir::toNativeSeparators("c:/tools/msys64/mingw64/share/proj"); // Travis-CI msys2 installation
+    QString projDirMingwGithub = QDir::toNativeSeparators("D:/a/_temp/msys/msys64/mingw64/share/proj"); // Github Actions msys2 installation
   public:
-    const char* const dirs[4] = {
+    const char* const dirs[5] = {
         projDirRelative.toUtf8().constData(),
         projDirMingwStd.toUtf8().constData(),
         projDirMingwTravis.toUtf8().constData(),
+        projDirMingwGithub.toUtf8().constData(),
 	NULL
     };
-    static const int count = 3;
+    static const int count = 4;
 };
 
 

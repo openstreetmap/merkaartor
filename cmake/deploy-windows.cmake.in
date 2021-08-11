@@ -6,10 +6,11 @@ set(MERKAARTOR_BINARY "${CPACK_TEMPORARY_INSTALL_DIRECTORY}/bin/merkaartor.exe")
 message("Working on binary: ${MERKAARTOR_BINARY}")
 
 # Copy whole packages of gdal and proj, as they need other files than dlls to work!
-execute_process(COMMAND pacman -Qlq mingw-w64-x86_64-gdal mingw-w64-x86_64-proj OUTPUT_VARIABLE DEP_PKGS_FILES OUTPUT_STRIP_TRAILING_WHITESPACE)
+# Also copy openssl directly, as it appears to be preinstalled by github actions in system paths and ignored by the toling below
+execute_process(COMMAND pacman -Qlq mingw-w64-x86_64-openssl mingw-w64-x86_64-gdal mingw-w64-x86_64-proj OUTPUT_VARIABLE DEP_PKGS_FILES OUTPUT_STRIP_TRAILING_WHITESPACE)
 string(REPLACE "\n" ";" DEP_PKGS_FILES_LIST ${DEP_PKGS_FILES})
 foreach(DEP_PKGS_FILE IN LISTS DEP_PKGS_FILES_LIST)
-  if (${DEP_PKGS_FILE} MATCHES "/include/|/man/|/$|.a$|.pc$|.cmake$")
+  if (${DEP_PKGS_FILE} MATCHES "/include/|/man/|/doc/|/$|.a$|.pc$|.cmake$")
     message("skipping file '${DEP_PKGS_FILE}'")
   else()
     string(REGEX REPLACE "^/mingw64/" "" DEP_PKGS_FILE_DEST "${DEP_PKGS_FILE}")
