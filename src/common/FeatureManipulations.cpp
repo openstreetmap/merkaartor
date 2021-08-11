@@ -218,7 +218,9 @@ static void appendPoints(Document* theDocument, CommandList* L, Way* Dest, Way* 
     for (int i=1; i<srclen; ++i) {
         int j = (reverse ? srclen-i : i) - (prepend != reverse ? 1 : 0);
         Node* Pt = Src->getNode(j);
-        L->add(new AddFeatureCommand(layer, Pt, false));
+        if (!Pt->layer() || layer != Pt->layer()) {
+            L->add(new AddFeatureCommand(layer, Pt, false));
+        }
         L->add(new WayAddNodeCommand(Dest, Pt, destpos++, layer));
     }
 }
