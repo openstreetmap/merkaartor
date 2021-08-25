@@ -1431,7 +1431,7 @@ Do you still want to use it?</source>
     <message>
         <location filename="../plugins/background/MGeoTiffBackground/GeoTiffAdapter.cpp" line="232"/>
         <source>Open GeoTIFF files</source>
-        <translation type="unfinished"/>
+        <translation>Открыть GeoTIFF файлы</translation>
     </message>
     <message>
         <location filename="../plugins/background/MGeoTiffBackground/GeoTiffAdapter.cpp" line="259"/>
@@ -2445,7 +2445,7 @@ Initializing...</source>
     <message>
         <location filename="../src/MainWindow.ui" line="849"/>
         <source>&amp;Curved way</source>
-        <translation type="unfinished"/>
+        <translation>Изогнутая линия</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.ui" line="858"/>
@@ -2456,7 +2456,7 @@ Initializing...</source>
         <location filename="../src/MainWindow.ui" line="869"/>
         <location filename="../src/MainWindow.ui" line="877"/>
         <source>&amp;All…</source>
-        <translation type="unfinished"/>
+        <translation>&amp;Всё…</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.ui" line="889"/>
@@ -2467,7 +2467,7 @@ Initializing...</source>
         <location filename="../src/MainWindow.ui" line="903"/>
         <location filename="../src/MainWindow.ui" line="911"/>
         <source>&amp;Viewport…</source>
-        <translation type="unfinished"/>
+        <translation>Содержимое экрана</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.ui" line="919"/>
@@ -2493,18 +2493,18 @@ Initializing...</source>
     <message>
         <location filename="../src/MainWindow.ui" line="1004"/>
         <source>Hide/show property dock</source>
-        <translation type="unfinished"/>
+        <translation>Скрыть/показать панель свойств</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.ui" line="1007"/>
         <source>Hide/Show the property dock</source>
-        <translation type="unfinished"/>
+        <translation>Скрыть/показать панель свойств</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.ui" line="1021"/>
         <location filename="../src/MainWindow.ui" line="1024"/>
         <source>Hide/show layer dock</source>
-        <translation type="unfinished"/>
+        <translation>Скрыть/показать панель слоёв</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.ui" line="1038"/>
@@ -2516,7 +2516,7 @@ Initializing...</source>
         <location filename="../src/MainWindow.ui" line="1091"/>
         <location filename="../src/MainWindow.ui" line="1094"/>
         <source>Hide/show undo dock</source>
-        <translation type="unfinished"/>
+        <translation>Скрыть/показать панель отмены изменений</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.ui" line="1105"/>
@@ -2527,7 +2527,7 @@ Initializing...</source>
         <location filename="../src/MainWindow.ui" line="1163"/>
         <location filename="../src/MainWindow.ui" line="1168"/>
         <source>Selected…</source>
-        <translation type="unfinished"/>
+        <translation>Выбранное…</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.ui" line="1177"/>
@@ -2594,7 +2594,7 @@ Initializing...</source>
         <location filename="../src/MainWindow.ui" line="1333"/>
         <location filename="../src/MainWindow.ui" line="1336"/>
         <source>Hide/show GPS dock</source>
-        <translation type="unfinished"/>
+        <translation>Скрыть/показать панель GPS</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.ui" line="1372"/>
@@ -2635,7 +2635,7 @@ Initializing...</source>
     <message>
         <location filename="../src/MainWindow.ui" line="1500"/>
         <source>&amp;Shortcut editor…</source>
-        <translation type="unfinished"/>
+        <translation>Редактор комбинаций клавиш…</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.ui" line="1516"/>
@@ -2671,7 +2671,7 @@ Initializing...</source>
         <location filename="../src/MainWindow.ui" line="1625"/>
         <location filename="../src/MainWindow.ui" line="1628"/>
         <source>Hide/show style dock</source>
-        <translation type="unfinished"/>
+        <translation>Скрыть/показать панель стилей</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.ui" line="1636"/>
@@ -2741,7 +2741,7 @@ Initializing...</source>
     <message>
         <location filename="../src/MainWindow.ui" line="1822"/>
         <source>Force delete</source>
-        <translation type="unfinished"/>
+        <translation>Принудительно удалить</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.ui" line="1830"/>
@@ -2756,7 +2756,7 @@ Initializing...</source>
     <message>
         <location filename="../src/MainWindow.ui" line="1874"/>
         <source>&amp;Join areas</source>
-        <translation type="unfinished"/>
+        <translation>Объединить области</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.ui" line="1877"/>
@@ -3470,7 +3470,7 @@ Initializing...</source>
         <location filename="../src/Interactions/CreateSingleWayInteraction.cpp" line="301"/>
         <location filename="../src/Interactions/CreateSingleWayInteraction.cpp" line="312"/>
         <source>Create node %1 in way %2</source>
-        <translation type="unfinished"/>
+        <translation>Создать точку %1 на линии %2</translation>
     </message>
     <message>
         <location filename="../src/Interactions/CreateSingleWayInteraction.cpp" line="285"/>
@@ -4490,12 +4490,12 @@ Do you want to do this now?</source>
     <message>
         <location filename="../src/common/TagModel.cpp" line="144"/>
         <source>Set tag &apos;%1=&apos; on %2</source>
-        <translation type="unfinished"/>
+        <translation>Назначить тег &apos;%1=&apos; для %2</translation>
     </message>
     <message>
         <location filename="../src/common/TagModel.cpp" line="175"/>
         <source>Set tag &apos;%1=%2&apos; on %3</source>
-        <translation type="unfinished"/>
+        <translation>Назначить тег &apos;%1=%2&apos; для %3</translation>
     </message>
     <message>
         <location filename="../src/Interactions/BuildBridgeInteraction.cpp" line="36"/>
@@ -5593,7 +5593,7 @@ What do you want to do next?</source>
     <message>
         <location filename="../src/Preferences/PreferencesDialog.ui" line="809"/>
         <source>Tag template</source>
-        <translation type="unfinished"/>
+        <translation>Шаблон тега</translation>
     </message>
     <message>
         <location filename="../src/Preferences/PreferencesDialog.ui" line="945"/>
@@ -5704,7 +5704,7 @@ What do you want to do next?</source>
     <message>
         <location filename="../src/Preferences/PreferencesDialog.ui" line="1436"/>
         <source>Cache folder</source>
-        <translation type="unfinished"/>
+        <translation>Директория кеша</translation>
     </message>
     <message>
         <location filename="../src/Preferences/PreferencesDialog.ui" line="1446"/>
@@ -6240,7 +6240,7 @@ Do you still wish to commit empty changeset comment?</source>
         <location filename="../src/Commands/FeatureCommands.cpp" line="314"/>
         <location filename="../src/Commands/FeatureCommands.cpp" line="400"/>
         <source>Remove tag &apos;%1&apos; from %2</source>
-        <translation type="unfinished"/>
+        <translation>Удалить тег &apos;%1&apos; от %2</translation>
     </message>
     <message>
         <location filename="../plugins/background/MCadastreFranceBackground/qadastre/cadastrewrapper.cpp" line="114"/>

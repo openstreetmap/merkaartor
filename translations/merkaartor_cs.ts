@@ -192,7 +192,7 @@
     <message>
         <location filename="../plugins/background/MCadastreFranceBackground/qadastre/cadastrebrowser.ui" line="91"/>
         <source>Load a city from the cadastre</source>
-        <translation type="unfinished"/>
+        <translation>Nahrát město z CadastreFrance</translation>
     </message>
 </context>
 <context>
@@ -200,22 +200,22 @@
     <message>
         <location filename="../plugins/background/MCadastreFranceBackground/CadastreFrance.cpp" line="132"/>
         <source>Grab City...</source>
-        <translation type="unfinished"/>
+        <translation>Vybrat město...</translation>
     </message>
     <message>
         <location filename="../plugins/background/MCadastreFranceBackground/CadastreFrance.cpp" line="135"/>
         <source>Tiled</source>
-        <translation type="unfinished"/>
+        <translation>Dlaždicové</translation>
     </message>
     <message>
         <location filename="../plugins/background/MCadastreFranceBackground/CadastreFrance.cpp" line="210"/>
         <source>The city cannot be loaded</source>
-        <translation type="unfinished"/>
+        <translation>Město se nepodařilo nahrát</translation>
     </message>
     <message>
         <location filename="../plugins/background/MCadastreFranceBackground/CadastreFrance.cpp" line="210"/>
         <source>Only vectorized cities can be handled by this plugin and the selected one is still in &quot;Image&quot; format.</source>
-        <translation type="unfinished"/>
+        <translation>Tento plugin podporuje pouze vektorová data, zvolený vstup je dostupný pouze v rastrovém formátu.</translation>
     </message>
 </context>
 <context>
@@ -224,18 +224,20 @@
         <location filename="../plugins/background/MCadastreFranceBackground/qadastre/cadastrewrapper.cpp" line="209"/>
         <source>Downloaded: %1/%2
 Remaining time: %3:%4</source>
-        <translation type="unfinished"/>
+        <translation>Staženo: %1/%2
+Zbývající čas: %3:%4</translation>
     </message>
     <message>
         <location filename="../plugins/background/MCadastreFranceBackground/qadastre/cadastrewrapper.cpp" line="211"/>
         <source>Downloaded: %1/%2
 Remaining time: %3:%4:%5</source>
-        <translation type="unfinished"/>
+        <translation>Staženo: %1/%2
+Zbývající čas: %3:%4:%5</translation>
     </message>
     <message>
         <location filename="../plugins/background/MCadastreFranceBackground/qadastre/cadastrewrapper.cpp" line="214"/>
         <source>Downloaded: %1/%2</source>
-        <translation type="unfinished"/>
+        <translation>Staženo: %1/%2</translation>
     </message>
 </context>
 <context>
@@ -1752,17 +1754,17 @@ Is it really what you meant?</source>
     <message>
         <location filename="../src/ImportExport/ImportCSVDialog.ui" line="254"/>
         <source>Field list:</source>
-        <translation type="unfinished"/>
+        <translation>Dostupná pole</translation>
     </message>
     <message>
         <location filename="../src/ImportExport/ImportCSVDialog.ui" line="283"/>
         <source>Field Name (= tag key) :</source>
-        <translation type="unfinished"/>
+        <translation>Jméno klíče (= tag):</translation>
     </message>
     <message>
         <location filename="../src/ImportExport/ImportCSVDialog.ui" line="300"/>
         <source>Field Type:</source>
-        <translation type="unfinished"/>
+        <translation>Typ klíče:</translation>
     </message>
     <message>
         <location filename="../src/ImportExport/ImportCSVDialog.ui" line="310"/>
@@ -1777,12 +1779,12 @@ Is it really what you meant?</source>
     <message>
         <location filename="../src/ImportExport/ImportCSVDialog.ui" line="342"/>
         <source>From (0 from start):</source>
-        <translation type="unfinished"/>
+        <translation>Začátek (0 pro celý soubor):</translation>
     </message>
     <message>
         <location filename="../src/ImportExport/ImportCSVDialog.ui" line="352"/>
         <source>To (0 to End):</source>
-        <translation type="unfinished"/>
+        <translation>Konec (0 pro celý soubor):</translation>
     </message>
     <message>
         <location filename="../src/ImportExport/ImportCSVDialog.ui" line="367"/>
@@ -1797,7 +1799,7 @@ Is it really what you meant?</source>
     <message>
         <location filename="../src/ImportExport/ImportCSVDialog.cpp" line="32"/>
         <source>String</source>
-        <translation type="unfinished"/>
+        <translation>Text</translation>
     </message>
     <message>
         <location filename="../src/ImportExport/ImportCSVDialog.cpp" line="33"/>
@@ -1807,7 +1809,7 @@ Is it really what you meant?</source>
     <message>
         <location filename="../src/ImportExport/ImportCSVDialog.cpp" line="34"/>
         <source>Float</source>
-        <translation type="unfinished"/>
+        <translation>Desetinné číslo</translation>
     </message>
     <message>
         <location filename="../src/ImportExport/ImportCSVDialog.cpp" line="35"/>
@@ -1832,13 +1834,14 @@ Is it really what you meant?</source>
     <message>
         <location filename="../src/ImportExport/ImportCSVDialog.cpp" line="395"/>
         <source>No coordinates</source>
-        <translation type="unfinished"/>
+        <translation>Nenalezeny souřadnice</translation>
     </message>
     <message>
         <location filename="../src/ImportExport/ImportCSVDialog.cpp" line="396"/>
         <source>Latitude or Longitude field missing. It will be impossible to import the file.
 Do you really want to exit?</source>
-        <translation type="unfinished"/>
+        <translation>Pole pro zeměpisnou šířku a délku (Latitude a Longitude) chybí. Soubor není možné importovat.
+Ukončit import?</translation>
     </message>
     <message>
         <location filename="../src/ImportExport/ImportCSVDialog.cpp" line="433"/>
@@ -1908,7 +1911,7 @@ Do you really want to exit?</source>
         <location filename="../src/ImportExport/ImportGPX.cpp" line="173"/>
         <source>Anonymized trackpoints</source>
         <comment>OSM trackpoints import</comment>
-        <translation type="unfinished"/>
+        <translation>Anonymizovat body</translation>
     </message>
 </context>
 <context>
@@ -1930,7 +1933,7 @@ Do you really want to exit?</source>
     <message>
         <location filename="../src/Layers/Layer.cpp" line="416"/>
         <source>%n features</source>
-        <translation type="unfinished"/>
+        <translation>%n objektů</translation>
     </message>
     <message>
         <location filename="../src/Layers/Layer.cpp" line="433"/>
@@ -1955,12 +1958,12 @@ Do you really want to exit?</source>
     <message>
         <location filename="../src/Docks/LayerDock.cpp" line="255"/>
         <source>Readonly All</source>
-        <translation>Vše pouze pro čtení</translation>
+        <translation>Pouze pro čtení: vše</translation>
     </message>
     <message>
         <location filename="../src/Docks/LayerDock.cpp" line="260"/>
         <source>Readonly None</source>
-        <translation type="unfinished"/>
+        <translation>Pouze pro čtení: nic</translation>
     </message>
     <message>
         <location filename="../src/Docks/LayerDock.cpp" line="267"/>
@@ -1990,12 +1993,12 @@ Do you really want to exit?</source>
     <message>
         <location filename="../src/Docks/LayerDock.cpp" line="404"/>
         <source>Tracks</source>
-        <translation>Tratě</translation>
+        <translation>Trasy</translation>
     </message>
     <message>
         <location filename="../src/Docks/LayerDock.cpp" line="491"/>
         <source>Reset Layers to default</source>
-        <translation type="unfinished"/>
+        <translation>Výchozí nastavení vrstev</translation>
     </message>
 </context>
 <context>
@@ -2038,13 +2041,14 @@ Do you really want to exit?</source>
     <message>
         <location filename="../src/Layers/LayerWidget.cpp" line="215"/>
         <source>Layer CLose: Dirty objects present</source>
-        <translation type="unfinished"/>
+        <translation>Zavřít vrstvu: nalezeny objekty s neuloženými změnami</translation>
     </message>
     <message>
         <location filename="../src/Layers/LayerWidget.cpp" line="216"/>
         <source>There are dirty features on this layer.
 Are you sure you want to close it? (no Undo possible)</source>
-        <translation type="unfinished"/>
+        <translation>Tato vrstva obsahuje neuložené změny.
+Opravu ji chcete zavřít? (tuto operaci nelze vzít zpět)</translation>
     </message>
     <message>
         <location filename="../src/Layers/LayerWidget.cpp" line="221"/>

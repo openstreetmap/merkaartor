@@ -1413,7 +1413,7 @@ Do you still want to use it?</source>
     <message>
         <location filename="../plugins/background/MGeoTiffBackground/GeoTiffAdapter.cpp" line="67"/>
         <source>Load image(s)...</source>
-        <translation type="unfinished"/>
+        <translation>Lataa kuva...</translation>
     </message>
     <message>
         <location filename="../plugins/background/MGeoTiffBackground/GeoTiffAdapter.cpp" line="70"/>
@@ -2453,7 +2453,7 @@ Käynnistetään…</translation>
     <message>
         <location filename="../src/MainWindow.ui" line="889"/>
         <source>&amp;Find…</source>
-        <translation type="unfinished"/>
+        <translation>&amp;Etsi…</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.ui" line="903"/>
@@ -4755,7 +4755,7 @@ Haluatko tehdä tämän nyt?</translation>
         <location filename="../src/Preferences/WmsServersList.cpp" line="20"/>
         <location filename="../src/Preferences/WmsServersList.cpp" line="40"/>
         <source>New Server</source>
-        <translation type="unfinished"/>
+        <translation>Uusi palvelin</translation>
     </message>
 </context>
 <context>
@@ -4763,7 +4763,7 @@ Haluatko tehdä tämän nyt?</translation>
     <message>
         <location filename="../plugins/background/MMsBingMapBackground/msbingmapadapter.cpp" line="243"/>
         <source>Terms of Use</source>
-        <translation type="unfinished"/>
+        <translation>Käyttöehdot</translation>
     </message>
 </context>
 <context>
@@ -4776,7 +4776,7 @@ Haluatko tehdä tämän nyt?</translation>
     <message>
         <location filename="../src/common/MultiProperties.ui" line="33"/>
         <source>Tags</source>
-        <translation type="unfinished"/>
+        <translation>Tagit</translation>
     </message>
     <message>
         <location filename="../src/common/MultiProperties.ui" line="53"/>
@@ -5298,7 +5298,7 @@ What do you want to do next?</source>
     <message>
         <location filename="../src/Preferences/PreferencesDialog.ui" line="34"/>
         <source>General</source>
-        <translation type="unfinished"/>
+        <translation>Yleinen</translation>
     </message>
     <message>
         <location filename="../src/Preferences/PreferencesDialog.ui" line="66"/>
