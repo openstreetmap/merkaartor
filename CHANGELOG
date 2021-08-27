@@ -7,6 +7,10 @@ v0.19.0
     * CHG: Added support for newer Proj.4 versions.
     * CHG: Improved logging output.
     * CHG: Added support for gpsd 3.20 and newer
+    * CHG: Automated translation handling not to include less than 50% translated languages (PR #250).
+    * FIX: Fixed undo for join ways interaction (PR #239).
+    * FIX: Disabled virtual node selection to avoid crash when applying interactions to virtual nodes. (PR #254, original issue described in PR #240).
+    * FIX: Fixed undo for build bridge too.
 
 v0.18.4
     * FIX: Fixed "Create rectangular building" when panning (issue 125).
