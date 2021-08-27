@@ -22,8 +22,12 @@ foreach(DEP_PKGS_FILE IN LISTS DEP_PKGS_FILES_LIST)
   endif()
 endforeach()
 
+message("Running windeployqt:")
 # Run Windeployqt to handle Qt libraries, including plugins
-execute_process(COMMAND ${WINDEPLOYQT} --compiler-runtime ${MERKAARTOR_BINARY})
+execute_process(COMMAND ${WINDEPLOYQT} --compiler-runtime ${MERKAARTOR_BINARY} RESULT_VARIABLE WINDEPLOYQT_RESULT)
+if ( NOT (${WINDEPLOYQT_RESULT} EQUAL "0") )
+    message(FATAL_ERROR "Windeployqt failed with result: ${WINDEPLOYQT_RESULT}.")
+endif()
 
 # Copy all required dlls into the package, skipping those residing in Windows installation
 execute_process(COMMAND ${CYGCHECK} ${MERKAARTOR_BINARY} OUTPUT_VARIABLE MERKAARTOR_DLL_DEPS OUTPUT_STRIP_TRAILING_WHITESPACE)
