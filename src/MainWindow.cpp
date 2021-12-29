@@ -2126,7 +2126,7 @@ void MainWindow::on_helpAboutAction_triggered()
     About.Version->setText(About.Version->text().arg(STRINGIFY(REVISION)));
     About.QTVersion->setText(About.QTVersion->text().arg(qVersion()).arg(QT_VERSION_STR));
     PJ_INFO projVer = proj_info();
-    About.ProjVersion->setText(About.ProjVersion->text().arg(QString("%1.%2.%3").arg(projVer.major).arg(projVer.minor).arg(projVer.patch)));
+    About.Proj4Version->setText(About.Proj4Version->text().arg(QString("%1.%2.%3").arg(projVer.major).arg(projVer.minor).arg(projVer.patch)));
     About.GdalVersion->setText(About.GdalVersion->text().arg(GDAL_RELEASE_NAME));
 
     QFile ct(":/Utils/CHANGELOG");
