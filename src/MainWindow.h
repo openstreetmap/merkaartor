@@ -263,6 +263,7 @@ public:
     void loadUrl(const QUrl& u);
     void loadDocument(QString fn);
     void loadTemplateDocument(QString fn);
+    void addTags(Feature* F,QString* addtagsstring,bool makeTagCommands);
     void saveDocument(const QString& fn);
     void saveTemplateDocument(const QString& fn);
     void downloadFeatures(const QList<Feature*>& aDownloadList);
