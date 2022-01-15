@@ -214,7 +214,7 @@ int main(int argc, char** argv)
 
     /* Load plugins; this handles different OS habits. */
 #if defined(Q_OS_WIN32)
-    QDir pluginsDir = QDir(qApp->applicationDirPath() + "/" + STRINGIFY(PLUGINS_DIR));
+    QDir pluginsDir = QDir(qApp->applicationDirPath() + "/../lib/merkaartor/plugins");
 #elif defined(Q_OS_MAC)
     QDir pluginsDir = QDir(qApp->applicationDirPath());
     pluginsDir.cdUp();
