@@ -513,7 +513,7 @@ void ImportCSVDialog::on_btSave_clicked()
 
     QDomElement root = theXmlDoc.createElement("CSVImportSettings");
     theXmlDoc.appendChild(root);
-    root.setAttribute("creator", QString("%1 v%2%3").arg(qApp->applicationName()).arg(STRINGIFY(VERSION)).arg(STRINGIFY(REVISION)));
+    root.setAttribute("creator", QString("%1 v%2%3").arg(qApp->applicationName()).arg(BuildMetadata::VERSION).arg(BuildMetadata::REVISION));
 
     QString tDelim = m_delim;
     if (tDelim == "\t")

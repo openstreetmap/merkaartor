@@ -284,7 +284,7 @@ void MerkaartorPreferences::save(bool UserPwdChanged)
     if (g_Merk_Ignore_Preferences || !saveOnline)
         return;
 
-    Sets->setValue("version/version", QString("%1").arg(STRINGIFY(VERSION)));
+    Sets->setValue("version/version", QString("%1").arg(BuildMetadata::VERSION));
     setTools();
     setAlphaList();
 
@@ -1368,7 +1368,7 @@ QStringList getPreferenceDirectories() {
         directories << resources.absolutePath();
     }
 #else
-    directories << QString(SHAREDIR);
+    directories << QString(BuildMetadata::GetShareDir());
 #endif
     directories << ":";
     return directories;
@@ -1525,7 +1525,7 @@ void MerkaartorPreferences::loadWMSes()
     loadWMSesFromFile(HOMEDIR + "/WmsServersList.xml");
     // TODO: Why is the Q_OS_MAC override in getPreferenceDirectories()
     // missing here? Is that a bug, or an intention?
-    loadWMSesFromFile(QString(SHAREDIR) + "/WmsServersList.xml");
+    loadWMSesFromFile(QString(BuildMetadata::GetShareDir()) + "/WmsServersList.xml");
     loadWMSesFromFile(":/WmsServersList.xml");
 }
 
@@ -1578,7 +1578,7 @@ void MerkaartorPreferences::loadTMSes()
     loadTMSesFromFile(HOMEDIR + "/TmsServersList.xml");
     // TODO: Why is the Q_OS_MAC override in getPreferenceDirectories()
     // missing here? Is that a bug, or an intention?
-    loadTMSesFromFile(QString(SHAREDIR) + "/TmsServersList.xml");
+    loadTMSesFromFile(QString(BuildMetadata::GetShareDir()) + "/TmsServersList.xml");
     loadTMSesFromFile(":/TmsServersList.xml");
 }
 
@@ -1631,7 +1631,7 @@ void MerkaartorPreferences::loadBookmarks()
     loadBookmarksFromFile(HOMEDIR + "/BookmarksList.xml");
     // TODO: Why is the Q_OS_MAC override in getPreferenceDirectories()
     // missing here? Is that a bug, or an intention?
-    loadBookmarksFromFile(QString(SHAREDIR) + "/BookmarksList.xml");
+    loadBookmarksFromFile(QString(BuildMetadata::GetShareDir()) + "/BookmarksList.xml");
     loadBookmarksFromFile(":/BookmarksList.xml");
 }
 

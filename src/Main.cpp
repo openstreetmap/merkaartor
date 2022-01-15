@@ -12,6 +12,7 @@
 #include "proj.h"
 #include "gdal_version.h"
 #include "Global.h"
+#include "build-metadata.hpp"
 
 #include "IMapAdapterFactory.h"
 
@@ -22,7 +23,7 @@ FILE* pLogFile = NULL;
 void showVersion()
 {
     QString o;
-    o = QString("%1 %2\n").arg(STRINGIFY(PRODUCT)).arg(STRINGIFY(REVISION));
+    o = QString("%1 %2\n").arg(BuildMetadata::PRODUCT).arg(BuildMetadata::REVISION);
     fprintf(stdout, "%s", o.toLatin1().data());
     o = QString("using Qt version %1 (built with %2)\n").arg(qVersion()).arg(QT_VERSION_STR);
     fprintf(stdout, "%s", o.toLatin1().data());
@@ -153,7 +154,7 @@ int main(int argc, char** argv)
         qInstallMessageHandler(debugMessageHandler);
     }
 
-    qInfo(lc_Main) << "**** " << QDateTime::currentDateTime().toString(Qt::ISODate) << " -- Starting " << QString("%1 %2").arg(qApp->applicationName()).arg(STRINGIFY(VERSION));
+    qInfo(lc_Main) << "**** " << QDateTime::currentDateTime().toString(Qt::ISODate) << " -- Starting " << QString("%1 %2").arg(qApp->applicationName()).arg(BuildMetadata::VERSION);
     qInfo(lc_Main) <<	"-------" << QString("using Qt version %1 (built with %2)").arg(qVersion()).arg(QT_VERSION_STR);
     PJ_INFO projVer = proj_info();
     qInfo(lc_Main) <<	"-------" << QString("using PROJ version %1.%2.%3").arg(projVer.major).arg(projVer.minor).arg(projVer.patch);
@@ -189,7 +190,7 @@ int main(int argc, char** argv)
     splash.show();
     instance.processEvents();
 
-    splash.showMessage(QString(instance.translate("Main", "%1 v%2\nLoading plugins...")).arg(qApp->applicationName()).arg(STRINGIFY(REVISION)), Qt::AlignBottom | Qt::AlignHCenter, Qt::black);
+    splash.showMessage(QString(instance.translate("Main", "%1 v%2\nLoading plugins...")).arg(qApp->applicationName()).arg(BuildMetadata::REVISION), Qt::AlignBottom | Qt::AlignHCenter, Qt::black);
     instance.processEvents();
 
     /* Create configuration directory for non-portable build. */
@@ -214,7 +215,7 @@ int main(int argc, char** argv)
 
     /* Load plugins; this handles different OS habits. */
 #if defined(Q_OS_WIN32)
-    QDir pluginsDir = QDir(qApp->applicationDirPath() + "/" + STRINGIFY(PLUGINS_DIR));
+    QDir pluginsDir = QDir(qApp->applicationDirPath() + "/");
 #elif defined(Q_OS_MAC)
     QDir pluginsDir = QDir(qApp->applicationDirPath());
     pluginsDir.cdUp();
@@ -225,8 +226,9 @@ int main(int argc, char** argv)
 
     /* Try directory with the application first. */
     QDir pluginsDir = qApp->applicationDirPath() + "/plugins";
-    if (!pluginsDir.exists())
-        pluginsDir = QDir(STRINGIFY(PLUGINS_DIR));
+    if (!pluginsDir.exists()) {
+        pluginsDir = QDir(BuildMetadata::GetLibDir() + "/plugins");
+    }
 #endif
 
     QCoreApplication::addLibraryPath(pluginsDir.path());
@@ -235,7 +237,7 @@ int main(int argc, char** argv)
     pluginsDir.cd("background");
     loadPluginsFromDir(pluginsDir);
 
-    splash.showMessage(QString(instance.translate("Main", "%1 v%2\nInitializing...")).arg(qApp->applicationName()).arg(STRINGIFY(REVISION)), Qt::AlignBottom | Qt::AlignHCenter, Qt::black);
+    splash.showMessage(QString(instance.translate("Main", "%1 v%2\nInitializing...")).arg(qApp->applicationName()).arg(BuildMetadata::REVISION), Qt::AlignBottom | Qt::AlignHCenter, Qt::black);
     instance.processEvents();
 
 //    QFatFsHandler* fatHandler = new QFatFsHandler(50000, 8192);
@@ -288,7 +290,7 @@ int main(int argc, char** argv)
         x = 255;
     }
 
-    qDebug(lc_Main) << "**** " << QDateTime::currentDateTime().toString(Qt::ISODate) << " -- Ending " << QString("%1 %2").arg(qApp->applicationName()).arg(STRINGIFY(VERSION));
+    qDebug(lc_Main) << "**** " << QDateTime::currentDateTime().toString(Qt::ISODate) << " -- Ending " << QString("%1 %2").arg(qApp->applicationName()).arg(BuildMetadata::VERSION);
     if(pLogFile) {
         fclose(pLogFile);
         pLogFile = NULL;

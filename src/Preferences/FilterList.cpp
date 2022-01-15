@@ -11,9 +11,7 @@
 //
 
 #include "FilterList.h"
-
-#define STRINGIFY(x) XSTRINGIFY(x)
-#define XSTRINGIFY(x) #x
+#include "build-metadata.hpp"
 
 FilterItem::FilterItem ()
     : name(""), filter(""), deleted(false)
@@ -98,7 +96,7 @@ void FiltersList::toXml(QDomElement parent)
 {
     QDomElement rt = parent.ownerDocument().createElement("Filters");
     parent.appendChild(rt);
-    rt.setAttribute("creator", QString("%1 v%2%3").arg(STRINGIFY(PRODUCT)).arg(STRINGIFY(VERSION)).arg(STRINGIFY(REVISION)));
+    rt.setAttribute("creator", QString("%1 v%2%3").arg(BuildMetadata::PRODUCT).arg(BuildMetadata::VERSION).arg(BuildMetadata::REVISION));
 
     QMapIterator <QString, FilterItem> it(theFilters);
     while (it.hasNext()) {

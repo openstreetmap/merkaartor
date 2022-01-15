@@ -504,7 +504,7 @@ bool DrawingLayer::toXML(QXmlStreamWriter& stream, bool asTemplate, QProgressDia
     if (!asTemplate) {
         stream.writeStartElement("osm");
         stream.writeAttribute("version", "0.6");
-        stream.writeAttribute("generator", QString("%1 %2").arg(STRINGIFY(PRODUCT)).arg(STRINGIFY(VERSION)));
+        stream.writeAttribute("generator", QString("%1 %2").arg(BuildMetadata::PRODUCT).arg(BuildMetadata::VERSION));
 
         if (p->Features.size()) {
             stream.writeStartElement("bound");

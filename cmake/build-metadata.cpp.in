@@ -1,0 +1,30 @@
+#include <QApplication>
+#include "build-metadata.hpp"
+
+char const * const BuildMetadata::VERSION = "@PROJECT_VERSION@";
+char const * const BuildMetadata::REVISION = "@VCS_DESCRIBE@";
+char const * const BuildMetadata::PRODUCT = "Merkaartor";
+
+char const * const BuildMetadata::SHARE_DIR = "@SHARE_DIR@";
+char const * const BuildMetadata::LIB_DIR = "@LIB_DIR@";
+
+QString BuildMetadata::GetShareDir() {
+#if Q_OS_WIN
+    return QCoreApplication::applicationDirPath() + "../" + SHARE_DIR;
+#else
+    return SHARE_DIR;
+#endif
+}
+
+QString BuildMetadata::GetLibDir() {
+#if Q_OS_WIN
+    return QCoreApplication::applicationDirPath() + "../" + LIB_DIR;
+#else
+    return LIB_DIR;
+#endif
+}
+
+const int BuildMetadata::VERSION_MAJOR = @PROJECT_VERSION_MAJOR@;
+const int BuildMetadata::VERSION_MINOR = @PROJECT_VERSION_MINOR@;
+const int BuildMetadata::VERSION_PATCH = @PROJECT_VERSION_PATCH@;
+const int BuildMetadata::VERSION_BUILD = @PROJECT_VERSION_TWEAK@;
