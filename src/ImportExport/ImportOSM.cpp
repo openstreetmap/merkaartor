@@ -541,9 +541,9 @@ bool importOSM(QWidget* aParent, QIODevice& File, Document* theDocument, Layer* 
         }
 
         if (EmptyFeature.size()) {
-            if (QMessageBox::warning(aParent,QApplication::translate("Downloader","Empty roads/relations detected"),
+            if (QMessageBox::warning(aParent,QApplication::translate("Downloader","Empty ways/relations detected"),
                     QApplication::translate("Downloader",
-                    "Empty roads/relations are probably errors.\n"
+                    "Empty ways/relations are probably errors.\n"
                     "Do you want to mark them for deletion?"),
                     QMessageBox::Ok | QMessageBox::Cancel,
                     QMessageBox::Cancel
