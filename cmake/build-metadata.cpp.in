@@ -9,16 +9,16 @@ char const * const BuildMetadata::SHARE_DIR = "@SHARE_DIR@";
 char const * const BuildMetadata::LIB_DIR = "@LIB_DIR@";
 
 QString BuildMetadata::GetShareDir() {
-#if Q_OS_WIN
-    return QCoreApplication::applicationDirPath() + "../" + SHARE_DIR;
+#if defined(Q_OS_WIN)
+    return QCoreApplication::applicationDirPath() + "/../" + SHARE_DIR;
 #else
     return SHARE_DIR;
 #endif
 }
 
 QString BuildMetadata::GetLibDir() {
-#if Q_OS_WIN
-    return QCoreApplication::applicationDirPath() + "../" + LIB_DIR;
+#if defined(Q_OS_WIN)
+    return QCoreApplication::applicationDirPath() + "/../" + LIB_DIR;
 #else
     return LIB_DIR;
 #endif
