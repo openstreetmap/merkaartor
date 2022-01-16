@@ -131,7 +131,7 @@ class MainWindowPrivate
     #endif
             , numImages(0)
         {
-            title = QString("%1 v%2").arg(STRINGIFY(PRODUCT)).arg(STRINGIFY(REVISION));
+            title = QString("%1 v%2").arg(BuildMetadata::PRODUCT).arg(BuildMetadata::REVISION);
         }
 
         QString FILTER_OPEN_NATIVE;
@@ -2123,7 +2123,7 @@ void MainWindow::on_helpAboutAction_triggered()
     About.setupUi(&dlg);
     dlg.setWindowFlags(dlg.windowFlags() & ~Qt::WindowContextHelpButtonHint);
     dlg.setWindowFlags(dlg.windowFlags() | Qt::MSWindowsFixedSizeDialogHint);
-    About.Version->setText(About.Version->text().arg(STRINGIFY(REVISION)));
+    About.Version->setText(About.Version->text().arg(BuildMetadata::REVISION));
     About.QTVersion->setText(About.QTVersion->text().arg(qVersion()).arg(QT_VERSION_STR));
     PJ_INFO projVer = proj_info();
     About.ProjVersion->setText(About.ProjVersion->text().arg(QString("%1.%2.%3").arg(projVer.major).arg(projVer.minor).arg(projVer.patch)));
@@ -4182,8 +4182,7 @@ QString MainWindow::makeAbsolute(const QString& path) {
 QStringList MainWindow::translationPaths() {
     QStringList paths;
     /* Try the macros first, as they are defined by the user. */
-    paths << makeAbsolute(STRINGIFY(TRANSDIR_SYSTEM));
-    paths << makeAbsolute(STRINGIFY(TRANSDIR_MERKAARTOR));
+    paths << makeAbsolute(BuildMetadata::GetShareDir() + "/translations");
     paths << QCoreApplication::applicationDirPath();
     paths << QCoreApplication::applicationDirPath() + "/translations";
 #if defined(Q_OS_MAC)

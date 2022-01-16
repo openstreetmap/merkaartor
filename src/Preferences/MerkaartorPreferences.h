@@ -37,6 +37,8 @@
 
 #include "IRenderer.h"
 
+#include "build-metadata.hpp"
+
 class MainWindow;
 class MapView;
 class IMapAdapterFactory;
@@ -55,7 +57,7 @@ class IPaintStyle;
 #endif
 #endif
 #endif
-#define USER_AGENT (QString("%1/%2 (%4)").arg(qApp->applicationName()).arg(STRINGIFY(REVISION))).arg(PLATFORM)
+#define USER_AGENT (QString("%1/%2 (%4)").arg(qApp->applicationName()).arg(BuildMetadata::REVISION)).arg(PLATFORM)
 
 #define WORLD_COORDBOX CoordBox(Coord(-COORD_MAX*.80, COORD_MAX*.80/2), Coord(COORD_MAX*.80, -COORD_MAX*.80/2))
 #define BUILTIN_STYLES_DIR ":/Styles"
@@ -70,7 +72,6 @@ class IPaintStyle;
 #else
 #define HOMEDIR (g_Merk_Portable ? qApp->applicationDirPath() : QDir::homePath() + "/.merkaartor")
 #endif
-#define SHAREDIR (g_Merk_Portable ? qApp->applicationDirPath() : STRINGIFY(SHARE_DIR))
 #define TEMPLATE_DOCUMENT (HOMEDIR + "/Startup.mdc")
 
 #define M_PARAM_DECLARE_BOOL(Param) \
@@ -118,8 +119,6 @@ class IPaintStyle;
         QColor get##Param();
 
 #define SAFE_DELETE(x) {delete (x); x = NULL;}
-#define STRINGIFY(x) XSTRINGIFY(x)
-#define XSTRINGIFY(x) #x
 
 /**
     @author cbro <cbro@semperpax.com>

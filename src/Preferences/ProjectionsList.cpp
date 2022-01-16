@@ -13,9 +13,8 @@
 
 #include "ProjectionsList.h"
 #include "MerkaartorPreferences.h"
+#include "build-metadata.hpp"
 
-#define STRINGIFY(x) XSTRINGIFY(x)
-#define XSTRINGIFY(x) #x
 
 ProjectionItem::ProjectionItem ()
     : name(""), projection(""), deleted(false)
@@ -126,7 +125,7 @@ void ProjectionsList::toXml(QDomElement parent)
 {
     QDomElement rt = parent.ownerDocument().createElement("Projections");
     parent.appendChild(rt);
-    rt.setAttribute("creator", QString("%1 v%2%3").arg(STRINGIFY(PRODUCT)).arg(STRINGIFY(VERSION)).arg(STRINGIFY(REVISION)));
+    rt.setAttribute("creator", QString("%1 v%2%3").arg(BuildMetadata::PRODUCT).arg(BuildMetadata::VERSION).arg(BuildMetadata::REVISION));
 
     QMapIterator <QString, ProjectionItem> it(theProjections);
     while (it.hasNext()) {

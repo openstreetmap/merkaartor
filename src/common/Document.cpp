@@ -612,7 +612,7 @@ void Document::exportOSM(QWidget* main, QIODevice* device, QList<Feature*> aFeat
 
     stream.writeStartElement("osm");
     stream.writeAttribute("version", "0.6");
-    stream.writeAttribute("generator", QString("%1 %2").arg(qApp->applicationName()).arg(STRINGIFY(VERSION)));
+    stream.writeAttribute("generator", QString("%1 %2").arg(qApp->applicationName()).arg(BuildMetadata::VERSION));
 
     CoordBox aCoordBox = aFeatures[0]->boundingBox(true);
     aFeatures[0]->toXML(stream, dlg);

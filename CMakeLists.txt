@@ -21,10 +21,9 @@ project(merkaartor VERSION ${VCS_VERSION})
 # compatibility.
 # Using configure_file() allows us to store the metadata in a .cpp file, thus
 # only rebuilding that one and linking.
-add_definitions(-DVERSION=${PROJECT_VERSION} -DREVISION=${VCS_DESCRIBE})
-add_definitions(-DPRODUCT=Merkaartor)
-add_definitions(-DSHARE_DIR=${CMAKE_INSTALL_PREFIX}/share/merkaartor)
-add_definitions(-DTRANSDIR_MERKAARTOR=${CMAKE_INSTALL_PREFIX}/share/merkaartor)
+set(SHARE_DIR ${CMAKE_INSTALL_PREFIX}/share/merkaartor)
+set(LIB_DIR   ${CMAKE_INSTALL_PREFIX}/lib/merkaartor)
+configure_file("${PROJECT_SOURCE_DIR}/cmake/build-metadata.cpp.in" "${PROJECT_BINARY_DIR}/build-metadata.cpp" @ONLY)
 
 enable_testing()
 
@@ -81,6 +80,7 @@ endif()
 
 # Populate a CMake variable with the sources
 set(merkaartor_SRCS
+${PROJECT_BINARY_DIR}/build-metadata.cpp
 ${merkaartor_SRCS_PLATFORM}
 src/Backend/MemoryBackend.cpp
 src/Backend/MemoryBackend.h
@@ -395,7 +395,6 @@ interfaces/IMapWatermark.h
 interfaces/IImageManager.cpp
 interfaces/IRenderer.h
 interfaces/IDocument.h
-interfaces/Interfaces.pri
 interfaces/IBackend.h
 interfaces/IMapAdapter.h
 3rdparty/qtsingleapplication-2.6_1-opensource/src/qtlockedfile.cpp

@@ -115,7 +115,7 @@ QByteArray DirtyListExecutorOSC::getChanges()
 
     OscStream.writeStartElement("osmChange ");
     OscStream.writeAttribute("version", "0.6");
-    OscStream.writeAttribute("generator", QString("Merkaartor %1").arg(STRINGIFY(VERSION)));
+    OscStream.writeAttribute("generator", QString("Merkaartor %1").arg(BuildMetadata::VERSION));
 
     runVisit();
 
@@ -161,7 +161,7 @@ bool DirtyListExecutorOSC::executeChanges(QWidget* aParent)
 
         OscStream.writeStartElement("osmChange ");
         OscStream.writeAttribute("version", "0.6");
-        OscStream.writeAttribute("generator", QString("Merkaartor %1").arg(STRINGIFY(VERSION)));
+        OscStream.writeAttribute("generator", QString("Merkaartor %1").arg(BuildMetadata::VERSION));
 
         Lbl->setText(QApplication::translate("Downloader","Preparing changes"));
         if ((ok = runVisit())) {
@@ -191,7 +191,7 @@ bool DirtyListExecutorOSC::start()
         "<tag k=\"comment\" v=\"%3\"/>"
         "</changeset>"
         "</osm>");
-    DataIn = DataIn.arg(STRINGIFY(VERSION)).arg(QLocale::system().name().split("_")[0]).arg(Utils::encodeAttributes(glbChangeSetComment));
+    DataIn = DataIn.arg(BuildMetadata::VERSION).arg(QLocale::system().name().split("_")[0]).arg(Utils::encodeAttributes(glbChangeSetComment));
     QString DataOut;
     QString URL = theDownloader->getURLToOpenChangeSet();
     if (sendRequest("PUT",URL,DataIn, DataOut) != 200)

@@ -150,46 +150,7 @@ cmake .. -DGPSD=ON
 
 ### Run qmake
 
-Note: qmake support is deprecatd and will be removed in the next release. Please use cmake instructions above whenever possible.
-
-```
-$ qmake -r
-```
-
-Note that you need the Qt4 or Qt5 version of qmake - running the Qt3 version
-will generate incorrect makefiles.  If both are installed, take care to run the
-correct version.  For example, on Fedora/Debian run
-
-```
-$ qmake-qt4
-```
-
-and on (K)ubuntu run
-
-```
-$ /usr/share/qt4/bin/qmake
-```
-
-There are some parameters you can pass to qmake to customize build:
-
-| Parameter | Meaning |
-| --- | ---
-| PREFIX=<path>               | base prefix for installation (unix only) |
-| TRANSDIR_MERKAARTOR=<path>  | where will the Merkaartor translations be installed |
-| TRANSDIR_SYSTEM=<path>      | where your global Qt translation directory is | 
-| NODEBUG=1                   | release target |
-| USEWEBENGINE=1              | enable use of WebEngine (required for some external plugins) |
-| SYSTEM_QTSA                 | use system copy of qtsingleapplication instead of internal |
-
-
-### Run make
-
-On Windows:           $ make release
-On other platforms:   $ make
-Debug build:          $ make debug
-
-On most Windows installations, debug is the default and we need to specify
-the release manually. Sorry about that.
+No longer supported.
 
 ### Done!
 
