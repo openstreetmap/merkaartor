@@ -28,7 +28,7 @@ public:
     virtual void setFlowControl(FlowType);
     virtual void setTimeout(ulong, ulong);
 
-    virtual bool open(OpenMode mode=0);
+    virtual bool open(OpenMode mode = QIODeviceBase::NotOpen );
     virtual void close();
     virtual void flush();
 
