@@ -139,7 +139,7 @@ WmsServer WmsServer::fromXml(QDomElement parent)
             QDomElement r = wmscElem.firstChildElement("Resolutions");
             if (!r.isNull()) {
                 QStringList resL;
-                resL = r.firstChild().toText().nodeValue().split(" ", QString::SkipEmptyParts);
+                resL = r.firstChild().toText().nodeValue().split(" ", Qt::SkipEmptyParts);
                 foreach(QString res, resL)
                     theServer.WmsCLayer.Resolutions << res.toDouble();
             }

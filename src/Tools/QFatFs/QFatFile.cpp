@@ -18,7 +18,7 @@ void QFatFile::setFilename(const QString &filename)
     if (filename.length() == 0)
         return;
 
-    QStringList tokens = filename.split("/", QString::SkipEmptyParts);
+    QStringList tokens = filename.split("/", Qt::SkipEmptyParts);
     m_name = tokens.takeLast();
     m_path = tokens.join("/");
 }

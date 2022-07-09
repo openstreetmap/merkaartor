@@ -489,7 +489,7 @@ void MainWindow::delayedInit()
 
 void MainWindow::handleMessage(const QString &msg)
 {
-    QStringList args = msg.split("$", QString::SkipEmptyParts);
+    QStringList args = msg.split("$", Qt::SkipEmptyParts);
     QStringList fileNames;
     for (int i=0; i < args.size(); ++i) {
         if (args[i] == "-l" || args[i] == "--log") {

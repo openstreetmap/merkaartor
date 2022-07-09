@@ -63,7 +63,7 @@ void RemoteControlConnection::readyRead() {
     if ( m_socket->canReadLine() ) {
         qDebug() << "RemoteControlConnection: canReadLine.";
         QString ln = m_socket->readLine();
-        QStringList tokens = ln.split( QRegExp("[ \r\n][ \r\n]*"), QString::SkipEmptyParts );
+        QStringList tokens = ln.split( QRegExp("[ \r\n][ \r\n]*"), Qt::SkipEmptyParts );
         if ( tokens[0] == "GET" ) {
             m_responseStream << "HTTP/1.1 200 OK\r\n";
             m_responseStream << "Date: " << date_time_rfc7231() << "\r\n";

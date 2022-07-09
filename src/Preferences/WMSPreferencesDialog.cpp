@@ -557,7 +557,7 @@ void WMSPreferencesDialog::parseTileSet(QDomElement &tilesetElem, WmscLayer &aLa
             aLayer.BoundingBox = QRectF(tl, br);
         } else if (elem.tagName() == "Resolutions") {
             QStringList resL;
-            resL = elem.firstChild().nodeValue().split(" ", QString::SkipEmptyParts);
+            resL = elem.firstChild().nodeValue().split(" ", Qt::SkipEmptyParts);
             foreach(QString res, resL)
                 aLayer.Resolutions << res.toDouble();
         } else if (elem.tagName() == "Width") {

@@ -263,7 +263,7 @@ FatError QFat::setCurrentTocs(const QString &path)
     FatTocEntries curTocs = m_rootToc;
     FAT_FAT_TYPE curTocCluster = 0;
 
-    QStringList levels = path.split("/", QString::SkipEmptyParts);
+    QStringList levels = path.split("/", Qt::SkipEmptyParts);
 
     bool found = false;
     for (int i=0; i<levels.size(); ++i) {
@@ -299,7 +299,7 @@ FatError QFat::getToc(const QString &filename, FatTocEntry& toc)
     if (filename.isEmpty())
         return FatFileNotFound;
 
-    QStringList levels = filename.split("/", QString::SkipEmptyParts);
+    QStringList levels = filename.split("/", Qt::SkipEmptyParts);
     QString name = levels.takeLast();
     QString path = levels.join("/");
 
@@ -329,7 +329,7 @@ FatError QFat::getTocEntries(const QString &reqpath, FatTocEntries& tocs)
     if (reqpath.isEmpty() || reqpath == "/") {
         tocs = m_rootToc;
     } else {
-        QStringList levels = reqpath.split("/", QString::SkipEmptyParts);
+        QStringList levels = reqpath.split("/", Qt::SkipEmptyParts);
         QString name = levels.takeLast();
         QString path = levels.join("/");
 
@@ -347,7 +347,7 @@ FatError QFat::getTocEntries(const QString &reqpath, FatTocEntries& tocs)
 
 FatError QFat::addToc(const QString &filename, const FatTocEntry &toc)
 {
-    QStringList levels = filename.split("/", QString::SkipEmptyParts);
+    QStringList levels = filename.split("/", Qt::SkipEmptyParts);
     QString name = levels.takeLast();
     QString path = levels.join("/");
     return addToc(path, name, toc);
@@ -378,7 +378,7 @@ FatError QFat::addToc(const QString &path, const QString& name, const FatTocEntr
 
 FatError QFat::deleteToc(const QString &filename)
 {
-    QStringList levels = filename.split("/", QString::SkipEmptyParts);
+    QStringList levels = filename.split("/", Qt::SkipEmptyParts);
     QString name = levels.takeLast();
     QString path = levels.join("/");
     return deleteToc(path, name);
@@ -417,7 +417,7 @@ FatError QFat::makeDir(const QString &reqpath)
     if (ret == FatNoError)
         return FatDirAlreadyExists;
 
-    QStringList levels = reqpath.split("/", QString::SkipEmptyParts);
+    QStringList levels = reqpath.split("/", Qt::SkipEmptyParts);
     QString name = levels.takeLast();
     QString path = levels.join("/");
 
@@ -451,7 +451,7 @@ FatError QFat::makeDirRecursive(const QString &reqpath)
 
     QString partPath;
     int i = 0;
-    QStringList levels = reqpath.split("/", QString::SkipEmptyParts);
+    QStringList levels = reqpath.split("/", Qt::SkipEmptyParts);
 
     while (i<levels.size()) {
         partPath = levels[0];
@@ -505,7 +505,7 @@ FatError QFat::removeDirRecursive(const QString& reqpath)
         if (ret != FatNoError)
             return ret;
 
-        QStringList levels = partPath.split("/", QString::SkipEmptyParts);
+        QStringList levels = partPath.split("/", Qt::SkipEmptyParts);
         levels.takeLast();
         partPath = levels.join("/");
     }

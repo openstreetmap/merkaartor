@@ -1191,7 +1191,7 @@ void QGPSDDevice::onDataAvailable()
 void QGPSDDevice::parse(const QString& s)
 {
     qDebug() << "parsing" << s.toUtf8().data() << "*";
-    QStringList Args(s.split(',',QString::SkipEmptyParts));
+    QStringList Args(s.split(',',Qt::SkipEmptyParts));
     for (int i=0; i<Args.count(); ++i)
     {
         QString Left(Args[i].left(2));
@@ -1206,10 +1206,10 @@ void QGPSDDevice::parseY(const QString& s)
 {
     for(int i = 0; i < 50; i ++)
         satArray[i][0] = satArray[i][1] = satArray[i][2] = 0;
-    QStringList Sats(s.split(':',QString::SkipEmptyParts));
+    QStringList Sats(s.split(':',Qt::SkipEmptyParts));
     for (int i=1; i<Sats.size(); ++i)
     {
-        QStringList Items(Sats[i].split(' ',QString::SkipEmptyParts));
+        QStringList Items(Sats[i].split(' ',Qt::SkipEmptyParts));
         if (Items.count() < 5)
             continue;
         int id = Items[0].toInt();
@@ -1229,7 +1229,7 @@ void QGPSDDevice::parseO(const QString& s)
     if (s.isEmpty()) return;
     setFixType(FixInvalid);
     if (s[0] == '?') return;
-    QStringList Args(s.split(' ',QString::SkipEmptyParts));
+    QStringList Args(s.split(' ',Qt::SkipEmptyParts));
     if (Args.count() < 5) return;
     setFixType(Fix3D);
     setFixStatus(StatusActive);
