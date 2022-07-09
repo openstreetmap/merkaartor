@@ -68,32 +68,6 @@ void ProjectionsList::addProjection(ProjectionItem aProjection)
     theProjections.insert(aProjection.name, aProjection);
 }
 
-QString searchEPSG(QString name, QString filename)
-{
-    QString ret;
-    QString espgNum = name.remove("epsg:", Qt::CaseInsensitive);
-    QFile f(filename);
-    f.open(QIODevice::ReadOnly);
-    if (!f.isOpen())
-        return ret;
-
-    QString theEpsgNum("<" + espgNum + ">");
-    while (!f.atEnd()) {
-        QByteArray epsg = f.readLine();
-
-        int idx = epsg.indexOf(theEpsgNum);
-        if (idx != -1) {
-            idx += theEpsgNum.length();
-            int idx2 = epsg.indexOf("<>", idx);
-            ret = epsg.mid(idx, idx2 - idx);
-            break;
-        }
-    }
-    f.close();
-
-    return ret;
-}
-
 ProjectionItem ProjectionsList::getProjection(QString name) const
 {
     if (name.contains("+proj")) {
