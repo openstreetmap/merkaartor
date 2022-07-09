@@ -39,7 +39,7 @@ namespace NameFinder {
         reader.readNext();
         while (!reader.atEnd()) {
             if (reader.isStartElement()) {
-                if (reader.name() == "searchresults") {
+                if (reader.name() == QStringLiteral("searchresults")) {
                     readSearchResultsElement();
                 } else {
                     reader.raiseError(QObject::tr("Not a proper results stream!"));
@@ -65,7 +65,7 @@ namespace NameFinder {
             }
 
             if (reader.isStartElement()) {
-                if (reader.name() == "place") {
+                if (reader.name() == QStringLiteral("place")) {
                     readNamedElement(&myResults);
                 } else {
                     skipElement();
@@ -96,11 +96,11 @@ namespace NameFinder {
             }
 
             if (reader.isStartElement()) {
-                if (reader.name() == "place") {
+                if (reader.name() == QStringLiteral("place")) {
                     readNamedElement(results);
-//                } else if (reader.name() == "description") {
+//                } else if (reader.name() == QStringLiteral("description")) {
 //                    readDescriptionElement(&myResult);
-//                } else if (reader.name() == "nearestplaces") {
+//                } else if (reader.name() == QStringLiteral("nearestplaces")) {
 //                    readNearestPlacesElement(&myResult);
                 } else {
                     skipElement();
@@ -148,7 +148,7 @@ namespace NameFinder {
 //                break;
 //            }
 //            if (reader.isStartElement()) {
-//                if (reader.name() == "named") {
+//                if (reader.name() == QStringLiteral("named")) {
 //                    QList<NameFinderResult> nearResults;
 //                    readNamedElement(&nearResults);
 //                    result->near = nearResults;

@@ -103,7 +103,7 @@ AddFeatureCommand * AddFeatureCommand::fromXML(Document* d, QXmlStreamReader& st
 
     stream.readNext();
     while(!stream.atEnd() && !stream.isEndElement()) {
-        if (stream.name() == "Command") {
+        if (stream.name() == QStringLiteral("Command")) {
             Command::fromXML(d, stream, a);
         }
         stream.readNext();
@@ -266,9 +266,9 @@ RemoveFeatureCommand * RemoveFeatureCommand::fromXML(Document* d, QXmlStreamRead
 
     stream.readNext();
     while(!stream.atEnd() && !stream.isEndElement()) {
-        if (stream.name() == "Cascaded") {
+        if (stream.name() == QStringLiteral("Cascaded")) {
             a->CascadedCleanUp = CommandList::fromXML(d, stream);
-        } else if (stream.name() == "Command") {
+        } else if (stream.name() == QStringLiteral("Command")) {
             Command::fromXML(d, stream, a);
         }
         stream.readNext();

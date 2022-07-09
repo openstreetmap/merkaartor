@@ -3226,7 +3226,7 @@ Document* MainWindow::doLoadDocument(QFile* file)
     QXmlStreamReader stream(file);
     while (stream.readNext() && stream.tokenType() != QXmlStreamReader::Invalid && stream.tokenType() != QXmlStreamReader::StartElement)
         ;
-    if (stream.tokenType() != QXmlStreamReader::StartElement || stream.name() != "MerkaartorDocument") {
+    if (stream.tokenType() != QXmlStreamReader::StartElement || stream.name() != QStringLiteral("MerkaartorDocument")) {
         QMessageBox::critical(this, tr("Invalid file"), tr("%1 is not a valid Merkaartor document.").arg(file->fileName()));
         return NULL;
     }
@@ -3239,12 +3239,12 @@ Document* MainWindow::doLoadDocument(QFile* file)
     if (version < 2.) {
         stream.readNext();
         while(!stream.atEnd() && !stream.isEndElement()) {
-            if (stream.name() == "MapDocument") {
+            if (stream.name() == QStringLiteral("MapDocument")) {
                 newDoc = Document::fromXML(QFileInfo(*file).fileName(), stream, version, theLayers, &progress);
 
                 if (progress.wasCanceled())
                     break;
-            } else if (stream.name() == "MapView") {
+            } else if (stream.name() == QStringLiteral("MapView")) {
                 view()->fromXML(stream);
             } else if (!stream.isWhitespace()) {
                 qDebug() << "Main: logic error: " << stream.name() << " : " << stream.tokenType() << " (" << stream.lineNumber() << ")";

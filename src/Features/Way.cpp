@@ -814,7 +814,7 @@ Way * Way::fromXML(Document* d, Layer * L, QXmlStreamReader& stream)
 
     stream.readNext();
     while(!stream.atEnd() && !stream.isEndElement()) {
-        if (stream.name() == "nd") {
+        if (stream.name() == QStringLiteral("nd")) {
             QString sId = stream.attributes().value("ref").toString();
             IFeature::FId nId(IFeature::Point, sId.toLongLong());
             Node* Part = CAST_NODE(d->getFeature(nId));
@@ -832,10 +832,10 @@ Way * Way::fromXML(Document* d, Layer * L, QXmlStreamReader& stream)
                 Part->setParentFeature(R);
             }
             stream.readNext();
-        } else if (stream.name() == "tag") {
+        } else if (stream.name() == QStringLiteral("tag")) {
             R->setTag(stream.attributes().value("k").toString(), stream.attributes().value("v").toString());
             stream.readNext();
-        } else if (stream.name() == "BoundingBox") {
+        } else if (stream.name() == QStringLiteral("BoundingBox")) {
             R->BBox = CoordBox::fromXML(stream);
             R->p->BBoxUpToDate = true;
             hasBbox = true;

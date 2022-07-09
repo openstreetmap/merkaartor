@@ -630,7 +630,7 @@ Relation * Relation::fromXML(Document * d, Layer * L, QXmlStreamReader& stream)
 
     stream.readNext();
     while(!stream.atEnd() && !stream.isEndElement()) {
-        if (stream.name() == "member") {
+        if (stream.name() == QStringLiteral("member")) {
             QString Type = stream.attributes().value("type").toString();
             QString sId = stream.attributes().value("ref").toString();
             QString role = stream.attributes().value("role").toString();
@@ -678,10 +678,10 @@ Relation * Relation::fromXML(Document * d, Layer * L, QXmlStreamReader& stream)
                 }
             }
             stream.readNext();
-        } else if (stream.name() == "tag") {
+        } else if (stream.name() == QStringLiteral("tag")) {
             R->setTag(stream.attributes().value("k").toString(), stream.attributes().value("v").toString());
             stream.readNext();
-        } else if (stream.name() == "BoundingBox") {
+        } else if (stream.name() == QStringLiteral("BoundingBox")) {
             R->BBox = CoordBox::fromXML(stream);
             R->p->BBoxUpToDate = true;
             hasBbox = true;

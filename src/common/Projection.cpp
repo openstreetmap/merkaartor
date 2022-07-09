@@ -225,7 +225,7 @@ bool ProjectionBackend::toXML(QXmlStreamWriter& stream)
 
 void ProjectionBackend::fromXML(QXmlStreamReader& stream)
 {
-    if (stream.name() == "Projection") {
+    if (stream.name() == QStringLiteral("Projection")) {
         QString proj;
         if (stream.attributes().hasAttribute("type"))
             proj = stream.attributes().value("type").toString();

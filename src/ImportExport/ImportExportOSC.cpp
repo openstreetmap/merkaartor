@@ -52,7 +52,7 @@ bool ImportExportOSC::import(Layer* aLayer)
 
     while (stream.readNext() && stream.tokenType() != QXmlStreamReader::Invalid && stream.tokenType() != QXmlStreamReader::StartElement)
         ;
-    if (stream.name() != "osmChange" && stream.name() != "osmchange") {
+    if (stream.name() != QStringLiteral("osmChange") && stream.name() != QStringLiteral("osmchange")) {
 //        QMessageBox::critical(this, tr("Invalid file"), tr("%1 is not a valid osmChange file.").arg(fn));
         return false;
     }
@@ -69,16 +69,16 @@ bool ImportExportOSC::import(Layer* aLayer)
     Feature* F = NULL;
     stream.readNext();
     while(!stream.atEnd() && !stream.isEndElement()) {
-        if (stream.name() == "create") {
+        if (stream.name() == QStringLiteral("create")) {
             stream.readNext();
             while(!stream.atEnd() && !stream.isEndElement()) {
-                if (stream.name() == "node") {
+                if (stream.name() == QStringLiteral("node")) {
                     F = Node::fromXML(theDoc, aLayer, stream);
                     theList->add(new AddFeatureCommand(aLayer, F, true));
-                } else if (stream.name() == "way") {
+                } else if (stream.name() == QStringLiteral("way")) {
                     F = Way::fromXML(theDoc, aLayer, stream);
                     theList->add(new AddFeatureCommand(aLayer, F, true));
-                } else if (stream.name() == "relation") {
+                } else if (stream.name() == QStringLiteral("relation")) {
                     F = Relation::fromXML(theDoc, aLayer, stream);
                     theList->add(new AddFeatureCommand(aLayer, F, true));
                 } else if (!stream.isWhitespace()) {
@@ -94,25 +94,25 @@ bool ImportExportOSC::import(Layer* aLayer)
 
                 stream.readNext();
             }
-        } else if (stream.name() == "modify") {
+        } else if (stream.name() == QStringLiteral("modify")) {
             stream.readNext();
             while(!stream.atEnd() && !stream.isEndElement()) {
                 QString sid = (stream.attributes().hasAttribute("id") ? stream.attributes().value("id").toString() : stream.attributes().value("xml:id").toString());
-                if (stream.name() == "node") {
+                if (stream.name() == QStringLiteral("node")) {
                     IFeature::FId id(Feature::Point, sid.toLongLong());
                     F = theDoc->getFeature(id);
                     if (!F || F->notEverythingDownloaded())
                         downloadFeature(0, id, theDoc, dLayer);
                     F = Node::fromXML(theDoc, aLayer, stream);
                     theList->add(new AddFeatureCommand(aLayer, F, true));
-                } else if (stream.name() == "way") {
+                } else if (stream.name() == QStringLiteral("way")) {
                     IFeature::FId id(Feature::LineString, sid.toLongLong());
                     F = theDoc->getFeature(id);
                     if (!F || F->notEverythingDownloaded())
                         downloadFeature(0, id, theDoc, dLayer);
                     F = Way::fromXML(theDoc, aLayer, stream);
                     theList->add(new AddFeatureCommand(aLayer, F, true));
-                } else if (stream.name() == "relation") {
+                } else if (stream.name() == QStringLiteral("relation")) {
                     IFeature::FId id(Feature::OsmRelation, sid.toLongLong());
                     F = theDoc->getFeature(id);
                     if (!F || F->notEverythingDownloaded())
@@ -131,16 +131,16 @@ bool ImportExportOSC::import(Layer* aLayer)
                 }
                 stream.readNext();
             }
-        } else if (stream.name() == "delete") {
+        } else if (stream.name() == QStringLiteral("delete")) {
             stream.readNext();
             while(!stream.atEnd() && !stream.isEndElement()) {
-                if (stream.name() == "node") {
+                if (stream.name() == QStringLiteral("node")) {
                     Node* N = Node::fromXML(theDoc, aLayer, stream);
                     theList->add(new RemoveFeatureCommand(theDoc, N));
-                } else if (stream.name() == "way") {
+                } else if (stream.name() == QStringLiteral("way")) {
                     Way* W = Way::fromXML(theDoc, aLayer, stream);
                     theList->add(new RemoveFeatureCommand(theDoc, W));
-                } else if (stream.name() == "relation") {
+                } else if (stream.name() == QStringLiteral("relation")) {
                     Relation* R = Relation::fromXML(theDoc, aLayer, stream);
                     theList->add(new RemoveFeatureCommand(theDoc, R));
                 } else if (!stream.isWhitespace()) {

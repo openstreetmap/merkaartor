@@ -126,7 +126,7 @@ RelationAddFeatureCommand * RelationAddFeatureCommand::fromXML(Document * d, QXm
 
     stream.readNext();
     while(!stream.atEnd() && !stream.isEndElement()) {
-        if (stream.name() == "Command") {
+        if (stream.name() == QStringLiteral("Command")) {
             Command::fromXML(d, stream, a);
         }
         stream.readNext();
@@ -261,7 +261,7 @@ RelationRemoveFeatureCommand * RelationRemoveFeatureCommand::fromXML(Document * 
 
     stream.readNext();
     while(!stream.atEnd() && !stream.isEndElement()) {
-        if (stream.name() == "Command") {
+        if (stream.name() == QStringLiteral("Command")) {
             Command::fromXML(d, stream, a);
         }
         stream.readNext();

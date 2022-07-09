@@ -833,9 +833,9 @@ void MapView::fromXML(QXmlStreamReader& stream)
     CoordBox cb;
     stream.readNext();
     while(!stream.atEnd() && !stream.isEndElement()) {
-        if (stream.name() == "Viewport") {
+        if (stream.name() == QStringLiteral("Viewport")) {
             cb = CoordBox::fromXML(stream);
-        } else if (stream.name() == "Projection") {
+        } else if (stream.name() == QStringLiteral("Projection")) {
             p->theProjection.fromXML(stream);
         }
         stream.readNext();

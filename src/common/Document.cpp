@@ -246,23 +246,23 @@ Document* Document::fromXML(QString title, QXmlStreamReader& stream, qreal versi
 
     stream.readNext();
     while(!stream.atEnd() && !stream.isEndElement()) {
-        if (stream.name() == "ImageMapLayer") {
+        if (stream.name() == QStringLiteral("ImageMapLayer")) {
             /*ImageMapLayer* l =*/ ImageMapLayer::fromXML(NewDoc, stream, progress);
-        } else if (stream.name() == "DeletedMapLayer") {
+        } else if (stream.name() == QStringLiteral("DeletedMapLayer")) {
             /*DeletedMapLayer* l =*/ DeletedLayer::fromXML(NewDoc, stream, progress);
-        } else if (stream.name() == "DirtyLayer" || stream.name() == "DirtyMapLayer") {
+        } else if (stream.name() == QStringLiteral("DirtyLayer") || stream.name() == QStringLiteral("DirtyMapLayer")) {
             /*DirtyMapLayer* l =*/ DirtyLayer::fromXML(NewDoc, stream, progress);
-        } else if (stream.name() == "UploadedLayer" || stream.name() == "UploadedMapLayer") {
+        } else if (stream.name() == QStringLiteral("UploadedLayer") || stream.name() == QStringLiteral("UploadedMapLayer")) {
             /*UploadedMapLayer* l =*/ UploadedLayer::fromXML(NewDoc, stream, progress);
-        } else if (stream.name() == "DrawingLayer" || stream.name() == "DrawingMapLayer") {
+        } else if (stream.name() == QStringLiteral("DrawingLayer") || stream.name() == QStringLiteral("DrawingMapLayer")) {
             /*DrawingMapLayer* l =*/ DrawingLayer::fromXML(NewDoc, stream, progress);
-        } else if (stream.name() == "TrackLayer" || stream.name() == "TrackMapLayer") {
+        } else if (stream.name() == QStringLiteral("TrackLayer") || stream.name() == QStringLiteral("TrackMapLayer")) {
             /*TrackMapLayer* l =*/ TrackLayer::fromXML(NewDoc, stream, progress);
-        } else if (stream.name() == "ExtractedLayer") {
+        } else if (stream.name() == QStringLiteral("ExtractedLayer")) {
             /*DrawingMapLayer* l =*/ DrawingLayer::fromXML(NewDoc, stream, progress);
-        } else if (stream.name() == "FilterLayer") {
+        } else if (stream.name() == QStringLiteral("FilterLayer")) {
             /*FilterLayer* l =*/ FilterLayer::fromXML(NewDoc, stream, progress);
-        } else if (stream.name() == "CommandHistory") {
+        } else if (stream.name() == QStringLiteral("CommandHistory")) {
             if (version > 1.0)
                 h = CommandHistory::fromXML(NewDoc, stream, progress);
         } else if (!stream.isWhitespace()) {
@@ -941,14 +941,14 @@ Document* Document::getDocumentFromXml(QDomDocument* theXmlDoc)
 
         stream.readNext();
         while(!stream.atEnd() && !stream.isEndElement()) {
-            if (stream.name() == "osm") {
+            if (stream.name() == QStringLiteral("osm")) {
                 stream.readNext();
                 while(!stream.atEnd() && !stream.isEndElement()) {
-                    if (stream.name() == "way") {
+                    if (stream.name() == QStringLiteral("way")) {
                         Way::fromXML(NewDoc, l, stream);
-                    } else if (stream.name() == "relation") {
+                    } else if (stream.name() == QStringLiteral("relation")) {
                         Relation::fromXML(NewDoc, l, stream);
-                    } else if (stream.name() == "node") {
+                    } else if (stream.name() == QStringLiteral("node")) {
                         Node::fromXML(NewDoc, l, stream);
                     } else if (!stream.isWhitespace()) {
                         qDebug() << "Doc::clipboard logic error:" << stream.name() << ":" << stream.tokenType() << "(" << stream.lineNumber() << ")";

@@ -555,21 +555,21 @@ DrawingLayer * DrawingLayer::doFromXML(DrawingLayer* l, Document* d, QXmlStreamR
 {
     stream.readNext();
     while(!stream.atEnd() && !stream.isEndElement()) {
-        if (stream.name() == "osm") {
+        if (stream.name() == QStringLiteral("osm")) {
             QSet<Way*> addedWays;
             stream.readNext();
             while(!stream.atEnd() && !stream.isEndElement()) {
-                if (stream.name() == "way") {
+                if (stream.name() == QStringLiteral("way")) {
                     Way* R = Way::fromXML(d, l, stream);
                     if (R)
                         addedWays << R;
-                } else if (stream.name() == "relation") {
+                } else if (stream.name() == QStringLiteral("relation")) {
                     /* Relation* r = */ Relation::fromXML(d, l, stream);
-                } else  if (stream.name() == "node") {
+                } else  if (stream.name() == QStringLiteral("node")) {
                     /* Node* N = */ Node::fromXML(d, l, stream);
-                } else if (stream.name() == "trkseg") {
+                } else if (stream.name() == QStringLiteral("trkseg")) {
                     /*TrackSegment* T = */ TrackSegment::fromXML(d, l, stream, progress);
-                } else if (stream.name() == "bound") {
+                } else if (stream.name() == QStringLiteral("bound")) {
                     stream.skipCurrentElement();
                 } else if (!stream.isWhitespace()) {
                     qDebug() << "osm: logic error:" << stream.name() << ":" << stream.tokenType() << "(" << stream.lineNumber() << ")";
@@ -584,11 +584,11 @@ DrawingLayer * DrawingLayer::doFromXML(DrawingLayer* l, Document* d, QXmlStreamR
                 stream.readNext();
                 qApp->processEvents();
             }
-        } else if (stream.name() == "DownloadedAreas") {
+        } else if (stream.name() == QStringLiteral("DownloadedAreas")) {
             if (d->getLastDownloadLayerTime().secsTo(QDateTime::currentDateTime()) < 12*3600) {    // Do not import downloaded areas if older than 12h
                 stream.readNext();
                 while(!stream.atEnd() && !stream.isEndElement()) {
-                    if (stream.name() == "DownloadedBoundingBox") {
+                    if (stream.name() == QStringLiteral("DownloadedBoundingBox")) {
                         d->addDownloadBox(l, CoordBox::fromXML(stream));
                         stream.readNext();
                     }
@@ -776,18 +776,18 @@ TrackLayer * TrackLayer::fromXML(Document* d, QXmlStreamReader& stream, QProgres
 
     stream.readNext();
     while(!stream.atEnd() && !stream.isEndElement()) {
-        if (stream.name() == "gpx") {
+        if (stream.name() == QStringLiteral("gpx")) {
             stream.readNext();
             while(!stream.atEnd() && !stream.isEndElement()) {
-                if (stream.name() == "trk") {
+                if (stream.name() == QStringLiteral("trk")) {
                     stream.readNext();
                     while(!stream.atEnd() && !stream.isEndElement()) {
-                        if (stream.name() == "trkseg") {
+                        if (stream.name() == QStringLiteral("trkseg")) {
                             TrackSegment::fromXML(d, l, stream, progress);
                         }
                         stream.readNext();
                     }
-                } else if (stream.name() == "wpt") {
+                } else if (stream.name() == QStringLiteral("wpt")) {
                     /* Node* N = */ TrackNode::fromGPX(d, l, stream);
                     //l->add(N);
                     progress->setValue(progress->value()+1);

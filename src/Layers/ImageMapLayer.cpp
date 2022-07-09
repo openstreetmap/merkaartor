@@ -452,10 +452,10 @@ ImageMapLayer * ImageMapLayer::fromXML(Document* d, QXmlStreamReader& stream, QP
 
     stream.readNext();
     while(!stream.atEnd() && !stream.isEndElement()) {
-        if (stream.name() == "AdjustmentList") {
+        if (stream.name() == QStringLiteral("AdjustmentList")) {
             stream.readNext();
             while(!stream.atEnd() && !stream.isEndElement()) {
-                if (stream.name() == "Adjustment") {
+                if (stream.name() == QStringLiteral("Adjustment")) {
                     int z = stream.attributes().value("zoom").toString().toInt();
                     if (l->p->AlignementTransformList.size() < z+1)
                         l->p->AlignementTransformList.resize(z+1);
@@ -467,15 +467,15 @@ ImageMapLayer * ImageMapLayer::fromXML(Document* d, QXmlStreamReader& stream, QP
                 }
                 stream.readNext();
             }
-        } else if (stream.name() == "WmsServer") {
+        } else if (stream.name() == QStringLiteral("WmsServer")) {
             server = stream.attributes().value("name").toString();
             l->setMapAdapter(bgtype, server);
             stream.readNext();
-        } else if (stream.name() == "TmsServer") {
+        } else if (stream.name() == QStringLiteral("TmsServer")) {
             server = stream.attributes().value("name").toString();
             l->setMapAdapter(bgtype, server);
             stream.readNext();
-        } else if (stream.name() == "Data") {
+        } else if (stream.name() == QStringLiteral("Data")) {
             l->setMapAdapter(bgtype, server);
             stream.readNext();
             if (l->getMapAdapter())

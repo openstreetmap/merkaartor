@@ -189,7 +189,7 @@ SetTagCommand * SetTagCommand::fromXML(Document * d, QXmlStreamReader& stream)
 
     stream.readNext();
     while(!stream.atEnd() && !stream.isEndElement()) {
-        if (stream.name() == "Command") {
+        if (stream.name() == QStringLiteral("Command")) {
             Command::fromXML(d, stream, a);
         }
         stream.readNext();
@@ -287,9 +287,9 @@ ClearTagsCommand * ClearTagsCommand::fromXML(Document * d, QXmlStreamReader& str
 
     stream.readNext();
     while(!stream.atEnd() && !stream.isEndElement()) {
-        if (stream.name() == "tag") {
+        if (stream.name() == QStringLiteral("tag")) {
             a->Before.push_back(qMakePair(stream.attributes().value("k").toString(),stream.attributes().value("v").toString()));
-        } else if (stream.name() == "Command") {
+        } else if (stream.name() == QStringLiteral("Command")) {
             Command::fromXML(d, stream, a);
         }
         stream.readNext();
@@ -404,7 +404,7 @@ ClearTagCommand * ClearTagCommand::fromXML(Document * d, QXmlStreamReader& strea
 
     stream.readNext();
     while(!stream.atEnd() && !stream.isEndElement()) {
-        if (stream.name() == "Command") {
+        if (stream.name() == QStringLiteral("Command")) {
             Command::fromXML(d, stream, a);
         }
         stream.readNext();

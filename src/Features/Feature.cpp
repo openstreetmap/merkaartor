@@ -922,7 +922,7 @@ void Feature::tagsFromXML(Document* d, Feature * f, QXmlStreamReader& stream)
 {
     Q_UNUSED(d)
     while(!stream.atEnd() && !stream.isEndElement()) {
-        if (stream.name() == "tag") {
+        if (stream.name() == QStringLiteral("tag")) {
             f->setTag(stream.attributes().value("k").toString(), stream.attributes().value("v").toString());
             stream.readNext();
         }

@@ -111,7 +111,7 @@ WayAddNodeCommand * WayAddNodeCommand::fromXML(Document * d, QXmlStreamReader& s
 
     stream.readNext();
     while(!stream.atEnd() && !stream.isEndElement()) {
-        if (stream.name() == "Command") {
+        if (stream.name() == QStringLiteral("Command")) {
             Command::fromXML(d, stream, a);
         }
         stream.readNext();
@@ -241,7 +241,7 @@ WayRemoveNodeCommand * WayRemoveNodeCommand::fromXML(Document * d, QXmlStreamRea
 
     stream.readNext();
     while(!stream.atEnd() && !stream.isEndElement()) {
-        if (stream.name() == "Command") {
+        if (stream.name() == QStringLiteral("Command")) {
             Command::fromXML(d, stream, a);
         }
         stream.readNext();

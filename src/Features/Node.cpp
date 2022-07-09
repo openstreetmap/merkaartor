@@ -354,7 +354,7 @@ Node * Node::fromXML(Document* d, Layer* L, QXmlStreamReader& stream)
 
     stream.readNext();
     while(!stream.atEnd() && !stream.isEndElement()) {
-        if (stream.name() == "tag") {
+        if (stream.name() == QStringLiteral("tag")) {
             Pt->setTag(stream.attributes().value("k").toString(), stream.attributes().value("v").toString());
             stream.readNext();
         }
@@ -515,45 +515,45 @@ TrackNode * TrackNode::fromGPX(Document* d, Layer* L, QXmlStreamReader& stream)
             Pt->setLastUpdated(Feature::OSMServer);
     }
 
-    if (stream.name() == "wpt")
+    if (stream.name() == QStringLiteral("wpt"))
         Pt->setTag("_waypoint_", "yes");
 
     QDateTime time = QDateTime::currentDateTime();
     stream.readNext();
     while(!stream.atEnd() && !stream.isEndElement()) {
-        if (stream.name() == "time") {
+        if (stream.name() == QStringLiteral("time")) {
             stream.readNext();
             QString dtm = stream.text().toString();
             time = QDateTime::fromString(dtm.left(19), Qt::ISODate);
             stream.readNext();
-        } else if (stream.name() == "ele") {
+        } else if (stream.name() == QStringLiteral("ele")) {
             stream.readNext();
             Pt->setElevation(stream.text().toString().toFloat());
             stream.readNext();
-        } else if (stream.name() == "speed") {
+        } else if (stream.name() == QStringLiteral("speed")) {
             stream.readNext();
             Pt->setSpeed(stream.text().toString().toFloat());
             stream.readNext();
-        } else if (stream.name() == "name") {
+        } else if (stream.name() == QStringLiteral("name")) {
             stream.readNext();
             Pt->setTag("name", stream.text().toString());
             stream.readNext();
-        } else if (stream.name() == "cmt") {
+        } else if (stream.name() == QStringLiteral("cmt")) {
             stream.readNext();
             Pt->setTag("_comment_", stream.text().toString());
             stream.readNext();
-        } else if (stream.name() == "desc") {
+        } else if (stream.name() == QStringLiteral("desc")) {
             stream.readNext();
             Pt->setTag("_description_", stream.text().toString());
             stream.readNext();
         }
-        else if (stream.name() == "cmt")
+        else if (stream.name() == QStringLiteral("cmt"))
         {
             stream.readNext();
             Pt->setTag("_comment_", stream.text().toString());
             stream.readNext();
         }
-        else if (stream.name() == "extensions") // for OpenStreetBugs
+        else if (stream.name() == QStringLiteral("extensions")) // for OpenStreetBugs
         {
             QString str = stream.readElementText(QXmlStreamReader::IncludeChildElements);
             QDomDocument doc;
