@@ -44,7 +44,6 @@
 #include "FeatureManipulations.h"
 #include "LayerIterator.h"
 #include "MasPaintStyle.h"
-#include "MapCSSPaintstyle.h"
 #include "PaintStyleEditor.h"
 #include "Utils/Utils.h"
 #include "DirtyList.h"
@@ -2966,17 +2965,13 @@ void MainWindow::on_mapStyleLoadAction_triggered()
     }
 
     QString f = QFileDialog::getOpenFileName(this, tr("Load map style"), QString(),
-                                             tr("Supported formats")+" (*.mas *.css)\n" \
+                                             tr("Supported formats")+" (*.mas)\n" \
                                              + tr("Merkaartor map style (*.mas)\n")
-                                             + tr("MapCSS stylesheet (*.css)"));
+                                            );
     if (!f.isNull()) {
-        if (f.endsWith("css"))
-            MapCSSPaintstyle::instance()->loadPainters(f);
-        else {
-            M_STYLE->loadPainters(f);
-            document()->setPainters(M_STYLE->getPainters());
-            invalidateView();
-        }
+        M_STYLE->loadPainters(f);
+        document()->setPainters(M_STYLE->getPainters());
+        invalidateView();
     }
 }
 

@@ -148,10 +148,8 @@ src/Render/NativeRenderDialog.h
 src/Render/NativeRenderDialog.cpp
 src/Render/MapRenderer.cpp
 src/PaintStyle/Painter.cpp
-src/PaintStyle/MapCSSPaintstyle.cpp
 src/PaintStyle/MasPaintStyle.h
 src/PaintStyle/Painter.h
-src/PaintStyle/MapCSSPaintstyle.h
 src/PaintStyle/PaintStyleEditor.ui
 src/PaintStyle/PrimitivePainter.cpp
 src/PaintStyle/PrimitivePainter.h
