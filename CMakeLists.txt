@@ -677,7 +677,7 @@ include(CPack)
 # The test shall be placed in file "tests/<test_name>.cpp" file, followed by required includes
 function(MERK_ADD_TEST test_name)
   add_executable(${test_name} tests/${test_name}.cpp ${ARGN})
-  target_link_libraries(${test_name} ${MERKAARTOR_LINK_LIBS} Qt6::Test )
+  target_link_libraries(${test_name} ${MERKAARTOR_LINK_LIBS} Qt::Test )
   add_test(${test_name} ${test_name})
   target_include_directories(${test_name} PUBLIC ${MERKAARTOR_INCLUDE_DIRECTORIES})
 endfunction()
