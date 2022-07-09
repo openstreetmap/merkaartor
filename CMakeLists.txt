@@ -42,6 +42,13 @@ set(CMAKE_AUTOUIC ON)
 
 set(CMAKE_AUTORCC ON)
 
+##############################################
+# Find Qt dependencies
+##############################################
+find_package(Qt6 COMPONENTS Svg Network Xml Core Gui Concurrent PrintSupport Widgets Test LinguistTools CONFIG REQUIRED)
+set(MERKAARTOR_LINK_LIBS Qt::Svg Qt::Network Qt::Xml Qt::Core Qt::Gui Qt::Concurrent Qt::PrintSupport Qt::Widgets ${PKGCONFIG_DEPS_LIBRARIES})
+
+
 set(CMAKE_AUTOUIC_SEARCH_PATHS
 ${CMAKE_CURRENT_SOURCE_DIR}/src
 ${CMAKE_CURRENT_SOURCE_DIR}/src/GPS
@@ -445,7 +452,6 @@ set(MERKAARTOR_SHARE_FILES
 install( FILES ${MERKAARTOR_SHARE_FILES} DESTINATION share/merkaartor)
 set_source_files_properties(${MEKAARTOR_SHARE_FILES} PROPERTIES MACOSX_PACKAGE_LOCATION "Resources")
 
-find_package(Qt5LinguistTools)
 set(TS_FILES
   ${CMAKE_SOURCE_DIR}/translations/merkaartor_cs.ts
   ${CMAKE_SOURCE_DIR}/translations/merkaartor_de.ts
@@ -466,7 +472,7 @@ set(TS_FILES
   ${CMAKE_SOURCE_DIR}/translations/merkaartor_uk.ts
   ${CMAKE_SOURCE_DIR}/translations/merkaartor_zh_TW.ts
 )
-qt5_add_translation(QM_FILES
+qt_add_translation(QM_FILES
     ${TS_FILES}
 )
 install( FILES ${QM_FILES} DESTINATION share/merkaartor/translations )
@@ -532,12 +538,6 @@ message(STATUS "")
 link_directories(${PKGCONFIG_DEPS_LIBRARY_DIRS})
 
 
-
-##############################################
-# Find Qt dependencies
-##############################################
-find_package(Qt5 COMPONENTS Svg Network Xml Core Gui Concurrent PrintSupport Widgets Test CONFIG REQUIRED)
-set(MERKAARTOR_LINK_LIBS Qt5::Svg Qt5::Network Qt5::Xml Qt5::Core Qt5::Gui Qt5::Concurrent Qt5::PrintSupport Qt5::Widgets ${PKGCONFIG_DEPS_LIBRARIES})
 
 ##############################################
 # Create the Merkaartor binary
@@ -677,7 +677,7 @@ include(CPack)
 # The test shall be placed in file "tests/<test_name>.cpp" file, followed by required includes
 function(MERK_ADD_TEST test_name)
   add_executable(${test_name} tests/${test_name}.cpp ${ARGN})
-  target_link_libraries(${test_name} ${MERKAARTOR_LINK_LIBS} Qt5::Test )
+  target_link_libraries(${test_name} ${MERKAARTOR_LINK_LIBS} Qt6::Test )
   add_test(${test_name} ${test_name})
   target_include_directories(${test_name} PUBLIC ${MERKAARTOR_INCLUDE_DIRECTORIES})
 endfunction()

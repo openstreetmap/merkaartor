@@ -24,7 +24,7 @@ function(MerkaartorAddPlugin)
         ${PROJECT_SOURCE_DIR}/src/Preferences
         ${PROJECT_SOURCE_DIR}/src/common
     )
-    target_link_libraries(${PLUGIN_NAME} Qt5::Svg Qt5::Network Qt5::Xml Qt5::Core Qt5::Gui Qt5::Concurrent Qt5::PrintSupport Qt5::Widgets ${PKGCONFIG_DEPS_LIBRARIES} )
+    target_link_libraries(${PLUGIN_NAME} Qt::Svg Qt::Network Qt::Xml Qt::Core Qt::Gui Qt::Concurrent Qt::PrintSupport Qt::Widgets ${PKGCONFIG_DEPS_LIBRARIES} )
     install(TARGETS ${PLUGIN_NAME}
 	    LIBRARY DESTINATION ${PLUGINS_INSTALL_POSTFIX}/${PLUGIN_DESTINATION}
 	    RUNTIME DESTINATION ${PLUGINS_INSTALL_POSTFIX}/${PLUGIN_DESTINATION})
