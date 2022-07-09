@@ -168,7 +168,7 @@ void ActionsDialog::exportShortcuts()
         QTextStream ts(&file);
         QStringList shortcuts;
         for (int row = 0; row < (int)actionsList.size(); ++row) {
-            ts << actionsTable->item(row, 0)->text() << ":" << actionsTable->item(row, 1)->text() << endl;
+            ts << actionsTable->item(row, 0)->text() << ":" << actionsTable->item(row, 1)->text() << QStringStream::endl;
         }
 
         file.close();

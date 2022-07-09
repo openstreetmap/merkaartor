@@ -95,7 +95,7 @@ inline Coord operator/(const Coord& A, qreal d)
 {
     if(d==0)
     {
-        qDebug()<<"Error: divide by 0"<<endl;
+        qDebug()<<"Error: divide by 0";
         return A;
     }
     return Coord(A.x()/d, A.y()/d);
