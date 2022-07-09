@@ -65,7 +65,7 @@ MerkaartorAddPlugin(NAME MMsBingMapBackgroundPlugin DESTINATION background SOURC
 #     ${PROJECT_SOURCE_DIR}/plugins/background/MCadastreFranceBackground/CadastreFrance.cpp
 # )
 
-MerkaartorAddPlugin(NAME MWalkingPapersBackgroundPlugin DESTINATION background SOURCES
-    #${PROJECT_SOURCE_DIR}/plugins/background/MWalkingPapersBackground/WalkingPapersAdapter.json
-    ${PROJECT_SOURCE_DIR}/plugins/background/MWalkingPapersBackground/WalkingPapersAdapter.cpp
-)
+#MerkaartorAddPlugin(NAME MWalkingPapersBackgroundPlugin DESTINATION background SOURCES
+#    #${PROJECT_SOURCE_DIR}/plugins/background/MWalkingPapersBackground/WalkingPapersAdapter.json
+#    ${PROJECT_SOURCE_DIR}/plugins/background/MWalkingPapersBackground/WalkingPapersAdapter.cpp
+#)
