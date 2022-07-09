@@ -16,6 +16,7 @@
 #include <QUrl>
 #include <QTextEdit>
 #include <QComboBox>
+#include <QRegularExpression>
 
 TMSPreferencesDialog::TMSPreferencesDialog(QWidget* parent)
     : QDialog(parent)
@@ -66,7 +67,7 @@ void TMSPreferencesDialog::on_btApplyTmsServer_clicked(void)
 
     WS.TmsName = edTmsName->text();
     WS.TmsAdress = theAdress;
-    WS.TmsPath = theUrl.toString(QUrl::RemoveScheme | QUrl::RemoveAuthority).replace(QRegExp("%25([123])"), "%\\1");
+    WS.TmsPath = theUrl.toString(QUrl::RemoveScheme | QUrl::RemoveAuthority).replace(QRegularExpression("%25([123])"), "%\\1");
     WS.TmsTileSize = sbTileSize->value();
     WS.TmsMinZoom = sbMinZoom->value();
     WS.TmsMaxZoom = sbMaxZoom->value();
@@ -106,7 +107,7 @@ void TMSPreferencesDialog::on_btAddTmsServer_clicked(void)
     addServer(
         TmsServer(edTmsName->text(),
         theAdress,
-        theUrl.toString(QUrl::RemoveScheme | QUrl::RemoveAuthority).replace(QRegExp("%25([123])"), "%\\1"),
+        theUrl.toString(QUrl::RemoveScheme | QUrl::RemoveAuthority).replace(QRegularExpression("%25([123])"), "%\\1"),
         proj,
         sbTileSize->value(),
         sbMinZoom->value(),
