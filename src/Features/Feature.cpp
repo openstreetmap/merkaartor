@@ -97,7 +97,7 @@ public:
         , Virtual(false), Special(false), DirtyLevel(0)
         , parentLayer(0)
     #ifndef FRISIUS_BUILD
-        , Time(QDateTime::currentDateTime().toTime_t()), User(0xffffffff)
+        , Time(QDateTime::currentDateTime().toSecsSinceEpoch()), User(0xffffffff)
     #endif
     {
 #ifndef FRISIUS_BUILD
@@ -264,12 +264,12 @@ bool Feature::hasOSMId() const
 
 const QDateTime Feature::time() const
 {
-    return QDateTime::fromTime_t(p->Time);
+    return QDateTime::fromSecsSinceEpoch(p->Time);
 }
 
 void Feature::setTime(const QDateTime& time)
 {
-    p->Time = time.toTime_t();
+    p->Time = time.toSecsSinceEpoch();
 }
 
 void Feature::setTime(uint epoch)
