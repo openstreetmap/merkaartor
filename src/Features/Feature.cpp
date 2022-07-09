@@ -23,6 +23,7 @@
 #include <QPainter>
 #include <QPainterPath>
 #include <QLocale>
+#include <QString>
 
 #include <algorithm>
 
@@ -840,10 +841,10 @@ QString Feature::toXML(int lvl, QProgressDialog * progress)
 
 void Feature::fromXML(QXmlStreamReader& stream, Feature* F)
 {
-    bool Deleted = (stream.attributes().value("deleted") == "true");
+    bool Deleted = (stream.attributes().value("deleted") == QStringLiteral("true"));
     int Dirty = (stream.attributes().hasAttribute("dirtylevel") ? stream.attributes().value("dirtylevel").toString().toInt() : 0);
-    bool Uploaded = (stream.attributes().value("uploaded") == "true");
-    bool Special = (stream.attributes().value("special") == "true");
+    bool Uploaded = (stream.attributes().value("uploaded") == QStringLiteral("true"));
+    bool Special = (stream.attributes().value("special") == QStringLiteral("true"));
 //    bool Selected = (stream.attributes().value("selected") == "true");
 
     QDateTime time;
