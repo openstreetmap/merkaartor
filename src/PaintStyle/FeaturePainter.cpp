@@ -9,7 +9,7 @@
 #include <QtCore/QString>
 #include <QtGui/QPainter>
 #include <QtGui/QPainterPath>
-#include <QMatrix>
+#include <QTransform>
 #include <QDomElement>
 #include <math.h>
 
@@ -756,13 +756,13 @@ void FeaturePainter::drawLabel(Way* R, QPainter* thePainter, MapRenderer* theRen
 //                    modY = (metrics.ascent()/2)-3;
                     modY = (metrics.height()/2)-metrics.descent();
 
-                    QMatrix m;
-                    m.translate(pt.x(), pt.y());
-                    m.rotate(-angle+modAngle);
+                    QTransform transform;
+                    transform.translate(pt.x(), pt.y());
+                    transform.rotate(-angle+modAngle);
 
                     QPainterPath charPath;
                     charPath.addText(0, modY, font, str.mid(i, 1));
-                    charPath = charPath * m;
+                    charPath = charPath * transform;
 
                     textPath.addPath(charPath);
 
