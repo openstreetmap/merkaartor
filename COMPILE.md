@@ -23,7 +23,7 @@ If this is not enough, here are more detailed instructions:
 You will need the following packages installed:
 
  - Working C++ compiler
- - Qt 5.9 or newer
+ - Qt 5.15 or newer
  - Proj 6.x or newer
  - GDAL (2.0.0 or newer for GDAL exports)
  - Exiv2 (for geoimage support)

@@ -45,8 +45,8 @@ set(CMAKE_AUTORCC ON)
 ##############################################
 # Find Qt dependencies
 ##############################################
-find_package(Qt6 COMPONENTS Svg Network Xml Core Gui Concurrent PrintSupport Widgets Test LinguistTools CONFIG REQUIRED)
-set(MERKAARTOR_LINK_LIBS Qt::Svg Qt::Network Qt::Xml Qt::Core Qt::Gui Qt::Concurrent Qt::PrintSupport Qt::Widgets ${PKGCONFIG_DEPS_LIBRARIES})
+find_package(Qt6 COMPONENTS Svg Network Xml Core Gui Concurrent PrintSupport Widgets Test LinguistTools Core5Compat CONFIG REQUIRED)
+set(MERKAARTOR_LINK_LIBS Qt::Svg Qt::Network Qt::Xml Qt::Core Qt::Gui Qt::Concurrent Qt::PrintSupport Qt::Widgets Qt6::Core5Compat ${PKGCONFIG_DEPS_LIBRARIES})
 
 
 set(CMAKE_AUTOUIC_SEARCH_PATHS
