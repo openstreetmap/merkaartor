@@ -21,7 +21,7 @@
 #include <QThread>
 #include <QObject>
 #include <QString>
-#include <QMutex>
+#include <QRecursiveMutex>
 #include <QFile>
 #include <QStringList>
 #include <QMessageBox>
@@ -81,7 +81,7 @@ void GPSSlotForwarder::checkDataAvailable()
 QGPSDevice::QGPSDevice()
     :LogFile(0)
 {
-    mutex = new QMutex(QMutex::Recursive);
+    mutex = new QRecursiveMutex();
 
     setLatitude(0);
     setLongitude(0);
