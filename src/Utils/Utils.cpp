@@ -35,11 +35,11 @@ bool Utils::QRectInterstects(const QRectF& r, const QLineF& lF, QPointF& a, QPoi
     bool hasP1 = false;
     bool hasP2 = false;
 
-    if (QLineF(r.topLeft(), r.bottomLeft()).intersect(lF, &pF) == QLineF::BoundedIntersection) {
+    if (QLineF(r.topLeft(), r.bottomLeft()).intersects(lF, &pF) == QLineF::BoundedIntersection) {
         a = pF;
         hasP1 = true;
     }
-    if (QLineF(r.bottomLeft(), r.bottomRight()).intersect(lF, &pF) == QLineF::BoundedIntersection) {
+    if (QLineF(r.bottomLeft(), r.bottomRight()).intersects(lF, &pF) == QLineF::BoundedIntersection) {
         if (hasP1) {
             b = pF;
             hasP2 = true;
@@ -48,7 +48,7 @@ bool Utils::QRectInterstects(const QRectF& r, const QLineF& lF, QPointF& a, QPoi
             hasP1 = true;
         }
     }
-    if (QLineF(r.bottomRight(), r.topRight()).intersect(lF, &pF) == QLineF::BoundedIntersection) {
+    if (QLineF(r.bottomRight(), r.topRight()).intersects(lF, &pF) == QLineF::BoundedIntersection) {
         if (hasP1) {
             b = pF;
             hasP2 = true;
@@ -57,7 +57,7 @@ bool Utils::QRectInterstects(const QRectF& r, const QLineF& lF, QPointF& a, QPoi
             hasP1 = true;
         }
     }
-    if (QLineF(r.topRight(), r.topLeft()).intersect(lF, &pF) == QLineF::BoundedIntersection) {
+    if (QLineF(r.topRight(), r.topLeft()).intersects(lF, &pF) == QLineF::BoundedIntersection) {
         if (hasP1) {
             b = pF;
             hasP2 = true;

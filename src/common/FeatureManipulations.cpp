@@ -638,7 +638,7 @@ void createStreetNumbers(Document* theDocument, CommandList* theList, Way* theRo
             for (int m=0; m < I->size()-1; ++m) {
                 QLineF l3 = QLineF(I->getNode(m)->position(), I->getNode(m+1)->position());
                 QPointF theIntersection;
-                if (lto.intersect(l3, &theIntersection) == QLineF::BoundedIntersection) {
+                if (lto.intersects(l3, &theIntersection) == QLineF::BoundedIntersection) {
                     intersectedTo = true;
                     QLineF lt = QLineF(prevPoint, theIntersection);
                     if (lt.length() < lto.length())
@@ -661,7 +661,7 @@ void createStreetNumbers(Document* theDocument, CommandList* theList, Way* theRo
                 for (int m=0; m < I->size()-1; ++m) {
                     QLineF l3 = QLineF(I->getNode(m)->position(), I->getNode(m+1)->position());
                     QPointF theIntersection;
-                    if (lfrom.intersect(l3, &theIntersection) == QLineF::BoundedIntersection) {
+                    if (lfrom.intersects(l3, &theIntersection) == QLineF::BoundedIntersection) {
                         intersectedFrom = true;
                         QLineF lt = QLineF(nv.p2(), theIntersection);
                         if (lt.length() < lfrom.length())
@@ -1902,7 +1902,7 @@ AxisAlignResult axisAlignRoads(Document* theDocument, CommandList* theList, Prop
                     // axes different, so probably safe to intersect
                     QLineF l0(midpoints[index0], midpoints[index0] + axis_vectors[edge_axis[index0]]);
                     QLineF l1(midpoints[index1], midpoints[index1] + axis_vectors[edge_axis[index1]]);
-                    if (l0.intersect(l1, &new_pos) == QLineF::NoIntersection) {
+                    if (l0.intersects(l1, &new_pos) == QLineF::NoIntersection) {
                         theList->undo();
                         return AxisAlignSharpAngles;
                     }
