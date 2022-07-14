@@ -482,12 +482,12 @@ void TrackNode::setElevation(qreal aElevation)
 
 const QDateTime& TrackNode::time() const
 {
-    return QDateTime::fromTime_t(Time);
+    return QDateTime::fromSecsSinceEpoch(Time);
 }
 
 void TrackNode::setTime(const QDateTime& time)
 {
-    Time = time.toTime_t();
+    Time = time.toSecsSinceEpoch();
 }
 
 void TrackNode::setTime(uint epoch)

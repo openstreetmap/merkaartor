@@ -1058,7 +1058,7 @@ void QGPSDDevice::onDataAvailable()
 #define FIX_TIME fix.time
 #endif
     if (gpsdata->FIX_TIME)
-        cur_datetime = QDateTime::fromTime_t(gpsdata->FIX_TIME);
+        cur_datetime = QDateTime::fromSecsSinceEpoch(gpsdata->FIX_TIME);
 #undef FIX_TIME
     emit updatePosition(gpsdata->fix.latitude,
                         gpsdata->fix.longitude,

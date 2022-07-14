@@ -427,8 +427,8 @@ FatError QFat::makeDir(const QString &reqpath)
 
     toc.flags = FLAG_FOLDER;
     QDateTime dt = QDateTime::currentDateTime();
-    toc.creationTimestamp = dt.toTime_t();
-    toc.modificationTimestamp = dt.toTime_t();
+    toc.creationTimestamp = dt.toSecsSinceEpoch();
+    toc.modificationTimestamp = dt.toSecsSinceEpoch();
     toc.size = 0;
     toc.name = name;
     toc.startCluster = clnum;
