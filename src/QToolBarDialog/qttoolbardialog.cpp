@@ -1158,7 +1158,7 @@ void QtToolBarDialogPrivate::fillNew()
             actionToItem.insert(action, item);
             itemToAction.insert(item, action);
             if (toolBarManager->isWidgetAction(action)) {
-                item->setData(0, Qt::TextColorRole, QColor(Qt::blue));
+                item->setData(0, Qt::ForegroundRole, QColor(Qt::blue));
                 widgetActionToToolBar.insert(action, 0);
             }
             item->setFlags(item->flags() | Qt::ItemIsDragEnabled);
@@ -1190,7 +1190,7 @@ void QtToolBarDialogPrivate::fillNew()
         if (it == toolBars.constBegin())
             ui.toolBarList->setCurrentItem(item);
         if (isDefaultToolBar(tbItem))
-            item->setData(Qt::TextColorRole, QColor(Qt::darkGreen));
+            item->setData(Qt::ForegroundRole, QColor(Qt::darkGreen));
         else
             item->setFlags(item->flags() | Qt::ItemIsEditable);
 
@@ -1498,7 +1498,7 @@ void QtToolBarDialogPrivate::rightClicked()
             currentItemToAction.insert(item, action);
             actionToCurrentItem.insert(action, item);
             if (widgetActionToToolBar.contains(action)) {
-                item->setData(Qt::TextColorRole, QColor(Qt::blue));
+                item->setData(Qt::ForegroundRole, QColor(Qt::blue));
                 ToolBarItem *toolBar = widgetActionToToolBar.value(action);
                 if (toolBar) {
                     currentState[toolBar].removeAll(action);
@@ -1580,7 +1580,7 @@ void QtToolBarDialogPrivate::currentToolBarChanged(QListWidgetItem *current)
             item->setTextAlignment(Qt::AlignLeft | Qt::AlignVCenter | Qt::TextShowMnemonic);
             actionToCurrentItem.insert(action, item);
             if (widgetActionToToolBar.contains(action))
-                item->setData(Qt::TextColorRole, QColor(Qt::blue));
+                item->setData(Qt::ForegroundRole, QColor(Qt::blue));
         }
         currentItemToAction.insert(item, action);
         if (!first)
