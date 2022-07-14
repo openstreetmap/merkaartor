@@ -38,6 +38,8 @@
 #include <QSet>
 #include <QReadWriteLock>
 
+#include <algorithm>
+
 /* MAPDOCUMENT */
 
 class MapDocumentPrivate
