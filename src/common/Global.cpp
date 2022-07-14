@@ -83,10 +83,15 @@ QStringList g_getTagValueList(QString k)
 {
     QSet<quint32> retList;
     if (k == "*") {
-        foreach (QList<quint32> list, tagList)
-            retList.unite(list.toSet());
-    } else
-        retList = tagList[tagKeys.indexOf(k)].toSet();
+        foreach (QList<quint32> list, tagList) {
+            foreach (quint32 element, list) {
+                retList.insert(element);
+            }
+        }
+    } else {
+        QList<quint32> list = tagList[tagKeys.indexOf(k)];
+        retList = QSet<quint32>(list.begin(), list.end());
+    }
 
     QStringList res;
     foreach (quint32 i, retList)
