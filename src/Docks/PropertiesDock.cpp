@@ -624,14 +624,14 @@ void PropertiesDock::resetValues()
             );
         else
             CurrentTagView->setColumnWidth(
-                0, CurrentTagView->fontMetrics().width(theModel->newKeyText())+10
+                0, CurrentTagView->fontMetrics().horizontalAdvance(theModel->newKeyText())+10
             );
         CurrentTagView->horizontalHeader()->setStretchLastSection(true);
         CurrentTagView->installEventFilter(shortcutFilter);
     }
     if (CurrentMembersView) {
         CurrentMembersView->setColumnWidth(
-            0, CurrentMembersView->fontMetrics().width(theModel->newKeyText())+10
+            0, CurrentMembersView->fontMetrics().horizontalAdvance(theModel->newKeyText())+10
         );
         CurrentMembersView->horizontalHeader()->setStretchLastSection(true);
         CurrentMembersView->installEventFilter(shortcutFilter);

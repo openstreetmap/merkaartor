@@ -622,7 +622,7 @@ void FeaturePainter::drawPointLabel(QPointF C, QString str, QString strBg, QPain
     QPainterPath bgPath;
 
     if (!str.isEmpty()) {
-        modX = - (metrics.width(str)/2);
+        modX = - (metrics.horizontalAdvance(str)/2);
         if (DrawIcon && !IconName.isEmpty() )
         {
             QImage pm(IconName);
@@ -634,7 +634,7 @@ void FeaturePainter::drawPointLabel(QPointF C, QString str, QString strBg, QPain
         thePainter->translate(C);
     }
     if (DrawLabelBackground && !strBg.isEmpty()) {
-        modX = - (metrics.width(strBg)/2);
+        modX = - (metrics.horizontalAdvance(strBg)/2);
         if (DrawIcon && !IconName.isEmpty() )
         {
             QImage pm(IconName);
@@ -725,7 +725,7 @@ void FeaturePainter::drawLabel(Way* R, QPainter* thePainter, MapRenderer* theRen
     if (!str.isEmpty()) {
         font.setPixelSize(int(WW));
         QFontMetricsF metrics(font);
-        qreal strWidth = metrics.width(str);
+        qreal strWidth = metrics.horizontalAdvance(str);
 
         if ((font.pixelSize() >= 5 || TEST_RFLAGS(RendererOptions::PrintAllLabels)) && tranformedRoadPath.length() > strWidth) {
             thePainter->setFont(font);
@@ -766,7 +766,7 @@ void FeaturePainter::drawLabel(Way* R, QPainter* thePainter, MapRenderer* theRen
 
                     textPath.addPath(charPath);
 
-                    qreal incremenet = metrics.width(str[i]);
+                    qreal incremenet = metrics.horizontalAdvance(str[i]);
                     curLen += (incremenet * modIncrement);
                 }
                 startSegment += lenSegment;
@@ -785,7 +785,7 @@ void FeaturePainter::drawLabel(Way* R, QPainter* thePainter, MapRenderer* theRen
         QRegion rg = thePainter->clipRegion();
         font.setPixelSize(int(WW));
         QFontMetrics metrics(font);
-        qreal strWidth = metrics.width(strBg);
+        qreal strWidth = metrics.horizontalAdvance(strBg);
 
         int repeat = int((tranformedRoadPath.length() / (strWidth * LABEL_STRAIGHT_DISTANCE)) - 0.5);
         int numSegment = repeat+1;
