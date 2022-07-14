@@ -69,7 +69,7 @@ ActionsDialog::ActionsDialog(QList<QAction *>& actions, MainWindow *parent)
     buttonLayout->addWidget(cancelButton);
 
     QVBoxLayout *mainLayout = new QVBoxLayout(this);
-    mainLayout->setMargin(8);
+    mainLayout->setContentsMargins(8, 8, 8, 8);
     mainLayout->setSpacing(8);
     mainLayout->addWidget(actionsTable);
     mainLayout->addLayout(buttonLayout);
