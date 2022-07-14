@@ -176,7 +176,6 @@ MainWindow::MainWindow(QWidget *parent)
         , toolBarManager(0)
 {
     setlocale(LC_NUMERIC, "C");  // impose decimal point separator
-    qsrand(QDateTime::currentDateTime().toTime_t());  //initialize random generator
 
     p = new MainWindowPrivate;
 

@@ -55,11 +55,13 @@ bool IImageManager::useDiskCache(QString filename)
     if (cachePermanent)
         return true;
 
-    int random = qrand() % 100;
     QFileInfo info(cacheDir.absolutePath() + "/" + filename);
     int days = info.lastModified().daysTo(QDateTime::currentDateTime());
 
-    return  random < (10 * days) ? false : true;
+    // TODO: Previously, we used to decide randomly. Why? Is there a better
+    // way? The user should check if there is a newer version, that'll likely
+    // fix the issues the randomness was trying to solve.
+    return info.exists() and (days < 10);
 }
 
 void IImageManager::adaptCache()
