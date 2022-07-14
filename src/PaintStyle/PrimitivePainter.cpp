@@ -504,8 +504,8 @@ void PrimitivePainter::drawLabel(QPainterPath* R, QPainter* thePainter, qreal Pi
             bgPath.addRect(textPath.boundingRect().adjusted(-BG_SPACING, -BG_SPACING, BG_SPACING, BG_SPACING));
 
             bool rgContains = false;
-            for (int i=0; i<rg.rects().size(); i++) {
-                if (rg.rects()[i].contains(bgPath.boundingRect().toRect().translated(pt.toPoint()))) {
+            for (auto const & rect : rg) {
+                if (rect.contains(bgPath.boundingRect().toRect().translated(pt.toPoint()))) {
                     rgContains = true;
                     break;
                 }
