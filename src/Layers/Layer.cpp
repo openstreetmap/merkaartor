@@ -201,7 +201,7 @@ void Layer::deleteAll() {
 
 void Layer::notifyIdUpdate(const IFeature::FId& id, Feature* aFeature)
 {
-    QHash<qint64, MapFeaturePtr>::iterator i;
+    QMultiHash<qint64, MapFeaturePtr>::iterator i;
 
     if (!aFeature) {
         i = p->IdMap.find(id.numId);
@@ -214,7 +214,7 @@ void Layer::notifyIdUpdate(const IFeature::FId& id, Feature* aFeature)
     }
     else {
         if (!aFeature->isVirtual())
-            p->IdMap.insertMulti(id.numId, aFeature);
+            p->IdMap.insert(id.numId, aFeature);
     }
 }
 
@@ -265,7 +265,7 @@ Feature* Layer::get(int i)
 
 Feature* Layer::get(const IFeature::FId& id)
 {
-    QHash<qint64, MapFeaturePtr>::const_iterator i;
+    QMultiHash<qint64, MapFeaturePtr>::const_iterator i;
 
     i = p->IdMap.find(id.numId);
     while (i != p->IdMap.end() && i.key() == id.numId) {

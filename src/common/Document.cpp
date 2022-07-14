@@ -74,7 +74,7 @@ public:
     LayerDock*	theDock;
     Layer*	lastDownloadLayer;
     QDateTime lastDownloadTimestamp;
-    QHash<Layer*, CoordBox>	downloadBoxes;
+    QMultiHash<Layer*, CoordBox>	downloadBoxes;
 
     TagSelector* tagFilter;
     int FilterRevision;
@@ -780,7 +780,7 @@ bool Document::importPBF(const QString& filename, DrawingLayer* NewLayer)
 
 void Document::addDownloadBox(Layer* l, CoordBox aBox)
 {
-    p->downloadBoxes.insertMulti(l, aBox);
+    p->downloadBoxes.insert(l, aBox);
 }
 
 void Document::removeDownloadBox(Layer* l)
@@ -800,7 +800,7 @@ const QList<CoordBox> Document::getDownloadBoxes(Layer* l) const
 
 bool Document::isDownloadedSafe(const CoordBox& bb) const
 {
-    QHashIterator<Layer*, CoordBox>it(p->downloadBoxes);
+    QMultiHashIterator<Layer*, CoordBox>it(p->downloadBoxes);
     while(it.hasNext()) {
         it.next();
         if (it.value().intersects(bb))
