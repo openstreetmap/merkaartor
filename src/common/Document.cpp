@@ -409,7 +409,7 @@ FilterLayer* Document::addFilterLayer(FilterLayer *aLayer)
 
 void Document::remove(Layer* aLayer)
 {
-    QList<Layer*>::iterator i = qFind(p->Layers.begin(),p->Layers.end(), aLayer);
+    QList<Layer*>::iterator i = std::find(p->Layers.begin(),p->Layers.end(), aLayer);
     if (i != p->Layers.end()) {
         p->Layers.erase(i);
     }
