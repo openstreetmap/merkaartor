@@ -99,13 +99,13 @@ void ImportCSVDialog::analyze()
         }
     }
 
-    QRegExp rx(QString("%1\\s*\".*\"\\s*%1").arg(m_delim));
-    if (rx.indexIn(l)) {
+    QRegularExpression rx(QString("%1\\s*\".*\"\\s*%1").arg(m_delim));
+    if (l.indexOf(rx)) {
         m_quote = "\"";
         ui->rbStringDouble->setChecked(true);
     } else {
-        rx = QRegExp(QString("%1\\s*'.*'\\s*%1").arg(m_delim));
-        if (rx.indexIn(l)) {
+        rx = QRegularExpression(QString("%1\\s*'.*'\\s*%1").arg(m_delim));
+        if (l.indexOf(rx)) {
             m_quote = "'";
             ui->rbStringSingle->setChecked(true);
         } else {

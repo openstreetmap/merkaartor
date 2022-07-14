@@ -37,10 +37,12 @@ QString OsmLink::parseUrl(QUrl theUrl)
 
     if (!theUrl.isValid()) return QString("Invalid URL: %1").arg(theUrl.toString());;
 
-    if (theUrl.toString().contains("openstreetmap.org/") && theUrl.toString().contains("#map=")) {
+    QString theUrlString = theUrl.toString();
+
+    if (theUrlString.contains("#map=")) {
         // first is 'map', zoom, lat and lon follows
         // afterwards, optionally &layers= may follow
-        QStringList list = theUrl.fragment().split(QRegExp("[/=&]"));
+        QStringList list = theUrl.fragment().split(QRegularExpression("[/=&]"));
         if(list[0] != "map")
             return QString("Unexpected fragment parameter %1").arg(list[0]);
         qreal zoom = list[1].toInt(&parseOk);   ARG_VALID(zoom);
@@ -117,43 +119,37 @@ QString OsmLink::parseUrl(QUrl theUrl)
         qreal lon = theQuery.queryItemValue("x").toDouble(&parseOk); ARG_VALID(lon);
 
         setLatLonZoom(lat, lon, zoom);
-    } else if (theUrl.toString().contains("/#map=")) {
-        // http://www.openstreetmap.org/#map=<zoom>/<lat>/<lon>
-        QRegExp rx("/#map=([0-9]+)/([0-9.]+)/([0-9.]+)$");
-        if (rx.indexIn(theUrl.toString()) >= 0) {
-            qreal zoom = rx.cap(1).toUInt(&parseOk); PARSE_ERROR(rx.cap(1));
-            qreal lat = rx.cap(2).toDouble(&parseOk); PARSE_ERROR(rx.cap(2));
-            qreal lon = rx.cap(3).toDouble(&parseOk); PARSE_ERROR(rx.cap(3));
-
-            setLatLonZoom(lat, lon, zoom);
-      }
-    } else if (theUrl.toString().contains("/maps/@")) {
+    } else if (theUrlString.contains("/maps/@")) {
         // https://www.google.de/maps/@<lat>,<lon>,<zoom>z
-        QRegExp rx("/maps/@([0-9.]+),([0-9.]+),([0-9.]+)z$");
-        if (rx.indexIn(theUrl.toString()) >= 0) {
-            qreal lat = rx.cap(1).toDouble(&parseOk); PARSE_ERROR(rx.cap(1));
-            qreal lon = rx.cap(2).toDouble(&parseOk); PARSE_ERROR(rx.cap(2));
-            qreal zoom = rx.cap(3).toDouble(&parseOk); PARSE_ERROR(rx.cap(3));
+        QRegularExpression rx("/maps/@([0-9.]+),([0-9.]+),([0-9.]+)z(/data=.*)?$");
+        auto match = rx.match(theUrlString);
+        if (match.hasMatch()) {
+            qreal lat = match.captured(1).toDouble(&parseOk); PARSE_ERROR(match.captured(1));
+            qreal lon = match.captured(2).toDouble(&parseOk); PARSE_ERROR(match.captured(2));
+            qreal zoom = match.captured(3).toDouble(&parseOk); PARSE_ERROR(match.captured(3));
 
             setLatLonZoom(lat, lon, zoom);
         }
-    } else if (theUrl.toString().startsWith("geo:")) {
+    } else if (theUrlString.startsWith("geo:")) {
         // geo:<lat>,<lon>?z=<zoom>
-        QRegExp rx("^geo:([0-9.]+),([0-9.]+)");
-        if (rx.indexIn(theUrl.toString()) >= 0) {
-            qreal lat = rx.cap(1).toDouble(&parseOk); PARSE_ERROR(rx.cap(1));
-            qreal lon = rx.cap(2).toDouble(&parseOk); PARSE_ERROR(rx.cap(2));
-            qreal zoom = 16; // default value
-
-            rx.setPattern("\\?z=([0-9]+)$");
-            if (rx.indexIn(theUrl.toString()) >= 0)
-                zoom = rx.cap(1).toUInt(&parseOk); PARSE_ERROR(rx.cap(1));
+        QRegularExpression rx("^geo:([0-9.]+),([0-9.]+)(\\?.*)?");
+        auto match = rx.match(theUrlString);
+        if (match.hasMatch()) {
+            qreal lat = match.captured(1).toDouble(&parseOk); PARSE_ERROR(match.captured(1));
+            qreal lon = match.captured(2).toDouble(&parseOk); PARSE_ERROR(match.captured(2));
+            qreal zoom = 16; // zoom is not mandatory, in fact, it is an unofficial extension. Provide reasonable default.
+                             
+            theQuery.setQuery(match.captured(3));
+            if (theQuery.hasQueryItem("z")) {
+                qDebug() << theQuery.hasQueryItem("z");
+                zoom = theQuery.queryItemValue("z").toDouble(&parseOk); ARG_VALID(zoom);
+            }
 
             setLatLonZoom(lat, lon, zoom);
         }
     }
 #undef theQuery
-    return QString("Unrecognised URL: %1").arg(theUrl.toString());
+    return QString("Unrecognised URL: %1").arg(theUrlString);
 }
 
 void OsmLink::parseShortUrl(QString code)
