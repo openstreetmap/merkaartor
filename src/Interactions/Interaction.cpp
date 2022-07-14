@@ -188,7 +188,7 @@ void Interaction::wheelEvent(QWheelEvent* ev)
     else if (finalZoom < 0.5)
         finalZoom = 0.5;
 
-    view()->zoom(finalZoom, ev->pos());
+    view()->zoom(finalZoom, ev->position().toPoint());
 }
 
 void Interaction::paintEvent(QPaintEvent*, QPainter& thePainter)
