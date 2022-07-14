@@ -73,7 +73,8 @@ void RemoteControlConnection::readyRead() {
             m_responseStream << "Access-Control-Allow-Origin: *\r\n";
             m_responseStream << "Content-length: 4\r\n\r\n";
             m_responseStream << "OK\r\n";
-            m_responseStream << flush;
+            m_responseStream.flush();
+            // TODO: According to http specs, we should not close the connection and wait for client to do so.
             m_socket->disconnectFromHost();
 
             qDebug() << "RemoteControlConnection: url read, response sent.";
