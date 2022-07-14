@@ -49,7 +49,7 @@ void StyleDock::addItem(QAction* a)
     ui.StyleList->blockSignals(true);
 
     QListWidgetItem* it = new QListWidgetItem(a->text());
-    it->setData(Qt::UserRole, qVariantFromValue((void *)a));
+    it->setData(Qt::UserRole, QVariant::fromValue((void *)a));
     ui.StyleList->addItem(it);
     if (a->data().toString() == M_PREFS->getDefaultStyle())
         ui.StyleList->setCurrentItem(it);
