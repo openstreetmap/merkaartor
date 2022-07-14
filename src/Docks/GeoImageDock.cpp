@@ -1114,7 +1114,7 @@ void ImageView::mouseMoveEvent(QMouseEvent * e)
 
 void ImageView::wheelEvent(QWheelEvent *e)
 {
-    zoom(e->delta() / 8.0 / 360.0 * 10.0); // one wheel rotation is about 10 steps
+    zoom(e->angleDelta().y() / 8.0 / 360.0 * 10.0); // one wheel rotation is about 10 steps
 }
 
 void ImageView::zoom(double levelStep)

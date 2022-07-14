@@ -169,7 +169,7 @@ void Interaction::wheelEvent(QWheelEvent* ev)
      *       int Steps = ev->delta() / 120;
      * However, classic mouse usually gives only 120, and trackpoint/touchpad gives very low values.
      */
-    int Steps = ev->delta() / 8;
+    int Steps = ev->angleDelta().y() / 8;
     if (Steps > 0) {
         for (int i = 0; i < Steps; ++i) {
             finalZoom *= M_PREFS->getZoomIn()/100.0;
