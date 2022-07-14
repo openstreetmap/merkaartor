@@ -35,7 +35,7 @@ ActionsDialog::ActionsDialog(QList<QAction *>& actions, MainWindow *parent)
     for (int i=0; i<actions.size(); ++i) {
         QAction *action = static_cast<QAction*>(actions.at(i));
         QTableWidgetItem* it = new QTableWidgetItem(action->toolTip());
-        it->setFlags(0);
+        it->setFlags(Qt::NoItemFlags);
         actionsTable->setItem(row, 0, it);
         actionsTable->setItem(row, 1, new QTableWidgetItem(action->shortcut().toString()));
 
