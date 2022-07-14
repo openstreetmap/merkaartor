@@ -681,6 +681,7 @@ function(MERK_ADD_TEST test_name)
 endfunction()
 
 MERK_ADD_TEST(test-projection src/common/Projection.cpp src/common/Coord.cpp)
+MERK_ADD_TEST(test-OsmLink src/Utils/OsmLink.cpp src/common/Coord.cpp)
 
 # Additional tests that use the main executable
 if (EXTRA_TESTS)

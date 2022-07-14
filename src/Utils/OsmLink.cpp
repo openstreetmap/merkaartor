@@ -29,7 +29,7 @@ QString OsmLink::parseUrl(QUrl theUrl)
     // On parse failure, we bail early, leaving m_isValid unset
     bool parseOk;
 #ifdef QT5
-    QUrlQuery theQuery;
+    QUrlQuery theQuery(theUrl);
 #define theQuery theQuery
 #else
 #define theQuery theUrl
@@ -51,7 +51,7 @@ QString OsmLink::parseUrl(QUrl theUrl)
 
         setLatLonZoom(lat, lon, zoom);
     }
-    else if (theUrl.toString().contains("osm.org/go"))
+    else if (theUrlString.contains("osm.org/go"))
     {
         parseShortUrl(theUrl.path().section('/', -1));
     }
@@ -78,16 +78,6 @@ QString OsmLink::parseUrl(QUrl theUrl)
         qreal left = theQuery.queryItemValue("minlon").toDouble(&parseOk);     ARG_VALID(minlon);
         qreal top = theQuery.queryItemValue("maxlat").toDouble(&parseOk);      ARG_VALID(maxlat);
         qreal right = theQuery.queryItemValue("maxlon").toDouble(&parseOk);    ARG_VALID(maxlon);
-
-        setMinMax(bottom, left, top, right);
-    }
-    else if (theQuery.hasQueryItem("left") && theQuery.hasQueryItem("right") &&
-         theQuery.hasQueryItem("bottom") && theQuery.hasQueryItem("top"))
-    {
-        qreal bottom = theQuery.queryItemValue("bottom").toDouble(&parseOk);  ARG_VALID(minlat);
-        qreal left = theQuery.queryItemValue("left").toDouble(&parseOk);      ARG_VALID(minlon);
-        qreal top = theQuery.queryItemValue("top").toDouble(&parseOk);        ARG_VALID(maxlat);
-        qreal right = theQuery.queryItemValue("right").toDouble(&parseOk);    ARG_VALID(maxlon);
 
         setMinMax(bottom, left, top, right);
     }
