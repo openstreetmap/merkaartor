@@ -439,7 +439,7 @@ void GeoImageDock::loadImage(QString file, Coord pos)
 
     }
 
-    QDateTime time = QFileInfo(file).created();
+    QDateTime time = QFileInfo(file).birthTime();
 
     //Pt->setTag("_waypoint_", "true");
     phNode->setTag("_picture_", "GeoTagged");
@@ -584,7 +584,7 @@ void GeoImageDock::loadImages(QStringList fileNames)
 //        }
         if (time.isNull()) // if time is still null, we use the file date as reference for image sorting (and not for finding out to which node the image belongs)
             // so we don't have to ask a question here
-            time = QFileInfo(file).created();
+            time = QFileInfo(file).birthTime();
 
         int res = photoDlgRes;
         if (!positionValid && res == -1) {
