@@ -50,7 +50,7 @@ namespace NameFinder {
         }
         myDevice->close();
 
-        qSort(myResults.begin(), myResults.end());
+        std::sort(myResults.begin(), myResults.end());
 
 // Implement error handling
         return true;

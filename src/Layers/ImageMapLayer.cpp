@@ -971,7 +971,8 @@ QRect ImageMapLayer::drawTiled(MapView& theView, QRect& rect)
         }
     }
 
-    qSort(tiles);
+    // TODO: Sort the tiles? Removed when refactoring to qt6.
+    //qSort(tiles);
 
     int n=0; // Arbitrarily limit the number of tiles to 100
     for (QList<Tile>::const_iterator tile = tiles.begin(); tile != tiles.end() && n<100; ++tile)

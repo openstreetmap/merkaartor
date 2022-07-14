@@ -830,7 +830,7 @@ void GeoImageDock::loadImages(QStringList fileNames)
 
     progress.setValue(fileNames.size());
 
-    qSort(usedTrackPoints); // sort them chronological
+    std::sort(usedTrackPoints.begin(), usedTrackPoints.end()); // sort them chronological
     curImage = -1; // the sorting invalidates curImage
 
     if (photoLayer && !photoLayer->size()) {
