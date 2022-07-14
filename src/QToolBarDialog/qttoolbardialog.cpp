@@ -1163,7 +1163,7 @@ void QtToolBarDialogPrivate::fillNew()
             }
             item->setFlags(item->flags() | Qt::ItemIsDragEnabled);
         }
-        ui.actionTree->setItemExpanded(categoryItem, true);
+        categoryItem->setExpanded(true);
     }
     //ui.actionTree->sortItems(0, Qt::AscendingOrder);
 
