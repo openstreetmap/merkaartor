@@ -236,7 +236,7 @@ Document* Document::fromXML(QString title, QXmlStreamReader& stream, qreal versi
     if (stream.attributes().hasAttribute("xml:id"))
         NewDoc->p->Id = stream.attributes().value("xml:id").toString();
     if (stream.attributes().hasAttribute("layernum"))
-        NewDoc->p->layerNum = stream.attributes().value("layernum").string()->toInt();
+        NewDoc->p->layerNum = stream.attributes().value("layernum").toString().toInt();
     else
         NewDoc->p->layerNum = 1;
     QString lastdownloadlayerId;
