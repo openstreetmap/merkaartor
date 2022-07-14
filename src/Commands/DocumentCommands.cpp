@@ -99,7 +99,7 @@ AddFeatureCommand * AddFeatureCommand::fromXML(Document* d, QXmlStreamReader& st
         return NULL;
 
     a->theFeature = F;
-    a->UserAdded = (stream.attributes().value("useradded") == "true" ? true : false);
+    a->UserAdded = (stream.attributes().value("useradded") == QStringLiteral("true") ? true : false);
 
     stream.readNext();
     while(!stream.atEnd() && !stream.isEndElement()) {

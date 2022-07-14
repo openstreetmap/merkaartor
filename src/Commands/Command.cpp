@@ -133,7 +133,7 @@ void Command::fromXML(Document* d, QXmlStreamReader& stream, Command* C)
     if (stream.attributes().hasAttribute("oldCreated"))
         C->oldCreated = stream.attributes().value("oldCreated").toString();
     if (stream.attributes().hasAttribute("undone"))
-        C->isUndone = (stream.attributes().value("undone") == "true" ? true : false);
+        C->isUndone = (stream.attributes().value("undone") == QStringLiteral("true") ? true : false);
     if (stream.attributes().hasAttribute("description"))
         C->description = stream.attributes().value("description").toString();
     C->mainFeature = F;
@@ -246,17 +246,17 @@ CommandList* CommandList::fromXML(Document* d, QXmlStreamReader& stream)
 {
     CommandList* l = new CommandList();
     l->setId(stream.attributes().value("xml:id").toString());
-    l->isReversed = (stream.attributes().value("reversed") == "true");
+    l->isReversed = (stream.attributes().value("reversed") == QStringLiteral("true"));
     if (stream.attributes().hasAttribute("description"))
         l->description = stream.attributes().value("description").toString();
     if (stream.attributes().hasAttribute("feature")) {
-        if (stream.attributes().value("featureclass") == "Node") {
+        if (stream.attributes().value("featureclass") == QStringLiteral("Node")) {
             l->mainFeature = (Feature*) Feature::getNodeOrCreatePlaceHolder(d, (Layer *) d->getDirtyOrOriginLayer(), IFeature::FId(IFeature::Point, stream.attributes().value("feature").toString().toLongLong()));
         } else
-        if (stream.attributes().value("featureclass") == "Way") {
+        if (stream.attributes().value("featureclass") == QStringLiteral("Way")) {
             l->mainFeature = (Feature*) Feature::getWayOrCreatePlaceHolder(d, (Layer *) d->getDirtyOrOriginLayer(), IFeature::FId(IFeature::LineString, stream.attributes().value("feature").toString().toLongLong()));
         } else
-        if (stream.attributes().value("featureclass") == "Relation") {
+        if (stream.attributes().value("featureclass") == QStringLiteral("Relation")) {
             l->mainFeature = (Feature*) Feature::getRelationOrCreatePlaceHolder(d, (Layer *) d->getDirtyOrOriginLayer(), IFeature::FId(IFeature::OsmRelation, stream.attributes().value("feature").toString().toLongLong()));
         }
     }

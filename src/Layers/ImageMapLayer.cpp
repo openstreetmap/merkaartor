@@ -446,9 +446,9 @@ ImageMapLayer * ImageMapLayer::fromXML(Document* d, QXmlStreamReader& stream, QP
 
     qreal alpha = stream.attributes().value("alpha").toString().toDouble();
     // TODO: Note that the logic for "enabled" is slightly different. Why?
-    bool visible = (stream.attributes().value("visible") == "true" ? true : false);
-    bool selected = (stream.attributes().value("selected") == "true" ? true : false);
-    bool enabled = (stream.attributes().value("enabled") == "false" ? false : true);
+    bool visible = (stream.attributes().value("visible") == QStringLiteral("true") ? true : false);
+    bool selected = (stream.attributes().value("selected") == QStringLiteral("true") ? true : false);
+    bool enabled = (stream.attributes().value("enabled") == QStringLiteral("false") ? false : true);
 
     stream.readNext();
     while(!stream.atEnd() && !stream.isEndElement()) {

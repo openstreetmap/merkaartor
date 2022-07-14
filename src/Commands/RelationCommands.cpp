@@ -108,13 +108,13 @@ RelationAddFeatureCommand * RelationAddFeatureCommand::fromXML(Document * d, QXm
 
     a->theRelation = Feature::getRelationOrCreatePlaceHolder(d, a->theLayer, IFeature::FId(IFeature::OsmRelation, stream.attributes().value("relation").toString().toLongLong()));
     Feature* F;
-    if (stream.attributes().value("featureclass") == "TrackPoint") {
+    if (stream.attributes().value("featureclass") == QStringLiteral("TrackPoint")) {
         F = (Feature*) Feature::getNodeOrCreatePlaceHolder(d, a->theLayer, IFeature::FId(IFeature::Point, stream.attributes().value("trackpoint").toString().toLongLong()));
     } else
-    if (stream.attributes().value("featureclass") == "Road") {
+    if (stream.attributes().value("featureclass") == QStringLiteral("Road")) {
         F = (Feature*) Feature::getWayOrCreatePlaceHolder(d, a->theLayer, IFeature::FId(IFeature::LineString, stream.attributes().value("road").toString().toLongLong()));
     } else
-    if (stream.attributes().value("featureclass") == "Relation") {
+    if (stream.attributes().value("featureclass") == QStringLiteral("Relation")) {
         F = (Feature*) Feature::getRelationOrCreatePlaceHolder(d, a->theLayer, IFeature::FId(IFeature::OsmRelation, stream.attributes().value("road").toString().toLongLong()));
     } else {
         if (!(F = d->getFeature(IFeature::FId(IFeature::All, stream.attributes().value("feature").toString().toLongLong()))))
@@ -243,13 +243,13 @@ RelationRemoveFeatureCommand * RelationRemoveFeatureCommand::fromXML(Document * 
 
     a->theRelation = Feature::getRelationOrCreatePlaceHolder(d, a->theLayer, IFeature::FId(IFeature::OsmRelation, stream.attributes().value("relation").toString().toLongLong()));
     Feature* F = NULL;
-    if (stream.attributes().value("featureclass") == "Node") {
+    if (stream.attributes().value("featureclass") == QStringLiteral("Node")) {
         F = (Feature*) Feature::getNodeOrCreatePlaceHolder(d, a->theLayer, IFeature::FId(IFeature::Point, stream.attributes().value("feature").toString().toLongLong()));
     } else
-    if (stream.attributes().value("featureclass") == "Way") {
+    if (stream.attributes().value("featureclass") == QStringLiteral("Way")) {
         F = (Feature*) Feature::getWayOrCreatePlaceHolder(d, a->theLayer, IFeature::FId(IFeature::LineString, stream.attributes().value("feature").toString().toLongLong()));
     } else
-    if (stream.attributes().value("featureclass") == "Relation") {
+    if (stream.attributes().value("featureclass") == QStringLiteral("Relation")) {
         F = (Feature*) Feature::getRelationOrCreatePlaceHolder(d, a->theLayer, IFeature::FId(IFeature::OsmRelation, stream.attributes().value("feature").toString().toLongLong()));
     } else {
         if (!(F = d->getFeature(IFeature::FId(IFeature::All, stream.attributes().value("feature").toString().toLongLong()))))

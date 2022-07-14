@@ -458,11 +458,11 @@ Layer * Layer::fromXML(Layer* l, Document* /*d*/, QXmlStreamReader& stream, QPro
 {
     l->setId(stream.attributes().value("xml:id").toString());
     l->setAlpha(stream.attributes().value("alpha").toString().toDouble());
-    l->setVisible((stream.attributes().value("visible") == "true" ? true : false));
-    l->setSelected((stream.attributes().value("selected") == "true" ? true : false));
-    l->setEnabled((stream.attributes().value("enabled") == "false" ? false : true));
-    l->setReadonly((stream.attributes().value("readonly") == "true" ? true : false));
-    l->setUploadable((stream.attributes().value("uploadable") == "false" ? false : true));
+    l->setVisible((stream.attributes().value("visible") == QStringLiteral("true") ? true : false));
+    l->setSelected((stream.attributes().value("selected") == QStringLiteral("true") ? true : false));
+    l->setEnabled((stream.attributes().value("enabled") == QStringLiteral("false") ? false : true));
+    l->setReadonly((stream.attributes().value("readonly") == QStringLiteral("true") ? true : false));
+    l->setUploadable((stream.attributes().value("uploadable") == QStringLiteral("false") ? false : true));
     l->setDirtyLevel((stream.attributes().hasAttribute("dirtylevel") ? stream.attributes().value("dirtylevel").toString().toInt() : 0));
 
     return l;
