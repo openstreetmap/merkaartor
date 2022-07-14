@@ -74,11 +74,6 @@ void g_removeFromTagList(quint32 k, quint32 v)
         tagList.remove(k);
 }
 
-QStringList g_getTagKeys()
-{
-    return tagKeys;
-}
-
 QStringList g_getTagValues()
 {
     return tagValues;
@@ -112,7 +107,7 @@ quint32 g_getTagKeyIndex(const QString& s)
 
 QStringList g_getTagKeyList()
 {
-    return tagKeys.toSet().toList();
+    return tagKeys;
 }
 
 QString g_getTagValue(int idx)
