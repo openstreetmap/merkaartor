@@ -19,7 +19,7 @@ public:
     Win_QextSerialPort(const QString & name, const PortSettings& settings);
     Win_QextSerialPort& operator=(const Win_QextSerialPort& s);
     virtual ~Win_QextSerialPort();
-    virtual bool open(OpenMode mode = QIODeviceBase::NotOpen);
+    virtual bool open(OpenMode mode = QIODevice::NotOpen);
     virtual void close();
     virtual void flush();
     virtual qint64 size() const;
