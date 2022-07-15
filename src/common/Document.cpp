@@ -800,13 +800,11 @@ const QList<CoordBox> Document::getDownloadBoxes(Layer* l) const
 
 bool Document::isDownloadedSafe(const CoordBox& bb) const
 {
-    QMultiHashIterator<Layer*, CoordBox>it(p->downloadBoxes);
-    while(it.hasNext()) {
-        it.next();
-        if (it.value().intersects(bb))
+    for (const CoordBox &item : p->downloadBoxes) {
+        if (item.intersects(bb)) {
             return true;
+        }
     }
-
     return false;
 }
 
