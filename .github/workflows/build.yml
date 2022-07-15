@@ -46,7 +46,8 @@ jobs:
       - name: Install dependencies
         run: |
           brew install gdal exiv2 proj qt${{ matrix.QT_MAJOR }} cmake
-          brew install --head exiv2
+          brew unlink exiv2
+          brew install --HEAD exiv2
       - name: Build
         run: |
           ./ci/travis-osx-script.sh
