@@ -148,6 +148,15 @@ For example, compiling in support for GPSD would be:
 cmake .. -DGPSD=ON
 ```
 
+#### Choosing Qt version
+
+To build with specific Qt version, use `CMAKE_PREFIX_PATH` to the Qt6 cmake directory -- that is the directory containing QtXConfig.cmake file:
+
+```
+$ ls /usr/lib/cmake/Qt6/Qt6Config.cmake
+$ cmake .. -DCMAKE_PREFIX_PATH=/usr/lib/cmake/Qt6/
+```
+
 ### Run qmake
 
 No longer supported.

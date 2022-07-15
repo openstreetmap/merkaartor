@@ -45,8 +45,17 @@ set(CMAKE_AUTORCC ON)
 ##############################################
 # Find Qt dependencies
 ##############################################
-find_package(Qt6 COMPONENTS Svg Network Xml Core Gui Concurrent PrintSupport Widgets Test LinguistTools Core5Compat CONFIG REQUIRED)
-set(MERKAARTOR_LINK_LIBS Qt::Svg Qt::Network Qt::Xml Qt::Core Qt::Gui Qt::Concurrent Qt::PrintSupport Qt::Widgets Qt6::Core5Compat ${PKGCONFIG_DEPS_LIBRARIES})
+set(MERKAARTOR_QT_LIBS Svg Network Xml Core Gui Concurrent PrintSupport Widgets Test)
+set(MERKAARTOR_QT_TOOLS LinguistTools)
+find_package(QT NAMES Qt5 Qt6 REQUIRED COMPONENTS Core)
+message(STATUS " * Qt version found: ${QT_VERSION}")
+if (${QT_VERSION_MAJOR} EQUAL 6)
+    list(APPEND MERKAARTOR_QT_LIBS Core5Compat)
+endif()
+
+find_package(Qt${QT_VERSION_MAJOR} COMPONENTS ${MERKAARTOR_QT_LIBS} ${MERKAARTOR_QT_TOOLS} CONFIG REQUIRED)
+set(MERKAARTOR_LINK_LIBS ${MERKAARTOR_QT_LIBS})
+list(TRANSFORM MERKAARTOR_LINK_LIBS PREPEND Qt${QT_VERSION_MAJOR}::)
 
 
 set(CMAKE_AUTOUIC_SEARCH_PATHS
@@ -533,6 +542,7 @@ message(STATUS " * LINK DIRECTORIES: ${PKGCONFIG_DEPS_LIBRARY_DIRS}")
 message(STATUS "")
 
 
+list(APPEND MERKAARTOR_LINK_LIBS ${PKGCONFIG_DEPS_LIBRARIES})
 link_directories(${PKGCONFIG_DEPS_LIBRARY_DIRS})
 
 
