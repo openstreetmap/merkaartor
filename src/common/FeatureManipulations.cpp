@@ -291,6 +291,23 @@ static void replaceItem(QList<T> &list, T oldItem, T newItem)
         list.replace(i, newItem);
 }
 
+/** Returns a tuple of {F1, F2} or {F2, F1}. First value in tuple is considered more important and should be merged into. */
+template<typename T>
+std::tuple<T*, T*> moreImportant(T* F1, T* F2) {
+    // If one feature has negative id, automatically pick the other - existing features always take precedence.
+    // If both features have negative id, it doesn't matter which we choose.
+    if (F1->id().numId < 0) {
+        return {F2, F1};
+    } else if (F2->id().numId < 0) {
+        return {F1, F2};
+    // Else pick the one that has more tags associated
+    } else if (F2->tagSize() > F1->tagSize()) {
+        return {F2, F1};
+    } else {
+        return {F1, F2};
+    }
+}
+
 void joinRoads(Document* theDocument, CommandList* theList, PropertiesDock* theDock)
 {
     QList<Feature*> selection = theDock->selection();
@@ -318,6 +335,8 @@ void joinRoads(Document* theDocument, CommandList* theList, PropertiesDock* theD
                 mergeNodes(theDocument, theList, R1->getNode(0), R1->getNode(R1->size()-1));
             }
         } else {
+            // Select the more important way as the one to keep
+            std::tie(R1, R2) = moreImportant(R1, R2);
             R1 = join(theDocument, theList, R1, R2);
             // replace R2 with R1 for subsequent operations
             replaceItem(ends[R2->getNode(0)->position()], R2, R1);
@@ -904,6 +923,7 @@ inserted:
 
 static void mergeNodes(Document* theDocument, CommandList* theList, Node *node1, Node *node2)
 {
+    std::tie(node1, node2) = moreImportant(node1, node2);
     QList<Feature*> alt;
     alt.append(node1);
     Feature::mergeTags(theDocument, theList, node1, node2);
