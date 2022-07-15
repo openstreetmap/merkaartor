@@ -31,11 +31,6 @@ bool parseContainer(QDomElement& e, Layer* aLayer);
 ImportExportGdal::ImportExportGdal(Document* doc)
  : IImportExport(doc)
 {
-#if defined(Q_OS_WIN32)
-    // Projection.h defines the list of search paths for Windows. Other platforms will search correctly on their own.
-    ProjDirs dirs;
-    OSRSetPROJSearchPaths(dirs.dirs);
-#endif
 }
 
 
