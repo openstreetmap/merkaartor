@@ -6,6 +6,7 @@
 #include "LayerWidget.h"
 #include "PropertiesDock.h"
 #include "Global.h"
+#include <exiv2/exiv2.hpp>
 
 #ifdef USE_ZBAR
 #include <zbar.h>
