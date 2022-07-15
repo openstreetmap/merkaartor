@@ -25,6 +25,9 @@ set(SHARE_DIR ${CMAKE_INSTALL_PREFIX}/share/merkaartor)
 set(LIB_DIR   ${CMAKE_INSTALL_PREFIX}/lib/merkaartor)
 configure_file("${PROJECT_SOURCE_DIR}/cmake/build-metadata.cpp.in" "${PROJECT_BINARY_DIR}/build-metadata.cpp" @ONLY)
 
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+
 enable_testing()
 
 # TODO: Add support for sanitizers
