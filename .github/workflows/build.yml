@@ -37,6 +37,8 @@ jobs:
       matrix:
         QT_MAJOR: [5, 6]
     name: MacOS X / Qt${{ matrix.QT_MAJOR }}
+    env:
+      QT_MAJOR: ${{ matrix.QT_MAJOR }}
     steps:
       - uses: actions/checkout@v2
         with:
