@@ -4,6 +4,7 @@ on: [push, pull_request]
 jobs:
   windows:
     runs-on: windows-latest
+    name: Windows / Qt6
     steps:
       - run: git config --global core.autocrlf input
         shell: bash
@@ -35,6 +36,7 @@ jobs:
     strategy:
       matrix:
         QT_MAJOR: [5, 6]
+    name: MacOS X / Qt${{ matrix.QT_MAJOR }}
     steps:
       - uses: actions/checkout@v2
         with:
@@ -58,7 +60,7 @@ jobs:
     strategy:
       matrix:
         SNAPSHOT: [0, 1]
-    name: linux-build (SNAPSHOT=${{ matrix.SNAPSHOT }})
+    name: Linux / Ubuntu 20.04 / Qt5 (SNAPSHOT=${{ matrix.SNAPSHOT }})
     env:
       QT_PREFIX: 515
       QT_REPO: ppa:beineri/opt-qt-5.15.4-focal
@@ -80,10 +82,8 @@ jobs:
     strategy:
       matrix:
         SNAPSHOT: [0, 1]
-    name: linux-build (SNAPSHOT=${{ matrix.SNAPSHOT }})
+    name: Linux / Ubuntu 22.04 / Qt6 (SNAPSHOT=${{ matrix.SNAPSHOT }})
     env:
-      QT_PREFIX: 6
-      TRAVIS_DIST: focal
       SNAPSHOT: ${{ matrix.SNAPSHOT }}
     steps:
       - uses: actions/checkout@v2
@@ -92,7 +92,7 @@ jobs:
       - name: Install dependencies
         run: |
           sudo apt-get update -qq
-          sudo apt-get -y install gdb libgdal-dev libproj-dev qt${QT_PREFIX}-base-dev qt${QT_PREFIX}-tools qt${QT_PREFIX}-svg build-essential libgl1-mesa-dev cmake git libexiv2-dev
+          sudo apt-get -y install gdb libgdal-dev libproj-dev qt6-base-dev qt6-base-dev-tools qt6-tools-dev build-essential libgl1-mesa-dev cmake git libexiv2-dev libqt6svg* libqt6core5compat* qt6-l10n-tools qt6-tools-dev-tools
 
       - name: Build
         run: |
