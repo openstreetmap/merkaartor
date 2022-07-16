@@ -457,7 +457,7 @@ void GeoImageDock::loadImages(QStringList fileNames)
     Document *theDocument = Main->document();
     MapView *theView = Main->view();
 
-    Exiv2::Image::AutoPtr image;
+    std::unique_ptr<Exiv2::Image> image;
     Exiv2::ExifData exifData;
     bool positionValid = false;
 
@@ -869,7 +869,7 @@ void GeoImageDock::saveImage()
 //    fn = QFileDialog::getSaveFileName(0, "Specify output filename", fn, tr("JPEG Images (*.jpg)"));
     qDebug() << fn;
     if (!fn.isEmpty()) {
-        Exiv2::Image::AutoPtr imageIn, imageOut;
+        std::unique_ptr<Exiv2::Image> imageIn, imageOut;
         Exiv2::ExifData exifData;
         try {
             imageIn = Exiv2::ImageFactory::open(usedTrackPoints.at(index).filename.toStdString());
@@ -893,7 +893,7 @@ Coord GeoImageDock::getGeoDataFromImage(const QString & file)
 {
     Coord pos;
     double lat = 0.0, lon = 0.0;
-    Exiv2::Image::AutoPtr image;
+    std::unique_ptr<Exiv2::Image> image;
     Exiv2::ExifData exifData;
     bool positionValid = false;
 
@@ -933,7 +933,7 @@ Coord GeoImageDock::getGeoDataFromImage(const QString & file)
 
 void GeoImageDock::addGeoDataToImage(Coord position, const QString & file)
 {
-    Exiv2::Image::AutoPtr image;
+    std::unique_ptr<Exiv2::Image> image;
 
     try {
         image = Exiv2::ImageFactory::open(file.toStdString());
