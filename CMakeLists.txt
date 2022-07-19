@@ -671,7 +671,11 @@ if (WIN32)
   set(CPACK_NSIS_ENABLE_UNINSTALL_DONT_CHECK_32 ON)
   # End of workaround
 
-  find_program(WINDEPLOYQT windeployqt)
+  if (${QT_VERSION_MAJOR} EQUAL 6)
+    find_program(WINDEPLOYQT windeployqt-qt6)
+  else()
+    find_program(WINDEPLOYQT windeployqt)
+  endif()
   find_program(CYGCHECK cygcheck)
   configure_file("${PROJECT_SOURCE_DIR}/cmake/deploy-windows.cmake.in" "${CMAKE_BINARY_DIR}/deploy-windows.cmake" @ONLY)
   set (CPACK_PRE_BUILD_SCRIPTS "${CMAKE_BINARY_DIR}/deploy-windows.cmake")
