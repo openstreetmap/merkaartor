@@ -49,9 +49,7 @@
 #include <QtNetwork/QLocalSocket>
 #include <QtCore/QDir>
 
-namespace QtLP_Private {
 #include "qtlockedfile.h"
-}
 
 class QtLocalPeer : public QObject
 {

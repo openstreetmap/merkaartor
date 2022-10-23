@@ -86,6 +86,7 @@
 
     \sa QFile::QFile()
 */
+namespace QtLP_Private {
 QtLockedFile::QtLockedFile()
     : QFile()
 {
@@ -197,3 +198,4 @@ QtLockedFile::LockMode QtLockedFile::lockMode() const
     Destroys the \e QtLockedFile object. If any locks were held, they
     are released.
 */
+}
