@@ -66,12 +66,14 @@ jobs:
     strategy:
       matrix:
         SNAPSHOT: [0, 1]
-    name: Linux / Ubuntu 20.04 / Qt5 (SNAPSHOT=${{ matrix.SNAPSHOT }})
+        CMAKE_UNITY_BUILD: ["ON", "OFF"]
+    name: Linux / Ubuntu 20.04 / Qt5 (SNAPSHOT=${{ matrix.SNAPSHOT }}) / CMAKE_UNITY_BUILD=${{ matrix.CMAKE_UNITY_BUILD }}
     env:
       QT_PREFIX: 515
       QT_REPO: ppa:beineri/opt-qt-5.15.4-focal
       TRAVIS_DIST: focal
       SNAPSHOT: ${{ matrix.SNAPSHOT }}
+      CMAKE_UNITY_BUILD: ${{ matrix.CMAKE_UNITY_BUILD }}
     steps:
       - uses: actions/checkout@v2
         with:
@@ -88,9 +90,11 @@ jobs:
     strategy:
       matrix:
         SNAPSHOT: [0, 1]
-    name: Linux / Ubuntu 22.04 / Qt6 (SNAPSHOT=${{ matrix.SNAPSHOT }})
+        CMAKE_UNITY_BUILD: ["ON", "OFF"]
+    name: Linux / Ubuntu 22.04 / Qt6 (SNAPSHOT=${{ matrix.SNAPSHOT }}) / CMAKE_UNITY_BUILD=${{ matrix.CMAKE_UNITY_BUILD }}
     env:
       SNAPSHOT: ${{ matrix.SNAPSHOT }}
+      CMAKE_UNITY_BUILD: ${{ matrix.CMAKE_UNITY_BUILD }}
     steps:
       - uses: actions/checkout@v2
         with:
