@@ -9,7 +9,7 @@
 #include <QtGui/QPainter>
 #include <QProgressDialog>
 
-#define TEST_RFLAGS(x) theView->renderOptions().options.testFlag(x)
+#define TEST_RFLAGS_NODE(x) theView->renderOptions().options.testFlag(x)
 
 Node::Node(const Coord& aCoord)
     : Feature()
@@ -163,7 +163,7 @@ const CoordBox& Node::boundingBox(bool) const
 
 void Node::drawSimple(QPainter &P, MapView *theView)
 {
-//    if (!M_PREFS->getWireframeView() && !TEST_RFLAGS(RendererOptions::Interacting))
+//    if (!M_PREFS->getWireframeView() && !TEST_RFLAGS_NODE(RendererOptions::Interacting))
 //        return;
 
     if (! ((isReadonly() || !isSelectable(theView->pixelPerM(), theView->renderOptions())) && (!isPOI() && !isWaypoint())))
@@ -725,7 +725,7 @@ void PhotoNode::drawHover(QPainter& thePainter, MapView* theView)
     Feature::drawHover(thePainter, theView);
 
     /* and then the image */
-    if (TEST_RFLAGS(RendererOptions::PhotosVisible) && theView->pixelPerM() > M_PREFS->getRegionalZoom()) {
+    if (TEST_RFLAGS_NODE(RendererOptions::PhotosVisible) && theView->pixelPerM() > M_PREFS->getRegionalZoom()) {
         QPoint me(theView->toView(this));
 
         qreal rt = qBound(0.2, (double)theView->pixelPerM(), 1.0);
@@ -746,7 +746,7 @@ qreal PhotoNode::pixelDistance(const QPointF& Target, qreal ClearDistance, const
 {
 #ifdef GEOIMAGE
     QPoint me = theView->toView(const_cast<PhotoNode*>(this));
-    if (TEST_RFLAGS(RendererOptions::PhotosVisible) && theView->pixelPerM() > M_PREFS->getRegionalZoom()) {
+    if (TEST_RFLAGS_NODE(RendererOptions::PhotosVisible) && theView->pixelPerM() > M_PREFS->getRegionalZoom()) {
         qreal rt = qBound(0.2, (double)theView->pixelPerM(), 1.0);
         qreal phRt = 1. * Photo->width() / Photo->height();
         QPoint phPt;

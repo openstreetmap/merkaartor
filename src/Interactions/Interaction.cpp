@@ -21,7 +21,7 @@
 
 #include <math.h>
 
-#define CLEAR_DISTANCE 7.01
+#define CLEAR_DISTANCE_INTERACTION 7.01
 
 Interaction::Interaction(MainWindow* aMain)
     : QObject(aMain), theMain(aMain), Panning(false)
@@ -275,7 +275,7 @@ void FeatureSnapInteraction::updateSnap(QMouseEvent* event)
                         SnapList.push_back(F);
                 }
 
-                qreal Distance = F->pixelDistance(event->pos(), CLEAR_DISTANCE, NoSnap, view());
+                qreal Distance = F->pixelDistance(event->pos(), CLEAR_DISTANCE_INTERACTION, NoSnap, view());
                 if (Distance < BestDistance && !F->isReadonly())
                 {
                     BestDistance = Distance;
@@ -291,7 +291,7 @@ void FeatureSnapInteraction::updateSnap(QMouseEvent* event)
     if (areNodesSelectable) {
         R = CAST_WAY(lastSnap());
         if (R) {
-            Node* N = R->pixelDistanceNode(event->pos(), CLEAR_DISTANCE, view(), NoSnap, NoSelectVirtuals);
+            Node* N = R->pixelDistanceNode(event->pos(), CLEAR_DISTANCE_INTERACTION, view(), NoSnap, NoSelectVirtuals);
             if (N)
                 setLastSnap( N );
         }

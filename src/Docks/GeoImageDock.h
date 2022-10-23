@@ -1,4 +1,5 @@
 
+#pragma once
 #include "MapView.h"
 #include "MainWindow.h"
 #include "Document.h"

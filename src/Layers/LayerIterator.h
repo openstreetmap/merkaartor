@@ -1,3 +1,4 @@
+#pragma once
 class IDocument;
 
 template <class L>

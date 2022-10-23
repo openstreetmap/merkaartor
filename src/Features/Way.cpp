@@ -21,7 +21,7 @@
 #include <algorithm>
 #include <QList>
 
-#define TEST_RFLAGS(x) theView->renderOptions().options.testFlag(x)
+#define TEST_RFLAGS_WAY(x) theView->renderOptions().options.testFlag(x)
 
 class WayPrivate
 {

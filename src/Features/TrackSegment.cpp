@@ -14,7 +14,7 @@
 #include <algorithm>
 #include <QList>
 
-#define TEST_RFLAGS(x) theView->renderOptions().options.testFlag(x)
+#define TEST_RFLAGS_TRACK_SEGMENT(x) theView->renderOptions().options.testFlag(x)
 
 class TrackSegmentPrivate
 {
@@ -165,7 +165,7 @@ void TrackSegment::drawTouchup(QPainter &P, MapView* theView)
 {
     QPen pen;
 
-    if (!TEST_RFLAGS(RendererOptions::TrackSegmentVisible))
+    if (!TEST_RFLAGS_TRACK_SEGMENT(RendererOptions::TrackSegmentVisible))
         return;
 
     for (int i=1; i<p->Nodes.size(); ++i)
