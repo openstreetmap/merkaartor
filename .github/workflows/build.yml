@@ -45,9 +45,11 @@ jobs:
           fetch-depth: 0
       - name: Install dependencies
         run: |
+          brew list
           brew install gdal exiv2 proj qt${{ matrix.QT_MAJOR }} cmake inih
           brew unlink exiv2
           brew install --HEAD exiv2
+          brew link qt${{ matrix.QT_MAJOR }}
       - name: Build
         run: |
           ./ci/travis-osx-script.sh
