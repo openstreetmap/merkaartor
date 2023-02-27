@@ -35,7 +35,7 @@ ActionsDialog::ActionsDialog(QList<QAction *>& actions, MainWindow *parent)
     for (int i=0; i<actions.size(); ++i) {
         QAction *action = static_cast<QAction*>(actions.at(i));
         QTableWidgetItem* it = new QTableWidgetItem(action->toolTip());
-        it->setFlags(0);
+        it->setFlags(Qt::NoItemFlags);
         actionsTable->setItem(row, 0, it);
         actionsTable->setItem(row, 1, new QTableWidgetItem(action->shortcut().toString()));
 
@@ -69,7 +69,7 @@ ActionsDialog::ActionsDialog(QList<QAction *>& actions, MainWindow *parent)
     buttonLayout->addWidget(cancelButton);
 
     QVBoxLayout *mainLayout = new QVBoxLayout(this);
-    mainLayout->setMargin(8);
+    mainLayout->setContentsMargins(8, 8, 8, 8);
     mainLayout->setSpacing(8);
     mainLayout->addWidget(actionsTable);
     mainLayout->addLayout(buttonLayout);
@@ -168,7 +168,7 @@ void ActionsDialog::exportShortcuts()
         QTextStream ts(&file);
         QStringList shortcuts;
         for (int row = 0; row < (int)actionsList.size(); ++row) {
-            ts << actionsTable->item(row, 0)->text() << ":" << actionsTable->item(row, 1)->text() << endl;
+            ts << actionsTable->item(row, 0)->text() << ":" << actionsTable->item(row, 1)->text() << Qt::endl;
         }
 
         file.close();

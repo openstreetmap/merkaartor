@@ -23,6 +23,7 @@
 #include <QPainter>
 #include <QPainterPath>
 #include <QLocale>
+#include <QString>
 
 #include <algorithm>
 
@@ -97,7 +98,7 @@ public:
         , Virtual(false), Special(false), DirtyLevel(0)
         , parentLayer(0)
     #ifndef FRISIUS_BUILD
-        , Time(QDateTime::currentDateTime().toTime_t()), User(0xffffffff)
+        , Time(QDateTime::currentDateTime().toSecsSinceEpoch()), User(0xffffffff)
     #endif
     {
 #ifndef FRISIUS_BUILD
@@ -264,12 +265,12 @@ bool Feature::hasOSMId() const
 
 const QDateTime Feature::time() const
 {
-    return QDateTime::fromTime_t(p->Time);
+    return QDateTime::fromSecsSinceEpoch(p->Time);
 }
 
 void Feature::setTime(const QDateTime& time)
 {
-    p->Time = time.toTime_t();
+    p->Time = time.toSecsSinceEpoch();
 }
 
 void Feature::setTime(uint epoch)
@@ -840,10 +841,10 @@ QString Feature::toXML(int lvl, QProgressDialog * progress)
 
 void Feature::fromXML(QXmlStreamReader& stream, Feature* F)
 {
-    bool Deleted = (stream.attributes().value("deleted") == "true");
+    bool Deleted = (stream.attributes().value("deleted") == QStringLiteral("true"));
     int Dirty = (stream.attributes().hasAttribute("dirtylevel") ? stream.attributes().value("dirtylevel").toString().toInt() : 0);
-    bool Uploaded = (stream.attributes().value("uploaded") == "true");
-    bool Special = (stream.attributes().value("special") == "true");
+    bool Uploaded = (stream.attributes().value("uploaded") == QStringLiteral("true"));
+    bool Special = (stream.attributes().value("special") == QStringLiteral("true"));
 //    bool Selected = (stream.attributes().value("selected") == "true");
 
     QDateTime time;
@@ -922,7 +923,7 @@ void Feature::tagsFromXML(Document* d, Feature * f, QXmlStreamReader& stream)
 {
     Q_UNUSED(d)
     while(!stream.atEnd() && !stream.isEndElement()) {
-        if (stream.name() == "tag") {
+        if (stream.name() == QStringLiteral("tag")) {
             f->setTag(stream.attributes().value("k").toString(), stream.attributes().value("v").toString());
             stream.readNext();
         }

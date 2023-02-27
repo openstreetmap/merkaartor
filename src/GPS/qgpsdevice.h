@@ -27,7 +27,7 @@
 #include <QFile>
 
 class QString;
-class QMutex;
+class QRecursiveMutex;
 class QextSerialPort;
 class QFile;
 
@@ -151,7 +151,7 @@ protected:
     int     fd;
     bool    stopLoop;
 
-    QMutex  *mutex;
+    QRecursiveMutex  *mutex;
 
     // functions to set various properties - private
 

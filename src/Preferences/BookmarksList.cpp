@@ -113,7 +113,7 @@ void BookmarksList::toXml(QDomElement parent)
 {
     QDomElement rt = parent.ownerDocument().createElement("Bookmarks");
     parent.appendChild(rt);
-    rt.setAttribute("creator", QString("%1 v%2%3").arg(STRINGIFY(PRODUCT)).arg(STRINGIFY(VERSION)).arg(STRINGIFY(REVISION)));
+    rt.setAttribute("creator", QString("%1 v%2").arg(BuildMetadata::PRODUCT).arg(BuildMetadata::REVISION));
 
     BookmarkListIterator it(theBookmarks);
     while (it.hasNext()) {

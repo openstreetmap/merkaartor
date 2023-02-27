@@ -4,7 +4,7 @@
 class IFeature;
 
 #include <QtCore/QString>
-#include <QRegExp>
+#include <QRegularExpression>
 #include <QList>
 #include <QStringList>
 
@@ -66,12 +66,11 @@ class TagSelectorOperator : public TagSelector
     private:
         TagSelectorMatchResult evaluateVal(const QString& val) const;
 
-        QRegExp rx;
+        QRegularExpression rx;
         QString Key, Oper, Value;
         Ops theOp;
         qreal numValue;
         QDateTime dtValue;
-        bool UseSimpleRegExp;
         bool UseFullRegExp;
         TagSelectorSpecialKey specialKey;
         TagSelectorSpecialValue specialValue;
@@ -90,7 +89,7 @@ class TagSelectorIsOneOf : public TagSelector
         virtual QString asExpression(bool Precedence) const;
 
     private:
-        QList<QRegExp> rxv;
+        QList<QRegularExpression> rxv;
         QStringList exactMatchv;
         QString Key;
         QStringList Values;

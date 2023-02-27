@@ -79,13 +79,13 @@ void CreatePolygonInteraction::mousePressEvent(QMouseEvent * event)
             QBrush SomeBrush(QColor(0xff,0x77,0x11,128));
             QPen TP(SomeBrush,view()->pixelPerM()*4);
 
-            QMatrix m;
-            m.translate(OriginF.x(), OriginF.y());
-            m.rotate(bAngle);
-            m.scale(bScale.x(), bScale.y());
+            QTransform transform;
+            transform.translate(OriginF.x(), OriginF.y());
+            transform.rotate(bAngle);
+            transform.scale(bScale.x(), bScale.y());
 
             QPointF Prev(CenterF.x()+cos(-Angle/2)*Radius,CenterF.y()+sin(-Angle/2)*Radius);
-            Node* First = g_backend.allocNode(theMain->document()->getDirtyOrOriginLayer(), XY_TO_COORD(m.map(Prev).toPoint()));
+            Node* First = g_backend.allocNode(theMain->document()->getDirtyOrOriginLayer(), XY_TO_COORD(transform.map(Prev).toPoint()));
             Way* R = g_backend.allocWay(theMain->document()->getDirtyOrOriginLayer());
             CommandList* L  = new CommandList(MainWindow::tr("Create polygon %1").arg(R->id().numId), R);
             L->add(new AddFeatureCommand(theMain->document()->getDirtyOrOriginLayer(),R,true));
@@ -94,7 +94,7 @@ void CreatePolygonInteraction::mousePressEvent(QMouseEvent * event)
             for (qreal a = 2*M_PI - Angle*3/2; a>0; a-=Angle)
             {
                 QPointF Next(CenterF.x()+cos(a)*Radius,CenterF.y()+sin(a)*Radius);
-                Node* New = g_backend.allocNode(theMain->document()->getDirtyOrOriginLayer(), XY_TO_COORD(m.map(Next).toPoint()));
+                Node* New = g_backend.allocNode(theMain->document()->getDirtyOrOriginLayer(), XY_TO_COORD(transform.map(Next).toPoint()));
                 L->add(new AddFeatureCommand(theMain->document()->getDirtyOrOriginLayer(),New,true));
                 R->add(New);
             }
@@ -134,11 +134,11 @@ void CreatePolygonInteraction::paintEvent(QPaintEvent* , QPainter& thePainter)
         if (Sides == 4)
             Radius = sqrt(2.)/2.;
 
-        QMatrix m;
-        m.translate(OriginF.x(), OriginF.y());
-        m.rotate(bAngle);
-        m.scale(bScale.x(), bScale.y());
-        QPolygonF thePoly = m.map(QRectF(QPointF(0.0, 0.0), QPointF(1.0, 1.0)));
+        QTransform transform;
+        transform.translate(OriginF.x(), OriginF.y());
+        transform.rotate(bAngle);
+        transform.scale(bScale.x(), bScale.y());
+        QPolygonF thePoly = transform.map(QRectF(QPointF(0.0, 0.0), QPointF(1.0, 1.0)));
 
         thePainter.setPen(QPen(QColor(0,0,255),1,Qt::DotLine));
         thePainter.drawPolygon(thePoly);
@@ -150,11 +150,11 @@ void CreatePolygonInteraction::paintEvent(QPaintEvent* , QPainter& thePainter)
         for (qreal a = 2*M_PI - Angle*3/2; a>0; a-=Angle)
         {
             QPointF Next(CenterF.x()+cos(a)*Radius,CenterF.y()+sin(a)*Radius);
-            ::draw(thePainter,TP,Feature::UnknownDirection, m.map(Prev),m.map(Next),4,view()->projection());
+            ::draw(thePainter,TP,Feature::UnknownDirection, transform.map(Prev),transform.map(Next),4,view()->projection());
             Prev = Next;
         }
         QPointF Next(CenterF.x()+cos(-Angle/2)*Radius,CenterF.y()+sin(-Angle/2)*Radius);
-        ::draw(thePainter,TP,Feature::UnknownDirection, m.map(Prev),m.map(Next),4,view()->projection());
+        ::draw(thePainter,TP,Feature::UnknownDirection, transform.map(Prev),transform.map(Next),4,view()->projection());
     }
 }
 
@@ -163,19 +163,19 @@ void CreatePolygonInteraction::mouseMoveEvent(QMouseEvent* event)
     if (HaveOrigin) {
         OriginF = COORD_TO_XY(Origin);
 
-        QMatrix m;
-        m.translate(OriginF.x(), OriginF.y());
-        m.rotate(bAngle);
+        QTransform transform;
+        transform.translate(OriginF.x(), OriginF.y());
+        transform.rotate(bAngle);
 
         if (event->modifiers() & Qt::ShiftModifier) {
-            bAngle += radToAng(angle(m.inverted().map(LastCursor), m.inverted().map(event->pos())));
+            bAngle += radToAng(angle(transform.inverted().map(LastCursor), transform.inverted().map(event->pos())));
 
-            QMatrix m2;
-            m2.translate(OriginF.x(), OriginF.y());
-            m2.rotate(bAngle);
-            bScale = m2.inverted().map(event->pos());
+            QTransform transform2;
+            transform2.translate(OriginF.x(), OriginF.y());
+            transform2.rotate(bAngle);
+            bScale = transform2.inverted().map(event->pos());
         } else {
-            bScale = m.inverted().map(event->pos());
+            bScale = transform.inverted().map(event->pos());
         }
 
         view()->update();

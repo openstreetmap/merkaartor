@@ -21,10 +21,12 @@ project(merkaartor VERSION ${VCS_VERSION})
 # compatibility.
 # Using configure_file() allows us to store the metadata in a .cpp file, thus
 # only rebuilding that one and linking.
-add_definitions(-DVERSION=${PROJECT_VERSION} -DREVISION=${VCS_DESCRIBE})
-add_definitions(-DPRODUCT=Merkaartor)
-add_definitions(-DSHARE_DIR=${CMAKE_INSTALL_PREFIX}/share/merkaartor)
-add_definitions(-DTRANSDIR_MERKAARTOR=${CMAKE_INSTALL_PREFIX}/share/merkaartor)
+set(SHARE_DIR ${CMAKE_INSTALL_PREFIX}/share/merkaartor)
+set(LIB_DIR   ${CMAKE_INSTALL_PREFIX}/lib/merkaartor)
+configure_file("${PROJECT_SOURCE_DIR}/cmake/build-metadata.cpp.in" "${PROJECT_BINARY_DIR}/build-metadata.cpp" @ONLY)
+
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 enable_testing()
 
@@ -42,6 +44,22 @@ set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTOUIC ON)
 
 set(CMAKE_AUTORCC ON)
+
+##############################################
+# Find Qt dependencies
+##############################################
+set(MERKAARTOR_QT_LIBS Svg Network Xml Core Gui Concurrent PrintSupport Widgets Test)
+set(MERKAARTOR_QT_TOOLS LinguistTools)
+find_package(QT NAMES Qt5 Qt6 REQUIRED COMPONENTS Core)
+message(STATUS " * Qt version found: ${QT_VERSION}")
+if (${QT_VERSION_MAJOR} EQUAL 6)
+    list(APPEND MERKAARTOR_QT_LIBS Core5Compat)
+endif()
+
+find_package(Qt${QT_VERSION_MAJOR} COMPONENTS ${MERKAARTOR_QT_LIBS} ${MERKAARTOR_QT_TOOLS} CONFIG REQUIRED)
+set(MERKAARTOR_LINK_LIBS ${MERKAARTOR_QT_LIBS})
+list(TRANSFORM MERKAARTOR_LINK_LIBS PREPEND Qt${QT_VERSION_MAJOR}::)
+
 
 set(CMAKE_AUTOUIC_SEARCH_PATHS
 ${CMAKE_CURRENT_SOURCE_DIR}/src
@@ -81,6 +99,7 @@ endif()
 
 # Populate a CMake variable with the sources
 set(merkaartor_SRCS
+${PROJECT_BINARY_DIR}/build-metadata.cpp
 ${merkaartor_SRCS_PLATFORM}
 src/Backend/MemoryBackend.cpp
 src/Backend/MemoryBackend.h
@@ -141,10 +160,8 @@ src/Render/NativeRenderDialog.h
 src/Render/NativeRenderDialog.cpp
 src/Render/MapRenderer.cpp
 src/PaintStyle/Painter.cpp
-src/PaintStyle/MapCSSPaintstyle.cpp
 src/PaintStyle/MasPaintStyle.h
 src/PaintStyle/Painter.h
-src/PaintStyle/MapCSSPaintstyle.h
 src/PaintStyle/PaintStyleEditor.ui
 src/PaintStyle/PrimitivePainter.cpp
 src/PaintStyle/PrimitivePainter.h
@@ -395,7 +412,6 @@ interfaces/IMapWatermark.h
 interfaces/IImageManager.cpp
 interfaces/IRenderer.h
 interfaces/IDocument.h
-interfaces/Interfaces.pri
 interfaces/IBackend.h
 interfaces/IMapAdapter.h
 3rdparty/qtsingleapplication-2.6_1-opensource/src/qtlockedfile.cpp
@@ -446,7 +462,6 @@ set(MERKAARTOR_SHARE_FILES
 install( FILES ${MERKAARTOR_SHARE_FILES} DESTINATION share/merkaartor)
 set_source_files_properties(${MEKAARTOR_SHARE_FILES} PROPERTIES MACOSX_PACKAGE_LOCATION "Resources")
 
-find_package(Qt5LinguistTools)
 set(TS_FILES
   ${CMAKE_SOURCE_DIR}/translations/merkaartor_cs.ts
   ${CMAKE_SOURCE_DIR}/translations/merkaartor_de.ts
@@ -467,7 +482,7 @@ set(TS_FILES
   ${CMAKE_SOURCE_DIR}/translations/merkaartor_uk.ts
   ${CMAKE_SOURCE_DIR}/translations/merkaartor_zh_TW.ts
 )
-qt5_add_translation(QM_FILES
+qt_add_translation(QM_FILES
     ${TS_FILES}
 )
 install( FILES ${QM_FILES} DESTINATION share/merkaartor/translations )
@@ -530,15 +545,10 @@ message(STATUS " * LINK DIRECTORIES: ${PKGCONFIG_DEPS_LIBRARY_DIRS}")
 message(STATUS "")
 
 
+list(APPEND MERKAARTOR_LINK_LIBS ${PKGCONFIG_DEPS_LIBRARIES})
 link_directories(${PKGCONFIG_DEPS_LIBRARY_DIRS})
 
 
-
-##############################################
-# Find Qt dependencies
-##############################################
-find_package(Qt5 COMPONENTS Svg Network Xml Core Gui Concurrent PrintSupport Widgets Test CONFIG REQUIRED)
-set(MERKAARTOR_LINK_LIBS Qt5::Svg Qt5::Network Qt5::Xml Qt5::Core Qt5::Gui Qt5::Concurrent Qt5::PrintSupport Qt5::Widgets ${PKGCONFIG_DEPS_LIBRARIES})
 
 ##############################################
 # Create the Merkaartor binary
@@ -661,7 +671,11 @@ if (WIN32)
   set(CPACK_NSIS_ENABLE_UNINSTALL_DONT_CHECK_32 ON)
   # End of workaround
 
-  find_program(WINDEPLOYQT windeployqt)
+  if (${QT_VERSION_MAJOR} EQUAL 6)
+    find_program(WINDEPLOYQT windeployqt-qt6)
+  else()
+    find_program(WINDEPLOYQT windeployqt)
+  endif()
   find_program(CYGCHECK cygcheck)
   configure_file("${PROJECT_SOURCE_DIR}/cmake/deploy-windows.cmake.in" "${CMAKE_BINARY_DIR}/deploy-windows.cmake" @ONLY)
   set (CPACK_PRE_BUILD_SCRIPTS "${CMAKE_BINARY_DIR}/deploy-windows.cmake")
@@ -678,12 +692,13 @@ include(CPack)
 # The test shall be placed in file "tests/<test_name>.cpp" file, followed by required includes
 function(MERK_ADD_TEST test_name)
   add_executable(${test_name} tests/${test_name}.cpp ${ARGN})
-  target_link_libraries(${test_name} ${MERKAARTOR_LINK_LIBS} Qt5::Test )
+  target_link_libraries(${test_name} ${MERKAARTOR_LINK_LIBS} Qt::Test )
   add_test(${test_name} ${test_name})
   target_include_directories(${test_name} PUBLIC ${MERKAARTOR_INCLUDE_DIRECTORIES})
 endfunction()
 
 MERK_ADD_TEST(test-projection src/common/Projection.cpp src/common/Coord.cpp)
+MERK_ADD_TEST(test-OsmLink src/Utils/OsmLink.cpp src/common/Coord.cpp)
 
 # Additional tests that use the main executable
 if (EXTRA_TESTS)

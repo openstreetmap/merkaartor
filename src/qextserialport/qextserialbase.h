@@ -159,7 +159,7 @@ public:
     virtual FlowType flowControl() const;
     virtual void setTimeout(ulong, ulong)=0;
 
-    virtual bool open(OpenMode mode=0)=0;
+    virtual bool open(OpenMode mode = QIODevice::NotOpen)=0;
     virtual bool isSequential() const;
     virtual void close()=0;
     virtual void flush()=0;

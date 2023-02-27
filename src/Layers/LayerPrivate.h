@@ -20,7 +20,7 @@ public:
     }
 
     QList<Feature*> Features;
-    QHash<qint64, MapFeaturePtr> IdMap;
+    QMultiHash<qint64, MapFeaturePtr> IdMap;
 
     QString Name;
     QString Description;

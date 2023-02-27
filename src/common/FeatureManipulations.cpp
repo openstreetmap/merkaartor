@@ -291,6 +291,23 @@ static void replaceItem(QList<T> &list, T oldItem, T newItem)
         list.replace(i, newItem);
 }
 
+/** Returns a tuple of {F1, F2} or {F2, F1}. First value in tuple is considered more important and should be merged into. */
+template<typename T>
+std::tuple<T*, T*> moreImportant(T* F1, T* F2) {
+    // If one feature has negative id, automatically pick the other - existing features always take precedence.
+    // If both features have negative id, it doesn't matter which we choose.
+    if (F1->id().numId < 0) {
+        return {F2, F1};
+    } else if (F2->id().numId < 0) {
+        return {F1, F2};
+    // Else pick the one that has more tags associated
+    } else if (F2->tagSize() > F1->tagSize()) {
+        return {F2, F1};
+    } else {
+        return {F1, F2};
+    }
+}
+
 void joinRoads(Document* theDocument, CommandList* theList, PropertiesDock* theDock)
 {
     QList<Feature*> selection = theDock->selection();
@@ -318,6 +335,8 @@ void joinRoads(Document* theDocument, CommandList* theList, PropertiesDock* theD
                 mergeNodes(theDocument, theList, R1->getNode(0), R1->getNode(R1->size()-1));
             }
         } else {
+            // Select the more important way as the one to keep
+            std::tie(R1, R2) = moreImportant(R1, R2);
             R1 = join(theDocument, theList, R1, R2);
             // replace R2 with R1 for subsequent operations
             replaceItem(ends[R2->getNode(0)->position()], R2, R1);
@@ -638,7 +657,7 @@ void createStreetNumbers(Document* theDocument, CommandList* theList, Way* theRo
             for (int m=0; m < I->size()-1; ++m) {
                 QLineF l3 = QLineF(I->getNode(m)->position(), I->getNode(m+1)->position());
                 QPointF theIntersection;
-                if (lto.intersect(l3, &theIntersection) == QLineF::BoundedIntersection) {
+                if (lto.intersects(l3, &theIntersection) == QLineF::BoundedIntersection) {
                     intersectedTo = true;
                     QLineF lt = QLineF(prevPoint, theIntersection);
                     if (lt.length() < lto.length())
@@ -661,7 +680,7 @@ void createStreetNumbers(Document* theDocument, CommandList* theList, Way* theRo
                 for (int m=0; m < I->size()-1; ++m) {
                     QLineF l3 = QLineF(I->getNode(m)->position(), I->getNode(m+1)->position());
                     QPointF theIntersection;
-                    if (lfrom.intersect(l3, &theIntersection) == QLineF::BoundedIntersection) {
+                    if (lfrom.intersects(l3, &theIntersection) == QLineF::BoundedIntersection) {
                         intersectedFrom = true;
                         QLineF lt = QLineF(nv.p2(), theIntersection);
                         if (lt.length() < lfrom.length())
@@ -904,6 +923,7 @@ inserted:
 
 static void mergeNodes(Document* theDocument, CommandList* theList, Node *node1, Node *node2)
 {
+    std::tie(node1, node2) = moreImportant(node1, node2);
     QList<Feature*> alt;
     alt.append(node1);
     Feature::mergeTags(theDocument, theList, node1, node2);
@@ -1902,7 +1922,7 @@ AxisAlignResult axisAlignRoads(Document* theDocument, CommandList* theList, Prop
                     // axes different, so probably safe to intersect
                     QLineF l0(midpoints[index0], midpoints[index0] + axis_vectors[edge_axis[index0]]);
                     QLineF l1(midpoints[index1], midpoints[index1] + axis_vectors[edge_axis[index1]]);
-                    if (l0.intersect(l1, &new_pos) == QLineF::NoIntersection) {
+                    if (l0.intersects(l1, &new_pos) == QLineF::NoIntersection) {
                         theList->undo();
                         return AxisAlignSharpAngles;
                     }

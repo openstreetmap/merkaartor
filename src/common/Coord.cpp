@@ -80,9 +80,9 @@ CoordBox CoordBox::fromXML(QXmlStreamReader& stream)
 
     stream.readNext();
     while(!stream.atEnd() && !stream.isEndElement()) {
-        if (stream.name() == "topright")
+        if (stream.name() == QStringLiteral("topright"))
             tr = Coord::fromXML(stream);
-        else if (stream.name() == "bottomleft")
+        else if (stream.name() == QStringLiteral("bottomleft"))
             bl = Coord::fromXML(stream);
 
         stream.readNext();

@@ -99,13 +99,13 @@ void ImportCSVDialog::analyze()
         }
     }
 
-    QRegExp rx(QString("%1\\s*\".*\"\\s*%1").arg(m_delim));
-    if (rx.indexIn(l)) {
+    QRegularExpression rx(QString("%1\\s*\".*\"\\s*%1").arg(m_delim));
+    if (l.indexOf(rx)) {
         m_quote = "\"";
         ui->rbStringDouble->setChecked(true);
     } else {
-        rx = QRegExp(QString("%1\\s*'.*'\\s*%1").arg(m_delim));
-        if (rx.indexIn(l)) {
+        rx = QRegularExpression(QString("%1\\s*'.*'\\s*%1").arg(m_delim));
+        if (l.indexOf(rx)) {
             m_quote = "'";
             ui->rbStringSingle->setChecked(true);
         } else {
@@ -513,7 +513,7 @@ void ImportCSVDialog::on_btSave_clicked()
 
     QDomElement root = theXmlDoc.createElement("CSVImportSettings");
     theXmlDoc.appendChild(root);
-    root.setAttribute("creator", QString("%1 v%2%3").arg(qApp->applicationName()).arg(STRINGIFY(VERSION)).arg(STRINGIFY(REVISION)));
+    root.setAttribute("creator", QString("%1 v%2%3").arg(qApp->applicationName()).arg(BuildMetadata::VERSION).arg(BuildMetadata::REVISION));
 
     QString tDelim = m_delim;
     if (tDelim == "\t")

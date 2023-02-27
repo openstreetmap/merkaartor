@@ -201,7 +201,7 @@ void Layer::deleteAll() {
 
 void Layer::notifyIdUpdate(const IFeature::FId& id, Feature* aFeature)
 {
-    QHash<qint64, MapFeaturePtr>::iterator i;
+    QMultiHash<qint64, MapFeaturePtr>::iterator i;
 
     if (!aFeature) {
         i = p->IdMap.find(id.numId);
@@ -214,7 +214,7 @@ void Layer::notifyIdUpdate(const IFeature::FId& id, Feature* aFeature)
     }
     else {
         if (!aFeature->isVirtual())
-            p->IdMap.insertMulti(id.numId, aFeature);
+            p->IdMap.insert(id.numId, aFeature);
     }
 }
 
@@ -265,7 +265,7 @@ Feature* Layer::get(int i)
 
 Feature* Layer::get(const IFeature::FId& id)
 {
-    QHash<qint64, MapFeaturePtr>::const_iterator i;
+    QMultiHash<qint64, MapFeaturePtr>::const_iterator i;
 
     i = p->IdMap.find(id.numId);
     while (i != p->IdMap.end() && i.key() == id.numId) {
@@ -458,11 +458,11 @@ Layer * Layer::fromXML(Layer* l, Document* /*d*/, QXmlStreamReader& stream, QPro
 {
     l->setId(stream.attributes().value("xml:id").toString());
     l->setAlpha(stream.attributes().value("alpha").toString().toDouble());
-    l->setVisible((stream.attributes().value("visible") == "true" ? true : false));
-    l->setSelected((stream.attributes().value("selected") == "true" ? true : false));
-    l->setEnabled((stream.attributes().value("enabled") == "false" ? false : true));
-    l->setReadonly((stream.attributes().value("readonly") == "true" ? true : false));
-    l->setUploadable((stream.attributes().value("uploadable") == "false" ? false : true));
+    l->setVisible((stream.attributes().value("visible") == QStringLiteral("true") ? true : false));
+    l->setSelected((stream.attributes().value("selected") == QStringLiteral("true") ? true : false));
+    l->setEnabled((stream.attributes().value("enabled") == QStringLiteral("false") ? false : true));
+    l->setReadonly((stream.attributes().value("readonly") == QStringLiteral("true") ? true : false));
+    l->setUploadable((stream.attributes().value("uploadable") == QStringLiteral("false") ? false : true));
     l->setDirtyLevel((stream.attributes().hasAttribute("dirtylevel") ? stream.attributes().value("dirtylevel").toString().toInt() : 0));
 
     return l;
@@ -504,7 +504,7 @@ bool DrawingLayer::toXML(QXmlStreamWriter& stream, bool asTemplate, QProgressDia
     if (!asTemplate) {
         stream.writeStartElement("osm");
         stream.writeAttribute("version", "0.6");
-        stream.writeAttribute("generator", QString("%1 %2").arg(STRINGIFY(PRODUCT)).arg(STRINGIFY(VERSION)));
+        stream.writeAttribute("generator", QString("%1 %2").arg(BuildMetadata::PRODUCT).arg(BuildMetadata::VERSION));
 
         if (p->Features.size()) {
             stream.writeStartElement("bound");
@@ -555,21 +555,21 @@ DrawingLayer * DrawingLayer::doFromXML(DrawingLayer* l, Document* d, QXmlStreamR
 {
     stream.readNext();
     while(!stream.atEnd() && !stream.isEndElement()) {
-        if (stream.name() == "osm") {
+        if (stream.name() == QStringLiteral("osm")) {
             QSet<Way*> addedWays;
             stream.readNext();
             while(!stream.atEnd() && !stream.isEndElement()) {
-                if (stream.name() == "way") {
+                if (stream.name() == QStringLiteral("way")) {
                     Way* R = Way::fromXML(d, l, stream);
                     if (R)
                         addedWays << R;
-                } else if (stream.name() == "relation") {
+                } else if (stream.name() == QStringLiteral("relation")) {
                     /* Relation* r = */ Relation::fromXML(d, l, stream);
-                } else  if (stream.name() == "node") {
+                } else  if (stream.name() == QStringLiteral("node")) {
                     /* Node* N = */ Node::fromXML(d, l, stream);
-                } else if (stream.name() == "trkseg") {
+                } else if (stream.name() == QStringLiteral("trkseg")) {
                     /*TrackSegment* T = */ TrackSegment::fromXML(d, l, stream, progress);
-                } else if (stream.name() == "bound") {
+                } else if (stream.name() == QStringLiteral("bound")) {
                     stream.skipCurrentElement();
                 } else if (!stream.isWhitespace()) {
                     qDebug() << "osm: logic error:" << stream.name() << ":" << stream.tokenType() << "(" << stream.lineNumber() << ")";
@@ -584,11 +584,11 @@ DrawingLayer * DrawingLayer::doFromXML(DrawingLayer* l, Document* d, QXmlStreamR
                 stream.readNext();
                 qApp->processEvents();
             }
-        } else if (stream.name() == "DownloadedAreas") {
+        } else if (stream.name() == QStringLiteral("DownloadedAreas")) {
             if (d->getLastDownloadLayerTime().secsTo(QDateTime::currentDateTime()) < 12*3600) {    // Do not import downloaded areas if older than 12h
                 stream.readNext();
                 while(!stream.atEnd() && !stream.isEndElement()) {
-                    if (stream.name() == "DownloadedBoundingBox") {
+                    if (stream.name() == QStringLiteral("DownloadedBoundingBox")) {
                         d->addDownloadBox(l, CoordBox::fromXML(stream));
                         stream.readNext();
                     }
@@ -776,18 +776,18 @@ TrackLayer * TrackLayer::fromXML(Document* d, QXmlStreamReader& stream, QProgres
 
     stream.readNext();
     while(!stream.atEnd() && !stream.isEndElement()) {
-        if (stream.name() == "gpx") {
+        if (stream.name() == QStringLiteral("gpx")) {
             stream.readNext();
             while(!stream.atEnd() && !stream.isEndElement()) {
-                if (stream.name() == "trk") {
+                if (stream.name() == QStringLiteral("trk")) {
                     stream.readNext();
                     while(!stream.atEnd() && !stream.isEndElement()) {
-                        if (stream.name() == "trkseg") {
+                        if (stream.name() == QStringLiteral("trkseg")) {
                             TrackSegment::fromXML(d, l, stream, progress);
                         }
                         stream.readNext();
                     }
-                } else if (stream.name() == "wpt") {
+                } else if (stream.name() == QStringLiteral("wpt")) {
                     /* Node* N = */ TrackNode::fromGPX(d, l, stream);
                     //l->add(N);
                     progress->setValue(progress->value()+1);

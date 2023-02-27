@@ -285,7 +285,7 @@ void ImportExportPBF::parseNode( Layer* aLayer )
         if (info.has_version())
             N->setVersionNumber(info.version());
         if (info.has_timestamp())
-            N->setTime(QDateTime::fromTime_t(info.timestamp()));
+            N->setTime(QDateTime::fromSecsSinceEpoch(info.timestamp()));
         if (info.has_user_sid())
             N->setUser(m_primitiveBlock.stringtable().s(info.user_sid()).data());
     }
@@ -327,7 +327,7 @@ void ImportExportPBF::parseWay( Layer* aLayer )
         if (info.has_version())
             W->setVersionNumber(info.version());
         if (info.has_timestamp())
-            W->setTime(QDateTime::fromTime_t(info.timestamp()));
+            W->setTime(QDateTime::fromSecsSinceEpoch(info.timestamp()));
         if (info.has_user_sid())
             W->setUser(m_primitiveBlock.stringtable().s(info.user_sid()).data());
     }
@@ -383,7 +383,7 @@ void ImportExportPBF::parseRelation( Layer* aLayer )
         if (info.has_version())
             R->setVersionNumber(info.version());
         if (info.has_timestamp())
-            R->setTime(QDateTime::fromTime_t(info.timestamp()));
+            R->setTime(QDateTime::fromSecsSinceEpoch(info.timestamp()));
         if (info.has_user_sid())
             R->setUser(m_primitiveBlock.stringtable().s(info.user_sid()).data());
     }

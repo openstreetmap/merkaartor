@@ -347,7 +347,7 @@ TagSelector::~TagSelector()
 /* TAGSELECTOROPERATOR */
 
 TagSelectorOperator::TagSelectorOperator(const QString& key, const QString& oper, const QString& value)
-    : Key(key), Oper(oper), Value(value), UseSimpleRegExp(false), UseFullRegExp(false)
+    : Key(key), Oper(oper), Value(value), UseFullRegExp(false)
     , specialKey(TagSelectKey_None)
     , specialValue(TagSelectValue_None)
 {
@@ -386,12 +386,11 @@ TagSelectorOperator::TagSelectorOperator(const QString& key, const QString& oper
         UseFullRegExp = true;
         QString r = value.mid(1);
         r.chop(1);
-        rx = QRegExp(r, Qt::CaseInsensitive);
-        rx.setPatternSyntax(QRegExp::RegExp2);
-    } else if (value.contains(QRegExp("[][*?]"))) {
-        UseSimpleRegExp = true;
-        rx = QRegExp(value, Qt::CaseInsensitive);
-        rx.setPatternSyntax(QRegExp::Wildcard);
+        rx = QRegularExpression(r, QRegularExpression::CaseInsensitiveOption);
+    } else if (value.contains(QRegularExpression("[][*?]"))) {
+        UseFullRegExp = true;
+        rx = QRegularExpression(QRegularExpression::wildcardToRegularExpression(value),
+                                QRegularExpression::CaseInsensitiveOption);
     }
     valN = Value.toDouble(&okval);
 
@@ -428,19 +427,8 @@ TagSelectorMatchResult TagSelectorOperator::evaluateVal(const QString& val) cons
         } else {
             if (val.toUpper() != emptyString) return TagSelect_Match;
         }
-    } else if (UseSimpleRegExp) {
-        QRegExp lrx(rx);
-        if (lrx.exactMatch(val))  {
-            if (theOp == EQ)
-                return TagSelect_Match;
-        } else {
-            if (theOp != EQ)
-                return TagSelect_Match;
-        }
-
     } else if (UseFullRegExp) {
-        QRegExp lrx(rx);
-        if (lrx.indexIn(val) != -1)  {
+        if (val.indexOf(rx) != -1)  {
             if (theOp == EQ)
                 return TagSelect_Match;
         } else {
@@ -796,9 +784,9 @@ TagSelectorIsOneOf::TagSelectorIsOneOf(const QString& key, const QStringList& va
     {
         if (values[i].toUpper() == "_NULL_") {
             specialValue = TagSelectValue_Empty;
-        } else if (values[i].contains(QRegExp("[][*?]"))) {
-            QRegExp rx(values[i], Qt::CaseInsensitive);
-            rx.setPatternSyntax(QRegExp::Wildcard);
+        } else if (values[i].contains(QRegularExpression("[][*?]"))) {
+            QRegularExpression rx(QRegularExpression::wildcardToRegularExpression(values[i]), 
+                                  QRegularExpression::CaseInsensitiveOption);
             rxv.append(rx);
         } else {
             exactMatchv.append(values[i]);
@@ -860,8 +848,8 @@ TagSelectorMatchResult TagSelectorIsOneOf::matches(const IFeature* F, qreal /*Pi
         foreach (QString pattern, exactMatchv) {
             if (QString::compare(V, pattern) == 0) return TagSelect_Match;
         }
-        foreach (QRegExp pattern, rxv) {
-            if (pattern.exactMatch(V)) return TagSelect_Match;
+        foreach (QRegularExpression pattern, rxv) {
+            if (V.indexOf(pattern) == 0) return TagSelect_Match;
         }
     }
     return TagSelect_NoMatch;

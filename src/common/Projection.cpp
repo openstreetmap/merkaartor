@@ -21,10 +21,6 @@ ProjectionBackend::ProjectionBackend(QString initProjection, std::function<QStri
 
 
     projCtx = std::shared_ptr<PJ_CONTEXT>(proj_context_create(), proj_context_destroy);
-#if defined(Q_OS_WIN)
-    ProjDirs dirs;
-    proj_context_set_search_paths(projCtx.get(), dirs.count, dirs.dirs);
-#endif // Q_OS_WIN
     projTransform = std::shared_ptr<PJ>(nullptr);
     projMutex = std::shared_ptr<QMutex>(new QMutex());
     setProjectionType(initProjection);
@@ -225,7 +221,7 @@ bool ProjectionBackend::toXML(QXmlStreamWriter& stream)
 
 void ProjectionBackend::fromXML(QXmlStreamReader& stream)
 {
-    if (stream.name() == "Projection") {
+    if (stream.name() == QStringLiteral("Projection")) {
         QString proj;
         if (stream.attributes().hasAttribute("type"))
             proj = stream.attributes().value("type").toString();

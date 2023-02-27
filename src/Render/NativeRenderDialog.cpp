@@ -138,6 +138,10 @@ int NativeRenderDialog::exec()
     return preview->exec();
 }
 
+QRect printerPageRect(QPrinter* printer) {
+    return printer->pageLayout().paintRectPixels(printer->resolution());
+}
+
 void NativeRenderDialog::renderPreview(QPrinter* printer)
 {
     /* Set the preview resolution. Having full resolution just for preview
@@ -145,7 +149,7 @@ void NativeRenderDialog::renderPreview(QPrinter* printer)
     printer->setResolution(96);
     QPainter P(printer);
     P.setRenderHint(QPainter::Antialiasing);
-    QRect theR = printer->pageRect();
+    QRect theR = printerPageRect(printer);
     qDebug() << "Rendering preview to:" << theR;
     theR.moveTo(0, 0);
     render(P, theR, options());
@@ -195,7 +199,7 @@ void NativeRenderDialog::exportPDF()
 
     QPainter P(thePrinter);
     P.setRenderHint(QPainter::Antialiasing);
-    QRect theR = thePrinter->pageRect();
+    QRect theR = printerPageRect(thePrinter);
     theR.moveTo(0, 0);
     RendererOptions opt = options();
     opt.options |= RendererOptions::PrintAllLabels;
@@ -220,7 +224,7 @@ void NativeRenderDialog::exportRaster()
 
     setPrinterOptions();
 
-    QRect theR = thePrinter->pageRect();
+    QRect theR = printerPageRect(thePrinter);
     theR.moveTo(0, 0);
 
     QPixmap pix(theR.size());
@@ -257,7 +261,7 @@ void NativeRenderDialog::exportSVG()
     setPrinterOptions();
 
     QSvgGenerator svgg;
-    QRect theR = thePrinter->pageRect();
+    QRect theR = printerPageRect(thePrinter);
     theR.moveTo(0, 0);
     svgg.setSize(theR.size());
     svgg.setFileName(s);

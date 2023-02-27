@@ -46,7 +46,7 @@ bool ShortcutOverrideFilter::eventFilter(QObject* object, QEvent* event) {
     // event will follow, otherwise the shortcut is activated
     if (event->type() == QEvent::ShortcutOverride) {
         QKeyEvent *keyEvent = static_cast<QKeyEvent*>(event);
-        QKeySequence pressed(keyEvent->key() + keyEvent->modifiers());
+        QKeySequence pressed(keyEvent->key() | keyEvent->modifiers());
 
         if (keyEvent->key() == Qt::Key_Escape) {
             if (widget->hasFocus()) {

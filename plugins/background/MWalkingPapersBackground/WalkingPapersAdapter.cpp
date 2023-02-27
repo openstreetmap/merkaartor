@@ -398,10 +398,10 @@ void WalkingPapersAdapter::fromXML(QXmlStreamReader& stream)
 
     stream.readNext();
     while(!stream.atEnd() && !stream.isEndElement()) {
-        if (stream.name() == "Images") {
+        if (stream.name() == QStringLiteral("Images")) {
             stream.readNext();
             while(!stream.atEnd() && !stream.isEndElement()) {
-                if (stream.name() == "Image") {
+                if (stream.name() == QStringLiteral("Image")) {
                     QString fn = stream.attributes().value("filename").toString();
                     if (!fn.isEmpty()) {
                         double x = stream.attributes().value("left").toString().toDouble();

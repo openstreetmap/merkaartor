@@ -92,12 +92,12 @@ void PixmapWidget::wheelEvent( QWheelEvent *anEvent )
 {
     qreal f;
 
-    f = zoomFactor + 0.001*anEvent->delta();
+    f = zoomFactor + 0.001*anEvent->angleDelta().y();
     if( f < 32.0/m_pm->width() )
         f = 32.0/m_pm->width();
 
 
-    QPoint p = anEvent->pos() - Delta;
+    QPoint p = anEvent->position().toPoint() - Delta;
     Delta -= (QPointF(p) / zoomFactor * f).toPoint() - p;
 
     setZoomFactor( f );

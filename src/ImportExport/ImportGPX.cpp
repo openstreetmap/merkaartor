@@ -145,7 +145,7 @@ static void importTrkSeg(const QDomElement& Root, Document* theDocument, Layer* 
         /* If the point is marked as anonymized, don't add it to a segment.
          * These are sorted by coordinates and are not proper segments. */
         if ( importOptions.testFlag(ImportGPX::Option::DetectAnonymizedSegments)
-             && (Pt->time().toTime_t() == 0)
+             && (Pt->time().toSecsSinceEpoch() == 0)
         ) {
             theLayer->add(Pt);
             nAnon++;

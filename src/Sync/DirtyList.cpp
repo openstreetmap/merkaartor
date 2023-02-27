@@ -115,20 +115,20 @@ bool DirtyListVisit::runVisit()
     DeletePass = false;
     document()->history().buildDirtyList(*this);
     DeletePass = true;
-    for (int i=0; i<RelationsToDelete.uniqueKeys().size(); i++) {
-        if (!RelationsToDelete.uniqueKeys()[i]->hasOSMId())
+    for (int i=0; i<RelationsToDelete.keys().size(); i++) {
+        if (!RelationsToDelete.keys()[i]->hasOSMId())
             continue;
-        RelationsToDelete[RelationsToDelete.uniqueKeys()[i]] = eraseRelation(RelationsToDelete.uniqueKeys()[i]);
+        RelationsToDelete[RelationsToDelete.keys()[i]] = eraseRelation(RelationsToDelete.keys()[i]);
     }
-    for (int i=0; i<RoadsToDelete.uniqueKeys().size(); i++) {
-        if (!RoadsToDelete.uniqueKeys()[i]->hasOSMId())
+    for (int i=0; i<RoadsToDelete.keys().size(); i++) {
+        if (!RoadsToDelete.keys()[i]->hasOSMId())
             continue;
-        RoadsToDelete[RoadsToDelete.uniqueKeys()[i]] = eraseRoad(RoadsToDelete.uniqueKeys()[i]);
+        RoadsToDelete[RoadsToDelete.keys()[i]] = eraseRoad(RoadsToDelete.keys()[i]);
     }
-    for (int i=0; i<TrackPointsToDelete.uniqueKeys().size(); i++) {
-        if (!TrackPointsToDelete.uniqueKeys()[i]->hasOSMId())
+    for (int i=0; i<TrackPointsToDelete.keys().size(); i++) {
+        if (!TrackPointsToDelete.keys()[i]->hasOSMId())
             continue;
-        TrackPointsToDelete[TrackPointsToDelete.uniqueKeys()[i]] = erasePoint(TrackPointsToDelete.uniqueKeys()[i]);
+        TrackPointsToDelete[TrackPointsToDelete.keys()[i]] = erasePoint(TrackPointsToDelete.keys()[i]);
     }
     return document()->history().buildDirtyList(*this);
 }
@@ -525,7 +525,7 @@ bool DirtyListExecutor::start()
         "<tag k=\"comment\" v=\"%3\"/>"
         "</changeset>"
         "</osm>");
-    DataIn = DataIn.arg(STRINGIFY(VERSION)).arg(QLocale::system().name().split("_")[0]).arg(Utils::encodeAttributes(glbChangeSetComment));
+    DataIn = DataIn.arg(BuildMetadata::VERSION).arg(QLocale::system().name().split("_")[0]).arg(Utils::encodeAttributes(glbChangeSetComment));
     QString DataOut;
     QString URL = theDownloader->getURLToOpenChangeSet();
     if (sendRequest("PUT",URL,DataIn, DataOut))

@@ -38,6 +38,8 @@
 #include <QSet>
 #include <QReadWriteLock>
 
+#include <algorithm>
+
 /* MAPDOCUMENT */
 
 class MapDocumentPrivate
@@ -72,7 +74,7 @@ public:
     LayerDock*	theDock;
     Layer*	lastDownloadLayer;
     QDateTime lastDownloadTimestamp;
-    QHash<Layer*, CoordBox>	downloadBoxes;
+    QMultiHash<Layer*, CoordBox>	downloadBoxes;
 
     TagSelector* tagFilter;
     int FilterRevision;
@@ -234,7 +236,7 @@ Document* Document::fromXML(QString title, QXmlStreamReader& stream, qreal versi
     if (stream.attributes().hasAttribute("xml:id"))
         NewDoc->p->Id = stream.attributes().value("xml:id").toString();
     if (stream.attributes().hasAttribute("layernum"))
-        NewDoc->p->layerNum = stream.attributes().value("layernum").string()->toInt();
+        NewDoc->p->layerNum = stream.attributes().value("layernum").toString().toInt();
     else
         NewDoc->p->layerNum = 1;
     QString lastdownloadlayerId;
@@ -246,23 +248,23 @@ Document* Document::fromXML(QString title, QXmlStreamReader& stream, qreal versi
 
     stream.readNext();
     while(!stream.atEnd() && !stream.isEndElement()) {
-        if (stream.name() == "ImageMapLayer") {
+        if (stream.name() == QStringLiteral("ImageMapLayer")) {
             /*ImageMapLayer* l =*/ ImageMapLayer::fromXML(NewDoc, stream, progress);
-        } else if (stream.name() == "DeletedMapLayer") {
+        } else if (stream.name() == QStringLiteral("DeletedMapLayer")) {
             /*DeletedMapLayer* l =*/ DeletedLayer::fromXML(NewDoc, stream, progress);
-        } else if (stream.name() == "DirtyLayer" || stream.name() == "DirtyMapLayer") {
+        } else if (stream.name() == QStringLiteral("DirtyLayer") || stream.name() == QStringLiteral("DirtyMapLayer")) {
             /*DirtyMapLayer* l =*/ DirtyLayer::fromXML(NewDoc, stream, progress);
-        } else if (stream.name() == "UploadedLayer" || stream.name() == "UploadedMapLayer") {
+        } else if (stream.name() == QStringLiteral("UploadedLayer") || stream.name() == QStringLiteral("UploadedMapLayer")) {
             /*UploadedMapLayer* l =*/ UploadedLayer::fromXML(NewDoc, stream, progress);
-        } else if (stream.name() == "DrawingLayer" || stream.name() == "DrawingMapLayer") {
+        } else if (stream.name() == QStringLiteral("DrawingLayer") || stream.name() == QStringLiteral("DrawingMapLayer")) {
             /*DrawingMapLayer* l =*/ DrawingLayer::fromXML(NewDoc, stream, progress);
-        } else if (stream.name() == "TrackLayer" || stream.name() == "TrackMapLayer") {
+        } else if (stream.name() == QStringLiteral("TrackLayer") || stream.name() == QStringLiteral("TrackMapLayer")) {
             /*TrackMapLayer* l =*/ TrackLayer::fromXML(NewDoc, stream, progress);
-        } else if (stream.name() == "ExtractedLayer") {
+        } else if (stream.name() == QStringLiteral("ExtractedLayer")) {
             /*DrawingMapLayer* l =*/ DrawingLayer::fromXML(NewDoc, stream, progress);
-        } else if (stream.name() == "FilterLayer") {
+        } else if (stream.name() == QStringLiteral("FilterLayer")) {
             /*FilterLayer* l =*/ FilterLayer::fromXML(NewDoc, stream, progress);
-        } else if (stream.name() == "CommandHistory") {
+        } else if (stream.name() == QStringLiteral("CommandHistory")) {
             if (version > 1.0)
                 h = CommandHistory::fromXML(NewDoc, stream, progress);
         } else if (!stream.isWhitespace()) {
@@ -409,7 +411,7 @@ FilterLayer* Document::addFilterLayer(FilterLayer *aLayer)
 
 void Document::remove(Layer* aLayer)
 {
-    QList<Layer*>::iterator i = qFind(p->Layers.begin(),p->Layers.end(), aLayer);
+    QList<Layer*>::iterator i = std::find(p->Layers.begin(),p->Layers.end(), aLayer);
     if (i != p->Layers.end()) {
         p->Layers.erase(i);
     }
@@ -612,7 +614,7 @@ void Document::exportOSM(QWidget* main, QIODevice* device, QList<Feature*> aFeat
 
     stream.writeStartElement("osm");
     stream.writeAttribute("version", "0.6");
-    stream.writeAttribute("generator", QString("%1 %2").arg(qApp->applicationName()).arg(STRINGIFY(VERSION)));
+    stream.writeAttribute("generator", QString("%1 %2").arg(qApp->applicationName()).arg(BuildMetadata::VERSION));
 
     CoordBox aCoordBox = aFeatures[0]->boundingBox(true);
     aFeatures[0]->toXML(stream, dlg);
@@ -778,7 +780,7 @@ bool Document::importPBF(const QString& filename, DrawingLayer* NewLayer)
 
 void Document::addDownloadBox(Layer* l, CoordBox aBox)
 {
-    p->downloadBoxes.insertMulti(l, aBox);
+    p->downloadBoxes.insert(l, aBox);
 }
 
 void Document::removeDownloadBox(Layer* l)
@@ -798,13 +800,11 @@ const QList<CoordBox> Document::getDownloadBoxes(Layer* l) const
 
 bool Document::isDownloadedSafe(const CoordBox& bb) const
 {
-    QHashIterator<Layer*, CoordBox>it(p->downloadBoxes);
-    while(it.hasNext()) {
-        it.next();
-        if (it.value().intersects(bb))
+    for (const CoordBox &item : p->downloadBoxes) {
+        if (item.intersects(bb)) {
             return true;
+        }
     }
-
     return false;
 }
 
@@ -941,14 +941,14 @@ Document* Document::getDocumentFromXml(QDomDocument* theXmlDoc)
 
         stream.readNext();
         while(!stream.atEnd() && !stream.isEndElement()) {
-            if (stream.name() == "osm") {
+            if (stream.name() == QStringLiteral("osm")) {
                 stream.readNext();
                 while(!stream.atEnd() && !stream.isEndElement()) {
-                    if (stream.name() == "way") {
+                    if (stream.name() == QStringLiteral("way")) {
                         Way::fromXML(NewDoc, l, stream);
-                    } else if (stream.name() == "relation") {
+                    } else if (stream.name() == QStringLiteral("relation")) {
                         Relation::fromXML(NewDoc, l, stream);
-                    } else if (stream.name() == "node") {
+                    } else if (stream.name() == QStringLiteral("node")) {
                         Node::fromXML(NewDoc, l, stream);
                     } else if (!stream.isWhitespace()) {
                         qDebug() << "Doc::clipboard logic error:" << stream.name() << ":" << stream.tokenType() << "(" << stream.lineNumber() << ")";

@@ -40,7 +40,6 @@ extern MainWindow* g_Merk_MainWindow;
 
 extern QPair<quint32, quint32> g_addToTagList(QString k, QString v);
 extern void g_removeFromTagList(quint32 k, quint32 v);
-extern QStringList g_getTagKeys();
 extern QStringList g_getTagValues();
 extern const QString& g_getTagKey(int idx);
 extern quint32 g_getTagKeyIndex(const QString& s);

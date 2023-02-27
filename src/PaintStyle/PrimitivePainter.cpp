@@ -6,7 +6,7 @@
 #include <QtCore/QString>
 #include <QtGui/QPainter>
 #include <QtGui/QPainterPath>
-#include <QMatrix>
+#include <QTransform>
 #include <math.h>
 
 #define CAPSTYLE Qt::RoundCap
@@ -337,7 +337,7 @@ void PrimitivePainter::drawPointLabel(QPointF C, QString str, QString strBg, QPa
     QPainterPath bgPath;
 
     if (!str.isEmpty()) {
-        modX = - (metrics.width(str)/2);
+        modX = - (metrics.horizontalAdvance(str)/2);
         if (DrawIcon && !IconName.isEmpty() )
         {
             QImage pm(IconName);
@@ -349,7 +349,7 @@ void PrimitivePainter::drawPointLabel(QPointF C, QString str, QString strBg, QPa
         thePainter->translate(C);
     }
     if (DrawLabelBackground && !strBg.isEmpty()) {
-        modX = - (metrics.width(strBg)/2);
+        modX = - (metrics.horizontalAdvance(strBg)/2);
         if (DrawIcon && !IconName.isEmpty() )
         {
             QImage pm(IconName);
@@ -425,10 +425,10 @@ void PrimitivePainter::drawLabel(QPainterPath* R, QPainter* thePainter, qreal Pi
         font.setPixelSize(int(WW));
         QFontMetrics metrics(font);
 
-        if (font.pixelSize() >= 5 && tranformedRoadPath.length() > metrics.width(str)) {
+        if (font.pixelSize() >= 5 && tranformedRoadPath.length() > metrics.horizontalAdvance(str)) {
             thePainter->setFont(font);
 
-            int repeat = int((tranformedRoadPath.length() / ((metrics.width(str) * LABEL_PATH_DISTANCE))) - 0.5);
+            int repeat = int((tranformedRoadPath.length() / ((metrics.horizontalAdvance(str) * LABEL_PATH_DISTANCE))) - 0.5);
             int numSegment = repeat+1;
             qreal lenSegment = tranformedRoadPath.length() / numSegment;
             qreal startSegment = 0;
@@ -436,14 +436,14 @@ void PrimitivePainter::drawLabel(QPainterPath* R, QPainter* thePainter, qreal Pi
             do {
                 QRegion rg = thePainter->clipRegion();
 
-                qreal curLen = startSegment + ((lenSegment - metrics.width(str)) / 2);
+                qreal curLen = startSegment + ((lenSegment - metrics.horizontalAdvance(str)) / 2);
                 int modIncrement = 1;
                 qreal modAngle = 0;
                 int modY = 0;
                 if (cos(angToRad(tranformedRoadPath.angleAtPercent((startSegment+(lenSegment/2))/tranformedRoadPath.length()))) < 0) {
                     modIncrement = -1;
                     modAngle = 180.0;
-                    curLen += metrics.width(str);
+                    curLen += metrics.horizontalAdvance(str);
                 }
                 for (int i = 0; i < str.length(); ++i) {
                     qreal t = tranformedRoadPath.percentAtLength(curLen);
@@ -451,17 +451,17 @@ void PrimitivePainter::drawLabel(QPainterPath* R, QPainter* thePainter, qreal Pi
                     qreal angle = tranformedRoadPath.angleAtPercent(t);
                     modY = (metrics.ascent()/2)-3;
 
-                    QMatrix m;
-                    m.translate(pt.x(), pt.y());
-                    m.rotate(-angle+modAngle);
+                    QTransform transform;
+                    transform.translate(pt.x(), pt.y());
+                    transform.rotate(-angle+modAngle);
 
                     QPainterPath charPath;
                     charPath.addText(0, modY, font, str.mid(i, 1));
-                    charPath = charPath * m;
+                    charPath = charPath * transform;
 
                     textPath.addPath(charPath);
 
-                    qreal incremenet = metrics.width(str[i]);
+                    qreal incremenet = metrics.horizontalAdvance(str[i]);
                     curLen += (incremenet * modIncrement);
                 }
                 startSegment += lenSegment;
@@ -482,7 +482,7 @@ void PrimitivePainter::drawLabel(QPainterPath* R, QPainter* thePainter, qreal Pi
         font.setPixelSize(int(WW));
         QFontMetrics metrics(font);
 
-        int repeat = int((tranformedRoadPath.length() / (metrics.width(strBg) * LABEL_STRAIGHT_DISTANCE)) - 0.5);
+        int repeat = int((tranformedRoadPath.length() / (metrics.horizontalAdvance(strBg) * LABEL_STRAIGHT_DISTANCE)) - 0.5);
         int numSegment = repeat+1;
         qreal lenSegment = tranformedRoadPath.length() / numSegment;
         qreal startSegment = 0;
@@ -495,7 +495,7 @@ void PrimitivePainter::drawLabel(QPainterPath* R, QPainter* thePainter, qreal Pi
             qreal t = tranformedRoadPath.percentAtLength(curLen);
             QPointF pt = tranformedRoadPath.pointAtPercent(t);
 
-            modX = - (metrics.width(strBg)/2);
+            modX = - (metrics.horizontalAdvance(strBg)/2);
             //modX = WW;
             modY = (metrics.ascent()/2);
 
@@ -504,8 +504,8 @@ void PrimitivePainter::drawLabel(QPainterPath* R, QPainter* thePainter, qreal Pi
             bgPath.addRect(textPath.boundingRect().adjusted(-BG_SPACING, -BG_SPACING, BG_SPACING, BG_SPACING));
 
             bool rgContains = false;
-            for (int i=0; i<rg.rects().size(); i++) {
-                if (rg.rects()[i].contains(bgPath.boundingRect().toRect().translated(pt.toPoint()))) {
+            for (auto const & rect : rg) {
+                if (rect.contains(bgPath.boundingRect().toRect().translated(pt.toPoint()))) {
                     rgContains = true;
                     break;
                 }

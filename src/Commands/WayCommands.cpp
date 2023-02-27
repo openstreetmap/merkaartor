@@ -111,7 +111,7 @@ WayAddNodeCommand * WayAddNodeCommand::fromXML(Document * d, QXmlStreamReader& s
 
     stream.readNext();
     while(!stream.atEnd() && !stream.isEndElement()) {
-        if (stream.name() == "Command") {
+        if (stream.name() == QStringLiteral("Command")) {
             Command::fromXML(d, stream, a);
         }
         stream.readNext();
@@ -234,14 +234,14 @@ WayRemoveNodeCommand * WayRemoveNodeCommand::fromXML(Document * d, QXmlStreamRea
     if (!a->theLayer)
         return NULL;
 
-    a->wasClosed = (stream.attributes().hasAttribute("closed") && stream.attributes().value("closed") == "true");
+    a->wasClosed = (stream.attributes().hasAttribute("closed") && stream.attributes().value("closed") == QStringLiteral("true"));
     a->theRoad = Feature::getWayOrCreatePlaceHolder(d, a->theLayer, IFeature::FId(IFeature::LineString, stream.attributes().value("road").toString().toLongLong()));
     a->theNode = Feature::getNodeOrCreatePlaceHolder(d, a->theLayer, IFeature::FId(IFeature::Point, stream.attributes().value("trackpoint").toString().toLongLong()));
     a->Idx = stream.attributes().value("index").toString().toUInt();
 
     stream.readNext();
     while(!stream.atEnd() && !stream.isEndElement()) {
-        if (stream.name() == "Command") {
+        if (stream.name() == QStringLiteral("Command")) {
             Command::fromXML(d, stream, a);
         }
         stream.readNext();

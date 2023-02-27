@@ -6,6 +6,7 @@
 #include "LayerWidget.h"
 #include "PropertiesDock.h"
 #include "Global.h"
+#include <exiv2/exiv2.hpp>
 
 #ifdef USE_ZBAR
 #include <zbar.h>
@@ -439,7 +440,7 @@ void GeoImageDock::loadImage(QString file, Coord pos)
 
     }
 
-    QDateTime time = QFileInfo(file).created();
+    QDateTime time = QFileInfo(file).birthTime();
 
     //Pt->setTag("_waypoint_", "true");
     phNode->setTag("_picture_", "GeoTagged");
@@ -456,7 +457,7 @@ void GeoImageDock::loadImages(QStringList fileNames)
     Document *theDocument = Main->document();
     MapView *theView = Main->view();
 
-    Exiv2::Image::AutoPtr image;
+    std::unique_ptr<Exiv2::Image> image;
     Exiv2::ExifData exifData;
     bool positionValid = false;
 
@@ -584,7 +585,7 @@ void GeoImageDock::loadImages(QStringList fileNames)
 //        }
         if (time.isNull()) // if time is still null, we use the file date as reference for image sorting (and not for finding out to which node the image belongs)
             // so we don't have to ask a question here
-            time = QFileInfo(file).created();
+            time = QFileInfo(file).birthTime();
 
         int res = photoDlgRes;
         if (!positionValid && res == -1) {
@@ -830,7 +831,7 @@ void GeoImageDock::loadImages(QStringList fileNames)
 
     progress.setValue(fileNames.size());
 
-    qSort(usedTrackPoints); // sort them chronological
+    std::sort(usedTrackPoints.begin(), usedTrackPoints.end()); // sort them chronological
     curImage = -1; // the sorting invalidates curImage
 
     if (photoLayer && !photoLayer->size()) {
@@ -868,7 +869,7 @@ void GeoImageDock::saveImage()
 //    fn = QFileDialog::getSaveFileName(0, "Specify output filename", fn, tr("JPEG Images (*.jpg)"));
     qDebug() << fn;
     if (!fn.isEmpty()) {
-        Exiv2::Image::AutoPtr imageIn, imageOut;
+        std::unique_ptr<Exiv2::Image> imageIn, imageOut;
         Exiv2::ExifData exifData;
         try {
             imageIn = Exiv2::ImageFactory::open(usedTrackPoints.at(index).filename.toStdString());
@@ -892,7 +893,7 @@ Coord GeoImageDock::getGeoDataFromImage(const QString & file)
 {
     Coord pos;
     double lat = 0.0, lon = 0.0;
-    Exiv2::Image::AutoPtr image;
+    std::unique_ptr<Exiv2::Image> image;
     Exiv2::ExifData exifData;
     bool positionValid = false;
 
@@ -932,7 +933,7 @@ Coord GeoImageDock::getGeoDataFromImage(const QString & file)
 
 void GeoImageDock::addGeoDataToImage(Coord position, const QString & file)
 {
-    Exiv2::Image::AutoPtr image;
+    std::unique_ptr<Exiv2::Image> image;
 
     try {
         image = Exiv2::ImageFactory::open(file.toStdString());
@@ -1114,7 +1115,7 @@ void ImageView::mouseMoveEvent(QMouseEvent * e)
 
 void ImageView::wheelEvent(QWheelEvent *e)
 {
-    zoom(e->delta() / 8.0 / 360.0 * 10.0); // one wheel rotation is about 10 steps
+    zoom(e->angleDelta().y() / 8.0 / 360.0 * 10.0); // one wheel rotation is about 10 steps
 }
 
 void ImageView::zoom(double levelStep)

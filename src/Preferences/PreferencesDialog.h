@@ -29,7 +29,7 @@ class OsmServerWidget : public QWidget, public Ui::OsmServerWidget
     Q_OBJECT
 
 public:
-    OsmServerWidget(QWidget * parent = 0, Qt::WindowFlags f = 0);
+    OsmServerWidget(QWidget * parent = 0, Qt::WindowFlags f = Qt::Widget);
 
 public slots:
     void on_tbOsmServerAdd_clicked();

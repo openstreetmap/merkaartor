@@ -193,17 +193,17 @@ QWidget* TagTemplateWidgetCombo::getWidget(const Feature* F, const MapView* V)
     aCombo->setMinimumWidth(100);
     aLayout->addWidget(aCombo);
 
-    aCombo->addItem(tr("Undefined"), qVariantFromValue(new TagTemplateWidgetValue("__NULL__")));
+    aCombo->addItem(tr("Undefined"), QVariant::fromValue(new TagTemplateWidgetValue("__NULL__")));
     QString val = F->tagValue(theTag, "__NULL__");
     int idx = -1;
     for (int i=0; i<theValues.size(); ++i) {
         if (theValues[i]->theDescriptions.count(lang))
-            aCombo->addItem(theValues[i]->theDescriptions[lang], qVariantFromValue(theValues[i]));
+            aCombo->addItem(theValues[i]->theDescriptions[lang], QVariant::fromValue(theValues[i]));
         else
             if (theValues[i]->theDescriptions.count(defLang))
-                aCombo->addItem(theValues[i]->theDescriptions[defLang], qVariantFromValue(theValues[i]));
+                aCombo->addItem(theValues[i]->theDescriptions[defLang], QVariant::fromValue(theValues[i]));
             else
-                aCombo->addItem(theValues[i]->theTagValue,  qVariantFromValue(theValues[i]));
+                aCombo->addItem(theValues[i]->theTagValue,  QVariant::fromValue(theValues[i]));
 
         if (theValues[i]->theTagValue == val)
             idx = aCombo->count() - 1;
@@ -911,9 +911,9 @@ QWidget* TagTemplates::getWidget(const Feature* F, const MapView* V)
     theCombo->addItem(tr("Undefined"), "__NULL__");
     for (int i=0; i<items.size(); ++i) {
         if (items[i]->theDescriptions.count(lang))
-            theCombo->addItem(items[i]->theDescriptions[lang], qVariantFromValue(items[i]));
+            theCombo->addItem(items[i]->theDescriptions[lang], QVariant::fromValue(items[i]));
         else
-            theCombo->addItem(items[i]->theDescriptions[defLang], qVariantFromValue(items[i]));
+            theCombo->addItem(items[i]->theDescriptions[defLang], QVariant::fromValue(items[i]));
 
         if (forcedTemplate) {
             if (items[i] == forcedTemplate) {

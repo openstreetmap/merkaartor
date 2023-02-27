@@ -446,16 +446,16 @@ ImageMapLayer * ImageMapLayer::fromXML(Document* d, QXmlStreamReader& stream, QP
 
     qreal alpha = stream.attributes().value("alpha").toString().toDouble();
     // TODO: Note that the logic for "enabled" is slightly different. Why?
-    bool visible = (stream.attributes().value("visible") == "true" ? true : false);
-    bool selected = (stream.attributes().value("selected") == "true" ? true : false);
-    bool enabled = (stream.attributes().value("enabled") == "false" ? false : true);
+    bool visible = (stream.attributes().value("visible") == QStringLiteral("true") ? true : false);
+    bool selected = (stream.attributes().value("selected") == QStringLiteral("true") ? true : false);
+    bool enabled = (stream.attributes().value("enabled") == QStringLiteral("false") ? false : true);
 
     stream.readNext();
     while(!stream.atEnd() && !stream.isEndElement()) {
-        if (stream.name() == "AdjustmentList") {
+        if (stream.name() == QStringLiteral("AdjustmentList")) {
             stream.readNext();
             while(!stream.atEnd() && !stream.isEndElement()) {
-                if (stream.name() == "Adjustment") {
+                if (stream.name() == QStringLiteral("Adjustment")) {
                     int z = stream.attributes().value("zoom").toString().toInt();
                     if (l->p->AlignementTransformList.size() < z+1)
                         l->p->AlignementTransformList.resize(z+1);
@@ -467,15 +467,15 @@ ImageMapLayer * ImageMapLayer::fromXML(Document* d, QXmlStreamReader& stream, QP
                 }
                 stream.readNext();
             }
-        } else if (stream.name() == "WmsServer") {
+        } else if (stream.name() == QStringLiteral("WmsServer")) {
             server = stream.attributes().value("name").toString();
             l->setMapAdapter(bgtype, server);
             stream.readNext();
-        } else if (stream.name() == "TmsServer") {
+        } else if (stream.name() == QStringLiteral("TmsServer")) {
             server = stream.attributes().value("name").toString();
             l->setMapAdapter(bgtype, server);
             stream.readNext();
-        } else if (stream.name() == "Data") {
+        } else if (stream.name() == QStringLiteral("Data")) {
             l->setMapAdapter(bgtype, server);
             stream.readNext();
             if (l->getMapAdapter())
@@ -971,7 +971,8 @@ QRect ImageMapLayer::drawTiled(MapView& theView, QRect& rect)
         }
     }
 
-    qSort(tiles);
+    // TODO: Sort the tiles? Removed when refactoring to qt6.
+    //qSort(tiles);
 
     int n=0; // Arbitrarily limit the number of tiles to 100
     for (QList<Tile>::const_iterator tile = tiles.begin(); tile != tiles.end() && n<100; ++tile)

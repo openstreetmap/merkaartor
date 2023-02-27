@@ -74,11 +74,6 @@ void g_removeFromTagList(quint32 k, quint32 v)
         tagList.remove(k);
 }
 
-QStringList g_getTagKeys()
-{
-    return tagKeys;
-}
-
 QStringList g_getTagValues()
 {
     return tagValues;
@@ -88,10 +83,15 @@ QStringList g_getTagValueList(QString k)
 {
     QSet<quint32> retList;
     if (k == "*") {
-        foreach (QList<quint32> list, tagList)
-            retList.unite(list.toSet());
-    } else
-        retList = tagList[tagKeys.indexOf(k)].toSet();
+        foreach (QList<quint32> list, tagList) {
+            foreach (quint32 element, list) {
+                retList.insert(element);
+            }
+        }
+    } else {
+        QList<quint32> list = tagList[tagKeys.indexOf(k)];
+        retList = QSet<quint32>(list.begin(), list.end());
+    }
 
     QStringList res;
     foreach (quint32 i, retList)
@@ -112,7 +112,7 @@ quint32 g_getTagKeyIndex(const QString& s)
 
 QStringList g_getTagKeyList()
 {
-    return tagKeys.toSet().toList();
+    return tagKeys;
 }
 
 QString g_getTagValue(int idx)

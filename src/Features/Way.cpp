@@ -712,7 +712,7 @@ bool Way::deleteChildren(Document* theDocument, CommandList* theList)
             ToDelete[N] = i;
         }
     }
-    QList<Feature*> ToDeleteKeys = ToDelete.uniqueKeys();
+    QList<Feature*> ToDeleteKeys = ToDelete.keys();
     for (int i=0; i<ToDeleteKeys.size(); ++i) {
         if (!ToDeleteKeys[i]->isDeleted())
             theList->add(new RemoveFeatureCommand(theDocument, ToDeleteKeys[i], Alternatives));
@@ -814,7 +814,7 @@ Way * Way::fromXML(Document* d, Layer * L, QXmlStreamReader& stream)
 
     stream.readNext();
     while(!stream.atEnd() && !stream.isEndElement()) {
-        if (stream.name() == "nd") {
+        if (stream.name() == QStringLiteral("nd")) {
             QString sId = stream.attributes().value("ref").toString();
             IFeature::FId nId(IFeature::Point, sId.toLongLong());
             Node* Part = CAST_NODE(d->getFeature(nId));
@@ -832,10 +832,10 @@ Way * Way::fromXML(Document* d, Layer * L, QXmlStreamReader& stream)
                 Part->setParentFeature(R);
             }
             stream.readNext();
-        } else if (stream.name() == "tag") {
+        } else if (stream.name() == QStringLiteral("tag")) {
             R->setTag(stream.attributes().value("k").toString(), stream.attributes().value("v").toString());
             stream.readNext();
-        } else if (stream.name() == "BoundingBox") {
+        } else if (stream.name() == QStringLiteral("BoundingBox")) {
             R->BBox = CoordBox::fromXML(stream);
             R->p->BBoxUpToDate = true;
             hasBbox = true;
@@ -994,7 +994,7 @@ int Way::createJunction(Document* theDocument, CommandList* theList, Way* R1, Wa
         for (int j=0; j<R2->size()-1; ++j) {
             QLineF S2(R2->getNode(j)->position(), R2->getNode(j+1)->position());
             QPointF intPoint;
-            if (S1.intersect(S2, &intPoint) == QLineF::BoundedIntersection) {
+            if (S1.intersects(S2, &intPoint) == QLineF::BoundedIntersection) {
                 numInter++;
                 if (doIt) {
                     Node* pt = g_backend.allocNode(theDocument->getDirtyOrOriginLayer(R1->layer()), intPoint);

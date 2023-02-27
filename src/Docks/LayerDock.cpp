@@ -184,7 +184,7 @@ void LayerDock::createContent()
 
     QWidget* frame = new QWidget();
     p->frameLayout = new QVBoxLayout(frame);
-    p->frameLayout->setMargin(0);
+    p->frameLayout->setContentsMargins(0, 0, 0, 0);
     p->frameLayout->setSpacing(0);
 
     p->tab = new QTabBar(frame);
@@ -220,12 +220,12 @@ void LayerDock::createContent()
     QWidget* aWidget = new QWidget();
     QVBoxLayout* aLayout = new QVBoxLayout(aWidget);
     aLayout->setSpacing(0);
-    aLayout->setMargin(0);
+    aLayout->setContentsMargins(0, 0, 0, 0);
 
     p->Content = new QWidget();
     p->Layout = new QVBoxLayout(p->Content);
     p->Layout->setSpacing(0);
-    p->Layout->setMargin(0);
+    p->Layout->setContentsMargins(0, 0, 0, 0);
 
     aLayout->addWidget(p->Content);
     aLayout->addStretch();

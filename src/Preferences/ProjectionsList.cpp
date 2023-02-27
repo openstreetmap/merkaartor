@@ -13,9 +13,8 @@
 
 #include "ProjectionsList.h"
 #include "MerkaartorPreferences.h"
+#include "build-metadata.hpp"
 
-#define STRINGIFY(x) XSTRINGIFY(x)
-#define XSTRINGIFY(x) #x
 
 ProjectionItem::ProjectionItem ()
     : name(""), projection(""), deleted(false)
@@ -69,32 +68,6 @@ void ProjectionsList::addProjection(ProjectionItem aProjection)
     theProjections.insert(aProjection.name, aProjection);
 }
 
-QString searchEPSG(QString name, QString filename)
-{
-    QString ret;
-    QString espgNum = name.remove("epsg:", Qt::CaseInsensitive);
-    QFile f(filename);
-    f.open(QIODevice::ReadOnly);
-    if (!f.isOpen())
-        return ret;
-
-    QString theEpsgNum("<" + espgNum + ">");
-    while (!f.atEnd()) {
-        QByteArray epsg = f.readLine();
-
-        int idx = epsg.indexOf(theEpsgNum);
-        if (idx != -1) {
-            idx += theEpsgNum.length();
-            int idx2 = epsg.indexOf("<>", idx);
-            ret = epsg.mid(idx, idx2 - idx);
-            break;
-        }
-    }
-    f.close();
-
-    return ret;
-}
-
 ProjectionItem ProjectionsList::getProjection(QString name) const
 {
     if (name.contains("+proj")) {
@@ -126,7 +99,7 @@ void ProjectionsList::toXml(QDomElement parent)
 {
     QDomElement rt = parent.ownerDocument().createElement("Projections");
     parent.appendChild(rt);
-    rt.setAttribute("creator", QString("%1 v%2%3").arg(STRINGIFY(PRODUCT)).arg(STRINGIFY(VERSION)).arg(STRINGIFY(REVISION)));
+    rt.setAttribute("creator", QString("%1 v%2%3").arg(BuildMetadata::PRODUCT).arg(BuildMetadata::VERSION).arg(BuildMetadata::REVISION));
 
     QMapIterator <QString, ProjectionItem> it(theProjections);
     while (it.hasNext()) {

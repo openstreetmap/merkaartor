@@ -33,6 +33,8 @@ POIs, yet easy to navigate.
 
 ## Sanitizers
 
+TODO: Update instructions for cmake.
+
 Sanitizers can be enabled by the SANITIZE option:
 
 ```
@@ -51,14 +53,6 @@ mind these are not our responsibilities for the most case. Usually all the bugs
 detected are severe and should be reported. Even running Merkaartor with
 a sanitizer enabled and reporting bugs is a huge benefit, though there is a severe
 performance hit involved.
-
-## Compiling with Clang
-
-You can compile Merkaartor with Clang, using standard Qt approach:
-
-```
-qmake -spec linux-clang
-```
 
 ## Variable naming convention
 

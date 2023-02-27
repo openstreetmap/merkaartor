@@ -14,6 +14,7 @@
 
 #include "WmsServersList.h"
 #include "MerkaartorPreferences.h"
+#include "build-metadata.hpp"
 
 WmsServer::WmsServer()
 {
@@ -138,7 +139,7 @@ WmsServer WmsServer::fromXml(QDomElement parent)
             QDomElement r = wmscElem.firstChildElement("Resolutions");
             if (!r.isNull()) {
                 QStringList resL;
-                resL = r.firstChild().toText().nodeValue().split(" ", QString::SkipEmptyParts);
+                resL = r.firstChild().toText().nodeValue().split(" ", Qt::SkipEmptyParts);
                 foreach(QString res, resL)
                     theServer.WmsCLayer.Resolutions << res.toDouble();
             }
@@ -208,7 +209,7 @@ void WmsServersList::toXml(QDomElement parent)
 {
     QDomElement rt = parent.ownerDocument().createElement("WmsServers");
     parent.appendChild(rt);
-    rt.setAttribute("creator", QString("%1 v%2").arg(STRINGIFY(PRODUCT)).arg(STRINGIFY(VERSION)));
+    rt.setAttribute("creator", QString("%1 v%2").arg(BuildMetadata::PRODUCT).arg(BuildMetadata::VERSION));
 
     WmsServerListIterator it(theServers);
     while (it.hasNext()) {

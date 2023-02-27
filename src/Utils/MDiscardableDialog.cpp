@@ -19,7 +19,7 @@ MDiscardableDialog::MDiscardableDialog(QWidget *parent, QString title)
 
     theLayout = new QVBoxLayout(this);
     theLayout->setSpacing(4);
-    theLayout->setMargin(4);
+    theLayout->setContentsMargins(4, 4, 4, 4);
 
     theDSA.setText(tr("Don't ask me this again"));
     theLayout->addWidget(&theDSA);

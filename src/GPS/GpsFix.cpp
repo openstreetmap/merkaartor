@@ -37,7 +37,7 @@ void GpsFix::onUpdateTimeout()
 
 void GpsFix::onPositionUpdated(const QtMobility::QGeoPositionInfo &update)
 {
-    m_timestamp = update.timestamp().toTime_t();
+    m_timestamp = update.timestamp().toSecsSinceEpoch();
     emit timestampChanged(m_timestamp);
     m_latitude = update.coordinate().latitude();
     emit latitudeChanged(m_latitude);

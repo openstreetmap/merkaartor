@@ -9,6 +9,7 @@
 
 #include <QTcpSocket>
 #include <QDateTime>
+#include <QRegularExpression>
 
 #include "RemoteControlServer.hpp"
 
@@ -63,7 +64,7 @@ void RemoteControlConnection::readyRead() {
     if ( m_socket->canReadLine() ) {
         qDebug() << "RemoteControlConnection: canReadLine.";
         QString ln = m_socket->readLine();
-        QStringList tokens = ln.split( QRegExp("[ \r\n][ \r\n]*"), QString::SkipEmptyParts );
+        QStringList tokens = ln.split( QRegularExpression("[ \r\n][ \r\n]*"), Qt::SkipEmptyParts );
         if ( tokens[0] == "GET" ) {
             m_responseStream << "HTTP/1.1 200 OK\r\n";
             m_responseStream << "Date: " << date_time_rfc7231() << "\r\n";
@@ -72,7 +73,8 @@ void RemoteControlConnection::readyRead() {
             m_responseStream << "Access-Control-Allow-Origin: *\r\n";
             m_responseStream << "Content-length: 4\r\n\r\n";
             m_responseStream << "OK\r\n";
-            m_responseStream << flush;
+            m_responseStream.flush();
+            // TODO: According to http specs, we should not close the connection and wait for client to do so.
             m_socket->disconnectFromHost();
 
             qDebug() << "RemoteControlConnection: url read, response sent.";

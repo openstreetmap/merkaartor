@@ -41,8 +41,8 @@ class ImageManager : public QObject, public IImageManager
     Q_OBJECT;
     public:
         ImageManager(QObject* parent = 0);
-        ImageManager(const ImageManager&);
-        ImageManager& operator=(const ImageManager&);
+        ImageManager(const ImageManager&) = default;
+        ImageManager& operator=(const ImageManager&) = default;
         ~ImageManager();
 
         //! returns a QPixmap of the asked image

@@ -2,14 +2,6 @@
 
 #include <QtGui/QPainter>
 
-void sortSatellitesById(QList<Satellite>& List)
-{
-    for (int i=0; i<List.size(); ++i)
-        for (int j=i+1; j<List.size(); ++j)
-            if (List[i].Id>List[j].Id)
-                List.swap(i, j);
-}
-
 SatelliteStrengthView::SatelliteStrengthView(QWidget* aParent)
 : QWidget(aParent)
 {

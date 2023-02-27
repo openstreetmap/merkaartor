@@ -4,7 +4,6 @@
 #include <QtCore/QString>
 #include <QtGui/QPainter>
 #include <QtGui/QPainterPath>
-#include <QMatrix>
 #include <QDomElement>
 #include <QFileInfo>
 #include <QDir>

@@ -235,8 +235,8 @@ void SlippyMapWidget::normalizeCoordinates(void) {
 
 void SlippyMapWidget::wheelEvent(QWheelEvent* ev)
 {
-    int NewZoom = ev->delta()/120 + p->Zoom;
-    ZoomTo(ev->pos(), NewZoom);
+    int NewZoom = ev->angleDelta().y()/120 + p->Zoom;
+    ZoomTo(ev->position().toPoint(), NewZoom);
     emit redraw();
 }
 

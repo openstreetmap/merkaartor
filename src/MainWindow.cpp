@@ -44,7 +44,6 @@
 #include "FeatureManipulations.h"
 #include "LayerIterator.h"
 #include "MasPaintStyle.h"
-#include "MapCSSPaintstyle.h"
 #include "PaintStyleEditor.h"
 #include "Utils/Utils.h"
 #include "DirtyList.h"
@@ -131,7 +130,7 @@ class MainWindowPrivate
     #endif
             , numImages(0)
         {
-            title = QString("%1 v%2").arg(STRINGIFY(PRODUCT)).arg(STRINGIFY(REVISION));
+            title = QString("%1 v%2").arg(BuildMetadata::PRODUCT).arg(BuildMetadata::REVISION);
         }
 
         QString FILTER_OPEN_NATIVE;
@@ -177,7 +176,6 @@ MainWindow::MainWindow(QWidget *parent)
         , toolBarManager(0)
 {
     setlocale(LC_NUMERIC, "C");  // impose decimal point separator
-    qsrand(QDateTime::currentDateTime().toTime_t());  //initialize random generator
 
     p = new MainWindowPrivate;
 
@@ -489,7 +487,7 @@ void MainWindow::delayedInit()
 
 void MainWindow::handleMessage(const QString &msg)
 {
-    QStringList args = msg.split("$", QString::SkipEmptyParts);
+    QStringList args = msg.split("$", Qt::SkipEmptyParts);
     QStringList fileNames;
     for (int i=0; i < args.size(); ++i) {
         if (args[i] == "-l" || args[i] == "--log") {
@@ -2123,7 +2121,7 @@ void MainWindow::on_helpAboutAction_triggered()
     About.setupUi(&dlg);
     dlg.setWindowFlags(dlg.windowFlags() & ~Qt::WindowContextHelpButtonHint);
     dlg.setWindowFlags(dlg.windowFlags() | Qt::MSWindowsFixedSizeDialogHint);
-    About.Version->setText(About.Version->text().arg(STRINGIFY(REVISION)));
+    About.Version->setText(About.Version->text().arg(BuildMetadata::REVISION));
     About.QTVersion->setText(About.QTVersion->text().arg(qVersion()).arg(QT_VERSION_STR));
     PJ_INFO projVer = proj_info();
     About.ProjVersion->setText(About.ProjVersion->text().arg(QString("%1.%2.%3").arg(projVer.major).arg(projVer.minor).arg(projVer.patch)));
@@ -2966,17 +2964,13 @@ void MainWindow::on_mapStyleLoadAction_triggered()
     }
 
     QString f = QFileDialog::getOpenFileName(this, tr("Load map style"), QString(),
-                                             tr("Supported formats")+" (*.mas *.css)\n" \
+                                             tr("Supported formats")+" (*.mas)\n" \
                                              + tr("Merkaartor map style (*.mas)\n")
-                                             + tr("MapCSS stylesheet (*.css)"));
+                                            );
     if (!f.isNull()) {
-        if (f.endsWith("css"))
-            MapCSSPaintstyle::instance()->loadPainters(f);
-        else {
-            M_STYLE->loadPainters(f);
-            document()->setPainters(M_STYLE->getPainters());
-            invalidateView();
-        }
+        M_STYLE->loadPainters(f);
+        document()->setPainters(M_STYLE->getPainters());
+        invalidateView();
     }
 }
 
@@ -3226,7 +3220,7 @@ Document* MainWindow::doLoadDocument(QFile* file)
     QXmlStreamReader stream(file);
     while (stream.readNext() && stream.tokenType() != QXmlStreamReader::Invalid && stream.tokenType() != QXmlStreamReader::StartElement)
         ;
-    if (stream.tokenType() != QXmlStreamReader::StartElement || stream.name() != "MerkaartorDocument") {
+    if (stream.tokenType() != QXmlStreamReader::StartElement || stream.name() != QStringLiteral("MerkaartorDocument")) {
         QMessageBox::critical(this, tr("Invalid file"), tr("%1 is not a valid Merkaartor document.").arg(file->fileName()));
         return NULL;
     }
@@ -3239,12 +3233,12 @@ Document* MainWindow::doLoadDocument(QFile* file)
     if (version < 2.) {
         stream.readNext();
         while(!stream.atEnd() && !stream.isEndElement()) {
-            if (stream.name() == "MapDocument") {
+            if (stream.name() == QStringLiteral("MapDocument")) {
                 newDoc = Document::fromXML(QFileInfo(*file).fileName(), stream, version, theLayers, &progress);
 
                 if (progress.wasCanceled())
                     break;
-            } else if (stream.name() == "MapView") {
+            } else if (stream.name() == QStringLiteral("MapView")) {
                 view()->fromXML(stream);
             } else if (!stream.isWhitespace()) {
                 qDebug() << "Main: logic error: " << stream.name() << " : " << stream.tokenType() << " (" << stream.lineNumber() << ")";
@@ -4182,8 +4176,7 @@ QString MainWindow::makeAbsolute(const QString& path) {
 QStringList MainWindow::translationPaths() {
     QStringList paths;
     /* Try the macros first, as they are defined by the user. */
-    paths << makeAbsolute(STRINGIFY(TRANSDIR_SYSTEM));
-    paths << makeAbsolute(STRINGIFY(TRANSDIR_MERKAARTOR));
+    paths << makeAbsolute(BuildMetadata::GetShareDir() + "/translations");
     paths << QCoreApplication::applicationDirPath();
     paths << QCoreApplication::applicationDirPath() + "/translations";
 #if defined(Q_OS_MAC)

@@ -108,7 +108,7 @@ class QT_QTTOOLBARDIALOG_EXPORT QtToolBarDialog : public QDialog
     Q_OBJECT
 public:
 
-    QtToolBarDialog(QWidget *parent = 0, Qt::WindowFlags flags = 0);
+    QtToolBarDialog(QWidget *parent = 0, Qt::WindowFlags flags = Qt::Widget);
     ~QtToolBarDialog();
 
     void setToolBarManager(QtToolBarManager *toolBarManager);

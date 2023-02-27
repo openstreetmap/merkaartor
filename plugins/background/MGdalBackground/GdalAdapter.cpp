@@ -622,14 +622,14 @@ void GdalAdapter::fromXML(QXmlStreamReader& stream)
     theImages.clear();
 
     while(!stream.atEnd() && !stream.isEndElement()) {
-        if (stream.name() == "Images") {
+        if (stream.name() == QStringLiteral("Images")) {
             if (stream.attributes().hasAttribute("projection"))
                 theProjection = stream.attributes().value("projection").toString();
             if (stream.attributes().hasAttribute("source"))
                 theSourceTag = stream.attributes().value("source").toString();
             stream.readNext();
             while(!stream.atEnd() && !stream.isEndElement()) {
-                if (stream.name() == "Image") {
+                if (stream.name() == QStringLiteral("Image")) {
                     QString fn = stream.attributes().value("filename").toString();
                     if (!fn.isEmpty())
                         loadImage(fn);

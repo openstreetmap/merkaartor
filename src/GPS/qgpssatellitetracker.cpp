@@ -99,8 +99,8 @@ void QGPSSatelliteTracker::paintEvent(QPaintEvent *)
 
 
     // now plot the satellites
-    painter.setPen(QPen(palette().foreground(), 2, Qt::SolidLine));
-    painter.setBrush(QBrush(palette().foreground()));
+    painter.setPen(QPen(palette().windowText(), 2, Qt::SolidLine));
+    painter.setBrush(QBrush(palette().windowText()));
 
     int x,y;
     for (int i=0; i<List.size(); ++i)

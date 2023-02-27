@@ -392,7 +392,7 @@ TrackSegment* TrackSegment::fromGPX(Document* d, Layer* L, QXmlStreamReader& str
 
     stream.readNext();
     while(!stream.atEnd() && !stream.isEndElement()) {
-        if (stream.name() == "trkpt") {
+        if (stream.name() == QStringLiteral("trkpt")) {
             TrackNode* N = TrackNode::fromGPX(d, L, stream);
             ts->add(N);
             progress->setValue(stream.characterOffset());

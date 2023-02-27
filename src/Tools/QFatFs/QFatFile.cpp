@@ -18,7 +18,7 @@ void QFatFile::setFilename(const QString &filename)
     if (filename.length() == 0)
         return;
 
-    QStringList tokens = filename.split("/", QString::SkipEmptyParts);
+    QStringList tokens = filename.split("/", Qt::SkipEmptyParts);
     m_name = tokens.takeLast();
     m_path = tokens.join("/");
 }
@@ -35,8 +35,8 @@ bool QFatFile::open(QIODevice::OpenMode mode)
 
         QDateTime dt = QDateTime::currentDateTime();
         m_toc.flags = FLAG_FILE;
-        m_toc.creationTimestamp = dt.toTime_t();
-        m_toc.modificationTimestamp = dt.toTime_t();
+        m_toc.creationTimestamp = dt.toSecsSinceEpoch();
+        m_toc.modificationTimestamp = dt.toSecsSinceEpoch();
         m_toc.size = 0;
         m_toc.name = m_name;
         m_toc.startCluster = FAT_FAT_TYPE_NOVALUE;
@@ -66,7 +66,7 @@ void QFatFile::close()
         else
             m_toc.startCluster = FAT_FAT_TYPE_NOVALUE;
         m_toc.size = size();
-        m_toc.modificationTimestamp = QDateTime::currentDateTime().toTime_t();
+        m_toc.modificationTimestamp = QDateTime::currentDateTime().toSecsSinceEpoch();
         if (m_fat->addToc(m_path, m_name, m_toc) != FatNoError) {
             qDebug() << "QFatFile::close: Error adding toc";
             return;

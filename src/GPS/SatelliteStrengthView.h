@@ -13,8 +13,6 @@ class Satellite
 		int SignalStrength;
 };
 
-void sortSatellitesById(QList<Satellite>& List);
-
 class SatelliteStrengthView : public QWidget
 {
 	Q_OBJECT

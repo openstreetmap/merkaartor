@@ -177,9 +177,9 @@ QDateTime QFatEngine::fileTime(QAbstractFileEngine::FileTime time) const
 {
     switch (time) {
     case QAbstractFileEngine::CreationTime:
-        return QDateTime::fromTime_t(m_toc.creationTimestamp);
+        return QDateTime::fromSecsSinceEpoch(m_toc.creationTimestamp);
     case QAbstractFileEngine::ModificationTime:
-        return QDateTime::fromTime_t(m_toc.modificationTimestamp);
+        return QDateTime::fromSecsSinceEpoch(m_toc.modificationTimestamp);
     default:
         return QDateTime();
     }

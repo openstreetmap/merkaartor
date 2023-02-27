@@ -4,6 +4,7 @@ on: [push, pull_request]
 jobs:
   windows:
     runs-on: windows-latest
+    name: Windows / Qt6
     steps:
       - run: git config --global core.autocrlf input
         shell: bash
@@ -16,7 +17,7 @@ jobs:
           msystem: MINGW64
           update: true
           path-type: strict
-          install: git mingw-w64-x86_64-toolchain mingw-w64-x86_64-python-pip msys/make msys/git mingw64/mingw-w64-x86_64-gcc mingw64/mingw-w64-x86_64-qt5 mingw64/mingw-w64-x86_64-gdal mingw64/mingw-w64-x86_64-proj mingw64/mingw-w64-x86_64-openjpeg2 mingw64/mingw-w64-x86_64-json-c mingw64/mingw-w64-x86_64-cmake mingw64/mingw-w64-x86_64-exiv2 mingw64/mingw-w64-x86_64-nsis mingw64/mingw-w64-x86_64-mesa
+          install: git mingw-w64-x86_64-toolchain mingw-w64-x86_64-python-pip msys/make msys/git mingw64/mingw-w64-x86_64-gcc mingw64/mingw-w64-x86_64-qt6 mingw64/mingw-w64-x86_64-gdal mingw64/mingw-w64-x86_64-proj mingw64/mingw-w64-x86_64-openjpeg2 mingw64/mingw-w64-x86_64-json-c mingw64/mingw-w64-x86_64-cmake mingw64/mingw-w64-x86_64-exiv2 mingw64/mingw-w64-x86_64-nsis mingw64/mingw-w64-x86_64-mesa
       - name: Build
         shell: msys2 {0}
         run: |
@@ -32,13 +33,23 @@ jobs:
 
   macosx:
     runs-on: macos-latest
+    strategy:
+      matrix:
+        QT_MAJOR: [5, 6]
+    name: MacOS X / Qt${{ matrix.QT_MAJOR }}
+    env:
+      QT_MAJOR: ${{ matrix.QT_MAJOR }}
     steps:
       - uses: actions/checkout@v2
         with:
           fetch-depth: 0
       - name: Install dependencies
         run: |
-          brew install gdal exiv2 proj exiv2 qt5 cmake
+          brew list
+          brew install gdal exiv2 proj qt${{ matrix.QT_MAJOR }} cmake inih
+          brew unlink exiv2
+          brew install --HEAD exiv2
+          brew link qt${{ matrix.QT_MAJOR }}
       - name: Build
         run: |
           ./ci/travis-osx-script.sh
@@ -50,15 +61,15 @@ jobs:
           pip3 install cloudsmith-cli
           ./build/upload-artifacts.sh
 
-  linux:
+  linux-qt5:
     runs-on: ubuntu-20.04
     strategy:
       matrix:
         SNAPSHOT: [0, 1]
-    name: linux-build (SNAPSHOT=${{ matrix.SNAPSHOT }})
+    name: Linux / Ubuntu 20.04 / Qt5 (SNAPSHOT=${{ matrix.SNAPSHOT }})
     env:
       QT_PREFIX: 515
-      QT_REPO: ppa:beineri/opt-qt-5.15.2-focal
+      QT_REPO: ppa:beineri/opt-qt-5.15.4-focal
       TRAVIS_DIST: focal
       SNAPSHOT: ${{ matrix.SNAPSHOT }}
     steps:
@@ -68,6 +79,27 @@ jobs:
       - name: Install dependencies
         run: |
           ./ci/travis-linux-install.sh
+      - name: Build
+        run: |
+          ./ci/travis-linux-script.sh
+
+  linux-qt6:
+    runs-on: ubuntu-22.04
+    strategy:
+      matrix:
+        SNAPSHOT: [0, 1]
+    name: Linux / Ubuntu 22.04 / Qt6 (SNAPSHOT=${{ matrix.SNAPSHOT }})
+    env:
+      SNAPSHOT: ${{ matrix.SNAPSHOT }}
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+      - name: Install dependencies
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get -y install gdb libgdal-dev libproj-dev qt6-base-dev qt6-base-dev-tools qt6-tools-dev build-essential libgl1-mesa-dev cmake git libexiv2-dev libqt6svg* libqt6core5compat* qt6-l10n-tools qt6-tools-dev-tools
+
       - name: Build
         run: |
           ./ci/travis-linux-script.sh

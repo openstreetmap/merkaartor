@@ -31,11 +31,6 @@ bool parseContainer(QDomElement& e, Layer* aLayer);
 ImportExportGdal::ImportExportGdal(Document* doc)
  : IImportExport(doc)
 {
-#if defined(Q_OS_WIN32)
-    // Projection.h defines the list of search paths for Windows. Other platforms will search correctly on their own.
-    ProjDirs dirs;
-    OSRSetPROJSearchPaths(dirs.dirs);
-#endif
 }
 
 
@@ -170,7 +165,7 @@ bool ImportExportGdal::export_(const QList<Feature *>& featList)
         poFeature->SetField( "osm_id", (qreal)(F->id().numId));
 #ifndef FRISIUS_BUILD
         poFeature->SetField( "osm_version", F->versionNumber());
-        poFeature->SetField( "osm_timestamp", (int)F->time().toTime_t());
+        poFeature->SetField( "osm_timestamp", (int)F->time().toSecsSinceEpoch());
 #endif
 
         if (CHECK_NODE(F)) {
@@ -403,7 +398,7 @@ bool ImportExportGdal::importGDALDataset(GDALDataset* poDS, Layer* aLayer, bool 
                         } else if (k == "osm_version") {
                             F->setVersionNumber(poFeature->GetFieldAsInteger(i));
                         } else if (k == "osm_timestamp") {
-                            F->setTime(QDateTime::fromTime_t(poFeature->GetFieldAsInteger(i)));
+                            F->setTime(QDateTime::fromSecsSinceEpoch(poFeature->GetFieldAsInteger(i)));
 #endif
                         } else {
                             if (!g_Merk_NoGuardedTagsImport) {
