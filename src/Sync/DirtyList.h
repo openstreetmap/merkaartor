@@ -20,6 +20,13 @@ class QWidget;
 #include <utility>
 #include <QList>
 
+/** Changeset information container class. */
+class ChangesetInfo {
+    public:
+        QString comment;
+        QString source;
+};
+
 class DirtyList
 {
     public:
@@ -107,7 +114,17 @@ class DirtyListDescriber : public DirtyListVisit
         virtual bool eraseRoad(Way* R);
         virtual bool eraseRelation(Relation* R);
 
-        bool showChanges(QWidget* Parent);
+        /**
+         * Display changeset upload dialog. If approved by user, returns true
+         * and info will be filled-in with dialog data. Returns false
+         * otherwise.
+         *
+         * @param Parent    Qt parent window
+         * @param info      Changeset info filled in by the user (left as is if cancelled).
+         *
+         * @return          true if changes approved by user
+         */
+        bool showChanges(QWidget* Parent, ChangesetInfo& info);
         int tasks() const;
 
     private:

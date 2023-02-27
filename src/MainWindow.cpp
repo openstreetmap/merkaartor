@@ -4289,9 +4289,10 @@ void MainWindow::syncOSM(const QString& aWeb, const QString& aUser, const QStrin
     DirtyListBuild Future;
     theDocument->history().buildDirtyList(Future);
     DirtyListDescriber Describer(theDocument,Future);
-    if (Describer.showChanges(this) && Describer.tasks()) {
+    ChangesetInfo changesetInfo;
+    if (Describer.showChanges(this, changesetInfo) && Describer.tasks()) {
         Future.resetUpdates();
-        DirtyListExecutorOSC Exec(theDocument,Future,aWeb,aUser,aPwd,Describer.tasks());
+        DirtyListExecutorOSC Exec(theDocument,Future,changesetInfo,aWeb,aUser,aPwd,Describer.tasks());
         if (Exec.executeChanges(this)) {
             if (M_PREFS->getAutoHistoryCleanup() && !theDocument->getDirtyOrOriginLayer()->getDirtySize())
                 theDocument->history().cleanup();

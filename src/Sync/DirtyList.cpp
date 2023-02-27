@@ -25,8 +25,6 @@ int glbNodesAdded, glbNodesUpdated, glbNodesDeleted;
 int glbWaysAdded, glbWaysUpdated, glbWaysDeleted;
 int glbRelationsAdded, glbRelationsUpdated, glbRelationsDeleted;
 
-QString glbChangeSetComment;
-
 QString stripToOSMId(const IFeature::FId& id)
 {
     return QString::number(id.numId);
@@ -293,7 +291,7 @@ int DirtyListDescriber::tasks() const
     return Task;
 }
 
-bool DirtyListDescriber::showChanges(QWidget* aParent)
+bool DirtyListDescriber::showChanges(QWidget* aParent, ChangesetInfo& changesetInfo)
 {
     QDialog* dlg = new QDialog(aParent);
     Ui.setupUi(dlg);
@@ -315,15 +313,15 @@ bool DirtyListDescriber::showChanges(QWidget* aParent)
     Ui.lblUpdated->setText(QString::number(glbUpdated));
     Ui.lblDeleted->setText(QString::number(glbDeleted));
 
-    //Ui.edChangesetComment->setText(glbChangeSetComment);
-    //Ui.edChangesetComment->selectAll();
+    Ui.edSources->setText(theDocument->getCurrentSourceTags().join(";"));
 
     bool ok = false;
     while (!ok) {
         if (dlg->exec() == QDialog::Accepted) {
             /* Dialog was accepted, check for non-empty comment */
             if (!Ui.edChangesetComment->text().isEmpty()) {
-                glbChangeSetComment = Ui.edChangesetComment->text();
+                changesetInfo.comment = Ui.edChangesetComment->text();
+                changesetInfo.source = Ui.edSources->text();
                 ok = true;
             } else if (QMessageBox::question(NULL,
                         QApplication::tr("Use empty changeset comment?"),
