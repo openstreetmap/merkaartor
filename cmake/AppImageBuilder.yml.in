@@ -15,15 +15,11 @@ AppDir:
     sources:
       - sourceline: 'deb [arch=amd64] http://archive.ubuntu.com/ubuntu/ jammy main restricted universe multiverse'
         key_url: 'http://keyserver.ubuntu.com/pks/lookup?op=get&search=0x871920D1991BC93C'
-      - sourceline: 'deb [arch=amd64] http://archive.ubuntu.com/ubuntu/ jammy-updates main restricted universe multiverse'
-      - sourceline: 'deb [arch=amd64] http://archive.ubuntu.com/ubuntu/ jammy-backports main restricted universe multiverse'
-        key_url: 'http://keyserver.ubuntu.com/pks/lookup?op=get&search=0x871920D1991BC93C'
-      - sourceline: 'deb https://apt.kitware.com/ubuntu/ jammy main'
-        key_url: 'https://apt.kitware.com/keys/kitware-archive-latest.asc'
 
     include:
       - libgdal30
       - libproj22
+      - libexiv2-dev
       - libqt6network6
       - libqt6xml6
       - libqt6concurrent6
@@ -32,10 +28,9 @@ AppDir:
       - libqt6gui6
       - libqt6core6
       - libqt6dbus6
-      - qt6-qpa-plugins
-      - libexiv2-dev
       - libqt6svg6
       - libqt6core5compat6
+      - qt6-qpa-plugins
 
   files:
     exclude:
