@@ -1,0 +1,57 @@
+version: 1
+
+AppDir:
+  path: ./AppDir
+
+  app_info:
+    id: be.merkaartor
+    name: merkaartor
+    icon: merkaartor
+    version: @VCS_DESCRIBE@
+    exec: usr/local/bin/merkaartor
+
+  apt:
+    arch: amd64
+    sources:
+      - sourceline: 'deb [arch=amd64] http://archive.ubuntu.com/ubuntu/ jammy main restricted universe multiverse'
+        key_url: 'http://keyserver.ubuntu.com/pks/lookup?op=get&search=0x871920D1991BC93C'
+      - sourceline: 'deb [arch=amd64] http://archive.ubuntu.com/ubuntu/ jammy-updates main restricted universe multiverse'
+      - sourceline: 'deb [arch=amd64] http://archive.ubuntu.com/ubuntu/ jammy-backports main restricted universe multiverse'
+        key_url: 'http://keyserver.ubuntu.com/pks/lookup?op=get&search=0x871920D1991BC93C'
+      - sourceline: 'deb https://apt.kitware.com/ubuntu/ jammy main'
+        key_url: 'https://apt.kitware.com/keys/kitware-archive-latest.asc'
+
+    include:
+      - libgdal30
+      - libproj22
+      - libqt6network6
+      - libqt6xml6
+      - libqt6concurrent6
+      - libqt6printsupport6
+      - libqt6widgets6
+      - libqt6gui6
+      - libqt6core6
+      - libqt6dbus6
+      - qt6-qpa-plugins
+      - libexiv2-dev
+      - libqt6svg6
+      - libqt6core5compat6
+
+  files:
+    exclude:
+      - usr/lib/x86_64-linux-gnu/gconv
+      - usr/share/man
+      - usr/share/doc
+      - usr/**/*.a
+      - usr/**/perl
+      - usr/include
+      - usr/lib/llvm-*
+      - usr/lib/x86_64-linux-gnu/libLLVM*
+  runtime:
+    env:
+      APPDIR_LIBRARY_PATH: $APPDIR/lib/x86_64-linux-gnu:$APPDIR/usr/lib/x86_64-linux-gnu:$APPDIR/usr/lib
+
+AppImage:
+  update-information: None
+  sign-key: None
+  arch: x86_64
