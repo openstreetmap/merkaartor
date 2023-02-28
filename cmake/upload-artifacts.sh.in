@@ -1,7 +1,7 @@
 #!/bin/bash
 
 EXIT_CODE=0
-for file in build/merkaartor-*.{dmg,zip,exe}; do
+for file in build/merkaartor-*.{dmg,zip,exe,AppImage}; do
   # The glob may expand to non-existing file if one of the suffixes don't exist. Ignore those and only upload existing artifacts.
   if [ -e "$file" ]; then
     cloudsmith push raw --version "@VCS_DESCRIBE@" merkaartor/merkaartor-nightly "$file"

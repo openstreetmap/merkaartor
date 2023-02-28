@@ -99,7 +99,34 @@ jobs:
         run: |
           sudo apt-get update -qq
           sudo apt-get -y install gdb libgdal-dev libproj-dev qt6-base-dev qt6-base-dev-tools qt6-tools-dev build-essential libgl1-mesa-dev cmake git libexiv2-dev libqt6svg* libqt6core5compat* qt6-l10n-tools qt6-tools-dev-tools
-
       - name: Build
         run: |
           ./ci/travis-linux-script.sh
+
+  linux-appimage:
+    runs-on: ubuntu-22.04
+    name: Linux / AppImage
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+      - name: Install dependencies
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get -y install gdb libgdal-dev libproj-dev qt6-base-dev qt6-base-dev-tools qt6-tools-dev build-essential libgl1-mesa-dev cmake git libexiv2-dev libqt6svg* libqt6core5compat* qt6-l10n-tools qt6-tools-dev-tools
+          sudo apt-get -y install python3-pip libglib2.0-dev bash dash squashfs-tools zsync fakeroot
+          sudo pip install git+https://github.com/AppImageCrafters/appimage-builder.git
+      - name: Build
+        run: |
+          mkdir build && cd build
+          cmake .. -DCMAKE_BUILD_TYPE=Release -DEXTRA_TESTS=OFF
+          make -j3
+          make DESTDIR=AppDir install
+          appimage-builder --skip-tests
+      - name: Upload artifacts
+        env:
+          CLOUDSMITH_API_KEY: ${{ secrets.CLOUDSMITH_API_KEY }}
+        if: contains('refs/heads/master refs/heads/gh-actions refs/heads/appimage', github.ref) || startsWith(github.ref, 'refs/tags/')
+        run: |
+          pip3 install cloudsmith-cli
+          ./build/upload-artifacts.sh
