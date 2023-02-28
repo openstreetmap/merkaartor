@@ -161,8 +161,6 @@ src/PaintStyle/Painter.cpp
 src/PaintStyle/MasPaintStyle.h
 src/PaintStyle/Painter.h
 src/PaintStyle/PaintStyleEditor.ui
-src/PaintStyle/PrimitivePainter.cpp
-src/PaintStyle/PrimitivePainter.h
 src/PaintStyle/PaintStyleEditor.h
 src/PaintStyle/MasPaintStyle.cpp
 src/PaintStyle/FeaturePainter.cpp
