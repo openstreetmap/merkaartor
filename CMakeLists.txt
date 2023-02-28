@@ -271,10 +271,8 @@ src/Utils/ShortcutOverrideFilter.h
 src/Utils/SelectionDialog.cpp
 src/Utils/ProjectionChooser.h
 src/Utils/TagSelectorWidget.ui
-src/Utils/CheckBoxList.cpp
 src/Utils/SlippyMapWidget.cpp
 src/Utils/TagSelectorWidget.h
-src/Utils/CheckBoxList.h
 src/Utils/SlippyMapWidget.h
 src/Utils/Utils.h
 src/Utils/OsmLink.cpp
