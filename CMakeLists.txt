@@ -186,12 +186,6 @@ src/Commands/WayCommands.h
 src/Commands/Command.cpp
 src/Commands/Command.h
 src/Commands/RelationCommands.h
-#src/Tools/QFatFs/QFatFs.h
-#src/Tools/QFatFs/QFat.cpp
-#src/Tools/QFatFs/QFatFile.cpp
-#src/Tools/QFatFs/QFatFs.cpp
-#src/Tools/QFatFs/QFat.h
-#src/Tools/QFatFs/QFatFile.h
 src/Tools/ActionsDialog.cpp
 src/Tools/ActionsDialog.h
 src/qextserialport/qextserialport.cpp
