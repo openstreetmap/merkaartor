@@ -104,13 +104,11 @@ ${merkaartor_SRCS_PLATFORM}
 src/Backend/MemoryBackend.cpp
 src/Backend/MemoryBackend.h
 src/GPS/qgps.h
-#src/GPS/GpsFix.cpp
 src/GPS/qgpsdevice.cpp
 src/GPS/qgpssatellitetracker.h
 src/GPS/SatelliteStrengthView.cpp
 src/GPS/qgpssatellitetracker.cpp
 src/GPS/SatelliteStrengthView.h
-#src/GPS/GpsFix.h
 src/GPS/qgpsdevice.h
 src/GPS/qgps.cpp
 src/GPS/qgpsmainwindowui.ui
