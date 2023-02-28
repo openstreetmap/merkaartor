@@ -118,39 +118,6 @@ class DirtyListDescriber : public DirtyListVisit
         int Task;
 };
 
-class DirtyListExecutor : public QObject, public DirtyListVisit
-{
-    Q_OBJECT
-
-    public:
-        DirtyListExecutor(Document* aDoc, const DirtyListBuild& aFuture, const QString& aWeb, const QString& aUser, const QString& aPwd, int aTasks);
-        virtual ~DirtyListExecutor();
-
-        virtual bool start();
-        virtual bool stop();
-        virtual bool addPoint(Node* Pt);
-        virtual bool addRoad(Way* R);
-        virtual bool addRelation(Relation* R);
-        virtual bool updatePoint(Node* Pt);
-        virtual bool updateRoad(Way* R);
-        virtual bool updateRelation(Relation* R);
-        virtual bool erasePoint(Node* Pt);
-        virtual bool eraseRoad(Way* R);
-        virtual bool eraseRelation(Relation* R);
-
-        bool executeChanges(QWidget* Parent);
-
-    private:
-        bool sendRequest(const QString& Method, const QString& URL, const QString& Out, QString& Rcv);
-
-        Ui::SyncListDialog Ui;
-        int Tasks, Done;
-        QProgressDialog* Progress;
-        QString Web,User,Pwd;
-        Downloader* theDownloader;
-        QString ChangeSetId;
-};
-
 QString stripToOSMId(const QString& id);
 QString userName(const Feature* F);
 
