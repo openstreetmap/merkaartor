@@ -266,14 +266,11 @@ src/Layers/LayerPrivate.h
 src/Utils/ShortcutOverrideFilter.h
 src/Utils/SelectionDialog.cpp
 src/Utils/ProjectionChooser.h
-src/Utils/TagSelectorWidget.ui
 src/Utils/SlippyMapWidget.cpp
-src/Utils/TagSelectorWidget.h
 src/Utils/SlippyMapWidget.h
 src/Utils/Utils.h
 src/Utils/OsmLink.cpp
 src/Utils/ShortcutOverrideFilter.cpp
-src/Utils/TagSelectorWidget.cpp
 src/Utils/LineF.h
 src/Utils/SelectionDialog.ui
 src/Utils/TagSelector.h
