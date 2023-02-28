@@ -29,6 +29,7 @@ You will need the following packages installed:
  - Exiv2 (for geoimage support)
  - (For Windows Installer) NSIS-3
  - CMake 3.19.0 or newer
+ - protobuf (for .osm.pbf support).
 
 The OS specifics will be explained further down.
 
@@ -38,13 +39,13 @@ Install the above packages using your package manager. For Debian/Ubuntu, this w
 look like this:
 
 ```
- $ sudo apt-get install build-essential libgdal-dev libproj-dev libexiv2-dev cmake
+ $ sudo apt-get install build-essential libgdal-dev libproj-dev libexiv2-dev cmake protobuf-compile
 ```
 
 Or for Qt5: 
 
 ```
- $ sudo apt-get install qt5-default libqt5xml5* libqt5network5* libqt5gui5* libqt5svg5* libqt5webkit5* libqt5quick5* qtdeclarative5-dev qttools5-dev qtbase5-dev qtchooser
+ $ sudo apt-get install qt5-default libqt5xml5* libqt5network5* libqt5gui5* libqt5svg5* libqt5webkit5* libqt5quick5* qtdeclarative5-dev qttools5-dev qtbase5-dev qtchooser protobuf-compiler
 ```
 
 ### Windows (32bit/64bit)
@@ -64,7 +65,8 @@ $ pacman -S base-devel \
 	mingw32/mingw-w64-i686-openjpeg2 \
 	mingw32/mingw-w64-i686-json-c \
 	mingw64/mingw-w64-i686-exiv2 \
-    mingw64/mingw-w64-i686-cmake
+    mingw64/mingw-w64-i686-cmake \
+    mingw64/mingw-w64-i686-protobuf
 ```
 
 For 64bit, they are:
@@ -79,7 +81,8 @@ $ pacman -S base-devel \
 	mingw64/mingw-w64-x86_64-openjpeg2 \
 	mingw64/mingw-w64-x86_64-json-c \
 	mingw64/mingw-w64-x86_64-exiv2 \
-    mingw64/mingw-w64-x86_64-cmake
+    mingw64/mingw-w64-x86_64-cmake \
+    mingw64/mingw-w64-x86_64-protobuf
 ```
 
 Done? Continue to the next step, but run a different msys shell, the mingw32 or
@@ -92,19 +95,8 @@ You will need functional xcode (or other c++ compiler), and libraries installed
 from [homebrew](http://brew.sh).
 
 ```
-brew install gdal proj qt
+brew install gdal proj qt exiv2 cmake protobuf
 ```
-
-If you want to use qt5, you need to force link it, as homebrew guys consider Qt4
-the default:
-
-```
-brew install qt5 gdal proj exiv2 cmake
-brew link --force qt5
-```
-
-You can do without linking, but you will need to manually supply some paths to
-the build environment.
 
 ## Compilation
 
@@ -140,6 +132,7 @@ configure it):
 --  * GEOIMAGE    ON
 --  * GPSD        OFF
 --  * WEBENGINE   OFF
+--  * PROTOBUF    ON
 ```
 
 For example, compiling in support for GPSD would be:
