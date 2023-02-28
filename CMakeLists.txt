@@ -193,8 +193,6 @@ src/Commands/RelationCommands.h
 #src/Tools/QFatFs/QFat.h
 #src/Tools/QFatFs/QFatFile.h
 src/Tools/ActionsDialog.cpp
-#src/Tools/RegionMapWidget.cpp
-#src/Tools/RegionMapWidget.h
 src/Tools/ActionsDialog.h
 src/qextserialport/qextserialport.cpp
 src/qextserialport/qextserialport.h
