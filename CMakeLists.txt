@@ -606,6 +606,7 @@ set (CPACK_RESOURCE_FILE_LICENSE "${CMAKE_SOURCE_DIR}/LICENSE")
 # Prepare deployment script
 ##############################################
 configure_file("${PROJECT_SOURCE_DIR}/cmake/upload-artifacts.sh.in" "${PROJECT_BINARY_DIR}/upload-artifacts.sh" @ONLY)
+configure_file("${PROJECT_SOURCE_DIR}/cmake/AppImageBuilder.yml.in" "${PROJECT_BINARY_DIR}/AppImageBuilder.yml" @ONLY)
 
 ##############################################
 # Mac OS X specific deploy scripts
