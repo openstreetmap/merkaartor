@@ -23,6 +23,7 @@ class QWidget;
 /** Changeset information container class. */
 class ChangesetInfo {
     public:
+        QString serverUrl;
         QString comment;
         QString source;
 };
@@ -120,7 +121,8 @@ class DirtyListDescriber : public DirtyListVisit
          * otherwise.
          *
          * @param Parent    Qt parent window
-         * @param info      Changeset info filled in by the user (left as is if cancelled).
+         * @param info      Changeset info filled with `comment` and `source`
+         *                  in by the user (left as is if cancelled).
          *
          * @return          true if changes approved by user
          */

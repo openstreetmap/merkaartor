@@ -312,6 +312,7 @@ bool DirtyListDescriber::showChanges(QWidget* aParent, ChangesetInfo& changesetI
     Ui.lblAdded->setText(QString::number(glbAdded));
     Ui.lblUpdated->setText(QString::number(glbUpdated));
     Ui.lblDeleted->setText(QString::number(glbDeleted));
+    Ui.lblServerUrl->setText(changesetInfo.serverUrl);
 
     Ui.edSources->setText(theDocument->getCurrentSourceTags().join(";"));
 
