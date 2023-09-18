@@ -1465,9 +1465,9 @@ void MainWindow::clipboardChanged()
     // mimeData() returns nullptr if not supported by the platform
     if (clipboard->mimeData()) {
         if (clipboard->mimeData()->hasFormat(MIME_OPENSTREETMAP_XML))
-            ok = theXmlDoc.setContent(clipboard->mimeData()->data(MIME_OPENSTREETMAP_XML));
+            ok = bool(theXmlDoc.setContent(clipboard->mimeData()->data(MIME_OPENSTREETMAP_XML)));
         else if (clipboard->mimeData()->hasText())
-            ok = theXmlDoc.setContent(clipboard->text());
+            ok = bool(theXmlDoc.setContent(clipboard->text()));
     }
 
     if (!ok) {
@@ -4289,9 +4289,10 @@ void MainWindow::syncOSM(const QString& aWeb, const QString& aUser, const QStrin
     DirtyListBuild Future;
     theDocument->history().buildDirtyList(Future);
     DirtyListDescriber Describer(theDocument,Future);
-    if (Describer.showChanges(this) && Describer.tasks()) {
+    ChangesetInfo changesetInfo = {aWeb, "", ""};
+    if (Describer.showChanges(this, changesetInfo) && Describer.tasks()) {
         Future.resetUpdates();
-        DirtyListExecutorOSC Exec(theDocument,Future,aWeb,aUser,aPwd,Describer.tasks());
+        DirtyListExecutorOSC Exec(theDocument,Future,changesetInfo,aWeb,aUser,aPwd,Describer.tasks());
         if (Exec.executeChanges(this)) {
             if (M_PREFS->getAutoHistoryCleanup() && !theDocument->getDirtyOrOriginLayer()->getDirtySize())
                 theDocument->history().cleanup();

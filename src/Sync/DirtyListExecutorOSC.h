@@ -26,7 +26,7 @@ class DirtyListExecutorOSC : public QObject, public DirtyListVisit
 
 public:
     DirtyListExecutorOSC(Document* aDoc, const DirtyListBuild& aFuture);
-    DirtyListExecutorOSC(Document* aDoc, const DirtyListBuild& aFuture, const QString& aWeb, const QString& aUser, const QString& aPwd, int aTasks);
+    DirtyListExecutorOSC(Document* aDoc, const DirtyListBuild& aFuture, const ChangesetInfo& info, const QString& aWeb, const QString& aUser, const QString& aPwd, int aTasks);
     virtual ~DirtyListExecutorOSC();
 
     void OscCreate(Feature* F);
@@ -61,6 +61,7 @@ private:
     Downloader* theDownloader;
     QString ChangeSetId;
     QString LastAction;
+    ChangesetInfo changesetInfo;
 };
 
 
