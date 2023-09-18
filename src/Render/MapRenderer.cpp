@@ -18,7 +18,7 @@
 #include "ImageMapLayer.h"
 #include "LineF.h"
 
-#define TEST_RFLAGS(x) theOptions.options.testFlag(x)
+#define TEST_RFLAGS_MAP_RENDERER(x) theOptions.options.testFlag(x)
 #define TEST_RENDERER_RFLAGS(x) r->theOptions.options.testFlag(x)
 
 void BackgroundStyleLayer::draw(Way* R)
@@ -260,10 +260,10 @@ void MapRenderer::render(
             NodeWidth = M_PREFS->getNodeSize();
     }
 
-    bool bgLayerVisible = TEST_RFLAGS(RendererOptions::BackgroundVisible);
-    bool fgLayerVisible = TEST_RFLAGS(RendererOptions::ForegroundVisible);
-    bool tchpLayerVisible = TEST_RFLAGS(RendererOptions::TouchupVisible);
-    bool lblLayerVisible = TEST_RFLAGS(RendererOptions::NamesVisible);
+    bool bgLayerVisible = TEST_RFLAGS_MAP_RENDERER(RendererOptions::BackgroundVisible);
+    bool fgLayerVisible = TEST_RFLAGS_MAP_RENDERER(RendererOptions::ForegroundVisible);
+    bool tchpLayerVisible = TEST_RFLAGS_MAP_RENDERER(RendererOptions::TouchupVisible);
+    bool lblLayerVisible = TEST_RFLAGS_MAP_RENDERER(RendererOptions::NamesVisible);
 
     QMap<RenderPriority, QSet<Feature*> >::const_iterator itm;
     QMap<RenderPriority, QSet<Feature*> >::const_iterator itmCur;
@@ -284,7 +284,7 @@ void MapRenderer::render(
             {
                 for (it = itm.value().constBegin(); it != itm.value().constEnd(); ++it) {
                     qreal alpha = (*it)->getAlpha();
-                    if ((*it)->isReadonly() && !TEST_RFLAGS(RendererOptions::ForPrinting))
+                    if ((*it)->isReadonly() && !TEST_RFLAGS_MAP_RENDERER(RendererOptions::ForPrinting))
                         alpha /= 2.0;
                     if (alpha != 1.) {
                         P->save();
@@ -315,7 +315,7 @@ void MapRenderer::render(
             {
                 for (it = itm.value().constBegin(); it != itm.value().constEnd(); ++it) {
                     qreal alpha = (*it)->getAlpha();
-                    if ((*it)->isReadonly() && !TEST_RFLAGS(RendererOptions::ForPrinting))
+                    if ((*it)->isReadonly() && !TEST_RFLAGS_MAP_RENDERER(RendererOptions::ForPrinting))
                         alpha /= 2.0;
                     if (alpha != 1.) {
                         P->save();
@@ -345,7 +345,7 @@ void MapRenderer::render(
         for (itm = theFeatures.constBegin() ;itm != theFeatures.constEnd(); ++itm) {
             for (it = itm.value().constBegin(); it != itm.value().constEnd(); ++it) {
                 qreal alpha = (*it)->getAlpha();
-                if ((*it)->isReadonly() && !TEST_RFLAGS(RendererOptions::ForPrinting))
+                if ((*it)->isReadonly() && !TEST_RFLAGS_MAP_RENDERER(RendererOptions::ForPrinting))
                     alpha /= 2.0;
                 if (alpha != 1.) {
                     P->save();
@@ -375,7 +375,7 @@ void MapRenderer::render(
             for (it = itm.value().constBegin(); it != itm.value().constEnd(); ++it) {
                 P->save();
                 qreal alpha = (*it)->getAlpha();
-                if ((*it)->isReadonly() && !TEST_RFLAGS(RendererOptions::ForPrinting))
+                if ((*it)->isReadonly() && !TEST_RFLAGS_MAP_RENDERER(RendererOptions::ForPrinting))
                     alpha /= 2.0;
                 P->setOpacity(alpha);
 

@@ -1,3 +1,4 @@
+#pragma once
 /****************************************************************************
 ** 
 ** Copyright (c) 2009 Nokia Corporation and/or its subsidiary(-ies).
@@ -49,9 +50,7 @@
 #include <QtNetwork/QLocalSocket>
 #include <QtCore/QDir>
 
-namespace QtLP_Private {
 #include "qtlockedfile.h"
-}
 
 class QtLocalPeer : public QObject
 {

@@ -13,7 +13,7 @@
 #include <QDomElement>
 #include <math.h>
 
-#define TEST_RFLAGS(x) theRenderer->theOptions.options.testFlag(x)
+#define TEST_RFLAGS_FEATURE_PAINTER(x) theRenderer->theOptions.options.testFlag(x)
 #define CAPSTYLE Qt::RoundCap
 #define JOINSTYLE Qt::RoundJoin
 
@@ -705,7 +705,7 @@ void FeaturePainter::drawLabel(Way* R, QPainter* thePainter, MapRenderer* theRen
     LineParameters lp = labelBoundary();
     qreal PixelPerM = theRenderer->thePixelPerM;
     qreal WW = PixelPerM*R->widthOf()*lp.Proportional+lp.Fixed;
-    if (WW < 10 && !TEST_RFLAGS(RendererOptions::PrintAllLabels)) return;
+    if (WW < 10 && !TEST_RFLAGS_FEATURE_PAINTER(RendererOptions::PrintAllLabels)) return;
     //qreal WWR = qMax(PixelPerM*R->widthOf()*BackgroundScale+BackgroundOffset, PixelPerM*R->widthOf()*ForegroundScale+ForegroundOffset);
 
     R->getLock();
@@ -727,7 +727,7 @@ void FeaturePainter::drawLabel(Way* R, QPainter* thePainter, MapRenderer* theRen
         QFontMetricsF metrics(font);
         qreal strWidth = metrics.horizontalAdvance(str);
 
-        if ((font.pixelSize() >= 5 || TEST_RFLAGS(RendererOptions::PrintAllLabels)) && tranformedRoadPath.length() > strWidth) {
+        if ((font.pixelSize() >= 5 || TEST_RFLAGS_FEATURE_PAINTER(RendererOptions::PrintAllLabels)) && tranformedRoadPath.length() > strWidth) {
             thePainter->setFont(font);
 
             int repeat = int((tranformedRoadPath.length() / ((strWidth * LABEL_PATH_DISTANCE))) - 0.5);

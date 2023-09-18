@@ -50,6 +50,7 @@
 #include <fcntl.h>
 
 #include "qtlockedfile.h"
+namespace QtLP_Private {
 
 bool QtLockedFile::lock(LockMode mode, bool block)
 {
@@ -119,3 +120,4 @@ QtLockedFile::~QtLockedFile()
         unlock();
 }
 
+}

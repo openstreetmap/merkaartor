@@ -39,7 +39,7 @@
 // from wikipedia
 #define EQUATORIALRADIUS 6378137.0
 #define LAT_ANG_PER_M 1.0 / EQUATORIALRADIUS
-#define TEST_RFLAGS(x) p->ROptions.options.testFlag(x)
+#define TEST_RFLAGS_MAP_VIEW(x) p->ROptions.options.testFlag(x)
 
 class MapViewPrivate
 {
@@ -169,7 +169,7 @@ void MapView::invalidate(bool updateWireframe, bool updateOsmMap, bool updateBgM
 {
     if (updateOsmMap) {
         if (!M_PREFS->getWireframeView()) {
-            if (!TEST_RFLAGS(RendererOptions::Interacting))
+            if (!TEST_RFLAGS_MAP_VIEW(RendererOptions::Interacting))
                 p->osmLayer->forceRedraw(p->theProjection, p->theTransform, rect(), p->PixelPerM, p->ROptions);
             else if (M_PREFS->getEditRendering() == 2)
                 p->osmLayer->forceRedraw(p->theProjection, p->theTransform, rect(), p->PixelPerM, p->ROptions);
@@ -298,7 +298,7 @@ void MapView::paintEvent(QPaintEvent * anEvent)
     if (M_PREFS->getWireframeView() || !p->osmLayer->isRenderingDone() || M_PREFS->getEditRendering() == 1)
         P.drawPixmap(p->theVectorPanDelta, *StaticWireframe);
     if (!M_PREFS->getWireframeView())
-        if (!(TEST_RFLAGS(RendererOptions::Interacting) && M_PREFS->getEditRendering() == 1))
+        if (!(TEST_RFLAGS_MAP_VIEW(RendererOptions::Interacting) && M_PREFS->getEditRendering() == 1))
             drawFeatures(P);
     P.drawPixmap(p->theVectorPanDelta, *StaticTouchup);
 
@@ -357,7 +357,7 @@ void MapView::paintEvent(QPaintEvent * anEvent)
 void MapView::drawScale(QPainter & P)
 {
 
-    if (!TEST_RFLAGS(RendererOptions::ScaleVisible))
+    if (!TEST_RFLAGS_MAP_VIEW(RendererOptions::ScaleVisible))
         return;
 
     errno = 0;
@@ -445,7 +445,7 @@ void floodFill(QImage& theImage, const QPoint& P, const QRgb& targetColor, const
 
 void MapView::drawLatLonGrid(QPainter & P)
 {
-    if (!TEST_RFLAGS(RendererOptions::LatLonGridVisible))
+    if (!TEST_RFLAGS_MAP_VIEW(RendererOptions::LatLonGridVisible))
         return;
 
     QPointF origin(0., 0.);
@@ -552,7 +552,7 @@ void MapView::drawFeatures(QPainter & P)
 
 void MapView::drawDownloadAreas(QPainter & P)
 {
-    if (!TEST_RFLAGS(RendererOptions::DownloadedVisible))
+    if (!TEST_RFLAGS_MAP_VIEW(RendererOptions::DownloadedVisible))
         return;
 
     P.save();
@@ -1001,7 +1001,7 @@ void MapView::setViewport(const CoordBox & TargetMap,
 
     p->ZoomLevel = p->theTransform.m11();
 
-    if (TEST_RFLAGS(RendererOptions::LockZoom) && p->theDocument) {
+    if (TEST_RFLAGS_MAP_VIEW(RendererOptions::LockZoom) && p->theDocument) {
         ImageMapLayer* l = NULL;
         for (LayerIterator<ImageMapLayer*> ImgIt(p->theDocument); !ImgIt.isEnd(); ++ImgIt) {
             l = ImgIt.get();
@@ -1027,7 +1027,7 @@ void MapView::zoom(qreal d, const QPoint & Around)
         return;
 
     qreal z = d;
-    if (TEST_RFLAGS(RendererOptions::LockZoom)) {
+    if (TEST_RFLAGS_MAP_VIEW(RendererOptions::LockZoom)) {
         ImageMapLayer* l = NULL;
         for (LayerIterator<ImageMapLayer*> ImgIt(p->theDocument); !ImgIt.isEnd(); ++ImgIt) {
             l = ImgIt.get();
@@ -1087,7 +1087,7 @@ void MapView::zoom(qreal d, const QPoint & Around,
 
 void MapView::adjustZoomToBoris()
 {
-    if (TEST_RFLAGS(RendererOptions::LockZoom)) {
+    if (TEST_RFLAGS_MAP_VIEW(RendererOptions::LockZoom)) {
         ImageMapLayer* l = NULL;
         for (LayerIterator<ImageMapLayer*> ImgIt(p->theDocument); !ImgIt.isEnd(); ++ImgIt) {
             l = ImgIt.get();

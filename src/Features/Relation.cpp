@@ -17,7 +17,7 @@
 #include <utility>
 #include <QList>
 
-#define TEST_RFLAGS(x) theView->renderOptions().options.testFlag(x)
+#define TEST_RFLAGS_RELATION(x) theView->renderOptions().options.testFlag(x)
 
 class RelationMemberModel : public QAbstractTableModel
 {
@@ -250,7 +250,7 @@ qreal Relation::pixelDistance(const QPointF& Target, qreal ClearEndDistance, con
     Q_UNUSED(NoSnap)
 
     qreal Best = 1000000;
-    if (!TEST_RFLAGS(RendererOptions::RelationsVisible) && !M_PREFS->getRelationsSelectableWhenHidden())
+    if (!TEST_RFLAGS_RELATION(RendererOptions::RelationsVisible) && !M_PREFS->getRelationsSelectableWhenHidden())
         return Best;
 
     //for (int i=0; i<p->Members.size(); ++i)
