@@ -1842,6 +1842,35 @@ void MainWindow::loadUrl(const QString& urlString)
     loadUrl(QUrl(urlString));
 }
 
+
+void MainWindow::addTags(Feature* F,QString* addtagsstring,bool makeTagCommands)
+{
+  if (addtagsstring->size()>0) {
+      CommandList* theList = new CommandList(MainWindow::tr("remote update tag %1").arg(F->tagValue("name","no name")),F);
+      QStringList addTagList = QUrl::fromPercentEncoding(addtagsstring->toUtf8()).split("|");
+      foreach (const QString &kv, addTagList) {
+          int eqix;
+          if ((eqix=kv.indexOf("="))>0) {
+              QString k=kv.left(eqix);
+              QString v=kv.right(kv.size()-eqix-1);
+              if (makeTagCommands) {
+                  theList->add(new SetTagCommand(F,k,v));
+              } else {
+                  F->setTag(k,v);
+              }
+          }
+      }
+    if (theList->empty())
+        delete theList;
+    else
+    {
+        theDocument->addHistory(theList);
+        emit content_changed();
+        invalidateView();
+    }
+  }
+}
+
 void MainWindow::loadUrl(const QUrl& theUrl)
 {
     activateWindow();
@@ -1886,6 +1915,8 @@ void MainWindow::loadUrl(const QUrl& theUrl)
             theView->setViewport(F->boundingBox(), theView->rect());
             on_fileDownloadMoreAction_triggered();
           }
+          QString addtagsstring=theQuery.queryItemValue("addtags");
+          addTags(F,&addtagsstring,true);
           properties()->setSelection(0);
           properties()->addSelection(F);
           emit content_changed();
@@ -1900,24 +1931,12 @@ void MainWindow::loadUrl(const QUrl& theUrl)
 	Layer* l=document()->getDirtyOrOriginLayer();
         N = g_backend.allocNode(g_Merk_MainWindow->document()->getDirtyOrOriginLayer(), pos);
 	N->setDirtyLevel(1);
-	QString poiName=".";
-	if (addtagsstring.size()>0) {
-	  QStringList addtags = QUrl::fromPercentEncoding(addtagsstring.toUtf8()).split("|");
-	  foreach (const QString &tag, addtags) {
-	    QStringList kv = tag.split("=");
-	    QString k=kv[0];
-	    QString v;
-	    if (kv.size()>0) {
-	      v=kv[1];
-	      if (k=="name") poiName=v;
-	    }
-	    N->setTag(k,v);
-	  }
-	}
-	theList  = new CommandList(MainWindow::tr("Remote add POI %1 %2").arg(N->id().numId).arg(poiName), N);
+        addTags(N,&addtagsstring,false);
+        qDebug() << "addnode " << N->findKey("name");
+	theList  = new CommandList(MainWindow::tr("Remote add POI %1 %2").arg(N->id().numId).arg(N->tagValue("name","no name")), N);
 	theList->add(new AddFeatureCommand(l,N,true));
 	g_Merk_MainWindow->properties()->setSelection(0);
-	N->updateMeta();		
+	N->updateMeta();
 	document()->addHistory(theList);
         properties()->setSelection(0);
 	properties()->addSelection(N);
