@@ -49,23 +49,3 @@ MerkaartorAddPlugin(NAME MMsBingMapBackgroundPlugin DESTINATION background SOURC
     ${PROJECT_SOURCE_DIR}/plugins/background/MMsBingMapBackground/msbingmapadapter.cpp
     ${PROJECT_SOURCE_DIR}/plugins/background/MMsBingMapBackground/mapadapter.cpp
 )
-
-# Plugin not maintained for a long time.
-# MerkaartorAddPlugin(NAME MCadastreFranceBackgroundPlugin DESTINATION background SOURCES
-#     ${PROJECT_SOURCE_DIR}/plugins/background/MCadastreFranceBackground/qadastre
-#     ${PROJECT_SOURCE_DIR}/plugins/background/MCadastreFranceBackground/qadastre/cadastrewrapper.cpp
-#     ${PROJECT_SOURCE_DIR}/plugins/background/MCadastreFranceBackground/qadastre/COPYING.txt
-#     ${PROJECT_SOURCE_DIR}/plugins/background/MCadastreFranceBackground/qadastre/searchdialog.ui
-#     ${PROJECT_SOURCE_DIR}/plugins/background/MCadastreFranceBackground/qadastre/searchdialog.cpp
-#     ${PROJECT_SOURCE_DIR}/plugins/background/MCadastreFranceBackground/qadastre/tile.cpp
-#     ${PROJECT_SOURCE_DIR}/plugins/background/MCadastreFranceBackground/qadastre/cadastrebrowser.ui
-#     ${PROJECT_SOURCE_DIR}/plugins/background/MCadastreFranceBackground/qadastre/city.cpp
-#     ${PROJECT_SOURCE_DIR}/plugins/background/MCadastreFranceBackground/qadastre/cadastrebrowser.cpp
-#     ${PROJECT_SOURCE_DIR}/plugins/background/MCadastreFranceBackground/qadastre/main.cpp
-#     ${PROJECT_SOURCE_DIR}/plugins/background/MCadastreFranceBackground/CadastreFrance.cpp
-# )
-
-#MerkaartorAddPlugin(NAME MWalkingPapersBackgroundPlugin DESTINATION background SOURCES
-#    #${PROJECT_SOURCE_DIR}/plugins/background/MWalkingPapersBackground/WalkingPapersAdapter.json
-#    ${PROJECT_SOURCE_DIR}/plugins/background/MWalkingPapersBackground/WalkingPapersAdapter.cpp
-#)

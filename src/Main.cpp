@@ -240,10 +240,6 @@ int main(int argc, char** argv)
     splash.showMessage(QString(instance.translate("Main", "%1 v%2\nInitializing...")).arg(qApp->applicationName()).arg(BuildMetadata::REVISION), Qt::AlignBottom | Qt::AlignHCenter, Qt::black);
     instance.processEvents();
 
-//    QFatFsHandler* fatHandler = new QFatFsHandler(50000, 8192);
-    //ZipEngineHandler* zipHandler = new ZipEngineHandler();
-
-
     MainWindow Main;
     g_Merk_MainWindow = &Main;
     instance.setActivationWindow(&Main, false);
@@ -295,9 +291,6 @@ int main(int argc, char** argv)
         fclose(pLogFile);
         pLogFile = NULL;
     }
-
-//    delete fatHandler;
-    //delete zipHandler;
 
     return x;
 }
