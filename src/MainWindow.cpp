@@ -15,9 +15,6 @@
 #include "ImportExportOSC.h"
 #include "ExportGPX.h"
 #include "ImportExportKML.h"
-#ifdef USE_PROTOBUF
-#include "ImportExportPBF.h"
-#endif
 #include "ImportExportGdal.h"
 #include "CreateAreaInteraction.h"
 #include "CreateDoubleWayInteraction.h"

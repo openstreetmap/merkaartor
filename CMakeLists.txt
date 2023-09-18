@@ -189,7 +189,6 @@ src/qextserialport/qextserialport.h
 src/qextserialport/qextserialbase.cpp
 src/qextserialport/qextserialbase.h
 src/ImportExport/ImportNMEA.cpp
-#src/ImportExport/ImportExportPBF.h
 src/ImportExport/ImportNMEA.h
 src/ImportExport/ImportExportGdal.h
 src/ImportExport/IImportExport.cpp
@@ -206,16 +205,11 @@ src/ImportExport/ImportExportOSC.cpp
 src/ImportExport/ExportGPX.h
 src/ImportExport/ImportCSVDialog.cpp
 src/ImportExport/ImportCSVDialog.ui
-#src/ImportExport/fileformat.pb.h
-#src/ImportExport/osmformat.pb.cc
-#src/ImportExport/osmformat.pb.h
-#src/ImportExport/fileformat.pb.cc
 src/ImportExport/ImportNGT.h
 src/ImportExport/ImportCSVDialog.h
 src/ImportExport/ExportOSM.h
 src/ImportExport/ImportOSM.cpp
 src/ImportExport/ImportExportCSV.h
-#src/ImportExport/ImportExportPBF.cpp
 src/ImportExport/IImportExport.h
 src/ImportExport/ExportGPX.cpp
 src/ImportExport/ImportGPX.cpp
@@ -481,6 +475,7 @@ option(ZBAR        "Enable ZBar usage in MWalkingPapersBackground and Geoimage."
 option(GEOIMAGE    "Enable Geoimage Dock (requires exiv2 library)."                   ON )
 option(GPSD        "Enable GPS Dock (requires gpsd library)."                         OFF)
 option(WEBENGINE   "Enable the use of QtWeb engine (not supported on all platforms)"  OFF)
+option(PROTOBUF    "Enable support for .osm.pbf format."                              ON)
 option(EXTRA_TESTS "Enable extra tests that cannot be run automatically on CI build." ON )
 
 message(STATUS "Build options (use -DOPT=ON/OFF to enable/disable):")
@@ -488,6 +483,7 @@ message(STATUS " * ZBAR        ${ZBAR}")
 message(STATUS " * GEOIMAGE    ${GEOIMAGE}")
 message(STATUS " * GPSD        ${GPSD}")
 message(STATUS " * WEBENGINE   ${WEBENGINE}")
+message(STATUS " * PROTOBUF    ${PROTOBUF}")
 message(STATUS " * EXTRA_TESTS ${EXTRA_TESTS}")
 message(STATUS "")
 
@@ -511,6 +507,17 @@ if (WEBENGINE)
     # add_definitions(-DTHREADED_BROWSERIMAGEMANAGER=1) # TODO: Check if that even does something/works
 endif()
 
+if (PROTOBUF)
+    find_package(Protobuf REQUIRED)
+    list(APPEND PKGCONFIG_REQUIRED_LIBS zlib protobuf)
+    add_definitions(-DUSE_PROTOBUF)
+    protobuf_generate_cpp(PROTOBUF_SRCS PROTOBUF_HDRS src/ImportExport/fileformat.proto src/ImportExport/osmformat.proto)
+    set(PROTOBUF_FILES
+        src/ImportExport/ImportExportPBF.cpp
+        src/ImportExport/ImportExportPBF.h
+        ${PROTOBUF_SRCS} ${PROTOBUF_HDRS}
+    )
+endif()
 
 # TODO: Check and remove or implement defines from code: PORTABLE, FRISIUS, NVIDIA_HACK, MOBILE, LIBPROXY, SYSTEM_QTSA
 find_package(PkgConfig REQUIRED)
@@ -541,7 +548,7 @@ if (WIN32)
   set(MERKAARTOR_ICON_FILE "${CMAKE_SOURCE_DIR}/Icons/merkaartor-win32.rc")
 endif()
 
-add_executable(${PROJECT_NAME} WIN32 MACOSX_BUNDLE ${merkaartor_SRCS} src/Main.cpp ${MERKAARTOR_ICON_FILE} ${QM_FILES})
+add_executable(${PROJECT_NAME} WIN32 MACOSX_BUNDLE ${merkaartor_SRCS} src/Main.cpp ${MERKAARTOR_ICON_FILE} ${QM_FILES} ${PROTOBUF_FILES})
 target_link_libraries(merkaartor ${MERKAARTOR_LINK_LIBS} )
 target_compile_options(merkaartor PUBLIC ${PKGCONFIG_DEPS_CFLAGS})
 install( TARGETS merkaartor RUNTIME DESTINATION bin BUNDLE DESTINATION .)
