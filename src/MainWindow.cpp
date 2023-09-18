@@ -1465,9 +1465,9 @@ void MainWindow::clipboardChanged()
     // mimeData() returns nullptr if not supported by the platform
     if (clipboard->mimeData()) {
         if (clipboard->mimeData()->hasFormat(MIME_OPENSTREETMAP_XML))
-            ok = theXmlDoc.setContent(clipboard->mimeData()->data(MIME_OPENSTREETMAP_XML));
+            ok = bool(theXmlDoc.setContent(clipboard->mimeData()->data(MIME_OPENSTREETMAP_XML)));
         else if (clipboard->mimeData()->hasText())
-            ok = theXmlDoc.setContent(clipboard->text());
+            ok = bool(theXmlDoc.setContent(clipboard->text()));
     }
 
     if (!ok) {
