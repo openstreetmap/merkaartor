@@ -11,7 +11,7 @@ WayAddNodeCommand::WayAddNodeCommand(Way* R)
 }
 
 WayAddNodeCommand::WayAddNodeCommand(Way* R, Node* W, Layer* aLayer)
-: Command (R), theLayer(aLayer), oldLayer(0), theRoad(R), theTrackPoint(W), Position(theRoad->size())
+: Command (R), theLayer(aLayer), oldLayer(0), theRoad(R), theTrackPoint(W), Position(R ? R->size() : 0)
 {
     if (!theLayer)
         theLayer = theRoad->layer();
@@ -128,7 +128,7 @@ WayRemoveNodeCommand::WayRemoveNodeCommand(Way* R)
 }
 
 WayRemoveNodeCommand::WayRemoveNodeCommand(Way* R, Node* W, Layer* aLayer)
-: Command(R), theLayer(aLayer), oldLayer(0), Idx(R->find(W)), wasClosed(R ? R->isClosed() : false), theRoad(R), theNode(W)
+: Command(R), theLayer(aLayer), oldLayer(0), Idx(R ? R->find(W) : 0), wasClosed(R ? R->isClosed() : false), theRoad(R), theNode(W)
 {
     if (!theLayer)
         theLayer = theRoad->layer();
@@ -136,7 +136,7 @@ WayRemoveNodeCommand::WayRemoveNodeCommand(Way* R, Node* W, Layer* aLayer)
 }
 
 WayRemoveNodeCommand::WayRemoveNodeCommand(Way* R, int anIdx, Layer* aLayer)
-: Command(R), theLayer(aLayer), oldLayer(0), Idx(anIdx), wasClosed(R ? R->isClosed() : false), theRoad(R), theNode(R->getNode(anIdx))
+: Command(R), theLayer(aLayer), oldLayer(0), Idx(anIdx), wasClosed(R ? R->isClosed() : false), theRoad(R), theNode(R ? R->getNode(anIdx) : nullptr)
 {
     if (!theLayer)
         theLayer = theRoad->layer();
