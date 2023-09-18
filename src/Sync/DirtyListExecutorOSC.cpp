@@ -26,7 +26,6 @@
 #include <QRegExp>
 
 extern int glbAdded, glbUpdated, glbDeleted;
-extern QString glbChangeSetComment;
 
 DirtyListExecutorOSC::DirtyListExecutorOSC(Document* aDoc, const DirtyListBuild& aFuture)
     : DirtyListVisit(aDoc, aFuture, false)
@@ -35,8 +34,8 @@ DirtyListExecutorOSC::DirtyListExecutorOSC(Document* aDoc, const DirtyListBuild&
 {
 }
 
-DirtyListExecutorOSC::DirtyListExecutorOSC(Document* aDoc, const DirtyListBuild& aFuture, const QString& aWeb, const QString& aUser, const QString& aPwd, int aTasks)
-: DirtyListVisit(aDoc, aFuture, false), Tasks(aTasks), Done(0), Web(aWeb), User(aUser), Pwd(aPwd), theDownloader(0)
+DirtyListExecutorOSC::DirtyListExecutorOSC(Document* aDoc, const DirtyListBuild& aFuture, const ChangesetInfo& info, const QString& aWeb, const QString& aUser, const QString& aPwd, int aTasks)
+: DirtyListVisit(aDoc, aFuture, false), changesetInfo(info), Tasks(aTasks), Done(0), Web(aWeb), User(aUser), Pwd(aPwd), theDownloader(0)
 {
     theDownloader = new Downloader(User, Pwd);
 }
@@ -184,14 +183,32 @@ bool DirtyListExecutorOSC::start()
     Progress->setLabelText(tr("OPEN changeset"));
     QEventLoop L; L.processEvents(QEventLoop::ExcludeUserInputEvents);
 
-    QString DataIn(
-        "<osm>"
-        "<changeset>"
-        "<tag k=\"created_by\" v=\"Merkaartor %1 (%2)\"/>"
-        "<tag k=\"comment\" v=\"%3\"/>"
-        "</changeset>"
-        "</osm>");
-    DataIn = DataIn.arg(BuildMetadata::VERSION).arg(QLocale::system().name().split("_")[0]).arg(Utils::encodeAttributes(glbChangeSetComment));
+    QString DataIn;
+    {
+        QXmlStreamWriter stream(&DataIn);
+        stream.writeStartElement("osm");
+        stream.writeStartElement("changeset");
+        stream.writeStartElement("tag");
+        stream.writeAttribute("k", "created_by");
+        stream.writeAttribute("v",
+                QString("Merkaartor %1 (%2)").arg(BuildMetadata::VERSION).arg(QLocale::system().name().split("_")[0]));
+        stream.writeEndElement();
+        if (changesetInfo.comment.length()) {
+            stream.writeStartElement("tag");
+            stream.writeAttribute("k", "comment");
+            stream.writeAttribute("v", changesetInfo.comment);
+            stream.writeEndElement();
+        }
+        if (changesetInfo.source.length()) {
+            stream.writeStartElement("tag");
+            stream.writeAttribute("k", "source");
+            stream.writeAttribute("v", changesetInfo.source);
+            stream.writeEndElement();
+        }
+        stream.writeEndDocument();
+    }
+    qDebug() << DataIn;
+
     QString DataOut;
     QString URL = theDownloader->getURLToOpenChangeSet();
     if (sendRequest("PUT",URL,DataIn, DataOut) != 200)

@@ -909,8 +909,9 @@ QStringList Document::getCurrentSourceTags()
     for (LayerIterator<ImageMapLayer*> ImgIt(this); !ImgIt.isEnd(); ++ImgIt) {
         if (ImgIt.get()->isVisible()) {
             QString s = ImgIt.get()->getMapAdapter()->getSourceTag();
-            if (!s.isEmpty())
-                theSrc << ImgIt.get()->getMapAdapter()->getSourceTag();
+            if ((!s.isEmpty()) && (!theSrc.contains(s))) {
+                theSrc << s;
+            }
         }
     }
     return theSrc;
