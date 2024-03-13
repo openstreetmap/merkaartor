@@ -4,6 +4,7 @@
 #include "Painter.h"
 #include "MainWindow.h"
 #include "Document.h"
+#include "BoundaryIcon.h"
 
 #include "SelectionDialog.h"
 
@@ -15,17 +16,6 @@
 #include <QPainter>
 #include <QPixmap>
 #include <QToolButton>
-
-static void makeBoundaryIcon(QToolButton* bt, QColor C)
-{
-    QPixmap pm(36, 18);
-    pm.fill(QColor(255, 255, 255));
-    QPainter p(&pm);
-    p.setPen(C);
-    p.setBrush(C);
-    p.drawRect(0, 6, 36, 6);
-    bt->setIcon(pm);
-}
 
 PaintStyleEditor::PaintStyleEditor(QWidget *aParent, const GlobalPainter& aGlobalPainter, const QList<Painter>& aPainters)
     : QDialog(aParent), theGlobalPainter(aGlobalPainter), thePainters(aPainters), FreezeUpdate(true)
