@@ -2,7 +2,7 @@
 if (APPLE)
 set(PLUGINS_INSTALL_POSTFIX "merkaartor.app/Contents/plugins")
 else()
-set(PLUGINS_INSTALL_POSTFIX "lib/merkaartor/plugins")
+set(PLUGINS_INSTALL_POSTFIX "${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_LIBDIR}/merkaartor/plugins")
 endif()
 
 function(MerkaartorAddPlugin)
