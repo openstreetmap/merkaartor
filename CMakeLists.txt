@@ -502,7 +502,7 @@ if (GEOIMAGE)
 endif()
 
 if (GPSD)
-    list(APPEND PKGCONFIG_REQUIRED_LIBS gpsd)
+    list(APPEND PKGCONFIG_REQUIRED_LIBS libgps)
     add_definitions(-DUSE_GPS=1)
 endif()
 
