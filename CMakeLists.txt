@@ -48,7 +48,7 @@ set(CMAKE_AUTORCC ON)
 ##############################################
 # Find Qt dependencies
 ##############################################
-set(MERKAARTOR_QT_LIBS Svg Network Xml Core Gui Concurrent PrintSupport Widgets Test)
+set(MERKAARTOR_QT_LIBS Svg Network NetworkAuth Xml Core Gui Concurrent PrintSupport Widgets Test)
 set(MERKAARTOR_QT_TOOLS LinguistTools)
 find_package(QT NAMES Qt5 Qt6 REQUIRED COMPONENTS Core)
 message(STATUS " * Qt version found: ${QT_VERSION}")
@@ -257,6 +257,8 @@ src/Layers/LayerWidget.h
 src/Layers/LayerWidget.ui
 src/Layers/FilterEditDialog.ui
 src/Layers/LayerPrivate.h
+src/Utils/HttpAuth.h
+src/Utils/HttpAuth.cpp
 src/Utils/ShortcutOverrideFilter.h
 src/Utils/SelectionDialog.cpp
 src/Utils/ProjectionChooser.h
@@ -686,6 +688,7 @@ endfunction()
 
 MERK_ADD_TEST(test-projection src/common/Projection.cpp src/common/Coord.cpp)
 MERK_ADD_TEST(test-OsmLink src/Utils/OsmLink.cpp src/common/Coord.cpp)
+MERK_ADD_TEST(test-HttpAuth src/Utils/HttpAuth.cpp)
 
 # Additional tests that use the main executable
 if (EXTRA_TESTS)
