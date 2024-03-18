@@ -479,6 +479,7 @@ option(GPSD        "Enable GPS Dock (requires gpsd library)."                   
 option(WEBENGINE   "Enable the use of QtWeb engine (not supported on all platforms)"  OFF)
 option(PROTOBUF    "Enable support for .osm.pbf format."                              ON)
 option(EXTRA_TESTS "Enable extra tests that cannot be run automatically on CI build." ON )
+option(INTERACTIVE_TESTS "Enable interactive tests that need user input."             OFF)
 
 message(STATUS "Build options (use -DOPT=ON/OFF to enable/disable):")
 message(STATUS " * ZBAR        ${ZBAR}")
@@ -688,7 +689,11 @@ endfunction()
 
 MERK_ADD_TEST(test-projection src/common/Projection.cpp src/common/Coord.cpp)
 MERK_ADD_TEST(test-OsmLink src/Utils/OsmLink.cpp src/common/Coord.cpp)
+
+# Additional tests that require user input
+if (INTERACTIVE_TESTS)
 MERK_ADD_TEST(test-HttpAuth src/Utils/HttpAuth.cpp)
+endif()
 
 # Additional tests that use the main executable
 if (EXTRA_TESTS)

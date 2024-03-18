@@ -21,10 +21,13 @@ public slots:
 
 signals:
     void authenticated();
+    void failed(int error);
 
 private:
     QOAuth2AuthorizationCodeFlow oauth2;
     bool permanent = false;
+    QString codeVerifier;
+    QString codeChallenge;
 };
 
 
