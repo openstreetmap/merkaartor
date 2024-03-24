@@ -44,13 +44,24 @@ QString generateCodeVerifier() {
 }
 
 HttpAuth::HttpAuth(QObject *parent) : QObject(parent) {
-    auto replyHandler = new QOAuthHttpServerReplyHandler(1337, this);
-    oauth2.setReplyHandler(replyHandler);
-    oauth2.setAuthorizationUrl(QUrl("https://www.openstreetmap.org/oauth2/authorize"));
-    oauth2.setAccessTokenUrl(QUrl("https://www.openstreetmap.org/oauth2/token"));
     oauth2.setScope("read_prefs write_prefs write_api read_gpx write_gpx write_notes");
     oauth2.setClientIdentifier("wv3ui28EyHjH0c4C1Wuz6_I-o47ithPAOt7Qt1ov9Ps");
+}
 
+void HttpAuth::setBaseUrl(const QUrl url) {
+    QUrl base(url);
+    oauth2.setAuthorizationUrl(base.resolved(QUrl("oauth2/authorize")));
+    oauth2.setAccessTokenUrl(base.resolved(QUrl("oauth2/token")));
+    qDebug() << "Base URL: " << base;
+    qDebug() << "Authorization URL: " << oauth2.authorizationUrl();
+    qDebug() << "Access Token URL: " << oauth2.accessTokenUrl();
+}
+
+void HttpAuth::Login() {
+    auto replyHandler = new QOAuthHttpServerReplyHandler(1337, this);
+    qDebug() << "connect.";
+    oauth2.setReplyHandler(replyHandler);
+    qDebug() << "connect2.";
     codeVerifier = generateCodeVerifier();
     codeChallenge = QString(QCryptographicHash::hash(codeVerifier.toUtf8(), QCryptographicHash::Sha256).toBase64(QByteArray::Base64UrlEncoding | QByteArray::OmitTrailingEquals));
 
@@ -71,6 +82,8 @@ HttpAuth::HttpAuth(QObject *parent) : QObject(parent) {
 
                 qDebug() << reply->readAll();
             });
+        } else if (status == QAbstractOAuth::Status::TemporaryCredentialsReceived) {
+            qDebug() << "Temporary credentials.";
         } else {
             qWarning() << "Status is not granted: " << int(status);
             emit failed(int(status));

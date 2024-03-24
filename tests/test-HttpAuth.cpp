@@ -9,7 +9,11 @@ class TestHttpAuth : public QObject
 
 
     void simpleLogin() {
+        QUrl url("hello");
+        qDebug() << url;
+
         HttpAuth auth(this);
+        auth.Login();
         auth.grant();
         QTest::qWait(10000);
     }

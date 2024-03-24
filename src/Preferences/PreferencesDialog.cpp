@@ -16,6 +16,7 @@
 #include "Document.h"
 #include "Feature.h"
 #include "PropertiesDock.h"
+#include "HttpAuth.h"
 
 #include <QFileDialog>
 #include <QColorDialog>
@@ -36,11 +37,36 @@ static void makeBoundaryIcon(QToolButton* bt, QColor C)
     bt->setIcon(pm);
 }
 
+
+// TODO: Move the class to it's own file.
+class OsmServerWidget : public QWidget, public Ui::OsmServerWidget
+{
+    Q_OBJECT
+
+public:
+    OsmServerWidget(QWidget * parent = 0, Qt::WindowFlags f = Qt::Widget);
+
+public slots:
+    void on_tbOsmServerAdd_clicked();
+    void on_tbOsmServerDel_clicked();
+    void on_rbOsmServerSelected_clicked();
+    void on_tbOAuth2Login_clicked();
+    void on_httpAuth_authenticated();
+    void on_httpAuth_failed();
+private:
+    HttpAuth httpAuth;
+};
+
+#include "PreferencesDialog.moc"
+
 OsmServerWidget::OsmServerWidget(QWidget * parent, Qt::WindowFlags f)
     : QWidget(parent, f)
 {
     setupUi(this);
     setAttribute(Qt::WA_DeleteOnClose);
+
+    connect(&httpAuth, &HttpAuth::authenticated, this, &OsmServerWidget::on_httpAuth_authenticated);
+    connect(&httpAuth, &HttpAuth::failed, this, &OsmServerWidget::on_httpAuth_failed);
 }
 
 void OsmServerWidget::on_tbOsmServerAdd_clicked()
@@ -95,6 +121,29 @@ void OsmServerWidget::on_rbOsmServerSelected_clicked()
     }
 
     rbOsmServerSelected->setChecked(true);
+}
+
+void OsmServerWidget::on_tbOAuth2Login_clicked() {
+    qDebug() << "Start login...";
+    httpAuth.setBaseUrl(QUrl(this->edOsmServerUrl->text()).resolved(QUrl("/")));
+    httpAuth.Login();
+    httpAuth.grant();
+    this->lbLoginState->setText(tr("Authenticating"));
+    this->tbOAuth2Login->setEnabled(false);
+}
+
+void OsmServerWidget::on_httpAuth_authenticated() {
+    qDebug() << "Authenticated!";
+    this->edOsmServerUser->setText("oauth2");
+    this->edOsmServerPwd->setText(httpAuth.token());
+    this->lbLoginState->setText(tr("Authenticated"));
+    this->tbOAuth2Login->setEnabled(true);
+}
+
+void OsmServerWidget::on_httpAuth_failed() {
+    qDebug() << "Failed!";
+    this->lbLoginState->setText(tr("Failed"));
+    this->tbOAuth2Login->setEnabled(true);
 }
 
 PreferencesDialog::PreferencesDialog(QWidget* parent)
@@ -189,6 +238,7 @@ void PreferencesDialog::loadPrefs()
         OsmServerWidget* wOSmServer = new OsmServerWidget(grpOSM);
 
         wOSmServer->edOsmServerUrl->setText(M_PREFS->getOsmApiUrl());
+        // wOSmServer->authType->setCurrentIndex(0); // Keep default authType per UI.
         wOSmServer->edOsmServerUser->setText(M_PREFS->getOsmUser());
         wOSmServer->edOsmServerPwd->setText(M_PREFS->getOsmPassword());
         wOSmServer->rbOsmServerSelected->setChecked(true);
@@ -196,10 +246,11 @@ void PreferencesDialog::loadPrefs()
 
         OsmServersLayout->addWidget(wOSmServer);
     } else {
-        foreach(OsmServer srv, *theOsmServers) {
+        foreach(OsmServerInfo srv, *theOsmServers) {
             OsmServerWidget* wOSmServer = new OsmServerWidget(grpOSM);
 
             wOSmServer->edOsmServerUrl->setText(srv.Url);
+            wOSmServer->authType->setCurrentIndex(static_cast<int>(srv.Type));
             wOSmServer->edOsmServerUser->setText(srv.User);
             wOSmServer->edOsmServerPwd->setText(srv.Password);
             wOSmServer->rbOsmServerSelected->setChecked(srv.Selected);
@@ -352,8 +403,9 @@ void PreferencesDialog::savePrefs()
         if (!wOsmServer)
             continue;
 
-        OsmServer srv;
+        OsmServerInfo srv;
         srv.Url = wOsmServer->edOsmServerUrl->text();
+        srv.Type = static_cast<decltype(srv.Type)>(wOsmServer->authType->currentIndex());
         srv.User = wOsmServer->edOsmServerUser->text();
         srv.Password = wOsmServer->edOsmServerPwd->text();
         srv.Selected = wOsmServer->rbOsmServerSelected->isChecked();

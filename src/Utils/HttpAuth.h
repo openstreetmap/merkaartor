@@ -12,9 +12,11 @@ class HttpAuth : public QObject
 
 public:
     HttpAuth(QObject *parent = nullptr);
+    void Login();
 
-    bool isPermanent() const {return false; }
-    void setPermanent(bool /*value*/) {};
+    void setBaseUrl(const QUrl url);
+
+    QString token() const { return oauth2.token(); }
 
 public slots:
     void grant() { oauth2.grant(); };

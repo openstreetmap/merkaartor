@@ -266,6 +266,7 @@ src/Utils/SlippyMapWidget.cpp
 src/Utils/SlippyMapWidget.h
 src/Utils/Utils.h
 src/Utils/OsmLink.cpp
+src/Utils/OsmServer.cpp
 src/Utils/ShortcutOverrideFilter.cpp
 src/Utils/LineF.h
 src/Utils/SelectionDialog.ui

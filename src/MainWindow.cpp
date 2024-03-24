@@ -2027,6 +2027,7 @@ void MainWindow::on_fileUploadAction_triggered()
             return;
     }
     on_editPropertiesAction_triggered();
+    // TODO: Replace this call to use a the OsmServer object instead of individual parameters.
     syncOSM(M_PREFS->getOsmApiUrl(), M_PREFS->getOsmUser(), M_PREFS->getOsmPassword());
 
     theDocument->history().updateActions();

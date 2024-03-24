@@ -1,0 +1,82 @@
+#ifndef __OSMSERVER_H__
+#define __OSMSERVER_H__
+
+#include <QString>
+#include <QDebug>
+#include <QNetworkReply>
+
+#include <memory>
+
+class QNetworkAccessManager;
+
+// A dataclass for OSM server information
+struct OsmServerInfo
+{
+    /* Note: Types here correspond to the UI combo box. Keep those in sync. */
+    enum class AuthType : int{
+        Basic,
+        OAuth2 //password field is the token if this type is used
+    };
+
+    static AuthType typeFromString(const QString& type) {
+        if (type == "basic")  return AuthType::Basic;
+        if (type == "oauth2") return AuthType::OAuth2;
+        qWarning() << "Error parsing AuthType: Unknown AuthType" << type;
+        return AuthType::Basic;
+    }
+
+    static QString typeToString(AuthType type) {
+        switch (type) {
+            case AuthType::OAuth2: return "oauth2";
+            case AuthType::Basic:  return "basic";
+            default:
+                qWarning() << "Error encoding AuthType: Unknown AuthType" << static_cast<int>(type);
+                return "basic";
+        }
+    }
+
+    bool Selected;
+    AuthType Type;
+    QString Url;
+    QString User;
+    QString Password;
+};
+
+class IOsmServerImpl : public QObject {
+    Q_OBJECT
+
+    public:
+        virtual QNetworkReply* get(const QUrl &url) = 0;
+        virtual QNetworkReply* put(const QUrl &url, const QByteArray &data) = 0;
+        virtual QNetworkReply* deleteResource(const QUrl &url) = 0;
+        virtual void authenticate() = 0;
+    signals:
+        void authenticated();
+        void failed(int error);
+};
+
+std::shared_ptr<IOsmServerImpl> makeOsmServer(OsmServerInfo& info, QNetworkAccessManager& manager);
+
+class OsmServer : public IOsmServerImpl {
+    Q_OBJECT
+
+    public:
+        OsmServer(QNetworkAccessManager& manager);
+
+        void setInfo(OsmServerInfo& info) { 
+            m_info = info;
+            m_impl = makeOsmServer(m_info, m_manager);
+        }
+
+        virtual QNetworkReply* get(const QUrl &url);
+        virtual QNetworkReply* put(const QUrl &url, const QByteArray &data);
+        virtual QNetworkReply* deleteResource(const QUrl &url);
+        virtual void authenticate();
+
+    private:
+        OsmServerInfo& m_info;
+        QNetworkAccessManager& m_manager;
+        std::shared_ptr<IOsmServerImpl> m_impl;
+};
+
+#endif

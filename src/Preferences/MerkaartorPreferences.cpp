@@ -990,6 +990,7 @@ QString MerkaartorPreferences::getOsmApiUrl() const
     if (u.path().isEmpty())
         u.setPath("/api/" + apiVersion());
 
+    qDebug() << "getOsmApiUrl" << u.toString();
     return u.toString();
 }
 
@@ -1662,8 +1663,9 @@ void MerkaartorPreferences::loadOsmServers()
         int size = Sets->beginReadArray("OsmServers");
         for (int i = 0; i < size; ++i) {
             Sets->setArrayIndex(i);
-            OsmServer server;
+            OsmServerInfo server;
             server.Selected = Sets->value("selected").toBool();
+            server.Type = OsmServerInfo::typeFromString(Sets->value("type").toString());
             server.Url = Sets->value("url").toString();
             server.User = Sets->value("user").toString();
             server.Password = Sets->value("password").toString();
@@ -1680,6 +1682,7 @@ void MerkaartorPreferences::saveOsmServers()
         for (int i = 0; i < theOsmServers.size(); ++i) {
             Sets->setArrayIndex(i);
             Sets->setValue("selected", theOsmServers.at(i).Selected);
+            Sets->setValue("type", OsmServerInfo::typeToString(theOsmServers.at(i).Type));
             Sets->setValue("url", theOsmServers.at(i).Url);
             Sets->setValue("user", theOsmServers.at(i).User);
             Sets->setValue("password", theOsmServers.at(i).Password);
