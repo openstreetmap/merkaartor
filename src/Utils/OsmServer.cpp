@@ -218,14 +218,15 @@ void OsmServerImplOAuth2::authenticate() {
             emit failed(int(status));
         }
     });
-    m_oauth2.setModifyParametersFunction([&](QAbstractOAuth::Stage stage, QMultiMap<QString, QVariant>*params){
-        qDebug() << "Stage: " << int(stage) << "with params" << *params;
+    m_oauth2.setModifyParametersFunction([codeVerifier,codeChallenge](QAbstractOAuth::Stage stage, QMultiMap<QString, QVariant>*params){
         if (params) {
+            qDebug() << "Stage: " << int(stage) << "with params" << *params;
             switch (stage) {
                 case QAbstractOAuth::Stage::RequestingAuthorization:
                     qDebug() << "Requesting Authorization.";
                     params->insert("code_challenge", codeChallenge);
                     params->insert("code_challenge_method", "S256");
+                    params->replace("redirect_uri", "http://127.0.0.1:1337/");
                     break;
                 case QAbstractOAuth::Stage::RequestingAccessToken:
                     qDebug() << "Requesting Access Token.";
@@ -234,8 +235,8 @@ void OsmServerImplOAuth2::authenticate() {
                 default:
                     qDebug() << "default stage.";
             }
+            qDebug() << "Stage: " << int(stage) << "with params" << *params;
         }
-        qDebug() << "Stage: " << int(stage) << "with params" << *params;
     });
 
     connect(&m_oauth2, &QOAuth2AuthorizationCodeFlow::authorizeWithBrowser,
