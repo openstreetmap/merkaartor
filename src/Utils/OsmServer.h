@@ -49,34 +49,23 @@ class IOsmServerImpl : public QObject {
         virtual QNetworkReply* get(const QUrl &url) = 0;
         virtual QNetworkReply* put(const QUrl &url, const QByteArray &data) = 0;
         virtual QNetworkReply* deleteResource(const QUrl &url) = 0;
+        virtual QNetworkReply* sendRequest(QNetworkRequest &request, const QByteArray &verb, const QByteArray &data) = 0;
         virtual void authenticate() = 0;
+
+        virtual OsmServerInfo const getServerInfo() const = 0;
+
+        virtual QUrl baseUrl() const {
+            return QUrl(getServerInfo().Url);
+        }
     signals:
         void authenticated();
         void failed(int error);
 };
 
-std::shared_ptr<IOsmServerImpl> makeOsmServer(OsmServerInfo& info, QNetworkAccessManager& manager);
+Q_DECLARE_INTERFACE(IOsmServerImpl, "InterfaceIOsmServerImpl")
 
-class OsmServer : public IOsmServerImpl {
-    Q_OBJECT
+using OsmServer = std::shared_ptr<IOsmServerImpl>;
 
-    public:
-        OsmServer(QNetworkAccessManager& manager);
-
-        void setInfo(OsmServerInfo& info) { 
-            m_info = info;
-            m_impl = makeOsmServer(m_info, m_manager);
-        }
-
-        virtual QNetworkReply* get(const QUrl &url);
-        virtual QNetworkReply* put(const QUrl &url, const QByteArray &data);
-        virtual QNetworkReply* deleteResource(const QUrl &url);
-        virtual void authenticate();
-
-    private:
-        OsmServerInfo& m_info;
-        QNetworkAccessManager& m_manager;
-        std::shared_ptr<IOsmServerImpl> m_impl;
-};
+OsmServer makeOsmServer(OsmServerInfo& info, QNetworkAccessManager& manager);
 
 #endif

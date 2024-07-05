@@ -234,19 +234,21 @@ public:
     M_PARAM_DECLARE_BOOL(HideToolbarLabels)
 
     /* Data */
-    void setOsmWebsite(const QString & theValue);
-    QString getOsmWebsite() const;
-    QString getOsmApiUrl() const;
+//    void setOsmWebsite(const QString & theValue);
+//    QString getOsmWebsite() const;
+//    QString getOsmApiUrl() const;
+    M_PARAM_DECLARE_INT(OsmServerIndex)
+    std::shared_ptr<IOsmServerImpl> getOsmServer();
 
     M_PARAM_DECLARE_STRING(XapiUrl)
     M_PARAM_DECLARE_STRING(NominatimUrl)
     M_PARAM_DECLARE_BOOL(AutoHistoryCleanup)
 
-    void setOsmUser(const QString & theValue);
-    QString getOsmUser() const;
-
-    void setOsmPassword(const QString & theValue);
-    QString getOsmPassword() const;
+//    void setOsmUser(const QString & theValue);
+//    QString getOsmUser() const;
+//
+//    void setOsmPassword(const QString & theValue);
+//    QString getOsmPassword() const;
 
     M_PARAM_DECLARE_DOUBLE(MaxDistNodes)
 
@@ -486,8 +488,6 @@ private:
 
 private slots:
     void on_requestFinished ( QNetworkReply *reply );
-    void on_authenticationRequired( QNetworkReply *reply, QAuthenticator *auth );
-    void on_sslErrors(QNetworkReply *reply, const QList<QSslError>& errors);
 
 signals:
     void bookmarkChanged();

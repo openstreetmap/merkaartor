@@ -80,7 +80,7 @@ void InfoDock::on_anchorClicked(const QUrl & link)
 //    } else {
 //        QMessageBox::warning(Main,QApplication::translate("Downloader","Download failed"),QApplication::translate("Downloader","Unexpected http status code (%1)").arg(theDownloader.resultCode()));
 //    }
-    QUrl theUrl(M_PREFS->getOsmWebsite()+link.path());
+    QUrl theUrl(M_PREFS->getOsmServer()->getServerInfo().Url+link.path());
     QDesktopServices::openUrl(theUrl);
 }
 

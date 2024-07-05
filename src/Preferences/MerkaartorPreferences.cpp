@@ -227,6 +227,7 @@ Tool::Tool()
 
 namespace {
 
+
 QSettings* getSettings() {
     if (!g_Merk_Portable) {
         return new QSettings();
@@ -253,9 +254,7 @@ MerkaartorPreferences::MerkaartorPreferences()
         version = Sets->value("version/version", "0").toString();
     }
 
-    connect(&httpRequest, SIGNAL(authenticationRequired(QNetworkReply*, QAuthenticator*)), this, SLOT(on_authenticationRequired(QNetworkReply*, QAuthenticator*)));
     connect(&httpRequest, SIGNAL(finished(QNetworkReply*)),this,SLOT(on_requestFinished(QNetworkReply*)));
-    connect(&httpRequest, SIGNAL(sslErrors(QNetworkReply *, const QList<QSslError>&)), this, SLOT(on_sslErrors(QNetworkReply*, const QList<QSslError>&)));
 
 #ifdef USE_LIBPROXY
     // Initialise libproxy
@@ -308,6 +307,7 @@ void MerkaartorPreferences::save(bool UserPwdChanged)
 
 void MerkaartorPreferences::toOsmPref()
 {
+    /* FIXME: Refactor.
     qDebug(lc_MerkaartorPreferences) << "MerkaartorPreferences::toOsmPref";
     if (getOfflineMode()) return;
 
@@ -356,10 +356,12 @@ void MerkaartorPreferences::toOsmPref()
         putOsmPref(it.key(), it.value());
     }
 
+    */
 }
 
 void MerkaartorPreferences::fromOsmPref()
 {
+    /* FIXME: Refactor.
     if (getOfflineMode()) return;
 
     qDebug(lc_MerkaartorPreferences) << "Requesting preferences from OSM server.";
@@ -373,35 +375,23 @@ void MerkaartorPreferences::fromOsmPref()
 
     httpRequest.setProxy(getProxy(osmWeb));
     OsmPrefLoadReply = httpRequest.get(req);
-}
-
-void MerkaartorPreferences::on_authenticationRequired( QNetworkReply *reply, QAuthenticator *auth ) {
-    static QNetworkReply *lastReply = NULL;
-
-    /* Only provide authentication the first time we see this reply, to avoid
-     * infinite loop providing the same credentials. */
-    if (lastReply != reply) {
-        lastReply = reply;
-        qDebug(lc_MerkaartorPreferences) << "Authentication required and provided.";
-        auth->setUser(getOsmUser());
-        auth->setPassword(getOsmPassword());
-    }
-}
-
-void MerkaartorPreferences::on_sslErrors(QNetworkReply *reply, const QList<QSslError>& errors) {
-    Q_UNUSED(reply);
-    qDebug(lc_MerkaartorPreferences) << "We stumbled upon some SSL errors: ";
-    foreach ( QSslError error, errors ) {
-        qDebug(lc_MerkaartorPreferences) << "1:";
-        qDebug(lc_MerkaartorPreferences) << error.errorString();
-    }
+    */
 }
 
 void MerkaartorPreferences::on_requestFinished ( QNetworkReply *reply )
 {
     int error = reply->error();
+
+    if (reply != OsmPrefLoadReply) {
+        qWarning(lc_MerkaartorPreferences) << "Ignoring foreign network request with URL: " << reply->url();
+        return;
+    }
+
     if (error != QNetworkReply::NoError) {
-        //qDebug(lc_MerkaartorPreferences) << "Received response with code " << error << "(" << reply->errorString() << ")";
+        qDebug(lc_MerkaartorPreferences) << "Error: " << reply->errorString();
+        qDebug(lc_MerkaartorPreferences) << "Received response with code " << error;
+        qDebug(lc_MerkaartorPreferences) << "Url was:" << reply->url();
+
         switch (error) {
             case QNetworkReply::HostNotFoundError:
                 qWarning() << "MerkaartorPreferences: Host not found, preferences won't be synchronized with your profile.";
@@ -419,9 +409,6 @@ void MerkaartorPreferences::on_requestFinished ( QNetworkReply *reply )
                 return;
         }
     }
-
-    if (reply != OsmPrefLoadReply)
-        return;
 
     qDebug(lc_MerkaartorPreferences) << "Reading preferences from online profile.";
 
@@ -508,6 +495,7 @@ void MerkaartorPreferences::on_requestFinished ( QNetworkReply *reply )
 
 void MerkaartorPreferences::putOsmPref(const QString& k, const QString& v)
 {
+    /* FIXME: Refactor.
     qDebug(lc_MerkaartorPreferences) << "Saving OSM preference online: " << k << "=" << v;
     QUrl osmWeb(getOsmApiUrl()+QString("/user/preferences/%1").arg(k));
 
@@ -518,10 +506,12 @@ void MerkaartorPreferences::putOsmPref(const QString& k, const QString& v)
 
     httpRequest.setProxy(getProxy(osmWeb));
     OsmPrefSaveReply = httpRequest.put(req, ba);
+    */
 }
 
 void MerkaartorPreferences::deleteOsmPref(const QString& k)
 {
+    /* FIXME: Refactor.
     qDebug(lc_MerkaartorPreferences) << "Deleting OSM preference online: " << k;
 
     QUrl osmWeb(getOsmApiUrl()+QString("/user/preferences/%1").arg(k));
@@ -530,6 +520,7 @@ void MerkaartorPreferences::deleteOsmPref(const QString& k)
 
     httpRequest.setProxy(getProxy(osmWeb));
     OsmPrefSaveReply = httpRequest.sendCustomRequest(req,"DELETE");
+    */
 }
 
 void MerkaartorPreferences::initialize()
@@ -948,95 +939,20 @@ M_PARAM_IMPLEMENT_BOOL(HideToolbarLabels, interface, false)
 
 /* DATA */
 
-QString MerkaartorPreferences::getOsmWebsite() const
-{
-    QString s;
-    if (!g_Merk_Ignore_Preferences && !g_Merk_Reset_Preferences)
-        s = Sets->value("osm/Website", "www.openstreetmap.org").toString();
-    else
-        s = "www.openstreetmap.org";
+M_PARAM_IMPLEMENT_INT(OsmServerIndex, osm, 0)
 
-#if QT_VERSION >= 0x040600 && !defined(FORCE_46)
-    QUrl u = QUrl::fromUserInput(s);
-#else
-    // convenience for creating a valid URL
-    // fails miserably if QString s already contains a schema
-    QString h = s; // intermediate host
-    QString p; // intermediate path
-
-    int slashpos = s.indexOf('/');
-    if (slashpos >= 1) // there's a path element in s
-    {
-        h = s.left(slashpos);
-        p = s.right(s.size() - 1 - slashpos);
-    }
-
-    QUrl u;
-    u.setHost(h);
-    u.setScheme("http");
-    u.setPath(p);
-#endif
-
-    if (!u.path().isEmpty())
-        u.setPath(QString());
-
-    return u.toString();
-}
-
-
-QString MerkaartorPreferences::getOsmApiUrl() const
-{
-    QUrl u(getOsmWebsite());
-    if (u.path().isEmpty())
-        u.setPath("/api/" + apiVersion());
-
-    qDebug() << "getOsmApiUrl" << u.toString();
-    return u.toString();
-}
-
-void MerkaartorPreferences::setOsmWebsite(const QString & theValue)
-{
-    if (!g_Merk_Ignore_Preferences)
-        Sets->setValue("osm/Website", theValue);
+std::shared_ptr<IOsmServerImpl> MerkaartorPreferences::getOsmServer() {
+    /* TODO: Each call creates a new server. */
+    OsmServerList* servers = getOsmServers();
+    return makeOsmServer((*servers)[getOsmServerIndex()], httpRequest);
 }
 
 M_PARAM_IMPLEMENT_STRING(XapiUrl, osm, "http://www.overpass-api.de/api/xapi_meta?")
 M_PARAM_IMPLEMENT_STRING(NominatimUrl, osm, "http://nominatim.openstreetmap.org/search")
 M_PARAM_IMPLEMENT_BOOL(AutoHistoryCleanup, data, true);
-
-QString MerkaartorPreferences::getOsmUser() const
-{
-    if (!g_Merk_Ignore_Preferences && !g_Merk_Reset_Preferences)
-        return Sets->value("osm/User").toString();
-    else
-        return QString();
-}
-
-void MerkaartorPreferences::setOsmUser(const QString & theValue)
-{
-    if (!g_Merk_Ignore_Preferences)
-        Sets->setValue("osm/User", theValue);
-}
-
-QString MerkaartorPreferences::getOsmPassword() const
-{
-    if (!g_Merk_Ignore_Preferences && !g_Merk_Reset_Preferences)
-        return Sets->value("osm/Password").toString();
-    else
-        return QString();
-}
-
-void MerkaartorPreferences::setOsmPassword(const QString & theValue)
-{
-    if (!g_Merk_Ignore_Preferences)
-        Sets->setValue("osm/Password", theValue);
-}
-
 M_PARAM_IMPLEMENT_DOUBLE(MaxDistNodes, data, 0.0);
-
 M_PARAM_IMPLEMENT_BOOL(AutoSaveDoc, data, false);
 M_PARAM_IMPLEMENT_BOOL(AutoExtractTracks, data, false);
-
 M_PARAM_IMPLEMENT_INT(DirectionalArrowsVisible, visual, 1);
 
 RendererOptions MerkaartorPreferences::getRenderOptions()

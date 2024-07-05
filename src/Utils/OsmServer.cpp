@@ -15,6 +15,8 @@ class OsmServerImplBasic : public IOsmServerImpl {
             return m_info.Url;
         }
 
+        OsmServerInfo const getServerInfo() const { return m_info; }
+
         virtual QNetworkReply* get(const QUrl &url) {
             return m_manager.get(QNetworkRequest(baseUrl().resolved(url)));
         }
@@ -25,6 +27,10 @@ class OsmServerImplBasic : public IOsmServerImpl {
 
         virtual QNetworkReply* deleteResource(const QUrl &url) {
             return m_manager.deleteResource(QNetworkRequest(baseUrl().resolved(url)));
+        }
+
+        virtual QNetworkReply* sendRequest(QNetworkRequest &request, const QByteArray &verb, const QByteArray &data) {
+            return m_manager.sendCustomRequest(request, verb, data);
         }
 
         virtual void authenticate() {
@@ -48,7 +54,7 @@ class OsmServerImplBasic : public IOsmServerImpl {
         void on_sslErrors(QNetworkReply *reply, const QList<QSslError>& errors);
 
     private:
-        OsmServerInfo& m_info;
+        OsmServerInfo m_info;
         QNetworkAccessManager& m_manager;
 };
 
@@ -65,6 +71,8 @@ class OsmServerImplOAuth2 : public IOsmServerImpl {
             return m_info.Url;
         }
 
+        OsmServerInfo const getServerInfo() const { return m_info; }
+
         virtual QNetworkReply* get(const QUrl &url) {
             return m_oauth2.get(baseUrl().resolved(url));
         }
@@ -76,18 +84,24 @@ class OsmServerImplOAuth2 : public IOsmServerImpl {
         virtual QNetworkReply* deleteResource(const QUrl &url) {
             return m_oauth2.deleteResource(baseUrl().resolved(url));
         }
+        
+        virtual QNetworkReply* sendRequest(QNetworkRequest &request, const QByteArray &verb, const QByteArray &data) {
+            qDebug() << "Sending request to URL " << request.url() << " with verb" << verb << "and data" << data;
+            m_oauth2.prepareRequest(&request, data);
+            return m_manager.sendCustomRequest(request, verb, data);
+        }
 
         virtual void authenticate();
 
     private:
-        OsmServerInfo& m_info;
+        OsmServerInfo m_info;
         QNetworkAccessManager& m_manager;
         QOAuth2AuthorizationCodeFlow m_oauth2;
 
         QString generateCodeVerifier();
 };
 
-std::shared_ptr<IOsmServer> makeOsmServer(OsmServerInfo& info, QNetworkAccessManager& manager) {
+std::shared_ptr<IOsmServerImpl> makeOsmServer(OsmServerInfo& info, QNetworkAccessManager& manager) {
     if (info.Type == OsmServerInfo::AuthType::Basic) {
         return std::make_shared<OsmServerImplBasic>(info, manager);
     } else if (info.Type == OsmServerInfo::AuthType::OAuth2) {
