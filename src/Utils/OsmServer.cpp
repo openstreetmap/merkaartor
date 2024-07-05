@@ -1,9 +1,33 @@
 #include <QOAuth2AuthorizationCodeFlow>
 #include <QOAuthHttpServerReplyHandler>
+#include <QAuthenticator>
 #include <QDesktopServices>
 
 #include "OsmServer.h"
-#include "HttpAuth.h"
+
+#include <random>
+//
+//FIXME: The client ID and secret are not really a secret, since there is no
+//way to hide them in a desktop application. In case of abuse, the client ID
+//can be revoked by osm.org. It might be a good idea to make it configurable,
+//so that the user can enter their own client ID and secret in this case.
+//
+//Client ID 	    wv3ui28EyHjH0c4C1Wuz6_I-o47ithPAOt7Qt1ov9Ps
+//Client Secret 	evCjgZOGTRL70ezsXs3VbxG0ugjJ5hq7pFQMB6toBcM // FIXME: The secret is not needed. Why?
+//Make sure to save this secret - it will not be accessible again
+//Permissions
+//
+//    Read user preferences (read_prefs)
+//    Modify user preferences (write_prefs)
+//    Create diary entries, comments and make friends (write_diary)
+//    Modify the map (write_api)
+//    Read private GPS traces (read_gpx)
+//    Upload GPS traces (write_gpx)
+//    Modify notes (write_notes)
+//
+//Redirect URIs
+//
+//    http://127.0.0.1:1337/
 
 class OsmServerImplBasic : public IOsmServerImpl {
     public:
@@ -65,6 +89,7 @@ class OsmServerImplOAuth2 : public IOsmServerImpl {
         {
             m_oauth2.setScope("read_prefs write_prefs write_api read_gpx write_gpx write_notes");
             m_oauth2.setClientIdentifier("wv3ui28EyHjH0c4C1Wuz6_I-o47ithPAOt7Qt1ov9Ps");
+            m_oauth2.setClientIdentifierSharedKey("evCjgZOGTRL70ezsXs3VbxG0ugjJ5hq7pFQMB6toBcM");
         }
 
         QUrl baseUrl() const {
@@ -161,7 +186,7 @@ void OsmServerImplOAuth2::authenticate() {
     qDebug() << "Authorization URL: " << m_oauth2.authorizationUrl();
     qDebug() << "Access Token URL: " << m_oauth2.accessTokenUrl();
 
-    auto replyHandler = new QOAuthHttpServerReplyHandler(1337, this);
+    auto replyHandler = new QOAuthHttpServerReplyHandler(QHostAddress("127.0.0.1"), 1337, this);
     qDebug() << "connect.";
     m_oauth2.setReplyHandler(replyHandler);
     qDebug() << "connect2.";
@@ -215,4 +240,6 @@ void OsmServerImplOAuth2::authenticate() {
 
     connect(&m_oauth2, &QOAuth2AuthorizationCodeFlow::authorizeWithBrowser,
             &QDesktopServices::openUrl);
+
+    m_oauth2.grant();
 }

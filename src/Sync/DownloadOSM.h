@@ -55,6 +55,7 @@ class Downloader : public QObject
     public slots:
         void progress( qint64 done, qint64 total );
         void animate();
+        void on_Cancel_clicked();
 
     private:
         OsmServer server;

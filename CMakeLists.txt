@@ -257,8 +257,6 @@ src/Layers/LayerWidget.h
 src/Layers/LayerWidget.ui
 src/Layers/FilterEditDialog.ui
 src/Layers/LayerPrivate.h
-src/Utils/HttpAuth.h
-src/Utils/HttpAuth.cpp
 src/Utils/ShortcutOverrideFilter.h
 src/Utils/SelectionDialog.cpp
 src/Utils/ProjectionChooser.h

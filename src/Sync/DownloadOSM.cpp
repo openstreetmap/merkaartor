@@ -65,6 +65,12 @@ void Downloader::setAnimator(QProgressDialog *anAnimator, QLabel* anAnimatorLabe
     }
 }
 
+void Downloader::on_Cancel_clicked()
+{
+    Error = true;
+    if (Loop.isRunning())
+        Loop.exit(QDialog::Rejected);
+}
 
 bool Downloader::go(const QUrl& url) {
     return request("GET", url, QString());
