@@ -240,15 +240,15 @@ void OsmServerImplOAuth2::authenticate() {
             switch (stage) {
                 case QAbstractOAuth::Stage::RequestingAuthorization:
                     qDebug() << "Requesting Authorization.";
-                    //params->insert("code_challenge", codeChallenge);
-                    //params->insert("code_challenge_method", "S256");
+                    params->insert("code_challenge", codeChallenge);
+                    params->insert("code_challenge_method", "S256");
                     // FIXME: Can be replaced by ->replace when Qt 6.x is minimum supported version
                     params->remove("redirect_uri");
                     params->insert("redirect_uri", "http://127.0.0.1:1337/");
                     break;
                 case QAbstractOAuth::Stage::RequestingAccessToken:
                     qDebug() << "Requesting Access Token.";
-                    //params->insert("code_verifier", codeVerifier);
+                    params->insert("code_verifier", codeVerifier);
                     //Note: technically, we no longer redirect, but OSM server rejects the token request unless we provide a matching redirect_uri
                     params->remove("redirect_uri");
                     params->insert("redirect_uri", "http://127.0.0.1:1337/");
