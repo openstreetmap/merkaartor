@@ -233,7 +233,8 @@ void OsmServerImplOAuth2::authenticate() {
         }
     });
 
-    m_oauth2.setModifyParametersFunction([codeVerifier,codeChallenge](QAbstractOAuth::Stage stage, QMultiMap<QString, QVariant>*params){
+    m_oauth2.setModifyParametersFunction([codeVerifier,codeChallenge](QAbstractOAuth::Stage stage, auto*params){
+        /* Note: params is QMap for Qt5 and QMultiMap for Qt6 */
         if (params) {
             qDebug() << "Stage: " << int(stage) << "with params" << *params;
             switch (stage) {
@@ -241,12 +242,16 @@ void OsmServerImplOAuth2::authenticate() {
                     qDebug() << "Requesting Authorization.";
                     //params->insert("code_challenge", codeChallenge);
                     //params->insert("code_challenge_method", "S256");
-                    params->replace("redirect_uri", "http://127.0.0.1:1337/");
+                    // FIXME: Can be replaced by ->replace when Qt 6.x is minimum supported version
+                    params->remove("redirect_uri");
+                    params->insert("redirect_uri", "http://127.0.0.1:1337/");
                     break;
                 case QAbstractOAuth::Stage::RequestingAccessToken:
                     qDebug() << "Requesting Access Token.";
                     //params->insert("code_verifier", codeVerifier);
-                    params->replace("redirect_uri", "http://127.0.0.1:1337/");
+                    //Note: technically, we no longer redirect, but OSM server rejects the token request unless we provide a matching redirect_uri
+                    params->remove("redirect_uri");
+                    params->insert("redirect_uri", "http://127.0.0.1:1337/");
                     break;
                 default:
                     qDebug() << "default stage.";
