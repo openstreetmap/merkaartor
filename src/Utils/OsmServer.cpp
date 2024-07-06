@@ -201,7 +201,7 @@ void OsmServerImplOAuth2::authenticate() {
             qDebug() << "Granted, token: " << m_oauth2.token();
             m_info.Password = m_oauth2.token();
             emit authenticated();
-            auto reply = get(QUrl("user/details"));
+            auto reply = get(QUrl("/api/0.6/user/details"));
             connect(reply, &QNetworkReply::finished, [=]() {
                 reply->deleteLater();
 
