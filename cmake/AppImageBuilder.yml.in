@@ -52,3 +52,4 @@ AppImage:
   sign-key: None
   comp: xz
   arch: x86_64
+  comp: xz

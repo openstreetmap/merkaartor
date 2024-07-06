@@ -287,6 +287,8 @@ src/Utils/PixmapWidget.cpp
 src/Utils/TagSelector.cpp
 src/Utils/SvgCache.h
 src/Utils/RemoteControlServer.cpp
+src/Utils/BoundaryIcon.cpp
+src/Utils/BoundaryIcon.h
 src/QToolBarDialog/qttoolbardialog.h
 src/QToolBarDialog/qttoolbardialog.cpp
 src/QToolBarDialog/qttoolbardialog.ui
@@ -475,6 +477,7 @@ set(PKGCONFIG_REQUIRED_LIBS gdal proj)
 option(ZBAR        "Enable ZBar usage in MWalkingPapersBackground and Geoimage."      OFF)
 option(GEOIMAGE    "Enable Geoimage Dock (requires exiv2 library)."                   ON )
 option(GPSD        "Enable GPS Dock (requires gpsd library)."                         OFF)
+option(LIBPROXY    "Enable libproxy usage."                                           OFF)
 option(WEBENGINE   "Enable the use of QtWeb engine (not supported on all platforms)"  OFF)
 option(PROTOBUF    "Enable support for .osm.pbf format."                              ON)
 option(EXTRA_TESTS "Enable extra tests that cannot be run automatically on CI build." ON )
@@ -484,6 +487,7 @@ message(STATUS "Build options (use -DOPT=ON/OFF to enable/disable):")
 message(STATUS " * ZBAR        ${ZBAR}")
 message(STATUS " * GEOIMAGE    ${GEOIMAGE}")
 message(STATUS " * GPSD        ${GPSD}")
+message(STATUS " * LIBPROXY    ${LIBPROXY}")
 message(STATUS " * WEBENGINE   ${WEBENGINE}")
 message(STATUS " * PROTOBUF    ${PROTOBUF}")
 message(STATUS " * EXTRA_TESTS ${EXTRA_TESTS}")
@@ -502,6 +506,11 @@ endif()
 if (GPSD)
     list(APPEND PKGCONFIG_REQUIRED_LIBS gpsd)
     add_definitions(-DUSE_GPS=1)
+endif()
+
+if (LIBPROXY)
+    list(APPEND PKGCONFIG_REQUIRED_LIBS libproxy-1.0)
+    add_definitions(-DUSE_LIBPROXY=1)
 endif()
 
 if (WEBENGINE)

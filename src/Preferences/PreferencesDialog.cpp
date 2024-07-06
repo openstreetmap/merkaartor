@@ -16,8 +16,8 @@
 #include "Document.h"
 #include "Feature.h"
 #include "PropertiesDock.h"
-//#include "HttpAuth.h"
 #include "OsmServer.h"
+#include "BoundaryIcon.h"
 
 #include <QFileDialog>
 #include <QColorDialog>
@@ -25,19 +25,6 @@
 #include <QPainter>
 #include <QStyleFactory>
 #include <QNetworkProxy>
-
-
-static void makeBoundaryIcon(QToolButton* bt, QColor C)
-{
-    QPixmap pm(36, 18);
-    pm.fill(QColor(255, 255, 255));
-    QPainter p(&pm);
-    p.setPen(C);
-    p.setBrush(C);
-    p.drawRect(0, 6, 36, 6);
-    bt->setIcon(pm);
-}
-
 
 // TODO: Move the class to it's own file.
 class OsmServerWidget : public QWidget, public Ui::OsmServerWidget
