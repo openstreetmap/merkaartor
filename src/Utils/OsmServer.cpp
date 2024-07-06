@@ -89,8 +89,18 @@ class OsmServerImplOAuth2 : public IOsmServerImpl {
         {
             m_oauth2.setScope("read_prefs write_prefs write_api read_gpx write_gpx write_notes");
             //m_oauth2.setScope("read_prefs%20write_prefs%20write_api%20read_gpx%20write_gpx%20write_notes");
-            m_oauth2.setClientIdentifier("wv3ui28EyHjH0c4C1Wuz6_I-o47ithPAOt7Qt1ov9Ps");
-            m_oauth2.setClientIdentifierSharedKey("evCjgZOGTRL70ezsXs3VbxG0ugjJ5hq7pFQMB6toBcM");
+            QString host = QUrl(m_info.Url).host();
+            if (host == "master.apis.dev.openstreetmap.org") {
+                m_oauth2.setClientIdentifier("Ydpjx_nAy3fnGN5X1LiFwqToueYvwV0Nl1_IUUi7H3I");
+                m_oauth2.setClientIdentifierSharedKey("SuWJYZr9hjCmZH4PaMrvB48aVR_vgIw4D2VUEKPlR4c");
+            } else {
+                if (host != "openstreetmap.org") {
+                    qWarning() << "Unknown OSM API host " << host << ", assuming alias to openstreetmap.org";
+                }
+                m_oauth2.setClientIdentifier("wv3ui28EyHjH0c4C1Wuz6_I-o47ithPAOt7Qt1ov9Ps");
+                m_oauth2.setClientIdentifierSharedKey("evCjgZOGTRL70ezsXs3VbxG0ugjJ5hq7pFQMB6toBcM");
+            }
+            m_oauth2.setToken(m_info.Password);
         }
 
         QUrl baseUrl() const {

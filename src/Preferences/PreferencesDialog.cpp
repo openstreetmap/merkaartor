@@ -48,6 +48,7 @@ public:
     OsmServerWidget(QWidget * parent = 0, Qt::WindowFlags f = Qt::Widget);
 
     OsmServerInfo getOsmServerInfo() const;
+    void setOsmServerInfo(OsmServerInfo srv);
     QNetworkAccessManager* m_nm; /* TODO: Inject. */
 
 public slots:
@@ -121,6 +122,14 @@ OsmServerInfo OsmServerWidget::getOsmServerInfo() const {
     return srv;
 }
 
+void OsmServerWidget::setOsmServerInfo(OsmServerInfo srv) {
+    edOsmServerUrl->setText(srv.Url);
+    authType->setCurrentIndex(static_cast<int>(srv.Type));
+    edOsmServerUser->setText(srv.User);
+    edOsmServerPwd->setText(srv.Password);
+    rbOsmServerSelected->setChecked(srv.Selected);
+}
+
 void OsmServerWidget::on_rbOsmServerSelected_clicked()
 {
     QLayout* lay = parentWidget()->layout();
@@ -152,6 +161,7 @@ void OsmServerWidget::on_tbOAuth2Login_clicked() {
 
 void OsmServerWidget::on_httpAuthAuthenticated() {
     qDebug() << "Authenticated!";
+    setOsmServerInfo(m_impl->getServerInfo());
     this->lbLoginState->setText(tr("Authenticated"));
     this->tbOAuth2Login->setEnabled(true);
 }
@@ -253,10 +263,6 @@ void PreferencesDialog::loadPrefs()
     if (!theOsmServers->size()) {
         OsmServerWidget* wOSmServer = new OsmServerWidget(grpOSM);
 
-        wOSmServer->edOsmServerUrl->setText("");
-        // wOSmServer->authType->setCurrentIndex(0); // Keep default authType per UI.
-        wOSmServer->edOsmServerUser->setText("");
-        wOSmServer->edOsmServerPwd->setText("");
         wOSmServer->rbOsmServerSelected->setChecked(true);
         wOSmServer->tbOsmServerDel->setEnabled(false);
 
@@ -264,13 +270,7 @@ void PreferencesDialog::loadPrefs()
     } else {
         foreach(OsmServerInfo srv, *theOsmServers) {
             OsmServerWidget* wOSmServer = new OsmServerWidget(grpOSM);
-
-            wOSmServer->edOsmServerUrl->setText(srv.Url);
-            wOSmServer->authType->setCurrentIndex(static_cast<int>(srv.Type));
-            wOSmServer->edOsmServerUser->setText(srv.User);
-            wOSmServer->edOsmServerPwd->setText(srv.Password);
-            wOSmServer->rbOsmServerSelected->setChecked(srv.Selected);
-
+            wOSmServer->setOsmServerInfo(srv);
             OsmServersLayout->addWidget(wOSmServer);
         }
     }
