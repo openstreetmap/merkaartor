@@ -88,6 +88,7 @@ class OsmServerImplOAuth2 : public IOsmServerImpl {
             : m_info(info), m_manager(manager),m_oauth2(&manager)
         {
             m_oauth2.setScope("read_prefs write_prefs write_api read_gpx write_gpx write_notes");
+            //m_oauth2.setScope("read_prefs%20write_prefs%20write_api%20read_gpx%20write_gpx%20write_notes");
             m_oauth2.setClientIdentifier("wv3ui28EyHjH0c4C1Wuz6_I-o47ithPAOt7Qt1ov9Ps");
             m_oauth2.setClientIdentifierSharedKey("evCjgZOGTRL70ezsXs3VbxG0ugjJ5hq7pFQMB6toBcM");
         }
@@ -205,7 +206,7 @@ void OsmServerImplOAuth2::authenticate() {
                 reply->deleteLater();
 
                 if (reply->error() != QNetworkReply::NoError) {
-                    qCritical() << "Error:" << reply->errorString();
+                    qCritical() << "Error:" << reply->error() << reply->errorString();
                     return;
                 }
 
@@ -218,19 +219,21 @@ void OsmServerImplOAuth2::authenticate() {
             emit failed(int(status));
         }
     });
+
     m_oauth2.setModifyParametersFunction([codeVerifier,codeChallenge](QAbstractOAuth::Stage stage, QMultiMap<QString, QVariant>*params){
         if (params) {
             qDebug() << "Stage: " << int(stage) << "with params" << *params;
             switch (stage) {
                 case QAbstractOAuth::Stage::RequestingAuthorization:
                     qDebug() << "Requesting Authorization.";
-                    params->insert("code_challenge", codeChallenge);
-                    params->insert("code_challenge_method", "S256");
+                    //params->insert("code_challenge", codeChallenge);
+                    //params->insert("code_challenge_method", "S256");
                     params->replace("redirect_uri", "http://127.0.0.1:1337/");
                     break;
                 case QAbstractOAuth::Stage::RequestingAccessToken:
                     qDebug() << "Requesting Access Token.";
-                    params->insert("code_verifier", codeVerifier);
+                    //params->insert("code_verifier", codeVerifier);
+                    params->replace("redirect_uri", "http://127.0.0.1:1337/");
                     break;
                 default:
                     qDebug() << "default stage.";
