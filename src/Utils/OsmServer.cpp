@@ -100,19 +100,22 @@ class OsmServerImplOAuth2 : public IOsmServerImpl {
         OsmServerInfo const getServerInfo() const { return m_info; }
 
         virtual QNetworkReply* get(const QUrl &url) {
+            qDebug() << "get: " << baseUrl().resolved(url);
             return m_oauth2.get(baseUrl().resolved(url));
         }
 
         virtual QNetworkReply* put(const QUrl &url, const QByteArray &data) {
+            qDebug() << "put: " << baseUrl().resolved(url);
             return m_oauth2.put(baseUrl().resolved(url), data);
         }
 
         virtual QNetworkReply* deleteResource(const QUrl &url) {
+            qDebug() << "delete: " << baseUrl().resolved(url);
             return m_oauth2.deleteResource(baseUrl().resolved(url));
         }
         
         virtual QNetworkReply* sendRequest(QNetworkRequest &request, const QByteArray &verb, const QByteArray &data) {
-            qDebug() << "Sending request to URL " << request.url() << " with verb" << verb << "and data" << data;
+            qDebug() << "custom request" << request.url() << " with verb" << verb << "and data" << data;
             m_oauth2.prepareRequest(&request, data);
             return m_manager.sendCustomRequest(request, verb, data);
         }
