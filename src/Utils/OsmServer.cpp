@@ -2,6 +2,7 @@
 #include <QOAuthHttpServerReplyHandler>
 #include <QAuthenticator>
 #include <QDesktopServices>
+#include <QTimer>
 
 #include "OsmServer.h"
 
@@ -201,9 +202,13 @@ void OsmServerImplOAuth2::authenticate() {
     qDebug() << "Access Token URL: " << m_oauth2.accessTokenUrl();
 
     auto replyHandler = new QOAuthHttpServerReplyHandler(QHostAddress("127.0.0.1"), 1337, this);
-    qDebug() << "connect.";
+    QTimer::singleShot(6000, replyHandler, [=]() {
+        qWarning() << "OAuth2 reply handler timed out.";
+        replyHandler->deleteLater();
+        emit failed(QNetworkReply::TimeoutError);
+    });
+
     m_oauth2.setReplyHandler(replyHandler);
-    qDebug() << "connect2.";
     QString codeVerifier = generateCodeVerifier();
     QString codeChallenge = QString(QCryptographicHash::hash(codeVerifier.toUtf8(), QCryptographicHash::Sha256).toBase64(QByteArray::Base64UrlEncoding | QByteArray::OmitTrailingEquals));
 
@@ -214,6 +219,7 @@ void OsmServerImplOAuth2::authenticate() {
             qDebug() << "Granted, token: " << m_oauth2.token();
             m_info.Password = m_oauth2.token();
             emit authenticated();
+            replyHandler->deleteLater();
             auto reply = get(QUrl("/api/0.6/user/details"));
             connect(reply, &QNetworkReply::finished, [=]() {
                 reply->deleteLater();
@@ -229,6 +235,7 @@ void OsmServerImplOAuth2::authenticate() {
             qDebug() << "Temporary credentials.";
         } else {
             qWarning() << "Status is not granted: " << int(status);
+            replyHandler->deleteLater();
             emit failed(int(status));
         }
     });
