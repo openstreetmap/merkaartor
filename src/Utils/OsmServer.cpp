@@ -66,7 +66,7 @@ class OsmServerImplBasic : public IOsmServerImpl {
 
                 if (reply->error() != QNetworkReply::NoError) {
                     qCritical() << "Error:" << reply->errorString();
-                    emit failed(reply->error());
+                    emit failed(Error::Unauthorized, reply->errorString());
                 } else {
                     qDebug() << reply->readAll();
                     emit authenticated();
@@ -85,24 +85,7 @@ class OsmServerImplBasic : public IOsmServerImpl {
 
 class OsmServerImplOAuth2 : public IOsmServerImpl {
     public:
-        OsmServerImplOAuth2(OsmServerInfo& info, QNetworkAccessManager& manager)
-            : m_info(info), m_manager(manager),m_oauth2(&manager)
-        {
-            m_oauth2.setScope("read_prefs write_prefs write_api read_gpx write_gpx write_notes");
-            //m_oauth2.setScope("read_prefs%20write_prefs%20write_api%20read_gpx%20write_gpx%20write_notes");
-            QString host = QUrl(m_info.Url).host();
-            if (host == "master.apis.dev.openstreetmap.org") {
-                m_oauth2.setClientIdentifier("Ydpjx_nAy3fnGN5X1LiFwqToueYvwV0Nl1_IUUi7H3I");
-                m_oauth2.setClientIdentifierSharedKey("SuWJYZr9hjCmZH4PaMrvB48aVR_vgIw4D2VUEKPlR4c");
-            } else {
-                if (host != "openstreetmap.org") {
-                    qWarning() << "Unknown OSM API host " << host << ", assuming alias to openstreetmap.org";
-                }
-                m_oauth2.setClientIdentifier("wv3ui28EyHjH0c4C1Wuz6_I-o47ithPAOt7Qt1ov9Ps");
-                m_oauth2.setClientIdentifierSharedKey("evCjgZOGTRL70ezsXs3VbxG0ugjJ5hq7pFQMB6toBcM");
-            }
-            m_oauth2.setToken(m_info.Password);
-        }
+        OsmServerImplOAuth2(OsmServerInfo& info, QNetworkAccessManager& manager);
 
         QUrl baseUrl() const {
             return m_info.Url;
@@ -194,6 +177,27 @@ QString OsmServerImplOAuth2::generateCodeVerifier() {
     return result;
 }
 
+OsmServerImplOAuth2::OsmServerImplOAuth2(OsmServerInfo& info, QNetworkAccessManager& manager)
+    : m_info(info), m_manager(manager),m_oauth2(&manager)
+{
+    m_oauth2.setScope("read_prefs write_prefs write_api read_gpx write_gpx write_notes");
+    //m_oauth2.setScope("read_prefs%20write_prefs%20write_api%20read_gpx%20write_gpx%20write_notes");
+    QString host = QUrl(m_info.Url).host();
+    if (host == "master.apis.dev.openstreetmap.org") {
+        m_oauth2.setClientIdentifier("Ydpjx_nAy3fnGN5X1LiFwqToueYvwV0Nl1_IUUi7H3I");
+        m_oauth2.setClientIdentifierSharedKey("SuWJYZr9hjCmZH4PaMrvB48aVR_vgIw4D2VUEKPlR4c");
+    } else {
+        if (host != "openstreetmap.org") {
+            qWarning() << "Unknown OSM API host " << host << ", assuming alias to openstreetmap.org";
+        }
+        m_oauth2.setClientIdentifier("wv3ui28EyHjH0c4C1Wuz6_I-o47ithPAOt7Qt1ov9Ps");
+        m_oauth2.setClientIdentifierSharedKey("evCjgZOGTRL70ezsXs3VbxG0ugjJ5hq7pFQMB6toBcM");
+    }
+    m_oauth2.setToken(m_info.Password);
+
+    connect(&m_oauth2, &QOAuth2AuthorizationCodeFlow::authorizeWithBrowser, &QDesktopServices::openUrl);
+}
+
 void OsmServerImplOAuth2::authenticate() {
     m_oauth2.setAuthorizationUrl(baseUrl().resolved(QUrl("oauth2/authorize")));
     m_oauth2.setAccessTokenUrl(baseUrl().resolved(QUrl("oauth2/token")));
@@ -202,10 +206,10 @@ void OsmServerImplOAuth2::authenticate() {
     qDebug() << "Access Token URL: " << m_oauth2.accessTokenUrl();
 
     auto replyHandler = new QOAuthHttpServerReplyHandler(QHostAddress("127.0.0.1"), 1337, this);
-    QTimer::singleShot(6000, replyHandler, [=]() {
+    QTimer::singleShot(60000, replyHandler, [=]() {
         qWarning() << "OAuth2 reply handler timed out.";
         replyHandler->deleteLater();
-        emit failed(QNetworkReply::TimeoutError);
+        emit failed(Error::Timeout, tr("OAuth2 reply handler timed out."));
     });
 
     m_oauth2.setReplyHandler(replyHandler);
@@ -235,9 +239,19 @@ void OsmServerImplOAuth2::authenticate() {
             qDebug() << "Temporary credentials.";
         } else {
             qWarning() << "Status is not granted: " << int(status);
-            replyHandler->deleteLater();
-            emit failed(int(status));
         }
+    });
+
+    connect(&m_oauth2, &QOAuth2AuthorizationCodeFlow::error, replyHandler, [this, replyHandler]() {
+        qDebug() << "QOAuth2AuthorizationCodeFlow::error raised.";
+        replyHandler->deleteLater();
+        emit failed(Error::ReplyError, tr("QOAuth2AuthorizationCodeFlow::error raised."));
+    });
+
+    connect(replyHandler, &QOAuthHttpServerReplyHandler::tokenRequestErrorOccurred, this, [this, replyHandler](QAbstractOAuth::Error error, const QString& errorString) {
+        qDebug() << "Token request error occurred: " << int(error) << errorString;
+        replyHandler->deleteLater();
+        emit failed(Error::TokenRequestError, tr("Token request failed.") + "\n" + errorString);
     });
 
     m_oauth2.setModifyParametersFunction([codeVerifier,codeChallenge](QAbstractOAuth::Stage stage, auto*params){
@@ -266,9 +280,6 @@ void OsmServerImplOAuth2::authenticate() {
             qDebug() << "Stage: " << int(stage) << "with params" << *params;
         }
     });
-
-    connect(&m_oauth2, &QOAuth2AuthorizationCodeFlow::authorizeWithBrowser,
-            &QDesktopServices::openUrl);
 
     m_oauth2.grant();
 }

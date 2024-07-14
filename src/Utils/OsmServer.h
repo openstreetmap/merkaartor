@@ -57,9 +57,17 @@ class IOsmServerImpl : public QObject {
         virtual QUrl baseUrl() const {
             return QUrl(getServerInfo().Url);
         }
+
+        enum class Error {
+            NoError,
+            Unauthorized,
+            Timeout,
+            ReplyError,
+            TokenRequestError
+        };
     signals:
         void authenticated();
-        void failed(int error);
+        void failed(Error error, QString errorString);
 };
 
 Q_DECLARE_INTERFACE(IOsmServerImpl, "InterfaceIOsmServerImpl")
