@@ -8,7 +8,7 @@
     <x>0</x>
     <y>0</y>
     <width>689</width>
-    <height>487</height>
+    <height>592</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -21,7 +21,7 @@
       <enum>QTabWidget::North</enum>
      </property>
      <property name="currentIndex">
-      <number>3</number>
+      <number>5</number>
      </property>
      <widget class="QWidget" name="tab_4">
       <attribute name="title">
@@ -899,7 +899,7 @@
           </size>
          </property>
          <property name="title">
-          <string>OSM API (URL is, e.g., &quot;https://www.openstreetmap.org/api/0.6&quot;)</string>
+          <string>OSM API (do not include /api/0.6/ specifier)</string>
          </property>
          <layout class="QVBoxLayout" name="OsmServersLayout"/>
         </widget>
@@ -1121,7 +1121,16 @@
              <property name="spacing">
               <number>4</number>
              </property>
-             <property name="margin">
+             <property name="leftMargin">
+              <number>0</number>
+             </property>
+             <property name="topMargin">
+              <number>0</number>
+             </property>
+             <property name="rightMargin">
+              <number>0</number>
+             </property>
+             <property name="bottomMargin">
               <number>0</number>
              </property>
              <item>
@@ -1149,7 +1158,16 @@
              <property name="spacing">
               <number>4</number>
              </property>
-             <property name="margin">
+             <property name="leftMargin">
+              <number>0</number>
+             </property>
+             <property name="topMargin">
+              <number>0</number>
+             </property>
+             <property name="rightMargin">
+              <number>0</number>
+             </property>
+             <property name="bottomMargin">
               <number>0</number>
              </property>
              <item>

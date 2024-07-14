@@ -36,7 +36,36 @@
       </widget>
      </item>
      <item>
-      <widget class="QLineEdit" name="edOsmServerUrl"/>
+      <widget class="QComboBox" name="edOsmServerUrl">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="cursor">
+        <cursorShape>IBeamCursor</cursorShape>
+       </property>
+       <property name="mouseTracking">
+        <bool>true</bool>
+       </property>
+       <property name="acceptDrops">
+        <bool>true</bool>
+       </property>
+       <property name="editable">
+        <bool>true</bool>
+       </property>
+       <item>
+        <property name="text">
+         <string>https://www.openstreetmap.org/</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>https://master.apis.dev.openstreetmap.org/</string>
+        </property>
+       </item>
+      </widget>
      </item>
      <item>
       <widget class="QToolButton" name="tbOsmServerAdd">

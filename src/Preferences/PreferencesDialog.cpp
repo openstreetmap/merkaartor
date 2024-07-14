@@ -101,7 +101,7 @@ void OsmServerWidget::on_tbOsmServerDel_clicked()
 
 OsmServerInfo OsmServerWidget::getOsmServerInfo() const {
     OsmServerInfo srv;
-    srv.Url = edOsmServerUrl->text();
+    srv.Url = edOsmServerUrl->currentText();
     srv.Type = static_cast<decltype(srv.Type)>(authType->currentIndex());
     srv.User = edOsmServerUser->text();
     srv.Password = edOsmServerPwd->text();
@@ -110,7 +110,7 @@ OsmServerInfo OsmServerWidget::getOsmServerInfo() const {
 }
 
 void OsmServerWidget::setOsmServerInfo(OsmServerInfo srv) {
-    edOsmServerUrl->setText(srv.Url);
+    edOsmServerUrl->setCurrentText(srv.Url);
     authType->setCurrentIndex(static_cast<int>(srv.Type));
     edOsmServerUser->setText(srv.User);
     edOsmServerPwd->setText(srv.Password);
