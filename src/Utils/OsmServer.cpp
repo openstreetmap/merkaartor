@@ -248,11 +248,14 @@ void OsmServerImplOAuth2::authenticate() {
         emit failed(Error::ReplyError, tr("QOAuth2AuthorizationCodeFlow::error raised."));
     });
 
+#if QT_VERSION > QT_VERSION_CHECK(6, 6, 0)
+    // TODO: Is there a way to check in Qt5?
     connect(replyHandler, &QOAuthHttpServerReplyHandler::tokenRequestErrorOccurred, this, [this, replyHandler](QAbstractOAuth::Error error, const QString& errorString) {
         qDebug() << "Token request error occurred: " << int(error) << errorString;
         replyHandler->deleteLater();
         emit failed(Error::TokenRequestError, tr("Token request failed.") + "\n" + errorString);
     });
+#endif
 
     m_oauth2.setModifyParametersFunction([codeVerifier,codeChallenge](QAbstractOAuth::Stage stage, auto*params){
         /* Note: params is QMap for Qt5 and QMultiMap for Qt6 */
