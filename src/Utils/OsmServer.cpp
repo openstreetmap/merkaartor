@@ -4,6 +4,7 @@
 #include <QDesktopServices>
 #include <QTimer>
 #include <QInputDialog>
+#include <QLoggingCategory>
 
 #include "OsmServer.h"
 #include "OsmOAuth2Flow.h"
@@ -32,6 +33,7 @@
 //
 //    http://127.0.0.1:1337/
 
+QLoggingCategory lc_OsmServer("merk.OsmServer");
 
 class OsmServerImplBasic : public IOsmServerImpl {
     public:
@@ -71,7 +73,7 @@ class OsmServerImplBasic : public IOsmServerImpl {
                     qCritical() << "Error:" << reply->errorString();
                     emit failed(Error::Unauthorized, reply->errorString());
                 } else {
-                    qDebug() << reply->readAll();
+                    qDebug(lc_OsmServer) << reply->readAll();
                     emit authenticated();
                 }
             });
@@ -97,22 +99,22 @@ class OsmServerImplOAuth2 : public IOsmServerImpl {
         OsmServerInfo const getServerInfo() const { return m_info; }
 
         virtual QNetworkReply* get(const QUrl &url) {
-            qDebug() << "get: " << baseUrl().resolved(url);
+            qDebug(lc_OsmServer) << "get: " << baseUrl().resolved(url);
             return m_oauth2.get(baseUrl().resolved(url));
         }
 
         virtual QNetworkReply* put(const QUrl &url, const QByteArray &data) {
-            qDebug() << "put: " << baseUrl().resolved(url);
+            qDebug(lc_OsmServer) << "put: " << baseUrl().resolved(url);
             return m_oauth2.put(baseUrl().resolved(url), data);
         }
 
         virtual QNetworkReply* deleteResource(const QUrl &url) {
-            qDebug() << "delete: " << baseUrl().resolved(url);
+            qDebug(lc_OsmServer) << "delete: " << baseUrl().resolved(url);
             return m_oauth2.deleteResource(baseUrl().resolved(url));
         }
         
         virtual QNetworkReply* sendRequest(QNetworkRequest &request, const QByteArray &verb, const QByteArray &data) {
-            qDebug() << "custom request" << request.url() << " with verb" << verb << "and data" << data;
+            qDebug(lc_OsmServer) << "custom request" << request.url() << " with verb" << verb << "and data" << data;
             m_oauth2.prepareRequest(&request, data);
             return m_manager.sendCustomRequest(request, verb, data);
         }
@@ -137,7 +139,7 @@ std::shared_ptr<IOsmServerImpl> makeOsmServer(OsmServerInfo& info, QNetworkAcces
         // OsmServerImplOAuth2 will inspect info.Type and choose appropriately
         return std::make_shared<OsmServerImplOAuth2>(info, manager);
     } else {
-        qWarning() << "Error creating OsmServer: Unknown AuthType" << static_cast<int>(info.Type);
+        qWarning(lc_OsmServer) << "Error creating OsmServer: Unknown AuthType" << static_cast<int>(info.Type);
         return nullptr;
     }
 }
@@ -195,7 +197,7 @@ OsmServerImplOAuth2::OsmServerImplOAuth2(OsmServerInfo& info, QNetworkAccessMana
         m_oauth2.setClientIdentifierSharedKey("SuWJYZr9hjCmZH4PaMrvB48aVR_vgIw4D2VUEKPlR4c");
     } else {
         if (host != "openstreetmap.org") {
-            qWarning() << "Unknown OSM API host " << host << ", assuming alias to openstreetmap.org";
+            qWarning(lc_OsmServer) << "Unknown OSM API host " << host << ", assuming alias to openstreetmap.org";
         }
         m_oauth2.setClientIdentifier("wv3ui28EyHjH0c4C1Wuz6_I-o47ithPAOt7Qt1ov9Ps");
         m_oauth2.setClientIdentifierSharedKey("evCjgZOGTRL70ezsXs3VbxG0ugjJ5hq7pFQMB6toBcM");
@@ -206,9 +208,9 @@ OsmServerImplOAuth2::OsmServerImplOAuth2(OsmServerInfo& info, QNetworkAccessMana
 void OsmServerImplOAuth2::authenticate() {
     m_oauth2.setAuthorizationUrl(baseUrl().resolved(QUrl("oauth2/authorize")));
     m_oauth2.setAccessTokenUrl(baseUrl().resolved(QUrl("oauth2/token")));
-    qDebug() << "Base URL: " << baseUrl();
-    qDebug() << "Authorization URL: " << m_oauth2.authorizationUrl();
-    qDebug() << "Access Token URL: " << m_oauth2.accessTokenUrl();
+    qDebug(lc_OsmServer) << "Base URL: " << baseUrl();
+    qDebug(lc_OsmServer) << "Authorization URL: " << m_oauth2.authorizationUrl();
+    qDebug(lc_OsmServer) << "Access Token URL: " << m_oauth2.accessTokenUrl();
 
     QString redirect;
 
@@ -216,7 +218,7 @@ void OsmServerImplOAuth2::authenticate() {
     if (m_info.Type == OsmServerInfo::AuthType::OAuth2Redirect) {
         replyHandler = new QOAuthHttpServerReplyHandler(QHostAddress("127.0.0.1"), 1337, this);
         QTimer::singleShot(60000, replyHandler, [=]() {
-            qWarning() << "OAuth2 reply handler timed out.";
+            qWarning(lc_OsmServer) << "OAuth2 reply handler timed out.";
             replyHandler->deleteLater();
             emit failed(Error::Timeout, tr("OAuth2 reply handler timed out."));
         });
@@ -235,9 +237,9 @@ void OsmServerImplOAuth2::authenticate() {
 
     connect(&m_oauth2, &QOAuth2AuthorizationCodeFlow::statusChanged, [=](
             QAbstractOAuth::Status status) {
-        qDebug() << "OAuth status changed to " << int(status);
+        qDebug(lc_OsmServer) << "OAuth status changed to " << int(status);
         if (status == QAbstractOAuth::Status::Granted) {
-            qDebug() << "Granted, token: " << m_oauth2.token();
+            qDebug(lc_OsmServer) << "Granted, token: " << m_oauth2.token();
             m_info.Password = m_oauth2.token();
             emit authenticated();
             replyHandler->deleteLater();
@@ -250,17 +252,17 @@ void OsmServerImplOAuth2::authenticate() {
                     return;
                 }
 
-                qDebug() << reply->readAll();
+                qDebug(lc_OsmServer) << reply->readAll();
             });
         } else if (status == QAbstractOAuth::Status::TemporaryCredentialsReceived) {
-            qDebug() << "Temporary credentials.";
+            qDebug(lc_OsmServer) << "Temporary credentials.";
         } else {
-            qWarning() << "Status is not granted: " << int(status);
+            qWarning(lc_OsmServer) << "Status is not granted: " << int(status);
         }
     });
 
     connect(&m_oauth2, &QOAuth2AuthorizationCodeFlow::error, replyHandler, [this, replyHandler]() {
-        qDebug() << "QOAuth2AuthorizationCodeFlow::error raised.";
+        qDebug(lc_OsmServer) << "QOAuth2AuthorizationCodeFlow::error raised.";
         replyHandler->deleteLater();
         emit failed(Error::ReplyError, tr("QOAuth2AuthorizationCodeFlow::error raised."));
     });
@@ -268,7 +270,7 @@ void OsmServerImplOAuth2::authenticate() {
 #if QT_VERSION > QT_VERSION_CHECK(6, 6, 0)
     // TODO: Is there a way to check in Qt5?
     connect(replyHandler, &QOAuthHttpServerReplyHandler::tokenRequestErrorOccurred, this, [this, replyHandler](QAbstractOAuth::Error error, const QString& errorString) {
-        qDebug() << "Token request error occurred: " << int(error) << errorString;
+        qDebug(lc_OsmServer) << "Token request error occurred: " << int(error) << errorString;
         replyHandler->deleteLater();
         emit failed(Error::TokenRequestError, tr("Token request failed.") + "\n" + errorString);
     });
@@ -277,10 +279,10 @@ void OsmServerImplOAuth2::authenticate() {
     m_oauth2.setModifyParametersFunction([codeVerifier,codeChallenge,redirect](QAbstractOAuth::Stage stage, auto*params){
         /* Note: params is QMap for Qt5 and QMultiMap for Qt6 */
         if (params) {
-            qDebug() << "Stage: " << int(stage) << "with params" << *params;
+            qDebug(lc_OsmServer) << "Stage: " << int(stage) << "with params" << *params;
             switch (stage) {
                 case QAbstractOAuth::Stage::RequestingAuthorization:
-                    qDebug() << "Requesting Authorization.";
+                    qDebug(lc_OsmServer) << "Requesting Authorization.";
                     params->insert("code_challenge", codeChallenge);
                     params->insert("code_challenge_method", "S256");
                     // FIXME: Can be replaced by ->replace when Qt 6.x is minimum supported version
@@ -288,16 +290,16 @@ void OsmServerImplOAuth2::authenticate() {
                     params->insert("redirect_uri", redirect);
                     break;
                 case QAbstractOAuth::Stage::RequestingAccessToken:
-                    qDebug() << "Requesting Access Token.";
+                    qDebug(lc_OsmServer) << "Requesting Access Token.";
                     params->insert("code_verifier", codeVerifier);
                     //Note: technically, we no longer redirect, but OSM server rejects the token request unless we provide a matching redirect_uri
                     params->remove("redirect_uri");
                     params->insert("redirect_uri", redirect);
                     break;
                 default:
-                    qDebug() << "default stage.";
+                    qDebug(lc_OsmServer) << "default stage.";
             }
-            qDebug() << "Stage: " << int(stage) << "with params" << *params;
+            qDebug(lc_OsmServer) << "Stage: " << int(stage) << "with params" << *params;
         }
     });
 
@@ -307,22 +309,22 @@ void OsmServerImplOAuth2::authenticate() {
     } else if (m_info.Type == OsmServerInfo::AuthType::OAuth2OOB) {
         connect(&m_oauth2, &QOAuth2AuthorizationCodeFlow::authorizeWithBrowser, this, [this](const QUrl& url){
             bool ok;
-            qDebug() << "Login URL: " << url;
+            qDebug(lc_OsmServer) << "Login URL: " << url;
             QDesktopServices::openUrl(url);
             QString text = QInputDialog::getText(nullptr, tr("OAuth2 OOB flow"),
                     tr("Please login on the following URL in the browser and copy the resulting code below:") + "\n" + url.toString(),
                     QLineEdit::Normal, "", &ok);
             if (ok && !text.isEmpty()) {
-                qDebug() << "Received code: " << text;
+                qDebug(lc_OsmServer) << "Received code: " << text;
                 m_oauth2.requestAccessToken(text.trimmed());
-                qDebug() << m_oauth2.accessTokenUrl();
+                qDebug(lc_OsmServer) << m_oauth2.accessTokenUrl();
             } else {
-                qDebug() << "Cancelled by user.";
+                qDebug(lc_OsmServer) << "Cancelled by user.";
                 emit failed(Error::Cancelled, tr("Cancelled by user."));
             }
         });
     } else {
-        qWarning() << "Unknown OAuth type.";
+        qWarning(lc_OsmServer) << "Unknown OAuth type.";
     }
 
     m_oauth2.grant();
