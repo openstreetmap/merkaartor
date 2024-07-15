@@ -3,8 +3,10 @@
 #include <QAuthenticator>
 #include <QDesktopServices>
 #include <QTimer>
+#include <QInputDialog>
 
 #include "OsmServer.h"
+#include "OsmOAuth2Flow.h"
 
 #include <random>
 //
@@ -29,6 +31,7 @@
 //Redirect URIs
 //
 //    http://127.0.0.1:1337/
+
 
 class OsmServerImplBasic : public IOsmServerImpl {
     public:
@@ -119,7 +122,7 @@ class OsmServerImplOAuth2 : public IOsmServerImpl {
     private:
         OsmServerInfo m_info;
         QNetworkAccessManager& m_manager;
-        QOAuth2AuthorizationCodeFlow m_oauth2;
+        OsmOAuth2Flow m_oauth2;
 
         QString generateCodeVerifier();
 };
@@ -128,6 +131,9 @@ std::shared_ptr<IOsmServerImpl> makeOsmServer(OsmServerInfo& info, QNetworkAcces
     if (info.Type == OsmServerInfo::AuthType::Basic) {
         return std::make_shared<OsmServerImplBasic>(info, manager);
     } else if (info.Type == OsmServerInfo::AuthType::OAuth2Redirect) {
+        // OsmServerImplOAuth2 will inspect info.Type and choose appropriately
+        return std::make_shared<OsmServerImplOAuth2>(info, manager);
+    } else if (info.Type == OsmServerInfo::AuthType::OAuth2OOB) {
         // OsmServerImplOAuth2 will inspect info.Type and choose appropriately
         return std::make_shared<OsmServerImplOAuth2>(info, manager);
     } else {
@@ -206,14 +212,26 @@ void OsmServerImplOAuth2::authenticate() {
     qDebug() << "Authorization URL: " << m_oauth2.authorizationUrl();
     qDebug() << "Access Token URL: " << m_oauth2.accessTokenUrl();
 
-    auto replyHandler = new QOAuthHttpServerReplyHandler(QHostAddress("127.0.0.1"), 1337, this);
-    QTimer::singleShot(60000, replyHandler, [=]() {
-        qWarning() << "OAuth2 reply handler timed out.";
-        replyHandler->deleteLater();
-        emit failed(Error::Timeout, tr("OAuth2 reply handler timed out."));
-    });
+    QString redirect;
 
-    m_oauth2.setReplyHandler(replyHandler);
+    QAbstractOAuthReplyHandler* replyHandler = nullptr;
+    if (m_info.Type == OsmServerInfo::AuthType::OAuth2Redirect) {
+        replyHandler = new QOAuthHttpServerReplyHandler(QHostAddress("127.0.0.1"), 1337, this);
+        QTimer::singleShot(60000, replyHandler, [=]() {
+            qWarning() << "OAuth2 reply handler timed out.";
+            replyHandler->deleteLater();
+            emit failed(Error::Timeout, tr("OAuth2 reply handler timed out."));
+        });
+
+        m_oauth2.setReplyHandler(replyHandler);
+        redirect = "http://127.0.0.1:1337/";
+    } else {
+        replyHandler = new QOAuthOobReplyHandler(this);
+        m_oauth2.setReplyHandler(replyHandler);
+        redirect = "urn:ietf:wg:oauth:2.0:oob";
+    }
+
+
     QString codeVerifier = generateCodeVerifier();
     QString codeChallenge = QString(QCryptographicHash::hash(codeVerifier.toUtf8(), QCryptographicHash::Sha256).toBase64(QByteArray::Base64UrlEncoding | QByteArray::OmitTrailingEquals));
 
@@ -258,7 +276,7 @@ void OsmServerImplOAuth2::authenticate() {
     });
 #endif
 
-    m_oauth2.setModifyParametersFunction([codeVerifier,codeChallenge](QAbstractOAuth::Stage stage, auto*params){
+    m_oauth2.setModifyParametersFunction([codeVerifier,codeChallenge,redirect](QAbstractOAuth::Stage stage, auto*params){
         /* Note: params is QMap for Qt5 and QMultiMap for Qt6 */
         if (params) {
             qDebug() << "Stage: " << int(stage) << "with params" << *params;
@@ -269,14 +287,14 @@ void OsmServerImplOAuth2::authenticate() {
                     params->insert("code_challenge_method", "S256");
                     // FIXME: Can be replaced by ->replace when Qt 6.x is minimum supported version
                     params->remove("redirect_uri");
-                    params->insert("redirect_uri", "http://127.0.0.1:1337/");
+                    params->insert("redirect_uri", redirect);
                     break;
                 case QAbstractOAuth::Stage::RequestingAccessToken:
                     qDebug() << "Requesting Access Token.";
                     params->insert("code_verifier", codeVerifier);
                     //Note: technically, we no longer redirect, but OSM server rejects the token request unless we provide a matching redirect_uri
                     params->remove("redirect_uri");
-                    params->insert("redirect_uri", "http://127.0.0.1:1337/");
+                    params->insert("redirect_uri", redirect);
                     break;
                 default:
                     qDebug() << "default stage.";
@@ -286,4 +304,17 @@ void OsmServerImplOAuth2::authenticate() {
     });
 
     m_oauth2.grant();
+
+    if (m_info.Type == OsmServerInfo::AuthType::OAuth2OOB) {
+        bool ok;
+        QString text = QInputDialog::getText(nullptr, tr("Please login in the browser and copy the resulting code below:"),
+                tr("Code:"), QLineEdit::Normal, "", &ok);
+        if (ok && !text.isEmpty()) {
+            qDebug() << "Received code: " << text;
+            m_oauth2.requestAccessToken(text.trimmed());
+            qDebug() << m_oauth2.accessTokenUrl();
+        } else {
+            qDebug() << "Cancelled.";
+        }
+    }
 }

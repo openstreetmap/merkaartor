@@ -16,11 +16,13 @@ struct OsmServerInfo
     enum class AuthType : int{
         Basic,
         OAuth2Redirect, //password field is the token if OAuth2* is used
+        OAuth2OOB,
     };
 
     static AuthType typeFromString(const QString& type) {
         if (type == "basic")  return AuthType::Basic;
         if (type == "oauth2redirect") return AuthType::OAuth2Redirect;
+        if (type == "oauth2oob") return AuthType::OAuth2OOB;
         qWarning() << "Error parsing AuthType: Unknown AuthType" << type;
         return AuthType::Basic;
     }
@@ -28,6 +30,7 @@ struct OsmServerInfo
     static QString typeToString(AuthType type) {
         switch (type) {
             case AuthType::OAuth2Redirect: return "oauth2redirect";
+            case AuthType::OAuth2OOB: return "oauth2oob";
             case AuthType::Basic:  return "basic";
             default:
                 qWarning() << "Error encoding AuthType: Unknown AuthType" << static_cast<int>(type);

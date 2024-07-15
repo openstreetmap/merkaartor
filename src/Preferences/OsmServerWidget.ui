@@ -103,7 +103,7 @@
      <item>
       <widget class="QComboBox" name="authType">
        <property name="currentIndex">
-        <number>1</number>
+        <number>0</number>
        </property>
        <item>
         <property name="text">
@@ -112,7 +112,12 @@
        </item>
        <item>
         <property name="text">
-         <string>OAuth2</string>
+         <string>OAuth2 Redirect (redirect via 127.0.0.1:1337)</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>OAuth2 OOB (manually copy code)</string>
         </property>
        </item>
       </widget>
