@@ -201,8 +201,6 @@ OsmServerImplOAuth2::OsmServerImplOAuth2(OsmServerInfo& info, QNetworkAccessMana
         m_oauth2.setClientIdentifierSharedKey("evCjgZOGTRL70ezsXs3VbxG0ugjJ5hq7pFQMB6toBcM");
     }
     m_oauth2.setToken(m_info.Password);
-
-    connect(&m_oauth2, &QOAuth2AuthorizationCodeFlow::authorizeWithBrowser, &QDesktopServices::openUrl);
 }
 
 void OsmServerImplOAuth2::authenticate() {
@@ -303,18 +301,29 @@ void OsmServerImplOAuth2::authenticate() {
         }
     });
 
-    m_oauth2.grant();
 
-    if (m_info.Type == OsmServerInfo::AuthType::OAuth2OOB) {
-        bool ok;
-        QString text = QInputDialog::getText(nullptr, tr("Please login in the browser and copy the resulting code below:"),
-                tr("Code:"), QLineEdit::Normal, "", &ok);
-        if (ok && !text.isEmpty()) {
-            qDebug() << "Received code: " << text;
-            m_oauth2.requestAccessToken(text.trimmed());
-            qDebug() << m_oauth2.accessTokenUrl();
-        } else {
-            qDebug() << "Cancelled.";
-        }
+    if (m_info.Type == OsmServerInfo::AuthType::OAuth2Redirect) {
+        connect(&m_oauth2, &QOAuth2AuthorizationCodeFlow::authorizeWithBrowser, &QDesktopServices::openUrl);
+    } else if (m_info.Type == OsmServerInfo::AuthType::OAuth2OOB) {
+        connect(&m_oauth2, &QOAuth2AuthorizationCodeFlow::authorizeWithBrowser, this, [this](const QUrl& url){
+            bool ok;
+            qDebug() << "Login URL: " << url;
+            QDesktopServices::openUrl(url);
+            QString text = QInputDialog::getText(nullptr, tr("OAuth2 OOB flow"),
+                    tr("Please login on the following URL in the browser and copy the resulting code below:") + "\n" + url.toString(),
+                    QLineEdit::Normal, "", &ok);
+            if (ok && !text.isEmpty()) {
+                qDebug() << "Received code: " << text;
+                m_oauth2.requestAccessToken(text.trimmed());
+                qDebug() << m_oauth2.accessTokenUrl();
+            } else {
+                qDebug() << "Cancelled by user.";
+                emit failed(Error::Cancelled, tr("Cancelled by user."));
+            }
+        });
+    } else {
+        qWarning() << "Unknown OAuth type.";
     }
+
+    m_oauth2.grant();
 }

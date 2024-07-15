@@ -66,7 +66,8 @@ class IOsmServerImpl : public QObject {
             Unauthorized,
             Timeout,
             ReplyError,
-            TokenRequestError
+            TokenRequestError,
+            Cancelled,
         };
     signals:
         void authenticated();
