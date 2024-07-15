@@ -15,19 +15,19 @@ struct OsmServerInfo
     /* Note: Types here correspond to the UI combo box. Keep those in sync. */
     enum class AuthType : int{
         Basic,
-        OAuth2 //password field is the token if this type is used
+        OAuth2Redirect, //password field is the token if OAuth2* is used
     };
 
     static AuthType typeFromString(const QString& type) {
         if (type == "basic")  return AuthType::Basic;
-        if (type == "oauth2") return AuthType::OAuth2;
+        if (type == "oauth2redirect") return AuthType::OAuth2Redirect;
         qWarning() << "Error parsing AuthType: Unknown AuthType" << type;
         return AuthType::Basic;
     }
 
     static QString typeToString(AuthType type) {
         switch (type) {
-            case AuthType::OAuth2: return "oauth2";
+            case AuthType::OAuth2Redirect: return "oauth2redirect";
             case AuthType::Basic:  return "basic";
             default:
                 qWarning() << "Error encoding AuthType: Unknown AuthType" << static_cast<int>(type);

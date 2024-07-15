@@ -127,7 +127,8 @@ class OsmServerImplOAuth2 : public IOsmServerImpl {
 std::shared_ptr<IOsmServerImpl> makeOsmServer(OsmServerInfo& info, QNetworkAccessManager& manager) {
     if (info.Type == OsmServerInfo::AuthType::Basic) {
         return std::make_shared<OsmServerImplBasic>(info, manager);
-    } else if (info.Type == OsmServerInfo::AuthType::OAuth2) {
+    } else if (info.Type == OsmServerInfo::AuthType::OAuth2Redirect) {
+        // OsmServerImplOAuth2 will inspect info.Type and choose appropriately
         return std::make_shared<OsmServerImplOAuth2>(info, manager);
     } else {
         qWarning() << "Error creating OsmServer: Unknown AuthType" << static_cast<int>(info.Type);
