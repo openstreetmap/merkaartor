@@ -140,10 +140,11 @@ void OsmServerWidget::on_tbOAuth2Login_clicked() {
 
     connect(&*m_impl, &IOsmServerImpl::authenticated, this, &OsmServerWidget::on_httpAuthAuthenticated);
     connect(&*m_impl, &IOsmServerImpl::failed, this, &OsmServerWidget::on_httpAuthFailed);
-    m_impl->authenticate();
 
     this->lbLoginState->setText(tr("Authenticating"));
     this->tbOAuth2Login->setEnabled(false);
+
+    m_impl->authenticate();
 }
 
 void OsmServerWidget::on_httpAuthAuthenticated() {
