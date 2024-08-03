@@ -8,6 +8,7 @@
 
 #include "OsmServer.h"
 #include "OsmOAuth2Flow.h"
+#include "OAuth2OOBDialog.h"
 
 #include <random>
 //
@@ -308,15 +309,11 @@ void OsmServerImplOAuth2::authenticate() {
         connect(&m_oauth2, &QOAuth2AuthorizationCodeFlow::authorizeWithBrowser, &QDesktopServices::openUrl);
     } else if (m_info.Type == OsmServerInfo::AuthType::OAuth2OOB) {
         connect(&m_oauth2, &QOAuth2AuthorizationCodeFlow::authorizeWithBrowser, this, [this](const QUrl& url){
-            bool ok;
             qDebug(lc_OsmServer) << "Login URL: " << url;
-            QDesktopServices::openUrl(url);
-            QString text = QInputDialog::getText(nullptr, tr("OAuth2 OOB flow"),
-                    tr("Please login on the following URL in the browser and copy the resulting code below:") + "\n" + url.toString(),
-                    QLineEdit::Normal, "", &ok);
-            if (ok && !text.isEmpty()) {
-                qDebug(lc_OsmServer) << "Received code: " << text;
-                m_oauth2.requestAccessToken(text.trimmed());
+            QString code = OAuth2OOBDialog::getAuthCode(url.toString());
+            if (!code.isNull()) {
+                qDebug(lc_OsmServer) << "Received code: " << code;
+                m_oauth2.requestAccessToken(code.trimmed());
                 qDebug(lc_OsmServer) << m_oauth2.accessTokenUrl();
             } else {
                 qDebug(lc_OsmServer) << "Cancelled by user.";
