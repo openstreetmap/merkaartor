@@ -8,7 +8,7 @@ message("Working on binary: ${MERKAARTOR_BINARY}")
 # Copy whole packages of gdal and proj, as they need other files than dlls to work!
 # Also copy openssl directly, as it appears to be preinstalled by github actions in system paths and ignored by the toling below
 # Also copy opencl-icd, as is overridden by the system files
-execute_process(COMMAND pacman -Qlq mingw-w64-x86_64-openssl mingw-w64-opencl-icd mingw-w64-x86_64-gdal mingw-w64-x86_64-proj OUTPUT_VARIABLE DEP_PKGS_FILES OUTPUT_STRIP_TRAILING_WHITESPACE)
+execute_process(COMMAND pacman -Qlq mingw-w64-x86_64-openssl mingw-w64-x86_64-opencl-icd mingw-w64-x86_64-gdal mingw-w64-x86_64-proj OUTPUT_VARIABLE DEP_PKGS_FILES OUTPUT_STRIP_TRAILING_WHITESPACE)
 string(REPLACE "\n" ";" DEP_PKGS_FILES_LIST ${DEP_PKGS_FILES})
 foreach(DEP_PKGS_FILE IN LISTS DEP_PKGS_FILES_LIST)
   if (${DEP_PKGS_FILE} MATCHES "/include/|/man/|/doc/|/$|.a$|.pc$|.cmake$")
