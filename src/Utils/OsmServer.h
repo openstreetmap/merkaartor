@@ -62,6 +62,11 @@ class IOsmServerImpl : public QObject {
             return QUrl(getServerInfo().Url);
         }
 
+        virtual QUrl apiUrl() const {
+            return QUrl(getServerInfo().Url).resolved(QUrl("/api/0.6"));
+        }
+
+
         enum class Error {
             NoError,
             Unauthorized,
