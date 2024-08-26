@@ -43,6 +43,7 @@ struct OsmServerInfo
     QString Url;
     QString User;
     QString Password;
+    int CfgVersion = 1;
 };
 
 class IOsmServerImpl : public QObject {
@@ -79,5 +80,7 @@ Q_DECLARE_INTERFACE(IOsmServerImpl, "InterfaceIOsmServerImpl")
 using OsmServer = std::shared_ptr<IOsmServerImpl>;
 
 OsmServer makeOsmServer(OsmServerInfo& info, QNetworkAccessManager& manager);
+
+bool migrateOsmServerInfo(OsmServerInfo& info);
 
 #endif

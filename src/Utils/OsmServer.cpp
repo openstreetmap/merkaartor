@@ -5,6 +5,7 @@
 #include <QTimer>
 #include <QInputDialog>
 #include <QLoggingCategory>
+#include <QMessageBox>
 
 #include "OsmServer.h"
 #include "OsmOAuth2Flow.h"
@@ -325,4 +326,30 @@ void OsmServerImplOAuth2::authenticate() {
     }
 
     m_oauth2.grant();
+}
+
+/** Migration logic */
+
+bool migrateOsmServerInfo(OsmServerInfo& info) {
+    if (info.CfgVersion <= 0) {
+        /* Version 0 is pre-oAuth and old URL format. Fixup the URL and change to OAuth redirect. Ask user to migrate.*/
+        auto newUrl = QString(info.Url).replace("http://", "https://").replace("/api/0.6", "");
+        QMessageBox msgBox;
+        msgBox.setStyleSheet("QLabel{min-width: 500px;}");
+        msgBox.setText(QObject::tr("Migrate OSM Server"));
+        msgBox.setInformativeText(QObject::tr("OSM.org now requires OAuth2 for authentication. This brings in a URL change. Do you want to migrate?\n\nCurrent URL: %1\nNew URL: %2").arg(info.Url, newUrl));
+        msgBox.setStandardButtons(QMessageBox::Yes | QMessageBox::No);
+        msgBox.setDefaultButton(QMessageBox::Yes);
+        switch (msgBox.exec()) {
+            case QMessageBox::Yes:
+                info.Url = newUrl;
+                info.Type = OsmServerInfo::AuthType::OAuth2Redirect;
+                info.CfgVersion = 1;
+                return true;
+            default:
+            case QMessageBox::No:
+                return false;
+        }
+    }
+    return false;
 }
