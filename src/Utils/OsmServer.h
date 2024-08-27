@@ -43,6 +43,7 @@ struct OsmServerInfo
     QString Url;
     QString User;
     QString Password;
+    int CfgVersion = 1;
 };
 
 class IOsmServerImpl : public QObject {
@@ -60,6 +61,11 @@ class IOsmServerImpl : public QObject {
         virtual QUrl baseUrl() const {
             return QUrl(getServerInfo().Url);
         }
+
+        virtual QUrl apiUrl() const {
+            return QUrl(getServerInfo().Url).resolved(QUrl("/api/0.6"));
+        }
+
 
         enum class Error {
             NoError,
@@ -79,5 +85,7 @@ Q_DECLARE_INTERFACE(IOsmServerImpl, "InterfaceIOsmServerImpl")
 using OsmServer = std::shared_ptr<IOsmServerImpl>;
 
 OsmServer makeOsmServer(OsmServerInfo& info, QNetworkAccessManager& manager);
+
+bool migrateOsmServerInfo(OsmServerInfo& info);
 
 #endif

@@ -619,6 +619,17 @@ void MerkaartorPreferences::initialize()
 
     parentDashes << 1 << 5;
 
+    bool serversMigrated = false;
+    for (auto &srv: theOsmServers) {
+        serversMigrated |= migrateOsmServerInfo(srv);
+    }
+    if (serversMigrated) {
+        QMessageBox::information(nullptr,
+                tr("Osm Server Migration"),
+                tr("Some OSM server information has been migrated to the new format. Please visit preferences and login to the servers."));
+
+    }
+
     //Ensure we have a CacheDir value in QSettings
     if (!g_Merk_Ignore_Preferences)
         Sets->setValue("backgroundImage/CacheDir", Sets->value("backgroundImage/CacheDir", HOMEDIR + "/BackgroundCache"));
@@ -1585,6 +1596,7 @@ void MerkaartorPreferences::loadOsmServers()
             server.Url = Sets->value("url").toString();
             server.User = Sets->value("user").toString();
             server.Password = Sets->value("password").toString();
+            server.CfgVersion = Sets->value("version").toInt();
             theOsmServers.append(server);
         }
         Sets->endArray();
@@ -1602,6 +1614,7 @@ void MerkaartorPreferences::saveOsmServers()
             Sets->setValue("url", theOsmServers.at(i).Url);
             Sets->setValue("user", theOsmServers.at(i).User);
             Sets->setValue("password", theOsmServers.at(i).Password);
+            Sets->setValue("version", theOsmServers.at(i).CfgVersion);
         }
         Sets->endArray();
     }

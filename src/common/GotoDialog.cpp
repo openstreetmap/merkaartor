@@ -69,7 +69,7 @@ GotoDialog::GotoDialog(MapView* aView, QWidget *parent)
         .arg(QString::number(OsmZoom))
         );
     coordOsmApi->setText( QString("%1/map?bbox=%2,%3,%4,%5")
-//        .arg(M_PREFS->getOsmApiUrl()) //FIXME: Wut?
+        .arg(M_PREFS->getOsmServer()->apiUrl().toString())
         .arg(COORD2STRING(theViewport.bottomLeft().x()))
         .arg(COORD2STRING(theViewport.bottomLeft().y()))
         .arg(COORD2STRING(theViewport.topRight().x()))
