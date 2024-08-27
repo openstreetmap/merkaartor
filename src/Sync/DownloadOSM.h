@@ -20,6 +20,7 @@ class SpecialLayer;
 #include <QtCore/QObject>
 #include <QNetworkAccessManager>
 #include <QUrl>
+#include "Utils/OsmServer.h"
 
 #include "IFeature.h"
 
@@ -28,7 +29,7 @@ class Downloader : public QObject
     Q_OBJECT
 
     public:
-        Downloader(const QString& aUser, const QString& aPwd);
+        Downloader(OsmServer server);
 
         bool request(const QString& theMethod, const QUrl& URL, const QString& Out);
         bool go(const QUrl& url);
@@ -53,14 +54,11 @@ class Downloader : public QObject
 
     public slots:
         void progress( qint64 done, qint64 total );
-        void on_requestFinished( QNetworkReply *reply);
-        void on_authenticationRequired( QNetworkReply *reply, QAuthenticator *auth);
         void animate();
         void on_Cancel_clicked();
 
     private:
-        QNetworkAccessManager netManager;
-        QString User, Password;
+        OsmServer server;
         QByteArray Content;
         int Result;
         QString LocationText;
@@ -80,7 +78,6 @@ bool downloadMoreOSM(MainWindow* Main, const CoordBox& aBox , Document* theDocum
 bool downloadFeatures(MainWindow* Main, const QList<Feature*>& aDownloadList , Document* theDocument);
 bool downloadFeature(MainWindow* Main, const IFeature::FId& id, Document* theDocument, Layer* theLayer=NULL);
 bool downloadFeatures(MainWindow* Main, const QList<IFeature::FId>& aDownloadList, Document* theDocument, Layer* theLayer=NULL);
-bool downloadMapdust(MainWindow* Main, const CoordBox& aBox, Document* theDocument, SpecialLayer* theLayer=NULL);
 
 bool checkForConflicts(Document* theDocument);
 

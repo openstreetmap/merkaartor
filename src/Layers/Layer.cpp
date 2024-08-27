@@ -831,7 +831,7 @@ LayerWidget* SpecialLayer::newWidget(void)
 void SpecialLayer::refreshLayer()
 {
     if (m_type == Layer::MapDustLayer) {
-        g_Merk_MainWindow->on_layersMapdustAction_triggered();
+        /* FIXME: Remove mapdust type */
     }
 }
 

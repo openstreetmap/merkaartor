@@ -9,6 +9,8 @@
 #include <QProgressBar>
 #include <QLabel>
 
+#include "OsmServer.h"
+
 namespace Ui {
     class MainWindow;
 }
@@ -77,7 +79,6 @@ public slots:
     virtual void on_layersNewImageAction_triggered();
     virtual void on_layersNewDrawingAction_triggered();
     virtual void on_layersNewFilterAction_triggered();
-    virtual void on_layersMapdustAction_triggered();
 
     virtual void on_fileNewAction_triggered();
     virtual void on_fileDownloadAction_triggered();
@@ -340,7 +341,7 @@ private:
     void startBusyCursor();
     void endBusyCursor();
 
-    void syncOSM(const QString &aWeb, const QString &aUser, const QString &aPwd);
+    void syncOSM(OsmServer srv);
 protected:
     void closeEvent(QCloseEvent * event);
     virtual QMenu * createPopupMenu ();

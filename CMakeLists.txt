@@ -48,7 +48,7 @@ set(CMAKE_AUTORCC ON)
 ##############################################
 # Find Qt dependencies
 ##############################################
-set(MERKAARTOR_QT_LIBS Svg Network Xml Core Gui Concurrent PrintSupport Widgets Test)
+set(MERKAARTOR_QT_LIBS Svg Network NetworkAuth Xml Core Gui Concurrent PrintSupport Widgets Test)
 set(MERKAARTOR_QT_TOOLS LinguistTools)
 find_package(QT NAMES Qt5 Qt6 REQUIRED COMPONENTS Core)
 message(STATUS " * Qt version found: ${QT_VERSION}")
@@ -264,6 +264,10 @@ src/Utils/SlippyMapWidget.cpp
 src/Utils/SlippyMapWidget.h
 src/Utils/Utils.h
 src/Utils/OsmLink.cpp
+src/Utils/OsmServer.cpp
+src/Utils/OsmOAuth2Flow.cpp
+src/Utils/OAuth2OOBDialog.ui
+src/Utils/OAuth2OOBDialog.cpp
 src/Utils/ShortcutOverrideFilter.cpp
 src/Utils/LineF.h
 src/Utils/SelectionDialog.ui

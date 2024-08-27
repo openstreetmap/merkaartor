@@ -83,4 +83,16 @@ The TCL framework also had the convention of "I" for second-level
 initialisation of objects after creation (possibly due to limitations in the
 compiler support of C++ features - I don't remember).
 
+## Logging
 
+Some of the (newer) classes use QLoggingCategory for log filtering. Debug logs are disabled by default, but can be enabled at runtime using environment variable:
+
+```
+QT_LOGGING_RULES="merk.<ClassName>.debug=true"
+```
+
+Or for all classes:
+
+```
+QT_LOGGING_RULES="merk.*.debug=true"
+```

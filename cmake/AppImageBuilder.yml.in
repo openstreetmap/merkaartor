@@ -30,6 +30,7 @@ AppDir:
       - libqt6dbus6
       - libqt6svg6
       - libqt6core5compat6
+      - libqt6networkauth6
       - qt6-qpa-plugins
 
   files:
@@ -49,5 +50,6 @@ AppDir:
 AppImage:
   update-information: None
   sign-key: None
+  comp: xz
   arch: x86_64
   comp: xz

@@ -34,10 +34,10 @@ DirtyListExecutorOSC::DirtyListExecutorOSC(Document* aDoc, const DirtyListBuild&
 {
 }
 
-DirtyListExecutorOSC::DirtyListExecutorOSC(Document* aDoc, const DirtyListBuild& aFuture, const ChangesetInfo& info, const QString& aWeb, const QString& aUser, const QString& aPwd, int aTasks)
-: DirtyListVisit(aDoc, aFuture, false), changesetInfo(info), Tasks(aTasks), Done(0), Web(aWeb), User(aUser), Pwd(aPwd), theDownloader(0)
+DirtyListExecutorOSC::DirtyListExecutorOSC(Document* aDoc, const DirtyListBuild& aFuture, const ChangesetInfo& info, OsmServer server, int aTasks)
+: DirtyListVisit(aDoc, aFuture, false), changesetInfo(info), Tasks(aTasks), Done(0), server(server), theDownloader(0)
 {
-    theDownloader = new Downloader(User, Pwd);
+    theDownloader = new Downloader(server);
 }
 
 DirtyListExecutorOSC::~DirtyListExecutorOSC()
@@ -55,7 +55,7 @@ int DirtyListExecutorOSC::sendRequest(const QString& Method, const QString& URL,
 
     QMessageBox::StandardButton theChoice = QMessageBox::Retry;
     while (theChoice == QMessageBox::Retry) {
-        QUrl theUrl(Web+URL);
+        QUrl theUrl(URL);
         if (!theDownloader->request(Method,theUrl,Data))
         {
             qDebug() << QString("Upload error: request (%1); Server message is '%2'").arg(theDownloader->resultCode()).arg(theDownloader->resultText());
@@ -322,7 +322,7 @@ bool DirtyListExecutorOSC::stop()
     QEventLoop L; L.processEvents(QEventLoop::ExcludeUserInputEvents);
 
     URL = theDownloader->getURLToCloseChangeSet(ChangeSetId);
-    QUrl theUrl(Web+URL);
+    QUrl theUrl(URL);
     theDownloader->setAnimator(NULL, NULL, NULL, false);
     if (!theDownloader->request("PUT",theUrl,DataIn)) {
         QMessageBox::warning(NULL, tr("Changeset could not be closed."), tr("An unknown error has occurred. It might already be closed, or will be closed automatically. If you want to be sure, please, check manually on the osm.org website."));

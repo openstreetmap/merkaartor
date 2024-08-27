@@ -17,6 +17,7 @@
 
 #include <QXmlStreamWriter>
 #include <QBuffer>
+#include "Utils/OsmServer.h"
 
 class Downloader;
 
@@ -26,7 +27,7 @@ class DirtyListExecutorOSC : public QObject, public DirtyListVisit
 
 public:
     DirtyListExecutorOSC(Document* aDoc, const DirtyListBuild& aFuture);
-    DirtyListExecutorOSC(Document* aDoc, const DirtyListBuild& aFuture, const ChangesetInfo& info, const QString& aWeb, const QString& aUser, const QString& aPwd, int aTasks);
+    DirtyListExecutorOSC(Document* aDoc, const DirtyListBuild& aFuture, const ChangesetInfo& info, OsmServer server, int aTasks);
     virtual ~DirtyListExecutorOSC();
 
     void OscCreate(Feature* F);
@@ -57,7 +58,7 @@ private:
     Ui::SyncListDialog Ui;
     int Tasks, Done;
     QProgressDialog* Progress;
-    QString Web,User,Pwd;
+    OsmServer server;
     Downloader* theDownloader;
     QString ChangeSetId;
     QString LastAction;

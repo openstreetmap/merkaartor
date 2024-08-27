@@ -343,7 +343,7 @@ static bool downloadToResolve(const QList<Feature*>& Resolution, QWidget* aParen
 
     for (int i=0; i<Resolution.size(); i++ )
     {
-        QUrl URL = M_PREFS->getOsmApiUrl()+theDownloader->getURLToFetchFull(Resolution[i]);
+        QUrl URL = theDownloader->getURLToFetchFull(Resolution[i]);
         Lbl->setText(QApplication::translate("Downloader","Downloading unresolved %1 of %2").arg(i+1).arg(Resolution.size()));
         if (theDownloader->go(URL))
         {

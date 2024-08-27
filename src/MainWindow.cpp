@@ -102,6 +102,7 @@
 #include "gdal_version.h"
 
 #include "Utils/SlippyMapWidget.h"
+#include "Utils/OsmServer.h"
 
 namespace {
 
@@ -2018,6 +2019,8 @@ void MainWindow::on_fileUploadAction_triggered()
             return;
     }
 
+    /* TODO: Check if the server list is empty? */
+    /*
     while (M_PREFS->getOsmUser().isEmpty()) {
         int ret = QMessageBox::warning(this, tr("Upload OSM"), tr("You don't seem to have specified your\n"
             "OpenStreetMap username and password.\nDo you want to do this now?"), QMessageBox::Yes | QMessageBox::No);
@@ -2026,8 +2029,10 @@ void MainWindow::on_fileUploadAction_triggered()
         } else
             return;
     }
+    */
     on_editPropertiesAction_triggered();
-    syncOSM(M_PREFS->getOsmApiUrl(), M_PREFS->getOsmUser(), M_PREFS->getOsmPassword());
+    // TODO: Replace this call to use a the OsmServer object instead of individual parameters.
+    syncOSM(M_PREFS->getOsmServer());
 
     theDocument->history().updateActions();
     theDirty->updateList();
@@ -2065,28 +2070,6 @@ void MainWindow::on_fileDownloadMoreAction_triggered()
     deleteProgressDialog();
 
     emit content_changed();
-}
-
-void MainWindow::on_layersMapdustAction_triggered()
-{
-    SpecialLayer* sl = NULL;
-    for (int i=0; i<theDocument->layerSize(); ++i) {
-        if (theDocument->getLayer(i)->classType() == Layer::MapDustLayer) {
-            sl = dynamic_cast<SpecialLayer*>(theDocument->getLayer(i));
-            while (sl->size())
-            {
-                sl->deleteFeature(sl->get(0));
-            }
-        }
-    }
-
-    createProgressDialog();
-
-    if (!::downloadMapdust(this, theView->viewport(), theDocument, sl)) {
-        QMessageBox::warning(this, tr("Error downloading MapDust"), tr("The MapDust bugs could not be downloaded"));
-    }
-
-    deleteProgressDialog();
 }
 
 void MainWindow::downloadFeatures(const QList<Feature*>& aDownloadList)
@@ -4294,7 +4277,7 @@ bool MainWindow::hasUnsavedChanges()
     return true;
 }
 
-void MainWindow::syncOSM(const QString& aWeb, const QString& aUser, const QString& aPwd)
+void MainWindow::syncOSM(OsmServer server)
 {
 #ifndef FRISIUS_BUILD
     if (checkForConflicts(theDocument)) {
@@ -4305,10 +4288,10 @@ void MainWindow::syncOSM(const QString& aWeb, const QString& aUser, const QStrin
     DirtyListBuild Future;
     theDocument->history().buildDirtyList(Future);
     DirtyListDescriber Describer(theDocument,Future);
-    ChangesetInfo changesetInfo = {aWeb, "", ""};
+    ChangesetInfo changesetInfo = {server->getServerInfo().Url, "", ""};
     if (Describer.showChanges(this, changesetInfo) && Describer.tasks()) {
         Future.resetUpdates();
-        DirtyListExecutorOSC Exec(theDocument,Future,changesetInfo,aWeb,aUser,aPwd,Describer.tasks());
+        DirtyListExecutorOSC Exec(theDocument,Future,changesetInfo,server,Describer.tasks());
         if (Exec.executeChanges(this)) {
             if (M_PREFS->getAutoHistoryCleanup() && !theDocument->getDirtyOrOriginLayer()->getDirtySize())
                 theDocument->history().cleanup();

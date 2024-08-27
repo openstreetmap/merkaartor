@@ -16,6 +16,7 @@
 #include "Document.h"
 #include "Feature.h"
 #include "PropertiesDock.h"
+#include "OsmServer.h"
 #include "BoundaryIcon.h"
 
 #include <QFileDialog>
@@ -25,11 +26,38 @@
 #include <QStyleFactory>
 #include <QNetworkProxy>
 
+// TODO: Move the class to it's own file.
+class OsmServerWidget : public QWidget, public Ui::OsmServerWidget
+{
+    Q_OBJECT
+
+public:
+    OsmServerWidget(QWidget * parent = 0, Qt::WindowFlags f = Qt::Widget);
+
+    OsmServerInfo getOsmServerInfo() const;
+    void setOsmServerInfo(OsmServerInfo srv);
+    QNetworkAccessManager* m_nm; /* TODO: Inject. */
+
+public slots:
+    void on_tbOsmServerAdd_clicked();
+    void on_tbOsmServerDel_clicked();
+    void on_rbOsmServerSelected_clicked();
+    void on_tbOAuth2Login_clicked();
+    void on_httpAuthAuthenticated();
+    void on_httpAuthFailed();
+
+private:
+    std::shared_ptr<IOsmServerImpl> m_impl;
+};
+
+#include "PreferencesDialog.moc"
+
 OsmServerWidget::OsmServerWidget(QWidget * parent, Qt::WindowFlags f)
     : QWidget(parent, f)
 {
     setupUi(this);
     setAttribute(Qt::WA_DeleteOnClose);
+    m_nm = new QNetworkAccessManager(this);
 }
 
 void OsmServerWidget::on_tbOsmServerAdd_clicked()
@@ -71,6 +99,24 @@ void OsmServerWidget::on_tbOsmServerDel_clicked()
     }
 }
 
+OsmServerInfo OsmServerWidget::getOsmServerInfo() const {
+    OsmServerInfo srv;
+    srv.Url = edOsmServerUrl->currentText();
+    srv.Type = static_cast<decltype(srv.Type)>(authType->currentIndex());
+    srv.User = edOsmServerUser->text();
+    srv.Password = edOsmServerPwd->text();
+    srv.Selected = rbOsmServerSelected->isChecked();
+    return srv;
+}
+
+void OsmServerWidget::setOsmServerInfo(OsmServerInfo srv) {
+    edOsmServerUrl->setCurrentText(srv.Url);
+    authType->setCurrentIndex(static_cast<int>(srv.Type));
+    edOsmServerUser->setText(srv.User);
+    edOsmServerPwd->setText(srv.Password);
+    rbOsmServerSelected->setChecked(srv.Selected);
+}
+
 void OsmServerWidget::on_rbOsmServerSelected_clicked()
 {
     QLayout* lay = parentWidget()->layout();
@@ -84,6 +130,34 @@ void OsmServerWidget::on_rbOsmServerSelected_clicked()
     }
 
     rbOsmServerSelected->setChecked(true);
+}
+
+void OsmServerWidget::on_tbOAuth2Login_clicked() {
+    qDebug() << "Start login...";
+
+    OsmServerInfo srv = getOsmServerInfo();
+    m_impl = makeOsmServer(srv, *m_nm);
+
+    connect(&*m_impl, &IOsmServerImpl::authenticated, this, &OsmServerWidget::on_httpAuthAuthenticated);
+    connect(&*m_impl, &IOsmServerImpl::failed, this, &OsmServerWidget::on_httpAuthFailed);
+
+    this->lbLoginState->setText(tr("Authenticating"));
+    this->tbOAuth2Login->setEnabled(false);
+
+    m_impl->authenticate();
+}
+
+void OsmServerWidget::on_httpAuthAuthenticated() {
+    qDebug() << "Authenticated!";
+    setOsmServerInfo(m_impl->getServerInfo());
+    this->lbLoginState->setText(tr("Authenticated"));
+    this->tbOAuth2Login->setEnabled(true);
+}
+
+void OsmServerWidget::on_httpAuthFailed() {
+    qDebug() << "Failed!";
+    this->lbLoginState->setText(tr("Failed"));
+    this->tbOAuth2Login->setEnabled(true);
 }
 
 PreferencesDialog::PreferencesDialog(QWidget* parent)
@@ -177,22 +251,14 @@ void PreferencesDialog::loadPrefs()
     if (!theOsmServers->size()) {
         OsmServerWidget* wOSmServer = new OsmServerWidget(grpOSM);
 
-        wOSmServer->edOsmServerUrl->setText(M_PREFS->getOsmApiUrl());
-        wOSmServer->edOsmServerUser->setText(M_PREFS->getOsmUser());
-        wOSmServer->edOsmServerPwd->setText(M_PREFS->getOsmPassword());
         wOSmServer->rbOsmServerSelected->setChecked(true);
         wOSmServer->tbOsmServerDel->setEnabled(false);
 
         OsmServersLayout->addWidget(wOSmServer);
     } else {
-        foreach(OsmServer srv, *theOsmServers) {
+        foreach(OsmServerInfo srv, *theOsmServers) {
             OsmServerWidget* wOSmServer = new OsmServerWidget(grpOSM);
-
-            wOSmServer->edOsmServerUrl->setText(srv.Url);
-            wOSmServer->edOsmServerUser->setText(srv.User);
-            wOSmServer->edOsmServerPwd->setText(srv.Password);
-            wOSmServer->rbOsmServerSelected->setChecked(srv.Selected);
-
+            wOSmServer->setOsmServerInfo(srv);
             OsmServersLayout->addWidget(wOSmServer);
         }
     }
@@ -341,16 +407,10 @@ void PreferencesDialog::savePrefs()
         if (!wOsmServer)
             continue;
 
-        OsmServer srv;
-        srv.Url = wOsmServer->edOsmServerUrl->text();
-        srv.User = wOsmServer->edOsmServerUser->text();
-        srv.Password = wOsmServer->edOsmServerPwd->text();
-        srv.Selected = wOsmServer->rbOsmServerSelected->isChecked();
+        OsmServerInfo srv = wOsmServer->getOsmServerInfo();
 
-        if (srv.Selected && (srv.Url != M_PREFS->getOsmApiUrl() || srv.User != M_PREFS->getOsmUser() || srv.Password != M_PREFS->getOsmPassword())) {
-            M_PREFS->setOsmWebsite(srv.Url);
-            M_PREFS->setOsmUser(srv.User);
-            M_PREFS->setOsmPassword(srv.Password);
+        if (srv.Selected) {
+            M_PREFS->setOsmServerIndex(i);
             OsmDataChanged = true;
         }
 
