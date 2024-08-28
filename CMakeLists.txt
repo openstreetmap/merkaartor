@@ -55,6 +55,11 @@ message(STATUS " * Qt version found: ${QT_VERSION}")
 if (${QT_VERSION_MAJOR} EQUAL 6)
     list(APPEND MERKAARTOR_QT_LIBS Core5Compat)
 endif()
+if (APPLE)
+    # macdeployqt does not properly bundle dbus
+    # see https://bugreports.qt.io/browse/QTBUG-127075
+    list(APPEND MERKAARTOR_QT_LIBS DBus)
+endif()
 
 find_package(Qt${QT_VERSION_MAJOR} COMPONENTS ${MERKAARTOR_QT_LIBS} ${MERKAARTOR_QT_TOOLS} CONFIG REQUIRED)
 set(MERKAARTOR_LINK_LIBS ${MERKAARTOR_QT_LIBS})
