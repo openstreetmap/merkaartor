@@ -32,7 +32,7 @@ jobs:
           ./build/upload-artifacts.sh
 
   macosx:
-    runs-on: macos-latest
+    runs-on: macos-13
     strategy:
       matrix:
         QT_MAJOR: [5, 6]
