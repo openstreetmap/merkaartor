@@ -552,8 +552,6 @@ message(STATUS "")
 list(APPEND MERKAARTOR_LINK_LIBS ${PKGCONFIG_DEPS_LIBRARIES})
 link_directories(${PKGCONFIG_DEPS_LIBRARY_DIRS})
 
-
-
 ##############################################
 # Create the Merkaartor binary
 ##############################################
@@ -637,7 +635,7 @@ configure_file("${PROJECT_SOURCE_DIR}/cmake/AppImageBuilder.yml.in" "${PROJECT_B
 # Mac OS X specific deploy scripts
 ##############################################
 if (APPLE)
-  find_program(MACDEPLOYQT macdeployqt)
+  find_program(MACDEPLOYQT macdeployqt6)
   message("Found macdeployqt: ${MACDEPLOYQT}")
   configure_file("${PROJECT_SOURCE_DIR}/cmake/deploy-osx.cmake.in" "${PROJECT_BINARY_DIR}/deploy-osx.cmake" @ONLY)
   set (CPACK_PRE_BUILD_SCRIPTS "${PROJECT_BINARY_DIR}/deploy-osx.cmake")

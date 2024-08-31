@@ -35,22 +35,34 @@ jobs:
     runs-on: macos-13
     strategy:
       matrix:
-        QT_MAJOR: [5, 6]
+        QT_MAJOR: [6]
     name: MacOS X / Qt${{ matrix.QT_MAJOR }}
     env:
       QT_MAJOR: ${{ matrix.QT_MAJOR }}
     steps:
+      - name: Uninstall homebrew
+        run: |
+          brew uninstall --cask --force --ignore-dependencies $(brew list --cask)
+          brew uninstall --force --ignore-dependencies $(brew list) cmake
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
-      - name: Install dependencies
+      - uses: conda-incubator/setup-miniconda@v3
+        with:
+          auto-update-conda: true
+          channels: conda-forge,anaconda,defaults
+          auto-activate-base: true
+      - name: Conda info
+        shell: bash -el {0}
         run: |
-          brew list
-          brew install gdal exiv2 proj qt${{ matrix.QT_MAJOR }} cmake inih
-          brew unlink exiv2
-          brew install --HEAD exiv2
-          brew link qt${{ matrix.QT_MAJOR }}
+          conda install gdal exiv2 proj qtbase=6.7.2 qttools qt5compat cmake pkg-config
+          git clone https://github.com/qt/qtnetworkauth.git && cd qtnetworkauth
+          git checkout v6.7.2
+          mkdir build && cd build
+          cmake ..
+          make install
       - name: Build
+        shell: bash -el {0}
         run: |
           ./ci/travis-osx-script.sh
       - name: Upload artifacts
