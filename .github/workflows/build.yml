@@ -22,6 +22,11 @@ jobs:
         shell: msys2 {0}
         run: |
           ./ci/travis-windows-script.sh
+      - uses: actions/upload-artifact@v4
+        name: Upload artifacts to github
+        with:
+          name: binaries-win64
+          path: build/merkaartor-*.exe
       - name: Upload artifacts
         env:
           CLOUDSMITH_API_KEY: ${{ secrets.CLOUDSMITH_API_KEY }}
@@ -65,7 +70,12 @@ jobs:
         shell: bash -el {0}
         run: |
           ./ci/travis-osx-script.sh
-      - name: Upload artifacts
+      - uses: actions/upload-artifact@v4
+        name: Upload artifacts to github
+        with:
+          name: binaries-osx
+          path: build/merkaartor-*.dmg
+      - name: Upload artifacts to cloudsmith
         env:
           CLOUDSMITH_API_KEY: ${{ secrets.CLOUDSMITH_API_KEY }}
         if: (matrix.QT_MAJOR == 6) && (contains('refs/heads/master refs/heads/gh-actions', github.ref) || startsWith(github.ref, 'refs/tags/'))
@@ -139,6 +149,11 @@ jobs:
           make -j3
           make DESTDIR=AppDir install
           appimage-builder --skip-tests
+      - uses: actions/upload-artifact@v4
+        name: Upload artifacts to github
+        with:
+          name: binaries-linux
+          path: build/merkaartor-*.AppImage
       - name: Upload artifacts
         env:
           CLOUDSMITH_API_KEY: ${{ secrets.CLOUDSMITH_API_KEY }}
