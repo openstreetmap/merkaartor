@@ -45,10 +45,6 @@ jobs:
     env:
       QT_MAJOR: ${{ matrix.QT_MAJOR }}
     steps:
-      - name: Uninstall homebrew
-        run: |
-          brew uninstall --cask --force --ignore-dependencies $(brew list --cask)
-          brew uninstall --force --ignore-dependencies $(brew list) cmake
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
