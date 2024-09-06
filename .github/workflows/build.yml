@@ -8,7 +8,7 @@ jobs:
     steps:
       - run: git config --global core.autocrlf input
         shell: bash
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
         with:
           fetch-depth: 0
       - uses: msys2/setup-msys2@v2
@@ -22,6 +22,11 @@ jobs:
         shell: msys2 {0}
         run: |
           ./ci/travis-windows-script.sh
+      - uses: actions/upload-artifact@v4
+        name: Upload artifacts to github
+        with:
+          name: binaries-win64
+          path: build/merkaartor-*.exe
       - name: Upload artifacts
         env:
           CLOUDSMITH_API_KEY: ${{ secrets.CLOUDSMITH_API_KEY }}
@@ -32,33 +37,46 @@ jobs:
           ./build/upload-artifacts.sh
 
   macosx:
-    runs-on: macos-latest
+    runs-on: macos-13
     strategy:
       matrix:
-        QT_MAJOR: [5, 6]
+        QT_MAJOR: [6]
     name: MacOS X / Qt${{ matrix.QT_MAJOR }}
     env:
       QT_MAJOR: ${{ matrix.QT_MAJOR }}
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
         with:
           fetch-depth: 0
-      - name: Install dependencies
+      - uses: conda-incubator/setup-miniconda@v3
+        with:
+          auto-update-conda: true
+          channels: conda-forge,anaconda,defaults
+          auto-activate-base: true
+      - name: Conda info
+        shell: bash -el {0}
         run: |
-          brew list
-          brew install gdal exiv2 proj qt${{ matrix.QT_MAJOR }} cmake inih
-          brew unlink exiv2
-          brew install --HEAD exiv2
-          brew link qt${{ matrix.QT_MAJOR }}
+          conda install gdal exiv2 proj qtbase=6.7.2 qttools qt5compat cmake pkg-config poppler # poppler is required for gdal, but missing as a dependency
+          git clone https://github.com/qt/qtnetworkauth.git && cd qtnetworkauth
+          git checkout v6.7.2
+          mkdir build && cd build
+          cmake ..
+          make install
       - name: Build
+        shell: bash -el {0}
         run: |
           ./ci/travis-osx-script.sh
-      - name: Upload artifacts
+      - uses: actions/upload-artifact@v4
+        name: Upload artifacts to github
+        with:
+          name: binaries-osx
+          path: build/merkaartor-*.dmg
+      - name: Upload artifacts to cloudsmith
         env:
           CLOUDSMITH_API_KEY: ${{ secrets.CLOUDSMITH_API_KEY }}
         if: (matrix.QT_MAJOR == 6) && (contains('refs/heads/master refs/heads/gh-actions', github.ref) || startsWith(github.ref, 'refs/tags/'))
         run: |
-          pip3 install cloudsmith-cli
+          pip3 install cloudsmith-cli --break-system-packages
           ./build/upload-artifacts.sh
 
   linux-qt5:
@@ -75,7 +93,7 @@ jobs:
       SNAPSHOT: ${{ matrix.SNAPSHOT }}
       CMAKE_UNITY_BUILD: ${{ matrix.CMAKE_UNITY_BUILD }}
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
         with:
           fetch-depth: 0
       - name: Install dependencies
@@ -96,7 +114,7 @@ jobs:
       SNAPSHOT: ${{ matrix.SNAPSHOT }}
       CMAKE_UNITY_BUILD: ${{ matrix.CMAKE_UNITY_BUILD }}
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
         with:
           fetch-depth: 0
       - name: Install dependencies
@@ -111,7 +129,7 @@ jobs:
     runs-on: ubuntu-22.04
     name: Linux / AppImage
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
         with:
           fetch-depth: 0
       - name: Install dependencies
@@ -127,6 +145,11 @@ jobs:
           make -j3
           make DESTDIR=AppDir install
           appimage-builder --skip-tests
+      - uses: actions/upload-artifact@v4
+        name: Upload artifacts to github
+        with:
+          name: binaries-linux
+          path: build/merkaartor-*.AppImage
       - name: Upload artifacts
         env:
           CLOUDSMITH_API_KEY: ${{ secrets.CLOUDSMITH_API_KEY }}

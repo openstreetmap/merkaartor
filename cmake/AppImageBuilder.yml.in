@@ -32,6 +32,7 @@ AppDir:
       - libqt6core5compat6
       - libqt6networkauth6
       - qt6-qpa-plugins
+      - libprotobuf23
 
   files:
     exclude:
