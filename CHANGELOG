@@ -1,5 +1,14 @@
 This is a shortened changelog. See the Git commits for a full list of changes.
 
+v0.20.0
+    * ADD: Implemented OAuth2 authentication.
+    * ADD: AppImage builds.
+    * FIX: Fixed CI builds.
+    * FIX: libproxy and libgps external library handling by build system.
+    * FIX: CMake unity builds.
+    * FIX: Windows localization.
+    * DEL: Removed some dead code, qmake build config.
+
 v0.19.0
     * FIX: Fixed various GDAL import issues on all platforms.
     * CHG: Projection engine no longer enables coordinate wrapping by default.
