@@ -27,4 +27,4 @@ QString BuildMetadata::GetLibDir() {
 const int BuildMetadata::VERSION_MAJOR = @PROJECT_VERSION_MAJOR@;
 const int BuildMetadata::VERSION_MINOR = @PROJECT_VERSION_MINOR@;
 const int BuildMetadata::VERSION_PATCH = @PROJECT_VERSION_PATCH@;
-const int BuildMetadata::VERSION_BUILD = @PROJECT_VERSION_TWEAK@;
+const int BuildMetadata::VERSION_BUILD = @PROJECT_VERSION_TWEAK@+0;
