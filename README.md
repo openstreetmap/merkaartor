@@ -13,7 +13,7 @@ Travis-CI (Linux, Windows and Mac OS X) [![Build Status](https://travis-ci.org/o
 Binary installation files are available for various Linux distributions and Windows. 
 
 These Linux distributions are known to provide current versions of Merkaartor:
- - Arch via [AUR](https://aur.archlinux.org/packages/merkaartor-git/) ([git clone url](https://aur.archlinux.org/merkaartor-git.git))
+ - Arch
  - Debian
  - Fedora
  - Gentoo
