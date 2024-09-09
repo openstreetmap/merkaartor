@@ -371,9 +371,7 @@ src/Docks/MinimumRelationProperties.ui
 src/Docks/PropertiesDock.h
 src/Docks/DirtyDock.h
 src/Docks/StyleDock.cpp
-src/Docks/GeoImageDock.cpp
 src/Docks/DirtyDock.ui
-src/Docks/GeoImageDock.h
 src/Docks/MDockAncestor.cpp
 src/Docks/MinimumTrackPointProperties.ui
 src/Docks/StyleDock.h
@@ -507,6 +505,7 @@ endif()
 
 if (GEOIMAGE)
     list(APPEND PKGCONFIG_REQUIRED_LIBS exiv2)
+    list(APPEND merkaartor_SRCS src/Docks/GeoImageDock.cpp src/Docks/GeoImageDock.h)
     add_definitions(-DGEOIMAGE=1)
 endif()
 
