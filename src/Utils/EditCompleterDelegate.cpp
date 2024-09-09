@@ -55,7 +55,7 @@ QWidget* EditCompleterDelegate::createEditor(QWidget* parent, const QStyleOption
         cb->setInsertPolicy(QComboBox::InsertAlphabetically);
         cb->insertItems(-1, tagKeys);
         cb->setEditable(true);
-        completer->setCompletionMode(QCompleter::InlineCompletion);
+        completer->setFilterMode(Qt::MatchStartsWith);
         completer->setModelSorting(QCompleter::CaseInsensitivelySortedModel);
         cb->setCompleter(completer);
 
