@@ -242,7 +242,7 @@ MainWindow::MainWindow(QWidget *parent)
     updateLanguage();
 
     ViewportStatusLabel->setTextInteractionFlags(Qt::TextSelectableByMouse);
-    pbImages->setMaximumWidth(200);
+    pbImages->setMaximumWidth(50);
     pbImages->setFormat(tr("tile %v / %m"));
 #ifdef _MOBILE
     pbImages->setVisible(false);
