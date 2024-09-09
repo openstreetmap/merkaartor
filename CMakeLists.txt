@@ -21,8 +21,14 @@ project(merkaartor VERSION ${VCS_VERSION})
 # compatibility.
 # Using configure_file() allows us to store the metadata in a .cpp file, thus
 # only rebuilding that one and linking.
-set(SHARE_DIR ${CMAKE_INSTALL_PREFIX}/share/merkaartor)
-set(LIB_DIR   ${CMAKE_INSTALL_PREFIX}/lib/merkaartor)
+if (${CMAKE_SYSTEM_NAME} MATCHES "Linux")
+    include(GNUInstallDirs)
+    set(SHARE_DIR ${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_DATAROOTDIR}/merkaartor)
+    set(LIB_DIR   ${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_LIBDIR}/merkaartor)
+else()
+    set(SHARE_DIR ${CMAKE_INSTALL_PREFIX}/share/merkaartor)
+    set(LIB_DIR   ${CMAKE_INSTALL_PREFIX}/lib/merkaartor)
+endif()
 configure_file("${PROJECT_SOURCE_DIR}/cmake/build-metadata.cpp.in" "${PROJECT_BINARY_DIR}/build-metadata.cpp" @ONLY)
 
 set(CMAKE_CXX_STANDARD 17)

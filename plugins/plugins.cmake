@@ -1,6 +1,8 @@
 
 if (APPLE)
 set(PLUGINS_INSTALL_POSTFIX "merkaartor.app/Contents/plugins")
+elseif (${CMAKE_SYSTEM_NAME} MATCHES "Linux")
+set(PLUGINS_INSTALL_POSTFIX "${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_LIBDIR}/merkaartor/plugins")
 else()
 set(PLUGINS_INSTALL_POSTFIX "lib/merkaartor/plugins")
 endif()
