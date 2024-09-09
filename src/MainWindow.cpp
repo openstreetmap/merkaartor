@@ -4303,7 +4303,7 @@ void MainWindow::syncOSM(OsmServer server)
                     saveDocument(currentProjectFile);
                 } else {
                     if (QMessageBox::warning(this,tr("Unsaved changes"),
-                                             tr("It is strongly recommended to save the changes to your document after an upload.\nDo you want to do this now?"),
+                                             tr("It is strongly recommended to save the changes to your document after an upload, since the document contains information about dirty object that need to be uploaded. Not saving and uploading from the same document may result in duplicate geometry.\nDo you want to do this now?"),
                                              QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes) == QMessageBox::Yes) {
                         saveDocument(currentProjectFile);
 
