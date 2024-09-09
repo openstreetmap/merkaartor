@@ -228,8 +228,11 @@ MainWindow::MainWindow(QWidget *parent)
     MeterPerPixelLabel = new QLabel(this);
     AdjusmentMeterLabel = new QLabel(this);
 
+    ViewportStatusLabel->setWordWrap(true);
+    ViewportStatusLabel->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
+
     pbImages = new QProgressBar(this);
-    statusBar()->addPermanentWidget(ViewportStatusLabel);
+    statusBar()->addPermanentWidget(ViewportStatusLabel, true);
     statusBar()->addPermanentWidget(pbImages);
     statusBar()->addPermanentWidget(MeterPerPixelLabel);
     statusBar()->addPermanentWidget(AdjusmentMeterLabel);
