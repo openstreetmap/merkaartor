@@ -45,6 +45,8 @@ QString CreateNodeInteraction::toHtml()
 void CreateNodeInteraction::snapMousePressEvent(QMouseEvent * ev, Feature* aFeat)
 {
     if (CAST_NODE(aFeat)) {
+        clearNoSnap();
+        addToNoSnap(aFeat);
         return theMoveInteraction->snapMousePressEvent(ev, aFeat);
     } else {
         SAFE_DELETE(theMoveInteraction);
@@ -77,6 +79,7 @@ void CreateNodeInteraction::snapMouseReleaseEvent(QMouseEvent * ev, Feature* aFe
 {
     if (theMoveInteraction) {
         theMoveInteraction->snapMouseReleaseEvent(ev, aFeat);
+        clearNoSnap();
         return;
     }
 
