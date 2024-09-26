@@ -630,6 +630,11 @@ void MerkaartorPreferences::initialize()
 
     }
 
+    if (theOsmServers.size() == 0) {
+        theOsmServers.append(defaultOsmServerInfo);
+        qDebug(lc_MerkaartorPreferences) << "No OSM servers found, adding default server.";
+    }
+
     //Ensure we have a CacheDir value in QSettings
     if (!g_Merk_Ignore_Preferences)
         Sets->setValue("backgroundImage/CacheDir", Sets->value("backgroundImage/CacheDir", HOMEDIR + "/BackgroundCache"));

@@ -46,6 +46,8 @@ struct OsmServerInfo
     int CfgVersion = 1;
 };
 
+OsmServerInfo const defaultOsmServerInfo = OsmServerInfo{true, OsmServerInfo::AuthType::OAuth2Redirect, "https://www.openstreetmap.org/", "", ""};
+
 class IOsmServerImpl : public QObject {
     Q_OBJECT
 
