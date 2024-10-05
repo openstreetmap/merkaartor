@@ -90,15 +90,15 @@ ${CMAKE_CURRENT_SOURCE_DIR}/src/Docks
 add_definitions(-DQT_NO_DEPRECATED_WARNINGS)
 
 if (UNIX)
-	set(merkaartor_SRCS_PLATFORM
-		src/qextserialport/posix_qextserialport.cpp
-		3rdparty/qtsingleapplication-2.6_1-opensource/src/qtlockedfile_unix.cpp
-	)
+    set(merkaartor_SRCS_PLATFORM src/qextserialport/posix_qextserialport.cpp)
+    if (NOT USE_SYSTEM_QTSINGLEAPPLICATION)
+        list(APPEND merkaartor_SRCS_PLATFORM 3rdparty/qtsingleapplication-2.6_1-opensource/src/qtlockedfile_unix.cpp)
+    endif()
 elseif (WIN32)
-	set(merkaartor_SRCS_PLATFORM
-		src/qextserialport/win_qextserialport.cpp
-		3rdparty/qtsingleapplication-2.6_1-opensource/src/qtlockedfile_win.cpp
-	)
+    set(merkaartor_SRCS_PLATFORM src/qextserialport/win_qextserialport.cpp)
+    if (NOT USE_SYSTEM_QTSINGLEAPPLICATION)
+        list(APPEND merkaartor_SRCS_PLATFORM 3rdparty/qtsingleapplication-2.6_1-opensource/src/qtlockedfile_win.cpp)
+    endif()
 endif()
 
 
@@ -396,21 +396,25 @@ interfaces/IRenderer.h
 interfaces/IDocument.h
 interfaces/IBackend.h
 interfaces/IMapAdapter.h
-3rdparty/qtsingleapplication-2.6_1-opensource/src/qtlockedfile.cpp
-3rdparty/qtsingleapplication-2.6_1-opensource/src/qtsingleapplication.cpp
-3rdparty/qtsingleapplication-2.6_1-opensource/src/qtlocalpeer.cpp
-3rdparty/qtsingleapplication-2.6_1-opensource/src/qtsinglecoreapplication.cpp
-3rdparty/qtsingleapplication-2.6_1-opensource/src/qtlocalpeer.h
-3rdparty/qtsingleapplication-2.6_1-opensource/src/qtsingleapplication.h
-3rdparty/qtsingleapplication-2.6_1-opensource/src/qtlockedfile.h
-3rdparty/qtsingleapplication-2.6_1-opensource/src/qtsinglecoreapplication.h
 ./src/Utils/Utils.qrc
 ./Icons/AllIcons.qrc
 ./Icons/QToolBarDialog/qttoolbardialog.qrc
 ./Templates/Templates.qrc
 ./Styles/Styles.qrc
-
 )
+
+if (NOT USE_SYSTEM_QTSINGLEAPPLICATION)
+  list(APPEND merkaartor_SRCS 
+    3rdparty/qtsingleapplication-2.6_1-opensource/src/qtlockedfile.cpp
+    3rdparty/qtsingleapplication-2.6_1-opensource/src/qtsingleapplication.cpp
+    3rdparty/qtsingleapplication-2.6_1-opensource/src/qtlocalpeer.cpp
+    3rdparty/qtsingleapplication-2.6_1-opensource/src/qtsinglecoreapplication.cpp
+    3rdparty/qtsingleapplication-2.6_1-opensource/src/qtlocalpeer.h
+    3rdparty/qtsingleapplication-2.6_1-opensource/src/qtsingleapplication.h
+    3rdparty/qtsingleapplication-2.6_1-opensource/src/qtlockedfile.h
+    3rdparty/qtsingleapplication-2.6_1-opensource/src/qtsinglecoreapplication.h
+  )
+endif()
 
 if (NOT APPLE)
 install( FILES ${CMAKE_SOURCE_DIR}/src/org.merkaartor.merkaartor.desktop          DESTINATION share/applications     )
@@ -480,22 +484,24 @@ add_custom_target(update-translations COMMAND ${LUPDATE} ${CMAKE_SOURCE_DIR}/src
 # We need GDAL and proj for core functionality
 set(PKGCONFIG_REQUIRED_LIBS gdal proj)
 
-option(ZBAR        "Enable ZBar usage in MWalkingPapersBackground and Geoimage."      OFF)
-option(GEOIMAGE    "Enable Geoimage Dock (requires exiv2 library)."                   ON )
-option(GPSD        "Enable GPS Dock (requires gpsd library)."                         OFF)
-option(LIBPROXY    "Enable libproxy usage."                                           OFF)
-option(WEBENGINE   "Enable the use of QtWeb engine (not supported on all platforms)"  OFF)
-option(PROTOBUF    "Enable support for .osm.pbf format."                              ON)
-option(EXTRA_TESTS "Enable extra tests that cannot be run automatically on CI build." ON )
+option(ZBAR                           "Enable ZBar usage in MWalkingPapersBackground and Geoimage."      OFF)
+option(GEOIMAGE                       "Enable Geoimage Dock (requires exiv2 library)."                   ON )
+option(GPSD                           "Enable GPS Dock (requires gpsd library)."                         OFF)
+option(LIBPROXY                       "Enable libproxy usage."                                           OFF)
+option(WEBENGINE                      "Enable the use of QtWeb engine (not supported on all platforms)"  OFF)
+option(PROTOBUF                       "Enable support for .osm.pbf format."                              ON)
+option(EXTRA_TESTS                    "Enable extra tests that cannot be run automatically on CI build." ON )
+option(USE_SYSTEM_QTSINGLEAPPLICATION "Use system-wide QtSingleApplication"                              OFF)
 
 message(STATUS "Build options (use -DOPT=ON/OFF to enable/disable):")
-message(STATUS " * ZBAR        ${ZBAR}")
-message(STATUS " * GEOIMAGE    ${GEOIMAGE}")
-message(STATUS " * GPSD        ${GPSD}")
-message(STATUS " * LIBPROXY    ${LIBPROXY}")
-message(STATUS " * WEBENGINE   ${WEBENGINE}")
-message(STATUS " * PROTOBUF    ${PROTOBUF}")
-message(STATUS " * EXTRA_TESTS ${EXTRA_TESTS}")
+message(STATUS " * ZBAR                             ${ZBAR}")
+message(STATUS " * GEOIMAGE                         ${GEOIMAGE}")
+message(STATUS " * GPSD                             ${GPSD}")
+message(STATUS " * LIBPROXY                         ${LIBPROXY}")
+message(STATUS " * WEBENGINE                        ${WEBENGINE}")
+message(STATUS " * PROTOBUF                         ${PROTOBUF}")
+message(STATUS " * EXTRA_TESTS                      ${EXTRA_TESTS}")
+message(STATUS " * USE_SYSTEM_QTSINGLEAPPLICATION   ${USE_SYSTEM_QTSINGLEAPPLICATION}")
 message(STATUS "")
 
 if (ZBAR)
@@ -536,6 +542,16 @@ if (PROTOBUF)
     )
 endif()
 
+if (USE_SYSTEM_QTSINGLEAPPLICATION)
+    find_path(QTSINGLEAPPLICATION_INCLUDE_DIRS qtsingleapplication.h PATH_SUFFIXES qt${QT_VERSION_MAJOR}/QtSolutions REQUIRED)
+    find_library(QTSINGLEAPPLICATION_LIBRARIES Qt${QT_VERSION_MAJOR}Solutions_SingleApplication-2.6 REQUIRED)
+    set(QTSINGLEAPPLICATION_INCLUDE_DIRS ${QtSingleApplication_INCLUDE_DIRS})
+    set(QTSINGLEAPPLICATION_LIBRARIES ${QtSingleApplication_LIBRARIES})
+else()
+    set(QTSINGLEAPPLICATION_INCLUDE_DIRS ${CMAKE_CURRENT_SOURCE_DIR}/3rdparty/qtsingleapplication-2.6_1-opensource/src)
+    set(QTSINGLEAPPLICATION_LIBRARIES "QtSingleApplication")
+endif()
+
 # TODO: Check and remove or implement defines from code: PORTABLE, FRISIUS, NVIDIA_HACK, MOBILE, LIBPROXY, SYSTEM_QTSA
 find_package(PkgConfig REQUIRED)
 pkg_check_modules(PKGCONFIG_DEPS REQUIRED ${PKGCONFIG_REQUIRED_LIBS})
@@ -548,7 +564,7 @@ message(STATUS " * LINK DIRECTORIES: ${PKGCONFIG_DEPS_LIBRARY_DIRS}")
 message(STATUS "")
 
 
-list(APPEND MERKAARTOR_LINK_LIBS ${PKGCONFIG_DEPS_LIBRARIES})
+list(APPEND MERKAARTOR_LINK_LIBS ${PKGCONFIG_DEPS_LIBRARIES} ${QTSINGLEAPPLICATION_LIBRARIES})
 link_directories(${PKGCONFIG_DEPS_LIBRARY_DIRS})
 
 ##############################################
@@ -577,6 +593,7 @@ endif()
 
 set(MERKAARTOR_INCLUDE_DIRECTORIES
   ${PKGCONFIG_DEPS_INCLUDE_DIRS}
+  ${QTSINGLEAPPLICATION_INCLUDE_DIRS}
   ${LIBSSH_INCLUDE_DIR}
   ${CMAKE_CURRENT_SOURCE_DIR}/interfaces
   ${CMAKE_CURRENT_SOURCE_DIR}/include
@@ -600,7 +617,6 @@ set(MERKAARTOR_INCLUDE_DIRECTORIES
   ${CMAKE_CURRENT_SOURCE_DIR}/src/qextserialport
   ${CMAKE_CURRENT_SOURCE_DIR}/src/QMapControl
   ${CMAKE_CURRENT_SOURCE_DIR}/src/TagTemplate
-  ${CMAKE_CURRENT_SOURCE_DIR}/3rdparty/qtsingleapplication-2.6_1-opensource/src
 )
 target_include_directories( merkaartor PUBLIC ${MERKAARTOR_INCLUDE_DIRECTORIES})
 
