@@ -122,10 +122,11 @@ bool TagModel::setData(const QModelIndex &index, const QVariant &value, int role
     if (!theFeatures.size()) return false;
     if (index.isValid() && role == Qt::EditRole)
     {
+        const QString trimmedValue = value.toString().trimmed();
         /* Check if one of the same name already exists */
         if (index.column() == 0) {
             for (int i = 0; i < Tags.size(); i++) {
-                if ((i != index.row()) && (Tags[i].first == value.toString())) {
+                if ((i != index.row()) && (Tags[i].first == trimmedValue)) {
                     QMessageBox::warning(NULL, tr("Tag editor"), tr("Tag with this name already exists."));
                     return false;
                 }
@@ -141,7 +142,7 @@ bool TagModel::setData(const QModelIndex &index, const QVariant &value, int role
                 if (theFeatures.size() > 1)
                     L = new CommandList(MainWindow::tr("Set tags on multiple features"), NULL);
                 else
-                    L = new CommandList(MainWindow::tr("Set tag '%1=' on %2").arg(value.toString()).arg(theFeatures[0]->description()), theFeatures[0]);
+                    L = new CommandList(MainWindow::tr("Set tag '%1=' on %2").arg(trimmedValue).arg(theFeatures[0]->description()), theFeatures[0]);
                 for (int i=0; i<theFeatures.size(); ++i)
                 {
                     if (theFeatures[i]->isVirtual())
@@ -151,10 +152,10 @@ bool TagModel::setData(const QModelIndex &index, const QVariant &value, int role
                         bool userAdded = !(theFeatures[i]->id().type & IFeature::Conflict);
                         L->add(new AddFeatureCommand(Main->document()->getDirtyOrOriginLayer(),theFeatures[i],userAdded));
                     }
-                    L->add(new SetTagCommand(theFeatures[i],value.toString(),"", Main->document()->getDirtyOrOriginLayer(theFeatures[i]->layer())));
+                    L->add(new SetTagCommand(theFeatures[i],trimmedValue,"", Main->document()->getDirtyOrOriginLayer(theFeatures[i]->layer())));
                     theFeatures[i]->setLastUpdated(Feature::User);
                 }
-                Tags.push_back(qMakePair(value.toString(),QString("")));
+                Tags.push_back(qMakePair(trimmedValue,QString("")));
                 Main->document()->addHistory(L);
                 endInsertRows();
             }
@@ -165,9 +166,9 @@ bool TagModel::setData(const QModelIndex &index, const QVariant &value, int role
         {
             QString Original(Tags[index.row()].first);
             if (index.column() == 0)
-                Tags[index.row()].first = value.toString();
+                Tags[index.row()].first = trimmedValue;
             else
-                Tags[index.row()].second = value.toString();
+                Tags[index.row()].second = trimmedValue;
             CommandList* L;
             if (theFeatures.size() > 1)
                 L = new CommandList(MainWindow::tr("Set tags on multiple features"), NULL);
