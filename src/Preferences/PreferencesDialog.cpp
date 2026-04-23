@@ -12,6 +12,8 @@
 #include "PreferencesDialog.h"
 #include "MasPaintStyle.h"
 
+#include <algorithm>
+
 #include "MainWindow.h"
 #include "Document.h"
 #include "Feature.h"
@@ -83,9 +85,13 @@ void OsmServerWidget::on_tbOsmServerDel_clicked()
         return;
 
     if (rbOsmServerSelected->isChecked()) {
-        OsmServerWidget* w = dynamic_cast<OsmServerWidget*>(lay->itemAt(0)->widget());
-        if (w)
-            w->rbOsmServerSelected->setChecked(true);
+        for (int i = 0; i < lay->count(); ++i) {
+            OsmServerWidget* w = dynamic_cast<OsmServerWidget*>(lay->itemAt(i)->widget());
+            if (w && w != this) {
+                w->rbOsmServerSelected->setChecked(true);
+                break;
+            }
+        }
     }
     if (lay->count() > 2)
         close();
@@ -416,6 +422,8 @@ void PreferencesDialog::savePrefs()
 
         theServerList->append(srv);
     }
+    M_PREFS->setOsmServerIndex(std::clamp<qsizetype>(M_PREFS->getOsmServerIndex(), 0,
+                                                     theServerList->size() - 1));
 
     M_PREFS->setXapiUrl(edXapiUrl->text());
     M_PREFS->setNominatimUrl(edNominatimUrl->text());

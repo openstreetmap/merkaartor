@@ -14,6 +14,8 @@
 #include "IFeature.h"
 #include "MerkaartorPreferences.h"
 
+#include <algorithm>
+
 #include <QApplication>
 #include <QByteArray>
 #include <QMessageBox>
@@ -960,7 +962,8 @@ M_PARAM_IMPLEMENT_INT(OsmServerIndex, osm, 0)
 std::shared_ptr<IOsmServerImpl> MerkaartorPreferences::getOsmServer() {
     /* TODO: Each call creates a new server. */
     OsmServerList* servers = getOsmServers();
-    return makeOsmServer((*servers)[getOsmServerIndex()], httpRequest);
+    const qsizetype idx = std::clamp<qsizetype>(getOsmServerIndex(), 0, servers->size() - 1);
+    return makeOsmServer((*servers)[idx], httpRequest);
 }
 
 M_PARAM_IMPLEMENT_STRING(XapiUrl, osm, "http://www.overpass-api.de/api/xapi_meta?")
