@@ -38,7 +38,6 @@ struct OsmServerInfo
         }
     }
 
-    bool Selected;
     AuthType Type;
     QString Url;
     QString User;
@@ -46,7 +45,7 @@ struct OsmServerInfo
     int CfgVersion = 1;
 };
 
-OsmServerInfo const defaultOsmServerInfo = OsmServerInfo{true, OsmServerInfo::AuthType::OAuth2Redirect, "https://www.openstreetmap.org/", "", ""};
+OsmServerInfo const defaultOsmServerInfo = OsmServerInfo{OsmServerInfo::AuthType::OAuth2Redirect, "https://www.openstreetmap.org/", "", ""};
 
 class IOsmServerImpl : public QObject {
     Q_OBJECT

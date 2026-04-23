@@ -111,7 +111,6 @@ OsmServerInfo OsmServerWidget::getOsmServerInfo() const {
     srv.Type = static_cast<decltype(srv.Type)>(authType->currentIndex());
     srv.User = edOsmServerUser->text();
     srv.Password = edOsmServerPwd->text();
-    srv.Selected = rbOsmServerSelected->isChecked();
     return srv;
 }
 
@@ -120,7 +119,6 @@ void OsmServerWidget::setOsmServerInfo(OsmServerInfo srv) {
     authType->setCurrentIndex(static_cast<int>(srv.Type));
     edOsmServerUser->setText(srv.User);
     edOsmServerPwd->setText(srv.Password);
-    rbOsmServerSelected->setChecked(srv.Selected);
 }
 
 void OsmServerWidget::on_rbOsmServerSelected_clicked()
@@ -267,6 +265,10 @@ void PreferencesDialog::loadPrefs()
             wOSmServer->setOsmServerInfo(srv);
             OsmServersLayout->addWidget(wOSmServer);
         }
+        const qsizetype selectedIdx = std::clamp<qsizetype>(M_PREFS->getOsmServerIndex(),
+                                                            0, theOsmServers->size() - 1);
+        if (auto* w = dynamic_cast<OsmServerWidget*>(OsmServersLayout->itemAt(selectedIdx)->widget()))
+            w->rbOsmServerSelected->setChecked(true);
     }
 
     edXapiUrl->setText(M_PREFS->getXapiUrl());
@@ -413,14 +415,12 @@ void PreferencesDialog::savePrefs()
         if (!wOsmServer)
             continue;
 
-        OsmServerInfo srv = wOsmServer->getOsmServerInfo();
-
-        if (srv.Selected) {
+        if (wOsmServer->rbOsmServerSelected->isChecked()) {
             M_PREFS->setOsmServerIndex(i);
             OsmDataChanged = true;
         }
 
-        theServerList->append(srv);
+        theServerList->append(wOsmServer->getOsmServerInfo());
     }
     M_PREFS->setOsmServerIndex(std::clamp<qsizetype>(M_PREFS->getOsmServerIndex(), 0,
                                                      theServerList->size() - 1));
