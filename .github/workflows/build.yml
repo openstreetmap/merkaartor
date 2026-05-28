@@ -14,10 +14,10 @@ jobs:
       - uses: msys2/setup-msys2@v2
         name: Install dependencies
         with:
-          msystem: MINGW64
+          msystem: UCRT64
           update: true
           path-type: strict
-          install: git mingw-w64-x86_64-toolchain mingw-w64-x86_64-python-pip msys/make msys/git mingw64/mingw-w64-x86_64-gcc mingw64/mingw-w64-x86_64-qt6 mingw64/mingw-w64-x86_64-gdal mingw64/mingw-w64-x86_64-proj mingw64/mingw-w64-x86_64-openjpeg2 mingw64/mingw-w64-x86_64-json-c mingw64/mingw-w64-x86_64-cmake mingw64/mingw-w64-x86_64-exiv2 mingw64/mingw-w64-x86_64-nsis mingw64/mingw-w64-x86_64-mesa mingw64/mingw-w64-x86_64-protobuf
+          install: git mingw-w64-ucrt-x86_64-toolchain mingw-w64-ucrt-x86_64-python-pip msys/make msys/git ucrt64/mingw-w64-ucrt-x86_64-gcc ucrt64/mingw-w64-ucrt-x86_64-qt6 ucrt64/mingw-w64-ucrt-x86_64-gdal ucrt64/mingw-w64-ucrt-x86_64-proj ucrt64/mingw-w64-ucrt-x86_64-openjpeg2 ucrt64/mingw-w64-ucrt-x86_64-json-c ucrt64/mingw-w64-ucrt-x86_64-cmake ucrt64/mingw-w64-ucrt-x86_64-exiv2 ucrt64/mingw-w64-ucrt-x86_64-nsis ucrt64/mingw-w64-ucrt-x86_64-mesa ucrt64/mingw-w64-ucrt-x86_64-protobuf
       - name: Build
         shell: msys2 {0}
         run: |
