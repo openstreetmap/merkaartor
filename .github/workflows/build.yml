@@ -79,37 +79,14 @@ jobs:
           pip3 install cloudsmith-cli --break-system-packages
           ./build/upload-artifacts.sh
 
-  linux-qt5:
-    runs-on: ubuntu-20.04
-    strategy:
-      matrix:
-        SNAPSHOT: [0, 1]
-        CMAKE_UNITY_BUILD: ["ON", "OFF"]
-    name: Linux / Ubuntu 20.04 / Qt5 (SNAPSHOT=${{ matrix.SNAPSHOT }}) / CMAKE_UNITY_BUILD=${{ matrix.CMAKE_UNITY_BUILD }}
-    env:
-      QT_PREFIX: 515
-      QT_REPO: ppa:beineri/opt-qt-5.15.4-focal
-      TRAVIS_DIST: focal
-      SNAPSHOT: ${{ matrix.SNAPSHOT }}
-      CMAKE_UNITY_BUILD: ${{ matrix.CMAKE_UNITY_BUILD }}
-    steps:
-      - uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-      - name: Install dependencies
-        run: |
-          ./ci/travis-linux-install.sh
-      - name: Build
-        run: |
-          ./ci/travis-linux-script.sh
-
   linux-qt6:
-    runs-on: ubuntu-22.04
+    runs-on: ${{ matrix.os }}
     strategy:
       matrix:
+        os: [ubuntu-22.04, ubuntu-24.04]
         SNAPSHOT: [0, 1]
         CMAKE_UNITY_BUILD: ["ON", "OFF"]
-    name: Linux / Ubuntu 22.04 / Qt6 (SNAPSHOT=${{ matrix.SNAPSHOT }}) / CMAKE_UNITY_BUILD=${{ matrix.CMAKE_UNITY_BUILD }}
+    name: Linux / ${{ matrix.os }} / Qt6 (SNAPSHOT=${{ matrix.SNAPSHOT }}) / CMAKE_UNITY_BUILD=${{ matrix.CMAKE_UNITY_BUILD }}
     env:
       SNAPSHOT: ${{ matrix.SNAPSHOT }}
       CMAKE_UNITY_BUILD: ${{ matrix.CMAKE_UNITY_BUILD }}
