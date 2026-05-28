@@ -674,8 +674,7 @@ if (WIN32)
   # End of workaround
 
   if (${QT_VERSION_MAJOR} EQUAL 6)
-    # MSYS2 ships windeployqt6.exe; Debian ships windeployqt-qt6.
-    find_program(WINDEPLOYQT NAMES windeployqt6 windeployqt-qt6 windeployqt REQUIRED)
+    find_program(WINDEPLOYQT windeployqt6 REQUIRED)
   else()
     find_program(WINDEPLOYQT windeployqt REQUIRED)
   endif()
