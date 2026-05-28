@@ -511,7 +511,7 @@ endif()
 
 if (GPSD)
     list(APPEND PKGCONFIG_REQUIRED_LIBS libgps)
-    add_definitions(-DUSE_GPS=1)
+    add_definitions(-DUSE_GPSD_LIB=1)
 endif()
 
 if (LIBPROXY)
