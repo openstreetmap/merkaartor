@@ -22,81 +22,63 @@ If this is not enough, here are more detailed instructions:
 
 You will need the following packages installed:
 
- - Working C++ compiler
- - Qt 5.15 or newer
+ - Working C++ compiler (C++17)
+ - Qt 6 (the codebase still compiles against Qt 5.15+, but only Qt 6 is CI-tested)
  - Proj 6.x or newer
- - GDAL (2.0.0 or newer for GDAL exports)
+ - GDAL 2.0.0 or newer
  - Exiv2 (for geoimage support)
- - (For Windows Installer) NSIS-3
+ - protobuf (for .osm.pbf support)
  - CMake 3.19.0 or newer
- - protobuf (for .osm.pbf support).
+ - (For Windows Installer) NSIS-3
 
-The OS specifics will be explained further down.
+The OS specifics are explained below. The package lists mirror what the CI uses
+(see `.github/workflows/build.yml`); keep them in sync if you change one.
 
 ### Linux
 
-Install the above packages using your package manager. For Debian/Ubuntu, this would
-look like this:
+For Debian/Ubuntu (22.04, 24.04):
 
 ```
- $ sudo apt-get install build-essential libgdal-dev libproj-dev libexiv2-dev cmake protobuf-compile
+ $ sudo apt-get install build-essential cmake git protobuf-compiler \
+     libgdal-dev libproj-dev libexiv2-dev libgl1-mesa-dev \
+     qt6-base-dev qt6-base-dev-tools qt6-tools-dev qt6-tools-dev-tools qt6-l10n-tools \
+     libqt6svg6-dev libqt6networkauth6-dev libqt6core5compat6-dev
 ```
 
-Or for Qt5: 
+### Windows (64-bit)
+
+Install [MSYS2](https://www.msys2.org/) and use the **UCRT64** environment
+(`ucrt64.exe`, not the deprecated `mingw64.exe`). Install the packages:
 
 ```
- $ sudo apt-get install qt5-default libqt5xml5* libqt5network5* libqt5gui5* libqt5svg5* libqt5webkit5* libqt5quick5* qtdeclarative5-dev qttools5-dev qtbase5-dev qtchooser protobuf-compiler
+$ pacman -S git msys/make msys/git \
+    mingw-w64-ucrt-x86_64-toolchain \
+    mingw-w64-ucrt-x86_64-python-pip \
+    ucrt64/mingw-w64-ucrt-x86_64-gcc \
+    ucrt64/mingw-w64-ucrt-x86_64-qt6 \
+    ucrt64/mingw-w64-ucrt-x86_64-gdal \
+    ucrt64/mingw-w64-ucrt-x86_64-proj \
+    ucrt64/mingw-w64-ucrt-x86_64-openjpeg2 \
+    ucrt64/mingw-w64-ucrt-x86_64-json-c \
+    ucrt64/mingw-w64-ucrt-x86_64-cmake \
+    ucrt64/mingw-w64-ucrt-x86_64-exiv2 \
+    ucrt64/mingw-w64-ucrt-x86_64-nsis \
+    ucrt64/mingw-w64-ucrt-x86_64-mesa \
+    ucrt64/mingw-w64-ucrt-x86_64-protobuf
 ```
 
-### Windows (32bit/64bit)
-
-In both cases, you will need to download MSYS2 for your architecture, and
-install some packages from msys shell (msys2_shell.bat).
-
-For 32bit, they are (the w64 is not a bug!):
-
-```
-$ pacman -S base-devel \
-	msys/git \
-	mingw32/mingw-w64-i686-gcc \
-	mingw32/mingw-w64-i686-qt5 \
-	mingw32/mingw-w64-i686-gdal \
-	mingw32/mingw-w64-i686-proj \
-	mingw32/mingw-w64-i686-openjpeg2 \
-	mingw32/mingw-w64-i686-json-c \
-	mingw64/mingw-w64-i686-exiv2 \
-    mingw64/mingw-w64-i686-cmake \
-    mingw64/mingw-w64-i686-protobuf
-```
-
-For 64bit, they are:
-
-```
-$ pacman -S base-devel \
-	msys/git \
-	mingw64/mingw-w64-x86_64-gcc \
-	mingw64/mingw-w64-x86_64-qt5 \
-	mingw64/mingw-w64-x86_64-gdal \
-	mingw64/mingw-w64-x86_64-proj \
-	mingw64/mingw-w64-x86_64-openjpeg2 \
-	mingw64/mingw-w64-x86_64-json-c \
-	mingw64/mingw-w64-x86_64-exiv2 \
-    mingw64/mingw-w64-x86_64-cmake \
-    mingw64/mingw-w64-x86_64-protobuf
-```
-
-Done? Continue to the next step, but run a different msys shell, the mingw32 or
-mingw64, based on your architecture. Note that if you'll run mingw32 shell from
-64bit msys installtion, strange stuff will happen, so don't do it.
+Then continue the build steps below from the UCRT64 shell.
 
 ### Mac OS X
 
-You will need functional xcode (or other c++ compiler), and libraries installed
-from [homebrew](http://brew.sh).
+You will need a working Xcode (or other C++ compiler) and libraries installed
+from [homebrew](http://brew.sh):
 
 ```
-brew install gdal proj qt exiv2 cmake protobuf
+$ brew install gdal proj qt exiv2 cmake protobuf pkg-config
 ```
+
+Homebrew's `qt` formula provides Qt 6.
 
 ## Compilation
 
