@@ -674,9 +674,10 @@ if (WIN32)
   # End of workaround
 
   if (${QT_VERSION_MAJOR} EQUAL 6)
-    find_program(WINDEPLOYQT windeployqt-qt6)
+    # MSYS2 ships windeployqt6.exe; Debian ships windeployqt-qt6.
+    find_program(WINDEPLOYQT NAMES windeployqt6 windeployqt-qt6 windeployqt REQUIRED)
   else()
-    find_program(WINDEPLOYQT windeployqt)
+    find_program(WINDEPLOYQT windeployqt REQUIRED)
   endif()
   find_program(CYGCHECK cygcheck)
   configure_file("${PROJECT_SOURCE_DIR}/cmake/deploy-windows.cmake.in" "${CMAKE_BINARY_DIR}/deploy-windows.cmake" @ONLY)
