@@ -51,6 +51,5 @@ AppDir:
 AppImage:
   update-information: None
   sign-key: None
-  comp: xz
   arch: x86_64
-  comp: xz
+  comp: zstd
