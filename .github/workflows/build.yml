@@ -37,11 +37,12 @@ jobs:
           ./build/upload-artifacts.sh
 
   macosx:
-    runs-on: macos-13
+    runs-on: ${{ matrix.os }}
     strategy:
       matrix:
         QT_MAJOR: [6]
-    name: MacOS X / Qt${{ matrix.QT_MAJOR }}
+        os: [macos-15-intel, macos-15]
+    name: MacOS X (${{ matrix.os }}) / Qt${{ matrix.QT_MAJOR }}
     env:
       QT_MAJOR: ${{ matrix.QT_MAJOR }}
     steps:
@@ -69,7 +70,7 @@ jobs:
       - uses: actions/upload-artifact@v7
         name: Upload artifacts to github
         with:
-          name: binaries-osx
+          name: binaries-osx-${{ matrix.os == 'macos-15-intel' && 'x86_64' || 'arm64' }}
           path: build/merkaartor-*.dmg
       - name: Upload artifacts to cloudsmith
         env:
