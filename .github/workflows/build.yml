@@ -57,7 +57,7 @@ jobs:
       - name: Conda info
         shell: bash -el {0}
         run: |
-          conda install gdal exiv2 proj qt6-main=6.11.1 qt6-networkauth=6.11.1 libprotobuf cmake pkg-config poppler # poppler is required for gdal, but missing as a dependency
+          conda install gdal exiv2 expat proj qt6-main=6.11.1 qt6-networkauth=6.11.1 libprotobuf cmake pkg-config poppler # poppler is required for gdal, but missing as a dependency
       - name: Build
         shell: bash -el {0}
         run: |
