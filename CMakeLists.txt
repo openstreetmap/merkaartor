@@ -674,9 +674,9 @@ if (WIN32)
   # End of workaround
 
   if (${QT_VERSION_MAJOR} EQUAL 6)
-    find_program(WINDEPLOYQT windeployqt-qt6)
+    find_program(WINDEPLOYQT windeployqt6 REQUIRED)
   else()
-    find_program(WINDEPLOYQT windeployqt)
+    find_program(WINDEPLOYQT windeployqt REQUIRED)
   endif()
   find_program(CYGCHECK cygcheck)
   configure_file("${PROJECT_SOURCE_DIR}/cmake/deploy-windows.cmake.in" "${CMAKE_BINARY_DIR}/deploy-windows.cmake" @ONLY)
