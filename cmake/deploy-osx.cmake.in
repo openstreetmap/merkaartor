@@ -16,5 +16,20 @@ message("Running macdeployqt on ${TMP_APPDIR}")
 execute_process(COMMAND ${MACDEPLOYQT} "${TMP_APPDIR}" -verbose=3)
 execute_process(COMMAND install_name_tool -add_rpath "@executable_path/../Frameworks" "${CPACK_TEMPORARY_INSTALL_DIRECTORY}/@PROJECT_NAME@.app/Contents/MacOS/merkaartor")
 execute_process(COMMAND otool -l "${CPACK_TEMPORARY_INSTALL_DIRECTORY}/@PROJECT_NAME@.app/Contents/MacOS/merkaartor")
+
+# Ad-hoc sign the bundle. The arm64 kernel refuses to execute unsigned
+# Mach-O binaries (EXC_BAD_ACCESS / "code signature invalid"), and macOS 15+
+# Gatekeeper rejects unsigned x86_64 too. The "-" identity self-signs without
+# requiring an Apple Developer cert; the user still sees an unverified-developer
+# prompt on first launch but can open the app. Must run AFTER install_name_tool,
+# which would otherwise invalidate the signature.
+execute_process(
+  COMMAND codesign --force --deep --sign - "${TMP_APPDIR}"
+  RESULT_VARIABLE CODESIGN_RESULT
+)
+if (NOT (${CODESIGN_RESULT} EQUAL "0"))
+  message(FATAL_ERROR "codesign failed with result: ${CODESIGN_RESULT}.")
+endif()
+
 message("Done bundling.")
 execute_process(COMMAND find "${CPACK_TEMPORARY_INSTALL_DIRECTORY}")
