@@ -12,6 +12,8 @@
 #include "PreferencesDialog.h"
 #include "MasPaintStyle.h"
 
+#include <algorithm>
+
 #include "MainWindow.h"
 #include "Document.h"
 #include "Feature.h"
@@ -83,9 +85,13 @@ void OsmServerWidget::on_tbOsmServerDel_clicked()
         return;
 
     if (rbOsmServerSelected->isChecked()) {
-        OsmServerWidget* w = dynamic_cast<OsmServerWidget*>(lay->itemAt(0)->widget());
-        if (w)
-            w->rbOsmServerSelected->setChecked(true);
+        for (int i = 0; i < lay->count(); ++i) {
+            OsmServerWidget* w = dynamic_cast<OsmServerWidget*>(lay->itemAt(i)->widget());
+            if (w && w != this) {
+                w->rbOsmServerSelected->setChecked(true);
+                break;
+            }
+        }
     }
     if (lay->count() > 2)
         close();
@@ -105,7 +111,6 @@ OsmServerInfo OsmServerWidget::getOsmServerInfo() const {
     srv.Type = static_cast<decltype(srv.Type)>(authType->currentIndex());
     srv.User = edOsmServerUser->text();
     srv.Password = edOsmServerPwd->text();
-    srv.Selected = rbOsmServerSelected->isChecked();
     return srv;
 }
 
@@ -114,7 +119,6 @@ void OsmServerWidget::setOsmServerInfo(OsmServerInfo srv) {
     authType->setCurrentIndex(static_cast<int>(srv.Type));
     edOsmServerUser->setText(srv.User);
     edOsmServerPwd->setText(srv.Password);
-    rbOsmServerSelected->setChecked(srv.Selected);
 }
 
 void OsmServerWidget::on_rbOsmServerSelected_clicked()
@@ -261,6 +265,10 @@ void PreferencesDialog::loadPrefs()
             wOSmServer->setOsmServerInfo(srv);
             OsmServersLayout->addWidget(wOSmServer);
         }
+        const qsizetype selectedIdx = std::clamp<qsizetype>(M_PREFS->getOsmServerIndex(),
+                                                            0, theOsmServers->size() - 1);
+        if (auto* w = dynamic_cast<OsmServerWidget*>(OsmServersLayout->itemAt(selectedIdx)->widget()))
+            w->rbOsmServerSelected->setChecked(true);
     }
 
     edXapiUrl->setText(M_PREFS->getXapiUrl());
@@ -407,15 +415,15 @@ void PreferencesDialog::savePrefs()
         if (!wOsmServer)
             continue;
 
-        OsmServerInfo srv = wOsmServer->getOsmServerInfo();
-
-        if (srv.Selected) {
+        if (wOsmServer->rbOsmServerSelected->isChecked()) {
             M_PREFS->setOsmServerIndex(i);
             OsmDataChanged = true;
         }
 
-        theServerList->append(srv);
+        theServerList->append(wOsmServer->getOsmServerInfo());
     }
+    M_PREFS->setOsmServerIndex(std::clamp<qsizetype>(M_PREFS->getOsmServerIndex(), 0,
+                                                     theServerList->size() - 1));
 
     M_PREFS->setXapiUrl(edXapiUrl->text());
     M_PREFS->setNominatimUrl(edNominatimUrl->text());
