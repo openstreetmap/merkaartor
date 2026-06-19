@@ -639,6 +639,11 @@ if (APPLE)
   configure_file("${PROJECT_SOURCE_DIR}/cmake/deploy-osx.cmake.in" "${PROJECT_BINARY_DIR}/deploy-osx.cmake" @ONLY)
   set (CPACK_PRE_BUILD_SCRIPTS "${PROJECT_BINARY_DIR}/deploy-osx.cmake")
   set (CPACK_GENERATOR "DragNDrop")
+  # CPack defaults the system name to "Darwin" on macOS, so the Intel and
+  # Apple Silicon matrix legs would produce identical filenames and collide
+  # on the cloudsmith upload. Include the processor so each leg's DMG is
+  # uniquely named (Darwin-x86_64 vs Darwin-arm64).
+  set (CPACK_SYSTEM_NAME "Darwin-${CMAKE_SYSTEM_PROCESSOR}")
   set (CPACK_DMG_BACKGROUND_IMAGE       "${PROJECT_SOURCE_DIR}/cmake/CMakeDMGBackground.tif")
   set (CPACK_DMG_DS_STORE               "${PROJECT_SOURCE_DIR}/cmake/DS_Store.bin")
   #set (CPACK_DMG_DS_STORE_SETUP_SCRIPT "${PROJECT_SOURCE_DIR}/cmake/CMakeDMGSetup.scpt")
